@@ -20,5 +20,7 @@ export const downloadBatchOfTrialSessionAction = async ({
       trialSessionId,
     });
 
-  location.href = result.url;
+  const zipFile = new File([result], 'something.zip');
+  const resultBlobUrl = window.URL.createObjectURL(zipFile);
+  window.open(resultBlobUrl);
 };

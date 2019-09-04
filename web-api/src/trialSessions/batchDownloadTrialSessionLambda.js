@@ -1,8 +1,46 @@
 const createApplicationContext = require('../applicationContext');
 const {
-  getUserFromAuthHeader,
-  handle,
+  headers,
+  sendError,
+  sendOk,
 } = require('../middleware/apiGatewayHelper');
+const {
+  NotFoundError,
+  UnauthorizedError,
+} = require('../../../shared/src/errors/errors');
+const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
+
+const customHandle = async (event, fun) => {
+  if (event.source === 'serverless-plugin-warmup') {
+    return sendOk('Lambda is warm!');
+  }
+  try {
+    const { zipBuffer, zipName } = await fun();
+    return {
+      body: zipBuffer.toString('base64'),
+      headers: {
+        ...headers,
+        'Content-disposition': `attachment; filename=${zipName}`,
+        'Content-Disposition': `attachment; filename=${zipName}`,
+        'Content-Type': 'application/zip',
+        'accept-ranges': 'bytes',
+      },
+      isBase64Encoded: true,
+      statusCode: 200,
+    };
+  } catch (err) {
+    console.error('err', err);
+    if (err instanceof NotFoundError) {
+      err.statusCode = 404;
+      return sendError(err);
+    } else if (err instanceof UnauthorizedError) {
+      err.statusCode = 403;
+      return sendError(err);
+    } else {
+      return sendError(err);
+    }
+  }
+};
 
 /**
  * batch download trial session
@@ -11,7 +49,7 @@ const {
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, async () => {
+  customHandle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
