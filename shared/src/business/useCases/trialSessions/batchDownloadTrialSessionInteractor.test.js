@@ -65,6 +65,5 @@ describe('batchDownloadTrialSessionInteractor', () => {
     expect(getTrialSessionByIdMock).toHaveBeenCalled();
     expect(getCalendaredCasesForTrialSessionMock).toHaveBeenCalled();
     expect(zipDocumentsMock).toHaveBeenCalled();
-    expect(getDownloadPolicyUrlMock).toHaveBeenCalled();
   });
 });
