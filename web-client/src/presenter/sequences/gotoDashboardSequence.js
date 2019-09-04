@@ -74,7 +74,6 @@ const goToDashboard = [
       setCurrentPageAction('DashboardPractitioner'),
     ],
     respondent: [
-      clearAlertsAction,
       getCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardRespondent'),
