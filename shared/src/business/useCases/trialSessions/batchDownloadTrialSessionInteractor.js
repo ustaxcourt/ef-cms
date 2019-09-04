@@ -49,10 +49,10 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
   const trialDate = formatDateString(
     trialSessionDetails.startDate,
-    'MMMM D, YYYY',
+    'MMMM_D_YYYY',
   );
   const { trialLocation } = trialSessionDetails;
-  let zipName = sanitize(`${trialDate} - ${trialLocation}.zip`)
+  let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
     .replace(/\s/g, '_')
     .replace(/,/g, '');
   zipName = sanitize(`${trialSessionId}.zip`)
@@ -61,7 +61,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
   sessionCases = sessionCases.map(caseToBatch => {
     const caseName = Case.getCaseCaptionNames(caseToBatch.caseCaption);
-    const caseFolder = `${caseToBatch.docketNumber}, ${caseName}`;
+    const caseFolder = `${caseToBatch.docketNumber}`;
 
     return {
       ...caseToBatch,
@@ -103,7 +103,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
         caseDetail: caseDetails[caseId],
       }),
     );
-    extraFileNames.push(`${sessionCases[index].caseFolder}/00000000000.pdf`);
+    extraFileNames.push(`${sessionCases[index].caseFolder}/Docket_Record.pdf`);
   }
 
   await applicationContext.getPersistenceGateway().zipDocuments({
