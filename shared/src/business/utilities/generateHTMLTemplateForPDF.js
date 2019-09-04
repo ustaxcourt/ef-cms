@@ -152,9 +152,6 @@ const generateChangeOfAddressTemplate = content => {
     oldAddress = `<div>${oldData.phone}</div>`;
     newAddress = `<div>${newData.phone}</div>`;
   } else {
-    oldAddress = '';
-    newAddress = '';
-
     if (oldData.inCareOf) {
       oldAddress += `<div>c/o ${oldData.inCareOf}</div>`;
     }
