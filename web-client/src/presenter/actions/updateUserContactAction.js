@@ -37,9 +37,9 @@ export const updateUserContactAction = async ({
     }
   }
 
-  // we wait 1 second because we are hitting an "async: true" endpoint which means we will get a response
+  // we wait 2 seconds because we are hitting an "async: true" endpoint which means we will get a response
   // back instantly which means the user's address on the dashboard might not be updated yet.
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
   return path.success({
     alertSuccess: {
