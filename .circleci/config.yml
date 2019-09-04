@@ -343,7 +343,6 @@ workflows:
           filters:
             branches:
               only:
-                # - develop
                 - staging
                 - master
       - deploy-api-east:
@@ -356,7 +355,6 @@ workflows:
           filters:
             branches:
               only:
-                # - develop
                 - staging
                 - master
       - deploy-api-west:
@@ -369,7 +367,6 @@ workflows:
           filters:
             branches:
               only:
-                # - develop
                 - staging
                 - master
       - post-deploy:
