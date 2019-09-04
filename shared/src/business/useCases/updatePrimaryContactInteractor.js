@@ -37,12 +37,17 @@ exports.updatePrimaryContactInteractor = async ({
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  if (user.userId !== caseToUpdate.userId) {
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
+
+  const userIsAssociated = applicationContext
+    .getUseCases()
+    .userIsAssociated({ applicationContext, caseDetail: caseToUpdate, user });
+
+  if (!userIsAssociated) {
     throw new UnauthorizedError('Unauthorized for update case contact');
   }
 
   let caseNameToUse;
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
   const spousePartyTypes = [
     ContactFactory.PARTY_TYPES.petitionerSpouse,
     ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
