@@ -1,4 +1,5 @@
 const pdfjsLib = require('pdfjs-dist');
+const { PDFDocument } = require('pdf-lib');
 
 /**
  * loadPDFForSigningInteractor
@@ -10,6 +11,7 @@ const pdfjsLib = require('pdfjs-dist');
 exports.loadPDFForSigningInteractor = async ({
   applicationContext,
   documentId,
+  removeCover = false,
 }) => {
   try {
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
@@ -18,8 +20,20 @@ exports.loadPDFForSigningInteractor = async ({
       documentId,
     });
 
+    let formattedArrayBuffer;
     const arrayBuffer = await new Response(pdfData).arrayBuffer();
-    return await pdfjsLib.getDocument(arrayBuffer).promise;
+
+    if (removeCover) {
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      pdfDoc.removePage(0);
+      formattedArrayBuffer = await pdfDoc.save({
+        useObjectStreams: false,
+      });
+    } else {
+      formattedArrayBuffer = arrayBuffer;
+    }
+
+    return await pdfjsLib.getDocument(formattedArrayBuffer).promise;
   } catch (err) {
     throw new Error('error loading PDF');
   }

@@ -14,7 +14,7 @@ export const setPDFForSigningAction = async ({
   props,
   store,
 }) => {
-  const { documentId } = props;
+  const { caseDetail, documentId } = props;
 
   store.set(state.pdfForSigning.documentId, documentId);
 
@@ -22,11 +22,22 @@ export const setPDFForSigningAction = async ({
     return;
   }
 
+  let removeCover = false;
+  const document = caseDetail.documents.find(
+    document => document.documentId === documentId,
+  );
+
+  if (document.documentType === 'Proposed Stipulated Decision') {
+    removeCover = true;
+  }
+
   let pdfObj = {};
 
-  pdfObj = await applicationContext
-    .getUseCases()
-    .loadPDFForSigningInteractor({ applicationContext, documentId });
+  pdfObj = await applicationContext.getUseCases().loadPDFForSigningInteractor({
+    applicationContext,
+    documentId,
+    removeCover,
+  });
 
   store.set(state.pdfForSigning.pdfjsObj, pdfObj);
 };
