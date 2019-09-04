@@ -7,7 +7,7 @@
  * @param {object} params.user user entity
  * @returns {object} errors
  */
-exports.userIsAssociated = ({ applicationContext, caseDetail, user }) => {
+exports.userIsAssociated = ({ caseDetail, user }) => {
   const { role, userId } = user;
 
   if (userId === caseDetail.userId) {

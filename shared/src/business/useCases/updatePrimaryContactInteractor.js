@@ -33,11 +33,11 @@ exports.updatePrimaryContactInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
-
   if (!caseToUpdate) {
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
+
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const userIsAssociated = applicationContext
     .getUseCases()
