@@ -21,13 +21,13 @@ presenter.providers.applicationContext = {
 
 describe('updateUserContactAction', () => {
   it('should update the user and provide an alertSuccess message', async () => {
-    const { output } = await runAction(updateUserContactAction, {
+    await runAction(updateUserContactAction, {
       modules: {
         presenter,
       },
       state: {},
     });
     expect(updateUserMock).toHaveBeenCalled();
-    expect(output.alertSuccess).toBeDefined();
+    expect(successMock).toBeCalled();
   });
 });

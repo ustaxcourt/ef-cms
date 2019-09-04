@@ -45,6 +45,9 @@ const {
   CaseInternal,
 } = require('../../shared/src/business/entities/cases/CaseInternal');
 const {
+  caseSearchInteractor,
+} = require('../../shared/src/business/useCases/caseSearchInteractor');
+const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
@@ -654,6 +657,7 @@ module.exports = (appContextUser = {}) => {
         associatePractitionerWithCaseInteractor,
         associateRespondentWithCaseInteractor,
         batchDownloadTrialSessionInteractor,
+        caseSearchInteractor,
         checkForReadyForTrialCasesInteractor,
         completeWorkItemInteractor,
         createCaseDeadlineInteractor,
