@@ -13,7 +13,7 @@ describe('cancelDelayedLogoutAction', () => {
         logoutTimer: {},
       },
     });
-    expect(result.state.logoutTimer).toBeNull();
+    expect(result.state.logoutTimer).toBeUndefined();
   });
 
   it('sets shouldIdleLogout to false', async () => {
