@@ -70,10 +70,12 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const showCaseNameForPrimary = !get(state.caseDetail.contactSecondary.name);
 
-  let showEditPrimaryContactButton = isExternalUser;
+  let showEditPrimaryContactButton = false;
 
   if (userRole === 'respondent') {
     showEditPrimaryContactButton = false;
+  } else if (userRole === 'practitioner') {
+    showEditPrimaryContactButton = userAssociatedWithCase;
   }
 
   return {
