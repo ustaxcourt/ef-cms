@@ -3,6 +3,7 @@ import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
+import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
@@ -99,7 +100,7 @@ export const PrimaryDocumentForm = connect(
                     onChange={e => {
                       updateDocketEntryFormValueSequence({
                         key: e.target.name,
-                        value: e.target.value,
+                        value: limitLength(e.target.value, 2),
                       });
                     }}
                   />
@@ -111,6 +112,7 @@ export const PrimaryDocumentForm = connect(
                     className="usa-input usa-input--inline"
                     id="date-received-day"
                     max="31"
+                    maxLength="2"
                     min="1"
                     name="dateReceivedDay"
                     placeholder="DD"
@@ -122,7 +124,7 @@ export const PrimaryDocumentForm = connect(
                     onChange={e => {
                       updateDocketEntryFormValueSequence({
                         key: e.target.name,
-                        value: e.target.value,
+                        value: limitLength(e.target.value, 2),
                       });
                     }}
                   />
@@ -134,6 +136,7 @@ export const PrimaryDocumentForm = connect(
                     className="usa-input usa-input--inline"
                     id="date-received-year"
                     max="2100"
+                    maxLength="4"
                     min="1900"
                     name="dateReceivedYear"
                     placeholder="YYYY"
@@ -145,7 +148,7 @@ export const PrimaryDocumentForm = connect(
                     onChange={e => {
                       updateDocketEntryFormValueSequence({
                         key: e.target.name,
-                        value: e.target.value,
+                        value: limitLength(e.target.value, 4),
                       });
                     }}
                   />

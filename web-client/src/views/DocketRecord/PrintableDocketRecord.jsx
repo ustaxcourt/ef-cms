@@ -8,9 +8,9 @@ import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 export const PrintableDocketRecord = connect(
   {
     caseDetail: state.formattedCaseDetail,
-    gotoCaseDetail: sequences.gotoCaseDetailSequence,
+    navigateToCaseDetail: sequences.navigateToCaseDetailSequence,
   },
-  ({ caseDetail, gotoCaseDetail }) => {
+  ({ caseDetail, navigateToCaseDetail }) => {
     return (
       <>
         <div className="big-blue-header">
@@ -30,8 +30,8 @@ export const PrintableDocketRecord = connect(
           <button
             className="usa-button usa-button--unstyled margin-bottom-3"
             onClick={() => {
-              gotoCaseDetail({
-                docketNumber: caseDetail.docketNumber,
+              navigateToCaseDetail({
+                caseId: caseDetail.docketNumber,
               });
             }}
           >
