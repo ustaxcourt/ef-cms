@@ -10,6 +10,10 @@ describe('CaseDeadline', () => {
   });
 
   describe('validation', () => {
+    it('should throw an error if app context is not passed in', () => {
+      expect(() => new CaseDeadline({}, {})).toThrow(TypeError);
+    });
+
     it('should have error messages for missing fields', () => {
       const caseDeadline = new CaseDeadline({}, { applicationContext });
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({

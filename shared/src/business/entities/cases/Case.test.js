@@ -17,6 +17,10 @@ describe('Case entity', () => {
     };
   });
 
+  it('should throw an error if app context is not passed in', () => {
+    expect(() => new Case({}, {})).toThrow();
+  });
+
   it('defaults the orders to false', () => {
     const myCase = new Case(MOCK_CASE, { applicationContext });
     expect(myCase).toMatchObject({

@@ -49,10 +49,15 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
   const trialDate = formatDateString(
     trialSessionDetails.startDate,
-    'MMMM D, YYYY',
+    'MMMM_D_YYYY',
   );
   const { trialLocation } = trialSessionDetails;
-  const zipName = sanitize(`${trialDate} - ${trialLocation}.zip`);
+  let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
+    .replace(/\s/g, '_')
+    .replace(/,/g, '');
+  zipName = sanitize(`${trialSessionId}.zip`)
+    .replace(/\s/g, '_')
+    .replace(/,/g, '');
 
   sessionCases = sessionCases.map(caseToBatch => {
     const caseName = Case.getCaseCaptionNames(caseToBatch.caseCaption);
@@ -82,7 +87,10 @@ exports.batchDownloadTrialSessionInteractor = async ({
           'YYYY-MM-DD',
         );
         const docNum = padStart(`${aDocketRecord.index}`, 4, '0');
-        const pdfTitle = `${caseToBatch.caseFolder}/${docDate}_${docNum}_${aDocketRecord.description}.pdf`;
+        const fileName = sanitize(
+          `${docDate}_${docNum}_${aDocketRecord.description}.pdf`,
+        );
+        const pdfTitle = `${caseToBatch.caseFolder}/${fileName}`;
         s3Ids.push(myDoc.documentId);
         fileNames.push(pdfTitle);
       }
@@ -92,12 +100,14 @@ exports.batchDownloadTrialSessionInteractor = async ({
   for (let index = 0; index < sessionCases.length; index++) {
     let { caseId } = sessionCases[index];
     extraFiles.push(
-      applicationContext.getUseCases().generateDocketRecordPdfInteractor({
+      await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
         applicationContext,
         caseDetail: caseDetails[caseId],
       }),
     );
-    extraFileNames.push(`${sessionCases[index].caseFolder}/Docket Record.pdf`);
+    extraFileNames.push(
+      `${sessionCases[index].caseFolder}/0_Docket Record.pdf`,
+    );
   }
 
   await applicationContext.getPersistenceGateway().zipDocuments({

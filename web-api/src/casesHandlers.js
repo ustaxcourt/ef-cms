@@ -4,6 +4,7 @@ module.exports = {
     .handler,
   associateRespondentWithCaseLambda: require('./manualAssociation/associateRespondentWithCaseLambda')
     .handler,
+  caseSearchLambda: require('./cases/caseSearchLambda').handler,
   createCaseDeadlineLambda: require('./caseDeadline/createCaseDeadlineLambda')
     .handler,
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')

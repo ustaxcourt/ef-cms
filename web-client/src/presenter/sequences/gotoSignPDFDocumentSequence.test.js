@@ -7,7 +7,12 @@ presenter.providers.applicationContext = {
   ...applicationContext,
   getUseCases: () => ({
     getCaseInteractor: () => ({
-      caseId: '123',
+      documents: [
+        {
+          documentId: '123',
+          documentType: 'Proposed Stipulated Decision',
+        },
+      ],
     }),
     loadPDFForSigningInteractor: () => {
       1;

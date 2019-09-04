@@ -19,6 +19,10 @@ describe('NewTrialSession entity', () => {
   });
 
   describe('isValid', () => {
+    it('should throw an error if app context is not passed in', () => {
+      expect(() => new NewTrialSession({}, {})).toThrow();
+    });
+
     it('creates a valid trial session', () => {
       const trialSession = new NewTrialSession(VALID_TRIAL_SESSION, {
         applicationContext,
