@@ -15,6 +15,7 @@ exports.zipDocuments = ({
   extraFileNames,
   extraFiles,
   fileNames,
+  returnBuffer,
   s3Ids,
   zipName,
 }) => {
@@ -35,14 +36,30 @@ exports.zipDocuments = ({
       s3Client.upload(params, function() {});
 
       pass.on('finish', () => {
-        // eslint-disable-next-line no-console
-        console.log(`'${zipName}' in '${bucket}' has been created`);
         resolve();
       });
 
       pass.on('error', reject);
 
       return pass;
+    };
+
+    const streamToBuffer = () => {
+      const buffs = [];
+
+      const converter = new stream.Writable();
+
+      // eslint-disable-next-line no-underscore-dangle
+      converter._write = (chunk, encoding, cb) => {
+        buffs.push(chunk);
+        process.nextTick(cb);
+      };
+
+      converter.on('finish', () => {
+        resolve(Buffer.concat(buffs));
+      });
+
+      return converter;
     };
 
     s3Zip
@@ -55,6 +72,6 @@ exports.zipDocuments = ({
         extraFiles,
         extraFileNames,
       )
-      .pipe(uploadFromStream(s3Client));
+      .pipe(returnBuffer ? streamToBuffer() : uploadFromStream(s3Client));
   });
 };
