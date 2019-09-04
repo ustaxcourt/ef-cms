@@ -25,7 +25,6 @@ export const updateUserContactAction = async ({
         userId,
       });
   } catch (err) {
-    console.log('err.originalError', err.originalError);
     if (
       err.originalError &&
       err.originalError.response.data.indexOf(
@@ -37,6 +36,10 @@ export const updateUserContactAction = async ({
       throw err;
     }
   }
+
+  // we wait 2 seconds because we are hitting an "async: true" endpoint which means we will get a response
+  // back instantly which means the user's address on the dashboard might not be updated yet.
+  await new Promise(resolve => setTimeout(resolve, 2000));
 
   return path.success({
     alertSuccess: {

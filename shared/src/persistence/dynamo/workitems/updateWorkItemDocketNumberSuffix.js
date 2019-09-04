@@ -29,7 +29,7 @@ exports.updateWorkItemDocketNumberSuffix = async ({
         pk: workItem.pk,
         sk: workItem.sk,
       },
-      UpdateExpression: `SET #docketNumberSuffix = :docketNumberSuffix`,
+      UpdateExpression: 'SET #docketNumberSuffix = :docketNumberSuffix',
       applicationContext,
     });
   }

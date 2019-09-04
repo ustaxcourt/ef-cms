@@ -64,7 +64,7 @@ exports.sanitizePdfInteractor = async ({ applicationContext, documentId }) => {
       '-dDownsampleMonoImages=true',
       '-dDownsampleGrayImages=true',
       '-dDownsampleColorImages=true',
-      `-dPrinted=true`,
+      '-dPrinted=true',
       `-sOutputFile=${outputPdf.name}`,
       `-f ${intermediatePostscript.name}`,
     ].join(' ');

@@ -82,7 +82,7 @@ const PartyInformation = connect(
                   })}
                 </address>
 
-                {caseHelper.showEditContactButton && (
+                {caseHelper.showEditPrimaryContactButton && (
                   <p>
                     <a
                       className="usa-button usa-button--unstyled"

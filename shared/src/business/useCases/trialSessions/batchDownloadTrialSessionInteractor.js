@@ -55,9 +55,6 @@ exports.batchDownloadTrialSessionInteractor = async ({
   let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
     .replace(/\s/g, '_')
     .replace(/,/g, '');
-  zipName = sanitize(`${trialSessionId}.zip`)
-    .replace(/\s/g, '_')
-    .replace(/,/g, '');
 
   sessionCases = sessionCases.map(caseToBatch => {
     const caseName = Case.getCaseCaptionNames(caseToBatch.caseCaption);
@@ -110,21 +107,17 @@ exports.batchDownloadTrialSessionInteractor = async ({
     );
   }
 
-  await applicationContext.getPersistenceGateway().zipDocuments({
-    applicationContext,
-    extraFileNames,
-    extraFiles,
-    fileNames,
-    s3Ids,
-    zipName,
-  });
-
-  const results = await applicationContext
+  const zipBuffer = await applicationContext
     .getPersistenceGateway()
-    .getDownloadPolicyUrl({
+    .zipDocuments({
       applicationContext,
-      documentId: zipName,
+      extraFileNames,
+      extraFiles,
+      fileNames,
+      returnBuffer: true,
+      s3Ids,
+      zipName,
     });
 
-  return results;
+  return { zipBuffer, zipName };
 };

@@ -66,6 +66,7 @@ import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoPrimaryContactEditSequence } from './sequences/gotoPrimaryContactEditSequence';
+import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDocketRecordSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
 import { gotoSignPDFDocumentSequence } from './sequences/gotoSignPDFDocumentSequence';
@@ -79,6 +80,7 @@ import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSe
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
+import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAddEditCaseNoteModalFromDetailSequence } from './sequences/openAddEditCaseNoteModalFromDetailSequence';
@@ -313,6 +315,7 @@ export const presenter = {
     gotoIdleLogoutSequence,
     gotoLoginSequence,
     gotoPrimaryContactEditSequence,
+    gotoPrintableDocketRecordSequence,
     gotoRequestAccessSequence,
     gotoSelectDocumentTypeSequence,
     gotoSignPDFDocumentSequence,
@@ -326,6 +329,7 @@ export const presenter = {
     loadPdfSequence,
     loginWithCodeSequence,
     loginWithTokenSequence,
+    navigateToCaseDetailSequence,
     navigateToPathSequence,
     notFoundErrorSequence,
     openAddEditCaseNoteModalFromDetailSequence,
