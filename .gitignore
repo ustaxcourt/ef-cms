@@ -3,6 +3,7 @@
 .dynamodb/
 .scannerwork/
 .terraform/
+.serverless/
 aws.json
 coverage/
 cypress/screenshots
