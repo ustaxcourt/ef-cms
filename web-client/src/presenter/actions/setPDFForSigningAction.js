@@ -23,12 +23,15 @@ export const setPDFForSigningAction = async ({
   }
 
   let removeCover = false;
-  const document = caseDetail.documents.find(
-    document => document.documentId === documentId,
-  );
 
-  if (document.documentType === 'Proposed Stipulated Decision') {
-    removeCover = true;
+  if (caseDetail && Array.isArray(caseDetail.documents)) {
+    const document = caseDetail.documents.find(
+      caseDocument => caseDocument.documentId === documentId,
+    );
+
+    if (document && document.documentType === 'Proposed Stipulated Decision') {
+      removeCover = true;
+    }
   }
 
   let pdfObj = {};
