@@ -404,6 +404,14 @@ const router = {
       }),
     );
 
+    route(
+      '/case-search/no-matches',
+      checkLoggedIn(() => {
+        document.title = `Search Results ${pageTitleSuffix}`;
+        app.getSequence('gotoCaseSearchNoMatchesSequence')();
+      }),
+    );
+
     route('/mock-login...', () => {
       const { path, token } = queryStringDecoder();
       if (token) {

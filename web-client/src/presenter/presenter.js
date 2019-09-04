@@ -58,6 +58,7 @@ import { gotoAllCaseDeadlinesSequence } from './sequences/gotoAllCaseDeadlinesSe
 import { gotoBeforeStartCaseSequence } from './sequences/gotoBeforeStartCaseSequence';
 import { gotoBeforeYouFileDocumentSequence } from './sequences/gotoBeforeYouFileDocumentSequence';
 import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
+import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
 import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
@@ -305,6 +306,7 @@ export const presenter = {
     gotoBeforeStartCaseSequence,
     gotoBeforeYouFileDocumentSequence,
     gotoCaseDetailSequence,
+    gotoCaseSearchNoMatchesSequence,
     gotoCreateOrderSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,

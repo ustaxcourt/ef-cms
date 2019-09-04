@@ -13,7 +13,6 @@ export const clearAlertsAction = ({ get, store }) => {
     store.set(state.alertError, null);
     store.set(state.alertSuccess, null);
   }
-  store.set(state.form.searchError, false);
   store.set(state.caseDetailErrors, {});
   store.set(state.saveAlertsForNavigation, false);
   store.set(state.validationErrors, {});

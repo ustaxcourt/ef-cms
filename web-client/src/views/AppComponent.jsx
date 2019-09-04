@@ -5,6 +5,7 @@ import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
+import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardDocketClerk } from './Dashboards/DashboardDocketClerk';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
@@ -50,6 +51,7 @@ const pages = {
   CaseDeadlines,
   CaseDetail,
   CaseDetailInternal,
+  CaseSearchNoMatches,
   CreateOrder,
   DashboardDocketClerk,
   DashboardJudge,
