@@ -70,6 +70,14 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const showCaseNameForPrimary = !get(state.caseDetail.contactSecondary.name);
 
+  let showEditPrimaryContactButton = false;
+
+  if (userRole === 'respondent') {
+    showEditPrimaryContactButton = false;
+  } else if (userRole === 'practitioner') {
+    showEditPrimaryContactButton = userAssociatedWithCase;
+  }
+
   return {
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
@@ -99,6 +107,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContactButton: isExternalUser,
+    showEditPrimaryContactButton,
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
