@@ -14,12 +14,21 @@ exports.batchDownloadTrialSessionInteractor = ({
   caseDetails,
   trialSessionId,
 }) => {
-  return post({
-    applicationContext,
-    body: {
-      caseDetails,
-      trialSessionId,
-    },
-    endpoint: `/trial-sessions/${trialSessionId}/batch-download`,
-  });
+  return applicationContext
+    .getHttpClient()
+    .post(
+      `${applicationContext.getBaseUrl()}/trial-sessions/${trialSessionId}/batch-download`,
+      {
+        caseDetails,
+        trialSessionId,
+      },
+      {
+        headers: {
+          Accept: 'application/zip',
+          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+        },
+        responseType: 'blob',
+      },
+    )
+    .then(response => new Blob([response.data], { type: 'application/zip' }));
 };
