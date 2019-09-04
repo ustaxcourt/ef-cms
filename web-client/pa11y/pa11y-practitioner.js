@@ -20,4 +20,5 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=practitioner&path=/case-detail/102-19/request-access&filled-form=true',
   },
+  'http://localhost:1234/mock-login?token=practitioner&path=/case-search/no-matches',
 ];

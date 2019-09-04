@@ -13,6 +13,7 @@ import respondentFilesFirstIRSDocumentOnCase from './journey/respondentFilesFirs
 import respondentLogin from './journey/respondentLogIn';
 import respondentRequestsAccessToCase from './journey/respondentRequestsAccessToCase';
 import respondentSearchesForCase from './journey/respondentSearchesForCase';
+import respondentSearchesForNonexistentCase from './journey/respondentSearchesForNonexistentCase';
 import respondentSignsOut from './journey/respondentSignsOut';
 import respondentViewsCaseDetail from './journey/respondentViewsCaseDetail';
 import respondentViewsCaseDetailOfAssociatedCase from './journey/respondentViewsCaseDetailOfAssociatedCase';
@@ -40,10 +41,10 @@ presenter.providers.router = {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: test.docketNumber,
       });
-    }
-
-    if (url === '/') {
+    } else if (url === '/') {
       await test.runSequence('gotoDashboardSequence');
+    } else if (url === '/case-search/no-matches') {
+      await test.runSequence('gotoCaseSearchNoMatchesSequence');
     }
   },
 };
@@ -91,6 +92,8 @@ describe('Respondent requests access to a case', () => {
   taxpayerSignsOut(test);
 
   respondentLogin(test);
+  respondentSearchesForNonexistentCase(test);
+  respondentViewsDashboard(test);
   respondentSearchesForCase(test);
   respondentViewsCaseDetail(test);
   respondentFilesFirstIRSDocumentOnCase(test, fakeFile);
