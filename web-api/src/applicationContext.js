@@ -458,6 +458,9 @@ const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
 const {
+  userIsAssociated,
+} = require('../../shared/src/business/useCases/caseAssociation/userIsAssociatedInteractor');
+const {
   validatePdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
 const {
@@ -725,6 +728,7 @@ module.exports = (appContextUser = {}) => {
         updatePrimaryContactInteractor,
         updateTrialSessionWorkingCopyInteractor,
         updateUserContactInformationInteractor,
+        userIsAssociated,
         validatePdfInteractor,
         verifyCaseForUserInteractor,
         verifyPendingCaseForUserInteractor,
