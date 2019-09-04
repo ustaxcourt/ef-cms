@@ -11,6 +11,10 @@ describe('WorkItem', () => {
   });
 
   describe('isValid', () => {
+    it('should throw an error if app context is not passed in', () => {
+      expect(() => new WorkItem({}, {})).toThrow();
+    });
+
     it('Creates a valid workitem', () => {
       const workItem = new WorkItem(
         {
