@@ -1,5 +1,4 @@
 version: 2
-
 jobs:
   bundle:
     docker:
@@ -103,8 +102,8 @@ jobs:
       - run:
           name: Web Client - Test
           command: |
-            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api > /dev/null & 
-            ./wait-until.sh http://localhost:3000/api/swagger 
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api > /dev/null &
+            ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
             npm run test:client
       - run:
@@ -154,9 +153,9 @@ jobs:
               ./node_modules/.bin/cypress install
             fi
 
-            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null & 
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null &
             ./wait-until-services.sh
-            ./wait-until.sh http://localhost:1234 
+            ./wait-until.sh http://localhost:1234
             npm run cypress
       - store_artifacts:
           path: /home/circleci/project/cypress/videos/
@@ -304,6 +303,18 @@ jobs:
 
 workflows:
   version: 2
+  hourly:
+    jobs:
+      - deploy-ui
+      - deploy-api-west
+      - deploy-api-east
+    triggers:
+      - schedule:
+          cron: '0 7-18 * * 1-5'
+          filters:
+            branches:
+              only:
+                - develop
   build-and-deploy:
     jobs:
       - bundle
@@ -332,7 +343,7 @@ workflows:
           filters:
             branches:
               only:
-                - develop
+                # - develop
                 - staging
                 - master
       - deploy-api-east:
@@ -345,7 +356,7 @@ workflows:
           filters:
             branches:
               only:
-                - develop
+                # - develop
                 - staging
                 - master
       - deploy-api-west:
@@ -358,7 +369,7 @@ workflows:
           filters:
             branches:
               only:
-                - develop
+                # - develop
                 - staging
                 - master
       - post-deploy:
