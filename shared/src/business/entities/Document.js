@@ -23,7 +23,10 @@ Document.validationName = 'Document';
  * @param {object} rawDocument the raw document data
  * @constructor
  */
-function Document(rawDocument) {
+function Document(rawDocument, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.addToCoversheet = rawDocument.addToCoversheet;
@@ -66,7 +69,7 @@ function Document(rawDocument) {
 
   this.processingStatus = this.processingStatus || 'pending';
   this.workItems = (this.workItems || []).map(
-    workItem => new WorkItem(workItem),
+    workItem => new WorkItem(workItem, { applicationContext }),
   );
 }
 

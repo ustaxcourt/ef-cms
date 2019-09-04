@@ -1,5 +1,4 @@
 const joi = require('joi-browser');
-const uuid = require('uuid');
 const {
   createISODateString,
   formatDateString,
@@ -155,9 +154,12 @@ Case.docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case(rawCase) {
+function Case(rawCase, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
   this.caseCaption = rawCase.caseCaption;
-  this.caseId = rawCase.caseId || uuid.v4();
+  this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
   this.contactSecondary = rawCase.contactSecondary;
@@ -196,7 +198,9 @@ function Case(rawCase) {
   }
 
   if (Array.isArray(rawCase.documents)) {
-    this.documents = rawCase.documents.map(document => new Document(document));
+    this.documents = rawCase.documents.map(
+      document => new Document(document, { applicationContext }),
+    );
   } else {
     this.documents = [];
   }

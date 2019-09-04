@@ -45,7 +45,7 @@ exports.serveSignedStipDecisionInteractor = async ({
   if (!caseToUpdate) {
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
-  const caseEntity = new Case(caseToUpdate);
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const stipulatedDecisionDocument = caseEntity.getDocumentById({
     documentId,
