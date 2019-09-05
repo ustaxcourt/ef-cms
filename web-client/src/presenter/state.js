@@ -50,6 +50,11 @@ import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 export const state = {
   addDocketEntryHelper,
   alertHelper,
+  archiveDraftDocument: {
+    caseId: null,
+    documentId: null,
+    documentTitle: null,
+  },
   assigneeId: null,
   batchIndexToRescan: null,
   batches: [],
