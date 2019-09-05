@@ -66,6 +66,7 @@ function Document(rawDocument, { applicationContext }) {
   this.supportingDocument = rawDocument.supportingDocument;
   this.userId = rawDocument.userId;
   this.workItems = rawDocument.workItems;
+  this.archived = rawDocument.archived;
 
   this.processingStatus = this.processingStatus || 'pending';
   this.workItems = (this.workItems || []).map(
@@ -145,6 +146,7 @@ Document.prototype.isPetitionDocument = function() {
 joiValidationDecorator(
   Document,
   joi.object().keys({
+    archived: joi.boolean().optional(),
     createdAt: joi
       .date()
       .iso()
@@ -195,6 +197,15 @@ joiValidationDecorator(
  */
 Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
+};
+
+/**
+ * sets the document as archived (used to hide from the ui)
+ *
+ * @param {WorkItem} workItem the work item to add to the document
+ */
+Document.prototype.archive = function() {
+  this.archived = true;
 };
 
 Document.prototype.setAsServed = function(servedParties = null) {
