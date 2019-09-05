@@ -20,6 +20,6 @@ export const archiveDraftDocumentAction = async ({
 
   store.set(state.alertSuccess, {
     message: documentTitle,
-    title: 'Your message was created successfully.',
+    title: 'This document has been deleted:',
   });
 };
