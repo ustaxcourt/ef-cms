@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { SearchResults } from './SearchResults';
 import { StateSelect } from './StateSelect';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -8,14 +9,12 @@ export const AdvancedSearch = connect(
   {
     constants: state.constants,
     form: state.form,
-    searchResults: state.searchResults,
     submitAdvancedSearchSequence: sequences.submitAdvancedSearchSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
     constants,
     form,
-    searchResults,
     submitAdvancedSearchSequence,
     updateFormValueSequence,
   }) => {
@@ -139,7 +138,7 @@ export const AdvancedSearch = connect(
             </div>
           </div>
 
-          {JSON.stringify(searchResults)}
+          <SearchResults />
         </section>
       </>
     );

@@ -1,5 +1,3 @@
-import { BigHeader } from '../BigHeader';
-import { StateSelect } from './StateSelect';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -11,126 +9,45 @@ export const SearchResults = connect(
   ({ searchResults }) => {
     return (
       <>
-        <BigHeader text="Advanced Search" />
+        {searchResults && searchResults.length > 0 && (
+          <>
+            <h1 className="margin-top-4">({searchResults.length}) Matches</h1>
 
-        <section className="usa-section grid-container advanced-search">
-          <div className="header-with-blue-background">
-            <h3>Enter Search Criteria</h3>
-          </div>
-          <div className="blue-container">
-            <div className="grid-row grid-gap">
-              <div className="grid-col-4 right-gray-border">
-                <label className="usa-label" htmlFor="petitionerName">
-                  Petitioner name <span className="usa-hint">(required)</span>
-                </label>
-                <input
-                  className="usa-input"
-                  id="petitioner-name"
-                  name="petitionerName"
-                  type="text"
-                  value={form.petitionerName || ''}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-
-              <div className="grid-col-4 right-gray-border">
-                <div className="grid-row grid-gap">
-                  <div className="grid-col-7">
-                    <label className="usa-label" htmlFor="country-type">
-                      Country
-                    </label>
-                    <select
-                      className="usa-select"
-                      id="country-type"
-                      name="countryType"
-                      value={form.countryType}
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    >
-                      <option value={constants.COUNTRY_TYPES.DOMESTIC}>
-                        - United States -
-                      </option>
-                      <option value={constants.COUNTRY_TYPES.INTERNATIONAL}>
-                        - International -
-                      </option>
-                    </select>
-                  </div>
-
-                  <div className="grid-col-5">
-                    <label className="usa-label" htmlFor="petitionerName">
-                      State
-                    </label>
-                    <StateSelect
-                      bind={form.select}
-                      updateFormValueSequence={updateFormValueSequence}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid-col-4">
-                <div className="grid-row grid-gap">
-                  <div className="grid-col-7">
-                    <label className="display-block" htmlFor="year-filed">
-                      Year filed
-                    </label>
-                    <div className="usa-form-group--year display-inline-block">
-                      <input
-                        className="usa-input"
-                        id="year-filed-min"
-                        name="yearFiledMin"
-                        type="text"
-                        value={form.yearFiledMin || ''}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                    </div>
-                    <span className="margin-right-2">to</span>
-                    <div className="usa-form-group--year display-inline-block">
-                      <input
-                        className="usa-input"
-                        id="year-filed-max"
-                        name="yearFiledMax"
-                        type="text"
-                        value={form.yearFiledMax || ''}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid-col-5">
-                    <button
-                      className="usa-button advanced-search__button"
-                      onClick={() => submitAdvancedSearchSequence()}
-                    >
-                      Search
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <SearchResults />
-        </section>
+            <table className="usa-table search-results docket-record responsive-table row-border-only">
+              <thead>
+                <tr>
+                  <th aria-label="Number"></th>
+                  <th>Petitioner(s)</th>
+                  <th>Docket</th>
+                  <th>Date filed</th>
+                  <th>Case name</th>
+                  <th>State</th>
+                </tr>
+              </thead>
+              <tbody>
+                {searchResults.map((result, idx) => (
+                  <tr key={idx}>
+                    <td className="center-column">{idx + 1}</td>
+                    <td>{result.contactPrimary.name}</td>
+                    <td>
+                      {result.docketNumber}
+                      {result.docketNumberSuffix}
+                    </td>
+                    <td>{result.filedDate}</td>
+                    <td>{result.caseCaption}</td>
+                    <td>{result.contactPrimary.state}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
+        {searchResults && searchResults.length === 0 && (
+          <>
+            <h1 className="margin-top-4">No Matches Found</h1>
+            <p>Check your search terms and try again.</p>
+          </>
+        )}
       </>
     );
   },
