@@ -4,6 +4,11 @@ import { Mobile } from '../../ustc-ui/Responsive/Responsive';
 import { NonstandardForm } from './NonstandardForm';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
+import {
+  fileDocumentSecondaryOnChange,
+  onInputChange,
+  reactSelectValue,
+} from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
@@ -76,55 +81,26 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                   completeDocumentTypeSectionHelper.documentTypesForSecondarySelectSorted
                 }
                 placeholder="- Select -"
-                value={completeDocumentTypeSectionHelper.documentTypesForSecondarySelectSorted.filter(
-                  option =>
-                    option.eventCode === form.secondaryDocument.eventCode,
-                )}
+                value={reactSelectValue({
+                  documentTypes:
+                    completeDocumentTypeSectionHelper.documentTypesForSecondarySelectSorted,
+                  selectedEventCode: form.secondaryDocument.eventCode,
+                })}
                 onChange={(inputValue, { action }) => {
-                  {
-                    /* TODO: move switch to presenter */
-                  }
-                  switch (action) {
-                    case 'select-option':
-                      updateFileDocumentWizardFormValueSequence({
-                        key: 'secondaryDocument.category',
-                        value: inputValue.category,
-                      });
-                      updateFileDocumentWizardFormValueSequence({
-                        key: 'secondaryDocument.documentType',
-                        value: inputValue.documentType,
-                      });
-                      updateFileDocumentWizardFormValueSequence({
-                        key: 'secondaryDocument.documentTitle',
-                        value: inputValue.documentTitle,
-                      });
-                      updateFileDocumentWizardFormValueSequence({
-                        key: 'secondaryDocument.eventCode',
-                        value: inputValue.eventCode,
-                      });
-                      updateFileDocumentWizardFormValueSequence({
-                        key: 'secondaryDocument.scenario',
-                        value: inputValue.scenario,
-                      });
-                      validateSelectDocumentTypeSequence();
-                      break;
-                    case 'clear':
-                      updateFileDocumentWizardFormValueSequence({
-                        key: 'secondaryDocument.category',
-                        value: '',
-                      });
-                      validateSelectDocumentTypeSequence();
-                      break;
-                  }
+                  fileDocumentSecondaryOnChange({
+                    action,
+                    inputValue,
+                    updateSequence: updateFileDocumentWizardFormValueSequence,
+                    validateSequence: validateSelectDocumentTypeSequence,
+                  });
                   return true;
                 }}
                 onInputChange={(inputText, { action }) => {
-                  if (action == 'input-change') {
-                    updateScreenMetadataSequence({
-                      key: 'searchText',
-                      value: inputText,
-                    });
-                  }
+                  onInputChange({
+                    action,
+                    inputText,
+                    updateSequence: updateScreenMetadataSequence,
+                  });
                 }}
               />
               <Mobile>
