@@ -1,14 +1,18 @@
-import { FilingsAndProceedings } from './FilingsAndProceedings';
+import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
+import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const DraftDocuments = connect(
   {
+    archiveDraftDocumentModalSequence:
+      sequences.archiveDraftDocumentModalSequence,
     caseDetail: state.formattedCaseDetail,
+    showModal: state.showModal,
   },
-  ({ caseDetail }) => {
+  ({ archiveDraftDocumentModalSequence, caseDetail, showModal }) => {
     return (
       <React.Fragment>
         <table
@@ -20,6 +24,7 @@ export const DraftDocuments = connect(
               <th>Date</th>
               <th>Filings and Proceedings</th>
               <th>Created By</th>
+              <th>&nbsp;</th>
               <th>&nbsp;</th>
             </tr>
           </thead>
@@ -40,7 +45,7 @@ export const DraftDocuments = connect(
                         {FilingsAndProceedings}
                       </td>
                       <td>{record.filedBy}</td>
-                      <td className="no-wrap text-align-right">
+                      <td className="smaller-column">
                         {/* TODO: Link to the document to edit */}
                         <a
                           className="usa-button usa-button--unstyled"
@@ -50,12 +55,30 @@ export const DraftDocuments = connect(
                           Edit
                         </a>
                       </td>
+                      <td className="smaller-column">
+                        <button
+                          className="usa-button usa-button--unstyled red-warning"
+                          onClick={() => {
+                            archiveDraftDocumentModalSequence({
+                              caseId: caseDetail.caseId,
+                              documentId: draftDocument.documentId,
+                              documentTitle: draftDocument.documentTitle,
+                            });
+                          }}
+                        >
+                          <FontAwesomeIcon icon="times-circle" size="sm" />
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   );
                 },
               )}
           </tbody>
         </table>
+        {showModal === 'ArchiveDraftDocumentModal' && (
+          <ArchiveDraftDocumentModal />
+        )}
       </React.Fragment>
     );
   },
