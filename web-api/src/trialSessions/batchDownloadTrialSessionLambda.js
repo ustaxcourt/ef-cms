@@ -53,11 +53,12 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
+      const { trialSessionId } = event.pathParameters || {};
       const results = await applicationContext
         .getUseCases()
         .batchDownloadTrialSessionInteractor({
           applicationContext,
-          ...JSON.parse(event.body),
+          trialSessionId,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
