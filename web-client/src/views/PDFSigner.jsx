@@ -133,10 +133,19 @@ class PDFSignerComponent extends React.Component {
                   <div className="margin-top-2">
                     <button
                       className="usa-button"
-                      disabled={!this.props.signatureData}
+                      disabled={this.props.pdfSignerHelper.disableSaveButton}
                       onClick={() => this.props.completeSigning()}
                     >
-                      Save & Send
+                      Save
+                    </button>
+                    <button
+                      className="usa-button"
+                      disabled={
+                        this.props.pdfSignerHelper.disableSaveAndSendButton
+                      }
+                      onClick={() => this.props.completeSigning()}
+                    >
+                      Save & Send Message
                     </button>
                     <button
                       className="usa-button usa-button--unstyled margin-left-2"
@@ -200,6 +209,7 @@ PDFSignerComponent.propTypes = {
   navigateToPathSequence: PropTypes.func,
   pdfForSigning: PropTypes.object,
   pdfObj: PropTypes.object,
+  pdfSignerHelper: PropTypes.object,
   setCanvas: PropTypes.func,
   setPage: PropTypes.func,
   setSignatureData: PropTypes.func,
@@ -217,6 +227,7 @@ export const PDFSigner = connect(
     navigateToPathSequence: sequences.navigateToPathSequence,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
+    pdfSignerHelper: state.pdfSignerHelper,
     setCanvas: sequences.setCanvasForPDFSigningSequence,
     setSignatureData: sequences.setPDFSignatureDataSequence,
     signatureApplied: state.pdfForSigning.signatureApplied,
