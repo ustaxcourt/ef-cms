@@ -82,22 +82,40 @@ export const AdvancedSearch = connect(
               <div className="grid-col-4">
                 <div className="grid-row grid-gap">
                   <div className="grid-col-7">
-                    <label className="usa-label" htmlFor="petitionerName">
+                    <label className="display-block" htmlFor="year-filed">
                       Year filed
                     </label>
-                    <input
-                      className="usa-input"
-                      id="petitioner-name"
-                      name="petitionerName"
-                      type="text"
-                      value={form.petitionerName}
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
+                    <div className="usa-form-group--year display-inline-block">
+                      <input
+                        className="usa-input"
+                        id="year-filed-min"
+                        name="yearFiledMin"
+                        type="text"
+                        value={form.yearFiledMin}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                    <span className="margin-right-2">to</span>
+                    <div className="usa-form-group--year display-inline-block">
+                      <input
+                        className="usa-input"
+                        id="year-filed-max"
+                        name="yearFiledMax"
+                        type="text"
+                        value={form.yearFiledMax}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
                   </div>
 
                   <div className="grid-col-5">
