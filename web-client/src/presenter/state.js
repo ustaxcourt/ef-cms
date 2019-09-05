@@ -29,6 +29,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
+import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { primaryContactEditHelper } from './computeds/primaryContactEditHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
@@ -123,6 +124,7 @@ export const state = {
   },
   pdfPreviewModal: {},
   pdfPreviewModalHelper,
+  pdfSignerHelper,
   percentComplete: 0,
   petition: {},
   previewPdfFile: null,
