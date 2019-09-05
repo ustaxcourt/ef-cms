@@ -404,6 +404,9 @@ const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
+  archiveDraftDocumentInteractor,
+} = require('../../shared/src/business/useCases/archiveDraftDocumentInteractor');
+const {
   updateCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
 const {
@@ -656,6 +659,7 @@ module.exports = (appContextUser = {}) => {
     getUseCases: () => {
       return {
         addCoverToPDFDocumentInteractor,
+        archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
         associatePractitionerWithCaseInteractor,
         associateRespondentWithCaseInteractor,
