@@ -37,14 +37,11 @@ global.Blob = () => {};
 global.File = () => {
   return fakeFile;
 };
-global.URL = {
-  createObjectURL: () => {
-    return fakeData;
-  },
-};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
-  createObjectURL: () => {},
+  createObjectURL: () => {
+    return 'fakeUrl';
+  },
   externalRoute: () => null,
   revokeObjectURL: () => {},
   route: async url => {
