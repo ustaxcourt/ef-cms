@@ -9,6 +9,7 @@ import { state } from 'cerebral';
 export const generateDocketRecordPdfUrlAction = async ({
   applicationContext,
   get,
+  router,
 }) => {
   const caseDetail = get(state.formattedCaseDetail);
   const caseDetailHelper = get(state.caseDetailHelper);
@@ -26,7 +27,7 @@ export const generateDocketRecordPdfUrlAction = async ({
 
   const pdfFile = new Blob([docketRecordPdf], { type: 'application/pdf' });
 
-  const pdfUrl = window.URL.createObjectURL(pdfFile);
+  const pdfUrl = router.createObjectURL(pdfFile);
 
   return { pdfUrl };
 };
