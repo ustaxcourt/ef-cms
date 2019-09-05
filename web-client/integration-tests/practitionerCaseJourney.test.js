@@ -42,7 +42,7 @@ presenter.providers.router = {
       });
     } else if (url === '/') {
       await test.runSequence('gotoDashboardSequence');
-    } else if (url === '/case-search/no-matches') {
+    } else if (url === '/search/no-matches') {
       await test.runSequence('gotoCaseSearchNoMatchesSequence');
     }
   },

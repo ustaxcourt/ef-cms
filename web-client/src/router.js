@@ -411,7 +411,15 @@ const router = {
     );
 
     route(
-      '/case-search/no-matches',
+      '/search',
+      checkLoggedIn(() => {
+        document.title = `Advanced Search ${pageTitleSuffix}`;
+        app.getSequence('gotoAdvancedSearchSequence')();
+      }),
+    );
+
+    route(
+      '/search/no-matches',
       checkLoggedIn(() => {
         document.title = `Search Results ${pageTitleSuffix}`;
         app.getSequence('gotoCaseSearchNoMatchesSequence')();

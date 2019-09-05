@@ -29,6 +29,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
+import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { primaryContactEditHelper } from './computeds/primaryContactEditHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
@@ -49,6 +50,11 @@ import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 export const state = {
   addDocketEntryHelper,
   alertHelper,
+  archiveDraftDocument: {
+    caseId: null,
+    documentId: null,
+    documentTitle: null,
+  },
   assigneeId: null,
   batchIndexToRescan: null,
   batches: [],
@@ -123,6 +129,7 @@ export const state = {
   },
   pdfPreviewModal: {},
   pdfPreviewModalHelper,
+  pdfSignerHelper,
   percentComplete: 0,
   petition: {},
   previewPdfFile: null,
