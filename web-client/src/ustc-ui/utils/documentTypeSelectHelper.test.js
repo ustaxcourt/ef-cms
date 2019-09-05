@@ -16,7 +16,7 @@ describe('documentTypeSelectHelper', () => {
   });
 
   describe('fileDocumentPrimaryOnChange', () => {
-    it('should call update sequence multiple times with correct props followed by validate sequence if action is select-option', () => {
+    it('should call update sequence multiple times with correct props followed by validate sequence if "action" is "select-option"', () => {
       const inputValue = {
         category: 'Answer (filed by respondent only)',
         documentTitle: 'Amended Answer',
@@ -56,7 +56,7 @@ describe('documentTypeSelectHelper', () => {
       expect(validateSequenceSpy.called).toEqual(true);
     });
 
-    it('should call update sequence a single time followed by validate sequence if action is clear', () => {
+    it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
       fileDocumentPrimaryOnChange({
         action: 'clear',
         updateSequence: updateSequenceSpy,
@@ -71,7 +71,7 @@ describe('documentTypeSelectHelper', () => {
       expect(validateSequenceSpy.called).toEqual(true);
     });
 
-    it('should not call update or validate sequence if action is not select-option or clear', () => {
+    it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
       fileDocumentPrimaryOnChange({
         action: 'something-else',
         updateSequence: updateSequenceSpy,
@@ -84,7 +84,7 @@ describe('documentTypeSelectHelper', () => {
   });
 
   describe('fileDocumentSecondaryOnChange', () => {
-    it('should call update sequence multiple times with correct props followed by validate sequence if action is select-option', () => {
+    it('should call update sequence multiple times with correct props followed by validate sequence if "action" is "select-option"', () => {
       const inputValue = {
         category: 'Answer (filed by respondent only)',
         documentTitle: 'Amended Answer',
@@ -124,7 +124,7 @@ describe('documentTypeSelectHelper', () => {
       expect(validateSequenceSpy.called).toEqual(true);
     });
 
-    it('should call update sequence a single time followed by validate sequence if action is clear', () => {
+    it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
       fileDocumentSecondaryOnChange({
         action: 'clear',
         updateSequence: updateSequenceSpy,
@@ -139,7 +139,7 @@ describe('documentTypeSelectHelper', () => {
       expect(validateSequenceSpy.called).toEqual(true);
     });
 
-    it('should not call update or validate sequence if action is not select-option or clear', () => {
+    it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
       fileDocumentSecondaryOnChange({
         action: 'something-else',
         updateSequence: updateSequenceSpy,
@@ -152,7 +152,7 @@ describe('documentTypeSelectHelper', () => {
   });
 
   describe('docketEntryOnChange', () => {
-    it('should call update sequence multiple times with correct props followed by validate sequence if action is select-option', () => {
+    it('should call update sequence multiple times with correct props followed by validate sequence if "action" is "select-option"', () => {
       const inputValue = {
         value: 'AA',
       };
@@ -173,7 +173,7 @@ describe('documentTypeSelectHelper', () => {
       expect(validateSequenceSpy.called).toEqual(true);
     });
 
-    it('should call update sequence a single time followed by validate sequence if action is clear', () => {
+    it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
       docketEntryOnChange({
         action: 'clear',
         name: 'primaryDocument.eventCode',
@@ -189,7 +189,7 @@ describe('documentTypeSelectHelper', () => {
       expect(validateSequenceSpy.called).toEqual(true);
     });
 
-    it('should not call update or validate sequence if action is not select-option or clear', () => {
+    it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
       docketEntryOnChange({
         action: 'something-else',
         updateSequence: updateSequenceSpy,
@@ -202,7 +202,7 @@ describe('documentTypeSelectHelper', () => {
   });
 
   describe('onInputChange', () => {
-    it('should call update sequence a single time if action is input-change', () => {
+    it('should call update sequence a single time if "action" is "input-change"', () => {
       onInputChange({
         action: 'input-change',
         inputText: 'something',
@@ -216,7 +216,7 @@ describe('documentTypeSelectHelper', () => {
       });
     });
 
-    it('should not call update sequence if action is not input-change', () => {
+    it('should not call update sequence if "action" is not "input-change"', () => {
       onInputChange({
         action: 'something-else',
         inputText: 'something',

@@ -6,26 +6,18 @@ export const fileDocumentPrimaryOnChange = ({
 }) => {
   switch (action) {
     case 'select-option':
-      updateSequence({
-        key: 'category',
-        value: inputValue.category,
-      });
-      updateSequence({
-        key: 'documentType',
-        value: inputValue.documentType,
-      });
-      updateSequence({
-        key: 'documentTitle',
-        value: inputValue.documentTitle,
-      });
-      updateSequence({
-        key: 'eventCode',
-        value: inputValue.eventCode,
-      });
-      updateSequence({
-        key: 'scenario',
-        value: inputValue.scenario,
-      });
+      [
+        'category',
+        'documentType',
+        'documentTitle',
+        'eventCode',
+        'scenario',
+      ].forEach(key =>
+        updateSequence({
+          key,
+          value: inputValue[key],
+        }),
+      );
       validateSequence();
       break;
     case 'clear':
@@ -46,26 +38,18 @@ export const fileDocumentSecondaryOnChange = ({
 }) => {
   switch (action) {
     case 'select-option':
-      updateSequence({
-        key: 'secondaryDocument.category',
-        value: inputValue.category,
-      });
-      updateSequence({
-        key: 'secondaryDocument.documentType',
-        value: inputValue.documentType,
-      });
-      updateSequence({
-        key: 'secondaryDocument.documentTitle',
-        value: inputValue.documentTitle,
-      });
-      updateSequence({
-        key: 'secondaryDocument.eventCode',
-        value: inputValue.eventCode,
-      });
-      updateSequence({
-        key: 'secondaryDocument.scenario',
-        value: inputValue.scenario,
-      });
+      [
+        'category',
+        'documentType',
+        'documentTitle',
+        'eventCode',
+        'scenario',
+      ].forEach(key =>
+        updateSequence({
+          key: `secondaryDocument.${key}`,
+          value: inputValue[key],
+        }),
+      );
       validateSequence();
       break;
     case 'clear':
