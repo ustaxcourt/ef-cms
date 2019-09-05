@@ -6,5 +6,5 @@
  * @returns {Promise} async action
  */
 export const navigateToCaseSearchNoMatchesAction = async ({ router }) => {
-  await router.route('/case-search/no-matches');
+  await router.route('/search/no-matches');
 };
