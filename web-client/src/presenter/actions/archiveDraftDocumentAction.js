@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 /**
- * Gets the JWT token and refresh token using the cognito authorization code.
+ * calls the proxy/interactor to archive a document on the backend
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext contains the assignWorkItems method we will need from the getUseCases method
