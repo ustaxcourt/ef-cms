@@ -44,7 +44,9 @@ global.URL = {
 };
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
+  createObjectURL: () => {},
   externalRoute: () => null,
+  revokeObjectURL: () => {},
   route: async url => {
     if (url === `/case-detail/${test.docketNumber}`) {
       await test.runSequence('gotoCaseDetailSequence', {

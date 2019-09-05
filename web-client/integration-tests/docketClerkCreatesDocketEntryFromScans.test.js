@@ -4,19 +4,17 @@ import { ContactFactory } from '../../shared/src/business/entities/contacts/Cont
 import { JSDOM } from 'jsdom';
 import { MAX_FILE_SIZE_MB } from '../../shared/src/persistence/s3/getUploadPolicy';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
+import {
+  addBatchesForScanning,
+  createPDFFromScannedBatches,
+  selectScannerSource,
+} from './scanHelpers.js';
 import { applicationContext } from '../src/applicationContext';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
-
-import {
-  addBatchesForScanning,
-  createPDFFromScannedBatches,
-  selectScannerSource,
-} from './scanHelpers.js';
-
 import docketClerkAddsDocketEntryFile from './journey/docketClerkAddsDocketEntryFile';
 import docketClerkAddsDocketEntryWithoutFile from './journey/docketClerkAddsDocketEntryWithoutFile';
 import docketClerkLogIn from './journey/docketClerkLogIn';
@@ -24,7 +22,6 @@ import docketClerkSavesDocketEntry from './journey/docketClerkSavesDocketEntry';
 import docketClerkViewsEditDocketRecord from './journey/docketClerkViewsEditDocketRecord';
 import docketClerkViewsQCInProgress from './journey/docketClerkViewsQCInProgress';
 import docketClerkViewsSectionQCInProgress from './journey/docketClerkViewsSectionQCInProgress';
-
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
 import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
@@ -38,6 +35,7 @@ presenter.providers.applicationContext = Object.assign(applicationContext, {
   getScanner: getScannerInterface,
 });
 presenter.providers.router = {
+  createObjectURL: () => {},
   externalRoute: () => {},
   route: async url => {
     if (url === `/case-detail/${test.docketNumber}`) {
