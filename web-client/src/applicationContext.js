@@ -62,6 +62,7 @@ import { filePetitionInteractor } from '../../shared/src/business/useCases/fileP
 import {
   formatCase,
   formatCaseDeadlines,
+  formatDocument,
   getFormattedCaseDetail,
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
@@ -418,6 +419,7 @@ const applicationContext = {
       formatCase,
       formatCaseDeadlines,
       formatDateString,
+      formatDocument,
       getFormattedCaseDetail,
       isStringISOFormatted,
       prepareDateFromString,
