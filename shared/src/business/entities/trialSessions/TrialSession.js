@@ -4,7 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
+} = require('../../../utilities/JoiValidationConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
 
 const COMMON_CITIES = [
