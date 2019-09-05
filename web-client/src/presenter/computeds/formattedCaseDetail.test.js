@@ -1,9 +1,4 @@
-import { applicationContext } from '../../applicationContext';
-import {
-  formatDocument,
-  formattedCaseDetail as formattedCaseDetailComputed,
-  getFilingsAndProceedings,
-} from './formattedCaseDetail';
+import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -678,45 +673,6 @@ describe('formattedCaseDetail', () => {
         },
       });
       expect(result.caseDeadlines.length).toEqual(0);
-    });
-  });
-});
-
-describe('formatDocument', () => {
-  it('should format the servedAt date', () => {
-    const results = formatDocument(applicationContext, {
-      servedAt: '2019-03-27T21:53:00.297Z',
-    });
-    expect(results).toMatchObject({
-      servedAtFormatted: '03/27/19 05:53 pm',
-    });
-  });
-
-  it('should set the servedPartiesCode to `B` if status is served, servedAt date exists, and servedParties is an array', () => {
-    const results = formatDocument(applicationContext, {
-      servedAt: '2019-03-27T21:53:00.297Z',
-      servedParties: ['someone', 'someone else'],
-      status: 'served',
-    });
-    expect(results).toMatchObject({
-      servedPartiesCode: 'B',
-    });
-  });
-
-  describe('getFilingsAndProceedings', () => {
-    it('returns a value based on document properties (attachments, C/S, exhibits, objections, and lodged)', () => {
-      const result = getFilingsAndProceedings({
-        attachments: true,
-        certificateOfService: true,
-        certificateOfServiceDateFormatted: '11/12/1999',
-        exhibits: true,
-        lodged: true,
-        objections: 'Yes',
-      });
-
-      expect(result).toEqual(
-        '(C/S 11/12/1999) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)',
-      );
     });
   });
 });
