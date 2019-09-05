@@ -28,6 +28,18 @@ exports.caseSearchInteractor = async ({
 
   let filteredCases = caseCatalog;
 
+  if (petitionerName) {
+    petitionerName = petitionerName.toLowerCase();
+    filteredCases = filteredCases.filter(
+      myCase =>
+        (myCase.contactPrimary &&
+          myCase.contactPrimary.name &&
+          myCase.contactPrimary.name.toLowerCase().includes(petitionerName)) ||
+        (myCase.contactSecondary &&
+          myCase.contactSecondary.name &&
+          myCase.contactSecondary.name.toLowerCase().includes(petitionerName)),
+    );
+  }
   if (countryType) {
     filteredCases = filteredCases.filter(
       myCase =>
@@ -42,21 +54,6 @@ exports.caseSearchInteractor = async ({
       myCase =>
         (myCase.contactPrimary && myCase.contactPrimary.state === state) ||
         (myCase.contactSecondary && myCase.contactSecondary.state === state),
-    );
-  }
-  if (petitionerName) {
-    filteredCases = filteredCases.filter(
-      myCase =>
-        (myCase.contactPrimary &&
-          myCase.contactPrimary.name &&
-          myCase.contactPrimary.name.localeCompare(petitionerName, {
-            sensitivity: 'accent',
-          }) === 1) ||
-        (myCase.contactSecondary &&
-          myCase.contactSecondary.name &&
-          myCase.contactSecondary.name.localeCompare(petitionerName, {
-            sensitivity: 'accent',
-          }) === 1),
     );
   }
   if (yearFiledMin) {
