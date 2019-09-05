@@ -7,12 +7,24 @@ const { put } = require('../../dynamodbClientService');
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case to create the catalog record
  */
-exports.createCaseCatalogRecord = async ({ applicationContext, caseId }) => {
+exports.createCaseCatalogRecord = async ({
+  applicationContext,
+  caseToCreate,
+}) => {
+  const yearFiled = '20' + caseToCreate.docketNumber.split('-')[1];
+
   await put({
     Item: {
-      caseId,
+      caseCaption: caseToCreate.caseCaption,
+      caseId: caseToCreate.caseId,
+      contactPrimary: caseToCreate.contactPrimary,
+      contactSecondary: caseToCreate.contactSecondary,
+      docketNumber: caseToCreate.docketNumber,
+      docketNumberSuffix: caseToCreate.docketNumberSuffix,
+      filedDate: caseToCreate.createdAt,
       pk: 'catalog',
-      sk: `case-${caseId}`,
+      sk: `case-${caseToCreate.caseId}`,
+      yearFiled,
     },
     applicationContext,
   });

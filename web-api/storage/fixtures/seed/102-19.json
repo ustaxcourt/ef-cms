@@ -239,5 +239,39 @@
     ],
     "docketNumber": "102-19",
     "updatedAt": "2019-03-01T21:42:29.073Z"
+  },
+  {
+    "sk": "case-fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
+    "pk": "catalog",
+    "docketNumber": "102-19",
+    "docketNumberSuffix": "P",
+    "contactPrimary": {
+      "address3": "Dolor ea elit dolor",
+      "address2": "Duis molestias ullam",
+      "city": "Voluptatum facere qu",
+      "phone": "+1 (877) 656-9901",
+      "address1": "98 Cowley Avenue",
+      "postalCode": "98237",
+      "name": "Selma Horn",
+      "state": "DE",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "contactSecondary": {
+      "country": "Cruz Barnes",
+      "address3": "Illum ut architecto",
+      "address2": "Laboris voluptate mi",
+      "city": "Velit minima do quia",
+      "phone": "+1 (352) 612-3284",
+      "address1": "49 First Drive",
+      "postalCode": "64929",
+      "name": "Cairo Harris",
+      "state": "CO",
+      "countryType": "international"
+    },
+    "yearFiled": "2019",
+    "caseCaption": "Selma Horn & Cairo Harris, Petitioners",
+    "filedDate": "2019-03-01T21:42:29.073Z"
   }
 ]
