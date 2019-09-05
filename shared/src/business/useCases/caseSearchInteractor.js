@@ -26,54 +26,49 @@ exports.caseSearchInteractor = async ({
       applicationContext,
     });
 
-  const caseRecordCatalog = [];
-  for (let caseRecord of caseCatalog) {
-    const { caseId } = caseRecord;
-    const caseDetail = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId({
-        applicationContext,
-        caseId,
-      });
-    caseRecordCatalog.push(caseDetail);
-  }
-
-  let filteredCases = caseRecordCatalog;
+  let filteredCases = caseCatalog;
 
   if (countryType) {
     filteredCases = filteredCases.filter(
       myCase =>
-        myCase.contactPrimary &&
-        myCase.contactPrimary.countryType === countryType,
+        (myCase.contactPrimary &&
+          myCase.contactPrimary.countryType === countryType) ||
+        (myCase.contactSecondary &&
+          myCase.contactSecondary.countryType === countryType),
     );
   }
   if (state) {
     filteredCases = filteredCases.filter(
-      myCase => myCase.contactPrimary && myCase.contactPrimary.state === state,
+      myCase =>
+        (myCase.contactPrimary && myCase.contactPrimary.state === state) ||
+        (myCase.contactSecondary && myCase.contactSecondary.state === state),
     );
   }
   if (petitionerName) {
-    filteredCases = filteredCases.filter(
-      myCase =>
+    filteredCases = filteredCases.filter(myCase => {
+      return (
         (myCase.contactPrimary &&
           myCase.contactPrimary.name &&
-          myCase.contactPrimary.name.includes(petitionerName)) ||
+          myCase.contactPrimary.name.localeCompare(petitionerName, {
+            sensitivity: 'accent',
+          }) === 1) ||
         (myCase.contactSecondary &&
           myCase.contactSecondary.name &&
-          myCase.contactSecondary.name.includes(petitionerName)),
-    );
+          myCase.contactSecondary.name.localeCompare(petitionerName, {
+            sensitivity: 'accent',
+          }) === 1)
+      );
+    });
   }
   if (yearFiledMin) {
-    filteredCases = filteredCases.filter(myCase => {
-      const docketNumberYear = myCase.docketNumber.split('-')[1];
-      return +docketNumberYear >= +yearFiledMin;
-    });
+    filteredCases = filteredCases.filter(
+      myCase => +myCase.yearFiled >= +yearFiledMin,
+    );
   }
   if (yearFiledMax) {
-    filteredCases = filteredCases.filter(myCase => {
-      const docketNumberYear = myCase.docketNumber.split('-')[1];
-      return +docketNumberYear <= +yearFiledMax;
-    });
+    filteredCases = filteredCases.filter(
+      myCase => +myCase.yearFiled <= +yearFiledMax,
+    );
   }
 
   return Case.validateRawCollection(filteredCases, { applicationContext });
