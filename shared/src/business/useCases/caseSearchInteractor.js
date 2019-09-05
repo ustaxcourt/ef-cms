@@ -1,5 +1,3 @@
-const { Case } = require('../entities/cases/Case');
-
 /**
  * caseSearchInteractor
  *
@@ -67,5 +65,5 @@ exports.caseSearchInteractor = async ({
     );
   }
 
-  return Case.validateRawCollection(filteredCases, { applicationContext });
+  return filteredCases;
 };
