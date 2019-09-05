@@ -151,6 +151,18 @@ const formatCase = (applicationContext, caseDetail) => {
     );
   }
 
+  const { ORDER_TYPES_MAP } = applicationContext.getConstants();
+
+  result.draftDocuments = result.documents.filter(
+    document =>
+      (document.documentType === 'Stipulated Decision' &&
+        !document.documentType.signedAt) ||
+      (!document.servedAt &&
+        ORDER_TYPES_MAP.find(
+          order => order.documentType === document.documentType,
+        )),
+  );
+
   // establish an initial sort by ascending index
   result.docketRecordWithDocument.sort((a, b) => {
     return a.index - b.index;
