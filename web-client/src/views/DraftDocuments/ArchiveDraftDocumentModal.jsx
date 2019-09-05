@@ -21,12 +21,12 @@ class ArchiveDraftDocumentModalComponent extends ModalDialog {
   renderBody() {
     const { props } = this;
 
-    return <>document type name: {props.documentTypeName}</>;
+    return <div className="margin-top-2 semi-bold">{props.documentTitle}</div>;
   }
 }
 
 ArchiveDraftDocumentModalComponent.propTypes = {
-  documentTypeName: PropTypes.string,
+  documentTitle: PropTypes.string,
 };
 
 export const ArchiveDraftDocumentModal = connect(
