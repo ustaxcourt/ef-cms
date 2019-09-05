@@ -590,6 +590,10 @@ Case.prototype.getDocumentById = function({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
 };
 
+/**
+ *
+ * @returns {boolean} whether to show case name for primary
+ */
 Case.prototype.getShowCaseNameForPrimary = function() {
   return !(this.contactSecondary && this.contactSecondary.name);
 };

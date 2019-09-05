@@ -7,13 +7,18 @@
  * @param {string} providers.contentHtml the html content for the pdf
  * @returns {Promise<*>} the promise of the api call
  */
-exports.createDocketRecordPdfInteractor = ({ applicationContext, caseId }) => {
+exports.createDocketRecordPdfInteractor = ({
+  applicationContext,
+  caseId,
+  docketRecordSort,
+}) => {
   return applicationContext
     .getHttpClient()
     .post(
       `${applicationContext.getBaseUrl()}/api/docket-record-pdf`,
       {
         caseId,
+        docketRecordSort,
       },
       {
         headers: {
