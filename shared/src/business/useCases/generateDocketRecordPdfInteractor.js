@@ -10,6 +10,7 @@ const { ContactFactory } = require('../entities/contacts/ContactFactory');
 exports.generateDocketRecordPdfInteractor = async ({
   applicationContext,
   caseId,
+  docketRecordSort,
 }) => {
   const { Case } = applicationContext.getEntityConstructors();
   const caseCaptionPostfix = Case.CASE_CAPTION_POSTFIX;
@@ -22,6 +23,13 @@ exports.generateDocketRecordPdfInteractor = async ({
     });
 
   const caseEntity = new Case(caseSource, { applicationContext });
+  const formattedCaseDetail = applicationContext
+    .getUtilities()
+    .getFormattedCaseDetail({
+      applicationContext,
+      caseDetail: caseEntity,
+      docketRecordSort,
+    });
 
   const getPartyInfoContent = detail => {
     const {
@@ -239,7 +247,7 @@ exports.generateDocketRecordPdfInteractor = async ({
     return docketRecordContent;
   };
 
-  const { caseCaption, docketNumber, docketNumberSuffix } = caseEntity;
+  const { caseCaption, docketNumber, docketNumberSuffix } = formattedCaseDetail;
 
   const contentHtml = await applicationContext
     .getTemplateGenerators()
@@ -247,8 +255,8 @@ exports.generateDocketRecordPdfInteractor = async ({
       caption: caseCaption,
       captionPostfix: caseCaptionPostfix,
       docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
-      docketRecord: getDocketRecordContent(caseEntity),
-      partyInfo: getPartyInfoContent(caseEntity),
+      docketRecord: getDocketRecordContent(formattedCaseDetail),
+      partyInfo: getPartyInfoContent(formattedCaseDetail),
     });
 
   return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
