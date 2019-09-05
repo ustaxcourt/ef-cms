@@ -4,6 +4,11 @@ import { Mobile } from '../../ustc-ui/Responsive/Responsive';
 import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay/';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
+import {
+  fileDocumentPrimaryOnChange,
+  onInputChange,
+  reactSelectValue,
+} from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
@@ -58,54 +63,26 @@ export const CompleteDocumentTypeSection = connect(
               completeDocumentTypeSectionHelper.documentTypesForSelectSorted
             }
             placeholder="- Select -"
-            value={completeDocumentTypeSectionHelper.documentTypesForSelectSorted.filter(
-              option => option.eventCode === form.eventCode,
-            )}
+            value={reactSelectValue({
+              documentTypes:
+                completeDocumentTypeSectionHelper.documentTypesForSelectSorted,
+              selectedEventCode: form.eventCode,
+            })}
             onChange={(inputValue, { action }) => {
-              {
-                /* TODO: move switch to presenter */
-              }
-              switch (action) {
-                case 'select-option':
-                  updateFileDocumentWizardFormValueSequence({
-                    key: 'category',
-                    value: inputValue.category,
-                  });
-                  updateFileDocumentWizardFormValueSequence({
-                    key: 'documentType',
-                    value: inputValue.documentType,
-                  });
-                  updateFileDocumentWizardFormValueSequence({
-                    key: 'documentTitle',
-                    value: inputValue.documentTitle,
-                  });
-                  updateFileDocumentWizardFormValueSequence({
-                    key: 'eventCode',
-                    value: inputValue.eventCode,
-                  });
-                  updateFileDocumentWizardFormValueSequence({
-                    key: 'scenario',
-                    value: inputValue.scenario,
-                  });
-                  validateSelectDocumentTypeSequence();
-                  break;
-                case 'clear':
-                  updateFileDocumentWizardFormValueSequence({
-                    key: 'category',
-                    value: '',
-                  });
-                  validateSelectDocumentTypeSequence();
-                  break;
-              }
+              fileDocumentPrimaryOnChange({
+                action,
+                inputValue,
+                updateSequence: updateFileDocumentWizardFormValueSequence,
+                validateSequence: validateSelectDocumentTypeSequence,
+              });
               return true;
             }}
             onInputChange={(inputText, { action }) => {
-              if (action == 'input-change') {
-                updateScreenMetadataSequence({
-                  key: 'searchText',
-                  value: inputText,
-                });
-              }
+              onInputChange({
+                action,
+                inputText,
+                updateSequence: updateScreenMetadataSequence,
+              });
             }}
           />
           <Mobile>
