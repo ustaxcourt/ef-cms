@@ -592,6 +592,14 @@ Case.prototype.getDocumentById = function({ documentId }) {
 
 /**
  *
+ * @returns {boolean} whether to show case name for primary
+ */
+Case.prototype.getShowCaseNameForPrimary = function() {
+  return !(this.contactSecondary && this.contactSecondary.name);
+};
+
+/**
+ *
  * @param {string} payGovDate an ISO formatted datestring
  * @returns {Case} the updated case entity
  */

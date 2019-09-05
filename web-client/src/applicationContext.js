@@ -60,6 +60,13 @@ import { fileDocketEntryInteractor } from '../../shared/src/proxies/documents/fi
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
+import {
+  formatCase,
+  formatCaseDeadlines,
+  formatDocument,
+  getFormattedCaseDetail,
+  sortDocketRecords,
+} from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
@@ -411,10 +418,15 @@ const applicationContext = {
   getUtilities: () => {
     return {
       createISODateString,
+      formatCase,
+      formatCaseDeadlines,
       formatDateString,
+      formatDocument,
+      getFormattedCaseDetail,
       isStringISOFormatted,
       prepareDateFromString,
       setServiceIndicatorsForCase,
+      sortDocketRecords,
     };
   },
   setCurrentUser,
