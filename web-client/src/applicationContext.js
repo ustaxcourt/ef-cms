@@ -59,6 +59,12 @@ import { fileDocketEntryInteractor } from '../../shared/src/proxies/documents/fi
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
+import {
+  formatCase,
+  formatCaseDeadlines,
+  getFormattedCaseDetail,
+  sortDocketRecords,
+} from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
@@ -80,7 +86,6 @@ import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxie
 import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFilingTypesInteractor } from '../../shared/src/business/useCases/getFilingTypesInteractor';
-import { getFormattedCaseDetail } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getInboxMessagesForUserProxy';
 import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
@@ -410,11 +415,14 @@ const applicationContext = {
   getUtilities: () => {
     return {
       createISODateString,
+      formatCase,
+      formatCaseDeadlines,
       formatDateString,
       getFormattedCaseDetail,
       isStringISOFormatted,
       prepareDateFromString,
       setServiceIndicatorsForCase,
+      sortDocketRecords,
     };
   },
   setCurrentUser,

@@ -306,7 +306,10 @@ const getFormattedCaseDetail = ({
 };
 
 module.exports = {
+  formatCase,
+  formatCaseDeadlines,
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
+  sortDocketRecords,
 };
