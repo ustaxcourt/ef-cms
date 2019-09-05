@@ -3,6 +3,7 @@ import { queryStringDecoder } from './queryStringDecoder';
 import route from 'riot-route';
 
 route.base('/');
+
 const pageTitleSuffix = ' | U.S. Tax Court';
 
 const externalRoute = path => {
