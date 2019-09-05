@@ -14,15 +14,19 @@ import React from 'react';
 
 export const TrialSessionWorkingCopy = connect(
   {
+    baseUrl: state.baseUrl,
     downloadBatchOfTrialSessionSequence:
       sequences.downloadBatchOfTrialSessionSequence,
     formattedTrialSession: state.formattedTrialSessionDetails,
     showModal: state.showModal,
+    token: state.token,
   },
   ({
+    baseUrl,
     downloadBatchOfTrialSessionSequence,
     formattedTrialSession,
     showModal,
+    token,
   }) => {
     return (
       <>
@@ -33,17 +37,13 @@ export const TrialSessionWorkingCopy = connect(
               <h2 className="heading-1">Session Working Copy</h2>
             </div>
             <div className="grid-col-3 text-right padding-top-2">
-              <button
-                className="usa-button usa-button--unstyled"
-                onClick={() => {
-                  downloadBatchOfTrialSessionSequence({
-                    trialSessionId: formattedTrialSession.trialSessionId,
-                  });
-                }}
+              <a
+                aria-label="View PDF"
+                href={`${baseUrl}/trial-session/${formattedTrialSession.trialSessionId}/batch-download?token=${token}`}
               >
                 <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />{' '}
                 Download All Cases
-              </button>
+              </a>
             </div>
           </div>
 
