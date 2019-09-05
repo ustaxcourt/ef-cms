@@ -31,8 +31,8 @@ describe('handleInvalidScannerSourceAction', () => {
       },
     });
 
-    expect(result.state.scanner.scannerSourceIndex).toBeNull();
-    expect(result.state.scanner.scannerSourceName).toBeNull();
+    expect(result.state.scanner.scannerSourceIndex).toBeUndefined();
+    expect(result.state.scanner.scannerSourceName).toBeUndefined();
     expect(mockStorage.scannerSourceIndex).toBeNull();
     expect(mockStorage.scannerSourceName).toBeNull();
     expect(result.state.showModal).toEqual('ScanErrorModal');

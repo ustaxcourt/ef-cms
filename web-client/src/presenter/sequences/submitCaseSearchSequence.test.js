@@ -21,7 +21,6 @@ presenter.providers.router = {
 
 test = CerebralTest(presenter);
 test.setState('searchTerm', '111-19');
-test.setState('form.searchError', 'BLAH');
 
 describe('submitCaseSearchSequence', () => {
   beforeEach(() => {
@@ -32,8 +31,8 @@ describe('submitCaseSearchSequence', () => {
     await test.runSequence('submitCaseSearchSequence', {
       searchTerm: '111-19',
     });
-    expect(test.getState('form.searchError')).not.toBeTruthy();
     expect(routeStub.called).toBeTruthy();
+    expect(routeStub.getCall(0).args[0]).toContain('/case-detail');
   });
 
   it('does not navigate AND sets error state if endpoint throws NotFoundError', async () => {
@@ -46,8 +45,8 @@ describe('submitCaseSearchSequence', () => {
     await test.runSequence('submitCaseSearchSequence', {
       searchTerm: '111-19',
     });
-    expect(routeStub.called).toBeFalsy();
-    expect(test.getState('form.searchError')).toBeTruthy();
+    expect(routeStub.called).toBeTruthy();
+    expect(routeStub.getCall(0).args[0]).toContain('/case-search/no-matches');
   });
 
   it('rethrows errors that are not NotFoundError instances', async () => {
