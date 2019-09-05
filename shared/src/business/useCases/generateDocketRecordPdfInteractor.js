@@ -11,6 +11,9 @@ exports.generateDocketRecordPdfInteractor = async ({
   applicationContext,
   caseDetail,
 }) => {
+  const { Case } = applicationContext.getEntityConstructors();
+  const caseCaptionPostfix = Case.CASE_CAPTION_POSTFIX;
+
   const getPartyInfoContent = detail => {
     const {
       contactPrimary,
@@ -227,12 +230,7 @@ exports.generateDocketRecordPdfInteractor = async ({
     return docketRecordContent;
   };
 
-  const {
-    caseCaption,
-    caseCaptionPostfix,
-    docketNumber,
-    docketNumberSuffix,
-  } = caseDetail;
+  const { caseCaption, docketNumber, docketNumberSuffix } = caseDetail;
 
   const contentHtml = await applicationContext
     .getTemplateGenerators()

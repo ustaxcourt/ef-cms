@@ -1,8 +1,12 @@
+import { Case } from '../entities/cases/Case';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
 describe('generateDocketRecordPdfInteractor', () => {
   const generatePdfFromHtmlInteractorMock = jest.fn();
   const generatePrintableDocketRecordTemplateMock = jest.fn();
   const applicationContext = {
+    getEntityConstructors: () => ({
+      Case,
+    }),
     getTemplateGenerators: () => {
       return {
         generatePrintableDocketRecordTemplate: ({
@@ -26,7 +30,6 @@ describe('generateDocketRecordPdfInteractor', () => {
 
   const caseDetail = {
     caseCaption: 'Test Case Caption',
-    caseCaptionPostfix: 'Test Caption Postfix',
     contactPrimary: {
       address1: 'address 1',
       city: 'City',
