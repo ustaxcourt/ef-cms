@@ -45,8 +45,8 @@ exports.caseSearchInteractor = async ({
     );
   }
   if (petitionerName) {
-    filteredCases = filteredCases.filter(myCase => {
-      return (
+    filteredCases = filteredCases.filter(
+      myCase =>
         (myCase.contactPrimary &&
           myCase.contactPrimary.name &&
           myCase.contactPrimary.name.localeCompare(petitionerName, {
@@ -56,9 +56,8 @@ exports.caseSearchInteractor = async ({
           myCase.contactSecondary.name &&
           myCase.contactSecondary.name.localeCompare(petitionerName, {
             sensitivity: 'accent',
-          }) === 1)
-      );
-    });
+          }) === 1),
+    );
   }
   if (yearFiledMin) {
     filteredCases = filteredCases.filter(
