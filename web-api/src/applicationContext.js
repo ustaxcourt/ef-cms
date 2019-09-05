@@ -251,6 +251,9 @@ const {
   getEligibleCasesForTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
 const {
+  getFormattedCaseDetail,
+} = require('../../shared/src/business/utilities/getFormattedCaseDetail');
+const {
   getInboxMessagesForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForSection');
 const {
@@ -383,6 +386,9 @@ const {
 const {
   setCaseToReadyForTrialInteractor,
 } = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
+const {
+  setServiceIndicatorsForCase,
+} = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
 const {
   setTrialSessionAsSwingSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionAsSwingSessionInteractor');
@@ -517,6 +523,7 @@ module.exports = (appContextUser = {}) => {
   return {
     docketNumberGenerator,
     environment,
+    getCaseCaptionNames: Case.getCaseCaptionNames,
     getChromium: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
       // This dependency is only available on lambdas with the 'puppeteer' layer,
@@ -743,7 +750,9 @@ module.exports = (appContextUser = {}) => {
         createISODateString,
         formatDateString,
         getDocumentTypeForAddressChange,
+        getFormattedCaseDetail,
         prepareDateFromString,
+        setServiceIndicatorsForCase,
       };
     },
     irsGateway,
