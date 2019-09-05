@@ -27,6 +27,7 @@ export const SearchBox = connect(
             className="usa-input"
             id="search-field"
             name="searchTerm"
+            placeholder="Enter docket number (e.g., 123-19)"
             type="search"
             value={searchTerm}
             onChange={e => {
@@ -38,6 +39,13 @@ export const SearchBox = connect(
           <button className="usa-button ustc-search-button" type="submit">
             <span className="usa-search-submit-text">Search</span>
           </button>
+          <a
+            aria-label="advanced search"
+            className="usa-link advanced"
+            href="/search"
+          >
+            Advanced
+          </a>
         </div>
       </form>
     );
