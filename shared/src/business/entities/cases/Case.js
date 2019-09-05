@@ -590,6 +590,10 @@ Case.prototype.getDocumentById = function({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
 };
 
+Case.prototype.getShowCaseNameForPrimary = function() {
+  return !(this.contactSecondary && this.contactSecondary.name);
+};
+
 /**
  *
  * @param {string} payGovDate an ISO formatted datestring
