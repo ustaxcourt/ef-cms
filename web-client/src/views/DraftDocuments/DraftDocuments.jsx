@@ -30,57 +30,50 @@ export const DraftDocuments = connect(
           </thead>
           <tbody>
             {/* TODO: Update draftDocuments with whatever it ends up being, and remove existential check */}
-            {true &&
-              // caseDetail.draftDocuments.map(
-              [
-                {
-                  draftDocument: {
-                    documentId: 'yeehaw',
-                    documentTitle: 'Stipulated DEcision',
-                  },
-                  record: { filedBy: 'jo mama' },
+            {caseDetail.draftDocuments &&
+              caseDetail.draftDocuments.map(
+                ({ draftDocument, record }, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{draftDocument.createdAtFormatted}</td>
+                      <td>
+                        <FilingsAndProceedings
+                          arrayIndex={index}
+                          document={draftDocument}
+                          record={record}
+                        />
+                        {FilingsAndProceedings}
+                      </td>
+                      <td>{record.filedBy}</td>
+                      <td className="no-wrap text-align-right">
+                        {/* TODO: Link to the document to edit */}
+                        <a
+                          className="usa-button usa-button--unstyled"
+                          href={`/case-detail/${caseDetail.docketNumber}`}
+                        >
+                          <FontAwesomeIcon icon="edit" size="sm" />
+                          Edit
+                        </a>
+                      </td>
+                      <td className="no-wrap text-align-right">
+                        <button
+                          className="usa-button usa-button--unstyled red-warning"
+                          onClick={() => {
+                            archiveDraftDocumentModalSequence({
+                              caseId: caseDetail.caseId,
+                              documentId: draftDocument.documentId,
+                              documentTitle: draftDocument.documentTitle,
+                            });
+                          }}
+                        >
+                          <FontAwesomeIcon icon="times-circle" size="sm" />
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  );
                 },
-              ].map(({ draftDocument, record }, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{draftDocument.createdAtFormatted}</td>
-                    <td>
-                      <FilingsAndProceedings
-                        arrayIndex={index}
-                        document={draftDocument}
-                        record={record}
-                      />
-                      {FilingsAndProceedings}
-                    </td>
-                    <td>{record.filedBy}</td>
-                    <td className="no-wrap text-align-right">
-                      {/* TODO: Link to the document to edit */}
-                      <a
-                        className="usa-button usa-button--unstyled"
-                        href={`/case-detail/${caseDetail.docketNumber}`}
-                      >
-                        <FontAwesomeIcon icon="edit" size="sm" />
-                        Edit
-                      </a>
-                    </td>
-                    <td className="no-wrap text-align-right">
-                      <button
-                        className="usa-button usa-button--unstyled red-warning"
-                        onClick={() => {
-                          archiveDraftDocumentModalSequence({
-                            caseId: caseDetail.caseId,
-                            documentId: draftDocument.documentId,
-                            documentTitle: draftDocument.documentTitle,
-                          });
-                        }}
-                      >
-                        <FontAwesomeIcon icon="times-circle" size="sm" />
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
+              )}
           </tbody>
         </table>
         {showModal === 'ArchiveDraftDocumentModal' && (
