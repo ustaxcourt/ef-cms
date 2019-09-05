@@ -8,9 +8,17 @@ export const AdvancedSearch = connect(
   {
     constants: state.constants,
     form: state.form,
+    searchResults: state.searchResults,
+    submitAdvancedSearchSequence: sequences.submitAdvancedSearchSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({ constants, form, updateFormValueSequence }) => {
+  ({
+    constants,
+    form,
+    searchResults,
+    submitAdvancedSearchSequence,
+    updateFormValueSequence,
+  }) => {
     return (
       <>
         <BigHeader text="Advanced Search" />
@@ -30,7 +38,7 @@ export const AdvancedSearch = connect(
                   id="petitioner-name"
                   name="petitionerName"
                   type="text"
-                  value={form.petitionerName}
+                  value={form.petitionerName || ''}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -91,7 +99,7 @@ export const AdvancedSearch = connect(
                         id="year-filed-min"
                         name="yearFiledMin"
                         type="text"
-                        value={form.yearFiledMin}
+                        value={form.yearFiledMin || ''}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -107,7 +115,7 @@ export const AdvancedSearch = connect(
                         id="year-filed-max"
                         name="yearFiledMax"
                         type="text"
-                        value={form.yearFiledMax}
+                        value={form.yearFiledMax || ''}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -119,7 +127,10 @@ export const AdvancedSearch = connect(
                   </div>
 
                   <div className="grid-col-5">
-                    <button className="usa-button advanced-search__button">
+                    <button
+                      className="usa-button advanced-search__button"
+                      onClick={() => submitAdvancedSearchSequence()}
+                    >
                       Search
                     </button>
                   </div>
@@ -127,6 +138,8 @@ export const AdvancedSearch = connect(
               </div>
             </div>
           </div>
+
+          {JSON.stringify(searchResults)}
         </section>
       </>
     );
