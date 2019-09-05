@@ -19,38 +19,42 @@ describe('generateDocketRecordPdfInteractor', () => {
     },
     docketNumber: '123-45',
     docketNumberSuffix: 'S',
-    docketRecordWithDocument: [
+    docketRecord: [
       {
+        createdAt: '12/27/18',
+        description: 'Test Description',
+        documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+        filingDate: '12/27/18',
         index: '1',
-        record: {
-          createdAtFormatted: '12/27/18',
-          description: 'Test Description',
-        },
       },
       {
-        document: {
-          documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-        },
+        createdAt: '12/27/18',
+        description: 'Test Description',
+        documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+        filingDate: '12/27/18',
         index: '2',
-        record: {
-          createdAtFormatted: '12/27/18',
-          description: 'Test Description',
-        },
       },
       {
-        document: {
-          additionalInfo2: 'Addl Info 2',
-          documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
-          filingsAndProceedings: '(No Objection)',
-          isStatusServed: true,
-          servedAtFormatted: '03/27/19 05:54 pm',
-        },
+        createdAt: '12/27/18',
+        description: 'Test Description',
+        documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+        filingDate: '12/27/18',
+        filingsAndProceedings: 'Test F&P',
         index: '3',
-        record: {
-          createdAtFormatted: '12/27/18',
-          description: 'Test Description',
-          filingsAndProceedings: 'Test F&P',
-        },
+      },
+    ],
+    documents: [
+      {
+        documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+      },
+      {
+        documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+      },
+      {
+        additionalInfo2: 'Addl Info 2',
+        documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+        isStatusServed: true,
+        servedAtFormatted: '03/27/19 05:54 pm',
       },
     ],
     practitioners: [],

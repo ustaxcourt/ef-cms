@@ -41,12 +41,14 @@ describe('generateDocketRecordPdfUrlAction', () => {
         docketNumber: '123-45',
       },
       state: {
-        caseDetailHelper: {
-          caseCaptionPostfix: 'Test',
-          showCaseNameForPrimary: true,
-        },
         formattedCaseDetail: {
+          caseId: 'ca123',
           docketNumber: '123-45',
+        },
+        sessionMetadata: {
+          docketRecordSort: {
+            ca123: 'byDate',
+          },
         },
       },
     });
