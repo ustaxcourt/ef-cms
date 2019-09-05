@@ -3,6 +3,9 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
 
 const ContactFactory = {};
 
@@ -102,10 +105,7 @@ const domesticValidationObject = {
     .string()
     .valid(ContactFactory.COUNTRY_TYPES.DOMESTIC)
     .required(),
-  postalCode: joi
-    .string()
-    .regex(/^\d{5}(-\d{4})?$/)
-    .required(),
+  postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
   state: joi.string().required(),
 };
 

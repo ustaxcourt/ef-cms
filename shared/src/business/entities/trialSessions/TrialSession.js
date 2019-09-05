@@ -2,6 +2,9 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
 
 const COMMON_CITIES = [
@@ -196,10 +199,7 @@ TrialSession.validationRules = {
       .string()
       .max(400)
       .optional(),
-    postalCode: joi
-      .string()
-      .regex(/^\d{5}(-\d{4})?$/)
-      .optional(),
+    postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
     sessionType: joi
       .string()
       .valid(TrialSession.SESSION_TYPES)
@@ -208,7 +208,7 @@ TrialSession.validationRules = {
       .date()
       .iso()
       .required(),
-    startTime: joi.string().regex(/^(([0-1][0-9])|([2][0-3])):([0-5][0-9])$/),
+    startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
     state: joi.string().optional(),
     status: joi
       .string()
