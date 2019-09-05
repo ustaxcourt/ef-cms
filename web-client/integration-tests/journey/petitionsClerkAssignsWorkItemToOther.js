@@ -33,7 +33,7 @@ export default test => {
     test.selectedWorkItem = selectedWorkItems[0];
 
     // select an assignee
-    expect(test.getState('assigneeId')).toBeNull();
+    expect(test.getState('assigneeId')).toBeUndefined();
     await test.runSequence('selectAssigneeSequence', {
       assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test Petitionsclerk1',

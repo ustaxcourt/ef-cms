@@ -14,11 +14,13 @@ import practitionerNavigatesToCreateCase from './journey/practitionerNavigatesTo
 import practitionerRequestsAccessToCase from './journey/practitionerRequestsAccessToCase';
 import practitionerRequestsPendingAccessToCase from './journey/practitionerRequestsPendingAccessToCase';
 import practitionerSearchesForCase from './journey/practitionerSearchesForCase';
+import practitionerSearchesForNonexistentCase from './journey/practitionerSearchesForNonexistentCase';
 import practitionerSignsOut from './journey/practitionerSignsOut';
 import practitionerViewsCaseDetail from './journey/practitionerViewsCaseDetail';
 import practitionerViewsCaseDetailOfOwnedCase from './journey/practitionerViewsCaseDetailOfOwnedCase';
 import practitionerViewsCaseDetailOfPendingCase from './journey/practitionerViewsCaseDetailOfPendingCase';
 import practitionerViewsDashboard from './journey/practitionerViewsDashboard';
+import practitionerViewsDashboardBeforeAddingCase from './journey/practitionerViewsDashboardBeforeAddingCase';
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
@@ -38,10 +40,10 @@ presenter.providers.router = {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: test.docketNumber,
       });
-    }
-
-    if (url === '/') {
+    } else if (url === '/') {
       await test.runSequence('gotoDashboardSequence');
+    } else if (url === '/case-search/no-matches') {
+      await test.runSequence('gotoCaseSearchNoMatchesSequence');
     }
   },
 };
@@ -108,6 +110,8 @@ describe('Practitioner requests access to case', () => {
   taxpayerSignsOut(test);
 
   practitionerLogin(test);
+  practitionerSearchesForNonexistentCase(test);
+  practitionerViewsDashboardBeforeAddingCase(test);
   practitionerSearchesForCase(test);
   practitionerViewsCaseDetail(test);
   practitionerRequestsAccessToCase(test, fakeFile);
