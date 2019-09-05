@@ -6,6 +6,7 @@ import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
 import { archiveDraftDocumentModalSequence } from './sequences/archiveDraftDocumentModalSequence';
+import { archiveDraftDocumentSequence } from './sequences/archiveDraftDocumentSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { associatePractitionerWithCaseSequence } from './sequences/caseAssociation/associatePractitionerWithCaseSequence';
 import { associateRespondentWithCaseSequence } from './sequences/caseAssociation/associateRespondentWithCaseSequence';
@@ -257,6 +258,7 @@ export const presenter = {
   sequences: {
     addSupportingDocumentToFormSequence,
     archiveDraftDocumentModalSequence,
+    archiveDraftDocumentSequence,
     assignSelectedWorkItemsSequence,
     associatePractitionerWithCaseSequence,
     associateRespondentWithCaseSequence,
