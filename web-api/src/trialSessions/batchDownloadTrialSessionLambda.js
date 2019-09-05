@@ -20,7 +20,6 @@ const customHandle = async (event, fun) => {
       body: zipBuffer.toString('base64'),
       headers: {
         ...headers,
-        'Content-disposition': `attachment; filename=${zipName}`,
         'Content-Disposition': `attachment; filename=${zipName}`,
         'Content-Type': 'application/zip',
         'accept-ranges': 'bytes',

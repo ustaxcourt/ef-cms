@@ -39,7 +39,7 @@ export const TrialSessionWorkingCopy = connect(
             <div className="grid-col-3 text-right padding-top-2">
               <a
                 aria-label="View PDF"
-                href={`${baseUrl}/trial-session/${formattedTrialSession.trialSessionId}/batch-download?token=${token}`}
+                href={`${baseUrl}/trial-sessions/${formattedTrialSession.trialSessionId}/batch-download?token=${token}`}
               >
                 <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />{' '}
                 Download All Cases
