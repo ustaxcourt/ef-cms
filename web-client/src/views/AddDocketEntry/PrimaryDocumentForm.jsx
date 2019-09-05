@@ -186,6 +186,9 @@ export const PrimaryDocumentForm = connect(
                 ({ value }) => value === form.eventCode,
               )}
               onChange={(inputValue, { action, name }) => {
+                {
+                  /* TODO: move switch to presenter */
+                }
                 switch (action) {
                   case 'select-option':
                     updateDocketEntryFormValueSequence({
@@ -255,6 +258,9 @@ export const PrimaryDocumentForm = connect(
                     value === form.secondaryDocument.eventCode,
                 )}
                 onChange={(inputValue, { action, name }) => {
+                  {
+                    /* TODO: move switch to presenter */
+                  }
                   switch (action) {
                     case 'select-option':
                       updateDocketEntryFormValueSequence({
