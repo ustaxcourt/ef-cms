@@ -256,6 +256,7 @@ export const presenter = {
   providers: {},
   sequences: {
     addSupportingDocumentToFormSequence,
+    archiveDraftDocumentModalSequence,
     assignSelectedWorkItemsSequence,
     associatePractitionerWithCaseSequence,
     associateRespondentWithCaseSequence,
@@ -290,7 +291,6 @@ export const presenter = {
     createWorkItemSequence,
     deleteCaseDeadlineSequence,
     deleteCaseNoteFromCaseDetailSequence,
-    archiveDraftDocumentModalSequence,
     deleteCaseNoteFromWorkingCopySequence,
     deleteWorkingCopySessionNoteSequence,
     dismissAlertSequence,
