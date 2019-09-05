@@ -10,6 +10,10 @@ const externalRoute = path => {
   window.location.replace(path);
 };
 
+const openInNewTab = path => {
+  window.open(path, '_blank', 'noopener, noreferrer');
+};
+
 const router = {
   initialize: app => {
     document.title = 'U.S. Tax Court';
@@ -481,4 +485,4 @@ const router = {
   },
 };
 
-export { route, router, externalRoute };
+export { route, router, externalRoute, openInNewTab };
