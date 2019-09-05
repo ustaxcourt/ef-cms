@@ -1,16 +1,17 @@
-import { ModalDialog } from './ModalDialog';
+import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-class DeleteDraftDocumentModalComponent extends ModalDialog {
+class ArchiveDraftDocumentModalComponent extends ModalDialog {
   constructor(props) {
     super(props);
+
     this.modal = {
       cancelLabel: 'No, take me back',
       classNames: '',
-      confirmLabel: 'Yes, remove',
+      confirmLabel: 'Yes, delete',
       message:
         'The following document will be deleted and cannot be recovered:',
       title: 'Are you sure you want to delete this document?',
@@ -24,15 +25,15 @@ class DeleteDraftDocumentModalComponent extends ModalDialog {
   }
 }
 
-DeleteDraftDocumentModalComponent.propTypes = {
+ArchiveDraftDocumentModalComponent.propTypes = {
   documentTypeName: PropTypes.string,
 };
 
-export const DeleteDraftDocumentModal = connect(
+export const ArchiveDraftDocumentModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.deleteCaseDeadlineSequence,
+    confirmSequence: sequences.archiveDraftDocumentSequence,
     form: state.form,
   },
-  DeleteDraftDocumentModalComponent,
+  ArchiveDraftDocumentModalComponent,
 );

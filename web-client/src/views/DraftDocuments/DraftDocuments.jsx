@@ -1,14 +1,18 @@
+import { DeleteDraftDocumentModal } from './ArchiveDraftDocumentModal';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const DraftDocuments = connect(
   {
+    archiveDraftDocumentModalSequence:
+      sequences.archiveDraftDocumentModalSequence,
     caseDetail: state.formattedCaseDetail,
+    showModal: state.showModal,
   },
-  ({ caseDetail }) => {
+  ({ archiveDraftDocumentModalSequence, caseDetail, showModal }) => {
     return (
       <React.Fragment>
         <table
@@ -20,13 +24,15 @@ export const DraftDocuments = connect(
               <th>Date</th>
               <th>Filings and Proceedings</th>
               <th>Created By</th>
-              <th>&nbsp;</th>
+              <th width="50">&nbsp;</th>
+              <th width="50">&nbsp;</th>
             </tr>
           </thead>
           <tbody>
             {/* TODO: Update draftDocuments with whatever it ends up being, and remove existential check */}
-            {caseDetail.draftDocuments &&
-              caseDetail.draftDocuments.map(
+            {true &&
+              // caseDetail.draftDocuments.map(
+              [{ draftDocument: {}, record: { filedBy: 'jo mama' } }].map(
                 ({ draftDocument, record }, index) => {
                   return (
                     <tr key={index}>
@@ -49,6 +55,20 @@ export const DraftDocuments = connect(
                           <FontAwesomeIcon icon="edit" size="sm" />
                           Edit
                         </a>
+                      </td>
+                      <td className="no-wrap text-align-right">
+                        <button
+                          className="usa-button usa-button--unstyled red-warning"
+                          onClick={() => {
+                            archiveDraftDocumentModalSequence();
+                          }}
+                        >
+                          <FontAwesomeIcon icon="times-circle" size="sm" />
+                          Delete
+                        </button>
+                        {showModal === 'DeleteDraftDocumentModal' && (
+                          <DeleteDraftDocumentModal />
+                        )}
                       </td>
                     </tr>
                   );
