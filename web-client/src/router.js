@@ -14,6 +14,14 @@ const openInNewTab = path => {
   window.open(path, '_blank', 'noopener, noreferrer');
 };
 
+const createObjectURL = object => {
+  return window.URL.createObjectURL(object);
+};
+
+const revokeObjectURL = url => {
+  return window.URL.revokeObjectURL(url);
+};
+
 const router = {
   initialize: app => {
     document.title = 'U.S. Tax Court';
@@ -485,4 +493,11 @@ const router = {
   },
 };
 
-export { route, router, externalRoute, openInNewTab };
+export {
+  createObjectURL,
+  externalRoute,
+  openInNewTab,
+  revokeObjectURL,
+  route,
+  router,
+};
