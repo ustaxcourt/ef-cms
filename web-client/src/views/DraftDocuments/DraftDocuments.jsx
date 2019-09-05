@@ -24,8 +24,8 @@ export const DraftDocuments = connect(
               <th>Date</th>
               <th>Filings and Proceedings</th>
               <th>Created By</th>
-              <th width="50">&nbsp;</th>
-              <th width="50">&nbsp;</th>
+              <th>&nbsp;</th>
+              <th>&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -45,7 +45,7 @@ export const DraftDocuments = connect(
                         {FilingsAndProceedings}
                       </td>
                       <td>{record.filedBy}</td>
-                      <td className="no-wrap text-align-right">
+                      <td className="smaller-column">
                         {/* TODO: Link to the document to edit */}
                         <a
                           className="usa-button usa-button--unstyled"
@@ -55,7 +55,7 @@ export const DraftDocuments = connect(
                           Edit
                         </a>
                       </td>
-                      <td className="no-wrap text-align-right">
+                      <td className="smaller-column">
                         <button
                           className="usa-button usa-button--unstyled red-warning"
                           onClick={() => {
