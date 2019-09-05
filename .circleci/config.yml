@@ -310,7 +310,7 @@ workflows:
       - deploy-api-east
     triggers:
       - schedule:
-          cron: '0 12-24 * * 1-5'
+          cron: '0 12-23 * * 1-5'
           filters:
             branches:
               only:
