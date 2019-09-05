@@ -22,6 +22,7 @@ const router = {
         }
       };
     };
+
     route(
       '/',
       checkLoggedIn(() => {
@@ -29,6 +30,7 @@ const router = {
         app.getSequence('gotoDashboardSequence')({ baseRoute: 'dashboard' });
       }),
     );
+
     route(
       '/case-detail/*',
       checkLoggedIn(docketNumber => {
@@ -36,6 +38,7 @@ const router = {
         app.getSequence('gotoCaseDetailSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/documents/*',
       checkLoggedIn((docketNumber, documentId) => {
@@ -92,6 +95,7 @@ const router = {
         });
       }),
     );
+
     route(
       '/case-detail/*/documents/*/messages/*',
       checkLoggedIn((docketNumber, documentId, messageId) => {
@@ -103,6 +107,7 @@ const router = {
         });
       }),
     );
+
     route(
       '/case-detail/*/documents/*/messages/*/mark/*',
       checkLoggedIn(
@@ -117,6 +122,7 @@ const router = {
         },
       ),
     );
+
     route(
       '/case-detail/*/before-you-file-a-document',
       checkLoggedIn(docketNumber => {
@@ -124,6 +130,7 @@ const router = {
         app.getSequence('gotoBeforeYouFileDocumentSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
@@ -137,6 +144,7 @@ const router = {
         }
       }),
     );
+
     route(
       '/case-detail/*/file-a-document/details',
       checkLoggedIn(docketNumber => {
@@ -152,6 +160,7 @@ const router = {
         }
       }),
     );
+
     route(
       '/case-detail/*/file-a-document/review',
       checkLoggedIn(docketNumber => {
@@ -198,6 +207,7 @@ const router = {
         app.getSequence('gotoCreateOrderSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/add-docket-entry',
       checkLoggedIn(docketNumber => {
@@ -205,6 +215,7 @@ const router = {
         app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/printable-docket-record',
       checkLoggedIn(docketNumber => {
@@ -212,6 +223,7 @@ const router = {
         app.getSequence('gotoPrintableDocketRecordSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/request-access',
       checkLoggedIn(docketNumber => {
@@ -219,6 +231,7 @@ const router = {
         app.getSequence('gotoRequestAccessSequence')({ docketNumber });
       }),
     );
+
     route(
       '/document-qc..',
       checkLoggedIn(() => {
@@ -260,6 +273,7 @@ const router = {
         document.title = `Dashboard ${pageTitleSuffix}`;
       }),
     );
+
     route(
       '/trial-session-detail/*',
       checkLoggedIn(trialSessionId => {
@@ -267,6 +281,7 @@ const router = {
         app.getSequence('gotoTrialSessionDetailSequence')({ trialSessionId });
       }),
     );
+
     route(
       '/trial-session-working-copy/*',
       checkLoggedIn(trialSessionId => {
@@ -276,6 +291,7 @@ const router = {
         });
       }),
     );
+
     route(
       '/trial-sessions..',
       checkLoggedIn(() => {
@@ -287,9 +303,11 @@ const router = {
         app.getSequence('gotoTrialSessionsSequence')({ query });
       }),
     );
+
     route('/idle-logout', () => {
       app.getSequence('gotoIdleLogoutSequence')();
     });
+
     route('/log-in...', () => {
       const { code, path, token } = queryStringDecoder();
       if (code) {
@@ -298,6 +316,7 @@ const router = {
         app.getSequence('loginWithTokenSequence')({ path, token });
       }
     });
+
     route(
       '/before-filing-a-petition',
       checkLoggedIn(() => {
@@ -305,6 +324,7 @@ const router = {
         app.getSequence('gotoBeforeStartCaseSequence')();
       }),
     );
+
     route(
       '/file-a-petition/step-*',
       checkLoggedIn(step => {
@@ -354,6 +374,7 @@ const router = {
       document.title = `Style Guide ${pageTitleSuffix}`;
       app.getSequence('gotoStyleGuideSequence')();
     });
+
     route(
       '/messages..',
       checkLoggedIn(() => {
@@ -446,6 +467,7 @@ const router = {
       },
       true,
     );
+
     route.start(true);
   },
 };
