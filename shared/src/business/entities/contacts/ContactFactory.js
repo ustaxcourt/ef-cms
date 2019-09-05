@@ -5,7 +5,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
+} = require('../../../utilities/JoiValidationConstants');
 
 const ContactFactory = {};
 
