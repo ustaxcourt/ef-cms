@@ -81,6 +81,9 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                     option.eventCode === form.secondaryDocument.eventCode,
                 )}
                 onChange={(inputValue, { action }) => {
+                  {
+                    /* TODO: move switch to presenter */
+                  }
                   switch (action) {
                     case 'select-option':
                       updateFileDocumentWizardFormValueSequence({
