@@ -24,6 +24,8 @@ export const setPDFForSigningAction = async ({
 
   let removeCover = false;
 
+  let editingSignedStipulatedDecision = false;
+
   if (caseDetail && Array.isArray(caseDetail.documents)) {
     const document = caseDetail.documents.find(
       caseDocument => caseDocument.documentId === documentId,
@@ -31,14 +33,23 @@ export const setPDFForSigningAction = async ({
 
     if (document && document.documentType === 'Proposed Stipulated Decision') {
       removeCover = true;
+    } else {
+      editingSignedStipulatedDecision = true;
     }
   }
 
   let pdfObj = {};
 
+  let documentIdToLoad = documentId;
+
+  // if we are looking at a signed stipulated decision, we need to display the clear signature button
+  if (editingSignedStipulatedDecision) {
+    store.set(state.pdfForSigning.isPdfAlreadySigned, true);
+  }
+
   pdfObj = await applicationContext.getUseCases().loadPDFForSigningInteractor({
     applicationContext,
-    documentId,
+    documentId: documentIdToLoad,
     removeCover,
   });
 
