@@ -42,7 +42,7 @@ export const SearchBox = connect(
           <a
             aria-label="advanced search"
             className="usa-link advanced"
-            href="/advanced-search"
+            href="/search"
           >
             Advanced
           </a>
