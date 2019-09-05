@@ -15,19 +15,11 @@ import React from 'react';
 export const TrialSessionWorkingCopy = connect(
   {
     baseUrl: state.baseUrl,
-    downloadBatchOfTrialSessionSequence:
-      sequences.downloadBatchOfTrialSessionSequence,
     formattedTrialSession: state.formattedTrialSessionDetails,
     showModal: state.showModal,
     token: state.token,
   },
-  ({
-    baseUrl,
-    downloadBatchOfTrialSessionSequence,
-    formattedTrialSession,
-    showModal,
-    token,
-  }) => {
+  ({ baseUrl, formattedTrialSession, showModal, token }) => {
     return (
       <>
         <TrialSessionDetailHeader />
