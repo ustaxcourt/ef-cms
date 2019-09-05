@@ -2,7 +2,7 @@ import { resetArchiveDraftDocumentAction } from './resetArchiveDraftDocumentActi
 import { runAction } from 'cerebral/test';
 
 describe('resetArchiveDraftDocumentAction', () => {
-  it('resets the archive draft document related state props to null', async () => {
+  it('unsets the properties within the archiveDraftDocument state object', async () => {
     const result = await runAction(resetArchiveDraftDocumentAction, {
       state: {
         archiveDraftDocument: {
@@ -13,10 +13,6 @@ describe('resetArchiveDraftDocumentAction', () => {
       },
     });
 
-    expect(result.state.archiveDraftDocument).toMatchObject({
-      caseId: null,
-      documentId: null,
-      documentTitle: null,
-    });
+    expect(result.state.archiveDraftDocument).toMatchObject({});
   });
 });
