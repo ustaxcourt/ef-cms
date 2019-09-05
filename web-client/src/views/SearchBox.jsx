@@ -27,7 +27,7 @@ export const SearchBox = connect(
             className="usa-input"
             id="search-field"
             name="searchTerm"
-            placeholder="Enter docket number (e.g., 123-19)"
+            placeholder="Enter docket no. (123-19)"
             type="search"
             value={searchTerm}
             onChange={e => {
