@@ -30,6 +30,7 @@ import { OrderWithoutBody } from '../../shared/src/business/entities/orders/Orde
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
+import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { associatePractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associatePractitionerWithCaseProxy';
 import { associateRespondentWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associateRespondentWithCaseProxy';
@@ -179,6 +180,7 @@ const setCurrentUserToken = newToken => {
 };
 
 const allUseCases = {
+  archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
   associatePractitionerWithCaseInteractor,
   associateRespondentWithCaseInteractor,
