@@ -1336,3 +1336,13 @@ button.change-scanner-button {
 .minw-30 {
   min-width: 15rem;
 }
+
+.advanced-search {
+  .right-gray-border {
+    border-right: 1px solid color($theme-color-base-light);
+  }
+
+  .advanced-search__button {
+    margin-top: 39px;
+  }
+}

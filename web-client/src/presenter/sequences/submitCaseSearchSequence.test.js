@@ -46,7 +46,7 @@ describe('submitCaseSearchSequence', () => {
       searchTerm: '111-19',
     });
     expect(routeStub.called).toBeTruthy();
-    expect(routeStub.getCall(0).args[0]).toContain('/case-search/no-matches');
+    expect(routeStub.getCall(0).args[0]).toContain('/search/no-matches');
   });
 
   it('rethrows errors that are not NotFoundError instances', async () => {
