@@ -38,6 +38,7 @@ const {
 const {
   batchDownloadTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor');
+const { Case } = require('../../shared/src/business/entities/cases/Case');
 const {
   CaseExternalIncomplete,
 } = require('../../shared/src/business/entities/cases/CaseExternalIncomplete');
@@ -555,6 +556,7 @@ module.exports = (appContextUser = {}) => {
       return sesCache;
     },
     getEntityConstructors: () => ({
+      Case,
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
     }),
