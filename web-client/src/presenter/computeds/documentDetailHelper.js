@@ -1,4 +1,3 @@
-import { formatDocument } from './formattedCaseDetail';
 import { formatWorkItem } from './formattedWorkQueue';
 import { state } from 'cerebral';
 import _ from 'lodash';
@@ -18,7 +17,9 @@ export const documentDetailHelper = (get, applicationContext) => {
   );
   let formattedDocument = {};
   if (document) {
-    formattedDocument = formatDocument(applicationContext, document);
+    formattedDocument = applicationContext
+      .getUtilities()
+      .formatDocument(applicationContext, document);
     const allWorkItems = _.orderBy(
       formattedDocument.workItems,
       'createdAt',
