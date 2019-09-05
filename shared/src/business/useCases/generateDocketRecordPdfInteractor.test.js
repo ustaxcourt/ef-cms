@@ -1,35 +1,13 @@
 import { Case } from '../entities/cases/Case';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
+import { getFormattedCaseDetail } from '../utilities/getFormattedCaseDetail';
 describe('generateDocketRecordPdfInteractor', () => {
   const generatePdfFromHtmlInteractorMock = jest.fn();
   const generatePrintableDocketRecordTemplateMock = jest.fn();
-  const applicationContext = {
-    getEntityConstructors: () => ({
-      Case,
-    }),
-    getTemplateGenerators: () => {
-      return {
-        generatePrintableDocketRecordTemplate: ({
-          docketRecord,
-          partyInfo,
-        }) => {
-          generatePrintableDocketRecordTemplateMock();
-          return `<!DOCTYPE html>${docketRecord} ${partyInfo}</html>`;
-        },
-      };
-    },
-    getUseCases: () => {
-      return {
-        generatePdfFromHtmlInteractor: ({ contentHtml }) => {
-          generatePdfFromHtmlInteractorMock();
-          return contentHtml;
-        },
-      };
-    },
-  };
 
   const caseDetail = {
     caseCaption: 'Test Case Caption',
+    caseId: 'ca-123',
     contactPrimary: {
       address1: 'address 1',
       city: 'City',
@@ -79,6 +57,42 @@ describe('generateDocketRecordPdfInteractor', () => {
     respondents: [],
   };
 
+  const applicationContext = {
+    getCaseCaptionNames: Case.getCaseCaptionNames,
+    getEntityConstructors: () => ({
+      Case,
+    }),
+    getPersistenceGateway: () => ({
+      getCaseByCaseId: () => ({
+        ...caseDetail,
+      }),
+    }),
+    getTemplateGenerators: () => {
+      return {
+        generatePrintableDocketRecordTemplate: ({
+          docketRecord,
+          partyInfo,
+        }) => {
+          generatePrintableDocketRecordTemplateMock();
+          return `<!DOCTYPE html>${docketRecord} ${partyInfo}</html>`;
+        },
+      };
+    },
+    getUseCases: () => {
+      return {
+        generatePdfFromHtmlInteractor: ({ contentHtml }) => {
+          generatePdfFromHtmlInteractorMock();
+          return contentHtml;
+        },
+      };
+    },
+    getUtilities: () => ({
+      formatDateString: date => date,
+      getFormattedCaseDetail,
+      setServiceIndicatorsForCase: () => null,
+    }),
+  };
+
   it('Calls generatePdfFromHtmlInteractor and generatePrintableDocketRecordTemplate to build a PDF', async () => {
     const result = await generateDocketRecordPdfInteractor({
       applicationContext,
@@ -92,19 +106,24 @@ describe('generateDocketRecordPdfInteractor', () => {
 
   it('Displays contactSecondary if associated with the case', async () => {
     const result = await generateDocketRecordPdfInteractor({
-      applicationContext,
-      caseDetail: {
-        ...caseDetail,
-        contactSecondary: {
-          address1: 'address 1',
-          city: 'City',
-          countryType: 'domestic',
-          name: 'Test Secondary',
-          phone: '123-123-1234',
-          postalCode: '12345',
-          state: 'ST',
-        },
+      applicationContext: {
+        ...applicationContext,
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: () => ({
+            ...caseDetail,
+            contactSecondary: {
+              address1: 'address 1',
+              city: 'City',
+              countryType: 'domestic',
+              name: 'Test Secondary',
+              phone: '123-123-1234',
+              postalCode: '12345',
+              state: 'ST',
+            },
+          }),
+        }),
       },
+      caseId: 'ca123',
     });
 
     expect(result.indexOf('Test Secondary')).toBeGreaterThan(-1);
@@ -112,37 +131,42 @@ describe('generateDocketRecordPdfInteractor', () => {
 
   it('Displays practitioners associated with the case', async () => {
     const result = await generateDocketRecordPdfInteractor({
-      applicationContext,
-      caseDetail: {
-        ...caseDetail,
-        contactSecondary: {
-          address1: 'address 1',
-          city: 'City',
-          countryType: 'domestic',
-          name: 'Test Secondary',
-          phone: '123-123-1234',
-          postalCode: '12345',
-          state: 'ST',
-        },
-        practitioners: [
-          {
-            addressLine1: '123 Address 1',
-            city: 'Some City',
-            formattedName: 'Test Practitioner',
-            phoneNumber: '99999999',
-            representingPrimary: true,
-            state: 'ST',
-          },
-          {
-            addressLine1: '321 Address 1',
-            city: 'Some City',
-            formattedName: 'Test Practitioner 2',
-            phoneNumber: '99999999',
-            representingSecondary: true,
-            state: 'ST',
-          },
-        ],
+      applicationContext: {
+        ...applicationContext,
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: () => ({
+            ...caseDetail,
+            contactSecondary: {
+              address1: 'address 1',
+              city: 'City',
+              countryType: 'domestic',
+              name: 'Test Secondary',
+              phone: '123-123-1234',
+              postalCode: '12345',
+              state: 'ST',
+            },
+            practitioners: [
+              {
+                addressLine1: '123 Address 1',
+                city: 'Some City',
+                name: 'Test Practitioner',
+                phoneNumber: '99999999',
+                representingPrimary: true,
+                state: 'ST',
+              },
+              {
+                addressLine1: '321 Address 1',
+                city: 'Some City',
+                name: 'Test Practitioner 2',
+                phoneNumber: '99999999',
+                representingSecondary: true,
+                state: 'ST',
+              },
+            ],
+          }),
+        }),
       },
+      caseId: 'ca-123',
     });
 
     expect(result.indexOf('Test Practitioner')).toBeGreaterThan(-1);
@@ -151,20 +175,25 @@ describe('generateDocketRecordPdfInteractor', () => {
 
   it('Displays respondents associated with the case', async () => {
     const result = await generateDocketRecordPdfInteractor({
-      applicationContext,
-      caseDetail: {
-        ...caseDetail,
-        respondents: [
-          {
-            addressLine1: '123 Address 1',
-            city: 'Some City',
-            name: 'Test Respondent',
-            phoneNumber: '99999999',
-            representingPrimary: true,
-            state: 'ST',
-          },
-        ],
+      applicationContext: {
+        ...applicationContext,
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: () => ({
+            ...caseDetail,
+            respondents: [
+              {
+                addressLine1: '123 Address 1',
+                city: 'Some City',
+                name: 'Test Respondent',
+                phoneNumber: '99999999',
+                representingPrimary: true,
+                state: 'ST',
+              },
+            ],
+          }),
+        }),
       },
+      caseId: 'ca123',
     });
 
     expect(result.indexOf('Respondent Counsel')).toBeGreaterThan(-1);
@@ -173,17 +202,22 @@ describe('generateDocketRecordPdfInteractor', () => {
 
   it('Displays optional contact information if present', async () => {
     const result = await generateDocketRecordPdfInteractor({
-      applicationContext,
-      caseDetail: {
-        ...caseDetail,
-        contactPrimary: {
-          ...caseDetail.contactPrimary,
-          inCareOf: 'Test C/O',
-          title: 'Test Title',
-          address2: 'Address Two',
-          address3: 'Address Three',
-        },
+      applicationContext: {
+        ...applicationContext,
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: () => ({
+            ...caseDetail,
+            contactPrimary: {
+              ...caseDetail.contactPrimary,
+              inCareOf: 'Test C/O',
+              title: 'Test Title',
+              address2: 'Address Two',
+              address3: 'Address Three',
+            },
+          }),
+        }),
       },
+      caseId: 'ca-123',
     });
 
     expect(result.indexOf('Test C/O')).toBeGreaterThan(-1);
@@ -195,13 +229,9 @@ describe('generateDocketRecordPdfInteractor', () => {
   it('Displays caseName instead of contactPrimary name when showCaseNameForPrimary is set', async () => {
     const result = await generateDocketRecordPdfInteractor({
       applicationContext,
-      caseDetail: {
-        ...caseDetail,
-        showCaseNameForPrimary: true,
-        caseName: 'Test Case Name',
-      },
+      caseDetail: { ...caseDetail },
     });
 
-    expect(result.indexOf('Test Case Name')).toBeGreaterThan(-1);
+    expect(result.indexOf(caseDetail.caseCaption)).toBeGreaterThan(-1);
   });
 });
