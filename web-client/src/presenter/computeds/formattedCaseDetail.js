@@ -153,7 +153,7 @@ const formatCase = (applicationContext, caseDetail) => {
 
   const { ORDER_TYPES_MAP } = applicationContext.getConstants();
 
-  result.draftDocuments = result.documents.filter(
+  result.draftDocuments = (result.documents || []).filter(
     document =>
       (document.documentType === 'Stipulated Decision' &&
         !document.documentType.signedAt) ||
