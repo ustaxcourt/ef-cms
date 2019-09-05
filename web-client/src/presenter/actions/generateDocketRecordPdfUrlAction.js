@@ -11,12 +11,16 @@ export const generateDocketRecordPdfUrlAction = async ({
   get,
 }) => {
   const caseDetail = get(state.formattedCaseDetail);
+  const docketRecordSort = get(
+    state.sessionMetadata.docketRecordSort[caseDetail.caseId],
+  );
 
   const docketRecordPdf = await applicationContext
     .getUseCases()
     .createDocketRecordPdfInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
+      docketRecordSort,
     });
 
   const pdfFile = new Blob([docketRecordPdf], { type: 'application/pdf' });
