@@ -9,9 +9,6 @@ let updateCaseStub = sinon.stub().returns({});
 const updateCaseTrialSortTagsStub = sinon.stub().resolves();
 
 presenter.providers.applicationContext = {
-  getEntityConstructors: () => ({
-    Case,
-  }),
   getUseCases: () => ({
     updateCaseInteractor: updateCaseStub,
     updateCaseTrialSortTagsInteractor: updateCaseTrialSortTagsStub,
@@ -39,14 +36,6 @@ describe('updateCaseAction', () => {
     });
     expect(updateCaseTrialSortTagsStub.getCall(0).args[0].caseId).toEqual(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    );
-    expect(updateCaseTrialSortTagsStub.getCall(0).args[0].caseSortTags).toEqual(
-      {
-        hybrid:
-          'WashingtonDC-H-C-20190301164046-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        nonHybrid:
-          'WashingtonDC-R-C-20190301164046-c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      },
     );
   });
 
