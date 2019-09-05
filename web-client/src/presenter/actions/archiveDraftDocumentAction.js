@@ -1,4 +1,3 @@
-import { get } from 'cerebral/factories';
 import { state } from 'cerebral';
 /**
  * Gets the JWT token and refresh token using the cognito authorization code.
@@ -10,12 +9,17 @@ import { state } from 'cerebral';
  */
 export const archiveDraftDocumentAction = async ({
   applicationContext,
-  props,
+  get,
+  store,
 }) => {
-  const { documentId } = props;
-  const caseId = get(state.caseDetail.caseId);
+  const { caseId, documentId, documentTitle } = get(state.archiveDraftDocument);
 
   await applicationContext
     .getUseCases()
     .archiveDraftDocumentInteractor({ applicationContext, caseId, documentId });
+
+  store.set(state.alertSuccess, {
+    message: documentTitle,
+    title: 'Your message was created successfully.',
+  });
 };
