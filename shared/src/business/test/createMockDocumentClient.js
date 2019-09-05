@@ -125,6 +125,7 @@ const createMockDocumentClient = () => {
         } else {
           if (k.includes('documents[')) {
             obj = data[`${Key.pk} ${Key.sk}`];
+            // eslint-disable-next-line security/detect-eval-with-expression
             eval(`obj.${k} = ${JSON.stringify(v)};`);
           } else {
             obj[k] = v;

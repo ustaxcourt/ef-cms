@@ -58,7 +58,6 @@ describe('batchDownloadTrialSessionInteractor', () => {
   it('calls persistence functions to fetch trial sessions and associated cases and then zips their associated documents', async () => {
     await batchDownloadTrialSessionInteractor({
       applicationContext,
-      caseDetails: { '123': { ...MOCK_CASE } },
       trialSessionId: '123',
     });
 
