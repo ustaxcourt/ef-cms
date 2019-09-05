@@ -149,6 +149,13 @@
           background-image: none;
         }
       }
+      .usa-link.advanced {
+        display: inline-block;
+        margin-top: 0.5em;
+        margin-left: 0.5em;
+        color: color($theme-color-primary);
+        font-size: 15px;
+      }
     }
   }
 }

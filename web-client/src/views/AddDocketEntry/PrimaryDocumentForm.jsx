@@ -3,6 +3,11 @@ import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
+import {
+  docketEntryOnChange,
+  onInputChange,
+  reactSelectValue,
+} from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -182,38 +187,27 @@ export const PrimaryDocumentForm = connect(
               name="eventCode"
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               placeholder="- Select -"
-              value={internalTypesHelper.internalDocumentTypesForSelectSorted.filter(
-                ({ value }) => value === form.eventCode,
-              )}
+              value={reactSelectValue({
+                documentTypes:
+                  internalTypesHelper.internalDocumentTypesForSelectSorted,
+                selectedEventCode: form.eventCode,
+              })}
               onChange={(inputValue, { action, name }) => {
-                {
-                  /* TODO: move switch to presenter */
-                }
-                switch (action) {
-                  case 'select-option':
-                    updateDocketEntryFormValueSequence({
-                      key: name,
-                      value: inputValue.value,
-                    });
-                    validateDocketEntrySequence();
-                    break;
-                  case 'clear':
-                    updateDocketEntryFormValueSequence({
-                      key: name,
-                      value: '',
-                    });
-                    validateDocketEntrySequence();
-                    break;
-                }
+                docketEntryOnChange({
+                  action,
+                  inputValue,
+                  name,
+                  updateSequence: updateDocketEntryFormValueSequence,
+                  validateSequence: validateDocketEntrySequence,
+                });
                 return true;
               }}
               onInputChange={(inputText, { action }) => {
-                if (action == 'input-change') {
-                  updateScreenMetadataSequence({
-                    key: 'searchText',
-                    value: inputText,
-                  });
-                }
+                onInputChange({
+                  action,
+                  inputText,
+                  updateSequence: updateScreenMetadataSequence,
+                });
               }}
             />
             <Text
@@ -252,40 +246,28 @@ export const PrimaryDocumentForm = connect(
                   internalTypesHelper.internalDocumentTypesForSelectSorted
                 }
                 placeholder="- Select -"
-                value={internalTypesHelper.internalDocumentTypesForSelectSorted.filter(
-                  ({ value }) =>
-                    form.secondaryDocument &&
-                    value === form.secondaryDocument.eventCode,
-                )}
+                value={reactSelectValue({
+                  documentTypes:
+                    internalTypesHelper.internalDocumentTypesForSelectSorted,
+                  selectedEventCode:
+                    form.secondaryDocument && form.secondaryDocument.eventCode,
+                })}
                 onChange={(inputValue, { action, name }) => {
-                  {
-                    /* TODO: move switch to presenter */
-                  }
-                  switch (action) {
-                    case 'select-option':
-                      updateDocketEntryFormValueSequence({
-                        key: name,
-                        value: inputValue.value,
-                      });
-                      validateDocketEntrySequence();
-                      break;
-                    case 'clear':
-                      updateDocketEntryFormValueSequence({
-                        key: name,
-                        value: '',
-                      });
-                      validateDocketEntrySequence();
-                      break;
-                  }
+                  docketEntryOnChange({
+                    action,
+                    inputValue,
+                    name,
+                    updateSequence: updateDocketEntryFormValueSequence,
+                    validateSequence: validateDocketEntrySequence,
+                  });
                   return true;
                 }}
                 onInputChange={(inputText, { action }) => {
-                  if (action == 'input-change') {
-                    updateScreenMetadataSequence({
-                      key: 'searchText',
-                      value: inputText,
-                    });
-                  }
+                  onInputChange({
+                    action,
+                    inputText,
+                    updateSequence: updateScreenMetadataSequence,
+                  });
                 }}
               />
               {!form.secondaryDocument && (
