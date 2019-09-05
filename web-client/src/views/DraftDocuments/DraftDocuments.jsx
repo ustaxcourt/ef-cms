@@ -1,5 +1,4 @@
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
-import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
