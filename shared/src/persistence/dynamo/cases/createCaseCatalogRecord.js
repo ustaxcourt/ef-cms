@@ -11,7 +11,7 @@ exports.createCaseCatalogRecord = async ({
   applicationContext,
   caseToCreate,
 }) => {
-  const yearFiled = '20' + caseToCreate.docketNumber.split('-')[1];
+  const yearFiled = 2000 + caseToCreate.docketNumber.split('-')[1];
 
   await put({
     Item: {
