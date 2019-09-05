@@ -136,6 +136,16 @@ describe('formatCaseDeadlines', () => {
     expect(Array.isArray(result)).toBeTruthy();
     expect(result[0]).toHaveProperty('deadlineDateFormatted');
   });
+
+  it('should set the caseDeadline to overdue if the deadlineDate is before today', () => {
+    const result = formatCaseDeadlines(applicationContext, [
+      {
+        deadlineDate: '12/7/2017',
+      },
+    ]);
+    expect(result[0]).toHaveProperty('overdue');
+    expect(result[0]).toBeTruthy();
+  });
 });
 
 describe('formatDocument', () => {
@@ -217,7 +227,7 @@ describe('sortDocketRecords', () => {
     expect(result[0].index).toEqual('2');
   });
 
-  it('should sort docket records by date by default', () => {
+  it('should sort docket records by index when sortBy is byIndex', () => {
     const result = sortDocketRecords(
       [
         {
@@ -243,5 +253,33 @@ describe('sortDocketRecords', () => {
     );
 
     expect(result[1].index).toEqual('2');
+  });
+
+  it('should sort docket records in reverse if Desc is included in sortBy', () => {
+    const result = sortDocketRecords(
+      [
+        {
+          index: '2',
+          record: {
+            filingDate: new Date(),
+          },
+        },
+        {
+          index: '3',
+          record: {
+            filingDate: new Date(),
+          },
+        },
+        {
+          index: '1',
+          record: {
+            filingDate: new Date(),
+          },
+        },
+      ],
+      'byIndexDesc',
+    );
+
+    expect(result[0].index).toEqual('3');
   });
 });
