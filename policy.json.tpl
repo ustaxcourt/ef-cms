@@ -139,6 +139,7 @@
       "Effect": "Allow",
       "Action": [
         "iam:GetRole",
+        "iam:CreateRole",
         "iam:DeleteRole",
         "iam:PutRolePolicy",
         "iam:PassRole",
