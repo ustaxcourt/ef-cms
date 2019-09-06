@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * gets the document to be edited from the current caseDetail
+ * sets the document to be edited from the current caseDetail
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object
@@ -16,6 +16,9 @@ export const getDocumentToEditAction = ({ props, store }) => {
       document => document.documentId === documentIdToEdit,
     );
 
+    const draftState = documentToEdit.draftState || {};
+
     store.set(state.documentToEdit, documentToEdit);
+    store.set(state.form, draftState);
   }
 };
