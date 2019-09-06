@@ -121,7 +121,10 @@ class PDFSignerComponent extends React.Component {
         <section className="usa-section grid-container">
           <div className="grid-row">
             <div className="grid-col-12">
-              <h1>Proposed Stipulated Decision</h1>
+              <h1>
+                Sign{' '}
+                {this.props.documentDetailHelper.formattedDocument.documentType}
+              </h1>
               <div className="grid-row grid-gap">
                 <div className="grid-col-4">
                   <div className="blue-container">
@@ -202,6 +205,7 @@ PDFSignerComponent.propTypes = {
   completeDocumentSigningSequence: PropTypes.func,
   currentPageNumber: PropTypes.number,
   docketNumber: PropTypes.string,
+  documentDetailHelper: PropTypes.object,
   documentId: PropTypes.string,
   loadOriginalProposedStipulatedDecisionSequence: PropTypes.func,
   navigateToPathSequence: PropTypes.func,
@@ -222,6 +226,7 @@ export const PDFSigner = connect(
     completeDocumentSigningSequence: sequences.completeDocumentSigningSequence,
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
+    documentDetailHelper: state.documentDetailHelper,
     documentId: state.documentId,
     loadOriginalProposedStipulatedDecisionSequence:
       sequences.loadOriginalProposedStipulatedDecisionSequence,
