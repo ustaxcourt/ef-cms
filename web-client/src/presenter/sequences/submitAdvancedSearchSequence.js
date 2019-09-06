@@ -12,8 +12,10 @@ export const submitAdvancedSearchSequence = [
     error: [setAlertErrorAction, setValidationErrorsAction],
     success: [
       clearAlertsAction,
+      set(state.submitting, true),
       submitAdvancedSearchAction,
       set(state.searchResults, props.searchResults),
+      set(state.submitting, false),
     ],
   },
 ];
