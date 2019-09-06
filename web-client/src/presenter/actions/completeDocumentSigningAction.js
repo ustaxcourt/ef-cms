@@ -14,60 +14,72 @@ export const completeDocumentSigningAction = async ({
   applicationContext,
   get,
 }) => {
-  const {
-    documentId: originalDocumentId,
-    nameForSigning,
-    pageNumber,
-    signatureData: { scale, x, y },
-  } = get(state.pdfForSigning);
+  const messageId = get(state.messageId);
+  const originalDocumentId = get(state.pdfForSigning.documentId);
   const caseId = get(state.caseDetail.caseId);
   const caseDetail = get(state.caseDetail);
+  let documentIdToReturn = originalDocumentId;
   const document = caseDetail.documents.find(
     document => document.documentId === originalDocumentId,
   );
-  const messageId = get(state.messageId);
 
-  const { pdfjsObj } =
-    window.pdfjsObj !== undefined ? window : get(state.pdfForSigning);
+  if (get(state.pdfForSigning.signatureData.x)) {
+    const {
+      nameForSigning,
+      pageNumber,
+      signatureData: { scale, x, y },
+    } = get(state.pdfForSigning);
 
-  // generate signed document to bytes
-  const signedPdfBytes = await applicationContext
-    .getUseCases()
-    .generateSignedDocumentInteractor({
-      pageIndex: pageNumber - 1, // pdf.js starts at 1
-      pdfData: await pdfjsObj.getData(),
-      posX: x,
-      posY: y,
-      scale,
-      sigTextData: {
-        signatureName: `(Signed) ${nameForSigning}`,
-        signatureTitle: 'Chief Judge',
-      },
-    });
+    const { pdfjsObj } =
+      window.pdfjsObj !== undefined ? window : get(state.pdfForSigning);
 
-  let documentFile;
+    // generate signed document to bytes
+    const signedPdfBytes = await applicationContext
+      .getUseCases()
+      .generateSignedDocumentInteractor({
+        pageIndex: pageNumber - 1, // pdf.js starts at 1
+        pdfData: await pdfjsObj.getData(),
+        posX: x,
+        posY: y,
+        scale,
+        sigTextData: {
+          signatureName: `(Signed) ${nameForSigning}`,
+          signatureTitle: 'Chief Judge',
+        },
+      });
 
-  if (typeof File === 'function') {
-    documentFile = new File([signedPdfBytes], 'myfile.pdf');
-  } else {
-    documentFile = Buffer.from(signedPdfBytes, 'base64');
-    documentFile.name = 'myfile.pdf';
-  }
+    let documentFile;
 
-  const signedDocumentId = await applicationContext
-    .getPersistenceGateway()
-    .uploadDocument({
+    if (typeof File === 'function') {
+      documentFile = new File([signedPdfBytes], 'myfile.pdf');
+    } else {
+      documentFile = Buffer.from(signedPdfBytes, 'base64');
+      documentFile.name = 'myfile.pdf';
+    }
+
+    let documentIdToOverwrite = null;
+    if (document.documentType === 'Stipulated Decision') {
+      documentIdToOverwrite = originalDocumentId;
+    }
+
+    const signedDocumentId = await applicationContext
+      .getPersistenceGateway()
+      .uploadDocument({
+        applicationContext,
+        document: documentFile,
+        documentId: documentIdToOverwrite,
+        onUploadProgress: () => {},
+      });
+
+    documentIdToReturn = signedDocumentId;
+
+    await applicationContext.getUseCases().signDocumentInteractor({
       applicationContext,
-      document: documentFile,
-      onUploadProgress: () => {},
+      caseId,
+      originalDocumentId,
+      signedDocumentId,
     });
-
-  await applicationContext.getUseCases().signDocumentInteractor({
-    applicationContext,
-    caseId,
-    originalDocumentId,
-    signedDocumentId,
-  });
+  }
 
   if (messageId) {
     const workItemIdToClose = document.workItems.find(workItem =>
@@ -81,5 +93,5 @@ export const completeDocumentSigningAction = async ({
     });
   }
 
-  return { caseId, documentId: signedDocumentId, tab: 'docketRecord' };
+  return { caseId, documentId: documentIdToReturn, tab: 'docketRecord' };
 };

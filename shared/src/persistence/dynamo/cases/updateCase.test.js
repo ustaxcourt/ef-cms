@@ -2,26 +2,28 @@ const client = require('../../../../../shared/src/persistence/dynamodbClientServ
 const sinon = require('sinon');
 const { updateCase } = require('./updateCase');
 
-const applicationContext = {
-  environment: {
-    stage: 'local',
-  },
-};
-
 describe('updateCase', () => {
+  let applicationContext;
+  let putStub, getStub;
+
   beforeEach(() => {
-    sinon.stub(client, 'put').resolves(null);
-    sinon.stub(client, 'get').resolves({
+    putStub = sinon.stub().returns({
+      promise: async () => null,
+    });
+    getStub = sinon.stub(client, 'get').resolves({
       docketNumberSuffix: null,
       status: 'General Docket - Not at Issue',
     });
-    sinon.stub(client, 'query').resolves([]);
-  });
 
-  afterEach(() => {
-    client.put.restore();
-    client.get.restore();
-    client.query.restore();
+    applicationContext = {
+      environment: {
+        stage: 'local',
+      },
+      getDocumentClient: () => ({
+        get: getStub,
+        put: putStub,
+      }),
+    };
   });
 
   it('updates case with new version number', async () => {
@@ -36,11 +38,15 @@ describe('updateCase', () => {
         userId: 'taxpayer',
       },
     });
-    expect(client.put.getCall(0).args[0].Item).toMatchObject({
+    expect(putStub.getCall(0).args[0].Item).toMatchObject({
+      pk: 'catalog',
+      sk: 'case-123',
+    });
+    expect(putStub.getCall(1).args[0].Item).toMatchObject({
       pk: '123',
       sk: '0',
     });
-    expect(client.put.getCall(1).args[0].Item).toMatchObject({
+    expect(putStub.getCall(2).args[0].Item).toMatchObject({
       pk: '123',
       sk: '11',
     });

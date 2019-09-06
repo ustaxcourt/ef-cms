@@ -86,6 +86,7 @@ provider:
   apiGateway:
     binaryMediaTypes:
       - 'application/pdf'
+      - 'application/zip'
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
@@ -301,9 +302,6 @@ functions:
     events:
       - http:
           path: /{trialSessionId}/batch-download
-          method: post
+          method: get
+          contentHandling: CONVERT_TO_BINARY
           cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer

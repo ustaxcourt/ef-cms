@@ -19,7 +19,6 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.batchDownloadTrialSessionInteractor = async ({
   applicationContext,
-  caseDetails,
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -53,9 +52,6 @@ exports.batchDownloadTrialSessionInteractor = async ({
   );
   const { trialLocation } = trialSessionDetails;
   let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
-    .replace(/\s/g, '_')
-    .replace(/,/g, '');
-  zipName = sanitize(`${trialSessionId}.zip`)
     .replace(/\s/g, '_')
     .replace(/,/g, '');
 
@@ -102,7 +98,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
     extraFiles.push(
       await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
         applicationContext,
-        caseDetail: caseDetails[caseId],
+        caseId,
       }),
     );
     extraFileNames.push(
@@ -110,21 +106,17 @@ exports.batchDownloadTrialSessionInteractor = async ({
     );
   }
 
-  await applicationContext.getPersistenceGateway().zipDocuments({
-    applicationContext,
-    extraFileNames,
-    extraFiles,
-    fileNames,
-    s3Ids,
-    zipName,
-  });
-
-  const results = await applicationContext
+  const zipBuffer = await applicationContext
     .getPersistenceGateway()
-    .getDownloadPolicyUrl({
+    .zipDocuments({
       applicationContext,
-      documentId: zipName,
+      extraFileNames,
+      extraFiles,
+      fileNames,
+      returnBuffer: true,
+      s3Ids,
+      zipName,
     });
 
-  return results;
+  return { zipBuffer, zipName };
 };

@@ -9,7 +9,8 @@ import { state } from 'cerebral';
 
  */
 export const setPDFSignatureDataAction = async ({ props, store }) => {
-  const { signatureApplied, signatureData } = props;
+  const { isPdfAlreadySigned, signatureApplied, signatureData } = props;
   store.set(state.pdfForSigning.signatureData, signatureData);
   store.set(state.pdfForSigning.signatureApplied, signatureApplied);
+  store.set(state.pdfForSigning.isPdfAlreadySigned, isPdfAlreadySigned);
 };

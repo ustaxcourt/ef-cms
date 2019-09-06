@@ -123,7 +123,7 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validatePetitionFromPaperSequence');
-    expect(test.getState('alertError')).toEqual(null);
+    expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('submitPetitionFromPaperSequence');
