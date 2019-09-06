@@ -166,7 +166,7 @@ const formatCase = (applicationContext, caseDetail) => {
     editUrl:
       document.documentType === 'Stipulated Decision'
         ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}`,
+        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
   }));
 
   // establish an initial sort by ascending index
