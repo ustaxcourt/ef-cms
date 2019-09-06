@@ -162,6 +162,13 @@ const formatCase = (applicationContext, caseDetail) => {
           order => order.documentType === document.documentType,
         )),
   );
+  result.draftDocuments = result.draftDocuments.map(document => ({
+    ...document,
+    editUrl:
+      document.documentType === 'Stipulated Decision'
+        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+        : `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}`,
+  }));
 
   // establish an initial sort by ascending index
   result.docketRecordWithDocument.sort((a, b) => {

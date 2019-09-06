@@ -46,11 +46,7 @@ export const DraftDocuments = connect(
                     {/* TODO: Link to the document to edit */}
                     <a
                       className="usa-button usa-button--unstyled"
-                      href={
-                        draftDocument.documentType === 'Stipulated Decision'
-                          ? `/case-detail/${caseDetail.docketNumber}/documents/${draftDocument.documentId}/sign`
-                          : `/case-detail/${caseDetail.docketNumber}/documents/${draftDocument.documentId}`
-                      }
+                      href={draftDocument.editUrl}
                     >
                       <FontAwesomeIcon icon="edit" size="sm" />
                       Edit

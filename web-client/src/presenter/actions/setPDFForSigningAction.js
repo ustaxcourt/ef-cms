@@ -40,8 +40,6 @@ export const setPDFForSigningAction = async ({
 
   let pdfObj = {};
 
-  let documentIdToLoad = documentId;
-
   // if we are looking at a signed stipulated decision, we need to display the clear signature button
   if (editingSignedStipulatedDecision) {
     store.set(state.pdfForSigning.isPdfAlreadySigned, true);
@@ -49,7 +47,7 @@ export const setPDFForSigningAction = async ({
 
   pdfObj = await applicationContext.getUseCases().loadPDFForSigningInteractor({
     applicationContext,
-    documentId: documentIdToLoad,
+    documentId,
     removeCover,
   });
 
