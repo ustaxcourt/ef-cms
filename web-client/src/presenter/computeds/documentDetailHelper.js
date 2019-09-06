@@ -45,10 +45,10 @@ export const documentDetailHelper = (get, applicationContext) => {
         !workItem.completedAt,
     );
 
-    // Check all documents assosicated with the case
+    // Check all documents associated with the case
     // to see if there is a signed stip decision
     const signedDocument = caseDetail.documents.find(
-      doc => doc.documentType === SIGNED_STIPULATED_DECISION,
+      doc => doc.documentType === SIGNED_STIPULATED_DECISION && !doc.archived,
     );
 
     showSignDocumentButton =

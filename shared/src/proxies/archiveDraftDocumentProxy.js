@@ -15,9 +15,6 @@ exports.archiveDraftDocumentInteractor = ({
 }) => {
   return remove({
     applicationContext,
-    body: {
-      caseId,
-    },
-    endpoint: `/documents/${documentId}`,
+    endpoint: `/cases/${caseId}/documents/${documentId}`,
   });
 };
