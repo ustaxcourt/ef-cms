@@ -4,6 +4,7 @@ import {
 } from './computeds/formattedCaseDetail';
 
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
+import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
@@ -50,6 +51,7 @@ import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 export const state = {
   addDocketEntryHelper,
+  advancedSearchHelper,
   alertHelper,
   archiveDraftDocument: {
     caseId: null,
