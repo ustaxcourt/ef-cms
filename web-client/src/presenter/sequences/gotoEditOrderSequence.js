@@ -6,6 +6,7 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set, unset } from 'cerebral/factories';
+import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { state } from 'cerebral';
@@ -18,6 +19,7 @@ const gotoEditOrder = [
   clearAlertsAction,
   clearFormAction,
   getCaseAction,
+  setCaseAction,
   setDocumentToEditAction,
   ...convertHtml2PdfSequence,
   setCurrentPageAction('CreateOrder'),
