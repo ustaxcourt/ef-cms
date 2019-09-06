@@ -445,18 +445,19 @@ const router = {
     );
 
     route(
-      '/search',
-      checkLoggedIn(() => {
-        document.title = `Advanced Search ${pageTitleSuffix}`;
-        app.getSequence('gotoAdvancedSearchSequence')();
-      }),
-    );
-
-    route(
       '/search/no-matches',
       checkLoggedIn(() => {
         document.title = `Search Results ${pageTitleSuffix}`;
         app.getSequence('gotoCaseSearchNoMatchesSequence')();
+      }),
+    );
+
+    route(
+      '/search..',
+      checkLoggedIn(() => {
+        const query = route.query();
+        document.title = `Advanced Search ${pageTitleSuffix}`;
+        app.getSequence('gotoAdvancedSearchSequence')(query);
       }),
     );
 
