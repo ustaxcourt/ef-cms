@@ -9,12 +9,15 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {Promise} async action
  */
-export const validateAdvancedSearchAction = async ({ get, path }) => {
-  const errors = {};
-  const form = get(state.form);
-  if (!form.petitionerName) {
-    errors.petitionerName = 'Enter a name';
-  }
+export const validateAdvancedSearchAction = async ({
+  applicationContext,
+  get,
+  path,
+}) => {
+  const errors = applicationContext.getUseCases().validateCaseSearchInteractor({
+    applicationContext,
+    caseSearch: get(state.form),
+  });
 
   const isValid = isEmpty(errors);
 
