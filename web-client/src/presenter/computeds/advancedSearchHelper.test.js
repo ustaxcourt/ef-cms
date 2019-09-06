@@ -47,7 +47,7 @@ describe('advancedSearchHelper', () => {
     });
   });
 
-  it('formats search results', () => {
+  it('formats search results and sorts by docket number', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         constants: { US_STATES: ContactFactory.US_STATES },
@@ -56,35 +56,35 @@ describe('advancedSearchHelper', () => {
             caseCaption: 'Test Taxpayer, Petitioner',
             contactPrimary: { name: 'Test Person', state: 'TN' },
             docketNumber: '101-19',
-            filedDate: '2018-03-01T05:00:00.000Z',
+            filedDate: '2019-03-01T05:00:00.000Z',
           },
           {
             caseCaption: 'Test Taxpayer & Another Taxpayer, Petitioner(s)',
             contactPrimary: { name: 'Test Person', state: 'TX' },
             contactSecondary: { name: 'Another Person', state: 'TX' },
-            docketNumber: '102-19',
+            docketNumber: '102-18',
             docketNumberSuffix: 'W',
-            filedDate: '2019-05-01T05:00:00.000Z',
+            filedDate: '2018-05-01T05:00:00.000Z',
           },
         ],
       },
     });
     expect(result.formattedSearchResults).toMatchObject([
       {
+        caseCaptionNames: 'Test Taxpayer & Another Taxpayer',
+        contactPrimaryName: 'Test Person',
+        contactSecondaryName: 'Another Person',
+        docketNumberWithSuffix: '102-18W',
+        formattedFiledDate: '05/01/18',
+        fullStateName: 'Texas',
+      },
+      {
         caseCaptionNames: 'Test Taxpayer',
         contactPrimaryName: 'Test Person',
         contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
-        formattedFiledDate: '03/01/18',
+        formattedFiledDate: '03/01/19',
         fullStateName: 'Tennessee',
-      },
-      {
-        caseCaptionNames: 'Test Taxpayer & Another Taxpayer',
-        contactPrimaryName: 'Test Person',
-        contactSecondaryName: 'Another Person',
-        docketNumberWithSuffix: '102-19W',
-        formattedFiledDate: '05/01/19',
-        fullStateName: 'Texas',
       },
     ]);
   });
