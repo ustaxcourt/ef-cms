@@ -117,11 +117,11 @@ describe('caseSearchInteractor', () => {
     ]);
   });
 
-  it('filters catalog cases by state', async () => {
+  it('filters catalog cases by petitionerState', async () => {
     const foundCases = await caseSearchInteractor({
       applicationContext,
       countryType: 'domestic',
-      state: 'OK',
+      petitionerState: 'OK',
     });
 
     expect(foundCases.length).toEqual(2);
@@ -131,11 +131,11 @@ describe('caseSearchInteractor', () => {
     ]);
   });
 
-  it('filters catalog cases by state with no results', async () => {
+  it('filters catalog cases by petitionerState with no results', async () => {
     const foundCases = await caseSearchInteractor({
       applicationContext,
       countryType: 'domestic',
-      state: 'AB',
+      petitionerState: 'AB',
     });
 
     expect(foundCases.length).toEqual(0);

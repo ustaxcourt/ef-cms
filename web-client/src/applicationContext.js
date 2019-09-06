@@ -350,11 +350,11 @@ const applicationContext = {
     REFRESH_INTERVAL: 20 * MINUTES,
     SECTIONS,
     SESSION_DEBOUNCE: 250,
-    SESSION_MODAL_TIMEOUT: 5 * MINUTES,
+    SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
     SESSION_TIMEOUT:
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
-      55 * MINUTES, // 5 minutes
-    STATUS_TYPES: Case.STATUS_TYPES, // 55 minutes
+      55 * MINUTES, // 55 minutes
+    STATUS_TYPES: Case.STATUS_TYPES,
     TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
     TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,

@@ -103,7 +103,7 @@ export const AdvancedSearch = connect(
                     </div>
 
                     <div className="grid-col-5">
-                      <label className="usa-label" htmlFor="petitionerName">
+                      <label className="usa-label" htmlFor="petitioner-state">
                         State
                       </label>
                       <StateSelect
