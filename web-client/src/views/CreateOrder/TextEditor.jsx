@@ -44,6 +44,7 @@ export const TextEditor = class TextEditorComponent extends React.Component {
             ],
           ],
         }}
+        value={this.props.defaultValue}
         onChange={(content, delta, source, editor) => {
           const fullDelta = editor.getContents();
           const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
