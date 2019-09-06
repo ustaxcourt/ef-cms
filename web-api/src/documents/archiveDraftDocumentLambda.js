@@ -14,14 +14,14 @@ exports.handler = event =>
   handle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    const { documentId } = event.pathParameters;
+    const { caseId, documentId } = event.pathParameters;
 
     applicationContext.logger.info('Event', event);
     try {
       await applicationContext.getUseCases().archiveDraftDocumentInteractor({
         applicationContext,
+        caseId,
         documentId,
-        ...JSON.parse(event.body),
       });
       applicationContext.logger.info('User', user);
     } catch (e) {

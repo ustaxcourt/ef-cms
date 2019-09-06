@@ -154,12 +154,13 @@ const formatCase = (applicationContext, caseDetail) => {
 
   result.draftDocuments = (result.documents || []).filter(
     document =>
-      (document.documentType === 'Stipulated Decision' &&
+      !document.archived &&
+      ((document.documentType === 'Stipulated Decision' &&
         !document.documentType.signedAt) ||
-      (!document.servedAt &&
-        ORDER_TYPES_MAP.find(
-          order => order.documentType === document.documentType,
-        )),
+        (!document.servedAt &&
+          ORDER_TYPES_MAP.find(
+            order => order.documentType === document.documentType,
+          ))),
   );
   result.draftDocuments = result.draftDocuments.map(document => ({
     ...document,
