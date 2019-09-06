@@ -493,6 +493,7 @@ const {
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { exec } = require('child_process');
 const { User } = require('../../shared/src/business/entities/User');
+const { Order } = require('../../shared/src/business/entities/orders/Order');
 
 const { DynamoDB, S3, SES } = AWS;
 const execPromise = util.promisify(exec);
@@ -538,6 +539,9 @@ module.exports = (appContextUser = {}) => {
       const chromium = require('chrome-' + 'aws-lambda');
       return chromium;
     },
+    getConstants: () => ({
+      ORDER_TYPES_MAP: Order.ORDER_TYPES,
+    }),
     getCurrentUser,
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
