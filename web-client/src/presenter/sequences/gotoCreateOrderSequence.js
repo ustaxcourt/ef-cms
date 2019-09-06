@@ -2,6 +2,9 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
+import { getCaseAction } from '../actions/getCaseAction';
+import { getDocumentToEditAction } from '../actions/getDocumentToEditAction';
+import { getIsEditDocumentAction } from '../actions/getIsEditDocumentAction';
 import { hasOrderTypeSelectedAction } from '../actions/CourtIssuedOrder/hasOrderTypeSelectedAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -37,7 +40,13 @@ export const gotoCreateOrderSequence = [
       hasOrderTypeSelectedAction,
       {
         no: gotoCaseDetailWithModal,
-        proceed: gotoCreateOrder,
+        proceed: [
+          getIsEditDocumentAction,
+          {
+            edit: [getCaseAction, getDocumentToEditAction, gotoCreateOrder],
+            new: gotoCreateOrder,
+          },
+        ],
       },
     ],
     unauthorized: [redirectToCognitoAction],
