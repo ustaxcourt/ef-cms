@@ -17,6 +17,7 @@ export const setDocumentToEditAction = ({ props, store }) => {
     );
 
     const draftState = documentToEdit.draftState || {};
+    draftState.documentIdToEdit = documentIdToEdit;
 
     store.set(state.documentToEdit, documentToEdit);
     store.set(state.form, draftState);

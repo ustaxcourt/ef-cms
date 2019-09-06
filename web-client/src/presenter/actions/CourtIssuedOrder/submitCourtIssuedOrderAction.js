@@ -18,13 +18,13 @@ export const submitCourtIssuedOrderAction = async ({
   const { caseId, docketNumber } = get(state.caseDetail);
   const { primaryDocumentFileId } = props;
   const documentId = primaryDocumentFileId;
+  const formData = { ...get(state.form) };
+  const { documentIdToEdit } = formData;
 
-  let documentMetadata = omit(
-    {
-      ...get(state.form),
-    },
-    ['primaryDocumentFile'],
-  );
+  let documentMetadata = omit(formData, [
+    'primaryDocumentFile',
+    'documentIdToEdit',
+  ]);
 
   documentMetadata = {
     ...documentMetadata,
@@ -56,6 +56,7 @@ export const submitCourtIssuedOrderAction = async ({
       .getUseCases()
       .fileCourtIssuedOrderInteractor({
         applicationContext,
+        documentIdToEdit,
         documentMetadata,
         primaryDocumentFileId,
       });
