@@ -9,7 +9,7 @@ describe('archiveDraftDocumentInteractor', () => {
   it('returns an unauthorized error on non petitionsclerk users', async () => {
     applicationContext = {
       getCurrentUser: () => ({
-        role: 'docketclerk',
+        role: 'petitioner',
       }),
       getPersistenceGateway: () => ({
         updateCase: () => null,
