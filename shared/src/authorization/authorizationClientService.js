@@ -34,6 +34,7 @@ const AUTHORIZATION_MAP = {
     exports.TRIAL_SESSIONS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
+    exports.ARCHIVE_DOCUMENT,
   ],
   judge: [
     // TODO: review this list for accuracy!
@@ -53,6 +54,7 @@ const AUTHORIZATION_MAP = {
     exports.UPDATE_CASE,
     exports.WORKITEM,
     exports.BATCH_DOWNLOAD_TRIAL_SESSION,
+    exports.ARCHIVE_DOCUMENT,
   ],
   petitioner: [exports.FILE_EXTERNAL_DOCUMENT, exports.PETITION],
   petitionsclerk: [
@@ -93,6 +95,7 @@ const AUTHORIZATION_MAP = {
     exports.TRIAL_SESSIONS,
     exports.UPDATE_CASE,
     exports.WORKITEM,
+    exports.ARCHIVE_DOCUMENT,
   ],
   taxpayer: [exports.PETITION],
 };

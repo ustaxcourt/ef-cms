@@ -256,11 +256,3 @@ functions:
           path: /{documentId}/document-download-url
           method: get
           cors: true
-
-  archiveDraftDocument:
-    handler: web-api/src/documentsHandlers.archiveDraftDocumentLambda
-    events:
-      - http:
-          path: /{documentId}
-          method: delete
-          cors: true

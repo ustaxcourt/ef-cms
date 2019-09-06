@@ -220,6 +220,14 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  archiveDraftDocument:
+    handler: web-api/src/documentsHandlers.archiveDraftDocumentLambda
+    events:
+      - http:
+          path: /{caseId}/documents/{documentId}
+          method: delete
+          cors: true
+
   updateCase:
     handler: web-api/src/casesHandlers.updateCaseLambda
     events:
