@@ -21,6 +21,6 @@ export const gotoPrintDocketRecordPreview = async ({ get, props, router }) => {
 
   if (openNewTab) {
     const pdfPreviewUrl = get(state.pdfPreviewUrl);
-    window.open(pdfPreviewUrl, '_blank', 'noopener, noreferrer');
+    router.openInNewTab(pdfPreviewUrl);
   }
 };

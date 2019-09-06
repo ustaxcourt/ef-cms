@@ -5,19 +5,13 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
 const routeMock = jest.fn();
-
-const windowOpenMock = jest.fn();
-
-global.open = windowOpenMock;
-
-global.window = {
-  open: global.open,
-};
+const openInNewTabMock = jest.fn();
 
 describe('gotoPrintDocketRecordPreview', () => {
   beforeEach(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
+      openInNewTab: openInNewTabMock,
       route: routeMock,
     };
   });
@@ -68,6 +62,6 @@ describe('gotoPrintDocketRecordPreview', () => {
       },
     });
     expect(result.state.currentPage).toEqual('fakePage');
-    expect(windowOpenMock).toHaveBeenCalled();
+    expect(openInNewTabMock).toHaveBeenCalled();
   });
 });

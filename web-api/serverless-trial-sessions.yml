@@ -8,7 +8,7 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
-  # - serverless-apigwy-binary
+  - serverless-apigwy-binary
 
 custom:
   prune:
@@ -305,7 +305,3 @@ functions:
           method: get
           contentHandling: CONVERT_TO_BINARY
           cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer

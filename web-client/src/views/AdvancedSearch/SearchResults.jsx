@@ -4,14 +4,16 @@ import React from 'react';
 
 export const SearchResults = connect(
   {
-    searchResults: state.searchResults,
+    advancedSearchHelper: state.advancedSearchHelper,
   },
-  ({ searchResults }) => {
+  ({ advancedSearchHelper }) => {
     return (
       <>
-        {searchResults && searchResults.length > 0 && (
+        {advancedSearchHelper.showSearchResults && (
           <>
-            <h1 className="margin-top-4">({searchResults.length}) Matches</h1>
+            <h1 className="margin-top-4">
+              ({advancedSearchHelper.searchResultsCount}) Matches
+            </h1>
 
             <table className="usa-table search-results docket-record responsive-table row-border-only">
               <thead>
@@ -25,24 +27,31 @@ export const SearchResults = connect(
                 </tr>
               </thead>
               <tbody>
-                {searchResults.map((result, idx) => (
-                  <tr key={idx}>
-                    <td className="center-column">{idx + 1}</td>
-                    <td>{result.contactPrimary.name}</td>
-                    <td>
-                      {result.docketNumber}
-                      {result.docketNumberSuffix}
-                    </td>
-                    <td>{result.filedDate}</td>
-                    <td>{result.caseCaption}</td>
-                    <td>{result.contactPrimary.state}</td>
-                  </tr>
-                ))}
+                {advancedSearchHelper.formattedSearchResults.map(
+                  (result, idx) => (
+                    <tr key={idx}>
+                      <td className="center-column">{idx + 1}</td>
+                      <td>
+                        {result.contactPrimaryName}
+                        {result.contactSecondaryName && (
+                          <>
+                            <br />
+                            {result.contactSecondaryName}
+                          </>
+                        )}
+                      </td>
+                      <td>{result.docketNumberWithSuffix}</td>
+                      <td>{result.formattedFiledDate}</td>
+                      <td>{result.caseCaptionNames}</td>
+                      <td>{result.fullStateName}</td>
+                    </tr>
+                  ),
+                )}
               </tbody>
             </table>
           </>
         )}
-        {searchResults && searchResults.length === 0 && (
+        {advancedSearchHelper.showNoMatches && (
           <>
             <h1 className="margin-top-4">No Matches Found</h1>
             <p>Check your search terms and try again.</p>
