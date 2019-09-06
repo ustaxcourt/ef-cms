@@ -13,7 +13,6 @@ export const archiveDraftDocumentAction = async ({
   store,
 }) => {
   const { caseId, documentId, documentTitle } = get(state.archiveDraftDocument);
-
   await applicationContext
     .getUseCases()
     .archiveDraftDocumentInteractor({ applicationContext, caseId, documentId });
