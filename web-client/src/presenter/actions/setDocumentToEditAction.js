@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {void} sets the documentToEdit on state
  */
-export const getDocumentToEditAction = ({ props, store }) => {
+export const setDocumentToEditAction = ({ props, store }) => {
   const { caseDetail, documentIdToEdit } = props;
 
   if (documentIdToEdit) {
