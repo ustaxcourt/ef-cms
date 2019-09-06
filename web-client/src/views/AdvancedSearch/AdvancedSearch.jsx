@@ -11,12 +11,14 @@ export const AdvancedSearch = connect(
     form: state.form,
     submitAdvancedSearchSequence: sequences.submitAdvancedSearchSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    usStates: state.constants.US_STATES,
   },
   ({
     constants,
     form,
     submitAdvancedSearchSequence,
     updateFormValueSequence,
+    usStates,
   }) => {
     return (
       <>
@@ -81,6 +83,7 @@ export const AdvancedSearch = connect(
                     <StateSelect
                       bind={form.select}
                       updateFormValueSequence={updateFormValueSequence}
+                      usStates={usStates}
                     />
                   </div>
                 </div>
