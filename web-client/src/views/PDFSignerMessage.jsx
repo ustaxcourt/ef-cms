@@ -24,7 +24,9 @@ export const PDFSignerMessage = connect(
   }) => {
     return (
       <div>
-        <h3>Create Message</h3>
+        <h3>
+          Send Message <span className="usa-hint">(optional)</span>
+        </h3>
         <div className="usa-form-group">
           <label className="usa-label" htmlFor="section">
             Select Section

@@ -1,4 +1,4 @@
-export const constants = {
+const constants = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
@@ -10,7 +10,7 @@ export const constants = {
  * @param {object} caseDetail case to set service indicators on
  * @returns {object} service indicators for petitioner, practitioners, and respondents
  */
-export const setServiceIndicatorsForCase = caseDetail => {
+const setServiceIndicatorsForCase = caseDetail => {
   const {
     contactPrimary,
     contactSecondary,
@@ -60,4 +60,9 @@ export const setServiceIndicatorsForCase = caseDetail => {
   }
 
   return caseDetail;
+};
+
+module.exports = {
+  constants,
+  setServiceIndicatorsForCase,
 };

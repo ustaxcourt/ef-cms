@@ -6,17 +6,21 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get helper function
  * @param {object} providers.props the cerebral props object
- * @param {object} providers.store the cerebral store used for setting the state.pdfPreviewUrl
+ * @param {object} providers.router the riot.router object that is used for changing the route
  */
-export const gotoPrintDocketRecordPreview = ({ get, props, store }) => {
+export const gotoPrintDocketRecordPreview = async ({ get, props, router }) => {
   const { openNewTab = false, openNewView = true } = props;
 
   if (openNewView) {
-    store.set(state.currentPage, 'PrintableDocketRecord');
+    await router.route(
+      `/case-detail/${get(
+        state.caseDetail.docketNumber,
+      )}/printable-docket-record`,
+    );
   }
 
   if (openNewTab) {
     const pdfPreviewUrl = get(state.pdfPreviewUrl);
-    window.open(pdfPreviewUrl, '_blank', 'noopener, noreferrer');
+    router.openInNewTab(pdfPreviewUrl);
   }
 };

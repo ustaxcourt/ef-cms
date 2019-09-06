@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ProcedureType } from '../StartCase/ProcedureType';
 import { connect } from '@cerebral/react';
+import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -58,6 +59,7 @@ export const CaseInfo = connect(
                       }
                       id="received-at-month"
                       max="12"
+                      maxLength="2"
                       min="1"
                       name="receivedAtMonth"
                       type="number"
@@ -68,7 +70,7 @@ export const CaseInfo = connect(
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
-                          value: e.target.value,
+                          value: limitLength(e.target.value, 2),
                         });
                       }}
                     />
@@ -90,6 +92,7 @@ export const CaseInfo = connect(
                       }
                       id="received-at-day"
                       max="31"
+                      maxLength="2"
                       min="1"
                       name="receivedAtDay"
                       type="number"
@@ -100,7 +103,7 @@ export const CaseInfo = connect(
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
-                          value: e.target.value,
+                          value: limitLength(e.target.value, 2),
                         });
                       }}
                     />
@@ -122,6 +125,7 @@ export const CaseInfo = connect(
                       }
                       id="received-at-year"
                       max="2100"
+                      maxLength="4"
                       min="1900"
                       name="receivedAtYear"
                       type="number"
@@ -132,7 +136,7 @@ export const CaseInfo = connect(
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
-                          value: e.target.value,
+                          value: limitLength(e.target.value, 4),
                         });
                       }}
                     />

@@ -59,7 +59,7 @@ describe('ExternalDocumentNonStandardD', () => {
         serviceDate,
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        `Certificate of Service Petition 04-10-2012`,
+        'Certificate of Service Petition 04-10-2012',
       );
     });
   });

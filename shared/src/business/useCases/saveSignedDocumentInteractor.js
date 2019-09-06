@@ -34,25 +34,30 @@ exports.saveSignedDocumentInteractor = async ({
     document => document.documentId === originalDocumentId,
   );
 
-  const signedDocumentEntity = new Document(
-    {
-      createdAt: applicationContext.getUtilities().createISODateString(),
-      documentId: signedDocumentId,
-      documentType:
-        Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
-      eventCode:
-        Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
-      filedBy: originalDocumentEntity.filedBy,
-      isPaper: false,
-      processingStatus: 'complete',
-      userId: user.userId,
-    },
-    { applicationContext },
-  );
+  if (
+    originalDocumentEntity.documentType !==
+    Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType
+  ) {
+    const signedDocumentEntity = new Document(
+      {
+        createdAt: applicationContext.getUtilities().createISODateString(),
+        documentId: signedDocumentId,
+        documentType:
+          Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
+        eventCode:
+          Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
+        filedBy: originalDocumentEntity.filedBy,
+        isPaper: false,
+        processingStatus: 'complete',
+        userId: user.userId,
+      },
+      { applicationContext },
+    );
 
-  signedDocumentEntity.setSigned(user.userId);
+    signedDocumentEntity.setSigned(user.userId);
 
-  caseEntity.addDocumentWithoutDocketRecord(signedDocumentEntity);
+    caseEntity.addDocumentWithoutDocketRecord(signedDocumentEntity);
+  }
 
   applicationContext.logger.time('Updating case with signed document');
 

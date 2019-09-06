@@ -3,10 +3,23 @@ import { queryStringDecoder } from './queryStringDecoder';
 import route from 'riot-route';
 
 route.base('/');
+
 const pageTitleSuffix = ' | U.S. Tax Court';
 
 const externalRoute = path => {
   window.location.replace(path);
+};
+
+const openInNewTab = path => {
+  window.open(path, '_blank', 'noopener, noreferrer');
+};
+
+const createObjectURL = object => {
+  return window.URL.createObjectURL(object);
+};
+
+const revokeObjectURL = url => {
+  return window.URL.revokeObjectURL(url);
 };
 
 const router = {
@@ -22,6 +35,7 @@ const router = {
         }
       };
     };
+
     route(
       '/',
       checkLoggedIn(() => {
@@ -29,6 +43,7 @@ const router = {
         app.getSequence('gotoDashboardSequence')({ baseRoute: 'dashboard' });
       }),
     );
+
     route(
       '/case-detail/*',
       checkLoggedIn(docketNumber => {
@@ -36,6 +51,7 @@ const router = {
         app.getSequence('gotoCaseDetailSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/documents/*',
       checkLoggedIn((docketNumber, documentId) => {
@@ -92,6 +108,7 @@ const router = {
         });
       }),
     );
+
     route(
       '/case-detail/*/documents/*/messages/*',
       checkLoggedIn((docketNumber, documentId, messageId) => {
@@ -103,6 +120,7 @@ const router = {
         });
       }),
     );
+
     route(
       '/case-detail/*/documents/*/messages/*/mark/*',
       checkLoggedIn(
@@ -117,6 +135,7 @@ const router = {
         },
       ),
     );
+
     route(
       '/case-detail/*/before-you-file-a-document',
       checkLoggedIn(docketNumber => {
@@ -124,6 +143,7 @@ const router = {
         app.getSequence('gotoBeforeYouFileDocumentSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
@@ -137,6 +157,7 @@ const router = {
         }
       }),
     );
+
     route(
       '/case-detail/*/file-a-document/details',
       checkLoggedIn(docketNumber => {
@@ -152,6 +173,7 @@ const router = {
         }
       }),
     );
+
     route(
       '/case-detail/*/file-a-document/review',
       checkLoggedIn(docketNumber => {
@@ -198,11 +220,20 @@ const router = {
         app.getSequence('gotoCreateOrderSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/add-docket-entry',
       checkLoggedIn(docketNumber => {
         document.title = `Add docket entry ${pageTitleSuffix}`;
         app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
+      }),
+    );
+
+    route(
+      '/case-detail/*/printable-docket-record',
+      checkLoggedIn(docketNumber => {
+        document.title = `Docket Record ${pageTitleSuffix}`;
+        app.getSequence('gotoPrintableDocketRecordSequence')({ docketNumber });
       }),
     );
 
@@ -213,6 +244,7 @@ const router = {
         app.getSequence('gotoRequestAccessSequence')({ docketNumber });
       }),
     );
+
     route(
       '/document-qc..',
       checkLoggedIn(() => {
@@ -254,6 +286,7 @@ const router = {
         document.title = `Dashboard ${pageTitleSuffix}`;
       }),
     );
+
     route(
       '/trial-session-detail/*',
       checkLoggedIn(trialSessionId => {
@@ -261,6 +294,7 @@ const router = {
         app.getSequence('gotoTrialSessionDetailSequence')({ trialSessionId });
       }),
     );
+
     route(
       '/trial-session-working-copy/*',
       checkLoggedIn(trialSessionId => {
@@ -270,6 +304,7 @@ const router = {
         });
       }),
     );
+
     route(
       '/trial-sessions..',
       checkLoggedIn(() => {
@@ -281,9 +316,11 @@ const router = {
         app.getSequence('gotoTrialSessionsSequence')({ query });
       }),
     );
+
     route('/idle-logout', () => {
       app.getSequence('gotoIdleLogoutSequence')();
     });
+
     route('/log-in...', () => {
       const { code, path, token } = queryStringDecoder();
       if (code) {
@@ -292,6 +329,7 @@ const router = {
         app.getSequence('loginWithTokenSequence')({ path, token });
       }
     });
+
     route(
       '/before-filing-a-petition',
       checkLoggedIn(() => {
@@ -299,6 +337,7 @@ const router = {
         app.getSequence('gotoBeforeStartCaseSequence')();
       }),
     );
+
     route(
       '/file-a-petition/step-*',
       checkLoggedIn(step => {
@@ -348,6 +387,7 @@ const router = {
       document.title = `Style Guide ${pageTitleSuffix}`;
       app.getSequence('gotoStyleGuideSequence')();
     });
+
     route(
       '/messages..',
       checkLoggedIn(() => {
@@ -404,6 +444,23 @@ const router = {
       }),
     );
 
+    route(
+      '/search/no-matches',
+      checkLoggedIn(() => {
+        document.title = `Search Results ${pageTitleSuffix}`;
+        app.getSequence('gotoCaseSearchNoMatchesSequence')();
+      }),
+    );
+
+    route(
+      '/search..',
+      checkLoggedIn(() => {
+        const query = route.query();
+        document.title = `Advanced Search ${pageTitleSuffix}`;
+        app.getSequence('gotoAdvancedSearchSequence')(query);
+      }),
+    );
+
     route('/mock-login...', () => {
       const { path, token } = queryStringDecoder();
       if (token) {
@@ -432,8 +489,16 @@ const router = {
       },
       true,
     );
+
     route.start(true);
   },
 };
 
-export { route, router, externalRoute };
+export {
+  createObjectURL,
+  externalRoute,
+  openInNewTab,
+  revokeObjectURL,
+  route,
+  router,
+};

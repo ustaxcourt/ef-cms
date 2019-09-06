@@ -2,6 +2,9 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 /**
@@ -64,10 +67,7 @@ joiValidationDecorator(
 
         postalCode: joi.when('countryType', {
           is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
-          otherwise: joi
-            .string()
-            .regex(/^\d{5}(-\d{4})?$/)
-            .required(),
+          otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
           then: joi.string().required(),
         }),
 

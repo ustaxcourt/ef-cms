@@ -112,7 +112,7 @@ export default (test, fakeFile, overrides = {}) => {
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('alertError')).toEqual(null);
+    expect(test.getState('alertError')).toBeUndefined();
 
     expect(test.getState('alertSuccess')).toEqual({
       message: 'You can access your case at any time from the case list below.',
