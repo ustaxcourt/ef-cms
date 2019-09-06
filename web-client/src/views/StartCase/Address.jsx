@@ -11,6 +11,7 @@ export const Address = connect(
     data: state[props.bind],
     type: props.type,
     updateFormValueSequence: sequences[props.onChange],
+    usStates: state.constants.US_STATES,
     validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
@@ -18,6 +19,7 @@ export const Address = connect(
     data,
     type,
     updateFormValueSequence,
+    usStates,
     validateStartCaseSequence,
     validationErrors,
   }) => {
@@ -143,6 +145,7 @@ export const Address = connect(
                   data={data}
                   type={type}
                   updateFormValueSequence={updateFormValueSequence}
+                  usStates={usStates}
                   validateStartCaseSequence={validateStartCaseSequence}
                 />
               </div>
@@ -208,6 +211,7 @@ export const Address = connect(
               data={data}
               type={type}
               updateFormValueSequence={updateFormValueSequence}
+              usStates={usStates}
               validateStartCaseSequence={validateStartCaseSequence}
             />
             <Text
