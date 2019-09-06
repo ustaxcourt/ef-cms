@@ -1,3 +1,4 @@
+import { compareCasesByDocketNumber } from './formattedTrialSessionDetails';
 import { state } from 'cerebral';
 
 export const advancedSearchHelper = (get, applicationContext) => {
@@ -8,28 +9,30 @@ export const advancedSearchHelper = (get, applicationContext) => {
   if (searchResults) {
     const US_STATES = get(state.constants.US_STATES);
 
-    const formattedSearchResults = searchResults.map(result => {
-      result.contactPrimaryName =
-        result.contactPrimary && result.contactPrimary.name;
-      result.contactSecondaryName =
-        result.contactSecondary && result.contactSecondary.name;
+    const formattedSearchResults = searchResults
+      .sort(compareCasesByDocketNumber)
+      .map(result => {
+        result.contactPrimaryName =
+          result.contactPrimary && result.contactPrimary.name;
+        result.contactSecondaryName =
+          result.contactSecondary && result.contactSecondary.name;
 
-      result.formattedFiledDate = applicationContext
-        .getUtilities()
-        .formatDateString(result.filedDate, 'MMDDYY');
+        result.formattedFiledDate = applicationContext
+          .getUtilities()
+          .formatDateString(result.filedDate, 'MMDDYY');
 
-      result.docketNumberWithSuffix = `${result.docketNumber}${
-        result.docketNumberSuffix ? result.docketNumberSuffix : ''
-      }`;
+        result.docketNumberWithSuffix = `${result.docketNumber}${
+          result.docketNumberSuffix ? result.docketNumberSuffix : ''
+        }`;
 
-      result.caseCaptionNames = applicationContext.getCaseCaptionNames(
-        result.caseCaption || '',
-      );
+        result.caseCaptionNames = applicationContext.getCaseCaptionNames(
+          result.caseCaption || '',
+        );
 
-      result.fullStateName = US_STATES[result.contactPrimary.state];
+        result.fullStateName = US_STATES[result.contactPrimary.state];
 
-      return result;
-    });
+        return result;
+      });
 
     result = {
       formattedSearchResults,
