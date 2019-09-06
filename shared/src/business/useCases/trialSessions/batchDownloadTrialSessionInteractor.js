@@ -93,19 +93,18 @@ exports.batchDownloadTrialSessionInteractor = async ({
     });
   });
 
-  // Temporarily comment out docket record generation
-  // for (let index = 0; index < sessionCases.length; index++) {
-  //   let { caseId } = sessionCases[index];
-  //   extraFiles.push(
-  //     await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
-  //       applicationContext,
-  //       caseId,
-  //     }),
-  //   );
-  //   extraFileNames.push(
-  //     `${sessionCases[index].caseFolder}/0_Docket Record.pdf`,
-  //   );
-  // }
+  for (let index = 0; index < sessionCases.length; index++) {
+    let { caseId } = sessionCases[index];
+    extraFiles.push(
+      await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
+        applicationContext,
+        caseId,
+      }),
+    );
+    extraFileNames.push(
+      `${sessionCases[index].caseFolder}/0_Docket Record.pdf`,
+    );
+  }
 
   const zipBuffer = await applicationContext
     .getPersistenceGateway()
