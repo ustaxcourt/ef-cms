@@ -1,8 +1,7 @@
-import { usStates } from '../StartCase/StateSelect';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-export const StateSelect = ({ bind, updateFormValueSequence }) => {
+export const StateSelect = ({ bind, updateFormValueSequence, usStates }) => {
   return (
     <select
       className="usa-select"
@@ -46,4 +45,5 @@ export const StateSelect = ({ bind, updateFormValueSequence }) => {
 StateSelect.propTypes = {
   bind: PropTypes.string,
   updateFormValueSequence: PropTypes.func,
+  usStates: PropTypes.object,
 };
