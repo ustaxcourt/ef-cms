@@ -1,7 +1,14 @@
 import { AppComponent } from './views/AppComponent';
 import { Container } from '@cerebral/react';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
-import { externalRoute, route, router } from './router';
+import {
+  createObjectURL,
+  externalRoute,
+  openInNewTab,
+  revokeObjectURL,
+  route,
+  router,
+} from './router';
 import {
   faArrowAltCircleLeft as faArrowAltCircleLeftRegular,
   faCheckCircle as faCheckCircleRegular,
@@ -172,7 +179,10 @@ const app = {
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
+      createObjectURL,
       externalRoute,
+      openInNewTab,
+      revokeObjectURL,
       route,
     };
     const cerebralApp = App(presenter, debugTools);
