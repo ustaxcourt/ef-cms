@@ -166,20 +166,9 @@ class PDFSignerComponent extends React.Component {
                 <div className="grid-col-8">
                   <div className="sign-pdf-interface">
                     <span
-                      className={
-                        !this.props.signatureData && this.props.signatureApplied
-                          ? 'cursor-grabbing'
-                          : 'cursor-grab'
-                      }
+                      className={this.props.pdfSignerHelper.signatureClass}
                       id="signature"
                       ref={this.signatureRef}
-                      style={{
-                        display:
-                          this.props.signatureApplied &&
-                          !this.props.pdfForSigning.isPdfAlreadySigned
-                            ? 'block'
-                            : 'none',
-                      }}
                     >
                       (Signed) {this.props.pdfForSigning.nameForSigning}
                       <br />
