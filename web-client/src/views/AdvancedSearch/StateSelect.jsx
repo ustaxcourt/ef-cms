@@ -6,8 +6,8 @@ export const StateSelect = ({ bind, updateFormValueSequence }) => {
   return (
     <select
       className="usa-select"
-      id="state"
-      name="state"
+      id="petitioner-state"
+      name="petitionerState"
       value={bind}
       onChange={e => {
         updateFormValueSequence({
