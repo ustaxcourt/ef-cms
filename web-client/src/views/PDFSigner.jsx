@@ -56,9 +56,11 @@ class PDFSignerComponent extends React.Component {
 
   clear() {
     this.props.setSignatureData({
+      isPdfAlreadySigned: false,
       signatureApplied: false,
       signatureData: null,
     });
+    this.props.loadOriginalProposedStipulatedDecisionSequence();
   }
 
   stop(canvasEl, sigEl, x, y, scale = 1) {
@@ -134,7 +136,7 @@ class PDFSignerComponent extends React.Component {
                     <button
                       className="usa-button"
                       disabled={this.props.pdfSignerHelper.disableSaveButton}
-                      onClick={() => this.props.completeSigning()}
+                      onClick={() => this.props.saveDocumentSigningSequence()}
                     >
                       Save
                     </button>
@@ -143,7 +145,9 @@ class PDFSignerComponent extends React.Component {
                       disabled={
                         this.props.pdfSignerHelper.disableSaveAndSendButton
                       }
-                      onClick={() => this.props.completeSigning()}
+                      onClick={() =>
+                        this.props.completeDocumentSigningSequence()
+                      }
                     >
                       Save & Send Message
                     </button>
@@ -162,16 +166,9 @@ class PDFSignerComponent extends React.Component {
                 <div className="grid-col-8">
                   <div className="sign-pdf-interface">
                     <span
-                      className={
-                        !this.props.signatureData && this.props.signatureApplied
-                          ? 'cursor-grabbing'
-                          : 'cursor-grab'
-                      }
+                      className={this.props.pdfSignerHelper.signatureClass}
                       id="signature"
                       ref={this.signatureRef}
-                      style={{
-                        display: this.props.signatureApplied ? 'block' : 'none',
-                      }}
                     >
                       (Signed) {this.props.pdfForSigning.nameForSigning}
                       <br />
@@ -202,14 +199,16 @@ class PDFSignerComponent extends React.Component {
 
 PDFSignerComponent.propTypes = {
   cancel: PropTypes.func,
-  completeSigning: PropTypes.func,
+  completeDocumentSigningSequence: PropTypes.func,
   currentPageNumber: PropTypes.number,
   docketNumber: PropTypes.string,
   documentId: PropTypes.string,
+  loadOriginalProposedStipulatedDecisionSequence: PropTypes.func,
   navigateToPathSequence: PropTypes.func,
   pdfForSigning: PropTypes.object,
   pdfObj: PropTypes.object,
   pdfSignerHelper: PropTypes.object,
+  saveDocumentSigningSequence: PropTypes.func,
   setCanvas: PropTypes.func,
   setPage: PropTypes.func,
   setSignatureData: PropTypes.func,
@@ -220,14 +219,17 @@ PDFSignerComponent.propTypes = {
 export const PDFSigner = connect(
   {
     cancel: sequences.gotoDocumentDetailSequence,
-    completeSigning: sequences.completeDocumentSigningSequence,
+    completeDocumentSigningSequence: sequences.completeDocumentSigningSequence,
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
     documentId: state.documentId,
+    loadOriginalProposedStipulatedDecisionSequence:
+      sequences.loadOriginalProposedStipulatedDecisionSequence,
     navigateToPathSequence: sequences.navigateToPathSequence,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
+    saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
     setCanvas: sequences.setCanvasForPDFSigningSequence,
     setSignatureData: sequences.setPDFSignatureDataSequence,
     signatureApplied: state.pdfForSigning.signatureApplied,

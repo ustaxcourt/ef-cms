@@ -464,7 +464,7 @@ Case.prototype.addDocument = function(document) {
       description: document.documentType,
       documentId: document.documentId,
       filedBy: document.filedBy,
-      filingDate: this.receivedAt || document.createdAt,
+      filingDate: document.receivedAt || document.createdAt,
       status: document.status,
     }),
   );

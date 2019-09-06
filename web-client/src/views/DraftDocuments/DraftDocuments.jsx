@@ -1,5 +1,4 @@
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
-import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -29,51 +28,49 @@ export const DraftDocuments = connect(
             </tr>
           </thead>
           <tbody>
-            {/* TODO: Update draftDocuments with whatever it ends up being, and remove existential check */}
-            {caseDetail.draftDocuments &&
-              caseDetail.draftDocuments.map(
-                ({ draftDocument, record }, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{draftDocument.createdAtFormatted}</td>
-                      <td>
-                        <FilingsAndProceedings
-                          arrayIndex={index}
-                          document={draftDocument}
-                          record={record}
-                        />
-                        {FilingsAndProceedings}
-                      </td>
-                      <td>{record.filedBy}</td>
-                      <td className="smaller-column">
-                        {/* TODO: Link to the document to edit */}
-                        <a
-                          className="usa-button usa-button--unstyled"
-                          href={`/case-detail/${caseDetail.docketNumber}`}
-                        >
-                          <FontAwesomeIcon icon="edit" size="sm" />
-                          Edit
-                        </a>
-                      </td>
-                      <td className="smaller-column">
-                        <button
-                          className="usa-button usa-button--unstyled red-warning"
-                          onClick={() => {
-                            archiveDraftDocumentModalSequence({
-                              caseId: caseDetail.caseId,
-                              documentId: draftDocument.documentId,
-                              documentTitle: draftDocument.documentTitle,
-                            });
-                          }}
-                        >
-                          <FontAwesomeIcon icon="times-circle" size="sm" />
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                },
-              )}
+            {caseDetail.draftDocuments.map((draftDocument, index) => {
+              return (
+                <tr key={index}>
+                  <td>{draftDocument.createdAtFormatted}</td>
+                  <td>
+                    {/* <FilingsAndProceedings
+                        arrayIndex={index}
+                        document={draftDocument}
+                        record={record}
+                      /> */}
+                    {/* {FilingsAndProceedings} */}
+                    {draftDocument.documentType}
+                  </td>
+                  <td>{draftDocument.filedBy}</td>
+                  <td className="no-wrap text-align-right">
+                    {/* TODO: Link to the document to edit */}
+                    <a
+                      className="usa-button usa-button--unstyled"
+                      href={draftDocument.editUrl}
+                    >
+                      <FontAwesomeIcon icon="edit" size="sm" />
+                      Edit
+                    </a>
+                  </td>
+
+                  <td className="smaller-column">
+                    <button
+                      className="usa-button usa-button--unstyled red-warning"
+                      onClick={() => {
+                        archiveDraftDocumentModalSequence({
+                          caseId: caseDetail.caseId,
+                          documentId: draftDocument.documentId,
+                          documentTitle: draftDocument.documentTitle,
+                        });
+                      }}
+                    >
+                      <FontAwesomeIcon icon="times-circle" size="sm" />
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
         {showModal === 'ArchiveDraftDocumentModal' && (

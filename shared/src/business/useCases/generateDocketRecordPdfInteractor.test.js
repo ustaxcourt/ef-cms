@@ -63,6 +63,13 @@ describe('generateDocketRecordPdfInteractor', () => {
 
   const applicationContext = {
     getCaseCaptionNames: Case.getCaseCaptionNames,
+    getConstants: () => ({
+      ORDER_TYPES_MAP: [
+        {
+          documentType: 'Decision',
+        },
+      ],
+    }),
     getEntityConstructors: () => ({
       Case,
     }),

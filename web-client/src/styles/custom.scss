@@ -15,6 +15,10 @@ hr {
   margin: 20px 0;
 }
 
+.hide {
+  display: none;
+}
+
 .grid-row {
   &.underlined {
     border-bottom: 1px solid color($theme-color-base-lighter);
