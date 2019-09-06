@@ -60,6 +60,13 @@ import { fileDocketEntryInteractor } from '../../shared/src/proxies/documents/fi
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
+import {
+  formatCase,
+  formatCaseDeadlines,
+  formatDocument,
+  getFormattedCaseDetail,
+  sortDocketRecords,
+} from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
 import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
@@ -343,14 +350,15 @@ const applicationContext = {
     REFRESH_INTERVAL: 20 * MINUTES,
     SECTIONS,
     SESSION_DEBOUNCE: 250,
-    SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
+    SESSION_MODAL_TIMEOUT: 5 * MINUTES,
     SESSION_TIMEOUT:
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
-      55 * MINUTES, // 55 minutes
-    STATUS_TYPES: Case.STATUS_TYPES,
+      55 * MINUTES, // 5 minutes
+    STATUS_TYPES: Case.STATUS_TYPES, // 55 minutes
     TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
     TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+    US_STATES: ContactFactory.US_STATES,
   }),
   getCurrentUser,
   getCurrentUserToken,
@@ -411,10 +419,15 @@ const applicationContext = {
   getUtilities: () => {
     return {
       createISODateString,
+      formatCase,
+      formatCaseDeadlines,
       formatDateString,
+      formatDocument,
+      getFormattedCaseDetail,
       isStringISOFormatted,
       prepareDateFromString,
       setServiceIndicatorsForCase,
+      sortDocketRecords,
     };
   },
   setCurrentUser,

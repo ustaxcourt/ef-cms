@@ -1,7 +1,7 @@
 /**
  * Cancels all uploads in progress, returning to dashboard.
  */
-export const cancelUploadsAction = () => {
+export const cancelUploadsAction = ({ router }) => {
   // go back to dashboard
-  window.location.replace('/');
+  router.externalRoute('/');
 };

@@ -51,17 +51,18 @@ exports.handler = event =>
   customHandle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    const { caseDetail } = JSON.parse(event.body);
+    const { caseId, docketRecordSort } = JSON.parse(event.body);
 
     try {
       const result = await applicationContext
         .getUseCases()
         .generateDocketRecordPdfInteractor({
           applicationContext,
-          caseDetail,
+          caseId,
+          docketRecordSort,
         });
       applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Docket Number', caseDetail.docketNumber);
+      applicationContext.logger.info('Case ID', caseId);
       return result;
     } catch (e) {
       applicationContext.logger.error(e);

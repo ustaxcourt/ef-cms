@@ -9,14 +9,16 @@
  */
 exports.createDocketRecordPdfInteractor = ({
   applicationContext,
-  caseDetail,
+  caseId,
+  docketRecordSort,
 }) => {
   return applicationContext
     .getHttpClient()
     .post(
       `${applicationContext.getBaseUrl()}/api/docket-record-pdf`,
       {
-        caseDetail,
+        caseId,
+        docketRecordSort,
       },
       {
         headers: {
