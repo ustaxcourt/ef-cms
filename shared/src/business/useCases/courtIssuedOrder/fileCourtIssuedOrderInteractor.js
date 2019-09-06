@@ -17,6 +17,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.fileCourtIssuedOrderInteractor = async ({
   applicationContext,
+  documentIdToEdit = null,
   documentMetadata,
   primaryDocumentFileId,
 }) => {
@@ -36,19 +37,21 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  if (primaryDocumentFileId && documentMetadata) {
-    const documentEntity = new Document(
-      {
-        ...documentMetadata,
-        relationship: 'primaryDocument',
-        documentId: primaryDocumentFileId,
-        documentType: documentMetadata.documentType,
-        userId: user.userId,
-      },
-      { applicationContext },
-    );
-    documentEntity.processingStatus = 'complete';
+  const documentEntity = new Document(
+    {
+      ...documentMetadata,
+      relationship: 'primaryDocument',
+      documentId: documentIdToEdit || primaryDocumentFileId,
+      documentType: documentMetadata.documentType,
+      userId: user.userId,
+    },
+    { applicationContext },
+  );
+  documentEntity.processingStatus = 'complete';
 
+  if (documentIdToEdit) {
+    caseEntity.updateDocument(documentEntity);
+  } else if (primaryDocumentFileId && documentMetadata) {
     caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
     caseEntity.addDocketRecord(
