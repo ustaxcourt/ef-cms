@@ -32,7 +32,7 @@ export const CreateOrder = connect(
     updateFormValueSequence,
     updateScreenMetadataSequence,
   }) => {
-    const { documentToEdit, isEditing } = createOrderHelper;
+    const { isEditing } = createOrderHelper;
     return (
       <>
         <CaseDetailHeader />
@@ -69,6 +69,7 @@ export const CreateOrder = connect(
             <div className="grid-row grid-gap">
               <div className="grid-col-8">
                 <TextEditor
+                  defaultValue={isEditing ? form.richText : ''}
                   form={form}
                   updateFormValueSequence={updateFormValueSequence}
                   updateScreenMetadataSequence={updateScreenMetadataSequence}
