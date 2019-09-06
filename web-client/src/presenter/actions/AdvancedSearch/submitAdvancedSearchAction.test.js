@@ -35,14 +35,12 @@ describe('submitAdvancedSearchAction', () => {
     });
 
     expect(caseSearchInteractorStub.calledOnce).toEqual(true);
-    expect(caseSearchInteractorStub.getCall(0).args[0]).toEqual({
-      searchParams: {
-        countryType: 'c',
-        petitionerName: 'a',
-        petitionerState: 'b',
-        yearFiledMax: '2',
-        yearFiledMin: '1',
-      },
+    expect(caseSearchInteractorStub.getCall(0).args[0].searchParams).toEqual({
+      countryType: 'c',
+      petitionerName: 'a',
+      petitionerState: 'b',
+      yearFiledMax: '2',
+      yearFiledMin: '1',
     });
   });
 });
