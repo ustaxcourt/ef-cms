@@ -23,7 +23,7 @@ class PDFSignerComponent extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.signatureData === null) {
+    if (!this.props.signatureApplied) {
       this.renderPDFPage(this.props.currentPageNumber);
     }
   }
