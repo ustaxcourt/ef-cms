@@ -40,6 +40,7 @@ function Document(rawDocument, { applicationContext }) {
   this.documentId = rawDocument.documentId;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
+  this.draftState = rawDocument.draftState;
   this.isFileAttached = rawDocument.isFileAttached;
   this.eventCode = rawDocument.eventCode;
   this.exhibits = rawDocument.exhibits;
