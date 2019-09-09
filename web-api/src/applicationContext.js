@@ -387,6 +387,12 @@ const {
   setCaseToReadyForTrialInteractor,
 } = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
 const {
+  deleteSectionOutboxRecord,
+} = require('../../shared/src/persistence/dynamo/workitems/deleteSectionOutboxRecord');
+const {
+  deleteUserOutboxRecord,
+} = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
+const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
 const {
@@ -592,6 +598,8 @@ module.exports = (appContextUser = {}) => {
         deleteCaseNote,
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
+        deleteSectionOutboxRecord,
+        deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
         getAllCaseDeadlines,
