@@ -365,9 +365,6 @@ functions:
       - http:
           path: /practitioners/search
           method: get
-          request:
-            template:
-              application/json: { 'searchKey': "$input.params('searchKey')" }
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
@@ -380,9 +377,6 @@ functions:
       - http:
           path: /respondents/search
           method: get
-          request:
-            template:
-              application/json: { 'searchKey': "$input.params('searchKey')" }
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
