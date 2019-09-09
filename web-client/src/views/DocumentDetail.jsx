@@ -1,3 +1,4 @@
+import { ArchiveDraftDocumentModal } from './DraftDocuments/ArchiveDraftDocumentModal';
 import { CaseDetailEdit } from './CaseDetailEdit/CaseDetailEdit';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailReadOnly } from './CaseDetailReadOnly';
@@ -17,6 +18,8 @@ import React from 'react';
 
 export const DocumentDetail = connect(
   {
+    archiveDraftDocumentModalSequence:
+      sequences.archiveDraftDocumentModalSequence,
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     caseHelper: state.caseDetailHelper,
@@ -31,6 +34,7 @@ export const DocumentDetail = connect(
     token: state.token,
   },
   ({
+    archiveDraftDocumentModalSequence,
     baseUrl,
     caseDetail,
     caseHelper,
@@ -133,67 +137,99 @@ export const DocumentDetail = connect(
                     : ''
                 }`}
               >
-                <div className="document-detail__action-buttons float-right">
-                  {caseHelper.showServeToIrsButton &&
-                    documentDetailHelper.formattedDocument.isPetition && (
+                <div className="document-detail__action-buttons">
+                  <div className="float-left padding-bottom-2">
+                    {documentDetailHelper.isDraftDocument && (
+                      <>
+                        <a href={documentDetailHelper.documentEditUrl}>
+                          {' '}
+                          <FontAwesomeIcon icon={['fas', 'edit']} /> Edit
+                        </a>
+
+                        <button
+                          className="usa-button usa-button--unstyled red-warning margin-left-2"
+                          onClick={() => {
+                            archiveDraftDocumentModalSequence({
+                              caseId: caseDetail.caseId,
+                              documentId:
+                                documentDetailHelper.formattedDocument
+                                  .documentId,
+                              documentTitle:
+                                documentDetailHelper.formattedDocument
+                                  .documentType,
+                            });
+                          }}
+                        >
+                          <FontAwesomeIcon icon="times-circle" size="sm" />
+                          Delete
+                        </button>
+                      </>
+                    )}
+                  </div>
+                  <div className="float-right">
+                    {caseHelper.showServeToIrsButton &&
+                      documentDetailHelper.formattedDocument.isPetition && (
+                        <button
+                          className="usa-button serve-to-irs margin-right-0"
+                          onClick={() => clickServeToIrsSequence()}
+                        >
+                          <FontAwesomeIcon icon={['fas', 'clock']} />
+                          Serve to IRS
+                        </button>
+                      )}
+                    {documentDetailHelper.showServeDocumentButton && (
                       <button
                         className="usa-button serve-to-irs margin-right-0"
-                        onClick={() => clickServeToIrsSequence()}
+                        onClick={() => openServeConfirmModalDialogSequence()}
                       >
-                        <FontAwesomeIcon icon={['fas', 'clock']} />
-                        Serve to IRS
+                        <FontAwesomeIcon icon={['fas', 'paper-plane']} />
+                        Serve Document
                       </button>
                     )}
-                  {documentDetailHelper.showServeDocumentButton && (
-                    <button
-                      className="usa-button serve-to-irs margin-right-0"
-                      onClick={() => openServeConfirmModalDialogSequence()}
-                    >
-                      <FontAwesomeIcon icon={['fas', 'paper-plane']} />
-                      Serve Document
-                    </button>
-                  )}
-                  {caseHelper.showRecallButton &&
-                    documentDetailHelper.formattedDocument.isPetition && (
-                      <span className="recall-button-box">
-                        <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
-                        <span className="batched-message">Batched for IRS</span>
-                        <button
-                          className="usa-button recall-petition"
-                          onClick={() =>
-                            setModalDialogNameSequence({
-                              showModal: 'RecallPetitionModalDialog',
-                            })
-                          }
-                        >
-                          Recall
-                        </button>
-                      </span>
+                    {caseHelper.showRecallButton &&
+                      documentDetailHelper.formattedDocument.isPetition && (
+                        <span className="recall-button-box">
+                          <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
+                          <span className="batched-message">
+                            Batched for IRS
+                          </span>
+                          <button
+                            className="usa-button recall-petition"
+                            onClick={() =>
+                              setModalDialogNameSequence({
+                                showModal: 'RecallPetitionModalDialog',
+                              })
+                            }
+                          >
+                            Recall
+                          </button>
+                        </span>
+                      )}
+                    {documentDetailHelper.showSignDocumentButton && (
+                      <button
+                        className="usa-button serve-to-irs margin-right-0"
+                        onClick={() =>
+                          navigateToPathSequence({
+                            path: messageId
+                              ? `/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/messages/${messageId}/sign`
+                              : `/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/sign`,
+                          })
+                        }
+                      >
+                        <FontAwesomeIcon icon={['fas', 'edit']} />
+                        Sign This Document
+                      </button>
                     )}
-                  {documentDetailHelper.showSignDocumentButton && (
-                    <button
-                      className="usa-button serve-to-irs margin-right-0"
-                      onClick={() =>
-                        navigateToPathSequence({
-                          path: messageId
-                            ? `/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/messages/${messageId}/sign`
-                            : `/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/sign`,
-                        })
-                      }
-                    >
-                      <FontAwesomeIcon icon={['fas', 'edit']} />
-                      Sign This Document
-                    </button>
+                  </div>
+
+                  {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
+                  {!process.env.CI && (
+                    <iframe
+                      src={`${baseUrl}/documents/${documentDetailHelper.formattedDocument.documentId}/document-download-url?token=${token}`}
+                      title={`Document type: ${documentDetailHelper.formattedDocument.documentType}`}
+                    />
                   )}
                 </div>
-
-                {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
-                {!process.env.CI && (
-                  <iframe
-                    src={`${baseUrl}/documents/${documentDetailHelper.formattedDocument.documentId}/document-download-url?token=${token}`}
-                    title={`Document type: ${documentDetailHelper.formattedDocument.documentType}`}
-                  />
-                )}
               </div>
             </div>
           </div>
@@ -209,6 +245,9 @@ export const DocumentDetail = connect(
           <ServeConfirmModalDialog
             documentType={documentDetailHelper.formattedDocument.documentType}
           />
+        )}
+        {showModal === 'ArchiveDraftDocumentModal' && (
+          <ArchiveDraftDocumentModal />
         )}
       </>
     );

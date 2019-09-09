@@ -17,6 +17,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     item => item.documentId === documentId,
   );
   let formattedDocument = {};
+  let documentEditUrl;
   if (document) {
     formattedDocument = applicationContext
       .getUtilities()
@@ -71,6 +72,13 @@ export const documentDetailHelper = (get, applicationContext) => {
         ORDER_TYPES_MAP.find(
           order => order.documentType === document.documentType,
         ));
+
+    if (isDraftDocument) {
+      documentEditUrl =
+        document.documentType === 'Stipulated Decision'
+          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+          : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`;
+    }
   }
 
   const formattedDocumentIsPetition =
@@ -87,6 +95,7 @@ export const documentDetailHelper = (get, applicationContext) => {
         !formattedDocument.isPetition));
 
   return {
+    documentEditUrl,
     formattedDocument,
     isDraftDocument,
     showAction: (action, workItemId) => {
