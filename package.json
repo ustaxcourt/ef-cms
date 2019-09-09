@@ -127,7 +127,7 @@
     "wicg-inert": "^2.2.0"
   },
   "scripts": {
-    "build:all": "npm run clean && run-p build:api build:api:users build:api:cases build:api:documents build:api:workItems build:api:sections build:api:trialSessions build:client",
+    "build:all": "npm run clean && run-p build:api build:api:users build:api:cases build:api:case:deadlines build:api:case:documents build:api:case:notes build:api:documents build:api:workItems build:api:sections build:api:trialSessions build:client",
     "build:api:cases": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/casesHandlers.js",
     "build:api:case:documents": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/caseDocumentsHandlers.js",
     "build:api:case:deadlines": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/caseDeadlinesHandlers.js",
