@@ -43,6 +43,7 @@ export const gotoDocumentDetailSequence = [
   setProcedureTypesAction,
   getCaseTypesAction,
   setCaseTypesAction,
+  set(state.editDocumentEntryPoint, 'DocumentDetail'),
   setCurrentPageAction('DocumentDetail'),
   parallel([
     getShouldMarkReadAction,
