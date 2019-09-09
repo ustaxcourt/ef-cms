@@ -7,6 +7,7 @@ import React from 'react';
 
 export const AdvancedSearch = connect(
   {
+    advancedSearchHelper: state.advancedSearchHelper,
     constants: state.constants,
     form: state.form,
     submitAdvancedSearchSequence: sequences.submitAdvancedSearchSequence,
@@ -14,6 +15,7 @@ export const AdvancedSearch = connect(
     usStates: state.constants.US_STATES,
   },
   ({
+    advancedSearchHelper,
     constants,
     form,
     submitAdvancedSearchSequence,
@@ -76,16 +78,18 @@ export const AdvancedSearch = connect(
                     </select>
                   </div>
 
-                  <div className="grid-col-5">
-                    <label className="usa-label" htmlFor="petitioner-state">
-                      State
-                    </label>
-                    <StateSelect
-                      bind={form.petitionerState}
-                      updateFormValueSequence={updateFormValueSequence}
-                      usStates={usStates}
-                    />
-                  </div>
+                  {advancedSearchHelper.showStateSelect && (
+                    <div className="grid-col-5">
+                      <label className="usa-label" htmlFor="petitioner-state">
+                        State
+                      </label>
+                      <StateSelect
+                        bind={form.petitionerState}
+                        updateFormValueSequence={updateFormValueSequence}
+                        usStates={usStates}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
