@@ -303,11 +303,11 @@ functions:
       - http:
           contentHandling: CONVERT_TO_BINARY
           cors: true
-          # integration: lambda
+          integration: lambda
           method: get
           path: /{trialSessionId}/batch-download
-          #response:
-          #headers:
-          #Content-Type: "'application/zip'"
-          #Content-Disposition: "'attachment; filename={request.querystring.filename}'"
-          #Cache-Control: "'max-age=120'"
+          response:
+            headers:
+              Content-Type: "'application/zip'"
+              Content-Disposition: "'attachment; filename=your-batch.zip'"
+              Cache-Control: "'max-age=120'"
