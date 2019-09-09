@@ -7,5 +7,7 @@
  * @returns {Promise} async action
  */
 export const navigateToCaseDetailAction = async ({ props, router }) => {
-  await router.route(`/case-detail/${props.caseId}`);
+  if (props.caseId) {
+    await router.route(`/case-detail/${props.caseId}`);
+  }
 };
