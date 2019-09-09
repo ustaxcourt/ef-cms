@@ -301,7 +301,13 @@ functions:
     timeout: 900
     events:
       - http:
-          path: /{trialSessionId}/batch-download
-          method: get
           contentHandling: CONVERT_TO_BINARY
           cors: true
+          integration: lambda
+          method: get
+          path: /{trialSessionId}/batch-download
+          response:
+            headers:
+              Content-Type: "'application/zip'"
+              Content-Disposition: "'attachment; filename=your-batch.zip'"
+              Cache-Control: "'max-age=120'"
