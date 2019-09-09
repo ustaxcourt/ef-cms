@@ -43,22 +43,24 @@ exports.archiveDraftDocumentInteractor = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  for (const workItem of documentToArchive.workItems) {
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem,
-    });
-
-    await applicationContext.getPersistenceGateway().deleteSectionOutboxRecord({
-      applicationContext,
-      createdAt: workItem.createdAt,
-      section: workItem.sentBySection,
-    });
-
-    await applicationContext.getPersistenceGateway().deleteUserOutboxRecord({
-      applicationContext,
-      createdAt: workItem.createdAt,
-      userId: workItem.sentByUserId,
-    });
-  }
+  await Promise.all(
+    documentToArchive.workItems.map(workItem =>
+      Promise.all(
+        applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+          applicationContext,
+          workItem,
+        }),
+        applicationContext.getPersistenceGateway().deleteSectionOutboxRecord({
+          applicationContext,
+          createdAt: workItem.createdAt,
+          section: workItem.sentBySection,
+        }),
+        applicationContext.getPersistenceGateway().deleteUserOutboxRecord({
+          applicationContext,
+          createdAt: workItem.createdAt,
+          userId: workItem.sentByUserId,
+        }),
+      ),
+    ),
+  );
 };
