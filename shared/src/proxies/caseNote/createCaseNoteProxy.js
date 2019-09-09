@@ -13,6 +13,6 @@ exports.createCaseNoteInteractor = ({ applicationContext, caseId, notes }) => {
   return post({
     applicationContext,
     body: { notes },
-    endpoint: `/case-notes/${caseId}/case-note`,
+    endpoint: `/case-notes/${caseId}`,
   });
 };

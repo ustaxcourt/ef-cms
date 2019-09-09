@@ -16,6 +16,6 @@ exports.deleteCaseDeadlineInteractor = ({
 }) => {
   return remove({
     applicationContext,
-    endpoint: `/case-deadlines/${caseId}/case-deadline/${caseDeadlineId}`,
+    endpoint: `/case-deadlines/${caseId}/${caseDeadlineId}`,
   });
 };

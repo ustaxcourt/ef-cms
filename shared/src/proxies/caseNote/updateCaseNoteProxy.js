@@ -13,6 +13,6 @@ exports.updateCaseNoteInteractor = ({ applicationContext, caseId, notes }) => {
   return put({
     applicationContext,
     body: { notes },
-    endpoint: `/case-notes/${caseId}/case-note`,
+    endpoint: `/case-notes/${caseId}`,
   });
 };
