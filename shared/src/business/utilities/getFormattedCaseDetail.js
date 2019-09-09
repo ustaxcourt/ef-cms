@@ -152,16 +152,19 @@ const formatCase = (applicationContext, caseDetail) => {
 
   const { ORDER_TYPES_MAP } = applicationContext.getConstants();
 
-  result.draftDocuments = (result.documents || []).filter(
-    document =>
-      !document.archived &&
-      ((document.documentType === 'Stipulated Decision' &&
-        !document.documentType.signedAt) ||
-        (!document.servedAt &&
-          ORDER_TYPES_MAP.find(
-            order => order.documentType === document.documentType,
-          ))),
-  );
+  result.draftDocuments = (result.documents || [])
+    .filter(
+      document =>
+        !document.archived &&
+        ((document.documentType === 'Stipulated Decision' &&
+          !document.documentType.signedAt) ||
+          (!document.servedAt &&
+            ORDER_TYPES_MAP.find(
+              order => order.documentType === document.documentType,
+            ))),
+    )
+    .filter(document => document.documentType !== 'Stipulated Decision'); // TODO: this will be removed when we revisit stipulated decisions
+
   result.draftDocuments = result.draftDocuments.map(document => ({
     ...document,
     editUrl:
