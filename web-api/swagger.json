@@ -1032,7 +1032,7 @@
       }
     },
 
-    "/cases/{caseId}/documents/{documentId}/work-items": {
+    "/cases/{caseId}/{documentId}/work-items": {
       "parameters": [
         {
           "name": "caseId",
@@ -2043,7 +2043,7 @@
         }
       }
     },
-    "/cases/{caseId}/documents/{documentId}/coversheet": {
+    "/cases/{caseId}/{documentId}/coversheet": {
       "parameters": [
         {
           "name": "caseId",
@@ -2098,7 +2098,7 @@
         }
       }
     },
-    "/cases/{caseId}/documents/{documentId}/serve": {
+    "/cases/{caseId}/{documentId}/serve": {
       "parameters": [
         {
           "name": "caseId",
@@ -2156,7 +2156,7 @@
         }
       }
     },
-    "/cases/{caseId}/documents/{documentId}/sign": {
+    "/cases/{caseId}/{documentId}/sign": {
       "parameters": [
         {
           "name": "caseId",
@@ -2666,7 +2666,7 @@
         }
       }
     },
-    "/cases/case-deadlines": {
+    "/case-deadlines": {
       "get": {
         "tags": ["caseDeadlines"],
         "summary": "get all case deadlines",
@@ -2710,7 +2710,7 @@
         }
       }
     },
-    "/cases/{caseId}/case-deadline": {
+    "/case-deadlines/{caseId}": {
       "parameters": [
         {
           "name": "caseId",
@@ -2781,7 +2781,7 @@
         }
       }
     },
-    "/cases/{caseId}/case-deadline/{caseDeadlineId}": {
+    "/cases/{caseId}/{caseDeadlineId}": {
       "parameters": [
         {
           "name": "caseId",
@@ -3030,7 +3030,7 @@
         }
       }
     },
-    "/cases/{caseId}/case-note": {
+    "/case-notes/{caseId}": {
       "parameters": [
         {
           "name": "caseId",
