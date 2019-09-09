@@ -136,6 +136,25 @@ describe('getAuthHeader', () => {
     expect(response).toEqual('teoken');
     expect(error).toEqual(undefined);
   });
+
+  it('should return the user token from the Authorization header query string params passed in as "query"', () => {
+    let error;
+    let response;
+    try {
+      response = getAuthHeader({
+        headers: {
+          Authorization: 'bearer ',
+        },
+        query: {
+          token: 'teoken',
+        },
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(response).toEqual('teoken');
+    expect(error).toEqual(undefined);
+  });
 });
 
 describe('getUserFromAuthHeader', () => {
@@ -148,6 +167,15 @@ describe('getUserFromAuthHeader', () => {
       },
     });
     expect(user.name).toEqual('Test Petitioner');
+  });
+
+  it('should return null if the user token is not in the header', () => {
+    const user = getUserFromAuthHeader({
+      headers: {
+        Authorization: 'Bearer 123',
+      },
+    });
+    expect(user).toEqual(null);
   });
 });
 
