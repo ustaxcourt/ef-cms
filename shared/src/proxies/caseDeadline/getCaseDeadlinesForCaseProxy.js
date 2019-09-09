@@ -14,6 +14,6 @@ exports.getCaseDeadlinesForCaseInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/cases/${caseId}/case-deadline`,
+    endpoint: `/case-deadlines/${caseId}`,
   });
 };

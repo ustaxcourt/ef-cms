@@ -1,14 +1,11 @@
-service: ef-cms-cases
+service: ef-cms-case-documents
 plugins:
-  # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
-  - serverless-apigwy-binary
 
 custom:
   prune:
@@ -17,7 +14,7 @@ custom:
 
   serverless-offline:
     host: 0.0.0.0
-    port: 3002
+    port: 3008
 
   alerts:
     stages:
@@ -27,7 +24,7 @@ custom:
     dashboards: true
     alarms:
       - functionThrottles
-      - functionErrors
+      - functionErrorse
       - functionInvocations
       - functionDuration
       - errorExceptions
@@ -154,7 +151,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/casesHandlers.js
+    - web-api/src/caseDocumentsHandlers.js
 
   excludeDevDependencies: true
 
@@ -193,11 +190,11 @@ resources:
             MetricsEnabled: true
 
 functions:
-  updateCase:
-    handler: web-api/src/casesHandlers.updateCaseLambda
+  serveSignedStipDecision:
+    handler: web-api/src/caseDocumentsHandlers.serveSignedStipDecisionLambda
     events:
       - http:
-          path: /{caseId}
+          path: /{caseId}/{documentId}/serve
           method: put
           cors: true
           authorizer:
@@ -205,52 +202,38 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateCaseTrialSortTags:
-    handler: web-api/src/casesHandlers.updateCaseTrialSortTagsLambda
+  createWorkItem:
+    handler: web-api/src/caseDocumentsHandlers.createWorkItemLambda
     events:
       - http:
-          path: /{caseId}/update-case-trial-sort-tags
-          method: put
+          path: /{caseId}/{documentId}/work-items
+          method: post
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updatePrimaryContact:
-    runtime: nodejs8.10
-    handler: web-api/src/casesHandlers.updatePrimaryContactLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+  addCoversheet:
+    handler: web-api/src/caseDocumentsHandlers.addCoversheetLambda
     memorySize: 3008
     timeout: 900
     events:
       - http:
-          path: /{caseId}/contact-primary
-          method: put
+          path: /{caseId}/{documentId}/coversheet
+          method: post
           cors: true
+          # async: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  setCaseToReadyForTrial:
-    handler: web-api/src/casesHandlers.setCaseToReadyForTrialLambda
+  signDocument:
+    handler: web-api/src/caseDocumentsHandlers.signDocumentLambda
     events:
       - http:
-          path: /{caseId}/set-to-ready-for-trial
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  createCase:
-    handler: web-api/src/casesHandlers.createCaseLambda
-    events:
-      - http:
-          path: /
+          path: /{caseId}/{documentId}/sign
           method: post
           cors: true
           authorizer:
@@ -258,138 +241,10 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  createCaseFromPaper:
-    handler: web-api/src/casesHandlers.createCaseFromPaperLambda
+  archiveDraftDocument:
+    handler: web-api/src/documentsHandlers.archiveDraftDocumentLambda
     events:
       - http:
-          path: /paper
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  fileExternalDocument:
-    handler: web-api/src/casesHandlers.fileExternalDocumentToCaseLambda
-    events:
-      - http:
-          path: /{caseId}/external-document
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  fileDocketEntry:
-    handler: web-api/src/casesHandlers.fileDocketEntryToCaseLambda
-    events:
-      - http:
-          path: /{caseId}/docket-entry
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updateDocketEntry:
-    handler: web-api/src/casesHandlers.updateDocketEntryOnCaseLambda
-    events:
-      - http:
-          path: /{caseId}/docket-entry
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  fileCourtIssuedOrder:
-    handler: web-api/src/casesHandlers.fileCourtIssuedOrderToCaseLambda
-    events:
-      - http:
-          path: /{caseId}/court-issued-order
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getCase:
-    handler: web-api/src/casesHandlers.getCaseLambda
-    events:
-      - http:
-          path: /{caseId}
-          method: get
-          request:
-            parameters:
-              paths:
-                caseId: true
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  caseSearch:
-    handler: web-api/src/casesHandlers.caseSearchLambda
-    events:
-      - http:
-          path: /search
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  sendToIRS:
-    handler: web-api/src/casesHandlers.sendPetitionToIRSHoldingQueueLambda
-    events:
-      - http:
-          path: /{caseId}/send-to-irs-holding-queue
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  recallFromIRS:
-    handler: web-api/src/casesHandlers.recallPetitionFromIRSHoldingQueueLambda
-    events:
-      - http:
-          path: /{caseId}/recall-from-irs-holding-queue
+          path: /{caseId}/{documentId}
           method: delete
           cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  associatePractitionerWithCase:
-    handler: web-api/src/casesHandlers.associatePractitionerWithCaseLambda
-    events:
-      - http:
-          path: /{caseId}/associate-practitioner
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  associateRespondentWithCase:
-    handler: web-api/src/casesHandlers.associateRespondentWithCaseLambda
-    events:
-      - http:
-          path: /{caseId}/associate-respondent
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
