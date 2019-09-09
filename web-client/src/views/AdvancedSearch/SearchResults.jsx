@@ -40,7 +40,11 @@ export const SearchResults = connect(
                           </>
                         )}
                       </td>
-                      <td>{result.docketNumberWithSuffix}</td>
+                      <td>
+                        <a href={`/case-detail/${result.docketNumber}`}>
+                          {result.docketNumberWithSuffix}
+                        </a>
+                      </td>
                       <td>{result.formattedFiledDate}</td>
                       <td>{result.caseCaptionNames}</td>
                       <td>{result.fullStateName}</td>

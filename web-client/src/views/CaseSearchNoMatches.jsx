@@ -9,7 +9,7 @@ export const CaseSearchNoMatches = () => (
       <h1>No Matches Found</h1>
       <p>
         Check your docket number and try again. Or you can try{' '}
-        <a href="/advanced-search">searching by name</a>.
+        <a href="/search">searching by name</a>.
       </p>
     </section>
   </>
