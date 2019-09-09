@@ -45,7 +45,7 @@ exports.archiveDraftDocumentInteractor = async ({
 
   await Promise.all(
     documentToArchive.workItems.map(workItem =>
-      Promise.all(
+      Promise.all([
         applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
           applicationContext,
           workItem,
@@ -60,7 +60,7 @@ exports.archiveDraftDocumentInteractor = async ({
           createdAt: workItem.createdAt,
           userId: workItem.sentByUserId,
         }),
-      ),
+      ]),
     ),
   );
 };
