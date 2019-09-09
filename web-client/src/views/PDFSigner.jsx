@@ -136,13 +136,15 @@ class PDFSignerComponent extends React.Component {
                     <PDFSignerMessage />
                   </div>
                   <div className="margin-top-2">
-                    <button
+                    {/* TODO: This is commented out until we revisit the stipulated
+                    decision */}
+                    {/* <button
                       className="usa-button"
                       disabled={this.props.pdfSignerHelper.disableSaveButton}
                       onClick={() => this.props.saveDocumentSigningSequence()}
                     >
                       Save
-                    </button>
+                    </button> */}
                     <button
                       className="usa-button"
                       disabled={
