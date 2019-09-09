@@ -8,17 +8,44 @@ const advancedSearchHelper = withAppContextDecorator(
 );
 
 describe('advancedSearchHelper', () => {
-  it('returns empty object when searchResults is undefined', () => {
+  it('returns only showStateSelect when searchResults is undefined', () => {
     const result = runCompute(advancedSearchHelper, {
-      state: {},
+      state: {
+        constants: { COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES },
+        form: {},
+      },
     });
-    expect(result).toEqual({});
+    expect(result).toEqual({ showStateSelect: false });
+  });
+
+  it('returns showStateSelect true when state.form.countryType is "domestic"', () => {
+    const result = runCompute(advancedSearchHelper, {
+      state: {
+        constants: { COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES },
+        form: { countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC },
+      },
+    });
+    expect(result).toEqual({ showStateSelect: true });
+  });
+
+  it('returns showStateSelect false when state.form.countryType is "international"', () => {
+    const result = runCompute(advancedSearchHelper, {
+      state: {
+        constants: { COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES },
+        form: { countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL },
+      },
+    });
+    expect(result).toEqual({ showStateSelect: false });
   });
 
   it('returns showNoMatches true and showSearchResults false if searchResults is an empty array', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
-        constants: { US_STATES: ContactFactory.US_STATES },
+        constants: {
+          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+          US_STATES: ContactFactory.US_STATES,
+        },
+        form: {},
         searchResults: [],
       },
     });
@@ -31,7 +58,11 @@ describe('advancedSearchHelper', () => {
   it('returns showNoMatches false, showSearchResults true, and the results count if searchResults is an not empty array', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
-        constants: { US_STATES: ContactFactory.US_STATES },
+        constants: {
+          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+          US_STATES: ContactFactory.US_STATES,
+        },
+        form: {},
         searchResults: [
           {
             contactPrimary: { name: 'Test Person', state: 'TN' },
@@ -50,7 +81,11 @@ describe('advancedSearchHelper', () => {
   it('formats search results and sorts by docket number', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
-        constants: { US_STATES: ContactFactory.US_STATES },
+        constants: {
+          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+          US_STATES: ContactFactory.US_STATES,
+        },
+        form: {},
         searchResults: [
           {
             caseCaption: 'Test Taxpayer, Petitioner',

@@ -20,12 +20,16 @@ exports.fileCourtIssuedOrderInteractor = async ({
   documentMetadata,
   primaryDocumentFileId,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
 
-  if (!isAuthorized(user, CREATE_COURT_ISSUED_ORDER)) {
+  if (!isAuthorized(authorizedUser, CREATE_COURT_ISSUED_ORDER)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -43,6 +47,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
       documentId: documentIdToEdit || primaryDocumentFileId,
       documentType: documentMetadata.documentType,
       userId: user.userId,
+      filedBy: user.name,
     },
     { applicationContext },
   );
