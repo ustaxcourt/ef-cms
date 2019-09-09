@@ -7,8 +7,6 @@ module.exports = {
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
-  createCaseNoteLambda: require('./caseNote/createCaseNoteLambda').handler,
-  deleteCaseNoteLambda: require('./caseNote/deleteCaseNoteLambda').handler,
   fileCourtIssuedOrderToCaseLambda: require('./cases/fileCourtIssuedOrderToCaseLambda')
     .handler,
   fileDocketEntryToCaseLambda: require('./cases/fileDocketEntryToCaseLambda')
@@ -16,7 +14,6 @@ module.exports = {
   fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
     .handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
-  getCaseNoteLambda: require('./caseNote/getCaseNoteLambda').handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
@@ -24,7 +21,6 @@ module.exports = {
   setCaseToReadyForTrialLambda: require('./cases/setCaseToReadyForTrialLambda')
     .handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
-  updateCaseNoteLambda: require('./caseNote/updateCaseNoteLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,
   updateDocketEntryOnCaseLambda: require('./cases/updateDocketEntryOnCaseLambda')

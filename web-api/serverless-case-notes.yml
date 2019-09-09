@@ -1,0 +1,48 @@
+functions:
+  createCaseNote:
+    handler: web-api/src/caseNotesHandlers.createCaseNoteLambda
+    events:
+      - http:
+          path: /{caseId}/case-note
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getCaseNote:
+    handler: web-api/src/caseNotesHandlers.getCaseNoteLambda
+    events:
+      - http:
+          path: /{caseId}/case-note
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCaseNote:
+    handler: web-api/src/caseNotesHandlers.updateCaseNoteLambda
+    events:
+      - http:
+          path: /{caseId}/case-note
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  deleteCaseNote:
+    handler: web-api/src/caseNotesHandlers.deleteCaseNoteLambda
+    events:
+      - http:
+          path: /{caseId}/case-note
+          method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
