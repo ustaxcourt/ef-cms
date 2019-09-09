@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {object} contains the caseId and documentId
  */
-export const getDocumentDetailParamsAction = async ({ get }) => {
+export const getEditedDocumentDetailParamsAction = async ({ get }) => {
   const caseDetail = get(state.caseDetail);
   const documentDetail = get(state.documentToEdit);
 

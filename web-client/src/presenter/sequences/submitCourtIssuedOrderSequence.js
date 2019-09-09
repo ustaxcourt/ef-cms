@@ -1,7 +1,7 @@
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
-import { getDocumentDetailParamsAction } from '../actions/getDocumentDetailParamsAction';
 import { getEditDocumentEntryPointAction } from '../actions/getEditDocumentEntryPointAction';
+import { getEditedDocumentDetailParamsAction } from '../actions/getEditedDocumentDetailParamsAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
 import { isFormPristineAction } from '../actions/CourtIssuedOrder/isFormPristineAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -35,7 +35,7 @@ export const submitCourtIssuedOrderSequence = [
       getFileExternalDocumentAlertSuccessAction,
       setAlertSuccessAction,
       set(state.saveAlertsForNavigation, true),
-      getDocumentDetailParamsAction,
+      getEditedDocumentDetailParamsAction,
       getEditDocumentEntryPointAction,
       {
         CaseDetail: navigateToCaseDetailAction,
