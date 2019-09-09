@@ -1,5 +1,6 @@
 import { archiveDraftDocumentAction } from '../actions/archiveDraftDocumentAction';
 import { clearModalAction } from '../actions/clearModalAction';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { resetArchiveDraftDocumentAction } from '../actions/resetArchiveDraftDocumentAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
@@ -12,4 +13,5 @@ export const archiveDraftDocumentSequence = [
   refreshCaseAction,
   resetArchiveDraftDocumentAction,
   unsetFormSubmittingAction,
+  navigateToCaseDetailAction,
 ];

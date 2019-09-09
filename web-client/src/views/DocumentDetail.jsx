@@ -157,6 +157,7 @@ export const DocumentDetail = connect(
                               documentTitle:
                                 documentDetailHelper.formattedDocument
                                   .documentType,
+                              redirectToCaseDetail: true,
                             });
                           }}
                         >

@@ -12,7 +12,9 @@ export const archiveDraftDocumentAction = async ({
   get,
   store,
 }) => {
-  const { caseId, documentId, documentTitle } = get(state.archiveDraftDocument);
+  const { caseId, documentId, documentTitle, redirectToCaseDetail } = get(
+    state.archiveDraftDocument,
+  );
   await applicationContext
     .getUseCases()
     .archiveDraftDocumentInteractor({ applicationContext, caseId, documentId });
@@ -21,4 +23,10 @@ export const archiveDraftDocumentAction = async ({
     message: documentTitle,
     title: 'This document has been deleted:',
   });
+
+  if (redirectToCaseDetail) {
+    return {
+      caseId,
+    };
+  }
 };
