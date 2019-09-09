@@ -169,7 +169,7 @@ describe('getUserFromAuthHeader', () => {
     expect(user.name).toEqual('Test Petitioner');
   });
 
-  it('should return null if the user token is not in the header', () => {
+  it('should return null if the user token is not a valid jwt token', () => {
     const user = getUserFromAuthHeader({
       headers: {
         Authorization: 'Bearer 123',
