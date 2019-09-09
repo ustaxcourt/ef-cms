@@ -46,6 +46,8 @@ echo "starting sections service"
 npx sls offline start "$@" --config web-api/serverless-sections.yml &
 echo "starting trial session service"
 npx sls offline start "$@" --config web-api/serverless-trial-sessions.yml &
+echo "starting case document service"
+npx sls offline start "$@" --config web-api/serverless-case-documents.yml &
 
 echo "starting proxy"
 node ./web-api/proxy.js
