@@ -1,11 +1,11 @@
 import { state } from 'cerebral';
 
 /**
- * Clears any and all alerts that might be enabled.
+ * sets the default countryType on the advanced search form
  *
  * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function to retrieve state values
- * @param {object} providers.store the cerebral store object used for clearing alertError, alertSuccess, caseDetailErrors
+ * @param {Function} providers.get the cerebral get function
+ * @param {Function} providers.store the cerebral store function
  */
 export const setDefaultCountryTypeOnAdvancedSearchFormAction = ({
   get,
