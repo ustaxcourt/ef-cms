@@ -24,7 +24,7 @@ custom:
     dashboards: true
     alarms:
       - functionThrottles
-      - functionErrors
+      - functionErrorse
       - functionInvocations
       - functionDuration
       - errorExceptions
