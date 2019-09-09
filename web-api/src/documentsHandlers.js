@@ -1,6 +1,4 @@
 module.exports = {
-  archiveDraftDocumentLambda: require('./documents/archiveDraftDocumentLambda')
-    .handler,
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
     .handler,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrl')

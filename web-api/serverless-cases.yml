@@ -193,41 +193,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-  addCoversheet:
-    handler: web-api/src/casesHandlers.addCoversheetLambda
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: /{caseId}/documents/{documentId}/coversheet
-          method: post
-          cors: true
-          # async: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  signDocument:
-    handler: web-api/src/casesHandlers.signDocumentLambda
-    events:
-      - http:
-          path: /{caseId}/documents/{documentId}/sign
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  archiveDraftDocument:
-    handler: web-api/src/documentsHandlers.archiveDraftDocumentLambda
-    events:
-      - http:
-          path: /{caseId}/documents/{documentId}
-          method: delete
-          cors: true
-
   updateCase:
     handler: web-api/src/casesHandlers.updateCaseLambda
     events:
@@ -262,18 +227,6 @@ functions:
     events:
       - http:
           path: /{caseId}/contact-primary
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  serveSignedStipDecision:
-    handler: web-api/src/casesHandlers.serveSignedStipDecisionLambda
-    events:
-      - http:
-          path: /{caseId}/documents/{documentId}/serve
           method: put
           cors: true
           authorizer:
@@ -421,18 +374,6 @@ functions:
       - http:
           path: /{caseId}/recall-from-irs-holding-queue
           method: delete
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  createWorkItem:
-    handler: web-api/src/casesHandlers.createWorkItemLambda
-    events:
-      - http:
-          path: /{caseId}/documents/{documentId}/work-items
-          method: post
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
