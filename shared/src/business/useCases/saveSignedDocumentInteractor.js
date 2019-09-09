@@ -42,6 +42,8 @@ exports.saveSignedDocumentInteractor = async ({
       {
         createdAt: applicationContext.getUtilities().createISODateString(),
         documentId: signedDocumentId,
+        documentTitle:
+          Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
         documentType:
           Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
         eventCode:

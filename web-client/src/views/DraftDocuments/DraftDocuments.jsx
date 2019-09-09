@@ -1,4 +1,5 @@
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
+import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -33,17 +34,14 @@ export const DraftDocuments = connect(
                 <tr key={index}>
                   <td>{draftDocument.createdAtFormatted}</td>
                   <td>
-                    {/* <FilingsAndProceedings
-                        arrayIndex={index}
-                        document={draftDocument}
-                        record={record}
-                      /> */}
-                    {/* {FilingsAndProceedings} */}
-                    {draftDocument.documentType}
+                    <FilingsAndProceedings
+                      arrayIndex={index}
+                      document={draftDocument}
+                      record={{}} // TODO: we are not yet sure where this comes from since we don't have a docket record for proposed / signed stipulated decisions
+                    />
                   </td>
                   <td>{draftDocument.filedBy}</td>
                   <td className="no-wrap text-align-right">
-                    {/* TODO: Link to the document to edit */}
                     <a
                       className="usa-button usa-button--unstyled"
                       href={draftDocument.editUrl}

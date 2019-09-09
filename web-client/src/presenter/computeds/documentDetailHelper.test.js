@@ -16,6 +16,9 @@ let role = 'petitionsclerk';
 const documentDetailHelper = withAppContextDecorator(
   documentDetailHelperComputed,
   {
+    getConstants: () => ({
+      ORDER_TYPES_MAP: [],
+    }),
     getCurrentUser: () => ({
       role,
       userId: 'abc',

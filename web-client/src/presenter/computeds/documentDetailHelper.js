@@ -12,6 +12,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   let showServeDocumentButton = false;
 
   const documentId = get(state.documentId);
+  let isDraftDocument = false;
   const document = (caseDetail.documents || []).find(
     item => item.documentId === documentId,
   );
@@ -60,6 +61,16 @@ export const documentDetailHelper = (get, applicationContext) => {
       document.status !== 'served' &&
       currentUser.role === 'docketclerk' &&
       document.documentType === SIGNED_STIPULATED_DECISION;
+
+    const { ORDER_TYPES_MAP } = applicationContext.getConstants();
+
+    isDraftDocument =
+      (document.documentType === 'Stipulated Decision' &&
+        !document.documentType.signedAt) ||
+      (!document.servedAt &&
+        ORDER_TYPES_MAP.find(
+          order => order.documentType === document.documentType,
+        ));
   }
 
   const formattedDocumentIsPetition =
@@ -77,6 +88,7 @@ export const documentDetailHelper = (get, applicationContext) => {
 
   return {
     formattedDocument,
+    isDraftDocument,
     showAction: (action, workItemId) => {
       const actions = get(state.workItemActions);
       return actions[workItemId] === action;
