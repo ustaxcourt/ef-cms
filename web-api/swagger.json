@@ -2781,7 +2781,7 @@
         }
       }
     },
-    "/cases/{caseId}/{caseDeadlineId}": {
+    "/case-deadlines/{caseId}/{caseDeadlineId}": {
       "parameters": [
         {
           "name": "caseId",
