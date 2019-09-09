@@ -126,8 +126,11 @@
     "wicg-inert": "^2.2.0"
   },
   "scripts": {
-    "build:all": "npm run clean && run-p build:api build:api:users build:api:cases build:api:documents build:api:workItems build:api:sections build:api:trialSessions build:client",
+    "build:all": "npm run clean && run-p build:api build:api:users build:api:cases build:api:case:deadlines build:api:case:documents build:api:case:notes build:api:documents build:api:workItems build:api:sections build:api:trialSessions build:client",
     "build:api:cases": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/casesHandlers.js",
+    "build:api:case:documents": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/caseDocumentsHandlers.js",
+    "build:api:case:deadlines": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/caseDeadlinesHandlers.js",
+    "build:api:case:notes": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/caseNotesHandlers.js",
     "build:api:documents": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/documentsHandlers.js",
     "build:api:sections": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/sectionsHandlers.js",
     "build:api:trialSessions": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/trialSessionsHandlers.js",
