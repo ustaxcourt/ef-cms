@@ -10,6 +10,7 @@ import classNames from 'classnames';
 
 export const AdvancedSearch = connect(
   {
+    advancedSearchHelper: state.advancedSearchHelper,
     constants: state.constants,
     form: state.form,
     submitAdvancedSearchSequence: sequences.submitAdvancedSearchSequence,
@@ -18,6 +19,7 @@ export const AdvancedSearch = connect(
     validationErrors: state.validationErrors,
   },
   ({
+    advancedSearchHelper,
     constants,
     form,
     submitAdvancedSearchSequence,
@@ -102,16 +104,18 @@ export const AdvancedSearch = connect(
                       </select>
                     </div>
 
-                    <div className="grid-col-5">
-                      <label className="usa-label" htmlFor="petitioner-state">
-                        State
-                      </label>
-                      <StateSelect
-                        bind={form.select}
-                        updateFormValueSequence={updateFormValueSequence}
-                        usStates={usStates}
-                      />
-                    </div>
+                    {advancedSearchHelper.showStateSelect && (
+                      <div className="grid-col-5">
+                        <label className="usa-label" htmlFor="petitioner-state">
+                          State
+                        </label>
+                        <StateSelect
+                          bind={form.select}
+                          updateFormValueSequence={updateFormValueSequence}
+                          usStates={usStates}
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
 

@@ -2,9 +2,11 @@ import { compareCasesByDocketNumber } from './formattedTrialSessionDetails';
 import { state } from 'cerebral';
 
 export const advancedSearchHelper = (get, applicationContext) => {
+  const countryType = get(state.form.countryType);
+  const COUNTRY_TYPES = get(state.constants.COUNTRY_TYPES);
   const searchResults = get(state.searchResults);
 
-  let result = {};
+  let result = { showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC };
 
   if (searchResults) {
     const US_STATES = get(state.constants.US_STATES);
@@ -35,6 +37,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
       });
 
     result = {
+      ...result,
       formattedSearchResults,
       searchResultsCount: searchResults.length,
       showNoMatches: searchResults.length === 0,
