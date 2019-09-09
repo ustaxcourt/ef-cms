@@ -33,7 +33,7 @@
     "cerebral": "^5.1.1",
     "chrome-aws-lambda": "^1.19.0",
     "classnames": "^2.2.6",
-    "core-js": "^2.6.8",
+    "core-js": "^3.2.1",
     "csv-parse": "^4.4.5",
     "cypress": "^3.4.1",
     "dynamodb-admin": "^3.1.3",
