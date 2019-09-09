@@ -21,7 +21,7 @@ export const DocumentDetail = connect(
     caseDetail: state.caseDetail,
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
-    helper: state.documentDetailHelper,
+    documentDetailHelper: state.documentDetailHelper,
     messageId: state.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
     openServeConfirmModalDialogSequence:
@@ -35,7 +35,7 @@ export const DocumentDetail = connect(
     caseDetail,
     caseHelper,
     clickServeToIrsSequence,
-    helper,
+    documentDetailHelper,
     messageId,
     navigateToPathSequence,
     openServeConfirmModalDialogSequence,
@@ -47,15 +47,21 @@ export const DocumentDetail = connect(
       <>
         <CaseDetailHeader />
         <section className="usa-section grid-container DocumentDetail">
-          <h2 className="heading-1">{helper.formattedDocument.documentType}</h2>
+          <h2 className="heading-1">
+            {documentDetailHelper.formattedDocument.documentType}
+            {documentDetailHelper.isDraftDocument && ' - DRAFT'}
+          </h2>
           <div className="filed-by">
             <div className="padding-bottom-1">
-              Filed {helper.formattedDocument.createdAtFormatted}
-              {helper.formattedDocument.filedBy &&
-                ` by ${helper.formattedDocument.filedBy}`}
+              Filed {documentDetailHelper.formattedDocument.createdAtFormatted}
+              {documentDetailHelper.formattedDocument.filedBy &&
+                ` by ${documentDetailHelper.formattedDocument.filedBy}`}
             </div>
-            {helper.formattedDocument.showServedAt && (
-              <div>Served {helper.formattedDocument.servedAtFormatted}</div>
+            {documentDetailHelper.formattedDocument.showServedAt && (
+              <div>
+                Served{' '}
+                {documentDetailHelper.formattedDocument.servedAtFormatted}
+              </div>
             )}
           </div>
           <SuccessNotification />
@@ -67,7 +73,7 @@ export const DocumentDetail = connect(
                   bind="currentTab"
                   className="no-full-border-bottom tab-button-h2"
                 >
-                  {helper.showDocumentInfoTab && (
+                  {documentDetailHelper.showDocumentInfoTab && (
                     <Tab
                       id="tab-document-info"
                       tabName="Document Info"
@@ -77,8 +83,12 @@ export const DocumentDetail = connect(
                         aria-labelledby="tab-document-info"
                         id="tab-document-info-panel"
                       >
-                        {helper.showCaseDetailsEdit && <CaseDetailEdit />}
-                        {helper.showCaseDetailsView && <CaseDetailReadOnly />}
+                        {documentDetailHelper.showCaseDetailsEdit && (
+                          <CaseDetailEdit />
+                        )}
+                        {documentDetailHelper.showCaseDetailsView && (
+                          <CaseDetailReadOnly />
+                        )}
                       </div>
                     </Tab>
                   )}
@@ -118,14 +128,14 @@ export const DocumentDetail = connect(
               </div>
               <div
                 className={`grid-col-7 ${
-                  helper.showDocumentViewerTopMargin
+                  documentDetailHelper.showDocumentViewerTopMargin
                     ? 'document-viewer-top-margin'
                     : ''
                 }`}
               >
                 <div className="document-detail__action-buttons float-right">
                   {caseHelper.showServeToIrsButton &&
-                    helper.formattedDocument.isPetition && (
+                    documentDetailHelper.formattedDocument.isPetition && (
                       <button
                         className="usa-button serve-to-irs margin-right-0"
                         onClick={() => clickServeToIrsSequence()}
@@ -134,7 +144,7 @@ export const DocumentDetail = connect(
                         Serve to IRS
                       </button>
                     )}
-                  {helper.showServeDocumentButton && (
+                  {documentDetailHelper.showServeDocumentButton && (
                     <button
                       className="usa-button serve-to-irs margin-right-0"
                       onClick={() => openServeConfirmModalDialogSequence()}
@@ -144,7 +154,7 @@ export const DocumentDetail = connect(
                     </button>
                   )}
                   {caseHelper.showRecallButton &&
-                    helper.formattedDocument.isPetition && (
+                    documentDetailHelper.formattedDocument.isPetition && (
                       <span className="recall-button-box">
                         <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
                         <span className="batched-message">Batched for IRS</span>
@@ -160,14 +170,14 @@ export const DocumentDetail = connect(
                         </button>
                       </span>
                     )}
-                  {helper.showSignDocumentButton && (
+                  {documentDetailHelper.showSignDocumentButton && (
                     <button
                       className="usa-button serve-to-irs margin-right-0"
                       onClick={() =>
                         navigateToPathSequence({
                           path: messageId
-                            ? `/case-detail/${caseDetail.docketNumber}/documents/${helper.formattedDocument.documentId}/messages/${messageId}/sign`
-                            : `/case-detail/${caseDetail.docketNumber}/documents/${helper.formattedDocument.documentId}/sign`,
+                            ? `/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/messages/${messageId}/sign`
+                            : `/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/sign`,
                         })
                       }
                     >
@@ -180,8 +190,8 @@ export const DocumentDetail = connect(
                 {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
                 {!process.env.CI && (
                   <iframe
-                    src={`${baseUrl}/documents/${helper.formattedDocument.documentId}/document-download-url?token=${token}`}
-                    title={`Document type: ${helper.formattedDocument.documentType}`}
+                    src={`${baseUrl}/documents/${documentDetailHelper.formattedDocument.documentId}/document-download-url?token=${token}`}
+                    title={`Document type: ${documentDetailHelper.formattedDocument.documentType}`}
                   />
                 )}
               </div>
@@ -197,7 +207,7 @@ export const DocumentDetail = connect(
         )}
         {showModal === 'ServeConfirmModalDialog' && (
           <ServeConfirmModalDialog
-            documentType={helper.formattedDocument.documentType}
+            documentType={documentDetailHelper.formattedDocument.documentType}
           />
         )}
       </>
