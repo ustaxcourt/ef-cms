@@ -3,7 +3,7 @@ functions:
     handler: web-api/src/caseNotesHandlers.createCaseNoteLambda
     events:
       - http:
-          path: /{caseId}/case-note
+          path: /{caseId}
           method: post
           cors: true
           authorizer:
@@ -15,7 +15,7 @@ functions:
     handler: web-api/src/caseNotesHandlers.getCaseNoteLambda
     events:
       - http:
-          path: /{caseId}/case-note
+          path: /{caseId}
           method: get
           cors: true
           authorizer:
@@ -27,7 +27,7 @@ functions:
     handler: web-api/src/caseNotesHandlers.updateCaseNoteLambda
     events:
       - http:
-          path: /{caseId}/case-note
+          path: /{caseId}
           method: put
           cors: true
           authorizer:
@@ -39,7 +39,7 @@ functions:
     handler: web-api/src/caseNotesHandlers.deleteCaseNoteLambda
     events:
       - http:
-          path: /{caseId}/case-note
+          path: /{caseId}
           method: delete
           cors: true
           authorizer:
