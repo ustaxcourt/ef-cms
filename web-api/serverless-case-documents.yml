@@ -194,7 +194,7 @@ functions:
     handler: web-api/src/caseDocumentsHandlers.serveSignedStipDecisionLambda
     events:
       - http:
-          path: /{caseId}/documents/{documentId}/serve
+          path: /{caseId}/{documentId}/serve
           method: put
           cors: true
           authorizer:
@@ -206,7 +206,7 @@ functions:
     handler: web-api/src/caseDocumentsHandlers.createWorkItemLambda
     events:
       - http:
-          path: /{caseId}/documents/{documentId}/work-items
+          path: /{caseId}/{documentId}/work-items
           method: post
           cors: true
           authorizer:
@@ -220,7 +220,7 @@ functions:
     timeout: 900
     events:
       - http:
-          path: /{caseId}/documents/{documentId}/coversheet
+          path: /{caseId}/{documentId}/coversheet
           method: post
           cors: true
           # async: true
@@ -233,7 +233,7 @@ functions:
     handler: web-api/src/caseDocumentsHandlers.signDocumentLambda
     events:
       - http:
-          path: /{caseId}/documents/{documentId}/sign
+          path: /{caseId}/{documentId}/sign
           method: post
           cors: true
           authorizer:
@@ -245,6 +245,6 @@ functions:
     handler: web-api/src/documentsHandlers.archiveDraftDocumentLambda
     events:
       - http:
-          path: /{caseId}/documents/{documentId}
+          path: /{caseId}/{documentId}
           method: delete
           cors: true
