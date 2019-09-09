@@ -10,6 +10,6 @@ const { get } = require('../requests');
 exports.getAllCaseDeadlinesInteractor = ({ applicationContext }) => {
   return get({
     applicationContext,
-    endpoint: '/cases-deadlines',
+    endpoint: '/case-deadlines',
   });
 };
