@@ -380,54 +380,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  createCaseDeadline:
-    handler: web-api/src/casesHandlers.createCaseDeadlineLambda
-    events:
-      - http:
-          path: /{caseId}/case-deadline
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getCaseDeadlinesForCase:
-    handler: web-api/src/casesHandlers.getCaseDeadlinesForCaseLambda
-    events:
-      - http:
-          path: /{caseId}/case-deadline
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updateCaseDeadline:
-    handler: web-api/src/casesHandlers.updateCaseDeadlineLambda
-    events:
-      - http:
-          path: /{caseId}/case-deadline/{caseDeadlineId}
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  deleteCaseDeadline:
-    handler: web-api/src/casesHandlers.deleteCaseDeadlineLambda
-    events:
-      - http:
-          path: /{caseId}/case-deadline/{caseDeadlineId}
-          method: delete
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   associatePractitionerWithCase:
     handler: web-api/src/casesHandlers.associatePractitionerWithCaseLambda
     events:
@@ -494,18 +446,6 @@ functions:
       - http:
           path: /{caseId}/case-note
           method: delete
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getAllCaseDeadlines:
-    handler: web-api/src/casesHandlers.getAllCaseDeadlinesLambda
-    events:
-      - http:
-          path: /case-deadlines
-          method: get
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
