@@ -3,7 +3,6 @@ const {
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -58,14 +57,6 @@ exports.fileCourtIssuedOrderInteractor = async ({
     caseEntity.updateDocument(documentEntity);
   } else if (primaryDocumentFileId && documentMetadata) {
     caseEntity.addDocumentWithoutDocketRecord(documentEntity);
-
-    caseEntity.addDocketRecord(
-      new DocketRecord({
-        description: documentMetadata.documentTitle,
-        documentId: documentEntity.documentId,
-        filingDate: documentEntity.receivedAt,
-      }),
-    );
   }
 
   await applicationContext.getPersistenceGateway().updateCase({
