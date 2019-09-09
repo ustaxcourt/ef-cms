@@ -16,6 +16,6 @@ exports.createCoverSheetInteractor = ({
 }) => {
   return post({
     applicationContext,
-    endpoint: `/case-documents/${caseId}/documents/${documentId}/coversheet`,
+    endpoint: `/case-documents/${caseId}/${documentId}/coversheet`,
   });
 };

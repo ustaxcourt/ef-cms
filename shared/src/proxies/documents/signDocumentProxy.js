@@ -21,6 +21,6 @@ exports.signDocumentInteractor = ({
     body: {
       signedDocumentId,
     },
-    endpoint: `/case-documents/${caseId}/documents/${originalDocumentId}/sign`,
+    endpoint: `/case-documents/${caseId}/${originalDocumentId}/sign`,
   });
 };
