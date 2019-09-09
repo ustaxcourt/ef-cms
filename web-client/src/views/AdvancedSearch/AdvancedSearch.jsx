@@ -46,12 +46,12 @@ export const AdvancedSearch = connect(
                 <div className="grid-col-4 right-gray-border">
                   <div
                     className={classNames(
-                      ' usa-form-group',
+                      'usa-form-group margin-bottom-0',
                       validationErrors.petitionerName &&
                         'usa-form-group--error',
                     )}
                   >
-                    <label className="usa-label" htmlFor="petitionerName">
+                    <label className="usa-label" htmlFor="petitioner-name">
                       Petitioner name{' '}
                       <span className="usa-hint">(required)</span>
                     </label>
@@ -120,54 +120,63 @@ export const AdvancedSearch = connect(
                     <div className="grid-col-7">
                       <div
                         className={classNames(
-                          ' usa-form-group',
+                          'usa-form-group margin-bottom-0',
                           (validationErrors.yearFiledMin ||
                             validationErrors.yearFiledMax) &&
                             'usa-form-group--error',
                         )}
                       >
-                        <label className="display-block" htmlFor="year-filed">
-                          Year filed
-                        </label>
-                        <div className="usa-form-group--year display-inline-block">
-                          <input
-                            className="usa-input"
-                            id="year-filed-min"
-                            name="yearFiledMin"
-                            type="text"
-                            value={form.yearFiledMin || ''}
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
+                        <fieldset className="usa-fieldset margin-bottom-0">
+                          <legend
+                            className="display-block"
+                            id="year-filed-legend"
+                          >
+                            Year filed
+                          </legend>
+                          <div className="usa-form-group--year display-inline-block">
+                            <input
+                              aria-describedby="year-filed-label"
+                              aria-label="year, four digits"
+                              className="usa-input"
+                              id="year-filed-min"
+                              name="yearFiledMin"
+                              type="text"
+                              value={form.yearFiledMin || ''}
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                          </div>
+                          <span className="margin-right-2">to</span>
+                          <div className="usa-form-group--year display-inline-block">
+                            <input
+                              aria-describedby="year-filed-label"
+                              aria-label="year, four digits"
+                              className="usa-input"
+                              id="year-filed-max"
+                              name="yearFiledMax"
+                              type="text"
+                              value={form.yearFiledMax || ''}
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                          </div>
+                          <Text
+                            bind="validationErrors.yearFiledMin"
+                            className="usa-error-message"
+                          />{' '}
+                          <Text
+                            bind="validationErrors.yearFiledMax"
+                            className="usa-error-message"
                           />
-                        </div>
-                        <span className="margin-right-2">to</span>
-                        <div className="usa-form-group--year display-inline-block">
-                          <input
-                            className="usa-input"
-                            id="year-filed-max"
-                            name="yearFiledMax"
-                            type="text"
-                            value={form.yearFiledMax || ''}
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                        </div>
-                        <Text
-                          bind="validationErrors.yearFiledMin"
-                          className="usa-error-message"
-                        />{' '}
-                        <Text
-                          bind="validationErrors.yearFiledMax"
-                          className="usa-error-message"
-                        />
+                        </fieldset>
                       </div>
                     </div>
 
