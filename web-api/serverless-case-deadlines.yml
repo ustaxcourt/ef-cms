@@ -194,7 +194,7 @@ functions:
     handler: web-api/src/caseDeadlinesHandlers.createCaseDeadlineLambda
     events:
       - http:
-          path: /{caseId}/case-deadline
+          path: /{caseId}
           method: post
           cors: true
           authorizer:
@@ -206,7 +206,7 @@ functions:
     handler: web-api/src/caseDeadlinesHandlers.getCaseDeadlinesForCaseLambda
     events:
       - http:
-          path: /{caseId}/case-deadline
+          path: /{caseId}
           method: get
           cors: true
           authorizer:
@@ -218,7 +218,7 @@ functions:
     handler: web-api/src/caseDeadlinesHandlers.updateCaseDeadlineLambda
     events:
       - http:
-          path: /{caseId}/case-deadline/{caseDeadlineId}
+          path: /{caseId}/{caseDeadlineId}
           method: put
           cors: true
           authorizer:
@@ -230,7 +230,7 @@ functions:
     handler: web-api/src/caseDeadlinesHandlers.deleteCaseDeadlineLambda
     events:
       - http:
-          path: /{caseId}/case-deadline/{caseDeadlineId}
+          path: /{caseId}/{caseDeadlineId}
           method: delete
           cors: true
           authorizer:
