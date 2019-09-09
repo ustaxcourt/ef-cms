@@ -8,7 +8,6 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = async event => {
-  console.log(event);
   const user = getUserFromAuthHeader(event);
   const applicationContext = createApplicationContext(user);
   try {
