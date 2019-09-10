@@ -5,10 +5,10 @@ import React from 'react';
 export const SearchResults = connect(
   {
     advancedSearchHelper: state.advancedSearchHelper,
-    pageCount: state.constants.CASE_SEARCH_PAGE_COUNT,
+    pageSize: state.constants.CASE_SEARCH_PAGE_SIZE,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
-  ({ advancedSearchHelper, pageCount, showMoreResultsSequence }) => {
+  ({ advancedSearchHelper, pageSize, showMoreResultsSequence }) => {
     return (
       <>
         {advancedSearchHelper.showSearchResults && (
@@ -70,7 +70,7 @@ export const SearchResults = connect(
             className="usa-button usa-button--outline"
             onClick={() => showMoreResultsSequence()}
           >
-            Load {pageCount} More
+            Load {pageSize} More
           </button>
         )}
         {advancedSearchHelper.showNoMatches && (
