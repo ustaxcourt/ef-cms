@@ -1,5 +1,6 @@
 const {
   CREATE_COURT_ISSUED_ORDER,
+  EDIT_COURT_ISSUED_ORDER,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
@@ -23,7 +24,10 @@ exports.fileCourtIssuedOrderInteractor = async ({
   const authorizedUser = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
 
-  if (!isAuthorized(authorizedUser, CREATE_COURT_ISSUED_ORDER)) {
+  if (
+    !isAuthorized(authorizedUser, CREATE_COURT_ISSUED_ORDER) &&
+    !isAuthorized(authorizedUser, EDIT_COURT_ISSUED_ORDER)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 

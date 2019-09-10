@@ -32,7 +32,8 @@ export const CreateOrder = connect(
     updateFormValueSequence,
     updateScreenMetadataSequence,
   }) => {
-    const { isEditing } = createOrderHelper;
+    const { isEditing, pageTitle } = createOrderHelper;
+
     return (
       <>
         <CaseDetailHeader />
@@ -46,9 +47,7 @@ export const CreateOrder = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-8">
-                <h2 className="heading-1">
-                  {isEditing ? 'Edit' : 'Create'} Order
-                </h2>
+                <h2 className="heading-1">{pageTitle}</h2>
               </div>
               <div className="grid-col-3">
                 <h2 className="heading-1">Quick Preview</h2>
