@@ -13,7 +13,7 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         constants: {
-          CASE_SEARCH_PAGE_COUNT: CaseSearch.CASE_SEARCH_PAGE_COUNT,
+          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
         },
         form: {},
@@ -26,7 +26,7 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         constants: {
-          CASE_SEARCH_PAGE_COUNT: CaseSearch.CASE_SEARCH_PAGE_COUNT,
+          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
         },
         form: { countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC },
@@ -39,7 +39,7 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         constants: {
-          CASE_SEARCH_PAGE_COUNT: CaseSearch.CASE_SEARCH_PAGE_COUNT,
+          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
         },
         form: { countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL },
@@ -52,7 +52,7 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         constants: {
-          CASE_SEARCH_PAGE_COUNT: CaseSearch.CASE_SEARCH_PAGE_COUNT,
+          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
           US_STATES: ContactFactory.US_STATES,
         },
@@ -71,7 +71,7 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         constants: {
-          CASE_SEARCH_PAGE_COUNT: CaseSearch.CASE_SEARCH_PAGE_COUNT,
+          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
           US_STATES: ContactFactory.US_STATES,
         },
@@ -96,7 +96,7 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         constants: {
-          CASE_SEARCH_PAGE_COUNT: CaseSearch.CASE_SEARCH_PAGE_COUNT,
+          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
           US_STATES: ContactFactory.US_STATES,
         },
@@ -143,7 +143,7 @@ describe('advancedSearchHelper', () => {
     let result = runCompute(advancedSearchHelper, {
       state: {
         constants: {
-          CASE_SEARCH_PAGE_COUNT: 1,
+          CASE_SEARCH_PAGE_SIZE: 1,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
           US_STATES: ContactFactory.US_STATES,
         },
@@ -182,7 +182,7 @@ describe('advancedSearchHelper', () => {
     result = runCompute(advancedSearchHelper, {
       state: {
         constants: {
-          CASE_SEARCH_PAGE_COUNT: 1,
+          CASE_SEARCH_PAGE_SIZE: 1,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
           US_STATES: ContactFactory.US_STATES,
         },
