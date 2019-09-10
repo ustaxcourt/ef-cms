@@ -126,7 +126,7 @@ describe('advancedSearchHelper', () => {
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/18',
-        fullStateName: 'Texas',
+        fullStateNamePrimary: 'Texas',
       },
       {
         caseCaptionNames: 'Test Taxpayer',
@@ -134,7 +134,7 @@ describe('advancedSearchHelper', () => {
         contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
-        fullStateName: 'Tennessee',
+        fullStateNamePrimary: 'Tennessee',
       },
     ]);
   });
@@ -175,7 +175,7 @@ describe('advancedSearchHelper', () => {
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/18',
-        fullStateName: 'Texas',
+        fullStateNamePrimary: 'Texas',
       },
     ]);
 
@@ -186,7 +186,7 @@ describe('advancedSearchHelper', () => {
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
           US_STATES: ContactFactory.US_STATES,
         },
-        form: { currentPage: 2 },
+        form: { currentPage: 3 },
         searchResults: [
           {
             caseCaption: 'Test Taxpayer, Petitioner',
@@ -214,7 +214,7 @@ describe('advancedSearchHelper', () => {
       },
     });
     expect(result.showLoadMore).toEqual(false);
-    expect(result.formattedSearchResults.length).toEqual(2);
+    expect(result.formattedSearchResults.length).toEqual(3);
     expect(result.formattedSearchResults).toMatchObject([
       {
         caseCaptionNames: 'Test Petitioner & Another Petitioner',
