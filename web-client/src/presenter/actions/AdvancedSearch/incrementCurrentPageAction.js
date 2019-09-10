@@ -1,14 +1,14 @@
 import { state } from 'cerebral';
 
 /**
- * sets the advanced search props passed in via the query string onto the state.form
+ * increments state.form.currentPage by 1
  *
  * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object
+ * @param {Function} providers.get the cerebral get function
  * @param {Function} providers.store the cerebral store function
  */
 export const incrementCurrentPageAction = ({ get, store }) => {
-  let currentPage = get(state.form.currentPage);
+  const currentPage = get(state.form.currentPage) || 1;
 
   store.set(state.form.currentPage, currentPage + 1);
 };
