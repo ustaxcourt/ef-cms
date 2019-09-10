@@ -138,7 +138,7 @@ export const DocumentDetail = connect(
                 }`}
               >
                 <div className="document-detail__action-buttons">
-                  <div className="float-left padding-bottom-2">
+                  <div className="float-left margin-bottom-2 margin-top-neg-2">
                     {documentDetailHelper.isDraftDocument && (
                       <>
                         <a href={documentDetailHelper.documentEditUrl}>
@@ -222,15 +222,14 @@ export const DocumentDetail = connect(
                       </button>
                     )}
                   </div>
-
-                  {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
-                  {!process.env.CI && (
-                    <iframe
-                      src={`${baseUrl}/documents/${documentDetailHelper.formattedDocument.documentId}/document-download-url?token=${token}`}
-                      title={`Document type: ${documentDetailHelper.formattedDocument.documentType}`}
-                    />
-                  )}
                 </div>
+                {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
+                {!process.env.CI && (
+                  <iframe
+                    src={`${baseUrl}/documents/${documentDetailHelper.formattedDocument.documentId}/document-download-url?token=${token}`}
+                    title={`Document type: ${documentDetailHelper.formattedDocument.documentType}`}
+                  />
+                )}
               </div>
             </div>
           </div>
