@@ -60,6 +60,7 @@ const goToDashboard = [
       setCurrentPageAction('DashboardPetitioner'),
     ],
     petitionsclerk: [
+      clearAlertsAction,
       parallel([
         [getUsersInSectionAction({ section: 'petitions' }), setUsersAction],
         [
@@ -69,7 +70,6 @@ const goToDashboard = [
       ]),
     ],
     practitioner: [
-      clearAlertsAction,
       getCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPractitioner'),
