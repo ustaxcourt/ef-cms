@@ -1,12 +1,14 @@
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const SearchResults = connect(
   {
     advancedSearchHelper: state.advancedSearchHelper,
+    pageSize: state.constants.CASE_SEARCH_PAGE_SIZE,
+    showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
-  ({ advancedSearchHelper }) => {
+  ({ advancedSearchHelper, pageSize, showMoreResultsSequence }) => {
     return (
       <>
         {advancedSearchHelper.showSearchResults && (
@@ -62,6 +64,14 @@ export const SearchResults = connect(
               </tbody>
             </table>
           </>
+        )}
+        {advancedSearchHelper.showLoadMore && (
+          <button
+            className="usa-button usa-button--outline"
+            onClick={() => showMoreResultsSequence()}
+          >
+            Load {pageSize} More
+          </button>
         )}
         {advancedSearchHelper.showNoMatches && (
           <>

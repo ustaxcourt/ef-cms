@@ -3,8 +3,9 @@ import { state } from 'cerebral';
 
 export const advancedSearchHelper = (get, applicationContext) => {
   const countryType = get(state.form.countryType);
-  const COUNTRY_TYPES = get(state.constants.COUNTRY_TYPES);
+  const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES } = get(state.constants);
   const searchResults = get(state.searchResults);
+  const currentPage = get(state.form.currentPage);
 
   let result = { showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC };
 
@@ -48,10 +49,14 @@ export const advancedSearchHelper = (get, applicationContext) => {
 
     result = {
       ...result,
-      formattedSearchResults,
+      formattedSearchResults: formattedSearchResults.slice(
+        0,
+        currentPage * CASE_SEARCH_PAGE_SIZE,
+      ),
       searchResultsCount: searchResults.length,
       showNoMatches: searchResults.length === 0,
       showSearchResults: searchResults.length > 0,
+      showLoadMore: searchResults.length > currentPage * CASE_SEARCH_PAGE_SIZE,
     };
   }
 
