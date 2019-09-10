@@ -48,7 +48,7 @@ custom:
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'cases'
+    basePath: 'case-deadlines'
     endpointType: 'regional'
     certificateName: efcms-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
