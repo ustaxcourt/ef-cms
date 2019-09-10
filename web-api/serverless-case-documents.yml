@@ -48,7 +48,7 @@ custom:
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'cases'
+    basePath: 'case-documents'
     endpointType: 'regional'
     certificateName: efcms-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
@@ -242,7 +242,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   archiveDraftDocument:
-    handler: web-api/src/documentsHandlers.archiveDraftDocumentLambda
+    handler: web-api/src/caseDocumentsHandlers.archiveDraftDocumentLambda
     events:
       - http:
           path: /{caseId}/{documentId}
