@@ -12,7 +12,7 @@ export const getEditDocumentEntryPointAction = async ({ get, path, store }) => {
   const editDocumentEntryPointAction =
     get(state.editDocumentEntryPoint) || 'DocumentDetail';
 
-  store.set(state.editDocumentEntryPoint, null);
+  store.unset(state.editDocumentEntryPoint);
 
   return path[editDocumentEntryPointAction]();
 };
