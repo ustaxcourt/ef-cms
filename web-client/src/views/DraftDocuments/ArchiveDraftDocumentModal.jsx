@@ -12,8 +12,7 @@ class ArchiveDraftDocumentModalComponent extends ModalDialog {
       cancelLabel: 'No, take me back',
       classNames: '',
       confirmLabel: 'Yes, delete',
-      message:
-        'The following document will be deleted and cannot be recovered:',
+      message: "Once deleted, it can't be restored.",
       title: 'Are you sure you want to delete this document?',
     };
   }
@@ -21,7 +20,11 @@ class ArchiveDraftDocumentModalComponent extends ModalDialog {
   renderBody() {
     const { props } = this;
 
-    return <div className="margin-top-2 semi-bold">{props.documentTitle}</div>;
+    return (
+      <div className="margin-top-2 semi-bold">
+        {props.archiveDraftDocument.documentTitle}
+      </div>
+    );
   }
 }
 
@@ -31,6 +34,7 @@ ArchiveDraftDocumentModalComponent.propTypes = {
 
 export const ArchiveDraftDocumentModal = connect(
   {
+    archiveDraftDocument: state.archiveDraftDocument,
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.archiveDraftDocumentSequence,
     form: state.form,
