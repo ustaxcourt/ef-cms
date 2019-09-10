@@ -101,17 +101,34 @@ describe('advancedSearchHelper', () => {
             docketNumberSuffix: 'W',
             filedDate: '2018-05-01T05:00:00.000Z',
           },
+          {
+            caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
+            contactPrimary: { name: 'Test Petitioner', state: 'CA' },
+            contactSecondary: { name: 'Another Petitioner', state: 'TN' },
+            docketNumber: '101-18',
+            docketNumberSuffix: 'W',
+            filedDate: '2018-04-01T05:00:00.000Z',
+          },
         ],
       },
     });
     expect(result.formattedSearchResults).toMatchObject([
+      {
+        caseCaptionNames: 'Test Petitioner & Another Petitioner',
+        contactPrimaryName: 'Test Petitioner',
+        contactSecondaryName: 'Another Petitioner',
+        docketNumberWithSuffix: '101-18W',
+        formattedFiledDate: '04/01/18',
+        fullStateNamePrimary: 'California',
+        fullStateNameSecondary: 'Tennessee',
+      },
       {
         caseCaptionNames: 'Test Taxpayer & Another Taxpayer',
         contactPrimaryName: 'Test Person',
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/18',
-        fullStateName: 'Texas',
+        fullStateNamePrimary: 'Texas',
       },
       {
         caseCaptionNames: 'Test Taxpayer',
@@ -119,7 +136,7 @@ describe('advancedSearchHelper', () => {
         contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
-        fullStateName: 'Tennessee',
+        fullStateNamePrimary: 'Tennessee',
       },
     ]);
   });
