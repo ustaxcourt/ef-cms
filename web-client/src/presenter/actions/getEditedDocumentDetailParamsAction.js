@@ -5,14 +5,18 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.props the cerebral props object
  * @returns {object} contains the caseId and documentId
  */
-export const getEditedDocumentDetailParamsAction = async ({ get }) => {
+export const getEditedDocumentDetailParamsAction = async ({ get, props }) => {
   const caseDetail = get(state.caseDetail);
-  const documentDetail = get(state.documentToEdit);
+  const documentToEdit = get(state.documentToEdit);
+  const documentId = documentToEdit
+    ? documentToEdit.documentId
+    : get(props.primaryDocumentFileId);
 
   return {
     caseId: caseDetail.caseId,
-    documentId: documentDetail.documentId,
+    documentId,
   };
 };
