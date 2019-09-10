@@ -32,7 +32,17 @@ export const advancedSearchHelper = (get, applicationContext) => {
           result.caseCaption || '',
         );
 
-        result.fullStateName = US_STATES[result.contactPrimary.state];
+        result.fullStateNamePrimary =
+          US_STATES[result.contactPrimary.state] || result.contactPrimary.state;
+        if (
+          result.contactSecondary &&
+          result.contactSecondary.state &&
+          result.contactPrimary.state !== result.contactSecondary.state
+        ) {
+          result.fullStateNameSecondary =
+            US_STATES[result.contactSecondary.state] ||
+            result.contactSecondary.state;
+        }
 
         return result;
       });

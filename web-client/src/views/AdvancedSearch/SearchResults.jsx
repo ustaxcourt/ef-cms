@@ -49,7 +49,15 @@ export const SearchResults = connect(
                       </td>
                       <td>{result.formattedFiledDate}</td>
                       <td>{result.caseCaptionNames}</td>
-                      <td>{result.fullStateName}</td>
+                      <td>
+                        {result.fullStateNamePrimary}
+                        {result.fullStateNameSecondary && (
+                          <>
+                            <br />
+                            {result.fullStateNameSecondary}
+                          </>
+                        )}
+                      </td>
                     </tr>
                   ),
                 )}
