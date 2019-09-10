@@ -25,6 +25,8 @@ export const archiveDraftDocumentAction = async ({
   });
 
   if (redirectToCaseDetail) {
+    store.set(state.saveAlertsForNavigation, true);
+
     return {
       caseId,
     };

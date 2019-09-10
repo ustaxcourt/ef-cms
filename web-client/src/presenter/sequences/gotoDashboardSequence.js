@@ -69,6 +69,7 @@ const goToDashboard = [
       ]),
     ],
     practitioner: [
+      clearAlertsAction,
       getCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPractitioner'),
