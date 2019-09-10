@@ -20,6 +20,8 @@ const mockCaseDetailBase = {
   trialSessionId: 'ts123',
 };
 
+const getDateISO = () => new Date().toISOString();
+
 describe('formatCase', () => {
   let mockCaseDetail;
 
@@ -42,10 +44,10 @@ describe('formatCase', () => {
       ...mockCaseDetail,
       documents: [
         {
-          createdAt: new Date(),
+          createdAt: getDateISO(),
           documentId: 'd-1-2-3',
           documentType: 'Petition',
-          servedAt: new Date(),
+          servedAt: getDateISO(),
         },
       ],
     });
@@ -63,7 +65,7 @@ describe('formatCase', () => {
       ...mockCaseDetail,
       docketRecord: [
         {
-          createdAt: new Date(),
+          createdAt: getDateISO(),
           index: '1',
         },
       ],
@@ -130,7 +132,7 @@ describe('formatCaseDeadlines', () => {
   it('should call formatCaseDeadline on the given array', () => {
     const result = formatCaseDeadlines(applicationContext, [
       {
-        deadlineDate: new Date(),
+        deadlineDate: getDateISO(),
       },
     ]);
     expect(Array.isArray(result)).toBeTruthy();
@@ -140,7 +142,7 @@ describe('formatCaseDeadlines', () => {
   it('should set the caseDeadline to overdue if the deadlineDate is before today', () => {
     const result = formatCaseDeadlines(applicationContext, [
       {
-        deadlineDate: '12/7/2017',
+        deadlineDate: '2017-01-01T00:01:02Z',
       },
     ]);
     expect(result[0]).toHaveProperty('overdue');
@@ -193,7 +195,7 @@ describe('getFormattedCaseDetail', () => {
       applicationContext,
       caseDeadlines: [
         {
-          deadlineDate: new Date(),
+          deadlineDate: getDateISO(),
         },
       ],
       caseDetail: { ...mockCaseDetailBase },
@@ -213,13 +215,13 @@ describe('sortDocketRecords', () => {
       {
         index: '2',
         record: {
-          filingDate: new Date(),
+          filingDate: getDateISO(),
         },
       },
       {
         index: '1',
         record: {
-          filingDate: new Date(),
+          filingDate: getDateISO(),
         },
       },
     ]);
@@ -233,19 +235,19 @@ describe('sortDocketRecords', () => {
         {
           index: '2',
           record: {
-            filingDate: new Date(),
+            filingDate: getDateISO(),
           },
         },
         {
           index: '3',
           record: {
-            filingDate: new Date(),
+            filingDate: getDateISO(),
           },
         },
         {
           index: '1',
           record: {
-            filingDate: new Date(),
+            filingDate: getDateISO(),
           },
         },
       ],
@@ -261,19 +263,19 @@ describe('sortDocketRecords', () => {
         {
           index: '2',
           record: {
-            filingDate: new Date(),
+            filingDate: getDateISO(),
           },
         },
         {
           index: '3',
           record: {
-            filingDate: new Date(),
+            filingDate: getDateISO(),
           },
         },
         {
           index: '1',
           record: {
-            filingDate: new Date(),
+            filingDate: getDateISO(),
           },
         },
       ],
