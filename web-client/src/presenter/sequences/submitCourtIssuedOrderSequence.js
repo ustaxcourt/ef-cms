@@ -1,8 +1,11 @@
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
+import { getEditDocumentEntryPointAction } from '../actions/getEditDocumentEntryPointAction';
+import { getEditedDocumentDetailParamsAction } from '../actions/getEditedDocumentDetailParamsAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
 import { isFormPristineAction } from '../actions/CourtIssuedOrder/isFormPristineAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { navigateToDocumentDetailAction } from '../actions/navigateToDocumentDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { set } from 'cerebral/factories';
@@ -32,7 +35,12 @@ export const submitCourtIssuedOrderSequence = [
       getFileExternalDocumentAlertSuccessAction,
       setAlertSuccessAction,
       set(state.saveAlertsForNavigation, true),
-      navigateToCaseDetailAction,
+      getEditedDocumentDetailParamsAction,
+      getEditDocumentEntryPointAction,
+      {
+        CaseDetail: navigateToCaseDetailAction,
+        DocumentDetail: navigateToDocumentDetailAction,
+      },
     ],
   },
   unsetFormSubmittingAction,
