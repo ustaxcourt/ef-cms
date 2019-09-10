@@ -140,6 +140,7 @@ import { uploadDocument } from '../../shared/src/persistence/s3/uploadDocument';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
+import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
 import { uploadPdf } from '../../shared/src/persistence/s3/uploadPdf';
 import { validateAddPractitioner } from '../../shared/src/business/useCases/caseAssociation/validateAddPractitionerInteractor';
 import { validateAddRespondent } from '../../shared/src/business/useCases/caseAssociation/validateAddRespondentInteractor';
@@ -276,6 +277,7 @@ const allUseCases = {
   uploadDocumentInteractor,
   uploadExternalDocumentInteractor,
   uploadExternalDocumentsInteractor,
+  uploadOrderDocumentInteractor,
   validateAddPractitioner,
   validateAddRespondent,
   validateCaseAssociationRequestInteractor,
