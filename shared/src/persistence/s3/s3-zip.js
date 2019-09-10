@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 /* eslint-disable no-console */
 const archiver = require('archiver');
-const Promise = require('bluebird');
 const s3Files = require('s3-files');
 
 const s3Zip = {};
