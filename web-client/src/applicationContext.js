@@ -11,6 +11,7 @@ import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { CaseExternal } from '../../shared/src/business/entities/cases/CaseExternal';
 import { CaseExternalInformationFactory } from '../../shared/src/business/entities/cases/CaseExternalInformationFactory';
 import { CaseInternal } from '../../shared/src/business/entities/cases/CaseInternal';
+import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { Document } from '../../shared/src/business/entities/Document';
@@ -337,6 +338,7 @@ const applicationContext = {
   getConstants: () => ({
     BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
     CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+    CASE_SEARCH_PAGE_COUNT: CaseSearch.CASE_SEARCH_PAGE_COUNT,
     CATEGORIES: Document.CATEGORIES,
     CATEGORY_MAP: Document.CATEGORY_MAP,
     CHAMBERS_SECTION,

@@ -160,6 +160,7 @@ import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCale
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
 import { setWorkQueueIsInternalSequence } from './sequences/setWorkQueueIsInternalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
+import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
@@ -415,6 +416,7 @@ export const presenter = {
     setWorkItemActionSequence,
     setWorkQueueIsInternalSequence,
     showDocketRecordDetailModalSequence,
+    showMoreResultsSequence,
     signOutSequence,
     startScanSequence,
     submitAdvancedSearchSequence,

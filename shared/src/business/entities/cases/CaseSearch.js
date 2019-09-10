@@ -3,6 +3,8 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
+CaseSearch.CASE_SEARCH_PAGE_COUNT = 5;
+
 CaseSearch.validationName = 'CaseSearch';
 
 /**
