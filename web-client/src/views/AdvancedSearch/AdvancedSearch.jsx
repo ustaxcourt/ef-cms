@@ -140,7 +140,7 @@ export const AdvancedSearch = connect(
                           <div className="usa-form-group--year display-inline-block">
                             <input
                               aria-describedby="year-filed-label"
-                              aria-label="year, four digits"
+                              aria-label="starting year, four digits"
                               className="usa-input"
                               id="year-filed-min"
                               name="yearFiledMin"
@@ -158,7 +158,7 @@ export const AdvancedSearch = connect(
                           <div className="usa-form-group--year display-inline-block">
                             <input
                               aria-describedby="year-filed-label"
-                              aria-label="year, four digits"
+                              aria-label="ending year, four digits"
                               className="usa-input"
                               id="year-filed-max"
                               name="yearFiledMax"
