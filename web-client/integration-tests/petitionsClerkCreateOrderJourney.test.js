@@ -14,6 +14,7 @@ import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkViewsCaseDetailAfterAddingOrder from './journey/petitionsClerkViewsCaseDetailAfterAddingOrder';
 import petitionsClerkViewsDraftDocuments from './journey/petitionsClerkViewsDraftDocuments';
+import petitionsDeletesOrderFromCase from './journey/petitionsDeletesOrderFromCase';
 import taxPayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
@@ -126,5 +127,7 @@ describe('Petitions Clerk Create Order Journey', () => {
   petitionsClerkViewsDraftDocuments(test, 1);
   petitionsClerkEditsDraftOrder(test);
   petitionsClerkViewsDraftDocuments(test, 1);
+  petitionsDeletesOrderFromCase(test);
+  petitionsClerkViewsDraftDocuments(test, 0);
   petitionsClerkSignsOut(test);
 });
