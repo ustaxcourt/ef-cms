@@ -50,7 +50,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
     },
     { applicationContext },
   );
-  documentEntity.processingStatus = 'complete';
+  documentEntity.setAsProcessingStatusAsCompleted();
 
   caseEntity.updateDocument(documentEntity);
 
