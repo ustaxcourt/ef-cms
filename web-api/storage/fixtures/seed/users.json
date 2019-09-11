@@ -111,6 +111,57 @@
     "pk": "judge|user",
     "sk": "dabbad04-18d0-43ec-bafb-654e83405416"
   },
+  {
+    "role": "judge",
+    "sk": "dabbad05-18d0-43ec-bafb-654e83405416",
+    "name": "Judge Gustafson",
+    "section": "gustafsonsChambers",
+    "pk": "dabbad05-18d0-43ec-bafb-654e83405416",
+    "userId": "dabbad05-18d0-43ec-bafb-654e83405416",
+    "email": "judgeGustafson"
+  },
+  {
+    "pk": "gustafsonsChambers|user",
+    "sk": "dabbad05-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "pk": "judge|user",
+    "sk": "dabbad05-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "role": "judge",
+    "sk": "dabbad06-18d0-43ec-bafb-654e83405416",
+    "name": "Judge Pugh",
+    "section": "pughsChambers",
+    "pk": "dabbad06-18d0-43ec-bafb-654e83405416",
+    "userId": "dabbad06-18d0-43ec-bafb-654e83405416",
+    "email": "judgePugh"
+  },
+  {
+    "pk": "pughsChambers|user",
+    "sk": "dabbad06-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "pk": "judge|user",
+    "sk": "dabbad06-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "role": "judge",
+    "sk": "dabbad0a-18d0-43ec-bafb-654e83405416",
+    "name": "Judge Urda",
+    "section": "urdasChambers",
+    "pk": "dabbad0a-18d0-43ec-bafb-654e83405416",
+    "userId": "dabbad0a-18d0-43ec-bafb-654e83405416",
+    "email": "judgeUrda"
+  },
+  {
+    "pk": "urdasChambers|user",
+    "sk": "dabbad0a-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "pk": "judge|user",
+    "sk": "dabbad0a-18d0-43ec-bafb-654e83405416"
+  },
 
   {
     "pk": "seniorattorney|user",

@@ -49,6 +49,27 @@ exports.userMap = {
     role: 'judge',
     userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
   },
+  judgeGustafson: {
+    'custom:role': 'judge',
+    email: 'judgeGustafson',
+    name: 'Judge Gustafson',
+    role: 'judge',
+    userId: 'dabbad05-18d0-43ec-bafb-654e83405416',
+  },
+  judgePugh: {
+    'custom:role': 'judge',
+    email: 'judgePugh',
+    name: 'Judge Pugh',
+    role: 'judge',
+    userId: 'dabbad06-18d0-43ec-bafb-654e83405416',
+  },
+  judgeUrda: {
+    'custom:role': 'judge',
+    email: 'judgeUrda',
+    name: 'Judge Urda',
+    role: 'judge',
+    userId: 'dabbad0a-18d0-43ec-bafb-654e83405416',
+  },
 
   petitionsclerk: {
     'custom:role': 'petitionsclerk',
