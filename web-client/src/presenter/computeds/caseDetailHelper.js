@@ -27,7 +27,9 @@ export const caseDetailHelper = (get, applicationContext) => {
     ['CaseDetailInternal'].includes(currentPage) && userRole === 'docketclerk';
   let showCreateOrderButton =
     ['CaseDetailInternal'].includes(currentPage) &&
-    userRole === 'petitionsclerk';
+    ['docketclerk', 'judge', 'petitionsclerk', 'seniorattorney'].includes(
+      userRole,
+    );
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
