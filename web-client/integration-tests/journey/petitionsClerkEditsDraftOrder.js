@@ -6,7 +6,14 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export default test => {
+export default (
+  test,
+  {
+    currentRichText = '<p>This is a test order.</p>',
+    setRichText = '<p>This is an edited test order.</p>',
+    viewAfterEdit = 'DocumentDetail',
+  },
+) => {
   return it('Petitions edits draft order', async () => {
     const formatted = runCompute(formattedCaseDetail, {
       state: test.getState(),
@@ -19,11 +26,9 @@ export default test => {
       documentIdToEdit: draftOrder.documentId,
     });
 
-    expect(draftOrder.draftState.richText).toEqual(
-      '<p>This is a test order.</p>',
-    );
+    expect(draftOrder.draftState.richText).toEqual(currentRichText);
 
-    test.setState('form.richText', '<p>This is an edited test order.</p>');
+    test.setState('form.richText', setRichText);
     await test.runSequence('submitCourtIssuedOrderSequence');
 
     const formattedAfterEdit = runCompute(formattedCaseDetail, {
@@ -32,8 +37,13 @@ export default test => {
 
     const editedDraftOrder = formattedAfterEdit.draftDocuments[0];
 
-    expect(editedDraftOrder.draftState.richText).toEqual(
-      '<p>This is an edited test order.</p>',
-    );
+    expect(editedDraftOrder.draftState.richText).toEqual(setRichText);
+    if (viewAfterEdit === 'CaseDetail') {
+      expect(test.currentRouteUrl).toEqual(`/case-detail/${draftOrder.caseId}`);
+    } else if (viewAfterEdit === 'DocumentDetail') {
+      expect(test.currentRouteUrl).toEqual(
+        `/case-detail/${draftOrder.caseId}/documents/${draftOrder.documentId}`,
+      );
+    }
   });
 };
