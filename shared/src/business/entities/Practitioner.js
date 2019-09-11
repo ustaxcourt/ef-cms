@@ -3,7 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 
-const { respondentDecorator, respondentValidation } = require('./Respondent');
+const { userDecorator, userValidation } = require('./User');
 
 /**
  * constructor
@@ -12,7 +12,7 @@ const { respondentDecorator, respondentValidation } = require('./Respondent');
  * @constructor
  */
 function Practitioner(rawUser) {
-  respondentDecorator(this, rawUser);
+  userDecorator(this, rawUser);
   this.representingPrimary = rawUser.representingPrimary;
   this.representingSecondary = rawUser.representingSecondary;
 }
@@ -20,7 +20,7 @@ function Practitioner(rawUser) {
 joiValidationDecorator(
   Practitioner,
   joi.object().keys({
-    ...respondentValidation,
+    ...userValidation,
     representingPrimary: joi.boolean().optional(),
     representingSecondary: joi.boolean().optional(),
   }),
