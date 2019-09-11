@@ -1,5 +1,5 @@
 const {
-  CREATE_COURT_ISSUED_ORDER,
+  EDIT_COURT_ISSUED_ORDER,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
@@ -14,15 +14,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the updated case entity after the document is added
  */
-exports.fileCourtIssuedOrderInteractor = async ({
+exports.updateCourtIssuedOrderInteractor = async ({
   applicationContext,
+  documentIdToEdit,
   documentMetadata,
-  primaryDocumentFileId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
 
-  if (!isAuthorized(authorizedUser, CREATE_COURT_ISSUED_ORDER)) {
+  if (!isAuthorized(authorizedUser, EDIT_COURT_ISSUED_ORDER)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -43,7 +43,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
     {
       ...documentMetadata,
       relationship: 'primaryDocument',
-      documentId: primaryDocumentFileId,
+      documentId: documentIdToEdit,
       documentType: documentMetadata.documentType,
       userId: user.userId,
       filedBy: user.name,
@@ -52,7 +52,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
   );
   documentEntity.processingStatus = 'complete';
 
-  caseEntity.addDocumentWithoutDocketRecord(documentEntity);
+  caseEntity.updateDocument(documentEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
