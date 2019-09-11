@@ -1,9 +1,9 @@
 const {
   CREATE_COURT_ISSUED_ORDER,
+  EDIT_COURT_ISSUED_ORDER,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -17,15 +17,23 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.fileCourtIssuedOrderInteractor = async ({
   applicationContext,
+  documentIdToEdit = null,
   documentMetadata,
   primaryDocumentFileId,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
 
-  if (!isAuthorized(user, CREATE_COURT_ISSUED_ORDER)) {
+  if (
+    !isAuthorized(authorizedUser, CREATE_COURT_ISSUED_ORDER) &&
+    !isAuthorized(authorizedUser, EDIT_COURT_ISSUED_ORDER)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -36,28 +44,23 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  if (primaryDocumentFileId && documentMetadata) {
-    const documentEntity = new Document(
-      {
-        ...documentMetadata,
-        relationship: 'primaryDocument',
-        documentId: primaryDocumentFileId,
-        documentType: documentMetadata.documentType,
-        userId: user.userId,
-      },
-      { applicationContext },
-    );
-    documentEntity.processingStatus = 'complete';
+  const documentEntity = new Document(
+    {
+      ...documentMetadata,
+      relationship: 'primaryDocument',
+      documentId: documentIdToEdit || primaryDocumentFileId,
+      documentType: documentMetadata.documentType,
+      userId: user.userId,
+      filedBy: user.name,
+    },
+    { applicationContext },
+  );
+  documentEntity.processingStatus = 'complete';
 
+  if (documentIdToEdit) {
+    caseEntity.updateDocument(documentEntity);
+  } else if (primaryDocumentFileId && documentMetadata) {
     caseEntity.addDocumentWithoutDocketRecord(documentEntity);
-
-    caseEntity.addDocketRecord(
-      new DocketRecord({
-        description: documentMetadata.documentTitle,
-        documentId: documentEntity.documentId,
-        filingDate: documentEntity.receivedAt,
-      }),
-    );
   }
 
   await applicationContext.getPersistenceGateway().updateCase({

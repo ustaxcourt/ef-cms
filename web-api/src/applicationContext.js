@@ -38,6 +38,7 @@ const {
 const {
   batchDownloadTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor');
+const { Case } = require('../../shared/src/business/entities/cases/Case');
 const {
   CaseExternalIncomplete,
 } = require('../../shared/src/business/entities/cases/CaseExternalIncomplete');
@@ -250,6 +251,9 @@ const {
   getEligibleCasesForTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
 const {
+  getFormattedCaseDetail,
+} = require('../../shared/src/business/utilities/getFormattedCaseDetail');
+const {
   getInboxMessagesForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getInboxMessagesForSection');
 const {
@@ -383,6 +387,15 @@ const {
   setCaseToReadyForTrialInteractor,
 } = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
 const {
+  deleteSectionOutboxRecord,
+} = require('../../shared/src/persistence/dynamo/workitems/deleteSectionOutboxRecord');
+const {
+  deleteUserOutboxRecord,
+} = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
+const {
+  setServiceIndicatorsForCase,
+} = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
+const {
   setTrialSessionAsSwingSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionAsSwingSessionInteractor');
 const {
@@ -403,6 +416,9 @@ const {
 const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
+const {
+  archiveDraftDocumentInteractor,
+} = require('../../shared/src/business/useCases/archiveDraftDocumentInteractor');
 const {
   updateCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
@@ -458,6 +474,9 @@ const {
   uploadDocument,
 } = require('../../shared/src/persistence/s3/uploadDocument');
 const {
+  userIsAssociated,
+} = require('../../shared/src/business/useCases/caseAssociation/userIsAssociatedInteractor');
+const {
   validatePdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
 const {
@@ -481,6 +500,7 @@ const {
 const { Client } = require('@elastic/elasticsearch');
 const { exec } = require('child_process');
 const { User } = require('../../shared/src/business/entities/User');
+const { Order } = require('../../shared/src/business/entities/orders/Order');
 
 const { DynamoDB, S3, SES } = AWS;
 const execPromise = util.promisify(exec);
@@ -517,6 +537,7 @@ module.exports = (appContextUser = {}) => {
   return {
     docketNumberGenerator,
     environment,
+    getCaseCaptionNames: Case.getCaseCaptionNames,
     getChromium: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
       // This dependency is only available on lambdas with the 'puppeteer' layer,
@@ -528,6 +549,9 @@ module.exports = (appContextUser = {}) => {
       const chromium = require('chrome-' + 'aws-lambda');
       return chromium;
     },
+    getConstants: () => ({
+      ORDER_TYPES_MAP: Order.ORDER_TYPES,
+    }),
     getCurrentUser,
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
@@ -556,6 +580,7 @@ module.exports = (appContextUser = {}) => {
       return sesCache;
     },
     getEntityConstructors: () => ({
+      Case,
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
     }),
@@ -577,6 +602,8 @@ module.exports = (appContextUser = {}) => {
         deleteCaseNote,
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
+        deleteSectionOutboxRecord,
+        deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
         getAllCaseDeadlines,
@@ -665,6 +692,7 @@ module.exports = (appContextUser = {}) => {
     getUseCases: () => {
       return {
         addCoverToPDFDocumentInteractor,
+        archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
         associatePractitionerWithCaseInteractor,
         associateRespondentWithCaseInteractor,
@@ -737,6 +765,7 @@ module.exports = (appContextUser = {}) => {
         updatePrimaryContactInteractor,
         updateTrialSessionWorkingCopyInteractor,
         updateUserContactInformationInteractor,
+        userIsAssociated,
         validatePdfInteractor,
         verifyCaseForUserInteractor,
         verifyPendingCaseForUserInteractor,
@@ -749,7 +778,9 @@ module.exports = (appContextUser = {}) => {
         createISODateString,
         formatDateString,
         getDocumentTypeForAddressChange,
+        getFormattedCaseDetail,
         prepareDateFromString,
+        setServiceIndicatorsForCase,
       };
     },
     irsGateway,

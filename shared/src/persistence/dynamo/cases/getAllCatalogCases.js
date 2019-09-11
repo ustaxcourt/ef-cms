@@ -13,7 +13,7 @@ exports.getAllCatalogCases = async ({ applicationContext }) => {
       '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `catalog`,
+      ':pk': 'catalog',
       ':prefix': 'case',
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',

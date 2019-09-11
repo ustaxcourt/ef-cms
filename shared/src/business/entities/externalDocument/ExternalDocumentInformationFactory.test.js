@@ -175,7 +175,7 @@ describe('ExternalDocumentInformationFactory', () => {
       });
     });
 
-    describe(`Scenario 'Nonstandard H' Secondary Document`, () => {
+    describe("Scenario 'Nonstandard H' Secondary Document", () => {
       beforeEach(() => {
         baseDoc.scenario = 'Nonstandard H';
       });
@@ -209,7 +209,7 @@ describe('ExternalDocumentInformationFactory', () => {
           );
         });
 
-        it(`should not require 'has supporting secondary documents' radio be selected`, () => {
+        it("should not require 'has supporting secondary documents' radio be selected", () => {
           expect(errors().hasSecondarySupportingDocuments).toEqual(undefined);
         });
 
@@ -218,7 +218,7 @@ describe('ExternalDocumentInformationFactory', () => {
             baseDoc.secondaryDocumentFile = {};
           });
 
-          it(`should require 'has supporting secondary documents' radio be selected`, () => {
+          it("should require 'has supporting secondary documents' radio be selected", () => {
             expect(errors().hasSecondarySupportingDocuments).toEqual(
               'Enter selection for Secondary Supporting Documents.',
             );
@@ -247,7 +247,7 @@ describe('ExternalDocumentInformationFactory', () => {
           expect(errors().secondaryDocumentFile).toEqual(undefined);
         });
 
-        it(`should not require 'has supporting secondary documents' radio be selected`, () => {
+        it("should not require 'has supporting secondary documents' radio be selected", () => {
           expect(errors().hasSecondarySupportingDocuments).toEqual(undefined);
         });
 
@@ -256,7 +256,7 @@ describe('ExternalDocumentInformationFactory', () => {
             baseDoc.secondaryDocumentFile = {};
           });
 
-          it(`should require 'has supporting secondary documents' radio be selected`, () => {
+          it("should require 'has supporting secondary documents' radio be selected", () => {
             expect(errors().hasSecondarySupportingDocuments).toEqual(
               'Enter selection for Secondary Supporting Documents.',
             );

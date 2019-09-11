@@ -193,33 +193,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-  addCoversheet:
-    handler: web-api/src/casesHandlers.addCoversheetLambda
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: /{caseId}/documents/{documentId}/coversheet
-          method: post
-          cors: true
-          # async: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  signDocument:
-    handler: web-api/src/casesHandlers.signDocumentLambda
-    events:
-      - http:
-          path: /{caseId}/documents/{documentId}/sign
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   updateCase:
     handler: web-api/src/casesHandlers.updateCaseLambda
     events:
@@ -254,18 +227,6 @@ functions:
     events:
       - http:
           path: /{caseId}/contact-primary
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  serveSignedStipDecision:
-    handler: web-api/src/casesHandlers.serveSignedStipDecisionLambda
-    events:
-      - http:
-          path: /{caseId}/documents/{documentId}/serve
           method: put
           cors: true
           authorizer:
@@ -379,16 +340,6 @@ functions:
       - http:
           path: /search
           method: get
-          request:
-            template:
-              application/json:
-                {
-                  'petitionerName': "$input.params('petitionerName')",
-                  'countryType': "$input.params('countryType')",
-                  'state': "$input.params('state')",
-                  'yearFiledMin': "$input.params('yearFiledMin')",
-                  'yearFiledMax': "$input.params('yearFiledMax')",
-                }
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
@@ -419,66 +370,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  createWorkItem:
-    handler: web-api/src/casesHandlers.createWorkItemLambda
-    events:
-      - http:
-          path: /{caseId}/documents/{documentId}/work-items
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  createCaseDeadline:
-    handler: web-api/src/casesHandlers.createCaseDeadlineLambda
-    events:
-      - http:
-          path: /{caseId}/case-deadline
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getCaseDeadlinesForCase:
-    handler: web-api/src/casesHandlers.getCaseDeadlinesForCaseLambda
-    events:
-      - http:
-          path: /{caseId}/case-deadline
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updateCaseDeadline:
-    handler: web-api/src/casesHandlers.updateCaseDeadlineLambda
-    events:
-      - http:
-          path: /{caseId}/case-deadline/{caseDeadlineId}
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  deleteCaseDeadline:
-    handler: web-api/src/casesHandlers.deleteCaseDeadlineLambda
-    events:
-      - http:
-          path: /{caseId}/case-deadline/{caseDeadlineId}
-          method: delete
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   associatePractitionerWithCase:
     handler: web-api/src/casesHandlers.associatePractitionerWithCaseLambda
     events:
@@ -497,66 +388,6 @@ functions:
       - http:
           path: /{caseId}/associate-respondent
           method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  createCaseNote:
-    handler: web-api/src/casesHandlers.createCaseNoteLambda
-    events:
-      - http:
-          path: /{caseId}/case-note
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getCaseNote:
-    handler: web-api/src/casesHandlers.getCaseNoteLambda
-    events:
-      - http:
-          path: /{caseId}/case-note
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updateCaseNote:
-    handler: web-api/src/casesHandlers.updateCaseNoteLambda
-    events:
-      - http:
-          path: /{caseId}/case-note
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  deleteCaseNote:
-    handler: web-api/src/casesHandlers.deleteCaseNoteLambda
-    events:
-      - http:
-          path: /{caseId}/case-note
-          method: delete
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getAllCaseDeadlines:
-    handler: web-api/src/casesHandlers.getAllCaseDeadlinesLambda
-    events:
-      - http:
-          path: /case-deadlines
-          method: get
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

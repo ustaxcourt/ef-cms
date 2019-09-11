@@ -464,7 +464,7 @@ Case.prototype.addDocument = function(document) {
       description: document.documentType,
       documentId: document.documentId,
       filedBy: document.filedBy,
-      filingDate: this.receivedAt || document.createdAt,
+      filingDate: document.receivedAt || document.createdAt,
       status: document.status,
     }),
   );
@@ -588,6 +588,14 @@ Case.prototype.recallFromIRSHoldingQueue = function() {
 
 Case.prototype.getDocumentById = function({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
+};
+
+/**
+ *
+ * @returns {boolean} whether to show case name for primary
+ */
+Case.prototype.getShowCaseNameForPrimary = function() {
+  return !(this.contactSecondary && this.contactSecondary.name);
 };
 
 /**

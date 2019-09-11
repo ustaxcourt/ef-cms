@@ -115,6 +115,9 @@ exports.getAuthHeader = event => {
   if ((event.queryStringParameters || {}).token) {
     return (event.queryStringParameters || {}).token;
   }
+  if ((event.query || {}).token) {
+    return (event.query || {}).token;
+  }
   if (authorizationHeader) {
     usernameTokenArray = authorizationHeader.split(' ');
     if (!usernameTokenArray || !usernameTokenArray[1]) {

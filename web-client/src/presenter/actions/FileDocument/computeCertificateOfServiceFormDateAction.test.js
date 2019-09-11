@@ -9,7 +9,7 @@ describe('computeCertificateOfServiceFormDateAction', () => {
       },
     });
 
-    expect(result.state.form.certificateOfServiceDate).toEqual(null);
+    expect(result.state.form.certificateOfServiceDate).toBeNull();
   });
 
   it('should set certificateOfServiceDate to YYYY-MM-DD if state.form has year, month, and day', async () => {

@@ -10,6 +10,7 @@ import { ScanBatchPreviewer } from './ScanBatchPreviewer';
 import { Text } from '../ustc-ui/Text/Text';
 import { TrialCityOptions } from './TrialCityOptions';
 import { connect } from '@cerebral/react';
+import { limitLength } from '../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
@@ -105,7 +106,7 @@ export const StartCaseInternal = connect(
                             onChange={e => {
                               updateFormValueSequence({
                                 key: e.target.name,
-                                value: e.target.value,
+                                value: limitLength(e.target.value, 2),
                               });
                             }}
                           />
@@ -127,7 +128,7 @@ export const StartCaseInternal = connect(
                             onChange={e => {
                               updateFormValueSequence({
                                 key: e.target.name,
-                                value: e.target.value,
+                                value: limitLength(e.target.value, 2),
                               });
                             }}
                           />
@@ -149,7 +150,7 @@ export const StartCaseInternal = connect(
                             onChange={e => {
                               updateFormValueSequence({
                                 key: e.target.name,
-                                value: e.target.value,
+                                value: limitLength(e.target.value, 4),
                               });
                             }}
                           />

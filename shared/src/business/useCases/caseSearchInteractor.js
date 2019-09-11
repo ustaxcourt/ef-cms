@@ -1,5 +1,3 @@
-const { Case } = require('../entities/cases/Case');
-
 /**
  * caseSearchInteractor
  *
@@ -7,7 +5,7 @@ const { Case } = require('../entities/cases/Case');
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.countryType the country type to search cases by (domestic/international)
  * @param {string} providers.petitionerName the name of the petitioner to search cases by
- * @param {string} providers.state the state of the petitioner to search cases by
+ * @param {string} providers.petitionerState the state of the petitioner to search cases by
  * @param {string} providers.yearFiledMax the max year filed to search cases by
  * @param {string} providers.yearFiledMin the min year filed to search cases by
  * @returns {object} the case data
@@ -16,7 +14,7 @@ exports.caseSearchInteractor = async ({
   applicationContext,
   countryType,
   petitionerName,
-  state,
+  petitionerState,
   yearFiledMax,
   yearFiledMin,
 }) => {
@@ -78,8 +76,8 @@ exports.caseSearchInteractor = async ({
       },
     });
   }
-  if (state) {
-    query.push({ match: { 'contactPrimary.state': state } });
+  if (petitionerState) {
+    query.push({ match: { 'contactPrimary.state': petitionerState } });
   }
   if (yearFiledMin || yearFiledMax) {
     query.push({
@@ -110,5 +108,6 @@ exports.caseSearchInteractor = async ({
       foundCases.push(hit['_source']);
     }
   }
-  return Case.validateRawCollection(foundCases, { applicationContext });
+
+  return foundCases;
 };

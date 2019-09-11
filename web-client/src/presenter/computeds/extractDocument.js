@@ -1,4 +1,3 @@
-import { formatDocument } from './formattedCaseDetail';
 import { formatWorkItem } from './formattedWorkQueue';
 import { state } from 'cerebral';
 
@@ -9,10 +8,9 @@ export const extractedDocument = (get, applicationContext) => {
     document => document.documentId === documentId,
   );
   if (!selectedDocument) return {};
-  const formattedDocument = formatDocument(
-    applicationContext,
-    selectedDocument,
-  );
+  const formattedDocument = applicationContext
+    .getUtilities()
+    .formatDocument(applicationContext, selectedDocument);
   formattedDocument.workItems = (formattedDocument.workItems || [])
     .filter(items => !items.completedAt)
     .map(items => formatWorkItem(applicationContext, items));

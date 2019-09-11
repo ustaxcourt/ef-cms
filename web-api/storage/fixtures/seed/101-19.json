@@ -199,6 +199,23 @@
   {
     "sk": "case-2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
-    "pk": "catalog"
+    "pk": "catalog",
+    "docketNumber": "101-19",
+    "docketNumberSuffix": "W",
+    "contactPrimary": {
+      "address3": "Architecto assumenda",
+      "address2": "Suscipit animi solu",
+      "city": "Aspernatur nostrum s",
+      "phone": "+1 (537) 235-6147",
+      "address1": "68 Fabien Freeway",
+      "postalCode": "89499",
+      "name": "Brett Osborne",
+      "state": "AS",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "yearFiled": "2019",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "filedDate": "2019-03-01T21:40:46.415Z"
   }
 ]
