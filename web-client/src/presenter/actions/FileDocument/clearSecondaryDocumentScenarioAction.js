@@ -7,5 +7,5 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object used for clearing secondaryDocument.scenario
  */
 export const clearSecondaryDocumentScenarioAction = ({ store }) => {
-  store.set(state.form.secondaryDocument.scenario, null);
+  store.unset(state.form.secondaryDocument.scenario);
 };

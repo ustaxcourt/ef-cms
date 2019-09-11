@@ -3,12 +3,69 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
 
 const ContactFactory = {};
 
 ContactFactory.COUNTRY_TYPES = {
   DOMESTIC: 'domestic',
   INTERNATIONAL: 'international',
+};
+
+ContactFactory.US_STATES = {
+  AK: 'Alaska',
+  AL: 'Alabama',
+  AR: 'Arkansas',
+  AZ: 'Arizona',
+  CA: 'California',
+  CO: 'Colorado',
+  CT: 'Connecticut',
+  DC: 'District of Columbia',
+  DE: 'Delaware',
+  FL: 'Florida',
+  GA: 'Georgia',
+  HI: 'Hawaii',
+  IA: 'Iowa',
+  ID: 'Idaho',
+  IL: 'Illinois',
+  IN: 'Indiana',
+  KS: 'Kansas',
+  KY: 'Kentucky',
+  LA: 'Louisiana',
+  MA: 'Massachusetts',
+  MD: 'Maryland',
+  ME: 'Maine',
+  MI: 'Michigan',
+  MN: 'Minnesota',
+  MO: 'Missouri',
+  MS: 'Mississippi',
+  MT: 'Montana',
+  NC: 'North Carolina',
+  ND: 'North Dakota',
+  NE: 'Nebraska',
+  NH: 'New Hampshire',
+  NJ: 'New Jersey',
+  NM: 'New Mexico',
+  NV: 'Nevada',
+  NY: 'New York',
+  OH: 'Ohio',
+  OK: 'Oklahoma',
+  OR: 'Oregon',
+  PA: 'Pennsylvania',
+  RI: 'Rhode Island',
+  SC: 'South Carolina',
+  SD: 'South Dakota',
+  TN: 'Tennessee',
+  TX: 'Texas',
+  UT: 'Utah',
+  VA: 'Virginia',
+  VT: 'Vermont',
+  WA: 'Washington',
+  WI: 'Wisconsin',
+  WV: 'West Virginia',
+  WY: 'Wyoming',
 };
 
 ContactFactory.PARTY_TYPES = {
@@ -102,10 +159,7 @@ const domesticValidationObject = {
     .string()
     .valid(ContactFactory.COUNTRY_TYPES.DOMESTIC)
     .required(),
-  postalCode: joi
-    .string()
-    .regex(/^\d{5}(-\d{4})?$/)
-    .required(),
+  postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
   state: joi.string().required(),
 };
 

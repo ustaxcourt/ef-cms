@@ -9,11 +9,16 @@ import {
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
 
+import { formatDocument } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
+
 let role = 'petitionsclerk';
 
 const documentDetailHelper = withAppContextDecorator(
   documentDetailHelperComputed,
   {
+    getConstants: () => ({
+      ORDER_TYPES_MAP: [],
+    }),
     getCurrentUser: () => ({
       role,
       userId: 'abc',
@@ -22,6 +27,7 @@ const documentDetailHelper = withAppContextDecorator(
       return {
         createISODateString,
         formatDateString,
+        formatDocument,
         prepareDateFromString,
       };
     },

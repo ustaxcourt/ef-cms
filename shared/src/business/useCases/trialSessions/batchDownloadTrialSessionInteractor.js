@@ -19,7 +19,6 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.batchDownloadTrialSessionInteractor = async ({
   applicationContext,
-  caseDetails,
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -49,10 +48,10 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
   const trialDate = formatDateString(
     trialSessionDetails.startDate,
-    'MMMM D, YYYY',
+    'MMMM_D_YYYY',
   );
   const { trialLocation } = trialSessionDetails;
-  const zipName = sanitize(`${trialDate} - ${trialLocation}.zip`)
+  let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
     .replace(/\s/g, '_')
     .replace(/,/g, '');
 
@@ -84,7 +83,10 @@ exports.batchDownloadTrialSessionInteractor = async ({
           'YYYY-MM-DD',
         );
         const docNum = padStart(`${aDocketRecord.index}`, 4, '0');
-        const pdfTitle = `${caseToBatch.caseFolder}/${docDate}_${docNum}_${aDocketRecord.description}.pdf`;
+        const fileName = sanitize(
+          `${docDate}_${docNum}_${aDocketRecord.description}.pdf`,
+        );
+        const pdfTitle = `${caseToBatch.caseFolder}/${fileName}`;
         s3Ids.push(myDoc.documentId);
         fileNames.push(pdfTitle);
       }
@@ -96,27 +98,25 @@ exports.batchDownloadTrialSessionInteractor = async ({
     extraFiles.push(
       await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
         applicationContext,
-        caseDetail: caseDetails[caseId],
+        caseId,
       }),
     );
-    extraFileNames.push(`${sessionCases[index].caseFolder}/Docket Record.pdf`);
+    extraFileNames.push(
+      `${sessionCases[index].caseFolder}/0_Docket Record.pdf`,
+    );
   }
 
-  await applicationContext.getPersistenceGateway().zipDocuments({
-    applicationContext,
-    extraFileNames,
-    extraFiles,
-    fileNames,
-    s3Ids,
-    zipName,
-  });
-
-  const results = await applicationContext
+  const zipBuffer = await applicationContext
     .getPersistenceGateway()
-    .getDownloadPolicyUrl({
+    .zipDocuments({
       applicationContext,
-      documentId: zipName,
+      extraFileNames,
+      extraFiles,
+      fileNames,
+      returnBuffer: true,
+      s3Ids,
+      zipName,
     });
 
-  return results;
+  return { zipBuffer, zipName };
 };

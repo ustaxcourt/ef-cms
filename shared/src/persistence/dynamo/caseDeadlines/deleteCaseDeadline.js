@@ -42,7 +42,7 @@ exports.deleteCaseDeadline = async ({
     await client.delete({
       applicationContext,
       key: {
-        pk: `case-deadline-catalog`,
+        pk: 'case-deadline-catalog',
         sk: fullCaseDeadlineId,
       },
     }),

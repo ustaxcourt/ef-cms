@@ -1,8 +1,5 @@
 const createApplicationContext = require('../applicationContext');
-const {
-  getUserFromAuthHeader,
-  handle,
-} = require('../middleware/apiGatewayHelper');
+const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 
 /**
  * batch download trial session
@@ -10,22 +7,25 @@ const {
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.handler = event =>
-  handle(event, async () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
-    try {
-      const results = await applicationContext
-        .getUseCases()
-        .batchDownloadTrialSessionInteractor({
-          applicationContext,
-          ...JSON.parse(event.body),
-        });
-      applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Results', results);
-      return results;
-    } catch (e) {
-      applicationContext.logger.error(e);
-      throw e;
-    }
-  });
+exports.handler = async event => {
+  const user = getUserFromAuthHeader(event);
+  const applicationContext = createApplicationContext(user);
+  try {
+    const { trialSessionId } = event.path || {};
+    const {
+      zipBuffer,
+      zipName,
+    } = await applicationContext
+      .getUseCases()
+      .batchDownloadTrialSessionInteractor({
+        applicationContext,
+        trialSessionId,
+      });
+    applicationContext.logger.info('User', user);
+    applicationContext.logger.info('Results', zipName);
+    return zipBuffer.toString('base64');
+  } catch (e) {
+    applicationContext.logger.error(e);
+    throw e;
+  }
+};

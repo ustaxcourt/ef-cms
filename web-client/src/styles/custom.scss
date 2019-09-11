@@ -15,6 +15,10 @@ hr {
   margin: 20px 0;
 }
 
+.hide {
+  display: none;
+}
+
 .grid-row {
   &.underlined {
     border-bottom: 1px solid color($theme-color-base-lighter);
@@ -1232,7 +1236,7 @@ hr.lighter {
 }
 
 .pdf-preview-btn {
-  line-height: 1.1rem;
+  line-height: 1.4rem;
   word-break: break-all;
 }
 
@@ -1335,4 +1339,14 @@ button.change-scanner-button {
 
 .minw-30 {
   min-width: 15rem;
+}
+
+.advanced-search {
+  .right-gray-border {
+    border-right: 1px solid color($theme-color-base-light);
+  }
+
+  .advanced-search__button {
+    margin-top: 39px;
+  }
 }

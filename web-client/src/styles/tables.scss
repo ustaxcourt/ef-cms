@@ -16,7 +16,8 @@ table,
   }
 
   td {
-    padding: 15px 20px;
+    padding-top: 18px;
+    padding-bottom: 15px;
     background-color: transparent;
     vertical-align: top;
   }
@@ -579,5 +580,11 @@ table.case-list tbody tr:nth-child(even) td {
 
   .overdue {
     color: color($theme-color-secondary);
+  }
+}
+
+.draft-documents {
+  .smaller-column {
+    width: 130px;
   }
 }

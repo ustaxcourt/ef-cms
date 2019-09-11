@@ -12,6 +12,7 @@ import React from 'react';
 export const CreateOrder = connect(
   {
     convertHtml2PdfSequence: sequences.convertHtml2PdfSequence,
+    createOrderHelper: state.createOrderHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
@@ -22,6 +23,7 @@ export const CreateOrder = connect(
   },
   ({
     convertHtml2PdfSequence,
+    createOrderHelper,
     form,
     formCancelToggleCancelSequence,
     pdfPreviewUrl,
@@ -30,6 +32,8 @@ export const CreateOrder = connect(
     updateFormValueSequence,
     updateScreenMetadataSequence,
   }) => {
+    const { isEditing, pageTitle } = createOrderHelper;
+
     return (
       <>
         <CaseDetailHeader />
@@ -43,7 +47,7 @@ export const CreateOrder = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-8">
-                <h2 className="heading-1">Create Order</h2>
+                <h2 className="heading-1">{pageTitle}</h2>
               </div>
               <div className="grid-col-3">
                 <h2 className="heading-1">Quick Preview</h2>
@@ -64,6 +68,7 @@ export const CreateOrder = connect(
             <div className="grid-row grid-gap">
               <div className="grid-col-8">
                 <TextEditor
+                  defaultValue={isEditing ? form.richText : ''}
                   form={form}
                   updateFormValueSequence={updateFormValueSequence}
                   updateScreenMetadataSequence={updateScreenMetadataSequence}
@@ -83,7 +88,7 @@ export const CreateOrder = connect(
                     submitCourtIssuedOrderSequence();
                   }}
                 >
-                  Complete Order
+                  Save Order
                 </button>
                 <button
                   className="usa-button usa-button--unstyled margin-left-2"
