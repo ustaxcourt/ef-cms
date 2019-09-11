@@ -4,7 +4,8 @@ import { state } from 'cerebral';
  * change path based on if editing an order or creating a new one
  *
  * @param {object} providers the providers object
- * @param {object} providers.path the cerebral path used for setting state.submitting
+ * @param {object} providers.path the cerebral path to take depending on if documentToEdit was set or not
+ * @param {object} providers.get the cerebral get method used for getting state
  * @returns the path to take, either yes or no
  */
 export const isEditingOrderAction = ({ get, path }) => {
