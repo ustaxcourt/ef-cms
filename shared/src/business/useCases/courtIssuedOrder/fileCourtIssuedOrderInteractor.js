@@ -50,7 +50,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
     },
     { applicationContext },
   );
-  documentEntity.processingStatus = 'complete';
+  documentEntity.setAsProcessingStatusAsCompleted();
 
   caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 

@@ -541,7 +541,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
     pdfData,
   });
 
-  documentEntity.processingStatus = 'complete';
+  documentEntity.setAsProcessingStatusAsCompleted();
 
   applicationContext.logger.time('Updating Document Status');
   await applicationContext

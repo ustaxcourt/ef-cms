@@ -273,4 +273,8 @@ Document.prototype.setSigned = function(signByUserId) {
   this.signedAt = createISODateString();
 };
 
+Document.prototype.setAsProcessingStatusAsCompleted = function() {
+  this.processingStatus = 'complete';
+};
+
 exports.Document = Document;
