@@ -40,32 +40,18 @@ exports.caseSearchInteractor = async ({
     });
 
   for (let caseRecord of caseCatalog) {
-    const { caseId } = caseRecord;
-    const caseDetail = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByCaseId({
-        applicationContext,
-        caseId,
-      });
-
-    const yearFiled = '20' + caseDetail.docketNumber.split('-')[1];
-
     console.log('indexing');
     await applicationContext.getSearchClient().index({
       body: {
-        ...caseDetail,
-        yearFiled,
+        ...caseRecord,
       },
-      id: caseDetail.caseId,
+      id: caseRecord.caseId,
       index: 'cases',
     });
   }*/
 
   const query = [];
 
-  if (countryType) {
-    query.push({ match: { 'contactPrimary.countryType': countryType } });
-  }
   if (petitionerName) {
     query.push({
       bool: {
@@ -76,8 +62,25 @@ exports.caseSearchInteractor = async ({
       },
     });
   }
+  if (countryType) {
+    query.push({
+      bool: {
+        should: [
+          { match: { 'contactPrimary.countryType': countryType } },
+          { match: { 'contactSecondary.countryType': countryType } },
+        ],
+      },
+    });
+  }
   if (petitionerState) {
-    query.push({ match: { 'contactPrimary.state': petitionerState } });
+    query.push({
+      bool: {
+        should: [
+          { match: { 'contactPrimary.state': petitionerState } },
+          { match: { 'contactSecondary.state': petitionerState } },
+        ],
+      },
+    });
   }
   if (yearFiledMin || yearFiledMax) {
     query.push({
@@ -90,6 +93,8 @@ exports.caseSearchInteractor = async ({
       },
     });
   }
+
+  console.log(JSON.stringify(query));
 
   const { body } = await applicationContext.getSearchClient().search({
     body: {
