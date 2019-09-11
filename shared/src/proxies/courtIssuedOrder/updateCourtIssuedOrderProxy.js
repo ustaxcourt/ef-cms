@@ -1,7 +1,7 @@
-const { post } = require('../requests');
+const { put } = require('../requests');
 
 /**
- * fileCourtIssuedOrderProxy
+ * updateCourtIssuedOrderProxy
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,18 +9,17 @@ const { post } = require('../requests');
  * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileCourtIssuedOrderInteractor = ({
+exports.updateCourtIssuedOrderInteractor = ({
   applicationContext,
+  documentIdToEdit,
   documentMetadata,
-  primaryDocumentFileId,
 }) => {
   const { caseId } = documentMetadata;
-  return post({
+  return put({
     applicationContext,
     body: {
       documentMetadata,
-      primaryDocumentFileId,
     },
-    endpoint: `/cases/${caseId}/court-issued-order`,
+    endpoint: `/cases/${caseId}/court-issued-orders/${documentIdToEdit}`,
   });
 };
