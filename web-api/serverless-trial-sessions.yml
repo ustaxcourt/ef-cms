@@ -307,11 +307,6 @@ functions:
           method: get
           path: /{trialSessionId}/batch-download
           response:
-            statusCodes:
-              200:
-                pattern: '' # Default response method
-                headers:
-                  Content-Type: "'application/zip'"
-                  Content-Disposition: "'attachment; filename=your-batch.zip'"
-                  Cache-Control: "'max-age=120'"
-                  Access-Control-Allow-Origin: "'*'"
+            headers:
+              Content-Type: "'application/zip'"
+              Content-Disposition: "'attachment; filename=your-batch.zip'"
