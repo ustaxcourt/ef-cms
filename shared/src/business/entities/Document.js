@@ -203,7 +203,6 @@ Document.prototype.addWorkItem = function(workItem) {
 /**
  * sets the document as archived (used to hide from the ui)
  *
- * @param {WorkItem} workItem the work item to add to the document
  */
 Document.prototype.archive = function() {
   this.archived = true;
