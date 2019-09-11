@@ -9,10 +9,10 @@ import { state } from 'cerebral';
  * @param {Promise<*>} the redirect path
  */
 export const getEditDocumentEntryPointAction = async ({ get, path, store }) => {
-  const editDocumentEntryPointAction =
+  const editDocumentEntryPoint =
     get(state.editDocumentEntryPoint) || 'DocumentDetail';
 
   store.unset(state.editDocumentEntryPoint);
 
-  return path[editDocumentEntryPointAction]();
+  return path[editDocumentEntryPoint]();
 };
