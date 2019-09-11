@@ -98,10 +98,13 @@ s3Zip.archiveStream = function(stream, filesS3, filesZip, extras, extrasZip) {
     })
     .on('end', function() {
       self.debug && console.log('end -> finalize');
-      extraFilesPromisesAll.finally(() => {
-        self.debug && console.log('promise.all -> finalize');
-        archive.finalize();
-      });
+      extraFilesPromisesAll
+        .then(() => {})
+        .catch(() => {})
+        .then(() => {
+          self.debug && console.log('promise.all -> finalize');
+          archive.finalize();
+        });
     })
     .on('error', function(err) {
       archive.emit('error', err);
