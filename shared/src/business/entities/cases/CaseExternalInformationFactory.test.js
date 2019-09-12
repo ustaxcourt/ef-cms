@@ -304,7 +304,7 @@ describe('CaseExternalInformationFactory entity', () => {
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         contactPrimary: {
-          address1: 'Address is a required field.',
+          address1: 'Enter mailing address',
           city: 'City is a required field.',
           countryType: 'Country Type is a required field.',
           name: 'Name is a required field.',
@@ -411,7 +411,7 @@ describe('CaseExternalInformationFactory entity', () => {
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         caseType: 'Select a case type',
         contactPrimary: {
-          address1: 'Address is a required field.',
+          address1: 'Enter mailing address,
           city: 'City is a required field.',
           countryType: 'Country Type is a required field.',
           name: 'Name is a required field.',
@@ -420,7 +420,7 @@ describe('CaseExternalInformationFactory entity', () => {
           state: 'State is a required field.',
         },
         contactSecondary: {
-          address1: 'Address is a required field.',
+          address1: 'Enter mailing address',
           city: 'City is a required field.',
           countryType: 'Country Type is a required field.',
           name: 'Name is a required field.',
