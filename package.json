@@ -20,7 +20,7 @@
     "artillery": "^1.6.0-28",
     "artillery-plugin-fuzzer": "^1.0.1",
     "autoprefixer": "^9.6.1",
-    "aws-sdk": "^2.526.0",
+    "aws-sdk": "^2.527.0",
     "aws-sdk-mock": "^4.5.0",
     "aws-xray-sdk": "^2.3.6",
     "axios": "^0.19.0",
