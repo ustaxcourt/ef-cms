@@ -424,7 +424,7 @@ describe('CaseExternalInformationFactory entity', () => {
           city: 'Enter city',
           countryType: 'Country Type is a required field.',
           name: 'Name is a required field.',
-          phone: 'Phone is a required field.',
+          phone: 'Enter phone number',
           postalCode: 'Enter zip code',
           state: 'Enter state',
         },
