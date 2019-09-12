@@ -23,7 +23,13 @@ exports.handler = async event => {
       });
     applicationContext.logger.info('User', user);
     applicationContext.logger.info('Results', zipName);
-    return zipBuffer.toString('base64');
+    return {
+      body: zipBuffer.toString('base64'),
+      headers: {
+        'Content-Disposition': `attachment; filename=${zipName}`,
+        'Content-Type': 'application/zip',
+      },
+    };
   } catch (e) {
     applicationContext.logger.error(e);
     throw e;
