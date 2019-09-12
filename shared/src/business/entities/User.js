@@ -87,7 +87,7 @@ const userValidation = {
 
 const validationErrorMap = {
   address1: 'Enter mailing address',
-  city: 'City is a required field.',
+  city: 'Enter city',
   country: 'Country is a required field.',
   countryType: 'Country Type is a required field.',
   name: 'Name is a required field.',
