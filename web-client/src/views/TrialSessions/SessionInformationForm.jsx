@@ -129,7 +129,6 @@ export const SessionInformationForm = connect(
                       max="12"
                       min="1"
                       name="startTimeHours"
-                      placeholder="10"
                       type="number"
                       value={form.startTimeHours || ''}
                       onChange={e => {
@@ -149,7 +148,6 @@ export const SessionInformationForm = connect(
                       max="59"
                       min="0"
                       name="startTimeMinutes"
-                      placeholder="00"
                       type="number"
                       value={form.startTimeMinutes || ''}
                       onChange={e => {

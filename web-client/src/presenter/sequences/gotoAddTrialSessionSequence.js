@@ -22,6 +22,8 @@ const gotoAddTrialSession = [
   getUsersInSectionAction({ section: 'judge' }),
   setUsersAction,
   set(state.form.startTimeExtension, 'am'),
+  set(state.form.startTimeHours, '10'),
+  set(state.form.startTimeMinutes, '00'),
   setCurrentPageAction('AddTrialSession'),
 ];
 
