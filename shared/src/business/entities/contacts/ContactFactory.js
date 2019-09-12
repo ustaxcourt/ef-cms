@@ -123,7 +123,7 @@ const domesticErrorToMessageMap = {
   city: 'Enter city,
   countryType: 'Country Type is a required field.',
   name: 'Name is a required field.',
-  phone: 'Phone is a required field.',
+  phone: 'Enter phone number',
   postalCode: [
     {
       contains: 'match',
@@ -140,7 +140,7 @@ const internationalErrorToMessageMap = {
   country: 'Country is a required field.',
   countryType: 'Country Type is a required field.',
   name: 'Name is a required field.',
-  phone: 'Phone is a required field.',
+  phone: 'Enter phone number',
   postalCode: 'Postal Code is a required field.',
   state: 'State/Province/Region is a required field.',
 };
