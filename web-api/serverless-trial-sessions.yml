@@ -310,4 +310,5 @@ functions:
             headers:
               Content-Type: 'integration.response.body.headers.Content-Type'
               Content-Disposition: 'integration.response.body.headers.Content-Disposition'
-            template: $input.path('$.body')
+            template:
+              application/json: $input.path('$.body')
