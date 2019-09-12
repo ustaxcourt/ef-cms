@@ -95,7 +95,7 @@ const validationErrorMap = {
   postalCode: [
     {
       contains: 'match',
-      message: 'Please enter a valid zip code',
+      message: 'Enter zip code',
     },
     'Enter zip code',
   ],
