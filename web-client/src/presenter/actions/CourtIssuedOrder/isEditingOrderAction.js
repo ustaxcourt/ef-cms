@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.path the cerebral path to take depending on if documentToEdit was set or not
  * @param {object} providers.get the cerebral get method used for getting state
- * @returns the path to take, either yes or no
+ * @returns {object} path to take, either yes or no
  */
 export const isEditingOrderAction = ({ get, path }) => {
   const documentToEdit = get(state.documentToEdit);
