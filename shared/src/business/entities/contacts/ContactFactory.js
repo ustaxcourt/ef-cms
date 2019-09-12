@@ -122,7 +122,7 @@ const domesticErrorToMessageMap = {
   address1: 'Enter mailing address',
   city: 'Enter city,
   countryType: 'Country Type is a required field.',
-  name: 'Name is a required field.',
+  name: 'Enter name',
   phone: 'Enter phone number',
   postalCode: [
     {
@@ -139,7 +139,7 @@ const internationalErrorToMessageMap = {
   city: 'Enter city',
   country: 'Country is a required field.',
   countryType: 'Country Type is a required field.',
-  name: 'Name is a required field.',
+  name: 'Enter name',
   phone: 'Enter phone number',
   postalCode: 'Enter zip code',
   state: 'Enter state/province/region',

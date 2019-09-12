@@ -90,7 +90,7 @@ const validationErrorMap = {
   city: 'Enter city',
   country: 'Country is a required field.',
   countryType: 'Country Type is a required field.',
-  name: 'Name is a required field.',
+  name: 'Enter name',
   phone: 'Enter phone number',
   postalCode: [
     {
