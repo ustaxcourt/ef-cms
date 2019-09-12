@@ -16,9 +16,8 @@ export const submitCourtIssuedOrderAction = async ({
 }) => {
   let caseDetail;
   const { caseId, docketNumber } = get(state.caseDetail);
-  const { primaryDocumentFileId } = props;
-  const documentId = primaryDocumentFileId;
-  const formData = { ...get(state.form) };
+  const { primaryDocumentFileId: documentId } = props;
+  const formData = get(state.form);
   const { documentIdToEdit } = formData;
 
   let documentMetadata = omit(formData, [
@@ -34,31 +33,38 @@ export const submitCourtIssuedOrderAction = async ({
 
   documentMetadata.draftState = { ...documentMetadata };
 
-  if (primaryDocumentFileId) {
-    await applicationContext.getUseCases().virusScanPdfInteractor({
-      applicationContext,
-      documentId,
-    });
+  await applicationContext.getUseCases().virusScanPdfInteractor({
+    applicationContext,
+    documentId,
+  });
 
-    await applicationContext.getUseCases().validatePdfInteractor({
-      applicationContext,
-      documentId,
-    });
+  await applicationContext.getUseCases().validatePdfInteractor({
+    applicationContext,
+    documentId,
+  });
 
-    // TODO: ghostscript is causing problems with fonts on generated orders
-    // - this will be resolved in a cleanup issue later
-    /*await applicationContext.getUseCases().sanitizePdfInteractor({
+  // TODO: ghostscript is causing problems with fonts on generated orders
+  // - this will be resolved in a cleanup issue later
+  /*await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
       documentId,
     });*/
 
+  if (documentIdToEdit) {
+    caseDetail = await applicationContext
+      .getUseCases()
+      .updateCourtIssuedOrderInteractor({
+        applicationContext,
+        documentIdToEdit,
+        documentMetadata,
+      });
+  } else {
     caseDetail = await applicationContext
       .getUseCases()
       .fileCourtIssuedOrderInteractor({
         applicationContext,
-        documentIdToEdit,
         documentMetadata,
-        primaryDocumentFileId,
+        primaryDocumentFileId: documentId,
       });
   }
 

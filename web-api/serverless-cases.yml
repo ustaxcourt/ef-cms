@@ -318,6 +318,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  updateCourtIssuedOrder:
+    handler: web-api/src/casesHandlers.updateCourtIssuedOrderToCaseLambda
+    events:
+      - http:
+          path: /{caseId}/court-issued-orders/{documentId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getCase:
     handler: web-api/src/casesHandlers.getCaseLambda
     events:
