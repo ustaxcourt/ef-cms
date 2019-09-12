@@ -25,6 +25,7 @@ const AUTHORIZATION_MAP = {
     exports.ASSOCIATE_USER_WITH_CASE,
     exports.CASE_DEADLINE,
     exports.CASE_METADATA,
+    exports.CREATE_COURT_ISSUED_ORDER,
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.GET_CASE,
     exports.GET_CASES_BY_DOCUMENT_ID,
@@ -43,6 +44,7 @@ const AUTHORIZATION_MAP = {
     exports.ASSOCIATE_USER_WITH_CASE,
     exports.CASE_DEADLINE,
     exports.CASE_METADATA,
+    exports.CREATE_COURT_ISSUED_ORDER,
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.GET_CASE,
     exports.GET_CASES_BY_DOCUMENT_ID,
@@ -92,6 +94,7 @@ const AUTHORIZATION_MAP = {
   seniorattorney: [
     exports.ASSOCIATE_USER_WITH_CASE,
     exports.CASE_METADATA,
+    exports.CREATE_COURT_ISSUED_ORDER,
     exports.GET_CASE,
     exports.GET_CASES_BY_DOCUMENT_ID,
     exports.GET_READ_MESSAGES,
