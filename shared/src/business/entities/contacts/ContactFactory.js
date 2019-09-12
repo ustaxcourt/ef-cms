@@ -142,7 +142,6 @@ const internationalErrorToMessageMap = {
   name: 'Name is a required field.',
   phone: 'Phone is a required field.',
   postalCode: 'Postal Code is a required field.',
-  state: 'State/Province/Region is a required field.',
 };
 
 const commonValidationRequirements = {
@@ -171,7 +170,6 @@ const internationalValidationObject = {
     .valid(ContactFactory.COUNTRY_TYPES.INTERNATIONAL)
     .required(),
   postalCode: joi.string().required(),
-  state: joi.string().optional(),
 };
 
 /**
