@@ -85,6 +85,7 @@ import { loadOriginalProposedStipulatedDecisionSequence } from './sequences/load
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
+import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
@@ -342,6 +343,7 @@ export const presenter = {
     loadPdfSequence,
     loginWithCodeSequence,
     loginWithTokenSequence,
+    navigateBackSequence,
     navigateToCaseDetailSequence,
     navigateToPathSequence,
     notFoundErrorSequence,
