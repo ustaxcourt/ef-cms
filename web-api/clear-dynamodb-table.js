@@ -1,7 +1,15 @@
 const AWS = require('aws-sdk');
 const { chunk } = require('lodash');
 const args = process.argv.slice(2);
-const env = args.length ? args[0] : 'dev';
+
+// TODO: make this script loop through all records properly
+
+if (args.length < 1) {
+  console.error('must provide an environment to clear');
+  process.exit(1);
+}
+
+const env = args[0];
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
