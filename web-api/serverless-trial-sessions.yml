@@ -305,10 +305,7 @@ functions:
           cors: true
           integration: lambda
           method: get
-          path: /{trialSessionId}/batch-download
+          path: /{trialSessionId}/batch-download/{zipName}
           response:
             headers:
-              Content-Type: 'integration.response.body.headers.Content-Type'
-              Content-Disposition: 'integration.response.body.headers.Content-Disposition'
-            template:
-              application/json: $input.path('$.body')
+              Content-Type: "'application/zip'"
