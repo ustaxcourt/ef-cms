@@ -133,7 +133,7 @@ Case.COMMON_ERROR_MESSAGES = {
     },
     'Your Request for Place of Trial file size is empty',
   ],
-  stinFile: 'Upload a Statement of Taxpayer Identification',
+  stinFile: 'Upload a statement of taxpayer identification',
   stinFileSize: [
     {
       contains: 'must be less than or equal to',
