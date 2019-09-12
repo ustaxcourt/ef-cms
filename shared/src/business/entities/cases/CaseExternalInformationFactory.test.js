@@ -310,7 +310,7 @@ describe('CaseExternalInformationFactory entity', () => {
           name: 'Name is a required field.',
           phone: 'Enter phone number',
           postalCode: 'Enter zip code',
-          state: 'State is a required field.',
+          state: 'Enter state',
         },
       });
     });
@@ -417,7 +417,7 @@ describe('CaseExternalInformationFactory entity', () => {
           name: 'Name is a required field.',
           phone: 'Enter phone number',
           postalCode: 'Enter zip code',
-          state: 'State is a required field.',
+          state: 'Enter state',
         },
         contactSecondary: {
           address1: 'Enter mailing address',
@@ -426,7 +426,7 @@ describe('CaseExternalInformationFactory entity', () => {
           name: 'Name is a required field.',
           phone: 'Phone is a required field.',
           postalCode: 'Enter zip code',
-          state: 'State is a required field.',
+          state: 'Enter state',
         },
         petitionFileSize: 'Your Petition file size is empty',
         preferredTrialCity: 'Select a preferred trial location',

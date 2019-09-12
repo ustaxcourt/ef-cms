@@ -131,7 +131,7 @@ const domesticErrorToMessageMap = {
     },
     'Enter zip code',
   ],
-  state: 'State is a required field.',
+  state: 'Enter state',
 };
 
 const internationalErrorToMessageMap = {
@@ -142,7 +142,7 @@ const internationalErrorToMessageMap = {
   name: 'Name is a required field.',
   phone: 'Enter phone number',
   postalCode: 'Enter zip code',
-  state: 'State/Province/Region is a required field.',
+  state: 'Enter state/province/region',
 };
 
 const commonValidationRequirements = {

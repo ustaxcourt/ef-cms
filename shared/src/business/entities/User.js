@@ -99,7 +99,7 @@ const validationErrorMap = {
     },
     'Enter zip code',
   ],
-  state: 'State is a required field.',
+  state: 'Enter state',
 };
 
 /**
