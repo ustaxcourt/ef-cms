@@ -129,7 +129,7 @@ const domesticErrorToMessageMap = {
       contains: 'match',
       message: 'Please enter a valid zip code.',
     },
-    'Zip Code is a required field.',
+    'Enter zip code',
   ],
   state: 'State is a required field.',
 };
@@ -141,7 +141,7 @@ const internationalErrorToMessageMap = {
   countryType: 'Country Type is a required field.',
   name: 'Name is a required field.',
   phone: 'Enter phone number',
-  postalCode: 'Postal Code is a required field.',
+  postalCode: 'Enter zip code',
   state: 'State/Province/Region is a required field.',
 };
 
