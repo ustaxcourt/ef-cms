@@ -97,7 +97,7 @@ const validationErrorMap = {
       contains: 'match',
       message: 'Please enter a valid zip code.',
     },
-    'Zip Code is a required field.',
+    'Enter zip code',
   ],
   state: 'State is a required field.',
 };
