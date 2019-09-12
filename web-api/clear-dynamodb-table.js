@@ -1,5 +1,7 @@
 const AWS = require('aws-sdk');
 const { chunk } = require('lodash');
+const args = process.argv.slice(2);
+const env = args.length ? args[0] : 'dev';
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
@@ -8,7 +10,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 
 documentClient
   .scan({
-    TableName: 'efcms-dev',
+    TableName: `efcms-${env}`,
   })
   .promise()
   .then(async documents => {
@@ -20,7 +22,7 @@ documentClient
       await documentClient
         .batchWrite({
           RequestItems: {
-            'efcms-dev': c.map(item => ({
+            [`efcms-${env}`]: c.map(item => ({
               DeleteRequest: {
                 Key: {
                   pk: item.pk,
