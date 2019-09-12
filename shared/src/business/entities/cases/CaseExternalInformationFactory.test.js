@@ -21,7 +21,7 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '1',
       });
       expect(caseExternal.getFormattedValidationErrors().stinFile).toEqual(
-        'Upload a Statement of Taxpayer Identification',
+        'Upload a statement of taxpayer identification',
       );
     });
 
@@ -88,7 +88,7 @@ describe('CaseExternalInformationFactory entity', () => {
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         hasIrsNotice: 'Indicate whether you received an IRS notice',
         petitionFile: 'Upload a Petition',
-        stinFile: 'Upload a Statement of Taxpayer Identification',
+        stinFile: 'Upload a statement of taxpayer identification',
       });
 
       caseExternal = new CaseExternalInformationFactory({
@@ -222,7 +222,7 @@ describe('CaseExternalInformationFactory entity', () => {
         hasIrsNotice: 'Indicate whether you received an IRS notice',
         partyType: 'Select a party type',
         petitionFile: 'Upload a Petition',
-        stinFile: 'Upload a Statement of Taxpayer Identification',
+        stinFile: 'Upload a statement of taxpayer identification',
       });
 
       caseExternal = new CaseExternalInformationFactory({
@@ -397,7 +397,7 @@ describe('CaseExternalInformationFactory entity', () => {
         petitionFile: 'Upload a Petition',
         preferredTrialCity: 'Select a preferred trial location',
         procedureType: 'Select a case procedure',
-        stinFile: 'Upload a Statement of Taxpayer Identification',
+        stinFile: 'Upload a statement of taxpayer identification',
       });
 
       caseExternal = new CaseExternalInformationFactory({
