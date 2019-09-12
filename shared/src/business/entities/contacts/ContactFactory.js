@@ -121,7 +121,7 @@ ContactFactory.OTHER_TYPES = {
 const domesticErrorToMessageMap = {
   address1: 'Enter mailing address',
   city: 'Enter city,
-  countryType: 'Country Type is a required field.',
+  countryType: 'Enter country type',
   name: 'Enter name',
   phone: 'Enter phone number',
   postalCode: [
@@ -138,7 +138,7 @@ const internationalErrorToMessageMap = {
   address1: 'Enter mailing address',
   city: 'Enter city',
   country: 'Entry a country',
-  countryType: 'Country Type is a required field.',
+  countryType: 'Enter country type',
   name: 'Enter name',
   phone: 'Enter phone number',
   postalCode: 'Enter zip code',
