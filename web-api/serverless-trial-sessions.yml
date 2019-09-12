@@ -308,5 +308,6 @@ functions:
           path: /{trialSessionId}/batch-download
           response:
             headers:
-              Content-Type: "'application/zip'"
-              Content-Disposition: "'attachment; filename=your-batch.zip'"
+              Content-Type: 'integration.response.body.headers.Content-Type'
+              Content-Disposition: 'integration.response.body.headers.Content-Disposition'
+            template: $input.path('$.body')
