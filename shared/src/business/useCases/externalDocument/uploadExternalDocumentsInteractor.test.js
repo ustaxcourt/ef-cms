@@ -36,8 +36,8 @@ describe('uploadExternalDocumentsInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'seniorattorney',
-          userId: 'seniorattorney',
+          role: 'admin',
+          userId: 'admin',
         };
       },
       getPersistenceGateway: () => ({

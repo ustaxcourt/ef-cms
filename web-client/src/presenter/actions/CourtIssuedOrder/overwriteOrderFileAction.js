@@ -5,14 +5,17 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @returns {object} the next path based on if validation was successful or error
+ * @param {object} providers.path the cerebral path to take depending on if the file was uploaded successfully or not
+ * @param {object} providers.get the cerebral get method used for getting state
+ * @returns {object} the next path based on if the file was successfully uploaded or not
  */
-export const uploadOrderFileAction = async ({
+export const overwriteOrderFileAction = async ({
   applicationContext,
   get,
   path,
 }) => {
   const { primaryDocumentFile } = get(state.form);
+  const documentToEdit = get(state.documentToEdit);
 
   try {
     const primaryDocumentFileId = await applicationContext
@@ -20,6 +23,7 @@ export const uploadOrderFileAction = async ({
       .uploadOrderDocumentInteractor({
         applicationContext,
         documentFile: primaryDocumentFile,
+        documentIdToOverwrite: documentToEdit.documentId,
       });
 
     return path.success({

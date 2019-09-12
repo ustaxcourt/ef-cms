@@ -326,6 +326,11 @@ workflows:
       - deploy-ui
       - deploy-api-west
       - deploy-api-east
+      - post-deploy:
+          requires:
+            - deploy-ui
+            - deploy-api-west
+            - deploy-api-east
     triggers:
       - schedule:
           cron: '0 12-23 * * 1-5'

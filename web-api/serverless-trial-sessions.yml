@@ -310,4 +310,3 @@ functions:
             headers:
               Content-Type: "'application/zip'"
               Content-Disposition: "'attachment; filename=your-batch.zip'"
-              Cache-Control: "'max-age=120'"
