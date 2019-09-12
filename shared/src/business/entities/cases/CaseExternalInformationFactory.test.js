@@ -306,7 +306,7 @@ describe('CaseExternalInformationFactory entity', () => {
         contactPrimary: {
           address1: 'Enter mailing address',
           city: 'Enter city',
-          countryType: 'Country Type is a required field.',
+          countryType: 'Enter country type',
           name: 'Enter name',
           phone: 'Enter phone number',
           postalCode: 'Enter zip code',
@@ -413,7 +413,7 @@ describe('CaseExternalInformationFactory entity', () => {
         contactPrimary: {
           address1: 'Enter mailing address,'
           city: 'Enter city',
-          countryType: 'Country Type is a required field.',
+          countryType: 'Enter country type',
           name: 'Enter name',
           phone: 'Enter phone number',
           postalCode: 'Enter zip code',
@@ -422,7 +422,7 @@ describe('CaseExternalInformationFactory entity', () => {
         contactSecondary: {
           address1: 'Enter mailing address',
           city: 'Enter city',
-          countryType: 'Country Type is a required field.',
+          countryType: 'Enter country type',
           name: 'Enter name',
           phone: 'Enter phone number',
           postalCode: 'Enter zip code',

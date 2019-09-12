@@ -89,13 +89,13 @@ const validationErrorMap = {
   address1: 'Enter mailing address',
   city: 'Enter city',
   country: 'Enter a country',
-  countryType: 'Country Type is a required field.',
+  countryType: 'Enter country type',
   name: 'Enter name',
   phone: 'Enter phone number',
   postalCode: [
     {
       contains: 'match',
-      message: 'Please enter a valid zip code.',
+      message: 'Please enter a valid zip code',
     },
     'Enter zip code',
   ],
