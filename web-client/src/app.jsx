@@ -2,6 +2,7 @@ import { AppComponent } from './views/AppComponent';
 import { Container } from '@cerebral/react';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import {
+  back,
   createObjectURL,
   externalRoute,
   openInNewTab,
@@ -179,6 +180,7 @@ const app = {
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
+      back,
       createObjectURL,
       externalRoute,
       openInNewTab,
