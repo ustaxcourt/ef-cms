@@ -8,8 +8,8 @@ exports.getPetitionerEstateWithExecutorPrimaryContact = ContactFactory.createCon
   {
     additionalErrorMappings: {
       secondaryName:
-        'Name of Executor/Personal Representative is a required field.',
-      title: 'Title is a required field.',
+        'Enter name of executor/personal representative',
+      title: 'Enter title',
     },
     additionalValidation: {
       secondaryName: joi.string().required(),
