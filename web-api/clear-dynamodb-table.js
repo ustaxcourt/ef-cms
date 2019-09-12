@@ -1,5 +1,15 @@
 const AWS = require('aws-sdk');
 const { chunk } = require('lodash');
+const args = process.argv.slice(2);
+
+// TODO: make this script loop through all records properly
+
+if (args.length < 1) {
+  console.error('must provide an environment to clear');
+  process.exit(1);
+}
+
+const env = args[0];
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'dynamodb.us-east-1.amazonaws.com',
@@ -8,7 +18,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 
 documentClient
   .scan({
-    TableName: 'efcms-dev',
+    TableName: `efcms-${env}`,
   })
   .promise()
   .then(async documents => {
@@ -20,7 +30,7 @@ documentClient
       await documentClient
         .batchWrite({
           RequestItems: {
-            'efcms-dev': c.map(item => ({
+            [`efcms-${env}`]: c.map(item => ({
               DeleteRequest: {
                 Key: {
                   pk: item.pk,
