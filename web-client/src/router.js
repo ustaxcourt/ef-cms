@@ -22,6 +22,10 @@ const revokeObjectURL = url => {
   return window.URL.revokeObjectURL(url);
 };
 
+const back = () => {
+  window.history.back();
+};
+
 const router = {
   initialize: app => {
     document.title = 'U.S. Tax Court';
@@ -507,6 +511,7 @@ const router = {
 };
 
 export {
+  back,
   createObjectURL,
   externalRoute,
   openInNewTab,

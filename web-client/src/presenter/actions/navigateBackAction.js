@@ -5,7 +5,6 @@
  *
  */
 
-export const navigateBackAction = () => {
-  console.log('history', history);
-  history.back();
+export const navigateBackAction = ({ router }) => {
+  router.back();
 };
