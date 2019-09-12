@@ -24,7 +24,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, BATCH_DOWNLOAD_TRIAL_SESSION)) {
-    throw new UnauthorizedError('Unauthorized');
+    throw new UnauthorizedError('[403] Unauthorized');
   }
 
   const trialSessionDetails = await applicationContext

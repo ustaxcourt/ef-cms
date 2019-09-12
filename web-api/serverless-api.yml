@@ -9,7 +9,6 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
-  - serverless-apigwy-binary
 
 custom:
   prune:
@@ -243,7 +242,6 @@ functions:
           path: court-issued-order
           method: post
           cors: true
-          contentHandling: CONVERT_TO_BINARY
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -261,7 +259,6 @@ functions:
           path: docket-record-pdf
           method: post
           cors: true
-          contentHandling: CONVERT_TO_BINARY
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -279,7 +276,6 @@ functions:
           path: generate-pdf-from-html
           method: post
           cors: true
-          contentHandling: CONVERT_TO_BINARY
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
