@@ -13,6 +13,7 @@ export const StartCaseStep1 = connect(
       sequences.completeStartCaseWizardStepSequence,
     constants: state.constants,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    navigateBack: sequences.navigateBackSequence,
     startCaseHelper: state.startCaseHelper,
     validationErrors: state.validationErrors,
   },
@@ -20,6 +21,7 @@ export const StartCaseStep1 = connect(
     completeStartCaseWizardStepSequence,
     constants,
     formCancelToggleCancelSequence,
+    navigateBack,
     startCaseHelper,
     validationErrors,
   }) => {
@@ -96,7 +98,7 @@ export const StartCaseStep1 = connect(
           <button
             className="usa-button usa-button--outline margin-bottom-1"
             type="button"
-            onClick={() => history.back()}
+            onClick={() => navigateBack()}
           >
             Back
           </button>
