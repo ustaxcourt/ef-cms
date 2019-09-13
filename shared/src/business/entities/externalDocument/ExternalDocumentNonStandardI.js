@@ -25,7 +25,7 @@ ExternalDocumentNonStandardI.errorToMessageMap = {
   category: 'Select a Category.',
   documentType: 'Select a document type',
   freeText: 'Provide an answer',
-  ordinalValue: 'Select an iteration.',
+  ordinalValue: 'Select an iteration',
 };
 
 ExternalDocumentNonStandardI.schema = {
