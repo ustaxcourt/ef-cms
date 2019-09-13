@@ -145,7 +145,7 @@ export const StartCaseStep2 = connect(
               <CaseTypeSelect
                 allowDefaultOption={true}
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
-                legend="Type of Notice / Case"
+                legend="Type of notice / case"
                 validation="validateStartCaseWizardSequence"
                 value={form.caseType}
                 onChange="updateFormValueSequence"
