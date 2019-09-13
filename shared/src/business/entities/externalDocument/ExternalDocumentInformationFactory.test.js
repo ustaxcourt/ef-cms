@@ -29,7 +29,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
     it('should require certificate of service radio be selected', () => {
       expect(errors().certificateOfService).toEqual(
-        'Enter selection for Certificate of Service.',
+        'Indicate whether you are including a Certificate of Service',
       );
       baseDoc.certificateOfService = false;
       expect(errors().certificateOfService).toEqual(undefined);
