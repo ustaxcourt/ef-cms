@@ -73,7 +73,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       objections: 'Enter selection for Objections.',
-      secondaryDocument: 'Select a document.',
+      secondaryDocument: 'Select a document',
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
