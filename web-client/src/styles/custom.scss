@@ -231,6 +231,13 @@ select[disabled] {
   }
 }
 
+.site-banner {
+  .usa-accordion__button {
+    padding: 0;
+    font-weight: normal;
+  }
+}
+
 .alert-blank-message {
   height: 24px;
 }

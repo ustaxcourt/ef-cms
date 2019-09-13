@@ -16,12 +16,22 @@ export const UsaBanner = connect(
         <div className="usa-accordion">
           <header className="usa-banner__header">
             <div className="grid-container usa-banner__inner">
-              <img
-                alt="U.S. flag"
-                className="usa-banner__header-flag"
-                src={usFlag}
-              />
-              <p>An official website of the United States government&nbsp;</p>
+              <div className="grid-col-auto">
+                {' '}
+                <img
+                  alt="U.S. flag"
+                  className="usa-banner__header-flag"
+                  src={usFlag}
+                />
+              </div>
+              <div className="grid-col-fill tablet:grid-col-auto">
+                <p className="usa-banner__header-text">
+                  An official website of the United States government
+                </p>
+                <p aria-hidden="true" className="usa-banner__header-action">
+                  Here’s how you know
+                </p>
+              </div>
               <button
                 aria-controls="gov-banner"
                 aria-expanded={showDetails}
@@ -29,7 +39,7 @@ export const UsaBanner = connect(
                 onClick={() => toggleUsaBannerDetailsSequence()}
               >
                 <span className="usa-banner__button-text">
-                  Here’s how you know&nbsp;
+                  Here’s how you know
                 </span>
               </button>
             </div>
