@@ -91,6 +91,7 @@ provider:
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
     DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-us-east-1
+    TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
     MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
@@ -301,12 +302,6 @@ functions:
     timeout: 900
     events:
       - http:
-          contentHandling: CONVERT_TO_BINARY
-          cors: true
-          integration: lambda
-          method: get
           path: /{trialSessionId}/batch-download/{zipName}
-          response:
-            headers:
-              Content-Type: "'application/zip'"
-              Content-Disposition: "'attachment'"
+          method: get
+          cors: true
