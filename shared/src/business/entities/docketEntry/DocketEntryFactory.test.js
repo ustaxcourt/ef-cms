@@ -157,7 +157,7 @@ describe('DocketEntryFactory', () => {
           it('should validate secondary document', () => {
             expect(errors().secondaryDocument).toEqual({
               category: 'Select a Category.',
-              documentType: 'Select a Document Type.',
+              documentType: 'Select a document type',
             });
           });
         });
