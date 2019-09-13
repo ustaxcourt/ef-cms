@@ -12,7 +12,7 @@ export default (test, fakeFile) => {
       documentType: 'Select a document type',
       eventCode: 'Select a document',
       primaryDocumentFile: 'Upload a document',
-      representingPrimary: 'Select a party.',
+      representingPrimary: 'Select a party',
       scenario: 'Select a document',
     });
 
@@ -37,7 +37,7 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       certificateOfService: 'Indicate whether you are including a Certificate of Service',
       primaryDocumentFile: 'Upload a document',
-      representingPrimary: 'Select a party.',
+      representingPrimary: 'Select a party',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -48,7 +48,7 @@ export default (test, fakeFile) => {
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
       certificateOfService: 'Indicate whether you are including a Certificate of Service',
-      representingPrimary: 'Select a party.',
+      representingPrimary: 'Select a party',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -59,7 +59,7 @@ export default (test, fakeFile) => {
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate: 'Enter date of service',
-      representingPrimary: 'Select a party.',
+      representingPrimary: 'Select a party',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -79,7 +79,7 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
         'Certificate of Service date cannot be in the future.. Enter a valid date.',
-      representingPrimary: 'Select a party.',
+      representingPrimary: 'Select a party',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -89,7 +89,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      representingPrimary: 'Select a party.',
+      representingPrimary: 'Select a party',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
