@@ -120,7 +120,7 @@ ContactFactory.OTHER_TYPES = {
 
 const domesticErrorToMessageMap = {
   address1: 'Enter mailing address',
-  city: 'Enter city,
+  city: 'Enter city',
   countryType: 'Enter country type',
   name: 'Enter name',
   phone: 'Enter phone number',
