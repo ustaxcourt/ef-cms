@@ -95,7 +95,7 @@ describe('CaseInternal entity', () => {
 
       expect(
         caseInternal.getFormattedValidationErrors().preferredTrialCity,
-      ).toEqual('Select a trial location');
+      ).toEqual('Select a preferred trial location');
     });
   });
 });

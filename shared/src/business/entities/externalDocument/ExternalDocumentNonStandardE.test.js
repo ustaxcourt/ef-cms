@@ -9,7 +9,7 @@ describe('ExternalDocumentNonStandardE', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         category: 'Select a Category.',
         documentType: 'Select a document type',
-        trialLocation: 'Select a trial location.',
+        trialLocation: 'Select a preferred trial location.',
       });
     });
 
