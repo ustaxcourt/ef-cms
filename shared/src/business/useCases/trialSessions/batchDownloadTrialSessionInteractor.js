@@ -106,7 +106,6 @@ exports.batchDownloadTrialSessionInteractor = async ({
     );
   }
 
-  console.log('zipname', zipName);
   await applicationContext.getPersistenceGateway().zipDocuments({
     applicationContext,
     extraFileNames,
@@ -119,7 +118,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
   return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
+    documentId: zipName,
     useTempBucket: true,
-    zipName,
   });
 };
