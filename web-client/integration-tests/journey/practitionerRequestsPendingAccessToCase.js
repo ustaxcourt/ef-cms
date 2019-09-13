@@ -9,9 +9,9 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       certificateOfService: 'Enter selection for Certificate of Service.',
       documentTitleTemplate: 'Select a document',
-      documentType: 'Select a document',
+      documentType: 'Select a document type',
       eventCode: 'Select a document',
-      primaryDocumentFile: 'A file was not selected.',
+      primaryDocumentFile: 'Upload a document',
       representingPrimary: 'Select a party.',
       scenario: 'Select a document',
     });
@@ -40,7 +40,7 @@ export default (test, fakeFile) => {
       exhibits: 'Enter selection for Exhibits.',
       hasSupportingDocuments: 'Enter selection for Supporting Documents.',
       objections: 'Enter selection for Objections.',
-      primaryDocumentFile: 'A file was not selected.',
+      primaryDocumentFile: 'Upload a document',
       representingPrimary: 'Select a party.',
     });
 
@@ -101,7 +101,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      supportingDocumentFile: 'A file was not selected.',
+      supportingDocumentFile: 'Upload a document',
       supportingDocumentFreeText: 'Please provide a value.',
     });
 

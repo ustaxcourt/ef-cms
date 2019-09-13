@@ -30,8 +30,7 @@ describe('setFileDocumentValidationAlertErrors', () => {
                 supportingDocument: 'Enter selection for Supporting Document.',
               },
               {
-                certificateOfServiceDate:
-                  'Enter date of service',
+                certificateOfServiceDate: 'Enter date of service',
                 index: 2,
                 supportingDocumentFreeText: 'Please provide a value.',
               },
