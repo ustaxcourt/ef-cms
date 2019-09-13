@@ -393,6 +393,14 @@ const {
   deleteSectionOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteSectionOutboxRecord');
 const {
+  createUserInboxRecord,
+} = require('../../shared/src/persistence/dynamo/workitems/createUserInboxRecord');
+
+const {
+  createSectionInboxRecord,
+} = require('../../shared/src/persistence/dynamo/workitems/createSectionInboxRecord');
+
+const {
   deleteUserOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
@@ -593,9 +601,11 @@ module.exports = (appContextUser = {}) => {
         createCaseDeadline,
         createCaseNote,
         createCaseTrialSortMappingRecords,
+        createSectionInboxRecord,
         createTrialSession,
         createTrialSessionWorkingCopy,
         createUser,
+        createUserInboxRecord,
         createWorkItem,
         deleteCaseDeadline,
         deleteCaseNote,
