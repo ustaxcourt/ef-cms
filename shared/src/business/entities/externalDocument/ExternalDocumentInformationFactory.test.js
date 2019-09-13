@@ -94,7 +94,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
       it('should require supporting document type be entered', () => {
         expect(errors().supportingDocuments[0].supportingDocument).toEqual(
-          'Select a Document Type.',
+          'Select a document type',
         );
         baseDoc.supportingDocuments[0].supportingDocument = 'Brief';
         expect(errors().supportingDocuments).toEqual(undefined);
@@ -111,7 +111,7 @@ describe('ExternalDocumentInformationFactory', () => {
         ];
         expect(errors().supportingDocuments[0]).toEqual({
           index: 1,
-          supportingDocument: 'Select a Document Type.',
+          supportingDocument: 'Select a document type',
         });
       });
 
@@ -279,7 +279,7 @@ describe('ExternalDocumentInformationFactory', () => {
           it('should require supporting secondary document type be entered', () => {
             expect(
               errors().secondarySupportingDocuments[0].supportingDocument,
-            ).toEqual('Select a Document Type.');
+            ).toEqual('Select a document type');
             baseDoc.secondarySupportingDocuments[0].supportingDocument =
               'brief';
             expect(errors().secondarySupportingDocuments).toEqual(undefined);

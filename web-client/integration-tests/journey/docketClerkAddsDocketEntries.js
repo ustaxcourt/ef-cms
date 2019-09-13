@@ -19,7 +19,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       dateReceived: 'Enter date received.',
-      documentType: 'Select a Document Type.',
+      documentType: 'Select a document type',
       eventCode: 'Select a document type.',
       partyPrimary: 'Select a filing party.',
     });

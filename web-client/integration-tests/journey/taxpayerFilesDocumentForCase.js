@@ -12,7 +12,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       category: 'Select a Category.',
-      documentType: 'Select a Document Type.',
+      documentType: 'Select a document type',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -22,7 +22,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateSelectDocumentTypeSequence');
     expect(test.getState('validationErrors')).toEqual({
-      documentType: 'Select a Document Type.',
+      documentType: 'Select a document type',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -64,7 +64,7 @@ export default (test, fakeFile) => {
     await test.runSequence('selectDocumentSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      documentType: 'Select a Document Type.',
+      documentType: 'Select a document type',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -89,7 +89,7 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       secondaryDocument: {
         category: 'Select a Category.',
-        documentType: 'Select a Document Type.',
+        documentType: 'Select a document type',
       },
     });
 
@@ -168,7 +168,7 @@ export default (test, fakeFile) => {
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Select a Document Type.',
+          supportingDocument: 'Select a document type',
         },
       ],
     });
@@ -186,7 +186,7 @@ export default (test, fakeFile) => {
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Select a Document Type.',
+          supportingDocument: 'Select a document type',
         },
       ],
     });
@@ -213,7 +213,7 @@ export default (test, fakeFile) => {
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Select a Document Type.',
+          supportingDocument: 'Select a document type',
         },
       ],
     });
@@ -230,7 +230,7 @@ export default (test, fakeFile) => {
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Select a Document Type.',
+          supportingDocument: 'Select a document type',
         },
       ],
     });
@@ -307,7 +307,7 @@ export default (test, fakeFile) => {
       secondarySupportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Select a Document Type.',
+          supportingDocument: 'Select a document type',
         },
       ],
     });
