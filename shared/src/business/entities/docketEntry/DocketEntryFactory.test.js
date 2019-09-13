@@ -32,7 +32,7 @@ describe('DocketEntryFactory', () => {
     });
 
     it('should require received date be entered', () => {
-      expect(errors().dateReceived).toEqual('Enter date received.');
+      expect(errors().dateReceived).toEqual('Enter a valid date received');
       rawEntity.dateReceived = moment().format();
       expect(errors().dateReceived).toEqual(undefined);
     });
