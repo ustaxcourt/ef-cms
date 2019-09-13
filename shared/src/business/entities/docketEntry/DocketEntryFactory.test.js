@@ -62,7 +62,7 @@ describe('DocketEntryFactory', () => {
       });
 
       it('should require non standard fields', () => {
-        expect(errors().ordinalValue).toEqual('Select an iteration.');
+        expect(errors().ordinalValue).toEqual('Select an iteration');
         rawEntity.ordinalValue = 'First';
         expect(errors().ordinalValue).toEqual(undefined);
       });
