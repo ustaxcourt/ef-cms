@@ -10,7 +10,7 @@ export default test => {
     await test.runSequence('createWorkItemSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      assigneeId: 'Recipient is required.',
+      assigneeId: 'Select a recipient',
       message: 'Message is required.',
       section: 'Select a section.',
     });
