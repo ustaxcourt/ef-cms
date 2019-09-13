@@ -4,6 +4,7 @@ plugins:
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
   # - serverless-plugin-aws-alerts
+  #- serverless-offline-dynamodb-streams
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -17,6 +18,14 @@ custom:
   serverless-offline:
     host: 0.0.0.0
     port: 3002
+
+  #serverless-offline-dynamodb-streams:
+  #endpoint: http://0.0.0.0:8000
+  #region: us-east-1
+  #accessKeyId: root
+  #secretAccessKey: root
+  #skipCacheInvalidation: false
+  #readInterval: 500
 
   alerts:
     stages:
@@ -89,6 +98,7 @@ provider:
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
     DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-us-east-1
+    TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
     MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
@@ -404,3 +414,10 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+  #dynamoStreamHandler:
+  #handler: web-api/src/casesHandlers.dynamoStreamHandlerLambda
+  #events:
+  #- stream:
+  #enabled: true
+  #type: dynamodb
+  #tableName: efcms-local

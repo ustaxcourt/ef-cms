@@ -530,6 +530,7 @@ const environment = {
   region: process.env.AWS_REGION || 'us-east-1',
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
+  tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
 };
 
 let user;
@@ -684,6 +685,9 @@ module.exports = (appContextUser = {}) => {
         });
       }
       return s3Cache;
+    },
+    getTempDocumentsBucketName: () => {
+      return environment.tempDocumentsBucketName;
     },
     // TODO: replace external calls to environment
     getTemplateGenerators: () => {
