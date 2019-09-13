@@ -29,7 +29,7 @@ describe('CaseAssociationRequestFactory', () => {
     });
 
     it('should require document type', () => {
-      expect(errors().documentType).toEqual('Select a document');
+      expect(errors().documentType).toEqual('Select a document type');
       rawEntity.documentType = 'Entry of Appearance';
       expect(errors().documentType).toEqual(undefined);
     });

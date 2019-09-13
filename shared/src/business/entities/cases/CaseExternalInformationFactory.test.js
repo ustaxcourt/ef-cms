@@ -218,7 +218,7 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '3',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        filingType: 'Filing Type is required',
+        filingType: 'Select on whose behalf you are filing',
         hasIrsNotice: 'Indicate whether you received an IRS notice',
         partyType: 'Select a party type',
         petitionFile: 'Upload a Petition',
@@ -233,7 +233,7 @@ describe('CaseExternalInformationFactory entity', () => {
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         caseType: 'Select a case type',
-        filingType: 'Filing Type is required',
+        filingType: 'Select on whose behalf you are filing',
         partyType: 'Select a party type',
         petitionFileSize: 'Your Petition file size is empty',
         stinFileSize: 'Your STIN file size is empty',
@@ -251,7 +251,7 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '3',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        filingType: 'Filing Type is required',
+        filingType: 'Select on whose behalf you are filing',
         partyType: 'Select a party type',
       });
     });
@@ -391,7 +391,7 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '4',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        filingType: 'Filing Type is required',
+        filingType: 'Select on whose behalf you are filing',
         hasIrsNotice: 'Indicate whether you received an IRS notice',
         partyType: 'Select a party type',
         petitionFile: 'Upload a Petition',
