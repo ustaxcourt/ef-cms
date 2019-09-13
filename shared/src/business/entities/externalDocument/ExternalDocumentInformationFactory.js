@@ -124,9 +124,9 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       'Enter selection for Secondary Supporting Documents.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
     objections: 'Enter selection for Objections.',
-    partyPrimary: 'Select a filing party.',
-    partyRespondent: 'Select a filing party.',
-    partySecondary: 'Select a filing party.',
+    partyPrimary: 'Select a filing party',
+    partyRespondent: 'Select a filing party',
+    partySecondary: 'Select a filing party',
     primaryDocumentFile: 'Upload a document',
     primaryDocumentFileSize: [
       {

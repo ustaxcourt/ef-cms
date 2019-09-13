@@ -69,7 +69,7 @@ describe('DocketEntryFactory', () => {
     });
 
     it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
-      expect(errors().partyPrimary).toEqual('Select a filing party.');
+      expect(errors().partyPrimary).toEqual('Select a filing party');
       rawEntity.partySecondary = true;
       expect(errors().partyPrimary).toEqual(undefined);
     });
