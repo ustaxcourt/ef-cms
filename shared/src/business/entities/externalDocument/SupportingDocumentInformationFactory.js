@@ -64,7 +64,7 @@ SupportingDocumentInformationFactory.get = documentMetadata => {
       'Enter date for Certificate of Service.',
     ],
     supportingDocument: 'Select a document type',
-    supportingDocumentFile: 'Upload a document.',
+    supportingDocumentFile: 'Upload a document',
     supportingDocumentFileSize: [
       {
         contains: 'must be less than or equal to',

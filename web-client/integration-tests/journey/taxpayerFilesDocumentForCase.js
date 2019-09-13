@@ -146,8 +146,8 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       objections: 'Enter selection for Objections.',
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -163,8 +163,8 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate: 'Enter date for Certificate of Service.',
       objections: 'Enter selection for Objections.',
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [
         {
           index: 0,
@@ -181,8 +181,8 @@ export default (test, fakeFile) => {
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate: 'Enter date for Certificate of Service.',
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [
         {
           index: 0,
@@ -208,8 +208,8 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
         'Certificate of Service date is in the future. Please enter a valid date.',
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [
         {
           index: 0,
@@ -225,8 +225,8 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [
         {
           index: 0,
@@ -254,12 +254,12 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile: 'Upload a document.',
+          supportingDocumentFile: 'Upload a document',
           supportingDocumentFreeText: 'Enter name',
         },
       ],
@@ -272,12 +272,12 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      primaryDocumentFile: 'Upload a document',
+      secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile: 'Upload a document.',
+          supportingDocumentFile: 'Upload a document',
         },
       ],
     });
@@ -334,7 +334,7 @@ export default (test, fakeFile) => {
       secondarySupportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile: 'Upload a document.',
+          supportingDocumentFile: 'Upload a document',
           supportingDocumentFreeText: 'Enter name',
         },
       ],

@@ -127,7 +127,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     partyPrimary: 'Select a filing party.',
     partyRespondent: 'Select a filing party.',
     partySecondary: 'Select a filing party.',
-    primaryDocumentFile: 'Upload a document.',
+    primaryDocumentFile: 'Upload a document',
     primaryDocumentFileSize: [
       {
         contains: 'must be less than or equal to',
@@ -135,7 +135,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       },
       'Your Primary Document file size is empty.',
     ],
-    secondaryDocumentFile: 'Upload a document.',
+    secondaryDocumentFile: 'Upload a document',
     secondaryDocumentFileSize: [
       {
         contains: 'must be less than or equal to',
