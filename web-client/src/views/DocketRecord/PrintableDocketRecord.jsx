@@ -7,10 +7,10 @@ import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 
 export const PrintableDocketRecord = connect(
   {
-    caseDetail: state.formattedCaseDetail,
-    navigateToCaseDetail: sequences.navigateToCaseDetailSequence,
+    formattedCaseDetail: state.formattedCaseDetail,
+    navigateToCaseDetailSequence: sequences.navigateToCaseDetailSequence,
   },
-  ({ caseDetail, navigateToCaseDetail }) => {
+  ({ formattedCaseDetail, navigateToCaseDetailSequence }) => {
     return (
       <>
         <div className="big-blue-header">
@@ -18,9 +18,9 @@ export const PrintableDocketRecord = connect(
             <div className="grid-row">
               <div className="tablet:grid-col-6">
                 <h1 className="heading-2 captioned" tabIndex="-1">
-                  Docket Number: {caseDetail.docketNumberWithSuffix}
+                  Docket Number: {formattedCaseDetail.docketNumberWithSuffix}
                 </h1>
-                <p className="margin-0">{caseDetail.caseTitle}</p>
+                <p className="margin-0">{formattedCaseDetail.caseTitle}</p>
               </div>
               <div className="tablet:grid-col-6"></div>
             </div>
@@ -30,8 +30,8 @@ export const PrintableDocketRecord = connect(
           <button
             className="usa-button usa-button--unstyled margin-bottom-3"
             onClick={() => {
-              navigateToCaseDetail({
-                caseId: caseDetail.docketNumber,
+              navigateToCaseDetailSequence({
+                caseId: formattedCaseDetail.docketNumber,
               });
             }}
           >

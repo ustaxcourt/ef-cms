@@ -4,13 +4,13 @@ import React from 'react';
 
 export const TrialSessionsSummary = connect(
   {
-    recentTrialSessions:
+    formattedRecentSessions:
       state.formattedDashboardTrialSessions.formattedRecentSessions,
-    upcomingTrialSessions:
+    formattedUpcomingSessions:
       state.formattedDashboardTrialSessions.formattedUpcomingSessions,
     user: state.user,
   },
-  ({ recentTrialSessions, upcomingTrialSessions, user }) => {
+  ({ formattedRecentSessions, formattedUpcomingSessions, user }) => {
     return (
       <div aria-label="trial sessions" className="card" id="sessions-summary">
         <div className="grid-container content-wrapper gray">
@@ -28,7 +28,7 @@ export const TrialSessionsSummary = connect(
             </div>
           </div>
           <div role="list">
-            {upcomingTrialSessions.map((trialSession, idx) => (
+            {formattedUpcomingSessions.map((trialSession, idx) => (
               <div
                 className="grid-row margin-top-4 margin-bottom-4"
                 key={idx}
@@ -61,7 +61,7 @@ export const TrialSessionsSummary = connect(
             </div>
           </div>
           <div className="margin-bottom-0" role="list">
-            {recentTrialSessions.map((trialSession, idx) => (
+            {formattedRecentSessions.map((trialSession, idx) => (
               <div
                 className="grid-row margin-top-4 margin-bottom-4"
                 key={idx}

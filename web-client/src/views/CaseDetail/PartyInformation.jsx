@@ -45,26 +45,27 @@ const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
 
 const PartyInformation = connect(
   {
-    caseDetail: state.formattedCaseDetail,
-    caseHelper: state.caseDetailHelper,
+    caseDetailHelper: state.caseDetailHelper,
     constants: state.constants,
-    editSecondaryContact: sequences.openEditSecondaryContactModalSequence,
     form: state.form,
+    formattedCaseDetail: state.formattedCaseDetail,
     openAddPractitionerModalSequence:
       sequences.openAddPractitionerModalSequence,
     openAddRespondentModalSequence: sequences.openAddRespondentModalSequence,
+    openEditSecondaryContactModalSequence:
+      sequences.openEditSecondaryContactModalSequence,
     showModal: state.showModal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
   ({
-    caseDetail,
-    caseHelper,
+    caseDetailHelper,
     constants,
-    editSecondaryContact,
     form,
+    formattedCaseDetail,
     openAddPractitionerModalSequence,
     openAddRespondentModalSequence,
+    openEditSecondaryContactModalSequence,
     showModal,
     updateFormValueSequence,
     validationErrors,
@@ -73,59 +74,69 @@ const PartyInformation = connect(
       <div className="grid-container padding-x-0">
         <div className="grid-row">
           <div className="tablet:grid-col-3">
-            {caseDetail.contactPrimary && (
+            {formattedCaseDetail.contactPrimary && (
               <div>
                 <address aria-labelledby="primary-label">
-                  {AddressDisplay(caseDetail.contactPrimary, constants, {
-                    nameOverride:
-                      caseHelper.showCaseNameForPrimary && caseDetail.caseName,
-                  })}
+                  {AddressDisplay(
+                    formattedCaseDetail.contactPrimary,
+                    constants,
+                    {
+                      nameOverride:
+                        caseDetailHelper.showCaseNameForPrimary &&
+                        formattedCaseDetail.caseName,
+                    },
+                  )}
                 </address>
 
-                {caseHelper.showEditPrimaryContactButton && (
+                {caseDetailHelper.showEditPrimaryContactButton && (
                   <p>
                     <a
                       className="usa-button usa-button--unstyled"
-                      href={`/case-detail/${caseDetail.docketNumber}/contacts/primary/edit`}
+                      href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
                     >
                       <FontAwesomeIcon icon="edit" size="sm" />
                       Edit
                     </a>
                   </p>
                 )}
-                {caseDetail.contactPrimary.serviceIndicator && (
+                {formattedCaseDetail.contactPrimary.serviceIndicator && (
                   <div className="margin-top-4">
                     <span className="semi-bold">Service: </span>
-                    {caseDetail.contactPrimary.serviceIndicator}
+                    {formattedCaseDetail.contactPrimary.serviceIndicator}
                   </div>
                 )}
               </div>
             )}
           </div>
           <div className="tablet:grid-col-3">
-            {caseDetail.contactSecondary && caseDetail.contactSecondary.name && (
-              <div>
-                <address aria-labelledby="secondary-label">
-                  {caseDetail.contactSecondary.name &&
-                    AddressDisplay(caseDetail.contactSecondary, constants, {})}
-                </address>
-                {caseHelper.showEditContactButton && (
-                  <button
-                    className="usa-button usa-button--unstyled"
-                    onClick={() => editSecondaryContact()}
-                  >
-                    <FontAwesomeIcon icon="question-circle" size="sm" />
-                    Why can’t I edit this?
-                  </button>
-                )}
-                {caseDetail.contactSecondary.serviceIndicator && (
-                  <div className="margin-top-4">
-                    <span className="semi-bold">Service: </span>
-                    {caseDetail.contactSecondary.serviceIndicator}
-                  </div>
-                )}
-              </div>
-            )}
+            {formattedCaseDetail.contactSecondary &&
+              formattedCaseDetail.contactSecondary.name && (
+                <div>
+                  <address aria-labelledby="secondary-label">
+                    {formattedCaseDetail.contactSecondary.name &&
+                      AddressDisplay(
+                        formattedCaseDetail.contactSecondary,
+                        constants,
+                        {},
+                      )}
+                  </address>
+                  {caseDetailHelper.showEditContactButton && (
+                    <button
+                      className="usa-button usa-button--unstyled"
+                      onClick={() => openEditSecondaryContactModalSequence()}
+                    >
+                      <FontAwesomeIcon icon="question-circle" size="sm" />
+                      Why can’t I edit this?
+                    </button>
+                  )}
+                  {formattedCaseDetail.contactSecondary.serviceIndicator && (
+                    <div className="margin-top-4">
+                      <span className="semi-bold">Service: </span>
+                      {formattedCaseDetail.contactSecondary.serviceIndicator}
+                    </div>
+                  )}
+                </div>
+              )}
           </div>
         </div>
       </div>
@@ -134,8 +145,8 @@ const PartyInformation = connect(
     const practitionerPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
-          {caseDetail.practitioners &&
-            caseDetail.practitioners.map((practitioner, index) => (
+          {formattedCaseDetail.practitioners &&
+            formattedCaseDetail.practitioners.map((practitioner, index) => (
               <div
                 className={`tablet:grid-col-3 ${
                   index > 3 ? 'margin-top-3' : ''
@@ -165,12 +176,12 @@ const PartyInformation = connect(
                   Representing
                 </p>
                 {practitioner.representingPrimary &&
-                  caseDetail.contactPrimary.name}
+                  formattedCaseDetail.contactPrimary.name}
                 {practitioner.representingPrimary &&
                   practitioner.representingSecondary && <br />}
                 {practitioner.representingSecondary &&
-                  caseDetail.contactSecondary &&
-                  caseDetail.contactSecondary.name}
+                  formattedCaseDetail.contactSecondary &&
+                  formattedCaseDetail.contactSecondary.name}
               </div>
             ))}
         </div>
@@ -180,8 +191,8 @@ const PartyInformation = connect(
     const respondentPartyInformation = () => (
       <div className="grid-container padding-x-0">
         <div className="grid-row">
-          {caseDetail.respondents &&
-            caseDetail.respondents.map((respondent, index) => (
+          {formattedCaseDetail.respondents &&
+            formattedCaseDetail.respondents.map((respondent, index) => (
               <div
                 className={`tablet:grid-col-3 ${
                   index > 3 ? 'margin-top-3' : ''
@@ -351,13 +362,13 @@ const PartyInformation = connect(
           <div className="card">
             <div className="content-wrapper">
               <h3 className="underlined" id="primary-label">
-                {caseDetail.partyType || 'My Party Type'}
+                {formattedCaseDetail.partyType || 'My Party Type'}
               </h3>
               {mainPartyInformation()}
             </div>
           </div>
         </div>
-        {caseHelper.showPractitionerSection && (
+        {caseDetailHelper.showPractitionerSection && (
           <div className="subsection party-information">
             <div className="card">
               <div className="content-wrapper">
@@ -365,14 +376,14 @@ const PartyInformation = connect(
                   <div className="grid-col-6" id="practitioner-label">
                     <h3>Petitioner Counsel</h3>
                   </div>
-                  {caseHelper.showAddCounsel && practitionerSearch()}
+                  {caseDetailHelper.showAddCounsel && practitionerSearch()}
                 </div>
                 {practitionerPartyInformation()}
               </div>
             </div>
           </div>
         )}
-        {caseHelper.showRespondentSection && (
+        {caseDetailHelper.showRespondentSection && (
           <div className="subsection party-information">
             <div className="card">
               <div className="content-wrapper">
@@ -380,14 +391,14 @@ const PartyInformation = connect(
                   <div className="grid-col-6" id="secondary-label">
                     <h3>Respondent Counsel</h3>
                   </div>
-                  {caseHelper.showAddCounsel && respondentSearch()}
+                  {caseDetailHelper.showAddCounsel && respondentSearch()}
                 </div>
                 {respondentPartyInformation()}
               </div>
             </div>
           </div>
         )}
-        {caseHelper.showEditSecondaryContactModal && (
+        {caseDetailHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
         )}
         {showModal === 'AddPractitionerModal' && <AddPractitionerModal />}

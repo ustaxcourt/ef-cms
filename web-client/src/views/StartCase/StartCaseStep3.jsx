@@ -15,7 +15,7 @@ export const StartCaseStep3 = connect(
     filingTypes: state.filingTypes,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    navigateBack: sequences.navigateBackSequence,
+    navigateBackSequence: sequences.navigateBackSequence,
     startCaseHelper: state.startCaseHelper,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
@@ -28,7 +28,7 @@ export const StartCaseStep3 = connect(
     filingTypes,
     form,
     formCancelToggleCancelSequence,
-    navigateBack,
+    navigateBackSequence,
     startCaseHelper,
     updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence,
@@ -430,7 +430,7 @@ export const StartCaseStep3 = connect(
           <button
             className="usa-button usa-button--outline margin-bottom-1"
             type="button"
-            onClick={() => navigateBack()}
+            onClick={() => navigateBackSequence()}
           >
             Back
           </button>

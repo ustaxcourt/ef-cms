@@ -4,16 +4,16 @@ import React from 'react';
 
 export const CaseDetailReadOnlyPartyInformation = connect(
   {
-    caseDetail: state.formattedCaseDetail,
     caseDetailEditContactsHelper: state.caseDetailEditContactsHelper,
     caseDetailEditHelper: state.caseDetailEditHelper,
     constants: state.constants,
+    formattedCaseDetail: state.formattedCaseDetail,
   },
   ({
-    caseDetail,
     caseDetailEditContactsHelper,
     caseDetailEditHelper,
     constants,
+    formattedCaseDetail,
   }) => {
     const addressDisplay = contact => {
       return (
@@ -44,7 +44,7 @@ export const CaseDetailReadOnlyPartyInformation = connect(
         <h3>Party Information</h3>
         <div>
           <span className="label">Party Type</span>
-          <p>{caseDetail.partyType || 'My Party Type'}</p>
+          <p>{formattedCaseDetail.partyType || 'My Party Type'}</p>
         </div>
 
         {caseDetailEditHelper.showPrimaryContact && (
@@ -54,7 +54,7 @@ export const CaseDetailReadOnlyPartyInformation = connect(
             </span>
             <div>
               <address aria-labelledby="primary-label">
-                {addressDisplay(caseDetail.contactPrimary)}
+                {addressDisplay(formattedCaseDetail.contactPrimary)}
               </address>
             </div>
           </div>
@@ -66,8 +66,8 @@ export const CaseDetailReadOnlyPartyInformation = connect(
             </span>
             <div>
               <address aria-labelledby="secondary-label">
-                {caseDetail.contactSecondary.name &&
-                  addressDisplay(caseDetail.contactSecondary)}
+                {formattedCaseDetail.contactSecondary.name &&
+                  addressDisplay(formattedCaseDetail.contactSecondary)}
               </address>
             </div>
           </div>

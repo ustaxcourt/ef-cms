@@ -6,11 +6,11 @@ import React from 'react';
 export const IndividualWorkQueueBatched = connect(
   {
     documentHelper: state.documentHelper,
-    workQueue: state.formattedWorkQueue,
+    formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentHelper, workQueue, workQueueHelper }) => {
+  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -30,7 +30,7 @@ export const IndividualWorkQueueBatched = connect(
               <th>Batched</th>
             </tr>
           </thead>
-          {workQueue.map((item, idx) => (
+          {formattedWorkQueue.map((item, idx) => (
             <tbody key={idx}>
               <tr>
                 <td aria-hidden="true" className="focus-toggle" />
