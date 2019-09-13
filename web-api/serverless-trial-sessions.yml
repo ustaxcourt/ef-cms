@@ -309,3 +309,4 @@ functions:
           response:
             headers:
               Content-Type: "'application/zip'"
+              Content-Disposition: "'attachment'"
