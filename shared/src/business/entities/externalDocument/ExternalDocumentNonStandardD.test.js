@@ -11,7 +11,7 @@ describe('ExternalDocumentNonStandardD', () => {
         category: 'Select a Category.',
         documentType: 'Select a document type',
         previousDocument: 'Select a document',
-        serviceDate: 'Provide a service date.',
+        serviceDate: 'Provide a service date',
       });
     });
 
