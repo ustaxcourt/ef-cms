@@ -45,7 +45,7 @@ function CaseInternal(rawCase) {
 
 CaseInternal.errorToMessageMap = Object.assign(Case.COMMON_ERROR_MESSAGES, {
   petitionFile: 'Upload or scan a petition',
-  preferredTrialCity: 'Select a trial location',
+  preferredTrialCity: 'Select a preferred trial location',
 });
 
 const paperRequirements = joi.object().keys({
