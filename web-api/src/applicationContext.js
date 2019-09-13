@@ -509,6 +509,9 @@ const {
   verifyPendingCaseForUserInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor');
 const {
+  isFileExists,
+} = require('../../shared/src/persistence/s3/isFileExists');
+const {
   virusScanPdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
 const {
@@ -652,6 +655,7 @@ module.exports = (appContextUser = {}) => {
         getUsersInSection,
         getWorkItemById,
         incrementCounter,
+        isFileExists,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocument,
