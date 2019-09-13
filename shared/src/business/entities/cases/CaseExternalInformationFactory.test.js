@@ -411,7 +411,7 @@ describe('CaseExternalInformationFactory entity', () => {
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         caseType: 'Select a case type',
         contactPrimary: {
-          address1: 'Enter mailing address,'
+          address1: 'Enter mailing address',
           city: 'Enter city',
           countryType: 'Enter country type',
           name: 'Enter name',

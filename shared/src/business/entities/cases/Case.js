@@ -81,7 +81,7 @@ Case.COMMON_ERROR_MESSAGES = {
   caseType: 'Select a case type',
   docketNumber: 'Docket number is required',
   documents: 'At least one valid document is required',
-  filingType: 'Filing Type is required',
+  filingType: 'Select on whose behalf you are filing',
   hasIrsNotice: 'Indicate whether you received an IRS notice',
   irsNoticeDate: [
     {
