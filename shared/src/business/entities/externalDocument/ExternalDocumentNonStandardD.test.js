@@ -29,7 +29,7 @@ describe('ExternalDocumentNonStandardD', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         serviceDate:
-          'Service date is in the future. Please enter a valid date.',
+          'Service date is in the future. Enter a valid date.',
       });
     });
 
