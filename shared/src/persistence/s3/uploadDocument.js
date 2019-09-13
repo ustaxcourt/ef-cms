@@ -1,11 +1,14 @@
-const getUploadPolicy = async ({ applicationContext }) => {
+const getUploadPolicy = async ({ applicationContext, documentId }) => {
   const response = await applicationContext
     .getHttpClient()
-    .get(`${applicationContext.getBaseUrl()}/documents/upload-policy`, {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+    .get(
+      `${applicationContext.getBaseUrl()}/documents/${documentId}/upload-policy`,
+      {
+        headers: {
+          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+        },
       },
-    });
+    );
   return response.data;
 };
 
@@ -15,14 +18,17 @@ exports.uploadDocument = async ({
   documentId,
   onUploadProgress,
 }) => {
-  const policy = await getUploadPolicy({ applicationContext });
-  const docId = await applicationContext.getPersistenceGateway().uploadPdf({
+  const docId = documentId || applicationContext.getUniqueId();
+  const policy = await getUploadPolicy({
     applicationContext,
-    documentId,
+    documentId: docId,
+  });
+  await applicationContext.getPersistenceGateway().uploadPdf({
+    applicationContext,
+    documentId: docId,
     file: document,
     onUploadProgress,
     policy,
   });
-
   return docId;
 };
