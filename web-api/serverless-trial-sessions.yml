@@ -126,6 +126,7 @@ provider:
           - ''
           - - 'arn:aws:s3:::'
             - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
+            - ${self:provider.environment.TEMP_DOCUMENTS_BUCKET_NAME}
             - '/*'
     - Effect: 'Allow'
       Action:
