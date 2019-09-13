@@ -13,7 +13,7 @@ export default (test, overrides = {}) => {
 
     expect(test.getState('validationErrors')).toEqual({
       deadlineDate: 'Enter a valid deadline date',
-      description: 'Please enter a description.',
+      description: 'Enter a description of this deadline',
     });
 
     await test.runSequence('updateFormValueSequence', {

@@ -19,7 +19,7 @@ describe('CaseDeadline', () => {
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
         caseId: 'You must have a case id.',
         deadlineDate: 'Enter a valid deadline date',
-        description: 'Please enter a description.',
+        description: 'Enter a description of this deadline',
       });
     });
 

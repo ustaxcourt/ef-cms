@@ -30,7 +30,7 @@ CaseDeadline.errorToMessageMap = {
       contains: 'length must be less than or equal to',
       message: 'The description is too long. Please enter a valid description.',
     },
-    'Please enter a description.',
+    'Enter a description of this deadline',
   ],
 };
 
