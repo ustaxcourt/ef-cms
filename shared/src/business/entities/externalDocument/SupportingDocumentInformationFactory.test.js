@@ -8,7 +8,7 @@ describe('SupportingDocumentInformationFactory', () => {
       const extDoc = SupportingDocumentInformationFactory.get({});
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         attachments: 'Enter selection for Attachments.',
-        certificateOfService: 'Enter selection for Certificate of Service.',
+        certificateOfService: 'Indicate whether you are including a Certificate of Service',
         supportingDocument: 'Select a document type',
       });
     });
