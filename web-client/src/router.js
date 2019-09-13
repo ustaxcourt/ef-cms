@@ -35,6 +35,7 @@ const router = {
           const path = app.getState('cognitoLoginUrl');
           window.location.replace(path);
         } else {
+          app.getSequence('clearAlertSequence')();
           cb.apply(null, arguments);
         }
       };

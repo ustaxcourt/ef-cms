@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getAllCaseDeadlinesAction } from '../actions/CaseDeadline/getAllCaseDeadlinesAction';
@@ -10,7 +9,6 @@ import { setDefaultDateOnCalendarAction } from '../actions/CaseDeadline/setDefau
 
 const gotoAllCaseDeadlines = [
   setCurrentPageAction('Interstitial'),
-  clearAlertsAction,
   clearScreenMetadataAction,
   clearErrorAlertsAction,
   getAllCaseDeadlinesAction,
