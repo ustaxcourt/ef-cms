@@ -149,14 +149,20 @@ export const Address = connect(
                   validateStartCaseSequence={validateStartCaseSequence}
                 />
               </div>
-              <Text
-                bind={`validationErrors.${type}.city`}
-                className="usa-error-message"
-              />
-              <Text
-                bind={`validationErrors.${type}.state`}
-                className="usa-error-message"
-              />
+            </div>
+            <div className="grid-row grid-gap">
+              <div className="grid-col-8">
+                <Text
+                  bind={`validationErrors.${type}.city`}
+                  className="usa-error-message"
+                />
+              </div>
+              <div className="grid-col-4">
+                <Text
+                  bind={`validationErrors.${type}.state`}
+                  className="usa-error-message"
+                />
+              </div>
             </div>
           </div>
         </NonMobile>

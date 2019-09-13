@@ -13,6 +13,7 @@ export const FileDocument = connect(
   {
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    navigateBack: sequences.navigateBackSequence,
     reviewExternalDocumentInformationSequence:
       sequences.reviewExternalDocumentInformationSequence,
     showModal: state.showModal,
@@ -20,6 +21,7 @@ export const FileDocument = connect(
   ({
     form,
     formCancelToggleCancelSequence,
+    navigateBack,
     reviewExternalDocumentInformationSequence,
     showModal,
   }) => {
@@ -65,7 +67,7 @@ export const FileDocument = connect(
           <button
             className="usa-button usa-button--outline margin-bottom-1"
             type="button"
-            onClick={() => history.back()}
+            onClick={() => navigateBack()}
           >
             Back
           </button>
