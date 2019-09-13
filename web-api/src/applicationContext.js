@@ -425,6 +425,9 @@ const {
   submitPendingCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
 const {
+  getDownloadPolicyUrlInteractor,
+} = require('../../shared/src/business/useCases/getDownloadPolicyUrlInteractor');
+const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
@@ -493,6 +496,9 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
+const {
+  getUploadPolicyInteractor,
+} = require('../../shared/src/business/useCases/getUploadPolicyInteractor');
 const {
   verifyCaseForUserInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyCaseForUserInteractor');
@@ -730,6 +736,7 @@ module.exports = (appContextUser = {}) => {
         getDocumentQCInboxForUserInteractor,
         getDocumentQCServedForSectionInteractor,
         getDocumentQCServedForUserInteractor,
+        getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
@@ -742,6 +749,7 @@ module.exports = (appContextUser = {}) => {
         getTrialSessionDetailsInteractor,
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,
+        getUploadPolicyInteractor,
         getUserInteractor,
         getUsersInSectionInteractor,
         getWorkItemInteractor,
