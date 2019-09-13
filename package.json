@@ -161,7 +161,7 @@
     "start:client:ci": "CI=true npm run start:client",
     "start:client:no-scanner": "NO_SCANNER=true npm run start:client",
     "start:client:debug": "USTC_DEBUG=true npm run start:client",
-    "start:client": "npm run clean && FILE_UPLOAD_MODAL_TIMEOUT=1 GIT_COMMIT=$(git log --pretty=format:'%h' -n 1 2>/dev/null) USTC_ENV=dev parcel --no-cache --no-source-maps web-client/src/index.pug",
+    "start:client": "npm run clean && FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev parcel --no-cache --no-source-maps web-client/src/index.pug",
     "test": "echo 'Best run with start:api:ci and start:client:ci' && sleep 3 && CI=true npx run-s test:shared test:api test:client test:pa11y cypress lint",
     "test:api": "jest --maxWorkers=4 --config web-api/jest.config.js \"web-api/.*\\.test\\.js\"",
     "test:client": "CI=false SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand --config web-client/jest.config.js \"web-client/.*\\.test\\.js\"",
