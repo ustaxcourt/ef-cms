@@ -15,13 +15,16 @@ exports.zipDocuments = ({
   extraFileNames,
   extraFiles,
   fileNames,
-  returnBuffer,
   s3Ids,
+  uploadToTempBucket,
   zipName,
 }) => {
   return new Promise((resolve, reject) => {
     const { region } = applicationContext.environment;
-    const bucket = applicationContext.environment.documentsBucketName;
+    const documentsBucket = applicationContext.environment.documentsBucketName;
+    const destinationBucket = uploadToTempBucket
+      ? applicationContext.environment.tempDocumentsBucketName
+      : applicationContext.environment.documentsBucketName;
 
     const s3Client = applicationContext.getStorageClient();
 
@@ -30,12 +33,10 @@ exports.zipDocuments = ({
 
       const params = {
         Body: pass,
-        Bucket: bucket,
+        Bucket: destinationBucket,
         Key: zipName,
       };
-      s3Client.upload(params, function() {});
-
-      pass.on('finish', () => {
+      s3Client.upload(params, function() {
         resolve();
       });
 
@@ -44,34 +45,21 @@ exports.zipDocuments = ({
       return pass;
     };
 
-    const streamToBuffer = () => {
-      const buffs = [];
-
-      const converter = new stream.Writable();
-
-      // eslint-disable-next-line no-underscore-dangle
-      converter._write = (chunk, encoding, cb) => {
-        buffs.push(chunk);
-        process.nextTick(cb);
-      };
-
-      converter.on('finish', () => {
-        resolve(Buffer.concat(buffs));
-      });
-
-      return converter;
-    };
-
     s3Zip
       .setArchiverOptions({ gzip: false })
       .archive(
-        { bucket: bucket, debug: true, region: region, s3: s3Client },
+        {
+          bucket: documentsBucket,
+          debug: true,
+          region,
+          s3: s3Client,
+        },
         '',
         s3Ids,
         fileNames,
         extraFiles,
         extraFileNames,
       )
-      .pipe(returnBuffer ? streamToBuffer() : uploadFromStream(s3Client));
+      .pipe(uploadFromStream(s3Client));
   });
 };
