@@ -142,37 +142,41 @@ const internationalErrorToMessageMap = {
   name: 'Enter name',
   phone: 'Enter phone number',
   postalCode: 'Enter zip code',
-  state: 'Enter state/province/region',
 };
+
+/* eslint-disable sort-keys-fix/sort-keys-fix */
 
 const commonValidationRequirements = {
   address1: joi.string().required(),
   address2: joi.string().optional(),
   address3: joi.string().optional(),
   city: joi.string().required(),
-  name: joi.string().required(),
-  phone: joi.string().required(),
 };
 const domesticValidationObject = {
-  ...commonValidationRequirements,
+  name: joi.string().required(),
   countryType: joi
     .string()
     .valid(ContactFactory.COUNTRY_TYPES.DOMESTIC)
     .required(),
-  postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
+  ...commonValidationRequirements,
   state: joi.string().required(),
+  postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
+  phone: joi.string().required(),
 };
 
 const internationalValidationObject = {
-  ...commonValidationRequirements,
+  name: joi.string().required(),
   country: joi.string().required(),
   countryType: joi
     .string()
     .valid(ContactFactory.COUNTRY_TYPES.INTERNATIONAL)
     .required(),
+  ...commonValidationRequirements,
   postalCode: joi.string().required(),
-  state: joi.string().optional(),
+  phone: joi.string().required(),
 };
+
+/* eslint-enable sort-keys-fix/sort-keys-fix */
 
 /**
  * used for getting the joi validation object used for the different country type contacts.

@@ -10,6 +10,8 @@ CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_I
 CLIENT_ID="${CLIENT_ID%\"}"
 CLIENT_ID="${CLIENT_ID#\"}"
 
+echo "" > cases.txt
+
 response=$(aws cognito-idp admin-initiate-auth \
   --user-pool-id "${USER_POOL_ID}" \
   --client-id "${CLIENT_ID}" \
@@ -26,23 +28,151 @@ response=$(aws cognito-idp admin-initiate-auth \
   --auth-parameters USERNAME="petitionsclerk1@example.com"',PASSWORD'="Testing1234$")
 petitionsclerkToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
-
-for i in $(seq 1 20);
+while read line
 do
-  echo "creating case ${i}"
+  IFS=';' read -ra ADDR <<< "$line"
+  partyType="${ADDR[0]}"
+  caseType="${ADDR[1]}"
+  primaryContact="${ADDR[2]}"
+  secondaryContact="${ADDR[3]}"
+  caseProcedure="${ADDR[4]}"
+  placeOfTrial="${ADDR[5]}"
+  respondentCounsel="${ADDR[6]/$'\r'}"
+  petitionerCounsel="${ADDR[7]/$'\r'}"
+
+  echo "creating case for ${primaryContact}"
+
   petitionFileId=$(uuidgen)
   stinFileId=$(uuidgen)
+
+  secondaryContactJson="{}"
+  if [ ! -z "$secondaryContact" ] ; then
+    secondaryContactJson=$(cat <<EOF
+{
+  "countryType": "domestic",
+  "name": "${secondaryContact}",
+  "address1": "77 South Oak Lane",
+  "address2": "Asperiores consequat",
+  "address3": "Ipsum ab cum repelle",
+  "city": "Voluptatem aliquip c",
+  "postalCode": "23117",
+  "phone": "+1 (513) 248-2715",
+  "state": "TX",
+  "email": "taxpayer"
+}
+EOF
+)
+  fi
+
+  caseJson=$(cat <<EOF
+{
+  "petitionFileId": "${petitionFileId}",
+  "stinFileId": "${stinFileId}",
+  "petitionMetadata": {
+    "contactPrimary": {
+      "countryType": "domestic",
+      "name": "${primaryContact}",
+      "address1": "77 South Oak Lane",
+      "address2": "Asperiores consequat",
+      "address3": "Ipsum ab cum repelle",
+      "city": "Voluptatem aliquip c",
+      "postalCode": "23117",
+      "phone": "+1 (513) 248-2715",
+      "state": "TX",
+      "email": "taxpayer"
+    },
+    "hasIrsNotice": false,
+    "caseType": "${caseType}",
+    "filingType": "Myself",
+    "partyType": "${partyType}",
+    "contactSecondary": ${secondaryContactJson},
+    "procedureType": "${caseProcedure}",
+    "preferredTrialCity": "${placeOfTrial}"
+  }
+}  
+EOF
+  )
+
+  echo "${caseJson}"
 
   case=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/cases" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${taxpayerToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \
-    --data-binary '{"petitionFileId":"'"${petitionFileId}"'","petitionMetadata":{"contactPrimary":{"countryType":"domestic","name":"Vernon Miranda","address1":"77 South Oak Lane","address2":"Asperiores consequat","address3":"Ipsum ab cum repelle","city":"Voluptatem aliquip c","postalCode":"23117","phone":"+1 (513) 248-2715","state":"TX","email":"taxpayer"},"wizardStep":"4","stinFile":{},"stinFileSize":115022,"searchError":false,"petitionFile":{},"petitionFileSize":115022,"hasIrsNotice":false,"caseType":"Innocent Spouse","filingType":"Myself","partyType":"Petitioner","contactSecondary":{},"procedureType":"Regular","preferredTrialCity":"Denver, Colorado"},"stinFileId":"'"${stinFileId}"'"}' \
-    --compressed)
+    --compressed \
+    -d "${caseJson}")
+
   caseId=$(echo "${case}" | jq -r ".caseId")
+  docketNumber=$(echo "${case}" | jq -r ".docketNumber")
+  echo "${docketNumber} ${caseId}" >> cases.txt
 
   aws s3 cp "./assets/small_pdf.pdf" "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${petitionFileId}"
   aws s3 cp "./assets/small_pdf.pdf" "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${stinFileId}"
+
+  if [ ! -z "$petitionerCounsel" ] ; then
+    if [ "$petitionerCounsel" == 'practitioner1' ] ; then 
+      barNumber="PT1234" 
+    fi
+    if [ "$petitionerCounsel" == 'practitioner2' ] ; then 
+      barNumber="PT5432" 
+    fi
+
+    searchResults=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/users/practitioners/search?searchKey=${barNumber}" \
+      -H 'Accept: application/json, text/plain, */*' \
+      -H "Authorization: Bearer ${petitionsclerkToken}" \
+      -H 'Content-Type: application/json;charset=UTF-8'
+    )
+
+    practitionerId=$(echo "${searchResults}" | jq -r ".[0].userId")
+
+    associateBodyJson=$(cat <<EOF
+{
+  "caseId": "${caseId}",
+  "representingPrimary": true,
+  "userId": "${practitionerId}"
+}
+EOF
+)
+
+    curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/cases/${caseId}/associate-practitioner" \
+      -H 'Accept: application/json, text/plain, */*' \
+      -H "Authorization: Bearer ${petitionsclerkToken}" \
+      -H 'Content-Type: application/json;charset=UTF-8' \
+      --data-binary "${associateBodyJson}" \
+      --compressed
+  fi
+
+  if [ ! -z "$respondentCounsel" ] ; then
+    if [ "$respondentCounsel" == 'respondent1' ] ; then 
+      barNumber="RT6789" 
+    fi
+    if [ "$respondentCounsel" == 'respondent2' ] ; then 
+      barNumber="RT0987" 
+    fi
+
+    searchResults=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/users/respondents/search?searchKey=${barNumber}" \
+      -H 'Accept: application/json, text/plain, */*' \
+      -H "Authorization: Bearer ${petitionsclerkToken}" \
+      -H 'Content-Type: application/json;charset=UTF-8'
+    )
+
+    respondentId=$(echo "${searchResults}" | jq -r ".[0].userId")
+
+    associateBodyJson=$(cat <<EOF
+{
+  "caseId": "${caseId}",
+  "userId": "${respondentId}"
+}
+EOF
+)
+
+    curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/cases/${caseId}/associate-respondent" \
+      -H 'Accept: application/json, text/plain, */*' \
+      -H "Authorization: Bearer ${petitionsclerkToken}" \
+      -H 'Content-Type: application/json;charset=UTF-8' \
+      --data-binary "${associateBodyJson}" \
+      --compressed
+  fi
 
   curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/cases/${caseId}/send-to-irs-holding-queue" \
     -H 'Accept: application/json, text/plain, */*' \
@@ -65,5 +195,5 @@ do
     -H 'Content-Type: application/json;charset=UTF-8' \
     --data-binary '{}' \
     --compressed
-done
 
+done < ux_testing_data.csv

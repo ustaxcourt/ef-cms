@@ -16,8 +16,8 @@ exports.handler = event =>
     const applicationContext = createApplicationContext(user);
     try {
       const results = await applicationContext
-        .getPersistenceGateway()
-        .getUploadPolicy({
+        .getUseCases()
+        .getUploadPolicyInteractor({
           applicationContext,
         });
       applicationContext.logger.info('User', user);

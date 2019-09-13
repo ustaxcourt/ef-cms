@@ -305,8 +305,8 @@ functions:
           cors: true
           integration: lambda
           method: get
-          path: /{trialSessionId}/batch-download
+          path: /{trialSessionId}/batch-download/{zipName}
           response:
             headers:
               Content-Type: "'application/zip'"
-              Content-Disposition: "'attachment; filename=your-batch.zip'"
+              Content-Disposition: "'attachment'"
