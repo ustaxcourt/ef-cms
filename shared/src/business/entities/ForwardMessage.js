@@ -30,7 +30,7 @@ joiValidationDecorator(
   {
     assigneeId: 'Recipient is required.',
     forwardMessage: 'Message is required.',
-    section: 'Section is required',
+    section: 'Select a section',
   },
 );
 

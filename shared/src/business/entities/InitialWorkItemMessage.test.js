@@ -11,7 +11,7 @@ describe('InitialWorkItemMessage', () => {
         'Recipient is required.',
       );
       expect(message.getFormattedValidationErrors().section).toEqual(
-        'Section is required.',
+        'Select a section.',
       );
     });
 
