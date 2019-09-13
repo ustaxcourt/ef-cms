@@ -44,7 +44,7 @@ function CaseInternal(rawCase) {
 }
 
 CaseInternal.errorToMessageMap = Object.assign(Case.COMMON_ERROR_MESSAGES, {
-  petitionFile: 'Upload or scan a Petition',
+  petitionFile: 'Upload or scan a petition',
   preferredTrialCity: 'Select a trial location',
 });
 
