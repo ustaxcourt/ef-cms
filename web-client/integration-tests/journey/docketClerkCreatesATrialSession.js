@@ -7,12 +7,12 @@ export default (test, overrides = {}) => {
     await test.runSequence('submitTrialSessionSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      maxCases: 'Enter the maximum number of cases allowed for this session.',
-      sessionType: 'Session type is required.',
-      startDate: 'Date must be in correct format.',
-      term: 'Term session is not valid.',
-      termYear: 'Term year is required.',
-      trialLocation: 'Trial Location is required.',
+      maxCases: 'Enter a valid number of maximum cases',
+      sessionType: 'Select a session type',
+      startDate: 'Enter a valid start date',
+      term: 'Term session is not valid',
+      termYear: 'Term year is required',
+      trialLocation: 'Select a trial session location',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -51,9 +51,9 @@ export default (test, overrides = {}) => {
     await test.runSequence('validateTrialSessionSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      startDate: 'Term session is not valid.',
-      term: 'Term session is not valid.',
-      trialLocation: 'Trial Location is required.',
+      startDate: 'Enter a valid start date',
+      term: 'Term session is not valid',
+      trialLocation: 'Select a trial session location',
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
