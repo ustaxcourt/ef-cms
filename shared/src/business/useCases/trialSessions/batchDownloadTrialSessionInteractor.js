@@ -53,7 +53,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
   const { trialLocation } = trialSessionDetails;
   let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
     .replace(/\s/g, '_')
-    .replace(/,/g, '');
+    .replace(/,/g, ''); // TODO - create a sanitize utility for s3 ids // TODO - should we make these unique somehow?
 
   sessionCases = sessionCases.map(caseToBatch => {
     const caseName = Case.getCaseCaptionNames(caseToBatch.caseCaption);
@@ -106,17 +106,20 @@ exports.batchDownloadTrialSessionInteractor = async ({
     );
   }
 
-  const zipBuffer = await applicationContext
-    .getPersistenceGateway()
-    .zipDocuments({
-      applicationContext,
-      extraFileNames,
-      extraFiles,
-      fileNames,
-      returnBuffer: true,
-      s3Ids,
-      zipName,
-    });
+  console.log('zipname', zipName);
+  await applicationContext.getPersistenceGateway().zipDocuments({
+    applicationContext,
+    extraFileNames,
+    extraFiles,
+    fileNames,
+    s3Ids,
+    uploadToTempBucket: true,
+    zipName,
+  });
 
-  return { zipBuffer, zipName };
+  return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+    applicationContext,
+    useTempBucket: true,
+    zipName,
+  });
 };
