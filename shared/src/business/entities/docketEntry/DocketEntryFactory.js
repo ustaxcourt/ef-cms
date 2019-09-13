@@ -109,7 +109,7 @@ function DocketEntryFactory(rawProps) {
       },
       'Enter date received.',
     ],
-    eventCode: 'Select a document type.',
+    eventCode: 'Select a document type',
     exhibits: 'Enter selection for Exhibits.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
     lodged: 'Enter selection for Filing Status.',
