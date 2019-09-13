@@ -90,7 +90,7 @@ export default (test, fakeFile) => {
       supportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile: 'Upload a document.',
+          supportingDocumentFile: 'Upload a document',
         },
       ],
     });

@@ -22,7 +22,7 @@ describe('ExternalDocumentInformationFactory', () => {
     });
 
     it('should require primary document file', () => {
-      expect(errors().primaryDocumentFile).toEqual('Upload a document.');
+      expect(errors().primaryDocumentFile).toEqual('Upload a document');
       baseDoc.primaryDocumentFile = {};
       expect(errors().primaryDocumentFile).toEqual(undefined);
     });
@@ -139,7 +139,7 @@ describe('ExternalDocumentInformationFactory', () => {
         it('should require supporting document file to be selected', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
-          ).toEqual('Upload a document.');
+          ).toEqual('Upload a document');
           baseDoc.supportingDocuments[0].supportingDocumentFile = {};
           expect(errors().supportingDocuments).toEqual(undefined);
         });
@@ -155,7 +155,7 @@ describe('ExternalDocumentInformationFactory', () => {
         it('should require supporting document file to be selected', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
-          ).toEqual('Upload a document.');
+          ).toEqual('Upload a document');
           baseDoc.supportingDocuments[0].supportingDocumentFile = {};
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
@@ -242,7 +242,7 @@ describe('ExternalDocumentInformationFactory', () => {
         });
 
         it('should require secondary document file be added', () => {
-          expect(errors().secondaryDocumentFile).toEqual('Upload a document.');
+          expect(errors().secondaryDocumentFile).toEqual('Upload a document');
           baseDoc.secondaryDocumentFile = {};
           expect(errors().secondaryDocumentFile).toEqual(undefined);
         });
@@ -310,7 +310,7 @@ describe('ExternalDocumentInformationFactory', () => {
             it('should require supporting secondary document file to be added', () => {
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
-              ).toEqual('Upload a document.');
+              ).toEqual('Upload a document');
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFile = {};
               expect(errors().secondarySupportingDocuments).toEqual(undefined);
             });
@@ -330,7 +330,7 @@ describe('ExternalDocumentInformationFactory', () => {
             it('should require supporting secondary document file to be selected', () => {
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
-              ).toEqual('Upload a document.');
+              ).toEqual('Upload a document');
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFile = {};
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
