@@ -64,7 +64,7 @@ export const StartCaseStep2 = connect(
                   htmlFor="petition-file"
                   id="petition-file-label"
                 >
-                  Upload your Petition{' '}
+                  Upload your petition{' '}
                   <span className="success-message">
                     <FontAwesomeIcon icon="check-circle" size="1x" />
                   </span>
