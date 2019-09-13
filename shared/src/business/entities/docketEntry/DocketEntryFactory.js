@@ -107,7 +107,7 @@ function DocketEntryFactory(rawProps) {
         contains: 'must be less than or equal to',
         message: 'Received date is in the future. Please enter a valid date.',
       },
-      'Enter date received.',
+      'Enter a valid date received',
     ],
     eventCode: 'Select a document type',
     exhibits: 'Enter selection for Exhibits.',
