@@ -4,7 +4,6 @@ plugins:
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
   # - serverless-plugin-aws-alerts
-  #- serverless-offline-dynamodb-streams
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -18,14 +17,6 @@ custom:
   serverless-offline:
     host: 0.0.0.0
     port: 3002
-
-  #serverless-offline-dynamodb-streams:
-  #endpoint: http://0.0.0.0:8000
-  #region: us-east-1
-  #accessKeyId: root
-  #secretAccessKey: root
-  #skipCacheInvalidation: false
-  #readInterval: 500
 
   alerts:
     stages:
@@ -414,10 +405,3 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-  #dynamoStreamHandler:
-  #handler: web-api/src/casesHandlers.dynamoStreamHandlerLambda
-  #events:
-  #- stream:
-  #enabled: true
-  #type: dynamodb
-  #tableName: efcms-local
