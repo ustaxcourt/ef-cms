@@ -240,7 +240,7 @@ functions:
     handler: web-api/src/documentsHandlers.getUploadPolicyLambda
     events:
       - http:
-          path: /upload-policy
+          path: /{documentId}/upload-policy
           method: get
           cors: true
           authorizer:
