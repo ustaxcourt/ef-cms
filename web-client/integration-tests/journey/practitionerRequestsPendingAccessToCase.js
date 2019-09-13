@@ -12,7 +12,7 @@ export default (test, fakeFile) => {
       documentType: 'Select a document type',
       eventCode: 'Select a document',
       primaryDocumentFile: 'Upload a document',
-      representingPrimary: 'Select a party.',
+      representingPrimary: 'Select a party',
       scenario: 'Select a document',
     });
 
@@ -41,7 +41,7 @@ export default (test, fakeFile) => {
       hasSupportingDocuments: 'Enter selection for Supporting Documents.',
       objections: 'Enter selection for Objections.',
       primaryDocumentFile: 'Upload a document',
-      representingPrimary: 'Select a party.',
+      representingPrimary: 'Select a party',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {

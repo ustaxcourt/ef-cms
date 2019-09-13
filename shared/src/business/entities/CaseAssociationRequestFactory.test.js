@@ -164,7 +164,7 @@ describe('CaseAssociationRequestFactory', () => {
     });
 
     it('should require one of [representingPrimary, representingSecondary] to be selected', () => {
-      expect(errors().representingPrimary).toEqual('Select a party.');
+      expect(errors().representingPrimary).toEqual('Select a party');
       rawEntity.representingSecondary = true;
       expect(errors().representingPrimary).toEqual(undefined);
     });
