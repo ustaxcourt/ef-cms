@@ -6,7 +6,7 @@ const { ContactFactory } = require('./ContactFactory');
  */
 exports.getPetitionerCorporationContact = ContactFactory.createContactFactory({
   additionalErrorMappings: {
-    inCareOf: 'Enter in care of',
+    inCareOf: 'Enter name of in care of',
   },
   additionalValidation: {
     inCareOf: joi.string().required(),
