@@ -7,7 +7,8 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Indicate whether you are including a Certificate of Service',
+      certificateOfService:
+        'Indicate whether you are including a Certificate of Service',
       documentTitleTemplate: 'Select a document',
       documentType: 'Select a document type',
       eventCode: 'Select a document',
@@ -36,7 +37,8 @@ export default (test, fakeFile) => {
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
       attachments: 'Enter selection for Attachments.',
-      certificateOfService: 'Indicate whether you are including a Certificate of Service',
+      certificateOfService:
+        'Indicate whether you are including a Certificate of Service',
       exhibits: 'Enter selection for Exhibits.',
       hasSupportingDocuments: 'Enter selection for Supporting Documents.',
       objections: 'Enter selection for Objections.',
