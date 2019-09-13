@@ -42,7 +42,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
       it('should require certificate of service date be entered', () => {
         expect(errors().certificateOfServiceDate).toEqual(
-          'Enter date for Certificate of Service.',
+          'Enter date of service',
         );
         baseDoc.certificateOfServiceDate = moment().format();
         expect(errors().certificateOfServiceDate).toEqual(undefined);
@@ -120,7 +120,7 @@ describe('ExternalDocumentInformationFactory', () => {
         baseDoc.supportingDocuments[0].supportingDocument = 'brief';
         expect(
           errors().supportingDocuments[0].certificateOfServiceDate,
-        ).toEqual('Enter date for Certificate of Service.');
+        ).toEqual('Enter date of service');
         baseDoc.supportingDocuments[0].certificateOfServiceDate = moment().format();
         expect(errors().supportingDocuments).toEqual(undefined);
       });
@@ -229,7 +229,7 @@ describe('ExternalDocumentInformationFactory', () => {
           it('should require certificateOfServiceDate if secondary document file is selected and certificateOfService is true', () => {
             baseDoc.secondaryDocument = { certificateOfService: true };
             expect(errors().secondaryDocument.certificateOfServiceDate).toEqual(
-              'Enter date for Certificate of Service.',
+              'Enter date of service',
             );
           });
         });
@@ -291,7 +291,7 @@ describe('ExternalDocumentInformationFactory', () => {
               'brief';
             expect(
               errors().secondarySupportingDocuments[0].certificateOfServiceDate,
-            ).toEqual('Enter date for Certificate of Service.');
+            ).toEqual('Enter date of service');
             baseDoc.secondarySupportingDocuments[0].certificateOfServiceDate = moment().format();
             expect(errors().secondarySupportingDocuments).toEqual(undefined);
           });

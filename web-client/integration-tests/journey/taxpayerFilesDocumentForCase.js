@@ -161,7 +161,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter date for Certificate of Service.',
+      certificateOfServiceDate: 'Enter date of service',
       objections: 'Enter selection for Objections.',
       primaryDocumentFile: 'Upload a document',
       secondaryDocumentFile: 'Upload a document',
@@ -180,7 +180,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter date for Certificate of Service.',
+      certificateOfServiceDate: 'Enter date of service',
       primaryDocumentFile: 'Upload a document',
       secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [

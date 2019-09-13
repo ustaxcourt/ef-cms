@@ -118,7 +118,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
         message:
           'Certificate of Service date is in the future. Please enter a valid date.',
       },
-      'Enter date for Certificate of Service.',
+      'Enter date of service',
     ],
     hasSecondarySupportingDocuments:
       'Enter selection for Secondary Supporting Documents.',

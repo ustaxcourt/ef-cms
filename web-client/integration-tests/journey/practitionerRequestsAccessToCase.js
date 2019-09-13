@@ -58,7 +58,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter a Certificate of Service Date.',
+      certificateOfServiceDate: 'Enter date of service',
       representingPrimary: 'Select a party.',
     });
 

@@ -32,7 +32,7 @@ describe('SupportingDocumentInformationFactory', () => {
           supportingDocumentFile: {},
         });
         expect(extDoc.getFormattedValidationErrors()).toEqual({
-          certificateOfServiceDate: 'Enter date for Certificate of Service.',
+          certificateOfServiceDate: 'Enter date of service',
         });
       });
     });

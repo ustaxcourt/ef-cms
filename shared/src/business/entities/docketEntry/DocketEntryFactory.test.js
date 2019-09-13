@@ -98,7 +98,7 @@ describe('DocketEntryFactory', () => {
 
         it('should require certificate of service date be entered', () => {
           expect(errors().certificateOfServiceDate).toEqual(
-            'Enter a Certificate of Service Date.',
+            'Enter date of service',
           );
           rawEntity.certificateOfServiceDate = moment().format();
           expect(errors().certificateOfServiceDate).toEqual(undefined);

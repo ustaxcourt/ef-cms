@@ -63,7 +63,7 @@ describe('SecondaryDocumentInformationFactory', () => {
           secondaryDocumentFile: {},
         });
         expect(extDoc.getFormattedValidationErrors()).toEqual({
-          certificateOfServiceDate: 'Enter date for Certificate of Service.',
+          certificateOfServiceDate: 'Enter date of service',
         });
       });
 
