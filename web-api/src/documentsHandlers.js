@@ -1,7 +1,7 @@
 module.exports = {
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
     .handler,
-  getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrl')
+  getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrlLambda')
     .handler,
   getUploadPolicyLambda: require('./documents/getUploadPolicyLambda').handler,
   sanitizePdfLambda: require('./documents/sanitizePdfLambda').handler,
