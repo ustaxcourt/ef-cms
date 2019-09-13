@@ -36,7 +36,7 @@ export const Address = connect(
           }
         >
           <label className="usa-label" htmlFor={`${type}.address1`}>
-            Mailing Address Line 1
+            Mailing address line 1
           </label>
           <input
             autoCapitalize="none"
