@@ -114,9 +114,9 @@ function DocketEntryFactory(rawProps) {
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
     lodged: 'Enter selection for Filing Status.',
     objections: 'Enter selection for Objections.',
-    partyPrimary: 'Select a filing party.',
-    partyRespondent: 'Select a filing party.',
-    partySecondary: 'Select a filing party.',
+    partyPrimary: 'Select a filing party',
+    partyRespondent: 'Select a filing party',
+    partySecondary: 'Select a filing party',
     primaryDocumentFileSize: [
       {
         contains: 'must be less than or equal to',
