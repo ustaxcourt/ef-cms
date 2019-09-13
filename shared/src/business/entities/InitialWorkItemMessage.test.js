@@ -5,7 +5,7 @@ describe('InitialWorkItemMessage', () => {
     it('should have error messages for missing fields', () => {
       const message = new InitialWorkItemMessage({});
       expect(message.getFormattedValidationErrors().message).toEqual(
-        'Message is required.',
+        'Enter a message',
       );
       expect(message.getFormattedValidationErrors().assigneeId).toEqual(
         'Select a recipient',
