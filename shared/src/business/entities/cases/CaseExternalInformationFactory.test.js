@@ -309,7 +309,7 @@ describe('CaseExternalInformationFactory entity', () => {
           countryType: 'Enter country type',
           name: 'Enter name',
           phone: 'Enter phone number',
-          postalCode: 'Enter zip code',
+          postalCode: 'Enter ZIP code',
           state: 'Enter state',
         },
       });
@@ -416,7 +416,7 @@ describe('CaseExternalInformationFactory entity', () => {
           countryType: 'Enter country type',
           name: 'Enter name',
           phone: 'Enter phone number',
-          postalCode: 'Enter zip code',
+          postalCode: 'Enter ZIP code',
           state: 'Enter state',
         },
         contactSecondary: {
@@ -425,7 +425,7 @@ describe('CaseExternalInformationFactory entity', () => {
           countryType: 'Enter country type',
           name: 'Enter name',
           phone: 'Enter phone number',
-          postalCode: 'Enter zip code',
+          postalCode: 'Enter ZIP code',
           state: 'Enter state',
         },
         petitionFileSize: 'Your Petition file size is empty',

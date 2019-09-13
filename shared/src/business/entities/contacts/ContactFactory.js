@@ -127,9 +127,9 @@ const domesticErrorToMessageMap = {
   postalCode: [
     {
       contains: 'match',
-      message: 'Enter zip code.',
+      message: 'Enter ZIP code.',
     },
-    'Enter zip code',
+    'Enter ZIP code',
   ],
   state: 'Enter state',
 };
@@ -141,7 +141,7 @@ const internationalErrorToMessageMap = {
   countryType: 'Enter country type',
   name: 'Enter name',
   phone: 'Enter phone number',
-  postalCode: 'Enter zip code',
+  postalCode: 'Enter ZIP code',
 };
 
 /* eslint-disable sort-keys-fix/sort-keys-fix */

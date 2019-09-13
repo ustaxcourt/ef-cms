@@ -237,11 +237,11 @@ export const Address = connect(
           }
         >
           <label
-            aria-label="zip code"
+            aria-label="ZIP code"
             className="usa-label"
             htmlFor={`${type}.postalCode`}
           >
-            Zip code
+            ZIP code
           </label>
           <input
             autoCapitalize="none"
