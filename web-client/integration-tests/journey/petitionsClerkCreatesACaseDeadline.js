@@ -12,7 +12,7 @@ export default (test, overrides = {}) => {
     await test.runSequence('createCaseDeadlineSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      deadlineDate: 'Please enter a valid deadline date.',
+      deadlineDate: 'Enter a valid deadline date',
       description: 'Please enter a description.',
     });
 

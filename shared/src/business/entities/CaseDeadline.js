@@ -24,7 +24,7 @@ function CaseDeadline(rawProps, { applicationContext }) {
 
 CaseDeadline.errorToMessageMap = {
   caseId: 'You must have a case id.',
-  deadlineDate: 'Please enter a valid deadline date.',
+  deadlineDate: 'Enter a valid deadline date',
   description: [
     {
       contains: 'length must be less than or equal to',
