@@ -94,7 +94,7 @@ export const LocationInformationForm = connect(
 
           <div className="usa-form-group">
             <label className="usa-label" htmlFor="address2">
-              Address Line 2 <span className="usa-hint">(optional)</span>
+              Address line 2 <span className="usa-hint">(optional)</span>
             </label>
             <input
               autoCapitalize="none"
