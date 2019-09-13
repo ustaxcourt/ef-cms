@@ -8,10 +8,10 @@ export const FilingsAndProceedings = connect(
   {
     arrayIndex: props.arrayIndex,
     baseUrl: state.baseUrl,
-    caseDetail: state.formattedCaseDetail,
     caseDetailHelper: state.caseDetailHelper,
     document: props.document,
     documentHelper: state.documentHelper,
+    formattedCaseDetail: state.formattedCaseDetail,
     record: props.record,
     showDocketRecordDetailModalSequence:
       sequences.showDocketRecordDetailModalSequence,
@@ -20,10 +20,10 @@ export const FilingsAndProceedings = connect(
   ({
     arrayIndex,
     baseUrl,
-    caseDetail,
     caseDetailHelper,
     document,
     documentHelper,
+    formattedCaseDetail,
     record,
     showDocketRecordDetailModalSequence,
     token,
@@ -106,7 +106,7 @@ export const FilingsAndProceedings = connect(
           <a
             aria-label="View PDF"
             href={documentHelper({
-              docketNumber: caseDetail.docketNumber,
+              docketNumber: formattedCaseDetail.docketNumber,
               documentId: document.documentId,
               shouldLinkToEdit: document.isFileAttached === false,
             })}

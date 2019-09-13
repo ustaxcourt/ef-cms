@@ -14,13 +14,13 @@ import React from 'react';
 
 export const CaseDetail = connect(
   {
-    caseDetail: state.formattedCaseDetail,
-    caseHelper: state.caseDetailHelper,
+    caseDetailHelper: state.caseDetailHelper,
+    formattedCaseDetail: state.formattedCaseDetail,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
   },
   function CaseDetail({
-    caseDetail,
-    caseHelper,
+    caseDetailHelper,
+    formattedCaseDetail,
     setCaseDetailPageTabSequence,
   }) {
     return (
@@ -30,21 +30,21 @@ export const CaseDetail = connect(
             <div className="grid-row">
               <div className="tablet:grid-col-6">
                 <h1 className="heading-2 captioned" tabIndex="-1">
-                  Docket Number: {caseDetail.docketNumberWithSuffix}
+                  Docket Number: {formattedCaseDetail.docketNumberWithSuffix}
                 </h1>
-                <p className="margin-0">{caseDetail.caseTitle}</p>
+                <p className="margin-0">{formattedCaseDetail.caseTitle}</p>
               </div>
               <div className="tablet:grid-col-6">
-                {caseHelper.showRequestAccessToCaseButton && (
+                {caseDetailHelper.showRequestAccessToCaseButton && (
                   <a
                     className="usa-button tablet-full-width push-right margin-right-0"
-                    href={`/case-detail/${caseDetail.docketNumber}/request-access`}
+                    href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
                     id="button-request-access"
                   >
                     Request Access to Case
                   </a>
                 )}
-                {caseHelper.showPendingAccessToCaseButton && (
+                {caseDetailHelper.showPendingAccessToCaseButton && (
                   <span
                     aria-label="Request for Access Pending"
                     className="usa-tag push-right margin-right-0 padding-x-3"
@@ -52,10 +52,10 @@ export const CaseDetail = connect(
                     <span aria-hidden="true">Request for Access Pending</span>
                   </span>
                 )}
-                {caseHelper.showFileFirstDocumentButton && (
+                {caseDetailHelper.showFileFirstDocumentButton && (
                   <a
                     className="usa-button tablet-full-width push-right margin-right-0"
-                    href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
+                    href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
                     id="button-first-irs-document"
                   >
                     <FontAwesomeIcon icon="file" size="1x" /> File First IRS
@@ -69,7 +69,7 @@ export const CaseDetail = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          {caseHelper.showActionRequired && (
+          {caseDetailHelper.showActionRequired && (
             <div className="margin-bottom-6">
               <div className="title">
                 <h1>Action Required</h1>
@@ -85,7 +85,7 @@ export const CaseDetail = connect(
                 className="usa-select"
                 id="mobile-document-detail-tab-selector"
                 name="partyType"
-                value={caseHelper.documentDetailTab}
+                value={caseDetailHelper.documentDetailTab}
                 onChange={e => {
                   setCaseDetailPageTabSequence({
                     tab: e.target.value,
@@ -114,7 +114,7 @@ export const CaseDetail = connect(
                 tabName="caseInfo"
                 title="Case Information"
               >
-                {caseHelper.showCaseInformationPublic && (
+                {caseDetailHelper.showCaseInformationPublic && (
                   <CaseInformationPublic />
                 )}
                 <div className="case-detail-party-info">

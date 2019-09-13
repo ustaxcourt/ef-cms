@@ -15,11 +15,15 @@ import React from 'react';
 
 export const TrialSessionDetail = connect(
   {
-    formattedTrialSession: state.formattedTrialSessionDetails,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
     showModal: state.showModal,
   },
-  ({ formattedTrialSession, openSetCalendarModalSequence, showModal }) => (
+  ({
+    formattedTrialSessionDetails,
+    openSetCalendarModalSequence,
+    showModal,
+  }) => (
     <>
       <TrialSessionDetailHeader />
 
@@ -29,7 +33,7 @@ export const TrialSessionDetail = connect(
 
         <TrialSessionInformation />
 
-        {!formattedTrialSession.isCalendared && (
+        {!formattedTrialSessionDetails.isCalendared && (
           <Tabs
             bind="trialsessiondetails.caseList"
             defaultActiveTab="EligibleCases"
@@ -55,7 +59,7 @@ export const TrialSessionDetail = connect(
           </Tabs>
         )}
 
-        {formattedTrialSession.isCalendared && (
+        {formattedTrialSessionDetails.isCalendared && (
           <Tabs
             bind="trialsessiondetails.calendaredCaseList"
             defaultActiveTab="OpenCases"

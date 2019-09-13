@@ -4,13 +4,13 @@ import React from 'react';
 
 export const AllCases = connect(
   {
-    formattedCases: state.formattedTrialSessionDetails.allCases,
+    allCases: state.formattedTrialSessionDetails.allCases,
   },
-  ({ formattedCases }) => {
+  ({ allCases }) => {
     return (
       <React.Fragment>
         <div className="text-semibold push-right margin-bottom-2 margin-top-neg-205">
-          Count: {formattedCases.length}
+          Count: {allCases.length}
         </div>
         <table
           aria-describedby="all-cases-tab"
@@ -27,7 +27,7 @@ export const AllCases = connect(
               <th>Disposition</th>
             </tr>
           </thead>
-          {formattedCases.map((item, idx) => (
+          {allCases.map((item, idx) => (
             <tbody key={idx}>
               <tr className="eligible-cases-row">
                 <td>{item.status}</td>

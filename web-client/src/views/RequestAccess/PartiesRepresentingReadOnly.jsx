@@ -5,11 +5,11 @@ import React from 'react';
 
 export const PartiesRepresentingReadOnly = connect(
   {
-    caseDetail: state.formattedCaseDetail,
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
     form: state.form,
+    formattedCaseDetail: state.formattedCaseDetail,
   },
-  ({ caseDetail, chooseWizardStepSequence, form }) => {
+  ({ chooseWizardStepSequence, form, formattedCaseDetail }) => {
     return (
       <React.Fragment>
         <div className="margin-top-4">
@@ -32,10 +32,10 @@ export const PartiesRepresentingReadOnly = connect(
             </label>
             <ul className="ustc-unstyled-list without-margins">
               {form.representingPrimary && (
-                <li>{caseDetail.contactPrimary.name}</li>
+                <li>{formattedCaseDetail.contactPrimary.name}</li>
               )}
               {form.representingSecondary && (
-                <li>{caseDetail.contactSecondary.name}</li>
+                <li>{formattedCaseDetail.contactSecondary.name}</li>
               )}
             </ul>
           </div>

@@ -5,10 +5,10 @@ import React from 'react';
 
 export const TrialSessionInformation = connect(
   {
-    formattedTrialSession: state.formattedTrialSessionDetails,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     printTrialCalendarSequence: sequences.printTrialCalendarSequence,
   },
-  ({ formattedTrialSession, printTrialCalendarSequence }) => {
+  ({ formattedTrialSessionDetails, printTrialCalendarSequence }) => {
     return (
       <>
         <div className="grid-container padding-x-0">
@@ -17,7 +17,7 @@ export const TrialSessionInformation = connect(
               <h1>Session Information</h1>
             </div>
             <div className="grid-col-2">
-              {formattedTrialSession.isCalendared && (
+              {formattedTrialSessionDetails.isCalendared && (
                 <button
                   className="usa-button usa-button--unstyled float-right margin-top-2"
                   onClick={() => {
@@ -46,11 +46,11 @@ export const TrialSessionInformation = connect(
                       <div className="grid-row grid-gap">
                         <div className="grid-col-6">
                           <p className="label">Term</p>
-                          <p>{formattedTrialSession.formattedTerm}</p>
+                          <p>{formattedTrialSessionDetails.formattedTerm}</p>
                         </div>
                         <div className="grid-col-6">
                           <p className="label">Type</p>
-                          <p>{formattedTrialSession.sessionType}</p>
+                          <p>{formattedTrialSessionDetails.sessionType}</p>
                         </div>
                       </div>
 
@@ -59,38 +59,40 @@ export const TrialSessionInformation = connect(
                           <p className="label">Date</p>
                           <p
                             className={
-                              formattedTrialSession.showSwingSession
+                              formattedTrialSessionDetails.showSwingSession
                                 ? ''
                                 : 'margin-bottom-0'
                             }
                           >
-                            {formattedTrialSession.formattedStartDate}{' '}
-                            {formattedTrialSession.formattedStartTime}
+                            {formattedTrialSessionDetails.formattedStartDate}{' '}
+                            {formattedTrialSessionDetails.formattedStartTime}
                           </p>
                         </div>
                         <div className="grid-col-6">
                           <p className="label">Max # of Cases</p>
                           <p
                             className={
-                              formattedTrialSession.showSwingSession
+                              formattedTrialSessionDetails.showSwingSession
                                 ? ''
                                 : 'margin-bottom-0'
                             }
                           >
-                            {formattedTrialSession.maxCases}
+                            {formattedTrialSessionDetails.maxCases}
                           </p>
                         </div>
                       </div>
 
-                      {formattedTrialSession.showSwingSession && (
+                      {formattedTrialSessionDetails.showSwingSession && (
                         <div className="grid-row grid-gap">
                           <div className="grid-col-6">
                             <p className="label">Swing Session</p>
                             <p className="margin-bottom-0">
                               <a
-                                href={`/trial-session-detail/${formattedTrialSession.swingSessionId}`}
+                                href={`/trial-session-detail/${formattedTrialSessionDetails.swingSessionId}`}
                               >
-                                {formattedTrialSession.swingSessionLocation}
+                                {
+                                  formattedTrialSessionDetails.swingSessionLocation
+                                }
                               </a>
                             </p>
                           </div>
@@ -108,17 +110,19 @@ export const TrialSessionInformation = connect(
                       <div className="grid-row grid-gap">
                         <div className="grid-col-6">
                           <p className="label">Judge</p>
-                          <p>{formattedTrialSession.formattedJudge}</p>
+                          <p>{formattedTrialSessionDetails.formattedJudge}</p>
                         </div>
                         <div className="grid-col-6">
                           <p className="label">Trial Clerk</p>
-                          <p>{formattedTrialSession.formattedTrialClerk}</p>
+                          <p>
+                            {formattedTrialSessionDetails.formattedTrialClerk}
+                          </p>
                         </div>
                       </div>
 
                       <div
                         className={`grid-row grid-gap ${
-                          formattedTrialSession.showSwingSession
+                          formattedTrialSessionDetails.showSwingSession
                             ? 'margin-bottom-8'
                             : ''
                         }`}
@@ -126,14 +130,16 @@ export const TrialSessionInformation = connect(
                         <div className="grid-col-6">
                           <p className="label">Court Reporter</p>
                           <p className="margin-bottom-0">
-                            {formattedTrialSession.formattedCourtReporter}
+                            {
+                              formattedTrialSessionDetails.formattedCourtReporter
+                            }
                           </p>
                         </div>
                         <div className="grid-col-6">
                           <p className="label">IRS Calendar Administrator</p>
                           <p className="margin-bottom-0">
                             {
-                              formattedTrialSession.formattedIrsCalendarAdministrator
+                              formattedTrialSessionDetails.formattedIrsCalendarAdministrator
                             }
                           </p>
                         </div>
@@ -148,19 +154,19 @@ export const TrialSessionInformation = connect(
                 <div className="card trial-session-card">
                   <div className="content-wrapper">
                     <h3 className="underlined">Courthouse Location</h3>
-                    {formattedTrialSession.noLocationEntered && (
+                    {formattedTrialSessionDetails.noLocationEntered && (
                       <p>No location entered</p>
                     )}
-                    <p>{formattedTrialSession.courthouseName}</p>
+                    <p>{formattedTrialSessionDetails.courthouseName}</p>
                     <p>
                       <span className="address-line">
-                        {formattedTrialSession.address1}
+                        {formattedTrialSessionDetails.address1}
                       </span>
                       <span className="address-line">
-                        {formattedTrialSession.address2}
+                        {formattedTrialSessionDetails.address2}
                       </span>
                       <span className="address-line">
-                        {formattedTrialSession.formattedCityStateZip}
+                        {formattedTrialSessionDetails.formattedCityStateZip}
                       </span>
                     </p>
                   </div>
@@ -170,7 +176,7 @@ export const TrialSessionInformation = connect(
                 <div className="card trial-session-card">
                   <div className="content-wrapper">
                     <h3 className="underlined">Notes</h3>
-                    {formattedTrialSession.notes}
+                    {formattedTrialSessionDetails.notes}
                   </div>
                 </div>
               </div>

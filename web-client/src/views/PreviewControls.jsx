@@ -1,9 +1,19 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
+import { props } from 'cerebral';
 import React from 'react';
 
 export const PreviewControls = connect(
-  {},
+  {
+    currentPage: props.currentPage,
+    disableLeftButtons: props.disableLeftButtons,
+    disableRightButtons: props.disableRightButtons,
+    onFirstPage: props.onFirstPage,
+    onLastPage: props.onLastPage,
+    onNextPage: props.onNextPage,
+    onPreviousPage: props.onPreviousPage,
+    totalPages: props.totalPages,
+  },
   ({
     currentPage,
     disableLeftButtons,

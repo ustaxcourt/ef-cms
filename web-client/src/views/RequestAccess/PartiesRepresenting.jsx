@@ -4,8 +4,8 @@ import React from 'react';
 
 export const PartiesRepresenting = connect(
   {
-    caseDetail: state.formattedCaseDetail,
     form: state.form,
+    formattedCaseDetail: state.formattedCaseDetail,
     requestAccessHelper: state.requestAccessHelper,
     updateCaseAssociationFormValueSequence:
       sequences.updateCaseAssociationFormValueSequence,
@@ -13,8 +13,8 @@ export const PartiesRepresenting = connect(
       sequences.validateCaseAssociationRequestSequence,
   },
   ({
-    caseDetail,
     form,
+    formattedCaseDetail,
     requestAccessHelper,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
@@ -54,7 +54,7 @@ export const PartiesRepresenting = connect(
                   }}
                 />
                 <label className="usa-checkbox__label" htmlFor="party-primary">
-                  {caseDetail.contactPrimary.name}
+                  {formattedCaseDetail.contactPrimary.name}
                 </label>
               </div>
               {requestAccessHelper.showSecondaryParty && (
@@ -78,7 +78,7 @@ export const PartiesRepresenting = connect(
                     className="usa-checkbox__label"
                     htmlFor="party-secondary"
                   >
-                    {caseDetail.contactSecondary.name}
+                    {formattedCaseDetail.contactSecondary.name}
                   </label>
                 </div>
               )}
