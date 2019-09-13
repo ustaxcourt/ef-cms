@@ -235,7 +235,7 @@ export const Address = connect(
             className="usa-label"
             htmlFor={`${type}.postalCode`}
           >
-            ZIP Code
+            Zip code
           </label>
           <input
             autoCapitalize="none"

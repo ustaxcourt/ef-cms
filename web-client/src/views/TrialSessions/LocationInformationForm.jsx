@@ -231,7 +231,7 @@ export const LocationInformationForm = connect(
               className="usa-label"
               htmlFor="postal-code"
             >
-              ZIP Code <span className="usa-hint">(optional)</span>
+              Zip Code <span className="usa-hint">(optional)</span>
             </label>
             <input
               autoCapitalize="none"
