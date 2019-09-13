@@ -137,7 +137,7 @@ const domesticErrorToMessageMap = {
 const internationalErrorToMessageMap = {
   address1: 'Enter mailing address',
   city: 'Enter city',
-  country: 'Entry a country',
+  country: 'Enter a country',
   countryType: 'Enter country type',
   name: 'Enter name',
   phone: 'Enter phone number',
