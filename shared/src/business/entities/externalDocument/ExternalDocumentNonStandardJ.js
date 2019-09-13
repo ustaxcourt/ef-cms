@@ -24,8 +24,8 @@ ExternalDocumentNonStandardJ.prototype.getDocumentTitle = function() {
 ExternalDocumentNonStandardJ.errorToMessageMap = {
   category: 'Select a Category.',
   documentType: 'Select a document type',
-  freeText: 'Provide an answer.',
-  freeText2: 'Provide an answer.',
+  freeText: 'Provide an answer',
+  freeText2: 'Provide an answer',
 };
 
 ExternalDocumentNonStandardJ.schema = {
