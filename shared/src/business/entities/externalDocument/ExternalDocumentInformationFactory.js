@@ -116,7 +116,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       {
         contains: 'must be less than or equal to',
         message:
-          'Certificate of Service date is in the future. Please enter a valid date.',
+          'Certificate of Service date is in the future. Enter a valid date.',
       },
       'Enter date of service',
     ],
