@@ -7,16 +7,16 @@ import React from 'react';
 
 export const CaseDetailHeader = connect(
   {
-    caseDetail: state.formattedCaseDetail,
-    caseHelper: state.caseDetailHelper,
+    caseDetailHelper: state.caseDetailHelper,
+    formattedCaseDetail: state.formattedCaseDetail,
     openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
     showModal: state.showModal,
   },
   ({
-    caseDetail,
-    caseHelper,
+    caseDetailHelper,
+    formattedCaseDetail,
     openCaseCaptionModalSequence,
     openCreateOrderChooseTypeModalSequence,
     showModal,
@@ -28,23 +28,23 @@ export const CaseDetailHeader = connect(
             <div className="tablet:grid-col-8">
               <div className="margin-bottom-1">
                 <h1 className="heading-2 captioned" tabIndex="-1">
-                  <a href={'/case-detail/' + caseDetail.docketNumber}>
-                    Docket Number: {caseDetail.docketNumberWithSuffix}
+                  <a href={'/case-detail/' + formattedCaseDetail.docketNumber}>
+                    Docket Number: {formattedCaseDetail.docketNumberWithSuffix}
                   </a>
                 </h1>
-                {caseHelper.hidePublicCaseInformation && (
+                {caseDetailHelper.hidePublicCaseInformation && (
                   <span
-                    aria-label={`status: ${caseDetail.status}`}
+                    aria-label={`status: ${formattedCaseDetail.status}`}
                     className="usa-tag"
                   >
-                    <span aria-hidden="true">{caseDetail.status}</span>
+                    <span aria-hidden="true">{formattedCaseDetail.status}</span>
                   </span>
                 )}
               </div>
               <p className="margin-y-0" id="case-title">
                 <span>
-                  {caseDetail.caseTitle}{' '}
-                  {caseHelper.showCaptionEditButton && (
+                  {formattedCaseDetail.caseTitle}{' '}
+                  {caseDetailHelper.showCaptionEditButton && (
                     <button
                       className="usa-button usa-button--unstyled margin-left-105"
                       id="caption-edit-button"
@@ -63,10 +63,10 @@ export const CaseDetailHeader = connect(
               )}
             </div>
             <div className="tablet:grid-col-4">
-              {caseHelper.showCreateOrderButton && (
+              {caseDetailHelper.showCreateOrderButton && (
                 <button
                   className="usa-button usa-button--inverse float-right"
-                  href={`/case-detail/${caseDetail.docketNumber}/create-order`}
+                  href={`/case-detail/${formattedCaseDetail.docketNumber}/create-order`}
                   id="button-create-order"
                   onClick={() => openCreateOrderChooseTypeModalSequence()}
                 >

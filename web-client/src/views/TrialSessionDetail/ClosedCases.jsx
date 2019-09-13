@@ -4,13 +4,13 @@ import React from 'react';
 
 export const ClosedCases = connect(
   {
-    formattedCases: state.formattedTrialSessionDetails.closedCases,
+    closedCases: state.formattedTrialSessionDetails.closedCases,
   },
-  ({ formattedCases }) => {
+  ({ closedCases }) => {
     return (
       <React.Fragment>
         <div className="text-semibold push-right margin-bottom-2 margin-top-neg-205">
-          Count: {formattedCases.length}
+          Count: {closedCases.length}
         </div>
         <table
           aria-describedby="closed-cases-tab"
@@ -26,7 +26,7 @@ export const ClosedCases = connect(
               <th>Disposition</th>
             </tr>
           </thead>
-          {formattedCases.map((item, idx) => (
+          {closedCases.map((item, idx) => (
             <tbody key={idx}>
               <tr className="eligible-cases-row">
                 <td>

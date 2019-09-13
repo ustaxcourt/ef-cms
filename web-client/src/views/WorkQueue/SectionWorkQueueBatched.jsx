@@ -6,11 +6,10 @@ import React from 'react';
 export const SectionWorkQueueBatched = connect(
   {
     documentHelper: state.documentHelper,
-    workQueue: state.formattedWorkQueue,
+    formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
-    workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentHelper, workQueue, workQueueHelper }) => {
+  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -31,7 +30,7 @@ export const SectionWorkQueueBatched = connect(
               <th>Batched By</th>
             </tr>
           </thead>
-          {workQueue.map((item, idx) => {
+          {formattedWorkQueue.map((item, idx) => {
             return (
               <tbody key={idx}>
                 <tr>

@@ -5,10 +5,10 @@ import React from 'react';
 export const RecentMessagesInbox = connect(
   {
     documentHelper: state.documentHelper,
-    workQueue: state.formattedWorkQueue,
+    formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentHelper, workQueue, workQueueHelper }) => {
+  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -25,7 +25,7 @@ export const RecentMessagesInbox = connect(
               <th>Document</th>
             </tr>
           </thead>
-          {workQueue.slice(0, 5).map((item, idx) => {
+          {formattedWorkQueue.slice(0, 5).map((item, idx) => {
             return (
               <tbody key={idx}>
                 <tr>

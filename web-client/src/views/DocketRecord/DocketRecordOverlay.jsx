@@ -63,7 +63,10 @@ class DocketRecordOverlayComponent extends React.Component {
 
   renderModalContent() {
     const closeFunc = this.props.dismissModalSequence;
-    const { document, record } = this.props.caseDetail.docketRecordWithDocument[
+    const {
+      document,
+      record,
+    } = this.props.formattedCaseDetail.docketRecordWithDocument[
       this.props.docketRecordIndex
     ];
     const { baseUrl, token } = this.props;
@@ -124,21 +127,19 @@ class DocketRecordOverlayComponent extends React.Component {
 
 DocketRecordOverlayComponent.propTypes = {
   baseUrl: PropTypes.string,
-  caseDetail: PropTypes.object,
   dismissModalSequence: PropTypes.func,
   docketRecordIndex: PropTypes.number,
-  helper: PropTypes.object,
+  formattedCaseDetail: PropTypes.object,
   token: PropTypes.string,
 };
 
 export const DocketRecordOverlay = connect(
   {
     baseUrl: state.baseUrl,
-    caseDetail: state.formattedCaseDetail,
     clearDocumentSequence: sequences.clearDocumentSequence,
     dismissModalSequence: sequences.dismissModalSequence,
     docketRecordIndex: state.docketRecordIndex,
-    helper: state.caseDetailHelper,
+    formattedCaseDetail: state.formattedCaseDetail,
     token: state.token,
   },
   DocketRecordOverlayComponent,
