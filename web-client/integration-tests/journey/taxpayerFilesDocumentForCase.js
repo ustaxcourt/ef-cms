@@ -119,7 +119,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       secondaryDocument: {
-        freeText: 'Provide an answer.',
+        freeText: 'Provide an answer',
       },
     });
 
