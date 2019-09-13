@@ -122,16 +122,8 @@ provider:
       Action:
         - 's3:*'
       Resource:
-        - Fn::Join:
-            - ''
-            - - 'arn:aws:s3:::'
-              - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
-              - '/*'
-        - Fn::Join:
-            - ''
-            - - 'arn:aws:s3:::'
-              - ${self:provider.environment.TEMP_DOCUMENTS_BUCKET_NAME}
-              - '/*'
+        - arn:aws:s3:::${self:provider.environment.DOCUMENTS_BUCKET_NAME}/*
+        - arn:aws:s3:::${self:provider.environment.TEMP_DOCUMENTS_BUCKET_NAME}/*
     - Effect: 'Allow'
       Action:
         - dynamodb:Query
