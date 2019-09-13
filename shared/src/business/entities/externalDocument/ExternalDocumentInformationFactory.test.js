@@ -165,7 +165,7 @@ describe('ExternalDocumentInformationFactory', () => {
         it('should require supporting document text to be added', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFreeText,
-          ).toEqual('Enter name.');
+          ).toEqual('Enter name');
           baseDoc.supportingDocuments[0].supportingDocumentFreeText =
             'Something';
           expect(
@@ -341,7 +341,7 @@ describe('ExternalDocumentInformationFactory', () => {
               expect(
                 errors().secondarySupportingDocuments[0]
                   .supportingDocumentFreeText,
-              ).toEqual('Enter name.');
+              ).toEqual('Enter name');
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFreeText =
                 'Something';
               expect(
