@@ -158,7 +158,7 @@ function CaseAssociationRequestFactory(rawProps) {
         message:
           'Certificate of Service date is in the future. Please enter a valid date.',
       },
-      'Enter a Certificate of Service Date.',
+      'Enter date of service',
     ],
     documentTitleTemplate: 'Select a document',
     documentType: 'Select a document',
