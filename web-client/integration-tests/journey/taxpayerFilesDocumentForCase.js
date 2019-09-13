@@ -207,7 +207,7 @@ export default (test, fakeFile) => {
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        'Certificate of Service date is in the future. Enter a valid date.',
+        'Certificate of Service date cannot be in the future.. Enter a valid date.',
       primaryDocumentFile: 'Upload a document',
       secondaryDocumentFile: 'Upload a document',
       supportingDocuments: [

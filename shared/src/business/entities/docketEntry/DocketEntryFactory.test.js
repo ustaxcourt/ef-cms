@@ -42,7 +42,7 @@ describe('DocketEntryFactory', () => {
         .add(1, 'days')
         .format();
       expect(errors().dateReceived).toEqual(
-        'Received date is in the future. Enter a valid date.',
+        'Received date cannot be in the future.. Enter a valid date.',
       );
     });
 
@@ -109,7 +109,7 @@ describe('DocketEntryFactory', () => {
             .add(1, 'days')
             .format();
           expect(errors().certificateOfServiceDate).toEqual(
-            'Certificate of Service date is in the future. Enter a valid date.',
+            'Certificate of Service date cannot be in the future.. Enter a valid date.',
           );
         });
       });
