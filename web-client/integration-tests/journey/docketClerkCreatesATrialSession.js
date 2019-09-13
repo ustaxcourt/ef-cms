@@ -51,7 +51,7 @@ export default (test, overrides = {}) => {
     await test.runSequence('validateTrialSessionSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      startDate: 'Enter a valid start date',
+      startDate: 'Term session is not valid',
       term: 'Term session is not valid',
       trialLocation: 'Select a trial session location',
     });
