@@ -8,12 +8,12 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       certificateOfService: 'Enter selection for Certificate of Service.',
-      documentTitleTemplate: 'Select a document.',
-      documentType: 'Select a document.',
-      eventCode: 'Select a document.',
+      documentTitleTemplate: 'Select a document',
+      documentType: 'Select a document',
+      eventCode: 'Select a document',
       primaryDocumentFile: 'A file was not selected.',
       representingPrimary: 'Select a party.',
-      scenario: 'Select a document.',
+      scenario: 'Select a document',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {

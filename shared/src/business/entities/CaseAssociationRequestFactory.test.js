@@ -29,26 +29,26 @@ describe('CaseAssociationRequestFactory', () => {
     });
 
     it('should require document type', () => {
-      expect(errors().documentType).toEqual('Select a document.');
+      expect(errors().documentType).toEqual('Select a document');
       rawEntity.documentType = 'Entry of Appearance';
       expect(errors().documentType).toEqual(undefined);
     });
 
     it('should require document title template', () => {
-      expect(errors().documentTitleTemplate).toEqual('Select a document.');
+      expect(errors().documentTitleTemplate).toEqual('Select a document');
       rawEntity.documentTitleTemplate =
         'Entry of Appearance for [Petitioner Names]';
       expect(errors().documentTitleTemplate).toEqual(undefined);
     });
 
     it('should require event code', () => {
-      expect(errors().eventCode).toEqual('Select a document.');
+      expect(errors().eventCode).toEqual('Select a document');
       rawEntity.eventCode = '345';
       expect(errors().eventCode).toEqual(undefined);
     });
 
     it('should require scenario title', () => {
-      expect(errors().scenario).toEqual('Select a document.');
+      expect(errors().scenario).toEqual('Select a document');
       rawEntity.scenario = 'Standard';
       expect(errors().scenario).toEqual(undefined);
     });

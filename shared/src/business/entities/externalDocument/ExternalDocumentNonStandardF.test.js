@@ -10,7 +10,7 @@ describe('ExternalDocumentNonStandardF', () => {
         category: 'Select a Category.',
         documentType: 'Select a document type',
         ordinalValue: 'Select an iteration.',
-        previousDocument: 'Select a document.',
+        previousDocument: 'Select a document',
       });
     });
 

@@ -10,7 +10,7 @@ describe('ExternalDocumentNonStandardC', () => {
         category: 'Select a Category.',
         documentType: 'Select a document type',
         freeText: 'Enter name.',
-        previousDocument: 'Select a document.',
+        previousDocument: 'Select a document',
       });
     });
 
