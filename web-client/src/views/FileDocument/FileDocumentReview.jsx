@@ -14,6 +14,7 @@ export const FileDocumentReview = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    navigateBack: sequences.navigateBackSequence,
     showModal: state.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
@@ -22,6 +23,7 @@ export const FileDocumentReview = connect(
     fileDocumentHelper,
     form,
     formCancelToggleCancelSequence,
+    navigateBack,
     showModal,
     submitExternalDocumentSequence,
   }) => {
@@ -376,7 +378,7 @@ export const FileDocumentReview = connect(
           <button
             className="usa-button usa-button--outline margin-bottom-1"
             type="button"
-            onClick={() => history.back()}
+            onClick={() => navigateBack()}
           >
             Back
           </button>

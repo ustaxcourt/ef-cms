@@ -8,6 +8,7 @@ import React from 'react';
 export const ViewAllDocumentsDesktop = connect(
   {
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    navigateBack: sequences.navigateBackSequence,
     openCompleteSelectDocumentTypeModalSequence:
       sequences.openCompleteSelectDocumentTypeModalSequence,
     showModal: state.showModal,
@@ -17,6 +18,7 @@ export const ViewAllDocumentsDesktop = connect(
   },
   ({
     formCancelToggleCancelSequence,
+    navigateBack,
     openCompleteSelectDocumentTypeModalSequence,
     showModal,
     updateFileDocumentWizardFormValueSequence,
@@ -87,7 +89,7 @@ export const ViewAllDocumentsDesktop = connect(
             <button
               className="usa-button margin-right-205"
               id="back-button"
-              onClick={() => history.back()}
+              onClick={() => navigateBack()}
             >
               Back to File a Document
             </button>
