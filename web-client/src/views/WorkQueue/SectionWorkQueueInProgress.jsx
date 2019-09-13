@@ -7,22 +7,22 @@ export const SectionWorkQueueInProgress = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
     documentHelper: state.documentHelper,
-    sectionWorkQueue: state.formattedWorkQueue,
+    formattedWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
     selectedWorkItems: state.selectedWorkItems,
-    setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
+    setFocusedWorkItemSequence: sequences.setFocusedWorkItemSequence,
     users: state.users,
     workQueueHelper: state.workQueueHelper,
   },
   ({
     assignSelectedWorkItemsSequence,
     documentHelper,
-    sectionWorkQueue,
+    formattedWorkQueue,
     selectAssigneeSequence,
     selectedWorkItems,
     selectWorkItemSequence,
-    setFocusedWorkItem,
+    setFocusedWorkItemSequence,
     users,
     workQueueHelper,
   }) => {
@@ -80,11 +80,11 @@ export const SectionWorkQueueInProgress = connect(
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
             </tr>
           </thead>
-          {sectionWorkQueue.map((item, idx) => (
+          {formattedWorkQueue.map((item, idx) => (
             <tbody
               key={idx}
               onClick={() =>
-                setFocusedWorkItem({
+                setFocusedWorkItemSequence({
                   queueType: 'workQueue',
                   uiKey: item.uiKey,
                 })

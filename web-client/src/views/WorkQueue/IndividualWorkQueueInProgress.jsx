@@ -5,10 +5,10 @@ import React from 'react';
 export const IndividualWorkQueueInProgress = connect(
   {
     documentHelper: state.documentHelper,
-    workQueue: state.formattedWorkQueue,
+    formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentHelper, workQueue, workQueueHelper }) => {
+  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -29,7 +29,7 @@ export const IndividualWorkQueueInProgress = connect(
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
             </tr>
           </thead>
-          {workQueue.map((item, idx) => {
+          {formattedWorkQueue.map((item, idx) => {
             return (
               <tbody key={idx}>
                 <tr>

@@ -6,13 +6,13 @@ import React from 'react';
 export const SectionWorkQueueOutbox = connect(
   {
     documentHelper: state.documentHelper,
-    sectionWorkQueue: state.formattedWorkQueue,
+    formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
   ({
     documentHelper,
-    sectionWorkQueue,
+    formattedWorkQueue,
     workQueueHelper,
     workQueueSectionHelper,
   }) => {
@@ -42,7 +42,7 @@ export const SectionWorkQueueOutbox = connect(
             {workQueueHelper.showServedColumn && <th>Served</th>}
           </tr>
         </thead>
-        {sectionWorkQueue.map((item, idx) => (
+        {formattedWorkQueue.map((item, idx) => (
           <tbody key={idx}>
             <tr>
               <td aria-hidden="true" className="focus-toggle" />

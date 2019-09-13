@@ -5,9 +5,9 @@ import React from 'react';
 
 export const CaseListPetitioner = connect(
   {
-    caseList: state.formattedCases,
+    formattedCases: state.formattedCases,
   },
-  ({ caseList }) => {
+  ({ formattedCases }) => {
     return (
       <>
         <div className="grid-container padding-x-0">
@@ -42,7 +42,7 @@ export const CaseListPetitioner = connect(
               </tr>
             </thead>
             <tbody>
-              {caseList.map(item => (
+              {formattedCases.map(item => (
                 <tr key={item.docketNumber}>
                   <td className="hide-on-mobile">
                     <a href={'/case-detail/' + item.docketNumber}>
