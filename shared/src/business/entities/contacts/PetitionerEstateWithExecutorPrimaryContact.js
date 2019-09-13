@@ -7,8 +7,7 @@ const { ContactFactory } = require('./ContactFactory');
 exports.getPetitionerEstateWithExecutorPrimaryContact = ContactFactory.createContactFactory(
   {
     additionalErrorMappings: {
-      secondaryName:
-        'Enter name of executor/personal representative',
+      secondaryName: 'Enter name of executor/personal representative',
       title: 'Enter title',
     },
     additionalValidation: {
