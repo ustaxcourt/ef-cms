@@ -16,7 +16,7 @@ describe('validateForwardMessageInteractor', () => {
 
     expect(errors).toEqual({
       assigneeId: 'Select a recipient',
-      forwardMessage: 'Message is required.',
+      forwardMessage: 'Enter a message',
       section: 'Select a section',
     });
   });
@@ -49,7 +49,7 @@ describe('validateForwardMessageInteractor', () => {
 
     expect(errors).toEqual({
       assigneeId: 'Select a recipient',
-      forwardMessage: 'Message is required.',
+      forwardMessage: 'Enter a message',
     });
   });
 
@@ -67,7 +67,7 @@ describe('validateForwardMessageInteractor', () => {
     });
 
     expect(errors).toEqual({
-      forwardMessage: 'Message is required.',
+      forwardMessage: 'Enter a message',
     });
   });
 

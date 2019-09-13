@@ -29,7 +29,7 @@ joiValidationDecorator(
   undefined,
   {
     assigneeId: 'Select a recipient',
-    forwardMessage: 'Message is required.',
+    forwardMessage: 'Enter a message',
     section: 'Select a section',
   },
 );
