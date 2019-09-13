@@ -227,11 +227,11 @@ export const LocationInformationForm = connect(
             }`}
           >
             <label
-              aria-label="zip code"
+              aria-label="ZIP code"
               className="usa-label"
               htmlFor="postal-code"
             >
-              Zip Code <span className="usa-hint">(optional)</span>
+              ZIP code <span className="usa-hint">(optional)</span>
             </label>
             <input
               autoCapitalize="none"
