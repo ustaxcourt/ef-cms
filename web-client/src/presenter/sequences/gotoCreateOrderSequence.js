@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
@@ -18,7 +17,6 @@ const gotoCreateOrder = [
   clearModalAction,
   setCurrentPageAction('Interstitial'),
   set(state.showValidation, false),
-  clearAlertsAction,
   clearFormAction,
   setCasePropFromStateAction,
   unstashCreateOrderModalDataAction,

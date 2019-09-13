@@ -1,5 +1,4 @@
 import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getBaseRouteAction } from '../actions/getBaseRouteAction';
 import { getCasesByUserAction } from '../actions/getCasesByUserAction';
@@ -54,13 +53,11 @@ const goToDashboard = [
       },
     ],
     petitioner: [
-      clearAlertsAction,
       getCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPetitioner'),
     ],
     petitionsclerk: [
-      clearAlertsAction,
       parallel([
         [getUsersInSectionAction({ section: 'petitions' }), setUsersAction],
         [
@@ -80,7 +77,6 @@ const goToDashboard = [
       setCurrentPageAction('DashboardRespondent'),
     ],
     seniorattorney: [
-      clearAlertsAction,
       setCurrentPageAction('DashboardSeniorAttorney'),
       ...chooseWorkQueueSequence,
     ],

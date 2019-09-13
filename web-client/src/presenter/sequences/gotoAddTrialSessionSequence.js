@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
@@ -14,7 +13,6 @@ import { state } from 'cerebral';
 const gotoAddTrialSession = [
   setCurrentPageAction('Interstitial'),
   set(state.showValidation, false),
-  clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,
   getTrialSessionsAction,
