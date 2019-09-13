@@ -137,7 +137,7 @@
     "build:api:users": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/usersHandlers.js",
     "build:api:workItems": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/workItemsHandlers.js",
     "build:api": "parcel build --no-source-maps --bundle-node-modules --target node web-api/src/apiHandlers.js",
-    "build:client": "USTC_ENV=prod GIT_COMMIT=$(git log --pretty=format:'%h' -n 1 2>/dev/null) parcel build --no-source-maps web-client/src/index.pug; npm run build:jsdoc",
+    "build:client": "USTC_ENV=prod parcel build --no-source-maps web-client/src/index.pug; npm run build:jsdoc",
     "build:jsdoc": "jsdoc -c web-client/jsdoc.conf.json",
     "clean": "rm -rf dist/ web-client/.cache/",
     "cypress:open": "cypress open --config watchForFileChanges=true",
