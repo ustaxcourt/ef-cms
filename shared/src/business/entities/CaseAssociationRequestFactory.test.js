@@ -15,7 +15,7 @@ describe('CaseAssociationRequestFactory', () => {
     });
 
     it('should require a file', () => {
-      expect(errors().primaryDocumentFile).toEqual('A file was not selected.');
+      expect(errors().primaryDocumentFile).toEqual('Upload a document');
       rawEntity.primaryDocumentFile = {};
       expect(errors().primaryDocumentFile).toEqual(undefined);
     });
@@ -146,7 +146,7 @@ describe('CaseAssociationRequestFactory', () => {
 
           it('should require file', () => {
             expect(errors().supportingDocumentFile).toEqual(
-              'A file was not selected.',
+              'Upload a document',
             );
             rawEntity.supportingDocumentFile = {};
             expect(errors().supportingDocumentFile).toEqual(undefined);
