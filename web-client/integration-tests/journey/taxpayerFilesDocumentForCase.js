@@ -260,7 +260,7 @@ export default (test, fakeFile) => {
         {
           index: 0,
           supportingDocumentFile: 'Upload a document.',
-          supportingDocumentFreeText: 'Enter name.',
+          supportingDocumentFreeText: 'Enter name',
         },
       ],
     });
@@ -335,7 +335,7 @@ export default (test, fakeFile) => {
         {
           index: 0,
           supportingDocumentFile: 'Upload a document.',
-          supportingDocumentFreeText: 'Enter name.',
+          supportingDocumentFreeText: 'Enter name',
         },
       ],
     });

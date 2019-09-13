@@ -72,7 +72,7 @@ SupportingDocumentInformationFactory.get = documentMetadata => {
       },
       'Your Supporting Document file size is empty.',
     ],
-    supportingDocumentFreeText: 'Enter name.',
+    supportingDocumentFreeText: 'Enter name',
   };
 
   const makeRequired = itemName => {
