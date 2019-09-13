@@ -151,7 +151,8 @@ function CaseAssociationRequestFactory(rawProps) {
 
   let errorToMessageMap = {
     attachments: 'Enter selection for Attachments.',
-    certificateOfService: 'Indicate whether you are including a Certificate of Service',
+    certificateOfService:
+      'Indicate whether you are including a Certificate of Service',
     certificateOfServiceDate: [
       {
         contains: 'must be less than or equal to',

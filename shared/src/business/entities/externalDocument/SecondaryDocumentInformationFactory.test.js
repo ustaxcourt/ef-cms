@@ -42,7 +42,8 @@ describe('SecondaryDocumentInformationFactory', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         attachments: 'Enter selection for Attachments.',
-        certificateOfService: 'Indicate whether you are including a Certificate of Service',
+        certificateOfService:
+          'Indicate whether you are including a Certificate of Service',
       });
     });
 
