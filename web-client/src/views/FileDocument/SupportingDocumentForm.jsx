@@ -49,7 +49,7 @@ export const SupportingDocumentForm = connect(
               htmlFor={`supporting-document-${index}`}
               id={`supporting-document-${index}-label`}
             >
-              Select Supporting Document
+              Select supporting document
             </label>
             <select
               aria-describedby={`supporting-document-${index}-label`}

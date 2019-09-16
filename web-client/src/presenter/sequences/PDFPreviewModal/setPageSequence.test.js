@@ -19,6 +19,7 @@ presenter.providers.applicationContext.getPdfJs = () => ({
       promise: Promise.resolve({
         getPage: () => {
           return {
+            cleanup: () => null,
             getViewport: () => ({
               height: 100,
               width: 100,

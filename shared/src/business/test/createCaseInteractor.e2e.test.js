@@ -131,7 +131,6 @@ describe('createCase integration test', () => {
       orderToShowCause: false,
       status: 'New',
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-      yearAmounts: [],
     });
 
     applicationContext.getCurrentUser = () => {

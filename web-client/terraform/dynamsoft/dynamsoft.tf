@@ -13,7 +13,7 @@ resource "aws_instance" "dynamsoft" {
 
   user_data = "${data.template_file.setup_dynamsoft.rendered}"
 
-  iam_instance_profile = "${var.ec2_profile_name}"
+  iam_instance_profile = "dynamsoft_s3_download_role"
 }
 
 data "template_file" "setup_dynamsoft" {

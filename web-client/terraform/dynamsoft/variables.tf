@@ -18,10 +18,6 @@ variable "dynamsoft_s3_zip_path" {
   type = "string"
 }
 
-variable "ec2_profile_name" {
-  type = "string"
-}
-
 variable "dynamsoft_url" {
   type = "string"
 }

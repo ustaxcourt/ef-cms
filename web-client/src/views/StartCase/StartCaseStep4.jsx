@@ -13,13 +13,14 @@ import React from 'react';
 export const StartCaseStep4 = connect(
   {
     clearPreferredTrialCitySequence: sequences.clearPreferredTrialCitySequence,
+    completeStartCaseWizardStepSequence:
+      sequences.completeStartCaseWizardStepSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     openCaseDifferenceModalSequence: sequences.openCaseDifferenceModalSequence,
     screenMetadata: state.screenMetadata,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
-    submitFilePetitionSequence: sequences.submitFilePetitionSequence,
     toggleCaseDifferenceSequence: sequences.toggleCaseDifferenceSequence,
     trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -27,13 +28,13 @@ export const StartCaseStep4 = connect(
   },
   ({
     clearPreferredTrialCitySequence,
+    completeStartCaseWizardStepSequence,
     form,
     formCancelToggleCancelSequence,
     openCaseDifferenceModalSequence,
     screenMetadata,
     showModal,
     startCaseHelper,
-    submitFilePetitionSequence,
     toggleCaseDifferenceSequence,
     trialCitiesHelper,
     updateFormValueSequence,
@@ -102,7 +103,7 @@ export const StartCaseStep4 = connect(
         </div>
         <div className="blue-container">
           <ProcedureType
-            legend="Select Case Procedure"
+            legend="Select case procedure"
             value={form.procedureType}
             onChange={e => {
               updateFormValueSequence({
@@ -124,7 +125,7 @@ export const StartCaseStep4 = connect(
             </p>
             <div className="blue-container">
               <TrialCity
-                label="Select a Trial Location"
+                label="Select a trial location"
                 showDefaultOption={true}
                 showHint={true}
                 showRegularTrialCitiesHint={
@@ -159,7 +160,7 @@ export const StartCaseStep4 = connect(
             id="submit-case"
             type="button"
             onClick={() => {
-              submitFilePetitionSequence();
+              completeStartCaseWizardStepSequence({ nextStep: 5 });
             }}
           >
             Continue to Step 5 of 5

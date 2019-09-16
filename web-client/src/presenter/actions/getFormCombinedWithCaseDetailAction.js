@@ -141,22 +141,16 @@ export const getFormCombinedWithCaseDetailAction = ({
     delete caseDetail.preferredTrialCity;
   }
 
-  caseDetail.yearAmounts = caseDetail.yearAmounts
-    .map(yearAmount => ({
-      amount: !yearAmount.amount
-        ? null
-        : `${yearAmount.amount}`.replace(/,/g, '').replace(/\..*/g, ''),
-      year: castToISO(applicationContext, yearAmount.year),
-    }))
-    .filter(yearAmount => yearAmount.year || yearAmount.amount);
-
   if (caseCaption && (caseCaption = caseCaption.trim())) {
     caseDetail.caseCaption = caseCaption;
   }
 
   return {
     combinedCaseDetailWithForm: {
-      ...caseDetail,
+      ...omit(caseDetail, [
+        'contactPrimary.serviceIndicator',
+        'contactSecondary.serviceIndicator',
+      ]),
       ...form,
       payGovId: caseDetail.payGovId === '' ? null : caseDetail.payGovId,
     },

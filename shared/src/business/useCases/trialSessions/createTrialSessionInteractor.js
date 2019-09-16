@@ -2,6 +2,9 @@ const {
   isAuthorized,
   TRIAL_SESSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  TrialSessionWorkingCopy,
+} = require('../../entities/trialSessions/TrialSessionWorkingCopy');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -35,6 +38,22 @@ exports.createTrialSessionInteractor = async ({
       applicationContext,
       trialSession: trialSessionEntity.validate().toRawObject(),
     });
+
+  if (trialSessionEntity.judge && trialSessionEntity.judge.userId) {
+    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
+      trialSessionId: trialSessionEntity.trialSessionId,
+      userId: trialSessionEntity.judge.userId,
+    });
+
+    await applicationContext
+      .getPersistenceGateway()
+      .createTrialSessionWorkingCopy({
+        applicationContext,
+        trialSessionWorkingCopy: trialSessionWorkingCopyEntity
+          .validate()
+          .toRawObject(),
+      });
+  }
 
   return createdTrialSession;
 };

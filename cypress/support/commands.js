@@ -40,7 +40,7 @@ Cypress.Commands.add('upload_file', (fileName, selector, contentType) => {
         dataTransfer.items.add(testFile);
         el.files = dataTransfer.files;
         if (subject.is(':visible')) {
-          return cy.wrap(subject).trigger('change');
+          return cy.wrap(subject).trigger('change', { force: true });
         } else {
           return cy.wrap(subject);
         }
@@ -60,6 +60,14 @@ Cypress.Commands.add('showsErrorMessage', (shows = true) => {
     cy.get('.usa-alert-error').should('exist');
   } else {
     cy.get('.usa-alert-error').should('not.exist');
+  }
+});
+
+Cypress.Commands.add('showsSpinner', (shows = true) => {
+  if (shows) {
+    cy.get('.progress-indicator').should('exist');
+  } else {
+    cy.get('.progress-indicator').should('not.exist');
   }
 });
 

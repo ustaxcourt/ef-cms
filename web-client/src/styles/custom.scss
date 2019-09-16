@@ -170,6 +170,15 @@ select[disabled] {
   }
 }
 
+.numbered-list {
+  padding: 0px 20px;
+  margin: 0px;
+
+  li {
+    margin-bottom: 0.5em;
+  }
+}
+
 .blue-container {
   padding: 20px;
   background-color: $color-primary-alt-lightest;
@@ -294,6 +303,16 @@ select[disabled] {
     font-weight: $font-semibold;
     line-height: 30px;
     text-align: center;
+  }
+}
+
+.create-case-review {
+  label {
+    margin-bottom: 8px;
+  }
+
+  p.address-name {
+    margin-bottom: 0px;
   }
 }
 
@@ -744,289 +763,68 @@ header.usa-header {
   @media (max-width: units('desktop')) {
     height: auto;
   }
+}
 
-  .main-navigation {
-    display: none;
-    margin-top: 3rem;
-    font-family: $font-serif;
-
-    @media (min-width: units('desktop')) {
-      display: block;
-    }
-
-    li {
-      margin-right: 60px;
-
-      &.active {
-        a, button {
-          color: color($theme-color-base-darkest);
-        }
-      }
-
-      &.active,
+.reports-menu {
+  .reports-button-container {
+    .usa-button.header-tab-button {
       &:hover {
-        padding-bottom: 5px;
-        border-bottom: 3px solid color($theme-color-primary);
-
-        &.ustc-nav-no-active-underline {
-          border: 0;
-        }
-      }
-    }
-
-    a, button {
-      padding: 0 0 6px 0;
-      background: none;
-      color: color($theme-color-primary);
-      font-family: $font-serif;
-      font-size: 20px;
-      font-weight: $font-bold;
-      :hover {
         background: none;
-        color: color($theme-color-primary);
+        color: color($theme-color-primary-dark);
       }
-    }
-  }
-
-  .usa-menu-btn {
-    margin-right: -1rem;
-    float: right;
-  }
-}
-
-nav.usa-nav {
-  .usa-nav-close {
-    display: none;
-  }
-
-  .header-search-container {
-    margin-top: 2.5rem;
-  }
-
-  .mobile-account-menu-container {
-    display: none;
-    a, button {
-      padding: 0px;
-      background: none;
-      color: color($theme-color-primary);
-      font-family: $font-serif;
-      font-size: 20px;
-      font-weight: $font-bold;
-    }
-    :hover {
-      color: color($theme-color-primary-dark);
-    }
-  }
-
-  .usa-search {
-    position: relative;
-    top: -4px;
-    width: auto;
-    max-width: 320px;
-    margin: 0;
-    float: none;
-
-    @media (min-width: units('desktop')) {
-      float: none;
-    }
-
-    .usa-button {
-      min-width: auto;
-    }
-
-    input#search-field {
-      width: 220px;
-      height: 34px;
-    }
-
-    input#search-field + button {
-      height: 34px;
-    }
-  }
-
-  .usa-nav-secondary-links li:not(:last-child)::after {
-    padding-left: 0;
-    content: '';
-  }
-
-  .user-dropdown {
-    position: relative;
-    top: -4px;
-    margin: -4px 0 0 30px;
-  }
-
-  .button-account-login {
-    border: none;
-    background: none;
-    color: color($theme-color-primary);
-    font-weight: $font-semibold;
-  }
-
-  .user-icon {
-    width: 25px;
-    height: 25px;
-    margin-right: 5px;
-  }
-
-  &.mobile-menu {
-    background: color($theme-color-primary-dark);
-    font-family: $font-source-sans;
-
-    .usa-nav-close {
-      display: block;
-      width: auto;
-      border: none;
-      background: none;
-      color: $color-white;
-      float: right;
-    }
-
-    .header-search-container {
-      .usa-unstyled-list {
-        padding: 0;
-
-        li {
-          border: none;
-          &.usa-search {
-            button.search-button {
-              padding-right: 1rem;
-              padding-left: 1rem;
-              background: color($theme-color-base);
-            }
-
-            button:active {
-              background: color($theme-color-primary-dark);
-            }
-          }
-        }
-        a, button {
-          padding: 0px;
-          color: $color-white;
-          font-family: $font-source-sans;
-          text-decoration: none;
-          &:active {
-            text-decoration: underline;
-          }
-          &:hover {
-            background: none;
-            text-decoration: underline;
-          }
-        }
-        .user-dropdown {
-          display: none;
-        }
-      }
-      .account-menu-items {
-        padding: 0;
-        border-top: 2px solid $color-white;
-      }
-    }
-
-    .mobile-account-menu-container {
-      display: block;
-    }
-
-    .usa-nav-primary {
-      .usa-nav__primary {
-        li.active,
-        li:hover {
-          border: none;
-        }
-      }
-
-      a, button {
-        color: $color-white;
-      }
-      a, button:hover {
-        text-decoration: underline;
-      }
-    }
-
-    .button-account-login {
-      background: none;
-      color: $color-white;
-    }
-
-    .usa-search {
-      max-width: 220px;
-      input#search-field {
-        width: 115px;
-      }
-    }
-
-    .usa-nav__primary {
-      li {
-        &:last-child:hover {
-          padding-bottom: 0px;
-        }
-        &.active {
-          a {
-            color: $color-white;
-          }
-        }
-      }
-    }
-  }
-
-  #log-out {
-    color: $color-white;
-  }
-}
-
-.account-menu {
-  .account-button-container {
-    button.button-account-menu {
-      padding: 12px;
-      border: none;
-      background: none;
-      color: color($theme-color-primary);
-    }
-
-    .caret {
-      margin-right: 0;
     }
   }
 
   &.closed {
-    .account-menu-icon {
-      color: color($theme-color-primary);
-    }
-    .account-button-container {
+    .reports-button-container {
       background: none;
 
       :hover {
         background-color: color($theme-color-primary);
         border-radius: 0;
-
-        .account-menu-icon {
-          color: $color-white;
-        }
+        color: $color-white;
       }
     }
   }
   &.open {
-    .account-menu-icon {
-      color: $color-white;
-    }
-    .account-button-container {
+    .reports-button-container {
       background-color: color($theme-color-primary);
+
+      .usa-button.header-tab-button {
+        color: $color-white;
+      }
     }
   }
-  .account-menu-content {
+  .reports-menu-content {
     position: absolute;
-    right: 0px;
-    width: 109px;
+    bottom: 0;
+    width: 130px;
     padding: 10px 0;
     background-color: color($theme-color-primary);
 
-    ul li {
-      display: block;
-      margin-right: 8px;
-      text-align: right;
+    ul {
+      padding-left: 0.75em;
 
-      a {
-        color: $color-white;
-        font-size: 15px;
+      li {
+        display: block;
+        text-align: left;
+
+        &:hover {
+          padding: 0;
+          border: none;
+        }
+
+        a.reports-menu-item {
+          color: $color-white;
+          font-family: $font-source-sans;
+          font-size: 15px;
+          font-weight: $font-regular;
+
+          &:hover {
+            color: $color-primary-alt;
+            text-decoration: underline;
+          }
+        }
       }
     }
   }
@@ -1429,6 +1227,11 @@ hr.lighter {
   }
 }
 
+.pdf-preview-btn {
+  line-height: 1.1rem;
+  word-break: break-all;
+}
+
 button.change-scanner-button {
   color: white;
   font-weight: $font-semibold;
@@ -1492,4 +1295,40 @@ button.change-scanner-button {
   font-family: $font-source-sans;
   font-size: 17px;
   font-weight: $font-semibold;
+}
+
+.working-copy-filters {
+  .working-copy-filters--header {
+    span {
+      font-weight: $font-semibold;
+    }
+  }
+
+  .working-copy-filters--content {
+    padding: 1em;
+    border: 1px solid color($theme-color-base-lightest);
+    background-color: $color-primary-alt-lightest;
+
+    .show-all-sessions {
+      border-right: 1px solid color($theme-color-base-light);
+
+      label {
+        font-weight: $font-semibold;
+      }
+    }
+  }
+}
+
+.header-with-blue-background {
+  padding: 0.75em 1.25em;
+  background-color: color($theme-color-primary-dark);
+  color: $color-white;
+
+  h3 {
+    margin-bottom: 0;
+  }
+}
+
+.minw-30 {
+  min-width: 15rem;
 }

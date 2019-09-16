@@ -45,7 +45,7 @@ export const CaseListRespondent = connect(
       </div>
     );
 
-    const renderTitle = () => <h2>Your Cases</h2>;
+    const renderTitle = () => <h2>My Cases</h2>;
 
     const renderEmptyState = () => (
       <React.Fragment>
@@ -59,12 +59,12 @@ export const CaseListRespondent = connect(
         <div className="grid-container padding-x-0">
           <div className="grid-row">
             <div className="tablet:grid-col-6 hide-on-mobile">
-              <h2>Your Cases</h2>
+              <h2>My Cases</h2>
             </div>
           </div>
         </div>
         <div className="padding-top-205 show-on-mobile">
-          <h2>Your Cases</h2>
+          <h2>My Cases</h2>
         </div>
         {renderTable()}
       </React.Fragment>

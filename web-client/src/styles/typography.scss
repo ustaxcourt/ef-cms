@@ -15,7 +15,6 @@ h1,
   font-size: 32px;
   font-weight: $font-bold;
 
-
   /* little screens */
   @media only screen and (max-width: $medium-screen) {
     font-size: 28px;
@@ -151,4 +150,15 @@ a {
 
 a:hover {
   color: color($theme-color-primary-darker);
+}
+
+.create-case-review {
+  p,
+  div {
+    font-size: 17px;
+  }
+}
+
+.submit-reminders {
+  font-size: 17px;
 }

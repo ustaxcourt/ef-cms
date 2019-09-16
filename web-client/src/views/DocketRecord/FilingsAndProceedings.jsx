@@ -95,7 +95,7 @@ export const FilingsAndProceedings = connect(
                   aria-label="document uploading marker"
                   className="usa-tag"
                 >
-                  <span aria-hidden="true">Uploading</span>
+                  <span aria-hidden="true">Processing</span>
                 </span>
               )}
               {record.description}
@@ -116,7 +116,7 @@ export const FilingsAndProceedings = connect(
                 <FontAwesomeIcon icon={['fas', 'file-alt']} />
               </span>
             )}
-            {record.description}
+            {document.documentTitle || record.description}
           </a>
         )}
 
@@ -125,6 +125,10 @@ export const FilingsAndProceedings = connect(
         {!document && record.description}
 
         <span className="filings-and-proceedings">
+          {document &&
+            document.documentTitle &&
+            document.additionalInfo &&
+            ` ${document.additionalInfo}`}
           {record.filingsAndProceedings && ` ${record.filingsAndProceedings}`}
           {document &&
             document.additionalInfo2 &&

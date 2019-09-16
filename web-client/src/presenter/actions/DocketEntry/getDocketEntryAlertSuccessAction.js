@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * returns the alertSuccess object to display an alert message based
  * on the next step the user chose
@@ -6,22 +8,29 @@
  * @param {object} providers.props the cerebral props object
  * @returns {object} the alertSuccess object with default strings
  */
-export const getDocketEntryAlertSuccessAction = ({ props }) => {
+export const getDocketEntryAlertSuccessAction = ({ get, props }) => {
   const { isAddAnother } = props;
+  const isUpdatingWithFile = get(state.isUpdatingWithFile);
+
+  let title,
+    message = '';
+
+  if (isUpdatingWithFile) {
+    title = 'Your document has been saved to the entry.';
+    message =
+      'You can view the document by clicking on the docket entry below.';
+  } else {
+    title = 'Your entry has been added to the docket record.';
+  }
 
   if (isAddAnother) {
-    return {
-      alertSuccess: {
-        message: 'Continue adding docket entries below.',
-        title: 'Your entry has been added to the docket record.',
-      },
-    };
-  } else {
-    return {
-      alertSuccess: {
-        message: '',
-        title: 'Your entry has been added to the docket record.',
-      },
-    };
+    message = 'Continue adding docket entries below.';
   }
+
+  return {
+    alertSuccess: {
+      message,
+      title,
+    },
+  };
 };
