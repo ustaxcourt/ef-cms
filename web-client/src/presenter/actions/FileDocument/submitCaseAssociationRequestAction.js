@@ -101,14 +101,14 @@ export const submitCaseAssociationRequestAction = async ({
   const pendingDocuments = caseDetail.documents.filter(
     document => document.processingStatus === 'pending',
   );
-  const createCoverSheetInteractor = document => {
-    return applicationContext.getUseCases().createCoverSheetInteractor({
+  const addCoversheetInteractor = document => {
+    return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
       documentId: document.documentId,
     });
   };
-  await Promise.all(pendingDocuments.map(createCoverSheetInteractor));
+  await Promise.all(pendingDocuments.map(addCoversheetInteractor));
 
   return {
     caseDetail,
