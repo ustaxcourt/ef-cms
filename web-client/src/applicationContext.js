@@ -44,7 +44,6 @@ import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCa
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCaseNoteInteractor } from '../../shared/src/proxies/caseNote/createCaseNoteProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
-import { createDocketRecordPdfInteractor } from '../../shared/src/proxies/createDocketRecordPdfProxy';
 import {
   createISODateString,
   formatDateString,
@@ -70,6 +69,7 @@ import {
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
+import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
 import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
@@ -204,7 +204,6 @@ const allUseCases = {
   createCaseInteractor,
   createCaseNoteInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
-  createDocketRecordPdfInteractor,
   createTrialSessionInteractor,
   createWorkItemInteractor,
   deleteCaseDeadlineInteractor,
@@ -217,6 +216,7 @@ const allUseCases = {
   filePetitionInteractor,
   forwardWorkItemInteractor,
   generateCaseAssociationDocumentTitleInteractor,
+  generateDocketRecordPdfInteractor,
   generateDocumentTitleInteractor,
   generatePDFFromJPGDataInteractor,
   generateSignedDocumentInteractor,
