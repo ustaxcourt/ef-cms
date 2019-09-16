@@ -31,6 +31,7 @@ import { OrderWithoutBody } from '../../shared/src/business/entities/orders/Orde
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
+import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
 import { associatePractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associatePractitionerWithCaseProxy';
@@ -43,7 +44,6 @@ import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCa
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCaseNoteInteractor } from '../../shared/src/proxies/caseNote/createCaseNoteProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
-import { createCoverSheetInteractor } from '../../shared/src/proxies/documents/createCoverSheetProxy';
 import { createDocketRecordPdfInteractor } from '../../shared/src/proxies/createDocketRecordPdfProxy';
 import {
   createISODateString,
@@ -191,6 +191,7 @@ const setCurrentUserToken = newToken => {
 };
 
 const allUseCases = {
+  addCoversheetInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
   associatePractitionerWithCaseInteractor,
@@ -203,7 +204,6 @@ const allUseCases = {
   createCaseInteractor,
   createCaseNoteInteractor,
   createCourtIssuedOrderPdfFromHtmlInteractor,
-  createCoverSheetInteractor,
   createDocketRecordPdfInteractor,
   createTrialSessionInteractor,
   createWorkItemInteractor,

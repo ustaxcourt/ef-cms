@@ -1,6 +1,4 @@
-const {
-  addCoverToPdf,
-} = require('../../business/useCases/addCoverToPDFDocumentInteractor');
+const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
