@@ -37,22 +37,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
       state: {
-        caseDetail: {
-          yearAmounts: [
-            {
-              amount: 1,
-              year: '2009',
-            },
-            {
-              amount: '2',
-              year: '2010',
-            },
-            {
-              amount: '110,322.432',
-              year: '2011',
-            },
-          ],
-        },
+        caseDetail: {},
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
@@ -75,20 +60,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
         payGovDate: '2009-01-01T05:00:00.000Z',
         payGovId: undefined,
         receivedAt: '2009-03-03T05:00:00.000Z',
-        yearAmounts: [
-          {
-            amount: '1',
-            year: '2009-01-01T05:00:00.000Z',
-          },
-          {
-            amount: '2',
-            year: '2010-01-01T05:00:00.000Z',
-          },
-          {
-            amount: '110322',
-            year: '2011-01-01T05:00:00.000Z',
-          },
-        ],
       },
     });
   });
@@ -97,22 +68,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
       state: {
-        caseDetail: {
-          yearAmounts: [
-            {
-              amount: 1,
-              year: 'x',
-            },
-            {
-              amount: '2',
-              year: '2010',
-            },
-            {
-              amount: '110,322.432',
-              year: '2011',
-            },
-          ],
-        },
+        caseDetail: {},
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
@@ -135,20 +91,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
         payGovDate: '-1',
         payGovId: undefined,
         receivedAt: '-1',
-        yearAmounts: [
-          {
-            amount: '1',
-            year: '-1',
-          },
-          {
-            amount: '2',
-            year: '2010-01-01T05:00:00.000Z',
-          },
-          {
-            amount: '110322',
-            year: '2011-01-01T05:00:00.000Z',
-          },
-        ],
       },
     });
   });
@@ -162,7 +104,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           irsNoticeDate: '2018-12-24T05:00:00.000Z',
           payGovDate: '2018-12-24T05:00:00.000Z',
           receivedAt: '2018-12-24T05:00:00.000Z',
-          yearAmounts: [],
         },
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
@@ -186,7 +127,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
         payGovDate: '2018-12-24T05:00:00.000Z',
         payGovId: undefined,
         receivedAt: '2018-12-24T05:00:00.000Z',
-        yearAmounts: [],
       },
     });
   });
@@ -199,7 +139,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           irsNoticeDate: null,
           payGovDate: '2018-12-24T05:00:00.000Z',
           receivedAt: '2018-12-24T05:00:00.000Z',
-          yearAmounts: [],
         },
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
@@ -223,7 +162,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
         payGovDate: '2018-12-24T05:00:00.000Z',
         payGovId: undefined,
         receivedAt: '2018-12-24T05:00:00.000Z',
-        yearAmounts: [],
       },
     });
   });
@@ -237,7 +175,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           irsNoticeDate: '2018-12-24T05:00:00.000Z',
           payGovDate: '2018-12-24T05:00:00.000Z',
           receivedAt: '2018-12-24T05:00:00.000Z',
-          yearAmounts: [],
         },
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
@@ -270,7 +207,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
         caseDetail: {
           // irsNoticeDate: '2018-12-24T05:00:00.000Z',
           payGovDate: '2018-12-24T05:00:00.000Z',
-          yearAmounts: [],
         },
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,

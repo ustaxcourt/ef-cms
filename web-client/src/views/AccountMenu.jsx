@@ -1,107 +1,56 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import PropTypes from 'prop-types';
 import React from 'react';
-
-export const AccountMenuItems = ({ signOut }) => {
-  return (
-    <ul className="usa-unstyled-list">
-      <li>
-        <button
-          className="account-menu-item usa-button--unstyled"
-          id="log-out"
-          onClick={() => {
-            signOut();
-          }}
-        >
-          Log Out
-        </button>
-      </li>
-    </ul>
-  );
-};
+import classNames from 'classnames';
 
 export const AccountMenu = connect(
   {
-    isMenuOpen: state.accountMenuHelper.isMenuOpen,
     signOutSequence: sequences.signOutSequence,
-    toggleAccountMenu: sequences.toggleAccountMenuSequence,
+    toggleMenuSequence: sequences.toggleMenuSequence,
     user: state.user,
   },
-  ({ isMenuOpen, toggleAccountMenu, user }) => {
+  ({ isExpanded, signOutSequence, toggleMenuSequence, user }) => {
     return (
-      <div className={isMenuOpen ? 'account-menu open' : 'account-menu closed'}>
-        <div className="account-button-container">
+      <ul className="usa-nav__primary usa-accordion">
+        <li
+          className={classNames(
+            'usa-nav__primary-item',
+            isExpanded && 'usa-nav__submenu--open',
+          )}
+        >
           <button
-            aria-label="account menu"
-            className="button-account-menu"
+            aria-expanded={isExpanded}
+            className={classNames(
+              'usa-accordion__button usa-nav__link hidden-underline',
+            )}
             title={`Hello, ${user.name}`}
-            type="button"
-            onClick={() => toggleAccountMenu()}
+            onClick={() => {
+              toggleMenuSequence({ openMenu: 'AccountMenu' });
+            }}
           >
-            <FontAwesomeIcon
-              className="account-menu-icon user-icon"
-              icon={['far', 'user']}
-            />
-            <FontAwesomeIcon
-              className="account-menu-icon caret"
-              icon={['fa', 'caret-down']}
-            />
+            <span>
+              <FontAwesomeIcon
+                className="account-menu-icon"
+                icon={['far', 'user']}
+              />
+            </span>
           </button>
-        </div>
-        {isMenuOpen && <AccountMenuContent />}
-      </div>
+          {isExpanded && (
+            <ul className="usa-nav__submenu position-right-0">
+              <li className="usa-nav__submenu-item">
+                <button
+                  className="account-menu-item usa-button usa-button--unstyled"
+                  id="log-out"
+                  onClick={() => signOutSequence()}
+                >
+                  Log Out
+                </button>
+              </li>
+            </ul>
+          )}
+        </li>
+      </ul>
     );
   },
-);
-
-class AccountMenuContentComponent extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(e) {
-    const targetClasses = Array.from(e.target.classList);
-    if (targetClasses.includes('account-menu-item')) {
-      return true;
-    } else {
-      // set a small delay to account for state updates in parent
-      setTimeout(this.props.closeAccountMenu, 200);
-    }
-  }
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClick);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClick);
-  }
-
-  render() {
-    return (
-      <div className="account-menu-content">
-        {AccountMenuItems({ signOut: this.props.signOutSequence })}
-      </div>
-    );
-  }
-}
-
-AccountMenuContentComponent.propTypes = {
-  closeAccountMenu: PropTypes.func,
-  signOutSequence: PropTypes.func.isRequired,
-};
-
-AccountMenuItems.propTypes = {
-  signOut: PropTypes.func,
-};
-
-const AccountMenuContent = connect(
-  {
-    closeAccountMenu: sequences.closeAccountMenuSequence,
-    signOutSequence: sequences.signOutSequence,
-  },
-  AccountMenuContentComponent,
 );

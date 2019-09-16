@@ -1,76 +1,63 @@
-var express = require('express');
-var proxy = require('http-proxy-middleware');
+/* eslint-disable no-console */
+const express = require('express');
+const isReachable = require('is-reachable');
+const proxy = require('http-proxy-middleware');
 
-var app = express();
+// https://github.com/chimurai/http-proxy-middleware#options
 
-app.use(
-  '/api',
-  proxy({
-    pathRewrite: {
-      '^/api': '/',
+const PROXY_REACHABLE_TIMEOUT = 30 * 1000; // 30 seconds
+const PROXY_HOST = 'localhost';
+const PROXY_PORT = 3000;
+const LOG_LEVEL = 'info'; // ['debug', 'info', 'warn', 'error', 'silent']. Default: 'info'
+
+// do not include trailing slashes
+const PROXY_DESTINATIONS = {
+  '/api': `http://${PROXY_HOST}:3001`,
+  '/cases': `http://${PROXY_HOST}:3002`,
+  '/documents': `http://${PROXY_HOST}:3004`,
+  '/sections': `http://${PROXY_HOST}:3006`,
+  '/trial-sessions': `http://${PROXY_HOST}:3007`,
+  '/users': `http://${PROXY_HOST}:3003`,
+  '/work-items': `http://${PROXY_HOST}:3005`,
+};
+
+const proxyMain = async () => {
+  const pathRewrite = {};
+  const router = {};
+
+  Object.entries(PROXY_DESTINATIONS).forEach(([path, destination]) => {
+    pathRewrite[`^${path}`] = '';
+    router[`${PROXY_HOST}:${PROXY_PORT}${path}`] = destination;
+  });
+
+  if (LOG_LEVEL == 'debug') {
+    console.log('Path Rewrites', pathRewrite);
+    console.log('Router:', router);
+  }
+
+  const proxyObj = proxy('**', {
+    headers: {
+      Connection: 'keep-alive',
     },
-    target: 'http://localhost:3001',
-  }),
-);
+    logLevel: LOG_LEVEL,
+    pathRewrite,
+    router,
+    target: `http://${PROXY_HOST}:1234`,
+  });
 
-app.use(
-  '/cases',
-  proxy({
-    pathRewrite: {
-      '^/cases': '/',
-    },
-    target: 'http://localhost:3002',
-  }),
-);
+  const app = express();
+  app.use('/', proxyObj);
 
-app.use(
-  '/users',
-  proxy({
-    pathRewrite: {
-      '^/users': '/',
-    },
-    target: 'http://localhost:3003',
-  }),
-);
+  app.listen(PROXY_PORT);
 
-app.use(
-  '/documents',
-  proxy({
-    pathRewrite: {
-      '^/documents': '/',
-    },
-    target: 'http://localhost:3004',
-  }),
-);
+  const isProxyReachable = uri => {
+    // hitting '/TEST/PROXY' to deliberately elicit a 404 rather than 403 which clutters authorization logs
+    return isReachable(`${uri}/TEST/PROXY`, {
+      timeout: PROXY_REACHABLE_TIMEOUT,
+    });
+  };
 
-app.use(
-  '/work-items',
-  proxy({
-    pathRewrite: {
-      '^/work-items': '/',
-    },
-    target: 'http://localhost:3005',
-  }),
-);
+  await Promise.all(Object.values(PROXY_DESTINATIONS).map(isProxyReachable));
+};
 
-app.use(
-  '/sections',
-  proxy({
-    pathRewrite: {
-      '^/sections': '/',
-    },
-    target: 'http://localhost:3006',
-  }),
-);
-
-app.use(
-  '/trial-sessions',
-  proxy({
-    pathRewrite: {
-      '^/trial-sessions': '/',
-    },
-    target: 'http://localhost:3007',
-  }),
-);
-
-app.listen(3000);
+proxyMain();

@@ -53,4 +53,9 @@ exports.fillInAndSubmitForm = () => {
   cy.get('button#submit-case')
     .scrollIntoView()
     .click();
+
+  // step 5
+  cy.get('button#submit-case')
+    .scrollIntoView()
+    .click();
 };

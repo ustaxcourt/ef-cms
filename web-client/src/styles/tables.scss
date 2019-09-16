@@ -3,11 +3,16 @@ table,
   width: 100%;
   margin: 0 0 2em 0;
 
-  tr:hover {
+  tr:hover,
+  tbody.hoverable:hover {
     background: $color-primary-alt-lightest;
     box-shadow: 5px 0 0 0 color($theme-color-primary) inset;
     transition-duration: 0.2s;
     transition-property: all;
+  }
+
+  tr {
+    min-height: 50px;
   }
 
   td {
@@ -28,7 +33,6 @@ table,
 
   .batches-table {
     tr {
-
       td {
         padding-top: 10px;
         padding-bottom: 10px;
@@ -216,12 +220,19 @@ table.work-queue {
     &.padding-right-0 {
       padding-right: 0;
     }
+    .sortable-header-button {
+      color: color($theme-color-base-darkest);
+      font-weight: $font-semibold;
+      text-decoration: none;
+    }
+    .sortActive {
+      border-bottom: 3px solid color($theme-color-primary);
+    }
   }
 
   td {
     padding: 15px 16px;
     border: none;
-    font-size: 17px;
 
     &.padding-left-0 {
       padding-left: 0;
@@ -277,6 +288,12 @@ table.work-queue {
 
   tr {
     border-top: 1px solid color($theme-color-base-lighter);
+
+    &.notes-row {
+      td {
+        padding-top: 0;
+      }
+    }
   }
 
   tbody:not(.action-bar) {
@@ -442,7 +459,6 @@ table.docket-record {
         color: color($theme-color-warning);
       }
     }
-
 
     tr.in-progress:hover {
       td {

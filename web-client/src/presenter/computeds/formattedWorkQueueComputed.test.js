@@ -1,3 +1,4 @@
+import { applicationContext } from '../../applicationContext';
 import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -9,6 +10,7 @@ import {
 } from '../../../../shared/src/business/utilities/DateHandler';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
+  ...applicationContext,
   getCurrentUser: () => ({
     role: 'petitionsclerk',
     section: 'petitions',
@@ -39,6 +41,7 @@ const FORMATTED_WORK_ITEM = {
   },
   docketNumber: '101-18',
   document: {
+    attachments: true,
     documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
     documentType: 'Answer',
   },
@@ -86,6 +89,7 @@ describe('formatted work queue computed', () => {
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
     document: {
+      attachments: true,
       createdAt: '2018-12-27T18:05:54.164Z',
       documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',

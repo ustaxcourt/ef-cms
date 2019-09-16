@@ -1,47 +1,23 @@
-const {
-  drawImage,
-  drawLinesOfText,
-  drawText,
-  PDFDocumentFactory,
-  PDFDocumentWriter,
-} = require('pdf-lib');
 const { Case } = require('../entities/cases/Case');
 const { coverLogo } = require('../assets/coverLogo');
-const { flattenDeep } = require('lodash');
+const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
 /**
- * addCoverToPDFDocumentInteractor
+ * a helper function which creates a coversheet, prepends it to a pdf, and returns the new pdf
  *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id
- * @param {string} providers.documentId the document id
- * @returns {Uint8Array} the new pdf data
+ * @param {object} options the providers object
+ * @param {object} options.applicationContext the application context
+ * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
+ * @param {object} options.documentEntity the document entity we are creating the cover for
+ * @param {object} options.pdfData the original document pdf data
+ * @returns {object} the new pdf with a coversheet attached
  */
-exports.addCoverToPDFDocumentInteractor = async ({
+exports.addCoverToPdf = async ({
   applicationContext,
-  caseId,
-  documentId,
+  caseEntity,
+  documentEntity,
+  pdfData,
 }) => {
-  applicationContext.logger.time('Fetching the Case');
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByCaseId({
-      applicationContext,
-      caseId,
-    });
-  applicationContext.logger.timeEnd('Fetching the Case');
-
-  const caseEntity = new Case(caseRecord);
-
-  const documentEntity = caseEntity.documents.find(
-    document => document.documentId === documentId,
-  );
-
-  const documentIndex = caseEntity.documents.findIndex(
-    document => document.documentId === documentId,
-  );
-
   const isLodged = documentEntity.lodged;
   const { isPaper } = documentEntity;
 
@@ -77,7 +53,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
         .formatDateString(documentEntity.createdAt, 'MMDDYYYY')) ||
     null;
 
-  const caseCaption = caseRecord.caseCaption || Case.getCaseCaption(caseRecord);
+  const caseCaption = caseEntity.caseCaption || Case.getCaseCaption(caseEntity);
   const caseCaptionNames = Case.getCaseCaptionNames(caseCaption);
 
   let documentTitle =
@@ -101,16 +77,18 @@ exports.addCoverToPDFDocumentInteractor = async ({
     originallyFiledElectronically: !caseEntity.isPaper,
   };
 
-  applicationContext.logger.time('Fetching S3 File');
-  let { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: documentId,
-    })
-    .promise();
+  // create pdfDoc object from file data
+  applicationContext.logger.time('Loading the PDF');
+  const pdfDoc = await PDFDocument.load(pdfData);
+  applicationContext.logger.time('Loading the PDF');
 
-  applicationContext.logger.timeEnd('Fetching S3 File');
+  // Embed font to use for cover page generation
+  applicationContext.logger.time('Embed Font');
+  const helveticaFont = pdfDoc.embedStandardFont(StandardFonts.Helvetica);
+  const helveticaBoldFont = pdfDoc.embedStandardFont(
+    StandardFonts.HelveticaBold,
+  );
+  applicationContext.logger.timeEnd('Embed Font');
 
   // Dimensions of cover page - 8.5"x11" @ 300dpi
   const dimensionsX = 2550;
@@ -119,44 +97,16 @@ exports.addCoverToPDFDocumentInteractor = async ({
   const coverPageDimensions = [dimensionsX, dimensionsY];
   const horizontalMargin = 215; // left and right margins
   const verticalMargin = 190; // top and bottom margins
-  const defaultFontName = 'Helvetica';
+  const defaultFontName = helveticaFont;
   const defaultFontSize = 48;
   const fontSizeCaption = 64;
   const fontSizeTitle = 80;
-
-  // create pdfDoc object from file data
-  applicationContext.logger.time('Loading the PDF');
-  const pdfDoc = PDFDocumentFactory.load(pdfData);
-  applicationContext.logger.time('Loading the PDF');
 
   // allow GC to clear original loaded pdf data
   pdfData = null;
 
   const getPageDimensions = page => {
-    let mediaBox;
-
-    // Check for MediaBox on the page itself
-    const hasMediaBox = !!page.getMaybe('MediaBox');
-    if (hasMediaBox) {
-      mediaBox = page.index.lookup(page.get('MediaBox'));
-    }
-
-    // Check for MediaBox on each parent node
-    page.Parent.ascend(parent => {
-      const parentHasMediaBox = !!parent.getMaybe('MediaBox');
-      if (!mediaBox && parentHasMediaBox) {
-        mediaBox = parent.index.lookup(parent.get('MediaBox'));
-      }
-    }, true);
-
-    // This should never happen in valid PDF files
-    if (!mediaBox) throw new Error('Page Tree is missing MediaBox');
-
-    // Extract and return the width and height
-    return {
-      height: mediaBox.array[3].number,
-      width: mediaBox.array[2].number,
-    };
+    return page.getSize();
   };
 
   const pageScaler = value => {
@@ -175,24 +125,15 @@ exports.addCoverToPDFDocumentInteractor = async ({
   // USTC Seal (png) to embed in header
   applicationContext.logger.time('Embed PNG');
   const ustcSealBytes = new Uint8Array(coverLogo);
-  const [pngSeal, pngSealDimensions] = pdfDoc.embedPNG(ustcSealBytes);
+  const pngSeal = await pdfDoc.embedPng(ustcSealBytes);
   applicationContext.logger.timeEnd('Embed PNG');
-
-  // Embed font to use for cover page generation
-  applicationContext.logger.time('Embed Font');
-  const [helveticaRef, helveticaFont] = pdfDoc.embedStandardFont('Helvetica');
-  const [helveticaBoldRef, helveticaBoldFont] = pdfDoc.embedStandardFont(
-    'Helvetica-Bold',
-  );
-  applicationContext.logger.timeEnd('Embed Font');
 
   // Generate cover page
   applicationContext.logger.time('Generate Cover Page');
-  const coverPage = pdfDoc
-    .createPage(coverPageDimensions.map(dim => pageScaler(dim)))
-    .addImageObject('USTCSeal', pngSeal)
-    .addFontDictionary('Helvetica', helveticaRef)
-    .addFontDictionary('Helvetica-Bold', helveticaBoldRef);
+  const coverPage = pdfDoc.insertPage(
+    0,
+    coverPageDimensions.map(dim => pageScaler(dim)),
+  );
   applicationContext.logger.timeEnd('Generate Cover Page');
 
   const paddedLineHeight = (fontSize = defaultFontSize) => {
@@ -203,13 +144,13 @@ exports.addCoverToPDFDocumentInteractor = async ({
     const coverSheetDatumValue = coverSheetData[key];
     switch (key) {
       case 'includesCertificateOfService':
-        if (coverSheetDatumValue === true) {
+        if (coverSheetDatumValue) {
           return 'Certificate of Service';
         } else {
           return '';
         }
       case 'originallyFiledElectronically':
-        if (coverSheetDatumValue === true) {
+        if (coverSheetDatumValue) {
           return 'Electronically Filed';
         } else {
           return '';
@@ -237,7 +178,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
     offsetMargin = 0,
   ) => {
     let totalContentHeight;
-    const textHeight = font.heightOfFontAtSize(fontSize);
+    const textHeight = font.sizeAtHeight(fontSize);
     if (Array.isArray(previousContentArea.content)) {
       // Multiple lines of text
       totalContentHeight = previousContentArea.content.length * textHeight;
@@ -288,7 +229,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
   // Content areas
   const contentDateReceivedLabel = {
     content: 'Received',
-    fontName: 'Helvetica-Bold',
+    fontName: helveticaBoldFont,
     xPos: isPaper ? 800 : 900,
     yPos: 3036,
   };
@@ -300,13 +241,13 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentDateReceivedLabel,
       helveticaBoldFont,
       defaultFontSize,
-      helveticaFont.heightOfFontAtSize(defaultFontSize),
+      helveticaFont.sizeAtHeight(defaultFontSize),
     ),
   };
 
   const contentDateLodgedLabel = {
     content: dateLodgedLabel,
-    fontName: 'Helvetica-Bold',
+    fontName: helveticaBoldFont,
     xPos: 1440,
     yPos: 3036,
   };
@@ -318,13 +259,13 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentDateLodgedLabel,
       helveticaBoldFont,
       defaultFontSize,
-      helveticaFont.heightOfFontAtSize(defaultFontSize),
+      helveticaFont.sizeAtHeight(defaultFontSize),
     ),
   };
 
   const contentDateFiledLabel = {
     content: dateFiledLabel,
-    fontName: 'Helvetica-Bold',
+    fontName: helveticaBoldFont,
     xPos: 1938,
     yPos: 3036,
   };
@@ -336,7 +277,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentDateFiledLabel,
       helveticaBoldFont,
       defaultFontSize,
-      helveticaFont.heightOfFontAtSize(defaultFontSize),
+      helveticaFont.sizeAtHeight(defaultFontSize),
     ),
   };
 
@@ -360,7 +301,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentCaseCaptionPet,
       helveticaFont,
       fontSizeCaption,
-      helveticaFont.heightOfFontAtSize(fontSizeCaption),
+      helveticaFont.sizeAtHeight(fontSizeCaption),
     ),
   };
 
@@ -372,7 +313,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentPetitionerLabel,
       helveticaFont,
       fontSizeCaption,
-      helveticaFont.heightOfFontAtSize(fontSizeCaption),
+      helveticaFont.sizeAtHeight(fontSizeCaption),
     ),
   };
 
@@ -389,7 +330,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentVLabel,
       helveticaFont,
       fontSizeCaption,
-      helveticaFont.heightOfFontAtSize(fontSizeCaption),
+      helveticaFont.sizeAtHeight(fontSizeCaption),
     ),
   };
 
@@ -401,7 +342,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentCaseCaptionResp,
       helveticaFont,
       fontSizeCaption,
-      helveticaFont.heightOfFontAtSize(fontSizeCaption),
+      helveticaFont.sizeAtHeight(fontSizeCaption),
     ),
   };
 
@@ -437,7 +378,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentRespondentLabel,
       helveticaFont,
       fontSizeCaption,
-      helveticaFont.heightOfFontAtSize(fontSizeCaption) * 8,
+      helveticaFont.sizeAtHeight(fontSizeCaption) * 8,
     ),
   };
 
@@ -448,7 +389,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
       contentDocumentTitle,
       helveticaFont,
       fontSizeTitle,
-      helveticaFont.heightOfFontAtSize(fontSizeCaption) * 10,
+      helveticaFont.sizeAtHeight(fontSizeCaption) * 10,
     ),
   };
 
@@ -459,13 +400,13 @@ exports.addCoverToPDFDocumentInteractor = async ({
       fontObj: helveticaFont,
     },
     content: getContentByKey('dateServed'),
-    fontName: 'Helvetica-Bold',
+    fontName: helveticaBoldFont,
     fontSize: fontSizeTitle,
     xPos: 531,
     yPos: 231,
   };
 
-  const drawContent = contentArea => {
+  const drawContent = (page, contentArea) => {
     const {
       centerTextAt,
       content,
@@ -476,7 +417,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
     } = contentArea;
 
     const params = {
-      colorRgb: [0, 0, 0],
+      color: rgb(0, 0, 0),
       font: fontName || defaultFontName,
       lineHeight: pageScaler(paddedLineHeight(fontSize)),
       size: pageScaler(fontSize || defaultFontSize),
@@ -509,62 +450,96 @@ exports.addCoverToPDFDocumentInteractor = async ({
         const contentLines = content.map((cont, idx) => {
           const newParams = setCenterPos(cont, params);
           newParams.y = params.y - params.lineHeight * idx;
-          return drawText(cont, newParams);
+          return page.drawText('' + cont, newParams);
         });
         return contentLines;
       } else {
-        return drawLinesOfText(content, params);
+        page.drawText('' + content.join(' '), params);
+        return;
       }
     } else {
-      return drawText(content, setCenterPos(content, params));
+      return page.drawText('' + content, setCenterPos(content, params));
     }
   };
 
-  // This is where the magic happens. The content stream and its coords will need to be
-  // played with in order to get the desired cover page layout.
-  const coverPageContentStream = pdfDoc.createContentStream(
-    drawImage('USTCSeal', {
-      height: pageScaler(pngSealDimensions.height / 2),
-      width: pageScaler(pngSealDimensions.width / 2),
-      x: pageScaler(horizontalMargin),
-      y: pageScaler(translateY(verticalMargin + pngSealDimensions.height / 2)),
-    }),
-    ...flattenDeep(
-      [
-        contentDateReceivedLabel,
-        contentDateReceived,
-        contentDateLodgedLabel,
-        contentDateLodged,
-        contentDateFiledLabel,
-        contentDateFiled,
-        contentCaseCaptionPet,
-        contentPetitionerLabel,
-        contentVLabel,
-        contentCaseCaptionResp,
-        contentRespondentLabel,
-        contentElectronicallyFiled,
-        contentDocketNumber,
-        contentDocumentTitle,
-        contentCertificateOfService,
-        contentDateServed,
-      ].map(cont => drawContent(cont)),
-    ),
+  coverPage.drawImage(pngSeal, {
+    height: pageScaler(pngSeal.height / 2),
+    width: pageScaler(pngSeal.width / 2),
+    x: pageScaler(horizontalMargin),
+    y: pageScaler(translateY(verticalMargin + pngSeal.height / 2)),
+  });
+
+  [
+    contentDateReceivedLabel,
+    contentDateReceived,
+    contentDateLodgedLabel,
+    contentDateLodged,
+    contentDateFiledLabel,
+    contentDateFiled,
+    contentCaseCaptionPet,
+    contentPetitionerLabel,
+    contentVLabel,
+    contentCaseCaptionResp,
+    contentRespondentLabel,
+    contentElectronicallyFiled,
+    contentDocketNumber,
+    contentDocumentTitle,
+    contentCertificateOfService,
+    contentDateServed,
+  ].map(cont => drawContent(coverPage, cont));
+
+  return pdfDoc.save();
+};
+
+/**
+ * addCoverToPDFDocumentInteractor
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.caseId the case id
+ * @param {string} providers.documentId the document id
+ * @returns {Uint8Array} the new pdf data
+ */
+exports.addCoverToPDFDocumentInteractor = async ({
+  applicationContext,
+  caseId,
+  documentId,
+}) => {
+  applicationContext.logger.time('Fetching the Case');
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      caseId,
+    });
+  applicationContext.logger.timeEnd('Fetching the Case');
+
+  const caseEntity = new Case(caseRecord);
+
+  const documentEntity = caseEntity.documents.find(
+    document => document.documentId === documentId,
   );
 
-  // Add the content stream to our newly created page
-  coverPage.addContentStreams(pdfDoc.register(coverPageContentStream));
+  const documentIndex = caseEntity.documents.findIndex(
+    document => document.documentId === documentId,
+  );
 
-  // Insert cover page at position 0 (first) in the document. This is non-destructive, and
-  // pushes the original first page to page two.
-  pdfDoc.insertPage(0, coverPage);
+  applicationContext.logger.time('Fetching S3 File');
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: documentId,
+    })
+    .promise();
+  applicationContext.logger.timeEnd('Fetching S3 File');
 
-  // Write our pdfDoc object to byte array, ready to physically write to disk or upload
-  // to file server
-  applicationContext.logger.time('Saving Bytes');
-  const newPdfData = PDFDocumentWriter.saveToBytes(pdfDoc, {
-    useObjectStreams: false,
+  const newPdfData = await exports.addCoverToPdf({
+    applicationContext,
+    caseEntity,
+    documentEntity,
+    pdfData,
   });
-  applicationContext.logger.timeEnd('Saving Bytes');
 
   documentEntity.processingStatus = 'complete';
 

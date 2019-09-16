@@ -4,6 +4,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { cloneDeep } = require('lodash');
+const { createISODateString } = require('../../utilities/DateHandler');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -51,7 +52,7 @@ exports.assignWorkItemsInteractor = async ({
   const originalWorkItem = new WorkItem(cloneDeep(fullWorkItem));
 
   const newMessage = new Message({
-    createdAt: new Date().toISOString(),
+    createdAt: createISODateString(),
     from: user.name,
     fromUserId: user.userId,
     message: workItemEntity.getLatestMessageEntity().message,

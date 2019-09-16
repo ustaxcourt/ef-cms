@@ -129,7 +129,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
       receivedAt: RECEIVED_DATE,
       status: 'New',
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-      yearAmounts: [],
     });
 
     const petitionsclerkInbox = await getDocumentQCInboxForUserInteractor({

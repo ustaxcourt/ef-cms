@@ -1,0 +1,17 @@
+import { state } from 'cerebral';
+
+/**
+ * Toggles visibility of expanded menu in header
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.get the cerebral get function to retrieve state values
+ * @param {object} providers.store the cerebral store object used for setting or unsetting open menu
+ */
+export const toggleMenuAction = ({ get, props, store }) => {
+  const openMenu = get(state.navigation.openMenu);
+  if (openMenu == props.openMenu) {
+    store.unset(state.navigation.openMenu);
+  } else {
+    store.set(state.navigation.openMenu, props.openMenu);
+  }
+};
