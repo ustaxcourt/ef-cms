@@ -104,35 +104,36 @@ export const DocumentDetail = connect(
 
     const renderButtons = () => {
       return (
-        <div className="document-detail__action-buttons margin-top-1">
-          <div className="float-left margin-bottom-2 margin-top-neg-2">
-            {documentDetailHelper.isDraftDocument && (
-              <>
-                <a href={documentDetailHelper.documentEditUrl}>
-                  {' '}
-                  <FontAwesomeIcon icon={['fas', 'edit']} /> Edit
-                </a>
-
-                <button
-                  className="usa-button usa-button--unstyled red-warning margin-left-2"
-                  onClick={() => {
-                    archiveDraftDocumentModalSequence({
-                      caseId: caseDetail.caseId,
-                      documentId:
-                        documentDetailHelper.formattedDocument.documentId,
-                      documentTitle:
-                        documentDetailHelper.formattedDocument.documentType,
-                      redirectToCaseDetail: true,
-                    });
-                  }}
-                >
-                  <FontAwesomeIcon icon="times-circle" size="sm" />
-                  Delete
-                </button>
-              </>
-            )}
-          </div>
+        <div className="document-detail__action-buttons">
           <div className="float-right">
+            {documentDetailHelper.isDraftDocument && (
+              <div className="display-inline-block margin-right-2">
+                <>
+                  <a href={documentDetailHelper.documentEditUrl}>
+                    {' '}
+                    <FontAwesomeIcon icon={['fas', 'edit']} /> Edit
+                  </a>
+
+                  <button
+                    className="usa-button usa-button--unstyled red-warning margin-left-2"
+                    onClick={() => {
+                      archiveDraftDocumentModalSequence({
+                        caseId: caseDetail.caseId,
+                        documentId:
+                          documentDetailHelper.formattedDocument.documentId,
+                        documentTitle:
+                          documentDetailHelper.formattedDocument.documentType,
+                        redirectToCaseDetail: true,
+                      });
+                    }}
+                  >
+                    <FontAwesomeIcon icon="times-circle" size="sm" />
+                    Delete
+                  </button>
+                </>
+              </div>
+            )}
+
             {caseHelper.showServeToIrsButton &&
               documentDetailHelper.formattedDocument.isPetition && (
                 <button
@@ -220,13 +221,7 @@ export const DocumentDetail = connect(
 
             <div className="grid-row grid-gap">
               <div className="grid-col-5">{renderNestedTabs()}</div>
-              <div
-                className={`grid-col-7 ${
-                  documentDetailHelper.showDocumentViewerTopMargin
-                    ? 'document-viewer-top-margin'
-                    : ''
-                }`}
-              >
+              <div className="grid-col-7">
                 {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
                 {!process.env.CI && (
                   <iframe
