@@ -1,3 +1,4 @@
+import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { CaseSearchBox } from './CaseSearchBox';
 import { MyContactInformation } from './MyContactInformation';
 import { connect } from '@cerebral/react';
@@ -24,17 +25,13 @@ export const CaseListRespondent = connect(
             {formattedCases.map(item => (
               <tr key={item.docketNumber}>
                 <td className="hide-on-mobile">
-                  <a href={'/case-detail/' + item.docketNumber}>
-                    {item.docketNumberWithSuffix}
-                  </a>
+                  <CaseLink formattedCase={item} />
                 </td>
                 <td className="hide-on-mobile">{item.caseName}</td>
                 <td>{item.createdAtFormatted}</td>
                 <td className="show-on-mobile">
                   <div>
-                    <a href={'/case-detail/' + item.docketNumber}>
-                      {item.docketNumberWithSuffix}
-                    </a>
+                    <CaseLink formattedCase={item} />
                   </div>
                   {item.caseName}
                 </td>
