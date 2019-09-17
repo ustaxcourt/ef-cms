@@ -41,13 +41,12 @@ const NavigationItems = (helper, { isReportsMenuOpen }) => {
         <li className="usa-nav__primary-item">
           <a
             className={classNames(
-              'hidden-underline usa-nav__link',
+              'usa-nav__link',
               helper.pageIsHome && 'usa-current',
             )}
             href="/"
           >
-            <FontAwesomeIcon icon="home" />
-            <span className="sr-only">Home</span>
+            Dashboard
           </a>
         </li>
       )}

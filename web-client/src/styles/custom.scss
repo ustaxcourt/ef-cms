@@ -633,7 +633,7 @@ select.ustc-input-error {
 
 #case-detail-tabs {
   border: 1px solid color($theme-color-base-lighter);
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .case-detail-party-info {
@@ -681,7 +681,7 @@ textarea#case-caption {
 .filed-by {
   display: inline-block;
   padding: 0px;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   font-size: 17px;
 }
 
@@ -712,7 +712,7 @@ textarea#case-caption {
 }
 
 .beta {
-  padding: 20px;
+  padding: 10px;
   background-color: color($theme-color-warning-lighter);
   font-weight: $font-bold;
   a {
@@ -770,7 +770,7 @@ textarea#case-caption {
 
 header.usa-header {
   display: flex;
-  height: 115px;
+  height: 100px;
   flex-direction: row;
   border-bottom: none;
   margin-bottom: 0px;
@@ -846,8 +846,8 @@ header.usa-header {
 }
 
 .big-blue-header {
-  padding: 25px 0;
-  margin-bottom: 40px;
+  padding: 20px 0;
+  margin-bottom: 20px;
   background-color: color($theme-color-primary-darker);
   color: $color-white;
   h1 {
@@ -887,7 +887,7 @@ header.usa-header {
 
 .title {
   border-bottom: 1px solid color($theme-color-base-lighter);
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 
   h1 {
     position: relative;
@@ -966,7 +966,6 @@ hr.lighter {
 
 .tab-right-button {
   position: absolute;
-  top: -10px;
   right: -7px;
 }
 
