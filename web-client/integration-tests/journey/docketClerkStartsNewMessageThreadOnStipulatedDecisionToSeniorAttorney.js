@@ -12,7 +12,7 @@ export default test => {
     expect(test.getState('validationErrors')).toEqual({
       assigneeId: 'Select a recipient',
       message: 'Enter a message',
-      section: 'Select a section.',
+      section: 'Select a section',
     });
 
     await test.runSequence('updateFormValueSequence', {
