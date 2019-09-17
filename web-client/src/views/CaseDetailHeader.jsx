@@ -1,3 +1,4 @@
+import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { CreateOrderChooseTypeModal } from './CreateOrder/CreateOrderChooseTypeModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UpdateCaseCaptionModalDialog } from './CaseDetailEdit/UpdateCaseCaptionModalDialog';
@@ -28,9 +29,9 @@ export const CaseDetailHeader = connect(
             <div className="tablet:grid-col-8">
               <div className="margin-bottom-1">
                 <h1 className="heading-2 captioned" tabIndex="-1">
-                  <a href={'/case-detail/' + formattedCaseDetail.docketNumber}>
+                  <CaseLink formattedCase={formattedCaseDetail}>
                     Docket Number: {formattedCaseDetail.docketNumberWithSuffix}
-                  </a>
+                  </CaseLink>
                 </h1>
                 {caseDetailHelper.hidePublicCaseInformation && (
                   <span

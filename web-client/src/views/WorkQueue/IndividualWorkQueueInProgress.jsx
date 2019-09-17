@@ -1,3 +1,4 @@
+import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -35,12 +36,7 @@ export const IndividualWorkQueueInProgress = connect(
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row">
-                    <a
-                      className="no-wrap"
-                      href={`/case-detail/${item.docketNumber}`}
-                    >
-                      {item.docketNumberWithSuffix}
-                    </a>
+                    <CaseLink formattedCase={item} />
                   </td>
                   <td className="message-queue-row">
                     <span className="no-wrap">{item.received}</span>

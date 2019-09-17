@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { DateSelectCalendar } from './DateSelectCalendar';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
@@ -54,9 +55,7 @@ export const CaseDeadlines = connect(
                           {item.formattedDeadline}
                         </td>
                         <td className="smaller-column semi-bold">
-                          <a href={'/case-detail/' + item.docketNumber}>
-                            {item.formattedDocketNumber}
-                          </a>
+                          <CaseLink formattedCase={item} />
                         </td>
                         <td className="padding-extra">{item.description}</td>
                       </tr>
