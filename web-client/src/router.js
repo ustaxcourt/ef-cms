@@ -439,9 +439,9 @@ const router = {
             routeArgs.box = pathParts[2];
           }
 
-          app.getSequence('gotoDashboardSequence')(routeArgs);
+          app.getSequence('gotoMessagesSequence')(routeArgs);
         }
-        document.title = `Dashboard ${pageTitleSuffix}`;
+        document.title = `Messages ${pageTitleSuffix}`;
       }),
     );
 
