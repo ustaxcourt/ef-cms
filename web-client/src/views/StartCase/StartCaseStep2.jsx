@@ -43,7 +43,7 @@ export const StartCaseStep2 = connect(
           </h1>
         </Focus>
         <p className="required-statement margin-top-05 margin-bottom-2">
-          All fields required unless otherwise noted
+          *All fields required unless otherwise noted
         </p>
         <h2 className="margin-top-4">Upload Your Petition</h2>
         <Hint>
