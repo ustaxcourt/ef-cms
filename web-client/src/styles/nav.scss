@@ -10,21 +10,40 @@
 
       .usa-nav__primary {
         margin-top: 0;
+
+        .usa-nav__primary-item {
+          .usa-button {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            padding-left: 1rem;
+          }
+        }
+      }
+
+      .usa-nav {
+        width: 100%;
+        background-color: $color-primary-alt-lightest;
       }
 
       .usa-search.ustc-search {
         margin-bottom: 20px;
 
         .usa-input {
-          width: 220px;
+          width: 185px;
           height: 34px;
         }
         .usa-button {
           &.ustc-search-button {
-            min-width: 90px;
+            min-width: 50px;
             height: 34px;
-            background-image: none;
+            padding-right: 20px;
           }
+          .usa-search-submit-text {
+            display: none;
+          }
+        }
+        .advanced {
+          margin-top: 0.25rem;
         }
       }
 
@@ -56,6 +75,7 @@
       .usa-logo {
         width: 75px;
         max-width: 75px;
+        margin-bottom: 0.5rem;
       }
 
       .usa-nav__primary-item {
@@ -95,6 +115,7 @@
           .usa-nav__submenu {
             background-color: color($theme-color-primary);
 
+            /* this is for buttons in submenus that should be styled the same as links in submenus */
             .usa-nav__submenu-item button {
               color: $color-white;
               font-weight: $font-regular;
@@ -113,6 +134,8 @@
         }
 
         .usa-nav__link {
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
           color: color($theme-color-primary);
           font-family: $font-serif;
           font-size: 20px;
@@ -126,9 +149,8 @@
       }
 
       nav.ustc-nav {
-        height: 117px;
+        height: 100px;
         justify-content: space-between;
-        padding-left: 20px;
       }
     }
 
@@ -148,11 +170,13 @@
           height: 34px;
           background-image: none;
         }
+        .usa-sr-only {
+          display: none;
+        }
       }
       .usa-link.advanced {
         display: inline-block;
         margin-top: 0.5em;
-        margin-left: 1em;
         color: color($theme-color-primary);
         font-size: 15px;
       }
