@@ -104,7 +104,7 @@ export const DocumentDetail = connect(
 
     const renderButtons = () => {
       return (
-        <div className="document-detail__action-buttons">
+        <div className="document-detail__action-buttons margin-top-1">
           <div className="float-left margin-bottom-2 margin-top-neg-2">
             {documentDetailHelper.isDraftDocument && (
               <>
