@@ -32,7 +32,7 @@ describe('DocketEntryFactory', () => {
     });
 
     it('should require received date be entered', () => {
-      expect(errors().dateReceived).toEqual('Enter date received.');
+      expect(errors().dateReceived).toEqual('Enter a valid date received');
       rawEntity.dateReceived = moment().format();
       expect(errors().dateReceived).toEqual(undefined);
     });
@@ -42,7 +42,7 @@ describe('DocketEntryFactory', () => {
         .add(1, 'days')
         .format();
       expect(errors().dateReceived).toEqual(
-        'Received date is in the future. Please enter a valid date.',
+        'Received date cannot be in the future. Enter a valid date.',
       );
     });
 
@@ -62,14 +62,14 @@ describe('DocketEntryFactory', () => {
       });
 
       it('should require non standard fields', () => {
-        expect(errors().ordinalValue).toEqual('Select an iteration.');
+        expect(errors().ordinalValue).toEqual('Select an iteration');
         rawEntity.ordinalValue = 'First';
         expect(errors().ordinalValue).toEqual(undefined);
       });
     });
 
     it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
-      expect(errors().partyPrimary).toEqual('Select a filing party.');
+      expect(errors().partyPrimary).toEqual('Select a filing party');
       rawEntity.partySecondary = true;
       expect(errors().partyPrimary).toEqual(undefined);
     });
@@ -98,7 +98,7 @@ describe('DocketEntryFactory', () => {
 
         it('should require certificate of service date be entered', () => {
           expect(errors().certificateOfServiceDate).toEqual(
-            'Enter a Certificate of Service Date.',
+            'Enter date of service',
           );
           rawEntity.certificateOfServiceDate = moment().format();
           expect(errors().certificateOfServiceDate).toEqual(undefined);
@@ -109,7 +109,7 @@ describe('DocketEntryFactory', () => {
             .add(1, 'days')
             .format();
           expect(errors().certificateOfServiceDate).toEqual(
-            'Certificate of Service date is in the future. Please enter a valid date.',
+            'Certificate of Service date cannot be in the future. Enter a valid date.',
           );
         });
       });
@@ -157,7 +157,7 @@ describe('DocketEntryFactory', () => {
           it('should validate secondary document', () => {
             expect(errors().secondaryDocument).toEqual({
               category: 'Select a Category.',
-              documentType: 'Select a Document Type.',
+              documentType: 'Select a document type',
             });
           });
         });

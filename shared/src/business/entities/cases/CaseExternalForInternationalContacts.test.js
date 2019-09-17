@@ -28,7 +28,7 @@ describe('CaseExternal', () => {
         stinFileSize: 1,
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        contactPrimary: { country: 'Country is a required field.' },
+        contactPrimary: { country: 'Enter a country' },
       });
     });
 

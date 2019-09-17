@@ -22,8 +22,8 @@ ExternalDocumentNonStandardA.prototype.getDocumentTitle = function() {
 
 ExternalDocumentNonStandardA.errorToMessageMap = {
   category: 'Select a Category.',
-  documentType: 'Select a Document Type.',
-  previousDocument: 'Select a document.',
+  documentType: 'Select a document type',
+  previousDocument: 'Select a document',
 };
 
 ExternalDocumentNonStandardA.schema = {

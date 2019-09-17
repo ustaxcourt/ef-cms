@@ -36,7 +36,7 @@ export const Address = connect(
           }
         >
           <label className="usa-label" htmlFor={`${type}.address1`}>
-            Mailing Address Line 1
+            Mailing address line 1
           </label>
           <input
             autoCapitalize="none"
@@ -62,7 +62,7 @@ export const Address = connect(
         </div>
         <div className="usa-form-group">
           <label className="usa-label" htmlFor={`${type}.address2`}>
-            Address Line 2 <span className="usa-hint">(optional)</span>
+            Address line 2 <span className="usa-hint">(optional)</span>
           </label>
           <input
             autoCapitalize="none"
@@ -84,7 +84,7 @@ export const Address = connect(
         </div>
         <div className="usa-form-group">
           <label className="usa-label" htmlFor={`${type}.address3`}>
-            Address Line 3 <span className="usa-hint">(optional)</span>
+            Address line 3 <span className="usa-hint">(optional)</span>
           </label>
           <input
             autoCapitalize="none"
@@ -241,7 +241,7 @@ export const Address = connect(
             className="usa-label"
             htmlFor={`${type}.postalCode`}
           >
-            ZIP Code
+            ZIP code
           </label>
           <input
             autoCapitalize="none"

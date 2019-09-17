@@ -111,23 +111,24 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
   let errorToMessageMap = {
     attachments: 'Enter selection for Attachments.',
-    certificateOfService: 'Enter selection for Certificate of Service.',
+    certificateOfService:
+      'Indicate whether you are including a Certificate of Service',
     certificateOfServiceDate: [
       {
         contains: 'must be less than or equal to',
         message:
-          'Certificate of Service date is in the future. Please enter a valid date.',
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
       },
-      'Enter date for Certificate of Service.',
+      'Enter date of service',
     ],
     hasSecondarySupportingDocuments:
       'Enter selection for Secondary Supporting Documents.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
     objections: 'Enter selection for Objections.',
-    partyPrimary: 'Select a filing party.',
-    partyRespondent: 'Select a filing party.',
-    partySecondary: 'Select a filing party.',
-    primaryDocumentFile: 'Upload a document.',
+    partyPrimary: 'Select a filing party',
+    partyRespondent: 'Select a filing party',
+    partySecondary: 'Select a filing party',
+    primaryDocumentFile: 'Upload a document',
     primaryDocumentFileSize: [
       {
         contains: 'must be less than or equal to',
@@ -135,7 +136,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       },
       'Your Primary Document file size is empty.',
     ],
-    secondaryDocumentFile: 'Upload a document.',
+    secondaryDocumentFile: 'Upload a document',
     secondaryDocumentFileSize: [
       {
         contains: 'must be less than or equal to',
