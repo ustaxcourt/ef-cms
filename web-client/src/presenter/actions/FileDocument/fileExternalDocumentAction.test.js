@@ -5,17 +5,17 @@ import sinon from 'sinon';
 
 describe('fileExternalDocumentAction', () => {
   let uploadExternalDocumentStub;
-  let createCoverSheetStub;
+  let addCoversheetStub;
   let submitCaseAssociationRequestStub;
 
   beforeEach(() => {
     uploadExternalDocumentStub = sinon.stub();
-    createCoverSheetStub = sinon.stub();
+    addCoversheetStub = sinon.stub();
     submitCaseAssociationRequestStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        createCoverSheet: createCoverSheetStub,
+        addCoversheetInteractor: addCoversheetStub,
         submitCaseAssociationRequestInteractor: submitCaseAssociationRequestStub,
         uploadExternalDocumentInteractor: uploadExternalDocumentStub,
       }),

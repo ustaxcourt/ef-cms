@@ -5,7 +5,7 @@ import { submitDocketEntryAction } from './submitDocketEntryAction';
 import sinon from 'sinon';
 
 describe('submitDocketEntryAction', () => {
-  let createCoverSheetStub;
+  let addCoversheetStub;
   let fileDocketEntryStub;
   let virusScanPdfStub;
   let validatePdfStub;
@@ -13,7 +13,7 @@ describe('submitDocketEntryAction', () => {
   let updateDocketEntryStub;
 
   beforeEach(() => {
-    createCoverSheetStub = sinon.stub();
+    addCoversheetStub = sinon.stub();
     fileDocketEntryStub = sinon.stub();
     sanitizePdfStub = sinon.stub();
     validatePdfStub = sinon.stub();
@@ -24,7 +24,7 @@ describe('submitDocketEntryAction', () => {
       ...applicationContext,
       getUniqueId: () => '123',
       getUseCases: () => ({
-        createCoverSheetInteractor: createCoverSheetStub,
+        addCoversheetInteractor: addCoversheetStub,
         fileDocketEntryInteractor: fileDocketEntryStub,
         sanitizePdfInteractor: sanitizePdfStub,
         updateDocketEntryInteractor: updateDocketEntryStub,
