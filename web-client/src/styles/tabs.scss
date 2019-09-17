@@ -104,10 +104,6 @@
                 border-bottom: 1px solid color($theme-color-primary-darker);
               }
             }
-
-            span {
-              padding-bottom: 5px;
-            }
           }
 
           &.active {
@@ -121,7 +117,6 @@
 
               &:hover {
                 span {
-                  padding-bottom: 5px;
                   border-bottom: 3px solid color($theme-color-primary);
                 }
               }
