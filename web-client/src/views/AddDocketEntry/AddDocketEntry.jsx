@@ -29,6 +29,7 @@ export const AddDocketEntry = connect(
     return (
       <>
         <CaseDetailHeader />
+
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
