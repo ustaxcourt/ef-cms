@@ -11,7 +11,7 @@ describe('InitialWorkItemMessage', () => {
         'Select a recipient',
       );
       expect(message.getFormattedValidationErrors().section).toEqual(
-        'Select a section.',
+        'Select a section',
       );
     });
 
