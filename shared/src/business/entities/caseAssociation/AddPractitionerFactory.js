@@ -36,9 +36,9 @@ AddPractitionerFactory.get = metadata => {
   };
 
   let errorToMessageMap = {
-    representingPrimary: 'Select a represented party.',
-    representingSecondary: 'Select a represented party.',
-    user: 'Select a practitioner.',
+    representingPrimary: 'Select a represented party',
+    representingSecondary: 'Select a represented party',
+    user: 'Select a petitioner counsel',
   };
 
   let customValidate;

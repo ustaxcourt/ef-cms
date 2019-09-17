@@ -206,7 +206,7 @@ export const BeforeStartingCase = () => (
         >
           Got It, Letʼs File My Petition
         </a>
-        <a className="usa-button usa-button--outline" href="/">
+        <a className="usa-button usa-button--unstyled" href="/">
           Cancel
         </a>
       </div>

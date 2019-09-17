@@ -27,7 +27,7 @@ describe('CaseInternal entity', () => {
       expect(caseInternal.isValid()).toEqual(true);
     });
 
-    it('fails validation if date is in the future', () => {
+    it('fails validation if date cannot be in the future.', () => {
       const caseInternal = new CaseInternal({
         caseCaption: 'Dr. Leo Marvin, Petitioner',
         petitionFile: { anObject: true },
@@ -95,7 +95,7 @@ describe('CaseInternal entity', () => {
 
       expect(
         caseInternal.getFormattedValidationErrors().preferredTrialCity,
-      ).toEqual('Select a trial location');
+      ).toEqual('Select a preferred trial location');
     });
   });
 });

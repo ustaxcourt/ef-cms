@@ -175,7 +175,7 @@ export const PrimaryContactEdit = connect(
             Save
           </button>
           <button
-            className="usa-button usa-button--outline margin-top-3 margin-right-3"
+            className="usa-button usa-button--unstyled margin-top-3 margin-right-3"
             onClick={() => {
               cancelEditPrimaryContactSequence({
                 caseId: caseDetail.docketNumber,

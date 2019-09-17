@@ -5,8 +5,8 @@ describe('AddPractitioner', () => {
     it('should have error messages for missing fields', () => {
       const entity = AddPractitionerFactory.get({});
       expect(entity.getFormattedValidationErrors()).toEqual({
-        representingPrimary: 'Select a represented party.',
-        user: 'Select a practitioner.',
+        representingPrimary: 'Select a represented party',
+        user: 'Select a petitioner counsel',
       });
     });
 
@@ -24,7 +24,7 @@ describe('AddPractitioner', () => {
         user: { userId: 'abc' },
       });
       expect(entity.getFormattedValidationErrors()).toEqual({
-        representingPrimary: 'Select a represented party.',
+        representingPrimary: 'Select a represented party',
       });
     });
   });
