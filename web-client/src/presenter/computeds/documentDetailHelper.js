@@ -94,6 +94,7 @@ export const documentDetailHelper = (get, applicationContext) => {
       (!['New', 'Recalled'].includes(caseDetail.status) ||
         !formattedDocument.isPetition));
 
+
   return {
     documentEditUrl,
     formattedDocument,
