@@ -1,3 +1,4 @@
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -128,12 +129,7 @@ export const SectionWorkQueueInbox = connect(
                   </>
                 )}
                 <td className="message-queue-row">
-                  <a
-                    className="no-wrap"
-                    href={`/case-detail/${item.docketNumber}`}
-                  >
-                    {item.docketNumberWithSuffix}
-                  </a>
+                  <CaseLink formattedCase={item} />
                 </td>
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.received}</span>
