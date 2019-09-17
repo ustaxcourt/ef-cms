@@ -9,9 +9,9 @@ describe('ExternalDocumentNonStandardD', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         category: 'Select a Category.',
-        documentType: 'Select a Document Type.',
-        previousDocument: 'Select a document.',
-        serviceDate: 'Provide a service date.',
+        documentType: 'Select a document type',
+        previousDocument: 'Select a document',
+        serviceDate: 'Provide a service date',
       });
     });
 
@@ -29,7 +29,7 @@ describe('ExternalDocumentNonStandardD', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         serviceDate:
-          'Service date is in the future. Please enter a valid date.',
+          'Service date cannot be in the future. Enter a valid date.',
       });
     });
 

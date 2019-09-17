@@ -127,7 +127,7 @@ export const StartCaseStep4 = connect(
             </p>
             <div className="blue-container">
               <TrialCity
-                label="Select a trial location"
+                label="Select a preferred trial location"
                 showDefaultOption={true}
                 showHint={true}
                 showRegularTrialCitiesHint={

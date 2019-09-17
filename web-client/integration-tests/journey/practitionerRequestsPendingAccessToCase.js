@@ -7,13 +7,14 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Enter selection for Certificate of Service.',
-      documentTitleTemplate: 'Select a document.',
-      documentType: 'Select a document.',
-      eventCode: 'Select a document.',
-      primaryDocumentFile: 'A file was not selected.',
-      representingPrimary: 'Select a party.',
-      scenario: 'Select a document.',
+      certificateOfService:
+        'Indicate whether you are including a Certificate of Service',
+      documentTitleTemplate: 'Select a document',
+      documentType: 'Select a document type',
+      eventCode: 'Select a document',
+      primaryDocumentFile: 'Upload a document',
+      representingPrimary: 'Select a party',
+      scenario: 'Select a document',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -36,12 +37,13 @@ export default (test, fakeFile) => {
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
       attachments: 'Enter selection for Attachments.',
-      certificateOfService: 'Enter selection for Certificate of Service.',
+      certificateOfService:
+        'Indicate whether you are including a Certificate of Service',
       exhibits: 'Enter selection for Exhibits.',
       hasSupportingDocuments: 'Enter selection for Supporting Documents.',
       objections: 'Enter selection for Objections.',
-      primaryDocumentFile: 'A file was not selected.',
-      representingPrimary: 'Select a party.',
+      primaryDocumentFile: 'Upload a document',
+      representingPrimary: 'Select a party',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -101,7 +103,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      supportingDocumentFile: 'A file was not selected.',
+      supportingDocumentFile: 'Upload a document',
       supportingDocumentFreeText: 'Please provide a value.',
     });
 

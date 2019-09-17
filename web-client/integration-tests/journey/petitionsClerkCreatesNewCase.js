@@ -16,7 +16,7 @@ export default (test, fakeFile) => {
     );
 
     expect(test.getState('validationErrors.petitionFile')).toEqual(
-      'Upload or scan a Petition',
+      'Upload or scan a petition',
     );
 
     await test.runSequence('updateFormValueSequence', {

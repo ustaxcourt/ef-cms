@@ -28,9 +28,9 @@ joiValidationDecorator(
   }),
   undefined,
   {
-    assigneeId: 'Recipient is required.',
-    forwardMessage: 'Message is required.',
-    section: 'Section is required',
+    assigneeId: 'Select a recipient',
+    forwardMessage: 'Enter a message',
+    section: 'Select a section',
   },
 );
 

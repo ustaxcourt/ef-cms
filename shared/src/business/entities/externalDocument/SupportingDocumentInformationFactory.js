@@ -54,17 +54,18 @@ SupportingDocumentInformationFactory.get = documentMetadata => {
 
   let errorToMessageMap = {
     attachments: 'Enter selection for Attachments.',
-    certificateOfService: 'Enter selection for Certificate of Service.',
+    certificateOfService:
+      'Indicate whether you are including a Certificate of Service',
     certificateOfServiceDate: [
       {
         contains: 'must be less than or equal to',
         message:
-          'Certificate of Service date is in the future. Please enter a valid date.',
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
       },
-      'Enter date for Certificate of Service.',
+      'Enter date of service',
     ],
-    supportingDocument: 'Select a Document Type.',
-    supportingDocumentFile: 'Upload a document.',
+    supportingDocument: 'Select a document type',
+    supportingDocumentFile: 'Upload a document',
     supportingDocumentFileSize: [
       {
         contains: 'must be less than or equal to',
@@ -72,7 +73,7 @@ SupportingDocumentInformationFactory.get = documentMetadata => {
       },
       'Your Supporting Document file size is empty.',
     ],
-    supportingDocumentFreeText: 'Enter name.',
+    supportingDocumentFreeText: 'Enter name',
   };
 
   const makeRequired = itemName => {
