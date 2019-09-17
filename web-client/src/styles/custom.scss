@@ -846,8 +846,9 @@ header.usa-header {
 }
 
 .big-blue-header {
-  padding: 25px 0;
-  margin-bottom: 40px;
+  padding: 20px 0;
+  margin-bottom: 20px;
+  max-height: 90px;
   background-color: color($theme-color-primary-darker);
   color: $color-white;
   h1 {
