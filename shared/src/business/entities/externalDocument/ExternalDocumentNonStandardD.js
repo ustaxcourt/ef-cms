@@ -33,7 +33,7 @@ ExternalDocumentNonStandardD.errorToMessageMap = {
   serviceDate: [
     {
       contains: 'must be less than or equal to',
-      message: 'Service date cannot be in the future.. Enter a valid date.',
+      message: 'Service date cannot be in the future. Enter a valid date.',
     },
     'Provide a service date',
   ],

@@ -87,7 +87,7 @@ Case.COMMON_ERROR_MESSAGES = {
     {
       contains: 'must be less than or equal to',
       message:
-        'The IRS notice date cannot be in the future.. Enter a valid date.',
+        'The IRS notice date cannot be in the future. Enter a valid date.',
     },
     'Please enter a valid IRS notice date',
   ],
@@ -104,7 +104,7 @@ Case.COMMON_ERROR_MESSAGES = {
     {
       contains: 'must be less than or equal to',
       message:
-        'The Fee Payment date cannot be in the future.. Enter a valid date.',
+        'The Fee Payment date cannot be in the future. Enter a valid date.',
     },
     'Please enter a valid Fee Payment date',
   ],

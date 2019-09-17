@@ -17,7 +17,7 @@ export default test => {
     await test.runSequence('clickServeToIrsSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
       irsNoticeDate:
-        'The IRS notice date cannot be in the future.. Enter a valid date.',
+        'The IRS notice date cannot be in the future. Enter a valid date.',
     });
 
     await test.runSequence('updateFormValueSequence', {
