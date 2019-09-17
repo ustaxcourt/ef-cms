@@ -1,4 +1,4 @@
-import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
