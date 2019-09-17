@@ -42,7 +42,7 @@ export const SearchBox = connect(
           </button>
           <a
             aria-label="advanced search"
-            className="usa-link advanced margin-left-2"
+            className="usa-link advanced margin-left-105"
             href="/search"
           >
             Advanced
