@@ -22,7 +22,7 @@ export const PrintableDocketRecord = connect(
                 </h1>
                 <p className="margin-0">{formattedCaseDetail.caseTitle}</p>
               </div>
-              <div className="tablet:grid-col-6"></div>
+              <div className="tablet:grid-col-6" />
             </div>
           </div>
         </div>
