@@ -88,6 +88,7 @@ import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
+import { navigateToPrintableDocketRecordSequence } from './sequences/navigateToPrintableDocketRecordSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAddEditCaseNoteModalFromDetailSequence } from './sequences/openAddEditCaseNoteModalFromDetailSequence';
 import { openAddEditCaseNoteModalFromListSequence } from './sequences/openAddEditCaseNoteModalFromListSequence';
@@ -346,6 +347,7 @@ export const presenter = {
     navigateBackSequence,
     navigateToCaseDetailSequence,
     navigateToPathSequence,
+    navigateToPrintableDocketRecordSequence,
     notFoundErrorSequence,
     openAddEditCaseNoteModalFromDetailSequence,
     openAddEditCaseNoteModalFromListSequence,

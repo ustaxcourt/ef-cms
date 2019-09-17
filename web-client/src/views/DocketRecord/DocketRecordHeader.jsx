@@ -7,6 +7,8 @@ export const DocketRecordHeader = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    navigateToPrintableDocketRecordSequence:
+      sequences.navigateToPrintableDocketRecordSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
     printDocketRecordSequence: sequences.printDocketRecordSequence,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
@@ -15,6 +17,7 @@ export const DocketRecordHeader = connect(
   ({
     caseDetailHelper,
     formattedCaseDetail,
+    navigateToPrintableDocketRecordSequence,
     printDocketRecordSequence,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
@@ -67,7 +70,9 @@ export const DocketRecordHeader = connect(
                 aria-label="printable docket record"
                 className="hide-on-mobile usa-button usa-button--unstyled margin-top-1 margin-left-2"
                 onClick={() => {
-                  openDocketRecordPrintPreview();
+                  navigateToPrintableDocketRecordSequence({
+                    docketNumber: formattedCaseDetail.docketNumber,
+                  });
                 }}
               >
                 <FontAwesomeIcon icon="print" size="sm" />
