@@ -7,12 +7,12 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Enter selection for Certificate of Service.',
-      documentTitleTemplate: 'Select a document.',
-      documentType: 'Select a document.',
-      eventCode: 'Select a document.',
-      primaryDocumentFile: 'A file was not selected.',
-      scenario: 'Select a document.',
+      certificateOfService: 'Indicate whether you are including a Certificate of Service',
+      documentTitleTemplate: 'Select a document',
+      documentType: 'Select a document type',
+      eventCode: 'Select a document',
+      primaryDocumentFile: 'Upload a document',
+      scenario: 'Select a document',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -34,8 +34,8 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Enter selection for Certificate of Service.',
-      primaryDocumentFile: 'A file was not selected.',
+      certificateOfService: 'Indicate whether you are including a Certificate of Service',
+      primaryDocumentFile: 'Upload a document',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -45,7 +45,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Enter selection for Certificate of Service.',
+      certificateOfService: 'Indicate whether you are including a Certificate of Service',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -55,7 +55,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter a Certificate of Service Date.',
+      certificateOfServiceDate: 'Enter date of service',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -74,7 +74,7 @@ export default (test, fakeFile) => {
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        'Certificate of Service date is in the future. Please enter a valid date.',
+        'Certificate of Service date cannot be in the future. Enter a valid date.',
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {

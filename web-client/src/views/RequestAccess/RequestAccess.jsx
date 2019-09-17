@@ -118,7 +118,7 @@ export const RequestAccess = connect(
             Review Filing
           </button>
           <button
-            className="usa-button usa-button--outline"
+            className="usa-button usa-button--unstyled"
             type="button"
             onClick={() => {
               formCancelToggleCancelSequence();

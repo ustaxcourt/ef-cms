@@ -8,7 +8,7 @@ describe('ExternalDocumentStandard', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         category: 'Select a Category.',
-        documentType: 'Select a Document Type.',
+        documentType: 'Select a document type',
       });
     });
 

@@ -8,9 +8,9 @@ describe('ExternalDocumentNonStandardI', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         category: 'Select a Category.',
-        documentType: 'Select a Document Type.',
-        freeText: 'Provide an answer.',
-        ordinalValue: 'Select an iteration.',
+        documentType: 'Select a document type',
+        freeText: 'Provide an answer',
+        ordinalValue: 'Select an iteration',
       });
     });
 

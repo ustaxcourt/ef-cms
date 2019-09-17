@@ -52,7 +52,7 @@ describe('CaseExternal entity', () => {
         procedureType: 'Small',
       });
       expect(caseExternal.getFormattedValidationErrors().stinFile).toEqual(
-        'Upload a Statement of Taxpayer Identification',
+        'Upload a statement of taxpayer identification',
       );
     });
   });

@@ -15,7 +15,7 @@ function AddRespondent(rawProps) {
 }
 
 AddRespondent.errorToMessageMap = {
-  user: 'Select a Respondent.',
+  user: 'Select a respondent counsel',
 };
 
 AddRespondent.schema = joi.object().keys({

@@ -712,7 +712,7 @@ textarea#case-caption {
 }
 
 .beta {
-  padding: 20px;
+  padding: 10px;
   background-color: color($theme-color-warning-lighter);
   font-weight: $font-bold;
   a {
@@ -770,7 +770,7 @@ textarea#case-caption {
 
 header.usa-header {
   display: flex;
-  height: 115px;
+  height: 100px;
   flex-direction: row;
   border-bottom: none;
   margin-bottom: 0px;
@@ -913,7 +913,15 @@ hr.lighter {
 }
 
 .document-detail__action-buttons {
-  margin-bottom: -4px;
+  .float-left {
+    position: absolute;
+    bottom: 14px;
+    width: 300px;
+  }
+
+  .float-right {
+     margin-top: 8px;
+  }
 }
 
 .DocumentDetail {

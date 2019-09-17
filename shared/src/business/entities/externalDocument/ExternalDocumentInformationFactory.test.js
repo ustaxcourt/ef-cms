@@ -22,14 +22,14 @@ describe('ExternalDocumentInformationFactory', () => {
     });
 
     it('should require primary document file', () => {
-      expect(errors().primaryDocumentFile).toEqual('Upload a document.');
+      expect(errors().primaryDocumentFile).toEqual('Upload a document');
       baseDoc.primaryDocumentFile = {};
       expect(errors().primaryDocumentFile).toEqual(undefined);
     });
 
     it('should require certificate of service radio be selected', () => {
       expect(errors().certificateOfService).toEqual(
-        'Enter selection for Certificate of Service.',
+        'Indicate whether you are including a Certificate of Service',
       );
       baseDoc.certificateOfService = false;
       expect(errors().certificateOfService).toEqual(undefined);
@@ -42,7 +42,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
       it('should require certificate of service date be entered', () => {
         expect(errors().certificateOfServiceDate).toEqual(
-          'Enter date for Certificate of Service.',
+          'Enter date of service',
         );
         baseDoc.certificateOfServiceDate = moment().format();
         expect(errors().certificateOfServiceDate).toEqual(undefined);
@@ -53,7 +53,7 @@ describe('ExternalDocumentInformationFactory', () => {
           .add(1, 'days')
           .format();
         expect(errors().certificateOfServiceDate).toEqual(
-          'Certificate of Service date is in the future. Please enter a valid date.',
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
         );
       });
     });
@@ -94,7 +94,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
       it('should require supporting document type be entered', () => {
         expect(errors().supportingDocuments[0].supportingDocument).toEqual(
-          'Select a Document Type.',
+          'Select a document type',
         );
         baseDoc.supportingDocuments[0].supportingDocument = 'Brief';
         expect(errors().supportingDocuments).toEqual(undefined);
@@ -111,7 +111,7 @@ describe('ExternalDocumentInformationFactory', () => {
         ];
         expect(errors().supportingDocuments[0]).toEqual({
           index: 1,
-          supportingDocument: 'Select a Document Type.',
+          supportingDocument: 'Select a document type',
         });
       });
 
@@ -120,7 +120,7 @@ describe('ExternalDocumentInformationFactory', () => {
         baseDoc.supportingDocuments[0].supportingDocument = 'brief';
         expect(
           errors().supportingDocuments[0].certificateOfServiceDate,
-        ).toEqual('Enter date for Certificate of Service.');
+        ).toEqual('Enter date of service');
         baseDoc.supportingDocuments[0].certificateOfServiceDate = moment().format();
         expect(errors().supportingDocuments).toEqual(undefined);
       });
@@ -139,7 +139,7 @@ describe('ExternalDocumentInformationFactory', () => {
         it('should require supporting document file to be selected', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
-          ).toEqual('Upload a document.');
+          ).toEqual('Upload a document');
           baseDoc.supportingDocuments[0].supportingDocumentFile = {};
           expect(errors().supportingDocuments).toEqual(undefined);
         });
@@ -155,7 +155,7 @@ describe('ExternalDocumentInformationFactory', () => {
         it('should require supporting document file to be selected', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
-          ).toEqual('Upload a document.');
+          ).toEqual('Upload a document');
           baseDoc.supportingDocuments[0].supportingDocumentFile = {};
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
@@ -165,7 +165,7 @@ describe('ExternalDocumentInformationFactory', () => {
         it('should require supporting document text to be added', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFreeText,
-          ).toEqual('Enter name.');
+          ).toEqual('Enter name');
           baseDoc.supportingDocuments[0].supportingDocumentFreeText =
             'Something';
           expect(
@@ -229,7 +229,7 @@ describe('ExternalDocumentInformationFactory', () => {
           it('should require certificateOfServiceDate if secondary document file is selected and certificateOfService is true', () => {
             baseDoc.secondaryDocument = { certificateOfService: true };
             expect(errors().secondaryDocument.certificateOfServiceDate).toEqual(
-              'Enter date for Certificate of Service.',
+              'Enter date of service',
             );
           });
         });
@@ -242,7 +242,7 @@ describe('ExternalDocumentInformationFactory', () => {
         });
 
         it('should require secondary document file be added', () => {
-          expect(errors().secondaryDocumentFile).toEqual('Upload a document.');
+          expect(errors().secondaryDocumentFile).toEqual('Upload a document');
           baseDoc.secondaryDocumentFile = {};
           expect(errors().secondaryDocumentFile).toEqual(undefined);
         });
@@ -279,7 +279,7 @@ describe('ExternalDocumentInformationFactory', () => {
           it('should require supporting secondary document type be entered', () => {
             expect(
               errors().secondarySupportingDocuments[0].supportingDocument,
-            ).toEqual('Select a Document Type.');
+            ).toEqual('Select a document type');
             baseDoc.secondarySupportingDocuments[0].supportingDocument =
               'brief';
             expect(errors().secondarySupportingDocuments).toEqual(undefined);
@@ -291,7 +291,7 @@ describe('ExternalDocumentInformationFactory', () => {
               'brief';
             expect(
               errors().secondarySupportingDocuments[0].certificateOfServiceDate,
-            ).toEqual('Enter date for Certificate of Service.');
+            ).toEqual('Enter date of service');
             baseDoc.secondarySupportingDocuments[0].certificateOfServiceDate = moment().format();
             expect(errors().secondarySupportingDocuments).toEqual(undefined);
           });
@@ -310,7 +310,7 @@ describe('ExternalDocumentInformationFactory', () => {
             it('should require supporting secondary document file to be added', () => {
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
-              ).toEqual('Upload a document.');
+              ).toEqual('Upload a document');
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFile = {};
               expect(errors().secondarySupportingDocuments).toEqual(undefined);
             });
@@ -330,7 +330,7 @@ describe('ExternalDocumentInformationFactory', () => {
             it('should require supporting secondary document file to be selected', () => {
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
-              ).toEqual('Upload a document.');
+              ).toEqual('Upload a document');
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFile = {};
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
@@ -341,7 +341,7 @@ describe('ExternalDocumentInformationFactory', () => {
               expect(
                 errors().secondarySupportingDocuments[0]
                   .supportingDocumentFreeText,
-              ).toEqual('Enter name.');
+              ).toEqual('Enter name');
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFreeText =
                 'Something';
               expect(
@@ -355,7 +355,7 @@ describe('ExternalDocumentInformationFactory', () => {
     });
 
     it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
-      expect(errors().partyPrimary).toEqual('Select a filing party.');
+      expect(errors().partyPrimary).toEqual('Select a filing party');
       baseDoc.partyRespondent = true;
       expect(errors().partyPrimary).toEqual(undefined);
     });
