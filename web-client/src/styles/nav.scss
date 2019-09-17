@@ -56,6 +56,7 @@
       .usa-logo {
         width: 75px;
         max-width: 75px;
+        margin-bottom: 0.5rem;
       }
 
       .usa-nav__primary-item {
@@ -113,6 +114,8 @@
         }
 
         .usa-nav__link {
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
           color: color($theme-color-primary);
           font-family: $font-serif;
           font-size: 20px;
@@ -126,7 +129,7 @@
       }
 
       nav.ustc-nav {
-        height: 117px;
+        height: 100px;
         justify-content: space-between;
         padding-left: 20px;
       }
