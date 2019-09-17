@@ -8,13 +8,10 @@ import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CreateOrder } from './CreateOrder/CreateOrder';
-import { DashboardDocketClerk } from './Dashboards/DashboardDocketClerk';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
-import { DashboardPetitionsClerk } from './Dashboards/DashboardPetitionsClerk';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
-import { DashboardSeniorAttorney } from './Dashboards/DashboardSeniorAttorney';
 import { DocumentDetail } from './DocumentDetail';
 import { Error } from './Error';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
@@ -24,7 +21,7 @@ import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
-import { MessagesJudge } from './Messages/MessagesJudge';
+import { Messages } from './Messages/Messages';
 import { PDFSigner } from './PDFSigner';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
@@ -55,13 +52,10 @@ const pages = {
   CaseDetailInternal,
   CaseSearchNoMatches,
   CreateOrder,
-  DashboardDocketClerk,
   DashboardJudge,
   DashboardPetitioner,
-  DashboardPetitionsClerk,
   DashboardPractitioner,
   DashboardRespondent,
-  DashboardSeniorAttorney,
   DocumentDetail,
   Error,
   FileDocumentWizard,
@@ -69,7 +63,7 @@ const pages = {
   Interstitial,
   Loading,
   LogIn,
-  MessagesJudge,
+  Messages,
   PDFSigner,
   PrimaryContactEdit,
   PrintableDocketRecord,
