@@ -4,7 +4,6 @@ import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseInformationPublic } from './CaseDetail/CaseInformationPublic';
 import { DocketRecord } from './DocketRecord/DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PartyInformation } from './CaseDetail/PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
