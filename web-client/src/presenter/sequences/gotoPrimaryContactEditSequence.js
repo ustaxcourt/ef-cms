@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
@@ -11,7 +10,6 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 const gotoPrimaryContactEdit = [
   setCurrentPageAction('Interstitial'),
   startShowValidationAction,
-  clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,
   getCaseAction,
