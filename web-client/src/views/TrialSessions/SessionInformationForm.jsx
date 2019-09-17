@@ -21,7 +21,7 @@ export const SessionInformationForm = connect(
   }) => {
     return (
       <>
-        <h2 className="margin-top-4">Session Information</h2>
+        <h2 className="margin-top-0">Session Information</h2>
         <div className="blue-container">
           <div
             className={`usa-form-group ${

@@ -42,7 +42,7 @@ export const StartCaseStep3 = connect(
           </h1>
         </Focus>
         <p className="required-statement margin-top-05 margin-bottom-2">
-          All fields required unless otherwise noted
+          *All fields required unless otherwise noted
         </p>
         <div className="blue-container grid-container padding-x-0">
           <div className="grid-row grid-gap">
