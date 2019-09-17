@@ -633,7 +633,7 @@ select.ustc-input-error {
 
 #case-detail-tabs {
   border: 1px solid color($theme-color-base-lighter);
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .case-detail-party-info {
@@ -681,7 +681,7 @@ textarea#case-caption {
 .filed-by {
   display: inline-block;
   padding: 0px;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   font-size: 17px;
 }
 
@@ -887,7 +887,7 @@ header.usa-header {
 
 .title {
   border-bottom: 1px solid color($theme-color-base-lighter);
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 
   h1 {
     position: relative;
@@ -966,7 +966,6 @@ hr.lighter {
 
 .tab-right-button {
   position: absolute;
-  top: -10px;
   right: -7px;
 }
 
