@@ -1,9 +1,9 @@
 import { ActionRequired } from './CaseDetail/ActionRequired';
 import { CaseDeadlinesExternal } from './CaseDetail/CaseDeadlinesExternal';
+import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseInformationPublic } from './CaseDetail/CaseInformationPublic';
 import { DocketRecord } from './DocketRecord/DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PartyInformation } from './CaseDetail/PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
@@ -18,54 +18,11 @@ export const CaseDetail = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
   },
-  function CaseDetail({
-    caseDetailHelper,
-    formattedCaseDetail,
-    setCaseDetailPageTabSequence,
-  }) {
+  function CaseDetail({ caseDetailHelper, setCaseDetailPageTabSequence }) {
     return (
       <React.Fragment>
-        <div className="big-blue-header">
-          <div className="grid-container">
-            <div className="grid-row">
-              <div className="tablet:grid-col-6">
-                <h1 className="heading-2 captioned" tabIndex="-1">
-                  Docket Number: {formattedCaseDetail.docketNumberWithSuffix}
-                </h1>
-                <p className="margin-0">{formattedCaseDetail.caseTitle}</p>
-              </div>
-              <div className="tablet:grid-col-6">
-                {caseDetailHelper.showRequestAccessToCaseButton && (
-                  <a
-                    className="usa-button tablet-full-width push-right margin-right-0"
-                    href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
-                    id="button-request-access"
-                  >
-                    Request Access to Case
-                  </a>
-                )}
-                {caseDetailHelper.showPendingAccessToCaseButton && (
-                  <span
-                    aria-label="Request for Access Pending"
-                    className="usa-tag push-right margin-right-0 padding-x-3"
-                  >
-                    <span aria-hidden="true">Request for Access Pending</span>
-                  </span>
-                )}
-                {caseDetailHelper.showFileFirstDocumentButton && (
-                  <a
-                    className="usa-button tablet-full-width push-right margin-right-0"
-                    href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
-                    id="button-first-irs-document"
-                  >
-                    <FontAwesomeIcon icon="file" size="1x" /> File First IRS
-                    Document
-                  </a>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+        <CaseDetailHeader />
+
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
