@@ -89,7 +89,11 @@ export const DocumentDetail = connect(
                 className="container-tabs no-full-border-bottom tab-button-h3"
                 id="case-detail-messages-tabs"
               >
-                <Tab tabName="inProgress" title="In Progress">
+                <Tab
+                  id="tab-messages-in-progress"
+                  tabName="inProgress"
+                  title="In Progress"
+                >
                   <PendingMessages />
                 </Tab>
                 <Tab tabName="completed" title="Complete">
@@ -103,11 +107,24 @@ export const DocumentDetail = connect(
     };
 
     const renderButtons = () => {
+      const showingAnyButton = [
+        caseHelper.showServeToIrsButton &&
+          documentDetailHelper.formattedDocument.isPetition,
+        documentDetailHelper.showServeDocumentButton,
+        caseHelper.showRecallButton &&
+          documentDetailHelper.formattedDocument.isPetition,
+        documentDetailHelper.showSignDocumentButton,
+      ].some(val => val);
+
       return (
         <div className="document-detail__action-buttons">
           <div className="float-right">
             {documentDetailHelper.isDraftDocument && (
-              <div className="display-inline-block margin-right-2">
+              <div
+                className={`display-inline-block margin-right-2${
+                  showingAnyButton ? '' : ' margin-top-2'
+                }`}
+              >
                 <>
                   <a href={documentDetailHelper.documentEditUrl}>
                     {' '}
