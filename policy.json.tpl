@@ -133,7 +133,7 @@
         "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-terraform-lock",
         "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-dev",
         "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-prod",
-        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-stg"
+        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-stg",
         "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-themis",
       ]
     },
