@@ -237,7 +237,7 @@ export const Address = connect(
           }
         >
           <label
-            aria-label="ZIP code"
+            aria-label="zip code"
             className="usa-label"
             htmlFor={`${type}.postalCode`}
           >

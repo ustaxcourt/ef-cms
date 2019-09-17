@@ -227,7 +227,7 @@ export const LocationInformationForm = connect(
             }`}
           >
             <label
-              aria-label="ZIP code"
+              aria-label="zip code"
               className="usa-label"
               htmlFor="postal-code"
             >
