@@ -1,5 +1,5 @@
 import { BigHeader } from '../BigHeader';
-import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateSelectCalendar } from './DateSelectCalendar';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
