@@ -62,7 +62,38 @@ export const CaseDetailHeader = connect(
                 <UpdateCaseCaptionModalDialog />
               )}
             </div>
+
             <div className="tablet:grid-col-4">
+              {caseDetailHelper.showRequestAccessToCaseButton && (
+                <a
+                  className="usa-button tablet-full-width push-right margin-right-0"
+                  href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
+                  id="button-request-access"
+                >
+                  Request Access to Case
+                </a>
+              )}
+
+              {caseDetailHelper.showPendingAccessToCaseButton && (
+                <span
+                  aria-label="Request for Access Pending"
+                  className="usa-tag push-right margin-right-0 padding-x-3"
+                >
+                  <span aria-hidden="true">Request for Access Pending</span>
+                </span>
+              )}
+
+              {caseDetailHelper.showFileFirstDocumentButton && (
+                <a
+                  className="usa-button tablet-full-width push-right margin-right-0"
+                  href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
+                  id="button-first-irs-document"
+                >
+                  <FontAwesomeIcon icon="file" size="1x" /> File First IRS
+                  Document
+                </a>
+              )}
+
               {caseDetailHelper.showCreateOrderButton && (
                 <button
                   className="usa-button usa-button--inverse float-right"
