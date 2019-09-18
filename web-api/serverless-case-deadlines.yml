@@ -242,7 +242,7 @@ functions:
     handler: web-api/src/caseDeadlinesHandlers.getAllCaseDeadlinesLambda
     events:
       - http:
-          path: /case-deadlines
+          path: /
           method: get
           cors: true
           authorizer:
