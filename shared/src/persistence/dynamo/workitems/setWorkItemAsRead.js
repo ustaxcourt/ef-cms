@@ -16,7 +16,7 @@ exports.setWorkItemAsRead = async ({
       pk: `user-${userId}`,
       sk: `workitem-${workItemId}`,
     },
-    UpdateExpression: `SET #isRead = :isRead`,
+    UpdateExpression: 'SET #isRead = :isRead',
     applicationContext,
   });
 };

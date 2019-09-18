@@ -27,7 +27,9 @@ presenter.providers.applicationContext = Object.assign(applicationContext, {
   getScanner: getScannerInterface,
 });
 presenter.providers.router = {
+  createObjectURL: () => {},
   externalRoute: () => {},
+  revokeObjectURL: () => {},
   route: async url => {
     if (url === `/case-detail/${test.docketNumber}`) {
       await test.runSequence('gotoCaseDetailSequence', {

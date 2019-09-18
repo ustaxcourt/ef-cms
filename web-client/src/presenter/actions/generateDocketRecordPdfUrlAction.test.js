@@ -8,14 +8,7 @@ const fakeData =
 const createDocketRecordPdfInteractorMock = jest.fn();
 const mockCreateObjectUrl = jest.fn();
 
-global.window = {
-  URL: {
-    createObjectURL: () => {
-      mockCreateObjectUrl();
-      return '123456-abcdef';
-    },
-  },
-};
+global.window = global;
 
 global.Blob = () => {};
 
@@ -29,6 +22,14 @@ presenter.providers.applicationContext = {
     };
   },
 };
+
+presenter.providers.router = {
+  createObjectURL: () => {
+    mockCreateObjectUrl();
+    return '123456-abcdef';
+  },
+};
+
 describe('generateDocketRecordPdfUrlAction', () => {
   it('creates a pdf and returns an object URL', async () => {
     const result = await runAction(generateDocketRecordPdfUrlAction, {
@@ -39,6 +40,17 @@ describe('generateDocketRecordPdfUrlAction', () => {
         contentHtml:
           '<!doctype html><html><head></head><body>Hello World</body></html>',
         docketNumber: '123-45',
+      },
+      state: {
+        formattedCaseDetail: {
+          caseId: 'ca123',
+          docketNumber: '123-45',
+        },
+        sessionMetadata: {
+          docketRecordSort: {
+            ca123: 'byDate',
+          },
+        },
       },
     });
     expect(createDocketRecordPdfInteractorMock).toHaveBeenCalled();

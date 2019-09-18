@@ -46,7 +46,7 @@ describe('CaseInternal entity', () => {
 
       expect(
         caseInternal.getFormattedValidationErrors().petitionFileSize,
-      ).toEqual('Your Petition file size is empty.');
+      ).toEqual('Your Petition file size is empty');
     });
 
     it('fails validation if stinFile is set, but stinFileSize is not', () => {
@@ -57,7 +57,7 @@ describe('CaseInternal entity', () => {
       });
 
       expect(caseInternal.getFormattedValidationErrors().stinFileSize).toEqual(
-        'Your STIN file size is empty.',
+        'Your STIN file size is empty',
       );
     });
 
@@ -70,7 +70,7 @@ describe('CaseInternal entity', () => {
 
       expect(
         caseInternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
-      ).toEqual('Your Ownership Disclosure Statement file size is empty.');
+      ).toEqual('Your Ownership Disclosure Statement file size is empty');
     });
 
     it('fails validation if requestForPlaceOfTrialFile is set, but requestForPlaceOfTrialFileSize is not', () => {
@@ -83,7 +83,19 @@ describe('CaseInternal entity', () => {
       expect(
         caseInternal.getFormattedValidationErrors()
           .requestForPlaceOfTrialFileSize,
-      ).toEqual('Your Request for Place of Trial file size is empty.');
+      ).toEqual('Your Request for Place of Trial file size is empty');
+    });
+
+    it('fails validation if requestForPlaceOfTrialFile is set, but preferredTrialCity is not', () => {
+      const caseInternal = new CaseInternal({
+        caseCaption: 'Dr. Leo Marvin, Petitioner',
+        receivedAt: new Date().toISOString(),
+        requestForPlaceOfTrialFile: new File([], 'test.pdf'),
+      });
+
+      expect(
+        caseInternal.getFormattedValidationErrors().preferredTrialCity,
+      ).toEqual('Select a trial location');
     });
   });
 });

@@ -14,8 +14,8 @@ export const sortByDateAndDocketNumber = (a, b) => {
 
 export const caseDeadlineReportHelper = (get, applicationContext) => {
   let caseDeadlines = get(state.allCaseDeadlines) || [];
-  let filterStartDate = get(state.filterStartDate);
-  let filterEndDate = get(state.filterEndDate);
+  let filterStartDate = get(state.screenMetadata.filterStartDate);
+  let filterEndDate = get(state.screenMetadata.filterEndDate);
 
   filterStartDate = applicationContext
     .getUtilities()

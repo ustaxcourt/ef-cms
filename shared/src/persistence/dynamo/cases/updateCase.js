@@ -2,6 +2,7 @@ const client = require('../../dynamodbClientService');
 const {
   updateWorkItemCaseStatus,
 } = require('../workitems/updateWorkItemCaseStatus');
+const { createCaseCatalogRecord } = require('./createCaseCatalogRecord');
 const {
   updateWorkItemDocketNumberSuffix,
 } = require('../workitems/updateWorkItemDocketNumberSuffix');
@@ -24,6 +25,12 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   });
 
   const requests = [];
+  requests.push(
+    createCaseCatalogRecord({
+      applicationContext,
+      caseToCreate: caseToUpdate,
+    }),
+  );
   if (
     oldCase.status !== caseToUpdate.status ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix

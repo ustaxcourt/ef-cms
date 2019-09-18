@@ -16,14 +16,14 @@ export const CaseSearchBox = connect(
     updateSearchTermSequence,
   }) => {
     return (
-      <React.Fragment>
+      <>
         <form
           onSubmit={e => {
             e.preventDefault();
             submitCaseSearchSequence();
           }}
         >
-          <div className="case-search">
+          <div className="case-search margin-bottom-4">
             <div className="card">
               <div className="content-wrapper gray">
                 <h3>Search for a Case</h3>
@@ -31,19 +31,16 @@ export const CaseSearchBox = connect(
                 <p>
                   To file an Entry of Appearance, Substitution of Counsel, etc.
                 </p>
-                <div
-                  className={`usa-form-group margin-bottom-0 ${
-                    form.searchError ? 'usa-form-group--error' : ''
-                  }`}
-                >
+                <div className="usa-form-group margin-bottom-2">
                   <div>
                     <label className="usa-label" htmlFor="docket-search-field">
-                      Docket Number
+                      Docket number
                     </label>
                     <input
                       className="usa-input"
                       id="docket-search-field"
                       name="searchTerm"
+                      placeholder="Enter docket number (e.g., 123-19)"
                       type="text"
                       value={searchTerm}
                       onChange={e => {
@@ -53,13 +50,12 @@ export const CaseSearchBox = connect(
                       }}
                     />
                   </div>
-
-                  {form.searchError && (
-                    <div className="usa-error-message">
-                      No case was found. Check your docket number and try again.
-                    </div>
-                  )}
                 </div>
+
+                <div className="margin-bottom-3">
+                  <a href="/search">Advanced Search</a>
+                </div>
+
                 <button
                   className="usa-button usa-button--outline margin-top-2"
                   type="submit"
@@ -70,7 +66,7 @@ export const CaseSearchBox = connect(
             </div>
           </div>
         </form>
-      </React.Fragment>
+      </>
     );
   },
 );

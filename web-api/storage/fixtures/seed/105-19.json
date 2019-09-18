@@ -88,8 +88,16 @@
     "practitioners": [
       {
         "role": "practitioner",
-        "address": "123 Main Street Los Angeles, CA 98089",
-        "phone": "111-111-1111",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "name": "Test Practitioner",
         "section": "practitioner",
@@ -204,5 +212,28 @@
     ],
     "docketNumber": "105-19",
     "updatedAt": "2019-03-27T21:53:00.297Z"
+  },
+  {
+    "sk": "case-6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
+    "pk": "catalog",
+    "docketNumber": "105-19",
+    "docketNumberSuffix": null,
+    "contactPrimary": {
+      "address3": "Aliquam molestias fu",
+      "address2": "Est asperiores ullam",
+      "city": "Consequatur duis ut",
+      "phone": "+1 (669) 779-5845",
+      "address1": "472 North Green Cowley Boulevard",
+      "postalCode": "49767",
+      "name": "Caryn Wall",
+      "state": "AE",
+      "countryType": "domestic",
+      "email": "taxpayer@example.com"
+    },
+    "contactSecondary": {},
+    "yearFiled": "2019",
+    "caseCaption": "Caryn Wall, Petitioner",
+    "filedDate": "2019-03-27T21:53:00.297Z"
   }
 ]

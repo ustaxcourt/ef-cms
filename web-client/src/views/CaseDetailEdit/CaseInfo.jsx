@@ -1,26 +1,30 @@
-import { sequences, state } from 'cerebral';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ProcedureType } from '../StartCase/ProcedureType';
-import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
+import { limitLength } from '../../ustc-ui/utils/limitLength';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseInfo = connect(
   {
     autoSaveCaseSequence: sequences.autoSaveCaseSequence,
+    baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
+    caseDetailEditHelper: state.caseDetailEditHelper,
     caseDetailErrors: state.caseDetailErrors,
     form: state.form,
-    trialCitiesHelper: state.trialCitiesHelper,
+    token: state.token,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
     autoSaveCaseSequence,
+    baseUrl,
     caseDetail,
+    caseDetailEditHelper,
     caseDetailErrors,
     form,
-    trialCitiesHelper,
+    token,
     updateCaseValueSequence,
     updateFormValueSequence,
   }) => {
@@ -55,6 +59,7 @@ export const CaseInfo = connect(
                       }
                       id="received-at-month"
                       max="12"
+                      maxLength="2"
                       min="1"
                       name="receivedAtMonth"
                       type="number"
@@ -65,7 +70,7 @@ export const CaseInfo = connect(
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
-                          value: e.target.value,
+                          value: limitLength(e.target.value, 2),
                         });
                       }}
                     />
@@ -87,6 +92,7 @@ export const CaseInfo = connect(
                       }
                       id="received-at-day"
                       max="31"
+                      maxLength="2"
                       min="1"
                       name="receivedAtDay"
                       type="number"
@@ -97,7 +103,7 @@ export const CaseInfo = connect(
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
-                          value: e.target.value,
+                          value: limitLength(e.target.value, 2),
                         });
                       }}
                     />
@@ -119,6 +125,7 @@ export const CaseInfo = connect(
                       }
                       id="received-at-year"
                       max="2100"
+                      maxLength="4"
                       min="1900"
                       name="receivedAtYear"
                       type="number"
@@ -129,7 +136,7 @@ export const CaseInfo = connect(
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
-                          value: e.target.value,
+                          value: limitLength(e.target.value, 4),
                         });
                       }}
                     />
@@ -153,10 +160,6 @@ export const CaseInfo = connect(
               updateCaseValueSequence({
                 key: 'procedureType',
                 value: e.target.value,
-              });
-              updateCaseValueSequence({
-                key: 'preferredTrialCity',
-                value: '',
               });
               autoSaveCaseSequence();
             }}
@@ -186,24 +189,77 @@ export const CaseInfo = connect(
           </div>
         </div>
 
-        <TrialCity
-          label="Trial Location"
-          showDefaultOption={true}
-          showHint={false}
-          showRegularTrialCitiesHint={false}
-          showSmallTrialCitiesHint={false}
-          trialCitiesByState={
-            trialCitiesHelper(caseDetail.procedureType).trialCitiesByState
-          }
-          value={caseDetail.preferredTrialCity}
-          onChange={e => {
-            updateCaseValueSequence({
-              key: 'preferredTrialCity',
-              value: e.target.value,
-            });
-            autoSaveCaseSequence();
-          }}
-        />
+        <div className="usa-form-group">
+          <label className="usa-label" htmlFor="preferred-trial-city">
+            Trial Location
+          </label>
+          <div id="preferred-trial-city">
+            {caseDetailEditHelper.showNoTrialLocationSelected && (
+              <>
+                <p>No trial location selected</p>
+                <div className="order-checkbox">
+                  <input
+                    checked={caseDetail.orderDesignatingPlaceOfTrial}
+                    className="usa-checkbox__input"
+                    id="order-designating-place-of-trial"
+                    name="orderDesignatingPlaceOfTrial"
+                    type="checkbox"
+                    onChange={e => {
+                      updateCaseValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                      autoSaveCaseSequence();
+                    }}
+                  />
+                  <label
+                    className="usa-checkbox__label"
+                    htmlFor="order-designating-place-of-trial"
+                  >
+                    Order Designating Place of Trial
+                  </label>
+                </div>
+              </>
+            )}
+            {caseDetailEditHelper.showRQTDocumentLink && (
+              <>
+                <a
+                  aria-label="View PDF: Ownership Disclosure Statement"
+                  href={`${baseUrl}/documents/${caseDetailEditHelper.requestForPlaceOfTrialDocumentId}/document-download-url?token=${token}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <FontAwesomeIcon className="fa-icon-blue" icon="file-pdf" />
+                  {caseDetailEditHelper.requestForPlaceOfTrialDocumentTitle}
+                </a>
+                <div className="order-checkbox">
+                  <input
+                    checked={caseDetail.orderToChangePlaceOfTrial}
+                    className="usa-checkbox__input"
+                    id="order-to-change-place-of-trial"
+                    name="orderToChangePlaceOfTrial"
+                    type="checkbox"
+                    onChange={e => {
+                      updateCaseValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                      autoSaveCaseSequence();
+                    }}
+                  />
+                  <label
+                    className="usa-checkbox__label"
+                    htmlFor="order-to-change-place-of-trial"
+                  >
+                    Order to Change Designated Place of Trial
+                  </label>
+                </div>
+              </>
+            )}
+            {caseDetailEditHelper.showReadOnlyTrialLocation &&
+              `Request for Place of Trial at ${caseDetail.preferredTrialCity}`}
+          </div>
+        </div>
 
         <div
           className={`usa-form-group margin-bottom-0 ${
@@ -212,7 +268,7 @@ export const CaseInfo = connect(
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="fee-payment-date-legend">
-              Fee Payment Date
+              Fee Payment Date <span className="usa-hint">(optional)</span>
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month">
@@ -304,7 +360,7 @@ export const CaseInfo = connect(
 
         <div className="usa-form-group">
           <label className="usa-label" htmlFor="fee-payment-id">
-            Fee Payment ID
+            Fee Payment ID <span className="usa-hint">(optional)</span>
           </label>
           <input
             className="usa-input"
@@ -344,7 +400,9 @@ export const CaseInfo = connect(
           </label>
         </div>
 
-        <h3 id="orders-needed">Orders Needed</h3>
+        <h3 id="orders-needed">
+          Orders Needed <span className="usa-hint">(optional)</span>
+        </h3>
         <div
           aria-labelledby="orders-needed"
           className="orders-needed"
@@ -352,6 +410,7 @@ export const CaseInfo = connect(
         >
           <div className="usa-form-group" role="listitem">
             <input
+              aria-describedby="orders-needed"
               checked={caseDetail.orderForRatification}
               className="usa-checkbox__input"
               id="order-for-ratification"
@@ -374,6 +433,7 @@ export const CaseInfo = connect(
           </div>
           <div className="usa-form-group" role="listitem">
             <input
+              aria-describedby="orders-needed"
               checked={caseDetail.noticeOfAttachments}
               className="usa-checkbox__input"
               id="notice-of-attachments"
@@ -396,6 +456,7 @@ export const CaseInfo = connect(
           </div>
           <div className="usa-form-group" role="listitem">
             <input
+              aria-describedby="orders-needed"
               checked={caseDetail.orderForAmendedPetition}
               className="usa-checkbox__input"
               id="order-for-amended-petition"
@@ -418,6 +479,7 @@ export const CaseInfo = connect(
           </div>
           <div className="usa-form-group" role="listitem">
             <input
+              aria-describedby="orders-needed"
               checked={caseDetail.orderForAmendedPetitionAndFilingFee}
               className="usa-checkbox__input"
               id="order-for-amended-petition-and-filing-fee"

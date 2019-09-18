@@ -1,10 +1,12 @@
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
+import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
+import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardDocketClerk } from './Dashboards/DashboardDocketClerk';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
@@ -36,6 +38,7 @@ import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
+import { UserContactEdit } from './UserContactEdit';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import PropTypes from 'prop-types';
@@ -44,11 +47,13 @@ import React from 'react';
 const pages = {
   AddDocketEntry,
   AddTrialSession,
+  AdvancedSearch,
   BeforeStartingCase,
   BeforeYouFileADocument,
   CaseDeadlines,
   CaseDetail,
   CaseDetailInternal,
+  CaseSearchNoMatches,
   CreateOrder,
   DashboardDocketClerk,
   DashboardJudge,
@@ -77,6 +82,7 @@ const pages = {
   TrialSessionDetail,
   TrialSessionWorkingCopy,
   TrialSessions,
+  UserContactEdit,
 };
 
 /**

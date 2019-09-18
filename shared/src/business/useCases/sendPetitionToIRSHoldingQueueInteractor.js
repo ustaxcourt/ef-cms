@@ -37,7 +37,7 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  const caseEntity = new Case(caseToUpdate);
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
   caseEntity.sendToIRSHoldingQueue();
 
   const processWorkItem = async workItem => {
@@ -51,6 +51,7 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
       });
 
       workItem.assignToIRSBatchSystem({
+        applicationContext,
         name: user.name,
         userId: user.userId,
         userSection: user.section,
@@ -80,6 +81,10 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
 
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity
+      .updateCaseTitleDocketRecord()
+      .updateDocketNumberRecord()
+      .validate()
+      .toRawObject(),
   });
 };

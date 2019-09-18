@@ -38,7 +38,7 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
     }),
     createCaseCatalogRecord({
       applicationContext,
-      caseId: caseToCreate.caseId,
+      caseToCreate,
     }),
   ]);
 

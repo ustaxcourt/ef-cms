@@ -7,13 +7,14 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openCreateOrderChooseTypeModalSequence } from './openCreateOrderChooseTypeModalSequence';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { set } from 'cerebral/factories';
+import { set, unset } from 'cerebral/factories';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { state } from 'cerebral';
 import { unstashCreateOrderModalDataAction } from '../actions/CourtIssuedOrder/unstashCreateOrderModalDataAction';
 
 const gotoCreateOrder = [
+  unset(state.documentToEdit),
   clearModalAction,
   setCurrentPageAction('Interstitial'),
   set(state.showValidation, false),

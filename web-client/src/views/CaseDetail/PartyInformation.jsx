@@ -11,7 +11,8 @@ const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
   return (
     <React.Fragment>
       <p className="margin-top-0 address-name">
-        {nameOverride || contact.name}
+        {nameOverride || contact.name}{' '}
+        {contact.barNumber && `(${contact.barNumber})`}
         {contact.inCareOf && (
           <span>
             <br />
@@ -81,15 +82,16 @@ const PartyInformation = connect(
                   })}
                 </address>
 
-                {caseHelper.showEditContactButton && (
-                  <div>
+                {caseHelper.showEditPrimaryContactButton && (
+                  <p>
                     <a
+                      className="usa-button usa-button--unstyled"
                       href={`/case-detail/${caseDetail.docketNumber}/contacts/primary/edit`}
                     >
                       <FontAwesomeIcon icon="edit" size="sm" />
                       Edit
                     </a>
-                  </div>
+                  </p>
                 )}
                 {caseDetail.contactPrimary.serviceIndicator && (
                   <div className="margin-top-4">
@@ -145,13 +147,11 @@ const PartyInformation = connect(
                     AddressDisplay(
                       {
                         ...practitioner,
-                        address1: practitioner.addressLine1,
-                        address2: practitioner.addressLine2,
-                        address3: practitioner.addressLine3,
+                        ...practitioner.contact,
                       },
                       constants,
                       {
-                        nameOverride: practitioner.formattedName,
+                        nameOverride: practitioner.name,
                       },
                     )}
                 </address>
@@ -193,13 +193,11 @@ const PartyInformation = connect(
                     AddressDisplay(
                       {
                         ...respondent,
-                        address1: respondent.addressLine1,
-                        address2: respondent.addressLine2,
-                        address3: respondent.addressLine3,
+                        ...respondent.contact,
                       },
                       constants,
                       {
-                        nameOverride: respondent.formattedName,
+                        nameOverride: respondent.name,
                       },
                     )}
                 </address>

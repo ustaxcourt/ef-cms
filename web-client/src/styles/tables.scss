@@ -16,7 +16,8 @@ table,
   }
 
   td {
-    padding: 15px 20px;
+    padding-top: 18px;
+    padding-bottom: 15px;
     background-color: transparent;
     vertical-align: top;
   }
@@ -252,7 +253,7 @@ table.work-queue {
     }
 
     &.message-queue-document {
-      max-width: units('tablet');
+      max-width: 35rem;
     }
 
     &.has-icon {
@@ -261,11 +262,15 @@ table.work-queue {
 
     .message-document-title {
       overflow: hidden;
-      max-width: units('tablet');
+      max-width: 35rem;
       padding: 4px;
       margin: -4px;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    &.to {
+      min-width: 10rem;
     }
 
     .message-document-detail {
@@ -575,5 +580,11 @@ table.case-list tbody tr:nth-child(even) td {
 
   .overdue {
     color: color($theme-color-secondary);
+  }
+}
+
+.draft-documents {
+  .smaller-column {
+    width: 130px;
   }
 }

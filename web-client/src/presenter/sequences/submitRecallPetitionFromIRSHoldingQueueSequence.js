@@ -1,8 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
-import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { recallPetitionFromIRSHoldingQueueAction } from '../actions/recallPetitionFromIRSHoldingQueueAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const submitRecallPetitionFromIRSHoldingQueueSequence = [
@@ -11,5 +12,7 @@ export const submitRecallPetitionFromIRSHoldingQueueSequence = [
   recallPetitionFromIRSHoldingQueueAction,
   setCurrentPageAction('Interstitial'),
   setAlertSuccessAction,
-  navigateToDashboardAction,
+  getCaseAction,
+  setCaseAction,
+  setCurrentPageAction('DocumentDetail'),
 ];

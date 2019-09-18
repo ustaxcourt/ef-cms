@@ -2,6 +2,10 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const {
+  JoiValidationConstants,
+} = require('../../utilities/JoiValidationConstants');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 /**
  * constructor
@@ -10,30 +14,95 @@ const {
  * @constructor
  */
 function User(rawUser) {
-  this.email = rawUser.email;
-  this.addressLine1 = rawUser.addressLine1;
-  this.addressLine2 = rawUser.addressLine2;
   this.barNumber = rawUser.barNumber;
-  this.phone = rawUser.phone;
+  this.email = rawUser.email;
   this.name = rawUser.name;
   this.role = rawUser.role || 'petitioner';
   this.section = rawUser.section;
   this.token = rawUser.token;
   this.userId = rawUser.userId;
+  if (rawUser.contact) {
+    this.contact = {
+      address1: rawUser.contact.address1,
+      address2: rawUser.contact.address2 || undefined,
+      address3: rawUser.contact.address3 || undefined,
+      city: rawUser.contact.city,
+      country: rawUser.contact.country,
+      countryType: rawUser.contact.countryType,
+      phone: rawUser.contact.phone,
+      postalCode: rawUser.contact.postalCode,
+      state: rawUser.contact.state,
+    };
+  }
 }
 
 joiValidationDecorator(
   User,
   joi.object().keys({
-    addressLine1: joi.string().optional(),
-    addressLine2: joi.string().optional(),
     barNumber: joi.string().optional(),
+    contact: joi
+      .object()
+      .keys({
+        address1: joi.string().required(),
+        address2: joi.string().optional(),
+        address3: joi.string().optional(),
+        city: joi.string().required(),
+        country: joi.when('countryType', {
+          is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+          otherwise: joi
+            .string()
+            .optional()
+            .allow(null),
+          then: joi.string().required(),
+        }),
+        countryType: joi
+          .string()
+          .valid(
+            ContactFactory.COUNTRY_TYPES.DOMESTIC,
+            ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+          )
+          .required(),
+
+        phone: joi.string().required(),
+
+        postalCode: joi.when('countryType', {
+          is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+          otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
+          then: joi.string().required(),
+        }),
+
+        state: joi.when('countryType', {
+          is: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+          otherwise: joi.string().required(),
+          then: joi
+            .string()
+            .optional()
+            .allow(null),
+        }),
+      })
+      .optional(),
     email: joi.string().optional(),
     name: joi.string().optional(),
-    phone: joi.string().optional(),
     token: joi.string().optional(),
     userId: joi.string().required(),
   }),
+  undefined,
+  {
+    address1: 'Address is a required field.',
+    city: 'City is a required field.',
+    country: 'Country is a required field.',
+    countryType: 'Country Type is a required field.',
+    name: 'Name is a required field.',
+    phone: 'Phone is a required field.',
+    postalCode: [
+      {
+        contains: 'match',
+        message: 'Please enter a valid zip code.',
+      },
+      'Zip Code is a required field.',
+    ],
+    state: 'State is a required field.',
+  },
 );
 
 User.ROLES = {

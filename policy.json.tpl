@@ -139,6 +139,7 @@
       "Effect": "Allow",
       "Action": [
         "iam:GetRole",
+        "iam:CreateRole",
         "iam:DeleteRole",
         "iam:PutRolePolicy",
         "iam:PassRole",
@@ -159,6 +160,9 @@
       "Resource": [
         "arn:aws:iam::ACCOUNT_ID:role/api_gateway_cloudwatch_global_*",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-cases-*-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-case-documents-*-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-case-deadlines-*-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-case-notes-*-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-*-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:instance-profile/dynamsoft_role-*",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-documents-*-lambdaRole",

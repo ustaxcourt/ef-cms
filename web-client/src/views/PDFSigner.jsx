@@ -23,7 +23,7 @@ class PDFSignerComponent extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.signatureData === null) {
+    if (!this.props.signatureApplied) {
       this.renderPDFPage(this.props.currentPageNumber);
     }
   }
@@ -56,9 +56,11 @@ class PDFSignerComponent extends React.Component {
 
   clear() {
     this.props.setSignatureData({
+      isPdfAlreadySigned: false,
       signatureApplied: false,
       signatureData: null,
     });
+    this.props.loadOriginalProposedStipulatedDecisionSequence();
   }
 
   stop(canvasEl, sigEl, x, y, scale = 1) {
@@ -119,7 +121,10 @@ class PDFSignerComponent extends React.Component {
         <section className="usa-section grid-container">
           <div className="grid-row">
             <div className="grid-col-12">
-              <h1>Proposed Stipulated Decision</h1>
+              <h1>
+                Sign{' '}
+                {this.props.documentDetailHelper.formattedDocument.documentType}
+              </h1>
               <div className="grid-row grid-gap">
                 <div className="grid-col-4">
                   <div className="blue-container">
@@ -131,12 +136,25 @@ class PDFSignerComponent extends React.Component {
                     <PDFSignerMessage />
                   </div>
                   <div className="margin-top-2">
+                    {/* TODO: This is commented out until we revisit the stipulated
+                    decision */}
+                    {/* <button
+                      className="usa-button"
+                      disabled={this.props.pdfSignerHelper.disableSaveButton}
+                      onClick={() => this.props.saveDocumentSigningSequence()}
+                    >
+                      Save
+                    </button> */}
                     <button
                       className="usa-button"
-                      disabled={!this.props.signatureData}
-                      onClick={() => this.props.completeSigning()}
+                      disabled={
+                        this.props.pdfSignerHelper.disableSaveAndSendButton
+                      }
+                      onClick={() =>
+                        this.props.completeDocumentSigningSequence()
+                      }
                     >
-                      Save & Send
+                      Save & Send Message
                     </button>
                     <button
                       className="usa-button usa-button--unstyled margin-left-2"
@@ -153,16 +171,9 @@ class PDFSignerComponent extends React.Component {
                 <div className="grid-col-8">
                   <div className="sign-pdf-interface">
                     <span
-                      className={
-                        !this.props.signatureData && this.props.signatureApplied
-                          ? 'cursor-grabbing'
-                          : 'cursor-grab'
-                      }
+                      className={this.props.pdfSignerHelper.signatureClass}
                       id="signature"
                       ref={this.signatureRef}
-                      style={{
-                        display: this.props.signatureApplied ? 'block' : 'none',
-                      }}
                     >
                       (Signed) {this.props.pdfForSigning.nameForSigning}
                       <br />
@@ -193,13 +204,17 @@ class PDFSignerComponent extends React.Component {
 
 PDFSignerComponent.propTypes = {
   cancel: PropTypes.func,
-  completeSigning: PropTypes.func,
+  completeDocumentSigningSequence: PropTypes.func,
   currentPageNumber: PropTypes.number,
   docketNumber: PropTypes.string,
+  documentDetailHelper: PropTypes.object,
   documentId: PropTypes.string,
+  loadOriginalProposedStipulatedDecisionSequence: PropTypes.func,
   navigateToPathSequence: PropTypes.func,
   pdfForSigning: PropTypes.object,
   pdfObj: PropTypes.object,
+  pdfSignerHelper: PropTypes.object,
+  saveDocumentSigningSequence: PropTypes.func,
   setCanvas: PropTypes.func,
   setPage: PropTypes.func,
   setSignatureData: PropTypes.func,
@@ -210,13 +225,18 @@ PDFSignerComponent.propTypes = {
 export const PDFSigner = connect(
   {
     cancel: sequences.gotoDocumentDetailSequence,
-    completeSigning: sequences.completeDocumentSigningSequence,
+    completeDocumentSigningSequence: sequences.completeDocumentSigningSequence,
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
+    documentDetailHelper: state.documentDetailHelper,
     documentId: state.documentId,
+    loadOriginalProposedStipulatedDecisionSequence:
+      sequences.loadOriginalProposedStipulatedDecisionSequence,
     navigateToPathSequence: sequences.navigateToPathSequence,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
+    pdfSignerHelper: state.pdfSignerHelper,
+    saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
     setCanvas: sequences.setCanvasForPDFSigningSequence,
     setSignatureData: sequences.setPDFSignatureDataSequence,
     signatureApplied: state.pdfForSigning.signatureApplied,

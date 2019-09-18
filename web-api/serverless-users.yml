@@ -341,15 +341,30 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  updateUserContactInformation:
+    runtime: nodejs8.10
+    handler: web-api/src/usersHandlers.updateUserContactInformationLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: /{userId}/contact-info
+          method: put
+          cors: true
+          async: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getPractitionersBySearchKey:
     handler: web-api/src/usersHandlers.getPractitionersBySearchKeyLambda
     events:
       - http:
           path: /practitioners/search
           method: get
-          request:
-            template:
-              application/json: { 'searchKey': "$input.params('searchKey')" }
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
@@ -362,9 +377,6 @@ functions:
       - http:
           path: /respondents/search
           method: get
-          request:
-            template:
-              application/json: { 'searchKey': "$input.params('searchKey')" }
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

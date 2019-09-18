@@ -47,6 +47,7 @@ describe('validatePdfInteractor', () => {
           putObjectTagging: () => {},
         }),
         logger: {
+          info: () => null,
           time: () => null,
           timeEnd: () => null,
         },
@@ -54,6 +55,12 @@ describe('validatePdfInteractor', () => {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
-    await expect(validatePdfInteractor(invalidParams)).rejects.toThrow();
+    let error;
+    try {
+      await validatePdfInteractor(invalidParams);
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toEqual('invalid pdf');
   });
 });

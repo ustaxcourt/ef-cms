@@ -42,8 +42,10 @@ describe('caseDeadlineReportHelper', () => {
     let result = runCompute(caseDeadlineReportHelper, {
       state: {
         allCaseDeadlines: caseDeadlines,
-        filterEndDate: '2019-08-21T12:59:59.000Z',
-        filterStartDate: '2019-08-21T04:00:00.000Z',
+        screenMetadata: {
+          filterEndDate: '2019-08-21T12:59:59.000Z',
+          filterStartDate: '2019-08-21T04:00:00.000Z',
+        },
       },
     });
     expect(result.formattedFilterDateHeader).toEqual('August 21, 2019');
@@ -53,7 +55,9 @@ describe('caseDeadlineReportHelper', () => {
     let result = runCompute(caseDeadlineReportHelper, {
       state: {
         allCaseDeadlines: caseDeadlines,
-        filterStartDate: '2019-08-21T04:00:00.000Z',
+        screenMetadata: {
+          filterStartDate: '2019-08-21T04:00:00.000Z',
+        },
       },
     });
     expect(result.caseDeadlineCount).toEqual(2);
@@ -74,8 +78,10 @@ describe('caseDeadlineReportHelper', () => {
     let result = runCompute(caseDeadlineReportHelper, {
       state: {
         allCaseDeadlines: caseDeadlines,
-        filterEndDate: '2019-08-23T04:00:00.000Z',
-        filterStartDate: '2019-08-21T04:00:00.000Z',
+        screenMetadata: {
+          filterEndDate: '2019-08-23T04:00:00.000Z',
+          filterStartDate: '2019-08-21T04:00:00.000Z',
+        },
       },
     });
     expect(result.caseDeadlineCount).toEqual(3);

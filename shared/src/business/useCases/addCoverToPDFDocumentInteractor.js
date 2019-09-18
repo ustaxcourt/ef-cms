@@ -514,7 +514,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
     });
   applicationContext.logger.timeEnd('Fetching the Case');
 
-  const caseEntity = new Case(caseRecord);
+  const caseEntity = new Case(caseRecord, { applicationContext });
 
   const documentEntity = caseEntity.documents.find(
     document => document.documentId === documentId,

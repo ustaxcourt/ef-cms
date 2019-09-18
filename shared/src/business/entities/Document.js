@@ -23,7 +23,10 @@ Document.validationName = 'Document';
  * @param {object} rawDocument the raw document data
  * @constructor
  */
-function Document(rawDocument) {
+function Document(rawDocument, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
   this.additionalInfo = rawDocument.additionalInfo;
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.addToCoversheet = rawDocument.addToCoversheet;
@@ -37,6 +40,7 @@ function Document(rawDocument) {
   this.documentId = rawDocument.documentId;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
+  this.draftState = rawDocument.draftState;
   this.isFileAttached = rawDocument.isFileAttached;
   this.eventCode = rawDocument.eventCode;
   this.exhibits = rawDocument.exhibits;
@@ -63,10 +67,11 @@ function Document(rawDocument) {
   this.supportingDocument = rawDocument.supportingDocument;
   this.userId = rawDocument.userId;
   this.workItems = rawDocument.workItems;
+  this.archived = rawDocument.archived;
 
   this.processingStatus = this.processingStatus || 'pending';
   this.workItems = (this.workItems || []).map(
-    workItem => new WorkItem(workItem),
+    workItem => new WorkItem(workItem, { applicationContext }),
   );
 }
 
@@ -90,6 +95,7 @@ Document.INITIAL_DOCUMENT_TYPES = {
     eventCode: 'P',
   },
   requestForPlaceOfTrial: {
+    documentTitle: 'Request for Place of Trial at [Place]',
     documentType: 'Request for Place of Trial',
     eventCode: 'RQT',
   },
@@ -141,6 +147,7 @@ Document.prototype.isPetitionDocument = function() {
 joiValidationDecorator(
   Document,
   joi.object().keys({
+    archived: joi.boolean().optional(),
     createdAt: joi
       .date()
       .iso()
@@ -191,6 +198,15 @@ joiValidationDecorator(
  */
 Document.prototype.addWorkItem = function(workItem) {
   this.workItems = [...this.workItems, workItem];
+};
+
+/**
+ * sets the document as archived (used to hide from the ui)
+ *
+ * @param {WorkItem} workItem the work item to add to the document
+ */
+Document.prototype.archive = function() {
+  this.archived = true;
 };
 
 Document.prototype.setAsServed = function(servedParties = null) {

@@ -8,15 +8,15 @@ export default (test, fakeFile) => {
     );
 
     expect(test.getState('validationErrors.caseCaption')).toEqual(
-      'Case Caption is required.',
+      'Enter a case caption',
     );
 
     expect(test.getState('validationErrors.receivedAt')).toEqual(
-      'Please enter a valid Date Received.',
+      'Enter a valid date received',
     );
 
     expect(test.getState('validationErrors.petitionFile')).toEqual(
-      'Upload or scan a petition.',
+      'Upload or scan a Petition',
     );
 
     await test.runSequence('updateFormValueSequence', {
@@ -123,7 +123,7 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validatePetitionFromPaperSequence');
-    expect(test.getState('alertError')).toEqual(null);
+    expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('submitPetitionFromPaperSequence');

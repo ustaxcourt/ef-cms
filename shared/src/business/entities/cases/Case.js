@@ -1,5 +1,4 @@
 const joi = require('joi-browser');
-const uuid = require('uuid');
 const {
   createISODateString,
   formatDateString,
@@ -16,6 +15,8 @@ const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes } = require('lodash');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
+const { Practitioner } = require('../Practitioner');
+const { Respondent } = require('../Respondent');
 
 Case.STATUS_TYPES = {
   batchedForIRS: 'Batched for IRS',
@@ -76,70 +77,69 @@ Case.ANSWER_DOCUMENT_CODES = [
 ];
 
 Case.COMMON_ERROR_MESSAGES = {
-  caseCaption: 'Case Caption is required.',
-  caseType: 'Case Type is required.',
-  docketNumber: 'Docket number is required.',
-  documents: 'At least one valid document is required.',
-  filingType: 'Filing Type is required.',
-  hasIrsNotice: 'You must indicate whether you received an IRS notice.',
+  caseCaption: 'Enter a case caption',
+  caseType: 'Select a case type',
+  docketNumber: 'Docket number is required',
+  documents: 'At least one valid document is required',
+  filingType: 'Filing Type is required',
+  hasIrsNotice: 'Indicate whether you received an IRS notice',
   irsNoticeDate: [
     {
       contains: 'must be less than or equal to',
       message:
         'The IRS notice date is in the future. Please enter a valid date.',
     },
-    'Please enter a valid IRS notice date.',
+    'Please enter a valid IRS notice date',
   ],
-  ownershipDisclosureFile: 'Ownership Disclosure Statement is required.',
+  ownershipDisclosureFile: 'Upload an Ownership Disclosure Statement',
   ownershipDisclosureFileSize: [
     {
       contains: 'must be less than or equal to',
       message: `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    'Your Ownership Disclosure Statement file size is empty.',
+    'Your Ownership Disclosure Statement file size is empty',
   ],
-  partyType: 'Party Type is required.',
+  partyType: 'Select a party type',
   payGovDate: [
     {
       contains: 'must be less than or equal to',
       message:
         'The Fee Payment date is in the future. Please enter a valid date.',
     },
-    'Please enter a valid Fee Payment date.',
+    'Please enter a valid Fee Payment date',
   ],
   payGovId: 'Fee Payment Id must be in a valid format',
-  petitionFile: 'The Petition file was not selected.',
+  petitionFile: 'Upload a Petition',
   petitionFileSize: [
     {
       contains: 'must be less than or equal to',
       message: `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    'Your Petition file size is empty.',
+    'Your Petition file size is empty',
   ],
-  preferredTrialCity: 'Preferred Trial City is required.',
-  procedureType: 'Procedure Type is required.',
+  preferredTrialCity: 'Select a preferred trial location',
+  procedureType: 'Select a case procedure',
   receivedAt: [
     {
       contains: 'must be less than or equal to',
-      message: 'The Date Received is in the future. Please enter a valid date.',
+      message: 'Date received cannot be in the future. Enter a valid date.',
     },
-    'Please enter a valid Date Received.',
+    'Enter a valid date received',
   ],
   requestForPlaceOfTrialFileSize: [
     {
       contains: 'must be less than or equal to',
       message: `Your Request for Place of Trial file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    'Your Request for Place of Trial file size is empty.',
+    'Your Request for Place of Trial file size is empty',
   ],
-  signature: 'You must review the form before submitting.',
-  stinFile: 'Statement of Taxpayer Identification Number is required.',
+  stinFile: 'Upload a Statement of Taxpayer Identification',
   stinFileSize: [
     {
       contains: 'must be less than or equal to',
       message: `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    'Your STIN file size is empty.',
+    'Your STIN file size is empty',
   ],
 };
 
@@ -154,9 +154,12 @@ Case.docketNumberMatcher = /^(\d{3,5}-\d{2})$/;
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case(rawCase) {
+function Case(rawCase, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
   this.caseCaption = rawCase.caseCaption;
-  this.caseId = rawCase.caseId || uuid.v4();
+  this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
   this.contactSecondary = rawCase.contactSecondary;
@@ -173,11 +176,9 @@ function Case(rawCase) {
   this.partyType = rawCase.partyType;
   this.payGovDate = rawCase.payGovDate;
   this.payGovId = rawCase.payGovId;
-  this.practitioners = rawCase.practitioners;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt;
-  this.respondents = rawCase.respondents || [];
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialJudge = rawCase.trialJudge;
@@ -197,9 +198,27 @@ function Case(rawCase) {
   }
 
   if (Array.isArray(rawCase.documents)) {
-    this.documents = rawCase.documents.map(document => new Document(document));
+    this.documents = rawCase.documents.map(
+      document => new Document(document, { applicationContext }),
+    );
   } else {
     this.documents = [];
+  }
+
+  if (Array.isArray(rawCase.practitioners)) {
+    this.practitioners = rawCase.practitioners.map(
+      practitioner => new Practitioner(practitioner),
+    );
+  } else {
+    this.practitioners = [];
+  }
+
+  if (Array.isArray(rawCase.respondents)) {
+    this.respondents = rawCase.respondents.map(
+      respondent => new Respondent(respondent),
+    );
+  } else {
+    this.respondents = [];
   }
 
   this.documents.forEach(document => {
@@ -216,16 +235,6 @@ function Case(rawCase) {
     this.docketRecord = [];
   }
 
-  if (!Array.isArray(this.practitioners)) {
-    this.practitioners = [];
-  }
-
-  const isNewCase = this.status === Case.STATUS_TYPES.new;
-
-  if (!isNewCase) {
-    this.updateDocketNumberRecord();
-  }
-
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
   this.orderForAmendedPetitionAndFilingFee =
@@ -234,6 +243,16 @@ function Case(rawCase) {
   this.orderForOds = rawCase.orderForOds || false;
   this.orderForRatification = rawCase.orderForRatification || false;
   this.orderToShowCause = rawCase.orderToShowCause || false;
+  this.orderToChangeDesignatedPlaceOfTrial =
+    rawCase.orderToChangeDesignatedPlaceOfTrial || false;
+
+  this.orderDesignatingPlaceOfTrial = Case.getDefaultOrderDesignatingPlaceOfTrialValue(
+    {
+      isPaper: rawCase.isPaper,
+      preferredTrialCity: rawCase.preferredTrialCity,
+      rawValue: rawCase.orderDesignatingPlaceOfTrial,
+    },
+  );
 }
 
 joiValidationDecorator(
@@ -341,7 +360,9 @@ joiValidationDecorator(
     return (
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
-      DocketRecord.validateCollection(this.docketRecord)
+      DocketRecord.validateCollection(this.docketRecord) &&
+      Respondent.validateCollection(this.respondents) &&
+      Practitioner.validateCollection(this.practitioners)
     );
   },
   Case.COMMON_ERROR_MESSAGES,
@@ -422,21 +443,11 @@ Case.getCaseCaptionNames = function(caseCaption) {
   return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
 };
 
-Case.prototype.attachRespondent = function({ user }) {
-  const respondent = {
-    ...user,
-    respondentId: user.userId,
-  };
-
+Case.prototype.attachRespondent = function(respondent) {
   this.respondents.push(respondent);
 };
 
-Case.prototype.attachPractitioner = function({ user }) {
-  const practitioner = {
-    ...user,
-    practitionerId: user.userId,
-  };
-
+Case.prototype.attachPractitioner = function(practitioner) {
   this.practitioners.push(practitioner);
 };
 
@@ -453,7 +464,7 @@ Case.prototype.addDocument = function(document) {
       description: document.documentType,
       documentId: document.documentId,
       filedBy: document.filedBy,
-      filingDate: this.receivedAt || document.createdAt,
+      filingDate: document.receivedAt || document.createdAt,
       status: document.status,
     }),
   );
@@ -531,34 +542,28 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
 Case.prototype.updateDocketNumberRecord = function() {
   const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
 
-  const oldDocketNumber =
+  let lastDocketNumber =
     this.docketNumber +
     (this.initialDocketNumberSuffix !== '_'
       ? this.initialDocketNumberSuffix
       : '');
+
   const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
 
-  let found;
-
-  this.docketRecord = this.docketRecord.reduce((acc, docketRecord) => {
+  this.docketRecord.forEach(docketRecord => {
     const result = docketNumberRegex.exec(docketRecord.description);
     if (result) {
-      const [, , pastChangedDocketNumber] = result;
-
-      if (pastChangedDocketNumber === newDocketNumber) {
-        found = true;
-        acc.push(docketRecord);
-      }
-    } else {
-      acc.push(docketRecord);
+      const [, , changedDocketNumber] = result;
+      lastDocketNumber = changedDocketNumber;
     }
-    return acc;
-  }, []);
+  });
 
-  if (!found && oldDocketNumber != newDocketNumber) {
+  const hasDocketNumberChanged = lastDocketNumber !== newDocketNumber;
+
+  if (hasDocketNumberChanged) {
     this.addDocketRecord(
       new DocketRecord({
-        description: `Docket Number is amended from '${oldDocketNumber}' to '${newDocketNumber}'`,
+        description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
         filingDate: createISODateString(),
       }),
     );
@@ -583,6 +588,14 @@ Case.prototype.recallFromIRSHoldingQueue = function() {
 
 Case.prototype.getDocumentById = function({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
+};
+
+/**
+ *
+ * @returns {boolean} whether to show case name for primary
+ */
+Case.prototype.getShowCaseNameForPrimary = function() {
+  return !(this.contactSecondary && this.contactSecondary.name);
 };
 
 /**
@@ -871,6 +884,27 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
   this.trialLocation = trialSessionEntity.trialLocation;
   this.status = Case.STATUS_TYPES.calendared;
   return this;
+};
+
+/**
+ * getDefaultOrderDesignatingPlaceOfTrialValue
+ *
+ * @returns {boolean} the value of if an order is needed for place of trial.
+ */
+Case.getDefaultOrderDesignatingPlaceOfTrialValue = function({
+  isPaper,
+  preferredTrialCity,
+  rawValue,
+}) {
+  let orderDesignatingPlaceOfTrial;
+  if (rawValue || rawValue === false) {
+    orderDesignatingPlaceOfTrial = rawValue;
+  } else if (isPaper && !preferredTrialCity) {
+    orderDesignatingPlaceOfTrial = true;
+  } else {
+    orderDesignatingPlaceOfTrial = false;
+  }
+  return orderDesignatingPlaceOfTrial;
 };
 
 module.exports = { Case };

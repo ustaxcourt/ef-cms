@@ -29,7 +29,7 @@ exports.updateWorkItemCaseStatus = async ({
         pk: workItem.pk,
         sk: workItem.sk,
       },
-      UpdateExpression: `SET #caseStatus = :caseStatus`,
+      UpdateExpression: 'SET #caseStatus = :caseStatus',
       applicationContext,
     });
   };

@@ -11,6 +11,6 @@ const { remove } = require('../requests');
 exports.deleteCaseNoteInteractor = ({ applicationContext, caseId }) => {
   return remove({
     applicationContext,
-    endpoint: `/cases/${caseId}/case-note`,
+    endpoint: `/case-notes/${caseId}`,
   });
 };
