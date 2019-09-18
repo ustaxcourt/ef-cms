@@ -88,7 +88,7 @@ describe('formatCase', () => {
     expect(result.respondents[0].formattedName).toEqual('Test Respondent');
   });
 
-  it('should format practitioners if the respondents array is set', () => {
+  it('should format practitioners if the practitioners array is set', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       practitioners: [
