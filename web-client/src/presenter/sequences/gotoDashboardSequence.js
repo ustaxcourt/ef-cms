@@ -3,7 +3,7 @@ import { getCasesByUserAction } from '../actions/getCasesByUserAction';
 import { getUserAction } from '../actions/getUserAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { navigateToPathAction } from '../actions/navigateToPathAction';
+import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
 import { setCasesAction } from '../actions/setCasesAction';
@@ -19,14 +19,14 @@ const goToDashboard = [
   clearErrorAlertsAction,
   getUserRoleAction,
   {
-    docketclerk: [set(state.path, '/messages'), navigateToPathAction],
-    judge: [set(state.path, '/messages'), navigateToPathAction],
+    docketclerk: [navigateToMessagesAction],
+    judge: [navigateToMessagesAction],
     petitioner: [
       getCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPetitioner'),
     ],
-    petitionsclerk: [set(state.path, '/messages'), navigateToPathAction],
+    petitionsclerk: [navigateToMessagesAction],
     practitioner: [
       getCasesByUserAction,
       setCasesAction,
@@ -37,7 +37,7 @@ const goToDashboard = [
       setCasesAction,
       setCurrentPageAction('DashboardRespondent'),
     ],
-    seniorattorney: [set(state.path, '/messages'), navigateToPathAction],
+    seniorattorney: [navigateToMessagesAction],
   },
 ];
 

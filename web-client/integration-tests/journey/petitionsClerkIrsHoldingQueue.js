@@ -14,9 +14,7 @@ const documentDetailHelper = withAppContextDecorator(
 
 export default test => {
   return it('Petitions clerk views IRS Holding Queue', async () => {
-    await test.runSequence('gotoDashboardSequence');
-
-    expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
+    await test.runSequence('gotoMessagesSequence');
 
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
@@ -74,10 +72,9 @@ export default test => {
     expect(caseDetailHelperBatched.showRecallButton).toEqual(true);
 
     await test.runSequence('submitRecallPetitionFromIRSHoldingQueueSequence');
-    await test.runSequence('gotoDashboardSequence');
+    await test.runSequence('gotoMessagesSequence');
     await waitForRouter();
 
-    expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
     expect(test.getState('workQueueToDisplay')).toEqual({
       box: 'batched',
       queue: 'section',
@@ -175,7 +172,7 @@ export default test => {
     await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
     await waitForRouter();
 
-    expect(test.getState('currentPage')).toEqual('DashboardPetitionsClerk');
+    // expect(test.getState('currentPage')).toEqual('Messages');
 
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'batched',
