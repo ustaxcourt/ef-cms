@@ -8,7 +8,7 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
-  # - serverless-apigwy-binary
+  - serverless-apigwy-binary
 
 custom:
   prune:
@@ -86,6 +86,7 @@ provider:
   apiGateway:
     binaryMediaTypes:
       - 'application/pdf'
+      - 'application/zip'
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
@@ -292,13 +293,21 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   batchDownloadTrialSession:
+    runtime: nodejs8.10
     handler: web-api/src/trialSessionsHandlers.batchDownloadTrialSessionLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
-          path: /{trialSessionId}/batch-download
-          method: get
+          contentHandling: CONVERT_TO_BINARY
           cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+          integration: lambda
+          method: get
+          path: /{trialSessionId}/batch-download
+          response:
+            headers:
+              Content-Type: "'application/zip'"
+              Content-Disposition: "'attachment; filename=your-batch.zip'"
+              Cache-Control: "'max-age=120'"

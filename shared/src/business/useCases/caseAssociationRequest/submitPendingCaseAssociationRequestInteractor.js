@@ -12,11 +12,15 @@ exports.submitPendingCaseAssociationRequestInteractor = async ({
   applicationContext,
   caseId,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (user.role !== 'practitioner') {
+  if (authorizedUser.role !== 'practitioner') {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const isAssociated = await applicationContext
     .getPersistenceGateway()

@@ -2,7 +2,6 @@ const {
   isAuthorized,
   PETITION,
 } = require('../../authorization/authorizationClientService');
-const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
@@ -11,41 +10,46 @@ const { PETITIONS_SECTION } = require('../entities/WorkQueue');
 const { UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
 
-const addDocumentToCase = (user, caseToAdd, documentEntity) => {
-  const workItemEntity = new WorkItem({
-    assigneeId: null,
-    assigneeName: null,
-    caseId: caseToAdd.caseId,
-    caseStatus: caseToAdd.status,
-    docketNumber: caseToAdd.docketNumber,
-    docketNumberSuffix: caseToAdd.docketNumberSuffix,
-    document: {
-      ...documentEntity.toRawObject(),
-      createdAt: documentEntity.createdAt,
+const addPetitionDocumentToCase = ({
+  applicationContext,
+  caseToAdd,
+  documentEntity,
+  user,
+}) => {
+  const workItemEntity = new WorkItem(
+    {
+      assigneeId: null,
+      assigneeName: null,
+      caseId: caseToAdd.caseId,
+      caseStatus: caseToAdd.status,
+      docketNumber: caseToAdd.docketNumber,
+      docketNumberSuffix: caseToAdd.docketNumberSuffix,
+      document: {
+        ...documentEntity.toRawObject(),
+        createdAt: documentEntity.createdAt,
+      },
+      isInitializeCase: documentEntity.isPetitionDocument() ? true : false,
+      isInternal: false,
+      section: PETITIONS_SECTION,
+      sentBy: user.userId,
     },
-    isInitializeCase: documentEntity.isPetitionDocument() ? true : false,
-    isInternal: false,
-    section: PETITIONS_SECTION,
-    sentBy: user.userId,
-  });
+    { applicationContext },
+  );
 
   let message;
 
-  if (documentEntity.documentType === 'Petition') {
-    const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
-    message = `${documentEntity.documentType} filed by ${caseCaptionNames} is ready for review.`;
-  } else {
-    message = `${documentEntity.documentType} filed by ${capitalize(
-      user.role,
-    )} is ready for review.`;
-  }
+  const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
+  message = `${documentEntity.documentType} filed by ${caseCaptionNames} is ready for review.`;
 
   workItemEntity.addMessage(
-    new Message({
-      from: user.name,
-      fromUserId: user.userId,
-      message,
-    }),
+    new Message(
+      {
+        from: user.name,
+        fromUserId: user.userId,
+        message,
+      },
+      { applicationContext },
+    ),
   );
 
   documentEntity.addWorkItem(workItemEntity);
@@ -111,31 +115,40 @@ exports.createCaseInteractor = async ({
     practitioners = [practitionerUser];
   }
 
-  const caseToAdd = new Case({
-    userId: user.userId,
-    practitioners,
-    ...petitionEntity.toRawObject(),
-    docketNumber,
-    isPaper: false,
-  });
+  const caseToAdd = new Case(
+    {
+      userId: user.userId,
+      practitioners,
+      ...petitionEntity.toRawObject(),
+      docketNumber,
+      isPaper: false,
+    },
+    {
+      applicationContext,
+    },
+  );
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
   const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
-  const petitionDocumentEntity = new Document({
-    documentId: petitionFileId,
-    documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
-    eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
-    filedBy: caseCaptionNames,
-    practitioner: practitioners[0],
-    userId: user.userId,
-  });
-  petitionDocumentEntity.generateFiledBy(caseToAdd);
-  const newWorkItem = addDocumentToCase(
-    user,
-    caseToAdd,
-    petitionDocumentEntity,
+  const petitionDocumentEntity = new Document(
+    {
+      documentId: petitionFileId,
+      documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
+      eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
+      filedBy: caseCaptionNames,
+      practitioner: practitioners[0],
+      userId: user.userId,
+    },
+    { applicationContext },
   );
+  petitionDocumentEntity.generateFiledBy(caseToAdd);
+  const newWorkItem = addPetitionDocumentToCase({
+    applicationContext,
+    caseToAdd,
+    documentEntity: petitionDocumentEntity,
+    user,
+  });
 
   caseToAdd.addDocketRecord(
     new DocketRecord({
@@ -146,27 +159,34 @@ exports.createCaseInteractor = async ({
     }),
   );
 
-  const stinDocumentEntity = new Document({
-    documentId: stinFileId,
-    documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
-    eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
-    filedBy: caseCaptionNames,
-    practitioner: practitioners[0],
-    userId: user.userId,
-  });
+  const stinDocumentEntity = new Document(
+    {
+      documentId: stinFileId,
+      documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
+      eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
+      filedBy: caseCaptionNames,
+      practitioner: practitioners[0],
+      userId: user.userId,
+    },
+    { applicationContext },
+  );
   stinDocumentEntity.generateFiledBy(caseToAdd);
   caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
 
   if (ownershipDisclosureFileId) {
-    const odsDocumentEntity = new Document({
-      documentId: ownershipDisclosureFileId,
-      documentType:
-        Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
-      eventCode: Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
-      filedBy: caseCaptionNames,
-      practitioner: practitioners[0],
-      userId: user.userId,
-    });
+    const odsDocumentEntity = new Document(
+      {
+        documentId: ownershipDisclosureFileId,
+        documentType:
+          Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
+        eventCode:
+          Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+        filedBy: caseCaptionNames,
+        practitioner: practitioners[0],
+        userId: user.userId,
+      },
+      { applicationContext },
+    );
     odsDocumentEntity.generateFiledBy(caseToAdd);
     caseToAdd.addDocument(odsDocumentEntity);
   }
@@ -181,5 +201,5 @@ exports.createCaseInteractor = async ({
     workItem: newWorkItem.validate().toRawObject(),
   });
 
-  return new Case(caseToAdd).toRawObject();
+  return new Case(caseToAdd, { applicationContext }).toRawObject();
 };

@@ -14,7 +14,7 @@ describe('updateDateFromCalendarAction', () => {
     };
   });
 
-  it('sets only state.filterStartDate to the formatted props.startDate if props.endDate is not passed in', async () => {
+  it('sets only state.screenMetadata.filterStartDate to the formatted props.startDate if props.endDate is not passed in', async () => {
     const testDate = new Date('2019-05-14T07:12:12.457Z');
 
     const result = await runAction(updateDateFromCalendarAction, {
@@ -22,13 +22,17 @@ describe('updateDateFromCalendarAction', () => {
       props: {
         startDate: testDate,
       },
-      state: {},
+      state: {
+        screenMetadata: {},
+      },
     });
 
-    expect(result.state.filterStartDate).toEqual('2019-05-14T04:00:00.000Z');
+    expect(result.state.screenMetadata.filterStartDate).toEqual(
+      '2019-05-14T04:00:00.000Z',
+    );
   });
 
-  it('sets state.filterStartDate and state.filterEndDate to the formatted props.startDate and props.endDate if both are passed in', async () => {
+  it('sets state.screenMetadata.filterStartDate and state.screenMetadata.filterEndDate to the formatted props.startDate and props.endDate if both are passed in', async () => {
     const testStartDate = new Date('2019-05-14T07:12:12.457Z');
     const testEndDate = new Date('2019-05-17T07:12:12.457Z');
 
@@ -38,10 +42,14 @@ describe('updateDateFromCalendarAction', () => {
         endDate: testEndDate,
         startDate: testStartDate,
       },
-      state: {},
+      state: { screenMetadata: {} },
     });
 
-    expect(result.state.filterStartDate).toEqual('2019-05-14T04:00:00.000Z');
-    expect(result.state.filterEndDate).toEqual('2019-05-17T04:00:00.000Z');
+    expect(result.state.screenMetadata.filterStartDate).toEqual(
+      '2019-05-14T04:00:00.000Z',
+    );
+    expect(result.state.screenMetadata.filterEndDate).toEqual(
+      '2019-05-17T04:00:00.000Z',
+    );
   });
 });

@@ -6,7 +6,7 @@ export const headerHelper = get => {
   const userRole = get(state.user.role);
   const currentPage = get(state.currentPage) || '';
   const notifications = get(state.notifications);
-  const workQueueIsInternal = get(state.workQueueIsInternal);
+  const workQueueIsInternal = get(state.workQueueToDisplay.workQueueIsInternal);
 
   const isUserInternal = role => {
     const internalRoles = [

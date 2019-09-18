@@ -5,6 +5,7 @@ import { CaseNotes } from './CaseDetail/CaseNotes';
 import { CreateCaseDeadlineModalDialog } from './CaseDetail/CreateCaseDeadlineModalDialog';
 import { DeleteCaseDeadlineModalDialog } from './CaseDetail/DeleteCaseDeadlineModalDialog';
 import { DocketRecord } from './DocketRecord/DocketRecord';
+import { DraftDocuments } from './DraftDocuments/DraftDocuments';
 import { EditCaseDeadlineModalDialog } from './CaseDetail/EditCaseDeadlineModalDialog';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -79,6 +80,13 @@ export const CaseDetailInternal = connect(
                 title="Docket Record"
               >
                 <DocketRecord />
+              </Tab>
+              <Tab
+                id="tab-draft-documents"
+                tabName="draftDocuments"
+                title="Draft Documents"
+              >
+                <DraftDocuments />
               </Tab>
               <Tab
                 id="tab-case-info"

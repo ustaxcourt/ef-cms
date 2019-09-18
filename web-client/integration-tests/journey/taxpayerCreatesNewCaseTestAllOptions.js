@@ -242,7 +242,7 @@ export default (test, fakeFile, overrides = {}) => {
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('alertError').messages).toContain(
-      'Ownership Disclosure Statement is required.',
+      'Upload an Ownership Disclosure Statement',
     );
 
     await test.runSequence('updateStartCaseFormValueSequence', {
@@ -252,7 +252,7 @@ export default (test, fakeFile, overrides = {}) => {
 
     await test.runSequence('submitFilePetitionSequence');
     expect(test.getState('alertError').messages[0]).not.toContain(
-      'Ownership Disclosure Statement is required.',
+      'Upload an Ownership Disclosure Statement',
     );
 
     // Partnership other than tax matters party type primary contact
@@ -733,7 +733,7 @@ export default (test, fakeFile, overrides = {}) => {
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('alertError')).toEqual(null);
+    expect(test.getState('alertError')).toBeUndefined();
 
     expect(test.getState('alertSuccess')).toEqual({
       message: 'You can access your case at any time from the case list below.',

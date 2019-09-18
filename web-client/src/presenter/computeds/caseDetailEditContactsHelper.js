@@ -50,6 +50,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           header: 'Executor/Personal Representative/Etc.',
           nameLabel: 'Name of Decedent',
           secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
+          titleHint: 'optional',
         },
       };
       break;
@@ -59,7 +60,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displayInCareOf: true,
           header: 'Estate Information',
           inCareOfLabel: 'In Care Of',
-          inCareOfLabelHint: 'Your Name',
+          inCareOfLabelHint: 'optional',
           nameLabel: 'Name of Decedent',
         },
       };
@@ -150,14 +151,14 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       contacts = {
         contactPrimary: {
           header: 'Petitioner Information',
-          nameLabel: 'Name',
+          nameLabel: 'Name of Petitioner/Surviving Spouse',
         },
         contactSecondary: {
           displayInCareOf: true,
           displayPhone: true,
-          header: 'Spouse Information',
+          header: 'Deceased Spouse Information',
           inCareOfLabel: 'In Care Of',
-          nameLabel: "Spouse's Name",
+          nameLabel: 'Name of Deceased Spouse',
         },
       };
       break;
@@ -190,6 +191,13 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       };
       break;
   }
+
+  ['contactPrimary', 'contactSecondary'].forEach(contactLabel => {
+    if (contacts[contactLabel]) {
+      contacts[contactLabel].phoneNumberLabelHint = 'optional';
+    }
+  });
+
   return contacts;
 };
 

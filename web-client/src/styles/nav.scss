@@ -59,10 +59,6 @@
       }
 
       .usa-nav__primary-item {
-        &:not(:last-child) {
-          padding-right: 20px;
-        }
-
         .usa-current::after,
         .usa-nav__link::after {
           height: 3px;
@@ -137,9 +133,13 @@
     }
 
     .usa-search.ustc-search {
-      margin-right: 2rem;
+      margin-right: 0.5em;
+
+      [role='search'] {
+        max-width: unset;
+      }
       .usa-input {
-        width: 220px;
+        width: 185px;
         height: 34px;
       }
       .usa-button {
@@ -148,6 +148,13 @@
           height: 34px;
           background-image: none;
         }
+      }
+      .usa-link.advanced {
+        display: inline-block;
+        margin-top: 0.5em;
+        margin-left: 1em;
+        color: color($theme-color-primary);
+        font-size: 15px;
       }
     }
   }

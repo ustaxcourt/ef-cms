@@ -16,5 +16,5 @@ exports.getCasesByUserInteractor = async ({ applicationContext, userId }) => {
       userId,
     });
 
-  return Case.validateRawCollection(cases);
+  return Case.validateRawCollection(cases, { applicationContext });
 };

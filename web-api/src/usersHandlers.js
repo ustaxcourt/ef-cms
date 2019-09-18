@@ -21,6 +21,8 @@ module.exports = {
     .handler,
   practitionerPendingCaseAssociationLambda: require('./cases/practitionerPendingCaseAssociationLambda')
     .handler,
+  updateUserContactInformationLambda: require('./users/updateUserContactInformationLambda')
+    .handler,
   verifyCaseForUserLambda: require('./cases/verifyCaseForUserLambda').handler,
   verifyPendingCaseForUserLambda: require('./cases/verifyPendingCaseForUserLambda')
     .handler,

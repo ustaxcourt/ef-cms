@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral function used to retrieve pdfPreviewUrl from state
  */
-export const clearPdfPreviewUrlAction = ({ get }) => {
+export const clearPdfPreviewUrlAction = ({ get, router }) => {
   const oldUrl = get(state.pdfPreviewUrl);
-  window.URL.revokeObjectURL(oldUrl);
+  router.revokeObjectURL(oldUrl);
 };

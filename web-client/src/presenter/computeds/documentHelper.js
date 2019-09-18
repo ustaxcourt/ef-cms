@@ -9,8 +9,7 @@ export const documentHelper = get => ({
 }) => {
   const currentUser = get(state.user);
   const userRole = currentUser.role;
-  const { box } = get(state.workQueueToDisplay);
-  const workQueueIsInternal = get(state.workQueueIsInternal);
+  const { box, workQueueIsInternal } = get(state.workQueueToDisplay);
 
   const shouldLinkToMessagesTab = () => {
     let linkToMessagesTab = false;

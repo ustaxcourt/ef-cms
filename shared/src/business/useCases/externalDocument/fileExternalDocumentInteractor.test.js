@@ -50,6 +50,7 @@ describe('fileExternalDocumentInteractor', () => {
           saveWorkItemForNonPaper: async () => caseRecord,
           updateCase: async () => caseRecord,
         }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       };
       await fileExternalDocumentInteractor({
         applicationContext,
@@ -86,6 +87,7 @@ describe('fileExternalDocumentInteractor', () => {
           saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
           updateCase: updateCaseSpy,
         }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       };
       await fileExternalDocumentInteractor({
         applicationContext,
@@ -127,6 +129,7 @@ describe('fileExternalDocumentInteractor', () => {
           saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
           updateCase: updateCaseSpy,
         }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       };
       await fileExternalDocumentInteractor({
         applicationContext,

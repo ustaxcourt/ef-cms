@@ -4,6 +4,7 @@ import {
 } from './computeds/formattedCaseDetail';
 
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
+import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
@@ -12,6 +13,7 @@ import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { contactsHelper } from './computeds/contactsHelper';
+import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentHelper } from './computeds/documentHelper';
@@ -29,6 +31,8 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
+import { pdfSignerHelper } from './computeds/pdfSignerHelper';
+import { primaryContactEditHelper } from './computeds/primaryContactEditHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
@@ -47,7 +51,13 @@ import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 export const state = {
   addDocketEntryHelper,
+  advancedSearchHelper,
   alertHelper,
+  archiveDraftDocument: {
+    caseId: null,
+    documentId: null,
+    documentTitle: null,
+  },
   assigneeId: null,
   batchIndexToRescan: null,
   batches: [],
@@ -68,6 +78,7 @@ export const state = {
   completeDocumentTypeSectionHelper,
   completeForm: {},
   contactsHelper,
+  createOrderHelper,
   currentPage: 'Interstitial',
   currentPageHeader: '',
   currentPageIndex: 0,
@@ -122,9 +133,11 @@ export const state = {
   },
   pdfPreviewModal: {},
   pdfPreviewModalHelper,
+  pdfSignerHelper,
   percentComplete: 0,
   petition: {},
   previewPdfFile: null,
+  primaryContactEditHelper,
   procedureTypes: [],
   requestAccessHelper,
   scanBatchPreviewerHelper,
@@ -161,7 +174,6 @@ export const state = {
   workItemMetadata: {},
   workQueue: [],
   workQueueHelper,
-  workQueueIsInternal: true,
   workQueueSectionHelper,
-  workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
 };

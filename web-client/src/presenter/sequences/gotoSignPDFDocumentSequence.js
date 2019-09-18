@@ -12,10 +12,10 @@ import { setMessageIdAction } from '../actions/setMessageIdAction';
 
 export const gotoSignPDFDocumentSequence = [
   setCurrentPageAction('Interstitial'),
-  setDocumentIdAction,
-  setMessageIdAction,
   getCaseAction,
   setCaseAction,
+  setDocumentIdAction,
+  setMessageIdAction,
   clearPDFSignatureDataAction,
   clearFormAction,
   setSignatureNameForPdfSigningAction,

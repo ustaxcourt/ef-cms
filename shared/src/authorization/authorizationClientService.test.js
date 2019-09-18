@@ -80,4 +80,14 @@ describe('Authorization client service', () => {
       isAuthorized({ role: 'docketclerk', userId: 'docketclerk' }, UPDATE_CASE),
     ).toBeTruthy();
   });
+
+  it('should evaluate owner when the owner param is provided', () => {
+    expect(
+      isAuthorized(
+        { role: 'docketclerk', userId: '123456' },
+        UPDATE_CASE,
+        123456,
+      ),
+    ).toBeTruthy();
+  });
 });

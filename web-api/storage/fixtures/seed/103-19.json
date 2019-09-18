@@ -225,6 +225,16 @@
         "name": "Test Respondent",
         "custom:role": "respondent",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "iat": 1551480838,
         "respondentId": "respondent",
         "email": "respondent",
@@ -751,6 +761,16 @@
         "name": "Test Respondent",
         "custom:role": "respondent",
         "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+        "contact": {
+          "address1": "234 Main St",
+          "address2": "Apartment 4",
+          "address3": "Under the stairs",
+          "city": "Chicago",
+          "countryType": "domestic",
+          "phone": "+1 (555) 555-5555",
+          "postalCode": "61234",
+          "state": "IL"
+        },
         "iat": 1551480838,
         "respondentId": "respondent",
         "email": "respondent",
@@ -818,5 +838,27 @@
     "docketNumber": "103-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-08-08T14:33:24.183Z"
+  },
+  {
+    "sk": "case-491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "pk": "catalog",
+    "docketNumber": "103-19",
+    "docketNumberSuffix": "S",
+    "contactPrimary": {
+      "address3": "Officiis sit consect",
+      "address2": "Eiusmod officiis dol",
+      "city": "Laborum Expedita qu",
+      "phone": "+1 (523) 202-1718",
+      "address1": "40 East Cowley Boulevard",
+      "postalCode": "18152",
+      "name": "Samson Workman",
+      "state": "MA",
+      "countryType": "domestic",
+      "email": "taxpayer"
+    },
+    "yearFiled": "2019",
+    "caseCaption": "Samson Workman, Petitioner",
+    "filedDate": "2019-03-01T22:53:50.097Z"
   }
 ]

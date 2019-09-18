@@ -4,6 +4,7 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getBaseRouteAction } from '../actions/getBaseRouteAction';
 import { getCasesByUserAction } from '../actions/getCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
+import { getUserAction } from '../actions/getUserAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -14,11 +15,14 @@ import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
+import { setUserAction } from '../actions/setUserAction';
 import { setUsersAction } from '../actions/setUsersAction';
 import { state } from 'cerebral';
 
 const goToDashboard = [
   setCurrentPageAction('Interstitial'),
+  getUserAction,
+  setUserAction,
   set(state.selectedWorkItems, []),
   clearErrorAlertsAction,
   getUserRoleAction,
@@ -56,6 +60,7 @@ const goToDashboard = [
       setCurrentPageAction('DashboardPetitioner'),
     ],
     petitionsclerk: [
+      clearAlertsAction,
       parallel([
         [getUsersInSectionAction({ section: 'petitions' }), setUsersAction],
         [
@@ -70,7 +75,6 @@ const goToDashboard = [
       setCurrentPageAction('DashboardPractitioner'),
     ],
     respondent: [
-      clearAlertsAction,
       getCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardRespondent'),

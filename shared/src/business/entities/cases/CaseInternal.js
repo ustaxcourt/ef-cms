@@ -23,6 +23,7 @@ function CaseInternal(rawCase) {
   this.partyType = rawCase.partyType;
   this.petitionFile = rawCase.petitionFile;
   this.petitionFileSize = rawCase.petitionFileSize;
+  this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt;
   this.requestForPlaceOfTrialFile = rawCase.requestForPlaceOfTrialFile;
@@ -43,7 +44,8 @@ function CaseInternal(rawCase) {
 }
 
 CaseInternal.errorToMessageMap = Object.assign(Case.COMMON_ERROR_MESSAGES, {
-  petitionFile: 'Upload or scan a petition.',
+  petitionFile: 'Upload or scan a Petition',
+  preferredTrialCity: 'Select a trial location',
 });
 
 const paperRequirements = joi.object().keys({
@@ -71,6 +73,11 @@ const paperRequirements = joi.object().keys({
       .min(1)
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
+  }),
+  preferredTrialCity: joi.when('requestForPlaceOfTrialFile', {
+    is: joi.exist().not(null),
+    otherwise: joi.optional().allow(null),
+    then: joi.string().required(),
   }),
   procedureType: joi.string().required(),
   receivedAt: joi

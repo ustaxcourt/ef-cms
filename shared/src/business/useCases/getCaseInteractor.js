@@ -46,6 +46,8 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseDetail = new Case(caseRecord).validate();
+  const caseDetail = new Case(caseRecord, {
+    applicationContext,
+  }).validate();
   return caseDetail.toRawObject();
 };

@@ -17,7 +17,7 @@ describe('CaseExternal entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFile,
-      ).toEqual('Ownership Disclosure Statement is required.');
+      ).toEqual('Upload an Ownership Disclosure Statement');
     });
     it('does not require ownership disclosure if filing type not set', () => {
       const petition = new CaseExternal({
@@ -52,7 +52,7 @@ describe('CaseExternal entity', () => {
         procedureType: 'Small',
       });
       expect(caseExternal.getFormattedValidationErrors().stinFile).toEqual(
-        'Statement of Taxpayer Identification Number is required.',
+        'Upload a Statement of Taxpayer Identification',
       );
     });
   });
@@ -91,7 +91,7 @@ describe('CaseExternal entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().petitionFileSize,
-      ).toEqual(`Your Petition file size is empty.`);
+      ).toEqual('Your Petition file size is empty');
     });
 
     it('should not error on petitionFileSize when petitionFile is undefined', () => {
@@ -122,7 +122,7 @@ describe('CaseExternal entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().petitionFileSize,
-      ).toEqual(`Your Petition file size is empty.`);
+      ).toEqual('Your Petition file size is empty');
     });
   });
 
@@ -157,7 +157,7 @@ describe('CaseExternal entity', () => {
         stinFileSize: 0,
       });
       expect(caseExternal.getFormattedValidationErrors().stinFileSize).toEqual(
-        `Your STIN file size is empty.`,
+        'Your STIN file size is empty',
       );
     });
 
@@ -188,7 +188,7 @@ describe('CaseExternal entity', () => {
         stinFile: new File([], 'testStinFile.pdf'),
       });
       expect(caseExternal.getFormattedValidationErrors().stinFileSize).toEqual(
-        `Your STIN file size is empty.`,
+        'Your STIN file size is empty',
       );
     });
   });
@@ -227,7 +227,7 @@ describe('CaseExternal entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
-      ).toEqual(`Your Ownership Disclosure Statement file size is empty.`);
+      ).toEqual('Your Ownership Disclosure Statement file size is empty');
     });
 
     it('should not error on ownershipDisclosureFileSize when ownershipDisclosureFile is undefined', () => {
@@ -258,7 +258,7 @@ describe('CaseExternal entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
-      ).toEqual(`Your Ownership Disclosure Statement file size is empty.`);
+      ).toEqual('Your Ownership Disclosure Statement file size is empty');
     });
   });
 });

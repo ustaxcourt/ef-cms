@@ -107,6 +107,16 @@ describe('filePetitionFromPaperInteractor', () => {
     );
   });
 
+  it('calls upload on a Request for Place of Trial file', async () => {
+    await filePetitionFromPaperInteractor({
+      applicationContext: createApplicationContext(),
+      requestForPlaceOfTrialFile: 'this rqt file',
+    });
+    expect(uploadDocumentStub.getCall(1).args[0].document).toEqual(
+      'this rqt file',
+    );
+  });
+
   it('uploads a Petition file and a STIN file', async () => {
     await filePetitionFromPaperInteractor({
       applicationContext: createApplicationContext(),
@@ -132,6 +142,21 @@ describe('filePetitionFromPaperInteractor', () => {
     expect(createCaseStub.getCall(0).args[0]).toMatchObject({
       ownershipDisclosureFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+  });
+
+  it('uploads a Request for Place of Trial file', async () => {
+    await filePetitionFromPaperInteractor({
+      applicationContext: createApplicationContext(),
+      petitionFile: 'something1',
+      petitionMetadata: 'something2',
+      requestForPlaceOfTrialFile: 'something',
+      stinFile: 'something3',
+    });
+    expect(createCaseStub.getCall(0).args[0]).toMatchObject({
+      petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      requestForPlaceOfTrialFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
   });
