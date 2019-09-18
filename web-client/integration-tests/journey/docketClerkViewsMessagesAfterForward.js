@@ -1,7 +1,7 @@
 export default test => {
-  return it('Docket clerk views dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
+  return it('Docket clerk views messages', async () => {
+    await test.runSequence('gotoMessagesSequence');
+    expect(test.getState('currentPage')).toEqual('Messages');
     const workItem = test
       .getState('workQueue')
       .find(
