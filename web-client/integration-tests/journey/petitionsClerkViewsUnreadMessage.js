@@ -10,12 +10,6 @@ export default (test, message) => {
       state: test.getState(),
     });
 
-    console.log(
-      'In a list of ',
-      workQueue.length,
-      'trying to find message of ',
-      message,
-    );
     const workItem = workQueue.find(
       item => item.currentMessage.message == message,
     );
