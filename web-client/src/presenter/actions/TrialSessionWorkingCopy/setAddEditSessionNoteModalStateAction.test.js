@@ -13,7 +13,7 @@ describe('setAddEditSessionNoteModalStateAction', () => {
       },
       state: {
         trialSession: {
-          startDate: '12-12-2001',
+          startDate: '2001-12-12T01:30:00.000Z',
           trialLocation: "Bob's Burgers",
         },
         trialSessionWorkingCopy: {
