@@ -45,7 +45,7 @@ const router = {
       '/',
       checkLoggedIn(() => {
         document.title = `Dashboard ${pageTitleSuffix}`;
-        app.getSequence('gotoDashboardSequence')({ baseRoute: 'dashboard' });
+        app.getSequence('gotoDashboardSequence')();
       }),
     );
 
@@ -286,7 +286,6 @@ const router = {
           });
         } else {
           const routeArgs = {
-            baseRoute: 'document-qc',
             workQueueIsInternal: false,
           };
           const pathParts = path.split('/');
@@ -298,9 +297,9 @@ const router = {
             routeArgs.box = pathParts[2];
           }
 
-          app.getSequence('gotoDashboardSequence')(routeArgs);
+          app.getSequence('gotoMessagesSequence')(routeArgs);
         }
-        document.title = `Dashboard ${pageTitleSuffix}`;
+        document.title = `Messages ${pageTitleSuffix}`;
       }),
     );
 
@@ -427,7 +426,6 @@ const router = {
           });
         } else {
           const routeArgs = {
-            baseRoute: 'messages',
             workQueueIsInternal: true,
           };
           const pathParts = path.split('/');
