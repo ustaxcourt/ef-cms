@@ -1,16 +1,18 @@
 export const workQueueSectionHelper = () => {
   const sectionDisplay = key => {
-    return {
-      adc: 'ADC',
-      admissions: 'Admissions',
-      calendar: 'Calendar',
-      chambers: 'Chambers',
-      clerkofcourt: 'Clerk of the Court',
-      docket: 'Docket',
-      petitions: 'Petitions',
-      seniorattorney: 'Senior Attorney',
-      trialClerks: 'Trial Clerks',
-    }[key];
+    return (
+      {
+        adc: 'ADC',
+        admissions: 'Admissions',
+        calendar: 'Calendar',
+        chambers: 'Chambers',
+        clerkofcourt: 'Clerk of the Court',
+        docket: 'Docket',
+        petitions: 'Petitions',
+        seniorattorney: 'Senior Attorney',
+        trialClerks: 'Trial Clerks',
+      }[key] || chambersDisplay(key)
+    );
   };
 
   const chambersDisplay = key => {
