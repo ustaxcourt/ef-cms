@@ -12,7 +12,7 @@ class ArchiveDraftDocumentModalComponent extends ModalDialog {
       cancelLabel: 'No, take me back',
       classNames: '',
       confirmLabel: 'Yes, delete',
-      message: "Once deleted, it can't be restored.",
+      message: 'Once deleted, it can’t be restored.',
       title: 'Are you sure you want to delete this document?',
     };
   }
