@@ -5,7 +5,6 @@ import { getUserAction } from '../actions/getUserAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
