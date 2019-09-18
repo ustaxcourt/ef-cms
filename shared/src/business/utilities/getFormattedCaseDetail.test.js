@@ -104,7 +104,7 @@ describe('formatCase', () => {
     );
   });
 
-  it('should the case details', () => {
+  it('should format the general properties of case details', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       hasVerifiedIrsNotice: true,
