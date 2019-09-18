@@ -164,7 +164,7 @@
     "test": "echo 'Best run with start:api:ci and start:client:ci' && sleep 3 && CI=true npx run-s test:shared test:api test:client test:pa11y cypress lint",
     "test:api": "jest --maxWorkers=4 --config web-api/jest.config.js \"web-api/.*\\.test\\.js\"",
     "test:client": "CI=false SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand --config web-client/jest.config.js \"web-client/.*\\.test\\.js\"",
-    "test:client:unit": "SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand --maxWorkers=4 --config web-client/jest.config.js \"web-client/src/.*\\.test\\.js\"",
+    "test:client:unit": "SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand --config web-client/jest.config.js \"web-client/src/.*\\.test\\.js\"",
     "test:pa11y": "pa11y-ci --config web-client/pa11y-ci.config.js",
     "test:shared": "jest --maxWorkers=4 --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
     "test:watch": "jest --watch .*test\\.js$",

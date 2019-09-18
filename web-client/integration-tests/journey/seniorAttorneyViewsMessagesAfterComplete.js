@@ -5,9 +5,9 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 export default test => {
-  return it('Senior Attorney views dashboard after they completed the stipulated decision work item', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardSeniorAttorney');
+  return it('Senior Attorney views messages after they completed the stipulated decision work item', async () => {
+    await test.runSequence('gotoMessagesSequence');
+    expect(test.getState('currentPage')).toEqual('Messages');
     expect(test.getState('workQueue').length).toBeGreaterThan(0);
     const workItem = runCompute(formattedWorkQueue, {
       state: test.getState(),
