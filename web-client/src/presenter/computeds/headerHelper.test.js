@@ -118,7 +118,6 @@ describe('headerHelper', () => {
         },
       },
     });
-    console.log(JSON.stringify(result));
     expect(result.pageIsMessages).toBeTruthy();
   });
   it('should know when the page is My Cases', () => {

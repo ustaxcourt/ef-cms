@@ -172,8 +172,6 @@ export default test => {
     await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
     await waitForRouter();
 
-    // expect(test.getState('currentPage')).toEqual('Messages');
-
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'batched',
       queue: 'section',
