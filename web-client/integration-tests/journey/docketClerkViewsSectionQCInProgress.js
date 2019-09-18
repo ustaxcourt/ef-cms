@@ -1,7 +1,7 @@
 export default (test, shouldExist) => {
   return it('Docket clerk views Section Document QC - In Progress', async () => {
     await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
+    expect(test.getState('currentPage')).toEqual('Messages');
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inProgress',
       queue: 'section',

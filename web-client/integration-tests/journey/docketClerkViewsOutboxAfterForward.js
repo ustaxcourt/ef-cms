@@ -1,7 +1,6 @@
 export default test => {
   return it('Docket clerk views outbox after forwarding', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
+    await test.runSequence('gotoMessagesSequence');
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'my',

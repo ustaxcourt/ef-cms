@@ -112,7 +112,7 @@ describe('headerHelper', () => {
     const result = runCompute(headerHelper, {
       state: {
         ...getState('petitionsclerk'),
-        currentPage: 'DashboardPetitionsClerk',
+        currentPage: 'Messages',
         workQueueToDisplay: {
           workQueueIsInternal: true,
         },
