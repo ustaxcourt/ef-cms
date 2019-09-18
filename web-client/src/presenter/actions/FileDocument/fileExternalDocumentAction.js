@@ -69,14 +69,14 @@ export const fileExternalDocumentAction = async ({
   const pendingDocuments = caseDetail.documents.filter(
     document => document.processingStatus === 'pending',
   );
-  const addCoversheetInteractor = document => {
+  const addCoversheet = document => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
       documentId: document.documentId,
     });
   };
-  await Promise.all(pendingDocuments.map(addCoversheetInteractor));
+  await Promise.all(pendingDocuments.map(addCoversheet));
 
   return path.success({
     caseDetail,
