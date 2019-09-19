@@ -77,69 +77,69 @@ Case.ANSWER_DOCUMENT_CODES = [
 ];
 
 Case.VALIDATION_ERROR_MESSAGES = {
-  caseCaption: '#Enter a case caption',
-  caseType: '#Select a case type',
-  docketNumber: '#Docket number is required',
-  documents: '#At least one valid document is required',
-  filingType: '#Select on whose behalf you are filing',
-  hasIrsNotice: '#Indicate whether you received an IRS notice',
+  caseCaption: 'Enter a case caption',
+  caseType: 'Select a case type',
+  docketNumber: 'Docket number is required',
+  documents: 'At least one valid document is required',
+  filingType: 'Select on whose behalf you are filing',
+  hasIrsNotice: 'Indicate whether you received an IRS notice',
   irsNoticeDate: [
     {
       contains: 'must be less than or equal to',
       message:
-        '#The IRS notice date cannot be in the future. Enter a valid date.',
+        'The IRS notice date cannot be in the future. Enter a valid date.',
     },
-    '#Please enter a valid IRS notice date',
+    'Please enter a valid IRS notice date',
   ],
-  ownershipDisclosureFile: '#Upload an Ownership Disclosure Statement',
+  ownershipDisclosureFile: 'Upload an Ownership Disclosure Statement',
   ownershipDisclosureFileSize: [
     {
       contains: 'must be less than or equal to',
-      message: `#Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      message: `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    '#Your Ownership Disclosure Statement file size is empty',
+    'Your Ownership Disclosure Statement file size is empty',
   ],
-  partyType: '#Select a party type',
+  partyType: 'Select a party type',
   payGovDate: [
     {
       contains: 'must be less than or equal to',
       message:
-        '#The Fee Payment date cannot be in the future. Enter a valid date.',
+        'The Fee Payment date cannot be in the future. Enter a valid date.',
     },
-    '#Please enter a valid Fee Payment date',
+    'Please enter a valid Fee Payment date',
   ],
-  payGovId: '#Fee Payment Id must be in a valid format',
-  petitionFile: '#Upload a Petition',
+  payGovId: 'Fee Payment Id must be in a valid format',
+  petitionFile: 'Upload a Petition',
   petitionFileSize: [
     {
       contains: 'must be less than or equal to',
-      message: `#Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      message: `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    '#Your Petition file size is empty',
+    'Your Petition file size is empty',
   ],
-  preferredTrialCity: '#Select a preferred trial location',
-  procedureType: '#Select a case procedure',
+  preferredTrialCity: 'Select a preferred trial location',
+  procedureType: 'Select a case procedure',
   receivedAt: [
     {
       contains: 'must be less than or equal to',
-      message: '#Date received cannot be in the future. Enter a valid date.',
+      message: 'Date received cannot be in the future. Enter a valid date.',
     },
-    '#Enter a valid date received',
+    'Enter a valid date received',
   ],
   requestForPlaceOfTrialFileSize: [
     {
       contains: 'must be less than or equal to',
-      message: `#Your Request for Place of Trial file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      message: `Your Request for Place of Trial file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    '#Your Request for Place of Trial file size is empty',
+    'Your Request for Place of Trial file size is empty',
   ],
-  stinFile: '#Upload a statement of taxpayer identification',
+  stinFile: 'Upload a statement of taxpayer identification',
   stinFileSize: [
     {
       contains: 'must be less than or equal to',
-      message: `#Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      message: `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    '#Your STIN file size is empty',
+    'Your STIN file size is empty',
   ],
 };
 
