@@ -1,8 +1,6 @@
 export default test => {
   return it('Judge views dashboard messages', async () => {
-    await test.runSequence('gotoDashboardSequence', {
-      baseRoute: 'dashboard',
-    });
+    await test.runSequence('gotoDashboardSequence');
     expect(test.getState('currentPage')).toEqual('DashboardJudge');
     expect(test.getState('workQueue').length).toBeGreaterThan(1);
     expect(test.getState('workQueue.0.messages.1.message')).toEqual(

@@ -1,7 +1,7 @@
 export default test => {
-  return it('Senior Attorney views dashboard to verify the work item that was forward by the docket clerk is now present', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardSeniorAttorney');
+  return it('Senior Attorney views messages to verify the work item that was forward by the docket clerk is now present', async () => {
+    await test.runSequence('gotoMessagesSequence');
+    expect(test.getState('currentPage')).toEqual('Messages');
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
