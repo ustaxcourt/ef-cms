@@ -2,17 +2,17 @@ import { generateDocketRecordPdfUrlAction } from '../actions/generateDocketRecor
 import { getCaseAction } from '../actions/getCaseAction';
 import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { state } from 'cerebral';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const gotoPrintableDocketRecordSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   getCaseAction,
   setCaseAction,
   generateDocketRecordPdfUrlAction,
   ...setPdfPreviewUrlSequence,
   set(state.currentPage, 'PrintableDocketRecord'),
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];
