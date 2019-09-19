@@ -1,11 +1,11 @@
 import { chooseWorkQueueSequence } from '../sequences/chooseWorkQueueSequence';
 import { runBatchProcessAction } from '../actions/runBatchProcessAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const runBatchProcessSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   runBatchProcessAction,
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
   ...chooseWorkQueueSequence,
 ];

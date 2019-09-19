@@ -2,11 +2,11 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseActiontiontion } from '../setWaitingForResponseActionseActionseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseActiontiontion } from '../acsetWaitingForResponseActionseActionseAction';
 import { updateUserContactAction } from '../actions/updateUserContactAction';
 import { validateUserContactAction } from '../actions/validateUserContactAction';
 
@@ -17,13 +17,16 @@ export const submitEditUserContactSequence = [
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
-      setFormSubmittingAction,
+      setWaitingForResponseActiontiontion,
       updateUserContactAction,
       {
-        noChange: [unsetFormSubmittingAction, navigateToDashboardAction],
+        noChange: [
+          unsetWaitingForResponseActiontiontion,
+          navigateToDashboardAction,
+        ],
         success: [
           setAlertSuccessAction,
-          unsetFormSubmittingAction,
+          unsetWaitingForResponseActiontiontion,
           setCurrentPageAction('Interstitial'),
           navigateToDashboardAction,
         ],

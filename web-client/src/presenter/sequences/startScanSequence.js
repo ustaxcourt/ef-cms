@@ -4,16 +4,16 @@ import { getScannerSourcesAction } from '../actions/getScannerSourcesAction';
 import { handleInvalidScannerSourceAction } from '../actions/handleInvalidScannerSourceAction';
 import { handleScanErrorAction } from '../actions/handleScanErrorAction';
 import { set } from 'cerebral/factories';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startScanAction } from '../actions/startScanAction';
 import { state } from 'cerebral';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateScannerSourceAction } from '../actions/validateScannerSourceAction';
 import { waitForSpinnerAction } from '../actions/waitForSpinnerAction';
 
 export const startScanSequence = [
   clearModalAction,
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   waitForSpinnerAction,
   getCachedScannerSourceAction,
   {
@@ -35,5 +35,5 @@ export const startScanSequence = [
       set(state.showModal, 'SelectScannerSourceModal'),
     ],
   },
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];

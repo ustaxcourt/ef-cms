@@ -1,15 +1,15 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
 import { set } from 'cerebral/factories';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { state } from 'cerebral';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateCaseAction } from '../actions/updateCaseAction';
 import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 
 export const clickServeToIrsSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   clearAlertsAction,
   getFormCombinedWithCaseDetailAction,
   validateCaseDetailAction,
@@ -17,5 +17,5 @@ export const clickServeToIrsSequence = [
     error: [setValidationAlertErrorsAction],
     success: [updateCaseAction, set(state.showModal, 'ServeToIrsModalDialog')],
   },
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];
