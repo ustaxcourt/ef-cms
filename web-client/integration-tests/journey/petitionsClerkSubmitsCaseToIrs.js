@@ -1,3 +1,7 @@
+import { Case } from '../../../shared/src/business/entities/cases/Case';
+
+const { VALIDATION_ERROR_MESSAGES } = Case;
+
 export default test => {
   return it('Petitions clerk submits case to IRS holding queue', async () => {
     await test.runSequence('updateFormValueSequence', {
@@ -16,8 +20,7 @@ export default test => {
 
     await test.runSequence('clickServeToIrsSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
-      irsNoticeDate:
-        'The IRS notice date cannot be in the future. Enter a valid date.',
+      irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
     });
 
     await test.runSequence('updateFormValueSequence', {
