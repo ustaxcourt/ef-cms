@@ -49,6 +49,9 @@ describe('validatePrimaryContactInteractor', () => {
       partyType,
     });
 
-    expect(errors).toEqual({ postalCode: 'Enter ZIP code.' });
+    expect(errors).toEqual({
+      postalCode:
+        ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.postalCode[0].message,
+    });
   });
 });
