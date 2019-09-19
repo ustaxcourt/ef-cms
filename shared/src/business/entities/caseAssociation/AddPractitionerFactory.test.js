@@ -1,12 +1,14 @@
 const { AddPractitionerFactory } = require('./AddPractitionerFactory');
 
+const errorMessages = AddPractitionerFactory.VALIDATION_ERROR_MESSAGES;
+
 describe('AddPractitioner', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const entity = AddPractitionerFactory.get({});
       expect(entity.getFormattedValidationErrors()).toEqual({
-        representingPrimary: 'Select a represented party',
-        user: 'Select a petitioner counsel',
+        representingPrimary: errorMessages.representingPrimary,
+        user: errorMessages.user,
       });
     });
 
@@ -24,7 +26,7 @@ describe('AddPractitioner', () => {
         user: { userId: 'abc' },
       });
       expect(entity.getFormattedValidationErrors()).toEqual({
-        representingPrimary: 'Select a represented party',
+        representingPrimary: errorMessages.representingPrimary,
       });
     });
   });
