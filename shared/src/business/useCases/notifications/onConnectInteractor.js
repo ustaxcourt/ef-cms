@@ -14,6 +14,8 @@ exports.onConnectInteractor = async ({ applicationContext, connectionId }) => {
   //   throw new UnauthorizedError('Unauthorized to assign work item');
   // }
 
+  console.log('user', authorizedUser);
+
   await applicationContext.getPersistenceGateway().saveUserConnection({
     applicationContext,
     connectionId,
