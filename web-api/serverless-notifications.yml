@@ -17,7 +17,8 @@ custom:
 
   serverless-offline:
     host: 0.0.0.0
-    port: 3010
+    port: 3020 # this port really isn't used, but needs to be unique to prevent address in use errors
+    websocketPort: 3011
 
   alerts:
     stages:
@@ -192,11 +193,11 @@ resources:
 
 functions:
   connectHandler:
-    handler: web-api/src/apiHandlers.connectLambda
+    handler: web-api/src/notificationHandlers.connectLambda
     events:
       - websocket: $connect
 
   disconnectHandler:
-    handler: web-api/src/apiHandlers.disconnectLambda
+    handler: web-api/src/notificationHandlers.disconnectLambda
     events:
       - websocket: $disconnect

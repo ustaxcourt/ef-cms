@@ -186,17 +186,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-
-  connectHandler:
-    handler: web-api/src/apiHandlers.connectLambda
-    events:
-      - websocket: $connect
-
-  disconnectHandler:
-    handler: web-api/src/apiHandlers.disconnectLambda
-    events:
-      - websocket: $disconnect
-
   runBatchProcess:
     handler: web-api/src/apiHandlers.runBatchProcessLambda
     events:
