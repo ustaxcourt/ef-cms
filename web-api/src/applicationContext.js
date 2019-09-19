@@ -549,7 +549,7 @@ const environment = {
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
-  wsEndpoint: 'ws-efcms-dev.ustc-case-mgmt.flexion.us', // TODO: should come from env
+  wsEndpoint: process.env.WS_ENDPOINT || 'localhost:3011',
 };
 
 let user;
@@ -626,6 +626,9 @@ module.exports = (appContextUser = {}) => {
       }
       return notificationCache;
     },
+    getNotificationGateway: () => ({
+      sendNotificationToUser,
+    }),
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
@@ -677,7 +680,6 @@ module.exports = (appContextUser = {}) => {
         getTrialSessions,
         getUploadPolicy,
         getUserById,
-        saveUserConnection,
         getUsersBySearchKey,
         getUsersInSection,
         getWorkItemById,
@@ -686,11 +688,11 @@ module.exports = (appContextUser = {}) => {
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocument,
+        saveUserConnection,
         saveWorkItemForDocketClerkFilingExternalDocument,
         saveWorkItemForDocketEntryWithoutFile,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
-        sendNotificationToUser,
         setWorkItemAsRead,
         updateCase,
         updateCaseDeadline,

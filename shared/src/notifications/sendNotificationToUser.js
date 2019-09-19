@@ -18,6 +18,9 @@ exports.sendNotificationToUser = async ({
     applicationContext,
   });
 
+  console.log('userId', userId);
+  console.log('connections', connections);
+
   for (const connection of connections) {
     try {
       await notificationClient

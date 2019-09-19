@@ -5,7 +5,7 @@
   <body>
 
     <script>
-      const socket = new WebSocket('wss://ws-efcms-dev.ustc-case-mgmt.flexion.us')
+      const socket = new WebSocket('ws://localhost:3011?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6Imp1ZGdlIiwiZW1haWwiOiJqdWRnZUFybWVuIiwibmFtZSI6Ikp1ZGdlIEFybWVuIiwicm9sZSI6Imp1ZGdlIiwidXNlcklkIjoiZGFiYmFkMDAtMThkMC00M2VjLWJhZmItNjU0ZTgzNDA1NDE2Iiwic3ViIjoiZGFiYmFkMDAtMThkMC00M2VjLWJhZmItNjU0ZTgzNDA1NDE2IiwiaWF0IjoxNTY4OTA2NzQwfQ.YIXt6kqZ6eGgKSOK62Zxs2szvbOGoR--5vLwy4m5D0k')
       socket.onopen = (e) => {
         console.log('e', e);
         console.log('we are open');

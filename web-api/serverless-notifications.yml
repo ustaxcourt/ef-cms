@@ -72,6 +72,7 @@ provider:
   stage: ${self:custom.stage}
   region: ${self:custom.region}
   runtime: nodejs10.x
+  websocketApiRouteSelectionExpression: $request.body.action
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
@@ -195,9 +196,11 @@ functions:
   connectHandler:
     handler: web-api/src/notificationHandlers.connectLambda
     events:
-      - websocket: $connect
+      - websocket:
+          route: $connect
 
   disconnectHandler:
     handler: web-api/src/notificationHandlers.disconnectLambda
     events:
-      - websocket: $disconnect
+      - websocket:
+          route: $disconnect
