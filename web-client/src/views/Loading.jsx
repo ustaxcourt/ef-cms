@@ -9,19 +9,15 @@ export const Loading = connect(
     waitingForResponse: state.waitingForResponse,
   },
   ({ currentPage, waitingForResponse }) => {
+    const noInterstitialPage = currentPage !== 'Interstitial';
     return (
+      noInterstitialPage &&
       waitingForResponse && (
         <div
           aria-live="assertive"
           className="loading-overlay progress-indicator"
         >
-          {currentPage !== 'Interstitial' && (
-            <FontAwesomeIcon
-              className="fa-spin spinner"
-              icon="sync"
-              size="6x"
-            />
-          )}
+          <FontAwesomeIcon className="fa-spin spinner" icon="sync" size="6x" />
         </div>
       )
     );
