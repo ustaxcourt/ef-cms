@@ -116,9 +116,19 @@ exports.batchDownloadTrialSessionInteractor = async ({
     zipName,
   });
 
-  return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+  const downloadPolicyUrl = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      documentId: zipName,
+      useTempBucket: true,
+    });
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
-    documentId: zipName,
-    useTempBucket: true,
+    message: {
+      url: downloadPolicyUrl,
+    },
+    userId: user.userId,
   });
 };

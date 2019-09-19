@@ -1,0 +1,43 @@
+const client = require('../persistence/dynamodbClientService');
+
+exports.sendNotificationToUser = async ({
+  applicationContext,
+  message,
+  userId,
+}) => {
+  const notificationClient = applicationContext.getNotificationClient();
+
+  const connections = await client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `connections-${userId}`,
+    },
+    KeyConditionExpression: '#pk = :pk',
+    applicationContext,
+  });
+
+  for (const connection of connections) {
+    try {
+      await notificationClient
+        .postToConnection({
+          ConnectionId: connection.sk,
+          Data: message,
+        })
+        .promise();
+    } catch (err) {
+      if (err.statusCode === 410) {
+        await client
+          .delete({
+            applicationContext,
+            key: {
+              pk: connection.pk,
+              sk: connection.sk,
+            },
+          })
+          .promise();
+      }
+    }
+  }
+};

@@ -467,6 +467,9 @@ const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
 const {
+  sendNotificationToUser,
+} = require('../../shared/src/notifications/sendNotificationToUser');
+const {
   updateTrialSessionWorkingCopy,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy');
 const {
@@ -478,6 +481,18 @@ const {
 const {
   updateUserContactInformationInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserContactInformationInteractor');
+const {
+  onConnectInteractor,
+} = require('../../shared/src/business/useCases/notifications/onConnectInteractor');
+const {
+  onDisconnectInteractor,
+} = require('../../shared/src/business/useCases/notifications/onDisconnectInteractor');
+const {
+  saveUserConnection,
+} = require('../../shared/src/persistence/dynamo/notifications/saveUserConnection');
+const {
+  deleteUserConnection,
+} = require('../../shared/src/persistence/dynamo/notifications/deleteUserConnection');
 const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
@@ -534,6 +549,7 @@ const environment = {
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
+  wsEndpoint: 'ws-efcms-dev.ustc-case-mgmt.flexion.us', // TODO: should come from env
 };
 
 let user;
@@ -547,6 +563,7 @@ const setCurrentUser = newUser => {
 let dynamoClientCache = {};
 let s3Cache;
 let sesCache;
+let notificationCache;
 
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
@@ -601,6 +618,14 @@ module.exports = (appContextUser = {}) => {
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
     }),
+    getNotificationClient: () => {
+      if (!notificationCache) {
+        notificationCache = new AWS.ApiGatewayManagementApi({
+          endpoint: environment.wsEndpoint, // todo: this would come from ENV
+        });
+      }
+      return notificationCache;
+    },
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
@@ -622,6 +647,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteSectionOutboxRecord,
+        deleteUserConnection,
         deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
@@ -651,6 +677,7 @@ module.exports = (appContextUser = {}) => {
         getTrialSessions,
         getUploadPolicy,
         getUserById,
+        saveUserConnection,
         getUsersBySearchKey,
         getUsersInSection,
         getWorkItemById,
@@ -663,6 +690,7 @@ module.exports = (appContextUser = {}) => {
         saveWorkItemForDocketEntryWithoutFile,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
+        sendNotificationToUser,
         setWorkItemAsRead,
         updateCase,
         updateCaseDeadline,
@@ -761,6 +789,8 @@ module.exports = (appContextUser = {}) => {
         getUserInteractor,
         getUsersInSectionInteractor,
         getWorkItemInteractor,
+        onConnectInteractor,
+        onDisconnectInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
         runBatchProcessInteractor,
         sanitizePdfInteractor: args =>

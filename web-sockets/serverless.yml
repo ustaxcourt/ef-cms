@@ -1,0 +1,85 @@
+service: cseibert
+
+plugins:
+  - serverless-domain-manager
+
+custom:
+  alerts:
+    stages:
+      - dev
+  stage: ${opt:stage}
+  region: ${opt:region}
+  customDomain:
+    domainName: efcms-${self:provider.stage}.${opt:domain}
+    basePath: 'ws'
+    endpointType: 'regional'
+    certificateName: efcms-${self:provider.stage}.${opt:domain}
+    certificateRegion: ${opt:region}
+    stage: ${self:provider.stage}
+    createRoute53Record: false
+    enabled: true
+
+provider:
+  name: aws
+  stage: ${self:custom.stage}
+  region: ${self:custom.region}
+  runtime: nodejs10.x
+  memorySize: 768
+  websocketApiRouteSelectionExpression: $request.body.action
+  timeout: 30
+  deploymentBucket:
+    name: cseibert-serverless-bucket
+    serverSideEncryption: AES256
+
+  # environment:
+  #   S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
+  #   DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-us-east-1
+  #   TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
+  #   DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
+  #   MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
+  #   MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
+  #   STAGE: ${self:custom.stage}
+  #   USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
+  #   NODE_ENV: ${self:custom.vars.nodeEnv}
+  #   GS_LIB: /opt/share/ghostscript/9.06/Resource/Init
+  #   CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
+
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:*
+        - execute-api:Invoke
+      Resource:
+        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/cseibert-testing
+        - arn:aws:execute-api:${opt:region}:${opt:accountId}:*
+
+package:
+  exclude:
+    - ./**
+  include:
+    - index.js
+
+functions:
+  zip:
+    handler: index.zip
+    events:
+      - http:
+          path: /zips
+          method: post
+          cors: true
+
+  connectHandler:
+    handler: index.connect
+    events:
+      - websocket: $connect
+
+  disconnectHandler:
+    handler: index.disconnect
+    events:
+      - websocket: $disconnect
+
+  defaultMessages:
+    handler: index.defaultMessage
+    events:
+      - websocket:
+          route: $default
