@@ -17,7 +17,7 @@ custom:
 
   serverless-offline:
     host: 0.0.0.0
-    port: 3001
+    port: 3010
 
   alerts:
     stages:
@@ -51,7 +51,7 @@ custom:
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'api'
+    basePath: 'notifications'
     endpointType: 'regional'
     certificateName: efcms-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
@@ -120,6 +120,11 @@ provider:
         - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
     - Effect: 'Allow'
       Action:
+        - execute-api:Invoke
+      Resource:
+        - arn:aws:execute-api:${opt:region}:${opt:accountId}:*
+    - Effect: 'Allow'
+      Action:
         - 's3:*'
       Resource:
         Fn::Join:
@@ -147,7 +152,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/apiHandlers.js
+    - web-api/src/notificationHandlers.js
 
   excludeDevDependencies: true
 
@@ -186,7 +191,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-
   connectHandler:
     handler: web-api/src/apiHandlers.connectLambda
     events:
@@ -196,99 +200,3 @@ functions:
     handler: web-api/src/apiHandlers.disconnectLambda
     events:
       - websocket: $disconnect
-
-  runBatchProcess:
-    handler: web-api/src/apiHandlers.runBatchProcessLambda
-    events:
-      - http:
-          path: runBatchProcess
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getNotifications:
-    handler: web-api/src/apiHandlers.getNotificationsLambda
-    events:
-      - http:
-          path: notifications
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  checkForReadyForTrialCases:
-    handler: web-api/src/apiHandlers.checkForReadyForTrialCases
-    events:
-      - schedule: cron(0 7 * * ? *)
-
-  swagger:
-    handler: web-api/src/apiHandlers.swaggerLambda
-    events:
-      - http:
-          path: swagger
-          method: get
-          cors: true
-
-  swaggerJson:
-    handler: web-api/src/apiHandlers.swaggerJsonLambda
-    events:
-      - http:
-          path: swagger.json
-          method: get
-          cors: true
-
-  createCourtIssuedOrderPdfFromHtml:
-    runtime: nodejs8.10
-    handler: web-api/src/apiHandlers.createCourtIssuedOrderPdfFromHtmlLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: court-issued-order
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  generateDocketRecordPdfLambda:
-    runtime: nodejs8.10
-    handler: web-api/src/apiHandlers.generateDocketRecordPdfLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: docket-record-pdf
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  generatePdfFromHtmlLambda:
-    runtime: nodejs8.10
-    handler: web-api/src/apiHandlers.generatePdfFromHtmlLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: generate-pdf-from-html
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer

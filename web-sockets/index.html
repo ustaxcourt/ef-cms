@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  </head>
+  <body>
+
+    <script>
+      const socket = new WebSocket('wss://ws-efcms-dev.ustc-case-mgmt.flexion.us')
+      socket.onopen = (e) => {
+        console.log('e', e);
+        console.log('we are open');
+      }
+
+      socket.onmessage = (event) => {
+        console.log('event', event);
+      }
+    </script>
+  </body>
+</html>
