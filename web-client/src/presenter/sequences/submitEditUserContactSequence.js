@@ -4,9 +4,9 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseActiontiontion } from '../setWaitingForResponseActionseActionseAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { unsetWaitingForResponseActiontiontion } from '../acsetWaitingForResponseActionseActionseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateUserContactAction } from '../actions/updateUserContactAction';
 import { validateUserContactAction } from '../actions/validateUserContactAction';
 
@@ -17,20 +17,17 @@ export const submitEditUserContactSequence = [
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
-      setWaitingForResponseActiontiontion,
+      setWaitingForResponseAction,
       updateUserContactAction,
       {
-        noChange: [
-          unsetWaitingForResponseActiontiontion,
-          navigateToDashboardAction,
-        ],
+        noChange: [navigateToDashboardAction],
         success: [
           setAlertSuccessAction,
-          unsetWaitingForResponseActiontiontion,
           setCurrentPageAction('Interstitial'),
           navigateToDashboardAction,
         ],
       },
+      unsetWaitingForResponseAction,
     ],
   },
 ];
