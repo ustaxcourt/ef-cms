@@ -28,7 +28,7 @@ export const TrialSessionsSummary = connect(
             </div>
           </div>
           <div role="list">
-            {!formattedUpcomingSessions.length ? (
+            {formattedUpcomingSessions.length ? (
               formattedUpcomingSessions.map((trialSession, idx) => (
                 <div
                   className="grid-row margin-top-4 margin-bottom-4"
@@ -67,7 +67,7 @@ export const TrialSessionsSummary = connect(
             </div>
           </div>
           <div className="margin-bottom-0" role="list">
-            {!formattedRecentSessions.length ? (
+            {formattedRecentSessions.length ? (
               formattedRecentSessions.map((trialSession, idx) => (
                 <div
                   className="grid-row margin-top-4 margin-bottom-4"
