@@ -118,7 +118,7 @@ ContactFactory.OTHER_TYPES = {
   nextFriendForMinor: ContactFactory.PARTY_TYPES.nextFriendForMinor,
 };
 
-const domesticErrorToMessageMap = {
+ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES = {
   address1: 'Enter mailing address',
   city: 'Enter city',
   countryType: 'Enter country type',
@@ -134,7 +134,7 @@ const domesticErrorToMessageMap = {
   state: 'Enter state',
 };
 
-const internationalErrorToMessageMap = {
+ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES = {
   address1: 'Enter mailing address',
   city: 'Enter city',
   country: 'Enter a country',
@@ -211,8 +211,8 @@ ContactFactory.getErrorToMessageMap = ({
   countryType = ContactFactory.COUNTRY_TYPES.DOMESTIC,
 }) => {
   return countryType === ContactFactory.COUNTRY_TYPES.DOMESTIC
-    ? domesticErrorToMessageMap
-    : internationalErrorToMessageMap;
+    ? ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES
+    : ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES;
 };
 
 /**
