@@ -8,7 +8,7 @@ export const setupNotificationListenerAction = async ({
 
   // TODO: should this come from app context?
   const socket = new WebSocket(`ws://localhost:3011?token=${token}`);
-  socket.onopen = e => {};
+  socket.onopen = () => {};
 
   socket.onmessage = event => {
     const message = JSON.parse(event.data);

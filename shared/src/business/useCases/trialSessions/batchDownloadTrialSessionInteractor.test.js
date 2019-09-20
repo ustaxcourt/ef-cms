@@ -17,7 +17,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
   ]);
 
   const zipDocumentsMock = jest.fn();
-  const getDownloadPolicyUrlMock = jest.fn();
+  const getDownloadPolicyUrlMock = jest.fn(() => ({ url: 'something' }));
 
   beforeEach(() => {
     applicationContext = {
