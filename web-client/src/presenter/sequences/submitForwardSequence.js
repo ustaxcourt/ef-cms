@@ -4,16 +4,16 @@ import { forwardWorkItemAction } from '../actions/forwardWorkItemAction';
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setForwardMessageValidationErrorsAction } from '../actions/setForwardMessageValidationErrorsAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startForwardValidationAction } from '../actions/ForwardForm/startForwardValidationAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 import { unsetShowForwardInputs } from '../actions/unsetShowForwardInputs';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateForwardMessageAction } from '../actions/validateForwardMessageAction';
 
 export const submitForwardSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   startForwardValidationAction,
   clearAlertsAction,
   validateForwardMessageAction,
@@ -31,5 +31,5 @@ export const submitForwardSequence = [
       navigateToDashboardAction,
     ],
   },
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];

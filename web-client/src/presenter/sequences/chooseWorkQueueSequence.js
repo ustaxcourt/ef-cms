@@ -12,14 +12,14 @@ import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { getSentMessagesForSectionAction } from '../actions/getSentMessagesForSectionAction';
 import { getSentMessagesForUserAction } from '../actions/getSentMessagesForUserAction';
 import { parallel } from 'cerebral/factories';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setSectionInboxCountAction } from '../actions/setSectionInboxCountAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { setWorkItemsAction } from '../actions/setWorkItemsAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const chooseWorkQueueSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   clearWorkQueueAction,
   parallel([
     [getNotificationsAction, setNotificationsAction],
@@ -74,5 +74,5 @@ export const chooseWorkQueueSequence = [
       },
     ],
   ]),
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];
