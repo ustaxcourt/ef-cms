@@ -1,6 +1,5 @@
 const {
   CREATE_COURT_ISSUED_ORDER,
-  EDIT_COURT_ISSUED_ORDER,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
@@ -17,17 +16,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.fileCourtIssuedOrderInteractor = async ({
   applicationContext,
-  documentIdToEdit = null,
   documentMetadata,
   primaryDocumentFileId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
 
-  if (
-    !isAuthorized(authorizedUser, CREATE_COURT_ISSUED_ORDER) &&
-    !isAuthorized(authorizedUser, EDIT_COURT_ISSUED_ORDER)
-  ) {
+  if (!isAuthorized(authorizedUser, CREATE_COURT_ISSUED_ORDER)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -48,20 +43,16 @@ exports.fileCourtIssuedOrderInteractor = async ({
     {
       ...documentMetadata,
       relationship: 'primaryDocument',
-      documentId: documentIdToEdit || primaryDocumentFileId,
+      documentId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
       userId: user.userId,
       filedBy: user.name,
     },
     { applicationContext },
   );
-  documentEntity.processingStatus = 'complete';
+  documentEntity.setAsProcessingStatusAsCompleted();
 
-  if (documentIdToEdit) {
-    caseEntity.updateDocument(documentEntity);
-  } else if (primaryDocumentFileId && documentMetadata) {
-    caseEntity.addDocumentWithoutDocketRecord(documentEntity);
-  }
+  caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

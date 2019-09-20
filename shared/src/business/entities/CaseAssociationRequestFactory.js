@@ -151,27 +151,28 @@ function CaseAssociationRequestFactory(rawProps) {
 
   let errorToMessageMap = {
     attachments: 'Enter selection for Attachments.',
-    certificateOfService: 'Enter selection for Certificate of Service.',
+    certificateOfService:
+      'Indicate whether you are including a Certificate of Service',
     certificateOfServiceDate: [
       {
         contains: 'must be less than or equal to',
         message:
-          'Certificate of Service date is in the future. Please enter a valid date.',
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
       },
-      'Enter a Certificate of Service Date.',
+      'Enter date of service',
     ],
-    documentTitleTemplate: 'Select a document.',
-    documentType: 'Select a document.',
-    eventCode: 'Select a document.',
+    documentTitleTemplate: 'Select a document',
+    documentType: 'Select a document type',
+    eventCode: 'Select a document',
     exhibits: 'Enter selection for Exhibits.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
     objections: 'Enter selection for Objections.',
-    primaryDocumentFile: 'A file was not selected.',
-    representingPrimary: 'Select a party.',
-    representingSecondary: 'Select a party.',
-    scenario: 'Select a document.',
+    primaryDocumentFile: 'Upload a document',
+    representingPrimary: 'Select a party',
+    representingSecondary: 'Select a party',
+    scenario: 'Select a document',
     supportingDocument: 'Enter selection for Supporting Document.',
-    supportingDocumentFile: 'A file was not selected.',
+    supportingDocumentFile: 'Upload a document',
     supportingDocumentFileSize: [
       {
         contains: 'must be less than or equal to',

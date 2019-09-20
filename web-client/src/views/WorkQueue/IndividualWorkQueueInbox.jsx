@@ -1,3 +1,4 @@
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -6,10 +7,10 @@ import React from 'react';
 export const IndividualWorkQueueInbox = connect(
   {
     documentHelper: state.documentHelper,
-    workQueue: state.formattedWorkQueue,
+    formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentHelper, workQueue, workQueueHelper }) => {
+  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -33,18 +34,13 @@ export const IndividualWorkQueueInbox = connect(
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
             </tr>
           </thead>
-          {workQueue.map((item, idx) => {
+          {formattedWorkQueue.map((item, idx) => {
             return (
               <tbody key={idx}>
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row">
-                    <a
-                      className="no-wrap"
-                      href={`/case-detail/${item.docketNumber}`}
-                    >
-                      {item.docketNumberWithSuffix}
-                    </a>
+                    <CaseLink formattedCase={item} />
                   </td>
                   <td className="message-queue-row">
                     <span className="no-wrap">{item.received}</span>

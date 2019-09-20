@@ -4,13 +4,13 @@ import React from 'react';
 
 export const TrialSessionsSummary = connect(
   {
-    recentTrialSessions:
+    formattedRecentSessions:
       state.formattedDashboardTrialSessions.formattedRecentSessions,
-    upcomingTrialSessions:
+    formattedUpcomingSessions:
       state.formattedDashboardTrialSessions.formattedUpcomingSessions,
     user: state.user,
   },
-  ({ recentTrialSessions, upcomingTrialSessions, user }) => {
+  ({ formattedRecentSessions, formattedUpcomingSessions, user }) => {
     return (
       <div aria-label="trial sessions" className="card" id="sessions-summary">
         <div className="grid-container content-wrapper gray">
@@ -28,24 +28,30 @@ export const TrialSessionsSummary = connect(
             </div>
           </div>
           <div role="list">
-            {upcomingTrialSessions.map((trialSession, idx) => (
-              <div
-                className="grid-row margin-top-4 margin-bottom-4"
-                key={idx}
-                role="listitem"
-              >
-                <div className="tablet:grid-col-6">
-                  {trialSession.formattedStartDate}
+            {formattedUpcomingSessions.length ? (
+              formattedUpcomingSessions.map((trialSession, idx) => (
+                <div
+                  className="grid-row margin-top-4 margin-bottom-4"
+                  key={idx}
+                  role="listitem"
+                >
+                  <div className="tablet:grid-col-6">
+                    {trialSession.formattedStartDate}
+                  </div>
+                  <div className="tablet:grid-col-6">
+                    <a
+                      href={`/trial-session-working-copy/${trialSession.trialSessionId}`}
+                    >
+                      {trialSession.trialLocation}
+                    </a>
+                  </div>
                 </div>
-                <div className="tablet:grid-col-6">
-                  <a
-                    href={`/trial-session-working-copy/${trialSession.trialSessionId}`}
-                  >
-                    {trialSession.trialLocation}
-                  </a>
-                </div>
+              ))
+            ) : (
+              <div className="padding-top-2 padding-bottom-2">
+                You have no upcoming trial sessions.
               </div>
-            ))}
+            )}
           </div>
           <div className="grid-row underlined margin-top-4">
             <div className="tablet:grid-col-8">
@@ -61,24 +67,30 @@ export const TrialSessionsSummary = connect(
             </div>
           </div>
           <div className="margin-bottom-0" role="list">
-            {recentTrialSessions.map((trialSession, idx) => (
-              <div
-                className="grid-row margin-top-4 margin-bottom-4"
-                key={idx}
-                role="listitem"
-              >
-                <div className="tablet:grid-col-6">
-                  {trialSession.formattedStartDate}
+            {formattedRecentSessions.length ? (
+              formattedRecentSessions.map((trialSession, idx) => (
+                <div
+                  className="grid-row margin-top-4 margin-bottom-4"
+                  key={idx}
+                  role="listitem"
+                >
+                  <div className="tablet:grid-col-6">
+                    {trialSession.formattedStartDate}
+                  </div>
+                  <div className="tablet:grid-col-6">
+                    <a
+                      href={`/trial-session-working-copy/${trialSession.trialSessionId}`}
+                    >
+                      {trialSession.trialLocation}
+                    </a>
+                  </div>
                 </div>
-                <div className="tablet:grid-col-6">
-                  <a
-                    href={`/trial-session-working-copy/${trialSession.trialSessionId}`}
-                  >
-                    {trialSession.trialLocation}
-                  </a>
-                </div>
+              ))
+            ) : (
+              <div className="padding-top-2 padding-bottom-2">
+                You have no recent trial sessions.
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>

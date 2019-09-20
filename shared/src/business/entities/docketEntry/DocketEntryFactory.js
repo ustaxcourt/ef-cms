@@ -93,30 +93,31 @@ function DocketEntryFactory(rawProps) {
 
   let errorToMessageMap = {
     attachments: 'Enter selection for Attachments.',
-    certificateOfService: 'Enter selection for Certificate of Service.',
+    certificateOfService:
+      'Indicate whether you are including a Certificate of Service',
     certificateOfServiceDate: [
       {
         contains: 'must be less than or equal to',
         message:
-          'Certificate of Service date is in the future. Please enter a valid date.',
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
       },
-      'Enter a Certificate of Service Date.',
+      'Enter date of service',
     ],
     dateReceived: [
       {
         contains: 'must be less than or equal to',
-        message: 'Received date is in the future. Please enter a valid date.',
+        message: 'Received date cannot be in the future. Enter a valid date.',
       },
-      'Enter date received.',
+      'Enter a valid date received',
     ],
-    eventCode: 'Select a document type.',
+    eventCode: 'Select a document type',
     exhibits: 'Enter selection for Exhibits.',
     hasSupportingDocuments: 'Enter selection for Supporting Documents.',
     lodged: 'Enter selection for Filing Status.',
     objections: 'Enter selection for Objections.',
-    partyPrimary: 'Select a filing party.',
-    partyRespondent: 'Select a filing party.',
-    partySecondary: 'Select a filing party.',
+    partyPrimary: 'Select a filing party',
+    partyRespondent: 'Select a filing party',
+    partySecondary: 'Select a filing party',
     primaryDocumentFileSize: [
       {
         contains: 'must be less than or equal to',

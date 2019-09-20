@@ -11,7 +11,6 @@ const { post } = require('../requests');
  */
 exports.fileCourtIssuedOrderInteractor = ({
   applicationContext,
-  documentIdToEdit,
   documentMetadata,
   primaryDocumentFileId,
 }) => {
@@ -19,7 +18,6 @@ exports.fileCourtIssuedOrderInteractor = ({
   return post({
     applicationContext,
     body: {
-      documentIdToEdit,
       documentMetadata,
       primaryDocumentFileId,
     },

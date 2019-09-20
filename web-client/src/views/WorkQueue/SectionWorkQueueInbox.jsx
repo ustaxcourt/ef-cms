@@ -1,3 +1,4 @@
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -7,22 +8,22 @@ export const SectionWorkQueueInbox = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
     documentHelper: state.documentHelper,
-    sectionWorkQueue: state.formattedWorkQueue,
+    formattedWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
     selectedWorkItems: state.selectedWorkItems,
-    setFocusedWorkItem: sequences.setFocusedWorkItemSequence,
+    setFocusedWorkItemSequence: sequences.setFocusedWorkItemSequence,
     users: state.users,
     workQueueHelper: state.workQueueHelper,
   },
   ({
     assignSelectedWorkItemsSequence,
     documentHelper,
-    sectionWorkQueue,
+    formattedWorkQueue,
     selectAssigneeSequence,
     selectedWorkItems,
     selectWorkItemSequence,
-    setFocusedWorkItem,
+    setFocusedWorkItemSequence,
     users,
     workQueueHelper,
   }) => {
@@ -83,11 +84,11 @@ export const SectionWorkQueueInbox = connect(
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
             </tr>
           </thead>
-          {sectionWorkQueue.map((item, idx) => (
+          {formattedWorkQueue.map((item, idx) => (
             <tbody
               key={idx}
               onClick={() =>
-                setFocusedWorkItem({
+                setFocusedWorkItemSequence({
                   queueType: 'workQueue',
                   uiKey: item.uiKey,
                 })
@@ -128,12 +129,7 @@ export const SectionWorkQueueInbox = connect(
                   </>
                 )}
                 <td className="message-queue-row">
-                  <a
-                    className="no-wrap"
-                    href={`/case-detail/${item.docketNumber}`}
-                  >
-                    {item.docketNumberWithSuffix}
-                  </a>
+                  <CaseLink formattedCase={item} />
                 </td>
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.received}</span>

@@ -49,6 +49,6 @@ describe('validatePrimaryContactInteractor', () => {
       partyType,
     });
 
-    expect(errors).toEqual({ postalCode: 'Please enter a valid zip code.' });
+    expect(errors).toEqual({ postalCode: 'Enter ZIP code.' });
   });
 });

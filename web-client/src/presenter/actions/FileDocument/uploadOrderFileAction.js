@@ -13,12 +13,6 @@ export const uploadOrderFileAction = async ({
   path,
 }) => {
   const { primaryDocumentFile } = get(state.form);
-  const documentToEdit = get(state.documentToEdit);
-
-  // this could be null, which means the interactor will generate a new id for us
-  const documentIdToOverwrite = documentToEdit
-    ? documentToEdit.documentId
-    : null;
 
   try {
     const primaryDocumentFileId = await applicationContext
@@ -26,7 +20,6 @@ export const uploadOrderFileAction = async ({
       .uploadOrderDocumentInteractor({
         applicationContext,
         documentFile: primaryDocumentFile,
-        documentIdToOverwrite: documentIdToOverwrite,
       });
 
     return path.success({

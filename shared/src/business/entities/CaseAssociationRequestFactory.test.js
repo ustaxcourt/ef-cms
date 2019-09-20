@@ -15,40 +15,40 @@ describe('CaseAssociationRequestFactory', () => {
     });
 
     it('should require a file', () => {
-      expect(errors().primaryDocumentFile).toEqual('A file was not selected.');
+      expect(errors().primaryDocumentFile).toEqual('Upload a document');
       rawEntity.primaryDocumentFile = {};
       expect(errors().primaryDocumentFile).toEqual(undefined);
     });
 
     it('should require a certificate Of Service selection', () => {
       expect(errors().certificateOfService).toEqual(
-        'Enter selection for Certificate of Service.',
+        'Indicate whether you are including a Certificate of Service',
       );
       rawEntity.certificateOfService = false;
       expect(errors().certificateOfService).toEqual(undefined);
     });
 
     it('should require document type', () => {
-      expect(errors().documentType).toEqual('Select a document.');
+      expect(errors().documentType).toEqual('Select a document type');
       rawEntity.documentType = 'Entry of Appearance';
       expect(errors().documentType).toEqual(undefined);
     });
 
     it('should require document title template', () => {
-      expect(errors().documentTitleTemplate).toEqual('Select a document.');
+      expect(errors().documentTitleTemplate).toEqual('Select a document');
       rawEntity.documentTitleTemplate =
         'Entry of Appearance for [Petitioner Names]';
       expect(errors().documentTitleTemplate).toEqual(undefined);
     });
 
     it('should require event code', () => {
-      expect(errors().eventCode).toEqual('Select a document.');
+      expect(errors().eventCode).toEqual('Select a document');
       rawEntity.eventCode = '345';
       expect(errors().eventCode).toEqual(undefined);
     });
 
     it('should require scenario title', () => {
-      expect(errors().scenario).toEqual('Select a document.');
+      expect(errors().scenario).toEqual('Select a document');
       rawEntity.scenario = 'Standard';
       expect(errors().scenario).toEqual(undefined);
     });
@@ -60,7 +60,7 @@ describe('CaseAssociationRequestFactory', () => {
 
       it('should require certificate of service date to be entered', () => {
         expect(errors().certificateOfServiceDate).toEqual(
-          'Enter a Certificate of Service Date.',
+          'Enter date of service',
         );
         rawEntity.certificateOfServiceDate = moment().format();
         expect(errors().certificateOfServiceDate).toEqual(undefined);
@@ -71,7 +71,7 @@ describe('CaseAssociationRequestFactory', () => {
           .add(1, 'days')
           .format();
         expect(errors().certificateOfServiceDate).toEqual(
-          'Certificate of Service date is in the future. Please enter a valid date.',
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
         );
       });
     });
@@ -146,7 +146,7 @@ describe('CaseAssociationRequestFactory', () => {
 
           it('should require file', () => {
             expect(errors().supportingDocumentFile).toEqual(
-              'A file was not selected.',
+              'Upload a document',
             );
             rawEntity.supportingDocumentFile = {};
             expect(errors().supportingDocumentFile).toEqual(undefined);
@@ -164,7 +164,7 @@ describe('CaseAssociationRequestFactory', () => {
     });
 
     it('should require one of [representingPrimary, representingSecondary] to be selected', () => {
-      expect(errors().representingPrimary).toEqual('Select a party.');
+      expect(errors().representingPrimary).toEqual('Select a party');
       rawEntity.representingSecondary = true;
       expect(errors().representingPrimary).toEqual(undefined);
     });

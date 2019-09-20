@@ -37,7 +37,7 @@ export const CaseDeadlinesInternal = connect(
           </button>
         </div>
         {caseDetailHelper.showCaseDeadlinesInternalEmpty && (
-          <p className="heading-2 margin-bottom-10">
+          <p className="margin-bottom-5">
             There are no deadlines for this case.
           </p>
         )}

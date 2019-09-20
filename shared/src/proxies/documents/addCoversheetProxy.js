@@ -1,7 +1,7 @@
 const { post } = require('../requests');
 
 /**
- * createCoverSheetInteractor
+ * addCoversheetInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param {string} providers.documentId the document id
  * @returns {Promise<*>} the promise of the api call
  */
-exports.createCoverSheetInteractor = ({
+exports.addCoversheetInteractor = ({
   applicationContext,
   caseId,
   documentId,

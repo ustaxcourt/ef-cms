@@ -52,7 +52,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       error = e;
     }
 
-    expect(error.message).toEqual('Unauthorized');
+    expect(error.message).toEqual('[403] Unauthorized');
   });
 
   it('calls persistence functions to fetch trial sessions and associated cases and then zips their associated documents', async () => {

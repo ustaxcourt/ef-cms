@@ -51,8 +51,8 @@ function Order(rawOrder) {
 }
 
 Order.errorToMessageMap = {
-  documentTitle: 'Order title is required.',
-  documentType: 'Order type is required.',
+  documentTitle: 'Enter the title of this order',
+  documentType: 'Select an order type',
   orderBody: 'Order body is required.',
 };
 

@@ -37,7 +37,7 @@ export const RequestAccess = connect(
           </h1>
         </Focus>
         <p className="required-statement margin-top-05 margin-bottom-5">
-          All fields required unless otherwise noted
+          *All fields required unless otherwise noted
         </p>
         <div>
           <h2 className="header-with-link-button">
@@ -118,7 +118,7 @@ export const RequestAccess = connect(
             Review Filing
           </button>
           <button
-            className="usa-button usa-button--outline"
+            className="usa-button usa-button--unstyled"
             type="button"
             onClick={() => {
               formCancelToggleCancelSequence();

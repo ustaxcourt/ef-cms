@@ -1,3 +1,4 @@
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -43,9 +44,7 @@ export const SearchResults = connect(
                         )}
                       </td>
                       <td>
-                        <a href={`/case-detail/${result.docketNumber}`}>
-                          {result.docketNumberWithSuffix}
-                        </a>
+                        <CaseLink formattedCase={result} />
                       </td>
                       <td>{result.formattedFiledDate}</td>
                       <td>{result.caseCaptionNames}</td>

@@ -41,14 +41,15 @@ SecondaryDocumentInformationFactory.get = documentMetadata => {
 
   let errorToMessageMap = {
     attachments: 'Enter selection for Attachments.',
-    certificateOfService: 'Enter selection for Certificate of Service.',
+    certificateOfService:
+      'Indicate whether you are including a Certificate of Service',
     certificateOfServiceDate: [
       {
         contains: 'must be less than or equal to',
         message:
-          'Certificate of Service date is in the future. Please enter a valid date.',
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
       },
-      'Enter date for Certificate of Service.',
+      'Enter date of service',
     ],
     objections: 'Enter selection for Objections.',
   };

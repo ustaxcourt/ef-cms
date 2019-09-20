@@ -292,10 +292,38 @@ describe('generateChangeOfAddressTemplate', () => {
         country: 'Test Country',
         countryType: 'international',
       },
-      oldData: caseDetail.contactPrimary,
+      oldData: {
+        ...caseDetail.contactPrimary,
+        country: 'Old Country',
+      },
     });
 
     expect(result.indexOf('Test Country')).toBeGreaterThan(-1);
+    expect(result.indexOf('Old Country')).toBeGreaterThan(-1);
+  });
+
+  it('Shows inCareOf if inCareOf has been changed', () => {
+    const result = generateChangeOfAddressTemplate({
+      caption: caseDetail.caseCaption,
+      captionPostfix: caseDetail.caseCaptionPostfix,
+      docketNumberWithSuffix:
+        caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+      documentTitle: 'Notice of Change of Address',
+      name: 'Test Name',
+      newData: {
+        address1: 'Address One',
+        country: 'Test Country',
+        countryType: 'international',
+        inCareOf: 'Rachel Ray',
+      },
+      oldData: {
+        ...caseDetail.contactPrimary,
+        inCareOf: 'Guy Fieri',
+      },
+    });
+
+    expect(result.indexOf('c/o Guy Fieri')).toBeGreaterThan(-1);
+    expect(result.indexOf('c/o Rachel Ray')).toBeGreaterThan(-1);
   });
 });
 

@@ -154,26 +154,26 @@ TrialSession.prototype.init = function(rawSession, { applicationContext }) {
 };
 
 TrialSession.errorToMessageMap = {
-  maxCases: 'Enter the maximum number of cases allowed for this session.',
+  maxCases: 'Enter a valid number of maximum cases',
   postalCode: [
     {
       contains: 'match',
-      message: 'Enter a valid ZIP code.',
+      message: 'Enter ZIP code',
     },
   ],
-  sessionType: 'Session type is required.',
+  sessionType: 'Select a session type',
   startDate: [
     {
       contains: 'must be larger than or equal to',
-      message: 'Date must be in the future.',
+      message: 'Enter a valid start date',
     },
-    'Date must be in correct format.',
+    'Enter a valid start date',
   ],
-  startTime: 'Start time value provided is invalid.',
-  swingSessionId: 'You must select a swing session.',
-  term: 'Term session is not valid.',
-  termYear: 'Term year is required.',
-  trialLocation: 'Trial Location is required.',
+  startTime: 'Enter a valid start time',
+  swingSessionId: 'You must select a swing session',
+  term: 'Term session is not valid',
+  termYear: 'Term year is required',
+  trialLocation: 'Select a trial session location',
 };
 
 TrialSession.validationRules = {
