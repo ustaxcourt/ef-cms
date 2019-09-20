@@ -153,7 +153,7 @@ TrialSession.prototype.init = function(rawSession, { applicationContext }) {
     rawSession.trialSessionId || applicationContext.getUniqueId();
 };
 
-TrialSession.errorToMessageMap = {
+TrialSession.VALIDATION_ERROR_MESSAGES = {
   maxCases: 'Enter a valid number of maximum cases',
   postalCode: [
     {
@@ -267,7 +267,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  TrialSession.errorToMessageMap,
+  TrialSession.VALIDATION_ERROR_MESSAGES,
 );
 
 /**
