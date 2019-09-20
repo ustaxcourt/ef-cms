@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 /**
  * sets the state.submitting to false
  *
@@ -8,9 +6,7 @@ import { state } from 'cerebral';
  */
 export const batchDownloadTrialSessionAction = async ({
   applicationContext,
-  get,
   props,
-  store,
 }) => {
   await applicationContext.getUseCases().batchDownloadTrialSessionInteractor({
     applicationContext,
