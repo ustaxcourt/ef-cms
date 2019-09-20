@@ -119,60 +119,64 @@ ContactFactory.OTHER_TYPES = {
 };
 
 const domesticErrorToMessageMap = {
-  address1: 'Address is a required field.',
-  city: 'City is a required field.',
-  countryType: 'Country Type is a required field.',
-  name: 'Name is a required field.',
-  phone: 'Phone is a required field.',
+  address1: 'Enter mailing address',
+  city: 'Enter city',
+  countryType: 'Enter country type',
+  name: 'Enter name',
+  phone: 'Enter phone number',
   postalCode: [
     {
       contains: 'match',
-      message: 'Please enter a valid zip code.',
+      message: 'Enter ZIP code.',
     },
-    'Zip Code is a required field.',
+    'Enter ZIP code',
   ],
-  state: 'State is a required field.',
+  state: 'Enter state',
 };
 
 const internationalErrorToMessageMap = {
-  address1: 'Address is a required field.',
-  city: 'City is a required field.',
-  country: 'Country is a required field.',
-  countryType: 'Country Type is a required field.',
-  name: 'Name is a required field.',
-  phone: 'Phone is a required field.',
-  postalCode: 'Postal Code is a required field.',
-  state: 'State/Province/Region is a required field.',
+  address1: 'Enter mailing address',
+  city: 'Enter city',
+  country: 'Enter a country',
+  countryType: 'Enter country type',
+  name: 'Enter name',
+  phone: 'Enter phone number',
+  postalCode: 'Enter ZIP code',
 };
+
+/* eslint-disable sort-keys-fix/sort-keys-fix */
 
 const commonValidationRequirements = {
   address1: joi.string().required(),
   address2: joi.string().optional(),
   address3: joi.string().optional(),
   city: joi.string().required(),
-  name: joi.string().required(),
-  phone: joi.string().required(),
 };
 const domesticValidationObject = {
-  ...commonValidationRequirements,
+  name: joi.string().required(),
   countryType: joi
     .string()
     .valid(ContactFactory.COUNTRY_TYPES.DOMESTIC)
     .required(),
-  postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
+  ...commonValidationRequirements,
   state: joi.string().required(),
+  postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
+  phone: joi.string().required(),
 };
 
 const internationalValidationObject = {
-  ...commonValidationRequirements,
+  name: joi.string().required(),
   country: joi.string().required(),
   countryType: joi
     .string()
     .valid(ContactFactory.COUNTRY_TYPES.INTERNATIONAL)
     .required(),
+  ...commonValidationRequirements,
   postalCode: joi.string().required(),
-  state: joi.string().optional(),
+  phone: joi.string().required(),
 };
+
+/* eslint-enable sort-keys-fix/sort-keys-fix */
 
 /**
  * used for getting the joi validation object used for the different country type contacts.

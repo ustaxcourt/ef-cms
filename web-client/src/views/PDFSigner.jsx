@@ -203,7 +203,6 @@ class PDFSignerComponent extends React.Component {
 }
 
 PDFSignerComponent.propTypes = {
-  cancel: PropTypes.func,
   completeDocumentSigningSequence: PropTypes.func,
   currentPageNumber: PropTypes.number,
   docketNumber: PropTypes.string,
@@ -216,7 +215,6 @@ PDFSignerComponent.propTypes = {
   pdfSignerHelper: PropTypes.object,
   saveDocumentSigningSequence: PropTypes.func,
   setCanvas: PropTypes.func,
-  setPage: PropTypes.func,
   setSignatureData: PropTypes.func,
   signatureApplied: PropTypes.bool,
   signatureData: PropTypes.object,
@@ -224,7 +222,6 @@ PDFSignerComponent.propTypes = {
 
 export const PDFSigner = connect(
   {
-    cancel: sequences.gotoDocumentDetailSequence,
     completeDocumentSigningSequence: sequences.completeDocumentSigningSequence,
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,

@@ -28,10 +28,7 @@ export const headerHelper = get => {
 
   const isTrialSessions = currentPage.includes('TrialSession');
   const isDashboard = currentPage.startsWith('Dashboard');
-  const pageIsMessages =
-    userRole == 'judge'
-      ? currentPage.startsWith('Messages')
-      : isDashboard && workQueueIsInternal && !isTrialSessions;
+  const pageIsMessages = currentPage.startsWith('Messages');
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
 
   return {

@@ -1,30 +1,37 @@
-exports.CASE_METADATA = 'caseMetadata';
-exports.FILE_EXTERNAL_DOCUMENT = 'fileExternalDocument';
-exports.GET_CASE = 'getCase';
-exports.PETITION = 'getPetitionOptions';
-exports.UPDATE_CASE = 'updateCase';
-exports.WORKITEM = 'workItem';
-exports.CREATE_USER = 'createUser';
-exports.GET_USERS_IN_SECTIION = 'getUsersInSection';
-exports.START_PAPER_CASE = 'startPaperCase';
-exports.GET_READ_MESSAGES = 'getReadMessages';
-exports.EDIT_COURT_ISSUED_ORDER = 'editCourtIssuedOrder';
-exports.TRIAL_SESSIONS = 'trialSessions';
-exports.TRIAL_SESSION_WORKING_COPY = 'trialSessionWorkingCopy';
-exports.CREATE_COURT_ISSUED_ORDER = 'createCourtIssuedOrder';
+exports.CASE_METADATA = 'CASE_METADATA';
+exports.FILE_EXTERNAL_DOCUMENT = 'FILE_EXTERNAL_DOCUMENT';
+exports.GET_CASE = 'GET_CASE';
+exports.PETITION = 'PETITION';
+exports.UPDATE_CASE = 'UPDATE_CASE';
+exports.WORKITEM = 'WORKITEM';
+exports.CREATE_USER = 'CREATE_USER';
+exports.GET_USERS_IN_SECTIION = 'GET_USERS_IN_SECTIION';
+exports.START_PAPER_CASE = 'START_PAPER_CASE';
+exports.GET_READ_MESSAGES = 'GET_READ_MESSAGES';
+exports.EDIT_COURT_ISSUED_ORDER = 'EDIT_COURT_ISSUED_ORDER';
+exports.TRIAL_SESSIONS = 'TRIAL_SESSIONS';
+exports.TRIAL_SESSION_WORKING_COPY = 'TRIAL_SESSION_WORKING_COPY';
+exports.CREATE_COURT_ISSUED_ORDER = 'CREATE_COURT_ISSUED_ORDER';
 exports.CASE_DEADLINE = 'CASE_DEADLINE';
 exports.SERVE_DOCUMENT = 'SERVE_DOCUMENT';
 exports.ASSOCIATE_USER_WITH_CASE = 'ASSOCIATE_USER_WITH_CASE';
 exports.BATCH_DOWNLOAD_TRIAL_SESSION = 'BATCH_DOWNLOAD_TRIAL_SESSION';
 exports.UPDATE_CONTACT_INFO = 'UPDATE_CONTACT_INFO';
 exports.ARCHIVE_DOCUMENT = 'ARCHIVE_DOCUMENT';
+exports.VIEW_DOCUMENTS = 'VIEW_DOCUMENTS';
+exports.PENDING_CASE_ASSOCIATE = 'PENDING_CASE_ASSOCIATE';
+exports.UPLOAD_DOCUMENT = 'UPLOAD_DOCUMENT';
+exports.ASSOCIATE_SELF_WITH_CASE = 'ASSOCIATE_SELF_WITH_CASE';
 
 const AUTHORIZATION_MAP = {
   admin: [exports.CREATE_USER],
   docketclerk: [
+    exports.VIEW_DOCUMENTS,
+    exports.UPLOAD_DOCUMENT,
     exports.ASSOCIATE_USER_WITH_CASE,
     exports.CASE_DEADLINE,
     exports.CASE_METADATA,
+    exports.CREATE_COURT_ISSUED_ORDER,
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.GET_CASE,
     exports.GET_CASES_BY_DOCUMENT_ID,
@@ -40,9 +47,12 @@ const AUTHORIZATION_MAP = {
   ],
   judge: [
     // TODO: review this list for accuracy!
+    exports.VIEW_DOCUMENTS,
     exports.ASSOCIATE_USER_WITH_CASE,
     exports.CASE_DEADLINE,
+    exports.UPLOAD_DOCUMENT,
     exports.CASE_METADATA,
+    exports.CREATE_COURT_ISSUED_ORDER,
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.GET_CASE,
     exports.GET_CASES_BY_DOCUMENT_ID,
@@ -59,9 +69,15 @@ const AUTHORIZATION_MAP = {
     exports.BATCH_DOWNLOAD_TRIAL_SESSION,
     exports.ARCHIVE_DOCUMENT,
   ],
-  petitioner: [exports.FILE_EXTERNAL_DOCUMENT, exports.PETITION],
+  petitioner: [
+    exports.FILE_EXTERNAL_DOCUMENT,
+    exports.PETITION,
+    exports.VIEW_DOCUMENTS,
+    exports.UPLOAD_DOCUMENT,
+  ],
   petitionsclerk: [
     exports.ASSOCIATE_USER_WITH_CASE,
+    exports.VIEW_DOCUMENTS,
     exports.CASE_DEADLINE,
     exports.CASE_METADATA,
     exports.ARCHIVE_DOCUMENT,
@@ -74,25 +90,36 @@ const AUTHORIZATION_MAP = {
     exports.START_PAPER_CASE,
     exports.EDIT_COURT_ISSUED_ORDER,
     exports.TRIAL_SESSIONS,
+    exports.UPLOAD_DOCUMENT,
     exports.UPDATE_CASE,
     exports.WORKITEM,
   ],
   practitioner: [
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.GET_CASE,
+    exports.VIEW_DOCUMENTS,
+    exports.UPLOAD_DOCUMENT,
+    exports.ASSOCIATE_SELF_WITH_CASE,
     exports.PETITION,
+    exports.PENDING_CASE_ASSOCIATE,
     exports.UPDATE_CONTACT_INFO,
   ],
   respondent: [
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.GET_CASE,
     exports.UPDATE_CASE,
+    exports.ASSOCIATE_SELF_WITH_CASE,
+    exports.VIEW_DOCUMENTS,
+    exports.UPLOAD_DOCUMENT,
     exports.UPDATE_CONTACT_INFO,
   ],
   seniorattorney: [
     exports.ASSOCIATE_USER_WITH_CASE,
     exports.CASE_METADATA,
+    exports.CREATE_COURT_ISSUED_ORDER,
+    exports.UPLOAD_DOCUMENT,
     exports.GET_CASE,
+    exports.VIEW_DOCUMENTS,
     exports.GET_CASES_BY_DOCUMENT_ID,
     exports.GET_READ_MESSAGES,
     exports.EDIT_COURT_ISSUED_ORDER,
@@ -102,7 +129,6 @@ const AUTHORIZATION_MAP = {
     exports.WORKITEM,
     exports.ARCHIVE_DOCUMENT,
   ],
-  taxpayer: [exports.PETITION],
 };
 
 /**

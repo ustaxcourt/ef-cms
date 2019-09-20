@@ -23,6 +23,8 @@ module.exports = {
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,
+  updateCourtIssuedOrderToCaseLambda: require('./cases/updateCourtIssuedOrderToCaseLambda')
+    .handler,
   updateDocketEntryOnCaseLambda: require('./cases/updateDocketEntryOnCaseLambda')
     .handler,
   updatePrimaryContactLambda: require('./cases/updatePrimaryContactLambda')

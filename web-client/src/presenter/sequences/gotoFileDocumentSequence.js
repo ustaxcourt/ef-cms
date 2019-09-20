@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
@@ -12,7 +11,6 @@ import { state } from 'cerebral';
 const gotoFileDocument = [
   setCurrentPageAction('Interstitial'),
   set(state.showValidation, false),
-  clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,
   getCaseAction,

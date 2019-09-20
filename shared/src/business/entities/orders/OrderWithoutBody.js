@@ -14,9 +14,9 @@ function OrderWithoutBody(rawOrder) {
 }
 
 OrderWithoutBody.errorToMessageMap = {
-  documentTitle: 'Order title is required.',
-  documentType: 'Order type is required.',
-  eventCode: 'Order type is required.',
+  documentTitle: 'Enter the title of this order',
+  documentType: 'Select an order type',
+  eventCode: 'Select an order type',
 };
 
 joiValidationDecorator(

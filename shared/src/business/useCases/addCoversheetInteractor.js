@@ -492,7 +492,7 @@ exports.addCoverToPdf = async ({
 };
 
 /**
- * addCoverToPDFDocumentInteractor
+ * addCoversheetInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -500,7 +500,7 @@ exports.addCoverToPdf = async ({
  * @param {string} providers.documentId the document id
  * @returns {Uint8Array} the new pdf data
  */
-exports.addCoverToPDFDocumentInteractor = async ({
+exports.addCoversheetInteractor = async ({
   applicationContext,
   caseId,
   documentId,
@@ -541,7 +541,7 @@ exports.addCoverToPDFDocumentInteractor = async ({
     pdfData,
   });
 
-  documentEntity.processingStatus = 'complete';
+  documentEntity.setAsProcessingStatusAsCompleted();
 
   applicationContext.logger.time('Updating Document Status');
   await applicationContext

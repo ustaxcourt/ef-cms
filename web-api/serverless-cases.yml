@@ -8,7 +8,6 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
-  - serverless-apigwy-binary
 
 custom:
   prune:
@@ -90,6 +89,7 @@ provider:
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
     DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-us-east-1
+    TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
     MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
@@ -312,6 +312,18 @@ functions:
       - http:
           path: /{caseId}/court-issued-order
           method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCourtIssuedOrder:
+    handler: web-api/src/casesHandlers.updateCourtIssuedOrderToCaseLambda
+    events:
+      - http:
+          path: /{caseId}/court-issued-orders/{documentId}
+          method: put
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

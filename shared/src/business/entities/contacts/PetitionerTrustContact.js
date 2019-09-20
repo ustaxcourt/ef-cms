@@ -6,7 +6,7 @@ const { ContactFactory } = require('./ContactFactory');
  */
 exports.getPetitionerTrustContact = ContactFactory.createContactFactory({
   additionalErrorMappings: {
-    secondaryName: 'Name of Trustee is a required field.',
+    secondaryName: 'Enter name of trustee',
   },
   additionalValidation: {
     secondaryName: joi.string().required(),

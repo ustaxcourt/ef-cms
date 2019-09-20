@@ -42,7 +42,8 @@ describe('SecondaryDocumentInformationFactory', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         attachments: 'Enter selection for Attachments.',
-        certificateOfService: 'Enter selection for Certificate of Service.',
+        certificateOfService:
+          'Indicate whether you are including a Certificate of Service',
       });
     });
 
@@ -63,7 +64,7 @@ describe('SecondaryDocumentInformationFactory', () => {
           secondaryDocumentFile: {},
         });
         expect(extDoc.getFormattedValidationErrors()).toEqual({
-          certificateOfServiceDate: 'Enter date for Certificate of Service.',
+          certificateOfServiceDate: 'Enter date of service',
         });
       });
 

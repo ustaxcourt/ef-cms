@@ -18,10 +18,10 @@ export default test => {
     });
 
     expect(test.getState('validationErrors')).toEqual({
-      dateReceived: 'Enter date received.',
-      documentType: 'Select a Document Type.',
-      eventCode: 'Select a document type.',
-      partyPrimary: 'Select a filing party.',
+      dateReceived: 'Enter a valid date received',
+      documentType: 'Select a document type',
+      eventCode: 'Select a document type',
+      partyPrimary: 'Select a filing party',
     });
 
     //primary document

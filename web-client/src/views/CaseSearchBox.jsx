@@ -4,17 +4,11 @@ import React from 'react';
 
 export const CaseSearchBox = connect(
   {
-    form: state.form,
     searchTerm: state.searchTerm,
     submitCaseSearchSequence: sequences.submitCaseSearchSequence,
     updateSearchTermSequence: sequences.updateSearchTermSequence,
   },
-  ({
-    form,
-    searchTerm,
-    submitCaseSearchSequence,
-    updateSearchTermSequence,
-  }) => {
+  ({ searchTerm, submitCaseSearchSequence, updateSearchTermSequence }) => {
     return (
       <>
         <form

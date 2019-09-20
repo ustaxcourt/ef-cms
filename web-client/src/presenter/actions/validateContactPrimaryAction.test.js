@@ -66,7 +66,7 @@ describe('validateContactPrimaryAction', () => {
     });
 
     expect(result.state.validationErrors.contactPrimary).toEqual({
-      address1: 'Address is a required field.',
+      address1: 'Enter mailing address',
     });
     expect(errorStub.calledOnce).toEqual(true);
   });

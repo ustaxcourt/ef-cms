@@ -15,8 +15,8 @@ const irsGateway = require('../../shared/src/external/irsGateway');
 const util = require('util');
 const uuidv4 = require('uuid/v4');
 const {
-  addCoverToPDFDocumentInteractor,
-} = require('../../shared/src/business/useCases/addCoverToPDFDocumentInteractor');
+  addCoversheetInteractor,
+} = require('../../shared/src/business/useCases/addCoversheetInteractor');
 const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
@@ -323,6 +323,9 @@ const {
   getUsersBySearchKey,
 } = require('../../shared/src/persistence/dynamo/users/getUsersBySearchKey');
 const {
+  updateCourtIssuedOrderInteractor,
+} = require('../../shared/src/business/useCases/courtIssuedOrder/updateCourtIssuedOrderInteractor');
+const {
   getUsersInSection,
 } = require('../../shared/src/persistence/dynamo/users/getUsersInSection');
 const {
@@ -390,6 +393,14 @@ const {
   deleteSectionOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteSectionOutboxRecord');
 const {
+  createUserInboxRecord,
+} = require('../../shared/src/persistence/dynamo/workitems/createUserInboxRecord');
+
+const {
+  createSectionInboxRecord,
+} = require('../../shared/src/persistence/dynamo/workitems/createSectionInboxRecord');
+
+const {
   deleteUserOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
@@ -413,6 +424,9 @@ const {
 const {
   submitPendingCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
+const {
+  getDownloadPolicyUrlInteractor,
+} = require('../../shared/src/business/useCases/getDownloadPolicyUrlInteractor');
 const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
@@ -483,6 +497,9 @@ const {
   verifyCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
 const {
+  getUploadPolicyInteractor,
+} = require('../../shared/src/business/useCases/getUploadPolicyInteractor');
+const {
   verifyCaseForUserInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyCaseForUserInteractor');
 const {
@@ -491,6 +508,9 @@ const {
 const {
   verifyPendingCaseForUserInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor');
+const {
+  isFileExists,
+} = require('../../shared/src/persistence/s3/isFileExists');
 const {
   virusScanPdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
@@ -513,6 +533,7 @@ const environment = {
   region: process.env.AWS_REGION || 'us-east-1',
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
+  tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
 };
 
 let user;
@@ -590,9 +611,11 @@ module.exports = (appContextUser = {}) => {
         createCaseDeadline,
         createCaseNote,
         createCaseTrialSortMappingRecords,
+        createSectionInboxRecord,
         createTrialSession,
         createTrialSessionWorkingCopy,
         createUser,
+        createUserInboxRecord,
         createWorkItem,
         deleteCaseDeadline,
         deleteCaseNote,
@@ -632,6 +655,7 @@ module.exports = (appContextUser = {}) => {
         getUsersInSection,
         getWorkItemById,
         incrementCounter,
+        isFileExists,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocument,
@@ -666,6 +690,9 @@ module.exports = (appContextUser = {}) => {
       }
       return s3Cache;
     },
+    getTempDocumentsBucketName: () => {
+      return environment.tempDocumentsBucketName;
+    },
     // TODO: replace external calls to environment
     getTemplateGenerators: () => {
       return {
@@ -679,7 +706,7 @@ module.exports = (appContextUser = {}) => {
     },
     getUseCases: () => {
       return {
-        addCoverToPDFDocumentInteractor,
+        addCoversheetInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
         associatePractitionerWithCaseInteractor,
@@ -717,6 +744,7 @@ module.exports = (appContextUser = {}) => {
         getDocumentQCInboxForUserInteractor,
         getDocumentQCServedForSectionInteractor,
         getDocumentQCServedForUserInteractor,
+        getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
@@ -729,6 +757,7 @@ module.exports = (appContextUser = {}) => {
         getTrialSessionDetailsInteractor,
         getTrialSessionWorkingCopyInteractor,
         getTrialSessionsInteractor,
+        getUploadPolicyInteractor,
         getUserInteractor,
         getUsersInSectionInteractor,
         getWorkItemInteractor,
@@ -749,6 +778,7 @@ module.exports = (appContextUser = {}) => {
         updateCaseInteractor,
         updateCaseNoteInteractor,
         updateCaseTrialSortTagsInteractor,
+        updateCourtIssuedOrderInteractor,
         updateDocketEntryInteractor,
         updatePrimaryContactInteractor,
         updateTrialSessionWorkingCopyInteractor,

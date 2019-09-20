@@ -17,9 +17,9 @@ describe('validateInitialWorkItemMessageInteractor', () => {
     });
 
     expect(errors).toEqual({
-      assigneeId: 'Recipient is required.',
-      message: 'Message is required.',
-      section: 'Section is required.',
+      assigneeId: 'Select a recipient',
+      message: 'Enter a message',
+      section: 'Select a section',
     });
   });
 

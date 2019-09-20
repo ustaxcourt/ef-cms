@@ -15,32 +15,33 @@ export const AddDocketEntry = connect(
   {
     caseDetail: state.caseDetail,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    isEditing: state.isEditingDocketEntry,
+    isEditingDocketEntry: state.isEditingDocketEntry,
     showModal: state.showModal,
     submitDocketEntrySequence: sequences.submitDocketEntrySequence,
   },
   ({
     caseDetail,
     formCancelToggleCancelSequence,
-    isEditing,
+    isEditingDocketEntry,
     showModal,
     submitDocketEntrySequence,
   }) => {
     return (
       <>
         <CaseDetailHeader />
+
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
               <h1 className="margin-bottom-105">
-                {isEditing ? 'Edit' : 'Add'} Docket Entry
+                {isEditingDocketEntry ? 'Edit' : 'Add'} Docket Entry
               </h1>
             </div>
 
             <div className="grid-col-7">
-              {isEditing && (
+              {isEditingDocketEntry && (
                 <Hint exclamation fullWidth>
                   This docket entry is incomplete. Add a document and save to
                   complete this entry.

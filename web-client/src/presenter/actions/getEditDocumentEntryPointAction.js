@@ -6,13 +6,14 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get helper function
  * @param {object} providers.path the cerebral path which contains the next path in the sequence
- * @param {Promise<*>} the redirect path
+ * @param {object} providers.store the cerebral store
+ * @returns {object} the redirect path
  */
 export const getEditDocumentEntryPointAction = async ({ get, path, store }) => {
-  const editDocumentEntryPointAction =
+  const editDocumentEntryPoint =
     get(state.editDocumentEntryPoint) || 'DocumentDetail';
 
   store.unset(state.editDocumentEntryPoint);
 
-  return path[editDocumentEntryPointAction]();
+  return path[editDocumentEntryPoint]();
 };

@@ -7,17 +7,17 @@ import React from 'react';
 export const IdleActivityMonitor = connect(
   {
     constants: state.constants,
-    onIdle: sequences.setIdleStatusIdleSequence,
+    setIdleStatusIdleSequence: sequences.setIdleStatusIdleSequence,
     showAppTimeoutModalHelper: state.showAppTimeoutModalHelper,
   },
-  ({ constants, onIdle, showAppTimeoutModalHelper }) => {
+  ({ constants, setIdleStatusIdleSequence, showAppTimeoutModalHelper }) => {
     return (
       <>
         {showAppTimeoutModalHelper.beginIdleMonitor && (
           <IdleTimer
             debounce={constants.SESSION_DEBOUNCE}
             timeout={constants.SESSION_TIMEOUT}
-            onIdle={onIdle}
+            onIdle={setIdleStatusIdleSequence}
           />
         )}
         {showAppTimeoutModalHelper.showModal && <AppTimeoutModal />}

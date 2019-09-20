@@ -43,10 +43,13 @@ function CaseInternal(rawCase) {
   this.contactSecondary = contacts.secondary;
 }
 
-CaseInternal.errorToMessageMap = Object.assign(Case.COMMON_ERROR_MESSAGES, {
-  petitionFile: 'Upload or scan a Petition',
-  preferredTrialCity: 'Select a trial location',
-});
+CaseInternal.VALIDATION_ERROR_MESSAGES = Object.assign(
+  Case.VALIDATION_ERROR_MESSAGES,
+  {
+    petitionFile: 'Upload or scan a petition',
+    preferredTrialCity: 'Select a preferred trial location',
+  },
+);
 
 const paperRequirements = joi.object().keys({
   caseCaption: joi.string().required(),
@@ -115,7 +118,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  CaseInternal.errorToMessageMap,
+  CaseInternal.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { CaseInternal };
