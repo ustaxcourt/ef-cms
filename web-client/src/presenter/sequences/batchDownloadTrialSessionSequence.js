@@ -1,11 +1,11 @@
 import { batchDownloadTrialSessionAction } from '../actions/batchDownloadTrialSessionAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { setupNotificationListenerAction } from '../actions/setupNotificationListenerAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const batchDownloadTrialSessionSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   setupNotificationListenerAction,
   batchDownloadTrialSessionAction,
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];
