@@ -14,7 +14,7 @@ function AddRespondent(rawProps) {
   });
 }
 
-AddRespondent.errorToMessageMap = {
+AddRespondent.VALIDATION_ERROR_MESSAGES = {
   user: 'Select a respondent counsel',
 };
 
@@ -26,7 +26,7 @@ joiValidationDecorator(
   AddRespondent,
   AddRespondent.schema,
   undefined,
-  AddRespondent.errorToMessageMap,
+  AddRespondent.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { AddRespondent };

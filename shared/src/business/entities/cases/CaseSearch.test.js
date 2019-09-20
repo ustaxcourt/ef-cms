@@ -1,5 +1,7 @@
 const { CaseSearch } = require('./CaseSearch');
 
+const errorMessages = CaseSearch.VALIDATION_ERROR_MESSAGES;
+
 describe('Case Search entity', () => {
   it('needs only a petitioner name to be valid', () => {
     const caseSearch = new CaseSearch({ petitionerName: 'Solomon Grundy' });
@@ -19,7 +21,7 @@ describe('Case Search entity', () => {
     const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors.petitionerName).toEqual(
-      CaseSearch.errorToMessageMap.petitionerName,
+      errorMessages.petitionerName,
     );
   });
 

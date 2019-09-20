@@ -3,6 +3,8 @@ const {
 } = require('./validateOrderWithoutBodyInteractor');
 const { OrderWithoutBody } = require('../../entities/orders/OrderWithoutBody');
 
+const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
+
 describe('validateOrderWithoutBodyInteractor', () => {
   it('returns the expected errors object on an empty order object', () => {
     const errors = validateOrderWithoutBodyInteractor({
@@ -15,9 +17,9 @@ describe('validateOrderWithoutBodyInteractor', () => {
     });
 
     expect(errors).toEqual({
-      documentTitle: 'Enter the title of this order',
-      documentType: 'Select an order type',
-      eventCode: 'Select an order type',
+      documentTitle: errorMessages.documentTitle,
+      documentType: errorMessages.documentType,
+      eventCode: errorMessages.eventCode,
     });
   });
 

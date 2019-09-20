@@ -1,14 +1,14 @@
 import { loadPdfAction } from '../../actions/PDFPreviewModal/loadPdfAction';
-import { setFormSubmittingAction } from '../../actions/setFormSubmittingAction';
 import { setPageAction } from '../../actions/PDFPreviewModal/setPageAction';
-import { unsetFormSubmittingAction } from '../../actions/unsetFormSubmittingAction';
+import { setWaitingForResponseAction } from '../../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../../actions/unsetWaitingForResponseAction';
 
 export const loadPdfSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   loadPdfAction,
   {
     error: [],
     success: [setPageAction],
   },
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];

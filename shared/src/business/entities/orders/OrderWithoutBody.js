@@ -13,7 +13,7 @@ function OrderWithoutBody(rawOrder) {
   this.eventCode = rawOrder.eventCode;
 }
 
-OrderWithoutBody.errorToMessageMap = {
+OrderWithoutBody.VALIDATION_ERROR_MESSAGES = {
   documentTitle: 'Enter the title of this order',
   documentType: 'Select an order type',
   eventCode: 'Select an order type',
@@ -29,7 +29,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  OrderWithoutBody.errorToMessageMap,
+  OrderWithoutBody.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { OrderWithoutBody };

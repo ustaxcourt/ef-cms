@@ -22,7 +22,8 @@ function CaseExternalInformationFactory(rawCase) {
   }
 }
 
-CaseExternalInformationFactory.errorToMessageMap = Case.COMMON_ERROR_MESSAGES;
+CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES =
+  Case.VALIDATION_ERROR_MESSAGES;
 
 const MAX_STEPS = 4;
 const atWizardStep = (stepNum, schemaObj) => {
@@ -84,7 +85,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  CaseExternalInformationFactory.errorToMessageMap,
+  CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { CaseExternalInformationFactory };

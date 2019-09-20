@@ -76,7 +76,7 @@ Case.ANSWER_DOCUMENT_CODES = [
   'AATT',
 ];
 
-Case.COMMON_ERROR_MESSAGES = {
+Case.VALIDATION_ERROR_MESSAGES = {
   caseCaption: 'Enter a case caption',
   caseType: 'Select a case type',
   docketNumber: 'Docket number is required',
@@ -365,7 +365,7 @@ joiValidationDecorator(
       Practitioner.validateCollection(this.practitioners)
     );
   },
-  Case.COMMON_ERROR_MESSAGES,
+  Case.VALIDATION_ERROR_MESSAGES,
 );
 
 /**

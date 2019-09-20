@@ -1,3 +1,7 @@
+import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+
+const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
+
 export default (test, fakeFile) => {
   return it('Docketclerk adds docket entries', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
@@ -18,10 +22,10 @@ export default (test, fakeFile) => {
     });
 
     expect(test.getState('validationErrors')).toEqual({
-      dateReceived: 'Enter a valid date received',
+      dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: 'Select a document type',
-      eventCode: 'Select a document type',
-      partyPrimary: 'Select a filing party',
+      eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
+      partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
     });
 
     //primary document
@@ -72,7 +76,7 @@ export default (test, fakeFile) => {
     });
 
     expect(test.getState('validationErrors')).toEqual({
-      objections: 'Enter selection for Objections.',
+      objections: VALIDATION_ERROR_MESSAGES.objections,
       secondaryDocument: 'Select a document',
     });
 

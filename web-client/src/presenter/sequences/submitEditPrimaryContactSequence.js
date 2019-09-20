@@ -5,11 +5,11 @@ import { set } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { state } from 'cerebral';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updatePrimaryContactAction } from '../actions/updatePrimaryContactAction';
 import { validateContactPrimaryAction } from '../actions/validateContactPrimaryAction';
 
@@ -20,10 +20,10 @@ export const submitEditPrimaryContactSequence = [
   {
     error: [setValidationAlertErrorsAction],
     success: [
-      setFormSubmittingAction,
+      setWaitingForResponseAction,
       updatePrimaryContactAction,
       parallel([setDocumentDetailTabAction, setAlertSuccessAction]),
-      unsetFormSubmittingAction,
+      unsetWaitingForResponseAction,
       set(state.saveAlertsForNavigation, true),
       setCurrentPageAction('Interstitial'),
       navigateToCaseDetailAction,
