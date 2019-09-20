@@ -3,6 +3,10 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
+ * save the information about a new websocket connection
+ *
+ * @param {object} event the AWS event object
+ * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event => {
   return handle(event, async () => {
