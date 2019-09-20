@@ -300,4 +300,5 @@ functions:
       - http:
           path: /{trialSessionId}/batch-download/{zipName}
           method: get
+          async: true
           cors: true
