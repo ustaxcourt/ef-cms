@@ -1,6 +1,9 @@
 const {
   validateCaseDetailInteractor,
 } = require('./validateCaseDetailInteractor');
+const { Case } = require('../entities/cases/Case');
+
+const { VALIDATION_ERROR_MESSAGES } = Case;
 
 describe('validate case detail', () => {
   let applicationContext;
@@ -18,7 +21,7 @@ describe('validate case detail', () => {
     });
     expect(errors).toBeTruthy();
     expect(errors).toMatchObject({
-      docketNumber: 'Docket number is required',
+      docketNumber: VALIDATION_ERROR_MESSAGES.docketNumber,
     });
   });
 
@@ -31,7 +34,7 @@ describe('validate case detail', () => {
     });
     expect(errors).toBeTruthy();
     expect(errors).toMatchObject({
-      docketNumber: 'Docket number is required',
+      docketNumber: VALIDATION_ERROR_MESSAGES.docketNumber,
     });
   });
 

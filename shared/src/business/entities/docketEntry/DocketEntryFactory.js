@@ -11,6 +11,43 @@ const {
 } = require('../../../persistence/s3/getUploadPolicy');
 const { includes, omit } = require('lodash');
 
+DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
+  attachments: 'Enter selection for Attachments.',
+  certificateOfService:
+    'Indicate whether you are including a Certificate of Service',
+  certificateOfServiceDate: [
+    {
+      contains: 'must be less than or equal to',
+      message:
+        'Certificate of Service date cannot be in the future. Enter a valid date.',
+    },
+    'Enter date of service',
+  ],
+  dateReceived: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Received date cannot be in the future. Enter a valid date.',
+    },
+    'Enter a valid date received',
+  ],
+  eventCode: 'Select a document type',
+  exhibits: 'Enter selection for Exhibits.',
+  hasSupportingDocuments: 'Enter selection for Supporting Documents.',
+  lodged: 'Enter selection for Filing Status.',
+  objections: 'Enter selection for Objections.',
+  partyPrimary: 'Select a filing party',
+  partyRespondent: 'Select a filing party',
+  partySecondary: 'Select a filing party',
+  primaryDocumentFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your document file size is empty.',
+  ],
+  secondaryDocumentFile: 'A file was not selected.',
+};
+
 /**
  * @param {object} rawProps the raw docket entry data
  * @constructor
@@ -91,42 +128,7 @@ function DocketEntryFactory(rawProps) {
     secondaryDocumentFile: joi.object().optional(),
   };
 
-  let errorToMessageMap = {
-    attachments: 'Enter selection for Attachments.',
-    certificateOfService:
-      'Indicate whether you are including a Certificate of Service',
-    certificateOfServiceDate: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'Certificate of Service date cannot be in the future. Enter a valid date.',
-      },
-      'Enter date of service',
-    ],
-    dateReceived: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Received date cannot be in the future. Enter a valid date.',
-      },
-      'Enter a valid date received',
-    ],
-    eventCode: 'Select a document type',
-    exhibits: 'Enter selection for Exhibits.',
-    hasSupportingDocuments: 'Enter selection for Supporting Documents.',
-    lodged: 'Enter selection for Filing Status.',
-    objections: 'Enter selection for Objections.',
-    partyPrimary: 'Select a filing party',
-    partyRespondent: 'Select a filing party',
-    partySecondary: 'Select a filing party',
-    primaryDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your document file size is empty.',
-    ],
-    secondaryDocumentFile: 'A file was not selected.',
-  };
+  let errorToMessageMap = DocketEntryFactory.VALIDATION_ERROR_MESSAGES;
 
   let customValidate;
 

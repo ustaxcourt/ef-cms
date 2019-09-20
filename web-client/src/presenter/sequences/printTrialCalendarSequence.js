@@ -1,15 +1,15 @@
 import { generateDocketRecordPdfUrlAction } from '../actions/generateDocketRecordPdfUrlAction';
 import { gotoPrintTrialCalendarPreview } from '../actions/gotoPrintTrialCalendarPreview';
 import { printTrialCalendarAction } from '../actions/printTrialCalendarAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const printTrialCalendarSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   printTrialCalendarAction,
   generateDocketRecordPdfUrlAction,
   ...setPdfPreviewUrlSequence,
   gotoPrintTrialCalendarPreview,
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];

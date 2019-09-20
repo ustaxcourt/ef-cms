@@ -8,11 +8,11 @@ import { parallel } from 'cerebral';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
 export const completeDocumentSigningSequence = [
@@ -22,7 +22,7 @@ export const completeDocumentSigningSequence = [
   {
     error: [setValidationErrorsAction],
     success: [
-      setFormSubmittingAction,
+      setWaitingForResponseAction,
       completeDocumentSigningAction,
       parallel([setDocumentIdAction, setDocumentDetailTabAction]),
       validateInitialWorkItemMessageAction,
@@ -36,7 +36,7 @@ export const completeDocumentSigningSequence = [
           clearFormAction,
         ],
       },
-      unsetFormSubmittingAction,
+      unsetWaitingForResponseAction,
       clearPDFSignatureDataAction,
       clearFormAction,
       navigateToCaseDetailAction,

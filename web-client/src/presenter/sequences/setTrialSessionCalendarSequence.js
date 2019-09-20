@@ -4,13 +4,13 @@ import { getSetTrialSessionCalendarAlertSuccessAction } from '../actions/TrialSe
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setTrialSessionCalendarAction } from '../actions/TrialSession/setTrialSessionCalendarAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const setTrialSessionCalendarSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   setTrialSessionCalendarAction,
   clearModalAction,
   getTrialSessionDetailsAction,
@@ -19,5 +19,5 @@ export const setTrialSessionCalendarSequence = [
   setCalendaredCasesOnTrialSessionAction,
   getSetTrialSessionCalendarAlertSuccessAction,
   setAlertSuccessAction,
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];

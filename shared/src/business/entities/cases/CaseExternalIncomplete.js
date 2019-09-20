@@ -37,6 +37,9 @@ function CaseExternalIncomplete(rawCase) {
   this.contactSecondary = contacts.secondary;
 }
 
+CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES =
+  Case.VALIDATION_ERROR_MESSAGES;
+
 joiValidationDecorator(
   CaseExternalIncomplete,
   joi.object().keys({
@@ -52,7 +55,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  Case.COMMON_ERROR_MESSAGES,
+  CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { CaseExternalIncomplete };
