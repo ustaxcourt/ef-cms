@@ -12,12 +12,10 @@ export const generateDocketRecordPdfUrlAction = async ({
   router,
 }) => {
   const caseDetail = get(state.caseDetail);
-  console.log('caseDetail.caseId', caseDetail.caseId);
   const docketRecordSort = get(
     state.sessionMetadata.docketRecordSort[caseDetail.caseId],
   );
 
-  console.log('a');
   const docketRecordPdf = await applicationContext
     .getUseCases()
     .generateDocketRecordPdfInteractor({
@@ -25,7 +23,6 @@ export const generateDocketRecordPdfUrlAction = async ({
       caseId: caseDetail.caseId,
       docketRecordSort,
     });
-  console.log('b');
 
   const pdfFile = new Blob([docketRecordPdf], { type: 'application/pdf' });
 

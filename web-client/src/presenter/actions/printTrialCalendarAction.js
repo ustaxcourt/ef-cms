@@ -11,7 +11,6 @@ import printTrialCalendarTemplate from '../../views/TrialSessionDetail/printTria
  * @returns {object} the docket number and stringified contentHtml
  */
 export const printTrialCalendarAction = ({ get }) => {
-  console.log('here');
   const caseDetail = get(state.formattedCaseDetail);
   const formattedTrialSessionDetails = get(state.formattedTrialSessionDetails);
 
@@ -140,7 +139,6 @@ export const printTrialCalendarAction = ({ get }) => {
     /{{ trialCalendar }}/g,
     renderTrialCalendar(),
   );
-  console.log('there');
 
   return {
     contentHtml: output,

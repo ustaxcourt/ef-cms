@@ -5,13 +5,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
 /**
  */
 exports.handler = event => {
-  console.log('wtf');
-  console.log('wtf');
-  console.log('wtf');
-  console.log('wtf');
   return handle(event, async () => {
-    console.log('we are here!!');
-    console.log('event', event);
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {

@@ -621,7 +621,7 @@ module.exports = (appContextUser = {}) => {
     getNotificationClient: () => {
       if (!notificationCache) {
         notificationCache = new AWS.ApiGatewayManagementApi({
-          endpoint: environment.wsEndpoint, // todo: this would come from ENV
+          endpoint: environment.wsEndpoint,
         });
       }
       return notificationCache;
