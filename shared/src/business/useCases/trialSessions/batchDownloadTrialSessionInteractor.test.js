@@ -25,6 +25,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
         role: 'judge',
         userId: 'abc-123',
       }),
+      getNotificationGateway: () => ({ sendNotificationToUser: () => {} }),
       getPersistenceGateway: () => ({
         getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionMock,
         getDownloadPolicyUrl: getDownloadPolicyUrlMock,
