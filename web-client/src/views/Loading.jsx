@@ -5,13 +5,12 @@ import React from 'react';
 
 export const Loading = connect(
   {
-    currentPage: state.currentPage,
+    headerHelper: state.headerHelper,
     waitingForResponse: state.waitingForResponse,
   },
-  ({ currentPage, waitingForResponse }) => {
-    const noInterstitialPage = currentPage !== 'Interstitial';
+  ({ headerHelper, waitingForResponse }) => {
     return (
-      noInterstitialPage &&
+      !headerHelper.pageIsInterstitial &&
       waitingForResponse && (
         <div
           aria-live="assertive"
