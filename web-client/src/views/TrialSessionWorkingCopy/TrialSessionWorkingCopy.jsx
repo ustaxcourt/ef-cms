@@ -39,9 +39,7 @@ export const TrialSessionWorkingCopy = connect(
             <div className="grid-col-3 text-right padding-top-2">
               <button
                 aria-label="Download batch of Trial Session"
-                // href={`${baseUrl}/trial-sessions/${formattedTrialSessionDetails.trialSessionId}/batch-download/${formattedTrialSessionDetails.zipName}?token=${token}`}
-                rel="noopener noreferrer"
-                target="_blank"
+                className="usa-button usa-button--unstyled"
                 onClick={() =>
                   batchDownloadTrialSessionSequence({
                     trialSessionId: formattedTrialSessionDetails.trialSessionId,
