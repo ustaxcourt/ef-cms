@@ -368,7 +368,7 @@ workflows:
               only:
                 - staging
                 - master
-                - themis
+                - experimental
       - deploy-api-east:
           requires:
             - build-shared
@@ -381,7 +381,7 @@ workflows:
               only:
                 - staging
                 - master
-                - themis
+                - experimental
       - deploy-api-west:
           requires:
             - build-shared
@@ -394,7 +394,7 @@ workflows:
               only:
                 - staging
                 - master
-                - themis
+                - experimental
       - post-deploy:
           requires:
             - deploy-ui
@@ -406,4 +406,4 @@ workflows:
                 - develop
                 - staging
                 - master
-                - themis
+                - experimental
