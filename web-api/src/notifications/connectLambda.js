@@ -9,11 +9,13 @@ exports.handler = event => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
+      const endpoint = `${event.requestContext.domainName}/${event.requestContext.stage}`;
       const results = await applicationContext
         .getUseCases()
         .onConnectInteractor({
           applicationContext,
           connectionId: event.requestContext.connectionId,
+          endpoint,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);

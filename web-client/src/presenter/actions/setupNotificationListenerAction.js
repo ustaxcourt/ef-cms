@@ -6,14 +6,16 @@ export const setupNotificationListenerAction = async ({
 }) => {
   const token = applicationContext.getCurrentUserToken();
 
-  // TODO: should this come from app context?
-  const socket = new WebSocket(`ws://localhost:3011?token=${token}`);
+  const socket = new WebSocket(
+    `${applicationContext.getNotificationsUrl()}?token=${token}`,
+  );
   socket.onopen = e => {};
 
   socket.onmessage = event => {
     const message = JSON.parse(event.data);
     const { url } = message;
     window.open(url, '_blank');
+    socket.close();
   };
 
   store.set(state.socket, socket);

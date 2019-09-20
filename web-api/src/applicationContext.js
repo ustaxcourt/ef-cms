@@ -563,7 +563,6 @@ const setCurrentUser = newUser => {
 let dynamoClientCache = {};
 let s3Cache;
 let sesCache;
-let notificationCache;
 
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
@@ -618,13 +617,13 @@ module.exports = (appContextUser = {}) => {
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
     }),
-    getNotificationClient: () => {
-      if (!notificationCache) {
-        notificationCache = new AWS.ApiGatewayManagementApi({
-          endpoint: environment.wsEndpoint,
-        });
+    getNotificationClient: ({ endpoint }) => {
+      if (endpoint.indexOf('localhost') !== -1) {
+        endpoint = 'http://localhost:3011';
       }
-      return notificationCache;
+      return new AWS.ApiGatewayManagementApi({
+        endpoint,
+      });
     },
     getNotificationGateway: () => ({
       sendNotificationToUser,

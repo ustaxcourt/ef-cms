@@ -124,8 +124,6 @@ exports.batchDownloadTrialSessionInteractor = async ({
     useTempBucket: true,
   });
 
-  console.log('url', url);
-
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
