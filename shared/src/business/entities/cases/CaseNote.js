@@ -17,7 +17,7 @@ function CaseNote(rawProps) {
   this.notes = rawProps.notes;
 }
 
-CaseNote.errorToMessageMap = {
+CaseNote.VALIDATION_ERROR_MESSAGES = {
   notes: 'Notes can not be empty.',
 };
 
@@ -41,7 +41,7 @@ joiValidationDecorator(
   CaseNote,
   CaseNote.schema,
   undefined,
-  CaseNote.errorToMessageMap,
+  CaseNote.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { CaseNote };

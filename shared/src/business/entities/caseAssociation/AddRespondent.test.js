@@ -5,7 +5,7 @@ describe('AddRespondent', () => {
     it('should have error messages for missing fields', () => {
       const entity = new AddRespondent({});
       expect(entity.getFormattedValidationErrors()).toEqual({
-        user: 'Select a respondent counsel',
+        user: AddRespondent.VALIDATION_ERROR_MESSAGES.user,
       });
     });
 

@@ -1,11 +1,14 @@
 const {
   CaseExternalInformationFactory,
 } = require('./CaseExternalInformationFactory');
+const { ContactFactory } = require('../contacts/ContactFactory');
 const {
   MAX_FILE_SIZE_BYTES,
 } = require('../../../persistence/s3/getUploadPolicy');
 
-const { VALIDATION_ERROR_MESSAGES } = CaseExternalInformationFactory;
+const caseExternalErrorMessages =
+  CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES;
+const contactErrorMessages = ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES;
 
 describe('CaseExternalInformationFactory entity', () => {
   it('requires wizard step', () => {
@@ -22,7 +25,7 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '1',
       });
       expect(caseExternal.getFormattedValidationErrors().stinFile).toEqual(
-        VALIDATION_ERROR_MESSAGES.stinFile,
+        caseExternalErrorMessages.stinFile,
       );
     });
 
@@ -44,7 +47,7 @@ describe('CaseExternalInformationFactory entity', () => {
         });
         expect(
           caseExternal.getFormattedValidationErrors().stinFileSize,
-        ).toEqual(VALIDATION_ERROR_MESSAGES.stinFileSize[0].message);
+        ).toEqual(caseExternalErrorMessages.stinFileSize[0].message);
       });
 
       it('should inform you if stin file size is zero', () => {
@@ -55,7 +58,7 @@ describe('CaseExternalInformationFactory entity', () => {
         });
         expect(
           caseExternal.getFormattedValidationErrors().stinFileSize,
-        ).toEqual(VALIDATION_ERROR_MESSAGES.stinFileSize[1]);
+        ).toEqual(caseExternalErrorMessages.stinFileSize[1]);
       });
 
       it('should not error on stinFileSize when stinFile is undefined', () => {
@@ -74,7 +77,7 @@ describe('CaseExternalInformationFactory entity', () => {
         });
         expect(
           caseExternal.getFormattedValidationErrors().stinFileSize,
-        ).toEqual(VALIDATION_ERROR_MESSAGES.stinFileSize[1]);
+        ).toEqual(caseExternalErrorMessages.stinFileSize[1]);
       });
     });
   });
@@ -85,9 +88,9 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '2',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        hasIrsNotice: VALIDATION_ERROR_MESSAGES.hasIrsNotice,
-        petitionFile: VALIDATION_ERROR_MESSAGES.petitionFile,
-        stinFile: VALIDATION_ERROR_MESSAGES.stinFile,
+        hasIrsNotice: caseExternalErrorMessages.hasIrsNotice,
+        petitionFile: caseExternalErrorMessages.petitionFile,
+        stinFile: caseExternalErrorMessages.stinFile,
       });
 
       caseExternal = new CaseExternalInformationFactory({
@@ -95,9 +98,9 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '2',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        hasIrsNotice: VALIDATION_ERROR_MESSAGES.hasIrsNotice,
-        petitionFile: VALIDATION_ERROR_MESSAGES.petitionFile,
-        stinFileSize: VALIDATION_ERROR_MESSAGES.stinFileSize[1],
+        hasIrsNotice: caseExternalErrorMessages.hasIrsNotice,
+        petitionFile: caseExternalErrorMessages.petitionFile,
+        stinFileSize: caseExternalErrorMessages.stinFileSize[1],
       });
     });
 
@@ -108,8 +111,8 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '2',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        hasIrsNotice: VALIDATION_ERROR_MESSAGES.hasIrsNotice,
-        petitionFile: VALIDATION_ERROR_MESSAGES.petitionFile,
+        hasIrsNotice: caseExternalErrorMessages.hasIrsNotice,
+        petitionFile: caseExternalErrorMessages.petitionFile,
       });
     });
 
@@ -123,7 +126,7 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '2',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        caseType: VALIDATION_ERROR_MESSAGES.caseType,
+        caseType: caseExternalErrorMessages.caseType,
       });
     });
 
@@ -168,7 +171,7 @@ describe('CaseExternalInformationFactory entity', () => {
         });
         expect(
           caseExternal.getFormattedValidationErrors().petitionFileSize,
-        ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[0].message);
+        ).toEqual(caseExternalErrorMessages.petitionFileSize[0].message);
       });
 
       it('should inform you if petition file size is zero', () => {
@@ -181,7 +184,7 @@ describe('CaseExternalInformationFactory entity', () => {
         });
         expect(
           caseExternal.getFormattedValidationErrors().petitionFileSize,
-        ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
+        ).toEqual(caseExternalErrorMessages.petitionFileSize[1]);
       });
 
       it('should not error on petitionFileSize when petitionFile is undefined', () => {
@@ -204,7 +207,7 @@ describe('CaseExternalInformationFactory entity', () => {
         });
         expect(
           caseExternal.getFormattedValidationErrors().petitionFileSize,
-        ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
+        ).toEqual(caseExternalErrorMessages.petitionFileSize[1]);
       });
     });
   });
@@ -215,11 +218,11 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '3',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        filingType: VALIDATION_ERROR_MESSAGES.filingType,
-        hasIrsNotice: VALIDATION_ERROR_MESSAGES.hasIrsNotice,
-        partyType: VALIDATION_ERROR_MESSAGES.partyType,
-        petitionFile: VALIDATION_ERROR_MESSAGES.petitionFile,
-        stinFile: VALIDATION_ERROR_MESSAGES.stinFile,
+        filingType: caseExternalErrorMessages.filingType,
+        hasIrsNotice: caseExternalErrorMessages.hasIrsNotice,
+        partyType: caseExternalErrorMessages.partyType,
+        petitionFile: caseExternalErrorMessages.petitionFile,
+        stinFile: caseExternalErrorMessages.stinFile,
       });
 
       caseExternal = new CaseExternalInformationFactory({
@@ -229,11 +232,11 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '3',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        caseType: VALIDATION_ERROR_MESSAGES.caseType,
-        filingType: VALIDATION_ERROR_MESSAGES.filingType,
-        partyType: VALIDATION_ERROR_MESSAGES.partyType,
-        petitionFileSize: VALIDATION_ERROR_MESSAGES.petitionFileSize[1],
-        stinFileSize: VALIDATION_ERROR_MESSAGES.stinFileSize[1],
+        caseType: caseExternalErrorMessages.caseType,
+        filingType: caseExternalErrorMessages.filingType,
+        partyType: caseExternalErrorMessages.partyType,
+        petitionFileSize: caseExternalErrorMessages.petitionFileSize[1],
+        stinFileSize: caseExternalErrorMessages.stinFileSize[1],
       });
     });
 
@@ -248,8 +251,8 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '3',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        filingType: VALIDATION_ERROR_MESSAGES.filingType,
-        partyType: VALIDATION_ERROR_MESSAGES.partyType,
+        filingType: caseExternalErrorMessages.filingType,
+        partyType: caseExternalErrorMessages.partyType,
       });
     });
 
@@ -267,7 +270,7 @@ describe('CaseExternalInformationFactory entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile);
+      ).toEqual(caseExternalErrorMessages.ownershipDisclosureFile);
     });
 
     it('does not require ownershipDisclosureFile if filingType is not A business', () => {
@@ -301,13 +304,13 @@ describe('CaseExternalInformationFactory entity', () => {
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         contactPrimary: {
-          address1: 'Enter mailing address',
-          city: 'Enter city',
-          countryType: 'Enter country type',
-          name: 'Enter name',
-          phone: 'Enter phone number',
-          postalCode: 'Enter ZIP code',
-          state: 'Enter state',
+          address1: contactErrorMessages.address1,
+          city: contactErrorMessages.city,
+          countryType: contactErrorMessages.countryType,
+          name: contactErrorMessages.name,
+          phone: contactErrorMessages.phone,
+          postalCode: contactErrorMessages.postalCode[1],
+          state: contactErrorMessages.state,
         },
       });
     });
@@ -343,7 +346,7 @@ describe('CaseExternalInformationFactory entity', () => {
           caseExternal.getFormattedValidationErrors()
             .ownershipDisclosureFileSize,
         ).toEqual(
-          VALIDATION_ERROR_MESSAGES.ownershipDisclosureFileSize[0].message,
+          caseExternalErrorMessages.ownershipDisclosureFileSize[0].message,
         );
       });
 
@@ -356,7 +359,7 @@ describe('CaseExternalInformationFactory entity', () => {
         expect(
           caseExternal.getFormattedValidationErrors()
             .ownershipDisclosureFileSize,
-        ).toEqual(VALIDATION_ERROR_MESSAGES.ownershipDisclosureFileSize[1]);
+        ).toEqual(caseExternalErrorMessages.ownershipDisclosureFileSize[1]);
       });
 
       it('should not error on ownershipDisclosureFileSize when ownershipDisclosureFile is undefined', () => {
@@ -377,7 +380,7 @@ describe('CaseExternalInformationFactory entity', () => {
         expect(
           caseExternal.getFormattedValidationErrors()
             .ownershipDisclosureFileSize,
-        ).toEqual(VALIDATION_ERROR_MESSAGES.ownershipDisclosureFileSize[1]);
+        ).toEqual(caseExternalErrorMessages.ownershipDisclosureFileSize[1]);
       });
     });
   });
@@ -388,13 +391,13 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '4',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        filingType: VALIDATION_ERROR_MESSAGES.filingType,
-        hasIrsNotice: VALIDATION_ERROR_MESSAGES.hasIrsNotice,
-        partyType: VALIDATION_ERROR_MESSAGES.partyType,
-        petitionFile: VALIDATION_ERROR_MESSAGES.petitionFile,
-        preferredTrialCity: VALIDATION_ERROR_MESSAGES.preferredTrialCity,
-        procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
-        stinFile: VALIDATION_ERROR_MESSAGES.stinFile,
+        filingType: caseExternalErrorMessages.filingType,
+        hasIrsNotice: caseExternalErrorMessages.hasIrsNotice,
+        partyType: caseExternalErrorMessages.partyType,
+        petitionFile: caseExternalErrorMessages.petitionFile,
+        preferredTrialCity: caseExternalErrorMessages.preferredTrialCity,
+        procedureType: caseExternalErrorMessages.procedureType,
+        stinFile: caseExternalErrorMessages.stinFile,
       });
 
       caseExternal = new CaseExternalInformationFactory({
@@ -406,29 +409,29 @@ describe('CaseExternalInformationFactory entity', () => {
         wizardStep: '4',
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        caseType: VALIDATION_ERROR_MESSAGES.caseType,
+        caseType: caseExternalErrorMessages.caseType,
         contactPrimary: {
-          address1: 'Enter mailing address',
-          city: 'Enter city',
-          countryType: 'Enter country type',
-          name: 'Enter name',
-          phone: 'Enter phone number',
-          postalCode: 'Enter ZIP code',
-          state: 'Enter state',
+          address1: contactErrorMessages.address1,
+          city: contactErrorMessages.city,
+          countryType: contactErrorMessages.countryType,
+          name: contactErrorMessages.name,
+          phone: contactErrorMessages.phone,
+          postalCode: contactErrorMessages.postalCode[1],
+          state: contactErrorMessages.state,
         },
         contactSecondary: {
-          address1: 'Enter mailing address',
-          city: 'Enter city',
-          countryType: 'Enter country type',
-          name: 'Enter name',
-          phone: 'Enter phone number',
-          postalCode: 'Enter ZIP code',
-          state: 'Enter state',
+          address1: contactErrorMessages.address1,
+          city: contactErrorMessages.city,
+          countryType: contactErrorMessages.countryType,
+          name: contactErrorMessages.name,
+          phone: contactErrorMessages.phone,
+          postalCode: contactErrorMessages.postalCode[1],
+          state: contactErrorMessages.state,
         },
-        petitionFileSize: VALIDATION_ERROR_MESSAGES.petitionFileSize[1],
-        preferredTrialCity: VALIDATION_ERROR_MESSAGES.preferredTrialCity,
-        procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
-        stinFileSize: VALIDATION_ERROR_MESSAGES.stinFileSize[1],
+        petitionFileSize: caseExternalErrorMessages.petitionFileSize[1],
+        preferredTrialCity: caseExternalErrorMessages.preferredTrialCity,
+        procedureType: caseExternalErrorMessages.procedureType,
+        stinFileSize: caseExternalErrorMessages.stinFileSize[1],
       });
     });
 
