@@ -1,7 +1,7 @@
 const createApplicationContext = require('../applicationContext');
 const {
   getUserFromAuthHeader,
-  redirect,
+  handle,
 } = require('../middleware/apiGatewayHelper');
 
 /**
@@ -11,7 +11,7 @@ const {
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  redirect(event, async () => {
+  handle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {

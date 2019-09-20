@@ -1,15 +1,11 @@
 const createApplicationContext = require('../applicationContext');
-const {
-  getUserFromAuthHeader,
-  handle,
-} = require('../middleware/apiGatewayHelper');
+const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
  */
 exports.handler = event =>
   handle(event, async () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
+    const applicationContext = createApplicationContext({});
     try {
       const results = await applicationContext
         .getUseCases()
@@ -17,7 +13,10 @@ exports.handler = event =>
           applicationContext,
           connectionId: event.requestContext.connectionId,
         });
-      applicationContext.logger.info('User', user);
+      applicationContext.logger.info(
+        'Connection',
+        event.requestContext.connectionId,
+      );
       applicationContext.logger.info('Results', results);
       return results;
     } catch (e) {
