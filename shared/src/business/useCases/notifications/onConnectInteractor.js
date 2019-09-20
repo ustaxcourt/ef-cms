@@ -1,9 +1,3 @@
-const {
-  isAuthorized,
-  WORKITEM,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-
 /**
  * onConnectInteractor
  *
