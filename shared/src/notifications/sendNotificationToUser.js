@@ -5,8 +5,6 @@ exports.sendNotificationToUser = async ({
   message,
   userId,
 }) => {
-  const notificationClient = applicationContext.getNotificationClient();
-
   const connections = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -18,11 +16,14 @@ exports.sendNotificationToUser = async ({
     applicationContext,
   });
 
-  console.log('userId', userId);
-  console.log('connections', connections);
-
   for (const connection of connections) {
     try {
+      const { endpoint } = connection;
+
+      const notificationClient = applicationContext.getNotificationClient({
+        endpoint,
+      });
+
       await notificationClient
         .postToConnection({
           ConnectionId: connection.sk,
@@ -30,7 +31,6 @@ exports.sendNotificationToUser = async ({
         })
         .promise();
     } catch (err) {
-      console.log('err', err);
       if (err.statusCode === 410) {
         await client.delete({
           applicationContext,
