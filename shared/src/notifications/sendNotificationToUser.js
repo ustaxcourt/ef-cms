@@ -26,10 +26,11 @@ exports.sendNotificationToUser = async ({
       await notificationClient
         .postToConnection({
           ConnectionId: connection.sk,
-          Data: message,
+          Data: JSON.stringify(message),
         })
         .promise();
     } catch (err) {
+      console.log('err', err);
       if (err.statusCode === 410) {
         await client
           .delete({

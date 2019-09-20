@@ -549,7 +549,7 @@ const environment = {
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
-  wsEndpoint: process.env.WS_ENDPOINT || 'localhost:3011',
+  wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
 let user;
