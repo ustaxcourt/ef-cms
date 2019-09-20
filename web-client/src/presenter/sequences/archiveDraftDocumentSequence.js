@@ -3,15 +3,15 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { resetArchiveDraftDocumentAction } from '../actions/resetArchiveDraftDocumentAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const archiveDraftDocumentSequence = [
   clearModalAction,
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   archiveDraftDocumentAction,
   refreshCaseAction,
   resetArchiveDraftDocumentAction,
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
   navigateToCaseDetailAction,
 ];
