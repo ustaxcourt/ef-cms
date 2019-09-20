@@ -5,7 +5,6 @@ import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setPathAction } from '../actions/setPathAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
-import { setupNotificationListenerAction } from '../actions/setupNotificationListenerAction';
 import { startRefreshIntervalAction } from '../actions/startRefreshIntervalAction';
 
 /**
@@ -23,5 +22,4 @@ export const loginWithCodeSequence = [
   setUserAction,
   setPathAction,
   navigateToPathAction,
-  setupNotificationListenerAction,
 ];

@@ -6,7 +6,6 @@ import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
-import { setupNotificationListenerAction } from '../actions/setupNotificationListenerAction';
 import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
 
 export const submitLoginSequence = [
@@ -19,5 +18,4 @@ export const submitLoginSequence = [
   clearAlertsAction,
   navigateToPathAction,
   unsetFormSubmittingAction,
-  setupNotificationListenerAction,
 ];

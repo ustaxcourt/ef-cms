@@ -32,15 +32,13 @@ exports.sendNotificationToUser = async ({
     } catch (err) {
       console.log('err', err);
       if (err.statusCode === 410) {
-        await client
-          .delete({
-            applicationContext,
-            key: {
-              pk: connection.pk,
-              sk: connection.sk,
-            },
-          })
-          .promise();
+        await client.delete({
+          applicationContext,
+          key: {
+            pk: connection.pk,
+            sk: connection.sk,
+          },
+        });
       }
     }
   }

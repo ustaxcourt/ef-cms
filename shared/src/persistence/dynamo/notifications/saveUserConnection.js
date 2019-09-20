@@ -10,6 +10,7 @@ exports.saveUserConnection = async ({
 }) => {
   return await put({
     Item: {
+      gsi1pk: connectionId,
       pk: `connections-${userId}`,
       sk: connectionId,
     },

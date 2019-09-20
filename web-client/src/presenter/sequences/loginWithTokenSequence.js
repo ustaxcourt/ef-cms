@@ -4,7 +4,6 @@ import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setPathAction } from '../actions/setPathAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
-import { setupNotificationListenerAction } from '../actions/setupNotificationListenerAction';
 
 /**
  * Combine several sequences; set login value, and
@@ -19,5 +18,4 @@ export const loginWithTokenSequence = [
   setUserAction,
   setPathAction,
   navigateToPathAction,
-  setupNotificationListenerAction,
 ];
