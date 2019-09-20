@@ -21,11 +21,13 @@ exports.deleteUserConnection = async ({ applicationContext, connectionId }) => {
     applicationContext,
   });
 
+  console.log('users', users);
+
   for (const user of users) {
     await client.delete({
       applicationContext,
       key: {
-        pk: user,
+        pk: user.pk,
         sk: connectionId,
       },
     });

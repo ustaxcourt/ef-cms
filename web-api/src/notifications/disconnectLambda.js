@@ -5,6 +5,7 @@ const { handle } = require('../middleware/apiGatewayHelper');
  */
 exports.handler = event =>
   handle(event, async () => {
+    console.log('disconnect lambda');
     const applicationContext = createApplicationContext({});
     try {
       const results = await applicationContext
