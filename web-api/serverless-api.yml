@@ -93,7 +93,7 @@ provider:
     TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
-    MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
+    MASTER_REGION: ${self:provider.masterRegion}
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
@@ -215,21 +215,21 @@ functions:
     events:
       - schedule: cron(0 7 * * ? *)
 
-  swagger:
-    handler: web-api/src/apiHandlers.swaggerLambda
-    events:
-      - http:
-          path: swagger
-          method: get
-          cors: true
+  # swagger:
+  #   handler: web-api/src/apiHandlers.swaggerLambda
+  #   events:
+  #     - http:
+  #         path: swagger
+  #         method: get
+  #         cors: true
 
-  swaggerJson:
-    handler: web-api/src/apiHandlers.swaggerJsonLambda
-    events:
-      - http:
-          path: swagger.json
-          method: get
-          cors: true
+  # swaggerJson:
+  #   handler: web-api/src/apiHandlers.swaggerJsonLambda
+  #   events:
+  #     - http:
+  #         path: swagger.json
+  #         method: get
+  #         cors: true
 
   createCourtIssuedOrderPdfFromHtml:
     runtime: nodejs8.10
