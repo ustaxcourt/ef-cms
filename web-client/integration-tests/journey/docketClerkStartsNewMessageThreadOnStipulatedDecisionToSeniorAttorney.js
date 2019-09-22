@@ -1,3 +1,7 @@
+import { InitialWorkItemMessage } from '../../../shared/src/business/entities/InitialWorkItemMessage';
+
+const { VALIDATION_ERROR_MESSAGES } = InitialWorkItemMessage;
+
 export default test => {
   return it('Docket clerk starts a new message thread on the Stipulated Decision document to senior attorney', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
@@ -10,9 +14,9 @@ export default test => {
     await test.runSequence('createWorkItemSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      assigneeId: 'Select a recipient',
-      message: 'Enter a message',
-      section: 'Select a section',
+      assigneeId: VALIDATION_ERROR_MESSAGES.assigneeId,
+      message: VALIDATION_ERROR_MESSAGES.message,
+      section: VALIDATION_ERROR_MESSAGES.section,
     });
 
     await test.runSequence('updateFormValueSequence', {

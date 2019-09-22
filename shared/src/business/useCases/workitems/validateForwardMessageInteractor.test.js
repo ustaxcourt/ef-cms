@@ -3,6 +3,8 @@ const {
 } = require('./validateForwardMessageInteractor');
 const { ForwardMessage } = require('../../entities/ForwardMessage');
 
+const { VALIDATION_ERROR_MESSAGES } = ForwardMessage;
+
 describe('validateForwardMessageInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
     const errors = validateForwardMessageInteractor({
@@ -15,9 +17,9 @@ describe('validateForwardMessageInteractor', () => {
     });
 
     expect(errors).toEqual({
-      assigneeId: 'Select a recipient',
-      forwardMessage: 'Enter a message',
-      section: 'Select a section',
+      assigneeId: VALIDATION_ERROR_MESSAGES.assigneeId,
+      forwardMessage: VALIDATION_ERROR_MESSAGES.forwardMessage,
+      section: VALIDATION_ERROR_MESSAGES.section,
     });
   });
 
@@ -32,8 +34,8 @@ describe('validateForwardMessageInteractor', () => {
     });
 
     expect(errors).toEqual({
-      assigneeId: 'Select a recipient',
-      section: 'Select a section',
+      assigneeId: VALIDATION_ERROR_MESSAGES.assigneeId,
+      section: VALIDATION_ERROR_MESSAGES.section,
     });
   });
 
@@ -48,8 +50,8 @@ describe('validateForwardMessageInteractor', () => {
     });
 
     expect(errors).toEqual({
-      assigneeId: 'Select a recipient',
-      forwardMessage: 'Enter a message',
+      assigneeId: VALIDATION_ERROR_MESSAGES.assigneeId,
+      forwardMessage: VALIDATION_ERROR_MESSAGES.forwardMessage,
     });
   });
 
@@ -62,12 +64,12 @@ describe('validateForwardMessageInteractor', () => {
       },
       message: {
         assigneeId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        section: 'Select a section',
+        section: VALIDATION_ERROR_MESSAGES.section,
       },
     });
 
     expect(errors).toEqual({
-      forwardMessage: 'Enter a message',
+      forwardMessage: VALIDATION_ERROR_MESSAGES.forwardMessage,
     });
   });
 
