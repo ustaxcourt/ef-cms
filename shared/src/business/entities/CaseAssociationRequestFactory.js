@@ -9,37 +9,37 @@ const {
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 
 CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
-  attachments: '#Enter selection for Attachments.',
+  attachments: 'Enter selection for Attachments.',
   certificateOfService:
-    '#Indicate whether you are including a Certificate of Service',
+    'Indicate whether you are including a Certificate of Service',
   certificateOfServiceDate: [
     {
       contains: 'must be less than or equal to',
       message:
-        '#Certificate of Service date cannot be in the future. Enter a valid date.',
+        'Certificate of Service date cannot be in the future. Enter a valid date.',
     },
-    '#Enter date of service',
+    'Enter date of service',
   ],
-  documentTitleTemplate: '#Select a document',
-  documentType: '#Select a document type',
-  eventCode: '#Select a document',
-  exhibits: '#Enter selection for Exhibits.',
-  hasSupportingDocuments: '#Enter selection for Supporting Documents.',
-  objections: '#Enter selection for Objections.',
-  primaryDocumentFile: '#Upload a document',
-  representingPrimary: '#Select a party',
-  representingSecondary: '#Select a party',
-  scenario: '#Select a document',
-  supportingDocument: '#Enter selection for Supporting Document.',
-  supportingDocumentFile: '#Upload a document',
+  documentTitleTemplate: 'Select a document',
+  documentType: 'Select a document type',
+  eventCode: 'Select a document',
+  exhibits: 'Enter selection for Exhibits.',
+  hasSupportingDocuments: 'Enter selection for Supporting Documents.',
+  objections: 'Enter selection for Objections.',
+  primaryDocumentFile: 'Upload a document',
+  representingPrimary: 'Select a party',
+  representingSecondary: 'Select a party',
+  scenario: 'Select a document',
+  supportingDocument: 'Enter selection for Supporting Document.',
+  supportingDocumentFile: 'Upload a document',
   supportingDocumentFileSize: [
     {
       contains: 'must be less than or equal to',
-      message: `#Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    '#Your Secondary Document file size is empty.',
+    'Your Secondary Document file size is empty.',
   ],
-  supportingDocumentFreeText: '#Please provide a value.',
+  supportingDocumentFreeText: 'Please provide a value.',
 };
 
 /**
