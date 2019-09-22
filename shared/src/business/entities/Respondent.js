@@ -2,7 +2,11 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { userDecorator, userValidation, validationErrorMap } = require('./User');
+const {
+  userDecorator,
+  userValidation,
+  VALIDATION_ERROR_MESSAGES,
+} = require('./User');
 
 /**
  * constructor
@@ -18,7 +22,7 @@ joiValidationDecorator(
   Respondent,
   joi.object().keys(userValidation),
   undefined,
-  validationErrorMap,
+  VALIDATION_ERROR_MESSAGES,
 );
 
 Respondent.validationName = 'Respondent';
