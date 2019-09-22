@@ -1,10 +1,9 @@
 import { clearModalAction } from '../actions/clearModalAction';
-import { set } from 'cerebral/factories';
 import { setAlertFromExceptionAction } from '../actions/setAlertFromExceptionAction';
-import { state } from 'cerebral';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const setCurrentPageErrorSequence = [
-  set(state.submitting, false),
+  unsetWaitingForResponseAction,
   setAlertFromExceptionAction,
   clearModalAction,
 ];
