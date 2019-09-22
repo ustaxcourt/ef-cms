@@ -44,9 +44,9 @@ Batch.prototype.clear = function() {
   return this;
 };
 
-Batch.errorToMessageMap = {
-  batchIndex: 'Invalid batch index',
-  pages: 'At least one page is required',
+Batch.VALIDATION_ERROR_MESSAGES = {
+  batchIndex: '#Invalid batch index',
+  pages: '#At least one page is required',
 };
 
 Batch.schema = joi.object().keys({
@@ -71,6 +71,11 @@ Batch.schema = joi.object().keys({
     .required(),
 });
 
-joiValidationDecorator(Batch, Batch.schema, undefined, Batch.errorToMessageMap);
+joiValidationDecorator(
+  Batch,
+  Batch.schema,
+  undefined,
+  Batch.VALIDATION_ERROR_MESSAGES,
+);
 
 module.exports = { Batch };
