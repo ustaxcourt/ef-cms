@@ -13,10 +13,7 @@ import { state } from 'cerebral';
 export const generatePdfFromScanSessionAction = async ({
   applicationContext,
   get,
-  store,
 }) => {
-  store.set(state.submitting, true);
-
   // wait a bit so that the spinner shows up because generatePDFFromJPGDataInteractor blocks the browser
   await new Promise(resolve => setTimeout(resolve, 100));
   const documentSelectedForScan = get(state.documentSelectedForScan);
