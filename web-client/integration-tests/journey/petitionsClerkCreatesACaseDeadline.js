@@ -1,3 +1,7 @@
+import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline';
+
+const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
+
 export default (test, overrides = {}) => {
   return it('Petitions clerk creates a case deadline', async () => {
     test.setState('caseDetail', {});
@@ -12,8 +16,8 @@ export default (test, overrides = {}) => {
     await test.runSequence('createCaseDeadlineSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      deadlineDate: 'Enter a valid deadline date',
-      description: 'Enter a description of this deadline',
+      deadlineDate: VALIDATION_ERROR_MESSAGES.deadlineDate,
+      description: VALIDATION_ERROR_MESSAGES.description[1],
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -49,8 +53,7 @@ In a day or two`,
     await test.runSequence('validateCaseDeadlineSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      description:
-        'The description is too long. Please enter a valid description.',
+      description: VALIDATION_ERROR_MESSAGES.description[0].message,
     });
 
     await test.runSequence('updateFormValueSequence', {
