@@ -23,15 +23,14 @@ function CaseDeadline(rawProps, { applicationContext }) {
 }
 
 CaseDeadline.VALIDATION_ERROR_MESSAGES = {
-  caseId: '#You must have a case id.',
-  deadlineDate: '#Enter a valid deadline date',
+  caseId: 'You must have a case id.',
+  deadlineDate: 'Enter a valid deadline date',
   description: [
     {
       contains: 'length must be less than or equal to',
-      message:
-        '#The description is too long. Please enter a valid description.',
+      message: 'The description is too long. Please enter a valid description.',
     },
-    '#Enter a description of this deadline',
+    'Enter a description of this deadline',
   ],
 };
 

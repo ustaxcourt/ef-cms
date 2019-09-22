@@ -45,8 +45,8 @@ Batch.prototype.clear = function() {
 };
 
 Batch.VALIDATION_ERROR_MESSAGES = {
-  batchIndex: '#Invalid batch index',
-  pages: '#At least one page is required',
+  batchIndex: 'Invalid batch index',
+  pages: 'At least one page is required',
 };
 
 Batch.schema = joi.object().keys({
