@@ -1,28 +1,26 @@
 const createApplicationContext = require('../applicationContext');
-const {
-  getUserFromAuthHeader,
-  handle,
-} = require('../middleware/apiGatewayHelper');
+const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
- * batch download trial session
+ * remove the information about an existing websocket connection
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
   handle(event, async () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
+    const applicationContext = createApplicationContext({});
     try {
-      const { trialSessionId } = event.pathParameters || {};
       const results = await applicationContext
         .getUseCases()
-        .batchDownloadTrialSessionInteractor({
+        .onDisconnectInteractor({
           applicationContext,
-          trialSessionId,
+          connectionId: event.requestContext.connectionId,
         });
-      applicationContext.logger.info('User', user);
+      applicationContext.logger.info(
+        'Connection',
+        event.requestContext.connectionId,
+      );
       applicationContext.logger.info('Results', results);
       return results;
     } catch (e) {

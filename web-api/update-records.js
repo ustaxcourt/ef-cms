@@ -25,7 +25,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
         lastKey = results.LastEvaluatedKey;
         const recordsUpdated = [];
         for (const result of results.Items) {
-          console.log(count++);
           if (result.respondents) {
             result.respondents = result.respondents.map(r => ({
               ...r,

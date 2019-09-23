@@ -1,4 +1,5 @@
-service: ef-cms-users
+service: ef-cms
+
 plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
@@ -16,7 +17,8 @@ custom:
 
   serverless-offline:
     host: 0.0.0.0
-    port: 3003
+    port: 3020 # this port really isn't used, but needs to be unique to prevent address in use errors
+    websocketPort: 3011
 
   alerts:
     stages:
@@ -50,7 +52,7 @@ custom:
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'users'
+    basePath: 'notifications'
     endpointType: 'regional'
     certificateName: efcms-${self:provider.stage}.${opt:domain}
     certificateRegion: ${opt:region}
@@ -70,6 +72,7 @@ provider:
   stage: ${self:custom.stage}
   region: ${self:custom.region}
   runtime: nodejs10.x
+  websocketApiRouteSelectionExpression: $request.body.action
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
@@ -119,6 +122,11 @@ provider:
         - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
     - Effect: 'Allow'
       Action:
+        - execute-api:Invoke
+      Resource:
+        - arn:aws:execute-api:${opt:region}:${opt:accountId}:*
+    - Effect: 'Allow'
+      Action:
         - 's3:*'
       Resource:
         Fn::Join:
@@ -146,7 +154,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/usersHandlers.js
+    - web-api/src/notificationHandlers.js
 
   excludeDevDependencies: true
 
@@ -185,200 +193,14 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getUser:
-    handler: web-api/src/usersHandlers.getUserLambda
+  connectHandler:
+    handler: web-api/src/notificationHandlers.connectLambda
     events:
-      - http:
-          path: /
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+      - websocket:
+          route: $connect
 
-  getInternalUsers:
-    handler: web-api/src/usersHandlers.getInternalUsersLambda
+  disconnectHandler:
+    handler: web-api/src/notificationHandlers.disconnectLambda
     events:
-      - http:
-          path: /internal
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  createUser:
-    handler: web-api/src/usersHandlers.createUserLambda
-    events:
-      - http:
-          path: /
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getCasesByUser:
-    handler: web-api/src/usersHandlers.getCasesByUserLambda
-    events:
-      - http:
-          path: /{userId}/cases
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  verifyCaseForUser:
-    handler: web-api/src/usersHandlers.verifyCaseForUserLambda
-    events:
-      - http:
-          path: /{userId}/case/{caseId}
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  verifyPendingCaseForUser:
-    handler: web-api/src/usersHandlers.verifyPendingCaseForUserLambda
-    events:
-      - http:
-          path: /{userId}/case/{caseId}/pending
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  practitionerCaseAssociation:
-    handler: web-api/src/usersHandlers.practitionerCaseAssociationLambda
-    events:
-      - http:
-          path: /{userId}/case/{caseId}
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  practitionerPendingCaseAssociation:
-    handler: web-api/src/usersHandlers.practitionerPendingCaseAssociationLambda
-    events:
-      - http:
-          path: /{userId}/case/{caseId}/pending
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getInboxMessagesForUser:
-    handler: web-api/src/usersHandlers.getInboxMessagesForUserLambda
-    events:
-      - http:
-          path: /{userId}/messages/inbox
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getSentMessagesForUser:
-    handler: web-api/src/usersHandlers.getSentMessagesForUserLambda
-    events:
-      - http:
-          path: /{userId}/messages/sent
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCInboxForUser:
-    handler: web-api/src/usersHandlers.getDocumentQCInboxForUserLambda
-    events:
-      - http:
-          path: /{userId}/document-qc/inbox
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCBatchedForUser:
-    handler: web-api/src/usersHandlers.getDocumentQCBatchedForUserLambda
-    events:
-      - http:
-          path: /{userId}/document-qc/batched
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentQCServedForUser:
-    handler: web-api/src/usersHandlers.getDocumentQCServedForUserLambda
-    events:
-      - http:
-          path: /{userId}/document-qc/served
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updateUserContactInformation:
-    runtime: nodejs8.10
-    handler: web-api/src/usersHandlers.updateUserContactInformationLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: /{userId}/contact-info
-          method: put
-          cors: true
-          async: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getPractitionersBySearchKey:
-    handler: web-api/src/usersHandlers.getPractitionersBySearchKeyLambda
-    events:
-      - http:
-          path: /practitioners/search
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getRespondentsBySearchKey:
-    handler: web-api/src/usersHandlers.getRespondentsBySearchKeyLambda
-    events:
-      - http:
-          path: /respondents/search
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+      - websocket:
+          route: $disconnect
