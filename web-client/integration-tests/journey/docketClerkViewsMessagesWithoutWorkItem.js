@@ -1,6 +1,6 @@
 export default test => {
-  return it('Docket clerk views their dashboard and should not expect an individual work queue item, but should expect the docket section item', async () => {
-    await test.runSequence('gotoDashboardSequence');
+  return it('Docket clerk views their messages and should not expect an individual work queue item, but should expect the docket section item', async () => {
+    await test.runSequence('gotoMessagesSequence');
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'my',

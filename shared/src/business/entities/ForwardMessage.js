@@ -3,6 +3,12 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 
+ForwardMessage.VALIDATION_ERROR_MESSAGES = {
+  assigneeId: 'Select a recipient',
+  forwardMessage: 'Enter a message',
+  section: 'Select a section',
+};
+
 /**
  *
  * @param {object} rawMessage the raw message data
@@ -27,11 +33,7 @@ joiValidationDecorator(
     section: joi.string().required(),
   }),
   undefined,
-  {
-    assigneeId: 'Recipient is required.',
-    forwardMessage: 'Message is required.',
-    section: 'Section is required',
-  },
+  ForwardMessage.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { ForwardMessage };

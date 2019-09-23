@@ -8,6 +8,40 @@ const {
 } = require('../../persistence/s3/getUploadPolicy');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 
+CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
+  attachments: 'Enter selection for Attachments.',
+  certificateOfService:
+    'Indicate whether you are including a Certificate of Service',
+  certificateOfServiceDate: [
+    {
+      contains: 'must be less than or equal to',
+      message:
+        'Certificate of Service date cannot be in the future. Enter a valid date.',
+    },
+    'Enter date of service',
+  ],
+  documentTitleTemplate: 'Select a document',
+  documentType: 'Select a document type',
+  eventCode: 'Select a document',
+  exhibits: 'Enter selection for Exhibits.',
+  hasSupportingDocuments: 'Enter selection for Supporting Documents.',
+  objections: 'Enter selection for Objections.',
+  primaryDocumentFile: 'Upload a document',
+  representingPrimary: 'Select a party',
+  representingSecondary: 'Select a party',
+  scenario: 'Select a document',
+  supportingDocument: 'Enter selection for Supporting Document.',
+  supportingDocumentFile: 'Upload a document',
+  supportingDocumentFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Secondary Document file size is empty.',
+  ],
+  supportingDocumentFreeText: 'Please provide a value.',
+};
+
 /**
  * Case Association Request Factory entity
  *
@@ -149,39 +183,6 @@ function CaseAssociationRequestFactory(rawProps) {
     supportingDocumentFreeText: joi.string().required(),
   };
 
-  let errorToMessageMap = {
-    attachments: 'Enter selection for Attachments.',
-    certificateOfService: 'Enter selection for Certificate of Service.',
-    certificateOfServiceDate: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'Certificate of Service date is in the future. Please enter a valid date.',
-      },
-      'Enter a Certificate of Service Date.',
-    ],
-    documentTitleTemplate: 'Select a document.',
-    documentType: 'Select a document.',
-    eventCode: 'Select a document.',
-    exhibits: 'Enter selection for Exhibits.',
-    hasSupportingDocuments: 'Enter selection for Supporting Documents.',
-    objections: 'Enter selection for Objections.',
-    primaryDocumentFile: 'A file was not selected.',
-    representingPrimary: 'Select a party.',
-    representingSecondary: 'Select a party.',
-    scenario: 'Select a document.',
-    supportingDocument: 'Enter selection for Supporting Document.',
-    supportingDocumentFile: 'A file was not selected.',
-    supportingDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Secondary Document file size is empty.',
-    ],
-    supportingDocumentFreeText: 'Please provide a value.',
-  };
-
   let customValidate;
 
   const makeRequired = itemName => {
@@ -232,7 +233,7 @@ function CaseAssociationRequestFactory(rawProps) {
     entityConstructor,
     schema,
     customValidate,
-    errorToMessageMap,
+    CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES,
   );
 
   return new entityConstructor(rawProps);

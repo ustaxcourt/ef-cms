@@ -16,7 +16,7 @@ describe('validateCaseDeadlineInteractor', () => {
     });
 
     expect(Object.keys(errors)).toEqual(
-      Object.keys(CaseDeadline.errorToMessageMap),
+      Object.keys(CaseDeadline.VALIDATION_ERROR_MESSAGES),
     );
   });
 

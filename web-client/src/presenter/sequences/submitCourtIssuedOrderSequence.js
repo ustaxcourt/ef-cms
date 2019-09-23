@@ -11,10 +11,10 @@ import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteO
 import { set } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { state } from 'cerebral';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
 
 const onFileUploadedSuccess = [
@@ -32,7 +32,7 @@ const onFileUploadedSuccess = [
 ];
 
 export const submitCourtIssuedOrderSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   isFormPristineAction,
   {
     no: [...convertHtml2PdfSequence],
@@ -55,5 +55,5 @@ export const submitCourtIssuedOrderSequence = [
       },
     ],
   },
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];

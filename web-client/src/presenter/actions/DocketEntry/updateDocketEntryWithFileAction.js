@@ -56,7 +56,7 @@ export const updateDocketEntryWithFileAction = async ({
       primaryDocumentFileId: documentId,
     });
 
-  await applicationContext.getUseCases().createCoverSheetInteractor({
+  await applicationContext.getUseCases().addCoversheetInteractor({
     applicationContext,
     caseId: caseDetail.caseId,
     documentId,

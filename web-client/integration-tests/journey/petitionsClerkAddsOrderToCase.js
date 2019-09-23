@@ -1,3 +1,7 @@
+import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/OrderWithoutBody';
+
+const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
+
 export default test => {
   return it('Petitions clerk adds Order to case', async () => {
     await test.runSequence('openCreateMessageModalSequence');
@@ -5,9 +9,9 @@ export default test => {
     await test.runSequence('submitCreateOrderModalSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      documentTitle: 'Order title is required.',
-      documentType: 'Order type is required.',
-      eventCode: 'Order type is required.',
+      documentTitle: errorMessages.documentTitle,
+      documentType: errorMessages.documentType,
+      eventCode: errorMessages.eventCode,
     });
 
     await test.runSequence('updateCreateOrderModalFormValueSequence', {

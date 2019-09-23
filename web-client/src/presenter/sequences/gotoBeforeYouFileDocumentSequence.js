@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
@@ -10,7 +9,6 @@ import { state } from 'cerebral';
 const gotoBeforeYouFileDocument = [
   setCurrentPageAction('Interstitial'),
   set(state.showValidation, false),
-  clearAlertsAction,
   getCaseAction,
   setCaseAction,
   setCurrentPageAction('BeforeYouFileADocument'),

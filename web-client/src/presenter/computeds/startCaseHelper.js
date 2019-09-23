@@ -52,8 +52,8 @@ export const startCaseHelper = (get, applicationContext) => {
         : "What is the petitioner's role in filing for this minor or incompetent person?",
     noticeLegend:
       userRole === 'petitioner'
-        ? 'Did you receive a Notice from the IRS?'
-        : 'Do you have a Notice from the IRS?',
+        ? 'Did you receive a notice from the IRS?'
+        : 'Do you have a notice from the IRS?',
     showBusinessFilingTypeOptions: form.filingType === 'A business',
     showCaseNameForPrimary: !hasContactSecondary,
     showEstateFilingOptions: form.otherType === 'An estate or trust',

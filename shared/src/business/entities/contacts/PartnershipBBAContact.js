@@ -6,7 +6,7 @@ const { ContactFactory } = require('./ContactFactory');
  */
 exports.getPartnershipBBAPrimaryContact = ContactFactory.createContactFactory({
   additionalErrorMappings: {
-    secondaryName: 'Partnership Representative Name is a required field.',
+    secondaryName: 'Enter partnership representative name',
   },
   additionalValidation: {
     secondaryName: joi.string().required(),

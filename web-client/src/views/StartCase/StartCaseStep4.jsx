@@ -17,7 +17,7 @@ export const StartCaseStep4 = connect(
       sequences.completeStartCaseWizardStepSequence,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    navigateBack: sequences.navigateBackSequence,
+    navigateBackSequence: sequences.navigateBackSequence,
     openCaseDifferenceModalSequence: sequences.openCaseDifferenceModalSequence,
     screenMetadata: state.screenMetadata,
     showModal: state.showModal,
@@ -32,7 +32,7 @@ export const StartCaseStep4 = connect(
     completeStartCaseWizardStepSequence,
     form,
     formCancelToggleCancelSequence,
-    navigateBack,
+    navigateBackSequence,
     openCaseDifferenceModalSequence,
     screenMetadata,
     showModal,
@@ -50,7 +50,7 @@ export const StartCaseStep4 = connect(
           </h1>
         </Focus>
         <p className="required-statement margin-top-05 margin-bottom-2">
-          All fields required unless otherwise noted
+          *All fields required unless otherwise noted
         </p>
         <p>
           Tax laws allow you to file your case as a “small case,” which means
@@ -127,7 +127,7 @@ export const StartCaseStep4 = connect(
             </p>
             <div className="blue-container">
               <TrialCity
-                label="Select a trial location"
+                label="Select a preferred trial location"
                 showDefaultOption={true}
                 showHint={true}
                 showRegularTrialCitiesHint={
@@ -170,7 +170,7 @@ export const StartCaseStep4 = connect(
           <button
             className="usa-button usa-button--outline margin-bottom-1"
             type="button"
-            onClick={() => navigateBack()}
+            onClick={() => navigateBackSequence()}
           >
             Back
           </button>

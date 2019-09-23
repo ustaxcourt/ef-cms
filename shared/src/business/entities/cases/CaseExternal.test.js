@@ -1,8 +1,9 @@
 const {
   MAX_FILE_SIZE_BYTES,
-  MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
 const { CaseExternal } = require('./CaseExternal');
+
+const { VALIDATION_ERROR_MESSAGES } = CaseExternal;
 
 describe('CaseExternal entity', () => {
   describe('isValid', () => {
@@ -17,7 +18,7 @@ describe('CaseExternal entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFile,
-      ).toEqual('Upload an Ownership Disclosure Statement');
+      ).toEqual(VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile);
     });
     it('does not require ownership disclosure if filing type not set', () => {
       const petition = new CaseExternal({
@@ -52,7 +53,7 @@ describe('CaseExternal entity', () => {
         procedureType: 'Small',
       });
       expect(caseExternal.getFormattedValidationErrors().stinFile).toEqual(
-        'Upload a Statement of Taxpayer Identification',
+        VALIDATION_ERROR_MESSAGES.stinFile,
       );
     });
   });
@@ -72,9 +73,7 @@ describe('CaseExternal entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().petitionFileSize,
-      ).toEqual(
-        `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      );
+      ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[0].message);
     });
 
     it('should inform you if petition file size is zero', () => {
@@ -91,7 +90,7 @@ describe('CaseExternal entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().petitionFileSize,
-      ).toEqual('Your Petition file size is empty');
+      ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
     });
 
     it('should not error on petitionFileSize when petitionFile is undefined', () => {
@@ -122,7 +121,7 @@ describe('CaseExternal entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().petitionFileSize,
-      ).toEqual('Your Petition file size is empty');
+      ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
     });
   });
 
@@ -140,7 +139,7 @@ describe('CaseExternal entity', () => {
         stinFileSize: MAX_FILE_SIZE_BYTES + 5,
       });
       expect(caseExternal.getFormattedValidationErrors().stinFileSize).toEqual(
-        `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        VALIDATION_ERROR_MESSAGES.stinFileSize[0].message,
       );
     });
 
@@ -157,7 +156,7 @@ describe('CaseExternal entity', () => {
         stinFileSize: 0,
       });
       expect(caseExternal.getFormattedValidationErrors().stinFileSize).toEqual(
-        'Your STIN file size is empty',
+        VALIDATION_ERROR_MESSAGES.stinFileSize[1],
       );
     });
 
@@ -188,7 +187,7 @@ describe('CaseExternal entity', () => {
         stinFile: new File([], 'testStinFile.pdf'),
       });
       expect(caseExternal.getFormattedValidationErrors().stinFileSize).toEqual(
-        'Your STIN file size is empty',
+        VALIDATION_ERROR_MESSAGES.stinFileSize[1],
       );
     });
   });
@@ -209,7 +208,7 @@ describe('CaseExternal entity', () => {
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
       ).toEqual(
-        `Your Ownership Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        VALIDATION_ERROR_MESSAGES.ownershipDisclosureFileSize[0].message,
       );
     });
 
@@ -227,7 +226,7 @@ describe('CaseExternal entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
-      ).toEqual('Your Ownership Disclosure Statement file size is empty');
+      ).toEqual(VALIDATION_ERROR_MESSAGES.ownershipDisclosureFileSize[1]);
     });
 
     it('should not error on ownershipDisclosureFileSize when ownershipDisclosureFile is undefined', () => {
@@ -258,7 +257,7 @@ describe('CaseExternal entity', () => {
       });
       expect(
         caseExternal.getFormattedValidationErrors().ownershipDisclosureFileSize,
-      ).toEqual('Your Ownership Disclosure Statement file size is empty');
+      ).toEqual(VALIDATION_ERROR_MESSAGES.ownershipDisclosureFileSize[1]);
     });
   });
 });

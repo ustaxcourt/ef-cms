@@ -80,6 +80,10 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditPrimaryContactButton = userAssociatedWithCase;
   }
 
+  const showServeToIrsButton = ['New', 'Recalled'].includes(caseDetail.status);
+
+  const showRecallButton = caseDetail.status === 'Batched for IRS';
+
   return {
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
@@ -124,12 +128,12 @@ export const caseDetailHelper = (get, applicationContext) => {
       !isExternalUser ||
       (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
-    showRecallButton: caseDetail.status === 'Batched for IRS',
+    showRecallButton,
     showRequestAccessToCaseButton,
     showRespondentSection:
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),
-    showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
+    showServeToIrsButton,
     userHasAccessToCase,
   };
 };

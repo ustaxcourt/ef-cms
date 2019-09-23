@@ -5,6 +5,8 @@ const {
   validateInitialWorkItemMessageInteractor,
 } = require('./validateInitialWorkItemMessageInteractor');
 
+const { VALIDATION_ERROR_MESSAGES } = InitialWorkItemMessage;
+
 describe('validateInitialWorkItemMessageInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
     const errors = validateInitialWorkItemMessageInteractor({
@@ -17,9 +19,9 @@ describe('validateInitialWorkItemMessageInteractor', () => {
     });
 
     expect(errors).toEqual({
-      assigneeId: 'Recipient is required.',
-      message: 'Message is required.',
-      section: 'Section is required.',
+      assigneeId: VALIDATION_ERROR_MESSAGES.assigneeId,
+      message: VALIDATION_ERROR_MESSAGES.message,
+      section: VALIDATION_ERROR_MESSAGES.section,
     });
   });
 

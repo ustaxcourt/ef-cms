@@ -4,10 +4,14 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const Loading = connect(
-  { submitting: state.submitting },
-  ({ submitting }) => {
+  {
+    headerHelper: state.headerHelper,
+    waitingForResponse: state.waitingForResponse,
+  },
+  ({ headerHelper, waitingForResponse }) => {
     return (
-      submitting && (
+      !headerHelper.pageIsInterstitial &&
+      waitingForResponse && (
         <div
           aria-live="assertive"
           className="loading-overlay progress-indicator"
