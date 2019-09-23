@@ -87,10 +87,6 @@ export const StartCaseStep3 = connect(
                       </label>
                     </div>
                   ))}
-                  <Text
-                    bind="validationErrors.partyType"
-                    className="usa-error-message"
-                  />
                 </fieldset>
               </div>
             </div>
@@ -347,6 +343,10 @@ export const StartCaseStep3 = connect(
                 </fieldset>
               </div>
             )}
+          <Text
+            bind="validationErrors.partyType"
+            className="usa-error-message"
+          />
         </div>
 
         <Contacts
