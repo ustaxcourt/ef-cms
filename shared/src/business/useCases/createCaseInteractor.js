@@ -22,7 +22,7 @@ const addPetitionDocumentToCase = ({
       assigneeName: null,
       caseId: caseToAdd.caseId,
       caseStatus: caseToAdd.status,
-      caseTitle: Case.getCaseCaption(caseToAdd),
+      caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseToAdd)),
       docketNumber: caseToAdd.docketNumber,
       docketNumberSuffix: caseToAdd.docketNumberSuffix,
       document: {

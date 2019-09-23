@@ -144,7 +144,7 @@ exports.updateUserContactInformationInteractor = async ({
           assigneeName: null,
           caseId: caseEntity.caseId,
           caseStatus: caseEntity.status,
-          caseTitle: Case.getCaseCaption(caseEntity),
+          caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
           docketNumber: caseEntity.docketNumber,
           docketNumberSuffix: caseEntity.docketNumberSuffix,
           document: {
