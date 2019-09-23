@@ -53,6 +53,7 @@ function Order(rawOrder) {
 Order.VALIDATION_ERROR_MESSAGES = {
   documentTitle: 'Enter the title of this order',
   documentType: 'Select an order type',
+  eventCode: 'Select an order type',
   orderBody: 'Order body is required.',
 };
 

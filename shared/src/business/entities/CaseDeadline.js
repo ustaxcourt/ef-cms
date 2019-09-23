@@ -22,7 +22,7 @@ function CaseDeadline(rawProps, { applicationContext }) {
   this.deadlineDate = rawProps.deadlineDate;
 }
 
-CaseDeadline.errorToMessageMap = {
+CaseDeadline.VALIDATION_ERROR_MESSAGES = {
   caseId: 'You must have a case id.',
   deadlineDate: 'Enter a valid deadline date',
   description: [
@@ -65,7 +65,7 @@ joiValidationDecorator(
   CaseDeadline,
   CaseDeadline.schema,
   undefined,
-  CaseDeadline.errorToMessageMap,
+  CaseDeadline.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { CaseDeadline };

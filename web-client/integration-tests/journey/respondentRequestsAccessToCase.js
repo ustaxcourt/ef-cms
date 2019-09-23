@@ -1,3 +1,7 @@
+import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
+
+const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
+
 export default (test, fakeFile) => {
   return it('Respondent requests access to case', async () => {
     await test.runSequence('gotoRequestAccessSequence', {
@@ -7,12 +11,12 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Indicate whether you are including a Certificate of Service',
-      documentTitleTemplate: 'Select a document',
-      documentType: 'Select a document type',
-      eventCode: 'Select a document',
-      primaryDocumentFile: 'Upload a document',
-      scenario: 'Select a document',
+      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
+      documentTitleTemplate: VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      scenario: VALIDATION_ERROR_MESSAGES.scenario,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -34,8 +38,8 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Indicate whether you are including a Certificate of Service',
-      primaryDocumentFile: 'Upload a document',
+      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -45,7 +49,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Indicate whether you are including a Certificate of Service',
+      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -55,7 +59,8 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter date of service',
+      certificateOfServiceDate:
+        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -74,7 +79,7 @@ export default (test, fakeFile) => {
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        'Certificate of Service date cannot be in the future. Enter a valid date.',
+        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
