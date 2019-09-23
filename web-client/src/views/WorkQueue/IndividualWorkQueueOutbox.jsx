@@ -26,21 +26,26 @@ export const IndividualWorkQueueOutbox = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number" colSpan="2">
+              <th aria-label="Docket Number" colSpan="2" className="small">
                 <span className="padding-left-2px">Docket</span>
               </th>
               {workQueueHelper.showReceivedColumn && <th>Filed</th>}
-              {workQueueHelper.showSentColumn && <th>Sent</th>}
+              {workQueueHelper.showSentColumn && (
+                <th className="small">Sent</th>
+              )}
+              <th>Case name</th>
               <th aria-label="Status Icon" className="padding-right-0">
                 &nbsp;
               </th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
-              {!workQueueHelper.hideCaseStatusColumn && <th>Case Status</th>}
+              {!workQueueHelper.hideCaseStatusColumn && <th>Case status</th>}
               {workQueueHelper.showAssignedToColumn && (
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
               )}
-              {!workQueueHelper.hideSectionColumn && <th>Section</th>}
+              {!workQueueHelper.hideSectionColumn && (
+                <th className="small">Section</th>
+              )}
               {workQueueHelper.showServedColumn && <th>Served</th>}
             </tr>
           </thead>
@@ -48,7 +53,7 @@ export const IndividualWorkQueueOutbox = connect(
             <tbody key={idx}>
               <tr>
                 <td aria-hidden="true" className="focus-toggle" />
-                <td className="message-queue-row">
+                <td className="message-queue-row small">
                   <CaseLink formattedCase={item} />
                 </td>
                 {workQueueHelper.showReceivedColumn && (
@@ -57,10 +62,13 @@ export const IndividualWorkQueueOutbox = connect(
                   </td>
                 )}
                 {workQueueHelper.showSentColumn && (
-                  <td className="message-queue-row">
+                  <td className="message-queue-row small">
                     <span className="no-wrap">{item.sentDateFormatted}</span>
                   </td>
                 )}
+                <td className="message-queue-row message-queue-case-title">
+                  {item.caseTitle}
+                </td>
                 <td className="message-queue-row has-icon padding-right-0">
                   {item.showBatchedStatusIcon && (
                     <FontAwesomeIcon
@@ -72,7 +80,7 @@ export const IndividualWorkQueueOutbox = connect(
                     />
                   )}
                 </td>
-                <td className="message-queue-row">
+                <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
                     <a
                       className="case-link"
@@ -111,7 +119,7 @@ export const IndividualWorkQueueOutbox = connect(
                   </td>
                 )}
                 {!workQueueHelper.hideSectionColumn && (
-                  <td className="message-queue-row">
+                  <td className="message-queue-row small">
                     {workQueueSectionHelper.sectionDisplay(item.section)}
                   </td>
                 )}

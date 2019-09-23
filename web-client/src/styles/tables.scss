@@ -229,6 +229,9 @@ table.work-queue {
     .sortActive {
       border-bottom: 3px solid color($theme-color-primary);
     }
+    &.small {
+      max-width: $table-column-width-small;
+    }
   }
 
   td {
@@ -250,6 +253,14 @@ table.work-queue {
 
     &.message-queue-row {
       padding-top: 14px;
+    }
+
+    &.message-queue-case-title {
+      max-width: 15rem;
+    }
+
+    &.small {
+      width: $table-column-width-small;
     }
 
     &.message-queue-document {
