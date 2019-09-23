@@ -111,7 +111,7 @@
     "serverless-plugin-tracing": "^2.0.0",
     "serverless-prune-plugin": "^1.4.1",
     "serverless-s3-local": "github:ustaxcourt/serverless-s3-local",
-    "sinon": "^7.4.2",
+    "sinon": "^7.5.0",
     "spawn-sync": "^2.0.0",
     "stylelint": "^11.0.0",
     "stylelint-config-idiomatic-order": "^7.0.3",
@@ -119,7 +119,7 @@
     "swagger-cli": "^2.3.1",
     "tmp": "^0.1.0",
     "try-thread-sleep": "^2.0.0",
-    "uswds": "^2.2.0",
+    "uswds": "2.1.0",
     "uuid": "^3.3.3",
     "webpack": "^4.40.2",
     "wicg-inert": "^2.2.1"
