@@ -22,9 +22,9 @@ export const AllCases = connect(
             <tr>
               <th>Status</th>
               <th>Docket</th>
-              <th>Case Caption</th>
-              <th>Petitioner Counsel</th>
-              <th>Respondent Counsel</th>
+              <th>Case name</th>
+              <th>Petitioner counsel</th>
+              <th>Respondent counsel</th>
               <th>Disposition</th>
             </tr>
           </thead>
