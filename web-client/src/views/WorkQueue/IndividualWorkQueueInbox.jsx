@@ -23,7 +23,7 @@ export const IndividualWorkQueueInbox = connect(
               <th aria-label="Docket Number" colSpan="2">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              <th>Received</th>
+              <th>Filed</th>
               <th aria-label="Status Icon" className="padding-right-0">
                 &nbsp;
               </th>

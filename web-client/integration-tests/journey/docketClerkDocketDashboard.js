@@ -1,6 +1,7 @@
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
+import { last } from 'lodash';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
@@ -81,11 +82,13 @@ export default test => {
     const formatted = runCompute(formattedWorkQueue, {
       state: test.getState(),
     });
-    expect(formatted[0].createdAtFormatted).toBeDefined();
-    expect(formatted[0].docketNumberWithSuffix).toEqual(
+
+    const lastFormatted = last(formatted);
+    expect(lastFormatted.createdAtFormatted).toBeDefined();
+    expect(lastFormatted.docketNumberWithSuffix).toEqual(
       `${test.docketNumber}W`,
     );
-    expect(formatted[0].messages[0].createdAtFormatted).toBeDefined();
+    expect(lastFormatted.messages[0].createdAtFormatted).toBeDefined();
 
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
