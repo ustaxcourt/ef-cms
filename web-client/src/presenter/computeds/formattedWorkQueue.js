@@ -324,7 +324,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
     },
   };
 
-  let sortDirections = {
+  const sortDirections = {
     documentQc: {
       my: {
         batched: 'asc',
