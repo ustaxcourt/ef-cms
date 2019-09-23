@@ -1,3 +1,7 @@
+import { TrialSession } from '../../../shared/src/business/entities/trialSessions/TrialSession';
+
+const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
+
 export default (test, overrides = {}) => {
   return it('Docket clerk starts a trial session', async () => {
     await test.runSequence('gotoAddTrialSessionSequence');
@@ -7,12 +11,12 @@ export default (test, overrides = {}) => {
     await test.runSequence('submitTrialSessionSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      maxCases: 'Enter a valid number of maximum cases',
-      sessionType: 'Select a session type',
-      startDate: 'Enter a valid start date',
-      term: 'Term session is not valid',
-      termYear: 'Term year is required',
-      trialLocation: 'Select a trial session location',
+      maxCases: errorMessages.maxCases,
+      sessionType: errorMessages.sessionType,
+      startDate: errorMessages.startDate[1],
+      term: errorMessages.term,
+      termYear: errorMessages.termYear,
+      trialLocation: errorMessages.trialLocation,
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -51,9 +55,9 @@ export default (test, overrides = {}) => {
     await test.runSequence('validateTrialSessionSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      startDate: 'Term session is not valid',
-      term: 'Term session is not valid',
-      trialLocation: 'Select a trial session location',
+      startDate: errorMessages.term, //the term error message is used for the startDate error in validateTrialSessionAction
+      term: errorMessages.term,
+      trialLocation: errorMessages.trialLocation,
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {

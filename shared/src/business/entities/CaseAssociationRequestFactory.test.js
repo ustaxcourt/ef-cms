@@ -3,6 +3,8 @@ const {
   CaseAssociationRequestFactory,
 } = require('./CaseAssociationRequestFactory');
 
+const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
+
 describe('CaseAssociationRequestFactory', () => {
   let rawEntity;
 
@@ -15,40 +17,46 @@ describe('CaseAssociationRequestFactory', () => {
     });
 
     it('should require a file', () => {
-      expect(errors().primaryDocumentFile).toEqual('Upload a document');
+      expect(errors().primaryDocumentFile).toEqual(
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      );
       rawEntity.primaryDocumentFile = {};
       expect(errors().primaryDocumentFile).toEqual(undefined);
     });
 
     it('should require a certificate Of Service selection', () => {
       expect(errors().certificateOfService).toEqual(
-        'Indicate whether you are including a Certificate of Service',
+        VALIDATION_ERROR_MESSAGES.certificateOfService,
       );
       rawEntity.certificateOfService = false;
       expect(errors().certificateOfService).toEqual(undefined);
     });
 
     it('should require document type', () => {
-      expect(errors().documentType).toEqual('Select a document type');
+      expect(errors().documentType).toEqual(
+        VALIDATION_ERROR_MESSAGES.documentType,
+      );
       rawEntity.documentType = 'Entry of Appearance';
       expect(errors().documentType).toEqual(undefined);
     });
 
     it('should require document title template', () => {
-      expect(errors().documentTitleTemplate).toEqual('Select a document');
+      expect(errors().documentTitleTemplate).toEqual(
+        VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
+      );
       rawEntity.documentTitleTemplate =
         'Entry of Appearance for [Petitioner Names]';
       expect(errors().documentTitleTemplate).toEqual(undefined);
     });
 
     it('should require event code', () => {
-      expect(errors().eventCode).toEqual('Select a document');
+      expect(errors().eventCode).toEqual(VALIDATION_ERROR_MESSAGES.eventCode);
       rawEntity.eventCode = '345';
       expect(errors().eventCode).toEqual(undefined);
     });
 
     it('should require scenario title', () => {
-      expect(errors().scenario).toEqual('Select a document');
+      expect(errors().scenario).toEqual(VALIDATION_ERROR_MESSAGES.scenario);
       rawEntity.scenario = 'Standard';
       expect(errors().scenario).toEqual(undefined);
     });
@@ -60,7 +68,7 @@ describe('CaseAssociationRequestFactory', () => {
 
       it('should require certificate of service date to be entered', () => {
         expect(errors().certificateOfServiceDate).toEqual(
-          'Enter date of service',
+          VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
         );
         rawEntity.certificateOfServiceDate = moment().format();
         expect(errors().certificateOfServiceDate).toEqual(undefined);
@@ -71,7 +79,7 @@ describe('CaseAssociationRequestFactory', () => {
           .add(1, 'days')
           .format();
         expect(errors().certificateOfServiceDate).toEqual(
-          'Certificate of Service date cannot be in the future. Enter a valid date.',
+          VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
         );
       });
     });
@@ -84,7 +92,9 @@ describe('CaseAssociationRequestFactory', () => {
       });
 
       it('should require objections be selected', () => {
-        expect(errors().objections).toEqual('Enter selection for Objections.');
+        expect(errors().objections).toEqual(
+          VALIDATION_ERROR_MESSAGES.objections,
+        );
         rawEntity.objections = 'No';
         expect(errors().objections).toEqual(undefined);
       });
@@ -99,28 +109,30 @@ describe('CaseAssociationRequestFactory', () => {
       });
 
       it('should require exhibits be selected', () => {
-        expect(errors().exhibits).toEqual('Enter selection for Exhibits.');
+        expect(errors().exhibits).toEqual(VALIDATION_ERROR_MESSAGES.exhibits);
         rawEntity.exhibits = false;
         expect(errors().exhibits).toEqual(undefined);
       });
 
       it('should require attachments be selected', () => {
         expect(errors().attachments).toEqual(
-          'Enter selection for Attachments.',
+          VALIDATION_ERROR_MESSAGES.attachments,
         );
         rawEntity.attachments = false;
         expect(errors().attachments).toEqual(undefined);
       });
 
       it('should require objections be selected', () => {
-        expect(errors().objections).toEqual('Enter selection for Objections.');
+        expect(errors().objections).toEqual(
+          VALIDATION_ERROR_MESSAGES.objections,
+        );
         rawEntity.objections = 'No';
         expect(errors().objections).toEqual(undefined);
       });
 
       it('should require has supporting documents be selected', () => {
         expect(errors().hasSupportingDocuments).toEqual(
-          'Enter selection for Supporting Documents.',
+          VALIDATION_ERROR_MESSAGES.hasSupportingDocuments,
         );
         rawEntity.hasSupportingDocuments = false;
         expect(errors().hasSupportingDocuments).toEqual(undefined);
@@ -133,7 +145,7 @@ describe('CaseAssociationRequestFactory', () => {
 
         it('should require supporting document', () => {
           expect(errors().supportingDocument).toEqual(
-            'Enter selection for Supporting Document.',
+            VALIDATION_ERROR_MESSAGES.supportingDocument,
           );
           rawEntity.supportingDocument = 'Declaration in Support';
           expect(errors().supportingDocument).toEqual(undefined);
@@ -146,7 +158,7 @@ describe('CaseAssociationRequestFactory', () => {
 
           it('should require file', () => {
             expect(errors().supportingDocumentFile).toEqual(
-              'Upload a document',
+              VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
             );
             rawEntity.supportingDocumentFile = {};
             expect(errors().supportingDocumentFile).toEqual(undefined);
@@ -154,7 +166,7 @@ describe('CaseAssociationRequestFactory', () => {
 
           it('should require free text', () => {
             expect(errors().supportingDocumentFreeText).toEqual(
-              'Please provide a value.',
+              VALIDATION_ERROR_MESSAGES.supportingDocumentFreeText,
             );
             rawEntity.supportingDocumentFreeText = 'Lori';
             expect(errors().supportingDocumentFreeText).toEqual(undefined);
@@ -164,7 +176,9 @@ describe('CaseAssociationRequestFactory', () => {
     });
 
     it('should require one of [representingPrimary, representingSecondary] to be selected', () => {
-      expect(errors().representingPrimary).toEqual('Select a party');
+      expect(errors().representingPrimary).toEqual(
+        VALIDATION_ERROR_MESSAGES.representingPrimary,
+      );
       rawEntity.representingSecondary = true;
       expect(errors().representingPrimary).toEqual(undefined);
     });

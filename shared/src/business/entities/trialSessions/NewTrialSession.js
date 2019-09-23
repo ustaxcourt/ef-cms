@@ -16,7 +16,9 @@ function NewTrialSession(rawSession, { applicationContext }) {
   TrialSession.prototype.init.call(this, rawSession, { applicationContext });
 }
 
-NewTrialSession.errorToMessageMap = { ...TrialSession.errorToMessageMap };
+NewTrialSession.VALIDATION_ERROR_MESSAGES = {
+  ...TrialSession.VALIDATION_ERROR_MESSAGES,
+};
 
 joiValidationDecorator(
   NewTrialSession,
@@ -31,7 +33,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  NewTrialSession.errorToMessageMap,
+  NewTrialSession.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { NewTrialSession };
