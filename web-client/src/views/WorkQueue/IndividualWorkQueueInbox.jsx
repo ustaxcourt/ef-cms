@@ -20,18 +20,21 @@ export const IndividualWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number" colSpan="2">
+              <th aria-label="Docket Number" colSpan="2" className="small">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              <th>Filed</th>
+              <th className="small">Filed</th>
+              <th>Case name</th>
               <th aria-label="Status Icon" className="padding-right-0">
                 &nbsp;
               </th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
-              <th>Case Status</th>
+              <th>Case status</th>
               {!workQueueHelper.hideFromColumn && <th>From</th>}
-              {!workQueueHelper.hideSectionColumn && <th>Section</th>}
+              {!workQueueHelper.hideSectionColumn && (
+                <th className="small">Section</th>
+              )}
             </tr>
           </thead>
           {formattedWorkQueue.map((item, idx) => {
@@ -39,11 +42,14 @@ export const IndividualWorkQueueInbox = connect(
               <tbody key={idx}>
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
-                  <td className="message-queue-row">
+                  <td className="message-queue-row small">
                     <CaseLink formattedCase={item} />
                   </td>
-                  <td className="message-queue-row">
+                  <td className="message-queue-row small">
                     <span className="no-wrap">{item.received}</span>
+                  </td>
+                  <td className="message-queue-row message-queue-case-title">
+                    {item.caseTitle}
                   </td>
                   <td className="message-queue-row has-icon padding-right-0">
                     {item.showBatchedStatusIcon && (
@@ -117,7 +123,9 @@ export const IndividualWorkQueueInbox = connect(
                     </td>
                   )}
                   {!workQueueHelper.hideSectionColumn && (
-                    <td className="message-queue-row">{item.sentBySection}</td>
+                    <td className="message-queue-row small">
+                      {item.sentBySection}
+                    </td>
                   )}
                 </tr>
               </tbody>
