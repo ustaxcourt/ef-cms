@@ -45,6 +45,7 @@ export const CaseDeadlines = connect(
                     <tr>
                       <th>Due Date</th>
                       <th>Docket</th>
+                      <th>Case name</th>
                       <th>Description</th>
                     </tr>
                   </thead>
@@ -57,6 +58,7 @@ export const CaseDeadlines = connect(
                         <td className="smaller-column semi-bold">
                           <CaseLink formattedCase={item} />
                         </td>
+                        <td>{item.caseTitle}</td>
                         <td className="padding-extra">{item.description}</td>
                       </tr>
                     ))}
