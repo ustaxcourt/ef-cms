@@ -11,7 +11,7 @@ presenter.providers.path = {
 };
 
 describe('getEditDocumentEntryPointAction', () => {
-  it('calls the path for state.editDocumentEntryPoint', async () => {
+  it('returns the CaseDetail path when the editDocumentEntryPoint is set to CaseDetail', async () => {
     await runAction(getEditDocumentEntryPointAction, {
       modules: {
         presenter,
