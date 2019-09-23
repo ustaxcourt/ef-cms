@@ -19,65 +19,65 @@ const {
 const { includes } = require('lodash');
 
 const VALIDATION_ERROR_MESSAGES = {
-  attachments: '#Enter selection for Attachments.',
-  category: '#Select a Category.',
+  attachments: 'Enter selection for Attachments.',
+  category: 'Select a Category.',
   certificateOfService:
-    '#Indicate whether you are including a Certificate of Service',
+    'Indicate whether you are including a Certificate of Service',
   certificateOfServiceDate: [
     {
       contains: 'must be less than or equal to',
       message:
-        '#Certificate of Service date cannot be in the future. Enter a valid date.',
+        'Certificate of Service date cannot be in the future. Enter a valid date.',
     },
-    '#Enter date of service',
+    'Enter date of service',
   ],
-  documentType: '#Select a document type',
-  freeText: '#Provide an answer',
-  freeText2: '#Provide an answer',
+  documentType: 'Select a document type',
+  freeText: 'Provide an answer',
+  freeText2: 'Provide an answer',
   hasSecondarySupportingDocuments:
-    '#Enter selection for Secondary Supporting Documents.',
-  hasSupportingDocuments: '#Enter selection for Supporting Documents.',
-  objections: '#Enter selection for Objections.',
-  ordinalValue: '#Select an iteration',
-  partyPrimary: '#Select a filing party',
-  partyRespondent: '#Select a filing party',
-  partySecondary: '#Select a filing party',
-  previousDocument: '#Select a document',
-  primaryDocumentFile: '#Upload a document',
+    'Enter selection for Secondary Supporting Documents.',
+  hasSupportingDocuments: 'Enter selection for Supporting Documents.',
+  objections: 'Enter selection for Objections.',
+  ordinalValue: 'Select an iteration',
+  partyPrimary: 'Select a filing party',
+  partyRespondent: 'Select a filing party',
+  partySecondary: 'Select a filing party',
+  previousDocument: 'Select a document',
+  primaryDocumentFile: 'Upload a document',
   primaryDocumentFileSize: [
     {
       contains: 'must be less than or equal to',
-      message: `#Your Primary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      message: `Your Primary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    '#Your Primary Document file size is empty.',
+    'Your Primary Document file size is empty.',
   ],
-  secondaryDocument: '#Select a document',
-  secondaryDocumentFile: '#Upload a document',
+  secondaryDocument: 'Select a document',
+  secondaryDocumentFile: 'Upload a document',
   secondaryDocumentFileSize: [
     {
       contains: 'must be less than or equal to',
-      message: `#Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    '#Your Secondary Document file size is empty.',
+    'Your Secondary Document file size is empty.',
   ],
   serviceDate: [
     {
       contains: 'must be less than or equal to',
-      message: '#Service date cannot be in the future. Enter a valid date.',
+      message: 'Service date cannot be in the future. Enter a valid date.',
     },
-    '#Provide a service date',
+    'Provide a service date',
   ],
-  supportingDocument: '#Select a document type',
-  supportingDocumentFile: '#Upload a document',
+  supportingDocument: 'Select a document type',
+  supportingDocumentFile: 'Upload a document',
   supportingDocumentFileSize: [
     {
       contains: 'must be less than or equal to',
-      message: `#Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+      message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    '#Your Supporting Document file size is empty.',
+    'Your Supporting Document file size is empty.',
   ],
-  supportingDocumentFreeText: '#Enter name',
-  trialLocation: '#Select a preferred trial location.',
+  supportingDocumentFreeText: 'Enter name',
+  trialLocation: 'Select a preferred trial location.',
 };
 
 /**

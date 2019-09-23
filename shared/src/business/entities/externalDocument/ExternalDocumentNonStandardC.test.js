@@ -14,7 +14,7 @@ describe('ExternalDocumentNonStandardC', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         category: VALIDATION_ERROR_MESSAGES.category,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
-        freeText: '#Enter name',
+        freeText: VALIDATION_ERROR_MESSAGES.freeText,
         previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
       });
     });
