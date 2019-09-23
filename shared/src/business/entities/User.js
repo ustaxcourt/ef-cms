@@ -85,21 +85,21 @@ const userValidation = {
   userId: joi.string().required(),
 };
 
-const validationErrorMap = {
-  address1: 'Address is a required field.',
-  city: 'City is a required field.',
-  country: 'Country is a required field.',
-  countryType: 'Country Type is a required field.',
-  name: 'Name is a required field.',
-  phone: 'Phone is a required field.',
+const VALIDATION_ERROR_MESSAGES = {
+  address1: 'Enter mailing address',
+  city: 'Enter city',
+  country: 'Enter a country',
+  countryType: 'Enter country type',
+  name: 'Enter name',
+  phone: 'Enter phone number',
   postalCode: [
     {
       contains: 'match',
-      message: 'Please enter a valid zip code.',
+      message: 'Enter ZIP code',
     },
-    'Zip Code is a required field.',
+    'Enter ZIP code',
   ],
-  state: 'State is a required field.',
+  state: 'Enter state',
 };
 
 /**
@@ -118,7 +118,7 @@ joiValidationDecorator(
   User,
   joi.object().keys(userValidation),
   undefined,
-  validationErrorMap,
+  VALIDATION_ERROR_MESSAGES,
 );
 
 User.ROLES = {
@@ -134,4 +134,9 @@ User.prototype.isInternalUser = function() {
   return User.ROLES.INTERNAL.includes(this.role);
 };
 
-module.exports = { User, userDecorator, userValidation, validationErrorMap };
+module.exports = {
+  User,
+  VALIDATION_ERROR_MESSAGES,
+  userDecorator,
+  userValidation,
+};

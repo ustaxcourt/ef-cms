@@ -27,9 +27,9 @@ ExternalDocumentNonStandardC.prototype.getDocumentTitle = function() {
 
 ExternalDocumentNonStandardC.errorToMessageMap = {
   category: 'Select a Category.',
-  documentType: 'Select a Document Type.',
-  freeText: 'Enter name.',
-  previousDocument: 'Select a document.',
+  documentType: 'Select a document type',
+  freeText: 'Enter name',
+  previousDocument: 'Select a document',
 };
 
 ExternalDocumentNonStandardC.schema = {

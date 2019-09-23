@@ -20,7 +20,7 @@ ExternalDocumentStandard.prototype.getDocumentTitle = function() {
 
 ExternalDocumentStandard.errorToMessageMap = {
   category: 'Select a Category.',
-  documentType: 'Select a Document Type.',
+  documentType: 'Select a document type',
 };
 
 ExternalDocumentStandard.schema = {

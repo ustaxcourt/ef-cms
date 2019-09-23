@@ -1,10 +1,10 @@
 import { ErrorNotification } from '../ErrorNotification';
-import { HeaderDashboardInternal } from './HeaderDashboardInternal';
+import { HeaderDashboardInternal } from '../Dashboards/HeaderDashboardInternal';
 import { SuccessNotification } from '../SuccessNotification';
 import { WorkQueue } from '../WorkQueue';
 import React from 'react';
 
-export const DashboardSeniorAttorney = () => (
+export const Messages = () => (
   <>
     <HeaderDashboardInternal />
     <section className="usa-section grid-container">

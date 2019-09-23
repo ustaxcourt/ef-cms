@@ -16,7 +16,7 @@ export const StartCaseStep2 = connect(
     constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    navigateBack: sequences.navigateBackSequence,
+    navigateBackSequence: sequences.navigateBackSequence,
     startCaseHelper: state.startCaseHelper,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
@@ -29,7 +29,7 @@ export const StartCaseStep2 = connect(
     constants,
     form,
     formCancelToggleCancelSequence,
-    navigateBack,
+    navigateBackSequence,
     startCaseHelper,
     updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence,
@@ -43,7 +43,7 @@ export const StartCaseStep2 = connect(
           </h1>
         </Focus>
         <p className="required-statement margin-top-05 margin-bottom-2">
-          All fields required unless otherwise noted
+          *All fields required unless otherwise noted
         </p>
         <h2 className="margin-top-4">Upload Your Petition</h2>
         <Hint>
@@ -66,7 +66,7 @@ export const StartCaseStep2 = connect(
                   htmlFor="petition-file"
                   id="petition-file-label"
                 >
-                  Upload your Petition{' '}
+                  Upload your petition{' '}
                   <span className="success-message">
                     <FontAwesomeIcon icon="check-circle" size="1x" />
                   </span>
@@ -147,7 +147,7 @@ export const StartCaseStep2 = connect(
               <CaseTypeSelect
                 allowDefaultOption={true}
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
-                legend="Type of Notice / Case"
+                legend="Type of notice / case"
                 validation="validateStartCaseWizardSequence"
                 value={form.caseType}
                 onChange="updateFormValueSequence"
@@ -181,7 +181,7 @@ export const StartCaseStep2 = connect(
           <button
             className="usa-button usa-button--outline margin-bottom-1"
             type="button"
-            onClick={() => navigateBack()}
+            onClick={() => navigateBackSequence()}
           >
             Back
           </button>

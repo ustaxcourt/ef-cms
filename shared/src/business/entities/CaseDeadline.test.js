@@ -1,5 +1,7 @@
 const { CaseDeadline } = require('./CaseDeadline');
 
+const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
+
 describe('CaseDeadline', () => {
   let applicationContext;
 
@@ -17,9 +19,9 @@ describe('CaseDeadline', () => {
     it('should have error messages for missing fields', () => {
       const caseDeadline = new CaseDeadline({}, { applicationContext });
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
-        caseId: 'You must have a case id.',
-        deadlineDate: 'Please enter a valid deadline date.',
-        description: 'Please enter a description.',
+        caseId: VALIDATION_ERROR_MESSAGES.caseId,
+        deadlineDate: VALIDATION_ERROR_MESSAGES.deadlineDate,
+        description: VALIDATION_ERROR_MESSAGES.description[1],
       });
     });
 
@@ -52,8 +54,7 @@ You ain't been up off that porch, now`,
         { applicationContext },
       );
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
-        description:
-          'The description is too long. Please enter a valid description.',
+        description: VALIDATION_ERROR_MESSAGES.description[0].message,
       });
     });
   });

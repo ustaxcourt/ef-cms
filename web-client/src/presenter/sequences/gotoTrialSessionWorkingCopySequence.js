@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
@@ -18,7 +17,6 @@ import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTri
 
 const gotoTrialSessionDetails = [
   setCurrentPageAction('Interstitial'),
-  clearAlertsAction,
   clearErrorAlertsAction,
   setBaseUrlAction,
   setTrialSessionIdAction,

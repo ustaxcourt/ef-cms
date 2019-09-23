@@ -6,18 +6,18 @@ import sinon from 'sinon';
 describe('submitCaseAssociationRequestAction', () => {
   let submitCaseAssociationRequestStub;
   let submitPendingCaseAssociationRequestStub;
-  let createCoverSheetStub;
+  let addCoversheetInteractorStub;
   let fileDocketEntryStub;
 
   beforeEach(() => {
     submitCaseAssociationRequestStub = sinon.stub();
     submitPendingCaseAssociationRequestStub = sinon.stub();
-    createCoverSheetStub = sinon.stub();
+    addCoversheetInteractorStub = sinon.stub();
     fileDocketEntryStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        createCoverSheet: createCoverSheetStub,
+        addCoversheetInteractor: addCoversheetInteractorStub,
         fileDocketEntryInteractor: fileDocketEntryStub,
         submitCaseAssociationRequestInteractor: submitCaseAssociationRequestStub,
         submitPendingCaseAssociationRequestInteractor: submitPendingCaseAssociationRequestStub,

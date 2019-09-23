@@ -20,7 +20,7 @@ describe('validateTrialSessionInteractor', () => {
 
     expect(Object.keys(errors)).toEqual(
       Object.keys(
-        omit(NewTrialSession.errorToMessageMap, [
+        omit(NewTrialSession.VALIDATION_ERROR_MESSAGES, [
           'postalCode',
           'swingSessionId',
           'startTime',

@@ -1,3 +1,4 @@
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -6,11 +7,16 @@ import React from 'react';
 export const IndividualWorkQueueOutbox = connect(
   {
     documentHelper: state.documentHelper,
-    workQueue: state.formattedWorkQueue,
+    formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentHelper, workQueue, workQueueHelper, workQueueSectionHelper }) => {
+  ({
+    documentHelper,
+    formattedWorkQueue,
+    workQueueHelper,
+    workQueueSectionHelper,
+  }) => {
     return (
       <React.Fragment>
         <table
@@ -23,7 +29,7 @@ export const IndividualWorkQueueOutbox = connect(
               <th aria-label="Docket Number" colSpan="2">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              {workQueueHelper.showReceivedColumn && <th>Received</th>}
+              {workQueueHelper.showReceivedColumn && <th>Filed</th>}
               {workQueueHelper.showSentColumn && <th>Sent</th>}
               <th aria-label="Status Icon" className="padding-right-0">
                 &nbsp;
@@ -38,17 +44,12 @@ export const IndividualWorkQueueOutbox = connect(
               {workQueueHelper.showServedColumn && <th>Served</th>}
             </tr>
           </thead>
-          {workQueue.map((item, idx) => (
+          {formattedWorkQueue.map((item, idx) => (
             <tbody key={idx}>
               <tr>
                 <td aria-hidden="true" className="focus-toggle" />
                 <td className="message-queue-row">
-                  <a
-                    className="no-wrap"
-                    href={`/case-detail/${item.docketNumber}`}
-                  >
-                    {item.docketNumberWithSuffix}
-                  </a>
+                  <CaseLink formattedCase={item} />
                 </td>
                 {workQueueHelper.showReceivedColumn && (
                   <td className="message-queue-row">

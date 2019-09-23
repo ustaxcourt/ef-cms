@@ -8,7 +8,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       category: 'Select a Category.',
-      documentType: 'Select a Document Type.',
+      documentType: 'Select a document type',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -18,7 +18,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateSelectDocumentTypeSequence');
     expect(test.getState('validationErrors')).toEqual({
-      documentType: 'Select a Document Type.',
+      documentType: 'Select a document type',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {

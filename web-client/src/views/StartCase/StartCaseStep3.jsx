@@ -15,7 +15,7 @@ export const StartCaseStep3 = connect(
     filingTypes: state.filingTypes,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    navigateBack: sequences.navigateBackSequence,
+    navigateBackSequence: sequences.navigateBackSequence,
     startCaseHelper: state.startCaseHelper,
     updateStartCaseFormValueSequence:
       sequences.updateStartCaseFormValueSequence,
@@ -28,7 +28,7 @@ export const StartCaseStep3 = connect(
     filingTypes,
     form,
     formCancelToggleCancelSequence,
-    navigateBack,
+    navigateBackSequence,
     startCaseHelper,
     updateStartCaseFormValueSequence,
     validateStartCaseWizardSequence,
@@ -42,7 +42,7 @@ export const StartCaseStep3 = connect(
           </h1>
         </Focus>
         <p className="required-statement margin-top-05 margin-bottom-2">
-          All fields required unless otherwise noted
+          *All fields required unless otherwise noted
         </p>
         <div className="blue-container grid-container padding-x-0">
           <div className="grid-row grid-gap">
@@ -87,10 +87,6 @@ export const StartCaseStep3 = connect(
                       </label>
                     </div>
                   ))}
-                  <Text
-                    bind="validationErrors.partyType"
-                    className="usa-error-message"
-                  />
                 </fieldset>
               </div>
             </div>
@@ -347,6 +343,10 @@ export const StartCaseStep3 = connect(
                 </fieldset>
               </div>
             )}
+          <Text
+            bind="validationErrors.partyType"
+            className="usa-error-message"
+          />
         </div>
 
         <Contacts
@@ -430,7 +430,7 @@ export const StartCaseStep3 = connect(
           <button
             className="usa-button usa-button--outline margin-bottom-1"
             type="button"
-            onClick={() => navigateBack()}
+            onClick={() => navigateBackSequence()}
           >
             Back
           </button>

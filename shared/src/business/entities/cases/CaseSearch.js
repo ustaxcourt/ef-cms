@@ -21,7 +21,7 @@ function CaseSearch(rawProps) {
   this.countryType = rawProps.countryType || undefined;
 }
 
-CaseSearch.errorToMessageMap = {
+CaseSearch.VALIDATION_ERROR_MESSAGES = {
   petitionerName: 'Enter a name',
   yearFiledMax: [
     {
@@ -61,7 +61,7 @@ joiValidationDecorator(
   CaseSearch,
   CaseSearch.schema,
   undefined,
-  CaseSearch.errorToMessageMap,
+  CaseSearch.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { CaseSearch };

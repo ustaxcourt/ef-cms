@@ -1,6 +1,4 @@
-const {
-  addCoverToPdf,
-} = require('../../../business/useCases/addCoverToPDFDocumentInteractor');
+const { addCoverToPdf } = require('../addCoversheetInteractor');
 const {
   isAuthorized,
   UPDATE_CONTACT_INFO,

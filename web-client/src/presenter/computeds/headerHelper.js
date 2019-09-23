@@ -28,10 +28,8 @@ export const headerHelper = get => {
 
   const isTrialSessions = currentPage.includes('TrialSession');
   const isDashboard = currentPage.startsWith('Dashboard');
-  const pageIsMessages =
-    userRole == 'judge'
-      ? currentPage.startsWith('Messages')
-      : isDashboard && workQueueIsInternal && !isTrialSessions;
+  const pageIsMessages = currentPage.startsWith('Messages');
+  const pageIsInterstitial = currentPage == 'Interstitial';
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
 
   return {
@@ -40,6 +38,7 @@ export const headerHelper = get => {
       : '/document-qc/my/inbox',
     pageIsDocumentQC: isDashboard && !workQueueIsInternal && !isTrialSessions,
     pageIsHome: isDashboard && !pageIsMessages,
+    pageIsInterstitial,
     pageIsMessages,
     pageIsMyCases: isDashboard && isUserExternal(userRole),
     pageIsReports: isCaseDeadlines,

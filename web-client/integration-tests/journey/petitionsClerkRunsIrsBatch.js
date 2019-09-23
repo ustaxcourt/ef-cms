@@ -12,7 +12,7 @@ export default test => {
     await test.runSequence('runBatchProcessSequence');
 
     // view my outbox
-    await test.runSequence('gotoDashboardSequence', {
+    await test.runSequence('gotoMessagesSequence', {
       box: 'outbox',
       queue: 'my',
       workQueueIsInternal: false,
@@ -30,7 +30,7 @@ export default test => {
     ).toBeDefined();
 
     // view the IRS batch queue
-    await test.runSequence('gotoDashboardSequence', {
+    await test.runSequence('gotoMessagesSequence', {
       box: 'batched',
       queue: 'my',
       workQueueIsInternal: false,

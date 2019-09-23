@@ -15,7 +15,7 @@ export const StartCaseStep5 = connect(
     constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    navigateBack: sequences.navigateBackSequence,
+    navigateBackSequence: sequences.navigateBackSequence,
     showModal: state.showModal,
     startCaseHelper: state.startCaseHelper,
     submitFilePetitionSequence: sequences.submitFilePetitionSequence,
@@ -25,7 +25,7 @@ export const StartCaseStep5 = connect(
     constants,
     form,
     formCancelToggleCancelSequence,
-    navigateBack,
+    navigateBackSequence,
     showModal,
     startCaseHelper,
     submitFilePetitionSequence,
@@ -268,7 +268,7 @@ export const StartCaseStep5 = connect(
           <button
             className="usa-button usa-button--outline margin-bottom-1"
             type="button"
-            onClick={() => navigateBack()}
+            onClick={() => navigateBackSequence()}
           >
             Back
           </button>

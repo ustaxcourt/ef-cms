@@ -15,8 +15,8 @@ const irsGateway = require('../../shared/src/external/irsGateway');
 const util = require('util');
 const uuidv4 = require('uuid/v4');
 const {
-  addCoverToPDFDocumentInteractor,
-} = require('../../shared/src/business/useCases/addCoverToPDFDocumentInteractor');
+  addCoversheetInteractor,
+} = require('../../shared/src/business/useCases/addCoversheetInteractor');
 const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
@@ -718,7 +718,7 @@ module.exports = (appContextUser = {}) => {
     },
     getUseCases: () => {
       return {
-        addCoverToPDFDocumentInteractor,
+        addCoversheetInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
         associatePractitionerWithCaseInteractor,

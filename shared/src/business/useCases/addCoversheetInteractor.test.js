@@ -1,9 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const sinon = require('sinon');
-const {
-  addCoverToPDFDocumentInteractor,
-} = require('./addCoverToPDFDocumentInteractor.js');
+const { addCoversheetInteractor } = require('./addCoversheetInteractor.js');
 const {
   createISODateString,
   formatDateString,
@@ -19,7 +17,7 @@ const testPdfDocBytes = () => {
   return fs.readFileSync(testAssetsPath + 'sample.pdf');
 };
 
-describe('addCoverToPDFDocumentInteractor', () => {
+describe('addCoversheetInteractor', () => {
   let testPdfDoc;
 
   const testingCaseData = {
@@ -119,7 +117,7 @@ describe('addCoverToPDFDocumentInteractor', () => {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
-    const newPdfData = await addCoverToPDFDocumentInteractor(params);
+    const newPdfData = await addCoversheetInteractor(params);
 
     const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
@@ -166,7 +164,7 @@ describe('addCoverToPDFDocumentInteractor', () => {
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
     };
 
-    const newPdfData = await addCoverToPDFDocumentInteractor(params);
+    const newPdfData = await addCoversheetInteractor(params);
 
     const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();

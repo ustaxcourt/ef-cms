@@ -324,28 +324,28 @@ export const formattedWorkQueue = (get, applicationContext) => {
     },
   };
 
-  let sortDirections = {
+  const sortDirections = {
     documentQc: {
       my: {
-        batched: 'desc',
+        batched: 'asc',
         inProgress: 'asc',
-        inbox: 'desc',
+        inbox: 'asc',
         outbox: 'desc',
       },
       section: {
-        batched: 'desc',
+        batched: 'asc',
         inProgress: 'asc',
-        inbox: 'desc',
+        inbox: 'asc',
         outbox: 'desc',
       },
     },
     messages: {
       my: {
-        inbox: 'desc',
+        inbox: 'asc',
         outbox: 'desc',
       },
       section: {
-        inbox: 'desc',
+        inbox: 'asc',
         outbox: 'desc',
       },
     },

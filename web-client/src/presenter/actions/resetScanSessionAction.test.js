@@ -10,12 +10,10 @@ describe('resetScanSessionAction', () => {
         },
         documentSelectedForScan: 'petition',
         isScanning: true,
-        submitting: true,
       },
     });
 
     expect(result.state.batches.petition).toBeUndefined();
-    expect(result.state.submitting).toBeFalsy();
     expect(result.state.isScanning).toBeFalsy();
   });
 });

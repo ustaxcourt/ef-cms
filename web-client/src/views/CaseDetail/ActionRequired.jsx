@@ -21,9 +21,6 @@ const MailPayment = () => (
 
 export const ActionRequired = connect(
   {
-    caseDetail: state.formattedCaseDetail,
-    caseHelper: state.caseDetailHelper,
-    setDocumentDetailTabSequence: sequences.setDocumentDetailTabSequence,
     showDetails: state.paymentInfo.showDetails,
     togglePaymentDetailsSequence: sequences.togglePaymentDetailsSequence,
   },

@@ -6,15 +6,15 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { parallel } from 'cerebral';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const saveDocumentSigningSequence = [
   clearAlertsAction,
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   completeDocumentSigningAction,
   parallel([setDocumentIdAction, setDocumentDetailTabAction]),
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
   clearPDFSignatureDataAction,
   clearFormAction,
   navigateToCaseDetailAction,

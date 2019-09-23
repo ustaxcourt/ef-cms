@@ -1,3 +1,3 @@
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const unsetFormSubmittingSequence = [unsetFormSubmittingAction];
+export const unsetFormSubmittingSequence = [unsetWaitingForResponseAction];

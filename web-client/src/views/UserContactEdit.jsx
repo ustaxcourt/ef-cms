@@ -10,7 +10,7 @@ import React from 'react';
 
 export const UserContactEdit = connect(
   {
-    navigateBack: sequences.navigateBackSequence,
+    navigateBackSequence: sequences.navigateBackSequence,
     submitEditUserContactSequence: sequences.submitEditUserContactSequence,
     updateUserContactValueSequence: sequences.updateUserContactValueSequence,
     user: state.user,
@@ -18,7 +18,7 @@ export const UserContactEdit = connect(
     validationErrors: state.validationErrors,
   },
   ({
-    navigateBack,
+    navigateBackSequence,
     submitEditUserContactSequence,
     updateUserContactValueSequence,
     user,
@@ -127,8 +127,8 @@ export const UserContactEdit = connect(
             Save
           </button>
           <button
-            className="usa-button usa-button--outline margin-top-3 margin-right-3"
-            onClick={() => navigateBack()}
+            className="usa-button usa-button--unstyled margin-top-3 margin-right-3"
+            onClick={() => navigateBackSequence()}
           >
             Cancel
           </button>

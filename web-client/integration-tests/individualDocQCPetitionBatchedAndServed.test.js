@@ -41,7 +41,7 @@ presenter.providers.router = {
     }
 
     if (url === '/document-qc/section/inbox') {
-      await test.runSequence('gotoDashboardSequence', {
+      await test.runSequence('gotoMessagesSequence', {
         box: 'inbox',
         queue: 'section',
         workQueueIsInternal: false,
@@ -49,7 +49,7 @@ presenter.providers.router = {
     }
 
     if (url === '/document-qc/my/inbox') {
-      await test.runSequence('gotoDashboardSequence', {
+      await test.runSequence('gotoMessagesSequence', {
         box: 'inbox',
         queue: 'my',
         workQueueIsInternal: false,
@@ -57,7 +57,7 @@ presenter.providers.router = {
     }
 
     if (url === '/document-qc/my/batched') {
-      await test.runSequence('gotoDashboardSequence', {
+      await test.runSequence('gotoMessagesSequence', {
         box: 'batched',
         queue: 'my',
         workQueueIsInternal: false,
