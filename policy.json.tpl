@@ -105,6 +105,16 @@
       "Resource": "*"
     },
     {
+      "Sid": "DynamoDescribeLimits",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:DescribeLimits"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
       "Sid": "DynamoGranular",
       "Effect": "Allow",
       "Action": [
@@ -120,12 +130,13 @@
         "dynamodb:UpdateTable",
         "dynamodb:CreateGlobalTable",
         "dynamodb:DescribeContinuousBackups",
-        "dynamodb:DescribeGlobalTable"
+        "dynamodb:DescribeGlobalTable",
+        "dynamodb:DescribeLimits"
       ],
       "Resource": [
         "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-*",
         "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-*",
-        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-*",
+        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-*"
       ]
     },
     {
