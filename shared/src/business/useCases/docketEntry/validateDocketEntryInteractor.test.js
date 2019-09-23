@@ -5,7 +5,7 @@ const {
   validateDocketEntryInteractor,
 } = require('./validateDocketEntryInteractor');
 
-const errorMessages = DocketEntryFactory.VALIDATION_ERROR_MESSAGES;
+const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 describe('validateDocketEntryInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
@@ -19,10 +19,10 @@ describe('validateDocketEntryInteractor', () => {
     });
 
     expect(errors).toEqual({
-      dateReceived: errorMessages.dateReceived[1],
-      documentType: 'Select a document type',
-      eventCode: errorMessages.eventCode,
-      partyPrimary: errorMessages.partyPrimary,
+      dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
+      partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
     });
   });
 

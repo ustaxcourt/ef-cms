@@ -3,6 +3,9 @@ const {
   ExternalDocumentFactory,
 } = require('../externalDocument/ExternalDocumentFactory');
 const {
+  VALIDATION_ERROR_MESSAGES,
+} = require('../externalDocument/ExternalDocumentInformationFactory');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
@@ -12,17 +15,7 @@ const {
 const { includes, omit } = require('lodash');
 
 DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
-  attachments: 'Enter selection for Attachments.',
-  certificateOfService:
-    'Indicate whether you are including a Certificate of Service',
-  certificateOfServiceDate: [
-    {
-      contains: 'must be less than or equal to',
-      message:
-        'Certificate of Service date cannot be in the future. Enter a valid date.',
-    },
-    'Enter date of service',
-  ],
+  ...VALIDATION_ERROR_MESSAGES,
   dateReceived: [
     {
       contains: 'must be less than or equal to',
@@ -31,13 +24,7 @@ DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
     'Enter a valid date received',
   ],
   eventCode: 'Select a document type',
-  exhibits: 'Enter selection for Exhibits.',
-  hasSupportingDocuments: 'Enter selection for Supporting Documents.',
   lodged: 'Enter selection for Filing Status.',
-  objections: 'Enter selection for Objections.',
-  partyPrimary: 'Select a filing party',
-  partyRespondent: 'Select a filing party',
-  partySecondary: 'Select a filing party',
   primaryDocumentFileSize: [
     {
       contains: 'must be less than or equal to',
@@ -63,7 +50,6 @@ function DocketEntryFactory(rawProps) {
     this.dateReceived = rawPropsParam.dateReceived;
     this.documentType = rawPropsParam.documentType;
     this.eventCode = rawPropsParam.eventCode;
-    this.exhibits = rawPropsParam.exhibits;
     this.serviceDate = rawPropsParam.serviceDate;
     this.freeText = rawPropsParam.freeText;
     this.hasSupportingDocuments = rawPropsParam.hasSupportingDocuments;
@@ -96,7 +82,6 @@ function DocketEntryFactory(rawProps) {
       .max('now')
       .required(),
     eventCode: joi.string().required(),
-    exhibits: joi.boolean(),
     hasSupportingDocuments: joi.boolean(),
     lodged: joi.boolean(),
     primaryDocumentFile: joi.object().optional(),
@@ -128,8 +113,6 @@ function DocketEntryFactory(rawProps) {
     secondaryDocumentFile: joi.object().optional(),
   };
 
-  let errorToMessageMap = DocketEntryFactory.VALIDATION_ERROR_MESSAGES;
-
   let customValidate;
 
   const addToSchema = itemName => {
@@ -145,15 +128,6 @@ function DocketEntryFactory(rawProps) {
     externalDocumentOmit,
   );
   schema = { ...schema, ...docketEntryExternalDocumentSchema };
-
-  const docketEntryExternalDocumentErrorToMessageMap = omit(
-    exDoc.getErrorToMessageMap(),
-    externalDocumentOmit,
-  );
-  errorToMessageMap = {
-    ...errorToMessageMap,
-    ...docketEntryExternalDocumentErrorToMessageMap,
-  };
 
   if (rawProps.certificateOfService === true) {
     addToSchema('certificateOfServiceDate');
@@ -192,7 +166,7 @@ function DocketEntryFactory(rawProps) {
     entityConstructor,
     schema,
     customValidate,
-    errorToMessageMap,
+    DocketEntryFactory.VALIDATION_ERROR_MESSAGES,
   );
 
   return new entityConstructor(rawProps);
