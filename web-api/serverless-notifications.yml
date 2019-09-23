@@ -1,9 +1,9 @@
-service: ef-cms
+service: ef-cms-notifications
 
 plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
-  - serverless-plugin-bind-deployment-id
+  # - serverless-plugin-bind-deployment-id
   # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
@@ -51,14 +51,15 @@ custom:
             endpoint: jsutton@flexion.us
 
   customDomain:
-    domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'notifications'
+    domainName: efcms-${self:provider.stage}-ws.${opt:domain}
     endpointType: 'regional'
-    certificateName: efcms-${self:provider.stage}.${opt:domain}
+    certificateName: efcms-${self:provider.stage}-ws.${opt:domain}
     certificateRegion: ${opt:region}
     stage: ${self:provider.stage}
     createRoute53Record: false
     enabled: true
+    websocket: true
+
   splitStacks:
     perFunction: true
     perType: true
@@ -95,7 +96,7 @@ provider:
     TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
-    MASTER_REGION: ${self:provider.masterRegion}
+    MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
@@ -163,34 +164,34 @@ resources:
     #####
     # This Authorizer is used for validating the JWT token before invoking the lambda
     #####
-    ApiGatewayAuthorizer:
-      Type: AWS::ApiGateway::Authorizer
-      Properties:
-        Name: CognitoUserPool
-        Type: COGNITO_USER_POOLS
-        IdentitySource: method.request.header.Authorization
-        RestApiId:
-          Ref: ApiGatewayRestApi
-        ProviderARNs:
-          - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
+    # ApiGatewayAuthorizer:
+    #   Type: AWS::ApiGateway::Authorizer
+    #   Properties:
+    #     Name: CognitoUserPool
+    #     Type: COGNITO_USER_POOLS
+    #     IdentitySource: method.request.header.Authorization
+    #     RestApiId:
+    #       Ref: ApiGatewayRestApi
+    #     ProviderARNs:
+    #       - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
 
     #####
     # Begin Stage for API Gateway Logging
     #####
-    ApiGatewayStage:
-      Type: AWS::ApiGateway::Stage
-      Properties:
-        DeploymentId:
-          Ref: __deployment__
-        RestApiId:
-          Ref: ApiGatewayRestApi
-        StageName: ${opt:stage}
-        MethodSettings:
-          - DataTraceEnabled: true
-            HttpMethod: '*'
-            LoggingLevel: INFO
-            ResourcePath: '/*'
-            MetricsEnabled: true
+    # ApiGatewayStage:
+    #   Type: AWS::ApiGateway::Stage
+    #   Properties:
+    #     DeploymentId:
+    #       Ref: __deployment__
+    #     RestApiId:
+    #       Ref: ApiGatewayRestApi
+    #     StageName: ${opt:stage}
+    #     MethodSettings:
+    #       - DataTraceEnabled: true
+    #         HttpMethod: '*'
+    #         LoggingLevel: INFO
+    #         ResourcePath: '/*'
+    #         MetricsEnabled: true
 
 functions:
   connectHandler:
