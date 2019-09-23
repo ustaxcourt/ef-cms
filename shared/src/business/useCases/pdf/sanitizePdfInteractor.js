@@ -1,9 +1,9 @@
 const fs = require('fs');
 const tmp = require('tmp');
-// const util = require('util');
-// const { exec } = require('child_process');
+const util = require('util');
+const { exec } = require('child_process');
 
-// const execPromise = util.promisify(exec);
+const execPromise = util.promisify(exec);
 
 /**
  * sanitizes PDF input, removing interactive elements, saves altered PDF to persistence
@@ -14,7 +14,7 @@ const tmp = require('tmp');
  * @returns {Uint8Array} modified PDF data
  */
 exports.sanitizePdfInteractor = async ({ applicationContext, documentId }) => {
-  let inputPdf, intermediatePostscript, outputPdf /*newPdfData*/;
+  let inputPdf, intermediatePostscript, outputPdf, newPdfData;
 
   applicationContext.logger.time('Fetching S3 File');
   let { Body: pdfData } = await applicationContext
@@ -37,44 +37,44 @@ exports.sanitizePdfInteractor = async ({ applicationContext, documentId }) => {
     outputPdf = tmp.fileSync();
     fs.closeSync(outputPdf.fd);
 
-    // const pdf2ps_cmd = [
-    //   'gs',
-    //   '-q',
-    //   '-dQUIET',
-    //   '-dBATCH',
-    //   '-dSAFER',
-    //   '-dNOPAUSE',
-    //   '-sDEVICE=ps2write',
-    //   `-sOutputFile=${intermediatePostscript.name}`,
-    //   `-f ${inputPdf.name}`,
-    // ].join(' ');
-    // const ps2pdf_cmd = [
-    //   'gs',
-    //   '-q',
-    //   '-dQUIET',
-    //   '-dBATCH',
-    //   '-dSAFER',
-    //   '-dNOPAUSE',
-    //   '-dNOCACHE',
-    //   '-sDEVICE=pdfwrite',
-    //   '-dPDFSETTINGS=/prepress',
-    //   '-dColorConversionStrategy=/LeaveColorUnchanged',
-    //   '-dAutoFilterColorImages=true',
-    //   '-dAutoFilterGrayImages=true',
-    //   '-dDownsampleMonoImages=true',
-    //   '-dDownsampleGrayImages=true',
-    //   '-dDownsampleColorImages=true',
-    //   '-dPrinted=true',
-    //   `-sOutputFile=${outputPdf.name}`,
-    //   `-f ${intermediatePostscript.name}`,
-    // ].join(' ');
-    //
-    // // run GS conversions
-    // await execPromise(pdf2ps_cmd);
-    // await execPromise(ps2pdf_cmd);
+    const pdf2ps_cmd = [
+      'gs',
+      '-q',
+      '-dQUIET',
+      '-dBATCH',
+      '-dSAFER',
+      '-dNOPAUSE',
+      '-sDEVICE=ps2write',
+      `-sOutputFile=${intermediatePostscript.name}`,
+      `-f ${inputPdf.name}`,
+    ].join(' ');
+    const ps2pdf_cmd = [
+      'gs',
+      '-q',
+      '-dQUIET',
+      '-dBATCH',
+      '-dSAFER',
+      '-dNOPAUSE',
+      '-dNOCACHE',
+      '-sDEVICE=pdfwrite',
+      '-dPDFSETTINGS=/prepress',
+      '-dColorConversionStrategy=/LeaveColorUnchanged',
+      '-dAutoFilterColorImages=true',
+      '-dAutoFilterGrayImages=true',
+      '-dDownsampleMonoImages=true',
+      '-dDownsampleGrayImages=true',
+      '-dDownsampleColorImages=true',
+      '-dPrinted=true',
+      `-sOutputFile=${outputPdf.name}`,
+      `-f ${intermediatePostscript.name}`,
+    ].join(' ');
+
+    // run GS conversions
+    await execPromise(pdf2ps_cmd);
+    await execPromise(ps2pdf_cmd);
 
     // read GS results and return them
-    // newPdfData = fs.readFileSync(outputPdf.name);
+    newPdfData = fs.readFileSync(outputPdf.name);
 
     // remove temp-files we no longer need
     inputPdf.removeCallback();
@@ -117,5 +117,5 @@ exports.sanitizePdfInteractor = async ({ applicationContext, documentId }) => {
     },
   });
 
-  return pdfData; // newPdfData;
+  return newPdfData;
 };
