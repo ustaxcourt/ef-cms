@@ -30,7 +30,7 @@ ExternalDocumentNonStandardC.prototype.getDocumentTitle = function() {
 
 ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
-  freeText: '#Enter name',
+  freeText: 'Enter name',
 };
 
 ExternalDocumentNonStandardC.schema = {
