@@ -19,23 +19,26 @@ export const RecentMessagesInbox = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number" colSpan="2">
+              <th aria-label="Docket Number" colSpan="2" className="small">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              <th>Filed</th>
+              <th className="small">Filed</th>
               <th>Case name</th>
               <th>Document</th>
             </tr>
           </thead>
           {formattedWorkQueue.slice(0, 5).map((item, idx) => {
+            {
+              console.log(item);
+            }
             return (
               <tbody key={idx}>
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
-                  <td className="message-queue-row">
+                  <td className="message-queue-row small">
                     <CaseLink formattedCase={item} />
                   </td>
-                  <td className="message-queue-row">
+                  <td className="message-queue-row small">
                     <span className="no-wrap">{item.received}</span>
                   </td>
                   <td className="message-queue-row">
