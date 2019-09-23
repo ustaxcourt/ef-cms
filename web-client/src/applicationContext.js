@@ -398,14 +398,7 @@ const applicationContext = {
   getFileReader: () => FileReader,
   getHttpClient: () => axios,
   getNotificationsUrl: () => {
-    if (process.env.API_URL) {
-      return `${process.env.API_URL.replace(
-        'https://',
-        'wss://',
-      )}/notifications`;
-    } else {
-      return 'ws://localhost:3011';
-    }
+    return process.env.WS_URL || 'ws://localhost:3011';
   },
   getPdfJs: () => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
