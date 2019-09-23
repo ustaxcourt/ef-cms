@@ -39,7 +39,7 @@ export const TrialSessionDetail = connect(
             defaultActiveTab="EligibleCases"
           >
             <button
-              className="usa-button tab-right-button"
+              className="usa-button tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
               onClick={() => openSetCalendarModalSequence()}
             >
               <FontAwesomeIcon icon="calendar-check" size="1x" /> Set Calendar
