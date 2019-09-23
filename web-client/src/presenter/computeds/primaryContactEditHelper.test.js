@@ -20,7 +20,7 @@ const primaryContactEditHelper = withAppContextDecorator(
 );
 
 describe('primaryContactEditHelper', () => {
-  it('should set showInCareOf to true when the caseDetail partType is corporation', () => {
+  it('should set showInCareOf to true when the caseDetail partyType is corporation', () => {
     let testState = {
       ...state,
       caseDetail: {
