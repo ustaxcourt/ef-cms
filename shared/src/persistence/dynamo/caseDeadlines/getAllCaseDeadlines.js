@@ -54,8 +54,17 @@ exports.getAllCaseDeadlines = async ({ applicationContext }) => {
 
   const afterCaseMapping = afterMapping.map(m => ({
     ...m,
-    ...pick(caseMap[m.caseId], ['docketNumber', 'docketNumberSuffix']),
+    ...pick(caseMap[m.caseId], [
+      'docketNumber',
+      'docketNumberSuffix',
+      'caseTitle',
+      'partyType',
+      'contactPrimary',
+      'contactSecondary',
+    ]),
   }));
+
+  console.log(stripInternalKeys(afterCaseMapping));
 
   return stripInternalKeys(afterCaseMapping);
 };
