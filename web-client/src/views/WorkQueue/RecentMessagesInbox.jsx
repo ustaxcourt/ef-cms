@@ -22,7 +22,7 @@ export const RecentMessagesInbox = connect(
               <th aria-label="Docket Number" colSpan="2">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              <th>Received</th>
+              <th>Filed</th>
               <th>Document</th>
             </tr>
           </thead>

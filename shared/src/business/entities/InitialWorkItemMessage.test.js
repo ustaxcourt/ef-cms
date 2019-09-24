@@ -1,17 +1,19 @@
 const { InitialWorkItemMessage } = require('./InitialWorkItemMessage');
 
+const { VALIDATION_ERROR_MESSAGES } = InitialWorkItemMessage;
+
 describe('InitialWorkItemMessage', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const message = new InitialWorkItemMessage({});
       expect(message.getFormattedValidationErrors().message).toEqual(
-        'Enter a message',
+        VALIDATION_ERROR_MESSAGES.message,
       );
       expect(message.getFormattedValidationErrors().assigneeId).toEqual(
-        'Select a recipient',
+        VALIDATION_ERROR_MESSAGES.assigneeId,
       );
       expect(message.getFormattedValidationErrors().section).toEqual(
-        'Select a section',
+        VALIDATION_ERROR_MESSAGES.section,
       );
     });
 

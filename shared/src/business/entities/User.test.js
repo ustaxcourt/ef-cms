@@ -22,7 +22,7 @@ describe('User entity', () => {
     expect(user.isValid()).toBeTruthy();
   });
 
-  it('Creates a valid taxpayer user', () => {
+  it('Creates a valid domestic taxpayer user', () => {
     const user = new User({
       contact: {
         address1: '234 Main St',

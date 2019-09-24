@@ -85,7 +85,7 @@ const userValidation = {
   userId: joi.string().required(),
 };
 
-const validationErrorMap = {
+const VALIDATION_ERROR_MESSAGES = {
   address1: 'Enter mailing address',
   city: 'Enter city',
   country: 'Enter a country',
@@ -118,7 +118,7 @@ joiValidationDecorator(
   User,
   joi.object().keys(userValidation),
   undefined,
-  validationErrorMap,
+  VALIDATION_ERROR_MESSAGES,
 );
 
 User.ROLES = {
@@ -134,4 +134,9 @@ User.prototype.isInternalUser = function() {
   return User.ROLES.INTERNAL.includes(this.role);
 };
 
-module.exports = { User, userDecorator, userValidation, validationErrorMap };
+module.exports = {
+  User,
+  VALIDATION_ERROR_MESSAGES,
+  userDecorator,
+  userValidation,
+};

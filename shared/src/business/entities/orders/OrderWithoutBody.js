@@ -2,6 +2,7 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { Order } = require('./Order');
 
 /**
  * @param {object} rawOrder the raw order data
@@ -14,9 +15,7 @@ function OrderWithoutBody(rawOrder) {
 }
 
 OrderWithoutBody.VALIDATION_ERROR_MESSAGES = {
-  documentTitle: 'Enter the title of this order',
-  documentType: 'Select an order type',
-  eventCode: 'Select an order type',
+  ...Order.VALIDATION_ERROR_MESSAGES,
 };
 
 joiValidationDecorator(

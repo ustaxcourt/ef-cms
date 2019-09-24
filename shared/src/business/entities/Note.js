@@ -15,7 +15,7 @@ function Note(rawProps) {
   this.notes = rawProps.notes;
 }
 
-Note.errorToMessageMap = {
+Note.VALIDATION_ERROR_MESSAGES = {
   notes: 'Notes can not be empty.',
 };
 
@@ -23,6 +23,11 @@ Note.schema = joi.object().keys({
   notes: joi.string().required(),
 });
 
-joiValidationDecorator(Note, Note.schema, undefined, Note.errorToMessageMap);
+joiValidationDecorator(
+  Note,
+  Note.schema,
+  undefined,
+  Note.VALIDATION_ERROR_MESSAGES,
+);
 
 module.exports = { Note };
