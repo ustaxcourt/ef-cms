@@ -377,7 +377,7 @@ functions:
     events:
       - stream:
           type: dynamodb
-          arn: arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/efcms-local/stream/*
+          arn: arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/efcms-${opt:stage}/stream/*
           batchSize: 10
           startingPosition: TRIM_HORIZON
 

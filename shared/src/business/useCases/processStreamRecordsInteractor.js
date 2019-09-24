@@ -1,3 +1,4 @@
+const AWS = require('aws-sdk');
 const { createISODateString } = require('../utilities/DateHandler');
 
 /**
@@ -12,10 +13,12 @@ exports.processStreamRecordsInteractor = async ({
 
   recordsToProcess.forEach(async record => {
     if (record.eventName === 'INSERT') {
+      const bodyRecord = AWS.DynamoDB.Converter.unmarshall(
+        record.dynamodb.NewImage,
+      );
+
       await applicationContext.getSearchClient().index({
-        body: {
-          ...record.dynamodb.NewImage,
-        },
+        body: bodyRecord,
         id: record.dynamodb.Keys.pk.S,
         index: 'efcms',
       });
