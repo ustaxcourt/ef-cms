@@ -15,7 +15,7 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const { trialSessionId } = event.pathParameters || {};
+      const { trialSessionId } = event.pathParameters || event.path;
       const results = await applicationContext
         .getUseCases()
         .batchDownloadTrialSessionInteractor({
