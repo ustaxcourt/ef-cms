@@ -1,3 +1,5 @@
+const AWS = require('aws-sdk');
+
 /**
  * caseSearchInteractor
  *
@@ -15,49 +17,15 @@ exports.caseSearchInteractor = async ({
   countryType,
   petitionerName,
   petitionerState,
-  yearFiledMax,
-  yearFiledMin,
 }) => {
-  //delete full index
-  /*await applicationContext.getSearchClient().indices.delete(
-    {
-      index: 'cases',
-    },
-    function(err) {
-      if (err) {
-        console.error(err.message);
-      } else {
-        console.log('Index has been deleted!');
-      }
-    },
-  );*/
-
-  //set up the index
-  /*const caseCatalog = await applicationContext
-    .getPersistenceGateway()
-    .getAllCatalogCases({
-      applicationContext,
-    });
-
-  for (let caseRecord of caseCatalog) {
-    console.log('indexing');
-    await applicationContext.getSearchClient().index({
-      body: {
-        ...caseRecord,
-      },
-      id: caseRecord.caseId,
-      index: 'cases',
-    });
-  }*/
-
   const query = [];
 
   if (petitionerName) {
     query.push({
       bool: {
         should: [
-          { match: { 'contactPrimary.name': petitionerName } },
-          { match: { 'contactSecondary.name': petitionerName } },
+          { match: { 'contactPrimary.M.name.S': petitionerName } },
+          { match: { 'contactSecondary.M.name.S': petitionerName } },
         ],
       },
     });
@@ -66,8 +34,8 @@ exports.caseSearchInteractor = async ({
     query.push({
       bool: {
         should: [
-          { match: { 'contactPrimary.countryType': countryType } },
-          { match: { 'contactSecondary.countryType': countryType } },
+          { match: { 'contactPrimary.M.countryType.S': countryType } },
+          { match: { 'contactSecondary.M.countryType.S': countryType } },
         ],
       },
     });
@@ -76,13 +44,14 @@ exports.caseSearchInteractor = async ({
     query.push({
       bool: {
         should: [
-          { match: { 'contactPrimary.state': petitionerState } },
-          { match: { 'contactSecondary.state': petitionerState } },
+          { match: { 'contactPrimary.M.state.S': petitionerState } },
+          { match: { 'contactSecondary.M.state.S': petitionerState } },
         ],
       },
     });
   }
-  if (yearFiledMin || yearFiledMax) {
+  //TODO store the yearFiled on the case entity so we can search by it
+  /*if (yearFiledMin || yearFiledMax) {
     query.push({
       range: {
         yearFiled: {
@@ -92,7 +61,7 @@ exports.caseSearchInteractor = async ({
         },
       },
     });
-  }
+  }*/
 
   const { body } = await applicationContext.getSearchClient().search({
     body: {
@@ -102,13 +71,13 @@ exports.caseSearchInteractor = async ({
         },
       },
     },
-    index: 'cases',
+    index: 'efcms',
   });
 
   const foundCases = [];
   if (body && body.hits) {
     for (let hit of body.hits.hits) {
-      foundCases.push(hit['_source']);
+      foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
     }
   }
 

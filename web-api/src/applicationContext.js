@@ -345,6 +345,9 @@ const {
   WORKITEM,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
+  processStreamRecordsInteractor,
+} = require('../../shared/src/business/useCases/processStreamRecordsInteractor');
+const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
@@ -773,6 +776,7 @@ module.exports = (appContextUser = {}) => {
         getUserInteractor,
         getUsersInSectionInteractor,
         getWorkItemInteractor,
+        processStreamRecordsInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
         runBatchProcessInteractor,
         sanitizePdfInteractor: args =>

@@ -39,25 +39,7 @@
   {
     "sk": "case-d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
-    "pk": "catalog",
-    "docketNumber": "106-19",
-    "docketNumberSuffix": null,
-    "contactPrimary": {
-      "address3": "Saepe proident enim",
-      "address2": "Nostrud sint lorem u",
-      "city": "Dolore est qui pers",
-      "phone": "+1 (493) 953-3442",
-      "address1": "28 North Nobel Road",
-      "postalCode": "91301",
-      "name": "Denise Gould",
-      "state": "MS",
-      "countryType": "domestic",
-      "email": "taxpayer@example.com"
-    },
-    "contactSecondary": {},
-    "yearFiled": "2019",
-    "caseCaption": "Denise Gould, Petitioner",
-    "filedDate": "2019-07-12T17:11:47.010Z"
+    "pk": "catalog"
   },
   {
     "sk": "2b8ef08e-50be-4f9b-8a96-57baa5112f02",
