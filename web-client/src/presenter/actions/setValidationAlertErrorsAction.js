@@ -6,17 +6,24 @@ import { state } from 'cerebral';
  * displaying a list of bullet point alerts in a red error alert at the top of the page.
  *
  * @param {object} providers the providers object
+ * @param {object} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object used for getting the props.errors
  * @param {object} providers.store the cerebral store used for setting state.alertError
  * @returns {undefined} doesn't return anything
  */
-export const setValidationAlertErrorsAction = ({ props, store }) => {
+export const setValidationAlertErrorsAction = ({ get, props, store }) => {
   let errorKeys = Object.keys(props.errors);
+  const fieldOrder = get(state.fieldOrder);
+
+  const getErrorKeys = keys =>
+    keys.filter(key => props.errors[key] !== undefined);
+
   if (props.errorDisplayOrder) {
-    errorKeys = props.errorDisplayOrder.filter(
-      key => props.errors[key] !== undefined,
-    );
+    errorKeys = getErrorKeys(props.errorDisplayOrder);
+  } else if (Array.isArray(fieldOrder) && fieldOrder.length) {
+    errorKeys = getErrorKeys(fieldOrder);
   }
+
   const alertError = {
     messages: flattenDeep(
       errorKeys.map(key => {
