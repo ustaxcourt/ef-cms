@@ -1,8 +1,9 @@
-service: ef-cms-documents
+service: ef-cms-notifications
+
 plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
-  - serverless-plugin-bind-deployment-id
+  # - serverless-plugin-bind-deployment-id
   # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
@@ -16,7 +17,8 @@ custom:
 
   serverless-offline:
     host: 0.0.0.0
-    port: 3004
+    port: 3020 # this port really isn't used, but needs to be unique to prevent address in use errors
+    websocketPort: 3011
 
   alerts:
     stages:
@@ -49,14 +51,15 @@ custom:
             endpoint: jsutton@flexion.us
 
   customDomain:
-    domainName: efcms-${self:provider.stage}.${opt:domain}
-    basePath: 'documents'
+    domainName: efcms-${self:provider.stage}-ws.${opt:domain}
     endpointType: 'regional'
-    certificateName: efcms-${self:provider.stage}.${opt:domain}
+    certificateName: efcms-${self:provider.stage}-ws.${opt:domain}
     certificateRegion: ${opt:region}
     stage: ${self:provider.stage}
     createRoute53Record: false
     enabled: true
+    websocket: true
+
   splitStacks:
     perFunction: true
     perType: true
@@ -70,6 +73,7 @@ provider:
   stage: ${self:custom.stage}
   region: ${self:custom.region}
   runtime: nodejs10.x
+  websocketApiRouteSelectionExpression: $request.body.action
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
@@ -92,7 +96,7 @@ provider:
     TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
-    MASTER_REGION: ${self:provider.masterRegion}
+    MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
@@ -117,6 +121,11 @@ provider:
         - cognito-idp:AdminGetUser
       Resource:
         - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
+    - Effect: 'Allow'
+      Action:
+        - execute-api:Invoke
+      Resource:
+        - arn:aws:execute-api:${opt:region}:${opt:accountId}:*
     - Effect: 'Allow'
       Action:
         - 's3:*'
@@ -146,7 +155,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/documentsHandlers.js
+    - web-api/src/notificationHandlers.js
 
   excludeDevDependencies: true
 
@@ -155,104 +164,44 @@ resources:
     #####
     # This Authorizer is used for validating the JWT token before invoking the lambda
     #####
-    ApiGatewayAuthorizer:
-      Type: AWS::ApiGateway::Authorizer
-      Properties:
-        Name: CognitoUserPool
-        Type: COGNITO_USER_POOLS
-        IdentitySource: method.request.header.Authorization
-        RestApiId:
-          Ref: ApiGatewayRestApi
-        ProviderARNs:
-          - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
+    # ApiGatewayAuthorizer:
+    #   Type: AWS::ApiGateway::Authorizer
+    #   Properties:
+    #     Name: CognitoUserPool
+    #     Type: COGNITO_USER_POOLS
+    #     IdentitySource: method.request.header.Authorization
+    #     RestApiId:
+    #       Ref: ApiGatewayRestApi
+    #     ProviderARNs:
+    #       - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
 
     #####
     # Begin Stage for API Gateway Logging
     #####
-    ApiGatewayStage:
-      Type: AWS::ApiGateway::Stage
-      Properties:
-        DeploymentId:
-          Ref: __deployment__
-        RestApiId:
-          Ref: ApiGatewayRestApi
-        StageName: ${opt:stage}
-        MethodSettings:
-          - DataTraceEnabled: true
-            HttpMethod: '*'
-            LoggingLevel: INFO
-            ResourcePath: '/*'
-            MetricsEnabled: true
+    # ApiGatewayStage:
+    #   Type: AWS::ApiGateway::Stage
+    #   Properties:
+    #     DeploymentId:
+    #       Ref: __deployment__
+    #     RestApiId:
+    #       Ref: ApiGatewayRestApi
+    #     StageName: ${opt:stage}
+    #     MethodSettings:
+    #       - DataTraceEnabled: true
+    #         HttpMethod: '*'
+    #         LoggingLevel: INFO
+    #         ResourcePath: '/*'
+    #         MetricsEnabled: true
 
 functions:
-  getDownloadPolicyUrl:
-    handler: web-api/src/documentsHandlers.downloadPolicyUrlLambda
+  connectHandler:
+    handler: web-api/src/notificationHandlers.connectLambda
     events:
-      - http:
-          path: /{documentId}/download-policy-url
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+      - websocket:
+          route: $connect
 
-  sanitizePdf:
-    handler: web-api/src/documentsHandlers.sanitizePdfLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-ghostscript:latest
-    memorySize: 3008
-    timeout: 900
+  disconnectHandler:
+    handler: web-api/src/notificationHandlers.disconnectLambda
     events:
-      - http:
-          path: /{documentId}/sanitize
-          method: post
-          cors: true
-          # async: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  virusScan:
-    handler: web-api/src/documentsHandlers.virusScanPdfLambda
-    memorySize: 3008
-    timeout: 900
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
-    events:
-      - http:
-          path: /{documentId}/virus-scan
-          method: post
-          cors: true
-          async: true
-
-  validate:
-    handler: web-api/src/documentsHandlers.validatePdfLambda
-    events:
-      - http:
-          path: /{documentId}/validate
-          method: post
-          cors: true
-    alarms:
-      - errorExceptions
-
-  getUploadPolicy:
-    handler: web-api/src/documentsHandlers.getUploadPolicyLambda
-    events:
-      - http:
-          path: /{documentId}/upload-policy
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  getDocumentDownloadUrl:
-    handler: web-api/src/documentsHandlers.getDocumentDownloadUrlLambda
-    events:
-      - http:
-          path: /{documentId}/document-download-url
-          method: get
-          cors: true
+      - websocket:
+          route: $disconnect
