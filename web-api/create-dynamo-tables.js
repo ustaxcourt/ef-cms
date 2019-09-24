@@ -79,10 +79,6 @@ const createEFCMSTable = async () => {
         WriteCapacityUnits: 1,
       },
       TableName: 'efcms-local',
-      TimeToLiveSpecification: {
-        AttributeName: 'ttl',
-        Enabled: true,
-      },
     })
     .promise();
 };
