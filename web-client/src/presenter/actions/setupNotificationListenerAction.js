@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 export const setupNotificationListenerAction = async ({
   applicationContext,
 }) => {
