@@ -120,6 +120,10 @@
         "dynamodb:UpdateTable",
         "dynamodb:DescribeContinuousBackups",
         "dynamodb:DescribeGlobalTable"
+        "dynamodb:DescribeStream"
+        "dynamodb:GetRecords"
+        "dynamodb:GetShardIterator"
+        "dynamodb:ListStreams"
       ],
       "Resource": [
         "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-*",

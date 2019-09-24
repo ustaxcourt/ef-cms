@@ -78,6 +78,10 @@ const createEFCMSTable = async () => {
         ReadCapacityUnits: 1,
         WriteCapacityUnits: 1,
       },
+      StreamSpecification: {
+        StreamEnabled: true,
+        StreamViewType: 'NEW_AND_OLD_IMAGES',
+      },
       TableName: 'efcms-local',
     })
     .promise();
