@@ -173,7 +173,14 @@ export const StartCaseStep2 = connect(
             id="submit-case"
             type="button"
             onClick={() => {
-              completeStartCaseWizardStepSequence({ nextStep: 3 });
+              completeStartCaseWizardStepSequence({
+                errorDisplayOrder: [
+                  'petitionFile',
+                  'petitionFileSize',
+                  'hasIrsNotice',
+                ],
+                nextStep: 3,
+              });
             }}
           >
             Continue to Step 3 of 5
