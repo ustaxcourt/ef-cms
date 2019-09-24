@@ -56,14 +56,14 @@ describe('processStreamRecordsInteractor', () => {
     expect(indexSpy.mock.calls.length).toEqual(2);
     expect(indexSpy.mock.calls[0][0]).toEqual({
       body: {
-        caseId: '1',
+        caseId: { S: '1' },
       },
       id: '1',
       index: 'efcms',
     });
     expect(indexSpy.mock.calls[1][0]).toEqual({
       body: {
-        caseId: '3',
+        caseId: { S: '3' },
       },
       id: '3',
       index: 'efcms',

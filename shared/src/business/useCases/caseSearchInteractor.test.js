@@ -32,12 +32,12 @@ describe('caseSearchInteractor', () => {
             hits: [
               {
                 _source: {
-                  caseId: '1',
+                  caseId: { S: '1' },
                 },
               },
               {
                 _source: {
-                  caseId: '2',
+                  caseId: { S: '2' },
                 },
               },
             ],
@@ -58,24 +58,24 @@ describe('caseSearchInteractor', () => {
       {
         bool: {
           should: [
-            { match: { 'contactPrimary.name': 'test' } },
-            { match: { 'contactSecondary.name': 'test' } },
+            { match: { 'contactPrimary.M.name.S': 'test' } },
+            { match: { 'contactSecondary.M.name.S': 'test' } },
           ],
         },
       },
       {
         bool: {
           should: [
-            { match: { 'contactPrimary.countryType': 'domestic' } },
-            { match: { 'contactSecondary.countryType': 'domestic' } },
+            { match: { 'contactPrimary.M.countryType.S': 'domestic' } },
+            { match: { 'contactSecondary.M.countryType.S': 'domestic' } },
           ],
         },
       },
       {
         bool: {
           should: [
-            { match: { 'contactPrimary.state': 'Nebraska' } },
-            { match: { 'contactSecondary.state': 'Nebraska' } },
+            { match: { 'contactPrimary.M.state.S': 'Nebraska' } },
+            { match: { 'contactSecondary.M.state.S': 'Nebraska' } },
           ],
         },
       },
