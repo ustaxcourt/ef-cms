@@ -25,6 +25,7 @@ export const IndividualWorkQueueBatched = connect(
                 <span className="padding-left-2px">Docket</span>
               </th>
               <th>Filed</th>
+              <th>Case name</th>
               <th aria-label="Status Icon padding-right-0">&nbsp;</th>
               <th>Document</th>
               <th>Filed By</th>
@@ -40,6 +41,9 @@ export const IndividualWorkQueueBatched = connect(
                 </td>
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.received}</span>
+                </td>
+                <td className="message-queue-row">
+                  <span className="no-wrap">{item.caseTitle}</span>
                 </td>
                 <td className="message-queue-row has-icon padding-right-0">
                   {item.showBatchedStatusIcon && (
