@@ -264,24 +264,6 @@
   {
     "sk": "case-5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
-    "pk": "catalog",
-    "docketNumber": "104-19",
-    "docketNumberSuffix": null,
-    "contactPrimary": {
-      "inCareOf": "Abdul Barlow",
-      "address3": "Reprehenderit conseq",
-      "address2": "Non ad et fugiat ut",
-      "city": "Autem ipsum ea mole",
-      "phone": "+1 (445) 595-2606",
-      "address1": "688 South Clarendon Road",
-      "postalCode": "27543",
-      "name": "Mufutau Wade",
-      "state": "HI",
-      "countryType": "domestic",
-      "email": "taxpayer"
-    },
-    "yearFiled": "2019",
-    "caseCaption": "Mufutau Wade, Petitioner",
-    "filedDate": "2019-03-05T17:34:13.490Z"
+    "pk": "catalog"
   }
 ]

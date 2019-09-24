@@ -14,7 +14,7 @@ module.exports = {
   fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
     .handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
-  handleStreamRecordsLambda: require('./cases/handleStreamRecordsLambda')
+  processStreamRecordsLambda: require('./cases/processStreamRecordsLambda')
     .handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,

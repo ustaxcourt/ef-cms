@@ -372,8 +372,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  handleStreamRecords:
-    handler: web-api/src/casesHandlers.handleStreamRecordsLambda
+  processStreamRecords:
+    handler: web-api/src/casesHandlers.processStreamRecordsLambda
     events:
       - stream:
           type: dynamodb
