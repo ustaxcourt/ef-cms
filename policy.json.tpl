@@ -128,6 +128,7 @@
         "dynamodb:Query",
         "dynamodb:BatchGetItem",
         "dynamodb:UpdateTable",
+        "dynamodb:UpdateTimeToLive",
         "dynamodb:CreateGlobalTable",
         "dynamodb:DescribeContinuousBackups",
         "dynamodb:DescribeGlobalTable",
