@@ -11,7 +11,7 @@ export const generateDocketRecordPdfUrlAction = async ({
   get,
   router,
 }) => {
-  const caseDetail = get(state.formattedCaseDetail);
+  const caseDetail = get(state.caseDetail);
   const docketRecordSort = get(
     state.sessionMetadata.docketRecordSort[caseDetail.caseId],
   );

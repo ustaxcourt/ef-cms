@@ -37,6 +37,7 @@ import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/as
 import { associatePractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associatePractitionerWithCaseProxy';
 import { associateRespondentWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associateRespondentWithCaseProxy';
 import { authorizeCodeInteractor } from '../../shared/src/business/useCases/authorizeCodeInteractor';
+import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { caseSearchInteractor } from '../../shared/src/proxies/caseSearchProxy';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
@@ -197,6 +198,7 @@ const allUseCases = {
   associatePractitionerWithCaseInteractor,
   associateRespondentWithCaseInteractor,
   authorizeCodeInteractor,
+  batchDownloadTrialSessionInteractor,
   caseSearchInteractor,
   completeWorkItemInteractor,
   createCaseDeadlineInteractor,
@@ -395,6 +397,9 @@ const applicationContext = {
   },
   getFileReader: () => FileReader,
   getHttpClient: () => axios,
+  getNotificationsUrl: () => {
+    return process.env.WS_URL || 'ws://localhost:3011';
+  },
   getPdfJs: () => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
     return pdfjsLib;
