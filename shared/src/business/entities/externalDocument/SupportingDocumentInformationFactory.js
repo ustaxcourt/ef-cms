@@ -4,7 +4,6 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   MAX_FILE_SIZE_BYTES,
-  MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
 const { includes } = require('lodash');
 const { makeRequiredHelper } = require('./externalDocumentHelpers');
@@ -18,9 +17,13 @@ function SupportingDocumentInformationFactory() {}
 /**
  *
  * @param {object} documentMetadata the document metadata
+ * @param {object} VALIDATION_ERROR_MESSAGES the error to message map constant
  * @returns {object} the created document
  */
-SupportingDocumentInformationFactory.get = documentMetadata => {
+SupportingDocumentInformationFactory.get = (
+  documentMetadata,
+  VALIDATION_ERROR_MESSAGES,
+) => {
   let entityConstructor = function(rawProps) {
     this.attachments = rawProps.attachments;
     this.certificateOfService = rawProps.certificateOfService;
@@ -50,30 +53,6 @@ SupportingDocumentInformationFactory.get = documentMetadata => {
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
     supportingDocumentFreeText: joi.string(),
-  };
-
-  let errorToMessageMap = {
-    attachments: 'Enter selection for Attachments.',
-    certificateOfService:
-      'Indicate whether you are including a Certificate of Service',
-    certificateOfServiceDate: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'Certificate of Service date cannot be in the future. Enter a valid date.',
-      },
-      'Enter date of service',
-    ],
-    supportingDocument: 'Select a document type',
-    supportingDocumentFile: 'Upload a document',
-    supportingDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Supporting Document file size is empty.',
-    ],
-    supportingDocumentFreeText: 'Enter name',
   };
 
   const makeRequired = itemName => {
@@ -123,7 +102,7 @@ SupportingDocumentInformationFactory.get = documentMetadata => {
     entityConstructor,
     schema,
     undefined,
-    errorToMessageMap,
+    VALIDATION_ERROR_MESSAGES,
   );
 
   return new entityConstructor(documentMetadata);

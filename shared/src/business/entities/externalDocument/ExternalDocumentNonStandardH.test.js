@@ -1,4 +1,7 @@
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
+const {
+  VALIDATION_ERROR_MESSAGES,
+} = require('./ExternalDocumentInformationFactory');
 
 describe('ExternalDocumentNonStandardH', () => {
   describe('validation', () => {
@@ -7,11 +10,11 @@ describe('ExternalDocumentNonStandardH', () => {
         scenario: 'Nonstandard H',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        category: 'Select a Category.',
-        documentType: 'Select a document type',
+        category: VALIDATION_ERROR_MESSAGES.category,
+        documentType: VALIDATION_ERROR_MESSAGES.documentType,
         secondaryDocument: {
-          category: 'Select a Category.',
-          documentType: 'Select a document type',
+          category: VALIDATION_ERROR_MESSAGES.category,
+          documentType: VALIDATION_ERROR_MESSAGES.documentType,
         },
       });
     });
@@ -44,9 +47,9 @@ describe('ExternalDocumentNonStandardH', () => {
       expect(() => extDoc.validate()).toThrow();
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         secondaryDocument: {
-          category: 'Select a Category.',
-          documentType: 'Select a document type',
-          previousDocument: 'Select a document',
+          category: VALIDATION_ERROR_MESSAGES.category,
+          documentType: VALIDATION_ERROR_MESSAGES.documentType,
+          previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
         },
       });
     });
