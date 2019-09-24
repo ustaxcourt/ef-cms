@@ -1,4 +1,3 @@
-const AWS = require('aws-sdk');
 const { createISODateString } = require('../utilities/DateHandler');
 
 /**
@@ -10,20 +9,22 @@ exports.processStreamRecordsInteractor = async ({
   recordsToProcess,
 }) => {
   applicationContext.logger.info('Time', createISODateString());
-
-  recordsToProcess.forEach(async record => {
-    if (record.eventName === 'INSERT') {
-      const bodyRecord = await AWS.DynamoDB.Converter.unmarshall(
-        record.dynamodb.NewImage,
-      );
-
-      await applicationContext.getSearchClient().index({
-        body: { ...bodyRecord },
-        id: record.dynamodb.Keys.pk.S,
-        index: 'efcms',
-      });
-    }
-  });
-
+  try {
+    recordsToProcess.forEach(async record => {
+      if (['INSERT', 'MODIFY'].includes(record.eventName)) {
+        try {
+          await applicationContext.getSearchClient().index({
+            body: { ...record.dynamodb.NewImage },
+            id: record.dynamodb.Keys.pk.S,
+            index: 'efcms',
+          });
+        } catch (e) {
+          applicationContext.logger.info('Error', JSON.stringify(e));
+        }
+      }
+    });
+  } catch (e) {
+    console.log('error!', e);
+  }
   applicationContext.logger.info('Time', createISODateString());
 };

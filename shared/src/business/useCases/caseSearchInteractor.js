@@ -1,3 +1,5 @@
+const AWS = require('aws-sdk');
+
 /**
  * caseSearchInteractor
  *
@@ -22,8 +24,8 @@ exports.caseSearchInteractor = async ({
     query.push({
       bool: {
         should: [
-          { match: { 'contactPrimary.name': petitionerName } },
-          { match: { 'contactSecondary.name': petitionerName } },
+          { match: { 'contactPrimary.M.name.S': petitionerName } },
+          { match: { 'contactSecondary.M.name.S': petitionerName } },
         ],
       },
     });
@@ -32,8 +34,8 @@ exports.caseSearchInteractor = async ({
     query.push({
       bool: {
         should: [
-          { match: { 'contactPrimary.countryType': countryType } },
-          { match: { 'contactSecondary.countryType': countryType } },
+          { match: { 'contactPrimary.M.countryType.S': countryType } },
+          { match: { 'contactSecondary.M.countryType.S': countryType } },
         ],
       },
     });
@@ -42,8 +44,8 @@ exports.caseSearchInteractor = async ({
     query.push({
       bool: {
         should: [
-          { match: { 'contactPrimary.state': petitionerState } },
-          { match: { 'contactSecondary.state': petitionerState } },
+          { match: { 'contactPrimary.M.state.S': petitionerState } },
+          { match: { 'contactSecondary.M.state.S': petitionerState } },
         ],
       },
     });
@@ -75,7 +77,7 @@ exports.caseSearchInteractor = async ({
   const foundCases = [];
   if (body && body.hits) {
     for (let hit of body.hits.hits) {
-      foundCases.push(hit['_source']);
+      foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
     }
   }
 
