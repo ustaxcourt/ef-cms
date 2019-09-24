@@ -98,6 +98,7 @@ export const state = {
   documentUploadMode: 'scan',
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
+  fieldOrder: [],
   fileDocumentHelper,
   fileUploadStatusHelper,
   filingTypes: [],

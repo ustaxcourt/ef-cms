@@ -149,6 +149,7 @@ import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequ
 import { setDocumentDetailTabSequence } from './sequences/setDocumentDetailTabSequence';
 import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
+import { setFieldOrderSequence } from './sequences/setFieldOrderSequence';
 import { setFocusedWorkItemSequence } from './sequences/setFocusedWorkItemSequence';
 import { setFormSubmittingSequence } from './sequences/setFormSubmittingSequence';
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
@@ -408,6 +409,7 @@ export const presenter = {
     setDocumentDetailTabSequence,
     setDocumentForUploadSequence,
     setDocumentUploadModeSequence,
+    setFieldOrderSequence,
     setFocusedWorkItemSequence,
     setFormSubmittingSequence,
     setIdleStatusIdleSequence,
