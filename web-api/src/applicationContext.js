@@ -467,6 +467,9 @@ const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
 const {
+  sendNotificationToUser,
+} = require('../../shared/src/notifications/sendNotificationToUser');
+const {
   updateTrialSessionWorkingCopy,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy');
 const {
@@ -478,6 +481,18 @@ const {
 const {
   updateUserContactInformationInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserContactInformationInteractor');
+const {
+  onConnectInteractor,
+} = require('../../shared/src/business/useCases/notifications/onConnectInteractor');
+const {
+  onDisconnectInteractor,
+} = require('../../shared/src/business/useCases/notifications/onDisconnectInteractor');
+const {
+  saveUserConnection,
+} = require('../../shared/src/persistence/dynamo/notifications/saveUserConnection');
+const {
+  deleteUserConnection,
+} = require('../../shared/src/persistence/dynamo/notifications/deleteUserConnection');
 const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
@@ -534,6 +549,7 @@ const environment = {
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
+  wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
 let user;
@@ -601,6 +617,17 @@ module.exports = (appContextUser = {}) => {
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
     }),
+    getNotificationClient: ({ endpoint }) => {
+      if (endpoint.indexOf('localhost') !== -1) {
+        endpoint = 'http://localhost:3011';
+      }
+      return new AWS.ApiGatewayManagementApi({
+        endpoint,
+      });
+    },
+    getNotificationGateway: () => ({
+      sendNotificationToUser,
+    }),
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
@@ -622,6 +649,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteSectionOutboxRecord,
+        deleteUserConnection,
         deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
@@ -659,6 +687,7 @@ module.exports = (appContextUser = {}) => {
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocument,
+        saveUserConnection,
         saveWorkItemForDocketClerkFilingExternalDocument,
         saveWorkItemForDocketEntryWithoutFile,
         saveWorkItemForNonPaper,
@@ -761,6 +790,8 @@ module.exports = (appContextUser = {}) => {
         getUserInteractor,
         getUsersInSectionInteractor,
         getWorkItemInteractor,
+        onConnectInteractor,
+        onDisconnectInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
         runBatchProcessInteractor,
         sanitizePdfInteractor: args =>

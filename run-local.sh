@@ -52,6 +52,8 @@ echo "starting case deadlines service"
 npx sls offline start "$@" --config web-api/serverless-case-deadlines.yml &
 echo "starting case notes service"
 npx sls offline start "$@" --config web-api/serverless-case-notes.yml &
+echo "starting notifications service"
+npx sls offline start "$@" --config web-api/serverless-notifications.yml &
 
 echo "starting proxy"
 node ./web-api/proxy.js
