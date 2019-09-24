@@ -1,4 +1,4 @@
-import { Text } from '../../ustc-ui/Text/Text';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
 import React from 'react';
@@ -51,10 +51,7 @@ export const ProcedureType = connect(
             </div>
           ))}
         </fieldset>
-        <Text
-          bind="validationErrors.procedureType"
-          className="usa-error-message"
-        />
+        <ValidationText field="procedureType" />
       </div>
     );
   },

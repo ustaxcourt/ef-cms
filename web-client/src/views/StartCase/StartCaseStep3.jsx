@@ -2,7 +2,7 @@ import { Contacts } from './Contacts';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { Text } from '../../ustc-ui/Text/Text';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -343,10 +343,7 @@ export const StartCaseStep3 = connect(
                 </fieldset>
               </div>
             )}
-          <Text
-            bind="validationErrors.partyType"
-            className="usa-error-message"
-          />
+          <ValidationText field="partyType" />
         </div>
 
         <Contacts
@@ -404,14 +401,8 @@ export const StartCaseStep3 = connect(
                 updateFormValueSequence="updateStartCaseFormValueSequence"
                 validationSequence="validateStartCaseWizardSequence"
               />
-              <Text
-                bind="validationErrors.ownershipDisclosureFile"
-                className="usa-error-message"
-              />
-              <Text
-                bind="validationErrors.ownershipDisclosureFileSize"
-                className="usa-error-message"
-              />
+              <ValidationText field="ownershipDisclosureFile" />
+              <ValidationText field="ownershipDisclosureFileSize" />
             </div>
           </>
         )}
