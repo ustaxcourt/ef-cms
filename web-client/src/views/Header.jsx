@@ -25,7 +25,11 @@ const BetaBar = toggleBetaBarSequence => {
               className="button-icon float-right usa-button usa-button--unstyled"
               onClick={() => toggleBetaBarSequence()}
             >
-              <img alt="close" src={close} />
+              <img
+                alt="close"
+                className="ustc-icon-square--small"
+                src={close}
+              />
             </button>
           </div>
         </div>
