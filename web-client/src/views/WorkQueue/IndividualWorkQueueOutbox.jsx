@@ -41,10 +41,12 @@ export const IndividualWorkQueueOutbox = connect(
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
               {!workQueueHelper.hideCaseStatusColumn && <th>Case status</th>}
               {workQueueHelper.showAssignedToColumn && (
-                <th>{workQueueHelper.assigneeColumnTitle}</th>
+                <th className="max-width-7">
+                  {workQueueHelper.assigneeColumnTitle}
+                </th>
               )}
               {!workQueueHelper.hideSectionColumn && (
-                <th className="small">Section</th>
+                <th className="max-width-7">Section</th>
               )}
               {workQueueHelper.showServedColumn && <th>Served</th>}
             </tr>
@@ -119,7 +121,7 @@ export const IndividualWorkQueueOutbox = connect(
                   </td>
                 )}
                 {!workQueueHelper.hideSectionColumn && (
-                  <td className="message-queue-row small">
+                  <td className="message-queue-row max-width-7">
                     {workQueueSectionHelper.sectionDisplay(item.section)}
                   </td>
                 )}
