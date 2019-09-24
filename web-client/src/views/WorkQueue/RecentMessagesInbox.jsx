@@ -19,10 +19,11 @@ export const RecentMessagesInbox = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number" colSpan="2">
+              <th aria-label="Docket Number" className="small" colSpan="2">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              <th>Filed</th>
+              <th className="small">Filed</th>
+              <th>Case name</th>
               <th>Document</th>
             </tr>
           </thead>
@@ -31,11 +32,14 @@ export const RecentMessagesInbox = connect(
               <tbody key={idx}>
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
-                  <td className="message-queue-row">
+                  <td className="message-queue-row small">
                     <CaseLink formattedCase={item} />
                   </td>
-                  <td className="message-queue-row">
+                  <td className="message-queue-row small">
                     <span className="no-wrap">{item.received}</span>
+                  </td>
+                  <td className="message-queue-row">
+                    <span>{item.caseTitle}</span>
                   </td>
                   <td className="message-queue-row message-queue-document">
                     <div className="message-document-title">
