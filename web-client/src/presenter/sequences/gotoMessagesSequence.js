@@ -25,12 +25,7 @@ const goToMessages = [
       getUsersInSectionAction({ section: 'docket' }),
       setUsersAction,
     ],
-    judge: [
-      ...chooseWorkQueueSequence,
-      getTrialSessionsAction,
-      setTrialSessionsAction,
-      setCurrentPageAction('Messages'),
-    ],
+    judge: [getTrialSessionsAction, setTrialSessionsAction],
     petitionsclerk: [
       getUsersInSectionAction({ section: 'petitions' }),
       setUsersAction,
