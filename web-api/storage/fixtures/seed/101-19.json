@@ -30,6 +30,7 @@
             "createdAt": "2019-03-01T21:40:46.415Z",
             "assigneeName": null,
             "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
+            "caseTitle": "Brett Osborne",
             "messages": [
               {
                 "createdAt": "2019-03-01T21:40:46.415Z",
@@ -146,6 +147,7 @@
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "gsi1pk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
 
+    "caseTitle": "Brett Osborne",
     "messages": [
       {
         "createdAt": "2019-03-01T21:40:46.415Z",
@@ -184,6 +186,7 @@
     "assigneeName": null,
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "gsi1pk": "workitem-2611344f-f7bf-4f47-8ba0-60c70cb25446",
+    "caseTitle": "Brett Osborne",
     "messages": [
       {
         "createdAt": "2019-03-01T21:40:46.415Z",

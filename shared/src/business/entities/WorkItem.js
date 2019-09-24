@@ -67,6 +67,7 @@ joiValidationDecorator(
       })
       .required(),
     caseStatus: joi.string().optional(),
+    caseTitle: joi.string().optional(),
     completedAt: joi
       .date()
       .iso()
