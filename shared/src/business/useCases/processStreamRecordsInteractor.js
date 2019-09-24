@@ -13,12 +13,12 @@ exports.processStreamRecordsInteractor = async ({
 
   recordsToProcess.forEach(async record => {
     if (record.eventName === 'INSERT') {
-      const bodyRecord = AWS.DynamoDB.Converter.unmarshall(
+      const bodyRecord = await AWS.DynamoDB.Converter.unmarshall(
         record.dynamodb.NewImage,
       );
 
       await applicationContext.getSearchClient().index({
-        body: bodyRecord,
+        body: { ...bodyRecord },
         id: record.dynamodb.Keys.pk.S,
         index: 'efcms',
       });
