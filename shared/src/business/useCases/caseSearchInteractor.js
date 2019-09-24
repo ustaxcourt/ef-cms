@@ -94,8 +94,6 @@ exports.caseSearchInteractor = async ({
     });
   }
 
-  console.log(JSON.stringify(query));
-
   const { body } = await applicationContext.getSearchClient().search({
     body: {
       query: {

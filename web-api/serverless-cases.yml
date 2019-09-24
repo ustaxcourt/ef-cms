@@ -4,6 +4,7 @@ plugins:
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
   # - serverless-plugin-aws-alerts
+  - serverless-offline-dynamodb-streams
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -17,6 +18,15 @@ custom:
   serverless-offline:
     host: 0.0.0.0
     port: 3002
+
+  serverless-offline-dynamodb-streams:
+    apiVersion: '2013-12-02'
+    endpoint: http://0.0.0.0:8000
+    region: us-east-1
+    accessKeyId: root
+    secretAccessKey: root
+    skipCacheInvalidation: false
+    readInterval: 500
 
   alerts:
     stages:
@@ -139,6 +149,10 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
         - dynamodb:BatchWriteItem
+        - dynamodb:DescribeStream
+        - dynamodb:GetRecords
+        - dynamodb:GetShardIterator
+        - dynamodb:ListStreams
       Resource:
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
         - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
@@ -357,6 +371,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  handleStreamRecords:
+    handler: web-api/src/casesHandlers.handleStreamRecordsLambda
+    events:
+      - stream:
+          type: dynamodb
+          arn: arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/efcms-local/stream/*
+          batchSize: 10
+          startingPosition: TRIM_HORIZON
 
   sendToIRS:
     handler: web-api/src/casesHandlers.sendPetitionToIRSHoldingQueueLambda
