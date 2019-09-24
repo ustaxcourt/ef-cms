@@ -263,6 +263,10 @@ table.work-queue {
       width: $table-column-width-small;
     }
 
+    &.max-width-7 {
+      max-width: 7rem;
+    }
+
     &.message-queue-document {
       max-width: 25rem;
     }
@@ -281,7 +285,7 @@ table.work-queue {
     }
 
     &.to {
-      min-width: 10rem;
+      min-width: 7rem;
     }
 
     .message-document-detail {

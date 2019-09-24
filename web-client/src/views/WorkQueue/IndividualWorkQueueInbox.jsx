@@ -33,7 +33,7 @@ export const IndividualWorkQueueInbox = connect(
               <th>Case status</th>
               {!workQueueHelper.hideFromColumn && <th>From</th>}
               {!workQueueHelper.hideSectionColumn && (
-                <th className="small">Section</th>
+                <th className="max-width-7">Section</th>
               )}
             </tr>
           </thead>
@@ -123,7 +123,7 @@ export const IndividualWorkQueueInbox = connect(
                     </td>
                   )}
                   {!workQueueHelper.hideSectionColumn && (
-                    <td className="message-queue-row small">
+                    <td className="message-queue-row max-width-7">
                       {item.sentBySection}
                     </td>
                   )}
