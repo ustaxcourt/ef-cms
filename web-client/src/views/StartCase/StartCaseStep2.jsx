@@ -178,6 +178,7 @@ export const StartCaseStep2 = connect(
                   'petitionFile',
                   'petitionFileSize',
                   'hasIrsNotice',
+                  'caseType',
                 ],
                 nextStep: 3,
               });

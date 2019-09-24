@@ -162,7 +162,10 @@ export const StartCaseStep4 = connect(
             id="submit-case"
             type="button"
             onClick={() => {
-              completeStartCaseWizardStepSequence({ nextStep: 5 });
+              completeStartCaseWizardStepSequence({
+                errorDisplayOrder: ['procedureType', 'preferredTrialCity'],
+                nextStep: 5,
+              });
             }}
           >
             Continue to Step 5 of 5
