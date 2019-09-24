@@ -4,12 +4,16 @@ const {
 } = require('./fileExternalDocumentInteractor');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
+const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 
 describe('fileExternalDocumentInteractor', () => {
   let applicationContext;
 
   let caseRecord = {
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    contactPrimary: {
+      name: 'Guy Fieri',
+    },
     createdAt: '',
     docketNumber: '45678-18',
     documents: [
@@ -29,6 +33,7 @@ describe('fileExternalDocumentInteractor', () => {
         userId: 'respondent',
       },
     ],
+    partyType: ContactFactory.PARTY_TYPES.petitioner,
     role: 'petitioner',
     userId: 'taxpayer',
   };
