@@ -1,5 +1,8 @@
 const moment = require('moment');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
+const {
+  VALIDATION_ERROR_MESSAGES,
+} = require('./ExternalDocumentInformationFactory');
 
 describe('ExternalDocumentNonStandardD', () => {
   describe('validation', () => {
@@ -8,10 +11,10 @@ describe('ExternalDocumentNonStandardD', () => {
         scenario: 'Nonstandard D',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        category: 'Select a Category.',
-        documentType: 'Select a document type',
-        previousDocument: 'Select a document',
-        serviceDate: 'Provide a service date',
+        category: VALIDATION_ERROR_MESSAGES.category,
+        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
+        serviceDate: VALIDATION_ERROR_MESSAGES.serviceDate[1],
       });
     });
 
@@ -28,8 +31,7 @@ describe('ExternalDocumentNonStandardD', () => {
         serviceDate,
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        serviceDate:
-          'Service date cannot be in the future. Enter a valid date.',
+        serviceDate: VALIDATION_ERROR_MESSAGES.serviceDate[0].message,
       });
     });
 

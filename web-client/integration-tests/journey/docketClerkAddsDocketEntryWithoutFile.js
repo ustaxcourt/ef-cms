@@ -23,7 +23,7 @@ export default test => {
 
     expect(test.getState('validationErrors')).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
-      documentType: 'Select a document type',
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
     });

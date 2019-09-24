@@ -3,6 +3,9 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
+const {
+  VALIDATION_ERROR_MESSAGES,
+} = require('./ExternalDocumentInformationFactory');
 
 /**
  *
@@ -24,10 +27,8 @@ ExternalDocumentNonStandardG.prototype.getDocumentTitle = function() {
   );
 };
 
-ExternalDocumentNonStandardG.errorToMessageMap = {
-  category: 'Select a Category.',
-  documentType: 'Select a document type',
-  ordinalValue: 'Select an iteration',
+ExternalDocumentNonStandardG.VALIDATION_ERROR_MESSAGES = {
+  ...VALIDATION_ERROR_MESSAGES,
 };
 
 ExternalDocumentNonStandardG.schema = {
@@ -41,7 +42,7 @@ joiValidationDecorator(
   ExternalDocumentNonStandardG,
   ExternalDocumentNonStandardG.schema,
   undefined,
-  ExternalDocumentNonStandardG.errorToMessageMap,
+  ExternalDocumentNonStandardG.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { ExternalDocumentNonStandardG };
