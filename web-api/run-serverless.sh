@@ -19,7 +19,6 @@ export NODE_PRESERVE_SYMLINKS=1
 find ./web-api/src -type f -exec chmod -R ugo+r {} ";"
 
 npm run "${build}"
-
 cp "./web-api/src/${handler}" /tmp
 cp "./dist/${handler}" web-api/src
 
@@ -34,8 +33,9 @@ export SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploy
   --stage "${slsStage}" \
   --userPoolId "${USER_POOL_ID}" \
   --verbose
+echo "done running create_domain"
 
-ENVIRONMENT="${slsStage}" SLS_DEBUG="*" ./node_modules/.bin/sls deploy \
+ENVIRONMENT="${slsStage}" ./node_modules/.bin/sls deploy \
   --accountId "${ACCOUNT_ID}" \
   --config "./web-api/${config}" \
   --domain "${EFCMS_DOMAIN}"  \
@@ -44,7 +44,11 @@ ENVIRONMENT="${slsStage}" SLS_DEBUG="*" ./node_modules/.bin/sls deploy \
   --stage "${slsStage}" \
   --userPoolId "${USER_POOL_ID}" \
   --verbose
+echo "done running sls deploy"
 
+echo "slsStage: ${slsStage}"
+echo "region: ${region}"
 ./web-api/configure-custom-api-access-logging.sh "${slsStage}" ./web-api/config-custom-access-logs.json "${region}"
+echo "done configuring logging"
 
 cp "/tmp/${handler}" src
