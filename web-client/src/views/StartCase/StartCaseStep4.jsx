@@ -4,8 +4,8 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { ProcedureType } from './ProcedureType';
-import { Text } from '../../ustc-ui/Text/Text';
 import { TrialCity } from './TrialCity';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -148,10 +148,7 @@ export const StartCaseStep4 = connect(
                   validateStartCaseWizardSequence();
                 }}
               />
-              <Text
-                bind="validationErrors.preferredTrialCity"
-                className="usa-error-message"
-              />
+              <ValidationText field="preferredTrialCity" />
             </div>
           </>
         )}
