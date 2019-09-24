@@ -15,8 +15,19 @@ export const setValidationAlertErrorsAction = ({ get, props, store }) => {
   let errorKeys = Object.keys(props.errors);
   const fieldOrder = get(state.fieldOrder);
 
-  const getErrorKeys = keys =>
-    keys.filter(key => props.errors[key] !== undefined);
+  const getErrorKeys = keys => {
+    const filteredErrorKeys = [];
+    keys.forEach(key => {
+      let topLevelKey = key;
+      if (key.indexOf('.')) {
+        topLevelKey = key.split('.')[0];
+      }
+      if (props.errors[topLevelKey] !== undefined) {
+        filteredErrorKeys.push(topLevelKey);
+      }
+    });
+    return filteredErrorKeys;
+  };
 
   if (props.errorDisplayOrder) {
     errorKeys = getErrorKeys(props.errorDisplayOrder);
