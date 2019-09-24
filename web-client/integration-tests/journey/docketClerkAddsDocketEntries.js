@@ -23,7 +23,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
-      documentType: 'Select a document type',
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
     });
@@ -77,7 +77,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       objections: VALIDATION_ERROR_MESSAGES.objections,
-      secondaryDocument: 'Select a document',
+      secondaryDocument: VALIDATION_ERROR_MESSAGES.secondaryDocument,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {

@@ -1,3 +1,5 @@
+import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+
 export default (test, fakeFile) => {
   return it('Respondent adds stipulated decision', async () => {
     await test.runSequence('gotoFileDocumentSequence', {
@@ -7,8 +9,8 @@ export default (test, fakeFile) => {
     await test.runSequence('selectDocumentSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      category: 'Select a Category.',
-      documentType: 'Select a document type',
+      category: VALIDATION_ERROR_MESSAGES.category,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -18,7 +20,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateSelectDocumentTypeSequence');
     expect(test.getState('validationErrors')).toEqual({
-      documentType: 'Select a document type',
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {

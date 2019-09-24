@@ -1,8 +1,5 @@
-import { state } from 'cerebral';
-
 export const setupNotificationListenerAction = async ({
   applicationContext,
-  store,
 }) => {
   const token = applicationContext.getCurrentUserToken();
 
@@ -17,6 +14,4 @@ export const setupNotificationListenerAction = async ({
     window.open(url, '_blank');
     socket.close();
   };
-
-  store.set(state.socket, socket);
 };

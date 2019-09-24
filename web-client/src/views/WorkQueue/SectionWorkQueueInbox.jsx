@@ -71,6 +71,7 @@ export const SectionWorkQueueInbox = connect(
               {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>Filed</th>
+              <th>Case name</th>
               {!workQueueHelper.hideIconColumn && (
                 <th aria-label="Status Icon" className="padding-right-0" />
               )}
@@ -133,6 +134,9 @@ export const SectionWorkQueueInbox = connect(
                 </td>
                 <td className="message-queue-row">
                   <span className="no-wrap">{item.received}</span>
+                </td>
+                <td className="message-queue-row message-queue-case-title">
+                  {item.caseTitle}
                 </td>
                 {!workQueueHelper.hideIconColumn && (
                   <td className="message-queue-row has-icon padding-right-0">
