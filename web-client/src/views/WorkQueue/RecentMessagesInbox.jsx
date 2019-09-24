@@ -28,9 +28,6 @@ export const RecentMessagesInbox = connect(
             </tr>
           </thead>
           {formattedWorkQueue.slice(0, 5).map((item, idx) => {
-            {
-              console.log(item);
-            }
             return (
               <tbody key={idx}>
                 <tr>
