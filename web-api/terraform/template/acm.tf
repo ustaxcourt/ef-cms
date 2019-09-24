@@ -93,9 +93,12 @@ resource "aws_acm_certificate" "ws-us-west-1" {
     Description   = "Certificate for efcms-${var.environment}-ws.${var.dns_domain}"
     ManagedBy     = "terraform"
   }
+
+  provider       = "aws.us-west-1"
 }
 
 resource "aws_acm_certificate_validation" "ws-dns_validation-us-west-1" {
   certificate_arn         = "${aws_acm_certificate.ws-us-west-1.arn}"
   validation_record_fqdns = ["${aws_route53_record.ws-record.fqdn}"]
+  provider       = "aws.us-west-1"
 }
