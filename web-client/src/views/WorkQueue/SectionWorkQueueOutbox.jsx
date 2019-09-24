@@ -61,11 +61,9 @@ export const SectionWorkQueueOutbox = connect(
                   <span className="no-wrap">{item.sentDateFormatted}</span>
                 </td>
               )}
-              {workQueueHelper.showReceivedColumn && (
-                <td className="message-queue-row">
-                  <span className="no-wrap">{item.caseTitle}</span>
-                </td>
-              )}
+              <td className="message-queue-row message-queue-case-title">
+                {item.caseTitle}
+              </td>
               <td className="message-queue-row has-icon padding-right-0">
                 {item.showBatchedStatusIcon && (
                   <FontAwesomeIcon
