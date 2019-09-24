@@ -70,7 +70,7 @@ export const WorkingCopySessionList = connect(
                   )) || <FontAwesomeIcon icon="caret-down" />}
                 </button>
               </th>
-              <th className="no-wrap">Case Caption</th>
+              <th className="no-wrap">Case name</th>
               <th className="no-wrap">
                 <button
                   className="usa-button usa-button--unstyled sortable-header-button"
