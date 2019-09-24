@@ -1,185 +1,85 @@
 const { caseSearchInteractor } = require('./caseSearchInteractor');
 
 describe('caseSearchInteractor', () => {
+  let searchSpy;
+
   const applicationContext = {
     environment: { stage: 'local' },
-    getPersistenceGateway: () => ({
-      getAllCatalogCases: async () => {
-        return [
-          {
-            caseCaption: 'Brett Osborne, Petitioner',
-            caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
-            contactPrimary: {
-              countryType: 'domestic',
-              name: 'Test 2',
-              state: 'AS',
-            },
-            docketNumber: '101-19',
-            docketNumberSuffix: 'W',
-            filedDate: '2019-03-01T21:40:46.415Z',
-            yearFiled: '2019',
-          },
-          {
-            caseCaption: 'Adam Osborne, Petitioner',
-            caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
-            contactPrimary: {
-              countryType: 'international',
-              name: 'Test 1',
-              state: null,
-            },
-            docketNumber: '102-19',
-            docketNumberSuffix: 'W',
-            filedDate: '2019-03-05T21:40:46.415Z',
-            yearFiled: '2019',
-          },
-          {
-            caseCaption: 'Bob Osborne, Petitioner',
-            caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
-            contactPrimary: {
-              countryType: 'domestic',
-              name: 'something else',
-              state: 'OK',
-            },
-            docketNumber: '103-18',
-            docketNumberSuffix: 'W',
-            filedDate: '2018-03-07T21:40:46.415Z',
-            yearFiled: '2018',
-          },
-          {
-            caseCaption: 'Casey Osborne, Petitioner',
-            caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
-            contactPrimary: {
-              countryType: 'international',
-              name: 'some other person',
-            },
-            contactSecondary: {
-              countryType: 'domestic',
-              name: 'test person',
-              state: 'OK',
-            },
-            docketNumber: '104-18',
-            docketNumberSuffix: 'W',
-            filedDate: '2018-03-07T21:40:46.415Z',
-            yearFiled: '2018',
-          },
-        ];
-      },
+    getSearchClient: () => ({
+      search: searchSpy,
     }),
   };
 
-  it('filters catalog cases by petitioner name - not case sensitive', async () => {
-    const foundCases = await caseSearchInteractor({
+  it('returns empty array if no search params are passed in', async () => {
+    searchSpy = jest.fn(async () => {
+      return {
+        body: {},
+      };
+    });
+
+    const results = await caseSearchInteractor({
       applicationContext,
+    });
+
+    expect(results).toEqual([]);
+  });
+
+  it('calls search function with correct params and returns records', async () => {
+    searchSpy = jest.fn(async () => {
+      return {
+        body: {
+          hits: {
+            hits: [
+              {
+                _source: {
+                  caseId: '1',
+                },
+              },
+              {
+                _source: {
+                  caseId: '2',
+                },
+              },
+            ],
+          },
+        },
+      };
+    });
+
+    const results = await caseSearchInteractor({
+      applicationContext,
+      countryType: 'domestic',
       petitionerName: 'test',
+      petitionerState: 'Nebraska',
     });
 
-    expect(foundCases.length).toEqual(3);
-    expect(foundCases).toMatchObject([
-      { docketNumber: '101-19' },
-      { docketNumber: '102-19' },
-      { docketNumber: '104-18' },
+    expect(searchSpy).toHaveBeenCalled();
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+      {
+        bool: {
+          should: [
+            { match: { 'contactPrimary.name': 'test' } },
+            { match: { 'contactSecondary.name': 'test' } },
+          ],
+        },
+      },
+      {
+        bool: {
+          should: [
+            { match: { 'contactPrimary.countryType': 'domestic' } },
+            { match: { 'contactSecondary.countryType': 'domestic' } },
+          ],
+        },
+      },
+      {
+        bool: {
+          should: [
+            { match: { 'contactPrimary.state': 'Nebraska' } },
+            { match: { 'contactSecondary.state': 'Nebraska' } },
+          ],
+        },
+      },
     ]);
-  });
-
-  it('filters catalog cases by petitioner name with no results', async () => {
-    const foundCases = await caseSearchInteractor({
-      applicationContext,
-      petitionerName: 'Test!',
-    });
-
-    expect(foundCases.length).toEqual(0);
-  });
-
-  it('filters catalog cases by country type domestic', async () => {
-    const foundCases = await caseSearchInteractor({
-      applicationContext,
-      countryType: 'domestic',
-    });
-
-    expect(foundCases.length).toEqual(3);
-    expect(foundCases).toMatchObject([
-      { docketNumber: '101-19' },
-      { docketNumber: '103-18' },
-      { docketNumber: '104-18' },
-    ]);
-  });
-
-  it('filters catalog cases by country type international', async () => {
-    const foundCases = await caseSearchInteractor({
-      applicationContext,
-      countryType: 'international',
-    });
-
-    expect(foundCases.length).toEqual(2);
-    expect(foundCases).toMatchObject([
-      { docketNumber: '102-19' },
-      { docketNumber: '104-18' },
-    ]);
-  });
-
-  it('filters catalog cases by petitionerState', async () => {
-    const foundCases = await caseSearchInteractor({
-      applicationContext,
-      countryType: 'domestic',
-      petitionerState: 'OK',
-    });
-
-    expect(foundCases.length).toEqual(2);
-    expect(foundCases).toMatchObject([
-      { docketNumber: '103-18' },
-      { docketNumber: '104-18' },
-    ]);
-  });
-
-  it('filters catalog cases by petitionerState with no results', async () => {
-    const foundCases = await caseSearchInteractor({
-      applicationContext,
-      countryType: 'domestic',
-      petitionerState: 'AB',
-    });
-
-    expect(foundCases.length).toEqual(0);
-  });
-
-  it('filters catalog cases by year filed min', async () => {
-    const foundCases = await caseSearchInteractor({
-      applicationContext,
-      yearFiledMin: '2019',
-    });
-
-    expect(foundCases.length).toEqual(2);
-    expect(foundCases).toMatchObject([
-      { docketNumber: '101-19' },
-      { docketNumber: '102-19' },
-    ]);
-  });
-
-  it('filters catalog cases by year filed max', async () => {
-    const foundCases = await caseSearchInteractor({
-      applicationContext,
-      yearFiledMax: '2018',
-    });
-
-    expect(foundCases.length).toEqual(2);
-    expect(foundCases).toMatchObject([
-      { docketNumber: '103-18' },
-      { docketNumber: '104-18' },
-    ]);
-  });
-
-  it('filters catalog cases by year filed min and max', async () => {
-    const foundCases = await caseSearchInteractor({
-      applicationContext,
-      yearFiledMax: '2019',
-      yearFiledMin: '2018',
-    });
-
-    expect(foundCases.length).toEqual(4);
-    expect(foundCases).toMatchObject([
-      { docketNumber: '101-19' },
-      { docketNumber: '102-19' },
-      { docketNumber: '103-18' },
-      { docketNumber: '104-18' },
-    ]);
+    expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
   });
 });
