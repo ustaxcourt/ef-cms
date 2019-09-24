@@ -30,6 +30,7 @@
             "createdAt": "2019-03-01T22:53:50.098Z",
             "assigneeName": null,
             "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+            "caseTitle": "Samson Workman",
             "messages": [
               {
                 "createdAt": "2019-03-01T22:53:50.098Z",
@@ -85,6 +86,7 @@
             "createdAt": "2019-03-01T22:54:06.000Z",
             "assigneeName": null,
             "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+            "caseTitle": "Samson Workman",
             "messages": [
               {
                 "createdAt": "2019-03-01T22:54:06.000Z",
@@ -161,6 +163,7 @@
             "createdAt": "2019-08-14T20:35:52.915Z",
             "assigneeName": "Test Docketclerk",
             "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+            "caseTitle": "Samson Workman",
             "messages": [
               {
                 "createdAt": "2019-08-14T20:35:52.915Z",
@@ -310,6 +313,7 @@
     "createdAt": "2019-03-01T22:53:50.098Z",
     "assigneeName": null,
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-03-01T22:53:50.098Z",
@@ -347,6 +351,7 @@
     "createdAt": "2019-03-01T22:53:50.098Z",
     "assigneeName": null,
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-03-01T22:53:50.098Z",
@@ -383,6 +388,7 @@
     "createdAt": "2019-03-01T22:54:06.000Z",
     "assigneeName": null,
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-03-01T22:54:06.000Z",
@@ -418,6 +424,7 @@
     "createdAt": "2019-03-01T22:54:06.000Z",
     "assigneeName": null,
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-03-01T22:54:06.000Z",
@@ -452,10 +459,12 @@
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
     "isInternal": true,
+    "caseTitle": "Samson Workman",
     "createdAt": "2019-08-08T14:33:24.183Z",
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-08-08T14:33:24.183Z",
@@ -492,7 +501,9 @@
     "createdAt": "2019-08-08T14:33:24.183Z",
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+    "caseTitle": "Samson Workman",
     "sk": "2019-08-08T14:33:24.183Z",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-08-08T14:33:24.183Z",
@@ -513,6 +524,7 @@
     "docketNumberSuffix": "S",
     "caseStatus": "New",
     "gsi1pk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
+    "caseTitle": "Samson Workman",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
       "documentType": "Answer",
@@ -527,9 +539,11 @@
     "sentBySection": "petitions",
     "isInternal": true,
     "createdAt": "2019-08-08T14:33:24.183Z",
+    "caseTitle": "Samson Workman",
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-08-08T14:33:24.183Z",
@@ -565,9 +579,11 @@
     "sentBySection": "petitions",
     "isInternal": true,
     "createdAt": "2019-08-08T14:33:24.183Z",
+    "caseTitle": "Samson Workman",
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-08-08T14:33:24.183Z",
@@ -615,6 +631,7 @@
             "createdAt": "2019-03-01T22:53:50.098Z",
             "assigneeName": null,
             "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+            "caseTitle": "Samson Workman",
             "messages": [
               {
                 "createdAt": "2019-03-01T22:53:50.098Z",
@@ -670,6 +687,7 @@
             "createdAt": "2019-03-01T22:54:06.000Z",
             "assigneeName": null,
             "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+            "caseTitle": "Samson Workman",
             "messages": [
               {
                 "createdAt": "2019-03-01T22:54:06.000Z",
@@ -699,8 +717,10 @@
             "sentBySection": "petitions",
             "isInternal": true,
             "createdAt": "2019-08-08T14:33:24.183Z",
+            "caseTitle": "Samson Workman",
             "assigneeName": "Judge Armen",
             "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
+            "caseTitle": "Samson Workman",
             "messages": [
               {
                 "createdAt": "2019-08-08T14:33:24.183Z",
@@ -820,9 +840,11 @@
     "sentBySection": "petitions",
     "isInternal": true,
     "createdAt": "2019-08-08T14:33:24.183Z",
+    "caseTitle": "Samson Workman",
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "2019-08-08T14:33:24.183Z",
+    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-08-08T14:33:24.183Z",

@@ -121,6 +121,7 @@ exports.updatePrimaryContactInteractor = async ({
       assigneeName: null,
       caseId,
       caseStatus: caseEntity.status,
+      caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
       docketNumber: caseEntity.docketNumber,
       docketNumberSuffix: caseEntity.docketNumberSuffix,
       document: {

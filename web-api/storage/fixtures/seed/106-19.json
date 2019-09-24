@@ -450,6 +450,7 @@
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
     "isInternal": true,
+    "caseTitle": "Denise Gould",
     "createdAt": "2019-08-08T14:23:51.565Z",
     "assigneeName": "Judge Armen",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
@@ -474,7 +475,7 @@
     "procedureType": "Regular",
     "contactSecondary": {},
     "isPaper": false,
-    "initialTitle": "Denise Gould, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialTitle": "Denise Gould",
     "documents": [
       {
         "createdAt": "2019-07-12T17:09:41.026Z",
@@ -668,7 +669,7 @@
     "hasIrsNotice": false,
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
-    "caseTitle": "Denise Gould, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "caseTitle": "Denise Gould",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "currentVersion": "3",
     "orderForAmendedPetition": false,
@@ -705,7 +706,7 @@
     "procedureType": "Regular",
     "contactSecondary": {},
     "isPaper": false,
-    "initialTitle": "Denise Gould, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "initialTitle": "Denise Gould",
     "documents": [
       {
         "createdAt": "2019-07-12T17:09:41.026Z",
@@ -932,7 +933,7 @@
     "hasIrsNotice": false,
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
-    "caseTitle": "Denise Gould, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "caseTitle": "Denise Gould",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "currentVersion": "4",
     "orderForAmendedPetition": false,
@@ -992,6 +993,7 @@
     "isInternal": true,
     "createdAt": "2019-08-08T14:23:51.565Z",
     "assigneeName": "Judge Armen",
+    "caseTitle": "Denise Gould",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "sk": "workitem-368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "messages": [
@@ -1027,6 +1029,7 @@
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
     "isInternal": true,
+    "caseTitle": "Denise Gould",
     "createdAt": "2019-08-08T14:23:51.565Z",
     "assigneeName": "Judge Armen",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
@@ -1058,6 +1061,7 @@
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
     "section": "armensChambers",
+    "caseTitle": "Denise Gould",
     "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -1108,6 +1112,7 @@
     "createdAt": "2019-08-08T14:23:51.565Z",
     "assigneeName": "Judge Armen",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
+    "caseTitle": "Denise Gould",
     "sk": "2019-08-08T14:23:51.565Z",
     "messages": [
       {
