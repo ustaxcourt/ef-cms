@@ -126,6 +126,12 @@ provider:
         - arn:aws:s3:::${self:provider.environment.TEMP_DOCUMENTS_BUCKET_NAME}/*
     - Effect: 'Allow'
       Action:
+        - execute-api:Invoke
+        - execute-api:ManageConnections
+      Resource:
+        - '*'
+    - Effect: 'Allow'
+      Action:
         - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem
