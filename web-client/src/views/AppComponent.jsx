@@ -22,6 +22,7 @@ import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
+import { OrdersNeededSummary } from './CaseDetailEdit/OrdersNeededSummary';
 import { PDFSigner } from './PDFSigner';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
@@ -64,6 +65,7 @@ const pages = {
   Loading,
   LogIn,
   Messages,
+  OrdersNeededSummary,
   PDFSigner,
   PrimaryContactEdit,
   PrintableDocketRecord,
@@ -122,6 +124,8 @@ App.propTypes = {
   currentPage: PropTypes.string,
   currentPageHeader: PropTypes.string,
 };
+
+console.log(state.currentPage);
 
 export const AppComponent = connect(
   {

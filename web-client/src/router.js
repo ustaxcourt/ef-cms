@@ -263,6 +263,15 @@ const router = {
     );
 
     route(
+      '/case-detail/*/orders-needed',
+      checkLoggedIn(docketNumber => {
+        console.log(app.getState('currentPage'));
+        document.title = `Orders Needed ${pageTitleSuffix}`;
+        app.getSequence('gotoOrdersNeededSequence')({ docketNumber });
+      }),
+    );
+
+    route(
       '/document-qc..',
       checkLoggedIn(() => {
         const path = route._.getPathFromBase();
