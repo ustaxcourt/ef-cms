@@ -1,6 +1,6 @@
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { StateSelect } from './StateSelect';
-import { Text } from '../../ustc-ui/Text/Text';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -55,10 +55,7 @@ export const Address = connect(
               });
             }}
           />
-          <Text
-            bind={`validationErrors.${type}.address1`}
-            className="usa-error-message"
-          />
+          <ValidationText field={`${type}.address1`} />
         </div>
         <div className="usa-form-group">
           <label className="usa-label" htmlFor={`${type}.address2`}>
@@ -152,16 +149,10 @@ export const Address = connect(
             </div>
             <div className="grid-row grid-gap">
               <div className="grid-col-8">
-                <Text
-                  bind={`validationErrors.${type}.city`}
-                  className="usa-error-message"
-                />
+                <ValidationText field={`${type}.city`} />
               </div>
               <div className="grid-col-4">
-                <Text
-                  bind={`validationErrors.${type}.state`}
-                  className="usa-error-message"
-                />
+                <ValidationText field={`${type}.state`} />
               </div>
             </div>
           </div>
@@ -196,10 +187,7 @@ export const Address = connect(
                 });
               }}
             />
-            <Text
-              bind={`validationErrors.${type}.city`}
-              className="usa-error-message"
-            />
+            <ValidationText field={`${type}.city`} />
           </div>
           <div
             className={classNames(
@@ -220,10 +208,7 @@ export const Address = connect(
               usStates={usStates}
               validateStartCaseSequence={validateStartCaseSequence}
             />
-            <Text
-              bind={`validationErrors.${type}.state`}
-              className="usa-error-message"
-            />
+            <ValidationText field={`${type}.state`} />
           </div>
         </Mobile>
         <div
@@ -260,10 +245,7 @@ export const Address = connect(
               });
             }}
           />
-          <Text
-            bind={`validationErrors.${type}.postalCode`}
-            className="usa-error-message"
-          />
+          <ValidationText field={`${type}.postalCode`} />
         </div>
       </React.Fragment>
     );

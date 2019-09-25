@@ -3,7 +3,7 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { Text } from '../../ustc-ui/Text/Text';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -82,14 +82,9 @@ export const StartCaseStep2 = connect(
                   updateFormValueSequence="updateStartCaseFormValueSequence"
                   validationSequence="validateStartCaseWizardSequence"
                 />
-                <Text
-                  bind="validationErrors.petitionFile"
-                  className="usa-error-message"
-                />
-                <Text
-                  bind="validationErrors.petitionFileSize"
-                  className="usa-error-message"
-                />
+
+                <ValidationText field="petitionFile" />
+                <ValidationText field="petitionFileSize" />
               </div>
             </div>
           </div>
@@ -136,10 +131,7 @@ export const StartCaseStep2 = connect(
                     </label>
                   </div>
                 ))}
-                <Text
-                  bind="validationErrors.hasIrsNotice"
-                  className="usa-error-message"
-                />
+                <ValidationText field="hasIrsNotice" />
               </div>
             </fieldset>
 

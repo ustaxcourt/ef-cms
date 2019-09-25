@@ -41,6 +41,11 @@ resource "aws_dynamodb_table" "efcms-east" {
     Environment = "${var.environment}"
   }
 
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+
   lifecycle {
     prevent_destroy = true
   }
@@ -68,7 +73,7 @@ resource "aws_dynamodb_table" "efcms-west" {
     name = "gsi1pk"
     type = "S"
   }
-  
+
   point_in_time_recovery {
     enabled = true
   }
@@ -86,6 +91,11 @@ resource "aws_dynamodb_table" "efcms-west" {
   tags {
     Name        = "efcms-${var.environment}"
     Environment = "${var.environment}"
+  }
+
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
   }
 
   lifecycle {

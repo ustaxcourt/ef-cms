@@ -1,7 +1,7 @@
 import { Address } from './Address';
 import { Country } from './Country';
 import { InternationalAddress } from './InternationalAddress';
-import { Text } from '../../ustc-ui/Text/Text';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -71,10 +71,7 @@ export const ContactPrimary = connect(
                 });
               }}
             />
-            <Text
-              bind="validationErrors.contactPrimary.name"
-              className="usa-error-message"
-            />
+            <ValidationText field="contactPrimary.name" />
           </div>
 
           {contactsHelper.contactPrimary.displaySecondaryName && (
@@ -104,10 +101,7 @@ export const ContactPrimary = connect(
                   });
                 }}
               />
-              <Text
-                bind="validationErrors.contactPrimary.secondaryName"
-                className="usa-error-message"
-              />
+              <ValidationText field="contactPrimary.secondaryName" />
             </div>
           )}
 
@@ -182,10 +176,7 @@ export const ContactPrimary = connect(
                   });
                 }}
               />
-              <Text
-                bind="validationErrors.contactPrimary.inCareOf"
-                className="usa-error-message"
-              />
+              <ValidationText field="contactPrimary.inCareOf" />
             </div>
           )}
 
@@ -251,10 +242,7 @@ export const ContactPrimary = connect(
                 });
               }}
             />
-            <Text
-              bind="validationErrors.contactPrimary.phone"
-              className="usa-error-message"
-            />
+            <ValidationText field="contactPrimary.phone" />
           </div>
         </div>
       </>
