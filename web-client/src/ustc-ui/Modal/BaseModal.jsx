@@ -6,7 +6,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
-const appRoot = document.getElementById('app');
 const modalRoot = document.getElementById('modal-root');
 
 export class BaseModalComponent extends React.Component {
@@ -61,16 +60,12 @@ export class BaseModalComponent extends React.Component {
 
   componentDidMount() {
     modalRoot.appendChild(this.el);
-    appRoot.inert = true;
-    appRoot.setAttribute('aria-hidden', 'true');
     document.addEventListener('keydown', this.keydownTriggered, false);
     this.toggleNoScroll(true);
   }
 
   componentWillUnmount() {
     modalRoot.removeChild(this.el);
-    appRoot.inert = false;
-    appRoot.setAttribute('aria-hidden', 'false');
     document.removeEventListener('keydown', this.keydownTriggered, false);
     this.toggleNoScroll(false);
   }

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const appRoot = document.getElementById('app');
 const modalRoot = document.getElementById('modal-root');
 
 export class ModalDialog extends React.Component {
@@ -64,8 +63,6 @@ export class ModalDialog extends React.Component {
   }
   componentDidMount() {
     modalRoot.appendChild(this.el);
-    appRoot.inert = true;
-    appRoot.setAttribute('aria-hidden', 'true');
     document.addEventListener('keydown', this.keydownTriggered, false);
     this.toggleNoScroll(true);
     this.focusModal();
@@ -75,10 +72,7 @@ export class ModalDialog extends React.Component {
   }
   componentWillUnmount() {
     modalRoot.removeChild(this.el);
-    appRoot.inert = false;
-    appRoot.setAttribute('aria-hidden', 'false');
     document.removeEventListener('keydown', this.keydownTriggered, false);
-
     this.toggleNoScroll(false);
   }
 
@@ -86,7 +80,7 @@ export class ModalDialog extends React.Component {
     const modalHeader = document.querySelector(
       '.modal-header .modal-header__title',
     );
-    modalHeader.focus();
+    modalHeader && modalHeader.focus();
   }
 
   render() {
