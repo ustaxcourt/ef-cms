@@ -19,8 +19,6 @@ export const checkForOrdersNeededAction = async ({ get, path }) => {
     orderToShowCause,
   } = get(state.caseDetail);
 
-  console.log('yee haw');
-
   const ordersNeeded = [
     orderForAmendedPetition,
     orderForAmendedPetitionAndFilingFee,
