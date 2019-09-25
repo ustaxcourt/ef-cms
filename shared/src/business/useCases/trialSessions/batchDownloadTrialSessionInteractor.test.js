@@ -17,7 +17,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
   ]);
 
   const zipDocumentsMock = jest.fn();
-  const getDownloadPolicyUrlMock = jest.fn();
+  const getDownloadPolicyUrlMock = jest.fn(() => ({ url: 'something' }));
 
   beforeEach(() => {
     applicationContext = {
@@ -25,6 +25,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
         role: 'judge',
         userId: 'abc-123',
       }),
+      getNotificationGateway: () => ({ sendNotificationToUser: () => {} }),
       getPersistenceGateway: () => ({
         getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionMock,
         getDownloadPolicyUrl: getDownloadPolicyUrlMock,

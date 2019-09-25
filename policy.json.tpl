@@ -105,6 +105,16 @@
       "Resource": "*"
     },
     {
+      "Sid": "DynamoDescribeLimits",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:DescribeLimits"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
       "Sid": "DynamoGranular",
       "Effect": "Allow",
       "Action": [
@@ -118,8 +128,11 @@
         "dynamodb:Query",
         "dynamodb:BatchGetItem",
         "dynamodb:UpdateTable",
+        "dynamodb:UpdateTimeToLive",
+        "dynamodb:CreateGlobalTable",
         "dynamodb:DescribeContinuousBackups",
         "dynamodb:DescribeGlobalTable"
+        "dynamodb:DescribeLimits"
         "dynamodb:DescribeStream"
         "dynamodb:GetRecords"
         "dynamodb:GetShardIterator"
@@ -128,7 +141,7 @@
       "Resource": [
         "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-*",
         "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-*",
-        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-*",
+        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-*"
       ]
     },
     {
