@@ -113,6 +113,15 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=add-deadline',
   },
+  {
+    actions: [
+      'wait for ul.usa-list to be visible',
+      'wait for #button-create-order to be visible',
+    ],
+    notes: 'checks a11y of orders needed summary',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/orders-needed&info=orders-needed-summary',
+  },
 
   //this url probably needs to be moved to calendaring when those users are created
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=non-calendared-case',
