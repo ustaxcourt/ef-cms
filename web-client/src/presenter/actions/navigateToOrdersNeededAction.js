@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * changes the route to view the document-detail of the documentId
+ * changes the route to view the orders needed summary for a given petition
  *
  * @param {object} providers the providers object
  * @param {object} providers.router the riot.router object that is used for changing the route
