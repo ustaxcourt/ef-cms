@@ -155,7 +155,11 @@ export const DocumentDetail = connect(
               documentDetailHelper.formattedDocument.isPetition && (
                 <button
                   className="usa-button serve-to-irs margin-right-0"
-                  onClick={() => clickServeToIrsSequence()}
+                  onClick={() =>
+                    clickServeToIrsSequence({
+                      path: `/case-detail/${caseDetail.docketNumber}/orders-needed`,
+                    })
+                  }
                 >
                   <FontAwesomeIcon icon={['fas', 'clock']} />
                   Serve to IRS
