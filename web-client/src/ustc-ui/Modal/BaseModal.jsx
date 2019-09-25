@@ -1,3 +1,4 @@
+import { FocusLock } from '../../ustc-ui/FocusLock/FocusLock';
 import { connect } from '@cerebral/react';
 import { props, sequences } from 'cerebral';
 import PropTypes from 'prop-types';
@@ -80,22 +81,24 @@ export class BaseModalComponent extends React.Component {
 
   renderModalContent() {
     return (
-      <dialog
-        open
-        className={classNames('modal-screen', this.props.className)}
-        role="dialog"
-        onClick={this.blurDialog}
-      >
-        <div
-          aria-live="assertive"
-          aria-modal="true"
-          className="modal-dialog padding-205"
-          role="status"
-          onClick={event => event.stopPropagation()}
+      <FocusLock>
+        <dialog
+          open
+          className={classNames('modal-screen', this.props.className)}
+          role="dialog"
+          onClick={this.blurDialog}
         >
-          {this.props.children}
-        </div>
-      </dialog>
+          <div
+            aria-live="assertive"
+            aria-modal="true"
+            className="modal-dialog padding-205"
+            role="status"
+            onClick={event => event.stopPropagation()}
+          >
+            {this.props.children}
+          </div>
+        </dialog>
+      </FocusLock>
     );
   }
 }
