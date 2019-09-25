@@ -125,8 +125,6 @@ App.propTypes = {
   currentPageHeader: PropTypes.string,
 };
 
-console.log(state.currentPage);
-
 export const AppComponent = connect(
   {
     currentPage: state.currentPage,
