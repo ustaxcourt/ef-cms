@@ -1,15 +1,18 @@
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const OrdersNeededSummary = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
+    openCreateOrderChooseTypeModalSequence:
+      sequences.openCreateOrderChooseTypeModalSequence,
   },
-  ({ formattedCaseDetail }) => {
+  ({ formattedCaseDetail, openCreateOrderChooseTypeModalSequence }) => {
     return (
       <>
         <CaseDetailHeader />
@@ -17,7 +20,18 @@ export const OrdersNeededSummary = connect(
           <SuccessNotification />
           <ErrorNotification />
           <div>
-            <h1>Orders Needed</h1>
+            <h1>
+              Orders Needed{' '}
+              <div className="display-inline-block margin-left-2 margin-top-neg-1">
+                <button
+                  className="usa-button usa-button--unstyled"
+                  onClick={() => {}}
+                >
+                  <FontAwesomeIcon icon="print" size="sm" />
+                  Print
+                </button>
+              </div>
+            </h1>
           </div>
           <div>
             <ul className="usa-list">
@@ -43,6 +57,17 @@ export const OrdersNeededSummary = connect(
                 <li>Notice of Attachments in the Nature of Evidence</li>
               )}
             </ul>
+          </div>
+
+          <div className="margin-top-3">
+            <button
+              className="usa-button usa-button--inverse"
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/create-order`}
+              id="button-create-order"
+              onClick={() => openCreateOrderChooseTypeModalSequence()}
+            >
+              <FontAwesomeIcon icon="clipboard-list" size="1x" /> Create Order
+            </button>
           </div>
         </section>
       </>
