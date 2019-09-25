@@ -34,6 +34,6 @@ describe('getCalendaredCasesForTrialSession', () => {
     const result = await getCalendaredCasesForTrialSession({
       applicationContext,
     });
-    expect(result).toEqual([MOCK_CASE]);
+    expect(result).toMatchObject([MOCK_CASE]);
   });
 });
