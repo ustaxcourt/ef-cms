@@ -2,7 +2,6 @@ import { checkForOrdersNeededAction } from '../actions/CaseDetail/checkForOrders
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { gotoCaseDetailSequence } from './gotoCaseDetailSequence';
 import { gotoOrdersNeededSequence } from './gotoOrdersNeededSequence';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { sendPetitionToIRSHoldingQueueAction } from '../actions/sendPetitionToIRSHoldingQueueAction';
@@ -23,7 +22,7 @@ export const submitPetitionToIRSHoldingQueueSequence = [
   set(state.saveAlertsForNavigation, true),
   checkForOrdersNeededAction,
   {
-    no: [...gotoCaseDetailSequence],
+    no: [navigateToMessagesAction],
     yes: [...gotoOrdersNeededSequence],
   },
 ];
