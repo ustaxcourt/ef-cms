@@ -5,10 +5,8 @@ export const setupNotificationListenerAction = async ({
   store,
 }) => {
   const token = applicationContext.getCurrentUserToken();
+  const socket = applicationContext.getWebSocketClient(token);
 
-  const socket = new WebSocket(
-    `${applicationContext.getNotificationsUrl()}?token=${token}`,
-  );
   socket.onopen = () => {};
 
   socket.onmessage = event => {
