@@ -1,7 +1,8 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.caseDetail.judgeNotes
+ * returns a path based upon if any order-related values for a given case
+ * are set to true, in which it returns path.yes(); otherwise, path.no()
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
