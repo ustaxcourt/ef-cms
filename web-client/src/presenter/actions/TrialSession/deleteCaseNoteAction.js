@@ -8,13 +8,17 @@
  * @returns {object} the details of a caseNote
  */
 export const deleteCaseNoteAction = async ({ applicationContext, props }) => {
-  const { caseId } = props;
-  let caseNote;
+  const { caseId, trialSessionId } = props;
 
   await applicationContext.getUseCases().deleteCaseNoteInteractor({
     applicationContext,
     caseId,
   });
 
-  return { caseNote };
+  return {
+    caseNote: {
+      caseId,
+      trialSessionId,
+    },
+  };
 };
