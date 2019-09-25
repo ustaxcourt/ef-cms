@@ -1,4 +1,4 @@
-import { Text } from '../../ustc-ui/Text/Text';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -61,10 +61,7 @@ export const Country = connect(
               - International -
             </option>
           </select>
-          <Text
-            bind={`validationErrors.${type}.countryType`}
-            className="usa-error-message"
-          />
+          <ValidationText field={`${type}.countryType`} />
         </div>
         {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <div
@@ -99,10 +96,7 @@ export const Country = connect(
                 });
               }}
             />
-            <Text
-              bind={`validationErrors.${type}.country`}
-              className="usa-error-message"
-            />
+            <ValidationText field={`${type}.country`} />
           </div>
         )}
       </React.Fragment>
