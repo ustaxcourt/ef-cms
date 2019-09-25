@@ -34,7 +34,9 @@ export const setValidationAlertErrorsAction = ({ get, props, store }) => {
 
     if (filteredErrorKeys.length < errorKeys.length) {
       skippedKeys = errorKeys.filter(
-        errorKey => filteredErrorKeys.indexOf(errorKey) === -1,
+        errorKey =>
+          filteredErrorKeys.indexOf(errorKey) === -1 &&
+          props.errors[errorKey] !== undefined,
       );
     }
 
