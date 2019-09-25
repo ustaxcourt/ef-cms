@@ -1,6 +1,5 @@
 import { connect } from '@cerebral/react';
 import { props, sequences } from 'cerebral';
-import FocusLock from 'react-focus-lock';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -77,26 +76,24 @@ class OverlayComponent extends React.Component {
 
   renderModalContent() {
     return (
-      <FocusLock>
-        <dialog
-          open
-          className={classNames(
-            'modal-screen',
-            'overlay-full',
-            this.props.className,
-          )}
-          ref={this.props.forwardedRef}
+      <dialog
+        open
+        className={classNames(
+          'modal-screen',
+          'overlay-full',
+          this.props.className,
+        )}
+        ref={this.props.forwardedRef}
+      >
+        <div
+          aria-live="assertive"
+          aria-modal="true"
+          className="modal-overlay"
+          role="dialog"
         >
-          <div
-            aria-modal="true"
-            className="modal-overlay"
-            data-aria-live="assertive"
-            role="dialog"
-          >
-            {this.props.children}
-          </div>
-        </dialog>
-      </FocusLock>
+          {this.props.children}
+        </div>
+      </dialog>
     );
   }
 }
