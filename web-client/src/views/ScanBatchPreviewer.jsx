@@ -11,7 +11,7 @@ import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
-import { Text } from '../ustc-ui/Text/Text';
+import { ValidationText } from '../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
@@ -236,10 +236,7 @@ export const ScanBatchPreviewer = connect(
               </label>
             </div>
           </fieldset>
-          <Text
-            bind={`validationErrors.${documentType}`}
-            className="usa-error-message"
-          />
+          <ValidationText field={`${documentType}`} />
         </div>
       );
     };
