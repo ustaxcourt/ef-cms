@@ -9,6 +9,12 @@ import { state } from 'cerebral';
  * @returns {object} the path to execute next
  */
 export const checkForOrdersNeededAction = async ({ get, path }) => {
+  const caseDetail = get(state.caseDetail);
+
+  if (!caseDetail) {
+    return path.no();
+  }
+
   const {
     noticeOfAttachments,
     orderForAmendedPetition,
@@ -17,7 +23,7 @@ export const checkForOrdersNeededAction = async ({ get, path }) => {
     orderForOds,
     orderForRatification,
     orderToShowCause,
-  } = get(state.caseDetail);
+  } = caseDetail;
 
   const ordersNeeded = [
     orderForAmendedPetition,
