@@ -39,6 +39,11 @@ import { associateRespondentWithCaseInteractor } from '../../shared/src/proxies/
 import { authorizeCodeInteractor } from '../../shared/src/business/useCases/authorizeCodeInteractor';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { caseSearchInteractor } from '../../shared/src/proxies/caseSearchProxy';
+import {
+  compareCasesByDocketNumber,
+  formatCase as formatCaseForTrialSession,
+  formattedTrialSessionDetails,
+} from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
@@ -431,11 +436,14 @@ const applicationContext = {
   getUseCases: () => allUseCases,
   getUtilities: () => {
     return {
+      compareCasesByDocketNumber,
       createISODateString,
       formatCase,
       formatCaseDeadlines,
+      formatCaseForTrialSession,
       formatDateString,
       formatDocument,
+      formattedTrialSessionDetails,
       getFormattedCaseDetail,
       isStringISOFormatted,
       prepareDateFromString,

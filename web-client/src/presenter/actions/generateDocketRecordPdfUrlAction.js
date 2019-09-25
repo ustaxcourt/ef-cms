@@ -11,10 +11,18 @@ export const generateDocketRecordPdfUrlAction = async ({
   get,
   router,
 }) => {
+  console.log('1');
   const caseDetail = get(state.caseDetail);
+  console.log('caseDetail', caseDetail);
+  console.log(
+    'state.sessionMetadata.docketRecordSort',
+    get(state.sessionMetadata.docketRecordSort),
+  );
   const docketRecordSort = get(
     state.sessionMetadata.docketRecordSort[caseDetail.caseId],
   );
+
+  console.log('c');
 
   const docketRecordPdf = await applicationContext
     .getUseCases()
@@ -24,9 +32,13 @@ export const generateDocketRecordPdfUrlAction = async ({
       docketRecordSort,
     });
 
+  console.log('d');
+
   const pdfFile = new Blob([docketRecordPdf], { type: 'application/pdf' });
 
   const pdfUrl = router.createObjectURL(pdfFile);
+
+  console.log('e');
 
   return { pdfUrl };
 };

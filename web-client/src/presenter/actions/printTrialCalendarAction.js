@@ -135,10 +135,17 @@ export const printTrialCalendarAction = ({ get }) => {
     `;
   };
 
+  console.log('a');
   const output = printTrialCalendarTemplate.replace(
     /{{ trialCalendar }}/g,
     renderTrialCalendar(),
   );
+
+  console.log('b', {
+    contentHtml: output,
+    docketNumber: caseDetail.docketNumberWithSuffix,
+    headerHtml: `${formattedTrialSessionDetails.trialLocation} - ${formattedTrialSessionDetails.formattedStartDate} ${formattedTrialSessionDetails.sessionType}`,
+  });
 
   return {
     contentHtml: output,
