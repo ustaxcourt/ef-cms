@@ -60,7 +60,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     saveVersionedCase({
       applicationContext,
       caseToSave: caseToUpdate,
-      existingVersion: (caseToUpdate || {}).currentVersion,
+      existingVersion: caseToUpdate.currentVersion,
     }),
     ...requests,
   ]);

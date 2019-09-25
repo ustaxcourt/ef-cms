@@ -22,7 +22,7 @@ exports.createCase = async ({ applicationContext, caseToCreate }) => {
     saveVersionedCase({
       applicationContext,
       caseToSave: caseToCreate,
-      existingVersion: (caseToCreate || {}).currentVersion,
+      existingVersion: caseToCreate.currentVersion,
     }),
     createMappingRecord({
       applicationContext,
