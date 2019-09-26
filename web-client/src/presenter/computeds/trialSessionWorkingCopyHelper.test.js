@@ -1,3 +1,4 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { TrialSessionWorkingCopy } from '../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { runCompute } from 'cerebral/test';
@@ -28,6 +29,7 @@ describe('trial session working copy computed', () => {
     const result = runCompute(trialSessionWorkingCopyHelper, {
       state: {
         constants: {
+          STATUS_TYPES: Case.STATUS_TYPES,
           TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
         },
       },
@@ -40,6 +42,7 @@ describe('trial session working copy computed', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           constants: {
+            STATUS_TYPES: Case.STATUS_TYPES,
             TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
           },
           trialSession: {
@@ -73,6 +76,7 @@ describe('trial session working copy computed', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           constants: {
+            STATUS_TYPES: Case.STATUS_TYPES,
             TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
           },
           trialSession: {
@@ -106,6 +110,7 @@ describe('trial session working copy computed', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           constants: {
+            STATUS_TYPES: Case.STATUS_TYPES,
             TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
           },
           trialSession: {
@@ -153,6 +158,7 @@ describe('trial session working copy computed', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           constants: {
+            STATUS_TYPES: Case.STATUS_TYPES,
             TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
           },
           trialSession: {
@@ -179,6 +185,7 @@ describe('trial session working copy computed', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           constants: {
+            STATUS_TYPES: Case.STATUS_TYPES,
             TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
           },
           trialSession: {
@@ -210,6 +217,7 @@ describe('trial session working copy computed', () => {
       result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           constants: {
+            STATUS_TYPES: Case.STATUS_TYPES,
             TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
           },
           trialSession: {
@@ -247,6 +255,7 @@ describe('trial session working copy computed', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           constants: {
+            STATUS_TYPES: Case.STATUS_TYPES,
             TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
           },
           trialSession: {
@@ -287,6 +296,7 @@ describe('trial session working copy computed', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           constants: {
+            STATUS_TYPES: Case.STATUS_TYPES,
             TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
           },
           trialSession: {
@@ -322,6 +332,7 @@ describe('trial session working copy computed', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           constants: {
+            STATUS_TYPES: Case.STATUS_TYPES,
             TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
           },
           trialSession: {
@@ -350,6 +361,7 @@ describe('trial session working copy computed', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           constants: {
+            STATUS_TYPES: Case.STATUS_TYPES,
             TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
           },
           trialSession: {
@@ -379,12 +391,58 @@ describe('trial session working copy computed', () => {
       ]);
       expect(result.casesShownCount).toEqual(5);
     });
+
+    it('should return all sessions if none of the case statuses are closed', () => {
+      let result = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          constants: {
+            STATUS_TYPES: Case.STATUS_TYPES,
+            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+          },
+          trialSession: {
+            ...TRIAL_SESSION,
+            calendaredCases: [
+              MOCK_CASE,
+              {
+                ...MOCK_CASE,
+                status: Case.STATUS_TYPES.closed,
+                docketNumber: '102-19',
+              },
+              {
+                ...MOCK_CASE,
+                status: Case.STATUS_TYPES.closed,
+                docketNumber: '5000-17',
+              },
+              {
+                ...MOCK_CASE,
+                status: Case.STATUS_TYPES.closed,
+                docketNumber: '500-17',
+              },
+              {
+                ...MOCK_CASE,
+                status: Case.STATUS_TYPES.closed,
+                docketNumber: '90-07',
+              },
+            ],
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {},
+            filters: { statusUnassigned: true },
+            sort: 'docket',
+            sortOrder: 'asc',
+          },
+        },
+      });
+      expect(result.formattedCases).toMatchObject([{ docketNumber: '101-18' }]);
+      expect(result.casesShownCount).toEqual(1);
+    });
   });
 
   it('return the cases mapped by docket number', () => {
     let result = runCompute(trialSessionWorkingCopyHelper, {
       state: {
         constants: {
+          STATUS_TYPES: Case.STATUS_TYPES,
           TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
         },
         trialSession: {
