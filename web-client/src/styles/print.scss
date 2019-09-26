@@ -8,14 +8,14 @@
   }
 
   .big-blue-header {
-    *,
-    a {
-      text-decoration: none;
-      color: color($theme-color-base-ink);
-    }
-
-    text-decoration: none;
     background-color: color($theme-color-base-lightest);
     color: color($theme-color-base-ink);
+    text-decoration: none;
+
+    *,
+    a {
+      color: color($theme-color-base-ink);
+      text-decoration: none;
+    }
   }
 }
