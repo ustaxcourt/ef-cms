@@ -1,7 +1,6 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { formattedTrialSessionDetails } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
-import { runCompute } from 'cerebral/test';
 
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 

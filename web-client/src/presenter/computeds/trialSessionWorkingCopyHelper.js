@@ -1,5 +1,4 @@
 import { camelCase, pickBy } from 'lodash';
-import { formatCase } from './formattedTrialSessionDetails';
 import { makeMap } from './makeMap';
 import { state } from 'cerebral';
 
