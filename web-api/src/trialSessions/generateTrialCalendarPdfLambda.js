@@ -11,7 +11,7 @@ const {
 const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 
 /**
- * used for generating a printable PDF of a docket record
+ * lambda for creating the printable trial calendar
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
