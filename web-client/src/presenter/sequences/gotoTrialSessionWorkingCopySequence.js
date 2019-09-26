@@ -1,4 +1,5 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
+import { extractNotesFromCalendaredCasesAction } from '../actions/TrialSession/extractNotesFromCalendaredCasesAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
@@ -35,6 +36,7 @@ const gotoTrialSessionDetails = [
         yes: [
           getCalendaredCasesForTrialSessionAction,
           setCalendaredCasesOnTrialSessionAction,
+          extractNotesFromCalendaredCasesAction,
         ],
       },
       setCurrentPageAction('TrialSessionWorkingCopy'),
