@@ -12,9 +12,7 @@ describe('caseSearchInteractor', () => {
 
   it('returns empty array if no search params are passed in', async () => {
     searchSpy = jest.fn(async () => {
-      return {
-        body: {},
-      };
+      return {};
     });
 
     const results = await caseSearchInteractor({
@@ -27,21 +25,19 @@ describe('caseSearchInteractor', () => {
   it('calls search function with correct params and returns records', async () => {
     searchSpy = jest.fn(async () => {
       return {
-        body: {
-          hits: {
-            hits: [
-              {
-                _source: {
-                  caseId: { S: '1' },
-                },
+        hits: {
+          hits: [
+            {
+              _source: {
+                caseId: { S: '1' },
               },
-              {
-                _source: {
-                  caseId: { S: '2' },
-                },
+            },
+            {
+              _source: {
+                caseId: { S: '2' },
               },
-            ],
-          },
+            },
+          ],
         },
       };
     });
