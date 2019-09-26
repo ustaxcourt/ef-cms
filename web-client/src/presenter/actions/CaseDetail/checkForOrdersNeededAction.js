@@ -18,6 +18,7 @@ export const checkForOrdersNeededAction = async ({ get, path }) => {
 
   const {
     noticeOfAttachments,
+    orderDesignatingPlaceOfTrial,
     orderForAmendedPetition,
     orderForAmendedPetitionAndFilingFee,
     orderForFilingFee,
@@ -34,6 +35,7 @@ export const checkForOrdersNeededAction = async ({ get, path }) => {
     orderForRatification,
     orderToShowCause,
     noticeOfAttachments,
+    orderDesignatingPlaceOfTrial,
   ].some(val => !!val);
 
   if (ordersNeeded) {
