@@ -113,6 +113,7 @@ provider:
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
+    STREAM_TIMESTAMP: ${opt:stream_label} || '*'
 
   iamRoleStatements:
     - Effect: 'Allow'
@@ -379,7 +380,7 @@ functions:
     events:
       - stream:
           type: dynamodb
-          arn: arn:aws:dynamodb:us-east-1:515554424717:table/efcms-exp/stream/2019-09-20T19:34:44.208 # TODO: import from terraform arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/efcms-${opt:stage}/stream/*
+          arn: arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/efcms-${opt:stage}/stream/${env:STREAM_TIMESTAMP}
           batchSize: 100
           startingPosition: TRIM_HORIZON
 
