@@ -97,6 +97,7 @@
         "elasticloadbalancing:*",
         "ec2:*",
         "ses:*",
+        "es:*",
         "s3:*",
         "cloudformation:*",
         "cloudwatch:*",
