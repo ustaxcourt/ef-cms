@@ -6,9 +6,10 @@ module.exports = [
   'http://localhost:1234/mock-login?token=practitioner&path=/case-detail/102-19/request-access',
   {
     actions: [
-      'wait for element #document-type to be visible',
-      'set field #document-type to Substitution of Counsel',
-      'check field #document-type',
+      'wait for element #react-select-2-input to be visible',
+      'click #react-select-2-input',
+      'wait for element .select-react-element__menu to be visible',
+      'click #react-select-2-option-5', //Substitution of Counsel
       'set field #certificate-Yes to Yes',
       'check field #certificate-Yes',
       'wait for element #objections-Unknown to be visible',
