@@ -276,12 +276,9 @@ table.work-queue {
     }
 
     .message-document-title {
-      overflow: hidden;
       max-width: 35rem;
       padding: 4px;
       margin: -4px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     &.to {
