@@ -7,6 +7,7 @@ describe('printFromBrowserAction', () => {
   beforeEach(() => {
     printFromWindowStub = jest.fn();
 
+    global.window = global;
     global.window.print = printFromWindowStub;
   });
 
