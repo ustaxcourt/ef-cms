@@ -1,3 +1,4 @@
+import { getDocumentTypesForSelect } from './internalTypesHelper';
 import { state } from 'cerebral';
 
 export const requestAccessHelper = (get, applicationContext) => {
@@ -64,6 +65,8 @@ export const requestAccessHelper = (get, applicationContext) => {
     );
   }
 
+  const documentsForSelect = getDocumentTypesForSelect(documents);
+
   const shouldShowExhibits = !['practitioner', 'respondent'].includes(userRole);
 
   const documentWithExhibits =
@@ -114,6 +117,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     documentWithObjections,
     documentWithSupportingDocuments,
     documents,
+    documentsForSelect,
     partyValidationError,
     showFilingIncludes,
     showFilingNotIncludes,
