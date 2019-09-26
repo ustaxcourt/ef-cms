@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+const { deleteByGsi } = require('../helpers/deleteByGsi');
 
 /**
  * deleteUserConnection
@@ -14,25 +14,5 @@ exports.deleteUserConnection = async ({ applicationContext, connectionId }) => {
    * You can't delete for a gsi,
    * So a query is needed to gather pk/sk
    */
-  const connections = await client.query({
-    ExpressionAttributeNames: {
-      '#gsi1pk': 'gsi1pk',
-    },
-    ExpressionAttributeValues: {
-      ':gsi1pk': connectionId,
-    },
-    IndexName: 'gsi1',
-    KeyConditionExpression: '#gsi1pk = :gsi1pk',
-    applicationContext,
-  });
-
-  for (const connection of connections) {
-    await client.delete({
-      applicationContext,
-      key: {
-        pk: connection.pk,
-        sk: connection.sk,
-      },
-    });
-  }
+  await deleteByGsi({ applicationContext, gsi: connectionId });
 };
