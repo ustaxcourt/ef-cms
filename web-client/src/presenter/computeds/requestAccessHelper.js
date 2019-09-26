@@ -64,12 +64,15 @@ export const requestAccessHelper = (get, applicationContext) => {
     );
   }
 
-  const documentWithExhibits = [
-    'Motion to Substitute Parties and Change Caption',
-    'Notice of Intervention',
-    'Notice of Election to Participate',
-    'Notice of Election to Intervene',
-  ].includes(documentType);
+  const shouldShowExhibits = !['practitioner', 'respondent'].includes(userRole);
+
+  const documentWithExhibits =
+    [
+      'Motion to Substitute Parties and Change Caption',
+      'Notice of Intervention',
+      'Notice of Election to Participate',
+      'Notice of Election to Intervene',
+    ].includes(documentType) && shouldShowExhibits;
 
   const documentWithAttachments = [
     'Motion to Substitute Parties and Change Caption',
