@@ -124,7 +124,7 @@
       "Resource": [
         "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-*",
         "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-*",
-        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-*",
+        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-*"
       ]
     },
     {
