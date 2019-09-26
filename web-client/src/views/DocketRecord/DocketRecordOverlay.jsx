@@ -1,3 +1,4 @@
+import { FocusLock } from '../ustc-ui/FocusLock/FocusLock';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
