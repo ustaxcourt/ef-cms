@@ -95,10 +95,11 @@ export const documentDetailHelper = (get, applicationContext) => {
       (!['New', 'Recalled'].includes(caseDetail.status) ||
         !formattedDocument.isPetition));
 
-  const showViewOrdersNeededButton =
-    document && document.status
-      ? document.status === 'served' && userRole === 'petitionsclerk'
-      : false;
+  const showViewOrdersNeededButton = !!(
+    document &&
+    document.status === 'served' &&
+    userRole === 'petitionsclerk'
+  );
 
   return {
     documentEditUrl,
