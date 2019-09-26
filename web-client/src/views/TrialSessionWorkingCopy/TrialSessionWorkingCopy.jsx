@@ -34,7 +34,7 @@ export const TrialSessionWorkingCopy = connect(
             </div>
             <div className="grid-col-3 text-right padding-top-2">
               <button
-                aria-label="Download batch of Trial Session"
+                aria-label="Download batch of documents in a trial session"
                 className="usa-button usa-button--unstyled"
                 onClick={() =>
                   batchDownloadTrialSessionSequence({
