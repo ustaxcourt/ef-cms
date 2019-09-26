@@ -39,6 +39,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
     .getCalendaredCasesForTrialSession({
       applicationContext,
       trialSessionId,
+      userId: user.userId,
     });
 
   let s3Ids = [];
