@@ -31,7 +31,11 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
             caseMetadata[calendaredCase.docketNumber].trialStatus,
           )),
     )
-    .map(caseItem => formatCase({ applicationContext, caseItem }))
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .formatCaseForTrialSession({ applicationContext, caseItem }),
+    )
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber);
 
   const casesShownCount = formattedCases.length;

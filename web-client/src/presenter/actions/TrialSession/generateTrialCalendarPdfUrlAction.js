@@ -6,25 +6,21 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {object} the pdfUrl
  */
-export const generateDocketRecordPdfUrlAction = async ({
+export const generateTrialCalendarPdfUrlAction = async ({
   applicationContext,
   get,
   router,
 }) => {
-  const caseDetail = get(state.caseDetail);
-  const docketRecordSort = get(
-    state.sessionMetadata.docketRecordSort[caseDetail.caseId],
-  );
+  const trialSession = get(state.trialSession);
 
-  const docketRecordPdf = await applicationContext
+  const trialCalendarPdf = await applicationContext
     .getUseCases()
-    .generateDocketRecordPdfInteractor({
+    .generateTrialCalendarPdfInteractor({
       applicationContext,
-      caseId: caseDetail.caseId,
-      docketRecordSort,
+      trialSessionId: trialSession.trialSessionId,
     });
 
-  const pdfFile = new Blob([docketRecordPdf], { type: 'application/pdf' });
+  const pdfFile = new Blob([trialCalendarPdf], { type: 'application/pdf' });
 
   const pdfUrl = router.createObjectURL(pdfFile);
 
