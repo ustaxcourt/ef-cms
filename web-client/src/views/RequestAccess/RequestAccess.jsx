@@ -3,9 +3,10 @@ import { PartiesRepresenting } from './PartiesRepresenting';
 import { RequestAccessDocumentForm } from './RequestAccessDocumentForm';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { find } from 'lodash';
+import { reactSelectValue } from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import Select from 'react-select';
 
 export const RequestAccess = connect(
   {
@@ -52,52 +53,45 @@ export const RequestAccess = connect(
           >
             <label
               className="usa-label"
-              htmlFor="document-type"
+              htmlFor="react-select-2-input"
               id="document-type-label"
             >
               Document Type
             </label>
-            <select
+            <Select
               aria-describedby="document-type-label"
-              className={`usa-select ${
+              className={`select-react-element ${
                 validationErrors.documentType ? 'usa-select--error' : ''
               }`}
+              classNamePrefix="select-react-element"
               id="document-type"
               name="documentType"
-              value={form.documentType || ''}
+              options={requestAccessHelper.documentsForSelect}
+              placeholder="- Select -"
+              value={reactSelectValue({
+                documentTypes: requestAccessHelper.documentsForSelect,
+                selectedEventCode: form.eventCode,
+              })}
               onChange={e => {
-                const documentType = e.target.value;
-                const entry = find(requestAccessHelper.documents, {
-                  documentType,
-                });
                 updateCaseAssociationFormValueSequence({
                   key: 'documentType',
-                  value: e.target.value,
+                  value: e.label,
                 });
                 updateCaseAssociationFormValueSequence({
                   key: 'documentTitleTemplate',
-                  value: entry.documentTitleTemplate,
+                  value: e.documentTitleTemplate,
                 });
                 updateCaseAssociationFormValueSequence({
                   key: 'eventCode',
-                  value: entry.eventCode,
+                  value: e.eventCode,
                 });
                 updateCaseAssociationFormValueSequence({
                   key: 'scenario',
-                  value: entry.scenario,
+                  value: e.scenario,
                 });
                 validateCaseAssociationRequestSequence();
               }}
-            >
-              <option value="">- Select -</option>
-              {requestAccessHelper.documents.map(entry => {
-                return (
-                  <option key={entry.documentType} value={entry.documentType}>
-                    {entry.documentType}
-                  </option>
-                );
-              })}
-            </select>
+            />
             <Text
               bind="validationErrors.documentType"
               className="usa-error-message"
