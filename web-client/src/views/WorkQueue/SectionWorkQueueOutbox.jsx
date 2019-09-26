@@ -77,13 +77,7 @@ export const SectionWorkQueueOutbox = connect(
                 </td>
 
                 <td className="message-queue-row">
-                  <div
-                    className={
-                      workQueueHelper.isDisplayingQC
-                        ? ''
-                        : 'message-document-title'
-                    }
-                  >
+                  <div className="message-document-title">
                     <a
                       className="case-link"
                       href={documentHelper({

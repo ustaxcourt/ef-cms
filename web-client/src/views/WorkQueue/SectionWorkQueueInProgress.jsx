@@ -136,13 +136,7 @@ export const SectionWorkQueueInProgress = connect(
                   {item.caseTitle}
                 </td>
                 <td className="message-queue-row message-queue-document">
-                  <div
-                    className={
-                      workQueueHelper.isDisplayingQC
-                        ? ''
-                        : 'message-document-title'
-                    }
-                  >
+                  <div className="message-document-title">
                     <a
                       className="case-link"
                       href={documentHelper({
