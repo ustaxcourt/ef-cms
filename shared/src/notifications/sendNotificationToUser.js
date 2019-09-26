@@ -7,6 +7,7 @@ const client = require('../persistence/dynamodbClientService');
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.message the message
  * @param {string} providers.userId the id of the user
+ * @returns {Promise} upon completion of notification delivery
  */
 exports.sendNotificationToUser = async ({
   applicationContext,
@@ -24,7 +25,10 @@ exports.sendNotificationToUser = async ({
     applicationContext,
   });
 
-  for (const connection of connections) {
+  const messageStringified = JSON.stringify(message);
+
+  const sendNotificationToConnection = connection => {
+    let result;
     try {
       const { endpoint } = connection;
 
@@ -32,15 +36,15 @@ exports.sendNotificationToUser = async ({
         endpoint,
       });
 
-      await notificationClient
+      result = notificationClient
         .postToConnection({
           ConnectionId: connection.sk,
-          Data: JSON.stringify(message),
+          Data: messageStringified,
         })
         .promise();
     } catch (err) {
       if (err.statusCode === 410) {
-        await client.delete({
+        result = client.delete({
           applicationContext,
           key: {
             pk: connection.pk,
@@ -48,6 +52,10 @@ exports.sendNotificationToUser = async ({
           },
         });
       }
+      // TODO: what if error doesn't conform to the above?
     }
-  }
+    return result;
+  };
+
+  return Promise.all(connections.map(sendNotificationToConnection));
 };
