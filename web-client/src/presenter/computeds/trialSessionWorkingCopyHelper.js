@@ -1,8 +1,4 @@
 import { camelCase, pickBy } from 'lodash';
-import {
-  compareCasesByDocketNumber,
-  formatCase,
-} from './formattedTrialSessionDetails';
 import { makeMap } from './makeMap';
 import { state } from 'cerebral';
 
@@ -34,8 +30,12 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
             caseMetadata[calendaredCase.docketNumber].trialStatus,
           )),
     )
-    .map(caseItem => formatCase({ applicationContext, caseItem }))
-    .sort(compareCasesByDocketNumber);
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .formatCaseForTrialSession({ applicationContext, caseItem }),
+    )
+    .sort(applicationContext.getUtilities().compareCasesByDocketNumber);
 
   const casesShownCount = formattedCases.length;
 
