@@ -535,7 +535,7 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
-const { Client } = require('@elastic/elasticsearch');
+const elasticsearch = require('elasticsearch');
 const { exec } = require('child_process');
 const { User } = require('../../shared/src/business/entities/User');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
@@ -718,8 +718,8 @@ module.exports = (appContextUser = {}) => {
     },
     getSearchClient: () => {
       if (!searchClientCache) {
-        searchClientCache = new Client({
-          node: environment.elasticsearchEndpoint,
+        searchClientCache = new elasticsearch.Client({
+          host: environment.elasticsearchEndpoint,
         });
       }
       return searchClientCache;

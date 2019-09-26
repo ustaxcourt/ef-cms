@@ -63,7 +63,7 @@ exports.caseSearchInteractor = async ({
     });
   }*/
 
-  const { body } = await applicationContext.getSearchClient().search({
+  const body = await applicationContext.getSearchClient().search({
     body: {
       query: {
         bool: {
