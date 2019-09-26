@@ -1,7 +1,9 @@
+import { checkForOrdersNeededAction } from '../actions/CaseDetail/checkForOrdersNeededAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
+import { navigateToOrdersNeededAction } from '../actions/navigateToOrdersNeededAction';
 import { sendPetitionToIRSHoldingQueueAction } from '../actions/sendPetitionToIRSHoldingQueueAction';
 import { set } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -18,5 +20,9 @@ export const submitPetitionToIRSHoldingQueueSequence = [
   getCaseAction,
   setCaseAction,
   set(state.saveAlertsForNavigation, true),
-  navigateToMessagesAction,
+  checkForOrdersNeededAction,
+  {
+    no: [navigateToMessagesAction],
+    yes: [navigateToOrdersNeededAction],
+  },
 ];
