@@ -5,6 +5,7 @@ import _ from 'lodash';
 export const documentDetailHelper = (get, applicationContext) => {
   let showSignDocumentButton = false;
   const currentUser = applicationContext.getCurrentUser();
+  const userRole = get(state.user.role);
   const caseDetail = get(state.caseDetail);
 
   const SIGNED_STIPULATED_DECISION = 'Stipulated Decision';
@@ -94,6 +95,9 @@ export const documentDetailHelper = (get, applicationContext) => {
       (!['New', 'Recalled'].includes(caseDetail.status) ||
         !formattedDocument.isPetition));
 
+  const showViewOrdersNeededButton =
+    document && document.status === 'served' && userRole === 'petitionsclerk';
+
   return {
     documentEditUrl,
     formattedDocument,
@@ -108,5 +112,6 @@ export const documentDetailHelper = (get, applicationContext) => {
     showDocumentViewerTopMargin,
     showServeDocumentButton,
     showSignDocumentButton,
+    showViewOrdersNeededButton,
   };
 };
