@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
@@ -13,7 +12,6 @@ import { unsetFormSubmittingSequence } from './unsetFormSubmittingSequence';
 export const gotoOrdersNeededSequence = [
   setCurrentPageAction('Interstitial'),
   clearModalAction,
-  clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,
   setFormSubmittingSequence,

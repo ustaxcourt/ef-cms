@@ -56,16 +56,18 @@ exports.batchDownloadTrialSessionInteractor = async ({
     .replace(/\s/g, '_')
     .replace(/,/g, ''); // TODO - create a sanitize utility for s3 ids // TODO - should we make these unique somehow?
 
-  sessionCases = sessionCases.map(caseToBatch => {
-    const caseName = Case.getCaseCaptionNames(caseToBatch.caseCaption);
-    const caseFolder = `${caseToBatch.docketNumber}, ${caseName}`;
+  sessionCases = sessionCases
+    .filter(caseToFilter => caseToFilter.status !== Case.STATUS_TYPES.closed)
+    .map(caseToBatch => {
+      const caseName = Case.getCaseCaptionNames(caseToBatch.caseCaption);
+      const caseFolder = `${caseToBatch.docketNumber}, ${caseName}`;
 
-    return {
-      ...caseToBatch,
-      caseName,
-      caseFolder,
-    };
-  });
+      return {
+        ...caseToBatch,
+        caseName,
+        caseFolder,
+      };
+    });
 
   sessionCases.forEach(caseToBatch => {
     const documentMap = caseToBatch.documents.reduce((acc, document) => {

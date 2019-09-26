@@ -265,16 +265,16 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  generatePdfFromHtmlLambda:
+  generateTrialCalendarPdfLambda:
     runtime: nodejs8.10
-    handler: web-api/src/apiHandlers.generatePdfFromHtmlLambda
+    handler: web-api/src/apiHandlers.generateTrialCalendarPdfLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
     timeout: 900
     events:
       - http:
-          path: generate-pdf-from-html
+          path: trial-calendar-pdf
           method: post
           cors: true
           authorizer:

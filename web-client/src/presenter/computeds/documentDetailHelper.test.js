@@ -1,15 +1,12 @@
-import { runCompute } from 'cerebral/test';
-
-import { documentDetailHelper as documentDetailHelperComputed } from './documentDetailHelper';
-import { withAppContextDecorator } from '../../../src/withAppContext';
-
 import {
   createISODateString,
   formatDateString,
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
-
+import { documentDetailHelper as documentDetailHelperComputed } from './documentDetailHelper';
 import { formatDocument } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../../src/withAppContext';
 
 let role = 'petitionsclerk';
 
@@ -336,5 +333,95 @@ describe('formatted work queue computed', () => {
     expect(result.formattedDocument.documentId).toEqual(
       'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     );
+  });
+
+  describe('showViewOrdersNeededButton', () => {
+    it("should show the 'view orders needed' link if a document has been served and user is petitionsclerk", () => {
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+                status: 'served',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user: {
+            role: 'petitionsclerk',
+          },
+        },
+      });
+
+      expect(result.showViewOrdersNeededButton).toEqual(true);
+    });
+
+    it("should NOT show the 'view orders needed' link if a document has been served and user is NOT a petitionsclerk", () => {
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+                status: 'served',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user: {
+            role: 'docketclerk',
+          },
+        },
+      });
+
+      expect(result.showViewOrdersNeededButton).toEqual(false);
+    });
+
+    it("should NOT show the 'view orders needed' link if a document has NOT been served and user is a petitionsclerk", () => {
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+                status: 'processing',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user: {
+            role: 'petitionsclerk',
+          },
+        },
+      });
+
+      expect(result.showViewOrdersNeededButton).toEqual(false);
+    });
+
+    it("should NOT show the 'view orders needed' link if a document has NOT been served and user is NOT a petitionsclerk", () => {
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+                status: 'processing',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user: {
+            role: 'docketclerk',
+          },
+        },
+      });
+
+      expect(result.showViewOrdersNeededButton).toEqual(false);
+    });
   });
 });

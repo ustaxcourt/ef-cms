@@ -7,6 +7,8 @@ module.exports = {
     .handler,
   generatePdfFromHtmlLambda: require('./cases/generatePdfFromHtmlLambda')
     .handler,
+  generateTrialCalendarPdfLambda: require('./trialSessions/generateTrialCalendarPdfLambda')
+    .handler,
   getNotificationsLambda: require('./users/getNotificationsLambda').handler,
   runBatchProcessLambda: require('./cases/runBatchProcessLambda').handler,
   swaggerJsonLambda: require('./swagger/swaggerJsonLambda').handler,

@@ -90,6 +90,12 @@ const {
   prepareDateFromString,
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
+  compareCasesByDocketNumber,
+  formatCase: formatCaseForTrialSession,
+  formattedTrialSessionDetails,
+} = require('../../shared/src/business/utilities/getFormattedTrialSessionDetails');
+
+const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
 const {
@@ -150,7 +156,11 @@ const {
   generateChangeOfAddressTemplate,
   generateHTMLTemplateForPDF,
   generatePrintableDocketRecordTemplate,
+  generateTrialCalendarTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF');
+const {
+  generateTrialCalendarPdfInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
 const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
@@ -743,6 +753,7 @@ module.exports = (appContextUser = {}) => {
         generateChangeOfAddressTemplate,
         generateHTMLTemplateForPDF,
         generatePrintableDocketRecordTemplate,
+        generateTrialCalendarTemplate,
       };
     },
     getUniqueId: () => {
@@ -776,6 +787,7 @@ module.exports = (appContextUser = {}) => {
         generateDocketRecordPdfInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
+        generateTrialCalendarPdfInteractor,
         getAllCaseDeadlinesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
@@ -840,8 +852,11 @@ module.exports = (appContextUser = {}) => {
     },
     getUtilities: () => {
       return {
+        compareCasesByDocketNumber,
         createISODateString,
+        formatCaseForTrialSession,
         formatDateString,
+        formattedTrialSessionDetails,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         prepareDateFromString,
