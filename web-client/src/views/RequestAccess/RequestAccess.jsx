@@ -53,7 +53,7 @@ export const RequestAccess = connect(
           >
             <label
               className="usa-label"
-              htmlFor="document-type"
+              htmlFor="react-select-2-input"
               id="document-type-label"
             >
               Document Type
@@ -75,7 +75,7 @@ export const RequestAccess = connect(
               onChange={e => {
                 updateCaseAssociationFormValueSequence({
                   key: 'documentType',
-                  value: e.documentTitleTemplate,
+                  value: e.label,
                 });
                 updateCaseAssociationFormValueSequence({
                   key: 'documentTitleTemplate',
