@@ -9,7 +9,12 @@ const client = require('../../dynamodbClientService');
  * @returns {Promise} the promise of the call to persistence
  */
 exports.deleteUserConnection = async ({ applicationContext, connectionId }) => {
-  const users = await client.query({
+  /**
+   * Only one record should be found at most.
+   * You can't delete for a gsi,
+   * So a query is needed to gather pk/sk
+   */
+  const connections = await client.query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
@@ -21,12 +26,12 @@ exports.deleteUserConnection = async ({ applicationContext, connectionId }) => {
     applicationContext,
   });
 
-  for (const user of users) {
+  for (const connection of connections) {
     await client.delete({
       applicationContext,
       key: {
-        pk: user.pk,
-        sk: connectionId,
+        pk: connection.pk,
+        sk: connection.sk,
       },
     });
   }
