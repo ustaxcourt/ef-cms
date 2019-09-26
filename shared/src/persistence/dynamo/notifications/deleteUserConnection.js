@@ -21,13 +21,15 @@ exports.deleteUserConnection = async ({ applicationContext, connectionId }) => {
     applicationContext,
   });
 
-  for (const user of users) {
-    await client.delete({
-      applicationContext,
-      key: {
-        pk: user.pk,
-        sk: connectionId,
-      },
-    });
-  }
+  await Promise.all(
+    users.map(user =>
+      client.delete({
+        applicationContext,
+        key: {
+          pk: user.pk,
+          sk: connectionId,
+        },
+      }),
+    ),
+  );
 };
