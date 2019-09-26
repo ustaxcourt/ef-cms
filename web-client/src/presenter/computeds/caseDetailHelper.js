@@ -21,6 +21,16 @@ export const caseDetailHelper = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
   const modalState = get(state.modal);
+  const {
+    noticeOfAttachments,
+    orderDesignatingPlaceOfTrial,
+    orderForAmendedPetition,
+    orderForAmendedPetitionAndFilingFee,
+    orderForFilingFee,
+    orderForOds,
+    orderForRatification,
+    orderToShowCause,
+  } = caseDetail;
 
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
   let showAddDocketEntryButton =
@@ -83,13 +93,24 @@ export const caseDetailHelper = (get, applicationContext) => {
   }
 
   const showServeToIrsButton = ['New', 'Recalled'].includes(caseDetail.status);
-
   const showRecallButton = caseDetail.status === 'Batched for IRS';
+
+  const hasOrders = [
+    noticeOfAttachments,
+    orderForAmendedPetition,
+    orderForAmendedPetitionAndFilingFee,
+    orderForFilingFee,
+    orderForOds,
+    orderForRatification,
+    orderToShowCause,
+    orderDesignatingPlaceOfTrial,
+  ].some(hasOrder => !!hasOrder);
 
   return {
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
     documentDetailTab,
+    hasOrders,
     hidePublicCaseInformation: !isExternalUser,
     practitionerSearchResultsCount:
       modalState &&

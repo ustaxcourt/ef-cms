@@ -50,6 +50,9 @@ export const OrdersNeededSummary = connect(
               {formattedCaseDetail.orderForRatification && (
                 <li>Order for Radification of Petition</li>
               )}
+              {formattedCaseDetail.orderDesignatingPlaceOfTrial && (
+                <li>Order to Change Designated Place of Trial</li>
+              )}
               {formattedCaseDetail.orderToShowCause && (
                 <li>Order to Show Cause</li>
               )}
