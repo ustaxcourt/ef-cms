@@ -13,7 +13,6 @@ import { unsetFormSubmittingSequence } from './unsetFormSubmittingSequence';
 export const gotoOrdersNeededSequence = [
   setCurrentPageAction('Interstitial'),
   clearModalAction,
-  clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,
   setFormSubmittingSequence,
