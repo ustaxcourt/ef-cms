@@ -39,7 +39,7 @@ export const workQueueHelper = get => {
       }/${queue}/${box}`;
     },
     hideCaseStatusColumn: userIsPetitionsClerk && isDisplayingQC,
-    hideFiledByColumn: !(isDisplayingQC && userIsPetitionsClerk),
+    hideFiledByColumn: !(isDisplayingQC && userIsDocketClerk),
     hideFromColumn: isDisplayingQC,
     hideIconColumn: !workQueueIsInternal && userIsOther,
     hideSectionColumn: isDisplayingQC,
