@@ -1,0 +1,21 @@
+@media only print {
+  .usa-banner,
+  .usa-logo,
+  .beta,
+  .ustc-header,
+  button {
+    display: none !important;
+  }
+
+  .big-blue-header {
+    *,
+    a {
+      text-decoration: none;
+      color: color($theme-color-base-ink);
+    }
+
+    text-decoration: none;
+    background-color: color($theme-color-base-lightest);
+    color: color($theme-color-base-ink);
+  }
+}
