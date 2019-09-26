@@ -576,4 +576,69 @@ describe('case detail computed', () => {
     });
     expect(result.respondentSearchResultsCount).toBeUndefined();
   });
+
+  describe('hasOrders', () => {
+    it('should signify a given case has orders (hasOrders=TRUE) if any of the order-related props are true', () => {
+      const result = runCompute(caseDetailHelper, {
+        state: {
+          caseDetail: {
+            noticeOfAttachments: true,
+            orderForAmendedPetition: true,
+            orderForAmendedPetitionAndFilingFee: true,
+            orderForFilingFee: true,
+            orderForOds: true,
+            orderForRatification: true,
+            orderToChangeDesignatedPlaceOfTrial: true,
+            orderToShowCause: true,
+          },
+          form: {},
+          modal: {},
+        },
+      });
+
+      expect(result.hasOrders).toEqual(true);
+    });
+
+    it('should signify a given case does NOT have orders if all of the order-related props are false', () => {
+      const result = runCompute(caseDetailHelper, {
+        state: {
+          caseDetail: {
+            noticeOfAttachments: false,
+            orderForAmendedPetition: false,
+            orderForAmendedPetitionAndFilingFee: false,
+            orderForFilingFee: false,
+            orderForOds: false,
+            orderForRatification: false,
+            orderToChangeDesignatedPlaceOfTrial: false,
+            orderToShowCause: false,
+          },
+          form: {},
+          modal: {},
+        },
+      });
+
+      expect(result.hasOrders).toEqual(false);
+    });
+
+    it('should signify a given case has orders if one of the order-related props is true', () => {
+      const result = runCompute(caseDetailHelper, {
+        state: {
+          caseDetail: {
+            noticeOfAttachments: false,
+            orderForAmendedPetition: false,
+            orderForAmendedPetitionAndFilingFee: false,
+            orderForFilingFee: false,
+            orderForOds: false,
+            orderForRatification: false,
+            orderToChangeDesignatedPlaceOfTrial: false,
+            orderToShowCause: true,
+          },
+          form: {},
+          modal: {},
+        },
+      });
+
+      expect(result.hasOrders).toEqual(true);
+    });
+  });
 });
