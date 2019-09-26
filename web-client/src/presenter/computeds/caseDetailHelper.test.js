@@ -583,6 +583,7 @@ describe('case detail computed', () => {
         state: {
           caseDetail: {
             noticeOfAttachments: true,
+            orderDesignatingPlaceOfTrial: true,
             orderForAmendedPetition: true,
             orderForAmendedPetitionAndFilingFee: true,
             orderForFilingFee: true,
@@ -604,6 +605,7 @@ describe('case detail computed', () => {
         state: {
           caseDetail: {
             noticeOfAttachments: false,
+            orderDesignatingPlaceOfTrial: false,
             orderForAmendedPetition: false,
             orderForAmendedPetitionAndFilingFee: false,
             orderForFilingFee: false,
@@ -625,6 +627,7 @@ describe('case detail computed', () => {
         state: {
           caseDetail: {
             noticeOfAttachments: false,
+            orderDesignatingPlaceOfTrial: false,
             orderForAmendedPetition: false,
             orderForAmendedPetitionAndFilingFee: false,
             orderForFilingFee: false,
