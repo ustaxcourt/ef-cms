@@ -85,7 +85,7 @@ provider:
   logRetentionInDays: 7
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
-  elasticsearchEndpoint: search-${opt:stage}.${opt:domain}
+  elasticsearchEndpoint: https://search-efcms-search-exp-qkpsy5vogpyatuspuiv377fy5y.us-east-1.es.amazonaws.com # TODO: figure out how to get this dynamically generated URL (or create a domain)
   masterRegion: us-east-1
   userPoolId: us-east-1_7uRkF0Axn
   masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
@@ -379,7 +379,7 @@ functions:
     events:
       - stream:
           type: dynamodb
-          arn: arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/efcms-${opt:stage}/stream/*
+          arn: arn:aws:dynamodb:us-east-1:515554424717:table/efcms-exp/stream/2019-09-20T19:34:44.208 # TODO: import from terraform arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/efcms-${opt:stage}/stream/*
           batchSize: 100
           startingPosition: TRIM_HORIZON
 
