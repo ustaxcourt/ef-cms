@@ -1,5 +1,13 @@
 const client = require('../persistence/dynamodbClientService');
 
+/**
+ * sendNotificationToUser
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.message the message
+ * @param {string} providers.userId the id of the user
+ */
 exports.sendNotificationToUser = async ({
   applicationContext,
   message,
