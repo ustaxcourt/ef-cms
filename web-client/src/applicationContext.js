@@ -404,9 +404,6 @@ const applicationContext = {
   },
   getFileReader: () => FileReader,
   getHttpClient: () => axios,
-  getNotificationsUrl: () => {
-    return process.env.WS_URL || 'ws://localhost:3011';
-  },
   getPdfJs: () => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
     return pdfjsLib;
@@ -452,6 +449,12 @@ const applicationContext = {
       setServiceIndicatorsForCase,
       sortDocketRecords,
     };
+  },
+  getWebSocketClient: token => {
+    const notificationsUrl = process.env.WS_URL || 'ws://localhost:3011';
+    const connectionUrl = `${notificationsUrl}?token=${token}`;
+    const socket = new WebSocket(connectionUrl);
+    return socket;
   },
   setCurrentUser,
   setCurrentUserToken,

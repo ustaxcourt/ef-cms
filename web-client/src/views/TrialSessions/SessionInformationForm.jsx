@@ -1,4 +1,4 @@
-import { Text } from '../../ustc-ui/Text/Text';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -104,10 +104,7 @@ export const SessionInformationForm = connect(
                 </div>
               </div>
             </fieldset>
-            <Text
-              bind="validationErrors.startDate"
-              className="usa-error-message"
-            />
+            <ValidationText field="startDate" />
           </div>
           <div
             className={`usa-form-group ${
@@ -194,10 +191,7 @@ export const SessionInformationForm = connect(
                 </div>
               </div>
             </fieldset>
-            <Text
-              bind="validationErrors.startTime"
-              className="usa-error-message"
-            />
+            <ValidationText field="startTime" />
           </div>
           {formattedTrialSessions.showSwingSessionOption && (
             <>
@@ -264,10 +258,7 @@ export const SessionInformationForm = connect(
                       ),
                     )}
                   </select>
-                  <Text
-                    bind="validationErrors.swingSessionId"
-                    className="usa-error-message"
-                  />
+                  <ValidationText field="swingSessionId" />
                 </div>
               )}
             </>
@@ -310,10 +301,7 @@ export const SessionInformationForm = connect(
                 ),
               )}
             </fieldset>
-            <Text
-              bind="validationErrors.sessionType"
-              className="usa-error-message"
-            />
+            <ValidationText field="sessionType" />
           </div>
           <div
             className={`usa-form-group margin-bottom-0 ${
@@ -340,10 +328,7 @@ export const SessionInformationForm = connect(
                 });
               }}
             />
-            <Text
-              bind="validationErrors.maxCases"
-              className="usa-error-message"
-            />
+            <ValidationText field="maxCases" />
           </div>
         </div>
       </>
