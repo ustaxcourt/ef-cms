@@ -44,6 +44,7 @@ export const workQueueHelper = get => {
     hideIconColumn: !workQueueIsInternal && userIsOther,
     hideSectionColumn: isDisplayingQC,
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
+    isDisplayingQC,
     linkToDocumentMessages: !isDisplayingQC,
     sentTitle: workQueueIsInternal
       ? 'Sent'

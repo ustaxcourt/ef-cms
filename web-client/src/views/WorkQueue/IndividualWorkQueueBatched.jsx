@@ -57,7 +57,13 @@ export const IndividualWorkQueueBatched = connect(
                   )}
                 </td>
                 <td className="message-queue-row">
-                  <div className="message-document-title">
+                  <div
+                    className={
+                      workQueueHelper.isDisplayingQC
+                        ? ''
+                        : 'message-document-title'
+                    }
+                  >
                     <a
                       className="case-link"
                       href={documentHelper({

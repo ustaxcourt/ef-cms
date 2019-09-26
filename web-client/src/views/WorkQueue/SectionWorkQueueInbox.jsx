@@ -27,6 +27,7 @@ export const SectionWorkQueueInbox = connect(
     users,
     workQueueHelper,
   }) => {
+    console.log('isqc', workQueueHelper.isDisplayingQC);
     return (
       <React.Fragment>
         {workQueueHelper.showSendToBar && (
@@ -168,7 +169,13 @@ export const SectionWorkQueueInbox = connect(
                   </td>
                 )}
                 <td className="message-queue-row message-queue-document">
-                  <div className="message-document-title">
+                  <div
+                    className={
+                      workQueueHelper.isDisplayingQC
+                        ? ''
+                        : 'message-document-title'
+                    }
+                  >
                     <a
                       className="case-link"
                       href={documentHelper({
