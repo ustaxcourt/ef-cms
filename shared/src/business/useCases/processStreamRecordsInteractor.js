@@ -18,8 +18,6 @@ exports.processStreamRecordsInteractor = async ({
           index: 'efcms',
         });
       } catch (e) {
-        console.log(e);
-        console.error(e.stack || e);
         applicationContext.logger.info('Error', e);
       }
     }
