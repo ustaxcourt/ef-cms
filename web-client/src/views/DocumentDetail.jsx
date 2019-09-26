@@ -25,6 +25,7 @@ export const DocumentDetail = connect(
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     documentDetailHelper: state.documentDetailHelper,
+    gotoOrdersNeededSequence: sequences.gotoOrdersNeededSequence,
     messageId: state.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
     openServeConfirmModalDialogSequence:
@@ -40,6 +41,7 @@ export const DocumentDetail = connect(
     caseHelper,
     clickServeToIrsSequence,
     documentDetailHelper,
+    gotoOrdersNeededSequence,
     messageId,
     navigateToPathSequence,
     openServeConfirmModalDialogSequence,
@@ -119,6 +121,20 @@ export const DocumentDetail = connect(
       return (
         <div className="document-detail__action-buttons">
           <div className="float-right">
+            {caseHelper.hasOrders &&
+              documentDetailHelper.showViewOrdersNeededButton && (
+                <button
+                  className="usa-button usa-button--unstyled"
+                  onClick={() => {
+                    gotoOrdersNeededSequence({
+                      docketNumber: caseDetail.docketNumber,
+                    });
+                  }}
+                >
+                  View Orders Needed
+                </button>
+              )}
+
             {documentDetailHelper.isDraftDocument && (
               <div
                 className={`display-inline-block margin-right-2${

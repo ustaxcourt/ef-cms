@@ -1,4 +1,3 @@
-import { compareCasesByDocketNumber } from './formattedTrialSessionDetails';
 import { state } from 'cerebral';
 
 export const advancedSearchHelper = (get, applicationContext) => {
@@ -13,7 +12,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
     const US_STATES = get(state.constants.US_STATES);
 
     const formattedSearchResults = searchResults
-      .sort(compareCasesByDocketNumber)
+      .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
       .map(result => {
         result.contactPrimaryName =
           result.contactPrimary && result.contactPrimary.name;

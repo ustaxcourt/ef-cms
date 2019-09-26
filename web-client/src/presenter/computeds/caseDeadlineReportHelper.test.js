@@ -1,3 +1,4 @@
+import { applicationContext } from '../../applicationContext';
 import {
   caseDeadlineReportHelper as caseDeadlineReportHelperComputed,
   sortByDateAndDocketNumber,
@@ -106,7 +107,7 @@ describe('caseDeadlineReportHelper', () => {
 
   describe('sortByDateAndDocketNumber', () => {
     it('compares cases by docket number if dates are equal', () => {
-      let result = sortByDateAndDocketNumber(
+      let result = sortByDateAndDocketNumber(applicationContext)(
         {
           deadlineDate: '2019-11-25T04:00:00.000Z',
           docketNumber: '101-19',
@@ -120,7 +121,7 @@ describe('caseDeadlineReportHelper', () => {
     });
 
     it('returns -1 if the second date is after the first', () => {
-      let result = sortByDateAndDocketNumber(
+      let result = sortByDateAndDocketNumber(applicationContext)(
         {
           deadlineDate: '2019-11-25T04:00:00.000Z',
           docketNumber: '101-19',
@@ -134,7 +135,7 @@ describe('caseDeadlineReportHelper', () => {
     });
 
     it('returns 1 if the second date is before the first', () => {
-      let result = sortByDateAndDocketNumber(
+      let result = sortByDateAndDocketNumber(applicationContext)(
         {
           deadlineDate: '2019-11-25T04:00:00.000Z',
           docketNumber: '101-19',
