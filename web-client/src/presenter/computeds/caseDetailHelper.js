@@ -23,12 +23,12 @@ export const caseDetailHelper = (get, applicationContext) => {
   const modalState = get(state.modal);
   const {
     noticeOfAttachments,
+    orderDesignatingPlaceOfTrial,
     orderForAmendedPetition,
     orderForAmendedPetitionAndFilingFee,
     orderForFilingFee,
     orderForOds,
     orderForRatification,
-    orderToChangeDesignatedPlaceOfTrial,
     orderToShowCause,
   } = caseDetail;
 
@@ -103,7 +103,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     orderForOds,
     orderForRatification,
     orderToShowCause,
-    orderToChangeDesignatedPlaceOfTrial,
+    orderDesignatingPlaceOfTrial,
   ].some(hasOrder => !!hasOrder);
 
   return {
