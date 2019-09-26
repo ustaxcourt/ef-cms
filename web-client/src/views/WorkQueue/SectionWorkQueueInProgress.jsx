@@ -187,6 +187,11 @@ export const SectionWorkQueueInProgress = connect(
             </tbody>
           ))}
         </table>
+        {formattedWorkQueue.length === 0 && (
+          <div className="text-align-center">
+            {workQueueHelper.queueEmptyMessage}
+          </div>
+        )}
       </React.Fragment>
     );
   },
