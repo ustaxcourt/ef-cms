@@ -74,7 +74,9 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   let showEditPrimaryContactButton = false;
 
-  if (userRole === 'respondent') {
+  if (userRole === 'petitioner') {
+    showEditPrimaryContactButton = true;
+  } else if (userRole === 'respondent') {
     showEditPrimaryContactButton = false;
   } else if (userRole === 'practitioner') {
     showEditPrimaryContactButton = userAssociatedWithCase;

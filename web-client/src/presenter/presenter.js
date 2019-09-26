@@ -71,6 +71,7 @@ import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
 import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
+import { gotoOrdersNeededSequence } from './sequences/gotoOrdersNeededSequence';
 import { gotoPrimaryContactEditSequence } from './sequences/gotoPrimaryContactEditSequence';
 import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDocketRecordSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
@@ -332,6 +333,7 @@ export const presenter = {
     gotoIdleLogoutSequence,
     gotoLoginSequence,
     gotoMessagesSequence,
+    gotoOrdersNeededSequence,
     gotoPrimaryContactEditSequence,
     gotoPrintableDocketRecordSequence,
     gotoRequestAccessSequence,

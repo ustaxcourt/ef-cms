@@ -7,8 +7,8 @@ import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { ScanBatchPreviewer } from './ScanBatchPreviewer';
-import { Text } from '../ustc-ui/Text/Text';
 import { TrialCityOptions } from './TrialCityOptions';
+import { ValidationText } from '../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { limitLength } from '../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
@@ -156,10 +156,7 @@ export const StartCaseInternal = connect(
                           />
                         </div>
                       </div>
-                      <Text
-                        bind="validationErrors.receivedAt"
-                        className="usa-error-message"
-                      />
+                      <ValidationText field="receivedAt" />
                     </fieldset>
                   </div>
 
@@ -191,10 +188,7 @@ export const StartCaseInternal = connect(
                     <p className="margin-top-1">
                       {constants.CASE_CAPTION_POSTFIX}
                     </p>
-                    <Text
-                      bind="validationErrors.caseCaption"
-                      className="usa-error-message"
-                    />
+                    <ValidationText field="caseCaption" />
                   </div>
 
                   <CaseTypeSelect
@@ -245,10 +239,7 @@ export const StartCaseInternal = connect(
                       <option value="">- Select -</option>
                       <TrialCityOptions />
                     </select>
-                    <Text
-                      bind="validationErrors.preferredTrialCity"
-                      className="usa-error-message"
-                    />
+                    <ValidationText field="preferredTrialCity" />
                   </div>
 
                   <div
@@ -287,10 +278,7 @@ export const StartCaseInternal = connect(
                         ),
                       )}
                     </select>
-                    <Text
-                      bind="validationErrors.partyType"
-                      className="usa-error-message"
-                    />
+                    <ValidationText field="partyType" />
                   </div>
 
                   {(startCaseInternalHelper.showPrimaryContact ||
