@@ -22,7 +22,7 @@ describe('setFileDocumentValidationAlertErrors', () => {
             'supportingDocuments',
           ],
           errors: {
-            certificateOfServiceDate: 'Enter a Certificate of Service Date.',
+            certificateOfServiceDate: 'Enter date of service',
             primaryDocumentFile: 'A file was not selected.',
             supportingDocuments: [
               {
@@ -30,8 +30,7 @@ describe('setFileDocumentValidationAlertErrors', () => {
                 supportingDocument: 'Enter selection for Supporting Document.',
               },
               {
-                certificateOfServiceDate:
-                  'Enter a Certificate of Service Date.',
+                certificateOfServiceDate: 'Enter date of service',
                 index: 2,
                 supportingDocumentFreeText: 'Please provide a value.',
               },
@@ -44,10 +43,10 @@ describe('setFileDocumentValidationAlertErrors', () => {
     expect(state.alertError).toMatchObject({
       messages: [
         'A file was not selected.',
-        'Enter a Certificate of Service Date.',
+        'Enter date of service',
         'Supporting Document #1 - Enter selection for Supporting Document.',
         'Supporting Document #3 - Please provide a value.',
-        'Supporting Document #3 - Enter a Certificate of Service Date.',
+        'Supporting Document #3 - Enter date of service',
       ],
     });
   });

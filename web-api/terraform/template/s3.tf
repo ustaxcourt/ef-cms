@@ -79,3 +79,63 @@ resource "aws_s3_bucket" "documents_us_west_1" {
     environment = "${var.environment}"
   }
 }
+
+resource "aws_s3_bucket" "temp_documents_us_east_1" {
+  provider = "aws.us-east-1"
+  region = "us-east-1"
+  bucket = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
+  acl = "private"
+
+  cors_rule {
+    allowed_headers = ["Authorization"]
+    allowed_methods = ["GET", "POST"]
+    allowed_origins = ["*"]
+    max_age_seconds = 3000
+  }
+
+  versioning {
+    enabled = true
+  }
+
+  tags {
+    environment = "${var.environment}"
+  }
+
+  lifecycle_rule {
+    enabled = true
+
+    expiration {
+      days = 1
+    }
+  }
+}
+
+resource "aws_s3_bucket" "temp_documents_us_west_1" {
+  provider = "aws.us-west-1"
+  region = "us-west-1"
+  bucket = "${var.dns_domain}-temp-documents-${var.environment}-us-west-1"
+  acl = "private"
+
+  cors_rule {
+    allowed_headers = ["Authorization"]
+    allowed_methods = ["GET", "POST"]
+    allowed_origins = ["*"]
+    max_age_seconds = 3000
+  }
+
+  versioning {
+    enabled = true
+  }
+
+  tags {
+    environment = "${var.environment}"
+  }
+
+  lifecycle_rule {
+    enabled = true
+
+    expiration {
+      days = 1
+    }
+  }
+}

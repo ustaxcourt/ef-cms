@@ -14,9 +14,13 @@ function SecondaryDocumentInformationFactory() {}
 /**
  *
  * @param {object} documentMetadata the document metadata
+ * @param {object} VALIDATION_ERROR_MESSAGES the error to message map constant
  * @returns {object} the created document
  */
-SecondaryDocumentInformationFactory.get = documentMetadata => {
+SecondaryDocumentInformationFactory.get = (
+  documentMetadata,
+  VALIDATION_ERROR_MESSAGES,
+) => {
   let entityConstructor = function(rawProps) {
     this.attachments = rawProps.attachments;
     this.category = rawProps.category;
@@ -37,20 +41,6 @@ SecondaryDocumentInformationFactory.get = documentMetadata => {
       .iso()
       .max('now'),
     objections: joi.string(),
-  };
-
-  let errorToMessageMap = {
-    attachments: 'Enter selection for Attachments.',
-    certificateOfService: 'Enter selection for Certificate of Service.',
-    certificateOfServiceDate: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'Certificate of Service date is in the future. Please enter a valid date.',
-      },
-      'Enter date for Certificate of Service.',
-    ],
-    objections: 'Enter selection for Objections.',
   };
 
   const makeRequired = itemName => {
@@ -88,7 +78,7 @@ SecondaryDocumentInformationFactory.get = documentMetadata => {
     entityConstructor,
     schema,
     undefined,
-    errorToMessageMap,
+    VALIDATION_ERROR_MESSAGES,
   );
 
   return new entityConstructor(documentMetadata);

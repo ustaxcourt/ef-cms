@@ -88,7 +88,7 @@ export const IRSNotice = connect(
       return (
         <div
           className={
-            'usa-form-group ' +
+            'usa-form-group margin-bottom-0 ' +
             (caseDetailErrors.irsNoticeDate ? 'usa-form-group--error' : '')
           }
         >

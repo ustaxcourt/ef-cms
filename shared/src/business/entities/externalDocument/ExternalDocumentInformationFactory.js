@@ -18,6 +18,68 @@ const {
 } = require('./SupportingDocumentInformationFactory');
 const { includes } = require('lodash');
 
+const VALIDATION_ERROR_MESSAGES = {
+  attachments: 'Enter selection for Attachments.',
+  category: 'Select a Category.',
+  certificateOfService:
+    'Indicate whether you are including a Certificate of Service',
+  certificateOfServiceDate: [
+    {
+      contains: 'must be less than or equal to',
+      message:
+        'Certificate of Service date cannot be in the future. Enter a valid date.',
+    },
+    'Enter date of service',
+  ],
+  documentType: 'Select a document type',
+  freeText: 'Provide an answer',
+  freeText2: 'Provide an answer',
+  hasSecondarySupportingDocuments:
+    'Enter selection for Secondary Supporting Documents.',
+  hasSupportingDocuments: 'Enter selection for Supporting Documents.',
+  objections: 'Enter selection for Objections.',
+  ordinalValue: 'Select an iteration',
+  partyPrimary: 'Select a filing party',
+  partyRespondent: 'Select a filing party',
+  partySecondary: 'Select a filing party',
+  previousDocument: 'Select a document',
+  primaryDocumentFile: 'Upload a document',
+  primaryDocumentFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Primary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Primary Document file size is empty.',
+  ],
+  secondaryDocument: 'Select a document',
+  secondaryDocumentFile: 'Upload a document',
+  secondaryDocumentFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Secondary Document file size is empty.',
+  ],
+  serviceDate: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Service date cannot be in the future. Enter a valid date.',
+    },
+    'Provide a service date',
+  ],
+  supportingDocument: 'Select a document type',
+  supportingDocumentFile: 'Upload a document',
+  supportingDocumentFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Supporting Document file size is empty.',
+  ],
+  supportingDocumentFreeText: 'Enter name',
+  trialLocation: 'Select a preferred trial location.',
+};
+
 /**
  *
  * @constructor
@@ -54,22 +116,31 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     this.supportingDocuments = rawProps.supportingDocuments;
 
     if (this.secondaryDocument) {
-      this.secondaryDocument = SecondaryDocumentInformationFactory.get({
-        ...this.secondaryDocument,
-        secondaryDocumentFile: this.secondaryDocumentFile,
-      });
+      this.secondaryDocument = SecondaryDocumentInformationFactory.get(
+        {
+          ...this.secondaryDocument,
+          secondaryDocumentFile: this.secondaryDocumentFile,
+        },
+        VALIDATION_ERROR_MESSAGES,
+      );
     }
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return SupportingDocumentInformationFactory.get(item);
+        return SupportingDocumentInformationFactory.get(
+          item,
+          VALIDATION_ERROR_MESSAGES,
+        );
       });
     }
 
     if (this.secondarySupportingDocuments) {
       this.secondarySupportingDocuments = this.secondarySupportingDocuments.map(
         item => {
-          return SupportingDocumentInformationFactory.get(item);
+          return SupportingDocumentInformationFactory.get(
+            item,
+            VALIDATION_ERROR_MESSAGES,
+          );
         },
       );
     }
@@ -109,47 +180,11 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     supportingDocuments: joi.array().optional(),
   };
 
-  let errorToMessageMap = {
-    attachments: 'Enter selection for Attachments.',
-    certificateOfService: 'Enter selection for Certificate of Service.',
-    certificateOfServiceDate: [
-      {
-        contains: 'must be less than or equal to',
-        message:
-          'Certificate of Service date is in the future. Please enter a valid date.',
-      },
-      'Enter date for Certificate of Service.',
-    ],
-    hasSecondarySupportingDocuments:
-      'Enter selection for Secondary Supporting Documents.',
-    hasSupportingDocuments: 'Enter selection for Supporting Documents.',
-    objections: 'Enter selection for Objections.',
-    partyPrimary: 'Select a filing party.',
-    partyRespondent: 'Select a filing party.',
-    partySecondary: 'Select a filing party.',
-    primaryDocumentFile: 'Upload a document.',
-    primaryDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Primary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Primary Document file size is empty.',
-    ],
-    secondaryDocumentFile: 'Upload a document.',
-    secondaryDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your Secondary Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your Secondary Document file size is empty.',
-    ],
-  };
-
   let customValidate;
 
   const addProperty = (itemName, itemSchema, itemErrorMessage) => {
     addPropertyHelper({
-      errorToMessageMap,
+      VALIDATION_ERROR_MESSAGES,
       itemErrorMessage,
       itemName,
       itemSchema,
@@ -216,10 +251,13 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     entityConstructor,
     schema,
     customValidate,
-    errorToMessageMap,
+    VALIDATION_ERROR_MESSAGES,
   );
 
   return new entityConstructor(documentMetadata);
 };
 
-module.exports = { ExternalDocumentInformationFactory };
+module.exports = {
+  ExternalDocumentInformationFactory,
+  VALIDATION_ERROR_MESSAGES,
+};

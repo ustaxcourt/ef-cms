@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { set } from 'cerebral/factories';
@@ -8,7 +7,6 @@ import { setDefaultCountryTypeOnAdvancedSearchFormAction } from '../actions/Adva
 import { state } from 'cerebral';
 
 export const gotoAdvancedSearchSequence = [
-  clearAlertsAction,
   clearScreenMetadataAction,
   clearFormAction,
   set(state.form.currentPage, 1),

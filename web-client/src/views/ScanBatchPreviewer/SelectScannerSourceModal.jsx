@@ -5,9 +5,7 @@ import React from 'react';
 
 export const SelectScannerSourceModal = connect(
   {
-    cancelSequence: sequences.dismissModalSequence,
     modal: state.modal,
-    selectScannerSequence: sequences.setScannerSourceSequence,
     sources: state.scanHelper.sources,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },

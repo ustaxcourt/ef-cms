@@ -109,6 +109,7 @@ describe('formatCase', () => {
       ...mockCaseDetail,
       hasVerifiedIrsNotice: true,
       caseCaption: 'Test Case Caption',
+      trialTime: 11,
     });
 
     expect(result).toHaveProperty('createdAtFormatted');
@@ -126,11 +127,90 @@ describe('formatCase', () => {
     expect(result).toHaveProperty('formattedTrialDate');
     expect(result.formattedTrialJudge).toEqual('Not assigned');
   });
+
+  it('should apply additional information', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      documents: [
+        {
+          additionalInfo: 'additional information',
+          createdAt: getDateISO(),
+          documentId: 'd-1-2-3',
+          documentType: 'Petition',
+          servedAt: getDateISO(),
+        },
+      ],
+      docketRecord: [
+        {
+          createdAt: getDateISO(),
+          description: 'desc',
+          documentId: 'd-1-2-3',
+          index: '1',
+        },
+      ],
+    });
+
+    expect(result.docketRecord[0].description).toEqual(
+      'desc additional information',
+    );
+  });
+
+  it('should format certificate of service date', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      documents: [
+        {
+          certificateOfServiceDate: getDateISO(),
+          createdAt: getDateISO(),
+          documentId: 'd-1-2-3',
+          documentType: 'Petition',
+          servedAt: getDateISO(),
+        },
+      ],
+      docketRecord: [
+        {
+          createdAt: getDateISO(),
+          documentId: 'd-1-2-3',
+          index: '1',
+        },
+      ],
+    });
+
+    expect(result.documents[0].certificateOfServiceDateFormatted).toEqual(
+      applicationContext
+        .getUtilities()
+        .formatDateString(getDateISO(), 'MMDDYY'),
+    );
+  });
+
+  it('should format irs notice date', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      irsNoticeDate: getDateISO(),
+    });
+
+    expect(result.irsNoticeDateFormatted).toEqual(
+      applicationContext
+        .getUtilities()
+        .formatDateString(getDateISO(), 'MMDDYY'),
+    );
+  });
+
+  it("should return 'No notice provided' when there is no irs notice date", () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+    });
+
+    expect(result.irsNoticeDateFormatted).toEqual('No notice provided');
+  });
 });
 
 describe('formatCaseDeadlines', () => {
   it('should call formatCaseDeadline on the given array', () => {
     const result = formatCaseDeadlines(applicationContext, [
+      {
+        deadlineDate: getDateISO(),
+      },
       {
         deadlineDate: getDateISO(),
       },
@@ -143,6 +223,9 @@ describe('formatCaseDeadlines', () => {
     const result = formatCaseDeadlines(applicationContext, [
       {
         deadlineDate: '2017-01-01T00:01:02Z',
+      },
+      {
+        deadlineDate: getDateISO(),
       },
     ]);
     expect(result[0]).toHaveProperty('overdue');
@@ -224,9 +307,15 @@ describe('sortDocketRecords', () => {
           filingDate: getDateISO(),
         },
       },
+      {
+        index: '3',
+        record: {
+          filingDate: '2017-01-01T00:01:02Z',
+        },
+      },
     ]);
 
-    expect(result[0].index).toEqual('2');
+    expect(result[0].index).toEqual('3');
   });
 
   it('should sort docket records by index when sortBy is byIndex', () => {

@@ -22,6 +22,10 @@ const revokeObjectURL = url => {
   return window.URL.revokeObjectURL(url);
 };
 
+const back = () => {
+  window.history.back();
+};
+
 const router = {
   initialize: app => {
     document.title = 'U.S. Tax Court';
@@ -31,6 +35,7 @@ const router = {
           const path = app.getState('cognitoLoginUrl');
           window.location.replace(path);
         } else {
+          app.getSequence('clearAlertSequence')();
           cb.apply(null, arguments);
         }
       };
@@ -40,7 +45,7 @@ const router = {
       '/',
       checkLoggedIn(() => {
         document.title = `Dashboard ${pageTitleSuffix}`;
-        app.getSequence('gotoDashboardSequence')({ baseRoute: 'dashboard' });
+        app.getSequence('gotoDashboardSequence')();
       }),
     );
 
@@ -281,7 +286,6 @@ const router = {
           });
         } else {
           const routeArgs = {
-            baseRoute: 'document-qc',
             workQueueIsInternal: false,
           };
           const pathParts = path.split('/');
@@ -293,9 +297,9 @@ const router = {
             routeArgs.box = pathParts[2];
           }
 
-          app.getSequence('gotoDashboardSequence')(routeArgs);
+          app.getSequence('gotoMessagesSequence')(routeArgs);
         }
-        document.title = `Dashboard ${pageTitleSuffix}`;
+        document.title = `Messages ${pageTitleSuffix}`;
       }),
     );
 
@@ -422,7 +426,6 @@ const router = {
           });
         } else {
           const routeArgs = {
-            baseRoute: 'messages',
             workQueueIsInternal: true,
           };
           const pathParts = path.split('/');
@@ -434,9 +437,9 @@ const router = {
             routeArgs.box = pathParts[2];
           }
 
-          app.getSequence('gotoDashboardSequence')(routeArgs);
+          app.getSequence('gotoMessagesSequence')(routeArgs);
         }
-        document.title = `Dashboard ${pageTitleSuffix}`;
+        document.title = `Messages ${pageTitleSuffix}`;
       }),
     );
 
@@ -507,6 +510,7 @@ const router = {
 };
 
 export {
+  back,
   createObjectURL,
   externalRoute,
   openInNewTab,

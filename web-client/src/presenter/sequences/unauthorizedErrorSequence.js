@@ -1,10 +1,10 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setAlertFromExceptionAction } from '../actions/setAlertFromExceptionAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const unauthorizedErrorSequence = [
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
   setAlertFromExceptionAction,
   clearModalAction,
   redirectToCognitoAction,

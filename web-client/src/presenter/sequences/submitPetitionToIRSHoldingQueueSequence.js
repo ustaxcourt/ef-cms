@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
+import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { sendPetitionToIRSHoldingQueueAction } from '../actions/sendPetitionToIRSHoldingQueueAction';
 import { set } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -18,5 +18,5 @@ export const submitPetitionToIRSHoldingQueueSequence = [
   getCaseAction,
   setCaseAction,
   set(state.saveAlertsForNavigation, true),
-  navigateToDashboardAction,
+  navigateToMessagesAction,
 ];

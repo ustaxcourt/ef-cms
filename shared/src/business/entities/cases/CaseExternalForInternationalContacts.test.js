@@ -1,4 +1,8 @@
 const { CaseExternal } = require('./CaseExternal');
+const { ContactFactory } = require('../contacts/ContactFactory');
+
+const contactErrorMessages =
+  ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES;
 
 describe('CaseExternal', () => {
   describe('for (international) Contacts', () => {
@@ -28,7 +32,7 @@ describe('CaseExternal', () => {
         stinFileSize: 1,
       });
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        contactPrimary: { country: 'Country is a required field.' },
+        contactPrimary: { country: contactErrorMessages.country },
       });
     });
 

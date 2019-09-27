@@ -1,3 +1,5 @@
+import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+
 export default (test, fakeFile) => {
   return it('Respondent adds Motion with supporting Brief', async () => {
     await test.runSequence('gotoFileDocumentSequence', {
@@ -7,8 +9,8 @@ export default (test, fakeFile) => {
     await test.runSequence('selectDocumentSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      category: 'Select a Category.',
-      documentType: 'Select a Document Type.',
+      category: VALIDATION_ERROR_MESSAGES.category,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -18,7 +20,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateSelectDocumentTypeSequence');
     expect(test.getState('validationErrors')).toEqual({
-      documentType: 'Select a Document Type.',
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -86,11 +88,12 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      objections: 'Enter selection for Objections.',
+      objections: VALIDATION_ERROR_MESSAGES.objections,
       supportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile: 'Upload a document.',
+          supportingDocumentFile:
+            VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
         },
       ],
     });

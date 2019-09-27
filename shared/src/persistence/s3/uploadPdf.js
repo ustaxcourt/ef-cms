@@ -15,7 +15,7 @@ exports.uploadPdf = async ({
   onUploadProgress,
   policy,
 }) => {
-  const docId = documentId || applicationContext.getUniqueId();
+  const docId = documentId;
   const formData = new FormData();
   formData.append('key', docId);
   formData.append('X-Amz-Algorithm', policy.fields['X-Amz-Algorithm']);

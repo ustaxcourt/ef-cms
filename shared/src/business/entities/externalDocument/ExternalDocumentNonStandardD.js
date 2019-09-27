@@ -4,6 +4,9 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
+const {
+  VALIDATION_ERROR_MESSAGES,
+} = require('./ExternalDocumentInformationFactory');
 
 /**
  *
@@ -26,17 +29,8 @@ ExternalDocumentNonStandardD.prototype.getDocumentTitle = function() {
   );
 };
 
-ExternalDocumentNonStandardD.errorToMessageMap = {
-  category: 'Select a Category.',
-  documentType: 'Select a Document Type.',
-  previousDocument: 'Select a document.',
-  serviceDate: [
-    {
-      contains: 'must be less than or equal to',
-      message: 'Service date is in the future. Please enter a valid date.',
-    },
-    'Provide a service date.',
-  ],
+ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES = {
+  ...VALIDATION_ERROR_MESSAGES,
 };
 
 ExternalDocumentNonStandardD.schema = {
@@ -55,7 +49,7 @@ joiValidationDecorator(
   ExternalDocumentNonStandardD,
   ExternalDocumentNonStandardD.schema,
   undefined,
-  ExternalDocumentNonStandardD.errorToMessageMap,
+  ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { ExternalDocumentNonStandardD };

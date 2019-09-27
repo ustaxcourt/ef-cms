@@ -1,6 +1,4 @@
-const {
-  addCoverToPdf,
-} = require('../../../business/useCases/addCoverToPDFDocumentInteractor');
+const { addCoverToPdf } = require('../addCoversheetInteractor');
 const {
   isAuthorized,
   UPDATE_CONTACT_INFO,
@@ -146,6 +144,7 @@ exports.updateUserContactInformationInteractor = async ({
           assigneeName: null,
           caseId: caseEntity.caseId,
           caseStatus: caseEntity.status,
+          caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
           docketNumber: caseEntity.docketNumber,
           docketNumberSuffix: caseEntity.docketNumberSuffix,
           document: {

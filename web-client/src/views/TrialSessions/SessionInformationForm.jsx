@@ -6,7 +6,7 @@ import React from 'react';
 export const SessionInformationForm = connect(
   {
     form: state.form,
-    trialSessionHelper: state.formattedTrialSessions,
+    formattedTrialSessions: state.formattedTrialSessions,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
@@ -14,14 +14,14 @@ export const SessionInformationForm = connect(
   },
   ({
     form,
-    trialSessionHelper,
+    formattedTrialSessions,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
   }) => {
     return (
       <>
-        <h2 className="margin-top-4">Session Information</h2>
+        <h2 className="margin-top-0">Session Information</h2>
         <div className="blue-container">
           <div
             className={`usa-form-group ${
@@ -129,7 +129,6 @@ export const SessionInformationForm = connect(
                       max="12"
                       min="1"
                       name="startTimeHours"
-                      placeholder="10"
                       type="number"
                       value={form.startTimeHours || ''}
                       onChange={e => {
@@ -149,7 +148,6 @@ export const SessionInformationForm = connect(
                       max="59"
                       min="0"
                       name="startTimeMinutes"
-                      placeholder="00"
                       type="number"
                       value={form.startTimeMinutes || ''}
                       onChange={e => {
@@ -201,7 +199,7 @@ export const SessionInformationForm = connect(
               className="usa-error-message"
             />
           </div>
-          {trialSessionHelper.showSwingSessionOption && (
+          {formattedTrialSessions.showSwingSessionOption && (
             <>
               <div className="usa-form-group">
                 <div className="usa-checkbox">
@@ -226,7 +224,7 @@ export const SessionInformationForm = connect(
                   </label>
                 </div>
               </div>
-              {trialSessionHelper.showSwingSessionList && (
+              {formattedTrialSessions.showSwingSessionList && (
                 <div
                   className={`usa-form-group ${
                     validationErrors.swingSessionId
@@ -258,11 +256,13 @@ export const SessionInformationForm = connect(
                     }}
                   >
                     <option value="">- Select -</option>
-                    {trialSessionHelper.sessionsByTerm.map((session, idx) => (
-                      <option key={idx} value={session.trialSessionId}>
-                        {session.trialLocation}
-                      </option>
-                    ))}
+                    {formattedTrialSessions.sessionsByTerm.map(
+                      (session, idx) => (
+                        <option key={idx} value={session.trialSessionId}>
+                          {session.trialLocation}
+                        </option>
+                      ),
+                    )}
                   </select>
                   <Text
                     bind="validationErrors.swingSessionId"
