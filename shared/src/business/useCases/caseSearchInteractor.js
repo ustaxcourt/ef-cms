@@ -1,3 +1,5 @@
+const AWS = require('aws-sdk');
+
 /**
  * caseSearchInteractor
  *
@@ -15,57 +17,69 @@ exports.caseSearchInteractor = async ({
   countryType,
   petitionerName,
   petitionerState,
-  yearFiledMax,
-  yearFiledMin,
 }) => {
-  const caseCatalog = await applicationContext
-    .getPersistenceGateway()
-    .getAllCatalogCases({
-      applicationContext,
-    });
-
-  let filteredCases = caseCatalog;
+  const query = [];
 
   if (petitionerName) {
-    petitionerName = petitionerName.toLowerCase();
-    filteredCases = filteredCases.filter(
-      myCase =>
-        (myCase.contactPrimary &&
-          myCase.contactPrimary.name &&
-          myCase.contactPrimary.name.toLowerCase().includes(petitionerName)) ||
-        (myCase.contactSecondary &&
-          myCase.contactSecondary.name &&
-          myCase.contactSecondary.name.toLowerCase().includes(petitionerName)),
-    );
+    query.push({
+      bool: {
+        should: [
+          { match: { 'contactPrimary.M.name.S': petitionerName } },
+          { match: { 'contactSecondary.M.name.S': petitionerName } },
+        ],
+      },
+    });
   }
   if (countryType) {
-    filteredCases = filteredCases.filter(
-      myCase =>
-        (myCase.contactPrimary &&
-          myCase.contactPrimary.countryType === countryType) ||
-        (myCase.contactSecondary &&
-          myCase.contactSecondary.countryType === countryType),
-    );
+    query.push({
+      bool: {
+        should: [
+          { match: { 'contactPrimary.M.countryType.S': countryType } },
+          { match: { 'contactSecondary.M.countryType.S': countryType } },
+        ],
+      },
+    });
   }
   if (petitionerState) {
-    filteredCases = filteredCases.filter(
-      myCase =>
-        (myCase.contactPrimary &&
-          myCase.contactPrimary.state === petitionerState) ||
-        (myCase.contactSecondary &&
-          myCase.contactSecondary.state === petitionerState),
-    );
+    query.push({
+      bool: {
+        should: [
+          { match: { 'contactPrimary.M.state.S': petitionerState } },
+          { match: { 'contactSecondary.M.state.S': petitionerState } },
+        ],
+      },
+    });
   }
-  if (yearFiledMin) {
-    filteredCases = filteredCases.filter(
-      myCase => +myCase.yearFiled >= +yearFiledMin,
-    );
-  }
-  if (yearFiledMax) {
-    filteredCases = filteredCases.filter(
-      myCase => +myCase.yearFiled <= +yearFiledMax,
-    );
+  //TODO store the yearFiled on the case entity so we can search by it
+  /*if (yearFiledMin || yearFiledMax) {
+    query.push({
+      range: {
+        yearFiled: {
+          boost: 2.0,
+          gte: yearFiledMin,
+          lte: yearFiledMax,
+        },
+      },
+    });
+  }*/
+
+  const body = await applicationContext.getSearchClient().search({
+    body: {
+      query: {
+        bool: {
+          must: query,
+        },
+      },
+    },
+    index: 'efcms',
+  });
+
+  const foundCases = [];
+  if (body && body.hits) {
+    for (let hit of body.hits.hits) {
+      foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
+    }
   }
 
-  return filteredCases;
+  return foundCases;
 };

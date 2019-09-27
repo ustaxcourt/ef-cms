@@ -18,26 +18,7 @@
   {
     "sk": "case-58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
-    "pk": "catalog",
-    "docketNumber": "107-19",
-    "docketNumberSuffix": "L",
-    "contactPrimary": {
-      "address3": "Veritatis vel tenetu",
-      "secondaryName": "Wayne Obrien",
-      "address2": "Et et aliquip non si",
-      "city": "Rerum culpa consequ",
-      "phone": "+1 (849) 773-8302",
-      "address1": "343 Second Street",
-      "postalCode": "82461",
-      "name": "Tatum Craig",
-      "state": "NM",
-      "countryType": "domestic",
-      "email": "taxpayer"
-    },
-    "contactSecondary": {},
-    "yearFiled": "2019",
-    "caseCaption": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)",
-    "filedDate": "2019-08-16T17:29:10.132Z"
+    "pk": "catalog"
   },
   {
     "sk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
