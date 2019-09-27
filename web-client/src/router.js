@@ -10,8 +10,9 @@ const externalRoute = path => {
   window.location.replace(path);
 };
 
-const openInNewTab = path => {
-  window.open(path, '_blank', 'noopener, noreferrer');
+const openInNewTab = (path, noopener = true) => {
+  const windowFeatures = noopener && 'noopener, noreferrer' || '';
+  window.open(path, '_blank', windowFeatures);
 };
 
 const createObjectURL = object => {
