@@ -14,16 +14,12 @@ exports.sendNotificationToUser = async ({
   message,
   userId,
 }) => {
-  const connections = await client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `connections-${userId}`,
-    },
-    KeyConditionExpression: '#pk = :pk',
-    applicationContext,
-  });
+  const connections = await applicationContext
+    .getPersistenceGateway()
+    .getWebSocketConnectionsByUserId({
+      applicationContext,
+      userId,
+    });
 
   const messageStringified = JSON.stringify(message);
 
