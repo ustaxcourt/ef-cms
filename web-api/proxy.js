@@ -20,6 +20,7 @@ const PROXY_DESTINATIONS = {
   '/documents': `http://${PROXY_HOST}:3004`,
   '/notifications': `http://${PROXY_HOST}:3011`,
   '/sections': `http://${PROXY_HOST}:3006`,
+  '/streams': `http://${PROXY_HOST}:3012`,
   '/trial-sessions': `http://${PROXY_HOST}:3007`,
   '/users': `http://${PROXY_HOST}:3003`,
   '/work-items': `http://${PROXY_HOST}:3005`,

@@ -135,6 +135,7 @@
     "build:api:documents": "npm run build:_api -- web-api/src/documentsHandlers.js",
     "build:api:notifications": "npm run build:_api -- web-api/src/notificationHandlers.js",
     "build:api:sections": "npm run build:_api -- web-api/src/sectionsHandlers.js",
+    "build:api:streams": "npm run build:_api -- web-api/src/streamsHandlers.js",
     "build:api:trialSessions": "npm run build:_api -- web-api/src/trialSessionsHandlers.js",
     "build:api:users": "npm run build:_api -- web-api/src/usersHandlers.js",
     "build:api:workItems": "npm run build:_api -- web-api/src/workItemsHandlers.js",
