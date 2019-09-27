@@ -11,7 +11,7 @@ const externalRoute = path => {
 };
 
 const openInNewTab = (path, noopener = true) => {
-  const windowFeatures = noopener && 'noopener, noreferrer' || '';
+  const windowFeatures = (noopener && 'noopener, noreferrer') || '';
   window.open(path, '_blank', windowFeatures);
 };
 
