@@ -1,30 +1,28 @@
-const sinon = require('sinon');
 const { onDisconnectInteractor } = require('./onDisconnectInteractor');
 
-describe('onDisconnectInteractor', () => {
+describe('deleteUserConnection', () => {
   let applicationContext;
+  let deleteUserConnectionStub;
 
-  it('deletes user connections from persistence', async () => {
-    let error;
-    let deleteUserConnectionSpy = sinon.stub().returns(Promise.resolve(true));
+  beforeEach(() => {
+    deleteUserConnectionStub = jest.fn();
 
-    try {
-      applicationContext = {
-        getPersistenceGateway: () => ({
-          deleteUserConnection: deleteUserConnectionSpy,
-        }),
-      };
-      await onDisconnectInteractor({
-        applicationContext,
-        connectionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
-    expect(deleteUserConnectionSpy.called).toEqual(true);
-    expect(deleteUserConnectionSpy.getCall(0).args[0]).toMatchObject({
-      connectionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    applicationContext = {
+      environment: {
+        stage: 'dev',
+      },
+      getCurrentUser: () => ({ userId: 'abc' }),
+      getPersistenceGateway: () => ({
+        deleteUserConnection: deleteUserConnectionStub,
+      }),
+    };
+  });
+
+  it('attempts to delete the user connection', async () => {
+    await onDisconnectInteractor({
+      applicationContext,
+      connectionId: 'abc',
     });
+    expect(deleteUserConnectionStub).toHaveBeenCalled();
   });
 });
