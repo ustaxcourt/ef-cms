@@ -2,6 +2,7 @@ import { state } from 'cerebral';
 
 export const setupNotificationListenerAction = async ({
   applicationContext,
+  router,
   store,
 }) => {
   const token = applicationContext.getCurrentUserToken();
@@ -14,7 +15,7 @@ export const setupNotificationListenerAction = async ({
     const message = JSON.parse(event.data);
     const { url } = message;
     store.set(state.waitingForResponse, false);
-    window.open(url, '_blank');
+    router.openInNewTab(url, false);
     socket.close();
   };
 };
