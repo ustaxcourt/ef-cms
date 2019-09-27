@@ -10,9 +10,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {object} providers.documentIdToEdit the id of the document to update
  * @param {object} providers.documentMetadata the document metadata
- * @param {string} providers.primaryDocumentFileId the id of the primary document
- * @returns {Promise<*>} the updated case entity after the document is added
+ * @returns {Promise<*>} the updated case entity after the document is updated
  */
 exports.updateCourtIssuedOrderInteractor = async ({
   applicationContext,
