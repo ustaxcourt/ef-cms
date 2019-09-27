@@ -49,7 +49,7 @@ export const UserContactEdit = connect(
 
           <Hint wider>
             For name and Bar Number changes, please contact the Court’s
-            Admissions section at (202)-521-0700
+            Admissions section at (202) 521-0700
           </Hint>
 
           <div className="blue-container">
