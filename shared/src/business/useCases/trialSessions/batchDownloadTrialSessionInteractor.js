@@ -130,6 +130,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
+      action: 'batch_download_ready',
       url,
     },
     userId: user.userId,
