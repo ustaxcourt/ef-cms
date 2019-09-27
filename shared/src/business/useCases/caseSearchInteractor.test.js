@@ -47,6 +47,8 @@ describe('caseSearchInteractor', () => {
       countryType: 'domestic',
       petitionerName: 'test',
       petitionerState: 'Nebraska',
+      yearFiledMax: '2019',
+      yearFiledMin: '2018',
     });
 
     expect(searchSpy).toHaveBeenCalled();
@@ -72,6 +74,28 @@ describe('caseSearchInteractor', () => {
           should: [
             { match: { 'contactPrimary.M.state.S': 'Nebraska' } },
             { match: { 'contactSecondary.M.state.S': 'Nebraska' } },
+          ],
+        },
+      },
+      {
+        bool: {
+          should: [
+            {
+              range: {
+                'createdAt.S': {
+                  gte: '2018||/y',
+                  lte: '2019||/y',
+                },
+              },
+            },
+            {
+              range: {
+                'receivedAt.S': {
+                  gte: '2018||/y',
+                  lte: '2019||/y',
+                },
+              },
+            },
           ],
         },
       },
