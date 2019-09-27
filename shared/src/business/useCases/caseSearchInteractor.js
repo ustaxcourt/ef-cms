@@ -17,6 +17,8 @@ exports.caseSearchInteractor = async ({
   countryType,
   petitionerName,
   petitionerState,
+  yearFiledMax,
+  yearFiledMin,
 }) => {
   const query = [];
 
@@ -50,18 +52,30 @@ exports.caseSearchInteractor = async ({
       },
     });
   }
-  //TODO store the yearFiled on the case entity so we can search by it
-  /*if (yearFiledMin || yearFiledMax) {
+  if (yearFiledMin || yearFiledMax) {
     query.push({
-      range: {
-        yearFiled: {
-          boost: 2.0,
-          gte: yearFiledMin,
-          lte: yearFiledMax,
-        },
+      bool: {
+        should: [
+          {
+            range: {
+              'createdAt.S': {
+                gte: `${yearFiledMin}||/y`,
+                lte: `${yearFiledMax}||/y`,
+              },
+            },
+          },
+          {
+            range: {
+              'receivedAt.S': {
+                gte: `${yearFiledMin}||/y`,
+                lte: `${yearFiledMax}||/y`,
+              },
+            },
+          },
+        ],
       },
     });
-  }*/
+  }
 
   const body = await applicationContext.getSearchClient().search({
     body: {
