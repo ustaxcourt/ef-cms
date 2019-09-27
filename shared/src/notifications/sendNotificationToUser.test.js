@@ -32,6 +32,8 @@ const postToConnection = jest
   .fn()
   .mockReturnValue({ promise: () => Promise.resolve('ok') });
 
+const getWebSocketConnectionsByUserIdMock = jest.fn(() => connections);
+
 const applicationContext = {
   getNotificationClient: jest
     .fn()
@@ -41,17 +43,18 @@ const applicationContext = {
     .mockImplementation(() => {
       return { postToConnection };
     }),
+  getPersistenceGateway: () => ({
+    getWebSocketConnectionsByUserId: getWebSocketConnectionsByUserIdMock,
+  }),
 };
 
 describe('update primary contact on a case', () => {
   let deleteStub;
   beforeEach(() => {
-    sinon.stub(client, 'query').resolves(connections);
     deleteStub = sinon.stub(client, 'delete').resolves({});
   });
 
   afterEach(() => {
-    client.query.restore();
     client.delete.restore();
   });
 
