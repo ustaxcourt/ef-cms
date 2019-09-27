@@ -345,6 +345,9 @@ const {
   getWorkItemById,
 } = require('../../shared/src/persistence/dynamo/workitems/getWorkItemById');
 const {
+  getWebSocketConnectionByConnectionId,
+} = require('../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionByConnectionId');
+const {
   getWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/getWorkItemInteractor');
 const {
@@ -691,6 +694,7 @@ module.exports = (appContextUser = {}) => {
         getUserById,
         getUsersBySearchKey,
         getUsersInSection,
+        getWebSocketConnectionByConnectionId,
         getWorkItemById,
         incrementCounter,
         isFileExists,
