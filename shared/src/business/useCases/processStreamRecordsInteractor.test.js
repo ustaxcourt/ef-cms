@@ -9,6 +9,11 @@ describe('processStreamRecordsInteractor', () => {
     environment: { stage: 'local' },
     getSearchClient: () => ({
       index: indexSpy,
+      indices: {
+        putSettings: async () => {
+          return null;
+        },
+      },
     }),
     logger: {
       info: () => {},

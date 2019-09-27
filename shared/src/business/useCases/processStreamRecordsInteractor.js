@@ -9,6 +9,13 @@ exports.processStreamRecordsInteractor = async ({
   recordsToProcess,
 }) => {
   applicationContext.logger.info('Time', createISODateString());
+  await applicationContext.getSearchClient().indices.putSettings({
+    body: {
+      'index.mapping.total_fields.limit': '2000',
+    },
+    index: 'efcms',
+  });
+
   for (const record of recordsToProcess) {
     if (['INSERT', 'MODIFY'].includes(record.eventName)) {
       try {
