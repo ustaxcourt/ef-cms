@@ -15,11 +15,15 @@ import React from 'react';
 
 export const TrialSessionDetail = connect(
   {
-    formattedTrialSession: state.formattedTrialSessionDetails,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
     showModal: state.showModal,
   },
-  ({ formattedTrialSession, openSetCalendarModalSequence, showModal }) => (
+  ({
+    formattedTrialSessionDetails,
+    openSetCalendarModalSequence,
+    showModal,
+  }) => (
     <>
       <TrialSessionDetailHeader />
 
@@ -29,13 +33,13 @@ export const TrialSessionDetail = connect(
 
         <TrialSessionInformation />
 
-        {!formattedTrialSession.isCalendared && (
+        {!formattedTrialSessionDetails.isCalendared && (
           <Tabs
             bind="trialsessiondetails.caseList"
             defaultActiveTab="EligibleCases"
           >
             <button
-              className="usa-button tab-right-button"
+              className="usa-button tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
               onClick={() => openSetCalendarModalSequence()}
             >
               <FontAwesomeIcon icon="calendar-check" size="1x" /> Set Calendar
@@ -55,7 +59,7 @@ export const TrialSessionDetail = connect(
           </Tabs>
         )}
 
-        {formattedTrialSession.isCalendared && (
+        {formattedTrialSessionDetails.isCalendared && (
           <Tabs
             bind="trialsessiondetails.calendaredCaseList"
             defaultActiveTab="OpenCases"

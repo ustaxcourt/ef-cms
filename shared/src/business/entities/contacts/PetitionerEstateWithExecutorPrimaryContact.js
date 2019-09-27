@@ -7,9 +7,8 @@ const { ContactFactory } = require('./ContactFactory');
 exports.getPetitionerEstateWithExecutorPrimaryContact = ContactFactory.createContactFactory(
   {
     additionalErrorMappings: {
-      secondaryName:
-        'Name of Executor/Personal Representative is a required field.',
-      title: 'Title is a required field.',
+      secondaryName: 'Enter name of executor/personal representative',
+      title: 'Enter title',
     },
     additionalValidation: {
       secondaryName: joi.string().required(),

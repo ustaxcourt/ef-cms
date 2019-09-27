@@ -20,7 +20,6 @@ export const rescanBatchAction = async ({
   store,
 }) => {
   store.set(state.isScanning, true);
-  store.set(state.submitting, true);
   const batchIndex = get(state.batchIndexToRescan);
   const scanner = applicationContext.getScanner();
   scanner.setSourceByIndex(props.scannerSourceIndex);
@@ -33,7 +32,6 @@ export const rescanBatchAction = async ({
     const batches = get(state.batches[documentSelectedForScan]);
     batches.find(b => b.index === batchIndex).pages = pages;
     store.set(state.batches[documentSelectedForScan], batches);
-    store.set(state.submitting, false);
     store.set(state.isScanning, false);
     store.set(state.selectedBatchIndex, batchIndex);
     store.set(state.currentPageIndex, 0);

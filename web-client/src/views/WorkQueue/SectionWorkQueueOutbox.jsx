@@ -1,3 +1,4 @@
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -6,13 +7,13 @@ import React from 'react';
 export const SectionWorkQueueOutbox = connect(
   {
     documentHelper: state.documentHelper,
-    sectionWorkQueue: state.formattedWorkQueue,
+    formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
   ({
     documentHelper,
-    sectionWorkQueue,
+    formattedWorkQueue,
     workQueueHelper,
     workQueueSectionHelper,
   }) => {
@@ -27,8 +28,9 @@ export const SectionWorkQueueOutbox = connect(
             <th aria-label="Docket Number" colSpan="2">
               <span className="padding-left-2px">Docket</span>
             </th>
-            {workQueueHelper.showReceivedColumn && <th>Received</th>}
+            {workQueueHelper.showReceivedColumn && <th>Filed</th>}
             {workQueueHelper.showSentColumn && <th>Sent</th>}
+            <th>Case name</th>
             <th aria-label="Status Icon" className="padding-right-0" />
             <th>Document</th>
             {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
@@ -42,17 +44,12 @@ export const SectionWorkQueueOutbox = connect(
             {workQueueHelper.showServedColumn && <th>Served</th>}
           </tr>
         </thead>
-        {sectionWorkQueue.map((item, idx) => (
+        {formattedWorkQueue.map((item, idx) => (
           <tbody key={idx}>
             <tr>
               <td aria-hidden="true" className="focus-toggle" />
               <td className="message-queue-row">
-                <a
-                  className="no-wrap"
-                  href={`/case-detail/${item.docketNumber}`}
-                >
-                  {item.docketNumberWithSuffix}
-                </a>
+                <CaseLink formattedCase={item} />
               </td>
               {workQueueHelper.showReceivedColumn && (
                 <td className="message-queue-row">
@@ -64,6 +61,9 @@ export const SectionWorkQueueOutbox = connect(
                   <span className="no-wrap">{item.sentDateFormatted}</span>
                 </td>
               )}
+              <td className="message-queue-row message-queue-case-title">
+                {item.caseTitle}
+              </td>
               <td className="message-queue-row has-icon padding-right-0">
                 {item.showBatchedStatusIcon && (
                   <FontAwesomeIcon

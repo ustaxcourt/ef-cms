@@ -10,11 +10,9 @@ export const PDFSignerToolbar = connect(
     disablePrevious: state.documentSigningHelper.disablePrevious,
     isPdfAlreadySigned: state.pdfForSigning.isPdfAlreadySigned,
     nextPageNumber: state.documentSigningHelper.nextPageNumber,
-    pdfObj: state.pdfForSigning.pdfjsObj,
     previousPageNumber: state.documentSigningHelper.previousPageNumber,
     setPage: sequences.setPDFPageForSigningSequence,
     signatureApplied: state.pdfForSigning.signatureApplied,
-    signatureData: state.pdfForSigning.signatureData,
     totalPages: state.documentSigningHelper.totalPages,
   },
   ({

@@ -1,6 +1,4 @@
-const {
-  addCoverToPdf,
-} = require('../../business/useCases/addCoverToPDFDocumentInteractor');
+const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
@@ -123,6 +121,7 @@ exports.updatePrimaryContactInteractor = async ({
       assigneeName: null,
       caseId,
       caseStatus: caseEntity.status,
+      caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
       docketNumber: caseEntity.docketNumber,
       docketNumberSuffix: caseEntity.docketNumberSuffix,
       document: {

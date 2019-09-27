@@ -1,9 +1,12 @@
+import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { runCompute } from 'cerebral/test';
 
 import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
+
+const { VALIDATION_ERROR_MESSAGES } = Case;
 
 export default test => {
   return it('Petitions clerk updates case detail', async () => {
@@ -56,7 +59,7 @@ export default test => {
     });
     await test.runSequence('autoSaveCaseSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
-      irsNoticeDate: 'Please enter a valid IRS notice date',
+      irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[1],
     });
 
     // irsNoticeDate - valid
@@ -149,11 +152,14 @@ export default test => {
 
     await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
-      caseType: 'Select a case type',
-      procedureType: 'Select a case procedure',
+      caseType: VALIDATION_ERROR_MESSAGES.caseType,
+      procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
     });
     expect(test.getState('alertError')).toEqual({
-      messages: ['Select a case type', 'Select a case procedure'],
+      messages: [
+        VALIDATION_ERROR_MESSAGES.caseType,
+        VALIDATION_ERROR_MESSAGES.procedureType,
+      ],
       title: 'Please correct the following errors on the page:',
     });
 

@@ -1,4 +1,7 @@
+import { ForwardMessage } from '../../../shared/src/business/entities/ForwardMessage';
 import _ from 'lodash';
+
+const { VALIDATION_ERROR_MESSAGES } = ForwardMessage;
 
 export default test => {
   return it('Docket clerk forward work item', async () => {
@@ -24,7 +27,7 @@ export default test => {
 
     expect(
       test.getState(`validationErrors.${test.workItemId}.assigneeId`),
-    ).toEqual('Recipient is required.');
+    ).toEqual(VALIDATION_ERROR_MESSAGES.assigneeId);
 
     await test.runSequence('updateForwardFormValueSequence', {
       form: `form.${test.workItemId}`,

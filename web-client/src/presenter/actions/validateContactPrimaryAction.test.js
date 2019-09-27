@@ -3,6 +3,9 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { validateContactPrimaryAction } from './validateContactPrimaryAction';
 import sinon from 'sinon';
+const {
+  ContactFactory,
+} = require('../../../../shared/src/business/entities/contacts/ContactFactory');
 
 describe('validateContactPrimaryAction', () => {
   let successStub;
@@ -66,7 +69,7 @@ describe('validateContactPrimaryAction', () => {
     });
 
     expect(result.state.validationErrors.contactPrimary).toEqual({
-      address1: 'Address is a required field.',
+      address1: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.address1,
     });
     expect(errorStub.calledOnce).toEqual(true);
   });

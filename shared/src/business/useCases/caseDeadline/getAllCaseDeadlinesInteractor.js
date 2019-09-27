@@ -3,6 +3,7 @@ const {
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { Case } = require('../../entities/cases/Case');
 
 /**
  * getAllCaseDeadlinesInteractor
@@ -18,7 +19,14 @@ exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return await applicationContext.getPersistenceGateway().getAllCaseDeadlines({
-    applicationContext,
-  });
+  const allCaseDeadlines = await applicationContext
+    .getPersistenceGateway()
+    .getAllCaseDeadlines({
+      applicationContext,
+    });
+
+  return allCaseDeadlines.map(caseDeadline => ({
+    ...caseDeadline,
+    caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseDeadline)),
+  }));
 };

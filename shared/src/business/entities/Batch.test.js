@@ -1,5 +1,7 @@
 const { Batch } = require('./Batch');
 
+const { VALIDATION_ERROR_MESSAGES } = Batch;
+
 describe('Batch entity', () => {
   let applicationContext;
 
@@ -33,7 +35,7 @@ describe('Batch entity', () => {
       const batch = new Batch({ applicationContext, rawBatch: {} });
 
       expect(batch.getFormattedValidationErrors()).toMatchObject({
-        pages: 'At least one page is required',
+        pages: VALIDATION_ERROR_MESSAGES.pages,
       });
     });
 
@@ -47,7 +49,7 @@ describe('Batch entity', () => {
       });
 
       expect(batch.getFormattedValidationErrors()).toMatchObject({
-        batchIndex: 'Invalid batch index',
+        batchIndex: VALIDATION_ERROR_MESSAGES.batchIndex,
       });
     });
   });

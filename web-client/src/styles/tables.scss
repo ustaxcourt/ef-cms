@@ -229,6 +229,9 @@ table.work-queue {
     .sortActive {
       border-bottom: 3px solid color($theme-color-primary);
     }
+    &.small {
+      max-width: $table-column-width-small;
+    }
   }
 
   td {
@@ -252,8 +255,20 @@ table.work-queue {
       padding-top: 14px;
     }
 
+    &.message-queue-case-title {
+      max-width: 15rem;
+    }
+
+    &.small {
+      width: $table-column-width-small;
+    }
+
+    &.max-width-7 {
+      max-width: 7rem;
+    }
+
     &.message-queue-document {
-      max-width: 35rem;
+      max-width: 25rem;
     }
 
     &.has-icon {
@@ -270,7 +285,7 @@ table.work-queue {
     }
 
     &.to {
-      min-width: 10rem;
+      min-width: 7rem;
     }
 
     .message-document-detail {
@@ -446,14 +461,6 @@ table.docket-record {
 
     .filing-type-icon-mobile {
       display: none;
-    }
-
-    thead tr th {
-      height: 50px;
-    }
-
-    tbody td {
-      height: 65px;
     }
 
     tr.in-progress {

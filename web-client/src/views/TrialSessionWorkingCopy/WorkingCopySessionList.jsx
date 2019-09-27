@@ -1,4 +1,5 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
 import { Text } from '../../ustc-ui/Text/Text';
@@ -69,7 +70,7 @@ export const WorkingCopySessionList = connect(
                   )) || <FontAwesomeIcon icon="caret-down" />}
                 </button>
               </th>
-              <th className="no-wrap">Case Caption</th>
+              <th className="no-wrap">Case name</th>
               <th className="no-wrap">
                 <button
                   className="usa-button usa-button--unstyled sortable-header-button"
@@ -103,9 +104,7 @@ export const WorkingCopySessionList = connect(
               <tbody className="hoverable" key={idx}>
                 <tr className="vertical-align-middle-row">
                   <td>
-                    <a href={`/case-detail/${item.docketNumber}`}>
-                      {item.docketNumberWithSuffix}
-                    </a>
+                    <CaseLink formattedCase={item} />
                   </td>
                   <td>{item.caseCaptionNames}</td>
                   <td>

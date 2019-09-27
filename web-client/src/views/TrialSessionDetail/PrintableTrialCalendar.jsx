@@ -7,12 +7,12 @@ import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 
 export const PrintableTrialCalendar = connect(
   {
-    formattedTrialSession: state.formattedTrialSessionDetails,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     gotoTrialSessionDetailSequence: sequences.gotoTrialSessionDetailSequence,
     trialSessionId: state.trialSessionId,
   },
   ({
-    formattedTrialSession,
+    formattedTrialSessionDetails,
     gotoTrialSessionDetailSequence,
     trialSessionId,
   }) => {
@@ -21,20 +21,24 @@ export const PrintableTrialCalendar = connect(
         <div className="big-blue-header">
           <div className="grid-container">
             <div className="margin-bottom-1">
-              <h1 tabIndex="-1">{formattedTrialSession.trialLocation}</h1>
+              <h1 tabIndex="-1">
+                {formattedTrialSessionDetails.trialLocation}
+              </h1>
               <span
                 className={`usa-tag ${
-                  !formattedTrialSession.isCalendared ? 'ustc-tag--yellow' : ''
+                  !formattedTrialSessionDetails.isCalendared
+                    ? 'ustc-tag--yellow'
+                    : ''
                 }`}
               >
                 <span aria-hidden="true">
-                  {formattedTrialSession.formattedTerm}:{' '}
-                  {formattedTrialSession.status}
+                  {formattedTrialSessionDetails.formattedTerm}:{' '}
+                  {formattedTrialSessionDetails.status}
                 </span>
               </span>
             </div>
             <p className="margin-y-0" id="case-title">
-              <span>{formattedTrialSession.formattedStartDate}</span>
+              <span>{formattedTrialSessionDetails.formattedStartDate}</span>
             </p>
           </div>
         </div>

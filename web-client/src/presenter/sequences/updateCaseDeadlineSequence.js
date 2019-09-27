@@ -6,11 +6,11 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateCaseDeadlineAction } from '../actions/CaseDeadline/updateCaseDeadlineAction';
 import { validateCaseDeadlineAction } from '../actions/CaseDeadline/validateCaseDeadlineAction';
 
@@ -22,7 +22,7 @@ export const updateCaseDeadlineSequence = [
   {
     error: [setValidationErrorsAction],
     success: [
-      setFormSubmittingAction,
+      setWaitingForResponseAction,
       updateCaseDeadlineAction,
       {
         success: [stopShowValidationAction],
@@ -33,7 +33,7 @@ export const updateCaseDeadlineSequence = [
       clearModalStateAction,
       refreshCaseAction,
       getCaseDeadlinesForCaseAction,
-      unsetFormSubmittingAction,
+      unsetWaitingForResponseAction,
     ],
   },
 ];

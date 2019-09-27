@@ -1,5 +1,5 @@
 /**
- * createDocketRecordPdfInteractor (proxy)
+ * generateDocketRecordPdfInteractor (proxy)
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -7,7 +7,7 @@
  * @param {string} providers.contentHtml the html content for the pdf
  * @returns {Promise<*>} the promise of the api call
  */
-exports.createDocketRecordPdfInteractor = ({
+exports.generateDocketRecordPdfInteractor = ({
   applicationContext,
   caseId,
   docketRecordSort,

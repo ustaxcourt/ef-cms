@@ -76,18 +76,18 @@ Case.ANSWER_DOCUMENT_CODES = [
   'AATT',
 ];
 
-Case.COMMON_ERROR_MESSAGES = {
+Case.VALIDATION_ERROR_MESSAGES = {
   caseCaption: 'Enter a case caption',
   caseType: 'Select a case type',
   docketNumber: 'Docket number is required',
   documents: 'At least one valid document is required',
-  filingType: 'Filing Type is required',
+  filingType: 'Select on whose behalf you are filing',
   hasIrsNotice: 'Indicate whether you received an IRS notice',
   irsNoticeDate: [
     {
       contains: 'must be less than or equal to',
       message:
-        'The IRS notice date is in the future. Please enter a valid date.',
+        'The IRS notice date cannot be in the future. Enter a valid date.',
     },
     'Please enter a valid IRS notice date',
   ],
@@ -104,7 +104,7 @@ Case.COMMON_ERROR_MESSAGES = {
     {
       contains: 'must be less than or equal to',
       message:
-        'The Fee Payment date is in the future. Please enter a valid date.',
+        'The Fee Payment date cannot be in the future. Enter a valid date.',
     },
     'Please enter a valid Fee Payment date',
   ],
@@ -133,7 +133,7 @@ Case.COMMON_ERROR_MESSAGES = {
     },
     'Your Request for Place of Trial file size is empty',
   ],
-  stinFile: 'Upload a Statement of Taxpayer Identification',
+  stinFile: 'Upload a statement of taxpayer identification',
   stinFileSize: [
     {
       contains: 'must be less than or equal to',
@@ -365,7 +365,7 @@ joiValidationDecorator(
       Practitioner.validateCollection(this.practitioners)
     );
   },
-  Case.COMMON_ERROR_MESSAGES,
+  Case.VALIDATION_ERROR_MESSAGES,
 );
 
 /**

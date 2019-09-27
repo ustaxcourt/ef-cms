@@ -1,4 +1,7 @@
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
+const {
+  VALIDATION_ERROR_MESSAGES,
+} = require('./ExternalDocumentInformationFactory');
 
 describe('ExternalDocumentNonStandardB', () => {
   describe('validation', () => {
@@ -7,9 +10,9 @@ describe('ExternalDocumentNonStandardB', () => {
         scenario: 'Nonstandard B',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        category: 'Select a Category.',
-        documentType: 'Select a Document Type.',
-        freeText: 'Provide an answer.',
+        category: VALIDATION_ERROR_MESSAGES.category,
+        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        freeText: VALIDATION_ERROR_MESSAGES.freeText,
       });
     });
 

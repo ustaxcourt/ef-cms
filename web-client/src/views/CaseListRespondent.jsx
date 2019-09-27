@@ -1,3 +1,4 @@
+import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { CaseSearchBox } from './CaseSearchBox';
 import { MyContactInformation } from './MyContactInformation';
 import { connect } from '@cerebral/react';
@@ -6,10 +7,10 @@ import React from 'react';
 
 export const CaseListRespondent = connect(
   {
-    caseList: state.formattedCases,
-    helper: state.dashboardExternalHelper,
+    dashboardExternalHelper: state.dashboardExternalHelper,
+    formattedCases: state.formattedCases,
   },
-  ({ caseList, helper }) => {
+  ({ dashboardExternalHelper, formattedCases }) => {
     const renderTable = () => (
       <div className="margin-top-2">
         <table className="usa-table responsive-table dashboard" id="case-list">
@@ -21,20 +22,16 @@ export const CaseListRespondent = connect(
             </tr>
           </thead>
           <tbody>
-            {caseList.map(item => (
+            {formattedCases.map(item => (
               <tr key={item.docketNumber}>
                 <td className="hide-on-mobile">
-                  <a href={'/case-detail/' + item.docketNumber}>
-                    {item.docketNumberWithSuffix}
-                  </a>
+                  <CaseLink formattedCase={item} />
                 </td>
                 <td className="hide-on-mobile">{item.caseName}</td>
                 <td>{item.createdAtFormatted}</td>
                 <td className="show-on-mobile">
                   <div>
-                    <a href={'/case-detail/' + item.docketNumber}>
-                      {item.docketNumberWithSuffix}
-                    </a>
+                    <CaseLink formattedCase={item} />
                   </div>
                   {item.caseName}
                 </td>
@@ -75,7 +72,9 @@ export const CaseListRespondent = connect(
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap-6">
             <div className="tablet:grid-col-8">
-              {helper.showCaseList ? renderNonEmptyState() : renderEmptyState()}
+              {dashboardExternalHelper.showCaseList
+                ? renderNonEmptyState()
+                : renderEmptyState()}
             </div>
             <div className="tablet:grid-col-4">
               <CaseSearchBox />

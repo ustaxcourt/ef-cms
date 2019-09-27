@@ -22,15 +22,15 @@ function CaseDeadline(rawProps, { applicationContext }) {
   this.deadlineDate = rawProps.deadlineDate;
 }
 
-CaseDeadline.errorToMessageMap = {
+CaseDeadline.VALIDATION_ERROR_MESSAGES = {
   caseId: 'You must have a case id.',
-  deadlineDate: 'Please enter a valid deadline date.',
+  deadlineDate: 'Enter a valid deadline date',
   description: [
     {
       contains: 'length must be less than or equal to',
       message: 'The description is too long. Please enter a valid description.',
     },
-    'Please enter a description.',
+    'Enter a description of this deadline',
   ],
 };
 
@@ -65,7 +65,7 @@ joiValidationDecorator(
   CaseDeadline,
   CaseDeadline.schema,
   undefined,
-  CaseDeadline.errorToMessageMap,
+  CaseDeadline.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { CaseDeadline };

@@ -28,19 +28,23 @@ export const headerHelper = get => {
 
   const isTrialSessions = currentPage.includes('TrialSession');
   const isDashboard = currentPage.startsWith('Dashboard');
-  const pageIsMessages =
-    userRole == 'judge'
-      ? currentPage.startsWith('Messages')
-      : isDashboard && workQueueIsInternal && !isTrialSessions;
+  const isMessages = currentPage.startsWith('Messages');
+
+  const pageIsInterstitial = currentPage == 'Interstitial';
+  const pageIsHome =
+    isDashboard ||
+    (['docketclerk', 'petitionsclerk', 'seniorattorney'].includes(userRole) &&
+      isMessages);
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
 
   return {
     defaultQCBoxPath: isOtherUser(userRole)
       ? '/document-qc/section/inbox'
       : '/document-qc/my/inbox',
-    pageIsDocumentQC: isDashboard && !workQueueIsInternal && !isTrialSessions,
-    pageIsHome: isDashboard && !pageIsMessages,
-    pageIsMessages,
+    pageIsDocumentQC: isMessages && !workQueueIsInternal,
+    pageIsHome,
+    pageIsInterstitial,
+    pageIsMessages: isMessages && workQueueIsInternal,
     pageIsMyCases: isDashboard && isUserExternal(userRole),
     pageIsReports: isCaseDeadlines,
     pageIsTrialSessions: isTrialSessions && isUserInternal(userRole),

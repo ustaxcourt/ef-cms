@@ -70,8 +70,8 @@ Scan.prototype.getPages = function() {
   return aggregatedPngs;
 };
 
-Scan.errorToMessageMap = {
-  batches: 'At least one batch is required',
+Scan.VALIDATION_ERROR_MESSAGES = {
+  batches: '#At least one batch is required',
 };
 
 Scan.schema = joi.object().keys({
@@ -91,6 +91,11 @@ Scan.schema = joi.object().keys({
     .required(),
 });
 
-joiValidationDecorator(Scan, Scan.schema, undefined, Scan.errorToMessageMap);
+joiValidationDecorator(
+  Scan,
+  Scan.schema,
+  undefined,
+  Scan.VALIDATION_ERROR_MESSAGES,
+);
 
 module.exports = { Scan };

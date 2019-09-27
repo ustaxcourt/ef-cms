@@ -6,15 +6,19 @@ import React from 'react';
 export const MessagesInProgress = connect(
   {
     documentHelper: state.documentHelper,
-    extractedPendingMessages: state.extractedPendingMessagesFromCaseDetail,
+    extractedPendingMessagesFromCaseDetail:
+      state.extractedPendingMessagesFromCaseDetail,
   },
-  function MessagesInProgress({ documentHelper, extractedPendingMessages }) {
+  function MessagesInProgress({
+    documentHelper,
+    extractedPendingMessagesFromCaseDetail,
+  }) {
     return (
       <>
-        {extractedPendingMessages.length === 0 && (
+        {extractedPendingMessagesFromCaseDetail.length === 0 && (
           <p className="heading-2 margin-bottom-10">There are no messages.</p>
         )}
-        {extractedPendingMessages.length > 0 && (
+        {extractedPendingMessagesFromCaseDetail.length > 0 && (
           <table className="usa-table row-border-only subsection messages">
             <thead>
               <tr>
@@ -26,7 +30,7 @@ export const MessagesInProgress = connect(
             </thead>
 
             <tbody>
-              {extractedPendingMessages.map((workItem, idx) => (
+              {extractedPendingMessagesFromCaseDetail.map((workItem, idx) => (
                 <tr key={idx}>
                   <td className="responsive-title padding-extra">
                     {workItem.assigneeName}

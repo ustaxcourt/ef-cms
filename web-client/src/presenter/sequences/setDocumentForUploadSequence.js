@@ -5,6 +5,7 @@ import { getFormValueDocumentAction } from '../actions/getFormValueDocumentActio
 import { getFormValueDocumentSizeAction } from '../actions/getFormValueDocumentSizeAction';
 import { selectDocumentForPreviewSequence } from './selectDocumentForPreviewSequence';
 import { setDocumentUploadModeSequence } from './setDocumentUploadModeSequence';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateFormValueSequence } from './updateFormValueSequence';
 import { validateFileSizeAction } from '../actions/validateFileSizeAction';
 import { validatePetitionFromPaperSequence } from './validatePetitionFromPaperSequence';
@@ -12,7 +13,7 @@ import { validatePetitionFromPaperSequence } from './validatePetitionFromPaperSe
 export const setDocumentForUploadSequence = [
   validateFileSizeAction,
   {
-    invalid: [set(state.submitting, false), set(state.isScanning, false)],
+    invalid: [unsetWaitingForResponseAction, set(state.isScanning, false)],
     valid: [
       getFormValueDocumentAction,
       ...updateFormValueSequence,

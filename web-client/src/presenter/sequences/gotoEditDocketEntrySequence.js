@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
@@ -16,7 +15,6 @@ export const gotoEditDocketEntry = [
   setCurrentPageAction('Interstitial'),
   set(state.showValidation, false),
   clearScansAction,
-  clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,
   getCaseAction,

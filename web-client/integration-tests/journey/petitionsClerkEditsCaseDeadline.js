@@ -1,8 +1,11 @@
+import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline';
 import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
+
+const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
 
 export default (test, overrides = {}) => {
   return it('Petitions clerk edits a case deadline', async () => {
@@ -60,8 +63,7 @@ In a day or two`,
     await test.runSequence('updateCaseDeadlineSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      description:
-        'The description is too long. Please enter a valid description.',
+      description: VALIDATION_ERROR_MESSAGES.description[0].message,
     });
 
     await test.runSequence('validateCaseDeadlineSequence');

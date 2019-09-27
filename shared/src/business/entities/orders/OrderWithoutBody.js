@@ -2,6 +2,7 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { Order } = require('./Order');
 
 /**
  * @param {object} rawOrder the raw order data
@@ -13,10 +14,8 @@ function OrderWithoutBody(rawOrder) {
   this.eventCode = rawOrder.eventCode;
 }
 
-OrderWithoutBody.errorToMessageMap = {
-  documentTitle: 'Order title is required.',
-  documentType: 'Order type is required.',
-  eventCode: 'Order type is required.',
+OrderWithoutBody.VALIDATION_ERROR_MESSAGES = {
+  ...Order.VALIDATION_ERROR_MESSAGES,
 };
 
 joiValidationDecorator(
@@ -29,7 +28,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  OrderWithoutBody.errorToMessageMap,
+  OrderWithoutBody.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { OrderWithoutBody };

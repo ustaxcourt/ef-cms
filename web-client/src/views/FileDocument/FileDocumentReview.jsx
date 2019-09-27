@@ -10,18 +10,20 @@ import React from 'react';
 
 export const FileDocumentReview = connect(
   {
-    caseDetail: state.formattedCaseDetail,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    formattedCaseDetail: state.formattedCaseDetail,
+    navigateBackSequence: sequences.navigateBackSequence,
     showModal: state.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
   },
   ({
-    caseDetail,
     fileDocumentHelper,
     form,
+    formattedCaseDetail,
     formCancelToggleCancelSequence,
+    navigateBackSequence,
     showModal,
     submitExternalDocumentSequence,
   }) => {
@@ -323,11 +325,15 @@ export const FileDocumentReview = connect(
                       </label>
                       <ul className="ustc-unstyled-list without-margins">
                         {form.partyPrimary && (
-                          <li>{caseDetail.contactPrimary.name}, Petitioner</li>
+                          <li>
+                            {formattedCaseDetail.contactPrimary.name},
+                            Petitioner
+                          </li>
                         )}
                         {form.partySecondary && (
                           <li>
-                            {caseDetail.contactSecondary.name}, Petitioner
+                            {formattedCaseDetail.contactSecondary.name},
+                            Petitioner
                           </li>
                         )}
                         {form.partyRespondent && <li>Respondent</li>}
@@ -376,7 +382,7 @@ export const FileDocumentReview = connect(
           <button
             className="usa-button usa-button--outline margin-bottom-1"
             type="button"
-            onClick={() => history.back()}
+            onClick={() => navigateBackSequence()}
           >
             Back
           </button>
