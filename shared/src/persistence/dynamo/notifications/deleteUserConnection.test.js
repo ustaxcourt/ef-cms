@@ -19,7 +19,7 @@ describe('deleteUserConnection', () => {
         stage: 'dev',
       },
       getDocumentClient: () => ({
-        delete: deleteStub,
+        batchWrite: deleteStub,
         query: queryStub,
       }),
     };
@@ -32,11 +32,18 @@ describe('deleteUserConnection', () => {
     });
 
     expect(deleteStub).toHaveBeenCalledWith({
-      Key: {
-        pk: 'connections-123',
-        sk: 'abc',
+      RequestItems: {
+        'efcms-dev': [
+          {
+            DeleteRequest: {
+              Key: {
+                pk: 'connections-123',
+                sk: 'abc',
+              },
+            },
+          },
+        ],
       },
-      TableName: 'efcms-dev',
     });
   });
 });
