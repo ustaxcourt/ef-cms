@@ -45,6 +45,8 @@ const addPetitionDocumentWithWorkItemToCase = ({
       from: user.name,
       fromUserId: user.userId,
       message,
+      to: user.name,
+      toUserId: user.userId,
     },
     { applicationContext },
   );

@@ -39,12 +39,14 @@ export const workQueueHelper = get => {
       }/${queue}/${box}`;
     },
     hideCaseStatusColumn: userIsPetitionsClerk && isDisplayingQC,
-    hideFiledByColumn: !(isDisplayingQC && userIsPetitionsClerk),
+    hideFiledByColumn: !(isDisplayingQC && userIsDocketClerk),
     hideFromColumn: isDisplayingQC,
     hideIconColumn: !workQueueIsInternal && userIsOther,
     hideSectionColumn: isDisplayingQC,
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
+    isDisplayingQC,
     linkToDocumentMessages: !isDisplayingQC,
+    queueEmptyMessage: 'There are no messages',
     sentTitle: workQueueIsInternal
       ? 'Sent'
       : userIsDocketClerk
