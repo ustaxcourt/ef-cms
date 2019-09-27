@@ -1,11 +1,10 @@
 const socketRouter = () => {
-  event => {
+  return event => {
     const message = JSON.parse(event.data);
     const { action } = message;
-    console.log(message);
 
     switch (action) {
-      case 'zip_download_ready':
+      case 'batch_download_ready':
         break;
       default:
         break;
@@ -38,8 +37,6 @@ export const socketProvider = () => {
 
     socket = createWebSocketClient(token);
     socket.onmessage = socketRouter(app);
-    socket.onopen = event => console.log('socket:onopen', event);
-    socket.onclose = event => console.log('socket:onclose', event);
   };
 
   const initialize = _app => {

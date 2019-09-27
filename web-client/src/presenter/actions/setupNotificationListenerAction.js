@@ -18,6 +18,5 @@ export const setupNotificationListenerAction = async ({
     store.set(state.waitingForResponse, false);
     router.openInNewTab(url, false);
     socketClient.close();
-    socket.stop();
   };
 };
