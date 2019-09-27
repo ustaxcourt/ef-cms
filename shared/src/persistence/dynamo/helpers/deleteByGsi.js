@@ -21,15 +21,8 @@ exports.deleteByGsi = async ({ applicationContext, gsi }) => {
     applicationContext,
   });
 
-  await Promise.all(
-    items.map(item =>
-      client.delete({
-        applicationContext,
-        key: {
-          pk: item.pk,
-          sk: item.sk,
-        },
-      }),
-    ),
-  );
+  await client.batchDelete({
+    applicationContext,
+    items,
+  });
 };
