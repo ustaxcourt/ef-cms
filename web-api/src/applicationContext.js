@@ -546,6 +546,9 @@ const { exec } = require('child_process');
 const { User } = require('../../shared/src/business/entities/User');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 
+// increase the timeout for zip uploads to S3
+AWS.config.httpOptions.timeout = 300000;
+
 const { DynamoDB, S3, SES } = AWS;
 const execPromise = util.promisify(exec);
 
