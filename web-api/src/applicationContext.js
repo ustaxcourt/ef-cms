@@ -355,6 +355,9 @@ const {
   WORKITEM,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
+  processStreamRecordsInteractor,
+} = require('../../shared/src/business/useCases/processStreamRecordsInteractor');
+const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
@@ -542,19 +545,23 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
+const elasticsearch = require('elasticsearch');
 const { exec } = require('child_process');
 const { User } = require('../../shared/src/business/entities/User');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
+const connectionClass = require('http-aws-es');
 
 // increase the timeout for zip uploads to S3
 AWS.config.httpOptions.timeout = 300000;
 
-const { DynamoDB, S3, SES } = AWS;
+const { DynamoDB, EnvironmentCredentials, S3, SES } = AWS;
 const execPromise = util.promisify(exec);
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  elasticsearchEndpoint:
+    process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   masterDynamoDbEndpoint:
     process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
@@ -576,6 +583,7 @@ const setCurrentUser = newUser => {
 let dynamoClientCache = {};
 let s3Cache;
 let sesCache;
+let searchClientCache;
 
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
@@ -722,6 +730,29 @@ module.exports = (appContextUser = {}) => {
         zipDocuments,
       };
     },
+    getSearchClient: () => {
+      if (!searchClientCache) {
+        if (environment.stage === 'local') {
+          searchClientCache = new elasticsearch.Client({
+            host: environment.elasticsearchEndpoint,
+          });
+        } else {
+          searchClientCache = new elasticsearch.Client({
+            amazonES: {
+              credentials: new EnvironmentCredentials('AWS'),
+              region: 'us-east-1',
+            },
+            apiVersion: '7.1',
+            connectionClass: connectionClass,
+            host: environment.elasticsearchEndpoint,
+            log: 'warning',
+            port: 443,
+            protocol: 'https',
+          });
+        }
+      }
+      return searchClientCache;
+    },
     getStorageClient: () => {
       if (!s3Cache) {
         s3Cache = new S3({
@@ -807,6 +838,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemInteractor,
         onConnectInteractor,
         onDisconnectInteractor,
+        processStreamRecordsInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
         runBatchProcessInteractor,
         sanitizePdfInteractor: args =>

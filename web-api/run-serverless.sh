@@ -32,6 +32,8 @@ export SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploy
   --region "${region}" \
   --stage "${slsStage}" \
   --userPoolId "${USER_POOL_ID}" \
+  --dynamo_stream_arn="${DYNAMO_STREAM_ARN}" \
+  --elasticsearch_endpoint="${ELASTICSEARCH_ENDPOINT}" \
   --verbose
 echo "done running create_domain"
 
@@ -43,6 +45,8 @@ ENVIRONMENT="${slsStage}" ./node_modules/.bin/sls deploy \
   --region "${region}" \
   --stage "${slsStage}" \
   --userPoolId "${USER_POOL_ID}" \
+  --dynamo_stream_arn="${DYNAMO_STREAM_ARN}" \
+  --elasticsearch_endpoint="${ELASTICSEARCH_ENDPOINT}" \
   --verbose
 echo "done running sls deploy"
 

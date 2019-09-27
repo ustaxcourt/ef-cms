@@ -97,6 +97,7 @@
         "elasticloadbalancing:*",
         "ec2:*",
         "ses:*",
+        "es:*",
         "s3:*",
         "cloudformation:*",
         "cloudwatch:*",
@@ -131,8 +132,12 @@
         "dynamodb:UpdateTimeToLive",
         "dynamodb:CreateGlobalTable",
         "dynamodb:DescribeContinuousBackups",
-        "dynamodb:DescribeGlobalTable",
+        "dynamodb:DescribeGlobalTable"
         "dynamodb:DescribeLimits"
+        "dynamodb:DescribeStream"
+        "dynamodb:GetRecords"
+        "dynamodb:GetShardIterator"
+        "dynamodb:ListStreams"
       ],
       "Resource": [
         "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-*",

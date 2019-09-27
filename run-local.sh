@@ -30,7 +30,9 @@ set -- \
   --noAuth \
   --noTimeout \
   --region us-east-1 \
-  --stage local
+  --stage local \
+  --dynamo_stream_arn "arn:aws:dynamodb:ddblocal:000000000000:table/efcms-local/stream/*" \
+  --elasticsearch_endpoint "http://localhost:9200"
 
 echo "starting api service"
 npx sls offline start "$@" --config web-api/serverless-api.yml &
@@ -54,6 +56,8 @@ echo "starting case notes service"
 npx sls offline start "$@" --config web-api/serverless-case-notes.yml &
 echo "starting notifications service"
 npx sls offline start "$@" --config web-api/serverless-notifications.yml &
+echo "starting streams service"
+npx sls offline start "$@" --config web-api/serverless-streams.yml &
 
 echo "starting proxy"
 node ./web-api/proxy.js
