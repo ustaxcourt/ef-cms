@@ -1,5 +1,5 @@
 /**
- * changes the route to messages, which is "/document-qc"
+ * changes the route to /document-qc
  *
  * @param {object} providers the providers object
  * @param {object} providers.router the riot.router object that is used for changing the route
