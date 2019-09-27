@@ -21,7 +21,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
 
         result.formattedFiledDate = applicationContext
           .getUtilities()
-          .formatDateString(result.filedDate, 'MMDDYY');
+          .formatDateString(result.receivedAt || result.createdAt, 'MMDDYY');
 
         result.docketNumberWithSuffix = `${result.docketNumber}${
           result.docketNumberSuffix ? result.docketNumberSuffix : ''
