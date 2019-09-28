@@ -1,4 +1,4 @@
-import { presenter } from '../presenter';
+import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { stopWebSocketConnectionAction } from './stopWebSocketConnectionAction';
 

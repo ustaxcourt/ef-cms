@@ -1,5 +1,5 @@
 import { displayDownloadLinkAction } from './displayDownloadLinkAction';
-import { presenter } from '../presenter';
+import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('displayDownloadLinkAction', () => {
