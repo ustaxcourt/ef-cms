@@ -1,10 +1,13 @@
-const socketRouter = () => {
+const socketRouter = app => {
   return event => {
     const message = JSON.parse(event.data);
     const { action } = message;
 
     switch (action) {
       case 'batch_download_ready':
+        app.getSequence('batchDownloadReadySequence')({
+          ...message,
+        });
         break;
       default:
         break;
