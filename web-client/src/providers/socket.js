@@ -1,4 +1,6 @@
-const socketRouter = app => {
+const noop = () => {};
+
+const socketRouter = (app, onMessageCallbackFn) => {
   return event => {
     const message = JSON.parse(event.data);
     const { action } = message;
@@ -12,6 +14,8 @@ const socketRouter = app => {
       default:
         break;
     }
+
+    (onMessageCallbackFn || noop)(message);
   };
 };
 
