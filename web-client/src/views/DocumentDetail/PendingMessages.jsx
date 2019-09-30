@@ -226,7 +226,7 @@ export const PendingMessages = connect(
                         className="usa-label"
                         htmlFor={`complete-message-${idx}`}
                       >
-                        Add Message <span className="usa-hint">(optional)</span>
+                        Add message <span className="usa-hint">(optional)</span>
                       </label>
                       <textarea
                         className="usa-textarea"
@@ -409,7 +409,7 @@ export const PendingMessages = connect(
                           validationErrors[workItem.workItemId].forwardMessage
                         }
                         id={`forward-message-${idx}`}
-                        label="Add Message"
+                        label="Add message"
                         name="forwardMessage"
                         onChange={e => {
                           updateForwardFormValueSequence({

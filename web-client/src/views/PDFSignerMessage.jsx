@@ -112,7 +112,7 @@ export const PDFSignerMessage = connect(
           }
         >
           <label className="usa-label" htmlFor="message">
-            Add Message
+            Add message
           </label>
           <textarea
             className="usa-textarea"
