@@ -194,7 +194,7 @@ export const StartCaseInternal = connect(
                   <CaseTypeSelect
                     allowDefaultOption={true}
                     caseTypes={caseTypes}
-                    legend="Notice/Case Type"
+                    legend="Notice/case type"
                     validation="validatePetitionFromPaperSequence"
                     value={form.caseType}
                     onChange="updateFormValueSequence"

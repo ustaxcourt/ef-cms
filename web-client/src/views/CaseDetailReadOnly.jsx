@@ -29,7 +29,7 @@ export const CaseDetailReadOnly = connect(
         <div className="blue-container">
           <h3>IRS Notice(s)</h3>
 
-          <span className="label">Notice/Case Type</span>
+          <span className="label">Notice/case type</span>
           <p>{formattedCaseDetail.caseType}</p>
 
           <div className="label">Notice Date</div>
