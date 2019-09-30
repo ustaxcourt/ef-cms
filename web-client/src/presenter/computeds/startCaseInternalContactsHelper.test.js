@@ -307,7 +307,7 @@ describe('startCaseInternalContactsHelper', () => {
       },
       contactSecondary: {
         header: 'Deceased Spouse Information',
-        nameLabel: 'Name of Deceased Spouse',
+        nameLabel: 'Name of deceased spouse',
       },
     });
   });
@@ -327,7 +327,7 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Petitioner Information',
-        nameLabel: 'Name of Deceased Spouse',
+        nameLabel: 'Name of deceased spouse',
         secondaryNameLabel: 'Name of Surviving Spouse',
       },
     });

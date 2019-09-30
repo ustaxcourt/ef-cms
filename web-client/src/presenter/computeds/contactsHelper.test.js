@@ -355,7 +355,7 @@ describe('contactsHelper', () => {
       },
       contactSecondary: {
         header: 'Tell Us About Your Deceased Spouse',
-        nameLabel: 'Name of Deceased Spouse',
+        nameLabel: 'Name of deceased spouse',
       },
     });
   });
@@ -378,7 +378,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Surviving Spouse',
-        nameLabel: 'Name of Deceased Spouse',
+        nameLabel: 'Name of deceased spouse',
         secondaryNameLabel: 'Name of Surviving Spouse',
       },
     });
@@ -803,7 +803,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Surviving Spouse',
-        nameLabel: 'Name of Deceased Spouse',
+        nameLabel: 'Name of deceased spouse',
         secondaryNameLabel: 'Name of Surviving Spouse',
       },
     });
