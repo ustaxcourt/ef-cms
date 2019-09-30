@@ -1,5 +1,5 @@
 import { BigHeader } from './BigHeader';
-import { ButtonLink } from '../../ustc-ui/Buttons/ButtonLink';
+import { ButtonLink } from '../ustc-ui/Buttons/ButtonLink';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
