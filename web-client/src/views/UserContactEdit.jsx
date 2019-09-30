@@ -54,7 +54,7 @@ export const UserContactEdit = connect(
 
           <div className="blue-container">
             <div className="usa-form-group">
-              <p className="usa-label">Contact Name</p>
+              <p className="usa-label">Contact name</p>
               <p className="margin-top-0">
                 {user.name} ({user.barNumber})
               </p>
