@@ -305,7 +305,7 @@ describe('caseDetailEditContactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Petitioner Information',
-        nameLabel: 'Name of Petitioner/Surviving Spouse',
+        nameLabel: 'Name of petitioner/surviving spouse',
       },
       contactSecondary: {
         header: 'Deceased Spouse Information',

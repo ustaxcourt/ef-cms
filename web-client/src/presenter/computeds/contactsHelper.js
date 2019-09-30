@@ -138,7 +138,7 @@ export const contactsHelper = get => {
       case PARTY_TYPES.petitionerDeceasedSpouse:
         contactPrimary = {
           header: 'Tell Us About Yourself',
-          nameLabel: 'Name of Petitioner/Surviving Spouse',
+          nameLabel: 'Name of petitioner/surviving spouse',
         };
         contactSecondary = {
           displayInCareOf: true,
