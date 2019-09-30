@@ -135,7 +135,7 @@ describe('startCaseInternalContactsHelper', () => {
         displaySecondaryName: true,
         header: 'Guardian Information',
         nameLabel: 'Name of taxpayer',
-        secondaryNameLabel: 'Name of Guardian',
+        secondaryNameLabel: 'Name of guardian',
       },
     });
   });

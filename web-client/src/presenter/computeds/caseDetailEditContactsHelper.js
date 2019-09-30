@@ -71,7 +71,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displaySecondaryName: true,
           header: 'Guardian Information',
           nameLabel: 'Name of taxpayer',
-          secondaryNameLabel: 'Name of Guardian',
+          secondaryNameLabel: 'Name of guardian',
         },
       };
       break;
