@@ -5,11 +5,13 @@ import classNames from 'classnames';
 export const ButtonLink = props => {
   const { className, ...remainingProps } = props;
   const classes = classNames(
-    'usa-button usa-button--unstyled ustc-button--unstyled',
+    'usa-button usa-button--unstyled ustc-button--unstyled bg-orange',
     className,
   );
 
-  return <button className={classes} {...remainingProps}></button>;
+  return (
+    <button className={classes} type="button" {...remainingProps}></button>
+  );
 };
 
 ButtonLink.propTypes = {
