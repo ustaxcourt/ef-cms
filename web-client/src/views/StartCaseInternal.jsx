@@ -249,7 +249,7 @@ export const StartCaseInternal = connect(
                     )}
                   >
                     <label className="usa-label" htmlFor="party-type">
-                      Party Type
+                      Party type
                     </label>
                     <select
                       className="usa-select"
