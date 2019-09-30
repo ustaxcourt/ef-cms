@@ -95,7 +95,7 @@ export const RequestAccessDocumentForm = connect(
               >
                 <fieldset className="usa-fieldset margin-bottom-0">
                   <legend>
-                    Does Your Filing Include A Certificate of Service?
+                    Does your filing include a Certificate of Service?
                   </legend>
                   {['Yes', 'No'].map(option => (
                     <div className="usa-radio usa-radio__inline" key={option}>

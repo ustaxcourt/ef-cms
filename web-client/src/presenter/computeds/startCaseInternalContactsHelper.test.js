@@ -17,8 +17,8 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Conservator Information',
-        nameLabel: 'Name of Taxpayer',
-        secondaryNameLabel: 'Name of Conservator',
+        nameLabel: 'Name of taxpayer',
+        secondaryNameLabel: 'Name of conservator',
       },
     });
   });
@@ -36,7 +36,7 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displayInCareOf: true,
         header: 'Corporation Information',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
       },
     });
   });
@@ -54,7 +54,7 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Custodian Information',
-        nameLabel: 'Name of Taxpayer',
+        nameLabel: 'Name of taxpayer',
         secondaryNameLabel: 'Name of Custodian',
       },
     });
@@ -72,7 +72,7 @@ describe('startCaseInternalContactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Donor Information',
-        nameLabel: 'Name of Petitioner',
+        nameLabel: 'Name of petitioner',
       },
     });
   });
@@ -134,8 +134,8 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Guardian Information',
-        nameLabel: 'Name of Taxpayer',
-        secondaryNameLabel: 'Name of Guardian',
+        nameLabel: 'Name of taxpayer',
+        secondaryNameLabel: 'Name of guardian',
       },
     });
   });
@@ -155,8 +155,8 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Next Friend Information',
-        nameLabel: 'Name of Legally Incompetent Person',
-        secondaryNameLabel: 'Name of Next Friend',
+        nameLabel: 'Name of legally incompetent person',
+        secondaryNameLabel: 'Name of next friend',
       },
     });
   });
@@ -176,8 +176,8 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Next Friend Information',
-        nameLabel: 'Name of Minor',
-        secondaryNameLabel: 'Name of Next Friend',
+        nameLabel: 'Name of minor',
+        secondaryNameLabel: 'Name of next friend',
       },
     });
   });
@@ -197,8 +197,8 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Partnership Representative',
-        nameLabel: 'Business Name',
-        secondaryNameLabel: 'Name of Partnership Representative',
+        nameLabel: 'Business name',
+        secondaryNameLabel: 'Name of partnership representative',
       },
     });
   });
@@ -218,8 +218,8 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Partnership (Other than Tax Matters Partner) Information',
-        nameLabel: 'Business Name',
-        secondaryNameLabel: 'Name of Partner (Other than TMP)',
+        nameLabel: 'Business name',
+        secondaryNameLabel: 'Name of partner (other than TMP)',
       },
     });
   });
@@ -239,7 +239,7 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tax Matters Partner Information',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
         secondaryNameLabel: 'Name of Tax Matters Partner',
       },
     });
@@ -284,7 +284,7 @@ describe('startCaseInternalContactsHelper', () => {
       contactSecondary: {
         displayPhone: true,
         header: 'Spouse Information',
-        nameLabel: "Spouse's Name",
+        nameLabel: "Spouse's name",
       },
     });
   });
@@ -303,11 +303,11 @@ describe('startCaseInternalContactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Petitioner Information',
-        nameLabel: 'Name of Petitioner/Surviving Spouse',
+        nameLabel: 'Name of petitioner/surviving spouse',
       },
       contactSecondary: {
         header: 'Deceased Spouse Information',
-        nameLabel: 'Name of Deceased Spouse',
+        nameLabel: 'Name of deceased spouse',
       },
     });
   });
@@ -327,8 +327,8 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Petitioner Information',
-        nameLabel: 'Name of Deceased Spouse',
-        secondaryNameLabel: 'Name of Surviving Spouse',
+        nameLabel: 'Name of deceased spouse',
+        secondaryNameLabel: 'Name of surviving spouse',
       },
     });
   });
@@ -347,7 +347,7 @@ describe('startCaseInternalContactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Transferee Information',
-        nameLabel: 'Name of Petitioner',
+        nameLabel: 'Name of petitioner',
       },
     });
   });
@@ -367,8 +367,8 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Trustee Information',
-        nameLabel: 'Name of Trust',
-        secondaryNameLabel: 'Name of Trustee',
+        nameLabel: 'Name of trust',
+        secondaryNameLabel: 'Name of trustee',
       },
     });
   });
