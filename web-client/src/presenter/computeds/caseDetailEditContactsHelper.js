@@ -38,7 +38,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       contacts = {
         contactPrimary: {
           header: 'Donor Information',
-          nameLabel: 'Name of Petitioner',
+          nameLabel: 'Name of petitioner',
         },
       };
       break;
@@ -176,7 +176,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       contacts = {
         contactPrimary: {
           header: 'Transferee Information',
-          nameLabel: 'Name of Petitioner',
+          nameLabel: 'Name of petitioner',
         },
       };
       break;

@@ -84,7 +84,7 @@ describe('contactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Tell Us About the Donor You Are Filing For',
-        nameLabel: 'Name of Petitioner',
+        nameLabel: 'Name of petitioner',
       },
     });
   });
@@ -401,7 +401,7 @@ describe('contactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Tell Us About the Transferee You Are Filing For',
-        nameLabel: 'Name of Petitioner',
+        nameLabel: 'Name of petitioner',
       },
     });
   });
@@ -510,7 +510,7 @@ describe('contactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Tell Us About the Donor You Are Filing For',
-        nameLabel: 'Name of Petitioner',
+        nameLabel: 'Name of petitioner',
       },
     });
   });
@@ -826,7 +826,7 @@ describe('contactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Tell Us About the Transferee You Are Filing For',
-        nameLabel: 'Name of Petitioner',
+        nameLabel: 'Name of petitioner',
       },
     });
   });

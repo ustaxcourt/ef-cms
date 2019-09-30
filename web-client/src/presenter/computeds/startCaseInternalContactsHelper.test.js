@@ -72,7 +72,7 @@ describe('startCaseInternalContactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Donor Information',
-        nameLabel: 'Name of Petitioner',
+        nameLabel: 'Name of petitioner',
       },
     });
   });
@@ -347,7 +347,7 @@ describe('startCaseInternalContactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Transferee Information',
-        nameLabel: 'Name of Petitioner',
+        nameLabel: 'Name of petitioner',
       },
     });
   });
