@@ -34,7 +34,7 @@ export const PartiesRepresenting = connect(
           >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">
-                Who Are You Representing?
+                Who are you Representing?
               </legend>
               <span className="usa-hint">Check all that apply</span>
               <div className="usa-checkbox">

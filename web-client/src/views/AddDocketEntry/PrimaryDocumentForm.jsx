@@ -44,7 +44,7 @@ export const PrimaryDocumentForm = connect(
             }`}
           >
             <fieldset className="usa-fieldset">
-              <legend className="usa-legend">Filing Status</legend>
+              <legend className="usa-legend">Filing status</legend>
               {['File', 'Lodge'].map(option => (
                 <div className="usa-radio usa-radio__inline" key={option}>
                   <input
@@ -84,7 +84,7 @@ export const PrimaryDocumentForm = connect(
           >
             <fieldset className="usa-fieldset date-received">
               <legend id="usa-legend date-received-legend">
-                Date Received
+                Date received
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month">
@@ -176,7 +176,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="react-select-2-input"
               id="document-type-label"
             >
-              Document Type
+              Document type
             </label>
             <Select
               aria-describedby="document-type-label"
@@ -297,7 +297,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="additional-info"
               id="additional-info-label"
             >
-              Additional Info 1 <span className="usa-hint">(optional)</span>
+              Additional info 1 <span className="usa-hint">(optional)</span>
             </label>
             <input
               aria-describedby="additional-info-label"
@@ -338,7 +338,7 @@ export const PrimaryDocumentForm = connect(
                 className="usa-checkbox__label"
                 htmlFor="add-to-coversheet"
               >
-                Add to Cover Sheet
+                Add to cover sheet
               </label>
             </div>
           </div>
@@ -349,7 +349,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="additional-info2"
               id="additional-info2-label"
             >
-              Additional Info 2 <span className="usa-hint">(optional)</span>
+              Additional info 2 <span className="usa-hint">(optional)</span>
             </label>
             <input
               aria-describedby="additional-info2-label"
@@ -386,7 +386,7 @@ export const PrimaryDocumentForm = connect(
               }`}
             >
               <legend className="usa-legend">
-                Who Is Filing This Document?
+                Who is filing this document?
               </legend>
               <div className="usa-checkbox">
                 <input

@@ -26,7 +26,7 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
           }
         >
           <label className="usa-label" htmlFor="eventCode">
-            Select Order Type
+            Select order type
           </label>
 
           <select
@@ -67,7 +67,7 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
             }
           >
             <label className="usa-label" htmlFor="documentTitle">
-              Order Title
+              Order title
             </label>
             <input
               className="usa-input"

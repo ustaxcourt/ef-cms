@@ -56,7 +56,7 @@ export const AddTrialSession = connect(
             <div className="blue-container margin-bottom-2">
               <div className="usa-form-group margin-bottom-0">
                 <label className="usa-label" htmlFor="notes">
-                  Trial Session Notes{' '}
+                  Trial session notes{' '}
                   <span className="usa-hint">(optional)</span>
                 </label>
                 <textarea
