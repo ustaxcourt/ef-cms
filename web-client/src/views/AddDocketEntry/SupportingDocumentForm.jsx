@@ -190,7 +190,7 @@ export const SupportingDocumentForm = connect(
                 className="usa-checkbox__label"
                 htmlFor="add-to-coversheet"
               >
-                Add to Cover Sheet
+                Add to cover sheet
               </label>
             </div>
           </div>
