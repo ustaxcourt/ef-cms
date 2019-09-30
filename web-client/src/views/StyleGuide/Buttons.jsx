@@ -54,5 +54,23 @@ export const Buttons = () => (
     <ButtonLink link icon="question-circle">
       Button Link
     </ButtonLink>
+
+    <hr />
+    <ButtonLink href="/">Button Link</ButtonLink>
+    <ButtonLink href="/" icon="question-circle">
+      Button Link
+    </ButtonLink>
+    <ButtonLink secondary href="/">
+      Button Link
+    </ButtonLink>
+    <ButtonLink secondary href="/" icon="question-circle">
+      Button Link
+    </ButtonLink>
+    <ButtonLink link href="/">
+      Button Link
+    </ButtonLink>
+    <ButtonLink link href="/" icon="question-circle">
+      Button Link
+    </ButtonLink>
   </section>
 );
