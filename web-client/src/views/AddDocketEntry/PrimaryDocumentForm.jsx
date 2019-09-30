@@ -84,7 +84,7 @@ export const PrimaryDocumentForm = connect(
           >
             <fieldset className="usa-fieldset date-received">
               <legend id="usa-legend date-received-legend">
-                Date Received
+                Date received
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month">
