@@ -153,7 +153,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Surviving Spouse',
           nameLabel: 'Name of deceased spouse',
-          secondaryNameLabel: 'Name of Surviving Spouse',
+          secondaryNameLabel: 'Name of surviving spouse',
         };
         break;
       case PARTY_TYPES.transferee:
@@ -308,7 +308,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About the Surviving Spouse',
           nameLabel: 'Name of deceased spouse',
-          secondaryNameLabel: 'Name of Surviving Spouse',
+          secondaryNameLabel: 'Name of surviving spouse',
         };
         break;
       case PARTY_TYPES.transferee:

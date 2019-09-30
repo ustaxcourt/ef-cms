@@ -330,7 +330,7 @@ describe('caseDetailEditContactsHelper', () => {
         displaySecondaryName: true,
         header: 'Petitioner Information',
         nameLabel: 'Name of deceased spouse',
-        secondaryNameLabel: 'Name of Surviving Spouse',
+        secondaryNameLabel: 'Name of surviving spouse',
       },
     });
   });
