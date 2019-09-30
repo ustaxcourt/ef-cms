@@ -82,7 +82,7 @@ export const PrimaryContactEdit = connect(
               >
                 <label className="usa-label" htmlFor="inCareOf">
                   <span>
-                    In care of <span className="usa-hint">(Your Name)</span>
+                    In care of <span className="usa-hint">(your name)</span>
                   </span>
                 </label>
                 <input
