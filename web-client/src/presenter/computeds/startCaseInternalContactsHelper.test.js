@@ -155,7 +155,7 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Next Friend Information',
-        nameLabel: 'Name of Legally Incompetent Person',
+        nameLabel: 'Name of legally incompetent person',
         secondaryNameLabel: 'Name of Next Friend',
       },
     });

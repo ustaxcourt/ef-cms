@@ -80,7 +80,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header:
             'Tell Us About Yourself as the Next Friend for This Legally Incompetent Person',
-          nameLabel: 'Name of Legally Incompetent Person',
+          nameLabel: 'Name of legally incompetent person',
           secondaryNameLabel: 'Name of Next Friend',
         };
         break;
@@ -236,7 +236,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header:
             'Tell Us About the Next Friend for This Legally Incompetent Person',
-          nameLabel: 'Name of Legally Incompetent Person',
+          nameLabel: 'Name of legally incompetent person',
           secondaryNameLabel: 'Name of Next Friend',
         };
         break;
