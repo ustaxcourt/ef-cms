@@ -75,7 +75,7 @@ export const PDFSignerMessage = connect(
           }
         >
           <label className="usa-label" htmlFor="assigneeId">
-            Select Recipient
+            Select recipient
           </label>
           <select
             aria-disabled={!form.section ? 'true' : 'false'}
