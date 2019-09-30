@@ -193,7 +193,7 @@ export const IRSNotice = connect(
         <CaseTypeSelect
           allowDefaultOption={true}
           caseTypes={caseTypes}
-          legend="Type of Case"
+          legend="Type of case"
           validation="autoSaveCaseSequence"
           value={caseDetail.caseType}
           onChange="updateCaseValueSequence"
