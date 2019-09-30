@@ -371,7 +371,7 @@ export const ScanBatchPreviewer = connect(
               htmlFor={`${documentType}-file`}
               id={`${documentType}-label`}
             >
-              Upload Your File{' '}
+              Upload your file{' '}
               <span className="success-message">
                 <FontAwesomeIcon icon="check-circle" size="1x" />
               </span>
