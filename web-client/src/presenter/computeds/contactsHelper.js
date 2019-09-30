@@ -45,7 +45,7 @@ export const contactsHelper = get => {
       case PARTY_TYPES.donor:
         contactPrimary = {
           header: 'Tell Us About the Donor You Are Filing For',
-          nameLabel: 'Name of Petitioner',
+          nameLabel: 'Name of petitioner',
         };
         break;
       case PARTY_TYPES.estate:
@@ -159,7 +159,7 @@ export const contactsHelper = get => {
       case PARTY_TYPES.transferee:
         contactPrimary = {
           header: 'Tell Us About the Transferee You Are Filing For',
-          nameLabel: 'Name of Petitioner',
+          nameLabel: 'Name of petitioner',
         };
         break;
       case PARTY_TYPES.trust:
@@ -202,7 +202,7 @@ export const contactsHelper = get => {
       case PARTY_TYPES.donor:
         contactPrimary = {
           header: 'Tell Us About the Donor You Are Filing For',
-          nameLabel: 'Name of Petitioner',
+          nameLabel: 'Name of petitioner',
         };
         break;
       case PARTY_TYPES.estate:
@@ -314,7 +314,7 @@ export const contactsHelper = get => {
       case PARTY_TYPES.transferee:
         contactPrimary = {
           header: 'Tell Us About the Transferee You Are Filing For',
-          nameLabel: 'Name of Petitioner',
+          nameLabel: 'Name of petitioner',
         };
         break;
       case PARTY_TYPES.trust:
