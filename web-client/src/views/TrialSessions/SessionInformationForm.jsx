@@ -30,7 +30,7 @@ export const SessionInformationForm = connect(
           >
             <fieldset className="start-date usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="start-date-legend">
-                Start Date
+                Start date
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month margin-bottom-0">
