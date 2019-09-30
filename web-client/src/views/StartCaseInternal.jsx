@@ -86,7 +86,7 @@ export const StartCaseInternal = connect(
                         className="usa-legend with-hint"
                         id="date-received-legend"
                       >
-                        Date Received
+                        Date received
                       </legend>
                       <div className="usa-memorable-date">
                         <div className="usa-form-group usa-form-group--month margin-bottom-0">

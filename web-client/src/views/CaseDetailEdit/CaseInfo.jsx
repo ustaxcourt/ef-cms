@@ -39,7 +39,7 @@ export const CaseInfo = connect(
             >
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="received-at-legend">
-                  Date Received
+                  Date received
                 </legend>
                 <div className="usa-memorable-date">
                   <div className="usa-form-group usa-form-group--month margin-bottom-0">
