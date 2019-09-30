@@ -329,7 +329,7 @@ describe('contactsHelper', () => {
       contactSecondary: {
         displayPhone: true,
         header: 'Tell Us About Your Spouse',
-        nameLabel: "Spouse's Name",
+        nameLabel: "Spouse's name",
       },
     });
   });
