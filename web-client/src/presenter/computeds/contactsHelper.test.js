@@ -182,7 +182,7 @@ describe('contactsHelper', () => {
         header:
           'Tell Us About Yourself as the Next Friend for This Legally Incompetent Person',
         nameLabel: 'Name of legally incompetent person',
-        secondaryNameLabel: 'Name of Next Friend',
+        secondaryNameLabel: 'Name of next friend',
       },
     });
   });
@@ -206,7 +206,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Next Friend for This Minor',
         nameLabel: 'Name of Minor',
-        secondaryNameLabel: 'Name of Next Friend',
+        secondaryNameLabel: 'Name of next friend',
       },
     });
   });
@@ -608,7 +608,7 @@ describe('contactsHelper', () => {
         header:
           'Tell Us About the Next Friend for This Legally Incompetent Person',
         nameLabel: 'Name of legally incompetent person',
-        secondaryNameLabel: 'Name of Next Friend',
+        secondaryNameLabel: 'Name of next friend',
       },
     });
   });
@@ -632,7 +632,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header: 'Tell Us About the Next Friend for This Minor',
         nameLabel: 'Name of Minor',
-        secondaryNameLabel: 'Name of Next Friend',
+        secondaryNameLabel: 'Name of next friend',
       },
     });
   });
