@@ -268,7 +268,7 @@ export const CaseInfo = connect(
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="fee-payment-date-legend">
-              Fee Payment Date <span className="usa-hint">(optional)</span>
+              Fee payment date <span className="usa-hint">(optional)</span>
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month">
