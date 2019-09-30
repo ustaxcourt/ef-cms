@@ -64,7 +64,7 @@ node ./web-api/proxy.js
 
 echo "proxy stopped"
 
-if [ ! -e $CIRCLECI ]; then 
+if [ ! -e "$CIRCLECI" ]; then 
   echo "killing dynamodb local"
   pkill -P $DYNAMO_PID
 fi 
