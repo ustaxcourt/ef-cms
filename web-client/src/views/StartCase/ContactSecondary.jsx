@@ -153,7 +153,7 @@ export const ContactSecondary = connect(
               }
             >
               <label className="usa-label" htmlFor="secondaryPhone">
-                Phone Number
+                Phone number
                 {contactsHelper.contactSecondary.phoneNumberLabelHint && (
                   <>
                     {' '}

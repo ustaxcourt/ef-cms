@@ -215,7 +215,7 @@ export const ContactPrimary = connect(
             }
           >
             <label className="usa-label" htmlFor="phone">
-              Phone Number
+              Phone number
               {contactsHelper.contactPrimary.phoneNumberLabelHint && (
                 <>
                   {' '}
