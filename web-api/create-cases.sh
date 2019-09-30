@@ -28,7 +28,7 @@ response=$(aws cognito-idp admin-initiate-auth \
   --auth-parameters USERNAME="petitionsclerk1@example.com"',PASSWORD'="Testing1234$")
 petitionsclerkToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
-while read line
+while read -r line
 do
   IFS=';' read -ra ADDR <<< "$line"
   partyType="${ADDR[0]}"
@@ -46,7 +46,7 @@ do
   stinFileId=$(uuidgen)
 
   secondaryContactJson="{}"
-  if [ ! -z "$secondaryContact" ] ; then
+  if [ -n "$secondaryContact" ] ; then
     secondaryContactJson=$(cat <<EOF
 {
   "countryType": "domestic",
@@ -109,7 +109,7 @@ EOF
   aws s3 cp ./assets/small_pdf.pdf "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${petitionFileId}"
   aws s3 cp ./assets/small_pdf.pdf "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${stinFileId}"
 
-  if [ ! -z "$petitionerCounsel" ] ; then
+  if [ -n "$petitionerCounsel" ] ; then
     if [ "$petitionerCounsel" == 'practitioner1' ] ; then
       barNumber="PT1234"
     fi
@@ -142,7 +142,7 @@ EOF
       --compressed
   fi
 
-  if [ ! -z "$respondentCounsel" ] ; then
+  if [ -n "$respondentCounsel" ] ; then
     if [ "$respondentCounsel" == 'respondent1' ] ; then
       barNumber="RT6789"
     fi
