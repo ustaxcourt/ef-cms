@@ -114,7 +114,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Tax Matters Partner',
           nameLabel: 'Partnership Name',
-          secondaryNameLabel: 'Tax Matters Partner Name',
+          secondaryNameLabel: 'Tax Matters Partner name',
         };
         break;
       case PARTY_TYPES.petitioner:
