@@ -166,7 +166,7 @@ export const InternationalAddress = connect(
             className="usa-label"
             htmlFor={`${type}.postalCode`}
           >
-            Postal Code
+            Postal code
           </label>
           <input
             autoCapitalize="none"
