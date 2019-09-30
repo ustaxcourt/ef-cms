@@ -169,7 +169,7 @@ export const StartCaseInternal = connect(
                     }
                   >
                     <label className="usa-label" htmlFor="case-caption">
-                      Case Caption
+                      Case caption
                     </label>
                     <textarea
                       className="usa-textarea"
