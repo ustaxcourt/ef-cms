@@ -93,7 +93,7 @@ export const UserContactEdit = connect(
               }
             >
               <label className="usa-label" htmlFor="phone">
-                Phone Number
+                Phone number
               </label>
               <input
                 autoCapitalize="none"
