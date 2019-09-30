@@ -265,7 +265,7 @@ export const ScanBatchPreviewer = connect(
     const renderScan = () => {
       return (
         <>
-          <h5 className="header-scanned-batches">Scanned Batches</h5>
+          <h5 className="header-scanned-batches">Scanned batches</h5>
           <div className="batches-table-wrapper" ref={batchWrapperRef}>
             {scanBatchPreviewerHelper.batches.length > 0 ? (
               <table className="batches-table">
