@@ -220,7 +220,7 @@ export const StartCaseInternal = connect(
                     )}
                   >
                     <label className="usa-label" htmlFor="preferred-trial-city">
-                      Trial Location{' '}
+                      Trial location{' '}
                       <span className="usa-hint">(Required with RQT)</span>
                     </label>
                     <select

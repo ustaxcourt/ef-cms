@@ -100,7 +100,7 @@ export const StartCaseStep5 = connect(
 
                       <div className="margin-top-3">
                         <label className="usa-label" htmlFor="filing-location">
-                          Trial Location
+                          Trial location
                         </label>
                         <p>{form.preferredTrialCity}</p>
                       </div>
