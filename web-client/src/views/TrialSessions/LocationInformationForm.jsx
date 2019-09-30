@@ -51,7 +51,7 @@ export const LocationInformationForm = connect(
 
           <div className="usa-form-group">
             <label className="usa-label" htmlFor="courthouse-name">
-              Courthouse Name <span className="usa-hint">(optional)</span>
+              Courthouse name <span className="usa-hint">(optional)</span>
             </label>
             <input
               autoCapitalize="none"
