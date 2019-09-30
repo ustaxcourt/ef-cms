@@ -54,7 +54,7 @@ describe('DocketEntryFactory', () => {
       expect(errors().eventCode).toBeDefined();
     });
 
-    describe('Document Type', () => {
+    describe('Document type', () => {
       beforeEach(() => {
         rawEntity = {
           ...rawEntity,

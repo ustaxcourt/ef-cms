@@ -72,7 +72,7 @@ export const SupportingDocumentForm = connect(
               htmlFor="event-code"
               id="event-code-label"
             >
-              Document Type
+              Document type
             </label>
             <select
               aria-describedby="event-code-label"

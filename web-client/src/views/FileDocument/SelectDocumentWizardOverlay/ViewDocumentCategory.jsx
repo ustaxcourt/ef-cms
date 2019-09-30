@@ -57,7 +57,7 @@ export const ViewDocumentCategory = connect(
                 id="view-all-document-subheader"
                 tabIndex="-1"
               >
-                Select Document Type
+                Select Document type
               </h2>
             </div>
           </div>
