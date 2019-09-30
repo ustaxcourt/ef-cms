@@ -253,7 +253,7 @@ describe('fileDocumentHelper', () => {
 
     it('upload file is shown when supporting type is not empty', () => {
       state.form.supportingDocuments = [
-        { supportingDocument: 'Some Document Type' },
+        { supportingDocument: 'Some Document type' },
       ];
       const result = runCompute(fileDocumentHelper, { state });
       expect(

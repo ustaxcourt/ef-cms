@@ -226,7 +226,7 @@ export const PendingMessages = connect(
                         className="usa-label"
                         htmlFor={`complete-message-${idx}`}
                       >
-                        Add Message <span className="usa-hint">(optional)</span>
+                        Add message <span className="usa-hint">(optional)</span>
                       </label>
                       <textarea
                         className="usa-textarea"
@@ -325,7 +325,7 @@ export const PendingMessages = connect(
                         formatter={workQueueSectionHelper.sectionDisplay}
                         id={`section-${idx}`}
                         keys={v => v}
-                        label="Select Section"
+                        label="Select section"
                         name="section"
                         values={constants.SECTIONS}
                         onChange={e => {
@@ -351,7 +351,7 @@ export const PendingMessages = connect(
                           formatter={workQueueSectionHelper.chambersDisplay}
                           id={`chambers-${idx}`}
                           keys={v => v}
-                          label="Select Chambers"
+                          label="Select chambers"
                           name="chambers"
                           values={constants.CHAMBERS_SECTIONS}
                           onChange={e => {
@@ -387,7 +387,7 @@ export const PendingMessages = connect(
                         formatter={user => user.name}
                         id={`assignee-id-${idx}`}
                         keys={user => user.userId}
-                        label="Select Recipient"
+                        label="Select recipient"
                         name="assigneeId"
                         values={users}
                         onChange={e => {
@@ -409,7 +409,7 @@ export const PendingMessages = connect(
                           validationErrors[workItem.workItemId].forwardMessage
                         }
                         id={`forward-message-${idx}`}
-                        label="Add Message"
+                        label="Add message"
                         name="forwardMessage"
                         onChange={e => {
                           updateForwardFormValueSequence({

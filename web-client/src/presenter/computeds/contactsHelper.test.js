@@ -20,8 +20,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Conservator for This Taxpayer',
-        nameLabel: 'Name of Taxpayer',
-        secondaryNameLabel: 'Name of Conservator',
+        nameLabel: 'Name of taxpayer',
+        secondaryNameLabel: 'Name of conservator',
       },
     });
   });
@@ -42,7 +42,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displayInCareOf: true,
         header: 'Tell Us About the Corporation You Are Filing For',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
       },
     });
   });
@@ -63,7 +63,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Custodian for This Taxpayer',
-        nameLabel: 'Name of Taxpayer',
+        nameLabel: 'Name of taxpayer',
         secondaryNameLabel: 'Name of Custodian',
       },
     });
@@ -84,7 +84,7 @@ describe('contactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Tell Us About the Donor You Are Filing For',
-        nameLabel: 'Name of Petitioner',
+        nameLabel: 'Name of petitioner',
       },
     });
   });
@@ -156,8 +156,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Guardian for This Taxpayer',
-        nameLabel: 'Name of Taxpayer',
-        secondaryNameLabel: 'Name of Guardian',
+        nameLabel: 'Name of taxpayer',
+        secondaryNameLabel: 'Name of guardian',
       },
     });
   });
@@ -181,8 +181,8 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header:
           'Tell Us About Yourself as the Next Friend for This Legally Incompetent Person',
-        nameLabel: 'Name of Legally Incompetent Person',
-        secondaryNameLabel: 'Name of Next Friend',
+        nameLabel: 'Name of legally incompetent person',
+        secondaryNameLabel: 'Name of next friend',
       },
     });
   });
@@ -205,8 +205,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Next Friend for This Minor',
-        nameLabel: 'Name of Minor',
-        secondaryNameLabel: 'Name of Next Friend',
+        nameLabel: 'Name of minor',
+        secondaryNameLabel: 'Name of next friend',
       },
     });
   });
@@ -229,8 +229,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Partnership Representative',
-        nameLabel: 'Business Name',
-        secondaryNameLabel: 'Partnership Representative Name',
+        nameLabel: 'Business name',
+        secondaryNameLabel: 'Partnership representative name',
       },
     });
   });
@@ -254,8 +254,8 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header:
           'Tell Us About Yourself as the Partner (Other than Tax Matters Partner)',
-        nameLabel: 'Business Name',
-        secondaryNameLabel: 'Name of Partner (Other than TMP)',
+        nameLabel: 'Business name',
+        secondaryNameLabel: 'Name of partner (other than TMP)',
       },
     });
   });
@@ -279,7 +279,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Tax Matters Partner',
         nameLabel: 'Partnership Name',
-        secondaryNameLabel: 'Tax Matters Partner Name',
+        secondaryNameLabel: 'Tax Matters Partner name',
       },
     });
   });
@@ -329,7 +329,7 @@ describe('contactsHelper', () => {
       contactSecondary: {
         displayPhone: true,
         header: 'Tell Us About Your Spouse',
-        nameLabel: "Spouse's Name",
+        nameLabel: "Spouse's name",
       },
     });
   });
@@ -351,11 +351,11 @@ describe('contactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Tell Us About Yourself',
-        nameLabel: 'Name of Petitioner/Surviving Spouse',
+        nameLabel: 'Name of petitioner/surviving spouse',
       },
       contactSecondary: {
         header: 'Tell Us About Your Deceased Spouse',
-        nameLabel: 'Name of Deceased Spouse',
+        nameLabel: 'Name of deceased spouse',
       },
     });
   });
@@ -378,8 +378,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Surviving Spouse',
-        nameLabel: 'Name of Deceased Spouse',
-        secondaryNameLabel: 'Name of Surviving Spouse',
+        nameLabel: 'Name of deceased spouse',
+        secondaryNameLabel: 'Name of surviving spouse',
       },
     });
   });
@@ -401,7 +401,7 @@ describe('contactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Tell Us About the Transferee You Are Filing For',
-        nameLabel: 'Name of Petitioner',
+        nameLabel: 'Name of petitioner',
       },
     });
   });
@@ -424,8 +424,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Trustee',
-        nameLabel: 'Name of Trust',
-        secondaryNameLabel: 'Name of Trustee',
+        nameLabel: 'Name of trust',
+        secondaryNameLabel: 'Name of trustee',
       },
     });
   });
@@ -446,8 +446,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Conservator for This Taxpayer',
-        nameLabel: 'Name of Taxpayer',
-        secondaryNameLabel: 'Name of Conservator',
+        nameLabel: 'Name of taxpayer',
+        secondaryNameLabel: 'Name of conservator',
       },
     });
   });
@@ -468,7 +468,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displayInCareOf: true,
         header: 'Tell Us About the Corporation You Are Filing For',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
       },
     });
   });
@@ -489,7 +489,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Custodian for This Taxpayer',
-        nameLabel: 'Name of Taxpayer',
+        nameLabel: 'Name of taxpayer',
         secondaryNameLabel: 'Name of Custodian',
       },
     });
@@ -510,7 +510,7 @@ describe('contactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Tell Us About the Donor You Are Filing For',
-        nameLabel: 'Name of Petitioner',
+        nameLabel: 'Name of petitioner',
       },
     });
   });
@@ -582,8 +582,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Guardian for This Taxpayer',
-        nameLabel: 'Name of Taxpayer',
-        secondaryNameLabel: 'Name of Guardian',
+        nameLabel: 'Name of taxpayer',
+        secondaryNameLabel: 'Name of guardian',
       },
     });
   });
@@ -607,8 +607,8 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header:
           'Tell Us About the Next Friend for This Legally Incompetent Person',
-        nameLabel: 'Name of Legally Incompetent Person',
-        secondaryNameLabel: 'Name of Next Friend',
+        nameLabel: 'Name of legally incompetent person',
+        secondaryNameLabel: 'Name of next friend',
       },
     });
   });
@@ -631,8 +631,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Next Friend for This Minor',
-        nameLabel: 'Name of Minor',
-        secondaryNameLabel: 'Name of Next Friend',
+        nameLabel: 'Name of minor',
+        secondaryNameLabel: 'Name of next friend',
       },
     });
   });
@@ -655,8 +655,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Partnership Representative',
-        nameLabel: 'Business Name',
-        secondaryNameLabel: 'Name of Partnership Representative',
+        nameLabel: 'Business name',
+        secondaryNameLabel: 'Name of partnership representative',
       },
     });
   });
@@ -679,8 +679,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Partner (Other than Tax Matters Partner)',
-        nameLabel: 'Business Name',
-        secondaryNameLabel: 'Name of Partner (Other than TMP)',
+        nameLabel: 'Business name',
+        secondaryNameLabel: 'Name of partner (other than TMP)',
       },
     });
   });
@@ -803,8 +803,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Surviving Spouse',
-        nameLabel: 'Name of Deceased Spouse',
-        secondaryNameLabel: 'Name of Surviving Spouse',
+        nameLabel: 'Name of deceased spouse',
+        secondaryNameLabel: 'Name of surviving spouse',
       },
     });
   });
@@ -826,7 +826,7 @@ describe('contactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Tell Us About the Transferee You Are Filing For',
-        nameLabel: 'Name of Petitioner',
+        nameLabel: 'Name of petitioner',
       },
     });
   });
@@ -849,8 +849,8 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Trustee',
-        nameLabel: 'Name of Trust',
-        secondaryNameLabel: 'Name of Trustee',
+        nameLabel: 'Name of trust',
+        secondaryNameLabel: 'Name of trustee',
       },
     });
   });

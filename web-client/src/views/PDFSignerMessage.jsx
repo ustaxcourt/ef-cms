@@ -29,7 +29,7 @@ export const PDFSignerMessage = connect(
         </h3>
         <div className="usa-form-group">
           <label className="usa-label" htmlFor="section">
-            Select Section
+            Select section
           </label>
 
           <div
@@ -75,7 +75,7 @@ export const PDFSignerMessage = connect(
           }
         >
           <label className="usa-label" htmlFor="assigneeId">
-            Select Recipient
+            Select recipient
           </label>
           <select
             aria-disabled={!form.section ? 'true' : 'false'}
@@ -112,7 +112,7 @@ export const PDFSignerMessage = connect(
           }
         >
           <label className="usa-label" htmlFor="message">
-            Add Message
+            Add message
           </label>
           <textarea
             className="usa-textarea"
