@@ -97,7 +97,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Partnership Representative',
           nameLabel: 'Business name',
-          secondaryNameLabel: 'Partnership Representative Name',
+          secondaryNameLabel: 'Partnership representative name',
         };
         break;
       case PARTY_TYPES.partnershipOtherThanTaxMatters:
