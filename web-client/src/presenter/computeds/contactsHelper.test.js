@@ -425,7 +425,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Trustee',
         nameLabel: 'Name of Trust',
-        secondaryNameLabel: 'Name of Trustee',
+        secondaryNameLabel: 'Name of trustee',
       },
     });
   });
@@ -850,7 +850,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header: 'Tell Us About the Trustee',
         nameLabel: 'Name of Trust',
-        secondaryNameLabel: 'Name of Trustee',
+        secondaryNameLabel: 'Name of trustee',
       },
     });
   });
