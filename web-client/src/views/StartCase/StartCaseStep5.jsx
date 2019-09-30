@@ -118,7 +118,7 @@ export const StartCaseStep5 = connect(
                     <div className="tablet:grid-col-4 margin-bottom-1">
                       <>
                         <label className="usa-label" htmlFor="filing-parties">
-                          Party Type
+                          Party type
                         </label>
                         <p>{form.partyType}</p>
 
