@@ -367,7 +367,7 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Trustee Information',
-        nameLabel: 'Name of Trust',
+        nameLabel: 'Name of trust',
         secondaryNameLabel: 'Name of trustee',
       },
     });

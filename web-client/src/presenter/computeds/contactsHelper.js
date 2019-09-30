@@ -166,7 +166,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Trustee',
-          nameLabel: 'Name of Trust',
+          nameLabel: 'Name of trust',
           secondaryNameLabel: 'Name of trustee',
         };
         break;
@@ -321,7 +321,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About the Trustee',
-          nameLabel: 'Name of Trust',
+          nameLabel: 'Name of trust',
           secondaryNameLabel: 'Name of trustee',
         };
         break;
