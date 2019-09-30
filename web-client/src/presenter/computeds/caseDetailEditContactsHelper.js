@@ -18,7 +18,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displayInCareOf: true,
           header: 'Corporation Information',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'Your Name',
           nameLabel: 'Business Name',
         },
@@ -59,7 +59,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displayInCareOf: true,
           header: 'Estate Information',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'optional',
           nameLabel: 'Name of Decedent',
         },
@@ -157,7 +157,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displayInCareOf: true,
           displayPhone: true,
           header: 'Deceased Spouse Information',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           nameLabel: 'Name of deceased spouse',
         },
       };
