@@ -201,7 +201,7 @@ export const StartCaseInternal = connect(
                   />
 
                   <ProcedureType
-                    legend="Case Procedure"
+                    legend="Case procedure"
                     value={form.procedureType}
                     onChange={e => {
                       updateFormValueSequence({

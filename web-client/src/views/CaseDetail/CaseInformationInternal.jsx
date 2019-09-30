@@ -12,7 +12,7 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
         <p>{caseDetail.caseType}</p>
       </div>
       <div className="grid-col-6">
-        <p className="label">Case Procedure</p>
+        <p className="label">Case procedure</p>
         <p>{caseDetail.procedureType}</p>
       </div>
     </div>

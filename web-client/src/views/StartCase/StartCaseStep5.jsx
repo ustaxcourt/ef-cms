@@ -94,7 +94,7 @@ export const StartCaseStep5 = connect(
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
                       <label className="usa-label" htmlFor="filing-procedure">
-                        Case Procedure
+                        Case procedure
                       </label>
                       {form.procedureType}
 

@@ -14,7 +14,7 @@ export const CaseDetailReadOnly = connect(
 
         <div className="blue-container">
           <h3>Case Information</h3>
-          <div className="label">Case Procedure</div>
+          <div className="label">Case procedure</div>
           <p>{formattedCaseDetail.procedureType} Tax Case</p>
           <div className="label">Trial Location</div>
           <p>{formattedCaseDetail.preferredTrialCity}</p>

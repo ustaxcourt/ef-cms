@@ -154,7 +154,7 @@ export const CaseInfo = connect(
 
         <div className="usa-form-group">
           <ProcedureType
-            legend="Case Procedure"
+            legend="Case procedure"
             value={caseDetail.procedureType}
             onChange={e => {
               updateCaseValueSequence({
