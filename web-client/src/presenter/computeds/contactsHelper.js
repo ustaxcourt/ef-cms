@@ -21,31 +21,31 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Conservator for This Taxpayer',
-          nameLabel: 'Name of Taxpayer',
-          secondaryNameLabel: 'Name of Conservator',
+          nameLabel: 'Name of taxpayer',
+          secondaryNameLabel: 'Name of conservator',
         };
         break;
       case PARTY_TYPES.corporation:
         contactPrimary = {
           displayInCareOf: true,
           header: 'Tell Us About the Corporation You Are Filing For',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'Your Name',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
         };
         break;
       case PARTY_TYPES.custodian:
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Custodian for This Taxpayer',
-          nameLabel: 'Name of Taxpayer',
+          nameLabel: 'Name of taxpayer',
           secondaryNameLabel: 'Name of Custodian',
         };
         break;
       case PARTY_TYPES.donor:
         contactPrimary = {
           header: 'Tell Us About the Donor You Are Filing For',
-          nameLabel: 'Name of Petitioner',
+          nameLabel: 'Name of petitioner',
         };
         break;
       case PARTY_TYPES.estate:
@@ -62,7 +62,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displayInCareOf: true,
           header: 'Tell Us About the Estate You Are Filing For',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'Your Name',
           nameLabel: 'Name of Decedent',
         };
@@ -71,8 +71,8 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Guardian for This Taxpayer',
-          nameLabel: 'Name of Taxpayer',
-          secondaryNameLabel: 'Name of Guardian',
+          nameLabel: 'Name of taxpayer',
+          secondaryNameLabel: 'Name of guardian',
         };
         break;
       case PARTY_TYPES.nextFriendForIncompetentPerson:
@@ -80,24 +80,24 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header:
             'Tell Us About Yourself as the Next Friend for This Legally Incompetent Person',
-          nameLabel: 'Name of Legally Incompetent Person',
-          secondaryNameLabel: 'Name of Next Friend',
+          nameLabel: 'Name of legally incompetent person',
+          secondaryNameLabel: 'Name of next friend',
         };
         break;
       case PARTY_TYPES.nextFriendForMinor:
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Next Friend for This Minor',
-          nameLabel: 'Name of Minor',
-          secondaryNameLabel: 'Name of Next Friend',
+          nameLabel: 'Name of minor',
+          secondaryNameLabel: 'Name of next friend',
         };
         break;
       case PARTY_TYPES.partnershipBBA:
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Partnership Representative',
-          nameLabel: 'Business Name',
-          secondaryNameLabel: 'Partnership Representative Name',
+          nameLabel: 'Business name',
+          secondaryNameLabel: 'Partnership representative name',
         };
         break;
       case PARTY_TYPES.partnershipOtherThanTaxMatters:
@@ -105,8 +105,8 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header:
             'Tell Us About Yourself as the Partner (Other than Tax Matters Partner)',
-          nameLabel: 'Business Name',
-          secondaryNameLabel: 'Name of Partner (Other than TMP)',
+          nameLabel: 'Business name',
+          secondaryNameLabel: 'Name of partner (other than TMP)',
         };
         break;
       case PARTY_TYPES.partnershipAsTaxMattersPartner:
@@ -114,7 +114,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Tax Matters Partner',
           nameLabel: 'Partnership Name',
-          secondaryNameLabel: 'Tax Matters Partner Name',
+          secondaryNameLabel: 'Tax Matters Partner name',
         };
         break;
       case PARTY_TYPES.petitioner:
@@ -132,42 +132,42 @@ export const contactsHelper = get => {
         contactSecondary = {
           displayPhone: true,
           header: 'Tell Us About Your Spouse',
-          nameLabel: "Spouse's Name",
+          nameLabel: "Spouse's name",
         };
         break;
       case PARTY_TYPES.petitionerDeceasedSpouse:
         contactPrimary = {
           header: 'Tell Us About Yourself',
-          nameLabel: 'Name of Petitioner/Surviving Spouse',
+          nameLabel: 'Name of petitioner/surviving spouse',
         };
         contactSecondary = {
           displayInCareOf: true,
           displayPhone: true,
           header: 'Tell Us About Your Deceased Spouse',
-          inCareOfLabel: 'In Care Of',
-          nameLabel: 'Name of Deceased Spouse',
+          inCareOfLabel: 'In care of',
+          nameLabel: 'Name of deceased spouse',
         };
         break;
       case PARTY_TYPES.survivingSpouse:
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Surviving Spouse',
-          nameLabel: 'Name of Deceased Spouse',
-          secondaryNameLabel: 'Name of Surviving Spouse',
+          nameLabel: 'Name of deceased spouse',
+          secondaryNameLabel: 'Name of surviving spouse',
         };
         break;
       case PARTY_TYPES.transferee:
         contactPrimary = {
           header: 'Tell Us About the Transferee You Are Filing For',
-          nameLabel: 'Name of Petitioner',
+          nameLabel: 'Name of petitioner',
         };
         break;
       case PARTY_TYPES.trust:
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Trustee',
-          nameLabel: 'Name of Trust',
-          secondaryNameLabel: 'Name of Trustee',
+          nameLabel: 'Name of trust',
+          secondaryNameLabel: 'Name of trustee',
         };
         break;
     }
@@ -179,30 +179,30 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About the Conservator for This Taxpayer',
-          nameLabel: 'Name of Taxpayer',
-          secondaryNameLabel: 'Name of Conservator',
+          nameLabel: 'Name of taxpayer',
+          secondaryNameLabel: 'Name of conservator',
         };
         break;
       case PARTY_TYPES.corporation:
         contactPrimary = {
           displayInCareOf: true,
           header: 'Tell Us About the Corporation You Are Filing For',
-          inCareOfLabel: 'In Care Of',
-          nameLabel: 'Business Name',
+          inCareOfLabel: 'In care of',
+          nameLabel: 'Business name',
         };
         break;
       case PARTY_TYPES.custodian:
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About the Custodian for This Taxpayer',
-          nameLabel: 'Name of Taxpayer',
+          nameLabel: 'Name of taxpayer',
           secondaryNameLabel: 'Name of Custodian',
         };
         break;
       case PARTY_TYPES.donor:
         contactPrimary = {
           header: 'Tell Us About the Donor You Are Filing For',
-          nameLabel: 'Name of Petitioner',
+          nameLabel: 'Name of petitioner',
         };
         break;
       case PARTY_TYPES.estate:
@@ -219,7 +219,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displayInCareOf: true,
           header: 'Tell Us About the Estate You Are Filing For',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           nameLabel: 'Name of Decedent',
         };
         break;
@@ -227,8 +227,8 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About the Guardian for This Taxpayer',
-          nameLabel: 'Name of Taxpayer',
-          secondaryNameLabel: 'Name of Guardian',
+          nameLabel: 'Name of taxpayer',
+          secondaryNameLabel: 'Name of guardian',
         };
         break;
       case PARTY_TYPES.nextFriendForIncompetentPerson:
@@ -236,32 +236,32 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header:
             'Tell Us About the Next Friend for This Legally Incompetent Person',
-          nameLabel: 'Name of Legally Incompetent Person',
-          secondaryNameLabel: 'Name of Next Friend',
+          nameLabel: 'Name of legally incompetent person',
+          secondaryNameLabel: 'Name of next friend',
         };
         break;
       case PARTY_TYPES.nextFriendForMinor:
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About the Next Friend for This Minor',
-          nameLabel: 'Name of Minor',
-          secondaryNameLabel: 'Name of Next Friend',
+          nameLabel: 'Name of minor',
+          secondaryNameLabel: 'Name of next friend',
         };
         break;
       case PARTY_TYPES.partnershipBBA:
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About the Partnership Representative',
-          nameLabel: 'Business Name',
-          secondaryNameLabel: 'Name of Partnership Representative',
+          nameLabel: 'Business name',
+          secondaryNameLabel: 'Name of partnership representative',
         };
         break;
       case PARTY_TYPES.partnershipOtherThanTaxMatters:
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About the Partner (Other than Tax Matters Partner)',
-          nameLabel: 'Business Name',
-          secondaryNameLabel: 'Name of Partner (Other than TMP)',
+          nameLabel: 'Business name',
+          secondaryNameLabel: 'Name of partner (other than TMP)',
         };
         break;
       case PARTY_TYPES.partnershipAsTaxMattersPartner:
@@ -299,7 +299,7 @@ export const contactsHelper = get => {
           displayInCareOf: true,
           displayPhone: true,
           header: 'Tell Us About the Deceased Petitioner',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           nameLabel: 'Deceased Petitioner Name',
         };
         break;
@@ -307,22 +307,22 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About the Surviving Spouse',
-          nameLabel: 'Name of Deceased Spouse',
-          secondaryNameLabel: 'Name of Surviving Spouse',
+          nameLabel: 'Name of deceased spouse',
+          secondaryNameLabel: 'Name of surviving spouse',
         };
         break;
       case PARTY_TYPES.transferee:
         contactPrimary = {
           header: 'Tell Us About the Transferee You Are Filing For',
-          nameLabel: 'Name of Petitioner',
+          nameLabel: 'Name of petitioner',
         };
         break;
       case PARTY_TYPES.trust:
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About the Trustee',
-          nameLabel: 'Name of Trust',
-          secondaryNameLabel: 'Name of Trustee',
+          nameLabel: 'Name of trust',
+          secondaryNameLabel: 'Name of trustee',
         };
         break;
     }

@@ -67,7 +67,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                 htmlFor="secondary-doc-secondary-document-type"
                 id="secondary-document-type-label"
               >
-                Document Type
+                Document type
               </label>
               <Select
                 aria-describedby="secondary-document-type-label"
