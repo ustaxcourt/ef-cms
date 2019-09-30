@@ -9,7 +9,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displaySecondaryName: true,
           header: 'Conservator Information',
           nameLabel: 'Name of taxpayer',
-          secondaryNameLabel: 'Name of Conservator',
+          secondaryNameLabel: 'Name of conservator',
         },
       };
       break;
