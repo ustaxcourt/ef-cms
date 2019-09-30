@@ -4,6 +4,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 export const ButtonLink = props => {
+  const { href } = props;
   const {
     children,
     className,
@@ -12,6 +13,9 @@ export const ButtonLink = props => {
     secondary,
     ...remainingProps
   } = props;
+
+  const Element = (href && 'a') || 'button';
+
   const classes = classNames(
     'usa-button margin-right-205 margin-bottom-205',
     secondary && 'usa-button--outline',
@@ -20,18 +24,19 @@ export const ButtonLink = props => {
   );
 
   return (
-    <button className={classes} type="button" {...remainingProps}>
+    <Element className={classes} type="button" {...remainingProps}>
       {icon && (
         <FontAwesomeIcon className="margin-right-05" icon={icon} size="1x" />
       )}
       {children}
-    </button>
+    </Element>
   );
 };
 
 ButtonLink.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
+  href: PropTypes.string,
   icon: PropTypes.string,
   link: PropTypes.bool,
   secondary: PropTypes.bool,
