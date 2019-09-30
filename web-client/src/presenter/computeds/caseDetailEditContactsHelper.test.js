@@ -17,7 +17,7 @@ describe('caseDetailEditContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Conservator Information',
-        nameLabel: 'Name of Taxpayer',
+        nameLabel: 'Name of taxpayer',
         secondaryNameLabel: 'Name of Conservator',
       },
     });
@@ -54,7 +54,7 @@ describe('caseDetailEditContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Custodian Information',
-        nameLabel: 'Name of Taxpayer',
+        nameLabel: 'Name of taxpayer',
         secondaryNameLabel: 'Name of Custodian',
       },
     });
@@ -134,7 +134,7 @@ describe('caseDetailEditContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Guardian Information',
-        nameLabel: 'Name of Taxpayer',
+        nameLabel: 'Name of taxpayer',
         secondaryNameLabel: 'Name of Guardian',
       },
     });
