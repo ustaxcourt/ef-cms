@@ -176,7 +176,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="react-select-2-input"
               id="document-type-label"
             >
-              Document Type
+              Document type
             </label>
             <Select
               aria-describedby="document-type-label"
