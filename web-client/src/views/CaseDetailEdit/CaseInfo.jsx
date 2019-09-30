@@ -360,7 +360,7 @@ export const CaseInfo = connect(
 
         <div className="usa-form-group">
           <label className="usa-label" htmlFor="fee-payment-id">
-            Fee Payment ID <span className="usa-hint">(optional)</span>
+            Fee payment ID <span className="usa-hint">(optional)</span>
           </label>
           <input
             className="usa-input"

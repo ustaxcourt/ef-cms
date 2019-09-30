@@ -20,7 +20,7 @@ export const CaseDetailReadOnly = connect(
           <p>{formattedCaseDetail.preferredTrialCity}</p>
           <div className="label">Fee payment date</div>
           <p>{formattedCaseDetail.payGovDateFormatted || 'Unpaid'}</p>
-          <div className="label">Fee Payment ID</div>
+          <div className="label">Fee payment ID</div>
           <p id="fee-payment-id" name="payGovId">
             {formattedCaseDetail.payGovId || 'Unpaid'}
           </p>
