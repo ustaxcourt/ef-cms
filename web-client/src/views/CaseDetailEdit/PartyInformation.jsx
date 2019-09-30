@@ -31,7 +31,7 @@ export const PartyInformation = connect(
         <div className="subsection">
           <div className="usa-form-group">
             <label className="usa-label" htmlFor="case-caption">
-              Case Caption
+              Case caption
             </label>
             <textarea
               className="usa-textarea"
