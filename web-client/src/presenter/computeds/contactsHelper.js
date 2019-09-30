@@ -22,7 +22,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Conservator for This Taxpayer',
           nameLabel: 'Name of taxpayer',
-          secondaryNameLabel: 'Name of Conservator',
+          secondaryNameLabel: 'Name of conservator',
         };
         break;
       case PARTY_TYPES.corporation:
@@ -180,7 +180,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About the Conservator for This Taxpayer',
           nameLabel: 'Name of taxpayer',
-          secondaryNameLabel: 'Name of Conservator',
+          secondaryNameLabel: 'Name of conservator',
         };
         break;
       case PARTY_TYPES.corporation:
