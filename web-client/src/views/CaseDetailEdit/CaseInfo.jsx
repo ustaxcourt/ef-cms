@@ -191,7 +191,7 @@ export const CaseInfo = connect(
 
         <div className="usa-form-group">
           <label className="usa-label" htmlFor="preferred-trial-city">
-            Trial Location
+            Trial location
           </label>
           <div id="preferred-trial-city">
             {caseDetailEditHelper.showNoTrialLocationSelected && (

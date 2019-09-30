@@ -28,7 +28,7 @@ export const LocationInformationForm = connect(
             }`}
           >
             <label className="usa-label" htmlFor="trial-location">
-              Trial Location
+              Trial location
             </label>
             <select
               className="usa-select"
