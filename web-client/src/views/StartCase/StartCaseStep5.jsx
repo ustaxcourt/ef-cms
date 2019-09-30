@@ -1,4 +1,5 @@
 import { AddressDisplay } from '../CaseDetail/PartyInformation';
+import { ButtonLink } from '../../ustc-ui/Buttons/ButtonLink';
 import { CaseDifferenceModalOverlay } from './CaseDifferenceModalOverlay';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
@@ -272,15 +273,13 @@ export const StartCaseStep5 = connect(
           >
             Back
           </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
+          <ButtonLink
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </ButtonLink>
         </div>
         {showModal === 'CaseDifferenceModalOverlay' && (
           <CaseDifferenceModalOverlay />

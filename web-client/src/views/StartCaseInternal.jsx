@@ -1,4 +1,5 @@
 import { BigHeader } from './BigHeader';
+import { ButtonLink } from '../../ustc-ui/Buttons/ButtonLink';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
@@ -310,16 +311,14 @@ export const StartCaseInternal = connect(
                   >
                     Create Case
                   </button>
-                  <button
-                    className="usa-button usa-button--unstyled ustc-button--unstyled"
-                    type="button"
+                  <ButtonLink
                     onClick={() => {
                       formCancelToggleCancelSequence();
                       return false;
                     }}
                   >
                     Cancel
-                  </button>
+                  </ButtonLink>
                 </div>
               </div>
               <div className="grid-col-7">
