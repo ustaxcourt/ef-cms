@@ -1,3 +1,4 @@
+import { ButtonLink } from '../../ustc-ui/Buttons/ButtonLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
@@ -42,5 +43,16 @@ export const Buttons = () => (
     >
       Secondary Disabled
     </button>
+    <hr />
+    <ButtonLink>Button Link</ButtonLink>
+    <ButtonLink icon="question-circle">Button Link</ButtonLink>
+    <ButtonLink secondary>Button Link</ButtonLink>
+    <ButtonLink secondary icon="question-circle">
+      Button Link
+    </ButtonLink>
+    <ButtonLink link>Button Link</ButtonLink>
+    <ButtonLink link icon="question-circle">
+      Button Link
+    </ButtonLink>
   </section>
 );
