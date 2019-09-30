@@ -219,7 +219,7 @@ describe('startCaseInternalContactsHelper', () => {
         displaySecondaryName: true,
         header: 'Partnership (Other than Tax Matters Partner) Information',
         nameLabel: 'Business name',
-        secondaryNameLabel: 'Name of Partner (Other than TMP)',
+        secondaryNameLabel: 'Name of partner (other than TMP)',
       },
     });
   });

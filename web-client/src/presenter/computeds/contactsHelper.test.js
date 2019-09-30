@@ -255,7 +255,7 @@ describe('contactsHelper', () => {
         header:
           'Tell Us About Yourself as the Partner (Other than Tax Matters Partner)',
         nameLabel: 'Business name',
-        secondaryNameLabel: 'Name of Partner (Other than TMP)',
+        secondaryNameLabel: 'Name of partner (other than TMP)',
       },
     });
   });
@@ -680,7 +680,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header: 'Tell Us About the Partner (Other than Tax Matters Partner)',
         nameLabel: 'Business name',
-        secondaryNameLabel: 'Name of Partner (Other than TMP)',
+        secondaryNameLabel: 'Name of partner (other than TMP)',
       },
     });
   });
