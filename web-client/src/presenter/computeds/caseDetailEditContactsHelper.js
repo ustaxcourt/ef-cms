@@ -186,7 +186,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displaySecondaryName: true,
           header: 'Trustee Information',
           nameLabel: 'Name of Trust',
-          secondaryNameLabel: 'Name of Trustee',
+          secondaryNameLabel: 'Name of trustee',
         },
       };
       break;
