@@ -144,7 +144,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
           }
         >
           <label className="usa-label" htmlFor="message">
-            Add Message
+            Add message
           </label>
           <textarea
             className="usa-textarea"
