@@ -1,5 +1,5 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
-import { ButtonLink } from '../../ustc-ui/Buttons/ButtonLink';
+import { Button } from '../../ustc-ui/Button/Button';
 import { CompleteDocumentTypeSection } from './CompleteDocumentTypeSection';
 import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
@@ -44,13 +44,13 @@ export const SelectDocumentType = connect(
                 >
                   Continue
                 </button>
-                <ButtonLink
+                <Button
                   onClick={() => {
                     formCancelToggleCancelSequence();
                   }}
                 >
                   Cancel
-                </ButtonLink>
+                </Button>
               </div>
             </div>
 

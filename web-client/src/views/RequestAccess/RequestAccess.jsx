@@ -1,4 +1,4 @@
-import { ButtonLink } from '../../ustc-ui/Buttons/ButtonLink';
+import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesRepresenting } from './PartiesRepresenting';
 import { RequestAccessDocumentForm } from './RequestAccessDocumentForm';
@@ -116,13 +116,13 @@ export const RequestAccess = connect(
           >
             Review Filing
           </button>
-          <ButtonLink
+          <Button
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </ButtonLink>
+          </Button>
         </div>
       </React.Fragment>
     );

@@ -1,4 +1,4 @@
-import { ButtonLink } from '../../ustc-ui/Buttons/ButtonLink';
+import { Button } from '../../ustc-ui/Button/Button';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
@@ -387,13 +387,13 @@ export const FileDocumentReview = connect(
           >
             Back
           </button>
-          <ButtonLink
+          <Button
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </ButtonLink>
+          </Button>
         </div>
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (

@@ -1,4 +1,4 @@
-import { ButtonLink } from '../../ustc-ui/Buttons/ButtonLink';
+import { Button } from '../../ustc-ui/Button/Button';
 import { Contacts } from './Contacts';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -426,13 +426,13 @@ export const StartCaseStep3 = connect(
           >
             Back
           </button>
-          <ButtonLink
+          <Button
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </ButtonLink>
+          </Button>
         </div>
       </>
     );

@@ -1,4 +1,4 @@
-import { ButtonLink } from '../../ustc-ui/Buttons/ButtonLink';
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
@@ -44,33 +44,33 @@ export const Buttons = () => (
       Secondary Disabled
     </button>
     <hr />
-    <ButtonLink>Button Link</ButtonLink>
-    <ButtonLink icon="question-circle">Button Link</ButtonLink>
-    <ButtonLink secondary>Button Link</ButtonLink>
-    <ButtonLink secondary icon="question-circle">
+    <Button>Button Link</Button>
+    <Button icon="question-circle">Button Link</Button>
+    <Button secondary>Button Link</Button>
+    <Button secondary icon="question-circle">
       Button Link
-    </ButtonLink>
-    <ButtonLink link>Button Link</ButtonLink>
-    <ButtonLink link icon="question-circle">
+    </Button>
+    <Button link>Button Link</Button>
+    <Button link icon="question-circle">
       Button Link
-    </ButtonLink>
+    </Button>
 
     <hr />
-    <ButtonLink href="/">Button Link</ButtonLink>
-    <ButtonLink href="/" icon="question-circle">
+    <Button href="/">Button Link</Button>
+    <Button href="/" icon="question-circle">
       Button Link
-    </ButtonLink>
-    <ButtonLink secondary href="/">
+    </Button>
+    <Button secondary href="/">
       Button Link
-    </ButtonLink>
-    <ButtonLink secondary href="/" icon="question-circle">
+    </Button>
+    <Button secondary href="/" icon="question-circle">
       Button Link
-    </ButtonLink>
-    <ButtonLink link href="/">
+    </Button>
+    <Button link href="/">
       Button Link
-    </ButtonLink>
-    <ButtonLink link href="/" icon="question-circle">
+    </Button>
+    <Button link href="/" icon="question-circle">
       Button Link
-    </ButtonLink>
+    </Button>
   </section>
 );

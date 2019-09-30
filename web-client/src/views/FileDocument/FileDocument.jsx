@@ -1,4 +1,4 @@
-import { ButtonLink } from '../../ustc-ui/Buttons/ButtonLink';
+import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesFiling } from './PartiesFiling';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
@@ -73,13 +73,13 @@ export const FileDocument = connect(
           >
             Back
           </button>
-          <ButtonLink
+          <Button
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </ButtonLink>
+          </Button>
         </div>
 
         {showModal === 'WhatCanIIncludeModalOverlay' && (
