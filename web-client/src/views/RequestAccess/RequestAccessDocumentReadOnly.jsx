@@ -111,7 +111,7 @@ export const RequestAccessDocumentReadOnly = connect(
           {requestAccessHelper.documentWithObjections && (
             <div className="usa-form-group">
               <label className="usa-label" htmlFor="objections">
-                Are There Any Objections to This Document?
+                Are there any objections to this document?
               </label>
               {form.objections}
             </div>
