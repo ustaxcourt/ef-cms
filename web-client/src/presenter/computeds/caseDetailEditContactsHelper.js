@@ -20,7 +20,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           header: 'Corporation Information',
           inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'Your Name',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
         },
       };
       break;
@@ -100,7 +100,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Partnership Representative',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
           secondaryNameLabel: 'Name of Partnership Representative',
         },
       };
@@ -110,7 +110,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Partnership (Other than Tax Matters Partner) Information',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
           secondaryNameLabel: 'Name of Partner (Other than TMP)',
         },
       };
@@ -120,7 +120,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Tax Matters Partner Information',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
           secondaryNameLabel: 'Name of Tax Matters Partner',
         },
       };

@@ -42,7 +42,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displayInCareOf: true,
         header: 'Tell Us About the Corporation You Are Filing For',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
       },
     });
   });
@@ -229,7 +229,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Partnership Representative',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
         secondaryNameLabel: 'Partnership Representative Name',
       },
     });
@@ -254,7 +254,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header:
           'Tell Us About Yourself as the Partner (Other than Tax Matters Partner)',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
         secondaryNameLabel: 'Name of Partner (Other than TMP)',
       },
     });
@@ -468,7 +468,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displayInCareOf: true,
         header: 'Tell Us About the Corporation You Are Filing For',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
       },
     });
   });
@@ -655,7 +655,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Partnership Representative',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
         secondaryNameLabel: 'Name of Partnership Representative',
       },
     });
@@ -679,7 +679,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Partner (Other than Tax Matters Partner)',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
         secondaryNameLabel: 'Name of Partner (Other than TMP)',
       },
     });

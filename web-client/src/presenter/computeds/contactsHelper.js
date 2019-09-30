@@ -31,7 +31,7 @@ export const contactsHelper = get => {
           header: 'Tell Us About the Corporation You Are Filing For',
           inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'Your Name',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
         };
         break;
       case PARTY_TYPES.custodian:
@@ -96,7 +96,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Partnership Representative',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
           secondaryNameLabel: 'Partnership Representative Name',
         };
         break;
@@ -105,7 +105,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header:
             'Tell Us About Yourself as the Partner (Other than Tax Matters Partner)',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
           secondaryNameLabel: 'Name of Partner (Other than TMP)',
         };
         break;
@@ -188,7 +188,7 @@ export const contactsHelper = get => {
           displayInCareOf: true,
           header: 'Tell Us About the Corporation You Are Filing For',
           inCareOfLabel: 'In care of',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
         };
         break;
       case PARTY_TYPES.custodian:
@@ -252,7 +252,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About the Partnership Representative',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
           secondaryNameLabel: 'Name of Partnership Representative',
         };
         break;
@@ -260,7 +260,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About the Partner (Other than Tax Matters Partner)',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
           secondaryNameLabel: 'Name of Partner (Other than TMP)',
         };
         break;

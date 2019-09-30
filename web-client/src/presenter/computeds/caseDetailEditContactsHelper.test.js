@@ -36,7 +36,7 @@ describe('caseDetailEditContactsHelper', () => {
       contactPrimary: {
         displayInCareOf: true,
         header: 'Corporation Information',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
       },
     });
   });
@@ -197,7 +197,7 @@ describe('caseDetailEditContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Partnership Representative',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
         secondaryNameLabel: 'Name of Partnership Representative',
       },
     });
@@ -218,7 +218,7 @@ describe('caseDetailEditContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Partnership (Other than Tax Matters Partner) Information',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
         secondaryNameLabel: 'Name of Partner (Other than TMP)',
       },
     });
@@ -239,7 +239,7 @@ describe('caseDetailEditContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tax Matters Partner Information',
-        nameLabel: 'Business Name',
+        nameLabel: 'Business name',
         secondaryNameLabel: 'Name of Tax Matters Partner',
       },
     });
