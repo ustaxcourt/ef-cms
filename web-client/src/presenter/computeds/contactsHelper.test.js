@@ -230,7 +230,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Partnership Representative',
         nameLabel: 'Business name',
-        secondaryNameLabel: 'Partnership Representative Name',
+        secondaryNameLabel: 'Partnership representative name',
       },
     });
   });
