@@ -297,7 +297,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="additional-info"
               id="additional-info-label"
             >
-              Additional Info 1 <span className="usa-hint">(optional)</span>
+              Additional info 1 <span className="usa-hint">(optional)</span>
             </label>
             <input
               aria-describedby="additional-info-label"
@@ -349,7 +349,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="additional-info2"
               id="additional-info2-label"
             >
-              Additional Info 2 <span className="usa-hint">(optional)</span>
+              Additional info 2 <span className="usa-hint">(optional)</span>
             </label>
             <input
               aria-describedby="additional-info2-label"
