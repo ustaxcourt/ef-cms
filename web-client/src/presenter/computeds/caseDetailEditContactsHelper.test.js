@@ -309,7 +309,7 @@ describe('caseDetailEditContactsHelper', () => {
       },
       contactSecondary: {
         header: 'Deceased Spouse Information',
-        nameLabel: 'Name of Deceased Spouse',
+        nameLabel: 'Name of deceased spouse',
       },
     });
   });
@@ -329,7 +329,7 @@ describe('caseDetailEditContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Petitioner Information',
-        nameLabel: 'Name of Deceased Spouse',
+        nameLabel: 'Name of deceased spouse',
         secondaryNameLabel: 'Name of Surviving Spouse',
       },
     });

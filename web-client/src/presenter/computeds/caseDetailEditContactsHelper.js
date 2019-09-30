@@ -158,7 +158,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displayPhone: true,
           header: 'Deceased Spouse Information',
           inCareOfLabel: 'In Care Of',
-          nameLabel: 'Name of Deceased Spouse',
+          nameLabel: 'Name of deceased spouse',
         },
       };
       break;
@@ -167,7 +167,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Petitioner Information',
-          nameLabel: 'Name of Deceased Spouse',
+          nameLabel: 'Name of deceased spouse',
           secondaryNameLabel: 'Name of Surviving Spouse',
         },
       };

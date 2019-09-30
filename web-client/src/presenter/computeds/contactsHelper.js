@@ -145,14 +145,14 @@ export const contactsHelper = get => {
           displayPhone: true,
           header: 'Tell Us About Your Deceased Spouse',
           inCareOfLabel: 'In Care Of',
-          nameLabel: 'Name of Deceased Spouse',
+          nameLabel: 'Name of deceased spouse',
         };
         break;
       case PARTY_TYPES.survivingSpouse:
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Surviving Spouse',
-          nameLabel: 'Name of Deceased Spouse',
+          nameLabel: 'Name of deceased spouse',
           secondaryNameLabel: 'Name of Surviving Spouse',
         };
         break;
@@ -307,7 +307,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About the Surviving Spouse',
-          nameLabel: 'Name of Deceased Spouse',
+          nameLabel: 'Name of deceased spouse',
           secondaryNameLabel: 'Name of Surviving Spouse',
         };
         break;
