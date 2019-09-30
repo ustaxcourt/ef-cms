@@ -34,9 +34,9 @@ export const StartCaseStep5 = connect(
     return (
       <>
         <Focus>
-          <h1 className="heading-1" id="file-a-document-header" tabIndex="-1">
+          <h2 id="file-a-document-header" tabIndex="-1">
             5. Review Your Petition
-          </h1>
+          </h2>
         </Focus>
 
         <p>
