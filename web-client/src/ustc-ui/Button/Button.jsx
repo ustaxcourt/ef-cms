@@ -11,8 +11,11 @@ export const Button = props => {
     icon,
     link,
     secondary,
+    type,
     ...remainingProps
   } = props;
+
+  remainingProps.type = type || 'button';
 
   const Element = (href && 'a') || 'button';
 
@@ -40,4 +43,5 @@ Button.propTypes = {
   icon: PropTypes.string,
   link: PropTypes.bool,
   secondary: PropTypes.bool,
+  type: PropTypes.string,
 };
