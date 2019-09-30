@@ -33,11 +33,15 @@ export const RequestAccess = connect(
     return (
       <React.Fragment>
         <Focus>
-          <h1 id="file-a-document-header" tabIndex="-1">
+          <h1
+            className="margin-bottom-105"
+            id="file-a-document-header"
+            tabIndex="-1"
+          >
             Request Access to This Case
           </h1>
         </Focus>
-        <p className="required-statement margin-top-05 margin-bottom-5">
+        <p className="required-statement margin-top-0 margin-bottom-4">
           *All fields required unless otherwise noted
         </p>
         <div>
@@ -112,7 +116,7 @@ export const RequestAccess = connect(
             Review Filing
           </button>
           <button
-            className="usa-button usa-button--unstyled"
+            className="usa-button usa-button--unstyled ustc-button--unstyled"
             type="button"
             onClick={() => {
               formCancelToggleCancelSequence();
