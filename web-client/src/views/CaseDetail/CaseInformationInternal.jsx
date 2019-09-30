@@ -8,7 +8,7 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
   <React.Fragment>
     <div className="grid-row">
       <div className="grid-col-6">
-        <p className="label">Notice/Case Type</p>
+        <p className="label">Notice/case type</p>
         <p>{caseDetail.caseType}</p>
       </div>
       <div className="grid-col-6">
