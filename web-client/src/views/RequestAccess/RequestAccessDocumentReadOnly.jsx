@@ -93,7 +93,7 @@ export const RequestAccessDocumentReadOnly = connect(
           {requestAccessHelper.showFilingNotIncludes && (
             <div className="usa-form-group">
               <label className="usa-label" htmlFor="filing-not-includes">
-                Filing Does Not Include
+                Filing does not include:
               </label>
               <ul className="ustc-unstyled-list without-margins">
                 {!form.certificateOfService && <li>Certificate of Service</li>}
