@@ -72,7 +72,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Guardian for This Taxpayer',
           nameLabel: 'Name of taxpayer',
-          secondaryNameLabel: 'Name of Guardian',
+          secondaryNameLabel: 'Name of guardian',
         };
         break;
       case PARTY_TYPES.nextFriendForIncompetentPerson:
@@ -228,7 +228,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About the Guardian for This Taxpayer',
           nameLabel: 'Name of taxpayer',
-          secondaryNameLabel: 'Name of Guardian',
+          secondaryNameLabel: 'Name of guardian',
         };
         break;
       case PARTY_TYPES.nextFriendForIncompetentPerson:
