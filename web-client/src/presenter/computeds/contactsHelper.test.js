@@ -20,7 +20,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Conservator for This Taxpayer',
-        nameLabel: 'Name of Taxpayer',
+        nameLabel: 'Name of taxpayer',
         secondaryNameLabel: 'Name of Conservator',
       },
     });
@@ -63,7 +63,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Custodian for This Taxpayer',
-        nameLabel: 'Name of Taxpayer',
+        nameLabel: 'Name of taxpayer',
         secondaryNameLabel: 'Name of Custodian',
       },
     });
@@ -156,7 +156,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Guardian for This Taxpayer',
-        nameLabel: 'Name of Taxpayer',
+        nameLabel: 'Name of taxpayer',
         secondaryNameLabel: 'Name of Guardian',
       },
     });
@@ -446,7 +446,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Conservator for This Taxpayer',
-        nameLabel: 'Name of Taxpayer',
+        nameLabel: 'Name of taxpayer',
         secondaryNameLabel: 'Name of Conservator',
       },
     });
@@ -489,7 +489,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Custodian for This Taxpayer',
-        nameLabel: 'Name of Taxpayer',
+        nameLabel: 'Name of taxpayer',
         secondaryNameLabel: 'Name of Custodian',
       },
     });
@@ -582,7 +582,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Guardian for This Taxpayer',
-        nameLabel: 'Name of Taxpayer',
+        nameLabel: 'Name of taxpayer',
         secondaryNameLabel: 'Name of Guardian',
       },
     });
