@@ -135,9 +135,7 @@ export const IndividualWorkQueueOutbox = connect(
           ))}
         </table>
         {formattedWorkQueue.length === 0 && (
-          <div className="text-align-center">
-            {workQueueHelper.queueEmptyMessage}
-          </div>
+          <p>{workQueueHelper.queueEmptyMessage}</p>
         )}
       </React.Fragment>
     );
