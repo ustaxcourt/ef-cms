@@ -205,7 +205,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Next Friend for This Minor',
-        nameLabel: 'Name of Minor',
+        nameLabel: 'Name of minor',
         secondaryNameLabel: 'Name of next friend',
       },
     });
@@ -631,7 +631,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About the Next Friend for This Minor',
-        nameLabel: 'Name of Minor',
+        nameLabel: 'Name of minor',
         secondaryNameLabel: 'Name of next friend',
       },
     });
