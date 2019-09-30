@@ -176,7 +176,7 @@ describe('caseDetailEditContactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Next Friend Information',
-        nameLabel: 'Name of Minor',
+        nameLabel: 'Name of minor',
         secondaryNameLabel: 'Name of next friend',
       },
     });
