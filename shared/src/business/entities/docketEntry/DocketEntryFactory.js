@@ -24,7 +24,7 @@ DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
     'Enter a valid date received',
   ],
   eventCode: 'Select a document type',
-  lodged: 'Enter selection for Filing Status.',
+  lodged: 'Enter selection for Filing status.',
   primaryDocumentFileSize: [
     {
       contains: 'must be less than or equal to',

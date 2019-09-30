@@ -44,7 +44,7 @@ export const PrimaryDocumentForm = connect(
             }`}
           >
             <fieldset className="usa-fieldset">
-              <legend className="usa-legend">Filing Status</legend>
+              <legend className="usa-legend">Filing status</legend>
               {['File', 'Lodge'].map(option => (
                 <div className="usa-radio usa-radio__inline" key={option}>
                   <input
