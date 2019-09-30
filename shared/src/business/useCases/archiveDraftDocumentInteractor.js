@@ -10,8 +10,8 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update notes
- * @param {string} providers.notes the notes to update
+ * @param {string} providers.caseId the id of the case on which a document will be archived
+ * @param {string} providers.documentId the id of the document which will be archived
  * @returns {object} the updated case note returned from persistence
  */
 exports.archiveDraftDocumentInteractor = async ({

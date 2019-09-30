@@ -3,7 +3,7 @@
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id for the docket record to be generated
+ * @param {string} providers.trialSessionId the id for the trial session
  * @returns {Uint8Array} docket record pdf
  */
 exports.generateTrialCalendarPdfInteractor = async ({
