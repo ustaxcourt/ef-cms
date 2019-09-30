@@ -351,7 +351,7 @@ export const PendingMessages = connect(
                           formatter={workQueueSectionHelper.chambersDisplay}
                           id={`chambers-${idx}`}
                           keys={v => v}
-                          label="Select Chambers"
+                          label="Select chambers"
                           name="chambers"
                           values={constants.CHAMBERS_SECTIONS}
                           onChange={e => {

@@ -68,7 +68,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
             }
           >
             <label className="usa-label" htmlFor={'chambers'}>
-              Select Chambers
+              Select chambers
             </label>
             <select
               className="usa-select"
