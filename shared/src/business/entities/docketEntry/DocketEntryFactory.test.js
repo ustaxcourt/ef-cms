@@ -82,11 +82,11 @@ describe('DocketEntryFactory', () => {
       expect(errors().partyPrimary).toEqual(undefined);
     });
 
-    it('should not require Additional Info 1', () => {
+    it('should not require Additional info 1', () => {
       expect(errors().additionalInfo).toEqual(undefined);
     });
 
-    it('should not require Additional Info 2', () => {
+    it('should not require Additional info 2', () => {
       expect(errors().additionalInfo2).toEqual(undefined);
     });
 
