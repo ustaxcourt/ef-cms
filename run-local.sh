@@ -6,6 +6,10 @@ echo "starting dynamo"
 ./web-api/start-dynamo.sh &
 DYNAMO_PID=$!
 
+echo "starting elasticsearch"
+./web-api/start-elasticsearch.sh &
+ESEARCH_PID=$!
+
 node ./web-api/start-s3rver &
 S3RVER_PID=$!
 
@@ -67,5 +71,6 @@ echo "proxy stopped"
 if [ ! -e "$CIRCLECI" ]; then 
   echo "killing dynamodb local"
   pkill -P $DYNAMO_PID
+  pkill -p $ESEARCH_PID
 fi 
 kill $S3RVER_PID
