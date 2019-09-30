@@ -94,7 +94,7 @@ export const ContactSecondary = connect(
                   </span>
                 ) : (
                   <span>
-                    In Care Of <span className="usa-hint">(optional)</span>
+                    In care of <span className="usa-hint">(optional)</span>
                   </span>
                 )}
               </label>

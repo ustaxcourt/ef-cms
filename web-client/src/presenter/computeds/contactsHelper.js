@@ -29,7 +29,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displayInCareOf: true,
           header: 'Tell Us About the Corporation You Are Filing For',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'Your Name',
           nameLabel: 'Business Name',
         };
@@ -62,7 +62,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displayInCareOf: true,
           header: 'Tell Us About the Estate You Are Filing For',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'Your Name',
           nameLabel: 'Name of Decedent',
         };
@@ -144,7 +144,7 @@ export const contactsHelper = get => {
           displayInCareOf: true,
           displayPhone: true,
           header: 'Tell Us About Your Deceased Spouse',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           nameLabel: 'Name of deceased spouse',
         };
         break;
@@ -187,7 +187,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displayInCareOf: true,
           header: 'Tell Us About the Corporation You Are Filing For',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           nameLabel: 'Business Name',
         };
         break;
@@ -219,7 +219,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displayInCareOf: true,
           header: 'Tell Us About the Estate You Are Filing For',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           nameLabel: 'Name of Decedent',
         };
         break;
@@ -299,7 +299,7 @@ export const contactsHelper = get => {
           displayInCareOf: true,
           displayPhone: true,
           header: 'Tell Us About the Deceased Petitioner',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           nameLabel: 'Deceased Petitioner Name',
         };
         break;
