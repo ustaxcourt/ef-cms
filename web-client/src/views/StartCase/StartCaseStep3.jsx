@@ -37,9 +37,9 @@ export const StartCaseStep3 = connect(
     return (
       <>
         <Focus>
-          <h1 className="focusable margin-top-5" tabIndex="-1">
+          <h2 className="focusable" tabIndex="-1">
             3. Who are you filing this petition for?
-          </h1>
+          </h2>
         </Focus>
         <p className="required-statement margin-top-05 margin-bottom-2">
           *All fields required unless otherwise noted

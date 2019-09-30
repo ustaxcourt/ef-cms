@@ -45,9 +45,9 @@ export const StartCaseStep4 = connect(
     return (
       <>
         <Focus>
-          <h1 className="focusable margin-top-4" tabIndex="-1">
+          <h2 className="focusable" tabIndex="-1">
             4. How do you want this case handled?
-          </h1>
+          </h2>
         </Focus>
         <p className="required-statement margin-top-05 margin-bottom-2">
           *All fields required unless otherwise noted
