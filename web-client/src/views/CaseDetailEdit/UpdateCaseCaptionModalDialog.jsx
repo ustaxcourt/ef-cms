@@ -17,7 +17,7 @@ class UpdateCaseCaptionModalDialogComponent extends ModalDialog {
     return (
       <div>
         <label className="usa-label" htmlFor="caption">
-          Case Caption
+          Case caption
         </label>
         <textarea
           aria-labelledby="caption-label"

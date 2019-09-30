@@ -46,7 +46,7 @@ export const SessionAssignmentsForm = connect(
               htmlFor="trial-clerk"
               id="trial-clerk-label"
             >
-              Trial Clerk <span className="usa-hint">(optional)</span>
+              Trial clerk <span className="usa-hint">(optional)</span>
             </label>
             <select
               aria-describedby="trial-clerk-label"
@@ -71,7 +71,7 @@ export const SessionAssignmentsForm = connect(
 
           <div className="usa-form-group">
             <label className="usa-label" htmlFor="court-reporter">
-              Court Reporter <span className="usa-hint">(optional)</span>
+              Court reporter <span className="usa-hint">(optional)</span>
             </label>
             <input
               autoCapitalize="none"
@@ -91,7 +91,7 @@ export const SessionAssignmentsForm = connect(
 
           <div className="usa-form-group margin-bottom-0">
             <label className="usa-label" htmlFor="irs-calendar-administrator">
-              IRS Calendar Administrator{' '}
+              IRS calendar administrator{' '}
               <span className="usa-hint">(optional)</span>
             </label>
             <input

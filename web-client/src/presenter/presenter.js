@@ -12,6 +12,7 @@ import { associatePractitionerWithCaseSequence } from './sequences/caseAssociati
 import { associateRespondentWithCaseSequence } from './sequences/caseAssociation/associateRespondentWithCaseSequence';
 import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
 import { autoSaveTrialSessionWorkingCopySequence } from './sequences/autoSaveTrialSessionWorkingCopySequence';
+import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
@@ -275,6 +276,7 @@ export const presenter = {
     associateRespondentWithCaseSequence,
     autoSaveCaseSequence,
     autoSaveTrialSessionWorkingCopySequence,
+    batchDownloadReadySequence,
     batchDownloadTrialSessionSequence,
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,

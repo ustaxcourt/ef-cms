@@ -30,7 +30,7 @@ export const SessionInformationForm = connect(
           >
             <fieldset className="start-date usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="start-date-legend">
-                Start Date
+                Start date
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month margin-bottom-0">
@@ -309,7 +309,7 @@ export const SessionInformationForm = connect(
             }`}
           >
             <label className="usa-label" htmlFor="max-cases">
-              Number of Cases Allowed
+              Number of cases allowed
             </label>
             <input
               autoCapitalize="none"

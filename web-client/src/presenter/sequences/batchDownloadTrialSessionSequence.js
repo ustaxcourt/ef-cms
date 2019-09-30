@@ -1,9 +1,9 @@
 import { batchDownloadTrialSessionAction } from '../actions/batchDownloadTrialSessionAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { setupNotificationListenerAction } from '../actions/setupNotificationListenerAction';
+import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
 
 export const batchDownloadTrialSessionSequence = [
   setWaitingForResponseAction,
-  setupNotificationListenerAction,
+  startWebSocketConnectionAction,
   batchDownloadTrialSessionAction,
 ];

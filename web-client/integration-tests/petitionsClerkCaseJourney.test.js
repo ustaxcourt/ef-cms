@@ -8,6 +8,9 @@ import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
+import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
+import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
+import petitionsClerkUpdatesCaseWithOrders from './journey/petitionsClerkUpdatesCaseWithOrders';
 const {
   ContactFactory,
 } = require('../../shared/src/business/entities/contacts/ContactFactory');
@@ -59,10 +62,14 @@ describe('Case journey', () => {
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
+      STATUS_TYPES: Case.STATUS_TYPES,
       TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     });
   });
 
   petitionsClerkLogIn(test);
   petitionsClerkCreatesNewCase(test, fakeFile);
+  petitionsClerkSendsCaseToIRSHoldingQueue(test);
+  petitionsClerkRunsBatchProcess(test);
+  petitionsClerkUpdatesCaseWithOrders(test);
 });
