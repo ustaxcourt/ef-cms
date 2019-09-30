@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 
-export const ButtonLink = props => {
+export const Button = props => {
   const { href } = props;
   const {
     children,
@@ -33,7 +33,7 @@ export const ButtonLink = props => {
   );
 };
 
-ButtonLink.propTypes = {
+Button.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
   href: PropTypes.string,
