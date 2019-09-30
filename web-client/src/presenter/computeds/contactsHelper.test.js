@@ -351,7 +351,7 @@ describe('contactsHelper', () => {
     expect(result).toMatchObject({
       contactPrimary: {
         header: 'Tell Us About Yourself',
-        nameLabel: 'Name of Petitioner/Surviving Spouse',
+        nameLabel: 'Name of petitioner/surviving spouse',
       },
       contactSecondary: {
         header: 'Tell Us About Your Deceased Spouse',

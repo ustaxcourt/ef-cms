@@ -151,7 +151,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       contacts = {
         contactPrimary: {
           header: 'Petitioner Information',
-          nameLabel: 'Name of Petitioner/Surviving Spouse',
+          nameLabel: 'Name of petitioner/surviving spouse',
         },
         contactSecondary: {
           displayInCareOf: true,
