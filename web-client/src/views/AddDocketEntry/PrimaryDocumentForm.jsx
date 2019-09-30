@@ -386,7 +386,7 @@ export const PrimaryDocumentForm = connect(
               }`}
             >
               <legend className="usa-legend">
-                Who Is Filing This Document?
+                Who is filing this document?
               </legend>
               <div className="usa-checkbox">
                 <input
