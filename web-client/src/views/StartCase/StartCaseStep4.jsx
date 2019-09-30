@@ -1,3 +1,4 @@
+import { ButtonLink } from '../../ustc-ui/Buttons/ButtonLink';
 import { CaseDifferenceExplained } from '../CaseDifferenceExplained';
 import { CaseDifferenceModalOverlay } from './CaseDifferenceModalOverlay';
 import { Focus } from '../../ustc-ui/Focus/Focus';
@@ -174,15 +175,13 @@ export const StartCaseStep4 = connect(
           >
             Back
           </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
+          <ButtonLink
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </ButtonLink>
         </div>
         {showModal === 'CaseDifferenceModalOverlay' && (
           <CaseDifferenceModalOverlay />
