@@ -81,7 +81,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displaySecondaryName: true,
           header: 'Next Friend Information',
           nameLabel: 'Name of legally incompetent person',
-          secondaryNameLabel: 'Name of Next Friend',
+          secondaryNameLabel: 'Name of next friend',
         },
       };
       break;
@@ -91,7 +91,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displaySecondaryName: true,
           header: 'Next Friend Information',
           nameLabel: 'Name of Minor',
-          secondaryNameLabel: 'Name of Next Friend',
+          secondaryNameLabel: 'Name of next friend',
         },
       };
       break;
