@@ -107,7 +107,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
           }
         >
           <label className="usa-label" htmlFor="assigneeId">
-            Select Recipient
+            Select recipient
           </label>
           <select
             aria-disabled={!this.props.form.section ? 'true' : 'false'}

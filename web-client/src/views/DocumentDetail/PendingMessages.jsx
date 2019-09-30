@@ -387,7 +387,7 @@ export const PendingMessages = connect(
                         formatter={user => user.name}
                         id={`assignee-id-${idx}`}
                         keys={user => user.userId}
-                        label="Select Recipient"
+                        label="Select recipient"
                         name="assigneeId"
                         values={users}
                         onChange={e => {
