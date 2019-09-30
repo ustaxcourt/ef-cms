@@ -656,7 +656,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header: 'Tell Us About the Partnership Representative',
         nameLabel: 'Business name',
-        secondaryNameLabel: 'Name of Partnership Representative',
+        secondaryNameLabel: 'Name of partnership representative',
       },
     });
   });

@@ -101,7 +101,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displaySecondaryName: true,
           header: 'Partnership Representative',
           nameLabel: 'Business name',
-          secondaryNameLabel: 'Name of Partnership Representative',
+          secondaryNameLabel: 'Name of partnership representative',
         },
       };
       break;
