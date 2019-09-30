@@ -27,7 +27,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
           }
         >
           <label className="usa-label" htmlFor="section">
-            Select Section
+            Select section
           </label>
 
           <select

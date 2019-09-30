@@ -29,7 +29,7 @@ export const PDFSignerMessage = connect(
         </h3>
         <div className="usa-form-group">
           <label className="usa-label" htmlFor="section">
-            Select Section
+            Select section
           </label>
 
           <div
