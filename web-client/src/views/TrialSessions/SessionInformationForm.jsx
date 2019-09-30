@@ -309,7 +309,7 @@ export const SessionInformationForm = connect(
             }`}
           >
             <label className="usa-label" htmlFor="max-cases">
-              Number of Cases Allowed
+              Number of cases allowed
             </label>
             <input
               autoCapitalize="none"
