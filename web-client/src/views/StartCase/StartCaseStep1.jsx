@@ -28,13 +28,13 @@ export const StartCaseStep1 = connect(
     return (
       <>
         <Focus>
-          <h1
+          <h2
             className="focusable margin-bottom-2"
             id="start-case-header"
             tabIndex="-1"
           >
             1. Provide Statement of Identity
-          </h1>
+          </h2>
         </Focus>
         <Hint>
           The Statement of Taxpayer Identification is the only document that
