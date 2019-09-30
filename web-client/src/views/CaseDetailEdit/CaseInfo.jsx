@@ -39,7 +39,7 @@ export const CaseInfo = connect(
             >
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="received-at-legend">
-                  Date Received
+                  Date received
                 </legend>
                 <div className="usa-memorable-date">
                   <div className="usa-form-group usa-form-group--month margin-bottom-0">
@@ -154,7 +154,7 @@ export const CaseInfo = connect(
 
         <div className="usa-form-group">
           <ProcedureType
-            legend="Case Procedure"
+            legend="Case procedure"
             value={caseDetail.procedureType}
             onChange={e => {
               updateCaseValueSequence({
@@ -191,7 +191,7 @@ export const CaseInfo = connect(
 
         <div className="usa-form-group">
           <label className="usa-label" htmlFor="preferred-trial-city">
-            Trial Location
+            Trial location
           </label>
           <div id="preferred-trial-city">
             {caseDetailEditHelper.showNoTrialLocationSelected && (
@@ -268,7 +268,7 @@ export const CaseInfo = connect(
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="fee-payment-date-legend">
-              Fee Payment Date <span className="usa-hint">(optional)</span>
+              Fee payment date <span className="usa-hint">(optional)</span>
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month">
@@ -360,7 +360,7 @@ export const CaseInfo = connect(
 
         <div className="usa-form-group">
           <label className="usa-label" htmlFor="fee-payment-id">
-            Fee Payment ID <span className="usa-hint">(optional)</span>
+            Fee payment ID <span className="usa-hint">(optional)</span>
           </label>
           <input
             className="usa-input"

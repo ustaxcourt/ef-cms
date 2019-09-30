@@ -49,7 +49,7 @@ export const CompleteDocumentTypeSection = connect(
             htmlFor="document-type"
             id="document-type-label"
           >
-            Document Type
+            Document type
           </label>
           <Select
             aria-describedby="document-type-label"

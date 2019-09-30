@@ -95,13 +95,13 @@ export const StartCaseStep5 = connect(
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
                       <label className="usa-label" htmlFor="filing-procedure">
-                        Case Procedure
+                        Case procedure
                       </label>
                       {form.procedureType}
 
                       <div className="margin-top-3">
                         <label className="usa-label" htmlFor="filing-location">
-                          Trial Location
+                          Trial location
                         </label>
                         <p>{form.preferredTrialCity}</p>
                       </div>
@@ -119,7 +119,7 @@ export const StartCaseStep5 = connect(
                     <div className="tablet:grid-col-4 margin-bottom-1">
                       <>
                         <label className="usa-label" htmlFor="filing-parties">
-                          Party Type
+                          Party type
                         </label>
                         <p>{form.partyType}</p>
 

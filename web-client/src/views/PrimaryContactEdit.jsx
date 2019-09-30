@@ -62,7 +62,7 @@ export const PrimaryContactEdit = connect(
 
           <div className="blue-container">
             <div className="usa-form-group">
-              <p className="usa-label">Contact Name</p>
+              <p className="usa-label">Contact name</p>
               <p className="margin-top-0">
                 {caseDetailHelper.showCaseNameForPrimary
                   ? formattedCaseDetail.caseName
@@ -82,7 +82,7 @@ export const PrimaryContactEdit = connect(
               >
                 <label className="usa-label" htmlFor="inCareOf">
                   <span>
-                    In Care Of <span className="usa-hint">(Your Name)</span>
+                    In care of <span className="usa-hint">(your name)</span>
                   </span>
                 </label>
                 <input
@@ -141,7 +141,7 @@ export const PrimaryContactEdit = connect(
               }
             >
               <label className="usa-label" htmlFor="phone">
-                Phone Number
+                Phone number
               </label>
               <input
                 autoCapitalize="none"
