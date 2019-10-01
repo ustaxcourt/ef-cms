@@ -76,7 +76,7 @@ export const StartCaseInternal = connect(
               </div>
 
               <div className="grid-col-5">
-                <div className="blue-container document-detail-one-third">
+                <div className="blue-container margin-bottom-4 document-detail-one-third">
                   <div
                     className={`usa-form-group ${
                       validationErrors.receivedAt ? 'usa-form-group--error' : ''
@@ -302,25 +302,20 @@ export const StartCaseInternal = connect(
                     </div>
                   )}
                 </div>
-
-                <div className="margin-top-4">
-                  <button
-                    className="usa-button margin-bottom-2"
-                    id="submit-case"
-                    type="submit"
-                  >
-                    Create Case
-                  </button>
-                  <Button
-                    onClick={() => {
-                      formCancelToggleCancelSequence();
-                      return false;
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                </div>
+                <Button id="submit-case" type="submit">
+                  Create Case
+                </Button>
+                <Button
+                  link
+                  onClick={() => {
+                    formCancelToggleCancelSequence();
+                    return false;
+                  }}
+                >
+                  Cancel
+                </Button>
               </div>
+
               <div className="grid-col-7">
                 <ScanBatchPreviewer
                   documentTabs={[
