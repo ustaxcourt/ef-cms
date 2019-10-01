@@ -81,9 +81,6 @@
 
 .file-upload-status-modal {
   > .modal-header,
-  .button-box-container {
-    display: none;
-  }
 
   .status-message {
     margin-bottom: 10px;
@@ -173,12 +170,6 @@
   }
 }
 
-.modal-select-scanner-source {
-  .button-box-container {
-    display: none;
-  }
-}
-
 .pdf-preview-modal {
   top: 60px;
   width: 90%;
@@ -255,10 +246,6 @@ button {
     .pdf-preview-content {
       padding: 0 12px;
       border: none;
-    }
-
-    .button-box-container {
-      display: none;
     }
 
     .usa-button.usa-button--unstyled {

@@ -22,7 +22,10 @@ export const BeforeYouFileADocument = connect(
             Before you file a document…
           </h1>
 
-          <div className="grid-container padding-x-0" role="list">
+          <div
+            className="grid-container padding-x-0 margin-bottom-5"
+            role="list"
+          >
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6">
                 <div className="caseItem" role="listitem">
@@ -108,25 +111,22 @@ export const BeforeYouFileADocument = connect(
               </div>
             </div>
           </div>
-          <div className="button-box-container">
-            <a
-              className="usa-button margin-right-205 margin-bottom-1"
-              href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
-            >
-              OK, Iʼm Ready to File
-            </a>
-            <Button
-              link
-              onClick={() => {
-                formCancelToggleCancelSequence();
-              }}
-            >
-              Cancel
-            </Button>
-            {showModal === 'FormCancelModalDialog' && (
-              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
-            )}
-          </div>
+          <Button
+            href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
+          >
+            OK, Iʼm Ready to File
+          </Button>
+          <Button
+            link
+            onClick={() => {
+              formCancelToggleCancelSequence();
+            }}
+          >
+            Cancel
+          </Button>
+          {showModal === 'FormCancelModalDialog' && (
+            <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          )}
         </section>
       </>
     );
