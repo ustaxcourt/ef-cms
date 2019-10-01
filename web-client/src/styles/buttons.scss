@@ -76,6 +76,10 @@
     text-align: left;
   }
 
+  &.padding-0 {
+    padding: 0;
+  }
+
   @media only screen and (min-width: $medium-screen) {
     &.ustc-button--unstyled-with-left-icon {
       width: 305px;
