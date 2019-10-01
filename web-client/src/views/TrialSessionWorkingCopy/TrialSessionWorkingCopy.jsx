@@ -1,6 +1,5 @@
 import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
 import { AddEditSessionNoteModal } from './AddEditSessionNoteModal';
-import { Button } from '../../ustc-ui/Button/Button';
 import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
 import { DeleteSessionNoteConfirmModal } from './DeleteSessionNoteConfirmModal';
 import { ErrorNotification } from '../ErrorNotification';
@@ -34,9 +33,9 @@ export const TrialSessionWorkingCopy = connect(
               <h2 className="heading-1">Session Working Copy</h2>
             </div>
             <div className="grid-col-3 text-right padding-top-2">
-              <Button
-                link
+              <button
                 aria-label="Download batch of documents in a trial session"
+                className="usa-button usa-button--unstyled"
                 onClick={() =>
                   batchDownloadTrialSessionSequence({
                     trialSessionId: formattedTrialSessionDetails.trialSessionId,
@@ -44,9 +43,9 @@ export const TrialSessionWorkingCopy = connect(
                   })
                 }
               >
-                <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />
+                <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />{' '}
                 Download All Cases
-              </Button>
+              </button>
             </div>
           </div>
 
