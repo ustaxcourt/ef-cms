@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { ErrorNotification } from './ErrorNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -22,7 +23,7 @@ export const LogIn = connect(
             submitLoginSequence();
           }}
         >
-          <div className="blue-container">
+          <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
               <label className="usa-label" htmlFor="name">
                 Name
@@ -43,11 +44,9 @@ export const LogIn = connect(
               />
             </div>
           </div>
-          <div className="button-box-container">
-            <button className="usa-button" id="log-in-button" type="submit">
-              Log in
-            </button>
-          </div>
+          <Button id="log-in-button" type="submit">
+            Log in
+          </Button>
         </form>
       </section>
     );
