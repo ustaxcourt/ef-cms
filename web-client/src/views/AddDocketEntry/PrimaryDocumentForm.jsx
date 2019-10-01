@@ -37,7 +37,7 @@ export const PrimaryDocumentForm = connect(
   }) => {
     return (
       <React.Fragment>
-        <div className="blue-container docket-entry-form margin-bottom-5">
+        <div className="blue-container docket-entry-form">
           <div
             className={`usa-form-group ${
               validationErrors.lodged ? 'usa-form-group--error' : ''
