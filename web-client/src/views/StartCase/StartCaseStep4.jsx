@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDifferenceExplained } from '../CaseDifferenceExplained';
 import { CaseDifferenceModalOverlay } from './CaseDifferenceModalOverlay';
 import { Focus } from '../../ustc-ui/Focus/Focus';
@@ -45,9 +46,9 @@ export const StartCaseStep4 = connect(
     return (
       <>
         <Focus>
-          <h1 className="focusable margin-top-4" tabIndex="-1">
+          <h2 className="focusable" tabIndex="-1">
             4. How do you want this case handled?
-          </h1>
+          </h2>
         </Focus>
         <p className="required-statement margin-top-05 margin-bottom-2">
           *All fields required unless otherwise noted
@@ -174,15 +175,13 @@ export const StartCaseStep4 = connect(
           >
             Back
           </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
+          <Button
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
         {showModal === 'CaseDifferenceModalOverlay' && (
           <CaseDifferenceModalOverlay />

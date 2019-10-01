@@ -20,8 +20,16 @@ export const CaseSearchBox = connect(
           <div className="case-search margin-bottom-4">
             <div className="card">
               <div className="content-wrapper gray">
-                <h3>Search for a Case</h3>
-                <hr />
+                <div className="grid-row underlined">
+                  <div className="  grid-col-8">
+                    <h3>Search for a Case</h3>
+                  </div>
+                  <div className="tablet:grid-col-4 padding-top-05">
+                    <a className="usa-link float-right" href="/search">
+                      Advanced Search
+                    </a>
+                  </div>
+                </div>
                 <p>
                   To file an Entry of Appearance, Substitution of Counsel, etc.
                 </p>
@@ -44,10 +52,6 @@ export const CaseSearchBox = connect(
                       }}
                     />
                   </div>
-                </div>
-
-                <div className="margin-bottom-3">
-                  <a href="/search">Advanced Search</a>
                 </div>
 
                 <button

@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
@@ -42,5 +43,34 @@ export const Buttons = () => (
     >
       Secondary Disabled
     </button>
+    <hr />
+    <Button>Button Link</Button>
+    <Button icon="question-circle">Button Link</Button>
+    <Button secondary>Button Link</Button>
+    <Button secondary icon="question-circle">
+      Button Link
+    </Button>
+    <Button link>Button Link</Button>
+    <Button link icon="question-circle">
+      Button Link
+    </Button>
+
+    <hr />
+    <Button href="/">Button Link</Button>
+    <Button href="/" icon="question-circle">
+      Button Link
+    </Button>
+    <Button secondary href="/">
+      Button Link
+    </Button>
+    <Button secondary href="/" icon="question-circle">
+      Button Link
+    </Button>
+    <Button link href="/">
+      Button Link
+    </Button>
+    <Button link href="/" icon="question-circle">
+      Button Link
+    </Button>
   </section>
 );

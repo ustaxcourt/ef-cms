@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTypeSelect } from './CaseTypeSelect';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -38,14 +39,14 @@ export const StartCaseStep2 = connect(
     return (
       <>
         <Focus>
-          <h1 className="focusable margin-top-5" tabIndex="-1">
+          <h2 className="focusable" tabIndex="-1">
             2. Tell Us About Your Petition
-          </h1>
+          </h2>
         </Focus>
-        <p className="required-statement margin-top-05 margin-bottom-2">
+        <p className="required-statement margin-top-05 margin-bottom-4">
           *All fields required unless otherwise noted
         </p>
-        <h2 className="margin-top-4">Upload Your Petition</h2>
+        <h3>Upload Your Petition</h3>
         <Hint>
           Don’t forget to remove or redact your personal information on all your
           documents, including any IRS notice(s).
@@ -90,7 +91,7 @@ export const StartCaseStep2 = connect(
           </div>
         </div>
 
-        <h2 className="margin-top-4">Why are you filing this petition?</h2>
+        <h3 className="margin-top-4">Why are you filing this petition?</h3>
         <div className="blue-container">
           <div className="usa-form-group">
             <fieldset
@@ -139,6 +140,7 @@ export const StartCaseStep2 = connect(
               <CaseTypeSelect
                 allowDefaultOption={true}
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
+                className="margin-bottom-0"
                 legend="Type of notice / case"
                 validation="validateStartCaseWizardSequence"
                 value={form.caseType}
@@ -149,6 +151,7 @@ export const StartCaseStep2 = connect(
               <CaseTypeSelect
                 allowDefaultOption={true}
                 caseTypes={caseTypeDescriptionHelper.caseTypes}
+                className="margin-bottom-0"
                 legend="Which topic most closely matches your complaint with the
                 IRS?"
                 validation="validateStartCaseWizardSequence"
@@ -177,15 +180,13 @@ export const StartCaseStep2 = connect(
           >
             Back
           </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
+          <Button
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
       </>
     );

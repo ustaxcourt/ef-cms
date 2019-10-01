@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
@@ -28,13 +29,13 @@ export const StartCaseStep1 = connect(
     return (
       <>
         <Focus>
-          <h1
+          <h2
             className="focusable margin-bottom-2"
             id="start-case-header"
             tabIndex="-1"
           >
             1. Provide Statement of Identity
-          </h1>
+          </h2>
         </Focus>
         <Hint>
           The Statement of Taxpayer Identification is the only document that
@@ -102,15 +103,13 @@ export const StartCaseStep1 = connect(
           >
             Back
           </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
+          <Button
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
       </>
     );
