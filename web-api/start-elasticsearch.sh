@@ -19,8 +19,8 @@ fi
 # start elasticsearch
 if [ -f /.dockerenv ]; then
   useradd elasticsearch
-  chown elasticsearch:elasticsearch -R /home/app/.elasticsearch
-  su -c /home/app/.elasticsearch/bin/elasticsearch elasticsearch
+  chown elasticsearch:elasticsearch -R .elasticsearch
+  su -c .elasticsearch/bin/elasticsearch elasticsearch
 else
-  ./.elasticsearch/bin/elasticsearch
+  .elasticsearch/bin/elasticsearch
 fi
