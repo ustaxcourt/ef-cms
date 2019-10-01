@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -33,7 +34,7 @@ export const CaseSearchBox = connect(
                 <p>
                   To file an Entry of Appearance, Substitution of Counsel, etc.
                 </p>
-                <div className="usa-form-group margin-bottom-2">
+                <div className="usa-form-group margin-bottom-4">
                   <div>
                     <label className="usa-label" htmlFor="docket-search-field">
                       Docket number
@@ -54,12 +55,9 @@ export const CaseSearchBox = connect(
                   </div>
                 </div>
 
-                <button
-                  className="usa-button usa-button--outline margin-top-2"
-                  type="submit"
-                >
+                <Button secondary type="submit">
                   <span className="usa-search-submit-text">Search</span>
-                </button>
+                </Button>
               </div>
             </div>
           </div>
