@@ -1,4 +1,3 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
@@ -54,7 +53,8 @@ export const AddDocketEntry = connect(
               <section className="usa-section DocumentDetail">
                 <PrimaryDocumentForm />
                 <div className="button-box-container">
-                  <Button
+                  <button
+                    className="usa-button"
                     id="save-and-finish"
                     type="submit"
                     onClick={() => {
@@ -62,10 +62,11 @@ export const AddDocketEntry = connect(
                     }}
                   >
                     Finish
-                  </Button>
-                  <Button
-                    secondary
+                  </button>
+                  <button
+                    className="usa-button usa-button--outline margin-left-1"
                     id="save-and-add-supporting"
+                    type="button"
                     onClick={() => {
                       submitDocketEntrySequence({
                         docketNumber: caseDetail.docketNumber,
@@ -74,16 +75,16 @@ export const AddDocketEntry = connect(
                     }}
                   >
                     Add Another Entry
-                  </Button>
-                  <Button
-                    link
+                  </button>
+                  <button
+                    className="usa-button usa-button--unstyled margin-left-1"
                     id="cancel-button"
                     onClick={() => {
                       formCancelToggleCancelSequence();
                     }}
                   >
                     Cancel
-                  </Button>
+                  </button>
                   {showModal === 'FormCancelModalDialog' && (
                     <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
                   )}
