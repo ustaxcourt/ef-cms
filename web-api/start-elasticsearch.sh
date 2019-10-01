@@ -10,6 +10,9 @@ fi
 ES_ARCH_RENAMED="elasticsearch.tar.gz"
 ES_DESTINATION=".elasticsearch/"
 
+pwd
+ls
+
 if [ ! -d "$ES_DESTINATION" ]; then
   mkdir -p "$ES_DESTINATION"
   curl "$ES_DOWNLOAD" --output "${ES_DESTINATION}/${ES_ARCH_RENAMED}" --create-dirs
@@ -18,10 +21,13 @@ fi
 
 # start elasticsearch
 if [ -f /.dockerenv ]; then
+  echo "we are here"
   useradd elasticsearch
   chown elasticsearch:elasticsearch -R .elasticsearch
   chmod -R 0755 .elasticsearch
-  su -c "JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 .elasticsearch/bin/elasticsearch" elasticsearch
+  echo "starting elastic search"
+  ls /usr/lib/jvm/java-8-openjdk-amd64
+  su -c "pwd && ls && JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 .elasticsearch/bin/elasticsearch" elasticsearch
 else
   .elasticsearch/bin/elasticsearch
 fi
