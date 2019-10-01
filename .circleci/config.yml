@@ -7,21 +7,21 @@ jobs:
       - restore_cache:
           name: Source - Restoring Cache
           keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
+            - es-source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - es-source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - es-source-{{ .Environment.CACHE_VERSION }}-
       - checkout
       - save_cache:
           name: Source - Saving Cache
-          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          key: es-source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
           paths:
             - '.git'
       - restore_cache:
           name: NPM - Restoring Cache
           keys:
-            - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - npm-{{ .Environment.CACHE_VERSION }}-
+            - es-npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - es-npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - es-npm-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: NPM - Install
           command: npm i
@@ -29,7 +29,7 @@ jobs:
           name: NPM - Save to Cache
           paths:
             - node_modules # location depends on npm version
-          key: npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          key: es-npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - persist_to_workspace:
           root: /home
           paths:
