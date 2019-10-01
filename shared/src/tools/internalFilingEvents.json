@@ -333,7 +333,7 @@
       "category": "Miscellaneous",
       "eventCode": "AMDC",
       "scenario": "Nonstandard D",
-      "labelPreviousDocument": "Which Document Is This Certificate of Service For?",
+      "labelPreviousDocument": "Which document is this certificate of service for?",
       "labelFreeText": "Date of Service",
       "labelFreeText2": "",
       "ordinalField": ""
@@ -377,7 +377,7 @@
       "category": "Miscellaneous",
       "eventCode": "CS",
       "scenario": "Nonstandard D",
-      "labelPreviousDocument": "Which Document Is This Certificate of Service For?",
+      "labelPreviousDocument": "Which document is this certificate of service for?",
       "labelFreeText": "Date of Service",
       "labelFreeText2": "",
       "ordinalField": ""
