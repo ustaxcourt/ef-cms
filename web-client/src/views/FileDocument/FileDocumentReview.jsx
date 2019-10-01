@@ -347,7 +347,7 @@ export const FileDocumentReview = connect(
           </div>
         </div>
 
-        <div className="grid-row grid-gap">
+        <div className="grid-row grid-gap margin-bottom-5">
           <div className="tablet:grid-col-12 bg-white submit-reminders">
             <div className="card">
               <div className="content-header bg-accent-cool-dark text-white heading-3">
@@ -369,28 +369,27 @@ export const FileDocumentReview = connect(
           </div>
         </div>
 
-        <div className="button-box-container">
-          <Button
-            id="submit-document"
-            type="submit"
-            onClick={() => {
-              submitExternalDocumentSequence();
-            }}
-          >
-            Submit Your Filing
-          </Button>
-          <Button secondary onClick={() => navigateBackSequence()}>
-            Back
-          </Button>
-          <Button
-            link
-            onClick={() => {
-              formCancelToggleCancelSequence();
-            }}
-          >
-            Cancel
-          </Button>
-        </div>
+        <Button
+          id="submit-document"
+          type="submit"
+          onClick={() => {
+            submitExternalDocumentSequence();
+          }}
+        >
+          Submit Your Filing
+        </Button>
+        <Button secondary onClick={() => navigateBackSequence()}>
+          Back
+        </Button>
+        <Button
+          link
+          onClick={() => {
+            formCancelToggleCancelSequence();
+          }}
+        >
+          Cancel
+        </Button>
+
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
           <FileUploadErrorModal

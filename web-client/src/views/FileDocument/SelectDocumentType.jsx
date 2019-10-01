@@ -29,29 +29,27 @@ export const SelectDocumentType = connect(
               <h1 id="file-a-document-header" tabIndex="-1">
                 What document are you filing?
               </h1>
-              <div className="blue-container">
+
+              <div className="blue-container margin-bottom-5">
                 <CompleteDocumentTypeSection />
               </div>
-
-              <div className="button-box-container margin-top-4">
-                <Button
-                  id="submit-document"
-                  type="submit"
-                  onClick={() => {
-                    completeDocumentSelectSequence();
-                  }}
-                >
-                  Continue
-                </Button>
-                <Button
-                  link
-                  onClick={() => {
-                    formCancelToggleCancelSequence();
-                  }}
-                >
-                  Cancel
-                </Button>
-              </div>
+              <Button
+                id="submit-document"
+                type="submit"
+                onClick={() => {
+                  completeDocumentSelectSequence();
+                }}
+              >
+                Continue
+              </Button>
+              <Button
+                link
+                onClick={() => {
+                  formCancelToggleCancelSequence();
+                }}
+              >
+                Cancel
+              </Button>
             </div>
 
             <NonMobile>
