@@ -34,8 +34,7 @@ export const SelectDocumentType = connect(
               </div>
 
               <div className="button-box-container margin-top-4">
-                <button
-                  className="usa-button margin-right-205 margin-bottom-1"
+                <Button
                   id="submit-document"
                   type="submit"
                   onClick={() => {
@@ -43,7 +42,7 @@ export const SelectDocumentType = connect(
                   }}
                 >
                   Continue
-                </button>
+                </Button>
                 <Button
                   link
                   onClick={() => {
@@ -88,13 +87,13 @@ export const SelectDocumentType = connect(
                   </Accordion>
                   <div className="content-wrapper margin-top-3">
                     <div>
-                      <button
-                        className="usa-button usa-button--outline"
+                      <Button
+                        secondary
                         id="view-all-documents"
                         onClick={() => gotoViewAllDocumentsSequence()}
                       >
                         View All Document Categories
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>

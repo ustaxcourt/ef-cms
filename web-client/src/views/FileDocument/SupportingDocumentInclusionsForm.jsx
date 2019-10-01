@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -35,27 +36,22 @@ export const SupportingDocumentInclusionsForm = connect(
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend id={`${type}-extra-items-legend`}>
               Select extra items included with document
-              <button
-                className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105 ustc-button--unstyled-with-left-icon"
+              <Button
+                link
+                className="margin-top-1"
                 onClick={() =>
                   openCleanModalSequence({
                     value: 'WhatCanIIncludeModalOverlay',
                   })
                 }
               >
-                <div className="grid-row">
-                  <div className="grid-col-1">
-                    <FontAwesomeIcon
-                      className="margin-right-05"
-                      icon="question-circle"
-                      size="1x"
-                    />
-                  </div>
-                  <div className="grid-col-11">
-                    What can I include with my document?
-                  </div>
-                </div>
-              </button>
+                <FontAwesomeIcon
+                  className="margin-right-05"
+                  icon="question-circle"
+                  size="1x"
+                />
+                What can I include with my document?
+              </Button>
             </legend>
             <div className="usa-checkbox">
               <input
