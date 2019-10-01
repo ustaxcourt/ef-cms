@@ -54,7 +54,7 @@ export const contactsHelper = get => {
           displayTitle: true,
           header:
             'Tell Us About Yourself as the Executor/Personal Representative/etc. For This Estate',
-          nameLabel: 'Name of Decedent',
+          nameLabel: 'Name of decedent',
           secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
         };
         break;
@@ -64,7 +64,7 @@ export const contactsHelper = get => {
           header: 'Tell Us About the Estate You Are Filing For',
           inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'Your Name',
-          nameLabel: 'Name of Decedent',
+          nameLabel: 'Name of decedent',
         };
         break;
       case PARTY_TYPES.guardian:
@@ -211,7 +211,7 @@ export const contactsHelper = get => {
           displayTitle: true,
           header:
             'Tell Us About the Executor/Personal Representative/etc. For This Estate',
-          nameLabel: 'Name of Decedent',
+          nameLabel: 'Name of decedent',
           secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
         };
         break;
@@ -220,7 +220,7 @@ export const contactsHelper = get => {
           displayInCareOf: true,
           header: 'Tell Us About the Estate You Are Filing For',
           inCareOfLabel: 'In care of',
-          nameLabel: 'Name of Decedent',
+          nameLabel: 'Name of decedent',
         };
         break;
       case PARTY_TYPES.guardian:

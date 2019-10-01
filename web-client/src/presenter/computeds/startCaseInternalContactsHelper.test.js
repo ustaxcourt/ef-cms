@@ -93,7 +93,7 @@ describe('startCaseInternalContactsHelper', () => {
         displaySecondaryName: true,
         displayTitle: true,
         header: 'Executor/Personal Representative/Etc.',
-        nameLabel: 'Name of Decedent',
+        nameLabel: 'Name of decedent',
         secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
       },
     });
@@ -114,7 +114,7 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displayInCareOf: true,
         header: 'Estate Information',
-        nameLabel: 'Name of Decedent',
+        nameLabel: 'Name of decedent',
       },
     });
   });
