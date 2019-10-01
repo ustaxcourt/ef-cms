@@ -20,10 +20,10 @@ export const Button = props => {
   const Element = (href && 'a') || 'button';
 
   const classes = classNames(
-    'usa-button margin-right-205 margin-bottom-205',
+    className,
+    'usa-button margin-right-205',
     secondary && 'usa-button--outline',
     link && 'usa-button--unstyled ustc-button--unstyled',
-    className,
   );
 
   return (
