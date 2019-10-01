@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
@@ -50,9 +51,8 @@ export const RequestAccessReview = connect(
           <PartiesRepresentingReadOnly />
         )}
 
-        <div className="button-box-container">
-          <button
-            className="usa-button"
+        <div className="margin-top-5">
+          <Button
             id="submit-document"
             type="submit"
             onClick={() => {
@@ -60,16 +60,16 @@ export const RequestAccessReview = connect(
             }}
           >
             Submit Your Filing
-          </button>
-          <button
-            className="usa-button usa-button--unstyled"
+          </Button>
+          <Button
+            link
             type="button"
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
 
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
