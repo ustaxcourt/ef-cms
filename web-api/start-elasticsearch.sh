@@ -20,6 +20,7 @@ fi
 if [ -f /.dockerenv ]; then
   useradd elasticsearch
   chown elasticsearch:elasticsearch -R .elasticsearch
+  chmod -R 0755 .elasticsearch
   su -c "JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 .elasticsearch/bin/elasticsearch" elasticsearch
 else
   .elasticsearch/bin/elasticsearch

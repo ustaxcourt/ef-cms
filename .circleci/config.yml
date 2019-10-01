@@ -87,9 +87,37 @@ jobs:
             -Dsonar.login="${SHARED_SONAR_TOKEN}" \
             -Dsonar.host.url="https://sonarcloud.io"
 
+  test-job:
+    docker:
+      - image: sutt0n/ef-cms:elasticsearch
+      - image: elasticsearch:7.3.2
+        environment:
+          - transport.host: localhost
+          - network.host: 127.0.0.1
+          - http.port: 9200
+          - discovery.type: single-node
+    environment:
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
+    resource_class: large
+    steps:
+      - checkout
+      - run:
+          name: Web Client - Test
+          command: |
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api > /dev/null &
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run test:client
+
   build-client:
     docker:
       - image: sutt0n/ef-cms:elasticsearch
+      - image: elasticsearch:7.3.2
+        environment:
+          - transport.host: localhost
+          - network.host: 127.0.0.1
+          - http.port: 9200
+          - discovery.type: single-node
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: large
