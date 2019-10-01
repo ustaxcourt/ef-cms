@@ -7,7 +7,6 @@ else
   ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.4.0-darwin-x86_64.tar.gz"
 fi
 
-ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.3.2-darwin-x86_64.tar.gz"
 ES_ARCH_RENAMED="elasticsearch.tar.gz"
 ES_DESTINATION=".elasticsearch/"
 
