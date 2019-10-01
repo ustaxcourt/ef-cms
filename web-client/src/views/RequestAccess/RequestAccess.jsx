@@ -117,6 +117,7 @@ export const RequestAccess = connect(
             Review Filing
           </button>
           <Button
+            link
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

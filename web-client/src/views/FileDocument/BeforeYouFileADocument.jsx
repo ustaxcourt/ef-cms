@@ -116,6 +116,7 @@ export const BeforeYouFileADocument = connect(
               OK, Iʼm Ready to File
             </a>
             <Button
+              link
               onClick={() => {
                 formCancelToggleCancelSequence();
               }}
