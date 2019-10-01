@@ -328,54 +328,6 @@ export const RequestAccessDocumentForm = connect(
                 </div>
               )}
 
-              {requestAccessHelper.documentWithAttachments && (
-                <div
-                  className={`usa-form-group ${
-                    validationErrors.attachments ? 'usa-form-group--error' : ''
-                  } ${
-                    !requestAccessHelper.documentWithObjections
-                      ? 'margin-bottom-0'
-                      : ''
-                  }`}
-                >
-                  <fieldset className="usa-fieldset margin-bottom-0">
-                    <legend id="attachments-legend">
-                      Does your filing include attachments?
-                    </legend>
-                    {['Yes', 'No'].map(option => (
-                      <div className="usa-radio usa-radio__inline" key={option}>
-                        <input
-                          aria-describedby="attachments-legend"
-                          checked={form.attachments === (option === 'Yes')}
-                          className="usa-radio__input"
-                          id={`attachments-${option}`}
-                          name="attachments"
-                          type="radio"
-                          value={option}
-                          onChange={e => {
-                            updateCaseAssociationFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value === 'Yes',
-                            });
-                            validateCaseAssociationRequestSequence();
-                          }}
-                        />
-                        <label
-                          className="usa-radio__label"
-                          htmlFor={`attachments-${option}`}
-                        >
-                          {option}
-                        </label>
-                      </div>
-                    ))}
-                  </fieldset>
-                  <Text
-                    bind="validationErrors.attachments"
-                    className="usa-error-message"
-                  />
-                </div>
-              )}
-
               {requestAccessHelper.documentWithObjections && (
                 <div
                   className={`usa-form-group ${
