@@ -55,7 +55,7 @@ describe('caseDetailEditContactsHelper', () => {
         displaySecondaryName: true,
         header: 'Custodian Information',
         nameLabel: 'Name of taxpayer',
-        secondaryNameLabel: 'Name of Custodian',
+        secondaryNameLabel: 'Name of custodian',
       },
     });
   });

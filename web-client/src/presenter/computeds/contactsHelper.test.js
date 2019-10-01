@@ -64,7 +64,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Custodian for This Taxpayer',
         nameLabel: 'Name of taxpayer',
-        secondaryNameLabel: 'Name of Custodian',
+        secondaryNameLabel: 'Name of custodian',
       },
     });
   });
@@ -490,7 +490,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header: 'Tell Us About the Custodian for This Taxpayer',
         nameLabel: 'Name of taxpayer',
-        secondaryNameLabel: 'Name of Custodian',
+        secondaryNameLabel: 'Name of custodian',
       },
     });
   });

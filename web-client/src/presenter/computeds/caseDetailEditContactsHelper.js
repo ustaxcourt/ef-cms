@@ -30,7 +30,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displaySecondaryName: true,
           header: 'Custodian Information',
           nameLabel: 'Name of taxpayer',
-          secondaryNameLabel: 'Name of Custodian',
+          secondaryNameLabel: 'Name of custodian',
         },
       };
       break;
