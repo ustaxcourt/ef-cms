@@ -1,6 +1,6 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { CaseSearchBox } from './CaseSearchBox';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MyContactInformation } from './MyContactInformation';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -46,16 +46,17 @@ export const CaseListPractitioner = connect(
     const renderTitle = () => <h2>My Cases</h2>;
 
     const renderStartButton = () => (
-      <a
+      <Button
         className={
-          'usa-button tablet-full-width margin-right-0 ' +
+          'tablet-full-width margin-right-0 ' +
           (dashboardExternalHelper.showCaseList ? 'new-case' : '')
         }
         href="/file-a-petition/step-1"
+        icon="file"
         id="init-file-petition"
       >
-        <FontAwesomeIcon icon="file" size="1x" /> File a Petition
-      </a>
+        File a Petition
+      </Button>
     );
 
     const renderEmptyState = () => (
