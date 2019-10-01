@@ -1,4 +1,5 @@
 import { AddressDisplay } from '../CaseDetail/PartyInformation';
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDifferenceModalOverlay } from './CaseDifferenceModalOverlay';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
@@ -34,9 +35,9 @@ export const StartCaseStep5 = connect(
     return (
       <>
         <Focus>
-          <h1 className="heading-1" id="file-a-document-header" tabIndex="-1">
+          <h2 id="file-a-document-header" tabIndex="-1">
             5. Review Your Petition
-          </h1>
+          </h2>
         </Focus>
 
         <p>
@@ -272,15 +273,13 @@ export const StartCaseStep5 = connect(
           >
             Back
           </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
+          <Button
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
         {showModal === 'CaseDifferenceModalOverlay' && (
           <CaseDifferenceModalOverlay />

@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesFiling } from './PartiesFiling';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
@@ -72,15 +73,13 @@ export const FileDocument = connect(
           >
             Back
           </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
+          <Button
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
 
         {showModal === 'WhatCanIIncludeModalOverlay' && (

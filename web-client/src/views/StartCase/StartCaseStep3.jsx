@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { Contacts } from './Contacts';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -37,11 +38,11 @@ export const StartCaseStep3 = connect(
     return (
       <>
         <Focus>
-          <h1 className="focusable margin-top-5" tabIndex="-1">
+          <h2 className="focusable" tabIndex="-1">
             3. Who are you filing this petition for?
-          </h1>
+          </h2>
         </Focus>
-        <p className="required-statement margin-top-05 margin-bottom-2">
+        <p className="required-statement margin-top-05 margin-bottom-4">
           *All fields required unless otherwise noted
         </p>
         <div className="blue-container grid-container padding-x-0">
@@ -425,15 +426,13 @@ export const StartCaseStep3 = connect(
           >
             Back
           </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
+          <Button
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
       </>
     );

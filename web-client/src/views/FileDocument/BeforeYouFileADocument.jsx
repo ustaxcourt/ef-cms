@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
@@ -114,15 +115,13 @@ export const BeforeYouFileADocument = connect(
             >
               OK, Iʼm Ready to File
             </a>
-            <button
-              className="usa-button usa-button--unstyled ustc-button--unstyled"
-              id="cancel-button"
+            <Button
               onClick={() => {
                 formCancelToggleCancelSequence();
               }}
             >
               Cancel
-            </button>
+            </Button>
             {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
             )}
