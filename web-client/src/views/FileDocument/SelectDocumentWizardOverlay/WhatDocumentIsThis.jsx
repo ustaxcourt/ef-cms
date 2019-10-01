@@ -1,3 +1,4 @@
+import { Button } from '../../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
@@ -25,14 +26,15 @@ export const WhatDocumentIsThis = connect(
       <React.Fragment>
         <div className="overlay-blue-header">
           <div className="grid-container">
-            <button
+            <Button
+              link
               aria-roledescription="button to return to document selection"
-              className="heading-3 usa-button usa-button--unstyled"
+              className="heading-3 text-left"
               onClick={() => clearModalSequence()}
             >
               <FontAwesomeIcon icon="caret-left" />
               What document are you filing?
-            </button>
+            </Button>
           </div>
         </div>
         <div className="grid-container">
@@ -73,8 +75,9 @@ export const WhatDocumentIsThis = connect(
                       className="category-view grid-container padding-bottom-1 padding-top-1"
                       key={`${reasonIndex}-${categoryIndex}`}
                     >
-                      <button
-                        className="usa-button usa-button--unstyled "
+                      <Button
+                        link
+                        className="text-left"
                         onClick={() => {
                           updateModalValueSequence({
                             key: 'category',
@@ -94,7 +97,7 @@ export const WhatDocumentIsThis = connect(
                         }}
                       >
                         {category}
-                      </button>
+                      </Button>
                     </div>
                   );
                 })}
@@ -104,9 +107,8 @@ export const WhatDocumentIsThis = connect(
         })}
 
         <div className="grid-container margin-bottom-2">
-          <div className="button-box-container">
-            <button
-              className="usa-button"
+          <div className="margin-top-5">
+            <Button
               id="view-all-documents"
               onClick={() =>
                 chooseModalWizardStepSequence({
@@ -115,7 +117,7 @@ export const WhatDocumentIsThis = connect(
               }
             >
               View All Document Categories
-            </button>
+            </Button>
           </div>
         </div>
       </React.Fragment>
