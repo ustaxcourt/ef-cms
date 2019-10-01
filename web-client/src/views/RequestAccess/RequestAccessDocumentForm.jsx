@@ -299,7 +299,7 @@ export const RequestAccessDocumentForm = connect(
                 >
                   <fieldset className="usa-fieldset margin-bottom-0">
                     <legend id="attachments-legend">
-                      Does Your Filing Include Attachments?
+                      Does your filing include attachments?
                     </legend>
                     {['Yes', 'No'].map(option => (
                       <div className="usa-radio usa-radio__inline" key={option}>
