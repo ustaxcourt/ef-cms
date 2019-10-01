@@ -12,6 +12,7 @@ export const RequestAccessDocumentForm = connect(
     constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
+    openCleanModalSequence: sequences.openCleanModalSequence,
     requestAccessHelper: state.requestAccessHelper,
     updateCaseAssociationFormValueSequence:
       sequences.updateCaseAssociationFormValueSequence,
@@ -23,6 +24,7 @@ export const RequestAccessDocumentForm = connect(
     constants,
     fileDocumentHelper,
     form,
+    openCleanModalSequence,
     requestAccessHelper,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
@@ -56,7 +58,7 @@ export const RequestAccessDocumentForm = connect(
                   htmlFor="primary-document"
                   id="primary-document-label"
                 >
-                  Upload your document{' '}
+                  Upload your document
                   <span className="success-message padding-left-1">
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
@@ -77,6 +79,56 @@ export const RequestAccessDocumentForm = connect(
                   className="usa-error-message"
                 />
               </div>
+              <div className="usa-form-group">
+                <legend id="primaryDocument-extra-items-legend">
+                  Select extra items to include with your document
+                  <button
+                    className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105 ustc-button--unstyled-with-left-icon"
+                    onClick={() =>
+                      openCleanModalSequence({
+                        value: 'WhatCanIIncludeModalOverlay',
+                      })
+                    }
+                  >
+                    <div className="grid-row">
+                      <div className="grid-col-1">
+                        <FontAwesomeIcon
+                          className="margin-right-05"
+                          icon="question-circle"
+                          size="1x"
+                        />
+                      </div>
+                      <div className="grid-col-11">
+                        What can I include with my document?
+                      </div>
+                    </div>
+                  </button>
+                </legend>
+
+                <div className="usa-checkbox">
+                  <input
+                    checked={form.attachments || false}
+                    className="usa-checkbox__input"
+                    id="primaryDocument-attachments"
+                    name="attachments"
+                    type="checkbox"
+                    onChange={e => {
+                      updateCaseAssociationFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                      validateCaseAssociationRequestSequence();
+                    }}
+                  />
+                  <label
+                    className="usa-checkbox__label"
+                    htmlFor="primaryDocument-attachments"
+                  >
+                    Attachment(s)
+                  </label>
+                </div>
+              </div>
+
               <div
                 className={`usa-form-group ${
                   validationErrors.certificateOfService
@@ -91,36 +143,28 @@ export const RequestAccessDocumentForm = connect(
                 }`}
               >
                 <fieldset className="usa-fieldset margin-bottom-0">
-                  <legend>
-                    Does your filing include a Certificate of Service?
-                  </legend>
-                  {['Yes', 'No'].map(option => (
-                    <div className="usa-radio usa-radio__inline" key={option}>
-                      <input
-                        checked={
-                          form.certificateOfService === (option === 'Yes')
-                        }
-                        className="usa-radio__input"
-                        id={`certificate-${option}`}
-                        name="certificateOfService"
-                        type="radio"
-                        value={option}
-                        onChange={e => {
-                          updateCaseAssociationFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value === 'Yes',
-                          });
-                          validateCaseAssociationRequestSequence();
-                        }}
-                      />
-                      <label
-                        className="usa-radio__label"
-                        htmlFor={`certificate-${option}`}
-                      >
-                        {option}
-                      </label>
-                    </div>
-                  ))}
+                  <div className="usa-checkbox">
+                    <input
+                      checked={form.certificateOfService || false}
+                      className="usa-checkbox__input"
+                      id="primaryDocument-certificateOfService"
+                      name="certificateOfService"
+                      type="checkbox"
+                      onChange={e => {
+                        updateCaseAssociationFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateCaseAssociationRequestSequence();
+                      }}
+                    />
+                    <label
+                      className="usa-checkbox__label"
+                      htmlFor="primaryDocument-certificateOfService"
+                    >
+                      Certificate Of Service
+                    </label>
+                  </div>
                 </fieldset>
                 <Text
                   bind="validationErrors.certificateOfService"
@@ -162,7 +206,7 @@ export const RequestAccessDocumentForm = connect(
                           min="1"
                           name="certificateOfServiceMonth"
                           type="number"
-                          value={form.certificateOfServiceMonth}
+                          value={form.certificateOfServiceMonth || ''}
                           onBlur={() => {
                             validateCaseAssociationRequestSequence();
                           }}
@@ -191,7 +235,7 @@ export const RequestAccessDocumentForm = connect(
                           min="1"
                           name="certificateOfServiceDay"
                           type="number"
-                          value={form.certificateOfServiceDay}
+                          value={form.certificateOfServiceDay || ''}
                           onBlur={() => {
                             validateCaseAssociationRequestSequence();
                           }}
@@ -220,7 +264,7 @@ export const RequestAccessDocumentForm = connect(
                           min="1900"
                           name="certificateOfServiceYear"
                           type="number"
-                          value={form.certificateOfServiceYear}
+                          value={form.certificateOfServiceYear || ''}
                           onBlur={() => {
                             validateCaseAssociationRequestSequence();
                           }}
@@ -248,7 +292,7 @@ export const RequestAccessDocumentForm = connect(
                 >
                   <fieldset className="usa-fieldset">
                     <legend id="exhibits-legend">
-                      Does Your Filing Include Exhibits?
+                      Does your filing include exhibits?
                     </legend>
                     {['Yes', 'No'].map(option => (
                       <div className="usa-radio usa-radio__inline" key={option}>
