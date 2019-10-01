@@ -393,54 +393,54 @@ workflows:
       # - e2e-cypress:
       #     requires:
       #       - bundle
-      - deploy-ui:
-          requires:
-            - build-shared
-            - build-api
-            - build-client
-            - e2e-pa11y
-            - e2e-cypress
-          filters:
-            branches:
-              only:
-                - staging
-                - master
-                - experimental
-      - deploy-api-east:
-          requires:
-            - build-shared
-            - build-api
-            - build-client
-            - e2e-pa11y
-            - e2e-cypress
-          filters:
-            branches:
-              only:
-                - staging
-                - master
-                - experimental
-      - deploy-api-west:
-          requires:
-            - build-shared
-            - build-api
-            - build-client
-            - e2e-pa11y
-            - e2e-cypress
-          filters:
-            branches:
-              only:
-                - staging
-                - master
-                - experimental
-      - post-deploy:
-          requires:
-            - deploy-ui
-            - deploy-api-west
-            - deploy-api-east
-          filters:
-            branches:
-              only:
-                - develop
-                - staging
-                - master
-                - experimental
+      # - deploy-ui:
+      #     requires:
+      #       - build-shared
+      #       - build-api
+      #       - build-client
+      #       - e2e-pa11y
+      #       - e2e-cypress
+      #     filters:
+      #       branches:
+      #         only:
+      #           - staging
+      #           - master
+      #           - experimental
+      # - deploy-api-east:
+      #     requires:
+      #       - build-shared
+      #       - build-api
+      #       - build-client
+      #       - e2e-pa11y
+      #       - e2e-cypress
+      #     filters:
+      #       branches:
+      #         only:
+      #           - staging
+      #           - master
+      #           - experimental
+      # - deploy-api-west:
+      #     requires:
+      #       - build-shared
+      #       - build-api
+      #       - build-client
+      #       - e2e-pa11y
+      #       - e2e-cypress
+      #     filters:
+      #       branches:
+      #         only:
+      #           - staging
+      #           - master
+      #           - experimental
+      # - post-deploy:
+      #     requires:
+      #       - deploy-ui
+      #       - deploy-api-west
+      #       - deploy-api-east
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
+      #           - staging
+      #           - master
+      #           - experimental
