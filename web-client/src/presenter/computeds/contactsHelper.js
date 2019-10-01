@@ -39,7 +39,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Custodian for This Taxpayer',
           nameLabel: 'Name of taxpayer',
-          secondaryNameLabel: 'Name of Custodian',
+          secondaryNameLabel: 'Name of custodian',
         };
         break;
       case PARTY_TYPES.donor:
@@ -196,7 +196,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About the Custodian for This Taxpayer',
           nameLabel: 'Name of taxpayer',
-          secondaryNameLabel: 'Name of Custodian',
+          secondaryNameLabel: 'Name of custodian',
         };
         break;
       case PARTY_TYPES.donor:
