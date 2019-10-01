@@ -127,8 +127,10 @@ jobs:
       - run:
           name: Web Client - Test
           command: |
+            pwd &&
+            ls &&
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api &
-            ./wait-until.sh http://localhost:3000/api/swagger
+            /home/app/wait-until.sh http://localhost:3000/api/swagger
             sleep 5
             npm run test:client
       - run:
