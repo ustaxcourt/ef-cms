@@ -113,7 +113,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Tax Matters Partner',
-          nameLabel: 'Partnership Name',
+          nameLabel: 'Partnership name',
           secondaryNameLabel: 'Tax Matters Partner name',
         };
         break;
