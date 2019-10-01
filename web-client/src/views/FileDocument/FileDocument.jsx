@@ -55,9 +55,8 @@ export const FileDocument = connect(
 
         <PartiesFiling />
 
-        <div className="button-box-container margin-top-4">
-          <button
-            className="usa-button margin-right-205 margin-bottom-1"
+        <div className="margin-top-4">
+          <Button
             id="submit-document"
             type="submit"
             onClick={() => {
@@ -65,14 +64,10 @@ export const FileDocument = connect(
             }}
           >
             Review Filing
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
+          </Button>
+          <Button secondary onClick={() => navigateBackSequence()}>
             Back
-          </button>
+          </Button>
           <Button
             link
             onClick={() => {
