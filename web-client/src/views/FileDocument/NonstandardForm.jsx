@@ -161,7 +161,7 @@ export const NonstandardForm = connect(
             }
           >
             <fieldset className="usa-fieldset margin-bottom-0">
-              <legend id="date-of-service-legend">Service Date</legend>
+              <legend id="date-of-service-legend">Service date</legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month margin-bottom-0">
                   <label
