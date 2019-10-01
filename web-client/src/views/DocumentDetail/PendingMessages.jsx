@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Select } from '../../ustc-ui/Select/Select';
 import { TextArea } from '../../ustc-ui/TextArea/TextArea';
@@ -229,7 +230,7 @@ export const PendingMessages = connect(
                         Add message <span className="usa-hint">(optional)</span>
                       </label>
                       <textarea
-                        className="usa-textarea"
+                        className="usa-textarea margin-bottom-5"
                         id={`complete-message-${idx}`}
                         name="completeMessage"
                         onChange={e => {
@@ -240,11 +241,8 @@ export const PendingMessages = connect(
                           });
                         }}
                       />
-                      <div className="button-box-container">
-                        <button className="usa-button" type="submit">
-                          <span>Complete</span>
-                        </button>
-                      </div>
+
+                      <Button type="submit">Complete</Button>
                     </form>
                   </div>
                 )}
@@ -404,6 +402,7 @@ export const PendingMessages = connect(
 
                       <TextArea
                         aria-labelledby={`message-label-${idx}`}
+                        className="margin-bottom-5"
                         error={
                           validationErrors[workItem.workItemId] &&
                           validationErrors[workItem.workItemId].forwardMessage
@@ -422,12 +421,7 @@ export const PendingMessages = connect(
                           });
                         }}
                       />
-
-                      <div className="button-box-container">
-                        <button className="usa-button" type="submit">
-                          Send
-                        </button>
-                      </div>
+                      <Button type="submit">Send</Button>
                     </form>
                   </div>
                 )}

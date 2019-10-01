@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -65,12 +66,9 @@ export const SearchResults = connect(
           </>
         )}
         {advancedSearchHelper.showLoadMore && (
-          <button
-            className="usa-button usa-button--outline"
-            onClick={() => showMoreResultsSequence()}
-          >
+          <Button secondary onClick={() => showMoreResultsSequence()}>
             Load {pageSize} More
-          </button>
+          </Button>
         )}
         {advancedSearchHelper.showNoMatches && (
           <>
