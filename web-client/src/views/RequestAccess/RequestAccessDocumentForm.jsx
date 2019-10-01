@@ -31,17 +31,14 @@ export const RequestAccessDocumentForm = connect(
     return (
       <React.Fragment>
         <h2 className="margin-top-4">Tell Us About This Document</h2>
+        <Hint>
+          Remember to remove or redact all personal information (such as Social
+          Security Numbers, Taxpayer Identification Numbers, or Employer
+          Identification Numbers) from your documents.
+        </Hint>
         <div className="blue-container">
           <div className="grid-container padding-x-0">
-            <div className="tablet:grid-col-7 push-right">
-              <Hint>
-                Remember to remove or redact all personal information (such as
-                Social Security Numbers, Taxpayer Identification Numbers, or
-                Employer Identification Numbers) from your documents.
-              </Hint>
-            </div>
-
-            <div className="tablet:grid-col-5">
+            <div className="tablet:grid-col-12">
               <div
                 className={`usa-form-group ${
                   validationErrors.primaryDocumentFile
