@@ -5,8 +5,8 @@ pkill -f DynamoDBLocal
 echo "starting dynamo"
 ./web-api/start-dynamo.sh &
 DYNAMO_PID=$!
+./wait-until.sh http://localhost:8000/shell
 
-echo "starting elasticsearch"
 ./web-api/start-elasticsearch.sh &
 ESEARCH_PID=$!
 ./wait-until.sh http://localhost:9200/ 200

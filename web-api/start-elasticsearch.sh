@@ -1,7 +1,12 @@
 #!/bin/bash
 
 # download the elasticsearch archive if needed
-ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.3.2-darwin-x86_64.tar.gz"
+if [ -f /.dockerenv ]; then
+  ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.4.0-linux-x86_64.tar.gz"
+else 
+  ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.4.0-darwin-x86_64.tar.gz"
+fi
+
 ES_DESTINATION=".elasticsearch"
 
 if [ ! -f "./.elasticsearch/bin/elasticsearch" ]; then
@@ -11,4 +16,10 @@ if [ ! -f "./.elasticsearch/bin/elasticsearch" ]; then
 fi
 
 # start elasticsearch
-cd .elasticsearch && ./bin/elasticsearch
+if [ -f /.dockerenv ]; then
+  useradd elasticsearch
+  chown elasticsearch:elasticsearch -R /home/app/.elasticsearch
+  su -c /home/app/.elasticsearch/bin/elasticsearch elasticsearch
+else
+  ./.elasticsearch/bin/elasticsearch
+fi
