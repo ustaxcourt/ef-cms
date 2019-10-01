@@ -1,16 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
+import { SupportingDocuments } from '../FileDocument/SupportingDocuments';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const RequestAccessDocumentForm = connect(
   {
     constants: state.constants,
-    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     openCleanModalSequence: sequences.openCleanModalSequence,
     requestAccessHelper: state.requestAccessHelper,
@@ -22,7 +21,6 @@ export const RequestAccessDocumentForm = connect(
   },
   ({
     constants,
-    fileDocumentHelper,
     form,
     openCleanModalSequence,
     requestAccessHelper,
@@ -375,211 +373,18 @@ export const RequestAccessDocumentForm = connect(
                   />
                 </div>
               )}
-
-              {requestAccessHelper.documentWithSupportingDocuments && (
-                <div
-                  className={classNames(
-                    'usa-form-group',
-                    validationErrors.hasSupportingDocuments &&
-                      'usa-form-group--error',
-                    !form.hasSupportingDocuments && 'margin-bottom-0',
-                  )}
-                >
-                  <fieldset
-                    className={classNames(
-                      'usa-fieldset',
-                      !form.hasSupportingDocuments && 'margin-bottom-0',
-                    )}
-                  >
-                    <legend id="support-docs-legend">
-                      Do you have any supporting documents for this filing?
-                    </legend>
-                    {['Yes', 'No'].map(option => (
-                      <div className="usa-radio usa-radio__inline" key={option}>
-                        <input
-                          aria-describedby="support-docs-legend"
-                          checked={
-                            form.hasSupportingDocuments === (option === 'Yes')
-                          }
-                          className="usa-radio__input"
-                          id={`supporting-documents-${option}`}
-                          name="hasSupportingDocuments"
-                          type="radio"
-                          value={option}
-                          onChange={e => {
-                            updateCaseAssociationFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value === 'Yes',
-                            });
-                            validateCaseAssociationRequestSequence();
-                          }}
-                        />
-                        <label
-                          className="usa-radio__label"
-                          htmlFor={`supporting-documents-${option}`}
-                        >
-                          {option}
-                        </label>
-                      </div>
-                    ))}
-                  </fieldset>
-                  <Text
-                    bind="validationErrors.hasSupportingDocuments"
-                    className="usa-error-message"
-                  />
-                </div>
-              )}
-
-              {form.hasSupportingDocuments && (
-                <div
-                  className={classNames(
-                    'usa-form-group',
-                    validationErrors.supportingDocument &&
-                      'usa-form-group--error',
-                    !form.supportingDocument && 'margin-bottom-0',
-                  )}
-                >
-                  <label
-                    className="usa-label"
-                    htmlFor="supporting-document"
-                    id="supporting-document-label"
-                  >
-                    Select supporting document
-                  </label>
-                  <select
-                    aria-describedby="supporting-document-label"
-                    className={`usa-select ${
-                      validationErrors.supportingDocument
-                        ? 'usa-select--error'
-                        : ''
-                    }`}
-                    id="supporting-document"
-                    name="supportingDocument"
-                    value={form.supportingDocument || ''}
-                    onChange={e => {
-                      updateCaseAssociationFormValueSequence({
-                        key: 'supportingDocumentMetadata.category',
-                        value: 'Supporting Document',
-                      });
-                      updateCaseAssociationFormValueSequence({
-                        key: 'supportingDocumentMetadata.documentType',
-                        value: e.target.value,
-                      });
-                      updateCaseAssociationFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateCaseAssociationRequestSequence();
-                    }}
-                  >
-                    <option value="">- Select -</option>
-                    {fileDocumentHelper.supportingDocumentTypeList.map(
-                      entry => {
-                        return (
-                          <option
-                            key={entry.documentType}
-                            value={entry.documentType}
-                          >
-                            {entry.documentTypeDisplay}
-                          </option>
-                        );
-                      },
-                    )}
-                  </select>
-                  <Text
-                    bind="validationErrors.supportingDocument"
-                    className="usa-error-message"
-                  />
-                </div>
-              )}
-
-              {fileDocumentHelper.showSupportingDocumentFreeText && (
-                <div
-                  className={`usa-form-group ${
-                    validationErrors.supportingDocumentFreeText
-                      ? 'usa-form-group--error'
-                      : ''
-                  }`}
-                >
-                  <label
-                    className="usa-label"
-                    htmlFor="supporting-document-free-text"
-                    id="supporting-document-free-text-label"
-                  >
-                    Supporting Document Signed By
-                  </label>
-                  <input
-                    aria-describedby="supporting-document-free-text-label"
-                    autoCapitalize="none"
-                    className="usa-input"
-                    id="supporting-document-free-text"
-                    name="supportingDocumentFreeText"
-                    type="text"
-                    value={form.supportingDocumentFreeText || ''}
-                    onBlur={() => {
-                      validateCaseAssociationRequestSequence();
-                    }}
-                    onChange={e => {
-                      updateCaseAssociationFormValueSequence({
-                        key: 'supportingDocumentMetadata.freeText',
-                        value: e.target.value,
-                      });
-                      updateCaseAssociationFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                  <Text
-                    bind="validationErrors.supportingDocumentFreeText"
-                    className="usa-error-message"
-                  />
-                </div>
-              )}
-
-              {fileDocumentHelper.showSupportingDocumentUpload && (
-                <div
-                  className={`usa-form-group margin-bottom-0 ${
-                    validationErrors.supportingDocumentFile
-                      ? 'usa-form-group--error'
-                      : ''
-                  }`}
-                >
-                  <label
-                    className={
-                      'usa-label ustc-upload with-hint ' +
-                      (fileDocumentHelper.showSupportingDocumentValid
-                        ? 'validated'
-                        : '')
-                    }
-                    htmlFor="supporting-document-file"
-                    id="supporting-document-file-label"
-                  >
-                    Upload Your Supporting Document{' '}
-                    <span className="success-message">
-                      <FontAwesomeIcon icon="check-circle" size="sm" />
-                    </span>
-                  </label>
-                  <span className="usa-hint">
-                    File must be in PDF format (.pdf). Max file size{' '}
-                    {constants.MAX_FILE_SIZE_MB}MB.
-                  </span>
-                  <StateDrivenFileInput
-                    aria-describedby="supporting-document-file-label"
-                    id="supporting-document-file"
-                    name="supportingDocumentFile"
-                    updateFormValueSequence="updateCaseAssociationFormValueSequence"
-                    validationSequence="validateCaseAssociationRequestSequence"
-                  />
-                  <Text
-                    bind="validationErrors.supportingDocumentFile"
-                    className="usa-error-message"
-                  />
-                </div>
-              )}
             </div>
           </div>
         </div>
+        {requestAccessHelper.documentWithSupportingDocuments && (
+          <div>
+            <SupportingDocuments />
+            <Text
+              bind="validationErrors.hasSupportingDocuments"
+              className="usa-error-message"
+            />
+          </div>
+        )}
       </React.Fragment>
     );
   },

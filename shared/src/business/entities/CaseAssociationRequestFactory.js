@@ -7,6 +7,9 @@ const {
   MAX_FILE_SIZE_MB,
 } = require('../../persistence/s3/getUploadPolicy');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
+const {
+  SupportingDocumentInformationFactory,
+} = require('./externalDocument/SupportingDocumentInformationFactory');
 
 CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments.',
@@ -37,7 +40,7 @@ CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
       contains: 'must be less than or equal to',
       message: `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
     },
-    'Your Secondary Document file size is empty.',
+    'Your Supporting Document file size is empty.',
   ],
   supportingDocumentFreeText: 'Please provide a value.',
 };
@@ -69,7 +72,17 @@ function CaseAssociationRequestFactory(rawProps) {
     this.supportingDocument = rawPropsParam.supportingDocument;
     this.supportingDocumentFile = rawPropsParam.supportingDocumentFile;
     this.supportingDocumentFreeText = rawPropsParam.supportingDocumentFreeText;
+    this.supportingDocuments = rawProps.supportingDocuments;
   };
+
+  if (this.supportingDocuments) {
+    this.supportingDocuments = this.supportingDocuments.map(item => {
+      return SupportingDocumentInformationFactory.get(
+        item,
+        CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES,
+      );
+    });
+  }
 
   const documentWithExhibits = [
     'Motion to Substitute Parties and Change Caption',
@@ -181,6 +194,7 @@ function CaseAssociationRequestFactory(rawProps) {
       .integer()
       .required(),
     supportingDocumentFreeText: joi.string().required(),
+    supportingDocuments: joi.array().optional(),
   };
 
   let customValidate;
