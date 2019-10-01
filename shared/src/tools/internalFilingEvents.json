@@ -1194,7 +1194,7 @@
       "eventCode": "M052",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket Numbers (separate with a comma)",
+      "labelFreeText": "Docket numbers (separate with a comma)",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -1359,7 +1359,7 @@
       "eventCode": "M067",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket Numbers to Be Consolidated (separate with a comma)",
+      "labelFreeText": "Docket numbers to be consolidated (separate with a comma)",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -3667,7 +3667,7 @@
       "eventCode": "STBB",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket Number",
+      "labelFreeText": "Docket number",
       "labelFreeText2": "",
       "ordinalField": ""
     },
