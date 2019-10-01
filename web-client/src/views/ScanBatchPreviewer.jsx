@@ -265,7 +265,7 @@ export const ScanBatchPreviewer = connect(
     const renderScan = () => {
       return (
         <>
-          <h5 className="header-scanned-batches">Scanned Batches</h5>
+          <h5 className="header-scanned-batches">Scanned batches</h5>
           <div className="batches-table-wrapper" ref={batchWrapperRef}>
             {scanBatchPreviewerHelper.batches.length > 0 ? (
               <table className="batches-table">
@@ -371,7 +371,7 @@ export const ScanBatchPreviewer = connect(
               htmlFor={`${documentType}-file`}
               id={`${documentType}-label`}
             >
-              Upload Your File{' '}
+              Upload your file{' '}
               <span className="success-message">
                 <FontAwesomeIcon icon="check-circle" size="1x" />
               </span>

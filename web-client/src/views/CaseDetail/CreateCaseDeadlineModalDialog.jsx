@@ -26,7 +26,7 @@ class CreateCaseDeadlineModalDialogComponent extends ModalDialog {
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="deadline-date-legend">
-              Due Date
+              Due date
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month margin-bottom-0">
