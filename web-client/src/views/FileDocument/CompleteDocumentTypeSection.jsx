@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile } from '../../ustc-ui/Responsive/Responsive';
@@ -86,19 +87,14 @@ export const CompleteDocumentTypeSection = connect(
             }}
           />
           <Mobile>
-            <button
-              className="usa-button usa-button--unstyled margin-top-2"
+            <Button
+              link
+              className="margin-top-1"
               onClick={() => openSelectDocumentWizardOverlaySequence()}
             >
-              <div className="grid-row">
-                <div className="grid-col-1">
-                  <FontAwesomeIcon icon="question-circle" size="sm" />
-                </div>
-                <div className="grid-col-11">
-                  Need help selecting a document?
-                </div>
-              </div>
-            </button>
+              <FontAwesomeIcon icon="question-circle" size="sm" />
+              Need help selecting a document?
+            </Button>
           </Mobile>
           <Text
             bind="validationErrors.documentType"
