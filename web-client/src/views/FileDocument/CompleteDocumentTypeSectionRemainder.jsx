@@ -107,7 +107,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
               <Mobile>
                 <Button
                   link
-                  className="margin-top-2"
+                  className="margin-top-1"
                   onClick={() =>
                     openSelectDocumentWizardOverlaySequence({
                       forSecondary: true,
