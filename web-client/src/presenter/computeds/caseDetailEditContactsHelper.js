@@ -30,7 +30,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displaySecondaryName: true,
           header: 'Custodian Information',
           nameLabel: 'Name of taxpayer',
-          secondaryNameLabel: 'Name of Custodian',
+          secondaryNameLabel: 'Name of custodian',
         },
       };
       break;
@@ -48,7 +48,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displaySecondaryName: true,
           displayTitle: true,
           header: 'Executor/Personal Representative/Etc.',
-          nameLabel: 'Name of Decedent',
+          nameLabel: 'Name of decedent',
           secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
           titleHint: 'optional',
         },
@@ -61,7 +61,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           header: 'Estate Information',
           inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'optional',
-          nameLabel: 'Name of Decedent',
+          nameLabel: 'Name of decedent',
         },
       };
       break;

@@ -114,7 +114,7 @@ export const SupportingDocumentInclusionsForm = connect(
           >
             <fieldset className="service-date usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id={`${type}-service-date-legend`}>
-                Service Date
+                Service date
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month">
