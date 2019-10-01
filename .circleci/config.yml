@@ -2,7 +2,7 @@ version: 2
 jobs:
   bundle:
     docker:
-      - image: sutt0n/ef-cms:elasticsearch
+      - image: sutt0n/ef-cms:latest
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -37,7 +37,7 @@ jobs:
 
   build-api:
     docker:
-      - image: sutt0n/ef-cms:elasticsearch
+      - image: sutt0n/ef-cms:latest
     steps:
       - attach_workspace:
           at: ~/
@@ -67,7 +67,7 @@ jobs:
 
   build-shared:
     docker:
-      - image: sutt0n/ef-cms:elasticsearch
+      - image: sutt0n/ef-cms:latest
     steps:
       - attach_workspace:
           at: ~/
@@ -89,7 +89,7 @@ jobs:
 
   # test-job:
   #   docker:
-  #     - image: sutt0n/ef-cms:elasticsearch
+  #     - image: sutt0n/ef-cms:latest
   #     # - image: elasticsearch:7.3.2
   #     #   environment:
   #     #     - transport.host: localhost
@@ -111,7 +111,7 @@ jobs:
 
   build-client:
     docker:
-      - image: sutt0n/ef-cms:elasticsearch
+      - image: sutt0n/ef-cms:latest
       # - image: elasticsearch:7.3.2
       #   environment:
       #     - transport.host: localhost
@@ -146,7 +146,7 @@ jobs:
 
   e2e-pa11y:
     docker:
-      - image: sutt0n/ef-cms:elasticsearch
+      - image: sutt0n/ef-cms:latest
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: large
@@ -163,7 +163,7 @@ jobs:
 
   e2e-cypress:
     docker:
-      - image: sutt0n/ef-cms:elasticsearch
+      - image: sutt0n/ef-cms:latest
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: large

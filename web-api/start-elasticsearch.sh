@@ -21,13 +21,11 @@ fi
 
 # start elasticsearch
 if [ -f /.dockerenv ]; then
-  echo "we are here"
   useradd elasticsearch
   chown elasticsearch:elasticsearch -R .elasticsearch
   chmod -R 0755 .elasticsearch
   echo "starting elastic search"
-  ls /usr/lib/jvm/java-8-openjdk-amd64
-  su -c "pwd && ls && JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 .elasticsearch/bin/elasticsearch" elasticsearch
+  su -c "pwd && ls -la && ls -la .elasticsearch && JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 .elasticsearch/bin/elasticsearch" elasticsearch
 else
   .elasticsearch/bin/elasticsearch
 fi
