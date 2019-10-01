@@ -31,7 +31,7 @@ export const AddEditSessionNoteModal = connect(
           )}
         >
           <label className="usa-label" htmlFor="case-notes">
-            {'Judge’s notes'}
+            Judge’s notes
           </label>
           <BindedTextarea
             ariaLabel="notes"
