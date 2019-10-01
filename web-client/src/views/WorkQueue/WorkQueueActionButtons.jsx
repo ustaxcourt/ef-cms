@@ -1,4 +1,3 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
 import { connect } from '@cerebral/react';
@@ -15,14 +14,21 @@ export const WorkQueueActionButtons = connect(
       <React.Fragment>
         {workQueueHelper.showStartCaseButton && (
           <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
-            <Button href="/file-a-petition/step-1" id="init-file-petition">
+            <a
+              className="usa-button"
+              href="/file-a-petition/step-1"
+              id="init-file-petition"
+            >
               <FontAwesomeIcon icon="plus-circle" size="1x" />
               Create a Case
-            </Button>
+            </a>
             <If bind="workQueueHelper.showRunBatchIRSProcessButton">
-              <Button secondary onClick={() => runBatchProcessSequence()}>
+              <button
+                className="usa-button usa-button--outline margin-left-1"
+                onClick={() => runBatchProcessSequence()}
+              >
                 Run IRS Batch Process
-              </Button>
+              </button>
             </If>
           </div>
         )}
