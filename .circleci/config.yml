@@ -44,7 +44,6 @@ jobs:
       - run:
           name: Lint
           command: |
-            ls -la
             npm run lint
       - run:
           name: Shellcheck
