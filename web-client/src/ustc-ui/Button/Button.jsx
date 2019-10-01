@@ -17,7 +17,7 @@ export const Button = props => {
 
   remainingProps.type = type || 'button';
 
-  const Element = (href && 'a') || 'button';
+  const Element = href ? 'a' : 'button';
 
   const classes = classNames(
     className,
