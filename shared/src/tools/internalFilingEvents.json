@@ -3747,7 +3747,7 @@
       "category": "Supporting Document",
       "eventCode": "AFF",
       "scenario": "Nonstandard C",
-      "labelPreviousDocument": "Which Document Is This Affidavit in Support Of?",
+      "labelPreviousDocument": "Which document is this affidavit in support of?",
       "labelFreeText": "Who signed this?",
       "labelFreeText2": "",
       "ordinalField": ""
