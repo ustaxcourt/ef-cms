@@ -20,7 +20,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What iteration is this filing?"
     },
     {
       "documentTitle": "Answer",
@@ -325,7 +325,7 @@
       "labelPreviousDocument": "Which Document Are You Amending?",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What iteration is this filing?"
     },
     {
       "documentTitle": "Amended Certificate of Service of [Document Name]",
@@ -347,7 +347,7 @@
       "labelPreviousDocument": "Which Document Are You Amending?",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What iteration is this filing?"
     },
     {
       "documentTitle": "[First, Second, etc.] Amendment to [anything]",
@@ -2768,7 +2768,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What iteration is this filing?"
     },
     {
       "documentTitle": "Request for Judicial Notice",
@@ -3625,7 +3625,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What iteration is this filing?"
     },
     {
       "documentTitle": "Stipulation of Pretrial Deadlines",
@@ -3691,7 +3691,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What iteration is this filing?"
     }
   ],
   "Supplement": [
@@ -3704,7 +3704,7 @@
       "labelPreviousDocument": "Which Document Is This a Supplement To?",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What iteration is this filing?"
     },
     {
       "documentTitle": "[First, Second, etc.] Supplement To [anything]",
@@ -3726,7 +3726,7 @@
       "labelPreviousDocument": "Which Document Is This Supplemental For?",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What iteration is this filing?"
     },
     {
       "documentTitle": "[First, Second, etc.] Supplemental [anything]",
