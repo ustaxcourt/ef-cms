@@ -86,7 +86,7 @@ export const StartCaseInternal = connect(
                         className="usa-legend with-hint"
                         id="date-received-legend"
                       >
-                        Date Received
+                        Date received
                       </legend>
                       <div className="usa-memorable-date">
                         <div className="usa-form-group usa-form-group--month margin-bottom-0">
@@ -169,7 +169,7 @@ export const StartCaseInternal = connect(
                     }
                   >
                     <label className="usa-label" htmlFor="case-caption">
-                      Case Caption
+                      Case caption
                     </label>
                     <textarea
                       className="usa-textarea"
@@ -194,14 +194,14 @@ export const StartCaseInternal = connect(
                   <CaseTypeSelect
                     allowDefaultOption={true}
                     caseTypes={caseTypes}
-                    legend="Notice/Case Type"
+                    legend="Notice/case type"
                     validation="validatePetitionFromPaperSequence"
                     value={form.caseType}
                     onChange="updateFormValueSequence"
                   />
 
                   <ProcedureType
-                    legend="Case Procedure"
+                    legend="Case procedure"
                     value={form.procedureType}
                     onChange={e => {
                       updateFormValueSequence({
@@ -220,7 +220,7 @@ export const StartCaseInternal = connect(
                     )}
                   >
                     <label className="usa-label" htmlFor="preferred-trial-city">
-                      Trial Location{' '}
+                      Trial location{' '}
                       <span className="usa-hint">(Required with RQT)</span>
                     </label>
                     <select
@@ -249,7 +249,7 @@ export const StartCaseInternal = connect(
                     )}
                   >
                     <label className="usa-label" htmlFor="party-type">
-                      Party Type
+                      Party type
                     </label>
                     <select
                       className="usa-select"

@@ -75,7 +75,7 @@ export const Country = connect(
             }
           >
             <label className="usa-label" htmlFor={`${type}.country`}>
-              Country Name
+              Country name
             </label>
             <input
               autoCapitalize="none"

@@ -29,7 +29,7 @@ describe('DocketEntryFactory', () => {
       );
     });
 
-    it('should not require a Filing Status selection', () => {
+    it('should not require a Filing status selection', () => {
       expect(errors().lodged).toEqual(undefined);
     });
 
@@ -54,7 +54,7 @@ describe('DocketEntryFactory', () => {
       expect(errors().eventCode).toBeDefined();
     });
 
-    describe('Document Type', () => {
+    describe('Document type', () => {
       beforeEach(() => {
         rawEntity = {
           ...rawEntity,
@@ -82,11 +82,11 @@ describe('DocketEntryFactory', () => {
       expect(errors().partyPrimary).toEqual(undefined);
     });
 
-    it('should not require Additional Info 1', () => {
+    it('should not require Additional info 1', () => {
       expect(errors().additionalInfo).toEqual(undefined);
     });
 
-    it('should not require Additional Info 2', () => {
+    it('should not require Additional info 2', () => {
       expect(errors().additionalInfo2).toEqual(undefined);
     });
 

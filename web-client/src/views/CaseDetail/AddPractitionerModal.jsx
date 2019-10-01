@@ -94,7 +94,7 @@ class AddPractitionerModalComponent extends ModalDialog {
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend id="representing-legend">
-              Who is This Counsel Representing?
+              Who is this counsel representing?
             </legend>
             <div className="usa-checkbox">
               <input

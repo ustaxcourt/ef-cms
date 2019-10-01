@@ -155,7 +155,7 @@ export const ContactPrimary = connect(
                   </span>
                 ) : (
                   <span>
-                    In Care Of <span className="usa-hint">(optional)</span>
+                    In care of <span className="usa-hint">(optional)</span>
                   </span>
                 )}
               </label>
@@ -215,7 +215,7 @@ export const ContactPrimary = connect(
             }
           >
             <label className="usa-label" htmlFor="phone">
-              Phone Number
+              Phone number
               {contactsHelper.contactPrimary.phoneNumberLabelHint && (
                 <>
                   {' '}

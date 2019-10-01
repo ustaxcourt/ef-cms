@@ -27,7 +27,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
           }
         >
           <label className="usa-label" htmlFor="section">
-            Select Section
+            Select section
           </label>
 
           <select
@@ -68,7 +68,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
             }
           >
             <label className="usa-label" htmlFor={'chambers'}>
-              Select Chambers
+              Select chambers
             </label>
             <select
               className="usa-select"
@@ -107,7 +107,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
           }
         >
           <label className="usa-label" htmlFor="assigneeId">
-            Select Recipient
+            Select recipient
           </label>
           <select
             aria-disabled={!this.props.form.section ? 'true' : 'false'}
@@ -144,7 +144,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
           }
         >
           <label className="usa-label" htmlFor="message">
-            Add Message
+            Add message
           </label>
           <textarea
             className="usa-textarea"
