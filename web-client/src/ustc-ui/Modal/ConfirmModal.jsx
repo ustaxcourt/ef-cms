@@ -1,5 +1,5 @@
 import { BaseModal } from './BaseModal';
-import { Button } from '../ustc-ui/Button/Button';
+import { Button } from '../Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, sequences } from 'cerebral';
