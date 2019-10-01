@@ -370,8 +370,7 @@ export const FileDocumentReview = connect(
         </div>
 
         <div className="button-box-container">
-          <button
-            className="usa-button margin-bottom-1"
+          <Button
             id="submit-document"
             type="submit"
             onClick={() => {
@@ -379,14 +378,10 @@ export const FileDocumentReview = connect(
             }}
           >
             Submit Your Filing
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
+          </Button>
+          <Button secondary onClick={() => navigateBackSequence()}>
             Back
-          </button>
+          </Button>
           <Button
             link
             onClick={() => {
