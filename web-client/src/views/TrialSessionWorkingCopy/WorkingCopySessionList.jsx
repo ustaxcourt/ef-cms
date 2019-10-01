@@ -1,4 +1,5 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
@@ -49,8 +50,9 @@ export const WorkingCopySessionList = connect(
                 aria-label="Docket Number"
                 className="padding-left-2px no-wrap"
               >
-                <button
-                  className="usa-button usa-button--unstyled sortable-header-button"
+                <Button
+                  link
+                  className="sortable-header-button"
                   onClick={() => {
                     toggleWorkingCopySortSequence({
                       sort: 'docket',
@@ -68,12 +70,13 @@ export const WorkingCopySessionList = connect(
                   {(sort === 'docket' && sortOrder === 'desc' && (
                     <FontAwesomeIcon icon="caret-up" />
                   )) || <FontAwesomeIcon icon="caret-down" />}
-                </button>
+                </Button>
               </th>
               <th className="no-wrap">Case name</th>
               <th className="no-wrap">
-                <button
-                  className="usa-button usa-button--unstyled sortable-header-button"
+                <Button
+                  link
+                  className="sortable-header-button"
                   onClick={() => {
                     toggleWorkingCopySortSequence({
                       sort: 'practitioner',
@@ -91,7 +94,7 @@ export const WorkingCopySessionList = connect(
                   {(sort === 'practitioner' && sortOrder === 'desc' && (
                     <FontAwesomeIcon icon="caret-up" />
                   )) || <FontAwesomeIcon icon="caret-down" />}
-                </button>
+                </Button>
               </th>
               <th className="no-wrap">Respondent Counsel</th>
               <th className="no-wrap" colSpan="2">
@@ -139,17 +142,18 @@ export const WorkingCopySessionList = connect(
                       not
                       bind={`trialSessionWorkingCopy.caseNotes.${item.caseId}.notes`}
                     >
-                      <button
-                        className="usa-button usa-button--unstyled margin-top-1"
+                      <Button
+                        link
+                        className="margin-top-1"
+                        icon="plus-circle"
                         onClick={() => {
                           openAddEditCaseNoteModalFromListSequence({
                             caseId: item.caseId,
                           });
                         }}
                       >
-                        <FontAwesomeIcon icon="plus-circle"></FontAwesomeIcon>
                         Add Note
-                      </button>
+                      </Button>
                     </If>
                   </td>
                 </tr>
@@ -166,29 +170,31 @@ export const WorkingCopySessionList = connect(
                       />
                     </td>
                     <td className="no-wrap text-align-right">
-                      <button
-                        className="usa-button usa-button--unstyled red-warning margin-right-105"
+                      <Button
+                        link
+                        className="red-warning"
+                        icon="times-circle"
                         onClick={() => {
                           openDeleteCaseNoteConfirmModalSequence({
                             caseId: item.caseId,
                           });
                         }}
                       >
-                        <FontAwesomeIcon icon="times-circle"></FontAwesomeIcon>
                         Delete Note
-                      </button>
+                      </Button>
                     </td>
                     <td className="no-wrap text-align-right">
-                      <button
-                        className="usa-button usa-button--unstyled"
+                      <Button
+                        link
+                        icon="edit"
                         onClick={() => {
                           openAddEditCaseNoteModalFromListSequence({
                             caseId: item.caseId,
                           });
                         }}
                       >
-                        <FontAwesomeIcon icon="edit"></FontAwesomeIcon>Edit Note
-                      </button>
+                        Edit Note
+                      </Button>
                     </td>
                   </tr>
                 </If>
