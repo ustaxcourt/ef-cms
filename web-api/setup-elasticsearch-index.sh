@@ -7,4 +7,4 @@ pushd ./web-api/terraform/main
   export ELASTICSEARCH_ENDPOINT
 popd
 
-node ./elasticsearch-index-settings.js
+node ./web-api/elasticsearch-index-settings.js
