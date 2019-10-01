@@ -3748,7 +3748,7 @@
       "eventCode": "AFF",
       "scenario": "Nonstandard C",
       "labelPreviousDocument": "Which Document Is This Affidavit in Support Of?",
-      "labelFreeText": "Who Signed This?",
+      "labelFreeText": "Who signed this?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -3770,7 +3770,7 @@
       "eventCode": "DCL",
       "scenario": "Nonstandard C",
       "labelPreviousDocument": "Which Document Is This Declaration in Support Of?",
-      "labelFreeText": "Who Signed This?",
+      "labelFreeText": "Who signed this?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -3792,7 +3792,7 @@
       "eventCode": "USDL",
       "scenario": "Nonstandard C",
       "labelPreviousDocument": "Which Document Is This Declaration in Support Of?",
-      "labelFreeText": "Who Signed This?",
+      "labelFreeText": "Who signed this?",
       "labelFreeText2": "",
       "ordinalField": ""
     }
