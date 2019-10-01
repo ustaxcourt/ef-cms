@@ -399,7 +399,7 @@ export const RequestAccessDocumentForm = connect(
                     )}
                   >
                     <legend id="support-docs-legend">
-                      Do You Have Any Supporting Documents for This Filing?
+                      Do you have any supporting documents for this filing?
                     </legend>
                     {['Yes', 'No'].map(option => (
                       <div className="usa-radio usa-radio__inline" key={option}>
