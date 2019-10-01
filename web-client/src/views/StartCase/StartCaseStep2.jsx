@@ -92,7 +92,7 @@ export const StartCaseStep2 = connect(
         </div>
 
         <h3 className="margin-top-4">Why are you filing this petition?</h3>
-        <div className="blue-container">
+        <div className="blue-container margin-bottom-5">
           <div className="usa-form-group">
             <fieldset
               className={
@@ -162,32 +162,25 @@ export const StartCaseStep2 = connect(
           </div>
         </div>
 
-        <div className="button-box-container">
-          <button
-            className="usa-button margin-right-205 margin-bottom-4"
-            id="submit-case"
-            type="button"
-            onClick={() => {
-              completeStartCaseWizardStepSequence({ nextStep: 3 });
-            }}
-          >
-            Continue to Step 3 of 5
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
-            Back
-          </button>
-          <Button
-            onClick={() => {
-              formCancelToggleCancelSequence();
-            }}
-          >
-            Cancel
-          </Button>
-        </div>
+        <Button
+          id="submit-case"
+          onClick={() => {
+            completeStartCaseWizardStepSequence({ nextStep: 3 });
+          }}
+        >
+          Continue to Step 3 of 5
+        </Button>
+        <Button secondary onClick={() => navigateBackSequence()}>
+          Back
+        </Button>
+        <Button
+          link
+          onClick={() => {
+            formCancelToggleCancelSequence();
+          }}
+        >
+          Cancel
+        </Button>
       </>
     );
   },
