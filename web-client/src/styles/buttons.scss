@@ -14,7 +14,6 @@
     &:hover {
       color: color($theme-color-secondary-vivid);
     }
-
   }
 
   &:not(.usa-button--unstyled) {
@@ -71,6 +70,10 @@
 
   &.ustc-button--mobile-inline {
     width: auto;
+  }
+
+  &.text-left {
+    text-align: left;
   }
 
   @media only screen and (min-width: $medium-screen) {
