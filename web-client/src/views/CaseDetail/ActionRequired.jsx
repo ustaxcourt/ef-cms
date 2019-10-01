@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { connect } from '@cerebral/react';
@@ -50,15 +51,15 @@ export const ActionRequired = connect(
                 <div className="tablet:grid-col-6">
                   <h2>Pay by Debit / Credit Card</h2>
                   <p>Copy your docket number(s) and pay online.</p>
-                  <a
+                  <Button
                     aria-label="pay.gov u.s. tax court filing fees"
-                    className="usa-button tablet-full-width margin-bottom-3"
+                    className="tablet-full-width margin-bottom-3"
                     href="https://pay.gov/public/form/start/60485840"
                     rel="noopener noreferrer"
                     target="_blank"
                   >
                     Pay Now
-                  </a>
+                  </Button>
                 </div>
                 <div className="tablet:grid-col-6">
                   <Hint>

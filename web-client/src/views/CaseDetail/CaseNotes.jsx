@@ -1,4 +1,5 @@
 import { AddEditCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditCaseNoteModal';
+import { Button } from '../../ustc-ui/Button/Button';
 import { DeleteCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteCaseNoteConfirmModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
@@ -31,8 +32,9 @@ export const CaseNotes = connect(
                 <div className="card">
                   <div className="content-wrapper">
                     <If not bind="caseDetail.caseNote.notes">
-                      <button
-                        className="usa-button usa-button--unstyled float-right"
+                      <Button
+                        link
+                        className="float-right margin-0 padding-0"
                         onClick={() => {
                           openAddEditCaseNoteModalFromDetailSequence({
                             caseId: caseDetail.caseId,
@@ -41,7 +43,7 @@ export const CaseNotes = connect(
                       >
                         <FontAwesomeIcon icon="plus-circle" />
                         Add Note
-                      </button>
+                      </Button>
                     </If>
                     <h3 className="display-inline">Judge’s Notes</h3>
                     <If bind="caseDetail.caseNote.notes">
@@ -50,8 +52,8 @@ export const CaseNotes = connect(
                       </div>
                       <div className="grid-row">
                         <div className="tablet:grid-col-6">
-                          <button
-                            className="usa-button usa-button--unstyled"
+                          <Button
+                            link
                             onClick={() => {
                               openAddEditCaseNoteModalFromDetailSequence({
                                 caseId: caseDetail.caseId,
@@ -60,11 +62,12 @@ export const CaseNotes = connect(
                           >
                             <FontAwesomeIcon icon="edit"></FontAwesomeIcon>
                             Edit Note
-                          </button>
+                          </Button>
                         </div>
                         <div className="tablet:grid-col-6 text-align-right">
-                          <button
-                            className="usa-button usa-button--unstyled red-warning"
+                          <Button
+                            link
+                            className="red-warning"
                             onClick={() => {
                               openDeleteCaseNoteConfirmModalSequence({
                                 caseId: caseDetail.caseId,
@@ -73,7 +76,7 @@ export const CaseNotes = connect(
                           >
                             <FontAwesomeIcon icon="times-circle"></FontAwesomeIcon>
                             Delete Note
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     </If>
