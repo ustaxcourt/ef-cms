@@ -145,7 +145,7 @@ export const RequestAccessDocumentForm = connect(
                 >
                   <fieldset className="service-date usa-fieldset margin-bottom-0">
                     <legend className="usa-legend" id="service-date-legend">
-                      Service Date
+                      Service date
                     </legend>
                     <div className="usa-memorable-date">
                       <div className="usa-form-group usa-form-group--month margin-bottom-0">
@@ -299,7 +299,7 @@ export const RequestAccessDocumentForm = connect(
                 >
                   <fieldset className="usa-fieldset margin-bottom-0">
                     <legend id="attachments-legend">
-                      Does Your Filing Include Attachments?
+                      Does your filing include attachments?
                     </legend>
                     {['Yes', 'No'].map(option => (
                       <div className="usa-radio usa-radio__inline" key={option}>
@@ -347,7 +347,7 @@ export const RequestAccessDocumentForm = connect(
                 >
                   <fieldset className="usa-fieldset margin-bottom-0">
                     <legend id="objections-legend">
-                      Are There Any Objections to This Document?
+                      Are there any objections to this document?
                     </legend>
                     {['Yes', 'No', 'Unknown'].map(option => (
                       <div className="usa-radio usa-radio__inline" key={option}>
@@ -399,7 +399,7 @@ export const RequestAccessDocumentForm = connect(
                     )}
                   >
                     <legend id="support-docs-legend">
-                      Do You Have Any Supporting Documents for This Filing?
+                      Do you have any supporting documents for this filing?
                     </legend>
                     {['Yes', 'No'].map(option => (
                       <div className="usa-radio usa-radio__inline" key={option}>
