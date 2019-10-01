@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { cloneFile } from '../cloneFile';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from '../limitFileSize';
@@ -63,8 +64,9 @@ export const StateDrivenFileInput = connect(
         {form[name] && (
           <div>
             <span className="mr-1">{form[name].name}</span>
-            <button
-              className="usa-button usa-button--unstyled ustc-button--mobile-inline margin-left-1"
+            <Button
+              link
+              className="ustc-button--mobile-inline margin-left-1"
               onClick={() => {
                 updateFormValueSequence({
                   key: name,
@@ -75,7 +77,7 @@ export const StateDrivenFileInput = connect(
               }}
             >
               Change
-            </button>
+            </Button>
           </div>
         )}
       </React.Fragment>
