@@ -145,7 +145,7 @@ export const RequestAccessDocumentForm = connect(
                 >
                   <fieldset className="service-date usa-fieldset margin-bottom-0">
                     <legend className="usa-legend" id="service-date-legend">
-                      Service Date
+                      Service date
                     </legend>
                     <div className="usa-memorable-date">
                       <div className="usa-form-group usa-form-group--month margin-bottom-0">
