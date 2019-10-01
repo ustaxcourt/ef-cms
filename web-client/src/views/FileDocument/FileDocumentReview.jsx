@@ -388,6 +388,7 @@ export const FileDocumentReview = connect(
             Back
           </button>
           <Button
+            link
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

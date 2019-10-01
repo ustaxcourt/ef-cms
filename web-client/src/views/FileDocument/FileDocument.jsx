@@ -74,6 +74,7 @@ export const FileDocument = connect(
             Back
           </button>
           <Button
+            link
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

@@ -45,6 +45,7 @@ export const SelectDocumentType = connect(
                   Continue
                 </button>
                 <Button
+                  link
                   onClick={() => {
                     formCancelToggleCancelSequence();
                   }}
