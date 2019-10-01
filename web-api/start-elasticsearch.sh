@@ -23,9 +23,10 @@ fi
 if [ -f /.dockerenv ]; then
   useradd elasticsearch
   chown elasticsearch:elasticsearch -R .elasticsearch
+  chmod -R o+x .elasticsearch
   chmod -R 0755 .elasticsearch
   echo "starting elastic search"
-  su -c "pwd && ls -la && ls -la .elasticsearch && cd .elasticsearch && JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 ./bin/elasticsearch" elasticsearch
+  su -c "id -gn && whoami && pwd && ls -la && ls -la .elasticsearch && cd .elasticsearch && JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 ./bin/elasticsearch" elasticsearch
 else
-  .elasticsearch/bin/elasticsearch
+  cd .elasticsearch && ./bin/elasticsearch
 fi
