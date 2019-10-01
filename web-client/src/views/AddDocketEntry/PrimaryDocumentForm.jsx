@@ -467,7 +467,7 @@ export const PrimaryDocumentForm = connect(
             >
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="objections-legend">
-                  Are There Any Objections to This Document?
+                  Are there any objections to this document?
                 </legend>
                 {['Yes', 'No', 'Unknown'].map(option => (
                   <div className="usa-radio" key={option}>

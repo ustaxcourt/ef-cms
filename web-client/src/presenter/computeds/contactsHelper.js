@@ -39,7 +39,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Custodian for This Taxpayer',
           nameLabel: 'Name of taxpayer',
-          secondaryNameLabel: 'Name of Custodian',
+          secondaryNameLabel: 'Name of custodian',
         };
         break;
       case PARTY_TYPES.donor:
@@ -54,7 +54,7 @@ export const contactsHelper = get => {
           displayTitle: true,
           header:
             'Tell Us About Yourself as the Executor/Personal Representative/etc. For This Estate',
-          nameLabel: 'Name of Decedent',
+          nameLabel: 'Name of decedent',
           secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
         };
         break;
@@ -64,7 +64,7 @@ export const contactsHelper = get => {
           header: 'Tell Us About the Estate You Are Filing For',
           inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'Your Name',
-          nameLabel: 'Name of Decedent',
+          nameLabel: 'Name of decedent',
         };
         break;
       case PARTY_TYPES.guardian:
@@ -113,7 +113,7 @@ export const contactsHelper = get => {
         contactPrimary = {
           displaySecondaryName: true,
           header: 'Tell Us About Yourself as the Tax Matters Partner',
-          nameLabel: 'Partnership Name',
+          nameLabel: 'Partnership name',
           secondaryNameLabel: 'Tax Matters Partner name',
         };
         break;
@@ -196,7 +196,7 @@ export const contactsHelper = get => {
           displaySecondaryName: true,
           header: 'Tell Us About the Custodian for This Taxpayer',
           nameLabel: 'Name of taxpayer',
-          secondaryNameLabel: 'Name of Custodian',
+          secondaryNameLabel: 'Name of custodian',
         };
         break;
       case PARTY_TYPES.donor:
@@ -211,7 +211,7 @@ export const contactsHelper = get => {
           displayTitle: true,
           header:
             'Tell Us About the Executor/Personal Representative/etc. For This Estate',
-          nameLabel: 'Name of Decedent',
+          nameLabel: 'Name of decedent',
           secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
         };
         break;
@@ -220,7 +220,7 @@ export const contactsHelper = get => {
           displayInCareOf: true,
           header: 'Tell Us About the Estate You Are Filing For',
           inCareOfLabel: 'In care of',
-          nameLabel: 'Name of Decedent',
+          nameLabel: 'Name of decedent',
         };
         break;
       case PARTY_TYPES.guardian:
