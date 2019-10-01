@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MAX_FILE_SIZE_MB } from '../../../shared/src/persistence/s3/getUploadPolicy';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
@@ -23,7 +24,7 @@ export const BeforeStartingCase = () => (
       <h1 className="captioned margin-bottom-2" tabIndex="-1">
         Tips for Preparing Documents Before You File
       </h1>
-      <div className="grid-container padding-x-0" role="list">
+      <div className="grid-container padding-x-0 margin-bottom-5" role="list">
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-6">
             <div className="caseItem" role="listitem">
@@ -199,17 +200,12 @@ export const BeforeStartingCase = () => (
           </div>
         </div>
       </div>
-      <div className="button-box-container">
-        <a
-          className="usa-button margin-right-205 margin-bottom-4"
-          href="/file-a-petition/step-1"
-        >
-          Got It, Letʼs File My Petition
-        </a>
-        <a className="usa-button usa-button--unstyled" href="/">
-          Cancel
-        </a>
-      </div>
+      <Button href="/file-a-petition/step-1">
+        Got It, Letʼs File My Petition
+      </Button>
+      <Button link href="/">
+        Cancel
+      </Button>
     </section>
   </>
 );
