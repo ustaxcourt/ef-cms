@@ -159,6 +159,7 @@
     "seed:db": "node ./web-api/create-dynamo-tables.js && node ./web-api/seed-dynamo.js",
     "seed:s3": "export S3_DIR=./web-api/storage/s3 && rm -rf \"${S3_DIR}\" && cp -R ./web-api/storage/fixtures/s3/ \"${S3_DIR}\"",
     "seed": "run-p seed:db seed:s3",
+    "seed:elasticsearch": "./web-api/seed-elasticsearch.sh",
     "start:api": "./run-local.sh",
     "start:api:ci": "SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true CI=true ./run-local.sh",
     "start:madge": "node ./graph-generators/index.js",
