@@ -36,7 +36,7 @@ export const FileDocumentReview = connect(
           </h1>
         </Focus>
 
-        <p className="full-width">
+        <p>
           You can’t edit your filing once you submit it. Please make sure your
           information appears the way you want it to.
         </p>
@@ -318,7 +318,7 @@ export const FileDocumentReview = connect(
             <div className="tablet:grid-col-5 margin-bottom-4">
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper">
-                  <h3 className="underlined">Parties You’re Representing</h3>
+                  <h3 className="underlined">Parties Filing The Document(s)</h3>
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-1">
                       <label className="usa-label" htmlFor="filing-parties">
