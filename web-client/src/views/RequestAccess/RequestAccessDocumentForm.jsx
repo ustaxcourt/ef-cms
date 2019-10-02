@@ -140,30 +140,28 @@ export const RequestAccessDocumentForm = connect(
                     : ''
                 }`}
               >
-                <fieldset className="usa-fieldset margin-bottom-0">
-                  <div className="usa-checkbox">
-                    <input
-                      checked={form.certificateOfService || false}
-                      className="usa-checkbox__input"
-                      id="primaryDocument-certificateOfService"
-                      name="certificateOfService"
-                      type="checkbox"
-                      onChange={e => {
-                        updateCaseAssociationFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                        validateCaseAssociationRequestSequence();
-                      }}
-                    />
-                    <label
-                      className="usa-checkbox__label"
-                      htmlFor="primaryDocument-certificateOfService"
-                    >
-                      Certificate Of Service
-                    </label>
-                  </div>
-                </fieldset>
+                <div className="usa-checkbox">
+                  <input
+                    checked={form.certificateOfService || false}
+                    className="usa-checkbox__input"
+                    id="primaryDocument-certificateOfService"
+                    name="certificateOfService"
+                    type="checkbox"
+                    onChange={e => {
+                      updateCaseAssociationFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                      validateCaseAssociationRequestSequence();
+                    }}
+                  />
+                  <label
+                    className="usa-checkbox__label"
+                    htmlFor="primaryDocument-certificateOfService"
+                  >
+                    Certificate Of Service
+                  </label>
+                </div>
                 <Text
                   bind="validationErrors.certificateOfService"
                   className="usa-error-message"
