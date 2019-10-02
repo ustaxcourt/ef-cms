@@ -110,7 +110,7 @@ describe('contactsHelper', () => {
         header:
           'Tell Us About Yourself as the Executor/Personal Representative/etc. For This Estate',
         nameLabel: 'Name of decedent',
-        secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
+        secondaryNameLabel: 'Name of executor/personal representative, etc.',
       },
     });
   });
@@ -536,7 +536,7 @@ describe('contactsHelper', () => {
         header:
           'Tell Us About the Executor/Personal Representative/etc. For This Estate',
         nameLabel: 'Name of decedent',
-        secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
+        secondaryNameLabel: 'Name of executor/personal representative, etc.',
       },
     });
   });

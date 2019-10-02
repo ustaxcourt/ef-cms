@@ -55,7 +55,7 @@ export const contactsHelper = get => {
           header:
             'Tell Us About Yourself as the Executor/Personal Representative/etc. For This Estate',
           nameLabel: 'Name of decedent',
-          secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
+          secondaryNameLabel: 'Name of executor/personal representative, etc.',
         };
         break;
       case PARTY_TYPES.estateWithoutExecutor:

@@ -62,7 +62,7 @@ export const StartCaseStep5 = connect(
                     <div className="tablet:grid-col-6 margin-bottom-05">
                       <div className="margin-bottom-2">
                         <label className="usa-label" htmlFor="filing-type">
-                          Type of Notice/Case
+                          Type of notice/case
                         </label>
                         {form.caseType}
                         <div className="grid-row margin-top-3">
@@ -218,7 +218,7 @@ export const StartCaseStep5 = connect(
               <div className="grid-row grid-gap">
                 <div className="tablet:grid-col-12 margin-bottom-1">
                   <label className="usa-label" htmlFor="filing-service-email">
-                    Service Email
+                    Service email
                   </label>
                   {user.email}
                 </div>
