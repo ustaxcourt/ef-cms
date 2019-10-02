@@ -53,7 +53,8 @@ class SuccessNotificationComponent extends React.Component {
                   </div>
                   <div className="tablet:grid-col-2 usa-alert__action margin-top-1">
                     <Button
-                      className="no-underline"
+                      link
+                      className="no-underline padding-0"
                       icon="times-circle"
                       onClick={() => dismissAlertSequence()}
                     >
