@@ -1,6 +1,6 @@
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
+import { Button } from '../ustc-ui/Button/Button';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -14,7 +14,7 @@ export const DraftDocuments = connect(
   },
   ({ archiveDraftDocumentModalSequence, formattedCaseDetail, showModal }) => {
     return (
-      <React.Fragment>
+      <>
         {formattedCaseDetail.draftDocuments.length === 0 && (
           <p className="heading-3 margin-bottom-10">
             There are no draft documents.
@@ -49,18 +49,16 @@ export const DraftDocuments = connect(
                       </td>
                       <td>{draftDocument.filedBy}</td>
                       <td className="no-wrap text-align-right">
-                        <a
-                          className="usa-button usa-button--unstyled"
-                          href={draftDocument.editUrl}
-                        >
-                          <FontAwesomeIcon icon="edit" size="sm" />
+                        <Button link href={draftDocument.editUrl} icon="edit">
                           Edit
-                        </a>
+                        </Button>
                       </td>
 
                       <td className="smaller-column">
-                        <button
-                          className="usa-button usa-button--unstyled red-warning"
+                        <Button
+                          link
+                          className="red-warning"
+                          icon="times-circle"
                           onClick={() => {
                             archiveDraftDocumentModalSequence({
                               caseId: formattedCaseDetail.caseId,
@@ -69,9 +67,8 @@ export const DraftDocuments = connect(
                             });
                           }}
                         >
-                          <FontAwesomeIcon icon="times-circle" size="sm" />
                           Delete
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   );
@@ -83,7 +80,7 @@ export const DraftDocuments = connect(
         {showModal === 'ArchiveDraftDocumentModal' && (
           <ArchiveDraftDocumentModal />
         )}
-      </React.Fragment>
+      </>
     );
   },
 );
