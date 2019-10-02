@@ -30,6 +30,6 @@ export default test => {
     const showButton =
       documentHelper.showViewOrdersNeededButton && caseHelper.hasOrders;
 
-    expect(showButton).toEqual(true);
+    expect(showButton).toEqual(false);
   });
 };
