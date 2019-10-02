@@ -1,4 +1,5 @@
 const { CaseExternal } = require('./CaseExternal');
+const { ContactFactory } = require('../contacts/ContactFactory');
 
 describe('CaseExternal', () => {
   describe('for Corporation Contacts', () => {
@@ -8,7 +9,7 @@ describe('CaseExternal', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: 'Corporation',
+        partyType: ContactFactory.PARTY_TYPES.corporation,
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
@@ -37,7 +38,7 @@ describe('CaseExternal', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: 'Corporation',
+        partyType: ContactFactory.PARTY_TYPES.corporation,
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',
@@ -65,7 +66,7 @@ describe('CaseExternal', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
-        partyType: 'Corporation',
+        partyType: ContactFactory.PARTY_TYPES.corporation,
         petitionFile: {},
         petitionFileSize: 1,
         preferredTrialCity: 'Chattanooga, TN',

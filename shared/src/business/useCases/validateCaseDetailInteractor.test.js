@@ -2,6 +2,7 @@ const {
   validateCaseDetailInteractor,
 } = require('./validateCaseDetailInteractor');
 const { Case } = require('../entities/cases/Case');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -65,7 +66,7 @@ describe('validate case detail', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
-        partyType: 'Petitioner',
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'defined',
         procedureType: 'defined',
@@ -116,7 +117,7 @@ describe('validate case detail', () => {
         filingType: 'defined',
         hasIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
-        partyType: 'Petitioner',
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'defined',
@@ -153,7 +154,7 @@ describe('validate case detail', () => {
         filingType: 'defined',
         hasIrsNotice: false,
         irsNoticeDate: null,
-        partyType: 'Petitioner',
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
         payGovDate: '2018-12-24T00:00:00.000Z',
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'Chattanooga, TN',
