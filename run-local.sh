@@ -22,8 +22,10 @@ npm run seed:s3
 echo "creating & seeding dynamo tables"
 npm run seed:db
 
-echo "creating elasticsearch index"
-npm run seed:elasticsearch
+if [ -z "$SKIP_ELASTICSEARCH" ]; then 
+  echo "creating elasticsearch index"
+  npm run seed:elasticsearch
+fi
 
 # these exported values expire when script terminates
 export SKIP_SANITIZE=true
