@@ -146,7 +146,7 @@ export const PrimaryContactEdit = connect(
               </label>
               <input
                 autoCapitalize="none"
-                className="usa-input"
+                className="usa-input max-width-200"
                 id="phone"
                 name="contactPrimary.phone"
                 type="tel"
