@@ -170,19 +170,6 @@ function CaseAssociationRequestFactory(rawProps) {
 
   if (documentWithSupportingDocuments) {
     makeRequired('hasSupportingDocuments');
-
-    // TODO: Fix this up
-    // if (rawProps.hasSupportingDocuments === true) {
-    //   makeRequired('supportingDocument');
-    //
-    //   if (supportingDocumentWithFreeText) {
-    //     makeRequired('supportingDocumentFreeText');
-    //   }
-    //
-    //   if (supportingDocumentWithFile) {
-    //     makeRequired('supportingDocumentFile');
-    //   }
-    // }
   }
 
   if (
