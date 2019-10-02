@@ -255,32 +255,25 @@ export const StartCaseStep5 = connect(
           </div>
         </div>
 
-        <div className="button-box-container">
-          <button
-            className="usa-button margin-right-205 margin-bottom-4"
-            id="submit-case"
-            type="button"
-            onClick={() => {
-              submitFilePetitionSequence();
-            }}
-          >
-            Submit to U.S. Tax Court
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
-            Back
-          </button>
-          <Button
-            onClick={() => {
-              formCancelToggleCancelSequence();
-            }}
-          >
-            Cancel
-          </Button>
-        </div>
+        <Button
+          id="submit-case"
+          onClick={() => {
+            submitFilePetitionSequence();
+          }}
+        >
+          Submit to U.S. Tax Court
+        </Button>
+        <Button secondary onClick={() => navigateBackSequence()}>
+          Back
+        </Button>
+        <Button
+          link
+          onClick={() => {
+            formCancelToggleCancelSequence();
+          }}
+        >
+          Cancel
+        </Button>
         {showModal === 'CaseDifferenceModalOverlay' && (
           <CaseDifferenceModalOverlay />
         )}

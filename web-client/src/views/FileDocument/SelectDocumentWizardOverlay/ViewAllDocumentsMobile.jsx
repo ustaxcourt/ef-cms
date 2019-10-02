@@ -1,3 +1,4 @@
+import { Button } from '../../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
@@ -23,9 +24,10 @@ export const ViewAllDocumentsMobile = connect(
       <React.Fragment>
         <div className="overlay-blue-header">
           <div className="grid-container">
-            <button
+            <Button
+              link
               aria-roledescription="button to return to What is this document for?"
-              className="heading-3 usa-button usa-button--unstyled"
+              className="heading-3 text-left"
               onClick={() =>
                 chooseModalWizardStepSequence({
                   value: 'WhatDocumentIsThis',
@@ -34,7 +36,7 @@ export const ViewAllDocumentsMobile = connect(
             >
               <FontAwesomeIcon icon="caret-left" />
               What is this document for?
-            </button>
+            </Button>
           </div>
         </div>
         <div className="grid-container">
@@ -56,8 +58,9 @@ export const ViewAllDocumentsMobile = connect(
                 className="category-view grid-container padding-bottom-1 padding-top-1"
                 key={`${title}-document-${index}`}
               >
-                <button
-                  className="usa-button usa-button--unstyled "
+                <Button
+                  link
+                  className="text-left"
                   onClick={() => {
                     updateModalValueSequence({
                       key: 'category',
@@ -77,7 +80,7 @@ export const ViewAllDocumentsMobile = connect(
                   }}
                 >
                   {title}
-                </button>
+                </Button>
               </div>
             );
           })}

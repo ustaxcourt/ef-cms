@@ -5,6 +5,11 @@ pkill -f DynamoDBLocal
 echo "starting dynamo"
 ./web-api/start-dynamo.sh &
 DYNAMO_PID=$!
+./wait-until.sh http://localhost:8000/shell
+
+./web-api/start-elasticsearch.sh &
+ESEARCH_PID=$!
+./wait-until.sh http://localhost:9200/ 200
 
 node ./web-api/start-s3rver &
 S3RVER_PID=$!
@@ -14,6 +19,9 @@ npm run seed:s3
 
 echo "creating & seeding dynamo tables"
 npm run seed:db
+
+echo "creating elasticsearch index"
+npm run seed:elasticsearch
 
 # these exported values expire when script terminates
 export SKIP_SANITIZE=true
@@ -67,5 +75,6 @@ echo "proxy stopped"
 if [ ! -e "$CIRCLECI" ]; then 
   echo "killing dynamodb local"
   pkill -P $DYNAMO_PID
+  pkill -p $ESEARCH_PID
 fi 
 kill $S3RVER_PID

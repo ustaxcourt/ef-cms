@@ -121,7 +121,7 @@ export const StartCaseStep4 = connect(
 
         {startCaseHelper.showSelectTrial && (
           <>
-            <h2 className="margin-top-4">U.S. Tax Court Trial Locations</h2>
+            <h3 className="margin-top-4">U.S. Tax Court Trial Locations</h3>
             <p>
               If your case goes to trial, this is where it will be held. Keep in
               mind that the nearest location may not be in your state.
@@ -154,11 +154,9 @@ export const StartCaseStep4 = connect(
           </>
         )}
 
-        <div className="button-box-container">
-          <button
-            className="usa-button margin-right-205 margin-bottom-4"
+        <div className="margin-top-5">
+          <Button
             id="submit-case"
-            type="button"
             onClick={() => {
               completeStartCaseWizardStepSequence({
                 errorDisplayOrder: ['procedureType', 'preferredTrialCity'],
@@ -167,15 +165,12 @@ export const StartCaseStep4 = connect(
             }}
           >
             Continue to Step 5 of 5
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
+          </Button>
+          <Button secondary onClick={() => navigateBackSequence()}>
             Back
-          </button>
+          </Button>
           <Button
+            link
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
