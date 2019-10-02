@@ -21,12 +21,13 @@ fi
 
 # start elasticsearch
 if [ -f /.dockerenv ]; then
-  useradd elasticsearch
+  useradd -m elasticsearch
   # usermod -a -G elasticsearch elasticsearch
   # chown elasticsearch:elasticsearch -R .elasticsearch
   # chmod -R 777 .elasticsearch
   # cd .elasticsearch && JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 ./bin/elasticsearch
-  su -c "cd /root/project/.elasticsearch && JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 ./bin/elasticsearch" elasticsearch
+  cp -R .elasticsearch/* /home/elasticsearch
+  su -c "JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 /home/elasticsearch/bin/elasticsearch" elasticsearch
 else
   cd .elasticsearch && ./bin/elasticsearch
 fi
