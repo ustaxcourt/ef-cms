@@ -14,22 +14,8 @@ export const clearCaseAssociationWizardDataAction = ({ props, store }) => {
       store.unset(state.form.certificateOfServiceDay);
       store.unset(state.form.certificateOfServiceYear);
       break;
-    case 'hasSupportingDocuments':
-      store.unset(state.form.supportingDocument);
-      store.unset(state.form.supportingDocumentMetadata);
-      store.unset(state.form.supportingDocumentFreeText);
-      store.unset(state.form.supportingDocumentFile);
-      break;
-    case 'supportingDocument':
-      store.unset(state.form.supportingDocumentFreeText);
-      store.unset(state.form.supportingDocumentMetadata.freeText);
-      break;
     case 'documentType':
       store.unset(state.form.objections);
-      store.unset(state.form.exhibits);
-      store.unset(state.form.attachments);
-      store.unset(state.form.hasSupportingDocuments);
-      store.unset(state.form.supportingDocument);
       store.unset(state.form.supportingDocumentMetadata);
       if (!props.value) {
         store.unset(state.form.documentTitleTemplate);
