@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -35,27 +36,26 @@ export const DocketRecordHeader = connect(
           <div className="grid-row">
             <div className="tablet:grid-col-10">
               {caseDetailHelper.showAddDocketEntryButton && (
-                <a
-                  className="usa-button"
+                <Button
                   href={`/case-detail/${formattedCaseDetail.docketNumber}/add-docket-entry`}
                   id="button-add-record"
                 >
                   <FontAwesomeIcon icon="plus-circle" size="1x" /> Add Docket
                   Entry
-                </a>
+                </Button>
               )}
               {caseDetailHelper.showFileDocumentButton && (
-                <a
-                  className="usa-button"
+                <Button
                   href={`/case-detail/${formattedCaseDetail.docketNumber}/before-you-file-a-document`}
                   id="button-file-document"
                 >
                   <FontAwesomeIcon icon="file" size="1x" /> File a Document
-                </a>
+                </Button>
               )}
-              <button
+              <Button
+                link
                 aria-hidden="true"
-                className="show-on-mobile usa-button usa-button--unstyled margin-top-1 margin-left-2"
+                className="show-on-mobile margin-top-1 margin-left-2"
                 onClick={() => {
                   openDocketRecordPrintPreview({
                     openNewTab: true,
@@ -65,10 +65,11 @@ export const DocketRecordHeader = connect(
               >
                 <FontAwesomeIcon icon="print" size="sm" />
                 Printable Docket Record
-              </button>
-              <button
+              </Button>
+              <Button
+                link
                 aria-label="printable docket record"
-                className="hide-on-mobile usa-button usa-button--unstyled margin-top-1 margin-left-2"
+                className="hide-on-mobile margin-top-1 margin-left-2"
                 onClick={() => {
                   navigateToPrintableDocketRecordSequence({
                     docketNumber: formattedCaseDetail.docketNumber,
@@ -77,7 +78,7 @@ export const DocketRecordHeader = connect(
               >
                 <FontAwesomeIcon icon="print" size="sm" />
                 Printable Docket Record
-              </button>
+              </Button>
             </div>
             <div className="tablet:grid-col-2">
               <div className="only-large-screens">
