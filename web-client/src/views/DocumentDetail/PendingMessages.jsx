@@ -43,10 +43,9 @@ export const PendingMessages = connect(
   }) => {
     return (
       <div className="blue-container">
-        <button
-          className="usa-button usa-button margin-bottom-2"
+        <Button
+          className="margin-bottom-2"
           id="create-message-button"
-          type="button"
           onClick={() => openCreateMessageModalSequence()}
         >
           <FontAwesomeIcon
@@ -55,7 +54,7 @@ export const PendingMessages = connect(
             size="lg"
           />
           Create Message
-        </button>
+        </Button>
 
         {(!documentDetailHelper.formattedDocument ||
           !documentDetailHelper.formattedDocument.workItems ||
