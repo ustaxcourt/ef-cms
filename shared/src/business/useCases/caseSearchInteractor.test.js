@@ -83,6 +83,7 @@ describe('caseSearchInteractor', () => {
             {
               range: {
                 'createdAt.S': {
+                  format: 'yyyy',
                   gte: '2018||/y',
                   lte: '2019||/y',
                 },
@@ -91,6 +92,7 @@ describe('caseSearchInteractor', () => {
             {
               range: {
                 'receivedAt.S': {
+                  format: 'yyyy',
                   gte: '2018||/y',
                   lte: '2019||/y',
                 },
