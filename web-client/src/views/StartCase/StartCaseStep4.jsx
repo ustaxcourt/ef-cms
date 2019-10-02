@@ -121,7 +121,7 @@ export const StartCaseStep4 = connect(
 
         {startCaseHelper.showSelectTrial && (
           <>
-            <h2 className="margin-top-4">U.S. Tax Court Trial Locations</h2>
+            <h3 className="margin-top-4">U.S. Tax Court Trial Locations</h3>
             <p>
               If your case goes to trial, this is where it will be held. Keep in
               mind that the nearest location may not be in your state.

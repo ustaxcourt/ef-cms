@@ -97,7 +97,7 @@ export const UserContactEdit = connect(
               </label>
               <input
                 autoCapitalize="none"
-                className="usa-input"
+                className="usa-input max-width-200"
                 id="phone"
                 name="contact.phone"
                 type="tel"

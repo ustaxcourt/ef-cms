@@ -740,10 +740,12 @@ module.exports = (appContextUser = {}) => {
     },
     getSearchClient: () => {
       if (!searchClientCache) {
-        if (environment.stage === 'local') {
+        if (environment.stage === 'local' && process.env.CI !== 'true') {
           searchClientCache = new elasticsearch.Client({
             host: environment.elasticsearchEndpoint,
           });
+        } else if (environment.stage === 'local' && process.env.CI === 'true') {
+          searchClientCache = { index: () => {}, search: () => {} };
         } else {
           searchClientCache = new elasticsearch.Client({
             amazonES: {
@@ -751,6 +753,7 @@ module.exports = (appContextUser = {}) => {
               region: environment.region,
             },
             apiVersion: '7.1',
+            awsConfig: new AWS.Config({ region: 'us-east-1' }),
             connectionClass: connectionClass,
             host: environment.elasticsearchEndpoint,
             log: 'warning',

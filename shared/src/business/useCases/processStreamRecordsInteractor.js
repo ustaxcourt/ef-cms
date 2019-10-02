@@ -11,12 +11,13 @@ exports.processStreamRecordsInteractor = async ({
   recordsToProcess,
 }) => {
   applicationContext.logger.info('Time', createISODateString());
+  const searchClient = applicationContext.getSearchClient();
 
   const indexCalls = [];
   for (const record of recordsToProcess) {
     if (['INSERT', 'MODIFY'].includes(record.eventName)) {
       indexCalls.push(
-        applicationContext.getSearchClient().index({
+        searchClient.index({
           body: { ...record.dynamodb.NewImage },
           id: record.dynamodb.Keys.pk.S,
           index: 'efcms',
