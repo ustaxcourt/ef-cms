@@ -44,7 +44,8 @@ export const StartCaseStep1 = connect(
           It’s sent to the IRS to help identify you, but is never viewed by the
           Court or stored as part of the public record.
         </Hint>
-        <div className="blue-container">
+
+        <div className="blue-container margin-bottom-5">
           <div
             className={`usa-form-group ${
               validationErrors.stinFile ? 'usa-form-group--error' : ''
@@ -85,32 +86,25 @@ export const StartCaseStep1 = connect(
           </div>
         </div>
 
-        <div className="button-box-container">
-          <button
-            className="usa-button margin-right-205 margin-bottom-4"
-            id="submit-case"
-            type="button"
-            onClick={() => {
-              completeStartCaseWizardStepSequence({ nextStep: 2 });
-            }}
-          >
-            Continue to Step 2 of 5
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
-            Back
-          </button>
-          <Button
-            onClick={() => {
-              formCancelToggleCancelSequence();
-            }}
-          >
-            Cancel
-          </Button>
-        </div>
+        <Button
+          id="submit-case"
+          onClick={() => {
+            completeStartCaseWizardStepSequence({ nextStep: 2 });
+          }}
+        >
+          Continue to Step 2 of 5
+        </Button>
+        <Button secondary onClick={() => navigateBackSequence()}>
+          Back
+        </Button>
+        <Button
+          link
+          onClick={() => {
+            formCancelToggleCancelSequence();
+          }}
+        >
+          Cancel
+        </Button>
       </>
     );
   },

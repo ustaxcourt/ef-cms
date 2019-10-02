@@ -105,9 +105,8 @@ export const RequestAccess = connect(
         </div>
         <RequestAccessDocumentForm />
         {requestAccessHelper.showPartiesRepresenting && <PartiesRepresenting />}
-        <div className="button-box-container margin-top-4">
-          <button
-            className="usa-button margin-right-205 margin-bottom-1"
+        <div className="margin-top-5">
+          <Button
             id="submit-document"
             type="submit"
             onClick={() => {
@@ -115,8 +114,9 @@ export const RequestAccess = connect(
             }}
           >
             Review Filing
-          </button>
+          </Button>
           <Button
+            link
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

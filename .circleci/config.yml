@@ -44,7 +44,6 @@ jobs:
       - run:
           name: Lint
           command: |
-            ls -la
             npm run lint
       - run:
           name: Shellcheck
@@ -94,7 +93,7 @@ jobs:
     docker:
       - image: sutt0n/ef-cms:latest
     environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: large
     steps:
       - attach_workspace:
@@ -123,7 +122,7 @@ jobs:
     docker:
       - image: sutt0n/ef-cms:latest
     environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: large
     steps:
       - attach_workspace:
@@ -140,7 +139,7 @@ jobs:
     docker:
       - image: sutt0n/ef-cms:latest
     environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: large
     steps:
       - attach_workspace:
@@ -180,6 +179,9 @@ jobs:
       - run:
           name: 'Deploy - Web API - Terraform'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
+      - run:
+          name: Setup Elasticsearch Index Settings
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
       - run:
           name: 'Deploy - Web Client - S3'
           command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"

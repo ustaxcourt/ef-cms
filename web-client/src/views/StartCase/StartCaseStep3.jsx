@@ -408,25 +408,20 @@ export const StartCaseStep3 = connect(
           </>
         )}
 
-        <div className="button-box-container">
-          <button
-            className="usa-button margin-right-205 margin-bottom-4"
+        <div className="margin-top-5">
+          <Button
             id="submit-case"
-            type="button"
             onClick={() => {
               completeStartCaseWizardStepSequence({ nextStep: 4 });
             }}
           >
             Continue to Step 4 of 5
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
+          </Button>
+          <Button secondary onClick={() => navigateBackSequence()}>
             Back
-          </button>
+          </Button>
           <Button
+            link
             onClick={() => {
               formCancelToggleCancelSequence();
             }}

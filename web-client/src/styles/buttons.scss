@@ -14,7 +14,6 @@
     &:hover {
       color: color($theme-color-secondary-vivid);
     }
-
   }
 
   &:not(.usa-button--unstyled) {
@@ -64,10 +63,17 @@
   &.ustc-button--unstyled {
     padding: 0.75rem 0;
     text-align: center;
+    &.padding-top-0 {
+      padding-top: 0;
+    }
   }
 
   &.ustc-button--mobile-inline {
     width: auto;
+  }
+
+  &.text-left {
+    text-align: left;
   }
 
   @media only screen and (min-width: $medium-screen) {

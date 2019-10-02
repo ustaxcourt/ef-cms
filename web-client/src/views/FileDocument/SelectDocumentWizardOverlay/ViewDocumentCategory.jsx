@@ -1,3 +1,4 @@
+import { Button } from '../../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
@@ -28,9 +29,10 @@ export const ViewDocumentCategory = connect(
       <React.Fragment>
         <div className="overlay-blue-header">
           <div className="grid-container">
-            <button
+            <Button
+              link
               aria-roledescription={`button to return to ${modal.fromLabel}`}
-              className="heading-3 usa-button usa-button--unstyled"
+              className="heading-3 text-left"
               onClick={() =>
                 chooseModalWizardStepSequence({
                   value: modal.from,
@@ -39,7 +41,7 @@ export const ViewDocumentCategory = connect(
             >
               <FontAwesomeIcon icon="caret-left" />
               {modal.fromLabel}
-            </button>
+            </Button>
           </div>
         </div>
         <div className="grid-container">
@@ -69,8 +71,9 @@ export const ViewDocumentCategory = connect(
                 className="category-view grid-container padding-bottom-1 padding-top-1"
                 key={`document-${index}`}
               >
-                <button
-                  className="usa-button usa-button--unstyled"
+                <Button
+                  link
+                  className="text-left"
                   onClick={() => {
                     const prefix =
                       (modal.forSecondary && 'secondaryDocument.') || '';
@@ -98,7 +101,7 @@ export const ViewDocumentCategory = connect(
                   }}
                 >
                   {document.documentType}
-                </button>
+                </Button>
               </div>
             ),
           )}
