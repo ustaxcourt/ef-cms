@@ -518,14 +518,9 @@ select[disabled] {
     }
 
     @media only screen and (min-width: $medium-screen) {
-      width: 100px;
-      height: 100px;
+      width: 75px;
+      height: 75px;
       padding: 20px;
-
-      .svg-wrapper img.svg {
-        width: 54px;
-        height: 62px;
-      }
     }
   }
 
@@ -534,13 +529,13 @@ select[disabled] {
     @media only screen and (min-width: $medium-screen) {
       min-height: 0;
       padding-left: 86px;
-      padding-left: 150px;
+      padding-left: 100px;
     }
   }
 
   .caseItem__content {
     @media only screen and (min-width: $medium-screen) {
-      padding-left: 150px;
+      padding-left: 100px;
     }
   }
 }
