@@ -95,6 +95,7 @@
         "events:*",
         "sns:*",
         "elasticloadbalancing:*",
+        "es:*",
         "ec2:*",
         "ses:*",
         "s3:*",
@@ -103,16 +104,6 @@
         "lambda:*"
       ],
       "Resource": "*"
-    },
-    {
-      "Sid": "Elasticsearch",
-      "Effect": "Allow",
-      "Action": "es:*",
-      "Principal": "*",
-      "Resource": "*",
-      "Condition": {
-        "IpAddress": {"aws:SourceIp": "*"}
-      }
     },
     {
       "Sid": "DynamoDescribeLimits",
