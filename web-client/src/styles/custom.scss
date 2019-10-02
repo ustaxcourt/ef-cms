@@ -30,6 +30,10 @@ hr {
   }
 }
 
+.max-width-200 {
+  max-width: 200px;
+}
+
 .text-align-left {
   text-align: left;
 }
@@ -491,7 +495,6 @@ select[disabled] {
     }
   }
   [role='listitem'],
-
   .caseItem__icon {
     position: absolute;
     top: 0;
@@ -548,7 +551,6 @@ select[disabled] {
     margin-bottom: 30px;
   }
   [role='listitem'],
-
   .caseItem__icon {
     position: absolute;
     top: 0;
