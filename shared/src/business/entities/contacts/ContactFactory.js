@@ -73,23 +73,23 @@ ContactFactory.PARTY_TYPES = {
   corporation: 'Corporation',
   custodian: 'Custodian',
   donor: 'Donor',
-  estate: 'Estate with an Executor/Personal Representative/Fiduciary/etc.',
+  estate: 'Estate with an executor/personal representative/fiduciary/etc.',
   estateWithoutExecutor:
-    'Estate without an Executor/Personal Representative/Fiduciary/etc.',
+    'Estate without an executor/personal representative/fiduciary/etc.',
   guardian: 'Guardian',
   nextFriendForIncompetentPerson:
-    'Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary)',
+    'Next friend for a legally incompetent person (without a guardian, conservator, or other like fiduciary)',
   nextFriendForMinor:
-    'Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary)',
+    'Next friend for a minor (without a guardian, conservator, or other like fiduciary)',
   partnershipAsTaxMattersPartner: 'Partnership (as the Tax Matters Partner)',
   partnershipBBA:
     'Partnership (as a partnership representative under the BBA regime)',
   partnershipOtherThanTaxMatters:
     'Partnership (as a partner other than Tax Matters Partner)',
   petitioner: 'Petitioner',
-  petitionerDeceasedSpouse: 'Petitioner & Deceased Spouse',
-  petitionerSpouse: 'Petitioner & Spouse',
-  survivingSpouse: 'Surviving Spouse',
+  petitionerDeceasedSpouse: 'Petitioner & deceased spouse',
+  petitionerSpouse: 'Petitioner & spouse',
+  survivingSpouse: 'Surviving spouse',
   transferee: 'Transferee',
   trust: 'Trust',
 };
