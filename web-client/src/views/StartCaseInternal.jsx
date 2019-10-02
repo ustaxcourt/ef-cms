@@ -5,6 +5,7 @@ import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
 import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
+import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { ScanBatchPreviewer } from './ScanBatchPreviewer';
@@ -69,8 +70,10 @@ export const StartCaseInternal = connect(
             <ErrorNotification />
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h1 className="margin-bottom-105">Case Information</h1>
-                <p className="required-statement margin-top-0 margin-bottom-4">
+                <Focus>
+                  <h1 className="margin-bottom-105">Case Information</h1>
+                </Focus>
+                <p className="margin-bottom-4 margin-top-0 required-statement">
                   *All fields required unless otherwise noted
                 </p>
               </div>
