@@ -120,9 +120,10 @@ export const DocketRecordHeader = connect(
               </div>
               <div className="only-small-screens">
                 <div className="margin-top-3 margin-bottom-1">
-                  <button
+                  <Button
+                    link
                     aria-label="docket record sort"
-                    className="usa-button usa-button--unstyled mobile-sort-docket-button"
+                    className="mobile-sort-docket-button"
                     onClick={() => {
                       toggleMobileDocketSortSequence();
                     }}
@@ -136,7 +137,7 @@ export const DocketRecordHeader = connect(
                     {formattedCaseDetail.docketRecordSort === 'byIndexDesc' &&
                       'Order Descending'}
                     <FontAwesomeIcon icon="sort" size="sm" />
-                  </button>
+                  </Button>
                 </div>
               </div>
             </div>
