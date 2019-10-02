@@ -7,9 +7,11 @@ echo "starting dynamo"
 DYNAMO_PID=$!
 ./wait-until.sh http://localhost:8000/shell
 
-./web-api/start-elasticsearch.sh &
-ESEARCH_PID=$!
-./wait-until.sh http://localhost:9200/ 200
+if [ -z "$SKIP_ELASTICSEARCH" ]; then 
+  ./web-api/start-elasticsearch.sh &
+  ESEARCH_PID=$!
+  ./wait-until.sh http://localhost:9200/ 200
+fi
 
 node ./web-api/start-s3rver &
 S3RVER_PID=$!
