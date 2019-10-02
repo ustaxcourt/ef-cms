@@ -748,7 +748,7 @@ module.exports = (appContextUser = {}) => {
           searchClientCache = new elasticsearch.Client({
             amazonES: {
               credentials: new EnvironmentCredentials('AWS'),
-              region: 'us-east-1',
+              region: environment.region,
             },
             apiVersion: '7.1',
             connectionClass: connectionClass,
