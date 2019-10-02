@@ -115,7 +115,7 @@ export const ContactPrimary = connect(
                   </span>
                 )}
               </label>
-              <span className="usa-hint">For example, Executor, PR, etc.</span>
+              <span className="usa-hint">For example, executor, PR, etc.</span>
               <input
                 autoCapitalize="none"
                 className="usa-input"

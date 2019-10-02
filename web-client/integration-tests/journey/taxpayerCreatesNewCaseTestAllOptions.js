@@ -363,7 +363,7 @@ export default (test, fakeFile, overrides = {}) => {
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'estateType',
       value:
-        'Estate without an Executor/Personal Representative/Fiduciary/etc.',
+        'Estate without an executor/personal representative/Fiduciary/etc.',
     });
 
     result = runCompute(startCaseHelper, {
