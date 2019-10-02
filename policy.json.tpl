@@ -97,13 +97,24 @@
         "elasticloadbalancing:*",
         "ec2:*",
         "ses:*",
-        "es:*",
         "s3:*",
         "cloudformation:*",
         "cloudwatch:*",
         "lambda:*"
       ],
       "Resource": "*"
+    },
+    {
+      "Sid": "Elasticsearch",
+      "Effect": "Allow",
+      "Action": [
+        "es:*",
+      ],
+      "Principal": "*",
+      "Resource": "*",
+      "Condition": {
+        "IpAddress": {"aws:SourceIp": "*"}
+      }
     },
     {
       "Sid": "DynamoDescribeLimits",
