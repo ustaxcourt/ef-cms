@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -36,10 +37,10 @@ export const SearchBox = connect(
               });
             }}
           />
-          <button className="usa-button ustc-search-button" type="submit">
+          <Button className="ustc-search-button" type="submit">
             <span className="usa-search-submit-text">Search</span>
             <span className="usa-sr-only">Search</span>
-          </button>
+          </Button>
           <a
             aria-label="advanced search"
             className="usa-link advanced margin-left-105"
