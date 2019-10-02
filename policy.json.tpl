@@ -107,9 +107,7 @@
     {
       "Sid": "Elasticsearch",
       "Effect": "Allow",
-      "Action": [
-        "es:*",
-      ],
+      "Action": "es:*",
       "Principal": "*",
       "Resource": "*",
       "Condition": {
