@@ -232,7 +232,7 @@ export const LocationInformationForm = connect(
             </label>
             <input
               autoCapitalize="none"
-              className="usa-input usa-input--medium"
+              className="usa-input max-width-200 usa-input--medium"
               id="postal-code"
               name="postalCode"
               type="text"
