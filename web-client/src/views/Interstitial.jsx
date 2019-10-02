@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -19,13 +20,7 @@ export const Interstitial = connect(
               United States Tax Court website for information on court services
               and contact information.
             </p>
-            <button
-              className="usa-button"
-              type="button"
-              onClick={() => history.back()}
-            >
-              Back
-            </button>
+            <Button onClick={() => history.back()}>Back</Button>
           </section>
         )}
         {!alertHelper.showErrorAlert && (
