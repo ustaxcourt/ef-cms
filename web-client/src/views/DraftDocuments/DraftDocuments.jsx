@@ -28,7 +28,7 @@ export const DraftDocuments = connect(
             <thead>
               <tr>
                 <th>Date</th>
-                <th>Filings and Proceedings</th>
+                <th>Filings and proceedings</th>
                 <th>Created By</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
