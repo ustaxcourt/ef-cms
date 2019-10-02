@@ -80,7 +80,11 @@ export const Forms = () => (
           <label className="usa-label" htmlFor="input-tel">
             Phone input
           </label>
-          <input className="usa-input" id="input-tel" type="tel" />
+          <input
+            className="usa-input max-width-200"
+            id="input-tel"
+            type="tel"
+          />
         </div>
 
         <div className="usa-form-group usa-form-group--error">
@@ -88,7 +92,7 @@ export const Forms = () => (
             Phone input with error
           </label>
           <input
-            className="usa-input usa-input--error"
+            className="usa-input max-width-200 usa-input--error"
             id="input-tel-error"
             type="tel"
           />
@@ -409,7 +413,7 @@ export const Forms = () => (
               ZIP
             </label>
             <input
-              className="usa-input usa-input--medium"
+              className="usa-input max-width-200 usa-input--medium"
               id="zip"
               name="zip"
               pattern="[\d]{5}(-[\d]{4})?"
