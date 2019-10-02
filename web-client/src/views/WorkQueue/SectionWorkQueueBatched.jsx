@@ -27,9 +27,9 @@ export const SectionWorkQueueBatched = connect(
               <th>Case name</th>
               <th aria-label="Status Icon">&nbsp;</th>
               <th>Document</th>
-              <th>Filed By</th>
+              <th>Filed by</th>
               <th>Batched</th>
-              <th>Batched By</th>
+              <th>Batched by</th>
             </tr>
           </thead>
           {formattedWorkQueue.map((item, idx) => {
