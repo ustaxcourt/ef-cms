@@ -1,5 +1,5 @@
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
-import { Button } from '../ustc-ui/Button/Button';
+import { Button } from '../../ustc-ui/Button/Button';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
