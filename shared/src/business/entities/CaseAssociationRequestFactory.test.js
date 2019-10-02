@@ -8,7 +8,7 @@ const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 describe('CaseAssociationRequestFactory', () => {
   let rawEntity;
 
-  let errors = () =>
+  const errors = () =>
     CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors();
 
   describe('Base', () => {
