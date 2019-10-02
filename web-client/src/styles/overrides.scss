@@ -6,8 +6,10 @@
   margin-bottom: 0 !important;
 }
 
-.margin-bottom-1 {
-  margin-bottom: .5em !important;
+.usa-form-group {
+  &.margin-bottom-1 {
+    margin-bottom: .5em;
+  }
 }
 
 .usa-header + .usa-section,
