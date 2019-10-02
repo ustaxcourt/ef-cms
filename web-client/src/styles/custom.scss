@@ -423,12 +423,7 @@ select[disabled] {
 }
 
 .alert-gold {
-  span {
-    max-width: 700px;
-  }
-
-  display: inline-block;
-
+  max-width: 700px;
   padding: 10px;
   border-left: 5px solid color($theme-color-warning);
   background: color($theme-color-warning-lighter);
@@ -448,9 +443,7 @@ select[disabled] {
 }
 
 .alert-gold.full-width {
-  span {
-    max-width: none;
-  }
+  max-width: none;
 }
 
 .alert-gold.wider {
