@@ -22,7 +22,7 @@
     apiVersion: '7.1',
     connectionClass: connectionClass,
     host: {
-      host: `${environment.elasticsearchEndpoint}`,
+      host: environment.elasticsearchEndpoint,
       port: 443,
       protocol: 'https',
     },
