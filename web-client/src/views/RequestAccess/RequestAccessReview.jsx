@@ -29,7 +29,8 @@ export const RequestAccessReview = connect(
             Review Your Filing
           </h2>
         </Focus>
-        <p>
+
+        <p className="full-width">
           You can’t edit your filing once you submit it. Please make sure your
           information appears the way you want it to.
         </p>
