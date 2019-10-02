@@ -8,9 +8,9 @@ CaseSearch.CASE_SEARCH_PAGE_SIZE = 5;
 CaseSearch.validationName = 'CaseSearch';
 
 /**
- * Case Note entity
+ * Case Search entity
  *
- * @param {object} rawProps the raw case note data
+ * @param {object} rawProps the raw case search data
  * @constructor
  */
 function CaseSearch(rawProps) {
