@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
@@ -52,13 +52,13 @@ class SuccessNotificationComponent extends React.Component {
                     <p className="usa-alert__text">{alertSuccess.message}</p>
                   </div>
                   <div className="tablet:grid-col-2 usa-alert__action margin-top-1">
-                    <button
-                      className="usa-button usa-button--unstyled no-underline"
-                      type="button"
+                    <Button
+                      className="no-underline"
+                      icon="times-circle"
                       onClick={() => dismissAlertSequence()}
                     >
-                      Dismiss <FontAwesomeIcon icon="times-circle" />
-                    </button>
+                      Dismiss
+                    </Button>
                   </div>
                 </div>
               </div>
