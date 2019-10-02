@@ -1,5 +1,6 @@
 import { AddPractitionerModal } from './AddPractitionerModal';
 import { AddRespondentModal } from './AddRespondentModal';
+import { Button } from '../../ustc-ui/Button/Button';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Text } from '../../ustc-ui/Text/Text';
@@ -90,13 +91,13 @@ const PartyInformation = connect(
 
                 {caseDetailHelper.showEditPrimaryContactButton && (
                   <p>
-                    <a
-                      className="usa-button usa-button--unstyled"
+                    <Button
+                      link
                       href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
                     >
                       <FontAwesomeIcon icon="edit" size="sm" />
                       Edit
-                    </a>
+                    </Button>
                   </p>
                 )}
                 {formattedCaseDetail.contactPrimary.serviceIndicator && (
@@ -121,13 +122,13 @@ const PartyInformation = connect(
                       )}
                   </address>
                   {caseDetailHelper.showEditContactButton && (
-                    <button
-                      className="usa-button usa-button--unstyled"
+                    <Button
+                      link
                       onClick={() => openEditSecondaryContactModalSequence()}
                     >
                       <FontAwesomeIcon icon="question-circle" size="sm" />
                       Why can’t I edit this?
-                    </button>
+                    </Button>
                   )}
                   {formattedCaseDetail.contactSecondary.serviceIndicator && (
                     <div className="margin-top-4">

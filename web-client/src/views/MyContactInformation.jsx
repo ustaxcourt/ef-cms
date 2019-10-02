@@ -1,5 +1,5 @@
 import { AddressDisplay } from './CaseDetail/PartyInformation';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -11,7 +11,7 @@ export const MyContactInformation = connect(
   },
   ({ constants, user }) => {
     return (
-      <React.Fragment>
+      <>
         <div className="case-search">
           <div className="card">
             <div className="content-wrapper gray">
@@ -19,18 +19,14 @@ export const MyContactInformation = connect(
               <hr />
               {AddressDisplay({ ...user, ...user.contact }, constants)}
               <p className="margin-bottom-0">
-                <a
-                  className="usa-button usa-button--unstyled"
-                  href="/user/contact/edit"
-                >
-                  <FontAwesomeIcon className="margin-0" icon="edit" />
+                <Button link href="/user/contact/edit" icon="edit">
                   Edit
-                </a>
+                </Button>
               </p>
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     );
   },
 );
