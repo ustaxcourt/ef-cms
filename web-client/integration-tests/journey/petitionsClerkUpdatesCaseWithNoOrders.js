@@ -18,8 +18,6 @@ export default test => {
     await test.runSequence('autoSaveCaseSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
 
-    console.log('caseDetail', test.getState('caseDetail'));
-
     const caseHelper = runCompute(caseDetailHelper, {
       state: test.getState(),
     });
