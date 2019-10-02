@@ -578,8 +578,6 @@ const environment = {
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
-AWS.config.region = environment.region;
-
 let user;
 const getCurrentUser = () => {
   return user;
