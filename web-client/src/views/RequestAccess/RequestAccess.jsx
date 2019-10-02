@@ -42,7 +42,7 @@ export const RequestAccess = connect(
             Request Access to This Case
           </h1>
         </Focus>
-        <p className="required-statement margin-top-0 margin-bottom-4">
+        <p className="margin-bottom-4 margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
         <div>
