@@ -230,7 +230,7 @@ export const Address = connect(
           </label>
           <input
             autoCapitalize="none"
-            className="usa-input tablet:usa-input--medium"
+            className="usa-input max-width-200 tablet:usa-input--medium"
             id={`${type}.postalCode`}
             name={`${type}.postalCode`}
             type="text"
