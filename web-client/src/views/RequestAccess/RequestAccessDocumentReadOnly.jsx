@@ -8,10 +8,16 @@ import { PDFPreviewButton } from '../PDFPreviewButton';
 export const RequestAccessDocumentReadOnly = connect(
   {
     chooseWizardStepSequence: sequences.chooseWizardStepSequence,
+    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     requestAccessHelper: state.requestAccessHelper,
   },
-  ({ chooseWizardStepSequence, form, requestAccessHelper }) => {
+  ({
+    chooseWizardStepSequence,
+    fileDocumentHelper,
+    form,
+    requestAccessHelper,
+  }) => {
     return (
       <React.Fragment>
         <div>
@@ -47,27 +53,59 @@ export const RequestAccessDocumentReadOnly = connect(
             </div>
           </div>
 
-          {form.hasSupportingDocuments && (
-            <div className="usa-form-group">
-              <label className="usa-label" htmlFor="supporting-filing">
-                {form.supportingDocumentMetadata.documentTitle}
-              </label>
-              <div className="grid-row">
-                <div className="grid-col flex-auto">
-                  <FontAwesomeIcon
-                    className="fa-icon-blue"
-                    icon={['fas', 'file-pdf']}
-                  />
+          {form.supportingDocuments &&
+            form.supportingDocuments.map((item, idx) => (
+              <React.Fragment key={idx}>
+                <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
+                  <div className="tablet:grid-col-6 margin-bottom-1">
+                    <div className="tablet:margin-bottom-0 margin-bottom-205">
+                      <label
+                        className="usa-label"
+                        htmlFor={`supporting-documents-${idx}`}
+                      >
+                        {item.documentTitle}
+                      </label>
+                      <div className="grid-row">
+                        <div className="grid-col flex-auto">
+                          <FontAwesomeIcon
+                            className="fa-icon-blue"
+                            icon={['fas', 'file-pdf']}
+                          />
+                        </div>
+                        <div className="grid-col flex-fill">
+                          <PDFPreviewButton
+                            file={item.supportingDocumentFile}
+                            title={item.documentTitle}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="tablet:grid-col-6 margin-bottom-1">
+                    {fileDocumentHelper.supportingDocuments[idx]
+                      .showFilingIncludes && (
+                      <div className="margin-bottom-0">
+                        <label className="usa-label" htmlFor="filing-includes">
+                          Document includes
+                        </label>
+                        <ul className="ustc-unstyled-list without-margins">
+                          {item.certificateOfService && (
+                            <li>
+                              Certificate of Service{' '}
+                              {
+                                fileDocumentHelper.supportingDocuments[idx]
+                                  .certificateOfServiceDateFormatted
+                              }
+                            </li>
+                          )}
+                          {item.attachments && <li>Attachment(s)</li>}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="grid-col flex-fill">
-                  <PDFPreviewButton
-                    file={form.supportingDocumentFile}
-                    title={form.supportingDocumentMetadata.documentTitle}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
+              </React.Fragment>
+            ))}
 
           {requestAccessHelper.showFilingIncludes && (
             <div className="usa-form-group">
