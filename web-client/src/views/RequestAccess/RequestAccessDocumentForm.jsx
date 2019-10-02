@@ -77,7 +77,7 @@ export const RequestAccessDocumentForm = connect(
                   className="usa-error-message"
                 />
               </div>
-              <div className="usa-form-group">
+              <div className="usa-form-group margin-bottom-1">
                 <legend id="primaryDocument-extra-items-legend">
                   Select extra items to include with your document
                   <button
