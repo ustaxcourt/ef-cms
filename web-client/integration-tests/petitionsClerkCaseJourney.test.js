@@ -71,5 +71,4 @@ describe('Case journey', () => {
   petitionsClerkCreatesNewCase(test, fakeFile);
   petitionsClerkSendsCaseToIRSHoldingQueue(test);
   petitionsClerkRunsBatchProcess(test);
-  petitionsClerkUpdatesCaseWithOrders(test);
 });
