@@ -68,6 +68,8 @@ jobs:
   build-shared:
     docker:
       - image: sutt0n/ef-cms:latest
+    environment:	
+    _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
     steps:
       - attach_workspace:
           at: ~/
