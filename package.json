@@ -162,6 +162,7 @@
     "seed:elasticsearch": "./web-api/seed-elasticsearch.sh",
     "start:api": "./run-local.sh",
     "start:api:ci": "SKIP_SANITIZE=true SKIP_VIRUS_SCAN=true CI=true ./run-local.sh",
+    "start:api:no-es": "SKIP_ELASTICSEARCH=true npm run start:api",
     "start:madge": "node ./graph-generators/index.js",
     "start:client": "npm run clean && FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev parcel --no-cache --no-source-maps web-client/src/index.pug",
     "start:client:ci": "CI=true npm run start:client",
