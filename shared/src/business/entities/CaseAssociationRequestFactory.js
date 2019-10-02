@@ -45,17 +45,17 @@ function CaseAssociationRequestFactory(rawProps) {
     this.representingPrimary = rawPropsParam.representingPrimary;
     this.representingSecondary = rawPropsParam.representingSecondary;
     this.scenario = rawPropsParam.scenario;
-    this.supportingDocuments = rawProps.supportingDocuments;
-  };
+    this.supportingDocuments = rawPropsParam.supportingDocuments;
 
-  if (this.supportingDocuments) {
-    this.supportingDocuments = this.supportingDocuments.map(item => {
-      return SupportingDocumentInformationFactory.get(
-        item,
-        CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES,
-      );
-    });
-  }
+    if (this.supportingDocuments) {
+      this.supportingDocuments = this.supportingDocuments.map(item => {
+        return SupportingDocumentInformationFactory.get(
+          item,
+          CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES,
+        );
+      });
+    }
+  };
 
   const documentWithExhibits = [
     'Motion to Substitute Parties and Change Caption',
