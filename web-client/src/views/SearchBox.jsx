@@ -5,10 +5,10 @@ import React from 'react';
 export const SearchBox = connect(
   {
     searchTerm: state.searchTerm,
-    submitSearchSequence: sequences.submitSearchSequence,
+    submitCaseSearchSequence: sequences.submitCaseSearchSequence,
     updateSearchTermSequence: sequences.updateSearchTermSequence,
   },
-  ({ searchTerm, submitSearchSequence, updateSearchTermSequence }) => {
+  ({ searchTerm, submitCaseSearchSequence, updateSearchTermSequence }) => {
     return (
       <form
         noValidate
@@ -16,7 +16,7 @@ export const SearchBox = connect(
         id="search-input"
         onSubmit={e => {
           e.preventDefault();
-          submitSearchSequence();
+          submitCaseSearchSequence();
         }}
       >
         <div role="search">
