@@ -755,8 +755,7 @@ module.exports = (appContextUser = {}) => {
             apiVersion: '7.1',
             awsConfig: new AWS.Config({ region: 'us-east-1' }),
             connectionClass: connectionClass,
-            host:
-              'search-efcms-search-dev-sxrrpfiim22y5qova3izlx2uri.us-east-1.es.amazonaws.com',
+            host: environment.elasticsearchEndpoint,
             log: 'warning',
             port: 443,
             protocol: 'https',
