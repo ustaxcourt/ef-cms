@@ -21,12 +21,12 @@ fi
 
 # start elasticsearch
 if [ -f /.dockerenv ]; then
-  useradd elasticsearch
-  usermod -a -G elasticsearch elasticsearch
-  chown elasticsearch:elasticsearch -R .elasticsearch
-  chmod -R 777 .elasticsearch
-  echo "starting elastic search"
-  su -c "id -gn && whoami && pwd && ls -la && ls -la .elasticsearch && cd .elasticsearch && JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 ./bin/elasticsearch" elasticsearch
+  # useradd elasticsearch
+  # usermod -a -G elasticsearch elasticsearch
+  # chown elasticsearch:elasticsearch -R .elasticsearch
+  # chmod -R 777 .elasticsearch
+  cd .elasticsearch && JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 ./bin/elasticsearch
+  #su -c "id -gn && whoami && pwd && ls -la && ls -la .elasticsearch && cd .elasticsearch && JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 ./bin/elasticsearch" elasticsearch
 else
   cd .elasticsearch && ./bin/elasticsearch
 fi
