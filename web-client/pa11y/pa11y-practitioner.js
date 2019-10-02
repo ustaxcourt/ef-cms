@@ -10,8 +10,7 @@ module.exports = [
       'click #react-select-2-input',
       'wait for element .select-react-element__menu to be visible',
       'click #react-select-2-option-5', //Substitution of Counsel
-      'set field #certificate-Yes to Yes',
-      'check field #certificate-Yes',
+      'check field #primaryDocument-certificateOfService',
       'wait for element #objections-Unknown to be visible',
       'set field #objections-Unknown to Unknown',
       'check field #objections-Unknown',
