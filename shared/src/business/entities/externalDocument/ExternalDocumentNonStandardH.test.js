@@ -83,7 +83,7 @@ describe('ExternalDocumentNonStandardH', () => {
         secondaryDocument: {
           category: 'Supporting Document',
           documentTitle: 'Brief in support of [Document Name]',
-          documentType: 'Brief in Suppport',
+          documentType: 'Brief in Support',
           previousDocument: 'Petition',
           scenario: 'Nonstandard A',
         },
