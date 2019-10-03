@@ -1357,8 +1357,18 @@ button.change-scanner-button {
 }
 
 .advanced-search {
-  .right-gray-border {
-    border-right: 1px solid color($theme-color-base-light);
+  /* big screens */
+  @media only screen and (min-width: $medium-screen) {
+    .right-gray-border {
+      border-right: 1px solid color($theme-color-base-light);
+    }
+  }
+  /* little screens */
+  @media only screen and (max-width: $medium-screen - 1) {
+    input#petitioner-name,
+    select {
+      margin-bottom: 20px;
+    }
   }
 
   .advanced-search__button {

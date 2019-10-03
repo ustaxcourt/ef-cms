@@ -43,7 +43,7 @@ export const AdvancedSearch = connect(
             <h3>Enter Search Criteria</h3>
             <Button
               link
-              className="margin-left-205 padding-0"
+              className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
               onClick={() => {
                 clearAdvancedSearchFormSequence();
               }}
@@ -60,7 +60,7 @@ export const AdvancedSearch = connect(
               }}
             >
               <div className="grid-row grid-gap">
-                <div className="grid-col-4 right-gray-border">
+                <div className="tablet:grid-col-4 right-gray-border">
                   <div
                     className={classNames(
                       'usa-form-group margin-bottom-0',
@@ -92,9 +92,9 @@ export const AdvancedSearch = connect(
                   </div>
                 </div>
 
-                <div className="grid-col-4 right-gray-border">
+                <div className="tablet:grid-col-4 right-gray-border">
                   <div className="grid-row grid-gap">
-                    <div className="grid-col-7">
+                    <div className="tablet:grid-col-7">
                       <label className="usa-label" htmlFor="country-type">
                         Country
                       </label>
@@ -113,7 +113,7 @@ export const AdvancedSearch = connect(
                     </div>
 
                     {advancedSearchHelper.showStateSelect && (
-                      <div className="grid-col-5">
+                      <div className="tablet:grid-col-5">
                         <label className="usa-label" htmlFor="petitioner-state">
                           State
                         </label>
@@ -151,9 +151,9 @@ export const AdvancedSearch = connect(
                   </div>
                 </div>
 
-                <div className="grid-col-4">
+                <div className="tablet:grid-col-4">
                   <div className="grid-row grid-gap">
-                    <div className="grid-col-7">
+                    <div className="tablet:grid-col-7">
                       <div
                         className={classNames(
                           'usa-form-group margin-bottom-0',
@@ -216,7 +216,7 @@ export const AdvancedSearch = connect(
                       </div>
                     </div>
 
-                    <div className="grid-col-5">
+                    <div className="tablet:grid-col-5">
                       <Button className="advanced-search__button" type="submit">
                         Search
                       </Button>
