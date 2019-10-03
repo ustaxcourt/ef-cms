@@ -12,37 +12,41 @@ describe('advancedSearchHelper', () => {
   it('returns only showStateSelect when searchResults is undefined', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
+        advancedSearchForm: {},
         constants: {
           CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
         },
-        form: {},
       },
     });
     expect(result).toEqual({ showStateSelect: false });
   });
 
-  it('returns showStateSelect true when state.form.countryType is "domestic"', () => {
+  it('returns showStateSelect true when state.advancedSearchForm.countryType is "domestic"', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
+        advancedSearchForm: {
+          countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        },
         constants: {
           CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
         },
-        form: { countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC },
       },
     });
     expect(result).toEqual({ showStateSelect: true });
   });
 
-  it('returns showStateSelect false when state.form.countryType is "international"', () => {
+  it('returns showStateSelect false when state.advancedSearchForm.countryType is "international"', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
+        advancedSearchForm: {
+          countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
+        },
         constants: {
           CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
         },
-        form: { countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL },
       },
     });
     expect(result).toEqual({ showStateSelect: false });
@@ -51,12 +55,12 @@ describe('advancedSearchHelper', () => {
   it('returns showNoMatches true and showSearchResults false if searchResults is an empty array', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
+        advancedSearchForm: { currentPage: 1 },
         constants: {
           CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
           US_STATES: ContactFactory.US_STATES,
         },
-        form: { currentPage: 1 },
         searchResults: [],
       },
     });
@@ -70,12 +74,12 @@ describe('advancedSearchHelper', () => {
   it('returns showNoMatches false, showSearchResults true, and the results count if searchResults is an not empty array', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
+        advancedSearchForm: { currentPage: 1 },
         constants: {
           CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
           US_STATES: ContactFactory.US_STATES,
         },
-        form: { currentPage: 1 },
         searchResults: [
           {
             contactPrimary: { name: 'Test Person', state: 'TN' },
@@ -95,12 +99,12 @@ describe('advancedSearchHelper', () => {
   it('formats search results and sorts by docket number', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
+        advancedSearchForm: { currentPage: 1 },
         constants: {
           CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
           US_STATES: ContactFactory.US_STATES,
         },
-        form: { currentPage: 1 },
         searchResults: [
           {
             caseCaption: 'Test Taxpayer, Petitioner',
@@ -143,12 +147,12 @@ describe('advancedSearchHelper', () => {
   it('only returns formatted results that should be currently shown based on form.currentPage', () => {
     let result = runCompute(advancedSearchHelper, {
       state: {
+        advancedSearchForm: { currentPage: 1 },
         constants: {
           CASE_SEARCH_PAGE_SIZE: 1,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
           US_STATES: ContactFactory.US_STATES,
         },
-        form: { currentPage: 1 },
         searchResults: [
           {
             caseCaption: 'Test Taxpayer, Petitioner',
@@ -182,12 +186,12 @@ describe('advancedSearchHelper', () => {
 
     result = runCompute(advancedSearchHelper, {
       state: {
+        advancedSearchForm: { currentPage: 3 },
         constants: {
           CASE_SEARCH_PAGE_SIZE: 1,
           COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
           US_STATES: ContactFactory.US_STATES,
         },
-        form: { currentPage: 3 },
         searchResults: [
           {
             caseCaption: 'Test Taxpayer, Petitioner',
