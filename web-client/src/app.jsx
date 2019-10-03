@@ -20,6 +20,7 @@ import {
   faEyeSlash,
   faFileAlt,
   faFilePdf as faFilePdfRegular,
+  faTimesCircle as faTimesCircleRegular,
   faUser,
 } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -175,6 +176,7 @@ const app = {
       faSync,
       faThumbtack,
       faTimesCircle,
+      faTimesCircleRegular,
       faTrash,
       faUser,
       faUserCheck,

@@ -2,6 +2,7 @@ import { BigHeader } from '../BigHeader';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SearchResults } from './SearchResults';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -13,6 +14,7 @@ export const AdvancedSearch = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     advancedSearchHelper: state.advancedSearchHelper,
+    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     constants: state.constants,
     submitAdvancedSearchSequence: sequences.submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence:
@@ -23,6 +25,7 @@ export const AdvancedSearch = connect(
   ({
     advancedSearchForm,
     advancedSearchHelper,
+    clearAdvancedSearchFormSequence,
     constants,
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
@@ -38,6 +41,16 @@ export const AdvancedSearch = connect(
 
           <div className="header-with-blue-background">
             <h3>Enter Search Criteria</h3>
+            <Button
+              link
+              className="margin-left-205 padding-0"
+              onClick={() => {
+                clearAdvancedSearchFormSequence();
+              }}
+            >
+              <FontAwesomeIcon icon={['far', 'times-circle']} />
+              Clear Search
+            </Button>
           </div>
           <div className="blue-container">
             <form
