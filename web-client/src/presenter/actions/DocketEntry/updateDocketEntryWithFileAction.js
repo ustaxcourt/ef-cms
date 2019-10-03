@@ -29,9 +29,7 @@ export const updateDocketEntryWithFileAction = async ({
     isPaper: true,
     docketNumber,
     caseId,
-    createdAt:
-      documentMetadata.dateReceived ||
-      applicationContext.getUtilities().createISODateString(),
+    createdAt: documentMetadata.dateReceived,
     receivedAt: documentMetadata.dateReceived,
   };
 
