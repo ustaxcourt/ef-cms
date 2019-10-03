@@ -37,7 +37,7 @@ export const SupportingDocumentForm = connect(
           Supporting Document {index + 1}{' '}
           <Button
             link
-            className="red-warning"
+            className="red-warning text-left"
             icon="times-circle"
             onClick={() => {
               removeSupportingDocumentSequence({ index });
