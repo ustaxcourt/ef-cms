@@ -10,6 +10,7 @@ const {
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -53,7 +54,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: false,
-        partyType: 'Petitioner',
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
       },
@@ -404,7 +405,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
-      partyType: 'Petitioner',
+      partyType: ContactFactory.PARTY_TYPES.petitioner,
       practitioners: [],
       preferredTrialCity: 'Aberdeen, South Dakota',
       procedureType: 'Small',
