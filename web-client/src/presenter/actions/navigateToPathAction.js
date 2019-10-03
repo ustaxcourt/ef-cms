@@ -10,6 +10,5 @@ import { state } from 'cerebral';
  */
 export const navigateToPathAction = async ({ get, props, router }) => {
   const path = props.path || get(state.path);
-  console.log('we are here', path);
   await router.route(path);
 };
