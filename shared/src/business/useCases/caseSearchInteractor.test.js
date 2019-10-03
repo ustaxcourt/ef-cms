@@ -22,7 +22,71 @@ describe('caseSearchInteractor', () => {
     expect(results).toEqual([]);
   });
 
-  it('calls search function with correct params and returns records', async () => {
+  it('calls search function with correct params and returns records for an exact match result', async () => {
+    searchSpy = jest.fn(async () => {
+      return {
+        hits: {
+          hits: [
+            {
+              _source: {
+                caseId: { S: '1' },
+              },
+            },
+            {
+              _source: {
+                caseId: { S: '2' },
+              },
+            },
+          ],
+        },
+      };
+    });
+
+    const results = await caseSearchInteractor({
+      applicationContext,
+      petitionerName: 'test person',
+    });
+
+    expect(searchSpy).toHaveBeenCalled();
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+      {
+        bool: {
+          should: [
+            {
+              bool: {
+                minimum_should_match: 2,
+                should: [
+                  { term: { 'contactPrimary.M.name.S': 'test' } },
+                  { term: { 'contactPrimary.M.name.S': 'person' } },
+                ],
+              },
+            },
+            {
+              bool: {
+                minimum_should_match: 2,
+                should: [
+                  { term: { 'contactPrimary.M.secondaryName.S': 'test' } },
+                  { term: { 'contactPrimary.M.secondaryName.S': 'person' } },
+                ],
+              },
+            },
+            {
+              bool: {
+                minimum_should_match: 2,
+                should: [
+                  { term: { 'contactSecondary.M.name.S': 'test' } },
+                  { term: { 'contactSecondary.M.name.S': 'person' } },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    ]);
+    expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
+  });
+
+  it('calls search function with correct params and returns records for a nonexact match result', async () => {
     const commonExpectedQuery = [
       {
         bool: {
