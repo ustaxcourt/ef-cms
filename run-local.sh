@@ -69,7 +69,7 @@ npx sls offline start "$@" --config web-api/serverless-case-notes.yml &
 echo "starting notifications service"
 npx sls offline start "$@" --config web-api/serverless-notifications.yml &
 
-if [ -z "$SKIP_ELASTICSEARCH" ]; then 
+if [ -z "$CI" ]; then 
   echo "starting streams service"
   npx sls offline start "$@" --config web-api/serverless-streams.yml &
 fi
