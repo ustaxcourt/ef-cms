@@ -14,8 +14,5 @@
 
 if [ -z "$CI" ]; then 
   ./wait-until.sh http://localhost:3012/ 403
-fi
-
-if [ -z "$SKIP_ELASTICSEARCH" ]; then 
   ./wait-until.sh http://localhost:9200/ 200
 fi
