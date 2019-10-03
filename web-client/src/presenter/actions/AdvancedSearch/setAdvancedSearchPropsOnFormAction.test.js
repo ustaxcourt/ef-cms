@@ -3,7 +3,7 @@ import { runAction } from 'cerebral/test';
 import { setAdvancedSearchPropsOnFormAction } from './setAdvancedSearchPropsOnFormAction';
 
 describe('setAdvancedSearchPropsOnFormAction', () => {
-  it('sets valid advanced search fields passed in as props on state.form', async () => {
+  it('sets valid advanced search fields passed in as props on state.advancedSearchForm', async () => {
     const result = await runAction(setAdvancedSearchPropsOnFormAction, {
       modules: { presenter },
       props: {
@@ -14,10 +14,10 @@ describe('setAdvancedSearchPropsOnFormAction', () => {
         somethingElse: 'g',
         yearFiledMax: 'e',
       },
-      state: { form: { anotherThing: 'h' } },
+      state: { advancedSearchForm: { anotherThing: 'h' } },
     });
 
-    expect(result.state.form).toEqual({
+    expect(result.state.advancedSearchForm).toEqual({
       anotherThing: 'h',
       countryType: 'c',
       petitionerName: 'a',

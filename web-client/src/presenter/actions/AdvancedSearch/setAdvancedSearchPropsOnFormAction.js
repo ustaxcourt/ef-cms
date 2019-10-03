@@ -16,7 +16,7 @@ export const setAdvancedSearchPropsOnFormAction = ({ props, store }) => {
     'yearFiledMax',
   ].forEach(field => {
     if (props[field]) {
-      store.set(state.form[field], props[field]);
+      store.set(state.advancedSearchForm[field], props[field]);
     }
   });
 };

@@ -51,6 +51,7 @@ import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 export const state = {
   addDocketEntryHelper,
+  advancedSearchForm: {},
   advancedSearchHelper,
   alertHelper,
   archiveDraftDocument: {
