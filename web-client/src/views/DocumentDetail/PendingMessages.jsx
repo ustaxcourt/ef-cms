@@ -281,7 +281,7 @@ export const PendingMessages = connect(
                             {message.from}
                           </div>
                           <div className="margin-bottom-1">
-                            <span className="label-inline">Received</span>
+                            <span className="label-inline">Sent on</span>
                             {message.createdAtTimeFormatted}
                           </div>
                           <p>{message.message}</p>
