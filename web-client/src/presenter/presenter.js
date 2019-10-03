@@ -126,6 +126,7 @@ import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
 import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
+import { removeSupportingDocumentSequence } from './sequences/removeSupportingDocumentSequence';
 import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
@@ -389,6 +390,7 @@ export const presenter = {
     refreshCaseSequence,
     removeBatchSequence,
     removeScannedPdfSequence,
+    removeSupportingDocumentSequence,
     rescanBatchSequence,
     resetHeaderAccordionsSequence,
     reviewExternalDocumentInformationSequence,
