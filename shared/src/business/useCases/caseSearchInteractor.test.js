@@ -22,7 +22,7 @@ describe('caseSearchInteractor', () => {
     expect(results).toEqual([]);
   });
 
-  it('calls search function with correct params and returns records', async () => {
+  it('calls search function with correct params and returns records for an exact match result', async () => {
     searchSpy = jest.fn(async () => {
       return {
         hits: {
@@ -44,11 +44,7 @@ describe('caseSearchInteractor', () => {
 
     const results = await caseSearchInteractor({
       applicationContext,
-      countryType: 'domestic',
-      petitionerName: 'test',
-      petitionerState: 'Nebraska',
-      yearFiledMax: '2019',
-      yearFiledMin: '2018',
+      petitionerName: 'test person',
     });
 
     expect(searchSpy).toHaveBeenCalled();
@@ -56,11 +52,42 @@ describe('caseSearchInteractor', () => {
       {
         bool: {
           should: [
-            { match: { 'contactPrimary.M.name.S': 'test' } },
-            { match: { 'contactSecondary.M.name.S': 'test' } },
+            {
+              bool: {
+                minimum_should_match: 2,
+                should: [
+                  { term: { 'contactPrimary.M.name.S': 'test' } },
+                  { term: { 'contactPrimary.M.name.S': 'person' } },
+                ],
+              },
+            },
+            {
+              bool: {
+                minimum_should_match: 2,
+                should: [
+                  { term: { 'contactPrimary.M.secondaryName.S': 'test' } },
+                  { term: { 'contactPrimary.M.secondaryName.S': 'person' } },
+                ],
+              },
+            },
+            {
+              bool: {
+                minimum_should_match: 2,
+                should: [
+                  { term: { 'contactSecondary.M.name.S': 'test' } },
+                  { term: { 'contactSecondary.M.name.S': 'person' } },
+                ],
+              },
+            },
           ],
         },
       },
+    ]);
+    expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
+  });
+
+  it('calls search function with correct params and returns records for a nonexact match result', async () => {
+    const commonExpectedQuery = [
       {
         bool: {
           should: [
@@ -101,6 +128,91 @@ describe('caseSearchInteractor', () => {
           ],
         },
       },
+    ];
+
+    searchSpy = jest.fn(async args => {
+      //expected args for an exact matches search
+      if (args.body.query.bool.must[0].bool.should[0].bool) {
+        return {
+          hits: {},
+        };
+      } else {
+        return {
+          hits: {
+            hits: [
+              {
+                _source: {
+                  caseId: { S: '1' },
+                },
+              },
+              {
+                _source: {
+                  caseId: { S: '2' },
+                },
+              },
+            ],
+          },
+        };
+      }
+    });
+
+    const results = await caseSearchInteractor({
+      applicationContext,
+      countryType: 'domestic',
+      petitionerName: 'test person',
+      petitionerState: 'Nebraska',
+      yearFiledMax: '2019',
+      yearFiledMin: '2018',
+    });
+
+    expect(searchSpy).toHaveBeenCalled();
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
+      {
+        bool: {
+          should: [
+            {
+              bool: {
+                minimum_should_match: 2,
+                should: [
+                  { term: { 'contactPrimary.M.name.S': 'test' } },
+                  { term: { 'contactPrimary.M.name.S': 'person' } },
+                ],
+              },
+            },
+            {
+              bool: {
+                minimum_should_match: 2,
+                should: [
+                  { term: { 'contactPrimary.M.secondaryName.S': 'test' } },
+                  { term: { 'contactPrimary.M.secondaryName.S': 'person' } },
+                ],
+              },
+            },
+            {
+              bool: {
+                minimum_should_match: 2,
+                should: [
+                  { term: { 'contactSecondary.M.name.S': 'test' } },
+                  { term: { 'contactSecondary.M.name.S': 'person' } },
+                ],
+              },
+            },
+          ],
+        },
+      },
+      ...commonExpectedQuery,
+    ]);
+    expect(searchSpy.mock.calls[1][0].body.query.bool.must).toEqual([
+      {
+        bool: {
+          should: [
+            { match: { 'contactPrimary.M.name.S': 'test person' } },
+            { match: { 'contactPrimary.M.secondaryName.S': 'test person' } },
+            { match: { 'contactSecondary.M.name.S': 'test person' } },
+          ],
+        },
+      },
+      ...commonExpectedQuery,
     ]);
     expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
   });

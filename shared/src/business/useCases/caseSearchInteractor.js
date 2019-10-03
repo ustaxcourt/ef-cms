@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { get } = require('lodash');
 
 /**
  * caseSearchInteractor
@@ -20,40 +21,103 @@ exports.caseSearchInteractor = async ({
   yearFiledMax,
   yearFiledMin,
 }) => {
-  const query = [];
+  const exactMatchesQuery = [];
+  const nonExactMatchesQuery = [];
+  const commonQuery = [];
 
   if (petitionerName) {
-    query.push({
+    const petitionerNameArray = petitionerName.toLowerCase().split(' ');
+    exactMatchesQuery.push({
+      bool: {
+        should: [
+          {
+            bool: {
+              minimum_should_match: petitionerNameArray.length,
+              should: petitionerNameArray.map(word => {
+                return {
+                  term: {
+                    'contactPrimary.M.name.S': word,
+                  },
+                };
+              }),
+            },
+          },
+          {
+            bool: {
+              minimum_should_match: petitionerNameArray.length,
+              should: petitionerNameArray.map(word => {
+                return {
+                  term: {
+                    'contactPrimary.M.secondaryName.S': word,
+                  },
+                };
+              }),
+            },
+          },
+          {
+            bool: {
+              minimum_should_match: petitionerNameArray.length,
+              should: petitionerNameArray.map(word => {
+                return {
+                  term: {
+                    'contactSecondary.M.name.S': word,
+                  },
+                };
+              }),
+            },
+          },
+        ],
+      },
+    });
+
+    nonExactMatchesQuery.push({
       bool: {
         should: [
           { match: { 'contactPrimary.M.name.S': petitionerName } },
+          { match: { 'contactPrimary.M.secondaryName.S': petitionerName } },
           { match: { 'contactSecondary.M.name.S': petitionerName } },
         ],
       },
     });
   }
   if (countryType) {
-    query.push({
+    commonQuery.push({
       bool: {
         should: [
-          { match: { 'contactPrimary.M.countryType.S': countryType } },
-          { match: { 'contactSecondary.M.countryType.S': countryType } },
+          {
+            match: {
+              'contactPrimary.M.countryType.S': countryType,
+            },
+          },
+          {
+            match: {
+              'contactSecondary.M.countryType.S': countryType,
+            },
+          },
         ],
       },
     });
   }
   if (petitionerState) {
-    query.push({
+    commonQuery.push({
       bool: {
         should: [
-          { match: { 'contactPrimary.M.state.S': petitionerState } },
-          { match: { 'contactSecondary.M.state.S': petitionerState } },
+          {
+            match: {
+              'contactPrimary.M.state.S': petitionerState,
+            },
+          },
+          {
+            match: {
+              'contactSecondary.M.state.S': petitionerState,
+            },
+          },
         ],
       },
     });
   }
   if (yearFiledMin || yearFiledMax) {
-    query.push({
+    commonQuery.push({
       bool: {
         should: [
           {
@@ -79,11 +143,11 @@ exports.caseSearchInteractor = async ({
     });
   }
 
-  const body = await applicationContext.getSearchClient().search({
+  const exactMatchesBody = await applicationContext.getSearchClient().search({
     body: {
       query: {
         bool: {
-          must: query,
+          must: [...exactMatchesQuery, ...commonQuery],
         },
       },
     },
@@ -91,9 +155,32 @@ exports.caseSearchInteractor = async ({
   });
 
   const foundCases = [];
-  if (body && body.hits) {
-    for (let hit of body.hits.hits) {
+  const exactMatchesHits = get(exactMatchesBody, 'hits.hits');
+
+  if (exactMatchesHits && exactMatchesHits.length > 0) {
+    for (let hit of exactMatchesBody.hits.hits) {
       foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
+    }
+  } else {
+    const nonExactMatchesBody = await applicationContext
+      .getSearchClient()
+      .search({
+        body: {
+          query: {
+            bool: {
+              must: [...nonExactMatchesQuery, ...commonQuery],
+            },
+          },
+        },
+        index: 'efcms',
+      });
+
+    const nonExactMatchesHits = get(nonExactMatchesBody, 'hits.hits');
+
+    if (nonExactMatchesHits && nonExactMatchesHits.length > 0) {
+      for (let hit of nonExactMatchesBody.hits.hits) {
+        foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
+      }
     }
   }
 
