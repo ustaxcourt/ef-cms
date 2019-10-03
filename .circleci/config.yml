@@ -93,7 +93,7 @@ jobs:
     docker:
       - image: sutt0n/ef-cms:latest
     environment:
-      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
+      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: large
     steps:
       - attach_workspace:
@@ -101,9 +101,8 @@ jobs:
       - run:
           name: Web Client - Test
           command: |
-            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api > /dev/null &
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /dev/null &
             ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 5
             npm run test:client
       - run:
           name: Web Client - SonarQube
@@ -122,7 +121,7 @@ jobs:
     docker:
       - image: sutt0n/ef-cms:latest
     environment:
-      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
+      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: large
     steps:
       - attach_workspace:
@@ -130,16 +129,17 @@ jobs:
       - run:
           name: Pa11y
           command: |
-            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null &
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
             npm run test:pa11y
 
   e2e-cypress:
     docker:
       - image: sutt0n/ef-cms:latest
     environment:
-      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
+      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: large
     steps:
       - attach_workspace:
@@ -152,9 +152,10 @@ jobs:
               ./node_modules/.bin/cypress install
             fi
 
-            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci > /dev/null &
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
             ./wait-until-services.sh
-            ./wait-until.sh http://localhost:1234
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
             npm run cypress
       - store_artifacts:
           path: /home/circleci/project/cypress/videos/

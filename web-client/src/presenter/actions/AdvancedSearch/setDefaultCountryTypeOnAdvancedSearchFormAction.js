@@ -12,5 +12,5 @@ export const setDefaultCountryTypeOnAdvancedSearchFormAction = ({
   store,
 }) => {
   const { COUNTRY_TYPES } = get(state.constants);
-  store.set(state.form.countryType, COUNTRY_TYPES.DOMESTIC);
+  store.set(state.advancedSearchForm.countryType, COUNTRY_TYPES.DOMESTIC);
 };

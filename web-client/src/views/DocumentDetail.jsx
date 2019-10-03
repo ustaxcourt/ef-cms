@@ -1,4 +1,5 @@
 import { ArchiveDraftDocumentModal } from './DraftDocuments/ArchiveDraftDocumentModal';
+import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailEdit } from './CaseDetailEdit/CaseDetailEdit';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailReadOnly } from './CaseDetailReadOnly';
@@ -123,8 +124,8 @@ export const DocumentDetail = connect(
           <div className="float-right">
             {caseHelper.hasOrders &&
               documentDetailHelper.showViewOrdersNeededButton && (
-                <button
-                  className="usa-button usa-button--unstyled"
+                <Button
+                  link
                   onClick={() => {
                     gotoOrdersNeededSequence({
                       docketNumber: caseDetail.docketNumber,
@@ -132,7 +133,7 @@ export const DocumentDetail = connect(
                   }}
                 >
                   View Orders Needed
-                </button>
+                </Button>
               )}
 
             {documentDetailHelper.isDraftDocument && (
@@ -142,13 +143,13 @@ export const DocumentDetail = connect(
                 }`}
               >
                 <>
-                  <a href={documentDetailHelper.documentEditUrl}>
-                    {' '}
+                  <Button link href={documentDetailHelper.documentEditUrl}>
                     <FontAwesomeIcon icon={['fas', 'edit']} /> Edit
-                  </a>
+                  </Button>
 
-                  <button
-                    className="usa-button usa-button--unstyled red-warning margin-left-2"
+                  <Button
+                    link
+                    className="red-warning margin-right-0"
                     onClick={() => {
                       archiveDraftDocumentModalSequence({
                         caseId: caseDetail.caseId,
@@ -162,37 +163,37 @@ export const DocumentDetail = connect(
                   >
                     <FontAwesomeIcon icon="times-circle" size="sm" />
                     Delete
-                  </button>
+                  </Button>
                 </>
               </div>
             )}
 
             {caseHelper.showServeToIrsButton &&
               documentDetailHelper.formattedDocument.isPetition && (
-                <button
-                  className="usa-button serve-to-irs margin-right-0"
+                <Button
+                  className="serve-to-irs margin-right-0"
                   onClick={() => clickServeToIrsSequence()}
                 >
                   <FontAwesomeIcon icon={['fas', 'clock']} />
                   Serve to IRS
-                </button>
+                </Button>
               )}
             {documentDetailHelper.showServeDocumentButton && (
-              <button
-                className="usa-button serve-to-irs margin-right-0"
+              <Button
+                className="serve-to-irs margin-right-0"
                 onClick={() => openServeConfirmModalDialogSequence()}
               >
                 <FontAwesomeIcon icon={['fas', 'paper-plane']} />
                 Serve Document
-              </button>
+              </Button>
             )}
             {caseHelper.showRecallButton &&
               documentDetailHelper.formattedDocument.isPetition && (
                 <span className="recall-button-box">
                   <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
                   <span className="batched-message">Batched for IRS</span>
-                  <button
-                    className="usa-button recall-petition"
+                  <Button
+                    className="recall-petition"
                     onClick={() =>
                       setModalDialogNameSequence({
                         showModal: 'RecallPetitionModalDialog',
@@ -200,12 +201,12 @@ export const DocumentDetail = connect(
                     }
                   >
                     Recall
-                  </button>
+                  </Button>
                 </span>
               )}
             {documentDetailHelper.showSignDocumentButton && (
-              <button
-                className="usa-button serve-to-irs margin-right-0"
+              <Button
+                className="serve-to-irs margin-right-0"
                 onClick={() =>
                   navigateToPathSequence({
                     path: messageId
@@ -216,7 +217,7 @@ export const DocumentDetail = connect(
               >
                 <FontAwesomeIcon icon={['fas', 'edit']} />
                 Sign This Document
-              </button>
+              </Button>
             )}
           </div>
         </div>
