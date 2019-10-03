@@ -1,6 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { set, unset } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
@@ -11,7 +11,11 @@ import { validateAdvancedSearchAction } from '../actions/AdvancedSearch/validate
 export const submitAdvancedSearchSequence = [
   validateAdvancedSearchAction,
   {
-    error: [setAlertErrorAction, setValidationErrorsAction],
+    error: [
+      setAlertErrorAction,
+      setValidationErrorsAction,
+      unset(state.searchResults),
+    ],
     success: [
       clearAlertsAction,
       setWaitingForResponseAction,
