@@ -229,7 +229,7 @@ export const DocumentDetail = connect(
         <CaseDetailHeader />
         <section className="usa-section grid-container DocumentDetail">
           <h2 className="heading-1">
-            {documentDetailHelper.formattedDocument.documentType}
+            {documentDetailHelper.formattedDocument.documentTitle}
             {documentDetailHelper.isDraftDocument && ' - DRAFT'}
           </h2>
           <div className="filed-by">
