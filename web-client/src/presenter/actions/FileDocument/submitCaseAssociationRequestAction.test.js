@@ -34,7 +34,7 @@ describe('submitCaseAssociationRequestAction', () => {
       state: {
         caseDetail: {},
         form: {
-          documentType: 'Entry of Appearance',
+          documentType: 'Entry of appearance',
           primaryDocumentFile: {},
         },
       },

@@ -1561,8 +1561,8 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Substitute Parties and Change Caption",
-      "documentType": "Motion to Substitute Parties and Change Caption",
+      "documentTitle": "Motion to substitute parties and change caption",
+      "documentType": "Motion to substitute parties and change caption",
       "category": "Motion",
       "eventCode": "M107",
       "scenario": "Standard",
@@ -3125,7 +3125,7 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Brief in Support of [Document Name]",
+      "documentTitle": "Brief in support of [Document Name]",
       "documentType": "Brief in Support",
       "category": "Supporting Document",
       "eventCode": "BRF",
