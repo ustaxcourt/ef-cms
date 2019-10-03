@@ -18,13 +18,13 @@ describe('submitAdvancedSearchAction', () => {
     };
   });
 
-  it('should call caseSearchInteractor with the state.form as searchParams', async () => {
+  it('should call caseSearchInteractor with the state.advancedSearchForm as searchParams', async () => {
     await runAction(submitAdvancedSearchAction, {
       modules: {
         presenter,
       },
       state: {
-        form: {
+        advancedSearchForm: {
           countryType: 'c',
           petitionerName: 'a',
           petitionerState: 'b',

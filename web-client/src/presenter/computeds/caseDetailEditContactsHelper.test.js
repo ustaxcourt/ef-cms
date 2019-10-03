@@ -94,7 +94,7 @@ describe('caseDetailEditContactsHelper', () => {
         displayTitle: true,
         header: 'Executor/Personal Representative/Etc.',
         nameLabel: 'Name of decedent',
-        secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
+        secondaryNameLabel: 'Name of executor/personal representative, etc.',
       },
     });
   });

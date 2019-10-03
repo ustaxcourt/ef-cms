@@ -21,6 +21,7 @@ import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStep
 import { chooseStartCaseWizardStepSequence } from './sequences/chooseStartCaseWizardStepSequence';
 import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
+import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
@@ -207,6 +208,7 @@ import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserError
 import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
 import { unsetFormSubmittingSequence } from './sequences/unsetFormSubmittingSequence';
 import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsInternalSequence';
+import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
 import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
@@ -286,6 +288,7 @@ export const presenter = {
     chooseStartCaseWizardStepSequence,
     chooseWizardStepSequence,
     chooseWorkQueueSequence,
+    clearAdvancedSearchFormSequence,
     clearAlertSequence,
     clearDocumentSequence,
     clearModalFormSequence,
@@ -470,6 +473,7 @@ export const presenter = {
     unsetFormSaveSuccessSequence,
     unsetFormSubmittingSequence,
     unsetWorkQueueIsInternalSequence,
+    updateAdvancedSearchFormValueSequence,
     updateCaseAssociationFormValueSequence,
     updateCaseDeadlineSequence,
     updateCaseDetailSequence,

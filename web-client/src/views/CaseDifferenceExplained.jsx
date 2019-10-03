@@ -3,7 +3,7 @@ import React from 'react';
 
 export const CaseDifferenceExplained = () => (
   <div className="subsection case-difference">
-    <h2>Which case procedure should I choose?</h2>
+    <h2>Which Case Procedure Should I Choose?</h2>
     <h3 className="margin-bottom-4">
       Do I qualify for a small tax case procedure?
     </h3>
@@ -22,33 +22,32 @@ export const CaseDifferenceExplained = () => (
           <td>Deficiency</td>
           <td>
             The amount of deficiency (including any additions to tax and
-            penalties) cannot exceed $50,000 for any one year.
+            penalties) cannot exceed $50,000 for any one year
           </td>
         </tr>
         <tr>
           <td>Collection (Lien/Levy)</td>
           <td>
             The total amount of unpaid tax cannot exceed $50,000 for all years
-            combined.
+            combined
           </td>
         </tr>
         <tr>
           <td>Innocent Spouse Relief</td>
           <td>
             The amount of spousal relief sought cannot exceed $50,000 for all
-            years combined.
+            years combined
           </td>
         </tr>
         <tr>
           <td>Worker Classification</td>
           <td>
-            The amount in dispute cannot exceed $50,000 for any calendar
-            quarter.
+            The amount in dispute cannot exceed $50,000 for any calendar quarter
           </td>
         </tr>
         <tr>
           <td>Interest Abatement</td>
-          <td>The amount of the abatement sought cannot exceed $50,000.</td>
+          <td>The amount of the abatement sought cannot exceed $50,000</td>
         </tr>
         {[
           'Partnership',
