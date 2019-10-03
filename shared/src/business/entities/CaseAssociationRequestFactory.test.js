@@ -141,36 +141,27 @@ describe('CaseAssociationRequestFactory', () => {
       describe('Has supporting documents', () => {
         beforeEach(() => {
           rawEntity.hasSupportingDocuments = true;
+          rawEntity.supportingDocuments = [
+            { attachments: false, certificateOfService: false },
+          ];
         });
-
-        it('should require supporting document', () => {
-          expect(errors().supportingDocument).toEqual(
+        it('should require supporting document type be entered', () => {
+          expect(errors().supportingDocuments[0].supportingDocument).toEqual(
             VALIDATION_ERROR_MESSAGES.supportingDocument,
           );
-          rawEntity.supportingDocument = 'Declaration in Support';
-          expect(errors().supportingDocument).toEqual(undefined);
+          rawEntity.supportingDocuments[0].supportingDocument = 'Brief';
+
+          expect(errors().supportingDocuments).toEqual(undefined);
         });
 
-        describe('Has file and free text', () => {
-          beforeEach(() => {
-            rawEntity.supportingDocument = 'Declaration in Support';
-          });
-
-          it('should require file', () => {
-            expect(errors().supportingDocumentFile).toEqual(
-              VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
-            );
-            rawEntity.supportingDocumentFile = {};
-            expect(errors().supportingDocumentFile).toEqual(undefined);
-          });
-
-          it('should require free text', () => {
-            expect(errors().supportingDocumentFreeText).toEqual(
-              VALIDATION_ERROR_MESSAGES.supportingDocumentFreeText,
-            );
-            rawEntity.supportingDocumentFreeText = 'Lori';
-            expect(errors().supportingDocumentFreeText).toEqual(undefined);
-          });
+        it('should require certificate of service date to be entered if certificateOfService is true', () => {
+          rawEntity.supportingDocuments[0].certificateOfService = true;
+          rawEntity.supportingDocuments[0].supportingDocument = 'brief';
+          expect(
+            errors().supportingDocuments[0].certificateOfServiceDate,
+          ).toEqual(VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1]);
+          rawEntity.supportingDocuments[0].certificateOfServiceDate = moment().format();
+          expect(errors().supportingDocuments).toEqual(undefined);
         });
       });
     });

@@ -11,6 +11,7 @@ import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { state } from 'cerebral';
 
 const gotoRequestAccess = [
@@ -25,6 +26,7 @@ const gotoRequestAccess = [
   canRequestAccessAction,
   {
     proceed: [
+      setDefaultFileDocumentFormValuesAction,
       getUserRoleAction,
       {
         practitioner: [
