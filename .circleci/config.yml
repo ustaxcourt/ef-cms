@@ -123,16 +123,17 @@ jobs:
       - image: sutt0n/ef-cms:latest
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
       - run:
           name: Pa11y
           command: |
-            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci &
-            ./wait-until-services.sh
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm start:api:ci &
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm start:client:ci &
             ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
             npm run test:pa11y
 
   e2e-cypress:
@@ -140,7 +141,7 @@ jobs:
       - image: sutt0n/ef-cms:latest
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
@@ -152,9 +153,10 @@ jobs:
               ./node_modules/.bin/cypress install
             fi
 
-            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:client:ci start:api:ci &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:1234
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm start:api:ci &
+            SLS_DEBUG=* AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm start:client:ci &
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
             npm run cypress
       - store_artifacts:
           path: /home/circleci/project/cypress/videos/
