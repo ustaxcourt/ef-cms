@@ -22,7 +22,7 @@ const BetaBar = toggleBetaBarSequence => {
           </div>
           <div className="grid-col-2">
             <button
-              className="button-icon float-right usa-button usa-button--unstyled"
+              className="button-icon float-right"
               onClick={() => toggleBetaBarSequence()}
             >
               <img
