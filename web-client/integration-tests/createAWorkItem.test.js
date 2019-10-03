@@ -91,7 +91,7 @@ async function createCase(test) {
     contactSecondary: {},
     filingType: 'Myself',
     hasIrsNotice: false,
-    partyType: 'Petitioner',
+    partyType: ContactFactory.PARTY_TYPES.petitioner,
     preferredTrialCity: 'Lubbock, Texas',
     procedureType: 'Regular',
     signature: true,
