@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
@@ -54,9 +55,10 @@ export const FilingsAndProceedings = connect(
                 </a>
               </NonMobile>
               <Mobile>
-                <button
+                <Button
+                  link
                   aria-roledescription="button to view document details"
-                  className="usa-button usa-button--unstyled border-0"
+                  className="padding-0 border-0"
                   onClick={() => {
                     showDocketRecordDetailModalSequence({
                       docketRecordIndex,
@@ -65,7 +67,7 @@ export const FilingsAndProceedings = connect(
                   }}
                 >
                   {description}
-                </button>
+                </Button>
               </Mobile>
             </React.Fragment>
           )}

@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
@@ -15,18 +16,10 @@ export const IdleLogout = connect(
           United States Tax Court website for information on court services and
           contact information.
         </p>
-        <button
-          className="usa-button align-right"
-          onClick={() => redirectToLoginSequence()}
-        >
-          Log In
-        </button>{' '}
-        <a
-          className="usa-button usa-button--outline align-right"
-          href="https://www.ustaxcourt.gov/"
-        >
+        <Button onClick={() => redirectToLoginSequence()}>Log In</Button>
+        <Button link href="https://www.ustaxcourt.gov/">
           Go to the U.S. Tax Court Website
-        </a>
+        </Button>
       </section>
     );
   },

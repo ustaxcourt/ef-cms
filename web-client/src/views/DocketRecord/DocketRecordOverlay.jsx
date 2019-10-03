@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FocusLock } from '../../ustc-ui/FocusLock/FocusLock';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
@@ -77,26 +78,27 @@ class DocketRecordOverlayComponent extends React.Component {
             className={'modal-overlay'}
             role="dialog"
           >
-            <button
+            <Button
+              link
               aria-roledescription="button to return to docket record"
-              className="heading-2 usa-button usa-button--unstyled"
+              className="heading-2 text-left"
               onClick={() => closeFunc()}
             >
               <FontAwesomeIcon icon="caret-left" />
               Document Details
-            </button>
+            </Button>
             <hr className="margin-top-1 margin-bottom-2" />
             <h3 tabIndex="-1">{record.description}</h3>
-            <a
+            <Button
               aria-label={'View PDF'}
-              className="usa-button view-pdf-button tablet-full-width"
+              className="view-pdf-button tablet-full-width"
               href={`${baseUrl}/documents/${document.documentId}/document-download-url?token=${token}`}
               rel="noreferrer noopener"
               target="_blank"
             >
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
               View PDF
-            </a>
+            </Button>
             <p className="semi-bold label margin-top-3">Date</p>
             <p className="margin-top-0">{document.createdAtFormatted}</p>
             <p className="semi-bold label margin-top-3">Filed By</p>
