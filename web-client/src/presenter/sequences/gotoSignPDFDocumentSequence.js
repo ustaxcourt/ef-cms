@@ -21,5 +21,5 @@ export const gotoSignPDFDocumentSequence = [
   setSignatureNameForPdfSigningAction,
   setPDFForSigningAction,
   setPDFPageForSigningAction,
-  setCurrentPageAction('PDFSigner'),
+  setCurrentPageAction('SignStipDecision'),
 ];
