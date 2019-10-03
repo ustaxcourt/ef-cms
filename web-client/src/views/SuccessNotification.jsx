@@ -23,11 +23,9 @@ class SuccessNotificationComponent extends React.Component {
     this.notificationRef = React.createRef();
     const isMessageOnly =
       alertSuccess && alertSuccess.message && !alertSuccess.title;
-    const isTitleOnly =
-      alertSuccess && alertSuccess.title && !alertSuccess.messssage;
 
     return (
-      <React.Fragment>
+      <>
         {alertSuccess && (
           <div
             aria-live="polite"
@@ -43,15 +41,12 @@ class SuccessNotificationComponent extends React.Component {
               <div className="grid-container padding-x-0">
                 <div className="grid-row">
                   <div className="tablet:grid-col-10">
-                    <p
-                      className="heading-3 usa-alert__heading"
-                      style={{ paddingTop: isTitleOnly ? '6px' : '0px' }}
-                    >
+                    <p className="heading-3 usa-alert__heading padding-top-0">
                       {alertSuccess.title}
                     </p>
                     <p className="usa-alert__text">{alertSuccess.message}</p>
                   </div>
-                  <div className="tablet:grid-col-2 usa-alert__action margin-top-1">
+                  <div className="tablet:grid-col-2 usa-alert__action">
                     <Button
                       link
                       className="no-underline padding-0"
@@ -66,7 +61,7 @@ class SuccessNotificationComponent extends React.Component {
             </div>
           </div>
         )}
-      </React.Fragment>
+      </>
     );
   }
 }
