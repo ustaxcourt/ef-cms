@@ -38,7 +38,7 @@ export const SupportingDocuments = connect(
           </Button>
         )}
 
-        {fileDocumentHelper.showAddSupportingDocumentsLimitReached && (
+        {!!fileDocumentHelper.showAddSupportingDocumentsLimitReached && (
           <p>
             You can only add 5 supporting documents at a time. You may file
             another supporting document in a separate filing.
