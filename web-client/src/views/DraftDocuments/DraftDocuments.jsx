@@ -29,7 +29,7 @@ export const DraftDocuments = connect(
               <tr>
                 <th>Date</th>
                 <th>Filings and proceedings</th>
-                <th>Created By</th>
+                <th>Created by</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
               </tr>

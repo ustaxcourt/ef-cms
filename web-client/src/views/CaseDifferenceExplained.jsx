@@ -42,8 +42,7 @@ export const CaseDifferenceExplained = () => (
         <tr>
           <td>Worker Classification</td>
           <td>
-            The amount in dispute cannot exceed $50,000 for any calendar
-            quarter
+            The amount in dispute cannot exceed $50,000 for any calendar quarter
           </td>
         </tr>
         <tr>
