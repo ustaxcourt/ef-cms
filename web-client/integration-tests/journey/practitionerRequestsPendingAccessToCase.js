@@ -21,11 +21,11 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentType',
-      value: 'Motion to Substitute Parties and Change Caption',
+      value: 'Motion to substitute parties and change caption',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentTitleTemplate',
-      value: 'Motion to Substitute Parties and Change Caption',
+      value: 'Motion to substitute parties and change caption',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'eventCode',
@@ -84,7 +84,7 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('form.documentTitle')).toEqual(
-      'Motion to Substitute Parties and Change Caption',
+      'Motion to substitute parties and change caption',
     );
     expect(test.getState('validationErrors')).toEqual({});
 

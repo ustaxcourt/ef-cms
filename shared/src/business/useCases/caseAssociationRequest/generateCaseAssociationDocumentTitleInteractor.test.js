@@ -18,13 +18,13 @@ describe('generateCaseAssociationDocumentTitle', () => {
     const title = await generateCaseAssociationDocumentTitleInteractor({
       applicationContext,
       caseAssociationRequest: {
-        documentTitleTemplate: 'Substitution of Counsel for [Petitioner Names]',
-        documentType: 'Substitution of Counsel',
+        documentTitleTemplate: 'Substitution of counsel for [Petitioner Names]',
+        documentType: 'Substitution of counsel',
         representingPrimary: true,
       },
       contactPrimaryName: 'Test Petitioner',
       contactSecondaryName: 'Another Petitioner',
     });
-    expect(title).toEqual('Substitution of Counsel for Petr. Test Petitioner');
+    expect(title).toEqual('Substitution of counsel for Petr. Test Petitioner');
   });
 });

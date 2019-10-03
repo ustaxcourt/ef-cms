@@ -27,7 +27,7 @@ export const SupportingDocumentInclusionsForm = connect(
     validationData,
   }) => {
     return (
-      <React.Fragment>
+      <>
         <div
           className={`usa-form-group ${
             !data.certificateOfService ? 'margin-bottom-0' : ''
@@ -208,7 +208,7 @@ export const SupportingDocumentInclusionsForm = connect(
             />
           </div>
         )}
-      </React.Fragment>
+      </>
     );
   },
 );

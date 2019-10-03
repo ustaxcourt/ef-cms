@@ -146,8 +146,8 @@
   ],
   "Appearance and Representation": [
     {
-      "documentTitle": "Entry of Appearance",
-      "documentType": "Entry of Appearance",
+      "documentTitle": "Entry of appearance",
+      "documentType": "Entry of appearance",
       "category": "Appearance and Representation",
       "eventCode": "EA",
       "scenario": "Standard",
@@ -179,8 +179,8 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Substitution of Counsel",
-      "documentType": "Substitution of Counsel",
+      "documentTitle": "Substitution of counsel",
+      "documentType": "Substitution of counsel",
       "category": "Appearance and Representation",
       "eventCode": "SOC",
       "scenario": "Standard",
@@ -1881,8 +1881,8 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Substitute Parties and Change Caption",
-      "documentType": "Motion to Substitute Parties and Change Caption",
+      "documentTitle": "Motion to substitute parties and change caption",
+      "documentType": "Motion to substitute parties and change caption",
       "category": "Motion",
       "eventCode": "M107",
       "scenario": "Standard",
@@ -3753,7 +3753,7 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Brief in Support of [Document Name]",
+      "documentTitle": "Brief in support of [Document Name]",
       "documentType": "Brief in Support",
       "category": "Supporting Document",
       "eventCode": "BRF",

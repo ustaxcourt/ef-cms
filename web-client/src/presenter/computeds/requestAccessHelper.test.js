@@ -39,7 +39,7 @@ describe('requestAccessHelper', () => {
 
   it('indicates file uploads are valid', () => {
     state.form = {
-      documentType: 'Entry of Appearance',
+      documentType: 'Entry of appearance',
       primaryDocumentFile: { some: 'file' },
     };
 
@@ -69,7 +69,7 @@ describe('requestAccessHelper', () => {
         ...state,
         user: { role: 'practitioner' },
         form: {
-          documentType: 'Motion to Substitute Parties and Change Caption',
+          documentType: 'Motion to substitute parties and change caption',
           primaryDocumentFile: { some: 'file' },
         },
       },
@@ -146,7 +146,7 @@ describe('requestAccessHelper', () => {
     state.form = {
       attachments: true,
       certificateOfService: true,
-      documentType: 'Motion to Substitute Parties and Change Caption',
+      documentType: 'Motion to substitute parties and change caption',
       exhibits: true,
       hasSupportingDocuments: false,
     };
@@ -158,7 +158,7 @@ describe('requestAccessHelper', () => {
     state.form = {
       attachments: true,
       certificateOfService: true,
-      documentType: 'Motion to Substitute Parties and Change Caption',
+      documentType: 'Motion to substitute parties and change caption',
       exhibits: true,
       hasSupportingDocuments: true,
     };

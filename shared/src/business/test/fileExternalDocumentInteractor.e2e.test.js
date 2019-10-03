@@ -76,14 +76,14 @@ describe('fileExternalDocumentInteractor integration test', () => {
         certificateOfService: false,
         certificateOfServiceDate: 'undefined-undefined-undefined',
         docketNumber: '201-19',
-        documentTitle: 'Motion for Leave to File Brief in Support of Petition',
+        documentTitle: 'Motion for Leave to File Brief in support of Petition',
         documentType: 'Motion for Leave to File',
         hasSupportingDocuments: true,
         partyPrimary: true,
         scenario: 'Nonstandard H',
         secondaryDocument: {
           category: 'Supporting Document',
-          documentTitle: 'Brief in Support of Petition',
+          documentTitle: 'Brief in support of Petition',
           documentType: 'Brief in Support',
           previousDocument: 'Petition',
           scenario: 'Nonstandard A',
@@ -91,7 +91,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         secondarySupportingDocuments: [
           {
             category: 'Supporting Document',
-            documentTitle: 'Brief in Support of Amended Answer',
+            documentTitle: 'Brief in support of Amended Answer',
             documentType: 'Brief in Support',
             previousDocument: 'Amended Answer',
             scenario: 'Nonstandard A',
@@ -101,7 +101,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         supportingDocuments: [
           {
             category: 'Supporting Document',
-            documentTitle: 'Brief in Support of Amended Answer',
+            documentTitle: 'Brief in support of Amended Answer',
             documentType: 'Brief in Support',
             previousDocument: 'Amended Answer',
             scenario: 'Nonstandard A',
@@ -147,19 +147,19 @@ describe('fileExternalDocumentInteractor integration test', () => {
           description: 'Request for Place of Trial at Aberdeen, South Dakota',
         },
         {
-          description: 'Motion for Leave to File Brief in Support of Petition',
+          description: 'Motion for Leave to File Brief in support of Petition',
           documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
         },
         {
-          description: 'Brief in Support of Amended Answer',
+          description: 'Brief in support of Amended Answer',
           documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
         },
         {
-          description: 'Brief in Support of Petition',
+          description: 'Brief in support of Petition',
           documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
         },
         {
-          description: 'Brief in Support of Amended Answer',
+          description: 'Brief in support of Amended Answer',
           documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
         },
       ],
@@ -216,7 +216,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           docketNumber: '201-19',
           documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle:
-            'Motion for Leave to File Brief in Support of Petition',
+            'Motion for Leave to File Brief in support of Petition',
           documentType: 'Motion for Leave to File',
           hasSupportingDocuments: true,
           partyPrimary: true,
@@ -240,7 +240,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 docketNumber: '201-19',
                 documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
                 documentTitle:
-                  'Motion for Leave to File Brief in Support of Petition',
+                  'Motion for Leave to File Brief in support of Petition',
                 documentType: 'Motion for Leave to File',
                 hasSupportingDocuments: true,
                 partyPrimary: true,
@@ -266,7 +266,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           caseId,
           category: 'Supporting Document',
           documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
-          documentTitle: 'Brief in Support of Amended Answer',
+          documentTitle: 'Brief in support of Amended Answer',
           documentType: 'Brief in Support',
           partyPrimary: true,
           previousDocument: 'Amended Answer',
@@ -283,7 +283,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               document: {
                 category: 'Supporting Document',
                 documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
-                documentTitle: 'Brief in Support of Amended Answer',
+                documentTitle: 'Brief in support of Amended Answer',
                 documentType: 'Brief in Support',
                 partyPrimary: true,
                 previousDocument: 'Amended Answer',
@@ -308,7 +308,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         {
           category: 'Supporting Document',
           documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
-          documentTitle: 'Brief in Support of Petition',
+          documentTitle: 'Brief in support of Petition',
           documentType: 'Brief in Support',
           lodged: true,
           partyPrimary: true,
@@ -325,7 +325,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               document: {
                 category: 'Supporting Document',
                 documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
-                documentTitle: 'Brief in Support of Petition',
+                documentTitle: 'Brief in support of Petition',
                 documentType: 'Brief in Support',
                 lodged: true,
                 partyPrimary: true,
@@ -351,7 +351,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         {
           category: 'Supporting Document',
           documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
-          documentTitle: 'Brief in Support of Amended Answer',
+          documentTitle: 'Brief in support of Amended Answer',
           documentType: 'Brief in Support',
           lodged: true,
           partyPrimary: true,
@@ -368,7 +368,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               document: {
                 category: 'Supporting Document',
                 documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
-                documentTitle: 'Brief in Support of Amended Answer',
+                documentTitle: 'Brief in support of Amended Answer',
                 documentType: 'Brief in Support',
                 lodged: true,
                 partyPrimary: true,
@@ -443,7 +443,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           docketNumber: '201-19',
           documentId: '12de0fac-f63c-464f-ac71-0f54fd248484',
           documentTitle:
-            'Motion for Leave to File Brief in Support of Petition',
+            'Motion for Leave to File Brief in support of Petition',
           documentType: 'Motion for Leave to File',
           hasSupportingDocuments: true,
           partyPrimary: true,
@@ -473,7 +473,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         document: {
           category: 'Supporting Document',
           documentId: '22de0fac-f63c-464f-ac71-0f54fd248484',
-          documentTitle: 'Brief in Support of Amended Answer',
+          documentTitle: 'Brief in support of Amended Answer',
           documentType: 'Brief in Support',
           partyPrimary: true,
           previousDocument: 'Amended Answer',
@@ -502,7 +502,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         document: {
           category: 'Supporting Document',
           documentId: '32de0fac-f63c-464f-ac71-0f54fd248484',
-          documentTitle: 'Brief in Support of Petition',
+          documentTitle: 'Brief in support of Petition',
           documentType: 'Brief in Support',
           lodged: true,
           partyPrimary: true,
@@ -532,7 +532,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         document: {
           category: 'Supporting Document',
           documentId: '42de0fac-f63c-464f-ac71-0f54fd248484',
-          documentTitle: 'Brief in Support of Amended Answer',
+          documentTitle: 'Brief in support of Amended Answer',
           documentType: 'Brief in Support',
           lodged: true,
           partyPrimary: true,
