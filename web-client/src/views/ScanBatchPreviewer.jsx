@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import {
   ConfirmRescanBatchModal,
   DeleteBatchModal,
@@ -145,10 +146,9 @@ export const ScanBatchPreviewer = connect(
             />
           </div>
 
-          <button
+          <Button
             aria-label="create pdf"
-            className="usa-button margin-top-4"
-            type="button"
+            className="margin-top-4"
             onClick={e => {
               e.preventDefault();
               generatePdfFromScanSessionSequence({
@@ -159,7 +159,7 @@ export const ScanBatchPreviewer = connect(
           >
             <FontAwesomeIcon icon={['fas', 'file-pdf']} />
             Create PDF
-          </button>
+          </Button>
         </>
       );
     };
@@ -247,8 +247,9 @@ export const ScanBatchPreviewer = connect(
           {showModal === 'ConfirmDeletePDFModal' && <DeletePDFModal />}
           <div className="padding-top-4">
             <PdfPreview />
-            <button
-              className="margin-top-3 usa-button usa-button--outline red-warning bg-white"
+            <Button
+              secondary
+              className="margin-top-3 red-warning bg-white"
               onClick={e => {
                 e.preventDefault();
                 openConfirmDeletePDFModalSequence();
@@ -256,7 +257,7 @@ export const ScanBatchPreviewer = connect(
             >
               <FontAwesomeIcon icon={['fas', 'times-circle']} />
               Delete PDF
-            </button>
+            </Button>
           </div>
         </>
       );
@@ -274,11 +275,11 @@ export const ScanBatchPreviewer = connect(
                     <tr key={batch.index}>
                       <td>
                         {selectedBatchIndex !== batch.index && (
-                          <button
+                          <Button
+                            link
                             aria-label={`batch ${batch.index + 1} -- ${
                               batch.pages.length
                             } pages total`}
-                            className="usa-button usa-button--unstyled"
                             onClick={e => {
                               e.preventDefault();
                               setSelectedBatchIndexSequence({
@@ -287,7 +288,7 @@ export const ScanBatchPreviewer = connect(
                             }}
                           >
                             Batch {batch.index + 1}
-                          </button>
+                          </Button>
                         )}
                         {selectedBatchIndex === batch.index && (
                           <span className="batch-index">
@@ -299,9 +300,10 @@ export const ScanBatchPreviewer = connect(
                         <span>{batch.pages.length} pages</span>
                       </td>
                       <td>
-                        <button
+                        <Button
+                          link
                           aria-label={`rescan batch ${batch.index + 1}`}
-                          className="usa-button usa-button--unstyled no-underline"
+                          className="no-underline"
                           onClick={e => {
                             e.preventDefault();
                             openConfirmRescanBatchModalSequence({
@@ -311,14 +313,15 @@ export const ScanBatchPreviewer = connect(
                         >
                           <FontAwesomeIcon icon={['fas', 'redo-alt']} />
                           Rescan
-                        </button>
+                        </Button>
                       </td>
                       <td>
-                        <button
+                        <Button
+                          link
                           aria-label={`delete batch ${batch.index + 1} - with ${
                             batch.pages.length
                           } total pages`}
-                          className="usa-button usa-button--unstyled no-underline red-warning float-right"
+                          className="no-underline red-warning float-right"
                           onClick={e => {
                             e.preventDefault();
                             openConfirmDeleteBatchModalSequence({
@@ -329,7 +332,7 @@ export const ScanBatchPreviewer = connect(
                         >
                           <FontAwesomeIcon icon={['fas', 'times-circle']} />
                           Delete
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -343,8 +346,9 @@ export const ScanBatchPreviewer = connect(
           <hr className="lighter" />
 
           {scanBatchPreviewerHelper.scannerSource && (
-            <button
-              className="usa-button usa-button--unstyled no-underline"
+            <Button
+              link
+              className="no-underline"
               onClick={e => {
                 e.preventDefault();
                 startScanSequence();
@@ -352,7 +356,7 @@ export const ScanBatchPreviewer = connect(
             >
               <FontAwesomeIcon icon={['fas', 'plus-circle']} />
               Add Batch
-            </button>
+            </Button>
           )}
         </>
       );
@@ -458,11 +462,12 @@ export const ScanBatchPreviewer = connect(
                 <span className="margin-right-1">
                   Scanner: {scanBatchPreviewerHelper.scannerSource || 'None'}
                 </span>
-                <button
+                <Button
+                  link
                   aria-label={`${
                     scanBatchPreviewerHelper.scannerSource ? 'Change' : 'Select'
                   } scanner source`}
-                  className="usa-button usa-button--unstyled change-scanner-button margin-right-3"
+                  className="change-scanner-button"
                   onClick={e => {
                     e.preventDefault();
                     openChangeScannerSourceModalSequence();
@@ -471,7 +476,7 @@ export const ScanBatchPreviewer = connect(
                   {scanBatchPreviewerHelper.scannerSource
                     ? 'Change'
                     : 'Select Scanner'}
-                </button>
+                </Button>
               </div>
             </div>
           </div>

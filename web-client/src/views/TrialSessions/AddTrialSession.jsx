@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { LocationInformationForm } from './LocationInformationForm';
@@ -75,18 +76,15 @@ export const AddTrialSession = connect(
               </div>
             </div>
 
-            <button className="usa-button margin-right-2" type="submit">
-              Add Session
-            </button>
-            <button
-              className="usa-button usa-button--unstyled"
-              type="button"
+            <Button type="submit">Add Session</Button>
+            <Button
+              link
               onClick={() => {
                 formCancelToggleCancelSequence();
               }}
             >
               Cancel
-            </button>
+            </Button>
           </form>
         </section>
       </>

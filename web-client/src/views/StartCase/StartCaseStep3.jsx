@@ -38,11 +38,11 @@ export const StartCaseStep3 = connect(
     return (
       <>
         <Focus>
-          <h2 className="focusable" tabIndex="-1">
+          <h2 className="focusable margin-bottom-105" tabIndex="-1">
             3. Who are you filing this petition for?
           </h2>
         </Focus>
-        <p className="required-statement margin-top-05 margin-bottom-4">
+        <p className="margin-bottom-4 margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
         <div className="blue-container grid-container padding-x-0">
