@@ -45,6 +45,7 @@ describe('DateHandler', () => {
       const result = formatDateString(dateRetrievedFromStorage, 'YYYY-MM-DD'); // stored literally as EST
       expect(result).toBe('2001-01-01');
     });
+
     it('creates a formatted EST time from a database iso string', () => {
       const dateRetrievedFromStorage = '2019-03-02T04:40:46.415Z';
       const result = formatDateString(
@@ -52,6 +53,12 @@ describe('DateHandler', () => {
         'YYYY-MM-DD hh:mm a',
       );
       expect(result).toBe('2019-03-01 11:40 pm');
+    });
+
+    it('creates a formatted EST time using DateHandler internal format "TIME" ', () => {
+      const dateRetrievedFromStorage = '2019-03-02T01:40:46.415Z';
+      const result = formatDateString(dateRetrievedFromStorage, 'TIME');
+      expect(result).toBe('8:40 pm ET');
     });
   });
 });
