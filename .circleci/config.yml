@@ -122,7 +122,7 @@ jobs:
       - image: sutt0n/ef-cms:latest
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: xlarge
+    resource_class: large
     steps:
       - attach_workspace:
           at: ~/
@@ -140,7 +140,7 @@ jobs:
       - image: sutt0n/ef-cms:latest
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: xlarge
+    resource_class: large
     steps:
       - attach_workspace:
           at: ~/
