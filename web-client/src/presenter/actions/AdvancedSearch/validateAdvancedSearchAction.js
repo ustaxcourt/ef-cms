@@ -16,7 +16,7 @@ export const validateAdvancedSearchAction = async ({
 }) => {
   const errors = applicationContext.getUseCases().validateCaseSearchInteractor({
     applicationContext,
-    caseSearch: get(state.form),
+    caseSearch: get(state.advancedSearchForm),
   });
 
   const isValid = isEmpty(errors);

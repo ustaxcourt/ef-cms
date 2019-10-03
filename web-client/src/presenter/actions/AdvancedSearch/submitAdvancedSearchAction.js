@@ -12,7 +12,7 @@ export const submitAdvancedSearchAction = async ({
   applicationContext,
   get,
 }) => {
-  const form = get(state.form);
+  const form = get(state.advancedSearchForm);
 
   const searchResults = await applicationContext
     .getUseCases()
