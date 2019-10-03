@@ -205,6 +205,7 @@ import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserError
 import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
 import { unsetFormSubmittingSequence } from './sequences/unsetFormSubmittingSequence';
 import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsInternalSequence';
+import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
 import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
@@ -466,6 +467,7 @@ export const presenter = {
     unsetFormSaveSuccessSequence,
     unsetFormSubmittingSequence,
     unsetWorkQueueIsInternalSequence,
+    updateAdvancedSearchFormValueSequence,
     updateCaseAssociationFormValueSequence,
     updateCaseDeadlineSequence,
     updateCaseDetailSequence,

@@ -1,8 +1,8 @@
 import { BigHeader } from '../BigHeader';
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
 import { SearchResults } from './SearchResults';
-import { StateSelect } from './StateSelect';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -11,20 +11,21 @@ import classNames from 'classnames';
 
 export const AdvancedSearch = connect(
   {
+    advancedSearchForm: state.advancedSearchForm,
     advancedSearchHelper: state.advancedSearchHelper,
     constants: state.constants,
-    form: state.form,
     submitAdvancedSearchSequence: sequences.submitAdvancedSearchSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateAdvancedSearchFormValueSequence:
+      sequences.updateAdvancedSearchFormValueSequence,
     usStates: state.constants.US_STATES,
     validationErrors: state.validationErrors,
   },
   ({
+    advancedSearchForm,
     advancedSearchHelper,
     constants,
-    form,
     submitAdvancedSearchSequence,
-    updateFormValueSequence,
+    updateAdvancedSearchFormValueSequence,
     usStates,
     validationErrors,
   }) => {
@@ -63,9 +64,9 @@ export const AdvancedSearch = connect(
                       id="petitioner-name"
                       name="petitionerName"
                       type="text"
-                      value={form.petitionerName || ''}
+                      value={advancedSearchForm.petitionerName || ''}
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateAdvancedSearchFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
@@ -84,17 +85,10 @@ export const AdvancedSearch = connect(
                       <label className="usa-label" htmlFor="country-type">
                         Country
                       </label>
-                      <select
-                        className="usa-select"
+                      <BindedSelect
+                        bind="advancedSearchForm.countryType"
                         id="country-type"
                         name="countryType"
-                        value={form.countryType}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
                       >
                         <option value={constants.COUNTRY_TYPES.DOMESTIC}>
                           - United States -
@@ -102,7 +96,7 @@ export const AdvancedSearch = connect(
                         <option value={constants.COUNTRY_TYPES.INTERNATIONAL}>
                           - International -
                         </option>
-                      </select>
+                      </BindedSelect>
                     </div>
 
                     {advancedSearchHelper.showStateSelect && (
@@ -110,11 +104,35 @@ export const AdvancedSearch = connect(
                         <label className="usa-label" htmlFor="petitioner-state">
                           State
                         </label>
-                        <StateSelect
-                          bind={form.select}
-                          updateFormValueSequence={updateFormValueSequence}
-                          usStates={usStates}
-                        />
+                        <BindedSelect
+                          bind="advancedSearchForm.petitionerState"
+                          id="petitioner-state"
+                          name="petitionerState"
+                        >
+                          <option value="">- Select -</option>
+                          <optgroup label="State">
+                            {Object.keys(usStates).map(abbrev => {
+                              return (
+                                <option key={abbrev} value={abbrev}>
+                                  {usStates[abbrev]}
+                                </option>
+                              );
+                            })}
+                          </optgroup>
+                          <optgroup label="Other">
+                            <option value="AA">AA</option>
+                            <option value="AE">AE</option>
+                            <option value="AP">AP</option>
+                            <option value="AS">AS</option>
+                            <option value="FM">FM</option>
+                            <option value="GU">GU</option>
+                            <option value="MH">MH</option>
+                            <option value="MP">MP</option>
+                            <option value="PW">PW</option>
+                            <option value="PR">PR</option>
+                            <option value="VI">VI</option>
+                          </optgroup>
+                        </BindedSelect>
                       </div>
                     )}
                   </div>
@@ -146,9 +164,9 @@ export const AdvancedSearch = connect(
                               id="year-filed-min"
                               name="yearFiledMin"
                               type="text"
-                              value={form.yearFiledMin || ''}
+                              value={advancedSearchForm.yearFiledMin || ''}
                               onChange={e => {
-                                updateFormValueSequence({
+                                updateAdvancedSearchFormValueSequence({
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
@@ -164,9 +182,9 @@ export const AdvancedSearch = connect(
                               id="year-filed-max"
                               name="yearFiledMax"
                               type="text"
-                              value={form.yearFiledMax || ''}
+                              value={advancedSearchForm.yearFiledMax || ''}
                               onChange={e => {
-                                updateFormValueSequence({
+                                updateAdvancedSearchFormValueSequence({
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
