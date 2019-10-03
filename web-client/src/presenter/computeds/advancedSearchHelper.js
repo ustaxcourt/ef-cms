@@ -1,10 +1,10 @@
 import { state } from 'cerebral';
 
 export const advancedSearchHelper = (get, applicationContext) => {
-  const countryType = get(state.form.countryType);
+  const countryType = get(state.advancedSearchForm.countryType);
   const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES } = get(state.constants);
   const searchResults = get(state.searchResults);
-  const currentPage = get(state.form.currentPage);
+  const currentPage = get(state.advancedSearchForm.currentPage);
 
   let result = { showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC };
 
