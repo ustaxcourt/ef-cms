@@ -2,6 +2,10 @@ const faker = require('faker');
 const axios = require('axios');
 const { Case } = require('../../../shared/src/business/entities/cases/Case');
 const {
+  ContactFactory,
+} = require('../../../shared/src/business/entities/contacts/ContactFactory');
+
+const {
   TrialSession,
 } = require('../../../shared/src/business/entities/trialSessions/TrialSession');
 
@@ -41,35 +45,35 @@ const main = () => {
     //create a case
     const randomlyGeneratedData = {
       petitionFileId,
-      stinFileId,
       petitionMetadata: {
-        practitioners: [],
         caseType: Case.CASE_TYPES[faker.random.number() % 13],
-        filingType: 'Myself and my spouse',
-        partyType: 'Petitioner & Spouse',
         contactPrimary: {
-          name: faker.name.findName(),
           address1: faker.address.streetAddress(),
           city: faker.address.city(),
-          state: faker.address.stateAbbr(),
           countryType: 'domestic',
+          name: faker.name.findName(),
           phone: faker.phone.phoneNumber(),
           postalCode: faker.address.zipCode(),
+          state: faker.address.stateAbbr(),
         },
         contactSecondary: {
-          name: faker.name.findName(),
           address1: faker.address.streetAddress(),
           city: faker.address.city(),
-          state: faker.address.stateAbbr(),
           countryType: 'domestic',
+          name: faker.name.findName(),
           phone: faker.phone.phoneNumber(),
           postalCode: faker.address.zipCode(),
+          state: faker.address.stateAbbr(),
         },
         countryType: 'domestic',
+        filingType: 'Myself and my spouse',
         hasIrsNotice: faker.random.boolean(),
+        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+        practitioners: [],
         preferredTrialCity,
         procedureType: Case.PROCEDURE_TYPES[faker.random.number() % 2],
       },
+      stinFileId,
     };
 
     instance

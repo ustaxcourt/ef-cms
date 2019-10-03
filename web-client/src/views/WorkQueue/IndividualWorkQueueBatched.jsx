@@ -28,7 +28,7 @@ export const IndividualWorkQueueBatched = connect(
               <th>Case name</th>
               <th aria-label="Status Icon padding-right-0">&nbsp;</th>
               <th>Document</th>
-              <th>Filed By</th>
+              <th>Filed by</th>
               <th>Batched</th>
             </tr>
           </thead>
