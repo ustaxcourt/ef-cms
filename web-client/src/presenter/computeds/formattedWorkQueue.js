@@ -67,11 +67,14 @@ export const formatWorkItem = (
     message.createdAtTimeFormatted = applicationContext
       .getUtilities()
       .formatDateString(message.createdAt, 'DATE_TIME');
+    message.createdAtTimeZoneFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(message.createdAt, 'DATE_TIME_TZ');
   });
   result.sentBySection = _.capitalize(result.sentBySection);
   result.completedAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.completedAt, 'DATE_TIME');
+    .formatDateString(result.completedAt, 'DATE_TIME_TZ');
   result.assigneeName = result.assigneeName || 'Unassigned';
 
   result.showUnreadIndicators = !result.isRead;
