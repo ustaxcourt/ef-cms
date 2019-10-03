@@ -10,6 +10,8 @@ import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
 import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
+import petitionsClerkUpdatesCaseWithNoOrders from './journey/petitionsClerkUpdatesCaseWithNoOrders';
+import petitionsClerkUpdatesCaseWithOrders from './journey/petitionsClerkUpdatesCaseWithOrders';
 const {
   ContactFactory,
 } = require('../../shared/src/business/entities/contacts/ContactFactory');
@@ -47,7 +49,7 @@ fakeFile.name = 'fakeFile.pdf';
 
 test = CerebralTest(presenter);
 
-describe('Case journey', () => {
+describe('Petitions clerk case journey (with orders)', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
@@ -66,8 +68,17 @@ describe('Case journey', () => {
     });
   });
 
+  // case has orders => orders needed summary
   petitionsClerkLogIn(test);
   petitionsClerkCreatesNewCase(test, fakeFile);
   petitionsClerkSendsCaseToIRSHoldingQueue(test);
   petitionsClerkRunsBatchProcess(test);
+  petitionsClerkUpdatesCaseWithOrders(test);
+
+  // case does not have orders => no orders needed summary
+  petitionsClerkLogIn(test);
+  petitionsClerkCreatesNewCase(test, fakeFile);
+  petitionsClerkSendsCaseToIRSHoldingQueue(test);
+  petitionsClerkRunsBatchProcess(test);
+  petitionsClerkUpdatesCaseWithNoOrders(test);
 });
