@@ -4,7 +4,7 @@ export default test => {
     await test.runSequence('updateSearchTermSequence', {
       searchTerm: test.docketNumber,
     });
-    await test.runSequence('submitSearchSequence');
+    await test.runSequence('submitCaseSearchSequence');
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
   });
 };

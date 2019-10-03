@@ -1,4 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from '../../ustc-ui/Button/Button';
 import { If } from '../../ustc-ui/If/If';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -25,15 +25,16 @@ export const SessionNotes = connect(
                 <div className="card">
                   <div className="content-wrapper">
                     <If not bind="trialSessionWorkingCopy.sessionNotes">
-                      <button
-                        className="usa-button usa-button--unstyled float-right"
+                      <Button
+                        link
+                        className="float-right"
+                        icon="plus-circle"
                         onClick={() => {
                           openAddEditSessionNoteModalSequence();
                         }}
                       >
-                        <FontAwesomeIcon icon="plus-circle" />
                         Add Note
-                      </button>
+                      </Button>
                     </If>
                     <h3 className="display-inline">Session Notes</h3>
                     <If bind="trialSessionWorkingCopy.sessionNotes">
@@ -42,26 +43,27 @@ export const SessionNotes = connect(
                       </div>
                       <div className="grid-row">
                         <div className="tablet:grid-col-6">
-                          <button
-                            className="usa-button usa-button--unstyled"
+                          <Button
+                            link
+                            icon="edit"
                             onClick={() => {
                               openAddEditSessionNoteModalSequence();
                             }}
                           >
-                            <FontAwesomeIcon icon="edit"></FontAwesomeIcon>
                             Edit Note
-                          </button>
+                          </Button>
                         </div>
                         <div className="tablet:grid-col-6 text-align-right">
-                          <button
-                            className="usa-button usa-button--unstyled red-warning"
+                          <Button
+                            link
+                            className="red-warning"
+                            icon="times-circle"
                             onClick={() => {
                               openDeleteSessionNoteConfirmModalSequence();
                             }}
                           >
-                            <FontAwesomeIcon icon="times-circle"></FontAwesomeIcon>
                             Delete Note
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     </If>

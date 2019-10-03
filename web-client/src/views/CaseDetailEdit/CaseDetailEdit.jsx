@@ -1,6 +1,7 @@
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { sequences, state } from 'cerebral';
 
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseInfo } from './CaseInfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRSNotice } from './IRSNotice';
@@ -52,19 +53,15 @@ export const CaseDetailEdit = connect(
           </Tab>
         </Tabs>
 
-        <button
+        <Button
           aria-disabled={waitingForResponse ? 'true' : 'false'}
-          className={
-            waitingForResponse
-              ? 'usa-button usa-button-active'
-              : 'usa-button usa-button--outline'
-          }
           disabled={waitingForResponse}
+          secondary={!waitingForResponse}
           type="submit"
         >
           {waitingForResponse && <div className="spinner" />}
           Save
-        </button>
+        </Button>
         {screenMetadata.showSaveSuccess && (
           <span aria-live="polite" className="mini-success" role="alert">
             <FontAwesomeIcon icon="check-circle" size="sm" />

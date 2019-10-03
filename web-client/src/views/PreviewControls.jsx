@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props } from 'cerebral';
@@ -26,11 +27,9 @@ export const PreviewControls = connect(
   }) => {
     return (
       <div className="pdf-preview-controls">
-        <button
-          className={
-            'usa-button usa-button--unstyled' +
-            (disableLeftButtons ? ' disabled' : '')
-          }
+        <Button
+          link
+          className={disableLeftButtons ? ' disabled' : ''}
           title="pdf preview first page"
           onClick={onFirstPage}
         >
@@ -40,12 +39,10 @@ export const PreviewControls = connect(
             id="firstPage"
             size="2x"
           />
-        </button>
-        <button
-          className={
-            'usa-button usa-button--unstyled' +
-            (disableLeftButtons ? ' disabled' : '')
-          }
+        </Button>
+        <Button
+          link
+          className={disableLeftButtons ? ' disabled' : ''}
           title="pdf preview previous page"
           onClick={onPreviousPage}
         >
@@ -55,15 +52,13 @@ export const PreviewControls = connect(
             id="prev"
             size="2x"
           />
-        </button>
+        </Button>
         <span className="pages">
           Page {currentPage} of {totalPages}
         </span>
-        <button
-          className={
-            'usa-button usa-button--unstyled' +
-            (disableRightButtons ? ' disabled' : '')
-          }
+        <Button
+          link
+          className={disableRightButtons ? ' disabled' : ''}
           title="pdf preview next page"
           onClick={onNextPage}
         >
@@ -73,12 +68,10 @@ export const PreviewControls = connect(
             id="next"
             size="2x"
           />
-        </button>
-        <button
-          className={
-            'usa-button usa-button--unstyled' +
-            (disableRightButtons ? ' disabled' : '')
-          }
+        </Button>
+        <Button
+          link
+          className={disableRightButtons ? ' disabled' : ''}
           title="pdf preview last page"
           onClick={onLastPage}
         >
@@ -88,7 +81,7 @@ export const PreviewControls = connect(
             id="lastPage"
             size="2x"
           />
-        </button>
+        </Button>
       </div>
     );
   },
