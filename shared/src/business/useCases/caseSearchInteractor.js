@@ -20,12 +20,56 @@ exports.caseSearchInteractor = async ({
   yearFiledMax,
   yearFiledMin,
 }) => {
-  const query = [];
+  const exactMatchesQuery = [];
+  const nonExactMatchesQuery = [];
+  const commonQuery = [];
 
   if (petitionerName) {
-    const petitionerNameArray = petitionerName.split(' ');
+    const petitionerNameArray = petitionerName.toLowerCase().split(' ');
+    exactMatchesQuery.push({
+      bool: {
+        should: [
+          {
+            bool: {
+              minimum_should_match: petitionerNameArray.length,
+              should: petitionerNameArray.map(word => {
+                return {
+                  term: {
+                    'contactPrimary.M.name.S': word,
+                  },
+                };
+              }),
+            },
+          },
+          {
+            bool: {
+              minimum_should_match: petitionerNameArray.length,
+              should: petitionerNameArray.map(word => {
+                return {
+                  term: {
+                    'contactPrimary.M.secondaryName.S': word,
+                  },
+                };
+              }),
+            },
+          },
+          {
+            bool: {
+              minimum_should_match: petitionerNameArray.length,
+              should: petitionerNameArray.map(word => {
+                return {
+                  term: {
+                    'contactSecondary.M.name.S': word,
+                  },
+                };
+              }),
+            },
+          },
+        ],
+      },
+    });
 
-    query.push({
+    nonExactMatchesQuery.push({
       bool: {
         should: [
           { match: { 'contactPrimary.M.name.S': petitionerName } },
@@ -34,49 +78,19 @@ exports.caseSearchInteractor = async ({
         ],
       },
     });
-    query.push({
-      bool: {
-        should: [
-          {
-            terms: {
-              boost: 5,
-              'contactPrimary.M.name.S': petitionerNameArray,
-            },
-          },
-          {
-            terms: {
-              boost: 5,
-              'contactPrimary.M.secondaryName.S': petitionerNameArray,
-            },
-          },
-          {
-            terms: {
-              boost: 5,
-              'contactSecondary.M.name.S': petitionerNameArray,
-            },
-          },
-        ],
-      },
-    });
   }
   if (countryType) {
-    query.push({
+    commonQuery.push({
       bool: {
         should: [
           {
             match: {
-              'contactPrimary.M.countryType.S': {
-                // boost: 2,
-                query: countryType,
-              },
+              'contactPrimary.M.countryType.S': countryType,
             },
           },
           {
             match: {
-              'contactSecondary.M.countryType.S': {
-                // boost: 2,
-                query: countryType,
-              },
+              'contactSecondary.M.countryType.S': countryType,
             },
           },
         ],
@@ -84,23 +98,17 @@ exports.caseSearchInteractor = async ({
     });
   }
   if (petitionerState) {
-    query.push({
+    commonQuery.push({
       bool: {
         should: [
           {
             match: {
-              'contactPrimary.M.state.S': {
-                // boost: 2,
-                query: petitionerState,
-              },
+              'contactPrimary.M.state.S': petitionerState,
             },
           },
           {
             match: {
-              'contactSecondary.M.state.S': {
-                // boost: 2,
-                query: petitionerState,
-              },
+              'contactSecondary.M.state.S': petitionerState,
             },
           },
         ],
@@ -108,7 +116,7 @@ exports.caseSearchInteractor = async ({
     });
   }
   if (yearFiledMin || yearFiledMax) {
-    query.push({
+    commonQuery.push({
       bool: {
         should: [
           {
@@ -134,11 +142,11 @@ exports.caseSearchInteractor = async ({
     });
   }
 
-  const body = await applicationContext.getSearchClient().search({
+  const exactMatchesBody = await applicationContext.getSearchClient().search({
     body: {
       query: {
         bool: {
-          must: query,
+          must: [...exactMatchesQuery, ...commonQuery],
         },
       },
     },
@@ -146,19 +154,36 @@ exports.caseSearchInteractor = async ({
   });
 
   let foundCases = [];
-  console.log(JSON.stringify(body));
-  if (body && body.hits) {
-    const { hits, max_score } = body.hits;
+  if (
+    exactMatchesBody &&
+    exactMatchesBody.hits &&
+    exactMatchesBody.hits.hits &&
+    exactMatchesBody.hits.hits.length > 0
+  ) {
+    for (let hit of exactMatchesBody.hits.hits) {
+      foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
+    }
+  } else {
+    const nonExactMatchesBody = await applicationContext
+      .getSearchClient()
+      .search({
+        body: {
+          query: {
+            bool: {
+              must: [...nonExactMatchesQuery, ...commonQuery],
+            },
+          },
+        },
+        index: 'efcms',
+      });
 
-    if (max_score > 5) {
-      for (let hit of hits) {
-        const thisScore = hit['_score'];
-        if (thisScore > 5) {
-          foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
-        }
-      }
-    } else {
-      for (let hit of hits) {
+    if (
+      nonExactMatchesBody &&
+      nonExactMatchesBody.hits &&
+      nonExactMatchesBody.hits.hits &&
+      nonExactMatchesBody.hits.hits.length > 0
+    ) {
+      for (let hit of nonExactMatchesBody.hits.hits) {
         foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
       }
     }
