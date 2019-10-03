@@ -1,4 +1,5 @@
 const { CaseInternal } = require('./CaseInternal');
+const { ContactFactory } = require('../contacts/ContactFactory');
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
@@ -19,7 +20,7 @@ describe('CaseInternal entity', () => {
           postalCode: '05198',
           state: 'AK',
         },
-        partyType: 'Petitioner',
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitionFile: { anObject: true },
         petitionFileSize: 1,
         procedureType: 'Small',
