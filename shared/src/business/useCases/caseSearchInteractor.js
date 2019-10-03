@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { get } = require('lodash');
 
 /**
  * caseSearchInteractor
@@ -153,13 +154,10 @@ exports.caseSearchInteractor = async ({
     index: 'efcms',
   });
 
-  let foundCases = [];
-  if (
-    exactMatchesBody &&
-    exactMatchesBody.hits &&
-    exactMatchesBody.hits.hits &&
-    exactMatchesBody.hits.hits.length > 0
-  ) {
+  const foundCases = [];
+  const exactMatchesHits = get(exactMatchesBody, 'hits.hits');
+
+  if (exactMatchesHits && exactMatchesHits.length > 0) {
     for (let hit of exactMatchesBody.hits.hits) {
       foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
     }
@@ -177,12 +175,9 @@ exports.caseSearchInteractor = async ({
         index: 'efcms',
       });
 
-    if (
-      nonExactMatchesBody &&
-      nonExactMatchesBody.hits &&
-      nonExactMatchesBody.hits.hits &&
-      nonExactMatchesBody.hits.hits.length > 0
-    ) {
+    const nonExactMatchesHits = get(nonExactMatchesBody, 'hits.hits');
+
+    if (nonExactMatchesHits && nonExactMatchesHits.length > 0) {
       for (let hit of nonExactMatchesBody.hits.hits) {
         foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
       }
