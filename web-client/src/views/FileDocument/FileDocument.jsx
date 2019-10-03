@@ -30,7 +30,7 @@ export const FileDocument = connect(
       <React.Fragment>
         <Focus>
           <h1
-            className="margin-bottom-05"
+            className="margin-bottom-105"
             id="file-a-document-header"
             tabIndex="-1"
           >
@@ -38,7 +38,7 @@ export const FileDocument = connect(
           </h1>
         </Focus>
 
-        <p className="margin-bottom-5 required-statement margin-top-05 ">
+        <p className="margin-bottom-4 margin-top-0 required-statement ">
           *All fields required unless otherwise noted
         </p>
 

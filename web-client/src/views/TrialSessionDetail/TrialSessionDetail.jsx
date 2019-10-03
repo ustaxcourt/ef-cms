@@ -1,8 +1,8 @@
 import { AllCases } from './AllCases';
+import { Button } from '../../ustc-ui/Button/Button';
 import { ClosedCases } from './ClosedCases';
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { OpenCases } from './OpenCases';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
@@ -38,15 +38,13 @@ export const TrialSessionDetail = connect(
             bind="trialsessiondetails.caseList"
             defaultActiveTab="EligibleCases"
           >
-            <button
-              className="usa-button tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
+            <Button
+              className="tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
+              icon="calendar-check"
               onClick={() => openSetCalendarModalSequence()}
             >
-              <FontAwesomeIcon icon="calendar-check" size="1x" /> Set Calendar
-              {showModal == 'SetCalendarModalDialog' && (
-                <SetCalendarModalDialog />
-              )}
-            </button>
+              Set Calendar
+            </Button>
             <Tab
               id="eligible-cases-tab"
               tabName="EligibleCases"
@@ -58,6 +56,8 @@ export const TrialSessionDetail = connect(
             </Tab>
           </Tabs>
         )}
+
+        {showModal == 'SetCalendarModalDialog' && <SetCalendarModalDialog />}
 
         {formattedTrialSessionDetails.isCalendared && (
           <Tabs
