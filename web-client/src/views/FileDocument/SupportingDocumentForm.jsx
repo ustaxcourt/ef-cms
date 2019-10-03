@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { SupportingDocumentInclusionsForm } from './SupportingDocumentInclusionsForm';
@@ -12,6 +13,8 @@ export const SupportingDocumentForm = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     index: props.index,
+    removeSupportingDocumentSequence:
+      sequences.removeSupportingDocumentSequence,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence:
@@ -23,13 +26,26 @@ export const SupportingDocumentForm = connect(
     fileDocumentHelper,
     form,
     index,
+    removeSupportingDocumentSequence,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationErrors,
   }) => {
     return (
       <>
-        <h2 className="margin-top-4">Supporting Document {index + 1}</h2>
+        <h2 className="margin-top-4">
+          Supporting Document {index + 1}{' '}
+          <Button
+            link
+            className="red-warning"
+            icon="times-circle"
+            onClick={() => {
+              removeSupportingDocumentSequence({ index });
+            }}
+          >
+            Remove
+          </Button>
+        </h2>
         <div className="blue-container">
           <div
             className={`usa-form-group ${
