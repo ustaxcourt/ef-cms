@@ -20,10 +20,6 @@
     min-width: 132px;
   }
 
-  &.margin-right-0 {
-    margin-right: 0;
-  }
-
   .svg-inline--fa {
     margin-right: 5px;
     &.fa-1x {
@@ -76,6 +72,18 @@
     text-align: left;
   }
 
+  &.padding-0 {
+    padding: 0;
+  }
+
+  &.margin-0 {
+    margin: 0;
+  }
+
+  &.margin-right-0 {
+    margin-right: 0;
+  }
+
   @media only screen and (min-width: $medium-screen) {
     &.ustc-button--unstyled-with-left-icon {
       width: 305px;
@@ -117,4 +125,9 @@
 
 .serve-to-irs {
   margin-bottom: 20px;
+}
+
+.button-icon {
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
 }

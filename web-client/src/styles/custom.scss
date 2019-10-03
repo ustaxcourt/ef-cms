@@ -499,7 +499,7 @@ select[disabled] {
       margin-top: 20px;
     }
   }
-  [role='listitem'],
+
   .caseItem__icon {
     position: absolute;
     top: 0;
@@ -523,14 +523,9 @@ select[disabled] {
     }
 
     @media only screen and (min-width: $medium-screen) {
-      width: 100px;
-      height: 100px;
+      width: 75px;
+      height: 75px;
       padding: 20px;
-
-      .svg-wrapper img.svg {
-        width: 54px;
-        height: 62px;
-      }
     }
   }
 
@@ -539,13 +534,13 @@ select[disabled] {
     @media only screen and (min-width: $medium-screen) {
       min-height: 0;
       padding-left: 86px;
-      padding-left: 150px;
+      padding-left: 100px;
     }
   }
 
   .caseItem__content {
     @media only screen and (min-width: $medium-screen) {
-      padding-left: 150px;
+      padding-left: 100px;
     }
   }
 }
@@ -555,7 +550,7 @@ select[disabled] {
     margin-top: 30px;
     margin-bottom: 30px;
   }
-  [role='listitem'],
+
   .caseItem__icon {
     position: absolute;
     top: 0;
@@ -584,14 +579,9 @@ select[disabled] {
     }
 
     @media only screen and (min-width: $medium-screen) {
-      width: 100px;
-      height: 100px;
+      width: 75px;
+      height: 75px;
       padding: 20px;
-
-      .svg-wrapper img.svg {
-        width: 54px;
-        height: 62px;
-      }
     }
   }
 
@@ -600,13 +590,13 @@ select[disabled] {
     padding-left: 86px;
     @media only screen and (min-width: $medium-screen) {
       min-height: 0;
-      padding-left: 150px;
+      padding-left: 100px;
     }
   }
 
   .caseItem__content {
     @media only screen and (min-width: $medium-screen) {
-      padding-left: 150px;
+      padding-left: 100px;
     }
   }
 }
@@ -1352,6 +1342,13 @@ button.change-scanner-button {
 
   h3 {
     margin-bottom: 0;
+  }
+  button {
+    color: $color-white;
+  }
+  a:not(.usa-button):hover,
+  button:hover {
+    color: $color-primary-alt;
   }
 }
 

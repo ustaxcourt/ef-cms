@@ -18,9 +18,9 @@ export const BeforeYouFileADocument = connect(
       <>
         <CaseDetailHeader />
         <section className="usa-section before-filing-document grid-container">
-          <h1 className="captioned" tabIndex="-1">
+          <h2 className="captioned" tabIndex="-1">
             Before you file a document…
-          </h1>
+          </h2>
 
           <div
             className="grid-container padding-x-0 margin-bottom-5"
@@ -34,9 +34,9 @@ export const BeforeYouFileADocument = connect(
                       <FontAwesomeIcon icon={['far', 'copy']} />
                     </div>
                   </NonMobile>
-                  <h2 className="caseItem__heading">
+                  <h3 className="caseItem__heading">
                     1. Gather All Documents You Want to Include in Your Filing
-                  </h2>
+                  </h3>
                   <div className="caseItem__content">
                     <p>
                       You may have documents that are related or supporting the
@@ -93,9 +93,9 @@ export const BeforeYouFileADocument = connect(
                       <FontAwesomeIcon icon={['fa', 'shield-alt']} />
                     </div>
                   </NonMobile>
-                  <h2 className="caseItem__heading">
+                  <h3 className="caseItem__heading">
                     2. Remove Personal Information From Your Document(s)
-                  </h2>
+                  </h3>
                   <div className="caseItem__content">
                     <p>
                       If your document(s) includes personal information (such as

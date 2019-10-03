@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -22,14 +23,13 @@ export const RequestAccessDocumentReadOnly = connect(
       <React.Fragment>
         <div>
           <h2 className="header-with-link-button">{form.documentTitle}</h2>
-          <button
-            className="usa-button usa-button--unstyled margin-left-205"
-            type="button"
+          <Button
+            link
+            icon="edit"
             onClick={() => chooseWizardStepSequence({ value: 'RequestAccess' })}
           >
-            <FontAwesomeIcon icon="edit" size="sm" />
             Edit
-          </button>
+          </Button>
         </div>
 
         <div className="blue-container no-margin-last-child">
