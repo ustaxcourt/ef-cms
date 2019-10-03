@@ -28,6 +28,7 @@ import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
+import { SignOrder } from './SignOrder';
 import { SignStipDecision } from './SignStipDecision';
 import { StartCaseInternal } from './StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
@@ -71,6 +72,7 @@ const pages = {
   PrintableTrialCalendar,
   RequestAccessWizard,
   SelectDocumentType,
+  SignOrder,
   SignStipDecision,
   StartCaseInternal,
   StartCaseWizard,
