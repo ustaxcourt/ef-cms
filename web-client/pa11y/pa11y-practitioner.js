@@ -9,7 +9,7 @@ module.exports = [
       'wait for element #react-select-2-input to be visible',
       'click #react-select-2-input',
       'wait for element .select-react-element__menu to be visible',
-      'click #react-select-2-option-5', //Substitution of Counsel
+      'click #react-select-2-option-5', //Substitution of counsel
       'check field #primaryDocument-certificateOfService',
       'wait for element #objections-Unknown to be visible',
       'set field #objections-Unknown to Unknown',
