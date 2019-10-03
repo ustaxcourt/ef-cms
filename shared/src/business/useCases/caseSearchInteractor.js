@@ -59,6 +59,7 @@ exports.caseSearchInteractor = async ({
           {
             range: {
               'createdAt.S': {
+                format: 'yyyy',
                 gte: `${yearFiledMin}||/y`,
                 lte: `${yearFiledMax}||/y`,
               },
@@ -67,6 +68,7 @@ exports.caseSearchInteractor = async ({
           {
             range: {
               'receivedAt.S': {
+                format: 'yyyy',
                 gte: `${yearFiledMin}||/y`,
                 lte: `${yearFiledMax}||/y`,
               },

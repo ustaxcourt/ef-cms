@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -66,21 +67,17 @@ export const PDFSignerToolbar = connect(
             />
           </div>
           <div className="margin-top-3">
-            <button
-              className="usa-button"
+            <Button
               disabled={signatureApplied || isPdfAlreadySigned}
               onClick={() => applySignature()}
             >
               <FontAwesomeIcon icon={['fas', 'edit']} />
               Apply Signature
-            </button>
+            </Button>
             {(signatureApplied || isPdfAlreadySigned) && (
-              <button
-                className="usa-button usa-button--unstyled"
-                onClick={() => clearSignature()}
-              >
+              <Button link onClick={() => clearSignature()}>
                 Clear Signature
-              </button>
+              </Button>
             )}
           </div>
         </>

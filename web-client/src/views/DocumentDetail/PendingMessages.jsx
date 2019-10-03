@@ -43,10 +43,9 @@ export const PendingMessages = connect(
   }) => {
     return (
       <div className="blue-container">
-        <button
-          className="usa-button usa-button margin-bottom-2"
+        <Button
+          className="margin-bottom-2"
           id="create-message-button"
-          type="button"
           onClick={() => openCreateMessageModalSequence()}
         >
           <FontAwesomeIcon
@@ -55,7 +54,7 @@ export const PendingMessages = connect(
             size="lg"
           />
           Create Message
-        </button>
+        </Button>
 
         {(!documentDetailHelper.formattedDocument ||
           !documentDetailHelper.formattedDocument.workItems ||
@@ -102,13 +101,13 @@ export const PendingMessages = connect(
                   <div className="grid-container padding-x-0">
                     <div className="grid-row">
                       <div className="grid-col-4 padding-x-0">
-                        <button
+                        <Button
                           aria-controls={`history-card-${idx}`}
                           aria-selected={documentDetailHelper.showAction(
                             'history',
                             workItem.workItemId,
                           )}
-                          className={`usa-button ${
+                          className={`${
                             documentDetailHelper.showAction(
                               'history',
                               workItem.workItemId,
@@ -127,18 +126,18 @@ export const PendingMessages = connect(
                         >
                           <FontAwesomeIcon icon="list-ul" size="sm" />
                           View History
-                        </button>
+                        </Button>
                       </div>
 
                       <div className="grid-col-4 padding-x-0">
                         {workItem.showComplete && (
-                          <button
+                          <Button
                             aria-controls={`history-card-${idx}`}
                             aria-selected={documentDetailHelper.showAction(
                               'complete',
                               workItem.workItemId,
                             )}
-                            className={`usa-button ${
+                            className={`${
                               documentDetailHelper.showAction(
                                 'complete',
                                 workItem.workItemId,
@@ -160,19 +159,19 @@ export const PendingMessages = connect(
                               size="sm"
                             />
                             Complete
-                          </button>
+                          </Button>
                         )}
                       </div>
 
                       <div className="grid-col-4 padding-x-0">
                         {workItem.showSendTo && (
-                          <button
+                          <Button
                             aria-controls={`forward-card-${idx}`}
                             aria-selected={documentDetailHelper.showAction(
                               'forward',
                               workItem.workItemId,
                             )}
-                            className={`usa-button send-to ${
+                            className={`send-to ${
                               documentDetailHelper.showAction(
                                 'forward',
                                 workItem.workItemId,
@@ -192,7 +191,7 @@ export const PendingMessages = connect(
                           >
                             <FontAwesomeIcon icon="share-square" size="sm" />{' '}
                             Send To
-                          </button>
+                          </Button>
                         )}
                       </div>
                     </div>

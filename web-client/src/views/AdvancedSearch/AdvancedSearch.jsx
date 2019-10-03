@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
 import { SearchResults } from './SearchResults';
 import { StateSelect } from './StateSelect';
@@ -185,12 +186,9 @@ export const AdvancedSearch = connect(
                     </div>
 
                     <div className="grid-col-5">
-                      <button
-                        className="usa-button advanced-search__button"
-                        type="submit"
-                      >
+                      <Button className="advanced-search__button" type="submit">
                         Search
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
