@@ -4,7 +4,7 @@ module.exports = [
   {
     actions: [
       'wait for #party-type to be visible',
-      'set field #party-type to Surviving Spouse',
+      'set field #party-type to Surviving spouse',
       'check field #party-type',
       'wait for #secondary-name to be visible',
     ],
