@@ -34,13 +34,13 @@ export const SectionWorkQueueOutbox = connect(
               <th>Case name</th>
               <th aria-label="Status Icon" className="padding-right-0" />
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
-              {!workQueueHelper.hideCaseStatusColumn && <th>Case Status</th>}
+              {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
+              {!workQueueHelper.hideCaseStatusColumn && <th>Case status</th>}
               {workQueueHelper.showMessagesSentFromColumn && <th>From</th>}
               {workQueueHelper.showAssignedToColumn && (
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
               )}
-              {workQueueHelper.showProcessedByColumn && <th>Processed By</th>}
+              {workQueueHelper.showProcessedByColumn && <th>Processed by</th>}
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
               {workQueueHelper.showServedColumn && <th>Served</th>}
             </tr>
