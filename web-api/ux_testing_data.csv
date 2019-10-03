@@ -1,7 +1,7 @@
 Petitioner;Deficiency;Danyel Headley;;Regular;Detroit, Michigan;respondent1;practitioner1
 Petitioner;Deficiency;Georgine Dudas;;Regular;Detroit, Michigan;respondent1;
 Petitioner;Deficiency;Marylyn Tanouye;;Regular;Detroit, Michigan;respondent1;
-Petitioner & Spouse;Deficiency;Tyrone Hendriks;Cherie Andre;Regular;Detroit, Michigan;respondent1;
+Petitioner & spouse;Deficiency;Tyrone Hendriks;Cherie Andre;Regular;Detroit, Michigan;respondent1;
 Petitioner;Deficiency;Elden Silverman;;Regular;Detroit, Michigan;respondent1;
 Petitioner;Deficiency;Kittie Kangas;;Regular;Detroit, Michigan;respondent1;
 Petitioner;Deficiency;Sophie Taliaferro;;Regular;Detroit, Michigan;respondent1;practitioner1
@@ -15,7 +15,7 @@ Petitioner;Deficiency;Gerard Maycock;;Regular;Detroit, Michigan;respondent2;
 Petitioner;Deficiency;Pinkie Dorsey;;Regular;Detroit, Michigan;respondent2;
 Petitioner;Deficiency;Buford Brunell;;Regular;Detroit, Michigan;respondent2;
 Petitioner;Deficiency;Rex Pettyjohn;;Regular;Detroit, Michigan;respondent2;
-Petitioner & Spouse;CDP;Lucretia Spiva;Harold Pergande;Regular;Detroit, Michigan;respondent2;practitioner2
+Petitioner & spouse;CDP;Lucretia Spiva;Harold Pergande;Regular;Detroit, Michigan;respondent2;practitioner2
 Petitioner;Deficiency;Leon Perkin;;Regular;Detroit, Michigan;respondent2;
 Petitioner;Deficiency;Vincenzo Cruze;;Regular;Detroit, Michigan;respondent2;
 Petitioner;Deficiency;Renetta Ehrenberg;;Regular;San Francisco, California;respondent1;
@@ -28,7 +28,7 @@ Petitioner;Whistleblower;Duane Fonner;;Regular;San Francisco, California;respond
 Petitioner;Deficiency;Ginette Bacon;;Regular;San Francisco, California;respondent1;
 Petitioner;Deficiency;Angelic Naff;;Regular;San Francisco, California;respondent1;practitioner1
 Petitioner;Deficiency;Paul Slaten;;Regular;San Francisco, California;respondent1;practitioner1
-Petitioner & Spouse;Deficiency;Sigrid Yates;Jacinda Swindle;Small;San Francisco, California;respondent2;practitioner1
+Petitioner & spouse;Deficiency;Sigrid Yates;Jacinda Swindle;Small;San Francisco, California;respondent2;practitioner1
 Petitioner;CDP;Caitlyn Mirelez;;Small;San Francisco, California;respondent2;
 Petitioner;Deficiency;Kiesha Stroman;;Small;San Francisco, California;respondent2;
 Petitioner;Deficiency;Delphine Esh;;Small;San Francisco, California;respondent2;
@@ -40,7 +40,7 @@ Petitioner;Deficiency;Erasmo Dinardo;;Small;San Francisco, California;respondent
 Petitioner;Deficiency;Margery Kratochvil;;Small;San Francisco, California;respondent2;
 Petitioner;CDP;Elois Mummert;;Regular;Denver, Colorado;respondent1;
 Petitioner;Deficiency;Lavern Pruett;;Regular;Denver, Colorado;respondent1;
-Petitioner & Spouse;Deficiency;Hubert Gaskamp;Odessa Chapel;Regular;Denver, Colorado;respondent1;
+Petitioner & spouse;Deficiency;Hubert Gaskamp;Odessa Chapel;Regular;Denver, Colorado;respondent1;
 Petitioner;CDP;Letisha Mesta;;Regular;Denver, Colorado;respondent1;
 Petitioner;Deficiency;Mandi Hetrick;;Regular;Denver, Colorado;respondent1;
 Petitioner;Deficiency;Perla Cipriani;;Regular;Denver, Colorado;respondent1;
@@ -51,7 +51,7 @@ Petitioner;Deficiency;Dann Bussey;;Regular;Denver, Colorado;respondent2;
 Petitioner;Deficiency;Stephan Straughter;;Regular;Birmingham, Alabama;respondent1;
 Petitioner;Deficiency;Jay Hornsby;;Regular;Birmingham, Alabama;respondent1;
 Petitioner;Whistleblower;Lucilla Gibb;;Regular;Birmingham, Alabama;respondent1;
-Petitioner & Spouse;Deficiency;Linette Laskowski;Shaquita Dishman;Regular;Birmingham, Alabama;respondent1;
+Petitioner & spouse;Deficiency;Linette Laskowski;Shaquita Dishman;Regular;Birmingham, Alabama;respondent1;
 Petitioner;Deficiency;Rocio Mantle;;Regular;Birmingham, Alabama;respondent2;practitioner2
 Petitioner;Deficiency;Annamarie Conn;;Regular;Birmingham, Alabama;respondent2;practitioner1
 Petitioner;Deficiency;Rosalyn Kania;;Regular;Birmingham, Alabama;respondent2;
@@ -59,7 +59,7 @@ Petitioner;Deficiency;Vonda Grahm;;Regular;Birmingham, Alabama;respondent2;
 Petitioner;Deficiency;Drusilla Marko;;Regular;Birmingham, Alabama;respondent2;
 Petitioner;CDP;Chaya Job;;Regular;Birmingham, Alabama;respondent2;practitioner1
 Petitioner;Deficiency;Leslie Faria;;Regular;Phoenix, Arizona;respondent1;
-Petitioner & Spouse;Deficiency;Tesha Littlepage;Loura Demille;Regular;Phoenix, Arizona;respondent1;
+Petitioner & spouse;Deficiency;Tesha Littlepage;Loura Demille;Regular;Phoenix, Arizona;respondent1;
 Petitioner;Whistleblower;Wynona Gwyn;;Regular;Phoenix, Arizona;respondent1;
 Petitioner;Deficiency;Kia Pinnix;;Regular;Phoenix, Arizona;respondent1;practitioner2
 Petitioner;Deficiency;Denna Stephan;;Regular;Phoenix, Arizona;respondent1;

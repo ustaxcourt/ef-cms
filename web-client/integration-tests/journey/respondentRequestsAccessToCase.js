@@ -11,7 +11,6 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
       documentTitleTemplate: VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
       documentType: VALIDATION_ERROR_MESSAGES.documentType,
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
@@ -38,18 +37,12 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
-    });
-
-    await test.runSequence('validateCaseAssociationRequestSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {

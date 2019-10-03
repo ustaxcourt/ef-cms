@@ -17,6 +17,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   const isExternalUser = ['practitioner', 'petitioner', 'respondent'].includes(
     userRole,
   );
+  const isRequestAccessForm = currentPage === 'RequestAccessWizard';
   const isJudge = 'judge' == userRole;
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
@@ -62,12 +63,14 @@ export const caseDetailHelper = (get, applicationContext) => {
     } else {
       showFileDocumentButton = false;
       if (userRole === 'practitioner') {
-        showRequestAccessToCaseButton = !pendingAssociation;
+        showRequestAccessToCaseButton =
+          !pendingAssociation && !isRequestAccessForm;
         showPendingAccessToCaseButton = pendingAssociation;
       }
       if (userRole === 'respondent') {
         showFileFirstDocumentButton = !caseHasRespondent;
-        showRequestAccessToCaseButton = caseHasRespondent;
+        showRequestAccessToCaseButton =
+          caseHasRespondent && !isRequestAccessForm;
       }
     }
   } else {

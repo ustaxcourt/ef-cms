@@ -35,7 +35,7 @@ export const SupportingDocumentInclusionsForm = connect(
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend id={`${type}-extra-items-legend`}>
-              Select extra items included with document
+              Select extra items to include with your document
               <Button
                 link
                 className="margin-top-1"
