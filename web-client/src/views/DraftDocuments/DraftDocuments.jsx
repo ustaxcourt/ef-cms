@@ -30,6 +30,7 @@ export const DraftDocuments = connect(
                 <th>Date</th>
                 <th>Filings and proceedings</th>
                 <th>Created by</th>
+                <th>Signature Added</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
               </tr>
@@ -40,6 +41,7 @@ export const DraftDocuments = connect(
                   return (
                     <tr key={index}>
                       <td>{draftDocument.createdAtFormatted}</td>
+
                       <td>
                         <FilingsAndProceedings
                           arrayIndex={index}
@@ -47,7 +49,17 @@ export const DraftDocuments = connect(
                           record={{}} // TODO: we are not yet sure where this comes from since we don't have a docket record for proposed / signed stipulated decisions
                         />
                       </td>
+
                       <td>{draftDocument.filedBy}</td>
+
+                      <td className="no-wrap">
+                        {draftDocument.signedAt &&
+                          draftDocument.signedAtFormatted}
+                        {!draftDocument.signedAt && (
+                          <a href={draftDocument.signUrl}>Add Signature</a>
+                        )}
+                      </td>
+
                       <td className="no-wrap text-align-right">
                         <Button link href={draftDocument.editUrl} icon="edit">
                           Edit
