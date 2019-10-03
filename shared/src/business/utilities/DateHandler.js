@@ -1,7 +1,7 @@
 const moment = require('moment-timezone');
 
 const dateFormats = {
-  DATE_TIME: 'MM/DD/YY h:mm a [ET]',
+  DATE_TIME: 'MM/DD/YY hh:mm a',
   MMDDYY: 'MM/DD/YY',
   MMDDYYYY: 'MM/DD/YYYY',
   TIME: 'h:mm a [ET]',
