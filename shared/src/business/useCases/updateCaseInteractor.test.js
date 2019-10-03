@@ -1,6 +1,7 @@
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 const { omit } = require('lodash');
 const { updateCaseInteractor } = require('./updateCaseInteractor');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 const MOCK_CASE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -29,7 +30,7 @@ const MOCK_CASE = {
   ],
   filingType: 'Myself',
   hasIrsNotice: false,
-  partyType: 'Petitioner',
+  partyType: ContactFactory.PARTY_TYPES.petitioner,
   petitioners: [{ name: 'Test Taxpayer' }],
   preferredTrialCity: 'Washington, D.C.',
   procedureType: 'Regular',
@@ -191,7 +192,7 @@ describe('updateCase', () => {
         filingType: 'Myself and my spouse',
         hasIrsNotice: false,
         isPaper: false,
-        partyType: 'Petitioner & Spouse',
+        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         practitioners: [],
         preferredTrialCity: 'Mobile, Alabama',
         procedureType: 'Small',
