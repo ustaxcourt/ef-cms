@@ -23,12 +23,12 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
 import { OrdersNeededSummary } from './CaseDetailEdit/OrdersNeededSummary';
-import { PDFSigner } from './PDFSigner';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
+import { SignStipDecision } from './SignStipDecision';
 import { StartCaseInternal } from './StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
@@ -66,12 +66,12 @@ const pages = {
   LogIn,
   Messages,
   OrdersNeededSummary,
-  PDFSigner,
   PrimaryContactEdit,
   PrintableDocketRecord,
   PrintableTrialCalendar,
   RequestAccessWizard,
   SelectDocumentType,
+  SignStipDecision,
   StartCaseInternal,
   StartCaseWizard,
   StyleGuide,
