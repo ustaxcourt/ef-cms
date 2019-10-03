@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { generateCaseAssociationTitleAction } from '../actions/CaseAssociationRequest/generateCaseAssociationTitleAction';
+import { navigateToRequestAccessReviewAction } from '../actions/navigateToRequestAccessReviewAction';
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setSupportingDocumentScenarioAction } from '../actions/FileDocument/setSupportingDocumentScenarioAction';
@@ -25,7 +26,7 @@ export const reviewRequestAccessInformationSequence = [
       generateCaseAssociationTitleAction,
       set(state.showValidation, false),
       clearAlertsAction,
-      set(state.wizardStep, 'RequestAccessReview'),
+      navigateToRequestAccessReviewAction,
     ],
   },
 ];

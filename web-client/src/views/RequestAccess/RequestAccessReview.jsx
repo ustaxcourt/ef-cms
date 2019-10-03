@@ -39,7 +39,7 @@ export const RequestAccessReview = connect(
           </h1>
         </Focus>
 
-        <p>
+        <p className="full-width">
           You can’t edit your filing once you submit it. Please make sure your
           information appears the way you want it to.
         </p>
@@ -178,34 +178,36 @@ export const RequestAccessReview = connect(
               </div>
             </div>
 
-            <div className="tablet:grid-col-5 margin-bottom-4">
-              <div className="card height-full margin-bottom-0">
-                <div className="content-wrapper">
-                  <h3 className="underlined">Parties You’re Repreesenting</h3>
-                  <div className="grid-row grid-gap">
-                    <div className="tablet:grid-col-6 margin-bottom-1">
-                      <label className="usa-label" htmlFor="filing-parties">
-                        Parties
-                      </label>
-                      <ul className="ustc-unstyled-list without-margins">
-                        {form.representingPrimary && (
-                          <li>
-                            {formattedCaseDetail.contactPrimary.name},
-                            Petitioner
-                          </li>
-                        )}
-                        {form.representingSecondary && (
-                          <li>
-                            {formattedCaseDetail.contactSecondary.name},
-                            Petitioner
-                          </li>
-                        )}
-                      </ul>
+            {requestAccessHelper.showPartiesRepresenting && (
+              <div className="tablet:grid-col-5 margin-bottom-4">
+                <div className="card height-full margin-bottom-0">
+                  <div className="content-wrapper">
+                    <h3 className="underlined">Parties You’re Repreesenting</h3>
+                    <div className="grid-row grid-gap">
+                      <div className="tablet:grid-col-6 margin-bottom-1">
+                        <label className="usa-label" htmlFor="filing-parties">
+                          Parties
+                        </label>
+                        <ul className="ustc-unstyled-list without-margins">
+                          {form.representingPrimary && (
+                            <li>
+                              {formattedCaseDetail.contactPrimary.name},
+                              Petitioner
+                            </li>
+                          )}
+                          {form.representingSecondary && (
+                            <li>
+                              {formattedCaseDetail.contactSecondary.name},
+                              Petitioner
+                            </li>
+                          )}
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
