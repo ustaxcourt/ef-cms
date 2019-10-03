@@ -39,7 +39,7 @@ export const AdvancedSearch = connect(
         <section className="usa-section grid-container advanced-search">
           <ErrorNotification />
 
-          <div className="header-with-blue-background">
+          <div className="header-with-blue-background grid-row">
             <h3>Enter Search Criteria</h3>
             <Button
               link
