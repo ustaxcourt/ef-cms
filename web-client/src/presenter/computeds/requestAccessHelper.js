@@ -22,14 +22,14 @@ export const requestAccessHelper = (get, applicationContext) => {
 
   const documents = [
     {
-      documentTitleTemplate: 'Entry of Appearance for [Petitioner Names]',
-      documentType: 'Entry of Appearance',
+      documentTitleTemplate: 'Entry of appearance for [Petitioner Names]',
+      documentType: 'Entry of appearance',
       eventCode: 'EA',
       scenario: 'Standard',
     },
     {
-      documentTitleTemplate: 'Substitution of Counsel for [Petitioner Names]',
-      documentType: 'Substitution of Counsel',
+      documentTitleTemplate: 'Substitution of counsel for [Petitioner Names]',
+      documentType: 'Substitution of counsel',
       eventCode: 'SOC',
       scenario: 'Standard',
     },
@@ -39,8 +39,8 @@ export const requestAccessHelper = (get, applicationContext) => {
     documents.push(
       {
         documentTitleTemplate:
-          'Motion to Substitute Parties and Change Caption',
-        documentType: 'Motion to Substitute Parties and Change Caption',
+          'Motion to substitute parties and change caption',
+        documentType: 'Motion to substitute parties and change caption',
         eventCode: 'M107',
         scenario: 'Standard',
       },
@@ -71,26 +71,26 @@ export const requestAccessHelper = (get, applicationContext) => {
 
   const documentWithExhibits =
     [
-      'Motion to Substitute Parties and Change Caption',
+      'Motion to substitute parties and change caption',
       'Notice of Intervention',
       'Notice of Election to Participate',
       'Notice of Election to Intervene',
     ].includes(documentType) && shouldShowExhibits;
 
   const documentWithAttachments = [
-    'Motion to Substitute Parties and Change Caption',
+    'Motion to substitute parties and change caption',
     'Notice of Intervention',
     'Notice of Election to Participate',
     'Notice of Election to Intervene',
   ].includes(documentType);
 
   const documentWithObjections = [
-    'Substitution of Counsel',
-    'Motion to Substitute Parties and Change Caption',
+    'Substitution of counsel',
+    'Motion to substitute parties and change caption',
   ].includes(documentType);
 
   const documentWithSupportingDocuments = [
-    'Motion to Substitute Parties and Change Caption',
+    'Motion to substitute parties and change caption',
   ].includes(documentType);
 
   const partyValidationError =

@@ -144,7 +144,7 @@ export const RequestAccessDocumentForm = connect(
                   className="usa-checkbox__label"
                   htmlFor="primaryDocument-certificateOfService"
                 >
-                  Certificate Of Service
+                  Certificate of service
                 </label>
               </div>
             </fieldset>

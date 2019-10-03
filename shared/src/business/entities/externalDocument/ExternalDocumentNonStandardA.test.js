@@ -19,7 +19,7 @@ describe('ExternalDocumentNonStandardA', () => {
     it('should be valid when all fields are present', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
-        documentTitle: 'Brief in Support of [Document Name]',
+        documentTitle: 'Brief in support of [Document Name]',
         documentType: 'Brief in Support',
         previousDocument: 'Petition',
         scenario: 'Nonstandard A',
@@ -32,12 +32,12 @@ describe('ExternalDocumentNonStandardA', () => {
     it('should generate valid title', () => {
       const extDoc = ExternalDocumentFactory.get({
         category: 'Supporting Document',
-        documentTitle: 'Brief in Support of [Document Name]',
+        documentTitle: 'Brief in support of [Document Name]',
         documentType: 'Brief in Support',
         previousDocument: 'Petition',
         scenario: 'Nonstandard A',
       });
-      expect(extDoc.getDocumentTitle()).toEqual('Brief in Support of Petition');
+      expect(extDoc.getDocumentTitle()).toEqual('Brief in support of Petition');
     });
   });
 });

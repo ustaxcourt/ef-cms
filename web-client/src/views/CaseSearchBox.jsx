@@ -32,7 +32,7 @@ export const CaseSearchBox = connect(
                   </div>
                 </div>
                 <p>
-                  To file an Entry of Appearance, Substitution of Counsel, etc.
+                  To file an Entry of appearance, Substitution of counsel, etc.
                 </p>
                 <div className="usa-form-group margin-bottom-4">
                   <div>
