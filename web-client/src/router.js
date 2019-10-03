@@ -259,7 +259,29 @@ const router = {
       '/case-detail/*/request-access',
       checkLoggedIn(docketNumber => {
         document.title = `Request access ${pageTitleSuffix}`;
-        app.getSequence('gotoRequestAccessSequence')({ docketNumber });
+        if (app.getState('wizardStep') === 'RequestAccessReview') {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'RequestAccess',
+          });
+        } else {
+          app.getSequence('gotoRequestAccessSequence')({ docketNumber });
+        }
+      }),
+    );
+
+    route(
+      '/case-detail/*/request-access/review',
+      checkLoggedIn(docketNumber => {
+        document.title = `Request access review ${pageTitleSuffix}`;
+        if (!app.getState('wizardStep')) {
+          app.getSequence('navigateToPathSequence')({
+            path: `/case-detail/${docketNumber}/request-access`,
+          });
+        } else {
+          app.getSequence('chooseWizardStepSequence')({
+            value: 'RequestAccessReview',
+          });
+        }
       }),
     );
 
