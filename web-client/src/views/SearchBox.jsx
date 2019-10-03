@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -5,10 +6,10 @@ import React from 'react';
 export const SearchBox = connect(
   {
     searchTerm: state.searchTerm,
-    submitSearchSequence: sequences.submitSearchSequence,
+    submitCaseSearchSequence: sequences.submitCaseSearchSequence,
     updateSearchTermSequence: sequences.updateSearchTermSequence,
   },
-  ({ searchTerm, submitSearchSequence, updateSearchTermSequence }) => {
+  ({ searchTerm, submitCaseSearchSequence, updateSearchTermSequence }) => {
     return (
       <form
         noValidate
@@ -16,7 +17,7 @@ export const SearchBox = connect(
         id="search-input"
         onSubmit={e => {
           e.preventDefault();
-          submitSearchSequence();
+          submitCaseSearchSequence();
         }}
       >
         <div role="search">
@@ -36,10 +37,10 @@ export const SearchBox = connect(
               });
             }}
           />
-          <button className="usa-button ustc-search-button" type="submit">
+          <Button className="ustc-search-button" type="submit">
             <span className="usa-search-submit-text">Search</span>
             <span className="usa-sr-only">Search</span>
-          </button>
+          </Button>
           <a
             aria-label="advanced search"
             className="usa-link advanced margin-left-105"

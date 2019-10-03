@@ -12,4 +12,7 @@
 ./wait-until.sh http://localhost:3010/ 403
 ./wait-until.sh http://localhost:3011/ 403
 ./wait-until.sh http://localhost:3012/ 403
-./wait-until.sh http://localhost:9200/ 200
+
+if [ -z "$SKIP_ELASTICSEARCH" ]; then 
+  ./wait-until.sh http://localhost:9200/ 200
+fi
