@@ -57,6 +57,7 @@ describe('caseSearchInteractor', () => {
         bool: {
           should: [
             { match: { 'contactPrimary.M.name.S': 'test' } },
+            { match: { 'contactPrimary.M.secondaryName.S': 'test' } },
             { match: { 'contactSecondary.M.name.S': 'test' } },
           ],
         },
