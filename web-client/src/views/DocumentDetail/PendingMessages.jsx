@@ -282,7 +282,7 @@ export const PendingMessages = connect(
                           </div>
                           <div className="margin-bottom-1">
                             <span className="label-inline">Sent on</span>
-                            {message.createdAtTimeZoneFormatted}
+                            {message.createdAtTimeFormattedTZ}
                           </div>
                           <p>{message.message}</p>
                           {workItem.historyMessages.length - 1 !== mIdx && (

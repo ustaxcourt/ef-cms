@@ -38,7 +38,7 @@ export const MessagesInProgress = connect(
                   <td className="padding-extra">{workItem.messages[0].from}</td>
                   <td className="padding-extra">
                     <span className="no-wrap">
-                      {workItem.messages[0].createdAtTimeZoneFormatted}
+                      {workItem.messages[0].createdAtTimeFormattedTZ}
                     </span>
                   </td>
                   <td className="padding-extra">
