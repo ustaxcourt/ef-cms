@@ -34,6 +34,8 @@ export const DocumentDetail = connect(
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
     openServeConfirmModalDialogSequence:
       sequences.openServeConfirmModalDialogSequence,
+    removeSignatureFromOrderSequence:
+      sequences.removeSignatureFromOrderSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
     token: state.token,
@@ -51,6 +53,7 @@ export const DocumentDetail = connect(
     navigateToPathSequence,
     openConfirmEditModalSequence,
     openServeConfirmModalDialogSequence,
+    removeSignatureFromOrderSequence,
     setModalDialogNameSequence,
     showModal,
     token,
@@ -137,11 +140,21 @@ export const DocumentDetail = connect(
                   Signature
                 </Button>
               )}
-              {documentDetailHelper.formattedDocument.signedAt && (
+              {documentDetailHelper.showRemoveSignature && (
                 <>
                   Signed{' '}
                   {documentDetailHelper.formattedDocument.signedAtFormatted}
-                  <Button link className="margin-left-2">
+                  <Button
+                    link
+                    className="margin-left-2"
+                    onClick={() =>
+                      removeSignatureFromOrderSequence({
+                        caseDetail,
+                        documentIdToEdit:
+                          documentDetailHelper.formattedDocument.documentId,
+                      })
+                    }
+                  >
                     <FontAwesomeIcon icon={['far', 'times-circle']} /> Remove
                     Signature
                   </Button>
@@ -171,7 +184,7 @@ export const DocumentDetail = connect(
                 }`}
               >
                 <>
-                  {documentDetailHelper.formattedDocument.signedAt ? (
+                  {documentDetailHelper.showConfirmEditOrder ? (
                     <Button
                       link
                       icon="edit"
@@ -310,6 +323,7 @@ export const DocumentDetail = connect(
                 {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
                 {!process.env.CI && (
                   <iframe
+                    key={documentDetailHelper.formattedDocument.signedAt}
                     src={`${baseUrl}/documents/${documentDetailHelper.formattedDocument.documentId}/document-download-url?token=${token}`}
                     title={`Document type: ${documentDetailHelper.formattedDocument.documentType}`}
                   />
