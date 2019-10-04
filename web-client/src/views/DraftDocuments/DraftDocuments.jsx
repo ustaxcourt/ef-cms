@@ -1,5 +1,6 @@
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmEditModal } from './ConfirmEditModal';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -10,9 +11,15 @@ export const DraftDocuments = connect(
     archiveDraftDocumentModalSequence:
       sequences.archiveDraftDocumentModalSequence,
     formattedCaseDetail: state.formattedCaseDetail,
+    openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
     showModal: state.showModal,
   },
-  ({ archiveDraftDocumentModalSequence, formattedCaseDetail, showModal }) => {
+  ({
+    archiveDraftDocumentModalSequence,
+    formattedCaseDetail,
+    openConfirmEditModalSequence,
+    showModal,
+  }) => {
     return (
       <>
         {formattedCaseDetail.draftDocuments.length === 0 && (
@@ -61,9 +68,26 @@ export const DraftDocuments = connect(
                       </td>
 
                       <td className="no-wrap text-align-right">
-                        <Button link href={draftDocument.editUrl} icon="edit">
-                          Edit
-                        </Button>
+                        {draftDocument.signedAt ? (
+                          <Button
+                            link
+                            icon="edit"
+                            onClick={() => {
+                              openConfirmEditModalSequence({
+                                caseId: formattedCaseDetail.caseId,
+                                docketNumber: formattedCaseDetail.docketNumber,
+                                documentIdToEdit: draftDocument.documentId,
+                                path: draftDocument.editUrl,
+                              });
+                            }}
+                          >
+                            Edit
+                          </Button>
+                        ) : (
+                          <Button link href={draftDocument.editUrl} icon="edit">
+                            Edit
+                          </Button>
+                        )}
                       </td>
 
                       <td className="smaller-column">
@@ -92,6 +116,7 @@ export const DraftDocuments = connect(
         {showModal === 'ArchiveDraftDocumentModal' && (
           <ArchiveDraftDocumentModal />
         )}
+        {showModal === 'ConfirmEditModal' && <ConfirmEditModal />}
       </>
     );
   },

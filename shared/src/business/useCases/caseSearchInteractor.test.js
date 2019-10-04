@@ -105,27 +105,12 @@ describe('caseSearchInteractor', () => {
         },
       },
       {
-        bool: {
-          should: [
-            {
-              range: {
-                'createdAt.S': {
-                  format: 'yyyy',
-                  gte: '2018||/y',
-                  lte: '2019||/y',
-                },
-              },
-            },
-            {
-              range: {
-                'receivedAt.S': {
-                  format: 'yyyy',
-                  gte: '2018||/y',
-                  lte: '2019||/y',
-                },
-              },
-            },
-          ],
+        range: {
+          'receivedAt.S': {
+            format: 'yyyy',
+            gte: '2018||/y',
+            lte: '2019||/y',
+          },
         },
       },
     ];
