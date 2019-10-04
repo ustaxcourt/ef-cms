@@ -1,6 +1,7 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PDFSignerPageButtons } from './PDFSignerPageButtons';
 import { PropTypes } from 'prop-types';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -61,7 +62,11 @@ class SignOrderComponent extends React.Component {
       signatureApplied: false,
       signatureData: null,
     });
-    this.props.loadOriginalProposedStipulatedDecisionSequence();
+  }
+
+  restart() {
+    this.clear();
+    this.start();
   }
 
   stop(canvasEl, sigEl, x, y, scale = 1) {
@@ -121,15 +126,18 @@ class SignOrderComponent extends React.Component {
         <CaseDetailHeader />
         <section className="usa-section grid-container">
           <div className="grid-row margin-bottom-1">
-            <div className="grid-col-6">
+            <div className="grid-col-4">
               <Button link>
                 <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
                 Back to Draft
               </Button>
             </div>
-            <div className="grid-col-6 text-align-right">
-              {this.props.signatureApplied && (
-                <Button link>
+            <div className="grid-col-4 text-align-center sign-pdf-control">
+              <PDFSignerPageButtons />
+            </div>
+            <div className="grid-col-4 text-align-right">
+              {this.props.pdfSignerHelper.isPlaced && (
+                <Button link onClick={() => this.restart()}>
                   <FontAwesomeIcon icon={['far', 'times-circle']} />
                   Remove Signature
                 </Button>
@@ -137,6 +145,7 @@ class SignOrderComponent extends React.Component {
 
               <Button
                 className="margin-right-0"
+                disabled={!this.props.pdfSignerHelper.isPlaced}
                 onClick={() => this.props.saveDocumentSigningSequence()}
               >
                 Save Signature
