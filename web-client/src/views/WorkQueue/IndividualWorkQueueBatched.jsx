@@ -28,7 +28,7 @@ export const IndividualWorkQueueBatched = connect(
               <th>Case name</th>
               <th aria-label="Status Icon padding-right-0">&nbsp;</th>
               <th>Document</th>
-              <th>Filed By</th>
+              <th>Filed by</th>
               <th>Batched</th>
             </tr>
           </thead>
@@ -88,9 +88,7 @@ export const IndividualWorkQueueBatched = connect(
           ))}
         </table>
         {formattedWorkQueue.length === 0 && (
-          <div className="text-align-center">
-            {workQueueHelper.queueEmptyMessage}
-          </div>
+          <p>{workQueueHelper.queueEmptyMessage}</p>
         )}
       </React.Fragment>
     );

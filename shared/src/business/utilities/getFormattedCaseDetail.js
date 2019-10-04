@@ -165,8 +165,19 @@ const formatCase = (applicationContext, caseDetail) => {
     )
     .filter(document => document.documentType !== 'Stipulated Decision'); // TODO: this will be removed when we revisit stipulated decisions
 
+  result.draftDocuments.forEach(
+    document => (document.signedAt = new Date().toISOString()),
+  );
+
   result.draftDocuments = result.draftDocuments.map(document => ({
     ...document,
+    signedAtFormatted: applicationContext
+      .getUtilities()
+      .formatDateString(document.signedAt, 'MMDDYY'),
+    signUrl:
+      document.documentType === 'Stipulated Decision'
+        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
     editUrl:
       document.documentType === 'Stipulated Decision'
         ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`

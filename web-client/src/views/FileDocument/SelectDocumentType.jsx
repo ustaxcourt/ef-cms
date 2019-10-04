@@ -1,4 +1,5 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
+import { Button } from '../../ustc-ui/Button/Button';
 import { CompleteDocumentTypeSection } from './CompleteDocumentTypeSection';
 import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
@@ -28,31 +29,27 @@ export const SelectDocumentType = connect(
               <h1 id="file-a-document-header" tabIndex="-1">
                 What document are you filing?
               </h1>
-              <div className="blue-container">
+
+              <div className="blue-container margin-bottom-5">
                 <CompleteDocumentTypeSection />
               </div>
-
-              <div className="button-box-container margin-top-4">
-                <button
-                  className="usa-button margin-right-205 margin-bottom-1"
-                  id="submit-document"
-                  type="submit"
-                  onClick={() => {
-                    completeDocumentSelectSequence();
-                  }}
-                >
-                  Continue
-                </button>
-                <button
-                  className="usa-button usa-button--unstyled ustc-button--unstyled"
-                  type="button"
-                  onClick={() => {
-                    formCancelToggleCancelSequence();
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
+              <Button
+                id="submit-document"
+                type="submit"
+                onClick={() => {
+                  completeDocumentSelectSequence();
+                }}
+              >
+                Continue
+              </Button>
+              <Button
+                link
+                onClick={() => {
+                  formCancelToggleCancelSequence();
+                }}
+              >
+                Cancel
+              </Button>
             </div>
 
             <NonMobile>
@@ -88,13 +85,13 @@ export const SelectDocumentType = connect(
                   </Accordion>
                   <div className="content-wrapper margin-top-3">
                     <div>
-                      <button
-                        className="usa-button usa-button--outline"
+                      <Button
+                        secondary
                         id="view-all-documents"
                         onClick={() => gotoViewAllDocumentsSequence()}
                       >
                         View All Document Categories
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>

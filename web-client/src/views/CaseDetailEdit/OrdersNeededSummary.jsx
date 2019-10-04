@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -28,15 +29,15 @@ export const OrdersNeededSummary = connect(
             <h1>
               Orders Needed{' '}
               <div className="display-inline-block margin-left-2 margin-top-neg-1">
-                <button
-                  className="usa-button usa-button--unstyled"
+                <Button
+                  link
                   onClick={() => {
                     printFromBrowserSequence();
                   }}
                 >
                   <FontAwesomeIcon icon="print" size="sm" />
                   Print
-                </button>
+                </Button>
               </div>
             </h1>
           </div>
@@ -70,14 +71,12 @@ export const OrdersNeededSummary = connect(
           </div>
 
           <div className="margin-top-3">
-            <button
-              className="usa-button usa-button--inverse"
-              href={`/case-detail/${formattedCaseDetail.docketNumber}/create-order`}
+            <Button
               id="button-create-order"
               onClick={() => openCreateOrderChooseTypeModalSequence()}
             >
               <FontAwesomeIcon icon="clipboard-list" size="1x" /> Create Order
-            </button>
+            </Button>
           </div>
         </section>
       </>

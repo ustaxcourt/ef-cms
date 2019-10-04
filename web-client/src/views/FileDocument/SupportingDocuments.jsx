@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SupportingDocumentForm } from './SupportingDocumentForm';
 import { connect } from '@cerebral/react';
@@ -20,8 +21,9 @@ export const SupportingDocuments = connect(
           ))}
 
         {fileDocumentHelper.showAddSupportingDocuments && (
-          <button
-            className="usa-button usa-button--outline margin-top-205"
+          <Button
+            secondary
+            className="margin-top-205"
             id="add-supporting-document-button"
             onClick={() => {
               addSupportingDocumentToFormSequence({ type: 'primary' });
@@ -33,10 +35,10 @@ export const SupportingDocuments = connect(
               size="1x"
             />
             Add Supporting Document
-          </button>
+          </Button>
         )}
 
-        {fileDocumentHelper.showAddSupportingDocumentsLimitReached && (
+        {!!fileDocumentHelper.showAddSupportingDocumentsLimitReached && (
           <p>
             You can only add 5 supporting documents at a time. You may file
             another supporting document in a separate filing.

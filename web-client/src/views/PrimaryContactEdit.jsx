@@ -1,4 +1,5 @@
 import { Address } from './StartCase/Address';
+import { Button } from '../ustc-ui/Button/Button';
 import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
 import { Hint } from '../ustc-ui/Hint/Hint';
@@ -60,7 +61,7 @@ export const PrimaryContactEdit = connect(
             To change the case caption, please file a Motion to Change Caption
           </Hint>
 
-          <div className="blue-container">
+          <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
               <p className="usa-label">Contact name</p>
               <p className="margin-top-0">
@@ -145,7 +146,7 @@ export const PrimaryContactEdit = connect(
               </label>
               <input
                 autoCapitalize="none"
-                className="usa-input"
+                className="usa-input max-width-200"
                 id="phone"
                 name="contactPrimary.phone"
                 type="tel"
@@ -166,16 +167,15 @@ export const PrimaryContactEdit = connect(
               />
             </div>
           </div>
-          <button
-            className="usa-button margin-top-3 margin-right-3"
+          <Button
             onClick={() => {
               submitEditPrimaryContactSequence();
             }}
           >
             Save
-          </button>
-          <button
-            className="usa-button usa-button--unstyled margin-top-3 margin-right-3"
+          </Button>
+          <Button
+            link
             onClick={() => {
               cancelEditPrimaryContactSequence({
                 caseId: caseDetail.docketNumber,
@@ -183,7 +183,7 @@ export const PrimaryContactEdit = connect(
             }}
           >
             Cancel
-          </button>
+          </Button>
         </section>
       </>
     );

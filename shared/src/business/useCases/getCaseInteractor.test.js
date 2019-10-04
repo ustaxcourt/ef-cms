@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const { getCaseInteractor } = require('./getCaseInteractor');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_CASE } = require('../../test/mockCase');
 
 const { documents } = MOCK_CASE;
@@ -174,7 +175,7 @@ describe('Get case', () => {
               caseType: 'Other',
               createdAt: new Date().toISOString(),
               hasIrsNotice: false,
-              partyType: 'Petitioner',
+              partyType: ContactFactory.PARTY_TYPES.petitioner,
               petitioners: [{ name: 'Test Taxpayer' }],
               preferredTrialCity: 'Washington, D.C.',
               procedureType: 'Regular',

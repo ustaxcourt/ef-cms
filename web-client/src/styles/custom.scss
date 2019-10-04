@@ -30,6 +30,10 @@ hr {
   }
 }
 
+.max-width-200 {
+  max-width: 200px;
+}
+
 .text-align-left {
   text-align: left;
 }
@@ -423,7 +427,10 @@ select[disabled] {
 }
 
 .alert-gold {
-  max-width: 700px;
+  span {
+    max-width: 700px;
+  }
+  display: inline-block;
   padding: 10px;
   border-left: 5px solid color($theme-color-warning);
   background: color($theme-color-warning-lighter);
@@ -443,7 +450,9 @@ select[disabled] {
 }
 
 .alert-gold.full-width {
-  max-width: none;
+  span {
+    max-width: none;
+  }
 }
 
 .alert-gold.wider {
@@ -490,11 +499,6 @@ select[disabled] {
       margin-top: 20px;
     }
   }
-  [role='listitem'],
-  .button-box-container {
-    min-height: 150px;
-    clear: left;
-  }
 
   .caseItem__icon {
     position: absolute;
@@ -519,14 +523,9 @@ select[disabled] {
     }
 
     @media only screen and (min-width: $medium-screen) {
-      width: 100px;
-      height: 100px;
+      width: 75px;
+      height: 75px;
       padding: 20px;
-
-      .svg-wrapper img.svg {
-        width: 54px;
-        height: 62px;
-      }
     }
   }
 
@@ -535,13 +534,13 @@ select[disabled] {
     @media only screen and (min-width: $medium-screen) {
       min-height: 0;
       padding-left: 86px;
-      padding-left: 150px;
+      padding-left: 100px;
     }
   }
 
   .caseItem__content {
     @media only screen and (min-width: $medium-screen) {
-      padding-left: 150px;
+      padding-left: 100px;
     }
   }
 }
@@ -550,11 +549,6 @@ select[disabled] {
     position: relative;
     margin-top: 30px;
     margin-bottom: 30px;
-  }
-  [role='listitem'],
-  .button-box-container {
-    min-height: 150px;
-    clear: left;
   }
 
   .caseItem__icon {
@@ -585,14 +579,9 @@ select[disabled] {
     }
 
     @media only screen and (min-width: $medium-screen) {
-      width: 100px;
-      height: 100px;
+      width: 75px;
+      height: 75px;
       padding: 20px;
-
-      .svg-wrapper img.svg {
-        width: 54px;
-        height: 62px;
-      }
     }
   }
 
@@ -601,13 +590,13 @@ select[disabled] {
     padding-left: 86px;
     @media only screen and (min-width: $medium-screen) {
       min-height: 0;
-      padding-left: 150px;
+      padding-left: 100px;
     }
   }
 
   .caseItem__content {
     @media only screen and (min-width: $medium-screen) {
-      padding-left: 150px;
+      padding-left: 100px;
     }
   }
 }
@@ -1354,6 +1343,13 @@ button.change-scanner-button {
   h3 {
     margin-bottom: 0;
   }
+  button {
+    color: $color-white;
+  }
+  a:not(.usa-button):hover,
+  button:hover {
+    color: $color-primary-alt;
+  }
 }
 
 .minw-30 {
@@ -1361,8 +1357,18 @@ button.change-scanner-button {
 }
 
 .advanced-search {
-  .right-gray-border {
-    border-right: 1px solid color($theme-color-base-light);
+  /* big screens */
+  @media only screen and (min-width: $medium-screen) {
+    .right-gray-border {
+      border-right: 1px solid color($theme-color-base-light);
+    }
+  }
+  /* little screens */
+  @media only screen and (max-width: $medium-screen - 1) {
+    input#petitioner-name,
+    select {
+      margin-bottom: 20px;
+    }
   }
 
   .advanced-search__button {
