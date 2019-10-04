@@ -14,6 +14,5 @@ describe('removeSupportingDocumentAction', () => {
 
     expect(result.state.form.hasSupportingDocuments).toEqual(false);
     expect(result.state.form.supportingDocuments).toEqual([]);
-    expect(result.state.form.supportingDocumentCount).toEqual(0);
   });
 });

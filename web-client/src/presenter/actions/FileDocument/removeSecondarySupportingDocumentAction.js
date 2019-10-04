@@ -23,8 +23,4 @@ export const removeSecondarySupportingDocumentAction = ({
 
   store.set(state.form.hasSecondarySupportingDocuments, hasSupportingDocuments);
   store.set(state.form.secondarySupportingDocuments, supportingDocuments);
-  store.set(
-    state.form.secondarySupportingDocumentCount,
-    supportingDocuments.length,
-  );
 };
