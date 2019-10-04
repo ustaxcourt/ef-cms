@@ -823,7 +823,6 @@ Case.prototype.generateTrialSortTags = function() {
   const {
     caseId,
     caseType,
-    createdAt,
     preferredTrialCity,
     procedureType,
     receivedAt,
