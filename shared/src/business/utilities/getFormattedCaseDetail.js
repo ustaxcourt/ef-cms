@@ -165,10 +165,6 @@ const formatCase = (applicationContext, caseDetail) => {
     )
     .filter(document => document.documentType !== 'Stipulated Decision'); // TODO: this will be removed when we revisit stipulated decisions
 
-  result.draftDocuments.forEach(
-    document => (document.signedAt = new Date().toISOString()),
-  );
-
   result.draftDocuments = result.draftDocuments.map(document => ({
     ...document,
     signedAtFormatted: applicationContext
@@ -240,6 +236,8 @@ const formatCase = (applicationContext, caseDetail) => {
   result.caseName = applicationContext.getCaseCaptionNames(
     caseDetail.caseCaption || '',
   );
+  result.caseTitleWithoutRespondent =
+    caseDetail.caseTitle && caseDetail.caseTitle.replace('Respondent', '');
 
   result.formattedTrialCity = result.preferredTrialCity || 'Not assigned';
   result.formattedTrialDate = 'Not scheduled';

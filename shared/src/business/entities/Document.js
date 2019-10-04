@@ -182,8 +182,12 @@ joiValidationDecorator(
     signedAt: joi
       .date()
       .iso()
-      .optional(),
-    signedByUserId: joi.string().optional(),
+      .optional()
+      .allow(null),
+    signedByUserId: joi
+      .string()
+      .optional()
+      .allow(null),
     status: joi.string().optional(),
     userId: joi.string().required(),
   }),
@@ -270,6 +274,11 @@ Document.prototype.generateFiledBy = function(caseDetail) {
 Document.prototype.setSigned = function(signByUserId) {
   this.signedByUserId = signByUserId;
   this.signedAt = createISODateString();
+};
+
+Document.prototype.unsignDocument = function() {
+  this.signedAt = null;
+  this.signedByUserId = null;
 };
 
 Document.prototype.setAsProcessingStatusAsCompleted = function() {

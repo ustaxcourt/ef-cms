@@ -74,7 +74,7 @@ export const submitCaseAssociationRequestAction = async ({
   ].includes(documentMetadata.documentType);
 
   const documentWithPendingAssociation = [
-    'Motion to substitute parties and change caption',
+    'Motion to Substitute Parties and Change Caption',
     'Notice of Intervention',
     'Notice of Election to Participate',
     'Notice of Election to Intervene',
