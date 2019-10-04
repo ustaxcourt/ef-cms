@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * set the state for the delete notes modal
+ * set the state for the confirm edit modal
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
