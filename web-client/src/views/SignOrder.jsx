@@ -25,7 +25,7 @@ class SignOrderComponent extends React.Component {
   }
 
   componentDidUpdate() {
-    if (!this.props.signatureApplied) {
+    if (!this.props.signatureData) {
       this.renderPDFPage(this.props.currentPageNumber);
     }
   }
