@@ -38,7 +38,7 @@ export const IndividualWorkQueueOutbox = connect(
                 &nbsp;
               </th>
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+              {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               {!workQueueHelper.hideCaseStatusColumn && <th>Case status</th>}
               {workQueueHelper.showAssignedToColumn && (
                 <th className="max-width-7">
@@ -135,9 +135,7 @@ export const IndividualWorkQueueOutbox = connect(
           ))}
         </table>
         {formattedWorkQueue.length === 0 && (
-          <div className="text-align-center">
-            {workQueueHelper.queueEmptyMessage}
-          </div>
+          <p>{workQueueHelper.queueEmptyMessage}</p>
         )}
       </React.Fragment>
     );

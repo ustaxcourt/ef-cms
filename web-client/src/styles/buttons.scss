@@ -14,15 +14,10 @@
     &:hover {
       color: color($theme-color-secondary-vivid);
     }
-
   }
 
   &:not(.usa-button--unstyled) {
     min-width: 132px;
-  }
-
-  &.margin-right-0 {
-    margin-right: 0;
   }
 
   .svg-inline--fa {
@@ -62,12 +57,31 @@
   }
 
   &.ustc-button--unstyled {
-    padding: 0.75rem 1.25rem;
+    padding: 0.75rem 0;
     text-align: center;
+    &.padding-top-0 {
+      padding-top: 0;
+    }
   }
 
   &.ustc-button--mobile-inline {
     width: auto;
+  }
+
+  &.text-left {
+    text-align: left;
+  }
+
+  &.padding-0 {
+    padding: 0;
+  }
+
+  &.margin-0 {
+    margin: 0;
+  }
+
+  &.margin-right-0 {
+    margin-right: 0;
   }
 
   @media only screen and (min-width: $medium-screen) {
@@ -113,6 +127,7 @@
   margin-bottom: 20px;
 }
 
-.button-box-container {
-  margin-top: 40px;
+.button-icon {
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
 }

@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesFiling } from './PartiesFiling';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
@@ -29,7 +30,7 @@ export const FileDocument = connect(
       <React.Fragment>
         <Focus>
           <h1
-            className="margin-bottom-05"
+            className="margin-bottom-105"
             id="file-a-document-header"
             tabIndex="-1"
           >
@@ -37,7 +38,7 @@ export const FileDocument = connect(
           </h1>
         </Focus>
 
-        <p className="margin-bottom-5 required-statement margin-top-05 ">
+        <p className="margin-bottom-4 margin-top-0 required-statement ">
           *All fields required unless otherwise noted
         </p>
 
@@ -54,9 +55,8 @@ export const FileDocument = connect(
 
         <PartiesFiling />
 
-        <div className="button-box-container margin-top-4">
-          <button
-            className="usa-button margin-right-205 margin-bottom-1"
+        <div className="margin-top-4">
+          <Button
             id="submit-document"
             type="submit"
             onClick={() => {
@@ -64,23 +64,18 @@ export const FileDocument = connect(
             }}
           >
             Review Filing
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
+          </Button>
+          <Button secondary onClick={() => navigateBackSequence()}>
             Back
-          </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
+          </Button>
+          <Button
+            link
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
 
         {showModal === 'WhatCanIIncludeModalOverlay' && (

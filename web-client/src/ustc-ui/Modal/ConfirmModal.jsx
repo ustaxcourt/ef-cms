@@ -1,4 +1,5 @@
 import { BaseModal } from './BaseModal';
+import { Button } from '../Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, sequences } from 'cerebral';
@@ -68,41 +69,35 @@ export class ConfirmModalComponent extends React.Component {
             </div>
             {!this.noCloseBtn && (
               <div className="mobile-lg:grid-col-3">
-                <button
-                  className="text-no-underline usa-button usa-button--unstyled hide-on-mobile float-right"
-                  type="button"
+                <Button
+                  link
+                  className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
                   onClick={this.runCancelSequence}
                 >
-                  Close{' '}
-                  <FontAwesomeIcon className="margin-0" icon="times-circle" />
-                </button>
+                  Close
+                  <FontAwesomeIcon
+                    className="margin-right-0 margin-left-1"
+                    icon="times-circle"
+                  />
+                </Button>
               </div>
             )}
           </div>
         </div>
         {this.props.children}
         {(!this.noConfirm || !this.noCancel) && (
-          <div className="button-box-container">
+          <>
             {!this.noConfirm && (
-              <button
-                className="usa-button margin-right-205"
-                type="button"
-                onClick={this.runConfirmSequence}
-              >
+              <Button onClick={this.runConfirmSequence}>
                 {this.confirmLabel}
-              </button>
+              </Button>
             )}
-
             {!this.noCancel && (
-              <button
-                className="usa-button usa-button--outline"
-                type="button"
-                onClick={this.runCancelSequence}
-              >
+              <Button secondary onClick={this.runCancelSequence}>
                 {this.cancelLabel}
-              </button>
+              </Button>
             )}
-          </div>
+          </>
         )}
       </BaseModal>
     );

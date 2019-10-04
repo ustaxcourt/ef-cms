@@ -3,6 +3,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+import { Button } from '../../ustc-ui/Button/Button';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 
 export const PrintableTrialCalendar = connect(
@@ -44,8 +45,9 @@ export const PrintableTrialCalendar = connect(
         </div>
 
         <div className="grid-container print-docket-record">
-          <button
-            className="usa-button usa-button--unstyled margin-bottom-3"
+          <Button
+            link
+            className="margin-bottom-3"
             onClick={() => {
               gotoTrialSessionDetailSequence({
                 trialSessionId,
@@ -54,7 +56,7 @@ export const PrintableTrialCalendar = connect(
           >
             <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
             Back to Session Information
-          </button>
+          </Button>
           <PdfPreview />
         </div>
       </>

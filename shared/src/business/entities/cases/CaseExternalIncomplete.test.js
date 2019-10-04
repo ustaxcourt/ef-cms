@@ -1,4 +1,5 @@
 const { CaseExternalIncomplete } = require('./CaseExternalIncomplete');
+const { ContactFactory } = require('../contacts/ContactFactory');
 
 describe('CaseExternalIncomplete entity', () => {
   describe('isValid', () => {
@@ -21,7 +22,7 @@ describe('CaseExternalIncomplete entity', () => {
         filingType: 'Myself',
         hasIrsNotice: false,
         irsNoticeDate: null,
-        partyType: 'Petitioner',
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitionFileId: '102e29fa-bb8c-43ff-b18f-ddce9089dd80',
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'Small',

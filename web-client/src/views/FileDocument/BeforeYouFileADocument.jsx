@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
@@ -17,11 +18,14 @@ export const BeforeYouFileADocument = connect(
       <>
         <CaseDetailHeader />
         <section className="usa-section before-filing-document grid-container">
-          <h1 className="captioned" tabIndex="-1">
+          <h2 className="captioned" tabIndex="-1">
             Before you file a document…
-          </h1>
+          </h2>
 
-          <div className="grid-container padding-x-0" role="list">
+          <div
+            className="grid-container padding-x-0 margin-bottom-5"
+            role="list"
+          >
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6">
                 <div className="caseItem" role="listitem">
@@ -30,9 +34,9 @@ export const BeforeYouFileADocument = connect(
                       <FontAwesomeIcon icon={['far', 'copy']} />
                     </div>
                   </NonMobile>
-                  <h2 className="caseItem__heading">
+                  <h3 className="caseItem__heading">
                     1. Gather All Documents You Want to Include in Your Filing
-                  </h2>
+                  </h3>
                   <div className="caseItem__content">
                     <p>
                       You may have documents that are related or supporting the
@@ -89,9 +93,9 @@ export const BeforeYouFileADocument = connect(
                       <FontAwesomeIcon icon={['fa', 'shield-alt']} />
                     </div>
                   </NonMobile>
-                  <h2 className="caseItem__heading">
+                  <h3 className="caseItem__heading">
                     2. Remove Personal Information From Your Document(s)
-                  </h2>
+                  </h3>
                   <div className="caseItem__content">
                     <p>
                       If your document(s) includes personal information (such as
@@ -107,26 +111,22 @@ export const BeforeYouFileADocument = connect(
               </div>
             </div>
           </div>
-          <div className="button-box-container">
-            <a
-              className="usa-button margin-right-205 margin-bottom-1"
-              href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
-            >
-              OK, Iʼm Ready to File
-            </a>
-            <button
-              className="usa-button usa-button--unstyled ustc-button--unstyled"
-              id="cancel-button"
-              onClick={() => {
-                formCancelToggleCancelSequence();
-              }}
-            >
-              Cancel
-            </button>
-            {showModal === 'FormCancelModalDialog' && (
-              <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
-            )}
-          </div>
+          <Button
+            href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
+          >
+            OK, Iʼm Ready to File
+          </Button>
+          <Button
+            link
+            onClick={() => {
+              formCancelToggleCancelSequence();
+            }}
+          >
+            Cancel
+          </Button>
+          {showModal === 'FormCancelModalDialog' && (
+            <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+          )}
         </section>
       </>
     );

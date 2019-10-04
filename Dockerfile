@@ -39,6 +39,7 @@ RUN apt-get install -y awscli && \
 ENV SONAR_RUNNER_HOME=/home/app/sonar_home
 ENV PATH ${SONAR_RUNNER_HOME}/bin:$PATH
 ENV GS4JS_HOME=/usr/lib
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 COPY package.json /home/app/package.json
 COPY package-lock.json /home/app/package-lock.json

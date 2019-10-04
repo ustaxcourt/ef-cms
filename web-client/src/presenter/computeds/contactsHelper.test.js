@@ -64,7 +64,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Custodian for This Taxpayer',
         nameLabel: 'Name of taxpayer',
-        secondaryNameLabel: 'Name of Custodian',
+        secondaryNameLabel: 'Name of custodian',
       },
     });
   });
@@ -109,8 +109,8 @@ describe('contactsHelper', () => {
         displayTitle: true,
         header:
           'Tell Us About Yourself as the Executor/Personal Representative/etc. For This Estate',
-        nameLabel: 'Name of Decedent',
-        secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
+        nameLabel: 'Name of decedent',
+        secondaryNameLabel: 'Name of executor/personal representative, etc.',
       },
     });
   });
@@ -133,7 +133,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displayInCareOf: true,
         header: 'Tell Us About the Estate You Are Filing For',
-        nameLabel: 'Name of Decedent',
+        nameLabel: 'Name of decedent',
       },
     });
   });
@@ -278,7 +278,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displaySecondaryName: true,
         header: 'Tell Us About Yourself as the Tax Matters Partner',
-        nameLabel: 'Partnership Name',
+        nameLabel: 'Partnership name',
         secondaryNameLabel: 'Tax Matters Partner name',
       },
     });
@@ -490,7 +490,7 @@ describe('contactsHelper', () => {
         displaySecondaryName: true,
         header: 'Tell Us About the Custodian for This Taxpayer',
         nameLabel: 'Name of taxpayer',
-        secondaryNameLabel: 'Name of Custodian',
+        secondaryNameLabel: 'Name of custodian',
       },
     });
   });
@@ -535,8 +535,8 @@ describe('contactsHelper', () => {
         displayTitle: true,
         header:
           'Tell Us About the Executor/Personal Representative/etc. For This Estate',
-        nameLabel: 'Name of Decedent',
-        secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
+        nameLabel: 'Name of decedent',
+        secondaryNameLabel: 'Name of executor/personal representative, etc.',
       },
     });
   });
@@ -559,7 +559,7 @@ describe('contactsHelper', () => {
       contactPrimary: {
         displayInCareOf: true,
         header: 'Tell Us About the Estate You Are Filing For',
-        nameLabel: 'Name of Decedent',
+        nameLabel: 'Name of decedent',
       },
     });
   });

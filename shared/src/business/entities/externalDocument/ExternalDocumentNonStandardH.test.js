@@ -63,7 +63,7 @@ describe('ExternalDocumentNonStandardH', () => {
       scenario: 'Nonstandard H',
       secondaryDocument: {
         category: 'Supporting Document',
-        documentTitle: 'Brief in Support of [Document Name]',
+        documentTitle: 'Brief in support of [Document Name]',
         documentType: 'Brief in Support',
         previousDocument: 'Petition',
         scenario: 'Nonstandard A',
@@ -82,14 +82,14 @@ describe('ExternalDocumentNonStandardH', () => {
         scenario: 'Nonstandard H',
         secondaryDocument: {
           category: 'Supporting Document',
-          documentTitle: 'Brief in Support of [Document Name]',
-          documentType: 'Brief in Suppport',
+          documentTitle: 'Brief in support of [Document Name]',
+          documentType: 'Brief in Support',
           previousDocument: 'Petition',
           scenario: 'Nonstandard A',
         },
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        'Motion for Leave to File Brief in Support of Petition',
+        'Motion for Leave to File Brief in support of Petition',
       );
     });
   });
