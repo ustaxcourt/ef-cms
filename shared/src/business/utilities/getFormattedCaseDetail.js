@@ -240,6 +240,8 @@ const formatCase = (applicationContext, caseDetail) => {
   result.caseName = applicationContext.getCaseCaptionNames(
     caseDetail.caseCaption || '',
   );
+  result.caseTitleWithoutRespondent =
+    caseDetail.caseTitle && caseDetail.caseTitle.replace('Respondent', '');
 
   result.formattedTrialCity = result.preferredTrialCity || 'Not assigned';
   result.formattedTrialDate = 'Not scheduled';
