@@ -22,10 +22,7 @@ export const BeforeYouFileADocument = connect(
             Before You File a Document…
           </h2>
 
-          <div
-            className="grid-container padding-x-0 margin-bottom-5"
-            role="list"
-          >
+          <div className="grid-container padding-x-0" role="list">
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-6">
                 <div className="caseItem" role="listitem">

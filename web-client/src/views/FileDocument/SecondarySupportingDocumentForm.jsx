@@ -34,17 +34,19 @@ export const SecondarySupportingDocumentForm = connect(
     return (
       <>
         <h2 className="margin-top-4">
-          Secondary Supporting Document {index + 1}{' '}
-          <Button
-            link
-            className="red-warning text-left"
-            icon="times-circle"
-            onClick={() => {
-              removeSecondarySupportingDocumentSequence({ index });
-            }}
-          >
-            Remove
-          </Button>
+          <div className="display-flex">
+            Secondary Supporting Document {index + 1}{' '}
+            <Button
+              link
+              className="red-warning text-left padding-0 margin-left-1"
+              icon="times-circle"
+              onClick={() => {
+                removeSecondarySupportingDocumentSequence({ index });
+              }}
+            >
+              Remove
+            </Button>
+          </div>
         </h2>
         <div className="blue-container">
           <div

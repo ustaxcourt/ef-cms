@@ -473,3 +473,9 @@ label.ustc-upload {
     margin-left: 30px;
   }
 }
+
+.complete-document-type-section {
+  :last-child {
+    margin-bottom: 0;
+  }
+}

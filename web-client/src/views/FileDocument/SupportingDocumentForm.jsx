@@ -34,17 +34,19 @@ export const SupportingDocumentForm = connect(
     return (
       <>
         <h2 className="margin-top-4">
-          Supporting Document {index + 1}{' '}
-          <Button
-            link
-            className="red-warning text-left"
-            icon="times-circle"
-            onClick={() => {
-              removeSupportingDocumentSequence({ index });
-            }}
-          >
-            Remove
-          </Button>
+          <div className="display-flex">
+            Supporting Document {index + 1}{' '}
+            <Button
+              link
+              className="red-warning text-left padding-0 margin-left-1"
+              icon="times-circle"
+              onClick={() => {
+                removeSupportingDocumentSequence({ index });
+              }}
+            >
+              Remove
+            </Button>
+          </div>
         </h2>
         <div className="blue-container">
           <div
