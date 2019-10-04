@@ -109,7 +109,9 @@ export const documentDetailHelper = (get, applicationContext) => {
         !formattedDocument.isPetition));
 
   const showViewOrdersNeededButton =
-    document && document.status === 'served' && userRole === 'petitionsclerk';
+    ((document && document.status === 'served') ||
+      caseDetail.status === 'Batched for IRS') &&
+    userRole === 'petitionsclerk';
 
   return {
     documentEditUrl,
