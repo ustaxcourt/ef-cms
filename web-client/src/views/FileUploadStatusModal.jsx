@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -28,15 +29,15 @@ class FileUploadStatusComponent extends ModalDialog {
         </div>
         {helper.isCancelable && (
           <div className="cancel">
-            <button
-              className="usa-button usa-button--unstyled"
+            <Button
+              link
               onClick={e => {
                 e.stopPropagation();
                 cancelUploadSequence();
               }}
             >
               Cancel Upload
-            </button>
+            </Button>
           </div>
         )}
       </div>

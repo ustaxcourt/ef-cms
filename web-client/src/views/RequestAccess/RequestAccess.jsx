@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesRepresenting } from './PartiesRepresenting';
 import { RequestAccessDocumentForm } from './RequestAccessDocumentForm';
@@ -33,11 +34,15 @@ export const RequestAccess = connect(
     return (
       <React.Fragment>
         <Focus>
-          <h1 id="file-a-document-header" tabIndex="-1">
+          <h1
+            className="margin-bottom-105"
+            id="file-a-document-header"
+            tabIndex="-1"
+          >
             Request Access to This Case
           </h1>
         </Focus>
-        <p className="required-statement margin-top-05 margin-bottom-5">
+        <p className="margin-bottom-4 margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
         <div>
@@ -100,9 +105,8 @@ export const RequestAccess = connect(
         </div>
         <RequestAccessDocumentForm />
         {requestAccessHelper.showPartiesRepresenting && <PartiesRepresenting />}
-        <div className="button-box-container">
-          <button
-            className="usa-button"
+        <div className="margin-top-5">
+          <Button
             id="submit-document"
             type="submit"
             onClick={() => {
@@ -110,16 +114,15 @@ export const RequestAccess = connect(
             }}
           >
             Review Filing
-          </button>
-          <button
-            className="usa-button usa-button--unstyled"
-            type="button"
+          </Button>
+          <Button
+            link
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
       </React.Fragment>
     );

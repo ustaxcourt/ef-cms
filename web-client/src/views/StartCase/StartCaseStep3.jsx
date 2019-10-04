@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { Contacts } from './Contacts';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -37,11 +38,11 @@ export const StartCaseStep3 = connect(
     return (
       <>
         <Focus>
-          <h1 className="focusable margin-top-5" tabIndex="-1">
+          <h2 className="focusable margin-bottom-105" tabIndex="-1">
             3. Who are you filing this petition for?
-          </h1>
+          </h2>
         </Focus>
-        <p className="required-statement margin-top-05 margin-bottom-2">
+        <p className="margin-bottom-4 margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
         <div className="blue-container grid-container padding-x-0">
@@ -407,33 +408,26 @@ export const StartCaseStep3 = connect(
           </>
         )}
 
-        <div className="button-box-container">
-          <button
-            className="usa-button margin-right-205 margin-bottom-4"
+        <div className="margin-top-5">
+          <Button
             id="submit-case"
-            type="button"
             onClick={() => {
               completeStartCaseWizardStepSequence({ nextStep: 4 });
             }}
           >
             Continue to Step 4 of 5
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
+          </Button>
+          <Button secondary onClick={() => navigateBackSequence()}>
             Back
-          </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
+          </Button>
+          <Button
+            link
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
       </>
     );

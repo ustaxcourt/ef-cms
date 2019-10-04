@@ -11,7 +11,6 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
       documentTitleTemplate: VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
       documentType: VALIDATION_ERROR_MESSAGES.documentType,
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
@@ -22,11 +21,11 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentType',
-      value: 'Entry of Appearance',
+      value: 'Entry of appearance',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentTitleTemplate',
-      value: 'Entry of Appearance for [Petitioner Names]',
+      value: 'Entry of appearance for [Petitioner Names]',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'eventCode',
@@ -39,7 +38,6 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
     });
@@ -51,7 +49,6 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
       representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
     });
 
@@ -113,7 +110,7 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('form.documentTitle')).toEqual(
-      'Entry of Appearance for Petrs. Mona Schultz & Jimothy Schultz',
+      'Entry of appearance for Petrs. Mona Schultz & Jimothy Schultz',
     );
     expect(test.getState('validationErrors')).toEqual({});
 

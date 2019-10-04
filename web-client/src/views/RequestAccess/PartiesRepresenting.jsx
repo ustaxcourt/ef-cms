@@ -54,7 +54,7 @@ export const PartiesRepresenting = connect(
                   }}
                 />
                 <label className="usa-checkbox__label" htmlFor="party-primary">
-                  {formattedCaseDetail.contactPrimary.name}
+                  {formattedCaseDetail.contactPrimary.name}, Petitioner
                 </label>
               </div>
               {requestAccessHelper.showSecondaryParty && (
@@ -78,7 +78,7 @@ export const PartiesRepresenting = connect(
                     className="usa-checkbox__label"
                     htmlFor="party-secondary"
                   >
-                    {formattedCaseDetail.contactSecondary.name}
+                    {formattedCaseDetail.contactSecondary.name}, Petitioner
                   </label>
                 </div>
               )}

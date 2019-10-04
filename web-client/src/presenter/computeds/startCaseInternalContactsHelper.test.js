@@ -55,7 +55,7 @@ describe('startCaseInternalContactsHelper', () => {
         displaySecondaryName: true,
         header: 'Custodian Information',
         nameLabel: 'Name of taxpayer',
-        secondaryNameLabel: 'Name of Custodian',
+        secondaryNameLabel: 'Name of custodian',
       },
     });
   });
@@ -93,8 +93,8 @@ describe('startCaseInternalContactsHelper', () => {
         displaySecondaryName: true,
         displayTitle: true,
         header: 'Executor/Personal Representative/Etc.',
-        nameLabel: 'Name of Decedent',
-        secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
+        nameLabel: 'Name of decedent',
+        secondaryNameLabel: 'Name of executor/personal representative, etc.',
       },
     });
   });
@@ -114,7 +114,7 @@ describe('startCaseInternalContactsHelper', () => {
       contactPrimary: {
         displayInCareOf: true,
         header: 'Estate Information',
-        nameLabel: 'Name of Decedent',
+        nameLabel: 'Name of decedent',
       },
     });
   });

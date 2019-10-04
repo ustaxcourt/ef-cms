@@ -1,7 +1,7 @@
+import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 export const CaseDeadlinesInternal = connect(
@@ -26,15 +26,15 @@ export const CaseDeadlinesInternal = connect(
       <>
         <div className="title">
           <h1>Deadlines</h1>
-          <button
-            className="usa-button push-right"
+          <Button
+            className="push-right margin-right-0"
             id="button-add-deadline"
             onClick={() => {
               openCreateCaseDeadlineModalSequence();
             }}
           >
             <FontAwesomeIcon icon="calendar-alt" size="1x" /> Add Deadline
-          </button>
+          </Button>
         </div>
         {caseDetailHelper.showCaseDeadlinesInternalEmpty && (
           <p className="margin-bottom-5">
@@ -54,8 +54,9 @@ export const CaseDeadlinesInternal = connect(
                   </td>
                   <td className="padding-extra">{item.description}</td>
                   <td className="smaller-column center-column">
-                    <button
-                      className="usa-button usa-button--unstyled"
+                    <Button
+                      link
+                      className="margin-right-0 padding-0"
                       onClick={() => {
                         openDeleteCaseDeadlineModalSequence({
                           caseDeadlineId: item.caseDeadlineId,
@@ -68,11 +69,12 @@ export const CaseDeadlinesInternal = connect(
                         size="1x"
                       />
                       Remove
-                    </button>
+                    </Button>
                   </td>
                   <td className="smaller-column center-column">
-                    <button
-                      className="usa-button usa-button--unstyled"
+                    <Button
+                      link
+                      className="margin-right-0 padding-0"
                       onClick={() => {
                         openEditCaseDeadlineModalSequence({
                           caseDeadlineId: item.caseDeadlineId,
@@ -85,7 +87,7 @@ export const CaseDeadlinesInternal = connect(
                         size="1x"
                       />
                       Edit
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               ))}

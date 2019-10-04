@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -53,15 +54,16 @@ export const CreateOrder = connect(
                 <h2 className="heading-1">Quick Preview</h2>
               </div>
               <div className="grid-col-1">
-                <button
-                  className="usa-button usa-button--unstyled margin-top-105 minw-10"
+                <Button
+                  link
+                  className="margin-top-105 minw-10"
                   onClick={() => {
                     convertHtml2PdfSequence();
                   }}
                 >
                   <FontAwesomeIcon icon="sync" size="sm" />
                   Refresh
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -82,33 +84,32 @@ export const CreateOrder = connect(
 
             <div className="grid-row grid-gap margin-top-4">
               <div className="grid-col-8">
-                <button
-                  className="usa-button"
+                <Button
                   onClick={() => {
                     submitCourtIssuedOrderSequence();
                   }}
                 >
                   Save Order
-                </button>
-                <button
-                  className="usa-button usa-button--unstyled margin-left-2"
+                </Button>
+                <Button
+                  link
                   onClick={() => {
                     formCancelToggleCancelSequence();
                   }}
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
 
               <div className="grid-col-4">
-                <a
-                  className="usa-button usa-button--outline"
+                <Button
+                  secondary
                   href={pdfPreviewUrl}
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   View Full PDF
-                </a>
+                </Button>
               </div>
             </div>
           </div>

@@ -10,7 +10,7 @@ const documentDetailHelper = withAppContextDecorator(
 
 export default test => {
   return it('Petitions clerk adds orders to a case', async () => {
-    // order for amended petition
+    // order for amended petition = true
     await test.runSequence('updateFormValueSequence', {
       key: 'orderForAmendedPetition',
       value: true,
@@ -26,6 +26,10 @@ export default test => {
     const documentHelper = runCompute(documentDetailHelper, {
       state: test.getState(),
     });
-    expect(documentHelper.showViewOrdersNeededButton).toEqual(true);
+
+    const showButton =
+      documentHelper.showViewOrdersNeededButton && caseHelper.hasOrders;
+
+    expect(showButton).toEqual(true);
   });
 };

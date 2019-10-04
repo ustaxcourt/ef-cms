@@ -11,7 +11,6 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
       documentTitleTemplate: VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
       documentType: VALIDATION_ERROR_MESSAGES.documentType,
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
@@ -22,11 +21,11 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentType',
-      value: 'Motion to Substitute Parties and Change Caption',
+      value: 'Motion to substitute parties and change caption',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentTitleTemplate',
-      value: 'Motion to Substitute Parties and Change Caption',
+      value: 'Motion to substitute parties and change caption',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'eventCode',
@@ -39,10 +38,6 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      attachments: VALIDATION_ERROR_MESSAGES.attachments,
-      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
-      exhibits: VALIDATION_ERROR_MESSAGES.exhibits,
-      hasSupportingDocuments: VALIDATION_ERROR_MESSAGES.hasSupportingDocuments,
       objections: VALIDATION_ERROR_MESSAGES.objections,
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
       representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
@@ -84,54 +79,12 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validateCaseAssociationRequestSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
-    });
-
-    await test.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'supportingDocument',
-      value: 'Declaration in Support',
-    });
-
-    await test.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'supportingDocumentMetadata.documentType',
-      value: 'Declaration in Support',
-    });
-
-    await test.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'supportingDocumentMetadata.category',
-      value: 'Supporting Document',
-    });
-
-    await test.runSequence('validateCaseAssociationRequestSequence');
-    expect(test.getState('validationErrors')).toEqual({
-      supportingDocumentFile: VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
-      supportingDocumentFreeText:
-        VALIDATION_ERROR_MESSAGES.supportingDocumentFreeText,
-    });
-
-    await test.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'supportingDocumentFreeText',
-      value: 'No',
-    });
-
-    await test.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'supportingDocumentMetadata.freeText',
-      value: 'No',
-    });
-
-    await test.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'supportingDocumentFile',
-      value: fakeFile,
-    });
-
-    await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('form.documentTitle')).toEqual(
-      'Motion to Substitute Parties and Change Caption',
+      'Motion to substitute parties and change caption',
     );
     expect(test.getState('validationErrors')).toEqual({});
 

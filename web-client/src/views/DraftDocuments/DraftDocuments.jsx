@@ -1,6 +1,6 @@
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
+import { Button } from '../../ustc-ui/Button/Button';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -14,7 +14,7 @@ export const DraftDocuments = connect(
   },
   ({ archiveDraftDocumentModalSequence, formattedCaseDetail, showModal }) => {
     return (
-      <React.Fragment>
+      <>
         {formattedCaseDetail.draftDocuments.length === 0 && (
           <p className="heading-3 margin-bottom-10">
             There are no draft documents.
@@ -28,8 +28,9 @@ export const DraftDocuments = connect(
             <thead>
               <tr>
                 <th>Date</th>
-                <th>Filings and Proceedings</th>
-                <th>Created By</th>
+                <th>Filings and proceedings</th>
+                <th>Created by</th>
+                <th>Signature Added</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
               </tr>
@@ -40,6 +41,7 @@ export const DraftDocuments = connect(
                   return (
                     <tr key={index}>
                       <td>{draftDocument.createdAtFormatted}</td>
+
                       <td>
                         <FilingsAndProceedings
                           arrayIndex={index}
@@ -47,20 +49,28 @@ export const DraftDocuments = connect(
                           record={{}} // TODO: we are not yet sure where this comes from since we don't have a docket record for proposed / signed stipulated decisions
                         />
                       </td>
+
                       <td>{draftDocument.filedBy}</td>
+
+                      <td className="no-wrap">
+                        {draftDocument.signedAt &&
+                          draftDocument.signedAtFormatted}
+                        {!draftDocument.signedAt && (
+                          <a href={draftDocument.signUrl}>Add Signature</a>
+                        )}
+                      </td>
+
                       <td className="no-wrap text-align-right">
-                        <a
-                          className="usa-button usa-button--unstyled"
-                          href={draftDocument.editUrl}
-                        >
-                          <FontAwesomeIcon icon="edit" size="sm" />
+                        <Button link href={draftDocument.editUrl} icon="edit">
                           Edit
-                        </a>
+                        </Button>
                       </td>
 
                       <td className="smaller-column">
-                        <button
-                          className="usa-button usa-button--unstyled red-warning"
+                        <Button
+                          link
+                          className="red-warning"
+                          icon="times-circle"
                           onClick={() => {
                             archiveDraftDocumentModalSequence({
                               caseId: formattedCaseDetail.caseId,
@@ -69,9 +79,8 @@ export const DraftDocuments = connect(
                             });
                           }}
                         >
-                          <FontAwesomeIcon icon="times-circle" size="sm" />
                           Delete
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   );
@@ -83,7 +92,7 @@ export const DraftDocuments = connect(
         {showModal === 'ArchiveDraftDocumentModal' && (
           <ArchiveDraftDocumentModal />
         )}
-      </React.Fragment>
+      </>
     );
   },
 );
