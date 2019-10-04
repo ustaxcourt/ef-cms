@@ -6,7 +6,7 @@ const dateFormats = {
   MMDDYY: 'MM/DD/YY',
   MMDDYYYY: 'MM/DD/YYYY',
   TIME: 'h:mm a [ET]',
-  TIME_TZ: 'hh:mm a',
+  TIME_NO_TZ: 'hh:mm a',
 };
 
 const USTC_TZ = 'America/New_York';
