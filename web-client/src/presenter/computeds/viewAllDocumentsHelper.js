@@ -61,7 +61,7 @@ export const viewAllDocumentsHelper = get => {
           category: 'Stipulation',
         },
       ],
-      reason: 'Notify the Court of a Change',
+      reason: 'Notify the court of a change',
     },
     {
       categories: [
