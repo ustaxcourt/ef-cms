@@ -136,7 +136,7 @@ export const SecondarySupportingDocumentForm = connect(
                 htmlFor={`secondary-supporting-document-free-text-${index}`}
                 id={`secondary-supporting-document-free-text-${index}-label`}
               >
-                Supporting Document Signed By
+                Supporting document signed by
               </label>
               <input
                 aria-describedby={`secondary-supporting-document-free-text-${index}-label`}
@@ -194,7 +194,7 @@ export const SecondarySupportingDocumentForm = connect(
                   htmlFor={`secondary-supporting-document-file-${index}`}
                   id={`secondary-supporting-document-file-${index}-label`}
                 >
-                  Upload Your Supporting Document{' '}
+                  Upload your supporting document{' '}
                   <span className="success-message padding-left-1">
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>

@@ -1112,7 +1112,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          createdAt: '2018-12-12T05:00:00Z',
+          receivedAt: '2018-12-12T05:00:00Z',
         },
         {
           applicationContext,
@@ -1130,7 +1130,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          createdAt: '2018-12-12T05:00:00Z',
+          receivedAt: '2018-12-12T05:00:00Z',
           procedureType: 'Small',
         },
         {
@@ -1149,7 +1149,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          createdAt: '2018-12-12T05:00:00Z',
+          receivedAt: '2018-12-12T05:00:00Z',
           caseType: 'passport',
         },
         {
@@ -1168,7 +1168,7 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          createdAt: '2018-12-12T05:00:00Z',
+          receivedAt: '2018-12-12T05:00:00Z',
           caseType: 'cdp (lien/levy)',
         },
         {
