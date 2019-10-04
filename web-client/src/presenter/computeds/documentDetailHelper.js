@@ -46,6 +46,11 @@ export const documentDetailHelper = (get, applicationContext) => {
         ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
         : `/case-detail/${caseDetail.docketNumber}/edit-order/${formattedDocument.documentId}/sign`;
 
+    formattedDocument.editUrl =
+      formattedDocument.documentType === 'Stipulated Decision'
+        ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
+        : `/case-detail/${caseDetail.docketNumber}/edit-order/${formattedDocument.documentId}`;
+
     const stipulatedWorkItem = formattedDocument.workItems.find(
       workItem =>
         workItem.document.documentType === 'Proposed Stipulated Decision' &&
