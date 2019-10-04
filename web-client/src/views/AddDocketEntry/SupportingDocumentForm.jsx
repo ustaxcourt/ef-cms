@@ -114,7 +114,7 @@ export const SupportingDocumentForm = connect(
                 htmlFor="free-text"
                 id="free-text-label"
               >
-                Supporting Document Signed By
+                Supporting document signed by
               </label>
               <input
                 aria-describedby="free-text-label"
