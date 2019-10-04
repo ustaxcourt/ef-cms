@@ -58,7 +58,7 @@ export const completeDocumentSigningAction = async ({
     }
 
     let documentIdToOverwrite = null;
-    if (document.documentType === 'Stipulated Decision') {
+    if (document.documentType !== 'Proposed Stipulated Decision') {
       documentIdToOverwrite = originalDocumentId;
     }
 

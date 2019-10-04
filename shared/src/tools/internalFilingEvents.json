@@ -146,8 +146,8 @@
   ],
   "Appearance and Representation": [
     {
-      "documentTitle": "Entry of appearance",
-      "documentType": "Entry of appearance",
+      "documentTitle": "Entry of Appearance",
+      "documentType": "Entry of Appearance",
       "category": "Appearance and Representation",
       "eventCode": "EA",
       "scenario": "Standard",
@@ -179,8 +179,8 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Substitution of counsel",
-      "documentType": "Substitution of counsel",
+      "documentTitle": "Substitution of Counsel",
+      "documentType": "Substitution of Counsel",
       "category": "Appearance and Representation",
       "eventCode": "SOC",
       "scenario": "Standard",

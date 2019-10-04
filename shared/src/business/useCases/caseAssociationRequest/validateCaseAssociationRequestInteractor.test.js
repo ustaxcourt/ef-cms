@@ -38,7 +38,7 @@ describe('validateCaseAssociationRequest', () => {
         certificateOfService: true,
         certificateOfServiceDate: '1212-12-12',
         documentTitleTemplate: 'Entry of Appearance for [Petitioner Names]',
-        documentType: 'Entry of appearance',
+        documentType: 'Entry of Appearance',
         eventCode: '123',
         primaryDocumentFile: {},
         representingPrimary: true,

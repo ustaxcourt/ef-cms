@@ -34,11 +34,9 @@ exports.saveSignedDocumentInteractor = async ({
     document => document.documentId === originalDocumentId,
   );
 
-  if (
-    originalDocumentEntity.documentType !==
-    Document.SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType
-  ) {
-    const signedDocumentEntity = new Document(
+  let signedDocumentEntity;
+  if (originalDocumentEntity.documentType === 'Proposed Stipulated Decision') {
+    signedDocumentEntity = new Document(
       {
         createdAt: applicationContext.getUtilities().createISODateString(),
         documentId: signedDocumentId,
@@ -59,6 +57,20 @@ exports.saveSignedDocumentInteractor = async ({
     signedDocumentEntity.setSigned(user.userId);
 
     caseEntity.addDocumentWithoutDocketRecord(signedDocumentEntity);
+  } else {
+    signedDocumentEntity = new Document(
+      {
+        ...originalDocumentEntity,
+        createdAt: applicationContext.getUtilities().createISODateString(),
+        documentId: signedDocumentId,
+        processingStatus: 'complete',
+        userId: user.userId,
+      },
+      { applicationContext },
+    );
+
+    signedDocumentEntity.setSigned(user.userId);
+    caseEntity.updateDocument(signedDocumentEntity);
   }
 
   applicationContext.logger.time('Updating case with signed document');

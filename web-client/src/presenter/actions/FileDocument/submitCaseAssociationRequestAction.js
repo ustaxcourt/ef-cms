@@ -69,8 +69,8 @@ export const submitCaseAssociationRequestAction = async ({
     });
 
   const documentWithImmediateAssociation = [
-    'Entry of appearance',
-    'Substitution of counsel',
+    'Entry of Appearance',
+    'Substitution of Counsel',
   ].includes(documentMetadata.documentType);
 
   const documentWithPendingAssociation = [

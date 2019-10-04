@@ -72,7 +72,7 @@ function CaseAssociationRequestFactory(rawProps) {
   ].includes(rawProps.documentType);
 
   const documentWithObjections = [
-    'Substitution of counsel',
+    'Substitution of Counsel',
     'Motion to Substitute Parties and Change Caption',
   ].includes(rawProps.documentType);
 
@@ -81,8 +81,8 @@ function CaseAssociationRequestFactory(rawProps) {
   ].includes(rawProps.documentType);
 
   const documentWithConcatentatedPetitionerNames = [
-    'Entry of appearance',
-    'Substitution of counsel',
+    'Entry of Appearance',
+    'Substitution of Counsel',
   ].includes(rawProps.documentType);
 
   entityConstructor.prototype.getDocumentTitle = function(

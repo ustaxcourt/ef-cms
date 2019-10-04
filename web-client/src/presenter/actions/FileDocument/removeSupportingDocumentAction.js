@@ -18,5 +18,4 @@ export const removeSupportingDocumentAction = ({ get, props, store }) => {
 
   store.set(state.form.hasSupportingDocuments, hasSupportingDocuments);
   store.set(state.form.supportingDocuments, supportingDocuments);
-  store.set(state.form.supportingDocumentCount, supportingDocuments.length);
 };
