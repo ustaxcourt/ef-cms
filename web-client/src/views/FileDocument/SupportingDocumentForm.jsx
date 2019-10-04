@@ -34,17 +34,19 @@ export const SupportingDocumentForm = connect(
     return (
       <>
         <h2 className="margin-top-4">
-          Supporting Document {index + 1}{' '}
-          <Button
-            link
-            className="red-warning text-left"
-            icon="times-circle"
-            onClick={() => {
-              removeSupportingDocumentSequence({ index });
-            }}
-          >
-            Remove
-          </Button>
+          <div className="display-flex">
+            Supporting Document {index + 1}{' '}
+            <Button
+              link
+              className="red-warning text-left padding-0 margin-left-1"
+              icon="times-circle"
+              onClick={() => {
+                removeSupportingDocumentSequence({ index });
+              }}
+            >
+              Remove
+            </Button>
+          </div>
         </h2>
         <div className="blue-container">
           <div
@@ -131,7 +133,7 @@ export const SupportingDocumentForm = connect(
                 htmlFor={`supporting-document-free-text-${index}`}
                 id={`supporting-document-free-text-${index}-label`}
               >
-                Supporting Document Signed By
+                Supporting document signed by
               </label>
               <input
                 aria-describedby={`supporting-document-free-text-${index}-label`}
@@ -189,7 +191,7 @@ export const SupportingDocumentForm = connect(
                   htmlFor={`supporting-document-file-${index}`}
                   id={`supporting-document-file-${index}-label`}
                 >
-                  Upload Your Supporting Document{' '}
+                  Upload your supporting document{' '}
                   <span className="success-message">
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>

@@ -10,5 +10,5 @@ import { state } from 'cerebral';
  */
 export const setPDFPageForSigningAction = async ({ props, store }) => {
   const { pageNumber } = props;
-  store.set(state.pdfForSigning.pageNumber, pageNumber);
+  store.set(state.pdfForSigning.pageNumber, pageNumber || 1);
 };

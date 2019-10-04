@@ -18,8 +18,8 @@ describe('validateCaseAssociationRequest', () => {
     mockCaseAssociationRequest = {
       certificateOfService: true,
       certificateOfServiceDate: '1212-12-12',
-      documentTitle: 'Entry of appearance',
-      documentType: 'Entry of appearance',
+      documentTitle: 'Entry of Appearance',
+      documentType: 'Entry of Appearance',
       eventCode: '123',
       partyPrimary: true,
       primaryDocumentFile: {},

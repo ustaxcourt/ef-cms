@@ -5,14 +5,11 @@ const socketRouter = (app, onMessageCallbackFn) => {
     const message = JSON.parse(event.data);
     const { action } = message;
 
-    switch (action) {
-      case 'batch_download_ready':
-        app.getSequence('batchDownloadReadySequence')({
-          ...message,
-        });
-        break;
-      default:
-        break;
+    // NOTE: convert from if block to switch once three+ actions are present
+    if (action === 'batch_download_ready') {
+      app.getSequence('batchDownloadReadySequence')({
+        ...message,
+      });
     }
 
     (onMessageCallbackFn || noop)(message);

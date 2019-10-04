@@ -18,7 +18,6 @@ describe('addSupportingDocumentToFormAction', () => {
     expect(result.state.form.supportingDocuments).toEqual([
       { attachments: false, certificateOfService: false },
     ]);
-    expect(result.state.form.supportingDocumentCount).toEqual(1);
   });
 
   it('adds third primary supporting document to form', async () => {
@@ -29,7 +28,6 @@ describe('addSupportingDocumentToFormAction', () => {
       state: {
         form: {
           hasSupportingDocuments: true,
-          supportingDocumentCount: 2,
           supportingDocuments: [
             {
               supportingDocument: 'Something',
@@ -52,7 +50,6 @@ describe('addSupportingDocumentToFormAction', () => {
       },
       { attachments: false, certificateOfService: false },
     ]);
-    expect(result.state.form.supportingDocumentCount).toEqual(3);
   });
 
   it('adds first secondary supporting document to form', async () => {
@@ -71,7 +68,6 @@ describe('addSupportingDocumentToFormAction', () => {
     expect(result.state.form.secondarySupportingDocuments).toEqual([
       { attachments: false, certificateOfService: false },
     ]);
-    expect(result.state.form.secondarySupportingDocumentCount).toEqual(1);
   });
 
   it('adds third secondary supporting document to form', async () => {
@@ -82,7 +78,6 @@ describe('addSupportingDocumentToFormAction', () => {
       state: {
         form: {
           hasSecondarySupportingDocuments: true,
-          secondarySupportingDocumentCount: 2,
           secondarySupportingDocuments: [
             {
               supportingDocument: 'Something',
@@ -105,6 +100,5 @@ describe('addSupportingDocumentToFormAction', () => {
       },
       { attachments: false, certificateOfService: false },
     ]);
-    expect(result.state.form.secondarySupportingDocumentCount).toEqual(3);
   });
 });

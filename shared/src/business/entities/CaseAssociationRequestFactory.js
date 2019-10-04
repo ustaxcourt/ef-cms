@@ -58,31 +58,31 @@ function CaseAssociationRequestFactory(rawProps) {
   };
 
   const documentWithExhibits = [
-    'Motion to substitute parties and change caption',
+    'Motion to Substitute Parties and Change Caption',
     'Notice of Intervention',
     'Notice of Election to Participate',
     'Notice of Election to Intervene',
   ].includes(rawProps.documentType);
 
   const documentWithAttachments = [
-    'Motion to substitute parties and change caption',
+    'Motion to Substitute Parties and Change Caption',
     'Notice of Intervention',
     'Notice of Election to Participate',
     'Notice of Election to Intervene',
   ].includes(rawProps.documentType);
 
   const documentWithObjections = [
-    'Substitution of counsel',
-    'Motion to substitute parties and change caption',
+    'Substitution of Counsel',
+    'Motion to Substitute Parties and Change Caption',
   ].includes(rawProps.documentType);
 
   const documentWithSupportingDocuments = [
-    'Motion to substitute parties and change caption',
+    'Motion to Substitute Parties and Change Caption',
   ].includes(rawProps.documentType);
 
   const documentWithConcatentatedPetitionerNames = [
-    'Entry of appearance',
-    'Substitution of counsel',
+    'Entry of Appearance',
+    'Substitution of Counsel',
   ].includes(rawProps.documentType);
 
   entityConstructor.prototype.getDocumentTitle = function(

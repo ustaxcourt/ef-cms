@@ -10,7 +10,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setMessageIdAction } from '../actions/setMessageIdAction';
 
-export const gotoSignPDFDocumentSequence = [
+export const gotoSignOrderSequence = [
   setCurrentPageAction('Interstitial'),
   getCaseAction,
   setCaseAction,
@@ -21,5 +21,5 @@ export const gotoSignPDFDocumentSequence = [
   setSignatureNameForPdfSigningAction,
   setPDFForSigningAction,
   setPDFPageForSigningAction,
-  setCurrentPageAction('SignStipDecision'),
+  setCurrentPageAction('SignOrder'),
 ];

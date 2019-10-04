@@ -21,11 +21,11 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentType',
-      value: 'Entry of appearance',
+      value: 'Entry of Appearance',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentTitleTemplate',
-      value: 'Entry of appearance for [Petitioner Names]',
+      value: 'Entry of Appearance for [Petitioner Names]',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'eventCode',
@@ -110,7 +110,7 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('form.documentTitle')).toEqual(
-      'Entry of appearance for Petrs. Mona Schultz & Jimothy Schultz',
+      'Entry of Appearance for Petrs. Mona Schultz & Jimothy Schultz',
     );
     expect(test.getState('validationErrors')).toEqual({});
 
