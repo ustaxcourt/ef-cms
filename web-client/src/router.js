@@ -240,6 +240,18 @@ const router = {
     );
 
     route(
+      '/case-detail/*/edit-order/*/sign',
+      checkLoggedIn((docketNumber, documentId) => {
+        document.title = `Edit an order ${pageTitleSuffix}`;
+        const sequence = app.getSequence('gotoSignOrderSequence');
+        sequence({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/add-docket-entry',
       checkLoggedIn(docketNumber => {
         document.title = `Add docket entry ${pageTitleSuffix}`;
