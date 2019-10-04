@@ -31,7 +31,7 @@ describe('gotoSignPDFDocumentSequence', () => {
     });
 
     const pdfForSigning = test.getState('pdfForSigning');
-    expect(test.getState('currentPage')).toBe('PDFSigner');
+    expect(test.getState('currentPage')).toBe('SignStipDecision');
     expect(pdfForSigning.documentId).toEqual('123');
     expect(pdfForSigning.pageNumber).toEqual(2);
   });
