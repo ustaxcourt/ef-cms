@@ -14,6 +14,5 @@ describe('removeSecondarySupportingDocumentAction', () => {
 
     expect(result.state.form.hasSecondarySupportingDocuments).toEqual(false);
     expect(result.state.form.secondarySupportingDocuments).toEqual([]);
-    expect(result.state.form.secondarySupportingDocumentCount).toEqual(0);
   });
 });
