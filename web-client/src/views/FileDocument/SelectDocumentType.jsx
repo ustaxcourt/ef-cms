@@ -27,7 +27,7 @@ export const SelectDocumentType = connect(
           <div className="grid-row">
             <div className="tablet:grid-col-6">
               <h1 id="file-a-document-header" tabIndex="-1">
-                What document are you filing?
+                What Document are You Filing?
               </h1>
 
               <div className="blue-container margin-bottom-5 complete-document-type-section">
