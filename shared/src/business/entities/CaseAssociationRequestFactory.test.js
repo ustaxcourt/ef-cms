@@ -45,7 +45,7 @@ describe('CaseAssociationRequestFactory', () => {
         VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
       );
       rawEntity.documentTitleTemplate =
-        'Entry of appearance for [Petitioner Names]';
+        'Entry of Appearance for [Petitioner Names]';
       expect(errors().documentTitleTemplate).toEqual(undefined);
     });
 
@@ -87,7 +87,7 @@ describe('CaseAssociationRequestFactory', () => {
     describe('Substitution of counsel', () => {
       beforeEach(() => {
         rawEntity.documentTitleTemplate =
-          'Substitution of counsel for [Petitioner Names]';
+          'Substitution of Counsel for [Petitioner Names]';
         rawEntity.documentType = 'Substitution of counsel';
       });
 
@@ -100,12 +100,12 @@ describe('CaseAssociationRequestFactory', () => {
       });
     });
 
-    describe('Motion to substitute parties and change caption', () => {
+    describe('Motion to Substitute Parties and Change Caption', () => {
       beforeEach(() => {
         rawEntity.documentTitleTemplate =
-          'Motion to substitute parties and change caption';
+          'Motion to Substitute Parties and Change Caption';
         rawEntity.documentType =
-          'Motion to substitute parties and change caption';
+          'Motion to Substitute Parties and Change Caption';
       });
 
       it('should require exhibits be selected', () => {
@@ -178,31 +178,31 @@ describe('CaseAssociationRequestFactory', () => {
       it('should generate valid title for representingPrimary', () => {
         const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
-            'Substitution of counsel for [Petitioner Names]',
+            'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of counsel',
           representingPrimary: true,
         });
         expect(
           caseAssoc.getDocumentTitle('Test Petitioner', 'Another Petitioner'),
-        ).toEqual('Substitution of counsel for Petr. Test Petitioner');
+        ).toEqual('Substitution of Counsel for Petr. Test Petitioner');
       });
 
       it('should generate valid title for representingSecondary', () => {
         const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
-            'Substitution of counsel for [Petitioner Names]',
+            'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of counsel',
           representingSecondary: true,
         });
         expect(
           caseAssoc.getDocumentTitle('Test Petitioner', 'Another Petitioner'),
-        ).toEqual('Substitution of counsel for Petr. Another Petitioner');
+        ).toEqual('Substitution of Counsel for Petr. Another Petitioner');
       });
 
       it('should generate valid title for representingPrimary and representingSecondary', () => {
         const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
-            'Substitution of counsel for [Petitioner Names]',
+            'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of counsel',
           representingPrimary: true,
           representingSecondary: true,
@@ -210,32 +210,32 @@ describe('CaseAssociationRequestFactory', () => {
         expect(
           caseAssoc.getDocumentTitle('Test Petitioner', 'Another Petitioner'),
         ).toEqual(
-          'Substitution of counsel for Petrs. Test Petitioner & Another Petitioner',
+          'Substitution of Counsel for Petrs. Test Petitioner & Another Petitioner',
         );
       });
 
       it('should generate valid title and ignore parties for item without concatenation', () => {
         const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
-            'Motion to substitute parties and change caption',
-          documentType: 'Motion to substitute parties and change caption',
+            'Motion to Substitute Parties and Change Caption',
+          documentType: 'Motion to Substitute Parties and Change Caption',
           representingPrimary: true,
           representingSecondary: true,
         });
         expect(
           caseAssoc.getDocumentTitle('Test Petitioner', 'Another Petitioner'),
-        ).toEqual('Motion to substitute parties and change caption');
+        ).toEqual('Motion to Substitute Parties and Change Caption');
       });
 
       it('should generate valid title when party is respondent', () => {
         const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
-            'Substitution of counsel for [Petitioner Names]',
+            'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of counsel',
           partyRespondent: true,
         });
         expect(caseAssoc.getDocumentTitle()).toEqual(
-          'Substitution of counsel for Respondent',
+          'Substitution of Counsel for Respondent',
         );
       });
     });
