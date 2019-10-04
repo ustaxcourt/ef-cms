@@ -39,7 +39,7 @@ describe('requestAccessHelper', () => {
 
   it('indicates file uploads are valid', () => {
     state.form = {
-      documentType: 'Entry of appearance',
+      documentType: 'Entry of Appearance',
       primaryDocumentFile: { some: 'file' },
     };
 
