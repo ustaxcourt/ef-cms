@@ -141,7 +141,7 @@ export const DocumentDetail = connect(
                 <>
                   Signed{' '}
                   {documentDetailHelper.formattedDocument.signedAtFormatted}
-                  <Button link>
+                  <Button link className="margin-left-2">
                     <FontAwesomeIcon icon={['far', 'times-circle']} /> Remove
                     Signature
                   </Button>
@@ -167,7 +167,7 @@ export const DocumentDetail = connect(
             {documentDetailHelper.isDraftDocument && (
               <div
                 className={`display-inline-block margin-right-2${
-                  showingAnyButton ? '' : ' margin-top-2'
+                  showingAnyButton ? '' : ' margin-top-1'
                 }`}
               >
                 <>
