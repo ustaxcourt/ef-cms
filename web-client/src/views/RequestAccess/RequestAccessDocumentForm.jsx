@@ -144,7 +144,7 @@ export const RequestAccessDocumentForm = connect(
                   className="usa-checkbox__label"
                   htmlFor="primaryDocument-certificateOfService"
                 >
-                  Certificate of service
+                  Certificate of Service
                 </label>
               </div>
             </fieldset>
@@ -256,6 +256,50 @@ export const RequestAccessDocumentForm = connect(
               className="usa-error-message"
             />
           </div>
+
+          {requestAccessHelper.documentWithObjections && (
+            <div
+              className={`usa-form-group margin-top-2 margin-bottom-0 ${
+                validationErrors.objections ? 'usa-form-group--error' : ''
+              } `}
+            >
+              <fieldset className="usa-fieldset margin-bottom-0">
+                <legend id="objections-legend">
+                  Are there any objections to this document?
+                </legend>
+                {['Yes', 'No', 'Unknown'].map(option => (
+                  <div className="usa-radio usa-radio__inline" key={option}>
+                    <input
+                      aria-describedby="objections-legend"
+                      checked={form.objections === option}
+                      className="usa-radio__input"
+                      id={`objections-${option}`}
+                      name="objections"
+                      type="radio"
+                      value={option}
+                      onChange={e => {
+                        updateCaseAssociationFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                        validateCaseAssociationRequestSequence();
+                      }}
+                    />
+                    <label
+                      className="usa-radio__label"
+                      htmlFor={`objections-${option}`}
+                    >
+                      {option}
+                    </label>
+                  </div>
+                ))}
+                <Text
+                  bind="validationErrors.objections"
+                  className="usa-error-message"
+                />
+              </fieldset>
+            </div>
+          )}
         </div>
 
         {requestAccessHelper.documentWithSupportingDocuments && (
