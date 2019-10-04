@@ -7,9 +7,7 @@ import { state } from 'cerebral';
 import _ from 'lodash';
 
 const isDateToday = (date, applicationContext) => {
-  const now = applicationContext
-    .getUtilities()
-    .formatDateString(new Date(), 'MMDDYY');
+  const now = applicationContext.getUtilities().formatNow('MMDDYY');
   const then = applicationContext
     .getUtilities()
     .formatDateString(date, 'MMDDYY');
@@ -17,9 +15,7 @@ const isDateToday = (date, applicationContext) => {
 };
 
 const formatDateIfToday = (date, applicationContext) => {
-  const now = applicationContext
-    .getUtilities()
-    .formatDateString(new Date(), 'MMDDYY');
+  const now = applicationContext.getUtilities().formatNow('MMDDYY');
   const then = applicationContext
     .getUtilities()
     .formatDateString(date, 'MMDDYY');
