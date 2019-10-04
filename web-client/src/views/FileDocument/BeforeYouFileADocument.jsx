@@ -19,7 +19,7 @@ export const BeforeYouFileADocument = connect(
         <CaseDetailHeader />
         <section className="usa-section before-filing-document grid-container">
           <h2 className="captioned" tabIndex="-1">
-            Before you file a document…
+            Before You File a Document…
           </h2>
 
           <div
@@ -56,7 +56,7 @@ export const BeforeYouFileADocument = connect(
                       in a single PDF file.
                     </p>
 
-                    <p className="label">Supporting Documents</p>
+                    <p className="label">Supporting documents</p>
                     <p>
                       A supporting document is a document that supports and/or
                       provides depth to specific statements made in your primary
