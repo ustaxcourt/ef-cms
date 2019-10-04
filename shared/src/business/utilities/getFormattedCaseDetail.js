@@ -165,10 +165,6 @@ const formatCase = (applicationContext, caseDetail) => {
     )
     .filter(document => document.documentType !== 'Stipulated Decision'); // TODO: this will be removed when we revisit stipulated decisions
 
-  result.draftDocuments.forEach(
-    document => (document.signedAt = new Date().toISOString()),
-  );
-
   result.draftDocuments = result.draftDocuments.map(document => ({
     ...document,
     signedAtFormatted: applicationContext
