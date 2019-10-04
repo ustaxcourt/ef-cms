@@ -42,14 +42,12 @@ export const PrimaryContactEdit = connect(
       <>
         <div className="big-blue-header">
           <div className="grid-container">
-            <h1>Contact Information</h1>
+            <h1>Edit Contact Information</h1>
           </div>
         </div>
 
         <section className="usa-section grid-container">
           <ErrorNotification />
-
-          <h2>Edit Contact Information</h2>
 
           <p>
             This form will automatically create and submit a change of contact
