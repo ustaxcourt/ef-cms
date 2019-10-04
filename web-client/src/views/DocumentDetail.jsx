@@ -121,6 +121,29 @@ export const DocumentDetail = connect(
 
       return (
         <div className="document-detail__action-buttons">
+          {documentDetailHelper.isDraftDocument && (
+            <div className="float-left">
+              {!documentDetailHelper.formattedDocument.signedAt && (
+                <Button
+                  link
+                  href={documentDetailHelper.formattedDocument.signUrl}
+                >
+                  <FontAwesomeIcon icon={['fas', 'pencil-alt']} /> Apply
+                  Signature
+                </Button>
+              )}
+              {documentDetailHelper.formattedDocument.signedAt && (
+                <>
+                  Signed{' '}
+                  {documentDetailHelper.formattedDocument.signedAtFormatted}
+                  <Button link>
+                    <FontAwesomeIcon icon={['far', 'times-circle']} /> Remove
+                    Signature
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
           <div className="float-right">
             {caseHelper.hasOrders &&
               documentDetailHelper.showViewOrdersNeededButton && (
