@@ -62,7 +62,11 @@ class SignOrderComponent extends React.Component {
       signatureApplied: false,
       signatureData: null,
     });
-    this.props.loadOriginalProposedStipulatedDecisionSequence();
+  }
+
+  restart() {
+    this.clear();
+    this.start();
   }
 
   stop(canvasEl, sigEl, x, y, scale = 1) {
@@ -128,12 +132,12 @@ class SignOrderComponent extends React.Component {
                 Back to Draft
               </Button>
             </div>
-            <div className="grid-col-4 text-align-center">
+            <div className="grid-col-4 text-align-center sign-pdf-control">
               <PDFSignerPageButtons />
             </div>
             <div className="grid-col-4 text-align-right">
-              {this.props.signatureApplied && (
-                <Button link>
+              {this.props.pdfSignerHelper.isPlaced && (
+                <Button link onClick={() => this.restart()}>
                   <FontAwesomeIcon icon={['far', 'times-circle']} />
                   Remove Signature
                 </Button>
@@ -141,6 +145,7 @@ class SignOrderComponent extends React.Component {
 
               <Button
                 className="margin-right-0"
+                disabled={!this.props.pdfSignerHelper.isPlaced}
                 onClick={() => this.props.saveDocumentSigningSequence()}
               >
                 Save Signature
