@@ -467,7 +467,7 @@ export const ScanBatchPreviewer = connect(
                   aria-label={`${
                     scanBatchPreviewerHelper.scannerSource ? 'Change' : 'Select'
                   } scanner source`}
-                  className="change-scanner-button"
+                  className="change-scanner-button padding-0"
                   onClick={e => {
                     e.preventDefault();
                     openChangeScannerSourceModalSequence();
