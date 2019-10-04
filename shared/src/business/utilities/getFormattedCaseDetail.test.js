@@ -108,8 +108,10 @@ describe('formatCase', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       hasVerifiedIrsNotice: true,
-      caseCaption: 'Test Case Caption',
       trialTime: 11,
+      caseCaption: 'Test Case Caption',
+      caseTitle:
+        'Test Case Caption, Petitioners v. Internal Revenue, Respondent',
     });
 
     expect(result).toHaveProperty('createdAtFormatted');
@@ -123,6 +125,9 @@ describe('formatCase', () => {
     );
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
     expect(result.caseName).toEqual('Test Case Caption');
+    expect(result.caseTitleWithoutRespondent).toEqual(
+      'Test Case Caption, Petitioners v. Internal Revenue, ',
+    );
     expect(result.formattedTrialCity).toEqual('Not assigned');
     expect(result).toHaveProperty('formattedTrialDate');
     expect(result.formattedTrialJudge).toEqual('Not assigned');

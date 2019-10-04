@@ -118,27 +118,12 @@ exports.caseSearchInteractor = async ({
   }
   if (yearFiledMin || yearFiledMax) {
     commonQuery.push({
-      bool: {
-        should: [
-          {
-            range: {
-              'createdAt.S': {
-                format: 'yyyy',
-                gte: `${yearFiledMin}||/y`,
-                lte: `${yearFiledMax}||/y`,
-              },
-            },
-          },
-          {
-            range: {
-              'receivedAt.S': {
-                format: 'yyyy',
-                gte: `${yearFiledMin}||/y`,
-                lte: `${yearFiledMax}||/y`,
-              },
-            },
-          },
-        ],
+      range: {
+        'receivedAt.S': {
+          format: 'yyyy',
+          gte: `${yearFiledMin}||/y`,
+          lte: `${yearFiledMax}||/y`,
+        },
       },
     });
   }

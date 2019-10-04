@@ -71,7 +71,7 @@ export const StartCaseInternal = connect(
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
                 <Focus>
-                  <h1 className="margin-bottom-105">Case Information</h1>
+                  <h2 className="margin-bottom-105">Case Information</h2>
                 </Focus>
                 <p className="margin-bottom-4 margin-top-0 required-statement">
                   *All fields required unless otherwise noted
@@ -86,10 +86,7 @@ export const StartCaseInternal = connect(
                     }`}
                   >
                     <fieldset className="usa-fieldset margin-bottom-0">
-                      <legend
-                        className="usa-legend with-hint"
-                        id="date-received-legend"
-                      >
+                      <legend className="usa-legend" id="date-received-legend">
                         Date received
                       </legend>
                       <div className="usa-memorable-date">
@@ -249,6 +246,7 @@ export const StartCaseInternal = connect(
                   <div
                     className={classNames(
                       'usa-form-group',
+                      !form.partyType && 'margin-bottom-0',
                       validationErrors.partyType && 'usa-form-group--error',
                     )}
                   >

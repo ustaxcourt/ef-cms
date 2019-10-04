@@ -46,13 +46,17 @@ export const CaseDetailHeader = connect(
                 )}
               </div>
               <p className="margin-y-0" id="case-title">
-                <span>
-                  {formattedCaseDetail.caseTitle}{' '}
-                  {caseDetailHelper.showCaptionEditButton &&
-                    !hideActionButtons && (
+                {!caseDetailHelper.showCaptionEditButton && (
+                  <span>{formattedCaseDetail.caseTitle}</span>
+                )}
+                {caseDetailHelper.showCaptionEditButton && !hideActionButtons && (
+                  <span>
+                    {formattedCaseDetail.caseTitleWithoutRespondent}
+                    <span className="display-inline-block">
+                      <span>Respondent</span>
                       <Button
                         link
-                        className="margin-left-105"
+                        className="margin-left-05 padding-0"
                         id="caption-edit-button"
                         onClick={() => {
                           openCaseCaptionModalSequence();
@@ -61,8 +65,9 @@ export const CaseDetailHeader = connect(
                         <FontAwesomeIcon icon="edit" size="sm" />
                         Edit
                       </Button>
-                    )}
-                </span>
+                    </span>
+                  </span>
+                )}
               </p>
               {showModal == 'UpdateCaseCaptionModalDialog' && (
                 <UpdateCaseCaptionModalDialog />
