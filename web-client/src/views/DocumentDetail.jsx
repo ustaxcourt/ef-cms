@@ -126,30 +126,7 @@ export const DocumentDetail = connect(
 
       return (
         <div className="document-detail__action-buttons">
-          {documentDetailHelper.isDraftDocument && (
-            <div className="float-left">
-              {!documentDetailHelper.formattedDocument.signedAt && (
-                <Button
-                  link
-                  href={documentDetailHelper.formattedDocument.signUrl}
-                >
-                  <FontAwesomeIcon icon={['fas', 'pencil-alt']} /> Apply
-                  Signature
-                </Button>
-              )}
-              {documentDetailHelper.formattedDocument.signedAt && (
-                <>
-                  Signed{' '}
-                  {documentDetailHelper.formattedDocument.signedAtFormatted}
-                  <Button link className="margin-left-2">
-                    <FontAwesomeIcon icon={['far', 'times-circle']} /> Remove
-                    Signature
-                  </Button>
-                </>
-              )}
-            </div>
-          )}
-          <div className="float-right">
+          <div className="float-left">
             {caseHelper.hasOrders &&
               documentDetailHelper.showViewOrdersNeededButton && (
                 <Button
@@ -163,7 +140,31 @@ export const DocumentDetail = connect(
                   View Orders Needed
                 </Button>
               )}
-
+            {documentDetailHelper.isDraftDocument && (
+              <div>
+                {!documentDetailHelper.formattedDocument.signedAt && (
+                  <Button
+                    link
+                    href={documentDetailHelper.formattedDocument.signUrl}
+                  >
+                    <FontAwesomeIcon icon={['fas', 'pencil-alt']} /> Apply
+                    Signature
+                  </Button>
+                )}
+                {documentDetailHelper.formattedDocument.signedAt && (
+                  <>
+                    Signed{' '}
+                    {documentDetailHelper.formattedDocument.signedAtFormatted}
+                    <Button link className="margin-left-2">
+                      <FontAwesomeIcon icon={['far', 'times-circle']} /> Remove
+                      Signature
+                    </Button>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
+          <div className="float-right">
             {documentDetailHelper.isDraftDocument && (
               <div
                 className={`display-inline-block margin-right-2${
