@@ -78,6 +78,7 @@ import { gotoPrimaryContactEditSequence } from './sequences/gotoPrimaryContactEd
 import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDocketRecordSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
+import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoSignPDFDocumentSequence } from './sequences/gotoSignPDFDocumentSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
@@ -347,6 +348,7 @@ export const presenter = {
     gotoPrintableDocketRecordSequence,
     gotoRequestAccessSequence,
     gotoSelectDocumentTypeSequence,
+    gotoSignOrderSequence,
     gotoSignPDFDocumentSequence,
     gotoStartCaseWizardSequence,
     gotoStyleGuideSequence,
