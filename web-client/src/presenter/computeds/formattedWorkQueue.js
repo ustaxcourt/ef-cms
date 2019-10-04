@@ -32,7 +32,7 @@ const formatDateIfToday = (date, applicationContext) => {
   if (now == then) {
     formattedDate = applicationContext
       .getUtilities()
-      .formatDateString(date, 'TIME');
+      .formatDateString(date, 'TIME_TZ');
   } else if (then === yesterday) {
     formattedDate = 'Yesterday';
   } else {
@@ -63,12 +63,15 @@ export const formatWorkItem = (
     message.createdAtTimeFormatted = applicationContext
       .getUtilities()
       .formatDateString(message.createdAt, 'DATE_TIME');
-    message.createdAtTimeZoneFormatted = applicationContext
+    message.createdAtTimeFormattedTZ = applicationContext
       .getUtilities()
       .formatDateString(message.createdAt, 'DATE_TIME_TZ');
   });
   result.sentBySection = _.capitalize(result.sentBySection);
   result.completedAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.completedAt, 'DATE_TIME');
+  result.completedAtFormattedTZ = applicationContext
     .getUtilities()
     .formatDateString(result.completedAt, 'DATE_TIME_TZ');
   result.assigneeName = result.assigneeName || 'Unassigned';

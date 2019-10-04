@@ -74,7 +74,7 @@ export const CompletedMessages = connect(
                         </div>
                         <div className="margin-bottom-1">
                           <span className="label-inline">Sent on</span>
-                          {message.createdAtTimeZoneFormatted}
+                          {message.createdAtTimeFormattedTZ}
                         </div>
                         <div className="completed-message">
                           {message.message}

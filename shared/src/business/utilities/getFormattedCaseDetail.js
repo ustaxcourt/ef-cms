@@ -45,7 +45,7 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
     .getUtilities()
     .formatDateString(result.deadlineDate, 'MMDDYY');
 
-  //use the app context utility function so the time zones match when comparing dates
+  // use the app context utility function so the time zones match when comparing dates
   const deadlineDateMomented = applicationContext
     .getUtilities()
     .prepareDateFromString(result.deadlineDate);
