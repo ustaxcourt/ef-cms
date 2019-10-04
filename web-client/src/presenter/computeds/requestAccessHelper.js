@@ -23,13 +23,13 @@ export const requestAccessHelper = (get, applicationContext) => {
   const documents = [
     {
       documentTitleTemplate: 'Entry of Appearance for [Petitioner Names]',
-      documentType: 'Entry of appearance',
+      documentType: 'Entry of Appearance',
       eventCode: 'EA',
       scenario: 'Standard',
     },
     {
       documentTitleTemplate: 'Substitution of Counsel for [Petitioner Names]',
-      documentType: 'Substitution of counsel',
+      documentType: 'Substitution of Counsel',
       eventCode: 'SOC',
       scenario: 'Standard',
     },
@@ -85,7 +85,7 @@ export const requestAccessHelper = (get, applicationContext) => {
   ].includes(documentType);
 
   const documentWithObjections = [
-    'Substitution of counsel',
+    'Substitution of Counsel',
     'Motion to Substitute Parties and Change Caption',
   ].includes(documentType);
 

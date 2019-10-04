@@ -21,7 +21,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentType',
-      value: 'Entry of appearance',
+      value: 'Entry of Appearance',
     });
     await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentTitleTemplate',

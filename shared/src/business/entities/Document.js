@@ -76,8 +76,8 @@ function Document(rawDocument, { applicationContext }) {
 }
 
 const practitionerAssociationDocumentTypes = [
-  'Entry of appearance',
-  'Substitution of counsel',
+  'Entry of Appearance',
+  'Substitution of Counsel',
 ];
 
 /**
