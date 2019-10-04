@@ -10,6 +10,10 @@ const formatDocument = (applicationContext, document) => {
     .getUtilities()
     .formatDateString(result.servedAt, 'DATE_TIME');
 
+  result.signedAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.signedAt, 'MMDDYY');
+
   result.showServedAt = !!result.servedAt;
   result.isStatusServed = result.status === 'served';
   result.isPetition = result.documentType === 'Petition';

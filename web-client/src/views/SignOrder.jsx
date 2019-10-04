@@ -121,13 +121,25 @@ class SignOrderComponent extends React.Component {
   }
 
   render() {
+    const {
+      docketNumber,
+      documentId,
+      pdfForSigning,
+      pdfSignerHelper,
+      saveDocumentSigningSequence,
+      signatureApplied,
+      signatureData,
+    } = this.props;
     return (
       <>
         <CaseDetailHeader />
         <section className="usa-section grid-container">
           <div className="grid-row margin-bottom-1">
             <div className="grid-col-4">
-              <Button link>
+              <Button
+                link
+                href={`/case-detail/${docketNumber}/documents/${documentId}`}
+              >
                 <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
                 Back to Draft
               </Button>
@@ -136,7 +148,7 @@ class SignOrderComponent extends React.Component {
               <PDFSignerPageButtons />
             </div>
             <div className="grid-col-4 text-align-right">
-              {this.props.pdfSignerHelper.isPlaced && (
+              {pdfSignerHelper.isPlaced && (
                 <Button link onClick={() => this.restart()}>
                   <FontAwesomeIcon icon={['far', 'times-circle']} />
                   Remove Signature
@@ -145,8 +157,8 @@ class SignOrderComponent extends React.Component {
 
               <Button
                 className="margin-right-0"
-                disabled={!this.props.pdfSignerHelper.isPlaced}
-                onClick={() => this.props.saveDocumentSigningSequence()}
+                disabled={!pdfSignerHelper.isPlaced}
+                onClick={() => saveDocumentSigningSequence()}
               >
                 Save Signature
               </Button>
@@ -156,18 +168,18 @@ class SignOrderComponent extends React.Component {
             <div className="grid-col-12">
               <div className="sign-pdf-interface">
                 <span
-                  className={this.props.pdfSignerHelper.signatureClass}
+                  className={pdfSignerHelper.signatureClass}
                   id="signature"
                   ref={this.signatureRef}
                 >
-                  (Signed) {this.props.pdfForSigning.nameForSigning}
+                  (Signed) {pdfForSigning.nameForSigning}
                   <br />
                   Chief Judge
                 </span>
                 {!process.env.CI && (
                   <canvas
                     className={
-                      !this.props.signatureData && this.props.signatureApplied
+                      !signatureData && signatureApplied
                         ? 'cursor-grabbing'
                         : 'cursor-grab'
                     }

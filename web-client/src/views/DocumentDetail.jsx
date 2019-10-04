@@ -4,6 +4,7 @@ import { CaseDetailEdit } from './CaseDetailEdit/CaseDetailEdit';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailReadOnly } from './CaseDetailReadOnly';
 import { CompletedMessages } from './DocumentDetail/CompletedMessages';
+import { ConfirmEditModal } from './DraftDocuments/ConfirmEditModal';
 import { CreateMessageModalDialog } from './DocumentDetail/CreateMessageModalDialog';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,9 +27,11 @@ export const DocumentDetail = connect(
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     documentDetailHelper: state.documentDetailHelper,
+    formattedCaseDetail: state.formattedCaseDetail,
     gotoOrdersNeededSequence: sequences.gotoOrdersNeededSequence,
     messageId: state.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
+    openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
     openServeConfirmModalDialogSequence:
       sequences.openServeConfirmModalDialogSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
@@ -42,9 +45,11 @@ export const DocumentDetail = connect(
     caseHelper,
     clickServeToIrsSequence,
     documentDetailHelper,
+    formattedCaseDetail,
     gotoOrdersNeededSequence,
     messageId,
     navigateToPathSequence,
+    openConfirmEditModalSequence,
     openServeConfirmModalDialogSequence,
     setModalDialogNameSequence,
     showModal,
@@ -121,6 +126,29 @@ export const DocumentDetail = connect(
 
       return (
         <div className="document-detail__action-buttons">
+          {documentDetailHelper.isDraftDocument && (
+            <div className="float-left">
+              {!documentDetailHelper.formattedDocument.signedAt && (
+                <Button
+                  link
+                  href={documentDetailHelper.formattedDocument.signUrl}
+                >
+                  <FontAwesomeIcon icon={['fas', 'pencil-alt']} /> Apply
+                  Signature
+                </Button>
+              )}
+              {documentDetailHelper.formattedDocument.signedAt && (
+                <>
+                  Signed{' '}
+                  {documentDetailHelper.formattedDocument.signedAtFormatted}
+                  <Button link className="margin-left-2">
+                    <FontAwesomeIcon icon={['far', 'times-circle']} /> Remove
+                    Signature
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
           <div className="float-right">
             {caseHelper.hasOrders &&
               documentDetailHelper.showViewOrdersNeededButton && (
@@ -139,13 +167,35 @@ export const DocumentDetail = connect(
             {documentDetailHelper.isDraftDocument && (
               <div
                 className={`display-inline-block margin-right-2${
-                  showingAnyButton ? '' : ' margin-top-2'
+                  showingAnyButton ? '' : ' margin-top-1'
                 }`}
               >
                 <>
-                  <Button link href={documentDetailHelper.documentEditUrl}>
-                    <FontAwesomeIcon icon={['fas', 'edit']} /> Edit
-                  </Button>
+                  {documentDetailHelper.formattedDocument.signedAt ? (
+                    <Button
+                      link
+                      icon="edit"
+                      onClick={() => {
+                        openConfirmEditModalSequence({
+                          caseId: formattedCaseDetail.caseId,
+                          docketNumber: formattedCaseDetail.docketNumber,
+                          documentIdToEdit:
+                            documentDetailHelper.formattedDocument.documentId,
+                          path: documentDetailHelper.formattedDocument.editUrl,
+                        });
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  ) : (
+                    <Button
+                      link
+                      href={documentDetailHelper.formattedDocument.editUrl}
+                      icon="edit"
+                    >
+                      Edit
+                    </Button>
+                  )}
 
                   <Button
                     link
@@ -283,6 +333,7 @@ export const DocumentDetail = connect(
         {showModal === 'ArchiveDraftDocumentModal' && (
           <ArchiveDraftDocumentModal />
         )}
+        {showModal === 'ConfirmEditModal' && <ConfirmEditModal />}
       </>
     );
   },
