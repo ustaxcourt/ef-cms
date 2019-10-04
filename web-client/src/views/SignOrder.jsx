@@ -158,7 +158,11 @@ class SignOrderComponent extends React.Component {
               <Button
                 className="margin-right-0"
                 disabled={!pdfSignerHelper.isPlaced}
-                onClick={() => saveDocumentSigningSequence()}
+                onClick={() =>
+                  saveDocumentSigningSequence({
+                    gotoAfterSigning: 'DocumentDetail',
+                  })
+                }
               >
                 Save Signature
               </Button>
