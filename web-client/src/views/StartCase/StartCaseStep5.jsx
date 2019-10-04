@@ -1,4 +1,5 @@
 import { AddressDisplay } from '../CaseDetail/PartyInformation';
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDifferenceModalOverlay } from './CaseDifferenceModalOverlay';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
@@ -34,9 +35,9 @@ export const StartCaseStep5 = connect(
     return (
       <>
         <Focus>
-          <h1 className="heading-1" id="file-a-document-header" tabIndex="-1">
+          <h2 id="file-a-document-header" tabIndex="-1">
             5. Review Your Petition
-          </h1>
+          </h2>
         </Focus>
 
         <p>
@@ -61,7 +62,7 @@ export const StartCaseStep5 = connect(
                     <div className="tablet:grid-col-6 margin-bottom-05">
                       <div className="margin-bottom-2">
                         <label className="usa-label" htmlFor="filing-type">
-                          Type of Notice/Case
+                          Type of notice/case
                         </label>
                         {form.caseType}
                         <div className="grid-row margin-top-3">
@@ -217,7 +218,7 @@ export const StartCaseStep5 = connect(
               <div className="grid-row grid-gap">
                 <div className="tablet:grid-col-12 margin-bottom-1">
                   <label className="usa-label" htmlFor="filing-service-email">
-                    Service Email
+                    Service email
                   </label>
                   {user.email}
                 </div>
@@ -254,34 +255,25 @@ export const StartCaseStep5 = connect(
           </div>
         </div>
 
-        <div className="button-box-container">
-          <button
-            className="usa-button margin-right-205 margin-bottom-4"
-            id="submit-case"
-            type="button"
-            onClick={() => {
-              submitFilePetitionSequence();
-            }}
-          >
-            Submit to U.S. Tax Court
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
-            Back
-          </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
-            onClick={() => {
-              formCancelToggleCancelSequence();
-            }}
-          >
-            Cancel
-          </button>
-        </div>
+        <Button
+          id="submit-case"
+          onClick={() => {
+            submitFilePetitionSequence();
+          }}
+        >
+          Submit to U.S. Tax Court
+        </Button>
+        <Button secondary onClick={() => navigateBackSequence()}>
+          Back
+        </Button>
+        <Button
+          link
+          onClick={() => {
+            formCancelToggleCancelSequence();
+          }}
+        >
+          Cancel
+        </Button>
         {showModal === 'CaseDifferenceModalOverlay' && (
           <CaseDifferenceModalOverlay />
         )}

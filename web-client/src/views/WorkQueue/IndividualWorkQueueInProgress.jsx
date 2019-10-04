@@ -25,7 +25,7 @@ export const IndividualWorkQueueInProgress = connect(
               <th>Filed</th>
               <th>Case name</th>
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+              {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               <th>Case Status</th>
               {!workQueueHelper.hideFromColumn && <th>From</th>}
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
@@ -95,9 +95,7 @@ export const IndividualWorkQueueInProgress = connect(
           })}
         </table>
         {formattedWorkQueue.length === 0 && (
-          <div className="text-align-center">
-            {workQueueHelper.queueEmptyMessage}
-          </div>
+          <p>{workQueueHelper.queueEmptyMessage}</p>
         )}
       </React.Fragment>
     );

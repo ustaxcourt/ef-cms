@@ -35,9 +35,9 @@ export const ContactPrimary = connect(
     return (
       <>
         {parentView === 'StartCase' ? (
-          <h2 className="margin-top-4">
+          <h3 className="margin-top-4 padding-left-205">
             {contactsHelper.contactPrimary.header}
-          </h2>
+          </h3>
         ) : (
           <h4>{contactsHelper.contactPrimary.header}</h4>
         )}
@@ -115,7 +115,7 @@ export const ContactPrimary = connect(
                   </span>
                 )}
               </label>
-              <span className="usa-hint">For example, Executor, PR, etc.</span>
+              <span className="usa-hint">For example, executor, PR, etc.</span>
               <input
                 autoCapitalize="none"
                 className="usa-input"
@@ -227,7 +227,7 @@ export const ContactPrimary = connect(
             </label>
             <input
               autoCapitalize="none"
-              className="usa-input"
+              className="usa-input max-width-200"
               id="phone"
               name="contactPrimary.phone"
               type="tel"

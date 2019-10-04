@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile } from '../ustc-ui/Responsive/Responsive';
 import { ModalDialog } from './ModalDialog';
@@ -47,8 +48,8 @@ class PDFPreviewModalComponent extends ModalDialog {
         </Mobile>
         <div>
           <div className="margin-bottom-3">
-            <button
-              className="usa-button usa-button--unstyled"
+            <Button
+              link
               title="pdf preview first page"
               onClick={() =>
                 this.props.setPageSequence({
@@ -67,9 +68,9 @@ class PDFPreviewModalComponent extends ModalDialog {
                 id="firstPage"
                 size="2x"
               />
-            </button>
-            <button
-              className="usa-button usa-button--unstyled"
+            </Button>
+            <Button
+              link
               title="pdf preview next page"
               onClick={() =>
                 this.props.setPageSequence({
@@ -88,12 +89,12 @@ class PDFPreviewModalComponent extends ModalDialog {
                 id="prev"
                 size="2x"
               />
-            </button>
+            </Button>
             <span className="pages">
               Page {this.props.currentPage} of {this.props.totalPages}
             </span>
-            <button
-              className="usa-button usa-button--unstyled"
+            <Button
+              link
               title="pdf preview previous page"
               onClick={() =>
                 this.props.setPageSequence({
@@ -112,9 +113,9 @@ class PDFPreviewModalComponent extends ModalDialog {
                 id="next"
                 size="2x"
               />
-            </button>
-            <button
-              className="usa-button usa-button--unstyled"
+            </Button>
+            <Button
+              link
               title="pdf preview last page"
               onClick={() =>
                 this.props.setPageSequence({
@@ -133,7 +134,7 @@ class PDFPreviewModalComponent extends ModalDialog {
                 id="lastPage"
                 size="2x"
               />
-            </button>
+            </Button>
           </div>
           <div className="pdf-preview-content">
             <canvas

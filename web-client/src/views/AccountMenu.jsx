@@ -12,6 +12,16 @@ export const AccountMenu = connect(
     user: state.user,
   },
   ({ isExpanded, signOutSequence, toggleMenuSequence, user }) => {
+    const LogOutButton = () => (
+      <button
+        className="account-menu-item usa-button usa-button--unstyled"
+        id="log-out"
+        onClick={() => signOutSequence()}
+      >
+        Log Out
+      </button>
+    );
+
     return (
       <>
         <NonMobile>
@@ -42,13 +52,7 @@ export const AccountMenu = connect(
               {isExpanded && (
                 <ul className="usa-nav__submenu position-right-0">
                   <li className="usa-nav__submenu-item">
-                    <button
-                      className="account-menu-item usa-button usa-button--unstyled"
-                      id="log-out"
-                      onClick={() => signOutSequence()}
-                    >
-                      Log Out
-                    </button>
+                    <LogOutButton />
                   </li>
                 </ul>
               )}
@@ -58,13 +62,7 @@ export const AccountMenu = connect(
         <Mobile>
           <ul className="usa-nav__primary usa-accordion ustc-navigation-items">
             <li className="usa-nav__primary-item">
-              <button
-                className="account-menu-item usa-button usa-button--unstyled"
-                id="log-out"
-                onClick={() => signOutSequence()}
-              >
-                Log Out
-              </button>
+              <LogOutButton />
             </li>
           </ul>
         </Mobile>

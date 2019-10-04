@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDifferenceExplained } from '../CaseDifferenceExplained';
 import { CaseDifferenceModalOverlay } from './CaseDifferenceModalOverlay';
 import { Focus } from '../../ustc-ui/Focus/Focus';
@@ -45,11 +46,11 @@ export const StartCaseStep4 = connect(
     return (
       <>
         <Focus>
-          <h1 className="focusable margin-top-4" tabIndex="-1">
+          <h2 className="focusable margin-bottom-105" tabIndex="-1">
             4. How do you want this case handled?
-          </h1>
+          </h2>
         </Focus>
-        <p className="required-statement margin-top-05 margin-bottom-2">
+        <p className="margin-bottom-4 margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
         <p>
@@ -120,7 +121,7 @@ export const StartCaseStep4 = connect(
 
         {startCaseHelper.showSelectTrial && (
           <>
-            <h2 className="margin-top-4">U.S. Tax Court Trial Locations</h2>
+            <h3 className="margin-top-4">U.S. Tax Court Trial Locations</h3>
             <p>
               If your case goes to trial, this is where it will be held. Keep in
               mind that the nearest location may not be in your state.
@@ -153,11 +154,9 @@ export const StartCaseStep4 = connect(
           </>
         )}
 
-        <div className="button-box-container">
-          <button
-            className="usa-button margin-right-205 margin-bottom-4"
+        <div className="margin-top-5">
+          <Button
             id="submit-case"
-            type="button"
             onClick={() => {
               completeStartCaseWizardStepSequence({
                 errorDisplayOrder: ['procedureType', 'preferredTrialCity'],
@@ -166,23 +165,18 @@ export const StartCaseStep4 = connect(
             }}
           >
             Continue to Step 5 of 5
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
+          </Button>
+          <Button secondary onClick={() => navigateBackSequence()}>
             Back
-          </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
+          </Button>
+          <Button
+            link
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
         {showModal === 'CaseDifferenceModalOverlay' && (
           <CaseDifferenceModalOverlay />

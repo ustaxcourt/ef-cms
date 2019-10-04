@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
@@ -346,7 +347,7 @@ export const FileDocumentReview = connect(
           </div>
         </div>
 
-        <div className="grid-row grid-gap">
+        <div className="grid-row grid-gap margin-bottom-5">
           <div className="tablet:grid-col-12 bg-white submit-reminders">
             <div className="card">
               <div className="content-header bg-accent-cool-dark text-white heading-3">
@@ -368,34 +369,27 @@ export const FileDocumentReview = connect(
           </div>
         </div>
 
-        <div className="button-box-container">
-          <button
-            className="usa-button margin-bottom-1"
-            id="submit-document"
-            type="submit"
-            onClick={() => {
-              submitExternalDocumentSequence();
-            }}
-          >
-            Submit Your Filing
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
-            Back
-          </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
-            onClick={() => {
-              formCancelToggleCancelSequence();
-            }}
-          >
-            Cancel
-          </button>
-        </div>
+        <Button
+          id="submit-document"
+          type="submit"
+          onClick={() => {
+            submitExternalDocumentSequence();
+          }}
+        >
+          Submit Your Filing
+        </Button>
+        <Button secondary onClick={() => navigateBackSequence()}>
+          Back
+        </Button>
+        <Button
+          link
+          onClick={() => {
+            formCancelToggleCancelSequence();
+          }}
+        >
+          Cancel
+        </Button>
+
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
           <FileUploadErrorModal

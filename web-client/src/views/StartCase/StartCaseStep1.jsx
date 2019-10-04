@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Hint } from '../../ustc-ui/Hint/Hint';
@@ -28,13 +29,13 @@ export const StartCaseStep1 = connect(
     return (
       <>
         <Focus>
-          <h1
+          <h2
             className="focusable margin-bottom-2"
             id="start-case-header"
             tabIndex="-1"
           >
             1. Provide Statement of Identity
-          </h1>
+          </h2>
         </Focus>
         <Hint>
           The Statement of Taxpayer Identification is the only document that
@@ -43,7 +44,8 @@ export const StartCaseStep1 = connect(
           It’s sent to the IRS to help identify you, but is never viewed by the
           Court or stored as part of the public record.
         </Hint>
-        <div className="blue-container">
+
+        <div className="blue-container margin-bottom-5">
           <div
             className={`usa-form-group ${
               validationErrors.stinFile ? 'usa-form-group--error' : ''
@@ -84,34 +86,25 @@ export const StartCaseStep1 = connect(
           </div>
         </div>
 
-        <div className="button-box-container">
-          <button
-            className="usa-button margin-right-205 margin-bottom-4"
-            id="submit-case"
-            type="button"
-            onClick={() => {
-              completeStartCaseWizardStepSequence({ nextStep: 2 });
-            }}
-          >
-            Continue to Step 2 of 5
-          </button>
-          <button
-            className="usa-button usa-button--outline margin-bottom-1"
-            type="button"
-            onClick={() => navigateBackSequence()}
-          >
-            Back
-          </button>
-          <button
-            className="usa-button usa-button--unstyled ustc-button--unstyled"
-            type="button"
-            onClick={() => {
-              formCancelToggleCancelSequence();
-            }}
-          >
-            Cancel
-          </button>
-        </div>
+        <Button
+          id="submit-case"
+          onClick={() => {
+            completeStartCaseWizardStepSequence({ nextStep: 2 });
+          }}
+        >
+          Continue to Step 2 of 5
+        </Button>
+        <Button secondary onClick={() => navigateBackSequence()}>
+          Back
+        </Button>
+        <Button
+          link
+          onClick={() => {
+            formCancelToggleCancelSequence();
+          }}
+        >
+          Cancel
+        </Button>
       </>
     );
   },

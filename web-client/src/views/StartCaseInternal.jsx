@@ -1,9 +1,11 @@
 import { BigHeader } from './BigHeader';
+import { Button } from '../ustc-ui/Button/Button';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
 import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
+import { Focus } from '../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { ScanBatchPreviewer } from './ScanBatchPreviewer';
@@ -68,14 +70,16 @@ export const StartCaseInternal = connect(
             <ErrorNotification />
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h1 className="margin-bottom-105">Case Information</h1>
-                <p className="required-statement margin-top-0 margin-bottom-4">
+                <Focus>
+                  <h1 className="margin-bottom-105">Case Information</h1>
+                </Focus>
+                <p className="margin-bottom-4 margin-top-0 required-statement">
                   *All fields required unless otherwise noted
                 </p>
               </div>
 
               <div className="grid-col-5">
-                <div className="blue-container document-detail-one-third">
+                <div className="blue-container margin-bottom-4 document-detail-one-third">
                   <div
                     className={`usa-form-group ${
                       validationErrors.receivedAt ? 'usa-form-group--error' : ''
@@ -301,27 +305,20 @@ export const StartCaseInternal = connect(
                     </div>
                   )}
                 </div>
-
-                <div className="margin-top-4">
-                  <button
-                    className="usa-button margin-bottom-2"
-                    id="submit-case"
-                    type="submit"
-                  >
-                    Create Case
-                  </button>
-                  <button
-                    className="usa-button usa-button--unstyled ustc-button--unstyled"
-                    type="button"
-                    onClick={() => {
-                      formCancelToggleCancelSequence();
-                      return false;
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </div>
+                <Button id="submit-case" type="submit">
+                  Create Case
+                </Button>
+                <Button
+                  link
+                  onClick={() => {
+                    formCancelToggleCancelSequence();
+                    return false;
+                  }}
+                >
+                  Cancel
+                </Button>
               </div>
+
               <div className="grid-col-7">
                 <ScanBatchPreviewer
                   documentTabs={[

@@ -81,7 +81,7 @@ describe('Petitions Clerk Counsel Association Journey', () => {
         postalCode: '77546',
         state: 'AZ',
       },
-      partyType: 'Petitioner & Spouse',
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
   });
   taxpayerViewsDashboard(test);
