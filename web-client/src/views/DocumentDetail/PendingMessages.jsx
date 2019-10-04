@@ -89,7 +89,7 @@ export const PendingMessages = connect(
                   </div>
                   <div className="margin-bottom-1">
                     <span className="label-inline">Sent On</span>
-                    {workItem.currentMessage.createdAtTimeFormatted}
+                    {workItem.currentMessage.createdAtTimeFormattedTZ}
                   </div>
                   <p>{workItem.currentMessage.message}</p>
                 </div>
