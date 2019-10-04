@@ -178,7 +178,7 @@ function Case(rawCase, { applicationContext }) {
   this.payGovId = rawCase.payGovId;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
-  this.receivedAt = rawCase.receivedAt;
+  this.receivedAt = rawCase.receivedAt || createISODateString();
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialJudge = rawCase.trialJudge;
@@ -823,7 +823,6 @@ Case.prototype.generateTrialSortTags = function() {
   const {
     caseId,
     caseType,
-    createdAt,
     preferredTrialCity,
     procedureType,
     receivedAt,
@@ -840,10 +839,7 @@ Case.prototype.generateTrialSortTags = function() {
     casePrioritySymbol = 'B';
   }
 
-  const formattedFiledTime = formatDateString(
-    receivedAt || createdAt,
-    'YYYYMMDDHHmmss',
-  );
+  const formattedFiledTime = formatDateString(receivedAt, 'YYYYMMDDHHmmss');
   const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
 
   const nonHybridSortKey = [
