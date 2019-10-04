@@ -30,7 +30,7 @@ export const SelectDocumentType = connect(
                 What document are you filing?
               </h1>
 
-              <div className="blue-container margin-bottom-5">
+              <div className="blue-container margin-bottom-5 complete-document-type-section">
                 <CompleteDocumentTypeSection />
               </div>
               <Button

@@ -36,7 +36,7 @@ describe('CaseAssociationRequestFactory', () => {
       expect(errors().documentType).toEqual(
         VALIDATION_ERROR_MESSAGES.documentType,
       );
-      rawEntity.documentType = 'Entry of appearance';
+      rawEntity.documentType = 'Entry of Appearance';
       expect(errors().documentType).toEqual(undefined);
     });
 
@@ -84,11 +84,11 @@ describe('CaseAssociationRequestFactory', () => {
       });
     });
 
-    describe('Substitution of counsel', () => {
+    describe('Substitution of Counsel', () => {
       beforeEach(() => {
         rawEntity.documentTitleTemplate =
           'Substitution of Counsel for [Petitioner Names]';
-        rawEntity.documentType = 'Substitution of counsel';
+        rawEntity.documentType = 'Substitution of Counsel';
       });
 
       it('should require objections be selected', () => {
@@ -179,7 +179,7 @@ describe('CaseAssociationRequestFactory', () => {
         const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
-          documentType: 'Substitution of counsel',
+          documentType: 'Substitution of Counsel',
           representingPrimary: true,
         });
         expect(
@@ -191,7 +191,7 @@ describe('CaseAssociationRequestFactory', () => {
         const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
-          documentType: 'Substitution of counsel',
+          documentType: 'Substitution of Counsel',
           representingSecondary: true,
         });
         expect(
@@ -203,7 +203,7 @@ describe('CaseAssociationRequestFactory', () => {
         const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
-          documentType: 'Substitution of counsel',
+          documentType: 'Substitution of Counsel',
           representingPrimary: true,
           representingSecondary: true,
         });
@@ -231,7 +231,7 @@ describe('CaseAssociationRequestFactory', () => {
         const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
-          documentType: 'Substitution of counsel',
+          documentType: 'Substitution of Counsel',
           partyRespondent: true,
         });
         expect(caseAssoc.getDocumentTitle()).toEqual(
