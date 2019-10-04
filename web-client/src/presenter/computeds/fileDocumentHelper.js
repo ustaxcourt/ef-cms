@@ -66,25 +66,30 @@ export const fileDocumentHelper = (get, applicationContext) => {
     (form.secondaryDocument.certificateOfService ||
       form.secondaryDocument.attachments);
 
+  const supportingDocumentCount =
+    (form.supportingDocuments && form.supportingDocuments.length) || 0;
   const showAddSupportingDocuments =
-    !form.supportingDocumentCount || form.supportingDocumentCount < 5;
-
-  const showAddSupportingDocumentsLimitReached =
-    form.supportingDocumentCount && form.supportingDocumentCount >= 5;
+    !supportingDocumentCount || supportingDocumentCount < 5;
+  const showAddSupportingDocumentsLimitReached = !!(
+    supportingDocumentCount && supportingDocumentCount >= 5
+  );
 
   const showSecondaryDocumentInclusionsForm =
     form.documentType !== 'Motion for Leave to File' ||
     !!form.secondaryDocumentFile;
 
+  const secondarySupportingDocumentCount =
+    (form.secondarySupportingDocuments &&
+      form.secondarySupportingDocuments.length) ||
+    0;
   const showAddSecondarySupportingDocuments =
-    (!form.secondarySupportingDocumentCount ||
-      form.secondarySupportingDocumentCount < 5) &&
+    (!secondarySupportingDocumentCount ||
+      secondarySupportingDocumentCount < 5) &&
     (form.documentType !== 'Motion for Leave to File' ||
       !!form.secondaryDocumentFile);
-
-  const showAddSecondarySupportingDocumentsLimitReached =
-    form.secondarySupportingDocumentCount &&
-    form.secondarySupportingDocumentCount >= 5;
+  const showAddSecondarySupportingDocumentsLimitReached = !!(
+    secondarySupportingDocumentCount && secondarySupportingDocumentCount >= 5
+  );
 
   let exported = {
     certificateOfServiceDateFormatted,
