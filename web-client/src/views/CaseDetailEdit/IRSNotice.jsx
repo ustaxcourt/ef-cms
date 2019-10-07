@@ -2,6 +2,7 @@ import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const IRSNotice = connect(
   {
@@ -86,10 +87,10 @@ export const IRSNotice = connect(
     const renderIrsNoticeDate = () => {
       return (
         <div
-          className={
-            'usa-form-group margin-bottom-0 ' +
-            (caseDetailErrors.irsNoticeDate ? 'usa-form-group--error' : '')
-          }
+          className={classNames(
+            'usa-form-group margin-bottom-0',
+            caseDetailErrors.irsNoticeDate && 'usa-form-group--error',
+          )}
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="date-of-notice-legend">
@@ -100,10 +101,10 @@ export const IRSNotice = connect(
                 <input
                   aria-describedby="date-of-notice-legend"
                   aria-label="month, two digits"
-                  className={
-                    'usa-input usa-input--inline ' +
-                    (caseDetailErrors.irsNoticeDate ? 'usa-input--error' : '')
-                  }
+                  className={classNames(
+                    'usa-input usa-input--inline',
+                    caseDetailErrors.irsNoticeDate && 'usa-input--error',
+                  )}
                   id="date-of-notice-month"
                   max="12"
                   min="1"
@@ -126,10 +127,10 @@ export const IRSNotice = connect(
                 <input
                   aria-describedby="date-of-notice-legend"
                   aria-label="day, two digits"
-                  className={
-                    'usa-input usa-input--inline ' +
-                    (caseDetailErrors.irsNoticeDate ? 'usa-input--error' : '')
-                  }
+                  className={classNames(
+                    'usa-input usa-input--inline',
+                    caseDetailErrors.irsNoticeDate && 'usa-input--error',
+                  )}
                   id="date-of-notice-day"
                   max="31"
                   min="1"
@@ -152,10 +153,10 @@ export const IRSNotice = connect(
                 <input
                   aria-describedby="date-of-notice-legend"
                   aria-label="year, four digits"
-                  className={
-                    'usa-input usa-input--inline ' +
-                    (caseDetailErrors.irsNoticeDate ? 'usa-input--error' : '')
-                  }
+                  className={classNames(
+                    'usa-input usa-input--inline',
+                    caseDetailErrors.irsNoticeDate && 'usa-input--error',
+                  )}
                   id="date-of-notice-year"
                   max="2100"
                   min="1900"

@@ -8,6 +8,7 @@ import { WhatCanIIncludeModalOverlay } from '../FileDocument/WhatCanIIncludeModa
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const RequestAccessDocumentForm = connect(
   {
@@ -43,19 +44,16 @@ export const RequestAccessDocumentForm = connect(
 
         <div className="blue-container">
           <div
-            className={`usa-form-group ${
-              validationErrors.primaryDocumentFile
-                ? 'usa-form-group--error'
-                : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.primaryDocumentFile && 'usa-form-group--error',
+            )}
           >
             <label
-              className={
-                'usa-label ustc-upload with-hint' +
-                (requestAccessHelper.showPrimaryDocumentValid
-                  ? 'validated'
-                  : '')
-              }
+              className={classNames(
+                'usa-label ustc-upload with-hint',
+                requestAccessHelper.showPrimaryDocumentValid && 'validated',
+              )}
               htmlFor="primary-document"
               id="primary-document-label"
             >
@@ -151,11 +149,12 @@ export const RequestAccessDocumentForm = connect(
 
             {form.certificateOfService && (
               <fieldset
-                className={`usa-fieldset margin-bottom-0 margin-top-2 ${
-                  validationErrors && validationErrors.certificateOfServiceDate
-                    ? 'usa-form-group--error margin-top-2'
-                    : ''
-                }`}
+                className={classNames(
+                  'usa-fieldset margin-bottom-0 margin-top-2',
+                  validationErrors &&
+                    validationErrors.certificateOfServiceDate &&
+                    'usa-form-group--error margin-top-2',
+                )}
               >
                 <legend className="usa-legend" id="service-date-legend">
                   Service date
@@ -259,9 +258,10 @@ export const RequestAccessDocumentForm = connect(
 
           {requestAccessHelper.documentWithObjections && (
             <div
-              className={`usa-form-group margin-top-2 margin-bottom-0 ${
-                validationErrors.objections ? 'usa-form-group--error' : ''
-              } `}
+              className={classNames(
+                'usa-form-group margin-top-2 margin-bottom-0',
+                validationErrors.objections && 'usa-form-group--error',
+              )}
             >
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend id="objections-legend">

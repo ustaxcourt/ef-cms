@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
+import classNames from 'classnames';
 
 export const DocketRecord = connect(
   {
@@ -61,7 +62,10 @@ export const DocketRecord = connect(
                   document &&
                   document.isFileAttached === false;
                 return (
-                  <tr className={isInProgress ? 'in-progress' : ''} key={index}>
+                  <tr
+                    className={classNames(isInProgress && 'in-progress')}
+                    key={index}
+                  >
                     <td className="center-column hide-on-mobile">{index}</td>
                     <td>
                       <span className="no-wrap">

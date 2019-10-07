@@ -81,9 +81,10 @@ export const StartCaseInternal = connect(
               <div className="grid-col-5">
                 <div className="blue-container margin-bottom-4 document-detail-one-third">
                   <div
-                    className={`usa-form-group ${
-                      validationErrors.receivedAt ? 'usa-form-group--error' : ''
-                    }`}
+                    className={classNames(
+                      'usa-form-group',
+                      validationErrors.receivedAt && 'usa-form-group--error',
+                    )}
                   >
                     <fieldset className="usa-fieldset margin-bottom-0">
                       <legend className="usa-legend" id="date-received-legend">
@@ -162,12 +163,10 @@ export const StartCaseInternal = connect(
                   </div>
 
                   <div
-                    className={
-                      'usa-form-group ' +
-                      (validationErrors.caseCaption
-                        ? 'usa-form-group--error'
-                        : '')
-                    }
+                    className={classNames(
+                      'usa-form-group',
+                      validationErrors.caseCaption && 'usa-form-group--error',
+                    )}
                   >
                     <label className="usa-label" htmlFor="case-caption">
                       Case caption

@@ -5,7 +5,7 @@ import { connect } from '@cerebral/react';
 import { props, sequences } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 export class ConfirmModalComponent extends React.Component {
   constructor(props) {
@@ -57,7 +57,7 @@ export class ConfirmModalComponent extends React.Component {
         <div className="modal-header grid-container padding-x-0">
           <div className="grid-row">
             <div
-              className={classnames(
+              className={classNames(
                 this.noCloseBtn
                   ? 'mobile-lg:grid-col-12'
                   : 'mobile-lg:grid-col-9',
