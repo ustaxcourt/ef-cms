@@ -95,6 +95,7 @@ describe('Petitions Clerk Create Order Journey', () => {
         },
         revokeObjectURL: () => {},
       },
+      document: {},
       localStorage: {
         removeItem: () => null,
         setItem: () => null,
