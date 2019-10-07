@@ -7,12 +7,14 @@ import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialS
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultTrialSessionDetailTabAction } from '../actions/TrialSession/setDefaultTrialSessionDetailTabAction';
 import { setEligibleCasesOnTrialSessionAction } from '../actions/TrialSession/setEligibleCasesOnTrialSessionAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 
 const gotoTrialSessionDetails = [
   setCurrentPageAction('Interstitial'),
+  setDefaultTrialSessionDetailTabAction,
   clearErrorAlertsAction,
   setTrialSessionIdAction,
   getTrialSessionDetailsAction,
