@@ -103,7 +103,7 @@ describe('assignWorkItemsInteractor integration test', () => {
         docketNumberSuffix: 'S',
         document: {
           documentType: 'Petition',
-          filedBy: 'Rick Petitioner',
+          filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
         isInitializeCase: true,
@@ -142,7 +142,7 @@ describe('assignWorkItemsInteractor integration test', () => {
           assigneeName: 'Test Petitionsclerk',
           document: {
             documentType: 'Petition',
-            filedBy: 'Rick Petitioner',
+            filedBy: 'Petr. Rick Petitioner',
           },
           messages: [
             {

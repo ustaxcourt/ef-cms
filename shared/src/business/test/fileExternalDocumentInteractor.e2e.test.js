@@ -141,7 +141,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         {
           description: 'Petition',
           documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
-          filedBy: 'Test Petitioner',
+          filedBy: 'Petr. Test Petitioner',
         },
         {
           description: 'Request for Place of Trial at Aberdeen, South Dakota',
@@ -168,7 +168,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           caseId,
           documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
           documentType: 'Petition',
-          filedBy: 'Test Petitioner',
+          filedBy: 'Petr. Test Petitioner',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
             {
@@ -181,7 +181,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               document: {
                 documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
                 documentType: 'Petition',
-                filedBy: 'Test Petitioner',
+                filedBy: 'Petr. Test Petitioner',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
                 workItems: [],
               },
@@ -204,7 +204,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           caseId,
           documentId: '72de0fac-f63c-464f-ac71-0f54fd248484',
           documentType: 'Statement of Taxpayer Identification',
-          filedBy: 'Test Petitioner',
+          filedBy: 'Petr. Test Petitioner',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
