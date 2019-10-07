@@ -15,13 +15,16 @@ export const Button = props => {
     ...remainingProps
   } = props;
 
+  let { marginDirection } = props;
+  marginDirection = marginDirection || 'right';
+
   remainingProps.type = type || 'button';
 
   const Element = href ? 'a' : 'button';
 
   const classes = classNames(
     className,
-    'usa-button margin-right-205',
+    `usa-button margin-${marginDirection}-205`,
     secondary && 'usa-button--outline',
     link && 'usa-button--unstyled ustc-button--unstyled',
   );
@@ -42,6 +45,7 @@ Button.propTypes = {
   href: PropTypes.string,
   icon: PropTypes.string,
   link: PropTypes.bool,
+  marginDirection: PropTypes.string,
   secondary: PropTypes.bool,
   type: PropTypes.string,
 };
