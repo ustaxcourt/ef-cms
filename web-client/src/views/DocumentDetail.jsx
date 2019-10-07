@@ -17,6 +17,7 @@ import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const DocumentDetail = connect(
   {
@@ -181,9 +182,10 @@ export const DocumentDetail = connect(
           <div className="float-right">
             {documentDetailHelper.isDraftDocument && (
               <div
-                className={`display-inline-block margin-right-2${
-                  showingAnyButton ? '' : ' margin-top-1'
-                }`}
+                className={classNames(
+                  'display-inline-block margin-right-2',
+                  !showingAnyButton && 'margin-top-1',
+                )}
               >
                 <>
                   {documentDetailHelper.showConfirmEditOrder ? (

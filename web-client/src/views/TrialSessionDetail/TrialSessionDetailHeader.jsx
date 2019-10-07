@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const TrialSessionDetailHeader = connect(
   {
@@ -15,11 +16,11 @@ export const TrialSessionDetailHeader = connect(
           <div className="margin-bottom-1">
             <h1 tabIndex="-1">{formattedTrialSessionDetails.trialLocation}</h1>
             <span
-              className={`usa-tag ${
-                !formattedTrialSessionDetails.isCalendared
-                  ? 'ustc-tag--yellow'
-                  : ''
-              }`}
+              className={classNames(
+                'usa-tag',
+                !formattedTrialSessionDetails.isCalendared &&
+                  'ustc-tag--yellow',
+              )}
             >
               <span aria-hidden="true">
                 {formattedTrialSessionDetails.formattedTerm}:{' '}

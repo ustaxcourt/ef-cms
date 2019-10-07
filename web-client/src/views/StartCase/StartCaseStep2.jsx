@@ -8,6 +8,7 @@ import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const StartCaseStep2 = connect(
   {
@@ -55,15 +56,16 @@ export const StartCaseStep2 = connect(
           <div className="grid-row grid-gap">
             <div className="mobile-lg:grid-col-5">
               <div
-                className={`usa-form-group ${
-                  validationErrors.petitionFile ? 'usa-form-group--error' : ''
-                }`}
+                className={classNames(
+                  'usa-form-group',
+                  validationErrors.petitionFile && 'usa-form-group--error',
+                )}
               >
                 <label
-                  className={
-                    'usa-label ustc-upload-petition with-hint ' +
-                    (startCaseHelper.showPetitionFileValid ? 'validated' : '')
-                  }
+                  className={classNames(
+                    'usa-label ustc-upload-petition with-hint',
+                    startCaseHelper.showPetitionFileValid && 'validated',
+                  )}
                   htmlFor="petition-file"
                   id="petition-file-label"
                 >
@@ -95,10 +97,10 @@ export const StartCaseStep2 = connect(
         <div className="blue-container margin-bottom-5">
           <div className="usa-form-group">
             <fieldset
-              className={
-                'usa-fieldset ' +
-                (validationErrors.hasIrsNotice ? 'usa-form-group--error' : '')
-              }
+              className={classNames(
+                'usa-fieldset',
+                validationErrors.hasIrsNotice && 'usa-form-group--error',
+              )}
               id="irs-notice-radios"
             >
               <legend className="usa-legend" id="notice-legend">

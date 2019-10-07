@@ -7,6 +7,7 @@ import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const StartCaseStep3 = connect(
   {
@@ -49,9 +50,9 @@ export const StartCaseStep3 = connect(
           <div className="grid-row grid-gap">
             <div className="mobile-lg:grid-col-5">
               <div
-                className={
-                  validationErrors.filingType ? 'usa-form-group--error' : ''
-                }
+                className={classNames(
+                  validationErrors.filingType && 'usa-form-group--error',
+                )}
               >
                 <fieldset
                   className="usa-fieldset usa-sans"
@@ -95,10 +96,10 @@ export const StartCaseStep3 = connect(
 
           {startCaseHelper.showPetitionerDeceasedSpouseForm && (
             <div
-              className={
-                'ustc-secondary-question ' +
-                (validationErrors.partyType ? 'usa-form-group--error' : '')
-              }
+              className={classNames(
+                'ustc-secondary-question',
+                validationErrors.partyType && 'usa-form-group--error',
+              )}
             >
               <fieldset
                 className="usa-fieldset usa-sans"
@@ -145,10 +146,10 @@ export const StartCaseStep3 = connect(
           )}
           {startCaseHelper.showBusinessFilingTypeOptions && (
             <div
-              className={
-                'ustc-secondary-question ' +
-                (validationErrors.partyType ? 'usa-form-group--error' : '')
-              }
+              className={classNames(
+                'ustc-secondary-question',
+                validationErrors.partyType && 'usa-form-group--error',
+              )}
             >
               <fieldset className="usa-fieldset" id="business-type-radios">
                 <legend
@@ -194,10 +195,10 @@ export const StartCaseStep3 = connect(
           )}
           {startCaseHelper.showOtherFilingTypeOptions && (
             <div
-              className={
-                'ustc-secondary-question ' +
-                (validationErrors.partyType ? 'usa-form-group--error' : '')
-              }
+              className={classNames(
+                'ustc-secondary-question',
+                validationErrors.partyType && 'usa-form-group--error',
+              )}
             >
               <fieldset className="usa-fieldset" id="other-type-radios">
                 <legend htmlFor="other-type-radios" id="other-type-legend">
@@ -242,10 +243,10 @@ export const StartCaseStep3 = connect(
           {startCaseHelper.showOtherFilingTypeOptions &&
             startCaseHelper.showEstateFilingOptions && (
               <div
-                className={
-                  'ustc-secondary-question ' +
-                  (validationErrors.partyType ? 'usa-form-group--error' : '')
-                }
+                className={classNames(
+                  'ustc-secondary-question',
+                  validationErrors.partyType && 'usa-form-group--error',
+                )}
               >
                 <fieldset
                   className="usa-fieldset usa-sans"
@@ -291,10 +292,10 @@ export const StartCaseStep3 = connect(
           {startCaseHelper.showOtherFilingTypeOptions &&
             startCaseHelper.showMinorIncompetentFilingOptions && (
               <div
-                className={
-                  'ustc-secondary-question ' +
-                  (validationErrors.partyType ? 'usa-form-group--error' : '')
-                }
+                className={classNames(
+                  'ustc-secondary-question',
+                  validationErrors.partyType && 'usa-form-group--error',
+                )}
               >
                 <fieldset
                   className="usa-fieldset"
@@ -377,12 +378,10 @@ export const StartCaseStep3 = connect(
             </p>
             <div className="blue-container">
               <label
-                className={
-                  'ustc-upload-ods usa-label with-hint ' +
-                  (startCaseHelper.showOwnershipDisclosureValid
-                    ? 'validated'
-                    : '')
-                }
+                className={classNames(
+                  'ustc-upload-ods usa-label with-hint',
+                  startCaseHelper.showOwnershipDisclosureValid && 'validated',
+                )}
                 htmlFor="ownership-disclosure-file"
                 id="ownership-disclosure-file-label"
               >

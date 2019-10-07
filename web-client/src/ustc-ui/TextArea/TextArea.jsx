@@ -1,18 +1,21 @@
 import { connect } from '@cerebral/react';
 import React from 'react';
+import classNames from 'classnames';
 
 export const TextArea = connect(props => {
   const { error, id, label, name, onChange } = props;
   const ariaLabelledby = props['aria-labelledby'];
 
   return (
-    <div className={'usa-form-group ' + (error ? 'usa-form-group--error' : '')}>
+    <div
+      className={classNames('usa-form-group', error && 'usa-form-group--error')}
+    >
       <label className="usa-label" htmlFor={id}>
         {label}
       </label>
       <textarea
         aria-labelledby={ariaLabelledby}
-        className={'usa-textarea ' + (error ? 'usa-textarea--error' : '')}
+        className={classNames('usa-textarea', error && 'usa-textarea--error')}
         id={id}
         name={name}
         onChange={onChange}

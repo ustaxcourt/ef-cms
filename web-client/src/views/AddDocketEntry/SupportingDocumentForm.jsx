@@ -6,6 +6,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const SupportingDocumentForm = connect(
   {
@@ -28,19 +29,16 @@ export const SupportingDocumentForm = connect(
         <h1>Add Supporting Document</h1>
         <div className="blue-container docket-entry-form">
           <div
-            className={`usa-form-group ${
-              validationErrors.primaryDocumentFile
-                ? 'usa-form-group--error'
-                : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.primaryDocumentFile && 'usa-form-group--error',
+            )}
           >
             <label
-              className={
-                'usa-label ustc-upload ' +
-                (addDocketEntryHelper.showPrimaryDocumentValid
-                  ? 'validated'
-                  : '')
-              }
+              className={classNames(
+                'usa-label ustc-upload',
+                addDocketEntryHelper.showPrimaryDocumentValid && 'validated',
+              )}
               htmlFor="primary-document"
               id="primary-document-label"
             >
@@ -63,9 +61,10 @@ export const SupportingDocumentForm = connect(
           </div>
 
           <div
-            className={`usa-form-group ${
-              validationErrors.documentType ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.documentType && 'usa-form-group--error',
+            )}
           >
             <label
               className="usa-label"
@@ -105,9 +104,10 @@ export const SupportingDocumentForm = connect(
 
           {addDocketEntryHelper.showSupportingDocumentFreeText && (
             <div
-              className={`usa-form-group ${
-                validationErrors.freeText ? 'usa-form-group--error' : ''
-              }`}
+              className={classNames(
+                'usa-form-group',
+                validationErrors.freeText && 'usa-form-group--error',
+              )}
             >
               <label
                 className="usa-label"
@@ -196,11 +196,11 @@ export const SupportingDocumentForm = connect(
           </div>
 
           <div
-            className={`usa-form-group ${
-              !addDocketEntryHelper.showSupportingInclusions
-                ? 'margin-bottom-0'
-                : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              !addDocketEntryHelper.showSupportingInclusions &&
+                'margin-bottom-0',
+            )}
           >
             <label
               className="usa-label"

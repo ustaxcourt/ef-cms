@@ -5,6 +5,7 @@ import { TextArea } from '../../ustc-ui/TextArea/TextArea';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PendingMessages = connect(
   {
@@ -69,13 +70,11 @@ export const PendingMessages = connect(
             (workItem, idx) => (
               <div
                 aria-labelledby="tab-pending-messages"
-                className={`card margin-bottom-0 workitem-${
-                  workItem.workItemId
-                } ${
-                  workItem.currentMessage.messageId === messageId
-                    ? 'highlight'
-                    : ''
-                }`}
+                className={classNames(
+                  `card margin-bottom-0 workitem-${workItem.workItemId}`,
+                  workItem.currentMessage.messageId === messageId &&
+                    'highlight',
+                )}
                 key={idx}
               >
                 <div className="content-wrapper">
@@ -107,14 +106,14 @@ export const PendingMessages = connect(
                             'history',
                             workItem.workItemId,
                           )}
-                          className={`${
+                          className={classNames(
                             documentDetailHelper.showAction(
                               'history',
                               workItem.workItemId,
                             )
                               ? 'selected'
-                              : 'unselected'
-                          }`}
+                              : 'unselected',
+                          )}
                           id={`history-tab-${idx}`}
                           role="tab"
                           onClick={() =>
@@ -137,14 +136,14 @@ export const PendingMessages = connect(
                               'complete',
                               workItem.workItemId,
                             )}
-                            className={`${
+                            className={classNames(
                               documentDetailHelper.showAction(
                                 'complete',
                                 workItem.workItemId,
                               )
                                 ? 'selected'
-                                : 'unselected'
-                            }`}
+                                : 'unselected',
+                            )}
                             id={`complete-tab-${idx}`}
                             role="tab"
                             onClick={() =>
@@ -171,14 +170,15 @@ export const PendingMessages = connect(
                               'forward',
                               workItem.workItemId,
                             )}
-                            className={`send-to ${
+                            className={classNames(
+                              'send-to',
                               documentDetailHelper.showAction(
                                 'forward',
                                 workItem.workItemId,
                               )
                                 ? 'selected'
-                                : 'unselected'
-                            }`}
+                                : 'unselected',
+                            )}
                             data-workitemid={workItem.workItemId}
                             id={`forward-tab-${idx}`}
                             role="tab"
