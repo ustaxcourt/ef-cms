@@ -5,6 +5,7 @@ const { addCoversheetInteractor } = require('./addCoversheetInteractor.js');
 const {
   createISODateString,
   formatDateString,
+  formatNow,
   prepareDateFromString,
 } = require('../utilities/DateHandler');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
@@ -106,6 +107,7 @@ describe('addCoversheetInteractor', () => {
           return {
             createISODateString,
             formatDateString,
+            formatNow,
             prepareDateFromString,
           };
         },
@@ -153,6 +155,7 @@ describe('addCoversheetInteractor', () => {
           return {
             createISODateString,
             formatDateString,
+            formatNow,
             prepareDateFromString,
           };
         },
