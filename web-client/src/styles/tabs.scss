@@ -43,10 +43,6 @@
           background-color: none;
           color: color($theme-color-primary-darker);
         }
-
-        &:focus {
-          outline: 0;
-        }
       }
 
       &.active {
