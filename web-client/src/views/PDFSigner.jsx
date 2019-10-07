@@ -6,6 +6,7 @@ import { PropTypes } from 'prop-types';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 class PDFSignerComponent extends React.Component {
   constructor(props) {
@@ -181,12 +182,12 @@ class PDFSignerComponent extends React.Component {
                     </span>
                     {!process.env.CI && (
                       <canvas
-                        className={
+                        className={classNames(
                           !this.props.signatureData &&
-                          this.props.signatureApplied
+                            this.props.signatureApplied
                             ? 'cursor-grabbing'
-                            : 'cursor-grab'
-                        }
+                            : 'cursor-grab',
+                        )}
                         id="sign-pdf-canvas"
                         ref={this.canvasRef}
                       ></canvas>

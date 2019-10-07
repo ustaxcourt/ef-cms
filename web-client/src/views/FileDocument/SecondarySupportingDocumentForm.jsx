@@ -6,6 +6,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const SecondarySupportingDocumentForm = connect(
   {
@@ -50,18 +51,16 @@ export const SecondarySupportingDocumentForm = connect(
         </h2>
         <div className="blue-container">
           <div
-            className={`usa-form-group ${
+            className={classNames(
+              'usa-form-group',
               validationErrors.secondarySupportingDocuments &&
-              validationErrors.secondarySupportingDocuments[index] &&
-              validationErrors.secondarySupportingDocuments[index]
-                .supportingDocument
-                ? 'usa-form-group--error'
-                : ''
-            } ${
-              !form.secondarySupportingDocuments[index].supportingDocument
-                ? 'margin-bottom-0'
-                : ''
-            }`}
+                validationErrors.secondarySupportingDocuments[index] &&
+                validationErrors.secondarySupportingDocuments[index]
+                  .supportingDocument &&
+                'usa-form-group--error',
+              !form.secondarySupportingDocuments[index].supportingDocument &&
+                'margin-bottom-0',
+            )}
           >
             <label
               className="usa-label"
@@ -72,14 +71,14 @@ export const SecondarySupportingDocumentForm = connect(
             </label>
             <select
               aria-describedby={`secondary-supporting-document-${index}-label`}
-              className={`usa-select ${
+              className={classNames(
+                'usa-select',
                 validationErrors.secondarySupportingDocuments &&
-                validationErrors.secondarySupportingDocuments[index] &&
-                validationErrors.secondarySupportingDocuments[index]
-                  .supportingDocument
-                  ? 'usa-select--error'
-                  : ''
-              }`}
+                  validationErrors.secondarySupportingDocuments[index] &&
+                  validationErrors.secondarySupportingDocuments[index]
+                    .supportingDocument &&
+                  'usa-select--error',
+              )}
               id={`secondary-supporting-document-${index}`}
               name={`secondarySupportingDocuments.${index}.supportingDocument`}
               value={
@@ -124,14 +123,14 @@ export const SecondarySupportingDocumentForm = connect(
           {fileDocumentHelper.secondarySupportingDocuments[index]
             .showSupportingDocumentFreeText && (
             <div
-              className={`usa-form-group ${
+              className={classNames(
+                'usa-form-group',
                 validationErrors.secondarySupportingDocuments &&
-                validationErrors.secondarySupportingDocuments[index] &&
-                validationErrors.secondarySupportingDocuments[index]
-                  .supportingDocumentFreeText
-                  ? 'usa-form-group--error'
-                  : ''
-              }`}
+                  validationErrors.secondarySupportingDocuments[index] &&
+                  validationErrors.secondarySupportingDocuments[index]
+                    .supportingDocumentFreeText &&
+                  'usa-form-group--error',
+              )}
             >
               <label
                 className="usa-label"
@@ -176,23 +175,21 @@ export const SecondarySupportingDocumentForm = connect(
             .showSupportingDocumentUpload && (
             <>
               <div
-                className={`usa-form-group ${
+                className={classNames(
+                  'usa-form-group',
                   validationErrors.secondarySupportingDocuments &&
-                  validationErrors.secondarySupportingDocuments[index] &&
-                  validationErrors.secondarySupportingDocuments[index]
-                    .supportingDocumentFile
-                    ? 'usa-form-group--error'
-                    : ''
-                }`}
+                    validationErrors.secondarySupportingDocuments[index] &&
+                    validationErrors.secondarySupportingDocuments[index]
+                      .supportingDocumentFile &&
+                    'usa-form-group--error',
+                )}
               >
                 <label
-                  className={
-                    'usa-label ustc-upload with-hint ' +
-                    (fileDocumentHelper.secondarySupportingDocuments[index]
-                      .showSupportingDocumentValid
-                      ? 'validated'
-                      : '')
-                  }
+                  className={classNames(
+                    'usa-label ustc-upload with-hint',
+                    fileDocumentHelper.secondarySupportingDocuments[index]
+                      .showSupportingDocumentValid && 'validated',
+                  )}
                   htmlFor={`secondary-supporting-document-file-${index}`}
                   id={`secondary-supporting-document-file-${index}-label`}
                 >
