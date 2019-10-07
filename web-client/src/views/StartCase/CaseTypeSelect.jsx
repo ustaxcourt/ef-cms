@@ -25,14 +25,14 @@ export const CaseTypeSelect = connect(
     value,
   }) => {
     return (
-      <div className={classnames('subsection', className)}>
+      <div className={classnames(className)}>
         <div
           className={
-            'usa-form-group case-type-select ' +
+            'usa-form-group case-type-select margin-bottom-0 ' +
             (validationErrors.caseType ? 'usa-form-group--error' : '')
           }
         >
-          <fieldset className="usa-fieldset">
+          <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="case-type-select-legend">
               {legend}
             </legend>

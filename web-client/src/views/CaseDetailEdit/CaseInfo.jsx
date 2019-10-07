@@ -480,7 +480,7 @@ export const CaseInfo = connect(
               Order for Amended Petition
             </label>
           </div>
-          <div className="usa-form-group" role="listitem">
+          <div className="usa-form-group margin-bottom-0" role="listitem">
             <input
               aria-describedby="orders-needed"
               checked={caseDetail.orderForAmendedPetitionAndFilingFee}
