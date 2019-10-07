@@ -1,6 +1,7 @@
 import {
   createISODateString,
   formatDateString,
+  formatNow,
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
 import { documentDetailHelper as documentDetailHelperComputed } from './documentDetailHelper';
@@ -33,6 +34,7 @@ const documentDetailHelper = withAppContextDecorator(
         createISODateString,
         formatDateString,
         formatDocument,
+        formatNow,
         prepareDateFromString,
       };
     },

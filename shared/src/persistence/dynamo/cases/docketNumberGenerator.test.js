@@ -1,4 +1,5 @@
 const { createDocketNumber } = require('./docketNumberGenerator');
+const DateHandler = require('../../../business/utilities/DateHandler');
 
 describe('Create docket number', function() {
   it('should create a docketNumber', async () => {
@@ -12,12 +13,11 @@ describe('Create docket number', function() {
             incrementCounter: () => Promise.resolve(123),
           };
         },
+        getUtilities: () => {
+          return { ...DateHandler, formatNow: () => '96' };
+        },
       },
     });
-    const last2YearDigits = new Date()
-      .getFullYear()
-      .toString()
-      .substr(-2);
-    expect(result).toEqual(`223-${last2YearDigits}`);
+    expect(result).toEqual('223-96');
   });
 });
