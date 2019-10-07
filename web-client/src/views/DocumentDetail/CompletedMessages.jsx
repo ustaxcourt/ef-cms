@@ -41,7 +41,7 @@ export const CompletedMessages = connect(
                         </div>
                         <div>
                           <span className="label-inline">
-                            {workItem.completedAtFormatted}
+                            {workItem.completedAtFormattedTZ}
                           </span>
                         </div>
                         {workItem.completedMessage && (
@@ -54,7 +54,7 @@ export const CompletedMessages = connect(
                     {workItem.completedMessage === 'Served on IRS' && (
                       <p>
                         <span className="label-inline">
-                          Served on IRS at {workItem.completedAtFormatted}
+                          Served on IRS at {workItem.completedAtFormattedTZ}
                         </span>
                       </p>
                     )}
@@ -74,7 +74,7 @@ export const CompletedMessages = connect(
                         </div>
                         <div className="margin-bottom-1">
                           <span className="label-inline">Sent on</span>
-                          {message.createdAtTimeFormatted}
+                          {message.createdAtTimeFormattedTZ}
                         </div>
                         <div className="completed-message">
                           {message.message}

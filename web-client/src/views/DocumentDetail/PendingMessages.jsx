@@ -89,7 +89,7 @@ export const PendingMessages = connect(
                   </div>
                   <div className="margin-bottom-1">
                     <span className="label-inline">Sent On</span>
-                    {workItem.currentMessage.createdAtTimeFormatted}
+                    {workItem.currentMessage.createdAtTimeFormattedTZ}
                   </div>
                   <p>{workItem.currentMessage.message}</p>
                 </div>
@@ -282,7 +282,7 @@ export const PendingMessages = connect(
                           </div>
                           <div className="margin-bottom-1">
                             <span className="label-inline">Sent on</span>
-                            {message.createdAtTimeFormatted}
+                            {message.createdAtTimeFormattedTZ}
                           </div>
                           <p>{message.message}</p>
                           {workItem.historyMessages.length - 1 !== mIdx && (
