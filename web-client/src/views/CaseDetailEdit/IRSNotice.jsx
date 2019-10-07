@@ -1,8 +1,7 @@
+import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
-import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
 
 export const IRSNotice = connect(
   {
@@ -94,7 +93,7 @@ export const IRSNotice = connect(
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="date-of-notice-legend">
-              Date of Notice <span className="usa-hint">(optional)</span>
+              Date of notice <span className="usa-hint">(optional)</span>
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month margin-bottom-0">
