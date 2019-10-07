@@ -2,6 +2,7 @@ import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const ProcedureType = connect(
   {
@@ -14,11 +15,11 @@ export const ProcedureType = connect(
   ({ legend, onChange, procedureTypes, validationErrors, value }) => {
     return (
       <div
-        className={
+        className={classNames(
           validationErrors.procedureType
             ? 'usa-form-group usa-form-group--error'
-            : 'usa-form-group'
-        }
+            : 'usa-form-group',
+        )}
       >
         <fieldset
           className="usa-fieldset margin-bottom-0"

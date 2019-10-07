@@ -17,6 +17,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React, { useEffect, useRef } from 'react';
+import classNames from 'classnames';
 
 export const ScanBatchPreviewer = connect(
   {
@@ -171,13 +172,14 @@ export const ScanBatchPreviewer = connect(
           : 'margin-top-0';
       return (
         <div
-          className={`usa-form-group ${
-            validationErrors[documentType] ? 'usa-form-group--error' : ''
-          }`}
+          className={classNames(
+            'usa-form-group',
+            validationErrors[documentType] && 'usa-form-group--error',
+          )}
         >
           <fieldset
             aria-label="scan mode selection"
-            className={`usa-fieldset margin-bottom-3 ${headerMargin}`}
+            className={classNames('usa-fieldset margin-bottom-3', headerMargin)}
             id="scan-mode-radios"
           >
             <legend
@@ -366,12 +368,13 @@ export const ScanBatchPreviewer = connect(
       return (
         <div className="document-detail-one-third">
           <div
-            className={`usa-form-group ${
-              validationErrors.stinFile ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.stinFile && 'usa-form-group--error',
+            )}
           >
             <label
-              className={'usa-label ustc-upload-stin with-hint '}
+              className="usa-label ustc-upload-stin with-hint"
               htmlFor={`${documentType}-file`}
               id={`${documentType}-label`}
             >

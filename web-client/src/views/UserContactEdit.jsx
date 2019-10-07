@@ -8,6 +8,7 @@ import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const UserContactEdit = connect(
   {
@@ -82,14 +83,13 @@ export const UserContactEdit = connect(
               />
             )}
             <div
-              className={
-                'usa-form-group margin-bottom-0 ' +
-                (validationErrors &&
-                validationErrors.contact &&
-                validationErrors.contact.phone
-                  ? 'usa-form-group--error'
-                  : '')
-              }
+              className={classNames(
+                'usa-form-group margin-bottom-0',
+                validationErrors &&
+                  validationErrors.contact &&
+                  validationErrors.contact.phone &&
+                  'usa-form-group--error',
+              )}
             >
               <label className="usa-label" htmlFor="phone">
                 Phone number

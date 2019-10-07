@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 import { Button } from '../../ustc-ui/Button/Button';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
@@ -26,11 +27,11 @@ export const PrintableTrialCalendar = connect(
                 {formattedTrialSessionDetails.trialLocation}
               </h1>
               <span
-                className={`usa-tag ${
-                  !formattedTrialSessionDetails.isCalendared
-                    ? 'ustc-tag--yellow'
-                    : ''
-                }`}
+                className={classNames(
+                  'usa-tag',
+                  !formattedTrialSessionDetails.isCalendared &&
+                    'ustc-tag--yellow',
+                )}
               >
                 <span aria-hidden="true">
                   {formattedTrialSessionDetails.formattedTerm}:{' '}

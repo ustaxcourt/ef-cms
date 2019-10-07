@@ -4,7 +4,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 export const AddEditSessionNoteModal = connect(
   {
@@ -25,7 +25,7 @@ export const AddEditSessionNoteModal = connect(
       >
         <h5 className="margin-bottom-4">{modal.heading}</h5>
         <div
-          className={classnames(
+          className={classNames(
             'usa-form-group',
             validationErrors.notes && 'usa-form-group--error',
           )}
