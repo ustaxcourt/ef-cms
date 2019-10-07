@@ -4,7 +4,6 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-// THIS is the one that's busted
 export default (test, message) => {
   it('Views an unread message marking it read', async () => {
     const workQueue = await runCompute(formattedWorkQueue, {
