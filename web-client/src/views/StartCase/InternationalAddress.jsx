@@ -2,6 +2,7 @@ import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const InternationalAddress = connect(
   {
@@ -21,14 +22,13 @@ export const InternationalAddress = connect(
     return (
       <React.Fragment>
         <div
-          className={
-            'usa-form-group ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].address1
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            validationErrors &&
+              validationErrors[type] &&
+              validationErrors[type].address1 &&
+              'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor={`${type}.address1`}>
             Mailing address line 1
@@ -120,14 +120,13 @@ export const InternationalAddress = connect(
           <ValidationText field={`${type}.state`} />
         </div>
         <div
-          className={
-            'usa-form-group ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].city
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            validationErrors &&
+              validationErrors[type] &&
+              validationErrors[type].city &&
+              'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor={`${type}.city`}>
             City
@@ -152,14 +151,12 @@ export const InternationalAddress = connect(
           <ValidationText field={`${type}.city`} />
         </div>
         <div
-          className={
-            'usa-form-group ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].postalCode
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group ' + validationErrors &&
+              validationErrors[type] &&
+              validationErrors[type].postalCode &&
+              'usa-form-group--error',
+          )}
         >
           <label
             aria-label="postal code"
