@@ -910,7 +910,6 @@ hr.lighter {
   .float-left {
     position: absolute;
     bottom: 14px;
-    width: 300px;
   }
 
   .float-right {
@@ -940,10 +939,6 @@ hr.lighter {
   .label + p {
     margin-top: 5px;
     margin-bottom: 20px;
-  }
-
-  .grid-row.grid-gap.state-and-city {
-    max-width: 30rem;
   }
 }
 
@@ -1231,6 +1226,10 @@ hr.lighter {
   [data-icon='caret-right'] {
     position: relative;
     top: 5px;
+  }
+
+  svg:hover {
+    color: color($theme-color-primary-dark);
   }
 
   .pages {

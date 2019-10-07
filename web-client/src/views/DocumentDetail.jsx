@@ -158,7 +158,7 @@ export const DocumentDetail = connect(
                 {documentDetailHelper.showRemoveSignature && (
                   <>
                     Signed{' '}
-                    {documentDetailHelper.formattedDocument.signedAtFormatted}
+                    {documentDetailHelper.formattedDocument.signedAtFormattedTZ}
                     <Button
                       link
                       className="margin-left-2"
