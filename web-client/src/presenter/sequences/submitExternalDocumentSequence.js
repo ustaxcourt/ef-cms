@@ -4,10 +4,9 @@ import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocume
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
-import { set } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { state } from 'cerebral';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 
 export const submitExternalDocumentSequence = [
   openFileUploadStatusModalAction,
@@ -18,7 +17,7 @@ export const submitExternalDocumentSequence = [
       setCaseAction,
       getFileExternalDocumentAlertSuccessAction,
       closeFileUploadStatusModalAction,
-      set(state.saveAlertsForNavigation, true),
+      setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
       navigateToCaseDetailAction,
     ],

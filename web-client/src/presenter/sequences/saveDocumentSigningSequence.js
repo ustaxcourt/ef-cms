@@ -5,17 +5,17 @@ import { completeDocumentSigningAction } from '../actions/completeDocumentSignin
 import { getGotoAfterSigningAction } from '../actions/getGotoAfterSigningAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToDocumentDetailAction } from '../actions/navigateToDocumentDetailAction';
-import { parallel, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { parallel } from 'cerebral';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const saveDocumentSigningSequence = [
   clearAlertsAction,
-  set(state.saveAlertsForNavigation, true),
+  setSaveAlertsForNavigationAction,
   setWaitingForResponseAction,
   completeDocumentSigningAction,
   parallel([setDocumentIdAction, setDocumentDetailTabAction]),
