@@ -170,7 +170,7 @@ export const DocumentDetail = connect(
                         })
                       }
                     >
-                      <FontAwesomeIcon icon={['far', 'times-circle']} /> Remove
+                      <FontAwesomeIcon icon="times-circle" size="sm" /> Remove
                       Signature
                     </Button>
                   </>
