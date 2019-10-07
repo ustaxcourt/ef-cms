@@ -1,5 +1,6 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -12,6 +13,7 @@ import { setUsersAction } from '../actions/setUsersAction';
 const gotoTrialSessions = [
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
+  closeMobileMenuAction,
   clearErrorAlertsAction,
   getTrialSessionsAction,
   setTrialSessionsAction,
