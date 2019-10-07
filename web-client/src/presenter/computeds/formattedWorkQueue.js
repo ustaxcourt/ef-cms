@@ -7,9 +7,7 @@ import { state } from 'cerebral';
 import _ from 'lodash';
 
 const isDateToday = (date, applicationContext) => {
-  const now = applicationContext
-    .getUtilities()
-    .formatDateString(new Date(), 'MMDDYY');
+  const now = applicationContext.getUtilities().formatNow('MMDDYY');
   const then = applicationContext
     .getUtilities()
     .formatDateString(date, 'MMDDYY');
@@ -17,9 +15,7 @@ const isDateToday = (date, applicationContext) => {
 };
 
 const formatDateIfToday = (date, applicationContext) => {
-  const now = applicationContext
-    .getUtilities()
-    .formatDateString(new Date(), 'MMDDYY');
+  const now = applicationContext.getUtilities().formatNow('MMDDYY');
   const then = applicationContext
     .getUtilities()
     .formatDateString(date, 'MMDDYY');
@@ -36,7 +32,7 @@ const formatDateIfToday = (date, applicationContext) => {
   if (now == then) {
     formattedDate = applicationContext
       .getUtilities()
-      .formatDateString(date, 'TIME');
+      .formatDateString(date, 'TIME_TZ');
   } else if (then === yesterday) {
     formattedDate = 'Yesterday';
   } else {
@@ -64,14 +60,17 @@ export const formatWorkItem = (
       applicationContext,
     );
     message.to = message.to || 'Unassigned';
-    message.createdAtTimeFormatted = applicationContext
+    message.createdAtTimeFormattedTZ = applicationContext
       .getUtilities()
-      .formatDateString(message.createdAt, 'DATE_TIME');
+      .formatDateString(message.createdAt, 'DATE_TIME_TZ');
   });
   result.sentBySection = _.capitalize(result.sentBySection);
   result.completedAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.completedAt, 'DATE_TIME');
+  result.completedAtFormattedTZ = applicationContext
+    .getUtilities()
+    .formatDateString(result.completedAt, 'DATE_TIME_TZ');
   result.assigneeName = result.assigneeName || 'Unassigned';
 
   result.showUnreadIndicators = !result.isRead;
@@ -136,7 +135,7 @@ export const formatWorkItem = (
   ) {
     result.batchedAt = result.messages.find(
       message => message.message == 'Petition batched for IRS',
-    ).createdAtTimeFormatted;
+    ).createdAtTimeFormattedTZ;
   }
 
   return result;

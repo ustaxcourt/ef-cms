@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
@@ -23,6 +24,7 @@ export const submitEditUserContactSequence = [
         noChange: [navigateToDashboardAction],
         success: [
           setAlertSuccessAction,
+          setSaveAlertsForNavigationAction,
           setCurrentPageAction('Interstitial'),
           navigateToDashboardAction,
         ],

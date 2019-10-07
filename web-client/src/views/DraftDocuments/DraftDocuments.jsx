@@ -61,7 +61,7 @@ export const DraftDocuments = connect(
 
                       <td className="no-wrap">
                         {draftDocument.signedAt &&
-                          draftDocument.signedAtFormatted}
+                          draftDocument.signedAtFormattedTZ}
                         {!draftDocument.signedAt && (
                           <a href={draftDocument.signUrl}>Add Signature</a>
                         )}
@@ -71,6 +71,7 @@ export const DraftDocuments = connect(
                         {draftDocument.signedAt ? (
                           <Button
                             link
+                            data-document-id={draftDocument.documentId}
                             icon="edit"
                             onClick={() => {
                               openConfirmEditModalSequence({

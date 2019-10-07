@@ -87,6 +87,7 @@ const {
 const {
   createISODateString,
   formatDateString,
+  formatNow,
   prepareDateFromString,
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
@@ -886,6 +887,7 @@ module.exports = (appContextUser = {}) => {
         createISODateString,
         formatCaseForTrialSession,
         formatDateString,
+        formatNow,
         formattedTrialSessionDetails,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
