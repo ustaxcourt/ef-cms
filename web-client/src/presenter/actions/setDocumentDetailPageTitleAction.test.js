@@ -6,7 +6,7 @@ import { setDocumentDetailPageTitleAction } from './setDocumentDetailPageTitleAc
 presenter.providers.applicationContext = applicationContext;
 
 describe('setDocumentDetailPageTitleAction', () => {
-  it('sets the page title with the docket number and document type from the case', async () => {
+  it('sets the page title with the docket number and document type from the case if the document is on the case', async () => {
     await runAction(setDocumentDetailPageTitleAction, {
       state: {
         caseDetail: {
@@ -21,6 +21,28 @@ describe('setDocumentDetailPageTitleAction', () => {
         documentId: '321-cba-321-cba',
       },
     });
-    expect(document.title).toEqual('Docket 123-19 | Answer | U.S. Tax Court');
+    expect(window.document.title).toEqual(
+      'Docket 123-19 | Answer | U.S. Tax Court',
+    );
+  });
+
+  it('sets the page title with the docket number and hardcoded "Document details" if the document is not on the case', async () => {
+    await runAction(setDocumentDetailPageTitleAction, {
+      state: {
+        caseDetail: {
+          docketNumber: '123-19',
+          documents: [
+            {
+              documentId: '123-abc-123-abc',
+            },
+            { documentId: '321-cba-321-cba', documentType: 'Answer' },
+          ],
+        },
+        documentId: 'no',
+      },
+    });
+    expect(window.document.title).toEqual(
+      'Docket 123-19 | Document details | U.S. Tax Court',
+    );
   });
 });

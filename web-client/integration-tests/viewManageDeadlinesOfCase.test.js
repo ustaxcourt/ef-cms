@@ -63,6 +63,7 @@ describe('View and manage the deadlines of a case', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
+      document: {},
       localStorage: {
         removeItem: () => null,
         setItem: () => null,
