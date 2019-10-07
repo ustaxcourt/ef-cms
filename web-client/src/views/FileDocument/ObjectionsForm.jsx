@@ -2,6 +2,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const ObjectionsForm = connect(
   {
@@ -25,11 +26,12 @@ export const ObjectionsForm = connect(
     return (
       <>
         <div
-          className={`usa-form-group margin-bottom-0 ${
-            validationData && validationData.objections
-              ? 'usa-form-group--error'
-              : ''
-          }`}
+          className={classNames(
+            'usa-form-group margin-bottom-0',
+            validationData &&
+              validationData.objections &&
+              'usa-form-group--error',
+          )}
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend id={`${type}-objections-legend`}>

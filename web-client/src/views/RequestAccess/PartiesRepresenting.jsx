@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PartiesRepresenting = connect(
   {
@@ -26,11 +27,11 @@ export const PartiesRepresenting = connect(
         </h2>
         <div className="blue-container">
           <div
-            className={`usa-form-group margin-bottom-0 ${
-              requestAccessHelper.partyValidationError
-                ? 'usa-form-group--error'
-                : ''
-            }`}
+            className={classNames(
+              'usa-form-group margin-bottom-0',
+              requestAccessHelper.partyValidationError &&
+                'usa-form-group--error',
+            )}
           >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">

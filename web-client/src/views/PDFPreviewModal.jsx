@@ -5,6 +5,7 @@ import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 class PDFPreviewModalComponent extends ModalDialog {
   constructor(props) {
@@ -58,12 +59,11 @@ class PDFPreviewModalComponent extends ModalDialog {
               }
             >
               <FontAwesomeIcon
-                className={
-                  'icon-button' +
-                  (this.props.pdfPreviewModalHelper.disableLeftButtons
-                    ? ' disabled'
-                    : '')
-                }
+                className={classNames(
+                  'icon-button',
+                  this.props.pdfPreviewModalHelper.disableLeftButtons &&
+                    'disabled',
+                )}
                 icon={['fas', 'step-backward']}
                 id="firstPage"
                 size="2x"
@@ -79,12 +79,11 @@ class PDFPreviewModalComponent extends ModalDialog {
               }
             >
               <FontAwesomeIcon
-                className={
-                  'icon-button' +
-                  (this.props.pdfPreviewModalHelper.disableLeftButtons
-                    ? ' disabled'
-                    : '')
-                }
+                className={classNames(
+                  'icon-button',
+                  this.props.pdfPreviewModalHelper.disableLeftButtons &&
+                    'disabled',
+                )}
                 icon={['fas', 'caret-left']}
                 id="prev"
                 size="2x"
@@ -103,12 +102,11 @@ class PDFPreviewModalComponent extends ModalDialog {
               }
             >
               <FontAwesomeIcon
-                className={
-                  'icon-button' +
-                  (this.props.pdfPreviewModalHelper.disableRightButtons
-                    ? ' disabled'
-                    : '')
-                }
+                className={classNames(
+                  'icon-button',
+                  this.props.pdfPreviewModalHelper.disableRightButtons &&
+                    'disabled',
+                )}
                 icon={['fas', 'caret-right']}
                 id="next"
                 size="2x"
@@ -124,12 +122,11 @@ class PDFPreviewModalComponent extends ModalDialog {
               }
             >
               <FontAwesomeIcon
-                className={
-                  'icon-button' +
-                  (this.props.pdfPreviewModalHelper.disableRightButtons
-                    ? ' disabled'
-                    : '')
-                }
+                className={classNames(
+                  'icon-button',
+                  this.props.pdfPreviewModalHelper.disableRightButtons &&
+                    'disabled',
+                )}
                 icon={['fas', 'step-forward']}
                 id="lastPage"
                 size="2x"

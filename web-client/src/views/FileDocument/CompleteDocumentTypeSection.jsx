@@ -13,6 +13,7 @@ import {
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
+import classNames from 'classnames';
 
 export const CompleteDocumentTypeSection = connect(
   {
@@ -41,9 +42,10 @@ export const CompleteDocumentTypeSection = connect(
     return (
       <React.Fragment>
         <div
-          className={`usa-form-group ${
-            validationErrors.documentType ? 'usa-form-group--error' : ''
-          }`}
+          className={classNames(
+            'usa-form-group',
+            validationErrors.documentType && 'usa-form-group--error',
+          )}
         >
           <label
             className="usa-label"
