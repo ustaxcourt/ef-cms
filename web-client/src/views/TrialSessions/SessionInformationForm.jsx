@@ -270,7 +270,7 @@ export const SessionInformationForm = connect(
           >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="session-type-legend">
-                Session Type
+                Session type
               </legend>
               {['Regular', 'Small', 'Hybrid', 'Special', 'Motion/Hearing'].map(
                 option => (
