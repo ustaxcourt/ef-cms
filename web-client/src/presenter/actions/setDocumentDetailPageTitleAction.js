@@ -1,4 +1,4 @@
-import { setPageTitle } from '../../utilities/setPageTitle';
+import { setPageTitle } from '../utilities/setPageTitle';
 import { state } from 'cerebral';
 
 export const setDocumentDetailPageTitleAction = async ({ get }) => {
@@ -10,6 +10,12 @@ export const setDocumentDetailPageTitleAction = async ({ get }) => {
     item => item.documentId === documentId,
   );
 
-  const pageTitle = `Docket ${docketNumber} | ${document.documentType}`;
+  let pageTitle = `Docket ${docketNumber} | `;
+  if (document) {
+    pageTitle += document.documentType;
+  } else {
+    pageTitle += 'Document details';
+  }
+
   setPageTitle(pageTitle);
 };

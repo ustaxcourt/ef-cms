@@ -52,6 +52,7 @@ test = CerebralTest(presenter);
 describe('Petitions Clerk Counsel Association Journey', () => {
   beforeEach(() => {
     global.window = {
+      document: {},
       localStorage: {
         removeItem: () => null,
         setItem: () => null,
