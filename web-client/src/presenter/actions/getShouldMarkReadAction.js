@@ -11,12 +11,11 @@ import { state } from 'cerebral';
  */
 export const getShouldMarkReadAction = ({ path, props, store }) => {
   const { workItemIdToMarkAsRead } = props;
-
   if (workItemIdToMarkAsRead) {
     store.set(state.workItemId, props.workItemIdToMarkAsRead);
-
     return path['markRead']();
   } else {
+    console.trace('Marking as read workItemIdToMarkAsRead');
     return path['noAction']();
   }
 };
