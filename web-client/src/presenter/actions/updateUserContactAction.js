@@ -43,8 +43,9 @@ export const updateUserContactAction = async ({
 
   return path.success({
     alertSuccess: {
-      message: 'Please confirm the information below is correct.',
-      title: 'Your changes have been saved.',
+      message:
+        'It may take several minutes for all of your cases to display the updated information.',
+      title: 'Your contact information has been updated.',
     },
   });
 };
