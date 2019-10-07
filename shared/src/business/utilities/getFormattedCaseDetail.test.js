@@ -295,6 +295,28 @@ describe('getFormattedCaseDetail', () => {
     expect(result).toHaveProperty('docketRecordSort');
     expect(result).toHaveProperty('caseDeadlines');
   });
+
+  it('should format draft documents', () => {
+    const result = getFormattedCaseDetail({
+      applicationContext,
+      caseDetail: {
+        ...mockCaseDetailBase,
+        documents: [
+          {
+            archived: false,
+            createdAt: getDateISO(),
+            documentId: 'd-1-2-3',
+            documentType: 'Order',
+          },
+        ],
+      },
+      docketRecordSort: 'byDate',
+    });
+
+    expect(result.draftDocuments[0]).toHaveProperty('signUrl');
+    expect(result.draftDocuments[0]).toHaveProperty('editUrl');
+    expect(result.draftDocuments[0]).toHaveProperty('signedAtFormatted');
+  });
 });
 
 describe('sortDocketRecords', () => {
