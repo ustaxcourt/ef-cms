@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PreviewControls = connect(
   {
@@ -29,7 +30,7 @@ export const PreviewControls = connect(
       <div className="pdf-preview-controls">
         <Button
           link
-          className={disableLeftButtons ? ' disabled' : ''}
+          className={classNames(disableLeftButtons && 'disabled')}
           title="pdf preview first page"
           onClick={onFirstPage}
         >
@@ -42,7 +43,7 @@ export const PreviewControls = connect(
         </Button>
         <Button
           link
-          className={disableLeftButtons ? ' disabled' : ''}
+          className={classNames(disableLeftButtons && 'disabled')}
           title="pdf preview previous page"
           onClick={onPreviousPage}
         >
@@ -58,7 +59,7 @@ export const PreviewControls = connect(
         </span>
         <Button
           link
-          className={disableRightButtons ? ' disabled' : ''}
+          className={classNames(disableRightButtons && 'disabled')}
           title="pdf preview next page"
           onClick={onNextPage}
         >
@@ -71,7 +72,7 @@ export const PreviewControls = connect(
         </Button>
         <Button
           link
-          className={disableRightButtons ? ' disabled' : ''}
+          className={classNames(disableRightButtons && 'disabled')}
           title="pdf preview last page"
           onClick={onLastPage}
         >

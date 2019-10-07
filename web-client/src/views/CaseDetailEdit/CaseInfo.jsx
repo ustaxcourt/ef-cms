@@ -4,6 +4,7 @@ import { connect } from '@cerebral/react';
 import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const CaseInfo = connect(
   {
@@ -33,9 +34,10 @@ export const CaseInfo = connect(
         {caseDetail.isPaper && (
           <React.Fragment>
             <div
-              className={`usa-form-group ${
-                caseDetailErrors.receivedAt ? 'usa-form-group--error' : ''
-              }`}
+              className={classNames(
+                'usa-form-group',
+                caseDetailErrors.receivedAt && 'usa-form-group--error',
+              )}
             >
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="received-at-legend">
@@ -53,10 +55,10 @@ export const CaseInfo = connect(
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="month, two digits"
-                      className={
-                        'usa-input usa-input--inline' +
-                        (caseDetailErrors.receivedAt ? 'usa-error' : '')
-                      }
+                      className={classNames(
+                        'usa-input usa-input--inline',
+                        caseDetailErrors.receivedAt && 'usa-error',
+                      )}
                       id="received-at-month"
                       max="12"
                       maxLength="2"
@@ -86,10 +88,10 @@ export const CaseInfo = connect(
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="day, two digits"
-                      className={
-                        'usa-input usa-input--inline' +
-                        (caseDetailErrors.receivedAt ? 'usa-error' : '')
-                      }
+                      className={classNames(
+                        'usa-input usa-input--inline',
+                        caseDetailErrors.receivedAt && 'usa-error',
+                      )}
                       id="received-at-day"
                       max="31"
                       maxLength="2"
@@ -119,10 +121,10 @@ export const CaseInfo = connect(
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="year, four digits"
-                      className={
-                        'usa-input usa-input--inline' +
-                        (caseDetailErrors.receivedAt ? 'usa-error' : '')
-                      }
+                      className={classNames(
+                        'usa-input usa-input--inline',
+                        caseDetailErrors.receivedAt && 'usa-error',
+                      )}
                       id="received-at-year"
                       max="2100"
                       maxLength="4"
@@ -262,9 +264,10 @@ export const CaseInfo = connect(
         </div>
 
         <div
-          className={`usa-form-group margin-bottom-0 ${
-            caseDetailErrors.payGovDate ? 'usa-form-group--error' : ''
-          }`}
+          className={classNames(
+            'usa-form-group margin-bottom-0',
+            caseDetailErrors.payGovDate && 'usa-form-group--error',
+          )}
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="fee-payment-date-legend">
@@ -275,10 +278,10 @@ export const CaseInfo = connect(
                 <input
                   aria-describedby="fee-payment-date-legend"
                   aria-label="month, two digits"
-                  className={
-                    'usa-input usa-input--inline' +
-                    (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
-                  }
+                  className={classNames(
+                    'usa-input usa-input--inline',
+                    caseDetailErrors.payGovDate && 'usa-input-error',
+                  )}
                   id="fee-payment-date-month"
                   max="12"
                   min="1"
@@ -301,10 +304,10 @@ export const CaseInfo = connect(
                 <input
                   aria-describedby="fee-payment-date-legend"
                   aria-label="day, two digits"
-                  className={
-                    'usa-input usa-input--inline' +
-                    (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
-                  }
+                  className={classNames(
+                    'usa-input usa-input--inline',
+                    caseDetailErrors.payGovDate && 'usa-input-error',
+                  )}
                   id="fee-payment-date-day"
                   max="31"
                   min="1"
@@ -327,10 +330,10 @@ export const CaseInfo = connect(
                 <input
                   aria-describedby="fee-payment-date-legend"
                   aria-label="year, four digits"
-                  className={
-                    'usa-input usa-input--inline' +
-                    (caseDetailErrors.payGovDate ? 'usa-input-error' : '')
-                  }
+                  className={classNames(
+                    'usa-input usa-input--inline',
+                    caseDetailErrors.payGovDate && 'usa-input-error',
+                  )}
                   id="fee-payment-date-year"
                   max="2100"
                   min="1900"
