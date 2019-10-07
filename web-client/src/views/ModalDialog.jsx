@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 
 const modalRoot = document.getElementById('modal-root');
 
@@ -101,7 +102,7 @@ export class ModalDialog extends React.Component {
           <div
             aria-live={this.ariaLiveMode || 'assertive'}
             aria-modal="true"
-            className={`modal-dialog padding-205 ${modal.classNames}`}
+            className={classNames('modal-dialog padding-205', modal.classNames)}
             role="status"
             onClick={event => event.stopPropagation()}
           >

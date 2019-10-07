@@ -2,6 +2,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const Inclusions = connect(
   {
@@ -20,8 +21,8 @@ export const Inclusions = connect(
     validationErrors,
   }) => {
     return (
-      <div className={`usa-form-group ${marginClass}`}>
-        <fieldset className={`usa-fieldset ${marginClass}`}>
+      <div className={classNames('usa-form-group', marginClass)}>
+        <fieldset className={classNames('usa-fieldset', marginClass)}>
           <legend className="usa-legend">
             Inclusions <span className="usa-hint">(optional)</span>
           </legend>
@@ -67,12 +68,11 @@ export const Inclusions = connect(
             </label>
             {form.certificateOfService && (
               <fieldset
-                className={`margin-bottom-0 usa-fieldset service-date
-                        ${
-                          validationErrors.certificateOfServiceDate
-                            ? 'usa-form-group--error'
-                            : ''
-                        }`}
+                className={classNames(
+                  'margin-bottom-0 usa-fieldset service-date',
+                  validationErrors.certificateOfServiceDate &&
+                    'usa-form-group--error',
+                )}
               >
                 <legend
                   className="usa-legend usa-sr-only"

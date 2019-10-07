@@ -7,6 +7,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const StartCaseStep1 = connect(
   {
@@ -47,15 +48,16 @@ export const StartCaseStep1 = connect(
 
         <div className="blue-container margin-bottom-5">
           <div
-            className={`usa-form-group ${
-              validationErrors.stinFile ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.stinFile && 'usa-form-group--error',
+            )}
           >
             <label
-              className={
-                'usa-label ustc-upload-stin with-hint ' +
-                (startCaseHelper.showStinFileValid ? 'validated' : '')
-              }
+              className={classNames(
+                'usa-label ustc-upload-stin with-hint',
+                startCaseHelper.showStinFileValid && 'validated',
+              )}
               htmlFor="stin-file"
               id="stin-file-label"
             >

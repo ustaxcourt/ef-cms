@@ -358,6 +358,7 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   test = CerebralTest(presenter);
 
   global.window = {
+    document: {},
     localStorage: {
       removeItem: () => null,
       setItem: () => null,

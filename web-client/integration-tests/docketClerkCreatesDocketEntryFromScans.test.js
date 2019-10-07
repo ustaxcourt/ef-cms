@@ -89,6 +89,7 @@ describe('Create Docket Entry From Scans', () => {
     };
     global.window = {
       URL: global.URL,
+      document: {},
       localStorage: {
         getItem: key => {
           if (key === 'scannerSourceIndex') {
