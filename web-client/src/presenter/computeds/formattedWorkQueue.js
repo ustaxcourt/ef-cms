@@ -60,9 +60,6 @@ export const formatWorkItem = (
       applicationContext,
     );
     message.to = message.to || 'Unassigned';
-    message.createdAtTimeFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(message.createdAt, 'DATE_TIME');
     message.createdAtTimeFormattedTZ = applicationContext
       .getUtilities()
       .formatDateString(message.createdAt, 'DATE_TIME_TZ');
@@ -138,7 +135,7 @@ export const formatWorkItem = (
   ) {
     result.batchedAt = result.messages.find(
       message => message.message == 'Petition batched for IRS',
-    ).createdAtTimeFormatted;
+    ).createdAtTimeFormattedTZ;
   }
 
   return result;
