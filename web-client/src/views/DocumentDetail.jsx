@@ -180,31 +180,6 @@ export const DocumentDetail = connect(
           </div>
           <div className="float-right">
             {documentDetailHelper.isDraftDocument && (
-              <div>
-                {!documentDetailHelper.formattedDocument.signedAt && (
-                  <Button
-                    link
-                    href={documentDetailHelper.formattedDocument.signUrl}
-                  >
-                    <FontAwesomeIcon icon={['fas', 'pencil-alt']} /> Apply
-                    Signature
-                  </Button>
-                )}
-                {documentDetailHelper.formattedDocument.signedAt && (
-                  <>
-                    Signed{' '}
-                    {documentDetailHelper.formattedDocument.signedAtFormatted}
-                    <Button link className="margin-left-2">
-                      <FontAwesomeIcon icon={['far', 'times-circle']} /> Remove
-                      Signature
-                    </Button>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
-          <div className="float-right">
-            {documentDetailHelper.isDraftDocument && (
               <div
                 className={`display-inline-block margin-right-2${
                   showingAnyButton ? '' : ' margin-top-1'
