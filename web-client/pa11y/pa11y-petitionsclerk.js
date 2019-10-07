@@ -105,6 +105,19 @@ module.exports = [
   },
   {
     actions: [
+      'wait for #tab-draft-documents to be visible',
+      'click element #tab-draft-documents',
+      'wait for button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"] to be visible',
+      'click element button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"]',
+    ],
+    notes: 'checks the confirm modal when editing a signed draft document',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19&info=edit-signed-order-confirm-modal',
+  },
+
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-order/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/sign',
+  {
+    actions: [
       'wait for #button-add-deadline to be visible',
       'click element #button-add-deadline',
       'wait for #deadline-date-legend to be visible',
