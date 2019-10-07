@@ -116,7 +116,7 @@ class CreateCaseDeadlineModalDialogComponent extends ModalDialog {
           className={classNames(
             'usa-form-group',
             this.props.validationErrors.description && 'usa-form-group--error',
-          )()}
+          )}
         >
           <label className="usa-label" htmlFor="description">
             What is this deadline for?
