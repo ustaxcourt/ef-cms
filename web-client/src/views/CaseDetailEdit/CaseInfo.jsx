@@ -190,13 +190,16 @@ export const CaseInfo = connect(
         </div>
 
         <div className="usa-form-group">
-          <label className="usa-label" htmlFor="preferred-trial-city">
+          <label
+            className="usa-label margin-bottom-0"
+            htmlFor="preferred-trial-city"
+          >
             Trial location
           </label>
           <div id="preferred-trial-city">
             {caseDetailEditHelper.showNoTrialLocationSelected && (
               <>
-                <p>No trial location selected</p>
+                <p className="margin-top-0">No trial location selected</p>
                 <div className="order-checkbox">
                   <input
                     checked={caseDetail.orderDesignatingPlaceOfTrial}
