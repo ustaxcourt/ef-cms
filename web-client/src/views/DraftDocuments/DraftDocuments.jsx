@@ -61,7 +61,7 @@ export const DraftDocuments = connect(
 
                       <td className="no-wrap">
                         {draftDocument.signedAt &&
-                          draftDocument.signedAtFormatted}
+                          draftDocument.signedAtFormattedTZ}
                         {!draftDocument.signedAt && (
                           <a href={draftDocument.signUrl}>Add Signature</a>
                         )}
