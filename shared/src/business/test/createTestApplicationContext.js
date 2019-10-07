@@ -18,6 +18,7 @@ const {
 const {
   getDocumentQCBatchedForSection,
 } = require('../../persistence/dynamo/workitems/getDocumentQCBatchedForSection');
+const DateHandler = require('../utilities/DateHandler');
 const {
   getDocumentQCBatchedForUser,
 } = require('../../persistence/dynamo/workitems/getDocumentQCBatchedForUser');
@@ -138,6 +139,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     getUniqueId: () => {
       return uuidv4();
+    },
+    getUtilities: () => {
+      return { ...DateHandler };
     },
     isAuthorizedForWorkItems: () => true,
   };

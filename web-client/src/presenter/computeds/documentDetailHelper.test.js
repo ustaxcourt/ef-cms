@@ -1,6 +1,7 @@
 import {
   createISODateString,
   formatDateString,
+  formatNow,
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
 import { documentDetailHelper as documentDetailHelperComputed } from './documentDetailHelper';
@@ -10,11 +11,19 @@ import { withAppContextDecorator } from '../../../src/withAppContext';
 
 let role = 'petitionsclerk';
 
+const getDateISO = () => new Date().toISOString();
+
 const documentDetailHelper = withAppContextDecorator(
   documentDetailHelperComputed,
   {
     getConstants: () => ({
-      ORDER_TYPES_MAP: [],
+      ORDER_TYPES_MAP: [
+        {
+          documentTitle: 'Order of Dismissal',
+          documentType: 'Order of Dismissal',
+          eventCode: 'OD',
+        },
+      ],
     }),
     getCurrentUser: () => ({
       role,
@@ -25,6 +34,7 @@ const documentDetailHelper = withAppContextDecorator(
         createISODateString,
         formatDateString,
         formatDocument,
+        formatNow,
         prepareDateFromString,
       };
     },
@@ -422,6 +432,77 @@ describe('formatted work queue computed', () => {
       });
 
       expect(result.showViewOrdersNeededButton).toEqual(false);
+    });
+  });
+
+  describe('showConfirmEditOrder and showRemoveSignature', () => {
+    it('should show confirm edit order and remove signature', () => {
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: '123-abc',
+                documentType: 'Order of Dismissal',
+                signedAt: getDateISO(),
+              },
+            ],
+          },
+          documentId: '123-abc',
+          user: {
+            role: 'petitionsclerk',
+          },
+        },
+      });
+
+      expect(result.showConfirmEditOrder).toEqual(true);
+      expect(result.showRemoveSignature).toEqual(true);
+    });
+
+    it('should NOT show confirm edit order OR remove signature when the documentType is not an order', () => {
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: '123-abc',
+                documentType: 'Petition',
+                signedAt: getDateISO(),
+              },
+            ],
+          },
+          documentId: '123-abc',
+          user: {
+            role: 'petitionsclerk',
+          },
+        },
+      });
+
+      expect(result.showConfirmEditOrder).toEqual(false);
+      expect(result.showRemoveSignature).toEqual(false);
+    });
+
+    it('should NOT show confirm edit order OR remove signature when the document has not been signed', () => {
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          caseDetail: {
+            documents: [
+              {
+                documentId: '123-abc',
+                documentType: 'Petition',
+                signedAt: null,
+              },
+            ],
+          },
+          documentId: '123-abc',
+          user: {
+            role: 'petitionsclerk',
+          },
+        },
+      });
+
+      expect(result.showConfirmEditOrder).toEqual(false);
+      expect(result.showRemoveSignature).toEqual(false);
     });
   });
 });

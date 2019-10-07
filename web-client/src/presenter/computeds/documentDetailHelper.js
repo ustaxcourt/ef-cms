@@ -19,6 +19,9 @@ export const documentDetailHelper = (get, applicationContext) => {
   );
   let formattedDocument = {};
   let documentEditUrl;
+  let isSigned = false;
+  let isStipDecision = false;
+  let isOrder = false;
   if (document) {
     formattedDocument = applicationContext
       .getUtilities()
@@ -76,13 +79,13 @@ export const documentDetailHelper = (get, applicationContext) => {
 
     const { ORDER_TYPES_MAP } = applicationContext.getConstants();
 
+    isSigned = !!document.signedAt;
+    isStipDecision = document.documentType === 'Stipulated Decision';
+    isOrder = !!ORDER_TYPES_MAP.find(
+      order => order.documentType === document.documentType,
+    );
     isDraftDocument =
-      (document.documentType === 'Stipulated Decision' &&
-        !document.documentType.signedAt) ||
-      (!document.servedAt &&
-        ORDER_TYPES_MAP.find(
-          order => order.documentType === document.documentType,
-        ));
+      (isStipDecision && !isSigned) || (!document.servedAt && isOrder);
 
     if (isDraftDocument) {
       documentEditUrl =
@@ -106,7 +109,9 @@ export const documentDetailHelper = (get, applicationContext) => {
         !formattedDocument.isPetition));
 
   const showViewOrdersNeededButton =
-    document && document.status === 'served' && userRole === 'petitionsclerk';
+    ((document && document.status === 'served') ||
+      caseDetail.status === 'Batched for IRS') &&
+    userRole === 'petitionsclerk';
 
   return {
     documentEditUrl,
@@ -118,8 +123,10 @@ export const documentDetailHelper = (get, applicationContext) => {
     },
     showCaseDetailsEdit,
     showCaseDetailsView,
+    showConfirmEditOrder: isSigned && isOrder,
     showDocumentInfoTab,
     showDocumentViewerTopMargin,
+    showRemoveSignature: isOrder && isSigned,
     showServeDocumentButton,
     showSignDocumentButton,
     showViewOrdersNeededButton,

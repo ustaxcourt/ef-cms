@@ -14,7 +14,10 @@ const formatDocument = (applicationContext, document) => {
     .getUtilities()
     .formatDateString(result.signedAt, 'MMDDYY');
 
-  result.showServedAt = !!result.servedAt;
+  (result.signedAtFormattedTZ = applicationContext
+    .getUtilities()
+    .formatDateString(result.signedAt, 'DATE_TIME_TZ')),
+    (result.showServedAt = !!result.servedAt);
   result.isStatusServed = result.status === 'served';
   result.isPetition = result.documentType === 'Petition';
 
@@ -49,7 +52,7 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
     .getUtilities()
     .formatDateString(result.deadlineDate, 'MMDDYY');
 
-  //use the app context utility function so the time zones match when comparing dates
+  // use the app context utility function so the time zones match when comparing dates
   const deadlineDateMomented = applicationContext
     .getUtilities()
     .prepareDateFromString(result.deadlineDate);
@@ -174,6 +177,9 @@ const formatCase = (applicationContext, caseDetail) => {
     signedAtFormatted: applicationContext
       .getUtilities()
       .formatDateString(document.signedAt, 'MMDDYY'),
+    signedAtFormattedTZ: applicationContext
+      .getUtilities()
+      .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
     signUrl:
       document.documentType === 'Stipulated Decision'
         ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`

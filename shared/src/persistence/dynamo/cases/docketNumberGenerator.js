@@ -10,9 +10,6 @@ exports.createDocketNumber = async ({ applicationContext }) => {
     key: 'docketNumberCounter',
   });
   const plus100 = id + 100;
-  const last2YearDigits = new Date()
-    .getFullYear()
-    .toString()
-    .substr(-2);
-  return `${plus100}-${last2YearDigits}`;
+  const lastTwo = applicationContext.getUtilities().formatNow('YY');
+  return `${plus100}-${lastTwo}`;
 };

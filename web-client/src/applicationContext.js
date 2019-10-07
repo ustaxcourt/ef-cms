@@ -53,6 +53,7 @@ import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/pr
 import {
   createISODateString,
   formatDateString,
+  formatNow,
   isStringISOFormatted,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
@@ -442,6 +443,7 @@ const applicationContext = {
       formatCaseForTrialSession,
       formatDateString,
       formatDocument,
+      formatNow,
       formattedTrialSessionDetails,
       getFormattedCaseDetail,
       isStringISOFormatted,
