@@ -15,7 +15,6 @@ export const getShouldMarkReadAction = ({ path, props, store }) => {
     store.set(state.workItemId, props.workItemIdToMarkAsRead);
     return path['markRead']();
   } else {
-    console.trace('Marking as read workItemIdToMarkAsRead');
     return path['noAction']();
   }
 };
