@@ -1,12 +1,10 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetailHeader';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
-import { Button } from '../../ustc-ui/Button/Button';
-import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 
 export const PrintableDocketRecord = connect(
   {
@@ -16,7 +14,7 @@ export const PrintableDocketRecord = connect(
   ({ formattedCaseDetail, navigateToCaseDetailSequence }) => {
     return (
       <>
-        <CaseDetailHeader hideActionButtons />
+        <CaseDetailHeader />
         <div className="grid-container print-docket-record">
           <Button
             link
