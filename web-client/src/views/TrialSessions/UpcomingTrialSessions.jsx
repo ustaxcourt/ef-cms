@@ -27,7 +27,7 @@ export const UpcomingTrialSessions = connect(
                   id="sessionFilter"
                   name="sessionType"
                 >
-                  <option value="">-Session Type-</option>
+                  <option value="">-Session type-</option>
                   {trialSessionTypes.map(sessionType => (
                     <option key={sessionType} value={sessionType}>
                       {sessionType}
