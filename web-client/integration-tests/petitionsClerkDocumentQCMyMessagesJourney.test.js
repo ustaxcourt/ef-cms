@@ -144,9 +144,7 @@ describe('Petitions Clerk Document QC Journey', () => {
   petitionsClerkLogIn(test, 'petitionsclerk1');
   petitionsClerkViewsMyMessagesInbox(test, true);
   petitionsClerkGetsMyMessagesInboxCount(test);
-  console.log(test.getState());
   petitionsClerkViewsUnreadMessage(test, 'Here comes the hotstepper!');
-  // console.log(test.getState());
   petitionsClerkGetsMyMessagesInboxCount(test, -1);
   petitionsClerkSignsOut(test);
 });
