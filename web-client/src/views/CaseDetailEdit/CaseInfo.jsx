@@ -45,7 +45,7 @@ export const CaseInfo = connect(
                   <div className="usa-form-group usa-form-group--month margin-bottom-0">
                     <label
                       aria-hidden="true"
-                      className="usa-label"
+                      className="usa-label sr-only"
                       htmlFor="received-at-month"
                     >
                       MM
@@ -78,7 +78,7 @@ export const CaseInfo = connect(
                   <div className="usa-form-group usa-form-group--day margin-bottom-0">
                     <label
                       aria-hidden="true"
-                      className="usa-label"
+                      className="usa-label sr-only"
                       htmlFor="received-at-day"
                     >
                       DD
@@ -111,7 +111,7 @@ export const CaseInfo = connect(
                   <div className="usa-form-group usa-form-group--year margin-bottom-0">
                     <label
                       aria-hidden="true"
-                      className="usa-label"
+                      className="usa-label sr-only"
                       htmlFor="received-at-year"
                     >
                       YYYY
