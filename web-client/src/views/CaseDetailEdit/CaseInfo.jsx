@@ -45,6 +45,16 @@ export const CaseInfo = connect(
                 </legend>
                 <div className="usa-memorable-date">
                   <div className="usa-form-group usa-form-group--month margin-bottom-0">
+<<<<<<< HEAD
+=======
+                    <label
+                      aria-hidden="true"
+                      className="usa-label sr-only"
+                      htmlFor="received-at-month"
+                    >
+                      MM
+                    </label>
+>>>>>>> 3d2771c81... On Date received (under case info tab) label remove the MM DD YYYY sublabel - so it should look like "fee payment date"
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="month, two digits"
@@ -71,6 +81,16 @@ export const CaseInfo = connect(
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--day margin-bottom-0">
+<<<<<<< HEAD
+=======
+                    <label
+                      aria-hidden="true"
+                      className="usa-label sr-only"
+                      htmlFor="received-at-day"
+                    >
+                      DD
+                    </label>
+>>>>>>> 3d2771c81... On Date received (under case info tab) label remove the MM DD YYYY sublabel - so it should look like "fee payment date"
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="day, two digits"
@@ -97,6 +117,16 @@ export const CaseInfo = connect(
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--year margin-bottom-0">
+<<<<<<< HEAD
+=======
+                    <label
+                      aria-hidden="true"
+                      className="usa-label sr-only"
+                      htmlFor="received-at-year"
+                    >
+                      YYYY
+                    </label>
+>>>>>>> 3d2771c81... On Date received (under case info tab) label remove the MM DD YYYY sublabel - so it should look like "fee payment date"
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="year, four digits"
