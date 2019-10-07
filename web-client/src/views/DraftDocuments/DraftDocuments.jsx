@@ -71,6 +71,7 @@ export const DraftDocuments = connect(
                         {draftDocument.signedAt ? (
                           <Button
                             link
+                            data-document-id={draftDocument.documentId}
                             icon="edit"
                             onClick={() => {
                               openConfirmEditModalSequence({
