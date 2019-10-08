@@ -171,74 +171,96 @@ export const ScanBatchPreviewer = connect(
           ? 'margin-top-2'
           : 'margin-top-0';
       return (
-        <div
-          className={classNames(
-            'usa-form-group',
-            validationErrors[documentType] && 'usa-form-group--error',
-          )}
-        >
-          <fieldset
-            aria-label="scan mode selection"
-            className={classNames('usa-fieldset margin-bottom-3', headerMargin)}
-            id="scan-mode-radios"
-          >
-            <legend
-              className="usa-legend with-hint margin-bottom-2"
-              id="scan-mode-radios-legend"
+        <div className="grid-row">
+          <div className="grid-col-8">
+            <div
+              className={classNames(
+                'usa-form-group',
+                validationErrors[documentType] && 'usa-form-group--error',
+              )}
             >
-              How do you want to add this document?
-            </legend>
-            <div className="usa-radio usa-radio__inline">
-              <input
-                aria-describedby="scan-mode-radios-legend"
-                aria-labelledby="upload-mode-scan"
-                checked={scanBatchPreviewerHelper.uploadMode === 'scan'}
-                className="usa-radio__input"
-                id="scanMode"
-                name="uploadMode"
-                type="radio"
-                value="scan"
-                onChange={() =>
-                  setDocumentUploadModeSequence({
-                    documentUploadMode: 'scan',
-                  })
-                }
-              />
-              <label
-                className="usa-radio__label"
-                htmlFor="scanMode"
-                id="upload-mode-scan"
+              <fieldset
+                aria-label="scan mode selection"
+                className={classNames(
+                  'usa-fieldset margin-bottom-3',
+                  headerMargin,
+                )}
+                id="scan-mode-radios"
               >
-                Scan
-              </label>
-            </div>
+                <legend
+                  className="usa-legend with-hint margin-bottom-2"
+                  id="scan-mode-radios-legend"
+                >
+                  How do you want to add this document?
+                </legend>
+                <div className="usa-radio usa-radio__inline">
+                  <input
+                    aria-describedby="scan-mode-radios-legend"
+                    aria-labelledby="upload-mode-scan"
+                    checked={scanBatchPreviewerHelper.uploadMode === 'scan'}
+                    className="usa-radio__input"
+                    id="scanMode"
+                    name="uploadMode"
+                    type="radio"
+                    value="scan"
+                    onChange={() =>
+                      setDocumentUploadModeSequence({
+                        documentUploadMode: 'scan',
+                      })
+                    }
+                  />
+                  <label
+                    className="usa-radio__label"
+                    htmlFor="scanMode"
+                    id="upload-mode-scan"
+                  >
+                    Scan
+                  </label>
+                </div>
 
-            <div className="usa-radio usa-radio__inline">
-              <input
-                aria-describedby="scan-mode-radios-legend"
-                aria-labelledby="upload-mode-upload"
-                checked={scanBatchPreviewerHelper.uploadMode === 'upload'}
-                className="usa-radio__input"
-                id="uploadMode"
-                name="uploadMode"
-                type="radio"
-                value="upload"
-                onChange={() =>
-                  setDocumentUploadModeSequence({
-                    documentUploadMode: 'upload',
-                  })
-                }
-              />
-              <label
-                className="usa-radio__label"
-                htmlFor="uploadMode"
-                id="upload-mode-upload"
-              >
-                Upload
-              </label>
+                <div className="usa-radio usa-radio__inline">
+                  <input
+                    aria-describedby="scan-mode-radios-legend"
+                    aria-labelledby="upload-mode-upload"
+                    checked={scanBatchPreviewerHelper.uploadMode === 'upload'}
+                    className="usa-radio__input"
+                    id="uploadMode"
+                    name="uploadMode"
+                    type="radio"
+                    value="upload"
+                    onChange={() =>
+                      setDocumentUploadModeSequence({
+                        documentUploadMode: 'upload',
+                      })
+                    }
+                  />
+                  <label
+                    className="usa-radio__label"
+                    htmlFor="uploadMode"
+                    id="upload-mode-upload"
+                  >
+                    Upload
+                  </label>
+                </div>
+              </fieldset>
+              <ValidationText field={`${documentType}`} />
             </div>
-          </fieldset>
-          <ValidationText field={`${documentType}`} />
+          </div>
+
+          <div className="grid-col-4 margin-top-4 text-align-right">
+            {scanBatchPreviewerHelper.uploadMode === 'scan' &&
+              scanBatchPreviewerHelper.scannerSource && (
+                <Button
+                  onClick={e => {
+                    e.preventDefault();
+                    startScanSequence();
+                  }}
+                >
+                  <FontAwesomeIcon icon={['fas', 'plus-circle']} />
+                  Start Scan
+                </Button>
+              )}
+          </div>
         </div>
       );
     };
@@ -267,14 +289,14 @@ export const ScanBatchPreviewer = connect(
 
     const renderScan = () => {
       return (
-        <>
-          <h5 className="header-scanned-batches">Scanned batches</h5>
-          <div className="batches-table-wrapper" ref={batchWrapperRef}>
-            {scanBatchPreviewerHelper.batches.length > 0 ? (
+        scanBatchPreviewerHelper.batches.length > 0 && (
+          <>
+            <h5 className="header-scanned-batches">Scanned batches</h5>
+            <div className="batches-table-wrapper" ref={batchWrapperRef}>
               <table className="batches-table">
                 <tbody>
                   {scanBatchPreviewerHelper.batches.map(batch => (
-                    <tr key={batch.index}>
+                    <tr className="no-blue-hover" key={batch.index}>
                       <td>
                         {selectedBatchIndex !== batch.index && (
                           <Button
@@ -340,27 +362,11 @@ export const ScanBatchPreviewer = connect(
                   ))}
                 </tbody>
               </table>
-            ) : (
-              <div>None</div>
-            )}
-          </div>
+            </div>
 
-          <hr className="lighter" />
-
-          {scanBatchPreviewerHelper.scannerSource && (
-            <Button
-              link
-              className="no-underline"
-              onClick={e => {
-                e.preventDefault();
-                startScanSequence();
-              }}
-            >
-              <FontAwesomeIcon icon={['fas', 'plus-circle']} />
-              Add Batch
-            </Button>
-          )}
-        </>
+            <hr className="lighter" />
+          </>
+        )
       );
     };
 
