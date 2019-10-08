@@ -8,6 +8,9 @@ export const scanHelper = get => {
   const user = get(state.user);
   const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);
   const configScriptLoaded = get(state.scanner.configScriptLoaded);
+  const applicationForWaiverOfFilingFeeFileCompleted = !!get(
+    state.form.applicationForWaiverOfFilingFeeFile,
+  );
   const petitionFileCompleted = !!get(state.form.petitionFile);
   const ownershipDisclosureFileCompleted = !!get(
     state.form.ownershipDisclosureFile,
@@ -18,6 +21,7 @@ export const scanHelper = get => {
   );
 
   return {
+    applicationForWaiverOfFilingFeeFileCompleted,
     hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
     hasScanFeature: !!(user && user.role && internalRoles.includes(user.role)),
     ownershipDisclosureFileCompleted,
