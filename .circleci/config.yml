@@ -166,11 +166,18 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build Docker Image
-          command: cd web-api/runtimes/clamav && ./build.sh && cd ../ghostscript && ./build.sh && cd ../puppeteer && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
-      - run:
           name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+          command: |
+            echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export COMPARE_BRANCH=$(./get-compare-branch.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+      - run:
+          name: Build Docker Image
+          command: |
+            git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/clamav" && cd ~/project/web-api/runtimes/clamav && ./build.sh 
+            git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/ghostscript" && cd ~/project/web-api/runtimes/ghostscript && ./build.sh 
+            git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/puppeteer" && cd ~/project/web-api/runtimes/puppeteer && ./build.sh 
+
+            cd ~/project/ && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Dynamsoft Keys
           command: echo "export DYNAMSOFT_PRODUCT_KEYS='$(./get-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
@@ -205,6 +212,14 @@ jobs:
             echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export COMPARE_BRANCH=$(./get-compare-branch.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
+          name: Build Docker Image
+          command: |
+            git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/clamav" && cd ~/project/web-api/runtimes/clamav && ./build.sh 
+            git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/ghostscript" && cd ~/project/web-api/runtimes/ghostscript && ./build.sh 
+            git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/puppeteer" && cd ~/project/web-api/runtimes/puppeteer && ./build.sh 
+
+            cd ~/project/ && docker build -t efcms -f Dockerfile .
+      - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-east-1'
           command: |
             if (git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/puppeteer"); then
@@ -225,73 +240,109 @@ jobs:
       - run:
           name: 'Deploy - Web API - Serverless - API - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-api"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js api)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-api")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-api.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Cases - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-cases"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js cases)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-cases")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-cases.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Case Documents - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-case-documents"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js caseDocuments)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-case-documents")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-documents.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Case Deadlines - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-case-deadlines"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js caseDeadlines)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-case-deadlines")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-deadlines.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Case Notes - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-case-notes"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js caseNotes)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-case-notes")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-notes.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Users - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-users"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js users)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-users")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-users.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Documents - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-documents"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js documents)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-documents")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-documents.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Work Items - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-work-items"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js workItems)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-work-items")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-work-items.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Sections - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-sections"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js sections)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-sections")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-sections.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Trial Sessions - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-trial-sessions"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js trialSessions)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-trial-sessions")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-trial-sessions.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Notifications - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-notifications"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js notifications)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-notifications")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-notifications.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Streams - us-east-1 (east only)'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-streams"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js streams)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-streams")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-streams.sh ${ENV} us-east-1"
             fi
 
@@ -313,6 +364,14 @@ jobs:
             echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export COMPARE_BRANCH=$(./get-compare-branch.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
+          name: Build Docker Image
+          command: |
+            git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/clamav" && cd ~/project/web-api/runtimes/clamav && ./build.sh 
+            git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/ghostscript" && cd ~/project/web-api/runtimes/ghostscript && ./build.sh 
+            git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/puppeteer" && cd ~/project/web-api/runtimes/puppeteer && ./build.sh 
+
+            cd ~/project/ && docker build -t efcms -f Dockerfile .
+      - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-west-1'
           command: |
             if (git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/puppeteer"); then
@@ -333,67 +392,100 @@ jobs:
       - run:
           name: 'Deploy - Web API - Serverless - API - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-api"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js api)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-api")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-api.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Cases - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-cases"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js cases)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-cases")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-cases.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Case Documents - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-case-documents"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js caseDocuments)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-case-documents")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-documents.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Case Deadlines - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-case-deadlines"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js caseDeadlines)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-case-deadlines")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-deadlines.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Case Notes - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-case-notes"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js caseNotes)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-case-notes")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-notes.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Users - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-users"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js users)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-users")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-users.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Documents - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-documents"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js documents)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-documents")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-documents.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Work Items - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-work-items"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js workItems)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-work-items")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-work-items.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Sections - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-sections"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js sections)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-sections")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-sections.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Trial Sessions - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-trial-sessions"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js trialSessions)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-trial-sessions")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-trial-sessions.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Notifications - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-notifications"); then
+            REDEPLOY_VIA_DEPS=$(git diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js notifications)
+            REDEPLOY_VIA_SLS=$(git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "serverless-notifications")
+
+            if [[ ! -z REDEPLOY_VIA_DEPS ]] || [[ ! -z REDEPLOY_VIA_SLS ]]; then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-notifications.sh ${ENV} us-west-1"
             fi
 
