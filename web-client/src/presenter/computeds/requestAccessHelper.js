@@ -2,6 +2,10 @@ import { getDocumentTypesForSelect } from './internalTypesHelper';
 import { state } from 'cerebral';
 
 export const requestAccessHelper = (get, applicationContext) => {
+  const {
+    Document,
+    ExternalDocumentFactory,
+  } = applicationContext.getEntityConstructors();
   const { PARTY_TYPES } = get(state.constants);
   const caseDetail = get(state.caseDetail);
   const userRole = get(state.user.role);
@@ -18,6 +22,28 @@ export const requestAccessHelper = (get, applicationContext) => {
     certificateOfServiceDateFormatted = applicationContext
       .getUtilities()
       .formatDateString(certificateOfServiceDate, 'MMDDYY');
+  }
+
+  let supportingDocuments = null;
+  if (form.supportingDocuments && form.supportingDocuments.length > 0) {
+    supportingDocuments = form.supportingDocuments.map(document => {
+      let concatenatedDocTitle = document.documentTitle;
+
+      if (document.category) {
+        const documentMapping = Document.EXTERNAL_CATEGORY_MAP[
+          document.category
+        ].find(docMap => docMap.documentType === document.documentType);
+        concatenatedDocTitle = ExternalDocumentFactory.get({
+          ...documentMapping,
+          ...document,
+        }).getDocumentTitle();
+      }
+
+      return {
+        ...document,
+        documentTitle: concatenatedDocTitle,
+      };
+    });
   }
 
   const documents = [
@@ -124,6 +150,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     showPartiesRepresenting,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryParty,
+    supportingDocuments,
   };
 
   return exported;
