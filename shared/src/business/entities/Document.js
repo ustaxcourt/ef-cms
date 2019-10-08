@@ -13,6 +13,7 @@ Document.PETITION_DOCUMENT_TYPES = ['Petition'];
 Document.CATEGORIES = Object.keys(documentMapExternal);
 Document.CATEGORY_MAP = documentMapExternal;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
+Document.EXTERNAL_CATEGORY_MAP = documentMapExternal;
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 
 Document.validationName = 'Document';
