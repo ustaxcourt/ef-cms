@@ -242,9 +242,9 @@ jobs:
       - run:
           name: 'Deploy - Web API - Serverless - API - us-east-1'
           command: |
-          echo "BRANCH ${COMPARE_BRANCH}"
+            echo "BRANCH ${COMPARE_BRANCH}"
             echo "ENV ${ENV}"
-            
+
             REDEPLOY_VIA_DEPS=$(git diff --name-only origin/"${COMPARE_BRANCH}" | node ./web-api/dependency-tree-check.js api)
             REDEPLOY_VIA_SLS=$(git diff --name-only origin/"${COMPARE_BRANCH}" | grep -q "serverless-api")
 
