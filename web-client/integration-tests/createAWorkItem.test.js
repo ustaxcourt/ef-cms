@@ -199,6 +199,7 @@ describe('Create a work item', () => {
     jest.setTimeout(30000);
 
     global.window = {
+      document: {},
       localStorage: {
         removeItem: () => null,
         setItem: () => null,

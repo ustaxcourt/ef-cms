@@ -8,6 +8,7 @@ import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const FileDocumentReview = connect(
   {
@@ -81,11 +82,11 @@ export const FileDocumentReview = connect(
                     <div className="tablet:grid-col-6 margin-bottom-1">
                       {fileDocumentHelper.showFilingIncludes && (
                         <div
-                          className={` ${
+                          className={classNames(
                             !fileDocumentHelper.primaryDocument.showObjection
                               ? 'margin-bottom-0'
-                              : 'margin-bottom-5'
-                          }`}
+                              : 'margin-bottom-5',
+                          )}
                         >
                           <label
                             className="usa-label"
@@ -215,12 +216,12 @@ export const FileDocumentReview = connect(
                       <div className="tablet:grid-col-6 margin-bottom-1">
                         {fileDocumentHelper.showSecondaryFilingIncludes && (
                           <div
-                            className={` ${
+                            className={classNames(
                               !fileDocumentHelper.secondaryDocument
                                 .showObjection
                                 ? 'margin-bottom-0'
-                                : 'margin-bottom-5'
-                            }`}
+                                : 'margin-bottom-5',
+                            )}
                           >
                             <label
                               className="usa-label"

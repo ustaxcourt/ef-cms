@@ -3,6 +3,7 @@ import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const LocationInformationForm = connect(
   {
@@ -23,9 +24,10 @@ export const LocationInformationForm = connect(
         <h2 className="margin-top-4">Location Information</h2>
         <div className="blue-container">
           <div
-            className={`usa-form-group ${
-              validationErrors.trialLocation ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.trialLocation && 'usa-form-group--error',
+            )}
           >
             <label className="usa-label" htmlFor="trial-location">
               Trial location
@@ -219,9 +221,10 @@ export const LocationInformationForm = connect(
           </div>
 
           <div
-            className={`usa-form-group margin-bottom-0 ${
-              validationErrors.postalCode ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group margin-bottom-0',
+              validationErrors.postalCode && 'usa-form-group--error',
+            )}
           >
             <label
               aria-label="zip code"

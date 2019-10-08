@@ -27,7 +27,7 @@ export const HeaderDashboardInternal = connect(
               onClick={() => {
                 navigateToPathSequence({
                   path: workQueueHelper.getQueuePath({
-                    box: workQueueHelper.currentBoxView,
+                    box: 'inbox',
                     queue: 'section',
                   }),
                 });
@@ -45,7 +45,7 @@ export const HeaderDashboardInternal = connect(
                 onClick={() => {
                   navigateToPathSequence({
                     path: workQueueHelper.getQueuePath({
-                      box: workQueueHelper.currentBoxView,
+                      box: 'inbox',
                       queue: 'my',
                     }),
                   });

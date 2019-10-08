@@ -2,6 +2,7 @@ import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 class EditCaseDeadlineModalDialogComponent extends ModalDialog {
   constructor(props) {
@@ -17,12 +18,10 @@ class EditCaseDeadlineModalDialogComponent extends ModalDialog {
     return (
       <div className="ustc-create-order-modal">
         <div
-          className={
-            'usa-form-group ' +
-            (this.props.validationErrors.deadlineDate
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            this.props.validationErrors.deadlineDate && 'usa-form-group--error',
+          )}
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="deadline-date-legend">
@@ -33,12 +32,11 @@ class EditCaseDeadlineModalDialogComponent extends ModalDialog {
                 <input
                   aria-describedby="deadline-date-legend"
                   aria-label="month, two digits"
-                  className={
-                    'usa-input usa-input--inline ' +
-                    (this.props.validationErrors.deadlineDate
-                      ? 'usa-input--error'
-                      : '')
-                  }
+                  className={classNames(
+                    'usa-input usa-input--inline',
+                    this.props.validationErrors.deadlineDate &&
+                      'usa-input--error',
+                  )}
                   id="deadline-date-month"
                   max="12"
                   min="1"
@@ -59,12 +57,11 @@ class EditCaseDeadlineModalDialogComponent extends ModalDialog {
                 <input
                   aria-describedby="deadline-date-legend"
                   aria-label="day, two digits"
-                  className={
-                    'usa-input usa-input--inline ' +
-                    (this.props.validationErrors.deadlineDate
-                      ? 'usa-input--error'
-                      : '')
-                  }
+                  className={classNames(
+                    'usa-input usa-input--inline',
+                    this.props.validationErrors.deadlineDate &&
+                      'usa-input--error',
+                  )}
                   id="deadline-date-day"
                   max="31"
                   min="1"
@@ -85,12 +82,11 @@ class EditCaseDeadlineModalDialogComponent extends ModalDialog {
                 <input
                   aria-describedby="deadline-date-legend"
                   aria-label="year, four digits"
-                  className={
-                    'usa-input usa-input--inline ' +
-                    (this.props.validationErrors.deadlineDate
-                      ? 'usa-input--error'
-                      : '')
-                  }
+                  className={classNames(
+                    'usa-input usa-input--inline',
+                    this.props.validationErrors.deadlineDate &&
+                      'usa-input--error',
+                  )}
                   id="deadline-date-year"
                   max="2100"
                   min="1900"
@@ -117,12 +113,10 @@ class EditCaseDeadlineModalDialogComponent extends ModalDialog {
         </div>
 
         <div
-          className={
-            'usa-form-group ' +
-            (this.props.validationErrors.description
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            this.props.validationErrors.description && 'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor="description">
             What is this deadline for?

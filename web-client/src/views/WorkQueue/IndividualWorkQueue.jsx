@@ -33,7 +33,7 @@ export const IndividualWorkQueue = connect(
             <IndividualWorkQueueInbox />
           </div>
         </Tab>
-        {workQueueHelper.showInProgresssTab && (
+        {workQueueHelper.showInProgressTab && (
           <Tab
             id="section-in-progress-tab"
             tabName="inProgress"
