@@ -7,9 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.cases
  * @param {object} providers.get the cerebral get function used for getting state from store
  */
-export const setDefaultCaseDetailTabAction = ({ get, store }) => {
-  store.set(
-    state.caseDetailPage.informationTab,
-    get(state.caseDetailPage.informationTab) || 'docketRecord',
-  );
+export const setDefaultCaseDetailTabAction = ({ store }) => {
+  store.set(state.caseDetailPage.informationTab, 'docketRecord');
 };
