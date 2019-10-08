@@ -49,6 +49,7 @@ export const ClosedCases = connect(
             </tbody>
           ))}
         </table>
+        {closedCases.length === 0 && <p>There are no closed cases.</p>}
       </React.Fragment>
     );
   },

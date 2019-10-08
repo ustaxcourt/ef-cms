@@ -12,6 +12,7 @@ import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
+import classNames from 'classnames';
 
 export const PrimaryDocumentForm = connect(
   {
@@ -39,9 +40,10 @@ export const PrimaryDocumentForm = connect(
       <React.Fragment>
         <div className="blue-container docket-entry-form">
           <div
-            className={`usa-form-group ${
-              validationErrors.lodged ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.lodged && 'usa-form-group--error',
+            )}
           >
             <fieldset className="usa-fieldset">
               <legend className="usa-legend">Filing status</legend>
@@ -78,9 +80,10 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div
-            className={`usa-form-group ${
-              validationErrors.dateReceived ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.dateReceived && 'usa-form-group--error',
+            )}
           >
             <fieldset className="usa-fieldset date-received">
               <legend id="usa-legend date-received-legend">
@@ -167,9 +170,10 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div
-            className={`usa-form-group ${
-              validationErrors.eventCode ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.eventCode && 'usa-form-group--error',
+            )}
           >
             <label
               className="usa-label"
@@ -218,11 +222,12 @@ export const PrimaryDocumentForm = connect(
 
           {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
             <div
-              className={`usa-form-group ${
-                validationErrors.secondaryDocument && !form.secondaryDocument
-                  ? 'usa-form-group--error'
-                  : ''
-              }`}
+              className={classNames(
+                'usa-form-group',
+                validationErrors.secondaryDocument &&
+                  !form.secondaryDocument &&
+                  'usa-form-group--error',
+              )}
             >
               <label
                 className="usa-label"
@@ -374,16 +379,18 @@ export const PrimaryDocumentForm = connect(
           <Inclusions />
 
           <div
-            className={`usa-form-group ${
-              addDocketEntryHelper.partyValidationError
-                ? 'usa-form-group--error'
-                : ''
-            } ${!addDocketEntryHelper.showObjection ? 'margin-bottom-0' : ''}`}
+            className={classNames(
+              'usa-form-group',
+              addDocketEntryHelper.partyValidationError &&
+                'usa-form-group--error',
+              !addDocketEntryHelper.showObjection && 'margin-bottom-0',
+            )}
           >
             <fieldset
-              className={`usa-fieldset ${
-                !addDocketEntryHelper.showObjection ? 'margin-bottom-0' : ''
-              }`}
+              className={classNames(
+                'usa-fieldset',
+                !addDocketEntryHelper.showObjection && 'margin-bottom-0',
+              )}
             >
               <legend className="usa-legend">
                 Who is filing this document?
@@ -461,9 +468,10 @@ export const PrimaryDocumentForm = connect(
           </div>
           {addDocketEntryHelper.showObjection && (
             <div
-              className={`usa-form-group margin-bottom-0 ${
-                validationErrors.objections ? 'usa-form-group--error' : ''
-              }`}
+              className={classNames(
+                'usa-form-group margin-bottom-0',
+                validationErrors.objections && 'usa-form-group--error',
+              )}
             >
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="objections-legend">

@@ -14,6 +14,7 @@ const { post } = require('./requests');
  */
 exports.createCaseFromPaperInteractor = ({
   applicationContext,
+  applicationForWaiverOfFilingFeeFileId,
   ownershipDisclosureFileId,
   petitionFileId,
   petitionMetadata,
@@ -23,6 +24,7 @@ exports.createCaseFromPaperInteractor = ({
   return post({
     applicationContext,
     body: {
+      applicationForWaiverOfFilingFeeFileId,
       ownershipDisclosureFileId,
       petitionFileId,
       petitionMetadata,

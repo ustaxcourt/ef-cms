@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PDFSignerPageButtons = connect(
   {
@@ -43,7 +44,7 @@ export const PDFSignerPageButtons = connect(
       <>
         <Button link aria-label="previous page" onClick={getPreviousPage}>
           <FontAwesomeIcon
-            className={'icon-button' + (disablePrevious ? ' disabled' : '')}
+            className={classNames('icon-button', disablePrevious && 'disabled')}
             icon={['fas', 'caret-left']}
             size="2x"
           />
@@ -51,9 +52,14 @@ export const PDFSignerPageButtons = connect(
         <span className="pages">
           Page {currentPageNumber} of {totalPages}
         </span>
-        <Button link aria-label="next page" onClick={getNextPage}>
+        <Button
+          link
+          aria-label="next page"
+          marginDirection="left"
+          onClick={getNextPage}
+        >
           <FontAwesomeIcon
-            className={'icon-button' + (disableNext ? ' disabled' : '')}
+            className={classNames('icon-button', disableNext && ' disabled')}
             icon={['fas', 'caret-right']}
             size="2x"
           />

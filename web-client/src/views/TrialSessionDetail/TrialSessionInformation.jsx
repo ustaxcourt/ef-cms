@@ -2,6 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const TrialSessionInformation = connect(
   {
@@ -55,11 +56,10 @@ export const TrialSessionInformation = connect(
                         <div className="grid-col-6">
                           <p className="label">Date</p>
                           <p
-                            className={
-                              formattedTrialSessionDetails.showSwingSession
-                                ? ''
-                                : 'margin-bottom-0'
-                            }
+                            className={classNames(
+                              !formattedTrialSessionDetails.showSwingSession &&
+                                'margin-bottom-0',
+                            )}
                           >
                             {formattedTrialSessionDetails.formattedStartDate}{' '}
                             {formattedTrialSessionDetails.formattedStartTime}
@@ -68,11 +68,10 @@ export const TrialSessionInformation = connect(
                         <div className="grid-col-6">
                           <p className="label">Max # of Cases</p>
                           <p
-                            className={
-                              formattedTrialSessionDetails.showSwingSession
-                                ? ''
-                                : 'margin-bottom-0'
-                            }
+                            className={classNames(
+                              !formattedTrialSessionDetails.showSwingSession &&
+                                'margin-bottom-0',
+                            )}
                           >
                             {formattedTrialSessionDetails.maxCases}
                           </p>
@@ -118,11 +117,11 @@ export const TrialSessionInformation = connect(
                       </div>
 
                       <div
-                        className={`grid-row grid-gap ${
-                          formattedTrialSessionDetails.showSwingSession
-                            ? 'margin-bottom-8'
-                            : ''
-                        }`}
+                        className={classNames(
+                          'grid-row grid-gap',
+                          formattedTrialSessionDetails.showSwingSession &&
+                            'margin-bottom-8',
+                        )}
                       >
                         <div className="grid-col-6">
                           <p className="label">Court Reporter</p>
