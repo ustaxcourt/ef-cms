@@ -167,7 +167,11 @@ jobs:
       - checkout
       - run:
           name: Build Docker Image
-          command: cd web-api/runtimes/clamav && ./build.sh && cd ../ghostscript && ./build.sh && cd ../puppeteer && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
+          command: |
+            git diff --name-only origin/develop | grep -q "runtimes/clamav" && cd ~/project/web-api/runtimes/clamav && ./build.sh 
+            git diff --name-only origin/develop | grep -q "runtimes/ghostscript" && cd ~/project/web-api/runtimes/ghostscript && ./build.sh 
+            git diff --name-only origin/develop | grep -q "runtimes/puppeteer" && cd ~/project/web-api/runtimes/puppeteer && ./build.sh 
+            cd ~/project/ && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
@@ -195,10 +199,10 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            git diff --name-only origin/develop | grep -q "runtimes/clamav" && cd web-api/runtimes/clamav && ./build.sh 
-            git diff --name-only origin/develop | grep -q "runtimes/ghostscript" && cd ../ghostscript && ./build.sh 
-            git diff --name-only origin/develop | grep -q "runtimes/puppeteer" && cd ../puppeteer && ./build.sh 
-            cd ../../.. && docker build -t efcms -f Dockerfile .
+            git diff --name-only origin/develop | grep -q "runtimes/clamav" && cd ~/project/web-api/runtimes/clamav && ./build.sh 
+            git diff --name-only origin/develop | grep -q "runtimes/ghostscript" && cd ~/project/web-api/runtimes/ghostscript && ./build.sh 
+            git diff --name-only origin/develop | grep -q "runtimes/puppeteer" && cd ~/project/web-api/runtimes/puppeteer && ./build.sh 
+            cd ~/project/ && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: |
@@ -303,10 +307,10 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            git diff --name-only origin/develop | grep -q "runtimes/clamav" && cd web-api/runtimes/clamav && ./build.sh 
-            git diff --name-only origin/develop | grep -q "runtimes/ghostscript" && cd ../ghostscript && ./build.sh 
-            git diff --name-only origin/develop | grep -q "runtimes/puppeteer" && cd ../puppeteer && ./build.sh
-            cd ../../.. && docker build -t efcms -f Dockerfile .
+            git diff --name-only origin/develop | grep -q "runtimes/clamav" && cd ~/project/web-api/runtimes/clamav && ./build.sh 
+            git diff --name-only origin/develop | grep -q "runtimes/ghostscript" && cd ~/project/web-api/runtimes/ghostscript && ./build.sh 
+            git diff --name-only origin/develop | grep -q "runtimes/puppeteer" && cd ~/project/web-api/runtimes/puppeteer && ./build.sh 
+            cd ~/project/ && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: |
