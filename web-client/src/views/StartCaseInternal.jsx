@@ -335,6 +335,10 @@ export const StartCaseInternal = connect(
                       documentType: 'ownershipDisclosureFile',
                       title: 'ODS',
                     },
+                    {
+                      documentType: 'applicationForWaiverOfFilingFeeFile',
+                      title: 'Filing Fee Waiver',
+                    },
                   ]}
                   documentType={documentSelectedForScan}
                   title="Add Document(s)"
