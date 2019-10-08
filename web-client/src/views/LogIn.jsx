@@ -24,7 +24,7 @@ export const LogIn = connect(
           }}
         >
           <div className="blue-container margin-bottom-5">
-            <div className="usa-form-group">
+            <div className="usa-form-group margin-bottom-0">
               <label className="usa-label" htmlFor="name">
                 Name
               </label>

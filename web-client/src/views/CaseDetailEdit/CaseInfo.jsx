@@ -32,7 +32,7 @@ export const CaseInfo = connect(
     return (
       <div className="blue-container">
         {caseDetail.isPaper && (
-          <React.Fragment>
+          <>
             <div
               className={classNames(
                 'usa-form-group',
@@ -45,13 +45,6 @@ export const CaseInfo = connect(
                 </legend>
                 <div className="usa-memorable-date">
                   <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                    <label
-                      aria-hidden="true"
-                      className="usa-label"
-                      htmlFor="received-at-month"
-                    >
-                      MM
-                    </label>
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="month, two digits"
@@ -78,13 +71,6 @@ export const CaseInfo = connect(
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                    <label
-                      aria-hidden="true"
-                      className="usa-label"
-                      htmlFor="received-at-day"
-                    >
-                      DD
-                    </label>
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="day, two digits"
@@ -111,13 +97,6 @@ export const CaseInfo = connect(
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                    <label
-                      aria-hidden="true"
-                      className="usa-label"
-                      htmlFor="received-at-year"
-                    >
-                      YYYY
-                    </label>
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="year, four digits"
@@ -151,7 +130,7 @@ export const CaseInfo = connect(
                 )}
               </fieldset>
             </div>
-          </React.Fragment>
+          </>
         )}
 
         <div className="usa-form-group">
@@ -192,13 +171,16 @@ export const CaseInfo = connect(
         </div>
 
         <div className="usa-form-group">
-          <label className="usa-label" htmlFor="preferred-trial-city">
+          <label
+            className="usa-label margin-bottom-0"
+            htmlFor="preferred-trial-city"
+          >
             Trial location
           </label>
           <div id="preferred-trial-city">
             {caseDetailEditHelper.showNoTrialLocationSelected && (
               <>
-                <p>No trial location selected</p>
+                <p className="margin-top-0">No trial location selected</p>
                 <div className="order-checkbox">
                   <input
                     checked={caseDetail.orderDesignatingPlaceOfTrial}
@@ -480,7 +462,7 @@ export const CaseInfo = connect(
               Order for Amended Petition
             </label>
           </div>
-          <div className="usa-form-group" role="listitem">
+          <div className="usa-form-group margin-bottom-0" role="listitem">
             <input
               aria-describedby="orders-needed"
               checked={caseDetail.orderForAmendedPetitionAndFilingFee}
