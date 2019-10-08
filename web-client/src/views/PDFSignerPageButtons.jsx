@@ -52,7 +52,12 @@ export const PDFSignerPageButtons = connect(
         <span className="pages">
           Page {currentPageNumber} of {totalPages}
         </span>
-        <Button link aria-label="next page" onClick={getNextPage}>
+        <Button
+          link
+          aria-label="next page"
+          marginDirection="left"
+          onClick={getNextPage}
+        >
           <FontAwesomeIcon
             className={classNames('icon-button', disableNext && ' disabled')}
             icon={['fas', 'caret-right']}
