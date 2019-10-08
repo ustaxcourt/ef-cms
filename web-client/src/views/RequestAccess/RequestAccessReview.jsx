@@ -122,8 +122,8 @@ export const RequestAccessReview = connect(
                     </div>
                   </div>
 
-                  {form.supportingDocuments &&
-                    form.supportingDocuments.map((item, idx) => (
+                  {requestAccessHelper.supportingDocuments &&
+                    requestAccessHelper.supportingDocuments.map((item, idx) => (
                       <React.Fragment key={idx}>
                         <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
                           <div className="tablet:grid-col-6 margin-bottom-1">
