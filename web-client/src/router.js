@@ -1,10 +1,14 @@
 import { forEach, set } from 'lodash';
-import { queryStringDecoder } from './queryStringDecoder';
+import { queryStringDecoder } from './utilities/queryStringDecoder';
+import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
 
 route.base('/');
 
-const pageTitleSuffix = ' | U.S. Tax Court';
+// Add this prefix to page titles for all pages that are related to a case
+const getPageTitleDocketPrefix = docketNumber => {
+  return `Docket ${docketNumber} | `;
+};
 
 const externalRoute = path => {
   window.location.replace(path);
@@ -45,7 +49,7 @@ const router = {
     route(
       '/',
       checkLoggedIn(() => {
-        document.title = `Dashboard ${pageTitleSuffix}`;
+        setPageTitle('Dashboard');
         app.getSequence('gotoDashboardSequence')();
       }),
     );
@@ -53,7 +57,7 @@ const router = {
     route(
       '/case-detail/*',
       checkLoggedIn(docketNumber => {
-        document.title = `Case details ${pageTitleSuffix}`;
+        setPageTitle(`Docket ${docketNumber}`);
         app.getSequence('gotoCaseDetailSequence')({ docketNumber });
       }),
     );
@@ -61,7 +65,9 @@ const router = {
     route(
       '/case-detail/*/documents/*',
       checkLoggedIn((docketNumber, documentId) => {
-        document.title = `Document details ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Document details`,
+        );
         app.getSequence('gotoDocumentDetailSequence')({
           docketNumber,
           documentId,
@@ -72,7 +78,9 @@ const router = {
     route(
       '/case-detail/*/documents/*/edit',
       checkLoggedIn((docketNumber, documentId) => {
-        document.title = `Edit Docket Record ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
+        );
         app.getSequence('gotoEditDocketEntrySequence')({
           docketNumber,
           documentId,
@@ -106,7 +114,9 @@ const router = {
     route(
       '/case-detail/*/documents/*/mark/*',
       checkLoggedIn((docketNumber, documentId, workItemIdToMarkAsRead) => {
-        document.title = `Document details ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Document details`,
+        );
         app.getSequence('gotoDocumentDetailSequence')({
           docketNumber,
           documentId,
@@ -118,7 +128,9 @@ const router = {
     route(
       '/case-detail/*/documents/*/messages/*',
       checkLoggedIn((docketNumber, documentId, messageId) => {
-        document.title = `Document details ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Document details`,
+        );
         app.getSequence('gotoDocumentDetailSequence')({
           docketNumber,
           documentId,
@@ -131,7 +143,9 @@ const router = {
       '/case-detail/*/documents/*/messages/*/mark/*',
       checkLoggedIn(
         (docketNumber, documentId, messageId, workItemIdToMarkAsRead) => {
-          document.title = `Document details ${pageTitleSuffix}`;
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Document details`,
+          );
           app.getSequence('gotoDocumentDetailSequence')({
             docketNumber,
             documentId,
@@ -145,7 +159,11 @@ const router = {
     route(
       '/case-detail/*/before-you-file-a-document',
       checkLoggedIn(docketNumber => {
-        document.title = `Before you file a document ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(
+            docketNumber,
+          )} Before you file a document`,
+        );
         app.getSequence('gotoBeforeYouFileDocumentSequence')({ docketNumber });
       }),
     );
@@ -153,7 +171,9 @@ const router = {
     route(
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
-        document.title = `File a document ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} File a document`,
+        );
         if (app.getState('currentPage') === 'FileDocumentWizard') {
           app.getSequence('chooseWizardStepSequence')({
             value: 'SelectDocumentType',
@@ -167,7 +187,9 @@ const router = {
     route(
       '/case-detail/*/file-a-document/details',
       checkLoggedIn(docketNumber => {
-        document.title = `File a document ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} File a document`,
+        );
         if (app.getState('currentPage') === 'FileDocumentWizard') {
           app.getSequence('chooseWizardStepSequence')({
             value: 'FileDocument',
@@ -183,7 +205,9 @@ const router = {
     route(
       '/case-detail/*/file-a-document/review',
       checkLoggedIn(docketNumber => {
-        document.title = `File a document ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} File a document`,
+        );
         if (app.getState('currentPage') === 'FileDocumentWizard') {
           app.getSequence('chooseWizardStepSequence')({
             value: 'FileDocumentReview',
@@ -199,7 +223,9 @@ const router = {
     route(
       '/case-detail/*/file-a-document/all-document-categories',
       checkLoggedIn(docketNumber => {
-        document.title = `File a document ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} File a document`,
+        );
         if (app.getState('currentPage') === 'FileDocumentWizard') {
           app.getSequence('chooseWizardStepSequence')({
             value: 'ViewAllDocuments',
@@ -215,14 +241,18 @@ const router = {
     route(
       '/case-detail/*/contacts/primary/edit',
       checkLoggedIn(docketNumber => {
-        document.title = `Primary contact ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Primary contact`,
+        );
         app.getSequence('gotoPrimaryContactEditSequence')({ docketNumber });
       }),
     );
     route(
       '/case-detail/*/create-order',
       checkLoggedIn(docketNumber => {
-        document.title = `Create an order ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
+        );
         app.getSequence('gotoCreateOrderSequence')({ docketNumber });
       }),
     );
@@ -230,7 +260,7 @@ const router = {
     route(
       '/case-detail/*/edit-order/*',
       checkLoggedIn((docketNumber, documentIdToEdit) => {
-        document.title = `Edit an order ${pageTitleSuffix}`;
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
         const sequence = app.getSequence('gotoEditOrderSequence');
         sequence({
           docketNumber,
@@ -242,7 +272,7 @@ const router = {
     route(
       '/case-detail/*/edit-order/*/sign',
       checkLoggedIn((docketNumber, documentId) => {
-        document.title = `Edit an order ${pageTitleSuffix}`;
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
         const sequence = app.getSequence('gotoSignOrderSequence');
         sequence({
           docketNumber,
@@ -254,7 +284,9 @@ const router = {
     route(
       '/case-detail/*/add-docket-entry',
       checkLoggedIn(docketNumber => {
-        document.title = `Add docket entry ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
+        );
         app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
       }),
     );
@@ -262,7 +294,7 @@ const router = {
     route(
       '/case-detail/*/printable-docket-record',
       checkLoggedIn(docketNumber => {
-        document.title = `Docket Record ${pageTitleSuffix}`;
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Docket record`);
         app.getSequence('gotoPrintableDocketRecordSequence')({ docketNumber });
       }),
     );
@@ -270,7 +302,9 @@ const router = {
     route(
       '/case-detail/*/request-access',
       checkLoggedIn(docketNumber => {
-        document.title = `Request access ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Request access`,
+        );
         if (app.getState('wizardStep') === 'RequestAccessReview') {
           app.getSequence('chooseWizardStepSequence')({
             value: 'RequestAccess',
@@ -284,7 +318,9 @@ const router = {
     route(
       '/case-detail/*/request-access/review',
       checkLoggedIn(docketNumber => {
-        document.title = `Request access review ${pageTitleSuffix}`;
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Request access review`,
+        );
         if (!app.getState('wizardStep')) {
           app.getSequence('navigateToPathSequence')({
             path: `/case-detail/${docketNumber}/request-access`,
@@ -300,7 +336,7 @@ const router = {
     route(
       '/case-detail/*/orders-needed',
       checkLoggedIn(docketNumber => {
-        document.title = `Orders Needed ${pageTitleSuffix}`;
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Orders needed`);
         app.getSequence('gotoOrdersNeededSequence')({ docketNumber });
       }),
     );
@@ -342,14 +378,14 @@ const router = {
 
           app.getSequence('gotoMessagesSequence')(routeArgs);
         }
-        document.title = `Messages ${pageTitleSuffix}`;
+        setPageTitle('Messages');
       }),
     );
 
     route(
       '/trial-session-detail/*',
       checkLoggedIn(trialSessionId => {
-        document.title = `Trial Session Information ${pageTitleSuffix}`;
+        setPageTitle('Trial session information');
         app.getSequence('gotoTrialSessionDetailSequence')({ trialSessionId });
       }),
     );
@@ -357,7 +393,7 @@ const router = {
     route(
       '/trial-session-working-copy/*',
       checkLoggedIn(trialSessionId => {
-        document.title = `Trial Session Working Copy ${pageTitleSuffix}`;
+        setPageTitle('Trial session working copy');
         app.getSequence('gotoTrialSessionWorkingCopySequence')({
           trialSessionId,
         });
@@ -371,7 +407,7 @@ const router = {
         forEach(route.query(), (value, key) => {
           set(query, key, value);
         });
-        document.title = `Trial sessions ${pageTitleSuffix}`;
+        setPageTitle('Trial sessions');
         app.getSequence('gotoTrialSessionsSequence')({ query });
       }),
     );
@@ -392,7 +428,7 @@ const router = {
     route(
       '/before-filing-a-petition',
       checkLoggedIn(() => {
-        document.title = `Before you file a petition ${pageTitleSuffix}`;
+        setPageTitle('Before you file a petition');
         app.getSequence('gotoBeforeStartCaseSequence')();
       }),
     );
@@ -400,7 +436,7 @@ const router = {
     route(
       '/file-a-petition/step-*',
       checkLoggedIn(step => {
-        document.title = `File a petition ${pageTitleSuffix}`;
+        setPageTitle('File a petition');
         if (app.getState('currentPage') === 'StartCaseWizard') {
           app.getSequence('chooseStartCaseWizardStepSequence')({
             step: `${step}`,
@@ -426,7 +462,7 @@ const router = {
     route(
       '/file-a-petition-pa11y/step-*',
       checkLoggedIn(step => {
-        document.title = `File a petition ${pageTitleSuffix}`;
+        setPageTitle('File a petition');
         app.getSequence('gotoStartCaseWizardSequence')({
           step,
           wizardStep: `StartCaseStep${step}`,
@@ -437,13 +473,13 @@ const router = {
     route(
       '/add-a-trial-session',
       checkLoggedIn(() => {
-        document.title = `Add a trial session ${pageTitleSuffix}`;
+        setPageTitle('Add a trial session');
         app.getSequence('gotoAddTrialSessionSequence')();
       }),
     );
 
     route('/style-guide', () => {
-      document.title = `Style Guide ${pageTitleSuffix}`;
+      setPageTitle('Style guide');
       app.getSequence('gotoStyleGuideSequence')();
     });
 
@@ -482,14 +518,14 @@ const router = {
 
           app.getSequence('gotoMessagesSequence')(routeArgs);
         }
-        document.title = `Messages ${pageTitleSuffix}`;
+        setPageTitle('Messages');
       }),
     );
 
     route(
       '/reports/case-deadlines',
       checkLoggedIn(() => {
-        document.title = `Case Deadlines ${pageTitleSuffix}`;
+        setPageTitle('Case deadlines');
         app.getSequence('gotoAllCaseDeadlinesSequence')();
       }),
     );
@@ -497,7 +533,7 @@ const router = {
     route(
       '/user/contact/edit',
       checkLoggedIn(() => {
-        document.title = `Edit User Contact ${pageTitleSuffix}`;
+        setPageTitle('Edit user contact');
         app.getSequence('gotoUserContactEditSequence')();
       }),
     );
@@ -505,7 +541,7 @@ const router = {
     route(
       '/search/no-matches',
       checkLoggedIn(() => {
-        document.title = `Search Results ${pageTitleSuffix}`;
+        setPageTitle('Search results');
         app.getSequence('gotoCaseSearchNoMatchesSequence')();
       }),
     );
@@ -514,7 +550,7 @@ const router = {
       '/search..',
       checkLoggedIn(() => {
         const query = route.query();
-        document.title = `Advanced Search ${pageTitleSuffix}`;
+        setPageTitle('Advanced search');
         app.getSequence('gotoAdvancedSearchSequence')(query);
       }),
     );
@@ -522,17 +558,17 @@ const router = {
     route('/mock-login...', () => {
       const { path, token } = queryStringDecoder();
       if (token) {
-        document.title = `Mock Login ${pageTitleSuffix}`;
+        setPageTitle('Mock login');
         app.getSequence('submitLoginSequence')({ path, token });
         return;
       }
 
       if (process.env.COGNITO) {
         // USTC_ENV is undefined in prod
-        document.title = `Dashboard ${pageTitleSuffix}`;
+        setPageTitle('Dashboard');
         app.getSequence('gotoDashboardSequence')();
       } else {
-        document.title = `Mock Login ${pageTitleSuffix}`;
+        setPageTitle('Mock login');
         app.getSequence('gotoLoginSequence')();
       }
     });
@@ -540,7 +576,7 @@ const router = {
     route(
       '..',
       () => {
-        document.title = `Error ${pageTitleSuffix}`;
+        setPageTitle('Error');
         app.getSequence('notFoundErrorSequence')({
           error: {},
         });

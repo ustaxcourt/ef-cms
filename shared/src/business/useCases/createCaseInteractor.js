@@ -116,6 +116,14 @@ exports.createCaseInteractor = async ({
     practitioners = [practitionerUser];
   }
 
+  let partySecondary = false;
+  if (
+    petitionMetadata.contactSecondary &&
+    petitionMetadata.contactSecondary.name
+  ) {
+    partySecondary = true;
+  }
+
   const caseToAdd = new Case(
     {
       userId: user.userId,
@@ -130,14 +138,14 @@ exports.createCaseInteractor = async ({
   );
 
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
-  const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
 
   const petitionDocumentEntity = new Document(
     {
       documentId: petitionFileId,
       documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
-      filedBy: caseCaptionNames,
+      partyPrimary: true,
+      partySecondary,
       practitioner: practitioners[0],
       userId: user.userId,
     },
@@ -165,7 +173,8 @@ exports.createCaseInteractor = async ({
       documentId: stinFileId,
       documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
       eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
-      filedBy: caseCaptionNames,
+      partyPrimary: true,
+      partySecondary,
       practitioner: practitioners[0],
       userId: user.userId,
     },
@@ -182,7 +191,8 @@ exports.createCaseInteractor = async ({
           Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode:
           Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
-        filedBy: caseCaptionNames,
+        partyPrimary: true,
+        partySecondary,
         practitioner: practitioners[0],
         userId: user.userId,
       },
