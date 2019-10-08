@@ -296,7 +296,7 @@ export const ScanBatchPreviewer = connect(
               <table className="batches-table">
                 <tbody>
                   {scanBatchPreviewerHelper.batches.map(batch => (
-                    <tr key={batch.index}>
+                    <tr className="no-blue-hover" key={batch.index}>
                       <td>
                         {selectedBatchIndex !== batch.index && (
                           <Button
