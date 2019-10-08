@@ -32,7 +32,7 @@ export const CaseInfo = connect(
     return (
       <div className="blue-container">
         {caseDetail.isPaper && (
-          <React.Fragment>
+          <>
             <div
               className={classNames(
                 'usa-form-group',
@@ -45,13 +45,6 @@ export const CaseInfo = connect(
                 </legend>
                 <div className="usa-memorable-date">
                   <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                    <label
-                      aria-hidden="true"
-                      className="usa-label sr-only"
-                      htmlFor="received-at-month"
-                    >
-                      MM
-                    </label>
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="month, two digits"
@@ -78,13 +71,6 @@ export const CaseInfo = connect(
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                    <label
-                      aria-hidden="true"
-                      className="usa-label sr-only"
-                      htmlFor="received-at-day"
-                    >
-                      DD
-                    </label>
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="day, two digits"
@@ -111,13 +97,6 @@ export const CaseInfo = connect(
                     />
                   </div>
                   <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                    <label
-                      aria-hidden="true"
-                      className="usa-label sr-only"
-                      htmlFor="received-at-year"
-                    >
-                      YYYY
-                    </label>
                     <input
                       aria-describedby="received-at-legend"
                       aria-label="year, four digits"
@@ -151,7 +130,7 @@ export const CaseInfo = connect(
                 )}
               </fieldset>
             </div>
-          </React.Fragment>
+          </>
         )}
 
         <div className="usa-form-group">
