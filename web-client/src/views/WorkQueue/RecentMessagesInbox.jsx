@@ -85,6 +85,7 @@ export const RecentMessagesInbox = connect(
             );
           })}
         </table>
+        {formattedWorkQueue.length === 0 && <p>There are no messages.</p>}
       </React.Fragment>
     );
   },
