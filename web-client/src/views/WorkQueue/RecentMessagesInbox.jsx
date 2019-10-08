@@ -25,6 +25,10 @@ export const RecentMessagesInbox = connect(
               <th className="small">Filed</th>
               <th>Case name</th>
               <th>Document</th>
+              {workQueueHelper.showCaseStatusColumn && (
+                <th className="no-wrap">Case Status</th>
+              )}
+              {workQueueHelper.showFromColumn && <th>From</th>}
             </tr>
           </thead>
           {formattedWorkQueue.slice(0, 5).map((item, idx) => {
@@ -72,11 +76,16 @@ export const RecentMessagesInbox = connect(
                       </div>
                     )}
                   </td>
+                  {workQueueHelper.showCaseStatusColumn && (
+                    <td>{item.caseStatus}</td>
+                  )}
+                  {workQueueHelper.showFromColumn && <td>{item.sentBy}</td>}
                 </tr>
               </tbody>
             );
           })}
         </table>
+        {formattedWorkQueue.length === 0 && <p>There are no messages.</p>}
       </React.Fragment>
     );
   },

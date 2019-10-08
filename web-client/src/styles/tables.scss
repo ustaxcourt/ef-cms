@@ -3,7 +3,7 @@ table,
   width: 100%;
   margin: 0 0 2em 0;
 
-  tr:hover,
+  tr:hover:not(.no-blue-hover),
   tbody.hoverable:hover {
     background: $color-primary-alt-lightest;
     box-shadow: 5px 0 0 0 color($theme-color-primary) inset;
@@ -30,13 +30,13 @@ table,
 .batches-table-wrapper {
   height: 160px;
   overflow-y: auto;
-  // border-bottom: 1px solid color($theme-color-base-lighter);
 
   .batches-table {
     tr {
       td {
-        padding-top: 10px;
-        padding-bottom: 10px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        vertical-align: inherit;
       }
     }
   }

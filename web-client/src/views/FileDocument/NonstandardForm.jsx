@@ -4,6 +4,7 @@ import { connect } from '@cerebral/react';
 import { get } from 'lodash';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const NonstandardForm = connect(
   {
@@ -33,11 +34,12 @@ export const NonstandardForm = connect(
       <div className="nonstandard-form">
         {helper[level].showTextInput && (
           <div
-            className={`usa-form-group ${
-              validationErrors && validationErrors.freeText
-                ? 'usa-form-group--error'
-                : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors &&
+                validationErrors.freeText &&
+                'usa-form-group--error',
+            )}
           >
             <label className="usa-label" htmlFor={`${namespace}free-text`}>
               {helper[level].textInputLabel}
@@ -68,11 +70,12 @@ export const NonstandardForm = connect(
 
         {helper[level].showTextInput2 && (
           <div
-            className={`usa-form-group ${
-              validationErrors && validationErrors.freeText2
-                ? 'usa-form-group--error'
-                : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors &&
+                validationErrors.freeText2 &&
+                'usa-form-group--error',
+            )}
           >
             <label className="usa-label" htmlFor={`${namespace}free-text2`}>
               {helper[level].textInputLabel2}
@@ -103,11 +106,12 @@ export const NonstandardForm = connect(
 
         {helper[level].previousDocumentSelectLabel && (
           <div
-            className={`usa-form-group ${
-              validationErrors && validationErrors.previousDocument
-                ? 'usa-form-group--error'
-                : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors &&
+                validationErrors.previousDocument &&
+                'usa-form-group--error',
+            )}
           >
             <label
               className="usa-label"
@@ -117,11 +121,12 @@ export const NonstandardForm = connect(
             </label>
             <select
               aria-label="previousDocument"
-              className={`usa-select ${
-                validationErrors && validationErrors.previousDocument
-                  ? 'usa-select--error'
-                  : ''
-              }`}
+              className={classNames(
+                'usa-select',
+                validationErrors &&
+                  validationErrors.previousDocument &&
+                  'usa-select--error',
+              )}
               id={`${namespace}previous-document`}
               name={`${namespace}previousDocument`}
               value={get(form, `${namespace}previousDocument`, '')}
@@ -153,12 +158,12 @@ export const NonstandardForm = connect(
 
         {helper[level].showDateFields && (
           <div
-            className={
-              'usa-form-group ' +
-              (validationErrors && validationErrors.serviceDate
-                ? 'usa-form-group--error'
-                : '')
-            }
+            className={classNames(
+              'usa-form-group',
+              validationErrors &&
+                validationErrors.serviceDate &&
+                'usa-form-group--error',
+            )}
           >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend id="date-of-service-legend">Service date</legend>
@@ -174,12 +179,12 @@ export const NonstandardForm = connect(
                   <input
                     aria-describedby="date-of-service-legend"
                     aria-label="month, two digits"
-                    className={
-                      'usa-input usa-input-inline ' +
-                      (validationErrors && validationErrors.serviceDate
-                        ? 'usa-input--error'
-                        : '')
-                    }
+                    className={classNames(
+                      'usa-input usa-input-inline',
+                      validationErrors &&
+                        validationErrors.serviceDate &&
+                        'usa-input--error',
+                    )}
                     id={`${namespace}month`}
                     max="12"
                     min="1"
@@ -208,12 +213,12 @@ export const NonstandardForm = connect(
                   <input
                     aria-describedby="date-of-service-legend"
                     aria-label="day, two digits"
-                    className={
-                      'usa-input usa-input-inline ' +
-                      (validationErrors && validationErrors.serviceDate
-                        ? 'usa-input--error'
-                        : '')
-                    }
+                    className={classNames(
+                      'usa-input usa-input-inline',
+                      validationErrors &&
+                        validationErrors.serviceDate &&
+                        'usa-input--error',
+                    )}
                     id={`${namespace}day`}
                     max="31"
                     min="1"
@@ -242,12 +247,12 @@ export const NonstandardForm = connect(
                   <input
                     aria-describedby="date-of-service-legend"
                     aria-label="year, four digits"
-                    className={
-                      'usa-input usa-input-inline ' +
-                      (validationErrors && validationErrors.serviceDate
-                        ? 'usa-input--error'
-                        : '')
-                    }
+                    className={classNames(
+                      'usa-input usa-input-inline',
+                      validationErrors &&
+                        validationErrors.serviceDate &&
+                        'usa-input--error',
+                    )}
                     id={`${namespace}year`}
                     max="2100"
                     min="1900"
@@ -276,11 +281,12 @@ export const NonstandardForm = connect(
 
         {helper[level].showTrialLocationSelect && (
           <div
-            className={`usa-form-group ${
-              validationErrors && validationErrors.trialLocation
-                ? 'usa-form-group--error'
-                : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors &&
+                validationErrors.trialLocation &&
+                'usa-form-group--error',
+            )}
           >
             <TrialCity
               label={helper[level].textInputLabel}
@@ -308,12 +314,12 @@ export const NonstandardForm = connect(
 
         {helper[level].ordinalField && (
           <div
-            className={
-              'usa-form-group ' +
-              (validationErrors && validationErrors.ordinalValue
-                ? 'usa-form-group--error'
-                : '')
-            }
+            className={classNames(
+              'usa-form-group',
+              validationErrors &&
+                validationErrors.ordinalValue &&
+                'usa-form-group--error',
+            )}
           >
             <fieldset
               className="usa-fieldset margin-bottom-0"

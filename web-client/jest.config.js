@@ -10,7 +10,7 @@ module.exports = {
     },
   },
   globals: {
-    window: true,
+    window: { document: {} },
   },
   testEnvironment: 'node',
   // this is to ignore imported html files

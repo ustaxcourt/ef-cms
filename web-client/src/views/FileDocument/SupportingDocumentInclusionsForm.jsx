@@ -4,6 +4,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const SupportingDocumentInclusionsForm = connect(
   {
@@ -29,9 +30,10 @@ export const SupportingDocumentInclusionsForm = connect(
     return (
       <>
         <div
-          className={`usa-form-group ${
-            !data.certificateOfService ? 'margin-bottom-0' : ''
-          }`}
+          className={classNames(
+            'usa-form-group',
+            !data.certificateOfService && 'margin-bottom-0',
+          )}
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend id={`${type}-extra-items-legend`}>
@@ -102,11 +104,12 @@ export const SupportingDocumentInclusionsForm = connect(
         </div>
         {data.certificateOfService && (
           <div
-            className={`usa-form-group margin-bottom-0 ${
-              validationData && validationData.certificateOfServiceDate
-                ? 'usa-form-group--error'
-                : ''
-            }`}
+            className={classNames(
+              'usa-form-group margin-bottom-0',
+              validationData &&
+                validationData.certificateOfServiceDate &&
+                'usa-form-group--error',
+            )}
           >
             <fieldset className="service-date usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id={`${type}-service-date-legend`}>

@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const TrialCity = connect(
   {
@@ -27,13 +28,13 @@ export const TrialCity = connect(
   }) => {
     return (
       <div
-        className={
-          'usa-form-group ' +
-          (validationErrors.preferredTrialCity ? 'usa-form-group--error' : '')
-        }
+        className={classNames(
+          'usa-form-group',
+          validationErrors.preferredTrialCity && 'usa-form-group--error',
+        )}
       >
         <label
-          className={`usa-label ${showHint ? 'with-hint' : ''}`}
+          className={classNames('usa-label', showHint && 'with-hint')}
           htmlFor="preferred-trial-city"
         >
           {label}
