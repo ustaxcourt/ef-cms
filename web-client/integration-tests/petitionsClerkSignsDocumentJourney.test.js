@@ -98,14 +98,18 @@ describe('Petitions Clerk Create Order Journey', () => {
         },
         revokeObjectURL: () => {},
       },
+      document: {},
       localStorage: {
         removeItem: () => null,
         setItem: () => null,
       },
-    };
-
-    global.window.pdfjsObj = {
-      getData: () => fakeFile,
+      pdfjsObj: {
+        getData: () => {
+          return new Promise(resolve => {
+            resolve(new Uint8Array(fakeFile));
+          });
+        },
+      },
     };
 
     test.setState('constants', {
