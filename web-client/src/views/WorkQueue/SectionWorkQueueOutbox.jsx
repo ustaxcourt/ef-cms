@@ -41,6 +41,7 @@ export const SectionWorkQueueOutbox = connect(
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
               )}
               {workQueueHelper.showProcessedByColumn && <th>Processed by</th>}
+              {workQueueHelper.showBatchedByColumn && <th>Batched by</th>}
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
               {workQueueHelper.showServedColumn && <th>Served</th>}
             </tr>
@@ -119,6 +120,9 @@ export const SectionWorkQueueOutbox = connect(
                   </td>
                 )}
                 {workQueueHelper.showProcessedByColumn && (
+                  <td className="message-queue-row">{item.completedBy}</td>
+                )}
+                {workQueueHelper.showBatchedByColumn && (
                   <td className="message-queue-row">{item.completedBy}</td>
                 )}
                 {!workQueueHelper.hideSectionColumn && (
