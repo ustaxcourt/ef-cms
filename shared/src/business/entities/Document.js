@@ -86,6 +86,10 @@ const practitionerAssociationDocumentTypes = [
  * @type {{petitionFile: string, requestForPlaceOfTrial: string, stin: string}}
  */
 Document.INITIAL_DOCUMENT_TYPES = {
+  applicationForWaiverOfFilingFee: {
+    documentType: 'Application for Waiver of Filing Fee',
+    eventCode: 'APW',
+  },
   ownershipDisclosure: {
     documentType: 'Ownership Disclosure Statement',
     eventCode: 'ODS',
