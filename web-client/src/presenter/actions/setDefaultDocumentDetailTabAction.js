@@ -13,4 +13,5 @@ export const setDefaultDocumentDetailTabAction = ({ get, store }) => {
     state.currentTab,
     showDocumentInfoTab ? 'Document Info' : 'Messages',
   );
+  store.unset(state.documentDetail.messagesTab);
 };

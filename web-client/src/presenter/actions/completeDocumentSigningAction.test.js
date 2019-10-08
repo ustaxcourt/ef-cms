@@ -12,6 +12,7 @@ describe('completeDocumentSigningAction', () => {
 
   beforeEach(() => {
     global.window = {
+      document: {},
       pdfjsObj: {
         getData: sinon.stub(),
       },

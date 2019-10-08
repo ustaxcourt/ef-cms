@@ -1,5 +1,6 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getAllCaseDeadlinesAction } from '../actions/CaseDeadline/getAllCaseDeadlinesAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
@@ -10,6 +11,7 @@ import { setDefaultDateOnCalendarAction } from '../actions/CaseDeadline/setDefau
 const gotoAllCaseDeadlines = [
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
+  closeMobileMenuAction,
   clearErrorAlertsAction,
   getAllCaseDeadlinesAction,
   setCaseDeadlinesAction,
