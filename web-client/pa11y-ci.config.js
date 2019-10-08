@@ -1,3 +1,5 @@
+const sanitize = require('sanitize-filename');
+
 const docketclerk = require('./pa11y/pa11y-docketclerk');
 const petitionsclerk = require('./pa11y/pa11y-petitionsclerk');
 const practitioner = require('./pa11y/pa11y-practitioner');
@@ -22,6 +24,25 @@ const initialUrls = [
   'http://localhost:1234/request-for-page-that-doesnt-exist',
   'http://localhost:1234/idle-logout',
 ];
+
+const urls = [...initialUrls, ...userUrls];
+
+const screenshotUrls = urls.map(item => {
+  const urlRegex = /^.*&path=/;
+  const screenCapturePath = './web-client/pa11y/pa11y-screenshots/new';
+  if (typeof item === 'object') {
+    const urlPath = item.url.replace(urlRegex, '');
+    item.screenCapture = `${screenCapturePath}/${sanitize(urlPath)}.png`;
+  } else if (typeof item === 'string') {
+    const url = item;
+    const urlPath = url.replace(urlRegex, '');
+    item = {
+      screenCapture: `${screenCapturePath}/${sanitize(urlPath)}.png`,
+      url,
+    };
+  }
+  return item;
+});
 
 if (process.env.CI) {
   initialUrls.push({
@@ -48,5 +69,5 @@ module.exports = {
     useIncognitoBrowserContext: true,
     wait: 5000,
   },
-  urls: [...initialUrls, ...userUrls],
+  urls: screenshotUrls,
 };
