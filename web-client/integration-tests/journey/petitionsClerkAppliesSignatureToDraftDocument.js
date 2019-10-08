@@ -2,7 +2,6 @@ export default test => {
   return it('Petitions clerk applies signature to a draft document', async () => {
     await test.runSequence('setPDFSignatureDataSequence', {
       isPdfAlreadySigned: false,
-      pdfjsObj: { getData: () => {} },
       signatureApplied: true,
       signatureData: { scale: 1, x: 20, y: 20 },
     });
