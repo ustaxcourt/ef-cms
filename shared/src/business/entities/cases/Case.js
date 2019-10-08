@@ -77,6 +77,15 @@ Case.ANSWER_DOCUMENT_CODES = [
 ];
 
 Case.VALIDATION_ERROR_MESSAGES = {
+  applicationForWaiverOfFilingFeeFile:
+    'Upload an Application for Waiver of Filing Fee',
+  applicationForWaiverOfFilingFeeFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Filing Fee Waiver file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Filing Fee Waiver file size is empty',
+  ],
   caseCaption: 'Enter a case caption',
   caseType: 'Select a case type',
   docketNumber: 'Docket number is required',
