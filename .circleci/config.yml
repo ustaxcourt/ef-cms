@@ -229,73 +229,73 @@ jobs:
       - run:
           name: 'Deploy - Web API - Serverless - API - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-api"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-api"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-api.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Cases - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-cases"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-cases"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-cases.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Case Documents - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-case-documents"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-case-documents"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-documents.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Case Deadlines - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-case-deadlines"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-case-deadlines"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-deadlines.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Case Notes - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-case-notes"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-case-notes"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-notes.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Users - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-users"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-users"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-users.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Documents - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-documents"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-documents"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-documents.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Work Items - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-work-items"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-work-items"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-work-items.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Sections - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-sections"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-sections"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-sections.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Trial Sessions - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-trial-sessions"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-trial-sessions"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-trial-sessions.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Notifications - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-notifications"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-notifications"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-notifications.sh ${ENV} us-east-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Streams - us-east-1 (east only)'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-streams"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-streams"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-streams.sh ${ENV} us-east-1"
             fi
 
@@ -337,67 +337,67 @@ jobs:
       - run:
           name: 'Deploy - Web API - Serverless - API - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-api"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-api"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-api.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Cases - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-cases"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-cases"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-cases.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Case Documents - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-case-documents"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-case-documents"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-documents.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Case Deadlines - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-case-deadlines"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-case-deadlines"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-deadlines.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Case Notes - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-case-notes"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-case-notes"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-notes.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Users - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-users"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-users"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-users.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Documents - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-documents"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-documents"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-documents.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Work Items - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-work-items"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-work-items"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-work-items.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Sections - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-sections"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-sections"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-sections.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Trial Sessions - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-trial-sessions"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-trial-sessions"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-trial-sessions.sh ${ENV} us-west-1"
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Notifications - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "web-api/src|serverless-notifications"); then
+            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-notifications"); then
               docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-notifications.sh ${ENV} us-west-1"
             fi
 
