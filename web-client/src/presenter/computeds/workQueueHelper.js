@@ -46,7 +46,9 @@ export const workQueueHelper = get => {
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
     isDisplayingQC,
     linkToDocumentMessages: !isDisplayingQC,
-    queueEmptyMessage: 'There are no messages.',
+    queueEmptyMessage: workQueueIsInternal
+      ? 'There are no messages.'
+      : 'There are no documents.',
     sentTitle: workQueueIsInternal
       ? 'Sent'
       : userIsDocketClerk
