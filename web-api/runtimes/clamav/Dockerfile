@@ -8,6 +8,7 @@ RUN echo "Prepping ClamAV"
 
 RUN rm -rf bin
 RUN rm -rf lib
+#
 
 RUN yum update -y
 RUN amazon-linux-extras install epel -y
