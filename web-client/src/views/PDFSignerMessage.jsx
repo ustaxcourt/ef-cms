@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PDFSignerMessage = connect(
   {
@@ -33,10 +34,10 @@ export const PDFSignerMessage = connect(
           </label>
 
           <div
-            className={
-              'usa-form-group ' +
-              (validationErrors.section ? 'usa-form-group--error' : '')
-            }
+            className={classNames(
+              'usa-form-group',
+              validationErrors.section && 'usa-form-group--error',
+            )}
           >
             <select
               className="usa-select"
@@ -69,10 +70,10 @@ export const PDFSignerMessage = connect(
         </div>
 
         <div
-          className={
-            'usa-form-group ' +
-            (validationErrors.assigneeId ? 'usa-form-group--error' : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            validationErrors.assigneeId && 'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor="assigneeId">
             Select recipient
@@ -106,10 +107,10 @@ export const PDFSignerMessage = connect(
         </div>
 
         <div
-          className={
-            'usa-form-group ' +
-            (validationErrors.message ? 'usa-form-group--error' : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            validationErrors.message && 'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor="message">
             Add message

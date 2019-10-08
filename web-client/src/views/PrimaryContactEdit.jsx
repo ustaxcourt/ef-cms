@@ -8,6 +8,7 @@ import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PrimaryContactEdit = connect(
   {
@@ -71,13 +72,12 @@ export const PrimaryContactEdit = connect(
 
             {primaryContactEditHelper.showInCareOf && (
               <div
-                className={
-                  'usa-form-group ' +
-                  (validationErrors.contactPrimary &&
-                  validationErrors.contactPrimary.inCareOf
-                    ? 'usa-form-group--error'
-                    : '')
-                }
+                className={classNames(
+                  'usa-form-group',
+                  validationErrors.contactPrimary &&
+                    validationErrors.contactPrimary.inCareOf &&
+                    'usa-form-group--error',
+                )}
               >
                 <label className="usa-label" htmlFor="inCareOf">
                   <span>
@@ -130,14 +130,13 @@ export const PrimaryContactEdit = connect(
               />
             )}
             <div
-              className={
-                'usa-form-group margin-bottom-0 ' +
-                (validationErrors &&
-                validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.phone
-                  ? 'usa-form-group--error'
-                  : '')
-              }
+              className={classNames(
+                'usa-form-group margin-bottom-0',
+                validationErrors &&
+                  validationErrors.contactPrimary &&
+                  validationErrors.contactPrimary.phone &&
+                  'usa-form-group--error',
+              )}
             >
               <label className="usa-label" htmlFor="phone">
                 Phone number

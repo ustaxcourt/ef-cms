@@ -2,6 +2,7 @@ import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 class CreateMessageModalDialogComponent extends ModalDialog {
   constructor(props) {
@@ -18,13 +19,12 @@ class CreateMessageModalDialogComponent extends ModalDialog {
     return (
       <div className="ustc-create-message-modal">
         <div
-          className={
-            'usa-form-group ' +
-            (this.props.validationErrors.section &&
-            !this.props.modal.showChambersSelect
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            this.props.validationErrors.section &&
+              !this.props.modal.showChambersSelect &&
+              'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor="section">
             Select section
@@ -60,12 +60,10 @@ class CreateMessageModalDialogComponent extends ModalDialog {
         </div>
         {this.props.modal.showChambersSelect && (
           <div
-            className={
-              'usa-form-group ' +
-              (this.props.validationErrors.section
-                ? 'usa-form-group--error'
-                : '')
-            }
+            className={classNames(
+              'usa-form-group',
+              this.props.validationErrors.section && 'usa-form-group--error',
+            )}
           >
             <label className="usa-label" htmlFor={'chambers'}>
               Select chambers
@@ -99,12 +97,10 @@ class CreateMessageModalDialogComponent extends ModalDialog {
           </div>
         )}
         <div
-          className={
-            'usa-form-group ' +
-            (this.props.validationErrors.assigneeId
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            this.props.validationErrors.assigneeId && 'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor="assigneeId">
             Select recipient
@@ -138,10 +134,10 @@ class CreateMessageModalDialogComponent extends ModalDialog {
         </div>
 
         <div
-          className={
-            'usa-form-group ' +
-            (this.props.validationErrors.message ? 'usa-form-group--error' : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            this.props.validationErrors.message && 'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor="message">
             Add message

@@ -5,6 +5,7 @@ import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const ContactSecondary = connect(
   {
@@ -42,13 +43,12 @@ export const ContactSecondary = connect(
         )}
         <div className="blue-container contact-group">
           <div
-            className={
-              'usa-form-group ' +
-              (validationErrors.contactSecondary &&
-              validationErrors.contactSecondary.name
-                ? 'usa-form-group--error'
-                : '')
-            }
+            className={classNames(
+              'usa-form-group',
+              validationErrors.contactSecondary &&
+                validationErrors.contactSecondary.name &&
+                'usa-form-group--error',
+            )}
           >
             <label className="usa-label" htmlFor="secondaryName">
               {contactsHelper.contactSecondary.nameLabel}
@@ -74,13 +74,12 @@ export const ContactSecondary = connect(
           </div>
           {contactsHelper.contactSecondary.displayInCareOf && (
             <div
-              className={
-                'usa-form-group ' +
-                (validationErrors.contactSecondary &&
-                validationErrors.contactSecondary.inCareOf
-                  ? 'usa-form-group--error'
-                  : '')
-              }
+              className={classNames(
+                'usa-form-group',
+                validationErrors.contactSecondary &&
+                  validationErrors.contactSecondary.inCareOf &&
+                  'usa-form-group--error',
+              )}
             >
               <label className="usa-label" htmlFor="secondaryInCareOf">
                 {contactsHelper.contactSecondary.inCareOfLabel ? (
@@ -144,13 +143,12 @@ export const ContactSecondary = connect(
           )}
           {contactsHelper.contactSecondary.displayPhone && (
             <div
-              className={
-                'usa-form-group ' +
-                (validationErrors.contactSecondary &&
-                validationErrors.contactSecondary.phone
-                  ? 'usa-form-group--error'
-                  : '')
-              }
+              className={classNames(
+                'usa-form-group',
+                validationErrors.contactSecondary &&
+                  validationErrors.contactSecondary.phone &&
+                  'usa-form-group--error',
+              )}
             >
               <label className="usa-label" htmlFor="secondaryPhone">
                 Phone number

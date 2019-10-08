@@ -5,6 +5,7 @@ import { MyContactInformation } from './MyContactInformation';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const CaseListPractitioner = connect(
   {
@@ -47,10 +48,10 @@ export const CaseListPractitioner = connect(
 
     const renderStartButton = () => (
       <Button
-        className={
-          'tablet-full-width margin-right-0 ' +
-          (dashboardExternalHelper.showCaseList ? 'new-case' : '')
-        }
+        className={classNames(
+          'tablet-full-width margin-right-0',
+          dashboardExternalHelper.showCaseList && 'new-case',
+        )}
         href="/file-a-petition/step-1"
         icon="file"
         id="init-file-petition"

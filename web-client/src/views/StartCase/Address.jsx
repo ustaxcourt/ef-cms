@@ -26,14 +26,13 @@ export const Address = connect(
     return (
       <React.Fragment>
         <div
-          className={
-            'usa-form-group ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].address1
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            validationErrors &&
+              validationErrors[type] &&
+              validationErrors[type].address1 &&
+              'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor={`${type}.address1`}>
             Mailing address line 1
@@ -212,14 +211,13 @@ export const Address = connect(
           </div>
         </Mobile>
         <div
-          className={
-            'usa-form-group ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].postalCode
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            validationErrors &&
+              validationErrors[type] &&
+              validationErrors[type].postalCode &&
+              'usa-form-group--error',
+          )}
         >
           <label
             aria-label="zip code"
