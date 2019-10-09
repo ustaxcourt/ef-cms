@@ -73,7 +73,7 @@ export const SectionWorkQueueInProgress = connect(
               <th>Filed</th>
               <th>Case name</th>
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+              {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               <th>Case Status</th>
               {workQueueHelper.showAssignedToColumn && (
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
@@ -181,6 +181,9 @@ export const SectionWorkQueueInProgress = connect(
             </tbody>
           ))}
         </table>
+        {formattedWorkQueue.length === 0 && (
+          <p>{workQueueHelper.queueEmptyMessage}</p>
+        )}
       </React.Fragment>
     );
   },

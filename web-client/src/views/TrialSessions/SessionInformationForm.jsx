@@ -1,7 +1,8 @@
-import { Text } from '../../ustc-ui/Text/Text';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const SessionInformationForm = connect(
   {
@@ -24,13 +25,14 @@ export const SessionInformationForm = connect(
         <h2 className="margin-top-0">Session Information</h2>
         <div className="blue-container">
           <div
-            className={`usa-form-group ${
-              validationErrors.startDate ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.startDate && 'usa-form-group--error',
+            )}
           >
             <fieldset className="start-date usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="start-date-legend">
-                Start Date
+                Start date
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month margin-bottom-0">
@@ -104,15 +106,13 @@ export const SessionInformationForm = connect(
                 </div>
               </div>
             </fieldset>
-            <Text
-              bind="validationErrors.startDate"
-              className="usa-error-message"
-            />
+            <ValidationText field="startDate" />
           </div>
           <div
-            className={`usa-form-group ${
-              validationErrors.startTime ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.startTime && 'usa-form-group--error',
+            )}
           >
             <fieldset className="start-time usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="start-time-legend">
@@ -194,10 +194,7 @@ export const SessionInformationForm = connect(
                 </div>
               </div>
             </fieldset>
-            <Text
-              bind="validationErrors.startTime"
-              className="usa-error-message"
-            />
+            <ValidationText field="startTime" />
           </div>
           {formattedTrialSessions.showSwingSessionOption && (
             <>
@@ -226,11 +223,10 @@ export const SessionInformationForm = connect(
               </div>
               {formattedTrialSessions.showSwingSessionList && (
                 <div
-                  className={`usa-form-group ${
-                    validationErrors.swingSessionId
-                      ? 'usa-form-group--error '
-                      : ''
-                  }`}
+                  className={classNames(
+                    'usa-form-group',
+                    validationErrors.swingSessionId && 'usa-form-group--error',
+                  )}
                 >
                   <label
                     className="usa-label"
@@ -241,9 +237,10 @@ export const SessionInformationForm = connect(
                   </label>
                   <select
                     aria-describedby="swing-session-id-label"
-                    className={`usa-select ${
-                      validationErrors.swingSessionId ? 'usa-select--error' : ''
-                    }`}
+                    className={classNames(
+                      'usa-select',
+                      validationErrors.swingSessionId && 'usa-select--error',
+                    )}
                     id="swing-session-id"
                     name="swingSessionId"
                     value={form.swingSessionId || ''}
@@ -264,22 +261,20 @@ export const SessionInformationForm = connect(
                       ),
                     )}
                   </select>
-                  <Text
-                    bind="validationErrors.swingSessionId"
-                    className="usa-error-message"
-                  />
+                  <ValidationText field="swingSessionId" />
                 </div>
               )}
             </>
           )}
           <div
-            className={`usa-form-group ${
-              validationErrors.sessionType ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.sessionType && 'usa-form-group--error',
+            )}
           >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="session-type-legend">
-                Session Type
+                Session type
               </legend>
               {['Regular', 'Small', 'Hybrid', 'Special', 'Motion/Hearing'].map(
                 option => (
@@ -310,18 +305,16 @@ export const SessionInformationForm = connect(
                 ),
               )}
             </fieldset>
-            <Text
-              bind="validationErrors.sessionType"
-              className="usa-error-message"
-            />
+            <ValidationText field="sessionType" />
           </div>
           <div
-            className={`usa-form-group margin-bottom-0 ${
-              validationErrors.maxCases ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group margin-bottom-0',
+              validationErrors.maxCases && 'usa-form-group--error',
+            )}
           >
             <label className="usa-label" htmlFor="max-cases">
-              Number of Cases Allowed
+              Number of cases allowed
             </label>
             <input
               autoCapitalize="none"
@@ -340,10 +333,7 @@ export const SessionInformationForm = connect(
                 });
               }}
             />
-            <Text
-              bind="validationErrors.maxCases"
-              className="usa-error-message"
-            />
+            <ValidationText field="maxCases" />
           </div>
         </div>
       </>

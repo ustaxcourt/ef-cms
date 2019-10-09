@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { CreateOrderChooseTypeModal } from './CreateOrder/CreateOrderChooseTypeModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -45,12 +46,17 @@ export const CaseDetailHeader = connect(
                 )}
               </div>
               <p className="margin-y-0" id="case-title">
-                <span>
-                  {formattedCaseDetail.caseTitle}{' '}
-                  {caseDetailHelper.showCaptionEditButton &&
-                    !hideActionButtons && (
-                      <button
-                        className="usa-button usa-button--unstyled margin-left-105"
+                {!caseDetailHelper.showCaptionEditButton && (
+                  <span>{formattedCaseDetail.caseTitle}</span>
+                )}
+                {caseDetailHelper.showCaptionEditButton && !hideActionButtons && (
+                  <span>
+                    {formattedCaseDetail.caseTitleWithoutRespondent}
+                    <span className="display-inline-block">
+                      <span>Respondent</span>
+                      <Button
+                        link
+                        className="margin-left-05 padding-0"
                         id="caption-edit-button"
                         onClick={() => {
                           openCaseCaptionModalSequence();
@@ -58,9 +64,10 @@ export const CaseDetailHeader = connect(
                       >
                         <FontAwesomeIcon icon="edit" size="sm" />
                         Edit
-                      </button>
-                    )}
-                </span>
+                      </Button>
+                    </span>
+                  </span>
+                )}
               </p>
               {showModal == 'UpdateCaseCaptionModalDialog' && (
                 <UpdateCaseCaptionModalDialog />
@@ -70,13 +77,13 @@ export const CaseDetailHeader = connect(
             {!hideActionButtons && (
               <div className="tablet:grid-col-4">
                 {caseDetailHelper.showRequestAccessToCaseButton && (
-                  <a
-                    className="usa-button tablet-full-width push-right margin-right-0"
+                  <Button
+                    className="tablet-full-width push-right margin-right-0"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
                     id="button-request-access"
                   >
                     Request Access to Case
-                  </a>
+                  </Button>
                 )}
 
                 {caseDetailHelper.showPendingAccessToCaseButton && (
@@ -89,26 +96,25 @@ export const CaseDetailHeader = connect(
                 )}
 
                 {caseDetailHelper.showFileFirstDocumentButton && (
-                  <a
-                    className="usa-button tablet-full-width push-right margin-right-0"
+                  <Button
+                    className="tablet-full-width push-right margin-right-0"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
                     id="button-first-irs-document"
                   >
                     <FontAwesomeIcon icon="file" size="1x" /> File First IRS
                     Document
-                  </a>
+                  </Button>
                 )}
 
                 {caseDetailHelper.showCreateOrderButton && (
-                  <button
-                    className="usa-button usa-button--inverse float-right"
-                    href={`/case-detail/${formattedCaseDetail.docketNumber}/create-order`}
+                  <Button
+                    className="margin-right-0 float-right"
                     id="button-create-order"
                     onClick={() => openCreateOrderChooseTypeModalSequence()}
                   >
                     <FontAwesomeIcon icon="clipboard-list" size="1x" /> Create
                     Order
-                  </button>
+                  </Button>
                 )}
                 {showModal == 'CreateOrderChooseTypeModal' && (
                   <CreateOrderChooseTypeModal />

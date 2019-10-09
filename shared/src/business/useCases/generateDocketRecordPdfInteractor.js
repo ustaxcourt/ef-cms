@@ -181,8 +181,8 @@ exports.generateDocketRecordPdfInteractor = async ({
             <th>No.</th>
             <th>Date</th>
             <th>Event</th>
-            <th>Filings and Proceedings</th>
-            <th>Filed By</th>
+            <th>Filings and proceedings</th>
+            <th>Filed by</th>
             <th>Action</th>
             <th>Served</th>
             <th>Parties</th>

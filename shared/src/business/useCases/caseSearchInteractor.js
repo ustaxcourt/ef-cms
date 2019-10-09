@@ -1,3 +1,6 @@
+const AWS = require('aws-sdk');
+const { get } = require('lodash');
+
 /**
  * caseSearchInteractor
  *
@@ -18,54 +21,153 @@ exports.caseSearchInteractor = async ({
   yearFiledMax,
   yearFiledMin,
 }) => {
-  const caseCatalog = await applicationContext
-    .getPersistenceGateway()
-    .getAllCatalogCases({
-      applicationContext,
-    });
-
-  let filteredCases = caseCatalog;
+  const exactMatchesQuery = [];
+  const nonExactMatchesQuery = [];
+  const commonQuery = [];
 
   if (petitionerName) {
-    petitionerName = petitionerName.toLowerCase();
-    filteredCases = filteredCases.filter(
-      myCase =>
-        (myCase.contactPrimary &&
-          myCase.contactPrimary.name &&
-          myCase.contactPrimary.name.toLowerCase().includes(petitionerName)) ||
-        (myCase.contactSecondary &&
-          myCase.contactSecondary.name &&
-          myCase.contactSecondary.name.toLowerCase().includes(petitionerName)),
-    );
+    const petitionerNameArray = petitionerName.toLowerCase().split(' ');
+    exactMatchesQuery.push({
+      bool: {
+        should: [
+          {
+            bool: {
+              minimum_should_match: petitionerNameArray.length,
+              should: petitionerNameArray.map(word => {
+                return {
+                  term: {
+                    'contactPrimary.M.name.S': word,
+                  },
+                };
+              }),
+            },
+          },
+          {
+            bool: {
+              minimum_should_match: petitionerNameArray.length,
+              should: petitionerNameArray.map(word => {
+                return {
+                  term: {
+                    'contactPrimary.M.secondaryName.S': word,
+                  },
+                };
+              }),
+            },
+          },
+          {
+            bool: {
+              minimum_should_match: petitionerNameArray.length,
+              should: petitionerNameArray.map(word => {
+                return {
+                  term: {
+                    'contactSecondary.M.name.S': word,
+                  },
+                };
+              }),
+            },
+          },
+        ],
+      },
+    });
+
+    nonExactMatchesQuery.push({
+      bool: {
+        should: [
+          { match: { 'contactPrimary.M.name.S': petitionerName } },
+          { match: { 'contactPrimary.M.secondaryName.S': petitionerName } },
+          { match: { 'contactSecondary.M.name.S': petitionerName } },
+        ],
+      },
+    });
   }
   if (countryType) {
-    filteredCases = filteredCases.filter(
-      myCase =>
-        (myCase.contactPrimary &&
-          myCase.contactPrimary.countryType === countryType) ||
-        (myCase.contactSecondary &&
-          myCase.contactSecondary.countryType === countryType),
-    );
+    commonQuery.push({
+      bool: {
+        should: [
+          {
+            match: {
+              'contactPrimary.M.countryType.S': countryType,
+            },
+          },
+          {
+            match: {
+              'contactSecondary.M.countryType.S': countryType,
+            },
+          },
+        ],
+      },
+    });
   }
   if (petitionerState) {
-    filteredCases = filteredCases.filter(
-      myCase =>
-        (myCase.contactPrimary &&
-          myCase.contactPrimary.state === petitionerState) ||
-        (myCase.contactSecondary &&
-          myCase.contactSecondary.state === petitionerState),
-    );
+    commonQuery.push({
+      bool: {
+        should: [
+          {
+            match: {
+              'contactPrimary.M.state.S': petitionerState,
+            },
+          },
+          {
+            match: {
+              'contactSecondary.M.state.S': petitionerState,
+            },
+          },
+        ],
+      },
+    });
   }
-  if (yearFiledMin) {
-    filteredCases = filteredCases.filter(
-      myCase => +myCase.yearFiled >= +yearFiledMin,
-    );
-  }
-  if (yearFiledMax) {
-    filteredCases = filteredCases.filter(
-      myCase => +myCase.yearFiled <= +yearFiledMax,
-    );
+  if (yearFiledMin || yearFiledMax) {
+    commonQuery.push({
+      range: {
+        'receivedAt.S': {
+          format: 'yyyy',
+          gte: `${yearFiledMin}||/y`,
+          lte: `${yearFiledMax}||/y`,
+        },
+      },
+    });
   }
 
-  return filteredCases;
+  const exactMatchesBody = await applicationContext.getSearchClient().search({
+    body: {
+      query: {
+        bool: {
+          must: [...exactMatchesQuery, ...commonQuery],
+        },
+      },
+    },
+    index: 'efcms',
+  });
+
+  const foundCases = [];
+  const exactMatchesHits = get(exactMatchesBody, 'hits.hits');
+
+  if (exactMatchesHits && exactMatchesHits.length > 0) {
+    for (let hit of exactMatchesBody.hits.hits) {
+      foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
+    }
+  } else {
+    const nonExactMatchesBody = await applicationContext
+      .getSearchClient()
+      .search({
+        body: {
+          query: {
+            bool: {
+              must: [...nonExactMatchesQuery, ...commonQuery],
+            },
+          },
+        },
+        index: 'efcms',
+      });
+
+    const nonExactMatchesHits = get(nonExactMatchesBody, 'hits.hits');
+
+    if (nonExactMatchesHits && nonExactMatchesHits.length > 0) {
+      for (let hit of nonExactMatchesBody.hits.hits) {
+        foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
+      }
+    }
+  }
+
+  return foundCases;
 };

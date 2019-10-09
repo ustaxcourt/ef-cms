@@ -10,6 +10,7 @@ const {
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -53,7 +54,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: false,
-        partyType: 'Petitioner',
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
       },
@@ -140,7 +141,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         {
           description: 'Petition',
           documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
-          filedBy: 'Test Petitioner',
+          filedBy: 'Petr. Test Petitioner',
         },
         {
           description: 'Request for Place of Trial at Aberdeen, South Dakota',
@@ -167,7 +168,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           caseId,
           documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
           documentType: 'Petition',
-          filedBy: 'Test Petitioner',
+          filedBy: 'Petr. Test Petitioner',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [
             {
@@ -180,7 +181,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               document: {
                 documentId: '92eac064-9ca5-4c56-80a0-c5852c752277',
                 documentType: 'Petition',
-                filedBy: 'Test Petitioner',
+                filedBy: 'Petr. Test Petitioner',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
                 workItems: [],
               },
@@ -203,7 +204,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           caseId,
           documentId: '72de0fac-f63c-464f-ac71-0f54fd248484',
           documentType: 'Statement of Taxpayer Identification',
-          filedBy: 'Test Petitioner',
+          filedBy: 'Petr. Test Petitioner',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
@@ -404,7 +405,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
-      partyType: 'Petitioner',
+      partyType: ContactFactory.PARTY_TYPES.petitioner,
       practitioners: [],
       preferredTrialCity: 'Aberdeen, South Dakota',
       procedureType: 'Small',

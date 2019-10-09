@@ -20,12 +20,6 @@ export const addSupportingDocumentToFormAction = ({ get, props, store }) => {
       certificateOfService: false,
     });
     store.set(state.form.supportingDocuments, supportingDocuments);
-
-    const currentSupportingDocumentCount =
-      get(state.form.supportingDocumentCount) || 0;
-    const newSupportingDocumentCount =
-      parseInt(currentSupportingDocumentCount) + 1;
-    store.set(state.form.supportingDocumentCount, newSupportingDocumentCount);
   } else if (type === 'secondary') {
     store.set(state.form.hasSecondarySupportingDocuments, true);
     const secondarySupportingDocuments =
@@ -37,15 +31,6 @@ export const addSupportingDocumentToFormAction = ({ get, props, store }) => {
     store.set(
       state.form.secondarySupportingDocuments,
       secondarySupportingDocuments,
-    );
-
-    const currentSupportingDocumentCount =
-      get(state.form.secondarySupportingDocumentCount) || 0;
-    const newSupportingDocumentCount =
-      parseInt(currentSupportingDocumentCount) + 1;
-    store.set(
-      state.form.secondarySupportingDocumentCount,
-      newSupportingDocumentCount,
     );
   }
 };

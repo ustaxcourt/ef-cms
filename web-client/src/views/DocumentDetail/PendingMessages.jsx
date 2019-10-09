@@ -1,9 +1,11 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Select } from '../../ustc-ui/Select/Select';
 import { TextArea } from '../../ustc-ui/TextArea/TextArea';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PendingMessages = connect(
   {
@@ -42,10 +44,9 @@ export const PendingMessages = connect(
   }) => {
     return (
       <div className="blue-container">
-        <button
-          className="usa-button usa-button margin-bottom-2"
+        <Button
+          className="margin-bottom-2"
           id="create-message-button"
-          type="button"
           onClick={() => openCreateMessageModalSequence()}
         >
           <FontAwesomeIcon
@@ -54,7 +55,7 @@ export const PendingMessages = connect(
             size="lg"
           />
           Create Message
-        </button>
+        </Button>
 
         {(!documentDetailHelper.formattedDocument ||
           !documentDetailHelper.formattedDocument.workItems ||
@@ -69,13 +70,11 @@ export const PendingMessages = connect(
             (workItem, idx) => (
               <div
                 aria-labelledby="tab-pending-messages"
-                className={`card margin-bottom-0 workitem-${
-                  workItem.workItemId
-                } ${
-                  workItem.currentMessage.messageId === messageId
-                    ? 'highlight'
-                    : ''
-                }`}
+                className={classNames(
+                  `card margin-bottom-0 workitem-${workItem.workItemId}`,
+                  workItem.currentMessage.messageId === messageId &&
+                    'highlight',
+                )}
                 key={idx}
               >
                 <div className="content-wrapper">
@@ -89,7 +88,7 @@ export const PendingMessages = connect(
                   </div>
                   <div className="margin-bottom-1">
                     <span className="label-inline">Sent On</span>
-                    {workItem.currentMessage.createdAtTimeFormatted}
+                    {workItem.currentMessage.createdAtTimeFormattedTZ}
                   </div>
                   <p>{workItem.currentMessage.message}</p>
                 </div>
@@ -101,20 +100,20 @@ export const PendingMessages = connect(
                   <div className="grid-container padding-x-0">
                     <div className="grid-row">
                       <div className="grid-col-4 padding-x-0">
-                        <button
+                        <Button
                           aria-controls={`history-card-${idx}`}
                           aria-selected={documentDetailHelper.showAction(
                             'history',
                             workItem.workItemId,
                           )}
-                          className={`usa-button ${
+                          className={classNames(
                             documentDetailHelper.showAction(
                               'history',
                               workItem.workItemId,
                             )
                               ? 'selected'
-                              : 'unselected'
-                          }`}
+                              : 'unselected',
+                          )}
                           id={`history-tab-${idx}`}
                           role="tab"
                           onClick={() =>
@@ -126,25 +125,25 @@ export const PendingMessages = connect(
                         >
                           <FontAwesomeIcon icon="list-ul" size="sm" />
                           View History
-                        </button>
+                        </Button>
                       </div>
 
                       <div className="grid-col-4 padding-x-0">
                         {workItem.showComplete && (
-                          <button
+                          <Button
                             aria-controls={`history-card-${idx}`}
                             aria-selected={documentDetailHelper.showAction(
                               'complete',
                               workItem.workItemId,
                             )}
-                            className={`usa-button ${
+                            className={classNames(
                               documentDetailHelper.showAction(
                                 'complete',
                                 workItem.workItemId,
                               )
                                 ? 'selected'
-                                : 'unselected'
-                            }`}
+                                : 'unselected',
+                            )}
                             id={`complete-tab-${idx}`}
                             role="tab"
                             onClick={() =>
@@ -159,26 +158,27 @@ export const PendingMessages = connect(
                               size="sm"
                             />
                             Complete
-                          </button>
+                          </Button>
                         )}
                       </div>
 
                       <div className="grid-col-4 padding-x-0">
                         {workItem.showSendTo && (
-                          <button
+                          <Button
                             aria-controls={`forward-card-${idx}`}
                             aria-selected={documentDetailHelper.showAction(
                               'forward',
                               workItem.workItemId,
                             )}
-                            className={`usa-button send-to ${
+                            className={classNames(
+                              'send-to',
                               documentDetailHelper.showAction(
                                 'forward',
                                 workItem.workItemId,
                               )
                                 ? 'selected'
-                                : 'unselected'
-                            }`}
+                                : 'unselected',
+                            )}
                             data-workitemid={workItem.workItemId}
                             id={`forward-tab-${idx}`}
                             role="tab"
@@ -191,7 +191,7 @@ export const PendingMessages = connect(
                           >
                             <FontAwesomeIcon icon="share-square" size="sm" />{' '}
                             Send To
-                          </button>
+                          </Button>
                         )}
                       </div>
                     </div>
@@ -226,10 +226,10 @@ export const PendingMessages = connect(
                         className="usa-label"
                         htmlFor={`complete-message-${idx}`}
                       >
-                        Add Message <span className="usa-hint">(optional)</span>
+                        Add message <span className="usa-hint">(optional)</span>
                       </label>
                       <textarea
-                        className="usa-textarea"
+                        className="usa-textarea margin-bottom-5"
                         id={`complete-message-${idx}`}
                         name="completeMessage"
                         onChange={e => {
@@ -240,11 +240,8 @@ export const PendingMessages = connect(
                           });
                         }}
                       />
-                      <div className="button-box-container">
-                        <button className="usa-button" type="submit">
-                          <span>Complete</span>
-                        </button>
-                      </div>
+
+                      <Button type="submit">Complete</Button>
                     </form>
                   </div>
                 )}
@@ -284,8 +281,8 @@ export const PendingMessages = connect(
                             {message.from}
                           </div>
                           <div className="margin-bottom-1">
-                            <span className="label-inline">Received</span>
-                            {message.createdAtTimeFormatted}
+                            <span className="label-inline">Sent on</span>
+                            {message.createdAtTimeFormattedTZ}
                           </div>
                           <p>{message.message}</p>
                           {workItem.historyMessages.length - 1 !== mIdx && (
@@ -325,7 +322,7 @@ export const PendingMessages = connect(
                         formatter={workQueueSectionHelper.sectionDisplay}
                         id={`section-${idx}`}
                         keys={v => v}
-                        label="Select Section"
+                        label="Select section"
                         name="section"
                         values={constants.SECTIONS}
                         onChange={e => {
@@ -351,7 +348,7 @@ export const PendingMessages = connect(
                           formatter={workQueueSectionHelper.chambersDisplay}
                           id={`chambers-${idx}`}
                           keys={v => v}
-                          label="Select Chambers"
+                          label="Select chambers"
                           name="chambers"
                           values={constants.CHAMBERS_SECTIONS}
                           onChange={e => {
@@ -387,7 +384,7 @@ export const PendingMessages = connect(
                         formatter={user => user.name}
                         id={`assignee-id-${idx}`}
                         keys={user => user.userId}
-                        label="Select Recipient"
+                        label="Select recipient"
                         name="assigneeId"
                         values={users}
                         onChange={e => {
@@ -404,12 +401,13 @@ export const PendingMessages = connect(
 
                       <TextArea
                         aria-labelledby={`message-label-${idx}`}
+                        className="margin-bottom-5"
                         error={
                           validationErrors[workItem.workItemId] &&
                           validationErrors[workItem.workItemId].forwardMessage
                         }
                         id={`forward-message-${idx}`}
-                        label="Add Message"
+                        label="Add message"
                         name="forwardMessage"
                         onChange={e => {
                           updateForwardFormValueSequence({
@@ -422,12 +420,7 @@ export const PendingMessages = connect(
                           });
                         }}
                       />
-
-                      <div className="button-box-container">
-                        <button className="usa-button" type="submit">
-                          Send
-                        </button>
-                      </div>
+                      <Button type="submit">Send</Button>
                     </form>
                   </div>
                 )}

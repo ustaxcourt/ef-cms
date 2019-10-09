@@ -1,9 +1,11 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile } from '../ustc-ui/Responsive/Responsive';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 class PDFPreviewModalComponent extends ModalDialog {
   constructor(props) {
@@ -47,8 +49,8 @@ class PDFPreviewModalComponent extends ModalDialog {
         </Mobile>
         <div>
           <div className="margin-bottom-3">
-            <button
-              className="usa-button usa-button--unstyled"
+            <Button
+              link
               title="pdf preview first page"
               onClick={() =>
                 this.props.setPageSequence({
@@ -57,19 +59,18 @@ class PDFPreviewModalComponent extends ModalDialog {
               }
             >
               <FontAwesomeIcon
-                className={
-                  'icon-button' +
-                  (this.props.pdfPreviewModalHelper.disableLeftButtons
-                    ? ' disabled'
-                    : '')
-                }
+                className={classNames(
+                  'icon-button',
+                  this.props.pdfPreviewModalHelper.disableLeftButtons &&
+                    'disabled',
+                )}
                 icon={['fas', 'step-backward']}
                 id="firstPage"
                 size="2x"
               />
-            </button>
-            <button
-              className="usa-button usa-button--unstyled"
+            </Button>
+            <Button
+              link
               title="pdf preview next page"
               onClick={() =>
                 this.props.setPageSequence({
@@ -78,22 +79,21 @@ class PDFPreviewModalComponent extends ModalDialog {
               }
             >
               <FontAwesomeIcon
-                className={
-                  'icon-button' +
-                  (this.props.pdfPreviewModalHelper.disableLeftButtons
-                    ? ' disabled'
-                    : '')
-                }
+                className={classNames(
+                  'icon-button',
+                  this.props.pdfPreviewModalHelper.disableLeftButtons &&
+                    'disabled',
+                )}
                 icon={['fas', 'caret-left']}
                 id="prev"
                 size="2x"
               />
-            </button>
+            </Button>
             <span className="pages">
               Page {this.props.currentPage} of {this.props.totalPages}
             </span>
-            <button
-              className="usa-button usa-button--unstyled"
+            <Button
+              link
               title="pdf preview previous page"
               onClick={() =>
                 this.props.setPageSequence({
@@ -102,19 +102,18 @@ class PDFPreviewModalComponent extends ModalDialog {
               }
             >
               <FontAwesomeIcon
-                className={
-                  'icon-button' +
-                  (this.props.pdfPreviewModalHelper.disableRightButtons
-                    ? ' disabled'
-                    : '')
-                }
+                className={classNames(
+                  'icon-button',
+                  this.props.pdfPreviewModalHelper.disableRightButtons &&
+                    'disabled',
+                )}
                 icon={['fas', 'caret-right']}
                 id="next"
                 size="2x"
               />
-            </button>
-            <button
-              className="usa-button usa-button--unstyled"
+            </Button>
+            <Button
+              link
               title="pdf preview last page"
               onClick={() =>
                 this.props.setPageSequence({
@@ -123,17 +122,16 @@ class PDFPreviewModalComponent extends ModalDialog {
               }
             >
               <FontAwesomeIcon
-                className={
-                  'icon-button' +
-                  (this.props.pdfPreviewModalHelper.disableRightButtons
-                    ? ' disabled'
-                    : '')
-                }
+                className={classNames(
+                  'icon-button',
+                  this.props.pdfPreviewModalHelper.disableRightButtons &&
+                    'disabled',
+                )}
                 icon={['fas', 'step-forward']}
                 id="lastPage"
                 size="2x"
               />
-            </button>
+            </Button>
           </div>
           <div className="pdf-preview-content">
             <canvas

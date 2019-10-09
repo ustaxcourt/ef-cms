@@ -12,6 +12,7 @@ describe('completeDocumentSigningAction', () => {
 
   beforeEach(() => {
     global.window = {
+      document: {},
       pdfjsObj: {
         getData: sinon.stub(),
       },
@@ -19,7 +20,9 @@ describe('completeDocumentSigningAction', () => {
 
     global.File = sinon.stub();
 
-    uploadDocumentStub = sinon.stub();
+    uploadDocumentStub = sinon
+      .stub()
+      .returns('abc81f4d-1e47-423a-8caf-6d2fdc3d3859');
     generateSignedDocumentInteractorStub = sinon.stub();
     signDocumentInteractorStub = sinon.stub();
     getInboxMessagesForUserInteractorStub = sinon.stub().returns([
@@ -51,7 +54,7 @@ describe('completeDocumentSigningAction', () => {
   });
 
   it('should sign a document via executing various use cases', async () => {
-    await runAction(completeDocumentSigningAction, {
+    const result = await runAction(completeDocumentSigningAction, {
       modules: {
         presenter,
       },
@@ -91,5 +94,14 @@ describe('completeDocumentSigningAction', () => {
     expect(generateSignedDocumentInteractorStub.calledOnce).toEqual(true);
     expect(signDocumentInteractorStub.calledOnce).toEqual(true);
     expect(completeWorkItemInteractorStub.calledOnce).toEqual(true);
+    expect(result.output).toMatchObject({
+      alertSuccess: {
+        message: 'Your signature has been added',
+        title: '',
+      },
+      caseId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      documentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      tab: 'docketRecord',
+    });
   });
 });

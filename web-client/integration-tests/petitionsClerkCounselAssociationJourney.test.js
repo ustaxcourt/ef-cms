@@ -52,6 +52,7 @@ test = CerebralTest(presenter);
 describe('Petitions Clerk Counsel Association Journey', () => {
   beforeEach(() => {
     global.window = {
+      document: {},
       localStorage: {
         removeItem: () => null,
         setItem: () => null,
@@ -81,7 +82,7 @@ describe('Petitions Clerk Counsel Association Journey', () => {
         postalCode: '77546',
         state: 'AZ',
       },
-      partyType: 'Petitioner & Spouse',
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
   });
   taxpayerViewsDashboard(test);

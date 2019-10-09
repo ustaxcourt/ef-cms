@@ -1,15 +1,17 @@
 const moment = require('moment-timezone');
 
-const dateFormats = {
+const FORMATS = {
   DATE_TIME: 'MM/DD/YY hh:mm a',
+  DATE_TIME_TZ: 'MM/DD/YY h:mm a [ET]',
   MMDDYY: 'MM/DD/YY',
   MMDDYYYY: 'MM/DD/YYYY',
   TIME: 'hh:mm a',
+  TIME_TZ: 'h:mm a [ET]',
 };
 
 const USTC_TZ = 'America/New_York';
 
-module.exports.isStringISOFormatted = dateString => {
+const isStringISOFormatted = dateString => {
   return moment.utc(dateString, 'YYYY-MM-DDTHH:mm:ss.SSSZ', true).isValid();
 };
 
@@ -23,14 +25,12 @@ const prepareDateFromString = (dateString, inputFormat) => {
   return moment.tz(dateString, inputFormat, USTC_TZ);
 };
 
-module.exports.prepareDateFromString = prepareDateFromString;
-
 /**
  * @param {string} dateString a date string to be sent to persistence
  * @param {string} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {string} a formatted ISO date string
  */
-module.exports.createISODateString = (dateString, inputFormat) => {
+const createISODateString = (dateString, inputFormat) => {
   let result;
   if (!dateString) {
     result = moment();
@@ -46,8 +46,22 @@ module.exports.createISODateString = (dateString, inputFormat) => {
  * @param {string} formatStr the desired formatting as specified by the moment library
  * @returns {string} a formatted date string
  */
-module.exports.formatDateString = (dateString, formatStr) => {
+const formatDateString = (dateString, formatStr) => {
   if (!dateString) return;
-  formatStr = dateFormats[formatStr] || formatStr;
-  return prepareDateFromString(dateString).format(formatStr);
+  let formatString = FORMATS[formatStr] || formatStr;
+  return prepareDateFromString(dateString).format(formatString);
+};
+
+const formatNow = formatStr => {
+  const now = module.exports.createISODateString();
+  return module.exports.formatDateString(now, formatStr);
+};
+
+module.exports = {
+  FORMATS,
+  createISODateString,
+  formatDateString,
+  formatNow,
+  isStringISOFormatted,
+  prepareDateFromString,
 };

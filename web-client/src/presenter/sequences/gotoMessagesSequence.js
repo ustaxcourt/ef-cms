@@ -1,5 +1,6 @@
 import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
+import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
 import { getUserRoleAction } from '../actions/getUserRoleAction';
@@ -15,6 +16,7 @@ import { state } from 'cerebral';
 
 const goToMessages = [
   setCurrentPageAction('Interstitial'),
+  closeMobileMenuAction,
   getUserAction,
   setUserAction,
   set(state.selectedWorkItems, []),

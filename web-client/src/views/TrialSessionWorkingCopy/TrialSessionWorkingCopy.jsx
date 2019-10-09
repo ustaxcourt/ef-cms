@@ -1,5 +1,6 @@
 import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
 import { AddEditSessionNoteModal } from './AddEditSessionNoteModal';
+import { Button } from '../../ustc-ui/Button/Button';
 import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
 import { DeleteSessionNoteConfirmModal } from './DeleteSessionNoteConfirmModal';
 import { ErrorNotification } from '../ErrorNotification';
@@ -9,35 +10,58 @@ import { SuccessNotification } from '../SuccessNotification';
 import { TrialSessionDetailHeader } from '../TrialSessionDetail/TrialSessionDetailHeader';
 import { WorkingCopySessionList } from './WorkingCopySessionList';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const TrialSessionWorkingCopy = connect(
   {
-    baseUrl: state.baseUrl,
+    batchDownloadTrialSessionSequence:
+      sequences.batchDownloadTrialSessionSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     showModal: state.showModal,
-    token: state.token,
+    trialSessionHeaderHelper: state.trialSessionHeaderHelper,
+    user: state.user,
   },
-  ({ baseUrl, formattedTrialSessionDetails, showModal, token }) => {
+  ({
+    batchDownloadTrialSessionSequence,
+    formattedTrialSessionDetails,
+    showModal,
+    trialSessionHeaderHelper,
+    user,
+  }) => {
     return (
       <>
         <TrialSessionDetailHeader />
         <section className="usa-section grid-container">
           <div className="grid-row">
             <div className="grid-col-9">
-              <h2 className="heading-1">Session Working Copy</h2>
+              <h2 className="heading-1">
+                {user.name} - Session Copy
+                {trialSessionHeaderHelper.showSwitchToSessionDetail && (
+                  <a
+                    className="button-switch-box margin-left-2"
+                    href={`/trial-session-detail/${formattedTrialSessionDetails.trialSessionId}`}
+                  >
+                    View All Session Info
+                  </a>
+                )}
+              </h2>
             </div>
+
             <div className="grid-col-3 text-right padding-top-2">
-              <a
-                aria-label="Download batch of Trial Session"
-                href={`${baseUrl}/trial-sessions/${formattedTrialSessionDetails.trialSessionId}/batch-download/${formattedTrialSessionDetails.zipName}?token=${token}`}
-                rel="noopener noreferrer"
-                target="_blank"
+              <Button
+                link
+                aria-label="Download batch of documents in a trial session"
+                onClick={() =>
+                  batchDownloadTrialSessionSequence({
+                    trialSessionId: formattedTrialSessionDetails.trialSessionId,
+                    zipName: formattedTrialSessionDetails.zipName,
+                  })
+                }
               >
-                <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />{' '}
+                <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />
                 Download All Cases
-              </a>
+              </Button>
             </div>
           </div>
 

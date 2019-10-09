@@ -87,6 +87,16 @@ describe('filePetitionFromPaperInteractor', () => {
     );
   });
 
+  it('calls upload on an Application for Waiver of Filing Fee file', async () => {
+    await filePetitionFromPaperInteractor({
+      applicationContext: createApplicationContext(),
+      applicationForWaiverOfFilingFeeFile: 'this APW file',
+    });
+    expect(uploadDocumentStub.getCall(0).args[0].document).toEqual(
+      'this APW file',
+    );
+  });
+
   it('calls upload on an ODS file', async () => {
     await filePetitionFromPaperInteractor({
       applicationContext: createApplicationContext(),
@@ -141,6 +151,22 @@ describe('filePetitionFromPaperInteractor', () => {
     });
     expect(createCaseStub.getCall(0).args[0]).toMatchObject({
       ownershipDisclosureFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+  });
+
+  it('uploads an Application for Waiver of Filing Fee file', async () => {
+    await filePetitionFromPaperInteractor({
+      applicationContext: createApplicationContext(),
+      applicationForWaiverOfFilingFeeFile: 'something',
+      petitionFile: 'something1',
+      petitionMetadata: 'something2',
+      stinFile: 'something3',
+    });
+    expect(createCaseStub.getCall(0).args[0]).toMatchObject({
+      applicationForWaiverOfFilingFeeFileId:
+        'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       stinFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });

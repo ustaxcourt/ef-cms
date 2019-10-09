@@ -10,6 +10,7 @@ const {
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -53,7 +54,7 @@ describe('assignWorkItemsInteractor integration test', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: false,
-        partyType: 'Petitioner',
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
       },
@@ -102,7 +103,7 @@ describe('assignWorkItemsInteractor integration test', () => {
         docketNumberSuffix: 'S',
         document: {
           documentType: 'Petition',
-          filedBy: 'Rick Petitioner',
+          filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
         isInitializeCase: true,
@@ -141,7 +142,7 @@ describe('assignWorkItemsInteractor integration test', () => {
           assigneeName: 'Test Petitionsclerk',
           document: {
             documentType: 'Petition',
-            filedBy: 'Rick Petitioner',
+            filedBy: 'Petr. Rick Petitioner',
           },
           messages: [
             {

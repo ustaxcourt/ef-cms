@@ -4,6 +4,7 @@ const {
   createCaseFromPaperInteractor,
 } = require('./createCaseFromPaperInteractor');
 const { CaseInternal } = require('../entities/cases/CaseInternal');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
@@ -100,7 +101,7 @@ describe('createCaseFromPaperInteractor', () => {
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: DATE,
-          partyType: 'Petitioner',
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
           petitionFileSize: 1,
           procedureType: 'Small',
@@ -178,7 +179,7 @@ describe('createCaseFromPaperInteractor', () => {
           filingType: 'Myself',
           hasIrsNotice: true,
           irsNoticeDate: DATE,
-          partyType: 'Petitioner',
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
           petitionFileSize: 1,
           preferredTrialCity: 'Chattanooga, TN',

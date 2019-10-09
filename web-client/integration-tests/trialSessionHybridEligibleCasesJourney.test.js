@@ -58,6 +58,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
+      document: {},
       localStorage: {
         removeItem: () => null,
         setItem: () => null,

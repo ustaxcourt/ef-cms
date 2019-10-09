@@ -37,9 +37,6 @@ export const validateCaseAssociationRequestAction = ({
       'attachments',
       'objections',
       'hasSupportingDocuments',
-      'supportingDocument',
-      'supportingDocumentFreeText',
-      'supportingDocumentFile',
       'representingPrimary',
       'representingSecondary',
     ];

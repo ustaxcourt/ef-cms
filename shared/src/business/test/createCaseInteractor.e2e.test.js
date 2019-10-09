@@ -7,6 +7,8 @@ const {
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
+
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -50,7 +52,7 @@ describe('createCase integration test', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: false,
-        partyType: 'Petitioner',
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
       },
@@ -72,7 +74,7 @@ describe('createCase integration test', () => {
       docketRecord: [
         {
           description: 'Petition',
-          filedBy: 'Rick Petitioner',
+          filedBy: 'Petr. Rick Petitioner',
           status: undefined,
         },
         {
@@ -84,7 +86,7 @@ describe('createCase integration test', () => {
         {
           documentType: 'Petition',
           eventCode: 'P',
-          filedBy: 'Rick Petitioner',
+          filedBy: 'Petr. Rick Petitioner',
           workItems: [
             {
               assigneeId: null,
@@ -94,7 +96,7 @@ describe('createCase integration test', () => {
               docketNumberSuffix: 'S',
               document: {
                 documentType: 'Petition',
-                filedBy: 'Rick Petitioner',
+                filedBy: 'Petr. Rick Petitioner',
                 workItems: [],
               },
               isInitializeCase: true,
@@ -114,7 +116,7 @@ describe('createCase integration test', () => {
         {
           documentType: 'Statement of Taxpayer Identification',
           eventCode: 'STIN',
-          filedBy: 'Rick Petitioner',
+          filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
@@ -155,7 +157,7 @@ describe('createCase integration test', () => {
         document: {
           documentType: 'Petition',
           eventCode: 'P',
-          filedBy: 'Rick Petitioner',
+          filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },

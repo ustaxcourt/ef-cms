@@ -1,8 +1,10 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const InclusionsForm = connect(
   {
@@ -30,37 +32,31 @@ export const InclusionsForm = connect(
     return (
       <>
         <div
-          className={`usa-form-group ${
+          className={classNames(
+            'usa-form-group',
             !fileDocumentHelper[type].showObjection &&
-            !data.certificateOfService
-              ? 'margin-bottom-0'
-              : ''
-          }`}
+              !data.certificateOfService &&
+              'margin-bottom-0',
+          )}
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend id={`${type}-extra-items-legend`}>
-              Select extra items included with document
-              <button
-                className="usa-button usa-button--unstyled margin-top-2 margin-bottom-105 ustc-button--unstyled-with-left-icon"
+              Select extra items to include with your document
+              <Button
+                link
                 onClick={() =>
                   openCleanModalSequence({
                     value: 'WhatCanIIncludeModalOverlay',
                   })
                 }
               >
-                <div className="grid-row">
-                  <div className="grid-col-1">
-                    <FontAwesomeIcon
-                      className="margin-right-05"
-                      icon="question-circle"
-                      size="1x"
-                    />
-                  </div>
-                  <div className="grid-col-11">
-                    What can I include with my document?
-                  </div>
-                </div>
-              </button>
+                <FontAwesomeIcon
+                  className="margin-right-05"
+                  icon="question-circle"
+                  size="1x"
+                />
+                What can I include with my document?
+              </Button>
             </legend>
             <div className="usa-checkbox">
               <input
@@ -120,17 +116,17 @@ export const InclusionsForm = connect(
         </div>
         {data.certificateOfService && (
           <div
-            className={`usa-form-group ${
-              validationData && validationData.certificateOfServiceDate
-                ? 'usa-form-group--error'
-                : ''
-            } ${
-              !fileDocumentHelper[type].showObjection ? 'margin-bottom-0' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationData &&
+                validationData.certificateOfServiceDate &&
+                'usa-form-group--error',
+              !fileDocumentHelper[type].showObjection && 'margin-bottom-0',
+            )}
           >
             <fieldset className="service-date usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id={`${type}-service-date-legend`}>
-                Service Date
+                Service date
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month">

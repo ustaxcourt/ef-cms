@@ -44,7 +44,7 @@ legend {
     display: block;
   }
   &.with-hint {
-    margin-bottom: 5px;
+    margin-bottom: 2px;
   }
 
   /* little screens */
@@ -471,5 +471,11 @@ label.ustc-upload {
 .docket-entry-form {
   .service-date {
     margin-left: 30px;
+  }
+}
+
+.complete-document-type-section {
+  :last-child {
+    margin-bottom: 0;
   }
 }

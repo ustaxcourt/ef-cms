@@ -43,6 +43,9 @@ export const EligibleCases = connect(
             </tbody>
           ))}
         </table>
+        {formattedEligibleCases.length === 0 && (
+          <p>There are no eligible cases.</p>
+        )}
       </React.Fragment>
     );
   },

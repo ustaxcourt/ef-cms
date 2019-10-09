@@ -95,6 +95,7 @@
         "events:*",
         "sns:*",
         "elasticloadbalancing:*",
+        "es:*",
         "ec2:*",
         "ses:*",
         "s3:*",
@@ -103,6 +104,16 @@
         "lambda:*"
       ],
       "Resource": "*"
+    },
+    {
+      "Sid": "DynamoDescribeLimits",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:DescribeLimits"
+      ],
+      "Resource": [
+        "*"
+      ]
     },
     {
       "Sid": "DynamoGranular",
@@ -118,8 +129,15 @@
         "dynamodb:Query",
         "dynamodb:BatchGetItem",
         "dynamodb:UpdateTable",
+        "dynamodb:UpdateTimeToLive",
+        "dynamodb:CreateGlobalTable",
         "dynamodb:DescribeContinuousBackups",
         "dynamodb:DescribeGlobalTable"
+        "dynamodb:DescribeLimits"
+        "dynamodb:DescribeStream"
+        "dynamodb:GetRecords"
+        "dynamodb:GetShardIterator"
+        "dynamodb:ListStreams"
       ],
       "Resource": [
         "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-*",
