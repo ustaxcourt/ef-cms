@@ -311,10 +311,10 @@ export const PrimaryDocumentForm = connect(
             >
               Additional info 1 <span className="usa-hint">(optional)</span>
             </label>
-            <input
+            <textarea
               aria-describedby="additional-info-label"
               autoCapitalize="none"
-              className="usa-input"
+              className="usa-textarea height-8"
               id="additional-info"
               name="additionalInfo"
               type="text"
@@ -363,10 +363,10 @@ export const PrimaryDocumentForm = connect(
             >
               Additional info 2 <span className="usa-hint">(optional)</span>
             </label>
-            <input
+            <textarea
               aria-describedby="additional-info2-label"
               autoCapitalize="none"
-              className="usa-input"
+              className="usa-textarea height-8"
               id="additional-info2"
               name="additionalInfo2"
               type="text"
