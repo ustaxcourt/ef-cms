@@ -182,6 +182,13 @@ export const PrimaryDocumentForm = connect(
             >
               Document type
             </label>
+
+            <span className="usa-hint">
+              Enter your document name to see available document types,
+              <br />
+              or use the dropdown to select your document type.
+            </span>
+
             <Select
               aria-describedby="document-type-label"
               className="select-react-element"

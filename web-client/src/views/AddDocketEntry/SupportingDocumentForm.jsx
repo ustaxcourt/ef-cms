@@ -73,6 +73,7 @@ export const SupportingDocumentForm = connect(
             >
               Document type
             </label>
+
             <select
               aria-describedby="event-code-label"
               className="usa-select"
