@@ -29,7 +29,7 @@ describe('DocketEntryFactory', () => {
       );
     });
 
-    it('should not require a Filing status selection', () => {
+    it('should not require a filing status selection', () => {
       expect(errors().lodged).toEqual(undefined);
     });
 
