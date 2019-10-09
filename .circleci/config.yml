@@ -196,7 +196,7 @@ jobs:
 
   deploy-api-east:
     docker:
-      - image: sutt0n/ef-cms:experimental
+      - image: sutt0n/ef-cms:latest
     steps:
       - checkout
       - run: npm i
@@ -323,7 +323,7 @@ jobs:
 
   deploy-api-west:
     docker:
-      - image: sutt0n/ef-cms:experimental
+      - image: sutt0n/ef-cms:latest
     steps:
       - checkout
       - run: npm i
