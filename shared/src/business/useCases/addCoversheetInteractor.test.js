@@ -5,8 +5,10 @@ const { addCoversheetInteractor } = require('./addCoversheetInteractor.js');
 const {
   createISODateString,
   formatDateString,
+  formatNow,
   prepareDateFromString,
 } = require('../utilities/DateHandler');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { PDFDocument } = require('pdf-lib');
 
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
@@ -38,7 +40,7 @@ describe('addCoversheetInteractor', () => {
         userId: 'petitionsclerk',
       },
     ],
-    partyType: 'Petitioner',
+    partyType: ContactFactory.PARTY_TYPES.petitioner,
   };
 
   const optionalTestingCaseData = {
@@ -64,7 +66,7 @@ describe('addCoversheetInteractor', () => {
       },
     ],
     irsSendDate: '2019-04-19T14:45:15.595Z',
-    partyType: 'Petitioner & Spouse',
+    partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
   };
 
   const updateDocumentProcessingStatusStub = sinon.stub().resolves(null);
@@ -105,6 +107,7 @@ describe('addCoversheetInteractor', () => {
           return {
             createISODateString,
             formatDateString,
+            formatNow,
             prepareDateFromString,
           };
         },
@@ -152,6 +155,7 @@ describe('addCoversheetInteractor', () => {
           return {
             createISODateString,
             formatDateString,
+            formatNow,
             prepareDateFromString,
           };
         },

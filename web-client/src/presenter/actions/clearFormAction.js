@@ -9,4 +9,5 @@ import { state } from 'cerebral';
  */
 export const clearFormAction = ({ store }) => {
   store.set(state.form, {});
+  store.set(state.fieldOrder, []);
 };

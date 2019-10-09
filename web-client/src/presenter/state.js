@@ -51,6 +51,7 @@ import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 export const state = {
   addDocketEntryHelper,
+  advancedSearchForm: {},
   advancedSearchHelper,
   alertHelper,
   archiveDraftDocument: {
@@ -98,6 +99,7 @@ export const state = {
   documentUploadMode: 'scan',
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
+  fieldOrder: [],
   fileDocumentHelper,
   fileUploadStatusHelper,
   filingTypes: [],

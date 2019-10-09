@@ -19,6 +19,7 @@ const {
 } = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { User } = require('../entities/User');
 
 const DATE = '2019-03-01T22:54:06.000Z';
@@ -56,7 +57,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: false,
-        partyType: 'Petitioner',
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
       },
@@ -101,7 +102,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
         docketNumberSuffix: 'S',
         document: {
           documentType: 'Petition',
-          filedBy: 'Rick Petitioner',
+          filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
@@ -157,7 +158,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
         docketNumberSuffix: 'S',
         document: {
           documentType: 'Petition',
-          filedBy: 'Rick Petitioner',
+          filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
         },
         isInitializeCase: true,
@@ -202,7 +203,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
         docketNumberSuffix: 'S',
         document: {
           documentType: 'Petition',
-          filedBy: 'Rick Petitioner',
+          filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },

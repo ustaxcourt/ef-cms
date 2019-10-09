@@ -1,30 +1,32 @@
 import { batchDownloadTrialSessionInteractor } from './batchDownloadTrialSessionInteractor';
 
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { Case } = require('../../entities/cases/Case');
 
 describe('batchDownloadTrialSessionInteractor', () => {
-  let applicationContext;
+  let applicationContext, getCalendaredCasesForTrialSessionMock;
   const getTrialSessionByIdMock = jest.fn(() => {
     return {
-      startDate: new Date(),
+      startDate: new Date('2019-09-26T12:00:00.000Z'),
       trialLocation: 'Birmingham',
     };
   });
-  const getCalendaredCasesForTrialSessionMock = jest.fn(() => [
-    {
-      ...MOCK_CASE,
-    },
-  ]);
 
   const zipDocumentsMock = jest.fn();
-  const getDownloadPolicyUrlMock = jest.fn();
+  const getDownloadPolicyUrlMock = jest.fn(() => ({ url: 'something' }));
 
   beforeEach(() => {
+    getCalendaredCasesForTrialSessionMock = jest.fn(() => [
+      {
+        ...MOCK_CASE,
+      },
+    ]);
     applicationContext = {
       getCurrentUser: () => ({
         role: 'judge',
         userId: 'abc-123',
       }),
+      getNotificationGateway: () => ({ sendNotificationToUser: () => {} }),
       getPersistenceGateway: () => ({
         getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionMock,
         getDownloadPolicyUrl: getDownloadPolicyUrlMock,
@@ -64,5 +66,31 @@ describe('batchDownloadTrialSessionInteractor', () => {
     expect(getTrialSessionByIdMock).toHaveBeenCalled();
     expect(getCalendaredCasesForTrialSessionMock).toHaveBeenCalled();
     expect(zipDocumentsMock).toHaveBeenCalled();
+  });
+
+  it('should filter closed cases from batch', async () => {
+    getCalendaredCasesForTrialSessionMock = jest.fn(() => [
+      {
+        ...MOCK_CASE,
+        status: Case.STATUS_TYPES.closed,
+      },
+    ]);
+
+    await batchDownloadTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '123',
+    });
+
+    expect(getTrialSessionByIdMock).toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSessionMock).toHaveBeenCalled();
+    expect(zipDocumentsMock).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      extraFileNames: [],
+      extraFiles: [],
+      fileNames: [],
+      s3Ids: [],
+      uploadToTempBucket: true,
+      zipName: 'September_26_2019-Birmingham.zip',
+    });
   });
 });

@@ -12,6 +12,7 @@ import { limitLength } from '../../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
+import classNames from 'classnames';
 
 export const PrimaryDocumentForm = connect(
   {
@@ -39,12 +40,13 @@ export const PrimaryDocumentForm = connect(
       <React.Fragment>
         <div className="blue-container docket-entry-form">
           <div
-            className={`usa-form-group ${
-              validationErrors.lodged ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.lodged && 'usa-form-group--error',
+            )}
           >
             <fieldset className="usa-fieldset">
-              <legend className="usa-legend">Filing Status</legend>
+              <legend className="usa-legend">Filing status</legend>
               {['File', 'Lodge'].map(option => (
                 <div className="usa-radio usa-radio__inline" key={option}>
                   <input
@@ -78,13 +80,14 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div
-            className={`usa-form-group ${
-              validationErrors.dateReceived ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.dateReceived && 'usa-form-group--error',
+            )}
           >
             <fieldset className="usa-fieldset date-received">
               <legend id="usa-legend date-received-legend">
-                Date Received
+                Date received
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month">
@@ -167,17 +170,25 @@ export const PrimaryDocumentForm = connect(
           </div>
 
           <div
-            className={`usa-form-group ${
-              validationErrors.eventCode ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.eventCode && 'usa-form-group--error',
+            )}
           >
             <label
               className="usa-label"
               htmlFor="react-select-2-input"
               id="document-type-label"
             >
-              Document Type
+              Document type
             </label>
+
+            <span className="usa-hint">
+              Enter your document name to see available document types,
+              <br />
+              or use the dropdown to select your document type.
+            </span>
+
             <Select
               aria-describedby="document-type-label"
               className="select-react-element"
@@ -218,11 +229,12 @@ export const PrimaryDocumentForm = connect(
 
           {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
             <div
-              className={`usa-form-group ${
-                validationErrors.secondaryDocument && !form.secondaryDocument
-                  ? 'usa-form-group--error'
-                  : ''
-              }`}
+              className={classNames(
+                'usa-form-group',
+                validationErrors.secondaryDocument &&
+                  !form.secondaryDocument &&
+                  'usa-form-group--error',
+              )}
             >
               <label
                 className="usa-label"
@@ -297,7 +309,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="additional-info"
               id="additional-info-label"
             >
-              Additional Info 1 <span className="usa-hint">(optional)</span>
+              Additional info 1 <span className="usa-hint">(optional)</span>
             </label>
             <input
               aria-describedby="additional-info-label"
@@ -338,7 +350,7 @@ export const PrimaryDocumentForm = connect(
                 className="usa-checkbox__label"
                 htmlFor="add-to-coversheet"
               >
-                Add to Cover Sheet
+                Add to cover sheet
               </label>
             </div>
           </div>
@@ -349,7 +361,7 @@ export const PrimaryDocumentForm = connect(
               htmlFor="additional-info2"
               id="additional-info2-label"
             >
-              Additional Info 2 <span className="usa-hint">(optional)</span>
+              Additional info 2 <span className="usa-hint">(optional)</span>
             </label>
             <input
               aria-describedby="additional-info2-label"
@@ -374,19 +386,21 @@ export const PrimaryDocumentForm = connect(
           <Inclusions />
 
           <div
-            className={`usa-form-group ${
-              addDocketEntryHelper.partyValidationError
-                ? 'usa-form-group--error'
-                : ''
-            } ${!addDocketEntryHelper.showObjection ? 'margin-bottom-0' : ''}`}
+            className={classNames(
+              'usa-form-group',
+              addDocketEntryHelper.partyValidationError &&
+                'usa-form-group--error',
+              !addDocketEntryHelper.showObjection && 'margin-bottom-0',
+            )}
           >
             <fieldset
-              className={`usa-fieldset ${
-                !addDocketEntryHelper.showObjection ? 'margin-bottom-0' : ''
-              }`}
+              className={classNames(
+                'usa-fieldset',
+                !addDocketEntryHelper.showObjection && 'margin-bottom-0',
+              )}
             >
               <legend className="usa-legend">
-                Who Is Filing This Document?
+                Who is filing this document?
               </legend>
               <div className="usa-checkbox">
                 <input
@@ -461,13 +475,14 @@ export const PrimaryDocumentForm = connect(
           </div>
           {addDocketEntryHelper.showObjection && (
             <div
-              className={`usa-form-group margin-bottom-0 ${
-                validationErrors.objections ? 'usa-form-group--error' : ''
-              }`}
+              className={classNames(
+                'usa-form-group margin-bottom-0',
+                validationErrors.objections && 'usa-form-group--error',
+              )}
             >
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="objections-legend">
-                  Are There Any Objections to This Document?
+                  Are there any objections to this document?
                 </legend>
                 {['Yes', 'No', 'Unknown'].map(option => (
                   <div className="usa-radio" key={option}>

@@ -4,6 +4,7 @@ const { stripInternalKeys } = require('../helpers/stripInternalKeys');
 exports.getCalendaredCasesForTrialSession = async ({
   applicationContext,
   trialSessionId,
+  userId,
 }) => {
   const trialSession = await client.get({
     Key: {
@@ -23,9 +24,24 @@ exports.getCalendaredCasesForTrialSession = async ({
     })),
   });
 
-  const afterMapping = ids.map(m => ({
-    ...results.find(r => m === r.pk),
+  const afterMapping = ids.map(caseId => ({
+    ...results.find(r => caseId === r.pk),
   }));
 
-  return stripInternalKeys(afterMapping);
+  const notes = await client
+    .batchGet({
+      applicationContext,
+      keys: ids.map(caseId => ({
+        pk: `case-note|${caseId}`,
+        sk: userId,
+      })),
+    })
+    .then(stripInternalKeys);
+
+  const calendaredCasesWithNotes = afterMapping.map(calendaredCase => ({
+    ...calendaredCase,
+    notes: notes.find(note => note.caseId === calendaredCase.caseId),
+  }));
+
+  return stripInternalKeys(calendaredCasesWithNotes);
 };

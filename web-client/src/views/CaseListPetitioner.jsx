@@ -1,5 +1,5 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -17,13 +17,14 @@ export const CaseListPetitioner = connect(
               <h2 className="margin-0">My Cases</h2>
             </div>
             <div className="tablet:grid-col-6 mobile:grid-col-12 text-right">
-              <a
-                className="usa-button new-case tablet-full-width"
+              <Button
+                className="new-case tablet-full-width margin-right-0"
                 href="/before-filing-a-petition"
+                icon="file"
                 id="init-file-petition"
               >
-                <FontAwesomeIcon icon="file" size="1x" /> File a Petition
-              </a>
+                File a Petition
+              </Button>
             </div>
           </div>
         </div>

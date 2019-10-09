@@ -1,7 +1,7 @@
 import { Address } from './Address';
 import { Country } from './Country';
 import { InternationalAddress } from './InternationalAddress';
-import { Text } from '../../ustc-ui/Text/Text';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -35,21 +35,20 @@ export const ContactPrimary = connect(
     return (
       <>
         {parentView === 'StartCase' ? (
-          <h2 className="margin-top-4">
+          <h3 className="margin-top-4 padding-left-205">
             {contactsHelper.contactPrimary.header}
-          </h2>
+          </h3>
         ) : (
           <h4>{contactsHelper.contactPrimary.header}</h4>
         )}
         <div className="blue-container contact-group">
           <div
-            className={
-              'usa-form-group ' +
-              (validationErrors.contactPrimary &&
-              validationErrors.contactPrimary.name
-                ? 'usa-form-group--error'
-                : '')
-            }
+            className={classNames(
+              'usa-form-group',
+              validationErrors.contactPrimary &&
+                validationErrors.contactPrimary.name &&
+                'usa-form-group--error',
+            )}
           >
             <label className="usa-label" htmlFor="name">
               {contactsHelper.contactPrimary.nameLabel}
@@ -71,10 +70,7 @@ export const ContactPrimary = connect(
                 });
               }}
             />
-            <Text
-              bind="validationErrors.contactPrimary.name"
-              className="usa-error-message"
-            />
+            <ValidationText field="contactPrimary.name" />
           </div>
 
           {contactsHelper.contactPrimary.displaySecondaryName && (
@@ -104,10 +100,7 @@ export const ContactPrimary = connect(
                   });
                 }}
               />
-              <Text
-                bind="validationErrors.contactPrimary.secondaryName"
-                className="usa-error-message"
-              />
+              <ValidationText field="contactPrimary.secondaryName" />
             </div>
           )}
 
@@ -121,7 +114,7 @@ export const ContactPrimary = connect(
                   </span>
                 )}
               </label>
-              <span className="usa-hint">For example, Executor, PR, etc.</span>
+              <span className="usa-hint">For example, executor, PR, etc.</span>
               <input
                 autoCapitalize="none"
                 className="usa-input"
@@ -141,13 +134,12 @@ export const ContactPrimary = connect(
 
           {contactsHelper.contactPrimary.displayInCareOf && (
             <div
-              className={
-                'usa-form-group ' +
-                (validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.inCareOf
-                  ? 'usa-form-group--error'
-                  : '')
-              }
+              className={classNames(
+                'usa-form-group',
+                validationErrors.contactPrimary &&
+                  validationErrors.contactPrimary.inCareOf &&
+                  'usa-form-group--error',
+              )}
             >
               <label className="usa-label" htmlFor="inCareOf">
                 {contactsHelper.contactPrimary.inCareOfLabel ? (
@@ -161,7 +153,7 @@ export const ContactPrimary = connect(
                   </span>
                 ) : (
                   <span>
-                    In Care Of <span className="usa-hint">(optional)</span>
+                    In care of <span className="usa-hint">(optional)</span>
                   </span>
                 )}
               </label>
@@ -182,10 +174,7 @@ export const ContactPrimary = connect(
                   });
                 }}
               />
-              <Text
-                bind="validationErrors.contactPrimary.inCareOf"
-                className="usa-error-message"
-              />
+              <ValidationText field="contactPrimary.inCareOf" />
             </div>
           )}
 
@@ -215,16 +204,15 @@ export const ContactPrimary = connect(
             />
           )}
           <div
-            className={
-              'usa-form-group phone-input ' +
-              (validationErrors.contactPrimary &&
-              validationErrors.contactPrimary.phone
-                ? 'usa-form-group--error'
-                : '')
-            }
+            className={classNames(
+              'usa-form-group phone-input',
+              validationErrors.contactPrimary &&
+                validationErrors.contactPrimary.phone &&
+                'usa-form-group--error',
+            )}
           >
             <label className="usa-label" htmlFor="phone">
-              Phone Number
+              Phone number
               {contactsHelper.contactPrimary.phoneNumberLabelHint && (
                 <>
                   {' '}
@@ -236,7 +224,7 @@ export const ContactPrimary = connect(
             </label>
             <input
               autoCapitalize="none"
-              className="usa-input"
+              className="usa-input max-width-200"
               id="phone"
               name="contactPrimary.phone"
               type="tel"
@@ -251,10 +239,7 @@ export const ContactPrimary = connect(
                 });
               }}
             />
-            <Text
-              bind="validationErrors.contactPrimary.phone"
-              className="usa-error-message"
-            />
+            <ValidationText field="contactPrimary.phone" />
           </div>
         </div>
       </>

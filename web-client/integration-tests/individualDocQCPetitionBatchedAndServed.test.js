@@ -89,6 +89,7 @@ describe('INDIVIDUAL DOC QC: Petition Gets Batched and Served', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
+      document: {},
       localStorage: {
         removeItem: () => null,
         setItem: () => null,

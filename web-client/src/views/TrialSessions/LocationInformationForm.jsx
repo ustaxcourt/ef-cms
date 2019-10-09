@@ -1,8 +1,9 @@
-import { Text } from '../../ustc-ui/Text/Text';
 import { TrialCityOptions } from '../TrialCityOptions';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const LocationInformationForm = connect(
   {
@@ -23,12 +24,13 @@ export const LocationInformationForm = connect(
         <h2 className="margin-top-4">Location Information</h2>
         <div className="blue-container">
           <div
-            className={`usa-form-group ${
-              validationErrors.trialLocation ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.trialLocation && 'usa-form-group--error',
+            )}
           >
             <label className="usa-label" htmlFor="trial-location">
-              Trial Location
+              Trial location
             </label>
             <select
               className="usa-select"
@@ -46,15 +48,12 @@ export const LocationInformationForm = connect(
               <option value="">-- Select --</option>
               <TrialCityOptions />
             </select>
-            <Text
-              bind="validationErrors.trialLocation"
-              className="usa-error-message"
-            />
+            <ValidationText field="trialLocation" />
           </div>
 
           <div className="usa-form-group">
             <label className="usa-label" htmlFor="courthouse-name">
-              Courthouse Name <span className="usa-hint">(optional)</span>
+              Courthouse name <span className="usa-hint">(optional)</span>
             </label>
             <input
               autoCapitalize="none"
@@ -222,9 +221,10 @@ export const LocationInformationForm = connect(
           </div>
 
           <div
-            className={`usa-form-group margin-bottom-0 ${
-              validationErrors.postalCode ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group margin-bottom-0',
+              validationErrors.postalCode && 'usa-form-group--error',
+            )}
           >
             <label
               aria-label="zip code"
@@ -235,7 +235,7 @@ export const LocationInformationForm = connect(
             </label>
             <input
               autoCapitalize="none"
-              className="usa-input usa-input--medium"
+              className="usa-input max-width-200 usa-input--medium"
               id="postal-code"
               name="postalCode"
               type="text"
@@ -250,10 +250,7 @@ export const LocationInformationForm = connect(
                 });
               }}
             />
-            <Text
-              bind="validationErrors.postalCode"
-              className="usa-error-message"
-            />
+            <ValidationText field="postalCode" />
           </div>
         </div>
       </>

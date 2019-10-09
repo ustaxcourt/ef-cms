@@ -30,6 +30,7 @@ const {
   sendPetitionToIRSHoldingQueueInteractor,
 } = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { User } = require('../entities/User');
 
 const DATE = '2019-03-01T22:54:06.000Z';
@@ -67,7 +68,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: false,
-        partyType: 'Petitioner',
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
         preferredTrialCity: 'Charleston, West Virginia',
         procedureType: 'Regular',
       },
@@ -98,7 +99,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         document: {
           documentId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
           documentType: 'Petition',
-          filedBy: 'Adele Carver',
+          filedBy: 'Petr. Adele Carver',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
@@ -281,7 +282,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         docketNumberSuffix: 'L',
         document: {
           documentType: 'Petition',
-          filedBy: 'Adele Carver',
+          filedBy: 'Petr. Adele Carver',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },
@@ -329,7 +330,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
         docketNumberSuffix: 'L',
         document: {
           documentType: 'Petition',
-          filedBy: 'Adele Carver',
+          filedBy: 'Petr. Adele Carver',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
           workItems: [],
         },

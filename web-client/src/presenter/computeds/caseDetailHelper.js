@@ -17,10 +17,21 @@ export const caseDetailHelper = (get, applicationContext) => {
   const isExternalUser = ['practitioner', 'petitioner', 'respondent'].includes(
     userRole,
   );
+  const isRequestAccessForm = currentPage === 'RequestAccessWizard';
   const isJudge = 'judge' == userRole;
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
   const modalState = get(state.modal);
+  const {
+    noticeOfAttachments,
+    orderDesignatingPlaceOfTrial,
+    orderForAmendedPetition,
+    orderForAmendedPetitionAndFilingFee,
+    orderForFilingFee,
+    orderForOds,
+    orderForRatification,
+    orderToShowCause,
+  } = caseDetail;
 
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
   let showAddDocketEntryButton =
@@ -52,12 +63,14 @@ export const caseDetailHelper = (get, applicationContext) => {
     } else {
       showFileDocumentButton = false;
       if (userRole === 'practitioner') {
-        showRequestAccessToCaseButton = !pendingAssociation;
+        showRequestAccessToCaseButton =
+          !pendingAssociation && !isRequestAccessForm;
         showPendingAccessToCaseButton = pendingAssociation;
       }
       if (userRole === 'respondent') {
         showFileFirstDocumentButton = !caseHasRespondent;
-        showRequestAccessToCaseButton = caseHasRespondent;
+        showRequestAccessToCaseButton =
+          caseHasRespondent && !isRequestAccessForm;
       }
     }
   } else {
@@ -74,20 +87,33 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   let showEditPrimaryContactButton = false;
 
-  if (userRole === 'respondent') {
+  if (userRole === 'petitioner') {
+    showEditPrimaryContactButton = true;
+  } else if (userRole === 'respondent') {
     showEditPrimaryContactButton = false;
   } else if (userRole === 'practitioner') {
     showEditPrimaryContactButton = userAssociatedWithCase;
   }
 
   const showServeToIrsButton = ['New', 'Recalled'].includes(caseDetail.status);
-
   const showRecallButton = caseDetail.status === 'Batched for IRS';
+
+  const hasOrders = [
+    noticeOfAttachments,
+    orderForAmendedPetition,
+    orderForAmendedPetitionAndFilingFee,
+    orderForFilingFee,
+    orderForOds,
+    orderForRatification,
+    orderToShowCause,
+    orderDesignatingPlaceOfTrial,
+  ].some(hasOrder => !!hasOrder);
 
   return {
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
     documentDetailTab,
+    hasOrders,
     hidePublicCaseInformation: !isExternalUser,
     practitionerSearchResultsCount:
       modalState &&

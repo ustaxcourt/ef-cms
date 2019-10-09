@@ -1,12 +1,11 @@
-import { compareCasesByDocketNumber } from './formattedTrialSessionDetails';
 import { state } from 'cerebral';
 
-export const sortByDateAndDocketNumber = (a, b) => {
+export const sortByDateAndDocketNumber = applicationContext => (a, b) => {
   const firstDate = a.deadlineDate;
   const secondDate = b.deadlineDate;
 
   if (firstDate === secondDate) {
-    return compareCasesByDocketNumber(a, b);
+    return applicationContext.getUtilities().compareCasesByDocketNumber(a, b);
   } else {
     return firstDate.localeCompare(secondDate, 'en');
   }
@@ -53,7 +52,7 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
   };
 
   caseDeadlines = caseDeadlines
-    .sort(sortByDateAndDocketNumber)
+    .sort(sortByDateAndDocketNumber(applicationContext))
     .map(d => ({
       ...d,
       formattedDeadline: applicationContext

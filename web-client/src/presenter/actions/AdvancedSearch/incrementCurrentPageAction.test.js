@@ -3,12 +3,12 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('incrementCurrentPageAction', () => {
-  it('increments state.form.currentPage by 1', async () => {
+  it('increments state.advancedSearchForm.currentPage by 1', async () => {
     const result = await runAction(incrementCurrentPageAction, {
       modules: { presenter },
-      state: { form: { currentPage: 2 } },
+      state: { advancedSearchForm: { currentPage: 2 } },
     });
 
-    expect(result.state.form.currentPage).toEqual(3);
+    expect(result.state.advancedSearchForm.currentPage).toEqual(3);
   });
 });

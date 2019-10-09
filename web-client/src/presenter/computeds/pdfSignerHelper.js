@@ -5,6 +5,7 @@ export const pdfSignerHelper = get => {
   const signatureData = get(state.pdfForSigning.signatureData);
   const isPdfAlreadySigned = get(state.pdfForSigning.isPdfAlreadySigned);
   const signatureApplied = get(state.pdfForSigning.signatureApplied);
+  const isPlaced = signatureData || isPdfAlreadySigned;
 
   const cursorClass =
     !signatureData && signatureApplied ? 'cursor-grabbing ' : 'cursor-grab ';
@@ -12,13 +13,13 @@ export const pdfSignerHelper = get => {
 
   return {
     disableSaveAndSendButton:
-      (!signatureData && !isPdfAlreadySigned) ||
-      (!form.section && !form.assigneeId && !form.message),
+      !isPlaced || (!form.section && !form.assigneeId && !form.message),
     disableSaveButton:
       (!signatureData && !isPdfAlreadySigned) ||
       form.section ||
       form.assigneeId ||
       form.message,
+    isPlaced,
     signatureClass: `${cursorClass} ${hideClass}`,
   };
 };

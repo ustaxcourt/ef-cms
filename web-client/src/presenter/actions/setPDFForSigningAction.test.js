@@ -92,7 +92,7 @@ describe('setPDFForSigningAction', () => {
           documents: [
             {
               documentId,
-              documentType: 'Other Document Type',
+              documentType: 'Other Document type',
             },
           ],
         },

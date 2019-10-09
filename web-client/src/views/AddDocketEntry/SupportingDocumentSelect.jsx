@@ -3,6 +3,7 @@ import { connect } from '@cerebral/react';
 import { get } from 'lodash';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const SupportingDocumentSelect = connect(
   {
@@ -23,11 +24,12 @@ export const SupportingDocumentSelect = connect(
     return (
       <React.Fragment>
         <div
-          className={`usa-form-group ${
-            validationErrors && validationErrors.previousDocument
-              ? 'usa-form-group--error'
-              : ''
-          }`}
+          className={classNames(
+            'usa-form-group',
+            validationErrors &&
+              validationErrors.previousDocument &&
+              'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor={'previous-document'}>
             Which Document is This Supporting?

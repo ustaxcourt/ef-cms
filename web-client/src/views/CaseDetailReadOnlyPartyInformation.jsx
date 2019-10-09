@@ -43,7 +43,7 @@ export const CaseDetailReadOnlyPartyInformation = connect(
       <div className="blue-container read-only-party-information">
         <h3>Party Information</h3>
         <div>
-          <span className="label">Party Type</span>
+          <span className="label">Party type</span>
           <p>{formattedCaseDetail.partyType || 'My Party Type'}</p>
         </div>
 

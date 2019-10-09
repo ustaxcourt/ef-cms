@@ -27,7 +27,7 @@ export const UpcomingTrialSessions = connect(
                   id="sessionFilter"
                   name="sessionType"
                 >
-                  <option value="">-Session Type-</option>
+                  <option value="">-Session type-</option>
                   {trialSessionTypes.map(sessionType => (
                     <option key={sessionType} value={sessionType}>
                       {sessionType}
@@ -125,9 +125,7 @@ export const UpcomingTrialSessions = connect(
           ))}
         </table>
         {formattedTrialSessions.length === 0 && (
-          <p className="text-align-center margin-3 maxw-full">
-            There are no trial sessions available.
-          </p>
+          <p>There are no trial sessions.</p>
         )}
       </React.Fragment>
     );

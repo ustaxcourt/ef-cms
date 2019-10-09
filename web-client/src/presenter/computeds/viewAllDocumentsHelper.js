@@ -38,7 +38,7 @@ export const viewAllDocumentsHelper = get => {
           category: 'Petition',
         },
       ],
-      reason: 'Request Something From the Court',
+      reason: 'Request something from the court',
     },
     {
       categories: [
@@ -61,7 +61,7 @@ export const viewAllDocumentsHelper = get => {
           category: 'Stipulation',
         },
       ],
-      reason: 'Notify the Court of a Change',
+      reason: 'Notify the court of a change',
     },
     {
       categories: [
@@ -72,7 +72,7 @@ export const viewAllDocumentsHelper = get => {
           category: 'Supporting Document',
         },
       ],
-      reason: 'Update or Add to a Document',
+      reason: 'Update or add to a document',
     },
     {
       categories: [
@@ -86,7 +86,7 @@ export const viewAllDocumentsHelper = get => {
           category: 'Response, Opposition or Objection',
         },
       ],
-      reason: 'Respond to a Previous Document',
+      reason: 'Respond to a previous document',
     },
   ];
 

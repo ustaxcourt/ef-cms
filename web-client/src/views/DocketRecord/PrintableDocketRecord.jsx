@@ -1,11 +1,10 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetailHeader';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
-import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 
 export const PrintableDocketRecord = connect(
   {
@@ -15,10 +14,11 @@ export const PrintableDocketRecord = connect(
   ({ formattedCaseDetail, navigateToCaseDetailSequence }) => {
     return (
       <>
-        <CaseDetailHeader hideActionButtons />
+        <CaseDetailHeader />
         <div className="grid-container print-docket-record">
-          <button
-            className="usa-button usa-button--unstyled margin-bottom-3"
+          <Button
+            link
+            className="margin-bottom-3"
             onClick={() => {
               navigateToCaseDetailSequence({
                 caseId: formattedCaseDetail.docketNumber,
@@ -27,7 +27,7 @@ export const PrintableDocketRecord = connect(
           >
             <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
             Back to Case
-          </button>
+          </Button>
           <PdfPreview />
         </div>
       </>

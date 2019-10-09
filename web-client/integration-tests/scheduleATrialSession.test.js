@@ -64,6 +64,7 @@ describe('Schedule A Trial Session', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
+      document: {},
       localStorage: {
         removeItem: () => null,
         setItem: () => null,

@@ -4,7 +4,7 @@ module.exports = [
   {
     actions: [
       'wait for #party-type to be visible',
-      'set field #party-type to Surviving Spouse',
+      'set field #party-type to Surviving spouse',
       'check field #party-type',
       'wait for #secondary-name to be visible',
     ],
@@ -105,6 +105,19 @@ module.exports = [
   },
   {
     actions: [
+      'wait for #tab-draft-documents to be visible',
+      'click element #tab-draft-documents',
+      'wait for button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"] to be visible',
+      'click element button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"]',
+    ],
+    notes: 'checks the confirm modal when editing a signed draft document',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19&info=edit-signed-order-confirm-modal',
+  },
+
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-order/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/sign',
+  {
+    actions: [
       'wait for #button-add-deadline to be visible',
       'click element #button-add-deadline',
       'wait for #deadline-date-legend to be visible',
@@ -112,6 +125,15 @@ module.exports = [
     notes: 'checks a11y of add deadline modal',
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=add-deadline',
+  },
+  {
+    actions: [
+      'wait for ul.usa-list to be visible',
+      'wait for #button-create-order to be visible',
+    ],
+    notes: 'checks a11y of orders needed summary',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/orders-needed&info=orders-needed-summary',
   },
 
   //this url probably needs to be moved to calendaring when those users are created
