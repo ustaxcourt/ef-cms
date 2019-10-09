@@ -157,6 +157,7 @@ const {
   generateChangeOfAddressTemplate,
   generateHTMLTemplateForPDF,
   generatePrintableDocketRecordTemplate,
+  generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF');
 const {
@@ -168,6 +169,9 @@ const {
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
+const {
+  generatePrintableFilingReceiptInteractor,
+} = require('../../shared/src/business/useCases/generatePrintableFilingReceiptInteractor');
 const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
@@ -784,6 +788,7 @@ module.exports = (appContextUser = {}) => {
         generateChangeOfAddressTemplate,
         generateHTMLTemplateForPDF,
         generatePrintableDocketRecordTemplate,
+        generatePrintableFilingReceiptTemplate,
         generateTrialCalendarTemplate,
       };
     },
@@ -818,6 +823,7 @@ module.exports = (appContextUser = {}) => {
         generateDocketRecordPdfInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
+        generatePrintableFilingReceiptInteractor,
         generateTrialCalendarPdfInteractor,
         getAllCaseDeadlinesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
