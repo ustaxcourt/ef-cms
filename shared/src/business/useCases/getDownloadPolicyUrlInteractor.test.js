@@ -5,7 +5,7 @@ const {
 describe('getDownloadPolicyUrlInteractor', () => {
   beforeEach(() => {});
 
-  it('throw unauthorized error on invaliid role', async () => {
+  it('throw unauthorized error on invalid role', async () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
