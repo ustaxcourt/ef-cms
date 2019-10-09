@@ -11,7 +11,6 @@ const AWS = require('aws-sdk');
 // ^ must come first --------------------
 
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
-const irsGateway = require('../../shared/src/external/irsGateway');
 const util = require('util');
 const uuidv4 = require('uuid/v4');
 const {
@@ -895,7 +894,6 @@ module.exports = (appContextUser = {}) => {
         setServiceIndicatorsForCase,
       };
     },
-    irsGateway,
     isAuthorized,
     isAuthorizedForWorkItems: () => isAuthorized(user, WORKITEM),
     logger: {
