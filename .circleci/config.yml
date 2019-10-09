@@ -379,7 +379,7 @@ jobs:
           name: 'Deploy - Web API - Serverless - API - us-west-1'
           command: |
             REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | npm run check-dep api)"
-            REDEPLOY_VIA_SLS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-api" || test $? = 1)"
+            REDEPLOY_VIA_SLS="$((git --no-pager diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-api") || test $? = 1)"
             if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
               ./web-api/run-serverless-api.sh ${ENV} us-west-1
             fi
@@ -387,7 +387,7 @@ jobs:
           name: 'Deploy - Web API - Serverless - Cases - us-west-1'
           command: |
             REDEPLOY_VIA_DEPS="$(git diff --name-only origin/${COMPARE_BRANCH} | npm run check-dep cases)"
-            REDEPLOY_VIA_SLS="$(git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-cases" || test $? = 1)
+            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-cases") || test $? = 1)"
             if [[ ! -z "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
               ./web-api/run-serverless-cases.sh ${ENV} us-west-1
             fi
@@ -395,7 +395,7 @@ jobs:
           name: 'Deploy - Web API - Serverless - Case Documents - us-west-1'
           command: |
             REDEPLOY_VIA_DEPS="$(git diff --name-only origin/${COMPARE_BRANCH} | npm run check-dep caseDocuments)"
-            REDEPLOY_VIA_SLS="$(git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-case-documents" || test $? = 1)
+            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-case-documents") || test $? = 1)"
             if [[ ! -z "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
               ./web-api/run-serverless-case-documents.sh ${ENV} us-west-1
             fi
@@ -403,7 +403,7 @@ jobs:
           name: 'Deploy - Web API - Serverless - Case Deadlines - us-west-1'
           command: |
             REDEPLOY_VIA_DEPS="$(git diff --name-only origin/${COMPARE_BRANCH} | npm run check-dep caseDeadlines)"
-            REDEPLOY_VIA_SLS="$(git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-case-deadlines" || test $? = 1)
+            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-case-deadlines") || test $? = 1)"
             if [[ ! -z "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
               ./web-api/run-serverless-case-deadlines.sh ${ENV} us-west-1
             fi
