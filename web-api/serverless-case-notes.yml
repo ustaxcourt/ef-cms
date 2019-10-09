@@ -6,8 +6,12 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-plugin-warmup
 
 custom:
+  warmup: 
+    enabled: true
+    
   prune:
     automatic: true
     number: 3
