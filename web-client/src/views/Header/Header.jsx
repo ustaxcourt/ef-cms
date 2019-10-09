@@ -7,8 +7,8 @@ import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
-import close from '../../../node_modules/uswds/dist/img/close.svg';
-import seal from '../images/ustc_seal.svg';
+import close from '../../../../node_modules/uswds/dist/img/close.svg';
+import seal from '../../images/ustc_seal.svg';
 
 const BetaBar = toggleBetaBarSequence => {
   return (
@@ -38,7 +38,10 @@ const BetaBar = toggleBetaBarSequence => {
   );
 };
 
-const NavigationItems = (helper, { isReportsMenuOpen }) => {
+const NavigationItems = (
+  helper,
+  { isReportsMenuOpen, toggleMobileMenuSequence },
+) => {
   return (
     <ul className="usa-nav__primary usa-accordion ustc-navigation-items">
       {helper.showHomeIcon && (
@@ -49,6 +52,7 @@ const NavigationItems = (helper, { isReportsMenuOpen }) => {
               helper.pageIsHome && 'usa-current',
             )}
             href="/"
+            onClick={() => toggleMobileMenuSequence()}
           >
             Dashboard
           </a>
@@ -62,6 +66,7 @@ const NavigationItems = (helper, { isReportsMenuOpen }) => {
               helper.pageIsMessages && 'usa-current',
             )}
             href="/messages/my/inbox"
+            onClick={() => toggleMobileMenuSequence()}
           >
             Messages{' '}
             {helper.showMessagesIcon && (
@@ -84,6 +89,7 @@ const NavigationItems = (helper, { isReportsMenuOpen }) => {
               helper.pageIsDocumentQC && 'usa-current',
             )}
             href={helper.defaultQCBoxPath}
+            onClick={() => toggleMobileMenuSequence()}
           >
             Document QC
           </a>
@@ -97,6 +103,7 @@ const NavigationItems = (helper, { isReportsMenuOpen }) => {
               helper.pageIsMyCases && 'usa-current',
             )}
             href="/"
+            onClick={() => toggleMobileMenuSequence()}
           >
             My Cases
           </a>
@@ -110,6 +117,7 @@ const NavigationItems = (helper, { isReportsMenuOpen }) => {
               helper.pageIsTrialSessions && 'usa-current',
             )}
             href="/trial-sessions"
+            onClick={() => toggleMobileMenuSequence()}
           >
             Trial Sessions
           </a>
@@ -230,6 +238,7 @@ export class HeaderComponent extends React.Component {
                 {user &&
                   NavigationItems(helper, {
                     isReportsMenuOpen,
+                    toggleMobileMenuSequence,
                   })}
                 {helper.showSearchInHeader && <SearchBox />}
                 {helper.showAccountMenu && (

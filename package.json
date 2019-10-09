@@ -111,6 +111,7 @@
     "serverless-plugin-git-variables": "^3.3.2",
     "serverless-plugin-split-stacks": "^1.9.1",
     "serverless-plugin-tracing": "^2.0.0",
+    "serverless-plugin-warmup": "^4.7.0-rc.1",
     "serverless-prune-plugin": "^1.4.1",
     "serverless-s3-local": "github:ustaxcourt/serverless-s3-local",
     "sinon": "^7.5.0",
