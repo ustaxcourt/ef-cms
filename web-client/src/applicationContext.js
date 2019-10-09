@@ -391,7 +391,6 @@ const applicationContext = {
     CaseInternal,
     ContactFactory,
     DocketEntryFactory,
-    Document,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,
