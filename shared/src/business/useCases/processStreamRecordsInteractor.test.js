@@ -60,7 +60,7 @@ describe('processStreamRecordsInteractor', () => {
     });
 
     expect(indexSpy).toHaveBeenCalled();
-    expect(indexSpy.mock.calls.length).toEqual(2);
+    expect(indexSpy.mock.calls.length).toEqual(3);
     expect(indexSpy.mock.calls[0][0]).toEqual({
       body: {
         caseId: { S: '1' },
