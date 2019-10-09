@@ -32,7 +32,7 @@ export const getFileExternalDocumentAlertSuccessAction = ({ get, props }) => {
     'You can access your documents at any time from the docket record below.';
 
   if (props.printReceiptLink) {
-    message = `You can <a href="${props.printReceiptLink}">print a receipt</a> for your filing or access your documents at any time from the docket record below.`;
+    message = `You can <a href="${props.printReceiptLink}" target="_blank">print a receipt</a> for your filing or access your documents at any time from the docket record below.`;
   }
 
   return {
