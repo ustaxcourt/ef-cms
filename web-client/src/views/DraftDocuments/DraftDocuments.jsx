@@ -93,7 +93,7 @@ export const DraftDocuments = connect(
                         <Button
                           link
                           className="red-warning"
-                          icon="times-circle"
+                          icon="trash"
                           onClick={() => {
                             archiveDraftDocumentModalSequence({
                               caseId: formattedCaseDetail.caseId,
