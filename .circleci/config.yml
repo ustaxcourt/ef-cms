@@ -229,8 +229,10 @@ jobs:
       - run:
           name: 'Deploy - Web API - Serverless - API - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -qE "shared/src|web-api/src|serverless-api"); then
-              docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-api.sh ${ENV} us-east-1"
+            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js api)"
+            REDEPLOY_VIA_SLS="$((git --no-pager diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-api") || test $? = 1)"
+            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
+              ./web-api/run-serverless-api.sh "${ENV}" us-east-1
             fi
       - run:
           name: 'Deploy - Web API - Serverless - Cases - us-east-1'
