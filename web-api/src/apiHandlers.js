@@ -5,7 +5,7 @@ module.exports = {
     .handler,
   generateDocketRecordPdfLambda: require('./cases/generateDocketRecordPdfLambda')
     .handler,
-  generateFilingReceiptPdfLambda: require('./generateFilingReceiptPdfLambda')
+  generateFilingReceiptPdfLambda: require('./documents/generateFilingReceiptPdfLambda')
     .handler,
   generatePdfFromHtmlLambda: require('./cases/generatePdfFromHtmlLambda')
     .handler,
