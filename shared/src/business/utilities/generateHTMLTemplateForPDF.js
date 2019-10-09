@@ -62,6 +62,24 @@ const generateHTMLTemplateForPDF = (content, options) => {
             white-space: nowrap;
           }
 
+          .panel {
+            border: 1px solid #ccc;
+            margin: 15px 0 5px 0;
+          }
+
+          .header {
+            padding: 8px 10px;
+            border-bottom: 1px solid #ccc;
+            background: #f0f0f0;
+            font-size: 10px;
+            font-weight: bold;
+          }
+
+          .content {
+            min-height: 15px;
+            padding: 0 10px 10px 10px;
+          }
+
           .no-wrap {
             white-space: nowrap;
           }
@@ -637,8 +655,11 @@ const generatePrintableFilingReceiptTemplate = content => {
     captionPostfix,
     docketNumberWithSuffix,
     main: `
-    <div class="filed-by">Filed by ${'[filed by]'}</div>
-    <div class="filed-at">Filed ${'[filed at]'}</div>
+    <div class="filing-info">
+      <div class="filed-by">Filed by ${'[filed by]'}</div>
+      <div class="filed-at">Filed ${'[filed at]'}</div>
+    </div>
+    <div class="clear"></div>
     <div class="grid-container-main">
       <div class="panel">
         <div class="header">
@@ -651,12 +672,17 @@ const generatePrintableFilingReceiptTemplate = content => {
   };
 
   const options = {
-    h2: 'Receipt of Filing',
+    h3: 'Receipt of Filing',
     styles: `
+      .filing-info {
+        margin: 10px 0;
+      }
+
       .filed-by {
         width: 50%;
         float: left;
       }
+
       .filed-at {
         width: 50%;
         float: right;
