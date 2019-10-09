@@ -7,8 +7,8 @@ import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
-import close from '../../../node_modules/uswds/dist/img/close.svg';
-import seal from '../images/ustc_seal.svg';
+import close from '../../../../node_modules/uswds/dist/img/close.svg';
+import seal from '../../images/ustc_seal.svg';
 
 const BetaBar = toggleBetaBarSequence => {
   return (
