@@ -3,7 +3,7 @@ const { getUploadPolicyInteractor } = require('./getUploadPolicyInteractor');
 describe('getUploadPolicyInteractor', () => {
   beforeEach(() => {});
 
-  it('throw unauthorized error on invaliid role', async () => {
+  it('throw unauthorized error on invalid role', async () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {

@@ -24,7 +24,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(indexSpy).not.toHaveBeenCalled();
   });
 
-  it('calls index function with correct params only for records with eventName "INSERT"', async () => {
+  it('calls index function with correct params only for records with eventName "INSERT" or "MODIFY"', async () => {
     await processStreamRecordsInteractor({
       applicationContext,
       recordsToProcess: [
@@ -49,11 +49,18 @@ describe('processStreamRecordsInteractor', () => {
           },
           eventName: 'INSERT',
         },
+        {
+          dynamodb: {
+            Keys: { pk: { S: '4' } },
+            NewImage: { caseId: { S: '4' } },
+          },
+          eventName: 'MODIFY',
+        },
       ],
     });
 
     expect(indexSpy).toHaveBeenCalled();
-    expect(indexSpy.mock.calls.length).toEqual(2);
+    expect(indexSpy.mock.calls.length).toEqual(3);
     expect(indexSpy.mock.calls[0][0]).toEqual({
       body: {
         caseId: { S: '1' },
@@ -66,6 +73,13 @@ describe('processStreamRecordsInteractor', () => {
         caseId: { S: '3' },
       },
       id: '3',
+      index: 'efcms',
+    });
+    expect(indexSpy.mock.calls[2][0]).toEqual({
+      body: {
+        caseId: { S: '4' },
+      },
+      id: '4',
       index: 'efcms',
     });
   });

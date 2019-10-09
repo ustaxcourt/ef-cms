@@ -1,5 +1,5 @@
 export default test => {
-  return it('Petitions clerk applies signature to a draft document', async () => {
+  return it('petitions clerk clears signature on a draft document', async () => {
     await test.runSequence('setPDFSignatureDataSequence', {
       isPdfAlreadySigned: false,
       signatureApplied: false,
