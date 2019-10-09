@@ -196,17 +196,10 @@ jobs:
 
   deploy-api-east:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: sutt0n/ef-cms:experimental
     steps:
       - checkout
       - run: npm i
-      - run:
-          name: Build Docker Image
-          command: |
-            git diff --name-only origin/develop | grep -q "runtimes/clamav" && cd web-api/runtimes/clamav && ./build.sh 
-            git diff --name-only origin/develop | grep -q "runtimes/ghostscript" && cd ../ghostscript && ./build.sh 
-            git diff --name-only origin/develop | grep -q "runtimes/puppeteer" && cd ../puppeteer && ./build.sh 
-            cd ../../.. && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: |
@@ -330,17 +323,10 @@ jobs:
 
   deploy-api-west:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: sutt0n/ef-cms:experimental
     steps:
       - checkout
       - run: npm i
-      - run:
-          name: Build Docker Image
-          command: |
-            git diff --name-only origin/develop | grep -q "runtimes/clamav" && cd web-api/runtimes/clamav && ./build.sh 
-            git diff --name-only origin/develop | grep -q "runtimes/ghostscript" && cd ../ghostscript && ./build.sh 
-            git diff --name-only origin/develop | grep -q "runtimes/puppeteer" && cd ../puppeteer && ./build.sh
-            cd ../../.. && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: |
