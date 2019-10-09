@@ -479,108 +479,108 @@ const generateTrialCalendarTemplate = content => {
         font-family: sans-serif;
         font-size: 10px;
       }
-      
+
       h1 {
         padding-top: 10px;
         margin-bottom: 0px;
         font-size: 24px;
         line-height: 15px;
       }
-      
+
       h2 {
         margin-top: 0px;
         /* padding-bottom: 15px; */
         font-size: 20px;
         font-weight: normal;
       }
-      
+
       h3 {
         margin-top: 0px;
         font-family: sans-serif;
         font-size: 14px;
         font-weight: normal;
       }
-      
+
       .bold {
         font-weight: bold;
       }
-      
+
       .text-center {
         text-align: center;
       }
-      
+
       table {
         width: 100%;
         border: 1px solid #ccc;
         -webkit-border-horizontal-spacing: 0px;
-      
+
         border-spacing: 0;
         -webkit-border-vertical-spacing: 0px;
       }
-      
+
       th,
       td {
         border-bottom: 1px solid #ccc;
         text-align: left;
         vertical-align: top;
       }
-      
+
       td {
         padding: 12px 8px;
         line-height: 13px;
         vertical-align: top;
       }
-      
+
       th {
         padding: 8px 10px 10px 8px;
         white-space: nowrap;
       }
-      
+
       th {
         background-color: #f0f0f0;
       }
-      
+
       .grid-container {
         display: grid;
         grid-gap: 10px;
         grid-template-columns: 50% 50%;
       }
-      
+
       .grid-container-main {
         display: grid;
         grid-template-columns: 49% 2% 49%;
       }
-      
+
       .mb-1 {
         margin-bottom: 10px;
       }
-      
+
       .mb-2 {
         margin-bottom: 20px;
       }
-      
+
       h4 {
         margin-bottom: 0px;
       }
-      
+
       p {
         margin-top: 4px;
       }
-      
+
       .address-line {
         display: block;
       }
-      
+
       .court-header {
         margin-bottom: 30px;
         font-family: serif;
       }
-      
+
       .panel {
         border: 1px solid #ccc;
         margin: 15px 0 5px 0;
       }
-      
+
       .header {
         padding: 8px 10px;
         border-bottom: 1px solid #ccc;
@@ -588,32 +588,32 @@ const generateTrialCalendarTemplate = content => {
         font-size: 10px;
         font-weight: bold;
       }
-      
+
       .open-cases {
         font-size: 12px;
       }
-      
+
       .content {
         min-height: 15px;
         padding: 0 10px 10px 10px;
       }
-      
+
       .content.notes {
         padding-top: 12px;
       }
-      
+
       .mb-4 {
         margin-bottom: 40px;
       }
-      
+
       .pr-1 {
         padding-right: 10px;
       }
-      
+
       @page {
         margin-bottom: 55px;
       }
-      
+
       @page :first {
         margin-top: 0;
       }
@@ -624,9 +624,55 @@ const generateTrialCalendarTemplate = content => {
   return generateHTMLTemplateForPDF(templateContent, options);
 };
 
+const generatePrintableFilingReceiptTemplate = content => {
+  const {
+    caption,
+    captionPostfix,
+    docketNumberWithSuffix,
+    documentsFiledContent,
+  } = content;
+
+  const templateContent = {
+    caption,
+    captionPostfix,
+    docketNumberWithSuffix,
+    main: `
+    <div class="filed-by">Filed by ${'[filed by]'}</div>
+    <div class="filed-at">Filed ${'[filed at]'}</div>
+    <div class="grid-container-main">
+      <div class="panel">
+        <div class="header">
+          Documents Filed
+        </div>
+        <div class="content grid-container">${documentsFiledContent}</div>
+      </div>
+    </div>
+  `,
+  };
+
+  const options = {
+    h2: 'Receipt of Filing',
+    styles: `
+      .filed-by {
+        width: 50%;
+        float: left;
+      }
+      .filed-at {
+        width: 50%;
+        float: right;
+        text-align: right;
+      }
+    `,
+    title: 'Receipt of Filing',
+  };
+
+  return generateHTMLTemplateForPDF(templateContent, options);
+};
+
 module.exports = {
   generateChangeOfAddressTemplate,
   generateHTMLTemplateForPDF,
   generatePrintableDocketRecordTemplate,
+  generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
 };
