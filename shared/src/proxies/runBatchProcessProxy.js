@@ -10,6 +10,6 @@ const { post } = require('./requests');
 exports.runBatchProcessInteractor = ({ applicationContext }) => {
   return post({
     applicationContext,
-    endpoint: '/api/runBatchProcess',
+    endpoint: '/api/run-batch-process',
   });
 };

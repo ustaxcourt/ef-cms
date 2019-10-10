@@ -137,6 +137,23 @@ describe('getAuthHeader', () => {
     expect(error).toEqual(undefined);
   });
 
+  it('should not return the user token and should throw an error if token is not present in queryStringParameters or anywhere else', () => {
+    let error;
+    let response;
+    try {
+      response = getAuthHeader({
+        headers: {
+          Authorization: 'bearer ',
+        },
+        queryStringParameters: {},
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(response).toEqual(undefined);
+    expect(error).toBeDefined();
+  });
+
   it('should return the user token from the Authorization header query string params passed in as "query"', () => {
     let error;
     let response;
@@ -154,6 +171,23 @@ describe('getAuthHeader', () => {
     }
     expect(response).toEqual('teoken');
     expect(error).toEqual(undefined);
+  });
+
+  it('should not return the user token and should throw an error if token is not present in query or anywhere else', () => {
+    let error;
+    let response;
+    try {
+      response = getAuthHeader({
+        headers: {
+          Authorization: 'bearer ',
+        },
+        query: {},
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(response).toEqual(undefined);
+    expect(error).toBeDefined();
   });
 });
 
