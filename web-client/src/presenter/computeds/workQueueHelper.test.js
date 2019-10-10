@@ -116,4 +116,67 @@ describe('workQueueHelper', () => {
     });
     expect(result.showFromColumn).toBeTruthy();
   });
+
+  it('shows the batched by column when role is petitions clerk and box is the doc QC outbox', () => {
+    const result = runCompute(workQueueHelper, {
+      state: {
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        user: {
+          role: 'petitionsclerk',
+        },
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'my',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+    expect(result.showBatchedByColumn).toBeTruthy();
+  });
+
+  it('does not show the batched by column when role is not petitions clerk', () => {
+    const result = runCompute(workQueueHelper, {
+      state: {
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        user: {
+          role: 'docketclerk',
+        },
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'my',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+    expect(result.showBatchedByColumn).toBeFalsy();
+  });
+
+  it('does not show the batched by column when role is petitions clerk and box is not the doc QC outbox', () => {
+    const result = runCompute(workQueueHelper, {
+      state: {
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        user: {
+          role: 'petitionsclerk',
+        },
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'my',
+          workQueueIsInternal: true,
+        },
+      },
+    });
+    expect(result.showBatchedByColumn).toBeFalsy();
+  });
 });
