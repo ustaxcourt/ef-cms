@@ -235,11 +235,7 @@ jobs:
       - run:
           name: 'Deploy - Web API - Serverless - API - us-east-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js api)"
-            REDEPLOY_VIA_SLS="$((git --no-pager diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-api") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-api.sh "${ENV}" us-east-1
-            fi
+            ~/project/stack-deploy-check.sh api serverless-api ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Serverless - Cases - us-east-1'
           command: |
