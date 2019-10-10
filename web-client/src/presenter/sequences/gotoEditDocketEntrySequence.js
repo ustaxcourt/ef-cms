@@ -7,7 +7,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDocketEntryFormForEditAction } from '../actions/setDocketEntryFormForEditAction';
+import { setDocketEntryFormForEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForEditAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { state } from 'cerebral';
 
