@@ -64,11 +64,6 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'hasSupportingDocuments',
-      value: true,
-    });
-
-    await test.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
