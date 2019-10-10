@@ -845,7 +845,7 @@
         }
       }
     },
-    "/runBatchProcess": {
+    "/run-batch-process": {
       "post": {
         "summary": "run IRS batch process",
         "description": "Run the (temporary) send to IRS batch process, which creates a ZIP file of petition documents and uploads it to S3.\n",
@@ -2761,10 +2761,90 @@
         }
       }
     },
-    "/generate-pdf-from-html": {
+    "/docket-record-pdf": {
       "post": {
-        "summary": "generates a pdf given a html string",
-        "description": "creates a printable pdf out of the provided html string.\n",
+        "summary": "create a pdf of the docket record for a case",
+        "description": "create a pdf of the docket record for a case.\n",
+        "produces": ["application/pdf"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trial-calendar-pdf": {
+      "post": {
+        "summary": "create a pdf of the trial session calendar",
+        "description": "create a pdf of the trial session calendar.\n",
+        "produces": ["application/pdf"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/filing-receipt-pdf": {
+      "post": {
+        "summary": "create a pdf receipt for filing a document or documents",
+        "description": "create a pdf receipt for filing a document or documents.\n",
         "produces": ["application/pdf"],
         "responses": {
           "200": {
