@@ -34,19 +34,25 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     let content = `
       <h4>${document.documentTitle}</h4>
       <h4>Document Includes</h4>
-      ${document.attachments ? '<div>Attachment(s)</div>' : ''}
+      ${document.attachments ? '<p>Attachment(s)</p>' : ''}
       ${
         document.certificateOfService
-          ? `<div>Certificate of Service ${document.certificateOfServiceDate}</div>`
+          ? `<p>Certificate of Service ${applicationContext
+              .getUtilities()
+              .formatDateString(
+                document.certificateOfServiceDate,
+                'MMDDYY',
+              )}</p>`
           : ''
       }
-      <div>
+      <p>
+        <br />
         ${
           document.objections && document.objections === true
             ? 'Objections'
             : 'No Objections'
         }
-      </div>
+      </p>
       `;
 
     return content;
@@ -74,6 +80,9 @@ exports.generatePrintableFilingReceiptInteractor = async ({
       captionPostfix: caseCaptionPostfix,
       docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
       documentsFiledContent,
+      filedAt: applicationContext
+        .getUtilities()
+        .formatDateString(new Date(), 'DATE_TIME_TZ'),
     });
 
   return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({

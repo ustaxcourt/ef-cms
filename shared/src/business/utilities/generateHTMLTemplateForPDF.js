@@ -648,6 +648,7 @@ const generatePrintableFilingReceiptTemplate = content => {
     captionPostfix,
     docketNumberWithSuffix,
     documentsFiledContent,
+    filedAt,
   } = content;
 
   const templateContent = {
@@ -657,7 +658,7 @@ const generatePrintableFilingReceiptTemplate = content => {
     main: `
     <div class="filing-info">
       <div class="filed-by">Filed by ${'[filed by]'}</div>
-      <div class="filed-at">Filed ${'[filed at]'}</div>
+      <div class="filed-at">Filed ${filedAt}</div>
     </div>
     <div class="clear"></div>
     <div class="grid-container-main">
@@ -687,6 +688,10 @@ const generatePrintableFilingReceiptTemplate = content => {
         width: 50%;
         float: right;
         text-align: right;
+      }
+
+      hr {
+        margin: 12px 0px 8px 0px;
       }
     `,
     title: 'Receipt of Filing',
