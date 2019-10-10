@@ -208,114 +208,59 @@ jobs:
       - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/puppeteer"); then
-              cd ~/project/web-api/runtimes/puppeteer
-              ./build.sh
-              cd ~/project
-              ./web-api/run-serverless-puppeteer.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-layer.sh puppeteer ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Layers - Ghostscript - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/ghostscript"); then
-              cd ~/project/web-api/runtimes/ghostscript 
-              ./build.sh
-              cd ~/project/
-              ./web-api/run-serverless-ghostscript.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-layer.sh ghostscript ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Layers - ClamAV - us-east-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/clamav"); then
-              cd ~/project/web-api/runtimes/clamav 
-              ./build.sh
-              cd ~/project/
-              ./web-api/run-serverless-clamav.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-layer.sh clamav ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Serverless - API - us-east-1'
           command: |
-            ~/project/stack-deploy-check.sh api serverless-api ${COMPARE_BRANCH} ${ENV} us-east-1
+            ./check-deploy-stack.sh api serverless-api ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Serverless - Cases - us-east-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js cases)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-cases") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-cases.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-stack.sh cases serverless-cases ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Serverless - Case Documents - us-east-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js caseDocuments)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-case-documents") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-case-documents.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-stack.sh caseDocuments serverless-case-documents ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Serverless - Case Deadlines - us-east-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js caseDeadlines)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-case-deadlines") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-case-deadlines.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-stack.sh caseDeadlines serverless-case-deadlines ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Serverless - Case Notes - us-east-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js caseNotes)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-case-notes") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-case-notes.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-stack.sh caseNotes serverless-case-notes ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Serverless - Users - us-east-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js users)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-users") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-users.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-stack.sh users serverless-users ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Serverless - Documents - us-east-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js documents)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-documents") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-documents.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-stack.sh documents serverless-documents ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Serverless - Work Items - us-east-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js workItems)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-work-items") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-work-items.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-stack.sh workItems serverless-work-items ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Serverless - Sections - us-east-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js sections)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-sections") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-sections.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-stack.sh sections serverless-sections ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Serverless - Trial Sessions - us-east-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js trialSessions)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-trial-sessions") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-trial-sessions.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-stack.sh trialSessions serverless-trial-sessions ${COMPARE_BRANCH} ${ENV} us-east-1
       - run:
           name: 'Deploy - Web API - Serverless - Notifications - us-east-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js notifications)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-notifications") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-notifications.sh ${ENV} us-east-1
-            fi
+            ./check-deploy-stack.sh notifications serverless-notifications ${COMPARE_BRANCH} ${ENV} us-east-1
 
   deploy-api-west:
     docker:
@@ -331,118 +276,59 @@ jobs:
       - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/puppeteer"); then
-              cd ~/project/web-api/runtimes/puppeteer
-              ./build.sh
-              cd ~/project
-              ./web-api/run-serverless-puppeteer.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-layer.sh puppeteer ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Layers - Ghostscript - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/ghostscript"); then
-              cd ~/project/web-api/runtimes/ghostscript
-              ./build.sh
-              cd ~/project/
-              ./web-api/run-serverless-ghostscript.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-layer.sh ghostscript ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Layers - ClamAV - us-west-1'
           command: |
-            if (git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/clamav"); then
-              cd ~/project/web-api/runtimes/clamav
-              ./build.sh
-              cd ~/project/
-              ./web-api/run-serverless-clamav.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-layer.sh clamav ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Serverless - API - us-west-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js api)"
-            REDEPLOY_VIA_SLS="$((git --no-pager diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-api") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-api.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-stack.sh api serverless-api ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Serverless - Cases - us-west-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js cases)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-cases") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-cases.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-stack.sh cases serverless-cases ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Serverless - Case Documents - us-west-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js caseDocuments)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-case-documents") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-case-documents.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-stack.sh caseDocuments serverless-case-documents ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Serverless - Case Deadlines - us-west-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js caseDeadlines)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-case-deadlines") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-case-deadlines.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-stack.sh caseDeadlines serverless-case-deadlines ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Serverless - Case Notes - us-west-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js caseNotes)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-case-notes") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-case-notes.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-stack.sh caseNotes serverless-case-notes ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Serverless - Users - us-west-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js users)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-users") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-users.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-stack.sh users serverless-users ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Serverless - Documents - us-west-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js documents)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-documents") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-documents.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-stack.sh documents serverless-documents ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Serverless - Work Items - us-west-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js workItems)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-work-items") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-work-items.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-stack.sh workItems serverless-work-items ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Serverless - Sections - us-west-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js sections)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-sections") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-sections.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-stack.sh sections serverless-sections ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Serverless - Trial Sessions - us-west-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js trialSessions)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-trial-sessions") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-trial-sessions.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-stack.sh trialSessions serverless-trial-sessions ${COMPARE_BRANCH} ${ENV} us-west-1
       - run:
           name: 'Deploy - Web API - Serverless - Notifications - us-west-1'
           command: |
-            REDEPLOY_VIA_DEPS="$(git --no-pager diff --name-only origin/${COMPARE_BRANCH} | node ./web-api/dependency-tree-check.js notifications)"
-            REDEPLOY_VIA_SLS="$((git diff --name-only origin/${COMPARE_BRANCH} | grep -c "serverless-notifications") || test $? = 1)"
-            if [[ -n "$REDEPLOY_VIA_DEPS" ]] || [[ "$REDEPLOY_VIA_SLS" != "0" ]]; then
-              ./web-api/run-serverless-notifications.sh ${ENV} us-west-1
-            fi
+            ./check-deploy-stack.sh notifications serverless-notifications ${COMPARE_BRANCH} ${ENV} us-west-1
 
   post-deploy:
     machine:
