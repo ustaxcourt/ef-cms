@@ -3,6 +3,8 @@ module.exports = {
     .handler,
   createCourtIssuedOrderPdfFromHtmlLambda: require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda')
     .handler,
+  generateDocketRecordPdfLambda: require('./cases/generateDocketRecordPdfLambda')
+    .handler,
   generatePdfFromHtmlLambda: require('./cases/generatePdfFromHtmlLambda')
     .handler,
   getNotificationsLambda: require('./users/getNotificationsLambda').handler,

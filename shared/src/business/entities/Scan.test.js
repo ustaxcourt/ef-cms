@@ -1,6 +1,8 @@
 const { Batch } = require('./Batch');
 const { Scan } = require('./Scan');
 
+const { VALIDATION_ERROR_MESSAGES } = Scan;
+
 describe('Scan entity', () => {
   let applicationContext;
 
@@ -93,7 +95,7 @@ describe('Scan entity', () => {
       });
 
       expect(scan.getFormattedValidationErrors()).toMatchObject({
-        batches: 'At least one batch is required',
+        batches: VALIDATION_ERROR_MESSAGES.batches,
       });
     });
   });

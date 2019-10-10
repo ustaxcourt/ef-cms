@@ -2,15 +2,15 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { expireSaveSuccessAction } from '../actions/expireSaveSuccessAction';
 import { getFormCombinedWithCaseDetailAction } from '../actions/getFormCombinedWithCaseDetailAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setSaveSuccessAction } from '../actions/setSaveSuccessAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateCaseAction } from '../actions/updateCaseAction';
 import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 
 export const submitCaseDetailEditSaveSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   clearAlertsAction,
   getFormCombinedWithCaseDetailAction,
   validateCaseDetailAction,
@@ -23,5 +23,5 @@ export const submitCaseDetailEditSaveSequence = [
       expireSaveSuccessAction,
     ],
   },
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];

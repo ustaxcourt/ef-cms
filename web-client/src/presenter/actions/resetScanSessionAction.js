@@ -14,6 +14,5 @@ export const resetScanSessionAction = async ({ get, store }) => {
   const scans = get(state.batches);
   delete scans[documentSelectedForScan];
   store.set(state.batches, scans);
-  store.set(state.submitting, false);
   store.set(state.isScanning, false);
 };

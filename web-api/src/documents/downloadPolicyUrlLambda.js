@@ -16,8 +16,8 @@ exports.handler = event =>
     const applicationContext = createApplicationContext(user);
     try {
       const results = await applicationContext
-        .getPersistenceGateway()
-        .getDownloadPolicyUrl({
+        .getUseCases()
+        .getDownloadPolicyUrlInteractor({
           applicationContext,
           documentId: event.pathParameters.documentId,
         });

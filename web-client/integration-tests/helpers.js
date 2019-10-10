@@ -312,12 +312,6 @@ exports.uploadPetition = async (test, overrides = {}) => {
   return test.getState('caseDetail');
 };
 
-exports.waitForRouter = () => {
-  return new Promise(resolve => {
-    setImmediate(() => resolve(true));
-  });
-};
-
 exports.loginAs = async (test, user) => {
   await test.runSequence('updateFormValueSequence', {
     key: 'name',

@@ -6,7 +6,7 @@ const { ContactFactory } = require('./ContactFactory');
  */
 exports.getSurvivingSpouseContact = ContactFactory.createContactFactory({
   additionalErrorMappings: {
-    secondaryName: 'Name of Surviving Spouse is a required field.',
+    secondaryName: 'Enter name of surviving spouse',
   },
   additionalValidation: {
     secondaryName: joi.string().required(),

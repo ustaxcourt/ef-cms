@@ -112,8 +112,10 @@ describe('headerHelper', () => {
     const result = runCompute(headerHelper, {
       state: {
         ...getState('petitionsclerk'),
-        currentPage: 'DashboardPetitionsClerk',
-        workQueueIsInternal: true,
+        currentPage: 'Messages',
+        workQueueToDisplay: {
+          workQueueIsInternal: true,
+        },
       },
     });
     expect(result.pageIsMessages).toBeTruthy();

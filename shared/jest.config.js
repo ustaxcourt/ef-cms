@@ -1,11 +1,12 @@
 module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
-    'src/**/*.js',
-    '!src/tools/**/*.js',
-    '!src/proxies/**/*.js',
     '!src/**/ContactFactory.js',
     '!src/**/getScannerMockInterface.js',
+    '!src/business/test/**/*.js',
+    '!src/proxies/**/*.js',
+    '!src/tools/**/*.js',
+    'src/**/*.js',
   ],
   coverageDirectory: './coverage',
   coverageThreshold: {

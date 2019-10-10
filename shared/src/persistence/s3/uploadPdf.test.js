@@ -14,10 +14,10 @@ describe('uploadPdf', () => {
       getHttpClient: () => ({
         post: postStub,
       }),
-      getUniqueId: () => '123',
     };
     await uploadPdf({
       applicationContext,
+      documentId: '123',
       file: new File([], 'abc'),
       onUploadProgress: () => null,
       policy: {
@@ -60,10 +60,10 @@ describe('uploadPdf', () => {
       getHttpClient: () => ({
         post: postStub,
       }),
-      getUniqueId: () => '123',
     };
     await uploadPdf({
       applicationContext,
+      documentId: '123',
       file: new Blob([]),
       onUploadProgress: () => null,
       policy: {

@@ -2,7 +2,7 @@ const { DocketRecord } = require('./DocketRecord');
 
 describe('DocketRecord', () => {
   describe('validation', () => {
-    it('returns false if a filingDate is in the future', () => {
+    it('returns false if a filingDate cannot be in the future.', () => {
       expect(
         new DocketRecord({
           filingDate: new Date('9000-01-01').toISOString(),

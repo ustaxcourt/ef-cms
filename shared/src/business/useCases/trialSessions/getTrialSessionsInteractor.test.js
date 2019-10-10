@@ -26,6 +26,7 @@ describe('Get trial sessions', () => {
           getTrialSessions: () => {},
         };
       },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     await expect(
       getTrialSessionsInteractor({
@@ -49,6 +50,7 @@ describe('Get trial sessions', () => {
             Promise.resolve([omit(MOCK_TRIAL_SESSION, 'maxCases')]),
         };
       },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     let error;
     try {

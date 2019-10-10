@@ -23,7 +23,9 @@ exports.updateCaseDeadlineInteractor = async ({
     throw new UnauthorizedError('Unauthorized for updating case deadline');
   }
 
-  let caseDeadlineToUpdate = new CaseDeadline(caseDeadline);
+  let caseDeadlineToUpdate = new CaseDeadline(caseDeadline, {
+    applicationContext,
+  });
   caseDeadlineToUpdate = caseDeadlineToUpdate.validate().toRawObject();
 
   await applicationContext.getPersistenceGateway().updateCaseDeadline({

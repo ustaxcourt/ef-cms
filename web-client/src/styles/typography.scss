@@ -112,10 +112,11 @@ h6 {
     }
   }
 }
-
-p {
-  font-size: 17px;
-  line-height: 1.4em;
+p:not(.site-banner):not(.beta) {
+  p {
+    font-size: 17px;
+    line-height: 1.4em;
+  }
 }
 
 p.lead {

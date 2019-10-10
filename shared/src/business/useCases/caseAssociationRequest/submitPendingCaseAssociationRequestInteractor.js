@@ -1,5 +1,10 @@
 const { UnauthorizedError } = require('../../../errors/errors');
 
+const {
+  isAuthorized,
+  PENDING_CASE_ASSOCIATE,
+} = require('../../../authorization/authorizationClientService');
+
 /**
  * submitPendingCaseAssociationRequestInteractor
  *
@@ -12,11 +17,15 @@ exports.submitPendingCaseAssociationRequestInteractor = async ({
   applicationContext,
   caseId,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (user.role !== 'practitioner') {
+  if (!isAuthorized(authorizedUser, PENDING_CASE_ASSOCIATE)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const isAssociated = await applicationContext
     .getPersistenceGateway()

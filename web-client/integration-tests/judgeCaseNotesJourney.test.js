@@ -60,7 +60,7 @@ presenter.state = mapValues(presenter.state, value => {
 
 test = CerebralTest(presenter);
 
-describe('Trial Session Eligible Cases Journey', () => {
+describe('Trial Session Eligible Cases Journey (judge)', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {

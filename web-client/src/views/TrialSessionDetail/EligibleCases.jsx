@@ -1,3 +1,4 @@
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -18,7 +19,7 @@ export const EligibleCases = connect(
           <thead>
             <tr>
               <th>Docket</th>
-              <th>Case Caption</th>
+              <th>Case name</th>
               <th>Petitioner Counsel</th>
               <th>Respondent Counsel</th>
               <th>Case Type</th>
@@ -28,9 +29,7 @@ export const EligibleCases = connect(
             <tbody key={idx}>
               <tr className="eligible-cases-row">
                 <td>
-                  <a href={`/case-detail/${item.docketNumber}`}>
-                    {item.docketNumberWithSuffix}
-                  </a>
+                  <CaseLink formattedCase={item} />
                 </td>
                 <td>{item.caseCaption}</td>
                 <td>

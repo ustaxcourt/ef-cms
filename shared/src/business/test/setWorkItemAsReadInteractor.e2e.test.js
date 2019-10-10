@@ -81,7 +81,7 @@ describe('setWorkItemAsReadInteractor integration test', () => {
       d => d.documentType === 'Petition',
     ).workItems[0];
 
-    const workItemEntity = new WorkItem(workItem);
+    const workItemEntity = new WorkItem(workItem, { applicationContext });
 
     let inbox = await getDocumentQCInboxForUserInteractor({
       applicationContext,

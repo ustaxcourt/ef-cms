@@ -13,14 +13,14 @@ export const CaseDetailEdit = connect(
     screenMetadata: state.screenMetadata,
     submitCaseDetailEditSaveSequence:
       sequences.submitCaseDetailEditSaveSequence,
-    submitting: state.submitting,
     unsetFormSaveSuccessSequence: sequences.unsetFormSaveSuccessSequence,
+    waitingForResponse: state.waitingForResponse,
   },
   ({
     screenMetadata,
     submitCaseDetailEditSaveSequence,
-    submitting,
     unsetFormSaveSuccessSequence,
+    waitingForResponse,
   }) => {
     return (
       <form
@@ -53,16 +53,16 @@ export const CaseDetailEdit = connect(
         </Tabs>
 
         <button
-          aria-disabled={submitting ? 'true' : 'false'}
+          aria-disabled={waitingForResponse ? 'true' : 'false'}
           className={
-            submitting
+            waitingForResponse
               ? 'usa-button usa-button-active'
               : 'usa-button usa-button--outline'
           }
-          disabled={submitting}
+          disabled={waitingForResponse}
           type="submit"
         >
-          {submitting && <div className="spinner" />}
+          {waitingForResponse && <div className="spinner" />}
           Save
         </button>
         {screenMetadata.showSaveSuccess && (

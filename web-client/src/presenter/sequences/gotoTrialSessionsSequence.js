@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
@@ -12,7 +11,6 @@ import { setUsersAction } from '../actions/setUsersAction';
 
 const gotoTrialSessions = [
   setCurrentPageAction('Interstitial'),
-  clearAlertsAction,
   clearScreenMetadataAction,
   clearErrorAlertsAction,
   getTrialSessionsAction,

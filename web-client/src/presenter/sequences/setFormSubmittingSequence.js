@@ -1,3 +1,3 @@
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 
-export const setFormSubmittingSequence = [setFormSubmittingAction];
+export const setFormSubmittingSequence = [setWaitingForResponseAction];

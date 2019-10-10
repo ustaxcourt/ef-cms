@@ -2,6 +2,9 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  VALIDATION_ERROR_MESSAGES,
+} = require('./ExternalDocumentInformationFactory');
 
 /**
  *
@@ -18,9 +21,8 @@ ExternalDocumentStandard.prototype.getDocumentTitle = function() {
   return this.documentTitle;
 };
 
-ExternalDocumentStandard.errorToMessageMap = {
-  category: 'Select a Category.',
-  documentType: 'Select a Document Type.',
+ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES = {
+  ...VALIDATION_ERROR_MESSAGES,
 };
 
 ExternalDocumentStandard.schema = {
@@ -33,7 +35,7 @@ joiValidationDecorator(
   ExternalDocumentStandard,
   ExternalDocumentStandard.schema,
   undefined,
-  ExternalDocumentStandard.errorToMessageMap,
+  ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { ExternalDocumentStandard };

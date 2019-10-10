@@ -1,3 +1,4 @@
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -6,10 +7,10 @@ import React from 'react';
 export const IndividualWorkQueueInbox = connect(
   {
     documentHelper: state.documentHelper,
-    workQueue: state.formattedWorkQueue,
+    formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentHelper, workQueue, workQueueHelper }) => {
+  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -19,35 +20,36 @@ export const IndividualWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number" colSpan="2">
+              <th aria-label="Docket Number" className="small" colSpan="2">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              <th>Received</th>
+              <th className="small">Filed</th>
+              <th>Case name</th>
               <th aria-label="Status Icon" className="padding-right-0">
                 &nbsp;
               </th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
-              <th>Case Status</th>
+              <th>Case status</th>
               {!workQueueHelper.hideFromColumn && <th>From</th>}
-              {!workQueueHelper.hideSectionColumn && <th>Section</th>}
+              {!workQueueHelper.hideSectionColumn && (
+                <th className="max-width-7">Section</th>
+              )}
             </tr>
           </thead>
-          {workQueue.map((item, idx) => {
+          {formattedWorkQueue.map((item, idx) => {
             return (
               <tbody key={idx}>
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
-                  <td className="message-queue-row">
-                    <a
-                      className="no-wrap"
-                      href={`/case-detail/${item.docketNumber}`}
-                    >
-                      {item.docketNumberWithSuffix}
-                    </a>
+                  <td className="message-queue-row small">
+                    <CaseLink formattedCase={item} />
                   </td>
-                  <td className="message-queue-row">
+                  <td className="message-queue-row small">
                     <span className="no-wrap">{item.received}</span>
+                  </td>
+                  <td className="message-queue-row message-queue-case-title">
+                    {item.caseTitle}
                   </td>
                   <td className="message-queue-row has-icon padding-right-0">
                     {item.showBatchedStatusIcon && (
@@ -121,7 +123,9 @@ export const IndividualWorkQueueInbox = connect(
                     </td>
                   )}
                   {!workQueueHelper.hideSectionColumn && (
-                    <td className="message-queue-row">{item.sentBySection}</td>
+                    <td className="message-queue-row max-width-7">
+                      {item.sentBySection}
+                    </td>
                   )}
                 </tr>
               </tbody>

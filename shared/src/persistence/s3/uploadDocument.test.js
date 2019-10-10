@@ -19,6 +19,7 @@ describe('uploadDocument', () => {
       getPersistenceGateway: () => ({
         uploadPdf: () => DOCUMENT_ID,
       }),
+      getUniqueId: () => DOCUMENT_ID,
     };
     const documentId = await uploadDocument({
       applicationContext,

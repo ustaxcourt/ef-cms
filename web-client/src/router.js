@@ -3,10 +3,27 @@ import { queryStringDecoder } from './queryStringDecoder';
 import route from 'riot-route';
 
 route.base('/');
+
 const pageTitleSuffix = ' | U.S. Tax Court';
 
 const externalRoute = path => {
   window.location.replace(path);
+};
+
+const openInNewTab = path => {
+  window.open(path, '_blank', 'noopener, noreferrer');
+};
+
+const createObjectURL = object => {
+  return window.URL.createObjectURL(object);
+};
+
+const revokeObjectURL = url => {
+  return window.URL.revokeObjectURL(url);
+};
+
+const back = () => {
+  window.history.back();
 };
 
 const router = {
@@ -18,17 +35,20 @@ const router = {
           const path = app.getState('cognitoLoginUrl');
           window.location.replace(path);
         } else {
+          app.getSequence('clearAlertSequence')();
           cb.apply(null, arguments);
         }
       };
     };
+
     route(
       '/',
       checkLoggedIn(() => {
         document.title = `Dashboard ${pageTitleSuffix}`;
-        app.getSequence('gotoDashboardSequence')({ baseRoute: 'dashboard' });
+        app.getSequence('gotoDashboardSequence')();
       }),
     );
+
     route(
       '/case-detail/*',
       checkLoggedIn(docketNumber => {
@@ -36,6 +56,7 @@ const router = {
         app.getSequence('gotoCaseDetailSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/documents/*',
       checkLoggedIn((docketNumber, documentId) => {
@@ -92,6 +113,7 @@ const router = {
         });
       }),
     );
+
     route(
       '/case-detail/*/documents/*/messages/*',
       checkLoggedIn((docketNumber, documentId, messageId) => {
@@ -103,6 +125,7 @@ const router = {
         });
       }),
     );
+
     route(
       '/case-detail/*/documents/*/messages/*/mark/*',
       checkLoggedIn(
@@ -117,6 +140,7 @@ const router = {
         },
       ),
     );
+
     route(
       '/case-detail/*/before-you-file-a-document',
       checkLoggedIn(docketNumber => {
@@ -124,6 +148,7 @@ const router = {
         app.getSequence('gotoBeforeYouFileDocumentSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/file-a-document',
       checkLoggedIn(docketNumber => {
@@ -137,6 +162,7 @@ const router = {
         }
       }),
     );
+
     route(
       '/case-detail/*/file-a-document/details',
       checkLoggedIn(docketNumber => {
@@ -152,6 +178,7 @@ const router = {
         }
       }),
     );
+
     route(
       '/case-detail/*/file-a-document/review',
       checkLoggedIn(docketNumber => {
@@ -198,11 +225,32 @@ const router = {
         app.getSequence('gotoCreateOrderSequence')({ docketNumber });
       }),
     );
+
+    route(
+      '/case-detail/*/edit-order/*',
+      checkLoggedIn((docketNumber, documentIdToEdit) => {
+        document.title = `Edit an order ${pageTitleSuffix}`;
+        const sequence = app.getSequence('gotoEditOrderSequence');
+        sequence({
+          docketNumber,
+          documentIdToEdit,
+        });
+      }),
+    );
+
     route(
       '/case-detail/*/add-docket-entry',
       checkLoggedIn(docketNumber => {
         document.title = `Add docket entry ${pageTitleSuffix}`;
         app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
+      }),
+    );
+
+    route(
+      '/case-detail/*/printable-docket-record',
+      checkLoggedIn(docketNumber => {
+        document.title = `Docket Record ${pageTitleSuffix}`;
+        app.getSequence('gotoPrintableDocketRecordSequence')({ docketNumber });
       }),
     );
 
@@ -213,6 +261,7 @@ const router = {
         app.getSequence('gotoRequestAccessSequence')({ docketNumber });
       }),
     );
+
     route(
       '/document-qc..',
       checkLoggedIn(() => {
@@ -237,7 +286,6 @@ const router = {
           });
         } else {
           const routeArgs = {
-            baseRoute: 'document-qc',
             workQueueIsInternal: false,
           };
           const pathParts = path.split('/');
@@ -249,11 +297,12 @@ const router = {
             routeArgs.box = pathParts[2];
           }
 
-          app.getSequence('gotoDashboardSequence')(routeArgs);
+          app.getSequence('gotoMessagesSequence')(routeArgs);
         }
-        document.title = `Dashboard ${pageTitleSuffix}`;
+        document.title = `Messages ${pageTitleSuffix}`;
       }),
     );
+
     route(
       '/trial-session-detail/*',
       checkLoggedIn(trialSessionId => {
@@ -261,6 +310,7 @@ const router = {
         app.getSequence('gotoTrialSessionDetailSequence')({ trialSessionId });
       }),
     );
+
     route(
       '/trial-session-working-copy/*',
       checkLoggedIn(trialSessionId => {
@@ -270,6 +320,7 @@ const router = {
         });
       }),
     );
+
     route(
       '/trial-sessions..',
       checkLoggedIn(() => {
@@ -281,9 +332,11 @@ const router = {
         app.getSequence('gotoTrialSessionsSequence')({ query });
       }),
     );
+
     route('/idle-logout', () => {
       app.getSequence('gotoIdleLogoutSequence')();
     });
+
     route('/log-in...', () => {
       const { code, path, token } = queryStringDecoder();
       if (code) {
@@ -292,6 +345,7 @@ const router = {
         app.getSequence('loginWithTokenSequence')({ path, token });
       }
     });
+
     route(
       '/before-filing-a-petition',
       checkLoggedIn(() => {
@@ -299,6 +353,7 @@ const router = {
         app.getSequence('gotoBeforeStartCaseSequence')();
       }),
     );
+
     route(
       '/file-a-petition/step-*',
       checkLoggedIn(step => {
@@ -348,6 +403,7 @@ const router = {
       document.title = `Style Guide ${pageTitleSuffix}`;
       app.getSequence('gotoStyleGuideSequence')();
     });
+
     route(
       '/messages..',
       checkLoggedIn(() => {
@@ -370,7 +426,6 @@ const router = {
           });
         } else {
           const routeArgs = {
-            baseRoute: 'messages',
             workQueueIsInternal: true,
           };
           const pathParts = path.split('/');
@@ -382,9 +437,9 @@ const router = {
             routeArgs.box = pathParts[2];
           }
 
-          app.getSequence('gotoDashboardSequence')(routeArgs);
+          app.getSequence('gotoMessagesSequence')(routeArgs);
         }
-        document.title = `Dashboard ${pageTitleSuffix}`;
+        document.title = `Messages ${pageTitleSuffix}`;
       }),
     );
 
@@ -393,6 +448,31 @@ const router = {
       checkLoggedIn(() => {
         document.title = `Case Deadlines ${pageTitleSuffix}`;
         app.getSequence('gotoAllCaseDeadlinesSequence')();
+      }),
+    );
+
+    route(
+      '/user/contact/edit',
+      checkLoggedIn(() => {
+        document.title = `Edit User Contact ${pageTitleSuffix}`;
+        app.getSequence('gotoUserContactEditSequence')();
+      }),
+    );
+
+    route(
+      '/search/no-matches',
+      checkLoggedIn(() => {
+        document.title = `Search Results ${pageTitleSuffix}`;
+        app.getSequence('gotoCaseSearchNoMatchesSequence')();
+      }),
+    );
+
+    route(
+      '/search..',
+      checkLoggedIn(() => {
+        const query = route.query();
+        document.title = `Advanced Search ${pageTitleSuffix}`;
+        app.getSequence('gotoAdvancedSearchSequence')(query);
       }),
     );
 
@@ -413,6 +493,7 @@ const router = {
         app.getSequence('gotoLoginSequence')();
       }
     });
+
     route(
       '..',
       () => {
@@ -423,8 +504,17 @@ const router = {
       },
       true,
     );
+
     route.start(true);
   },
 };
 
-export { route, router, externalRoute };
+export {
+  back,
+  createObjectURL,
+  externalRoute,
+  openInNewTab,
+  revokeObjectURL,
+  route,
+  router,
+};

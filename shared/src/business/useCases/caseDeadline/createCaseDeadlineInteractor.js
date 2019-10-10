@@ -23,7 +23,9 @@ exports.createCaseDeadlineInteractor = async ({
     throw new UnauthorizedError('Unauthorized for create case deadline');
   }
 
-  const newCaseDeadline = new CaseDeadline(caseDeadline);
+  const newCaseDeadline = new CaseDeadline(caseDeadline, {
+    applicationContext,
+  });
 
   await applicationContext.getPersistenceGateway().createCaseDeadline({
     applicationContext,

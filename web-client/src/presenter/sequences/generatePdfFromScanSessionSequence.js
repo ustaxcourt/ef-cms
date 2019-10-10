@@ -7,15 +7,18 @@ import { getFormValueDocumentSizeAction } from '../actions/getFormValueDocumentS
 import { resetScanSessionAction } from '../actions/resetScanSessionAction';
 import { selectDocumentForPreviewSequence } from './selectDocumentForPreviewSequence';
 import { setDocumentUploadModeSequence } from './setDocumentUploadModeSequence';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateFormValueSequence } from './updateFormValueSequence';
 import { validateFileSizeAction } from '../actions/validateFileSizeAction';
 import { validatePetitionFromPaperSequence } from './validatePetitionFromPaperSequence';
 
 export const generatePdfFromScanSessionSequence = [
+  setWaitingForResponseAction,
   generatePdfFromScanSessionAction,
   validateFileSizeAction,
   {
-    invalid: [set(state.submitting, false), set(state.isScanning, false)],
+    invalid: [set(state.isScanning, false)],
     valid: [
       getFormValueDocumentAction,
       ...updateFormValueSequence,
@@ -27,4 +30,5 @@ export const generatePdfFromScanSessionSequence = [
       resetScanSessionAction,
     ],
   },
+  unsetWaitingForResponseAction,
 ];

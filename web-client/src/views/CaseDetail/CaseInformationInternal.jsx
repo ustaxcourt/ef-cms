@@ -65,10 +65,10 @@ TrialInformation.propTypes = {
 
 export const CaseInformationInternal = connect(
   {
-    caseDetail: state.formattedCaseDetail,
-    helper: state.caseDetailHelper,
+    caseDetailHelper: state.caseDetailHelper,
+    formattedCaseDetail: state.formattedCaseDetail,
   },
-  ({ caseDetail, helper }) => {
+  ({ caseDetailHelper, formattedCaseDetail }) => {
     return (
       <div className="internal-information">
         <div className="grid-container padding-x-0">
@@ -79,8 +79,8 @@ export const CaseInformationInternal = connect(
                   <div className="content-wrapper">
                     <h3 className="underlined">Petition Details</h3>
                     <PetitionDetails
-                      caseDetail={caseDetail}
-                      showPaymentRecord={helper.showPaymentRecord}
+                      caseDetail={formattedCaseDetail}
+                      showPaymentRecord={caseDetailHelper.showPaymentRecord}
                     />
                   </div>
                 </div>
@@ -91,8 +91,8 @@ export const CaseInformationInternal = connect(
                 <div className="case-info-card">
                   <h3>Petition Details</h3>
                   <PetitionDetails
-                    caseDetail={caseDetail}
-                    showPaymentRecord={helper.showPaymentRecord}
+                    caseDetail={formattedCaseDetail}
+                    showPaymentRecord={caseDetailHelper.showPaymentRecord}
                   />
                 </div>
               </div>
@@ -102,7 +102,7 @@ export const CaseInformationInternal = connect(
                 <div className="card height-full">
                   <div className="content-wrapper">
                     <h3 className="underlined">Trial Information</h3>
-                    <TrialInformation caseDetail={caseDetail} />
+                    <TrialInformation caseDetail={formattedCaseDetail} />
                   </div>
                 </div>
               </div>
@@ -111,7 +111,7 @@ export const CaseInformationInternal = connect(
               <div className="tablet:grid-col-6 margin-top-2">
                 <div className="case-info-card">
                   <h3>Trial Information</h3>
-                  <TrialInformation caseDetail={caseDetail} />
+                  <TrialInformation caseDetail={formattedCaseDetail} />
                 </div>
               </div>
             </Mobile>

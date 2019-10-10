@@ -1,6 +1,5 @@
-const s3Zip = require('s3-zip');
+const s3Zip = require('./s3-zip');
 const stream = require('stream');
-
 /**
  * zipDocuments
  *
@@ -11,10 +10,21 @@ const stream = require('stream');
  * @param {string} providers.zipName the name of the generated zip file
  * @returns {Promise} the created zip
  */
-exports.zipDocuments = ({ applicationContext, fileNames, s3Ids, zipName }) => {
+exports.zipDocuments = ({
+  applicationContext,
+  extraFileNames,
+  extraFiles,
+  fileNames,
+  s3Ids,
+  uploadToTempBucket,
+  zipName,
+}) => {
   return new Promise((resolve, reject) => {
     const { region } = applicationContext.environment;
-    const bucket = applicationContext.environment.documentsBucketName;
+    const documentsBucket = applicationContext.environment.documentsBucketName;
+    const destinationBucket = uploadToTempBucket
+      ? applicationContext.environment.tempDocumentsBucketName
+      : applicationContext.environment.documentsBucketName;
 
     const s3Client = applicationContext.getStorageClient();
 
@@ -23,12 +33,10 @@ exports.zipDocuments = ({ applicationContext, fileNames, s3Ids, zipName }) => {
 
       const params = {
         Body: pass,
-        Bucket: bucket,
+        Bucket: destinationBucket,
         Key: zipName,
       };
-      s3Client.upload(params, function() {});
-
-      pass.on('finish', () => {
+      s3Client.upload(params, function() {
         resolve();
       });
 
@@ -40,10 +48,17 @@ exports.zipDocuments = ({ applicationContext, fileNames, s3Ids, zipName }) => {
     s3Zip
       .setArchiverOptions({ gzip: false })
       .archive(
-        { bucket: bucket, region: region, s3: s3Client },
+        {
+          bucket: documentsBucket,
+          debug: true,
+          region,
+          s3: s3Client,
+        },
         '',
         s3Ids,
         fileNames,
+        extraFiles,
+        extraFileNames,
       )
       .pipe(uploadFromStream(s3Client));
   });

@@ -69,7 +69,9 @@ export const PendingMessages = connect(
             (workItem, idx) => (
               <div
                 aria-labelledby="tab-pending-messages"
-                className={`card workitem-${workItem.workItemId} ${
+                className={`card margin-bottom-0 workitem-${
+                  workItem.workItemId
+                } ${
                   workItem.currentMessage.messageId === messageId
                     ? 'highlight'
                     : ''

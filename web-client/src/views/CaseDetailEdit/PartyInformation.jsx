@@ -96,7 +96,7 @@ export const PartyInformation = connect(
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  <FontAwesomeIcon icon="file-pdf" />
+                  <FontAwesomeIcon className="fa-icon-blue" icon="file-pdf" />
                   Ownership Disclosure Statement
                 </a>
               )}

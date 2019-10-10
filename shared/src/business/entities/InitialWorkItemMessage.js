@@ -3,6 +3,12 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 
+InitialWorkItemMessage.VALIDATION_ERROR_MESSAGES = {
+  assigneeId: 'Select a recipient',
+  message: 'Enter a message',
+  section: 'Select a section',
+};
+
 /**
  *
  * @param {object} rawMessage the raw message data
@@ -27,11 +33,7 @@ joiValidationDecorator(
     section: joi.string().required(),
   }),
   undefined,
-  {
-    assigneeId: 'Recipient is required.',
-    message: 'Message is required.',
-    section: 'Section is required.',
-  },
+  InitialWorkItemMessage.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { InitialWorkItemMessage };

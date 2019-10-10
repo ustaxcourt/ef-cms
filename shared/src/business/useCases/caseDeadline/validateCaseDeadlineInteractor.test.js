@@ -10,12 +10,13 @@ describe('validateCaseDeadlineInteractor', () => {
         getEntityConstructors: () => ({
           CaseDeadline,
         }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
       caseDeadline: {},
     });
 
     expect(Object.keys(errors)).toEqual(
-      Object.keys(CaseDeadline.errorToMessageMap),
+      Object.keys(CaseDeadline.VALIDATION_ERROR_MESSAGES),
     );
   });
 
@@ -32,6 +33,7 @@ describe('validateCaseDeadlineInteractor', () => {
         getEntityConstructors: () => ({
           CaseDeadline,
         }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
       caseDeadline: mockCaseDeadline,
     });

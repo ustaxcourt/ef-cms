@@ -10,8 +10,8 @@ import React from 'react';
 import howToPrepareYourDocuments from '../../pdfs/how-to-prepare-your-documents.pdf';
 
 export const DashboardPetitioner = connect(
-  { helper: state.dashboardExternalHelper, user: state.user },
-  ({ helper, user }) => {
+  { dashboardExternalHelper: state.dashboardExternalHelper, user: state.user },
+  ({ dashboardExternalHelper, user }) => {
     return (
       <React.Fragment>
         <BigHeader text={`Welcome, ${user.name}`} />
@@ -20,8 +20,8 @@ export const DashboardPetitioner = connect(
           <ErrorNotification />
           <div className="grid-row grid-gap taxpayer-tools">
             <div className="tablet:grid-col-8">
-              {helper.showWhatToExpect && <WhatToExpect />}
-              {helper.showCaseList && <CaseListPetitioner />}
+              {dashboardExternalHelper.showWhatToExpect && <WhatToExpect />}
+              {dashboardExternalHelper.showCaseList && <CaseListPetitioner />}
             </div>
             <div className="tablet:grid-col-4">
               <div className="card">

@@ -1,3 +1,5 @@
+import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+
 export default (test, fakeFile) => {
   return it('Taxpayer files document for case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
@@ -11,8 +13,8 @@ export default (test, fakeFile) => {
     await test.runSequence('selectDocumentSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      category: 'Select a Category.',
-      documentType: 'Select a Document Type.',
+      category: VALIDATION_ERROR_MESSAGES.category,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -22,7 +24,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateSelectDocumentTypeSequence');
     expect(test.getState('validationErrors')).toEqual({
-      documentType: 'Select a Document Type.',
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -64,7 +66,7 @@ export default (test, fakeFile) => {
     await test.runSequence('selectDocumentSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      documentType: 'Select a Document Type.',
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -88,8 +90,8 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       secondaryDocument: {
-        category: 'Select a Category.',
-        documentType: 'Select a Document Type.',
+        category: VALIDATION_ERROR_MESSAGES.category,
+        documentType: VALIDATION_ERROR_MESSAGES.documentType,
       },
     });
 
@@ -119,7 +121,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       secondaryDocument: {
-        freeText: 'Provide an answer.',
+        freeText: VALIDATION_ERROR_MESSAGES.freeText,
       },
     });
 
@@ -145,9 +147,9 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      objections: 'Enter selection for Objections.',
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      objections: VALIDATION_ERROR_MESSAGES.objections,
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -161,14 +163,15 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter date for Certificate of Service.',
-      objections: 'Enter selection for Objections.',
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      certificateOfServiceDate:
+        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
+      objections: VALIDATION_ERROR_MESSAGES.objections,
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Select a Document Type.',
+          supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
         },
       ],
     });
@@ -180,13 +183,14 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter date for Certificate of Service.',
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      certificateOfServiceDate:
+        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Select a Document Type.',
+          supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
         },
       ],
     });
@@ -207,13 +211,13 @@ export default (test, fakeFile) => {
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        'Certificate of Service date is in the future. Please enter a valid date.',
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Select a Document Type.',
+          supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
         },
       ],
     });
@@ -225,12 +229,12 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Select a Document Type.',
+          supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
         },
       ],
     });
@@ -254,13 +258,15 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
       supportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile: 'Upload a document.',
-          supportingDocumentFreeText: 'Enter name.',
+          supportingDocumentFile:
+            VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
+          supportingDocumentFreeText:
+            VALIDATION_ERROR_MESSAGES.supportingDocumentFreeText,
         },
       ],
     });
@@ -272,12 +278,13 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateExternalDocumentInformationSequence');
     expect(test.getState('validationErrors')).toEqual({
-      primaryDocumentFile: 'Upload a document.',
-      secondaryDocumentFile: 'Upload a document.',
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
       supportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile: 'Upload a document.',
+          supportingDocumentFile:
+            VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
         },
       ],
     });
@@ -307,7 +314,7 @@ export default (test, fakeFile) => {
       secondarySupportingDocuments: [
         {
           index: 0,
-          supportingDocument: 'Select a Document Type.',
+          supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
         },
       ],
     });
@@ -334,8 +341,10 @@ export default (test, fakeFile) => {
       secondarySupportingDocuments: [
         {
           index: 0,
-          supportingDocumentFile: 'Upload a document.',
-          supportingDocumentFreeText: 'Enter name.',
+          supportingDocumentFile:
+            VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
+          supportingDocumentFreeText:
+            VALIDATION_ERROR_MESSAGES.supportingDocumentFreeText,
         },
       ],
     });

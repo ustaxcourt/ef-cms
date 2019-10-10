@@ -45,7 +45,7 @@ exports.checkForReadyForTrialCasesInteractor = async ({
       });
 
     if (caseToCheck) {
-      const caseEntity = new Case(caseToCheck);
+      const caseEntity = new Case(caseToCheck, { applicationContext });
 
       if (caseEntity.status === Case.STATUS_TYPES.generalDocket) {
         caseEntity.checkForReadyForTrial();

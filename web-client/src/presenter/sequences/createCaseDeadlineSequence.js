@@ -7,11 +7,11 @@ import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { createCaseDeadlineAction } from '../actions/CaseDeadline//createCaseDeadlineAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateCaseDeadlineAction } from '../actions/CaseDeadline/validateCaseDeadlineAction';
 
 export const createCaseDeadlineSequence = [
@@ -22,7 +22,7 @@ export const createCaseDeadlineSequence = [
   {
     error: [setValidationErrorsAction],
     success: [
-      setFormSubmittingAction,
+      setWaitingForResponseAction,
       createCaseDeadlineAction,
       {
         success: [stopShowValidationAction],
@@ -33,7 +33,7 @@ export const createCaseDeadlineSequence = [
       clearModalStateAction,
       refreshCaseAction,
       getCaseDeadlinesForCaseAction,
-      unsetFormSubmittingAction,
+      unsetWaitingForResponseAction,
     ],
   },
 ];

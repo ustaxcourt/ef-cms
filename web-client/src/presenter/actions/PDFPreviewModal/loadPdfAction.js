@@ -28,7 +28,7 @@ export const loadPdfAction = ({ applicationContext, path, props, store }) => {
         store.set(state.pdfPreviewModal.pdfDoc, pdfDoc);
         store.set(state.pdfPreviewModal.totalPages, pdfDoc.numPages);
         store.set(state.pdfPreviewModal.currentPage, 1);
-        store.set(state.pdfPreviewModal.error, null);
+        store.unset(state.pdfPreviewModal.error);
         resolve(path.success());
       } catch (err) {
         store.set(state.pdfPreviewModal.error, err);

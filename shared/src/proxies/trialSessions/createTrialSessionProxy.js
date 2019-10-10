@@ -15,6 +15,6 @@ exports.createTrialSessionInteractor = ({
   return post({
     applicationContext,
     body: trialSession,
-    endpoint: `/trial-sessions`,
+    endpoint: '/trial-sessions',
   });
 };

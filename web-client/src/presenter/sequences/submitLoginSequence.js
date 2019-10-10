@@ -3,13 +3,13 @@ import { createTokenAction } from '../actions/createTokenAction';
 import { decodeTokenAction } from '../actions/decodeTokenAction';
 import { getUserAction } from '../actions/getUserAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const submitLoginSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   createTokenAction,
   decodeTokenAction,
   setTokenAction,
@@ -17,5 +17,5 @@ export const submitLoginSequence = [
   setUserAction,
   clearAlertsAction,
   navigateToPathAction,
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];

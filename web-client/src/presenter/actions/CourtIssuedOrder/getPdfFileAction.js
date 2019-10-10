@@ -8,7 +8,12 @@ import { state } from 'cerebral';
  * @param {object} providers.props the passed in props
  * @returns {object} pdfFile, pdfUrl
  */
-export const getPdfFileAction = async ({ applicationContext, get, props }) => {
+export const getPdfFileAction = async ({
+  applicationContext,
+  get,
+  props,
+  router,
+}) => {
   const { htmlString } = props;
   const documentTitle = get(state.form.documentTitle);
 
@@ -31,7 +36,7 @@ export const getPdfFileAction = async ({ applicationContext, get, props }) => {
   const pdfFile = new File([pdfBlob], documentTitle, {
     type: 'application/pdf',
   });
-  const pdfUrl = window.URL.createObjectURL(pdfFile);
+  const pdfUrl = router.createObjectURL(pdfFile);
 
   return { pdfFile, pdfUrl };
 };

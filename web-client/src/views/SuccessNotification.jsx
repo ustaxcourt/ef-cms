@@ -19,7 +19,7 @@ class SuccessNotificationComponent extends React.Component {
 
   render() {
     const { alertSuccess } = this.props;
-    const { dismissAlert } = this.props;
+    const { dismissAlertSequence } = this.props;
     this.notificationRef = React.createRef();
     const isMessageOnly =
       alertSuccess && alertSuccess.message && !alertSuccess.title;
@@ -55,7 +55,7 @@ class SuccessNotificationComponent extends React.Component {
                     <button
                       className="usa-button usa-button--unstyled no-underline"
                       type="button"
-                      onClick={() => dismissAlert()}
+                      onClick={() => dismissAlertSequence()}
                     >
                       Dismiss <FontAwesomeIcon icon="times-circle" />
                     </button>
@@ -72,13 +72,13 @@ class SuccessNotificationComponent extends React.Component {
 
 SuccessNotificationComponent.propTypes = {
   alertSuccess: PropTypes.object,
-  dismissAlert: PropTypes.func,
+  dismissAlertSequence: PropTypes.func,
 };
 
 export const SuccessNotification = connect(
   {
     alertSuccess: state.alertSuccess,
-    dismissAlert: sequences.dismissAlertSequence,
+    dismissAlertSequence: sequences.dismissAlertSequence,
   },
   SuccessNotificationComponent,
 );

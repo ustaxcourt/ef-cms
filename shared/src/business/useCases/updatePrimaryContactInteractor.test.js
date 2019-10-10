@@ -28,6 +28,15 @@ let persistenceGateway = {
   saveWorkItemForNonPaper: () => null,
   updateCase: updateCaseStub,
 };
+
+const useCases = {
+  generatePdfFromHtmlInteractor: () => {
+    generatePdfFromHtmlInteractorStub();
+    return fakeFile;
+  },
+  userIsAssociated: () => true,
+};
+
 const applicationContext = {
   environment: { stage: 'local' },
   getCurrentUser: () => {
@@ -40,23 +49,20 @@ const applicationContext = {
   getPersistenceGateway: () => {
     return persistenceGateway;
   },
-  getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-  getUseCases: () => {
+  getTemplateGenerators: () => {
     return {
-      generatePdfFromHtmlInteractor: () => {
-        generatePdfFromHtmlInteractorStub();
-        return fakeFile;
-      },
-    };
-  },
-  getUtilities: () => {
-    return {
-      createISODateString,
-      formatDateString,
       generateChangeOfAddressTemplate: () => {
         generateChangeOfAddressTemplateStub();
         return '<html></html>';
       },
+    };
+  },
+  getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+  getUseCases: () => useCases,
+  getUtilities: () => {
+    return {
+      createISODateString,
+      formatDateString,
       getAddressPhoneDiff: () => {
         getAddressPhoneDiffStub();
         return {
@@ -110,11 +116,12 @@ describe('update primary contact on a case', () => {
     );
   });
 
-  it('throws an error if the case user id is not equal to the user making the request', async () => {
+  it('throws an error if the user making the request is not associated with the case', async () => {
     persistenceGateway.getCaseByCaseId = async () => ({
       ...MOCK_CASE,
       userId: '123',
     });
+    useCases.userIsAssociated = () => false;
     let error = null;
     try {
       await updatePrimaryContactInteractor({

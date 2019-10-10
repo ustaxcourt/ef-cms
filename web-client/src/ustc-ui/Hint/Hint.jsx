@@ -3,13 +3,13 @@ import { connect } from '@cerebral/react';
 import React from 'react';
 
 export const Hint = connect(props => {
-  const { children, exclamation, fullWidth } = props;
+  const { children, exclamation, fullWidth, wider } = props;
 
   return (
     <div
       className={`alert-gold add-bottom-margin ${
         fullWidth ? 'full-width' : ''
-      }`}
+      } ${wider ? 'wider' : ''}`}
     >
       <span className="usa-hint ustc-form-hint-with-svg">
         {!exclamation && (

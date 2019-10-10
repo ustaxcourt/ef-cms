@@ -17,7 +17,7 @@ export const clearWizardDataAction = ({ get, props, store }) => {
 
       break;
     case 'certificateOfService':
-      store.set(state.form.certificateOfServiceDate, null);
+      store.unset(state.form.certificateOfServiceDate);
 
       break;
     case 'documentType':

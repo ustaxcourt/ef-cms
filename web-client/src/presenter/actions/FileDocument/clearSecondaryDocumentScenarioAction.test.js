@@ -13,6 +13,6 @@ describe('clearSecondaryDocumentScenarioAction', () => {
       },
     });
 
-    expect(result.state.form.secondaryDocument.scenario).toEqual(null);
+    expect(result.state.form.secondaryDocument.scenario).toBeUndefined();
   });
 });

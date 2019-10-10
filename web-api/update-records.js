@@ -10,13 +10,14 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 (async function() {
   let hasMoreResults = true;
   let lastKey = null;
+  let count = 0;
   while (hasMoreResults) {
     hasMoreResults = false;
 
     await documentClient
       .scan({
         ExclusiveStartKey: lastKey,
-        TableName: 'efcms-dev',
+        TableName: 'efcms-stg',
       })
       .promise()
       .then(async results => {
@@ -24,21 +25,51 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
         lastKey = results.LastEvaluatedKey;
         const recordsUpdated = [];
         for (const result of results.Items) {
-          if (result.gsi1pk && result.gsi1pk.indexOf('workitem-') !== -1) {
-            if (!result.document.receivedAt) {
-              result.document.receivedAt = result.document.createdAt;
-              recordsUpdated.push(
-                documentClient
-                  .put({
-                    Item: result,
-                    TableName: 'efcms-dev',
-                  })
-                  .promise(),
-              );
-            }
+          console.log(count++);
+          if (result.respondents) {
+            result.respondents = result.respondents.map(r => ({
+              ...r,
+              contact: {
+                address1: '234 Main St',
+                address2: 'Apartment 4',
+                address3: 'Under the stairs',
+                city: 'Chicago',
+                countryType: 'domestic',
+                phone: '+1 (555) 555-5555',
+                postalCode: '61234',
+                state: 'IL',
+              },
+            }));
+          }
+
+          if (result.practitioners) {
+            result.practitioners = result.practitioners.map(p => ({
+              ...p,
+              contact: {
+                address1: '234 Main St',
+                address2: 'Apartment 4',
+                address3: 'Under the stairs',
+                city: 'Chicago',
+                countryType: 'domestic',
+                phone: '+1 (555) 555-5555',
+                postalCode: '61234',
+                state: 'IL',
+              },
+            }));
+          }
+
+          if (result.respondents || result.practitioners) {
+            console.log('updating a case');
+            await recordsUpdated.push(
+              documentClient
+                .put({
+                  Item: result,
+                  TableName: 'efcms-stg',
+                })
+                .promise(),
+            );
           }
         }
-        await Promise.all(recordsUpdated);
       });
   }
 })();

@@ -32,7 +32,9 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
       trialSessionId,
     });
 
-  const trialSessionEntity = new TrialSession(trialSession);
+  const trialSessionEntity = new TrialSession(trialSession, {
+    applicationContext,
+  });
 
   trialSessionEntity.validate();
 

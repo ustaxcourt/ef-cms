@@ -7,11 +7,11 @@ import { clearUsersAction } from '../actions/clearUsersAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
 export const createWorkItemSequence = [
@@ -21,7 +21,7 @@ export const createWorkItemSequence = [
   {
     error: [setValidationErrorsAction],
     success: [
-      setFormSubmittingAction,
+      setWaitingForResponseAction,
       createWorkItemAction,
       {
         success: [stopShowValidationAction, setAlertSuccessAction],
@@ -32,7 +32,7 @@ export const createWorkItemSequence = [
       clearModalAction,
       clearModalStateAction,
       refreshCaseAction,
-      unsetFormSubmittingAction,
+      unsetWaitingForResponseAction,
     ],
   },
 ];

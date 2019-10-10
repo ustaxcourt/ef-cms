@@ -15,11 +15,11 @@ import React from 'react';
 export const TrialSessionWorkingCopy = connect(
   {
     baseUrl: state.baseUrl,
-    formattedTrialSession: state.formattedTrialSessionDetails,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     showModal: state.showModal,
     token: state.token,
   },
-  ({ baseUrl, formattedTrialSession, showModal, token }) => {
+  ({ baseUrl, formattedTrialSessionDetails, showModal, token }) => {
     return (
       <>
         <TrialSessionDetailHeader />
@@ -30,8 +30,10 @@ export const TrialSessionWorkingCopy = connect(
             </div>
             <div className="grid-col-3 text-right padding-top-2">
               <a
-                aria-label="Batch download trial session"
-                href={`${baseUrl}/trial-sessions/${formattedTrialSession.trialSessionId}/batch-download?token=${token}`}
+                aria-label="Download batch of Trial Session"
+                href={`${baseUrl}/trial-sessions/${formattedTrialSessionDetails.trialSessionId}/batch-download/${formattedTrialSessionDetails.zipName}?token=${token}`}
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />{' '}
                 Download All Cases

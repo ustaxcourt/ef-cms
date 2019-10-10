@@ -15,7 +15,7 @@ describe('validateAddRespondent', () => {
     });
 
     expect(Object.keys(errors)).toEqual(
-      Object.keys(AddRespondent.errorToMessageMap),
+      Object.keys(AddRespondent.VALIDATION_ERROR_MESSAGES),
     );
   });
 

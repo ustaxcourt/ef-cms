@@ -1,3 +1,7 @@
+import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
+
+const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
+
 export default (test, fakeFile) => {
   return it('Practitioner requests access to case', async () => {
     await test.runSequence('gotoRequestAccessSequence', {
@@ -7,13 +11,13 @@ export default (test, fakeFile) => {
     await test.runSequence('reviewRequestAccessInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Enter selection for Certificate of Service.',
-      documentTitleTemplate: 'Select a document.',
-      documentType: 'Select a document.',
-      eventCode: 'Select a document.',
-      primaryDocumentFile: 'A file was not selected.',
-      representingPrimary: 'Select a party.',
-      scenario: 'Select a document.',
+      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
+      documentTitleTemplate: VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
+      scenario: VALIDATION_ERROR_MESSAGES.scenario,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -35,9 +39,9 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Enter selection for Certificate of Service.',
-      primaryDocumentFile: 'A file was not selected.',
-      representingPrimary: 'Select a party.',
+      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
+      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -47,8 +51,8 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfService: 'Enter selection for Certificate of Service.',
-      representingPrimary: 'Select a party.',
+      certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
+      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -58,8 +62,9 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: 'Enter a Certificate of Service Date.',
-      representingPrimary: 'Select a party.',
+      certificateOfServiceDate:
+        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
+      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -78,8 +83,8 @@ export default (test, fakeFile) => {
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        'Certificate of Service date is in the future. Please enter a valid date.',
-      representingPrimary: 'Select a party.',
+        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
+      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -89,7 +94,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      representingPrimary: 'Select a party.',
+      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {

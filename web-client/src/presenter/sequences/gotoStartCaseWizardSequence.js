@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseTypesAction } from '../actions/getCaseTypesAction';
@@ -14,7 +13,6 @@ import { setFilingTypesAction } from '../actions/setFilingTypesAction';
 import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
 
 export const gotoStartCaseWizardSequence = [
-  clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,
   prepareFormAction,

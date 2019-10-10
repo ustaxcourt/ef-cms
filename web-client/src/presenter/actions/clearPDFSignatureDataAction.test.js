@@ -15,6 +15,6 @@ describe('clearPDFSignatureDataAction', () => {
       },
     });
 
-    expect(result.state.pdfForSigning.signatureData).toBeNull();
+    expect(result.state.pdfForSigning.signatureData).toBeUndefined();
   });
 });

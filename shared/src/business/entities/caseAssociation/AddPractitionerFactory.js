@@ -12,6 +12,12 @@ const {
  */
 function AddPractitionerFactory() {}
 
+AddPractitionerFactory.VALIDATION_ERROR_MESSAGES = {
+  representingPrimary: 'Select a represented party',
+  representingSecondary: 'Select a represented party',
+  user: 'Select a petitioner counsel',
+};
+
 /**
  *
  * @param {object} metadata the metadata
@@ -35,12 +41,6 @@ AddPractitionerFactory.get = metadata => {
     representingSecondary: joi.boolean(),
   };
 
-  let errorToMessageMap = {
-    representingPrimary: 'Select a represented party.',
-    representingSecondary: 'Select a represented party.',
-    user: 'Select a practitioner.',
-  };
-
   let customValidate;
 
   const makeRequired = itemName => {
@@ -62,7 +62,7 @@ AddPractitionerFactory.get = metadata => {
     entityConstructor,
     schema,
     customValidate,
-    errorToMessageMap,
+    AddPractitionerFactory.VALIDATION_ERROR_MESSAGES,
   );
 
   return new entityConstructor(metadata);

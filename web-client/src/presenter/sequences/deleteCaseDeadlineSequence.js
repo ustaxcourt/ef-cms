@@ -5,12 +5,12 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { deleteCaseDeadlineAction } from '../actions/CaseDeadline//deleteCaseDeadlineAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const deleteCaseDeadlineSequence = [
   clearAlertsAction,
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   deleteCaseDeadlineAction,
   {
     success: [],
@@ -20,5 +20,5 @@ export const deleteCaseDeadlineSequence = [
   clearModalAction,
   refreshCaseAction,
   getCaseDeadlinesForCaseAction,
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];

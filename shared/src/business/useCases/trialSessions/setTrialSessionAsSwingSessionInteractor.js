@@ -32,7 +32,9 @@ exports.setTrialSessionAsSwingSessionInteractor = async ({
       trialSessionId,
     });
 
-  const trialSessionEntity = new TrialSession(trialSession);
+  const trialSessionEntity = new TrialSession(trialSession, {
+    applicationContext,
+  });
 
   trialSessionEntity.setAsSwingSession(swingSessionId);
 

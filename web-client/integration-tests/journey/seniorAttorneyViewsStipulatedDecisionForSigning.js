@@ -47,7 +47,7 @@ export default test => {
       // complete signing
       await test.runSequence('completeDocumentSigningSequence');
       const newSignatureData = test.getState('pdfForSigning.signatureData');
-      expect(newSignatureData).toBeNull();
+      expect(newSignatureData).toBeUndefined();
     });
   });
 };

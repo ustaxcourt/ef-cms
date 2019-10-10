@@ -7,7 +7,7 @@ describe('submitDocketEntryWithFileAction', () => {
   let validatePdfInteractorMock;
   let sanitizePdfInteractorMock;
   let fileDocketEntryInteractorMock;
-  let createCoverSheetInteractorMock;
+  let addCoversheetInteractorMock;
   let caseDetail;
 
   beforeEach(() => {
@@ -20,13 +20,13 @@ describe('submitDocketEntryWithFileAction', () => {
     validatePdfInteractorMock = jest.fn();
     sanitizePdfInteractorMock = jest.fn();
     fileDocketEntryInteractorMock = jest.fn(() => caseDetail);
-    createCoverSheetInteractorMock = jest.fn();
+    addCoversheetInteractorMock = jest.fn();
 
     //updateDocketEntryInteractorMock = jest.fn(() => caseDetail);
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        createCoverSheetInteractor: createCoverSheetInteractorMock,
+        addCoversheetInteractor: addCoversheetInteractorMock,
         fileDocketEntryInteractor: fileDocketEntryInteractorMock,
         sanitizePdfInteractor: sanitizePdfInteractorMock,
         validatePdfInteractor: validatePdfInteractorMock,
@@ -52,7 +52,7 @@ describe('submitDocketEntryWithFileAction', () => {
       },
     });
 
-    expect(createCoverSheetInteractorMock).toHaveBeenCalled();
+    expect(addCoversheetInteractorMock).toHaveBeenCalled();
     expect(fileDocketEntryInteractorMock).toHaveBeenCalled();
     expect(sanitizePdfInteractorMock).toHaveBeenCalled();
     expect(validatePdfInteractorMock).toHaveBeenCalled();

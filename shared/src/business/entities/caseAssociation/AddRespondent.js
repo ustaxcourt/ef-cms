@@ -14,8 +14,8 @@ function AddRespondent(rawProps) {
   });
 }
 
-AddRespondent.errorToMessageMap = {
-  user: 'Select a Respondent.',
+AddRespondent.VALIDATION_ERROR_MESSAGES = {
+  user: 'Select a respondent counsel',
 };
 
 AddRespondent.schema = joi.object().keys({
@@ -26,7 +26,7 @@ joiValidationDecorator(
   AddRespondent,
   AddRespondent.schema,
   undefined,
-  AddRespondent.errorToMessageMap,
+  AddRespondent.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { AddRespondent };

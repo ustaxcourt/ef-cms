@@ -16,6 +16,29 @@ const removeAWSGlobalFields = item => {
   return item;
 };
 
+/**
+ * used to filter empty strings from values before storing in dynamo
+ *
+ * @param {object} params the params to filter empty strings from
+ * @returns {object} the params with empty string values removed
+ */
+const filterEmptyStrings = params => {
+  const removeEmpty = obj => {
+    Object.keys(obj).forEach(key => {
+      if (obj[key] && typeof obj[key] === 'object') {
+        removeEmpty(obj[key]);
+      } else if (obj[key] === '') {
+        delete obj[key];
+      }
+    });
+  };
+
+  if (params) {
+    removeEmpty(params);
+  }
+  return params;
+};
+
 const getTableName = ({ applicationContext }) =>
   `efcms-${applicationContext.environment.stage}`;
 /**
@@ -24,13 +47,14 @@ const getTableName = ({ applicationContext }) =>
  * @returns {object} the item that was put
  */
 exports.put = params => {
+  const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
     .getDocumentClient()
     .put({
       TableName: getTableName({
         applicationContext: params.applicationContext,
       }),
-      ...params,
+      ...filteredParams,
     })
     .promise()
     .then(() => params.Item);
@@ -42,13 +66,14 @@ exports.put = params => {
  * @returns {object} the item that was updated
  */
 exports.update = params => {
+  const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
     .getDocumentClient()
     .update({
       TableName: getTableName({
         applicationContext: params.applicationContext,
       }),
-      ...params,
+      ...filteredParams,
     })
     .promise()
     .then(() => params.Item);
@@ -61,6 +86,7 @@ exports.update = params => {
  * @returns {object} the item that was updated
  */
 exports.updateConsistent = params => {
+  const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
     .getDocumentClient({
       useMasterRegion: true,
@@ -69,7 +95,7 @@ exports.updateConsistent = params => {
       TableName: getTableName({
         applicationContext: params.applicationContext,
       }),
-      ...params,
+      ...filteredParams,
     })
     .promise()
     .then(data => data.Attributes.id);
@@ -176,7 +202,7 @@ exports.batchWrite = ({ applicationContext, items }) => {
               '#pk': item.pk,
               '#sk': item.sk,
             },
-            Item: item,
+            Item: filterEmptyStrings(item),
           },
         })),
       },

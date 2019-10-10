@@ -10,11 +10,11 @@ import { state } from 'cerebral';
  * @returns {undefined}
  */
 export const setSectionInboxCountAction = ({ get, props, store }) => {
-  const internal = get(state.workQueueIsInternal);
+  const workQueueIsInternal = get(state.workQueueToDisplay.workQueueIsInternal);
   store.set(
     state.sectionInboxCount,
     props.workItems
-      .filter(item => item.isInternal === internal)
+      .filter(item => item.isInternal === workQueueIsInternal)
       .filter(item => item.document.isFileAttached !== false).length,
   );
 };

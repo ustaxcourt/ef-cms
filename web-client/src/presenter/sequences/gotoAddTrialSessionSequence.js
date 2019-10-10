@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
@@ -14,13 +13,15 @@ import { state } from 'cerebral';
 const gotoAddTrialSession = [
   setCurrentPageAction('Interstitial'),
   set(state.showValidation, false),
-  clearAlertsAction,
   clearFormAction,
   clearScreenMetadataAction,
   getTrialSessionsAction,
   setTrialSessionsAction,
   getUsersInSectionAction({ section: 'judge' }),
   setUsersAction,
+  set(state.form.startTimeExtension, 'am'),
+  set(state.form.startTimeHours, '10'),
+  set(state.form.startTimeMinutes, '00'),
   setCurrentPageAction('AddTrialSession'),
 ];
 

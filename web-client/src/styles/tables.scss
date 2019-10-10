@@ -16,7 +16,8 @@ table,
   }
 
   td {
-    padding: 15px 20px;
+    padding-top: 18px;
+    padding-bottom: 15px;
     background-color: transparent;
     vertical-align: top;
   }
@@ -228,6 +229,9 @@ table.work-queue {
     .sortActive {
       border-bottom: 3px solid color($theme-color-primary);
     }
+    &.small {
+      max-width: $table-column-width-small;
+    }
   }
 
   td {
@@ -251,8 +255,20 @@ table.work-queue {
       padding-top: 14px;
     }
 
+    &.message-queue-case-title {
+      max-width: 15rem;
+    }
+
+    &.small {
+      width: $table-column-width-small;
+    }
+
+    &.max-width-7 {
+      max-width: 7rem;
+    }
+
     &.message-queue-document {
-      max-width: units('tablet');
+      max-width: 25rem;
     }
 
     &.has-icon {
@@ -261,11 +277,15 @@ table.work-queue {
 
     .message-document-title {
       overflow: hidden;
-      max-width: units('tablet');
+      max-width: 35rem;
       padding: 4px;
       margin: -4px;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    &.to {
+      min-width: 7rem;
     }
 
     .message-document-detail {
@@ -443,14 +463,6 @@ table.docket-record {
       display: none;
     }
 
-    thead tr th {
-      height: 50px;
-    }
-
-    tbody td {
-      height: 65px;
-    }
-
     tr.in-progress {
       td {
         background: $color-yellow;
@@ -575,5 +587,11 @@ table.case-list tbody tr:nth-child(even) td {
 
   .overdue {
     color: color($theme-color-secondary);
+  }
+}
+
+.draft-documents {
+  .smaller-column {
+    width: 130px;
   }
 }

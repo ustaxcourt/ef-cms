@@ -4,6 +4,9 @@ const {
 const {
   validateExternalDocumentInteractor,
 } = require('./validateExternalDocumentInteractor');
+const {
+  VALIDATION_ERROR_MESSAGES,
+} = require('../../entities/externalDocument/ExternalDocumentInformationFactory');
 
 describe('validateExternalDocumentInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
@@ -17,8 +20,8 @@ describe('validateExternalDocumentInteractor', () => {
     });
 
     expect(errors).toEqual({
-      category: 'Select a Category.',
-      documentType: 'Select a Document Type.',
+      category: VALIDATION_ERROR_MESSAGES.category,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType,
     });
   });
 

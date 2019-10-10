@@ -7,7 +7,7 @@ const { ContactFactory } = require('./ContactFactory');
 exports.getNextFriendForIncompetentPersonContact = ContactFactory.createContactFactory(
   {
     additionalErrorMappings: {
-      secondaryName: 'Name of Next Friend is a required field.',
+      secondaryName: 'Enter name of next friend',
     },
     additionalValidation: {
       secondaryName: joi.string().required(),

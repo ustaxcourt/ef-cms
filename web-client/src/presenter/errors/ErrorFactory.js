@@ -8,21 +8,22 @@ import { UnidentifiedUserError } from './UnidentifiedUserError';
 export const ErrorFactory = {
   getError: e => {
     let responseCode = (e.response && e.response.status) || e.statusCode;
+    let newError = new ActionError(e);
     if (403 == responseCode) {
-      return new UnauthorizedRequestError(e);
+      newError = new UnauthorizedRequestError(e);
     } else if (404 == responseCode) {
-      return new NotFoundError(e);
+      newError = new NotFoundError(e);
     } else if (401 == responseCode) {
-      return new UnidentifiedUserError();
+      newError = new UnidentifiedUserError();
     } else if (/^4/.test(responseCode)) {
-      return new InvalidRequestError(e);
+      newError = new InvalidRequestError(e);
     } else if (/^5/.test(responseCode)) {
-      return new ServerInvalidResponseError(e);
+      newError = new ServerInvalidResponseError(e);
     } else if (!e.response) {
       // this should only happen if cognito throws a cors exception due to expired tokens or invalid tokens
-      return new UnidentifiedUserError(e);
-    } else {
-      return new ActionError(e);
+      newError = new UnidentifiedUserError(e);
     }
+    newError.originalError = e;
+    return newError;
   },
 };

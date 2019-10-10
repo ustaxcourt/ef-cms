@@ -24,5 +24,7 @@ exports.getTrialSessionsInteractor = async ({ applicationContext }) => {
       applicationContext,
     });
 
-  return TrialSession.validateRawCollection(trialSessions);
+  return TrialSession.validateRawCollection(trialSessions, {
+    applicationContext,
+  });
 };

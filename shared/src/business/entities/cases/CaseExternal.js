@@ -51,7 +51,7 @@ CaseExternal.prototype.init = function(rawCase) {
   this.stinFileSize = rawCase.stinFileSize;
 };
 
-CaseExternal.errorToMessageMap = Case.COMMON_ERROR_MESSAGES;
+CaseExternal.VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
 
 CaseExternal.commonRequirements = {
   businessType: joi
@@ -114,7 +114,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  CaseExternal.errorToMessageMap,
+  CaseExternal.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { CaseExternal };

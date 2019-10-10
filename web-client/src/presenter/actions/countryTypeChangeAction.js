@@ -17,7 +17,7 @@ export const countryTypeChangeAction = ({ store }) => {
     'state',
     'city',
   ].forEach(field => {
-    store.set(state.caseDetail.contactPrimary[field], undefined);
+    store.unset(state.caseDetail.contactPrimary[field]);
   });
 
   store.set(state.validationErrors.contactPrimary, {});

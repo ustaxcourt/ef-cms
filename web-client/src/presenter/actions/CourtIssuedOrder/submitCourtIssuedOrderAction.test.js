@@ -19,24 +19,6 @@ describe('submitCourtIssuedOrderAction', () => {
     };
   });
 
-  it('should skip calling fileCourtIssuedOrder if there is no primaryDocumentFileId', async () => {
-    fileCourtIssuedOrderStub.returns({ documents: [] });
-    await runAction(submitCourtIssuedOrderAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {},
-        form: {
-          documentType: 'Notice of Intervention',
-          primaryDocumentFile: {},
-        },
-      },
-    });
-
-    expect(fileCourtIssuedOrderStub.calledOnce).toEqual(false);
-  });
-
   it('should call fileCourtIssuedOrder', async () => {
     fileCourtIssuedOrderStub.returns({ documents: [] });
     await runAction(submitCourtIssuedOrderAction, {

@@ -1,11 +1,11 @@
 import { assignSelectedWorkItemsAction } from '../actions/assignSelectedWorkItemsAction';
 import { chooseWorkQueueSequence } from '../sequences/chooseWorkQueueSequence';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const assignSelectedWorkItemsSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   assignSelectedWorkItemsAction,
   ...chooseWorkQueueSequence,
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];

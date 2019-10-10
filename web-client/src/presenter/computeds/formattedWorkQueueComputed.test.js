@@ -123,10 +123,10 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [workItem],
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
+          workQueueIsInternal: true,
         },
       },
     });
@@ -155,10 +155,10 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
+          workQueueIsInternal: true,
         },
       },
     });
@@ -171,10 +171,10 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
+          workQueueIsInternal: true,
         },
       },
     });
@@ -187,10 +187,10 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
+          workQueueIsInternal: true,
         },
       },
     });
@@ -204,10 +204,10 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: {
           box: 'inbox',
           queue: 'my',
+          workQueueIsInternal: true,
         },
       },
     });
@@ -222,10 +222,10 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
-        workQueueIsInternal: true,
         workQueueToDisplay: {
           box: 'outbox',
           queue: 'my',
+          workQueueIsInternal: true,
         },
       },
     });
@@ -240,8 +240,11 @@ describe('formatted work queue computed', () => {
       state: {
         selectedWorkItems: [],
         workQueue: [workItem],
-        workQueueIsInternal: true,
-        workQueueToDisplay: { box: 'outbox', queue: 'section' },
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'section',
+          workQueueIsInternal: true,
+        },
       },
     });
 

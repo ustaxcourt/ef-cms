@@ -1,15 +1,13 @@
 import { generateDocketRecordPdfUrlAction } from '../actions/generateDocketRecordPdfUrlAction';
 import { gotoPrintDocketRecordPreview } from '../actions/gotoPrintDocketRecordPreview';
-import { printDocketRecordAction } from '../actions/printDocketRecordAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const printDocketRecordSequence = [
-  setFormSubmittingAction,
-  printDocketRecordAction,
+  setWaitingForResponseAction,
   generateDocketRecordPdfUrlAction,
   ...setPdfPreviewUrlSequence,
   gotoPrintDocketRecordPreview,
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];

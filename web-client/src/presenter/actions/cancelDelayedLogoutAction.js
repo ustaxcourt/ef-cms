@@ -10,6 +10,6 @@ import { state } from 'cerebral';
 export const cancelDelayedLogoutAction = ({ get, store }) => {
   const oldTimer = get(state.logoutTimer);
   clearTimeout(oldTimer);
-  store.set(state.logoutTimer, null);
+  store.unset(state.logoutTimer);
   store.set(state.shouldIdleLogout, false);
 };

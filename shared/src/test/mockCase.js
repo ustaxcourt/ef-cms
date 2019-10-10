@@ -9,6 +9,26 @@ exports.MOCK_CASE = {
     title: 'Executor',
   },
   docketNumber: '101-18',
+  docketRecord: [
+    {
+      description: 'first record',
+      documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+      filingDate: '2018-03-01T00:01:00.000Z',
+      index: 4,
+    },
+    {
+      description: 'second record',
+      documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+      filingDate: '2018-03-01T00:02:00.000Z',
+      index: 2,
+    },
+    {
+      description: 'third record',
+      documentId: '8675309b-28d0-43ec-bafb-654e83405413',
+      filingDate: '2018-03-01T00:03:00.000Z',
+      index: 3,
+    },
+  ],
   documents: MOCK_DOCUMENTS,
   filingType: 'Myself',
   hasIrsNotice: true,

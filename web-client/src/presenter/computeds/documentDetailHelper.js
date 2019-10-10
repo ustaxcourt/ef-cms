@@ -1,4 +1,3 @@
-import { formatDocument } from './formattedCaseDetail';
 import { formatWorkItem } from './formattedWorkQueue';
 import { state } from 'cerebral';
 import _ from 'lodash';
@@ -13,12 +12,16 @@ export const documentDetailHelper = (get, applicationContext) => {
   let showServeDocumentButton = false;
 
   const documentId = get(state.documentId);
+  let isDraftDocument = false;
   const document = (caseDetail.documents || []).find(
     item => item.documentId === documentId,
   );
   let formattedDocument = {};
+  let documentEditUrl;
   if (document) {
-    formattedDocument = formatDocument(applicationContext, document);
+    formattedDocument = applicationContext
+      .getUtilities()
+      .formatDocument(applicationContext, document);
     const allWorkItems = _.orderBy(
       formattedDocument.workItems,
       'createdAt',
@@ -44,10 +47,10 @@ export const documentDetailHelper = (get, applicationContext) => {
         !workItem.completedAt,
     );
 
-    // Check all documents assosicated with the case
+    // Check all documents associated with the case
     // to see if there is a signed stip decision
     const signedDocument = caseDetail.documents.find(
-      doc => doc.documentType === SIGNED_STIPULATED_DECISION,
+      doc => doc.documentType === SIGNED_STIPULATED_DECISION && !doc.archived,
     );
 
     showSignDocumentButton =
@@ -59,6 +62,23 @@ export const documentDetailHelper = (get, applicationContext) => {
       document.status !== 'served' &&
       currentUser.role === 'docketclerk' &&
       document.documentType === SIGNED_STIPULATED_DECISION;
+
+    const { ORDER_TYPES_MAP } = applicationContext.getConstants();
+
+    isDraftDocument =
+      (document.documentType === 'Stipulated Decision' &&
+        !document.documentType.signedAt) ||
+      (!document.servedAt &&
+        ORDER_TYPES_MAP.find(
+          order => order.documentType === document.documentType,
+        ));
+
+    if (isDraftDocument) {
+      documentEditUrl =
+        document.documentType === 'Stipulated Decision'
+          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+          : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`;
+    }
   }
 
   const formattedDocumentIsPetition =
@@ -75,7 +95,9 @@ export const documentDetailHelper = (get, applicationContext) => {
         !formattedDocument.isPetition));
 
   return {
+    documentEditUrl,
     formattedDocument,
+    isDraftDocument,
     showAction: (action, workItemId) => {
       const actions = get(state.workItemActions);
       return actions[workItemId] === action;

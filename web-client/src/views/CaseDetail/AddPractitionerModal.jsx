@@ -44,7 +44,7 @@ class AddPractitionerModalComponent extends ModalDialog {
                 {modal.practitionerMatches[0].barNumber}
                 )
                 <br />
-                {modal.practitionerMatches[0].addressLine2}
+                {modal.practitionerMatches[0].address2}
               </span>
             )}
             <div className="practitioner-matches">
@@ -75,7 +75,7 @@ class AddPractitionerModalComponent extends ModalDialog {
                     >
                       {counsel.name} ({counsel.barNumber})
                       <br />
-                      {counsel.addressLine2}
+                      {counsel.address2}
                     </label>
                   </div>
                 ))}

@@ -37,7 +37,7 @@ TrialSessionWorkingCopy.prototype.init = function(rawSession) {
   this.userId = rawSession.userId;
 };
 
-TrialSessionWorkingCopy.errorToMessageMap = {};
+TrialSessionWorkingCopy.VALIDATION_ERROR_MESSAGES = {};
 
 TrialSessionWorkingCopy.validationRules = {
   caseMetadata: joi
@@ -73,7 +73,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  TrialSessionWorkingCopy.errorToMessageMap,
+  TrialSessionWorkingCopy.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { TrialSessionWorkingCopy };

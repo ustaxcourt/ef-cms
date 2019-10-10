@@ -9,7 +9,6 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
-  - serverless-apigwy-binary
 
 custom:
   prune:
@@ -91,6 +90,7 @@ provider:
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
     DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-us-east-1
+    TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
     MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
@@ -243,7 +243,23 @@ functions:
           path: court-issued-order
           method: post
           cors: true
-          contentHandling: CONVERT_TO_BINARY
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  generateDocketRecordPdfLambda:
+    runtime: nodejs8.10
+    handler: web-api/src/apiHandlers.generateDocketRecordPdfLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: docket-record-pdf
+          method: post
+          cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -261,7 +277,6 @@ functions:
           path: generate-pdf-from-html
           method: post
           cors: true
-          contentHandling: CONVERT_TO_BINARY
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:

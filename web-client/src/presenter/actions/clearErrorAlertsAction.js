@@ -9,6 +9,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object used for clearing alertError and caseDetailErrors
  */
 export const clearErrorAlertsAction = ({ store }) => {
-  store.set(state.alertError, null);
+  store.unset(state.alertError);
   store.set(state.caseDetailErrors, {});
 };

@@ -59,6 +59,47 @@ describe('virusScanPdfInteractor', () => {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     };
 
-    await expect(virusScanPdfInteractor(infectedParams)).rejects.toThrow();
+    let error;
+    try {
+      await virusScanPdfInteractor(infectedParams);
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toEqual('error scanning PDF');
+  });
+
+  it('detects an infected PDF with code 1', async () => {
+    const infectedParams = {
+      applicationContext: {
+        environment: { documentsBucketName: 'documents' },
+        getStorageClient: () => ({
+          getObject: sinon.stub().returns({
+            promise: async () => ({
+              Body: testAsset('fake-virus.pdf'),
+            }),
+          }),
+          putObjectTagging: () => {},
+        }),
+        logger: {
+          error: () => null,
+          time: () => null,
+          timeEnd: () => null,
+        },
+        runVirusScan: async () => {
+          const err = new Error('');
+          err.code = 1;
+          throw err;
+        },
+      },
+      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    };
+
+    let error;
+    try {
+      await virusScanPdfInteractor(infectedParams);
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toEqual('infected');
   });
 });

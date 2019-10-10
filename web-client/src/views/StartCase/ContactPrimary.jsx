@@ -114,7 +114,12 @@ export const ContactPrimary = connect(
           {contactsHelper.contactPrimary.displayTitle && (
             <div className="usa-form-group">
               <label className="usa-label with-hint" htmlFor="title">
-                Title
+                Title{' '}
+                {contactsHelper.contactPrimary.titleHint && (
+                  <span className="usa-hint">
+                    ({contactsHelper.contactPrimary.titleHint})
+                  </span>
+                )}
               </label>
               <span className="usa-hint">For example, Executor, PR, etc.</span>
               <input

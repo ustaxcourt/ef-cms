@@ -1,8 +1,10 @@
 const joi = require('joi-browser');
-const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
 
 const COMMON_CITIES = [
@@ -115,11 +117,14 @@ TrialSession.validationName = 'TrialSession';
  * @param {object} rawSession the raw session data
  * @constructor
  */
-function TrialSession(rawSession) {
-  this.init(rawSession);
+function TrialSession(rawSession, { applicationContext }) {
+  this.init(rawSession, { applicationContext });
 }
 
-TrialSession.prototype.init = function(rawSession) {
+TrialSession.prototype.init = function(rawSession, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
   this.address1 = rawSession.address1;
   this.address2 = rawSession.address2;
   this.caseOrder = rawSession.caseOrder || [];
@@ -144,30 +149,31 @@ TrialSession.prototype.init = function(rawSession) {
   this.termYear = rawSession.termYear;
   this.trialClerk = rawSession.trialClerk;
   this.trialLocation = rawSession.trialLocation;
-  this.trialSessionId = rawSession.trialSessionId || uuid.v4();
+  this.trialSessionId =
+    rawSession.trialSessionId || applicationContext.getUniqueId();
 };
 
-TrialSession.errorToMessageMap = {
-  maxCases: 'Enter the maximum number of cases allowed for this session.',
+TrialSession.VALIDATION_ERROR_MESSAGES = {
+  maxCases: 'Enter a valid number of maximum cases',
   postalCode: [
     {
       contains: 'match',
-      message: 'Enter a valid ZIP code.',
+      message: 'Enter ZIP code',
     },
   ],
-  sessionType: 'Session type is required.',
+  sessionType: 'Select a session type',
   startDate: [
     {
       contains: 'must be larger than or equal to',
-      message: 'Date must be in the future.',
+      message: 'Enter a valid start date',
     },
-    'Date must be in correct format.',
+    'Enter a valid start date',
   ],
-  startTime: 'Start time value provided is invalid.',
-  swingSessionId: 'You must select a swing session.',
-  term: 'Term session is not valid.',
-  termYear: 'Term year is required.',
-  trialLocation: 'Trial Location is required.',
+  startTime: 'Enter a valid start time',
+  swingSessionId: 'You must select a swing session',
+  term: 'Term session is not valid',
+  termYear: 'Term year is required',
+  trialLocation: 'Select a trial session location',
 };
 
 TrialSession.validationRules = {
@@ -193,10 +199,7 @@ TrialSession.validationRules = {
       .string()
       .max(400)
       .optional(),
-    postalCode: joi
-      .string()
-      .regex(/^\d{5}(-\d{4})?$/)
-      .optional(),
+    postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
     sessionType: joi
       .string()
       .valid(TrialSession.SESSION_TYPES)
@@ -205,7 +208,7 @@ TrialSession.validationRules = {
       .date()
       .iso()
       .required(),
-    startTime: joi.string().regex(/^(([0-1][0-9])|([2][0-3])):([0-5][0-9])$/),
+    startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
     state: joi.string().optional(),
     status: joi
       .string()
@@ -264,7 +267,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  TrialSession.errorToMessageMap,
+  TrialSession.VALIDATION_ERROR_MESSAGES,
 );
 
 /**

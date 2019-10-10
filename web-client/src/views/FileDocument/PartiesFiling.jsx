@@ -4,18 +4,18 @@ import React from 'react';
 
 export const PartiesFiling = connect(
   {
-    caseDetail: state.formattedCaseDetail,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
+    formattedCaseDetail: state.formattedCaseDetail,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
   },
   ({
-    caseDetail,
     fileDocumentHelper,
     form,
+    formattedCaseDetail,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
   }) => {
@@ -54,7 +54,7 @@ export const PartiesFiling = connect(
                   }}
                 />
                 <label className="usa-checkbox__label" htmlFor="party-primary">
-                  {caseDetail.contactPrimary.name}, Petitioner
+                  {formattedCaseDetail.contactPrimary.name}, Petitioner
                 </label>
               </div>
               {fileDocumentHelper.showSecondaryParty && (
@@ -78,7 +78,7 @@ export const PartiesFiling = connect(
                     className="usa-checkbox__label"
                     htmlFor="party-secondary"
                   >
-                    {caseDetail.contactSecondary.name}, Petitioner
+                    {formattedCaseDetail.contactSecondary.name}, Petitioner
                   </label>
                 </div>
               )}
