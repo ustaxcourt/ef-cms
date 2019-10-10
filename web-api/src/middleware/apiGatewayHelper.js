@@ -30,7 +30,7 @@ exports.handle = async (event, fun) => {
     return exports.sendOk(response);
   } catch (err) {
     if (!process.env.CI) {
-      console.error('err', err);
+      //console.error('err', err);
     }
     if (err instanceof NotFoundError) {
       err.statusCode = 404;
