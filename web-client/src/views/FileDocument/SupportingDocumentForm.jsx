@@ -40,12 +40,12 @@ export const SupportingDocumentForm = connect(
             <Button
               link
               className="red-warning text-left padding-0 margin-left-1"
-              icon="times-circle"
+              icon="trash"
               onClick={() => {
                 removeSupportingDocumentSequence({ index });
               }}
             >
-              Remove
+              Delete
             </Button>
           </div>
         </h2>
