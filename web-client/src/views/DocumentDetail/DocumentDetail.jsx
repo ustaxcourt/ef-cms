@@ -1,19 +1,19 @@
-import { ArchiveDraftDocumentModal } from './DraftDocuments/ArchiveDraftDocumentModal';
-import { Button } from '../ustc-ui/Button/Button';
-import { CaseDetailEdit } from './CaseDetailEdit/CaseDetailEdit';
-import { CaseDetailHeader } from './CaseDetailHeader';
-import { CaseDetailReadOnly } from './CaseDetailReadOnly';
-import { CompletedMessages } from './DocumentDetail/CompletedMessages';
-import { ConfirmEditModal } from './DraftDocuments/ConfirmEditModal';
-import { CreateMessageModalDialog } from './DocumentDetail/CreateMessageModalDialog';
-import { ErrorNotification } from './ErrorNotification';
+import { ArchiveDraftDocumentModal } from '../DraftDocuments/ArchiveDraftDocumentModal';
+import { Button } from '../../ustc-ui/Button/Button';
+import { CaseDetailEdit } from '../CaseDetailEdit/CaseDetailEdit';
+import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CaseDetailReadOnly } from '../CaseDetailReadOnly';
+import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
+import { DocumentDetailHeader } from './DocumentDetailHeader';
+import { DocumentDisplayIframe } from './DocumentDisplayIframe';
+import { DocumentMessages } from './DocumentMessages';
+import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { PendingMessages } from './DocumentDetail/PendingMessages';
-import { RecallPetitionModalDialog } from './RecallPetitionModalDialog';
-import { ServeConfirmModalDialog } from './ServeConfirmModalDialog';
-import { ServeToIrsModalDialog } from './ServeToIrsModalDialog';
-import { SuccessNotification } from './SuccessNotification';
-import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { RecallPetitionModalDialog } from '../RecallPetitionModalDialog';
+import { ServeConfirmModalDialog } from '../ServeConfirmModalDialog';
+import { ServeToIrsModalDialog } from '../ServeToIrsModalDialog';
+import { SuccessNotification } from '../SuccessNotification';
+import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -23,7 +23,6 @@ export const DocumentDetail = connect(
   {
     archiveDraftDocumentModalSequence:
       sequences.archiveDraftDocumentModalSequence,
-    baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
@@ -39,11 +38,9 @@ export const DocumentDetail = connect(
       sequences.removeSignatureFromOrderSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
-    token: state.token,
   },
   ({
     archiveDraftDocumentModalSequence,
-    baseUrl,
     caseDetail,
     caseHelper,
     clickServeToIrsSequence,
@@ -57,7 +54,6 @@ export const DocumentDetail = connect(
     removeSignatureFromOrderSequence,
     setModalDialogNameSequence,
     showModal,
-    token,
   }) => {
     const renderParentTabs = () => {
       return (
@@ -95,23 +91,7 @@ export const DocumentDetail = connect(
               aria-labelledby="tab-pending-messages"
               id="tab-pending-messages-panel"
             >
-              <Tabs
-                boxed
-                bind="documentDetail.messagesTab"
-                className="container-tabs no-full-border-bottom tab-button-h3"
-                id="case-detail-messages-tabs"
-              >
-                <Tab
-                  id="tab-messages-in-progress"
-                  tabName="inProgress"
-                  title="In Progress"
-                >
-                  <PendingMessages />
-                </Tab>
-                <Tab tabName="completed" title="Complete">
-                  <CompletedMessages />
-                </Tab>
-              </Tabs>
+              <DocumentMessages />
             </div>
           </Tab>
         </Tabs>
@@ -295,24 +275,7 @@ export const DocumentDetail = connect(
       <>
         <CaseDetailHeader />
         <section className="usa-section grid-container DocumentDetail">
-          <h2 className="heading-1">
-            {documentDetailHelper.formattedDocument.documentTitle ||
-              documentDetailHelper.formattedDocument.documentType}
-            {documentDetailHelper.isDraftDocument && ' - DRAFT'}
-          </h2>
-          <div className="filed-by">
-            <div className="padding-bottom-1">
-              Filed {documentDetailHelper.formattedDocument.createdAtFormatted}
-              {documentDetailHelper.formattedDocument.filedBy &&
-                ` by ${documentDetailHelper.formattedDocument.filedBy}`}
-            </div>
-            {documentDetailHelper.formattedDocument.showServedAt && (
-              <div>
-                Served{' '}
-                {documentDetailHelper.formattedDocument.servedAtFormatted}
-              </div>
-            )}
-          </div>
+          <DocumentDetailHeader />
           <SuccessNotification />
           <ErrorNotification />
           <div className="grid-container padding-x-0">
@@ -324,14 +287,7 @@ export const DocumentDetail = connect(
             <div className="grid-row grid-gap">
               <div className="grid-col-5">{renderNestedTabs()}</div>
               <div className="grid-col-7">
-                {/* we can't show the iframe in cypress or else cypress will pause and ask for a save location for the file */}
-                {!process.env.CI && (
-                  <iframe
-                    key={documentDetailHelper.formattedDocument.signedAt}
-                    src={`${baseUrl}/documents/${documentDetailHelper.formattedDocument.documentId}/document-download-url?token=${token}`}
-                    title={`Document type: ${documentDetailHelper.formattedDocument.documentType}`}
-                  />
-                )}
+                <DocumentDisplayIframe />
               </div>
             </div>
           </div>
@@ -339,9 +295,6 @@ export const DocumentDetail = connect(
         {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
         {showModal === 'RecallPetitionModalDialog' && (
           <RecallPetitionModalDialog />
-        )}
-        {showModal === 'CreateMessageModalDialog' && (
-          <CreateMessageModalDialog />
         )}
         {showModal === 'ServeConfirmModalDialog' && (
           <ServeConfirmModalDialog

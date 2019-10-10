@@ -32,7 +32,7 @@ export const documentHelper = get => ({
     : '';
 
   if (shouldLinkToEdit) {
-    return `${baseUri}/edit`;
+    return `${baseUri}/complete`;
   } else if (shouldLinkToMessagesTab()) {
     return `${baseUri}/messages/${messageId}${markReadPath}`;
   } else {
