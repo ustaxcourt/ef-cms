@@ -649,6 +649,7 @@ const generatePrintableFilingReceiptTemplate = content => {
     docketNumberWithSuffix,
     documentsFiledContent,
     filedAt,
+    filedBy,
   } = content;
 
   const templateContent = {
@@ -657,7 +658,7 @@ const generatePrintableFilingReceiptTemplate = content => {
     docketNumberWithSuffix,
     main: `
     <div class="filing-info">
-      <div class="filed-by">Filed by ${'[filed by]'}</div>
+      <div class="filed-by">Filed by ${filedBy}</div>
       <div class="filed-at">Filed ${filedAt}</div>
     </div>
     <div class="clear"></div>

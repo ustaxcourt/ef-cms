@@ -104,7 +104,8 @@ exports.generatePrintableFilingReceiptInteractor = async ({
       documentsFiledContent,
       filedAt: applicationContext
         .getUtilities()
-        .formatDateString(new Date(), 'DATE_TIME_TZ'),
+        .formatDateString(primaryDocument.receivedAt, 'DATE_TIME_TZ'),
+      filedBy: primaryDocument.filedBy,
     });
 
   return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({

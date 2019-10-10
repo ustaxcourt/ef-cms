@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * Generates a printable receipt for document filing
  *
@@ -10,18 +12,27 @@
 
 export const generatePrintableFilingReceiptAction = async ({
   applicationContext,
+  get,
   props,
   router,
 }) => {
   const { documentsFiled } = props;
+  const { Document } = applicationContext.getEntityConstructors();
+  const caseDetail = get(state.caseDetail);
 
-  const getDocumentInfo = document => ({
-    attachments: document.attachments,
-    certificateOfService: document.certificateOfService,
-    certificateOfServiceDate: document.certificateOfServiceDate,
-    documentTitle: document.documentTitle,
-    objections: document.objections,
-  });
+  const getDocumentInfo = documentData => {
+    const document = new Document(documentData, { applicationContext });
+    document.generateFiledBy(caseDetail);
+    return {
+      attachments: document.attachments,
+      certificateOfService: document.certificateOfService,
+      certificateOfServiceDate: document.certificateOfServiceDate,
+      documentTitle: document.documentTitle,
+      filedBy: document.filedBy,
+      objections: document.objections,
+      receivedAt: document.receivedAt,
+    };
+  };
 
   const documents = {
     caseId: documentsFiled.caseId,
