@@ -68,6 +68,7 @@ import { gotoCompleteDocketEntrySequence } from './sequences/gotoCompleteDocketE
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoDashboardSequence } from './sequences/gotoDashboardSequence';
 import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequence';
+import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequence';
 import { gotoEditOrderSequence } from './sequences/gotoEditOrderSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
@@ -339,6 +340,7 @@ export const presenter = {
     gotoCreateOrderSequence,
     gotoDashboardSequence,
     gotoDocumentDetailSequence,
+    gotoEditDocketEntrySequence,
     gotoEditOrderSequence,
     gotoFileDocumentSequence,
     gotoIdleLogoutSequence,
