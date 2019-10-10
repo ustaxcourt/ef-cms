@@ -15,16 +15,18 @@ export const generatePrintableFilingReceiptAction = async ({
 }) => {
   const { documentsFiled } = props;
 
+  const getDocumentInfo = document => ({
+    attachments: document.attachments,
+    certificateOfService: document.certificateOfService,
+    certificateOfServiceDate: document.certificateOfServiceDate,
+    documentTitle: document.documentTitle,
+    objections: document.objections,
+  });
+
   const documents = {
     caseId: documentsFiled.caseId,
     docketNumber: documentsFiled.docketNumber,
-    primaryDocument: {
-      attachments: documentsFiled.attachments,
-      certificateOfService: documentsFiled.certificateOfService,
-      certificateOfServiceDate: documentsFiled.certificateOfServiceDate,
-      documentTitle: documentsFiled.documentTitle,
-      objections: documentsFiled.objections,
-    },
+    primaryDocument: getDocumentInfo(documentsFiled),
     supportingDocuments: [],
   };
 
@@ -33,13 +35,23 @@ export const generatePrintableFilingReceiptAction = async ({
     documentsFiled.supportingDocuments.length
   ) {
     documents.supportingDocuments = documentsFiled.supportingDocuments.map(
-      supportingDocument => ({
-        attachments: supportingDocument.attachments,
-        certificateOfService: supportingDocument.certificateOfService,
-        certificateOfServiceDate: supportingDocument.certificateOfServiceDate,
-        documentTitle: supportingDocument.documentTitle,
-        objections: supportingDocument.objections,
-      }),
+      supportingDocument => getDocumentInfo(supportingDocument),
+    );
+  }
+
+  if (documentsFiled.secondaryDocument) {
+    documents.secondaryDocument = getDocumentInfo(
+      documentsFiled.secondaryDocument,
+    );
+  }
+
+  if (
+    documentsFiled.secondarySupportingDocuments &&
+    documentsFiled.secondarySupportingDocuments.length
+  ) {
+    documents.secondarySupportingDocuments = documentsFiled.secondarySupportingDocuments.map(
+      secondarySupportingDocument =>
+        getDocumentInfo(secondarySupportingDocument),
     );
   }
 
