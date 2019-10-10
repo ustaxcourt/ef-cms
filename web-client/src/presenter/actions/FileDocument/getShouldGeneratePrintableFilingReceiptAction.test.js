@@ -16,23 +16,13 @@ describe('getShouldGeneratePrintableFilingReceiptAction', () => {
     };
   });
 
-  it('calls the false path if props.documentWithPendingAssociation is true', async () => {
+  it('calls the false path if state.documentToEdit is set', async () => {
     await runAction(getShouldGeneratePrintableFilingReceiptAction, {
       modules: {
         presenter,
       },
       props: {
-        documentWithPendingAssociation: true,
-      },
-    });
-
-    expect(falseMock).toHaveBeenCalled();
-  });
-
-  it('calls the false path if state.documentToEdit is set', async () => {
-    await runAction(getShouldGeneratePrintableFilingReceiptAction, {
-      modules: {
-        presenter,
+        documentsFiled: {},
       },
       state: {
         documentToEdit: {},
