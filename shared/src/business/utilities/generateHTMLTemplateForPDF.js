@@ -691,6 +691,15 @@ const generatePrintableFilingReceiptTemplate = content => {
         text-align: right;
       }
 
+      h4.document-includes-header {
+        margin-bottom: 5px;
+        padding-bottom: 0;
+      }
+
+      .included {
+        margin: 5px 0px;
+      }
+
       hr {
         margin: 12px 0px 8px 0px;
       }

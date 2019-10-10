@@ -37,13 +37,19 @@ exports.generatePrintableFilingReceiptInteractor = async ({
   formattedCaseDetail.showCaseNameForPrimary = caseEntity.getShowCaseNameForPrimary();
 
   const getDocumentContent = document => {
+    const hasDocumentIncludes =
+      document.attachments || document.certificateOfService;
     let content = `
       <h4>${document.documentTitle}</h4>
-      <h4>Document Includes</h4>
-      ${document.attachments ? '<p>Attachment(s)</p>' : ''}
+      ${
+        hasDocumentIncludes
+          ? '<h4 class="document-includes-header">Document Includes</h4>'
+          : ''
+      }
+      ${document.attachments ? '<p class="included">Attachment(s)</p>' : ''}
       ${
         document.certificateOfService
-          ? `<p>Certificate of Service ${applicationContext
+          ? `<p class="included">Certificate of Service ${applicationContext
               .getUtilities()
               .formatDateString(
                 document.certificateOfServiceDate,
@@ -51,15 +57,20 @@ exports.generatePrintableFilingReceiptInteractor = async ({
               )}</p>`
           : ''
       }
+      `;
+
+    if (document.objections) {
+      content += `
       <p>
-        <br />
+        ${hasDocumentIncludes ? '<br />' : ''}
         ${
-          document.objections && document.objections === true
-            ? 'Objections'
-            : 'No Objections'
+          ['No', 'Unknown'].includes(document.objections)
+            ? `${document.objections} Objections`
+            : 'Objections'
         }
       </p>
       `;
+    }
 
     return content;
   };
