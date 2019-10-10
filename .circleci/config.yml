@@ -198,7 +198,6 @@ jobs:
     docker:
       - image: sutt0n/ef-cms:latest
     steps:
-      - checkout
       - restore_cache:
           name: Source - Restoring Cache
           keys:
@@ -291,7 +290,6 @@ jobs:
     docker:
       - image: sutt0n/ef-cms:latest
     steps:
-      - checkout
       - restore_cache:
           name: Source - Restoring Cache
           keys:
