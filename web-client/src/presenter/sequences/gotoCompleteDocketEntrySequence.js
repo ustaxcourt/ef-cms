@@ -10,10 +10,11 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForEditAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditDocketEntry = [
   setCurrentPageAction('Interstitial'),
-  set(state.showValidation, false),
+  stopShowValidationAction,
   clearScansAction,
   clearFormAction,
   clearScreenMetadataAction,
