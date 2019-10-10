@@ -20,7 +20,7 @@ export const deconstructReceivedAtDateToFormAction = async ({
   if (
     receivedAt &&
     receivedAt.toDate() instanceof Date &&
-    !isNaN(receivedAt.toDate())
+    receivedAt.isValid()
   ) {
     store.set(state.form.dateReceivedMonth, receivedAt.format('M'));
     store.set(state.form.dateReceivedDay, receivedAt.format('D'));
