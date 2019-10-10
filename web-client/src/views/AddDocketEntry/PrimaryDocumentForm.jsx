@@ -182,6 +182,13 @@ export const PrimaryDocumentForm = connect(
             >
               Document type
             </label>
+
+            <span className="usa-hint">
+              Enter your document name to see available document types,
+              <br />
+              or use the dropdown to select your document type.
+            </span>
+
             <Select
               aria-describedby="document-type-label"
               className="select-react-element"
@@ -304,10 +311,10 @@ export const PrimaryDocumentForm = connect(
             >
               Additional info 1 <span className="usa-hint">(optional)</span>
             </label>
-            <input
+            <textarea
               aria-describedby="additional-info-label"
               autoCapitalize="none"
-              className="usa-input"
+              className="usa-textarea height-8"
               id="additional-info"
               name="additionalInfo"
               type="text"
@@ -356,10 +363,10 @@ export const PrimaryDocumentForm = connect(
             >
               Additional info 2 <span className="usa-hint">(optional)</span>
             </label>
-            <input
+            <textarea
               aria-describedby="additional-info2-label"
               autoCapitalize="none"
-              className="usa-input"
+              className="usa-textarea height-8"
               id="additional-info2"
               name="additionalInfo2"
               type="text"

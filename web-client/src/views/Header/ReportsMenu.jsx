@@ -8,12 +8,14 @@ export const ReportsMenu = connect(
     pageIsReports: state.headerHelper.pageIsReports,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
+    toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
   },
   ({
     isExpanded,
     pageIsReports,
     resetHeaderAccordionsSequence,
     toggleMenuSequence,
+    toggleMobileMenuSequence,
   }) => {
     return (
       <>
@@ -35,7 +37,10 @@ export const ReportsMenu = connect(
               <a
                 href="/reports/case-deadlines"
                 id="all-deadlines"
-                onClick={() => resetHeaderAccordionsSequence()}
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                }}
               >
                 Deadlines
               </a>
