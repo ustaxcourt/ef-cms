@@ -69,6 +69,7 @@ presenter.providers.applicationContext = {
 };
 
 presenter.providers.router = {
+  createObjectURL: () => '/test-url',
   externalRoute: () => null,
   route: async url => {
     if (url === '/document-qc/section/inbox') {
