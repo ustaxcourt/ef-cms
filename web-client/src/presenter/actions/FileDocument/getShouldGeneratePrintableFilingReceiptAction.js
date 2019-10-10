@@ -15,11 +15,7 @@ export const getShouldGeneratePrintableFilingReceiptAction = ({
   path,
   props,
 }) => {
-  if (
-    !props.documentWithPendingAssociation &&
-    !get(state.documentToEdit) &&
-    props.documentsFiled
-  ) {
+  if (!get(state.documentToEdit) && props.documentsFiled) {
     return path.true();
   }
 
