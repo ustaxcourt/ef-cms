@@ -28,7 +28,7 @@ export const gotoEditDocketEntry = [
   setCurrentPageAction('AddDocketEntry'),
 ];
 
-export const gotoEditDocketEntrySequence = [
+export const gotoCompleteDocketEntrySequence = [
   isLoggedInAction,
   {
     isLoggedIn: gotoEditDocketEntry,
