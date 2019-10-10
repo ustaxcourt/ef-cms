@@ -37,6 +37,7 @@ global.FormData = FormData;
 global.Blob = () => {};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
+  createObjectURL: () => '/test-url',
   externalRoute: () => {},
   route: async url => {
     if (url === `/case-detail/${test.docketNumber}`) {
