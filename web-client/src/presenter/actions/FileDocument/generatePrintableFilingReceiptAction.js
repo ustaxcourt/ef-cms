@@ -41,25 +41,19 @@ export const generatePrintableFilingReceiptAction = async ({
     supportingDocuments: [],
   };
 
-  if (
-    documentsFiled.supportingDocuments &&
-    documentsFiled.supportingDocuments.length
-  ) {
+  if (documentsFiled.hasSupportingDocuments) {
     documents.supportingDocuments = documentsFiled.supportingDocuments.map(
       supportingDocument => getDocumentInfo(supportingDocument),
     );
   }
 
-  if (documentsFiled.secondaryDocument) {
+  if (documentsFiled.secondaryDocumentFile) {
     documents.secondaryDocument = getDocumentInfo(
       documentsFiled.secondaryDocument,
     );
   }
 
-  if (
-    documentsFiled.secondarySupportingDocuments &&
-    documentsFiled.secondarySupportingDocuments.length
-  ) {
+  if (documentsFiled.hasSecondarySupportingDocuments) {
     documents.secondarySupportingDocuments = documentsFiled.secondarySupportingDocuments.map(
       secondarySupportingDocument =>
         getDocumentInfo(secondarySupportingDocument),
