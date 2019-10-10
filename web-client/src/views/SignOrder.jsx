@@ -150,8 +150,8 @@ class SignOrderComponent extends React.Component {
             <div className="grid-col-4 text-align-right">
               {pdfSignerHelper.isPlaced && (
                 <Button link onClick={() => this.restart()}>
-                  <FontAwesomeIcon icon={['far', 'times-circle']} />
-                  Remove Signature
+                  <FontAwesomeIcon icon={['fas', 'trash']} />
+                  Delete Signature
                 </Button>
               )}
 

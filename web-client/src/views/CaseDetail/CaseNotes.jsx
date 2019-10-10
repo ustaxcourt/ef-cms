@@ -74,7 +74,7 @@ export const CaseNotes = connect(
                               });
                             }}
                           >
-                            <FontAwesomeIcon icon="times-circle"></FontAwesomeIcon>
+                            <FontAwesomeIcon icon="trash"></FontAwesomeIcon>
                             Delete Note
                           </Button>
                         </div>
