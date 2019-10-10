@@ -72,6 +72,31 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('updateFormValueSequence', {
+      key: 'requestForPlaceOfTrialFile',
+      value: fakeFile,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'requestForPlaceOfTrialFileSize',
+      value: 1,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'applicationForWaiverOfFilingFeeFile',
+      value: fakeFile,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'applicationForWaiverOfFilingFeeFileSize',
+      value: 1,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'preferredTrialCity',
+      value: 'Birmingham, Alabama',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
       key: 'procedureType',
       value: 'Small',
     });
