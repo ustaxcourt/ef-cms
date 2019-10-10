@@ -50,9 +50,10 @@ function Order(rawOrder) {
   this.orderBody = rawOrder.orderBody;
 }
 
-Order.errorToMessageMap = {
-  documentTitle: 'Order title is required.',
-  documentType: 'Order type is required.',
+Order.VALIDATION_ERROR_MESSAGES = {
+  documentTitle: 'Enter the title of this order',
+  documentType: 'Select an order type',
+  eventCode: 'Select an order type',
   orderBody: 'Order body is required.',
 };
 
@@ -66,7 +67,7 @@ joiValidationDecorator(
   function() {
     return !this.getFormattedValidationErrors();
   },
-  Order.errorToMessageMap,
+  Order.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { Order };

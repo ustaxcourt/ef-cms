@@ -13,6 +13,7 @@ export const FileDocument = connect(
   {
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    navigateBackSequence: sequences.navigateBackSequence,
     reviewExternalDocumentInformationSequence:
       sequences.reviewExternalDocumentInformationSequence,
     showModal: state.showModal,
@@ -20,6 +21,7 @@ export const FileDocument = connect(
   ({
     form,
     formCancelToggleCancelSequence,
+    navigateBackSequence,
     reviewExternalDocumentInformationSequence,
     showModal,
   }) => {
@@ -34,8 +36,9 @@ export const FileDocument = connect(
             File Your Document(s)
           </h1>
         </Focus>
+
         <p className="margin-bottom-5 required-statement margin-top-05 ">
-          All fields required unless otherwise noted
+          *All fields required unless otherwise noted
         </p>
 
         <PrimaryDocumentForm />
@@ -65,7 +68,7 @@ export const FileDocument = connect(
           <button
             className="usa-button usa-button--outline margin-bottom-1"
             type="button"
-            onClick={() => history.back()}
+            onClick={() => navigateBackSequence()}
           >
             Back
           </button>

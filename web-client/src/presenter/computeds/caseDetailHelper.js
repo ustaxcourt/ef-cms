@@ -27,7 +27,9 @@ export const caseDetailHelper = (get, applicationContext) => {
     ['CaseDetailInternal'].includes(currentPage) && userRole === 'docketclerk';
   let showCreateOrderButton =
     ['CaseDetailInternal'].includes(currentPage) &&
-    userRole === 'petitionsclerk';
+    ['docketclerk', 'judge', 'petitionsclerk', 'seniorattorney'].includes(
+      userRole,
+    );
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
@@ -70,6 +72,18 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const showCaseNameForPrimary = !get(state.caseDetail.contactSecondary.name);
 
+  let showEditPrimaryContactButton = false;
+
+  if (userRole === 'respondent') {
+    showEditPrimaryContactButton = false;
+  } else if (userRole === 'practitioner') {
+    showEditPrimaryContactButton = userAssociatedWithCase;
+  }
+
+  const showServeToIrsButton = ['New', 'Recalled'].includes(caseDetail.status);
+
+  const showRecallButton = caseDetail.status === 'Batched for IRS';
+
   return {
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
@@ -99,6 +113,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContactButton: isExternalUser,
+    showEditPrimaryContactButton,
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
@@ -113,12 +128,12 @@ export const caseDetailHelper = (get, applicationContext) => {
       !isExternalUser ||
       (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
-    showRecallButton: caseDetail.status === 'Batched for IRS',
+    showRecallButton,
     showRequestAccessToCaseButton,
     showRespondentSection:
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),
-    showServeToIrsButton: ['New', 'Recalled'].includes(caseDetail.status),
+    showServeToIrsButton,
     userHasAccessToCase,
   };
 };

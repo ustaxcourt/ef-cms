@@ -1,11 +1,13 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
+import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { sendPetitionToIRSHoldingQueueAction } from '../actions/sendPetitionToIRSHoldingQueueAction';
+import { set } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { state } from 'cerebral';
 
 export const submitPetitionToIRSHoldingQueueSequence = [
   clearAlertsAction,
@@ -15,5 +17,6 @@ export const submitPetitionToIRSHoldingQueueSequence = [
   setAlertSuccessAction,
   getCaseAction,
   setCaseAction,
-  navigateToDashboardAction,
+  set(state.saveAlertsForNavigation, true),
+  navigateToMessagesAction,
 ];

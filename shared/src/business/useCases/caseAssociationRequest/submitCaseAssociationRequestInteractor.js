@@ -5,6 +5,10 @@ const {
   associateRespondentToCase,
 } = require('../../useCaseHelper/caseAssociation/associateRespondentToCase');
 const { UnauthorizedError } = require('../../../errors/errors');
+const {
+  ASSOCIATE_SELF_WITH_CASE,
+  isAuthorized,
+} = require('../../../authorization/authorizationClientService');
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -24,14 +28,18 @@ exports.submitCaseAssociationRequestInteractor = async ({
   representingPrimary,
   representingSecondary,
 }) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  const isPractitioner = user.role === 'practitioner';
-  const isRespondent = user.role === 'respondent';
-
-  if (!isPractitioner && !isRespondent) {
+  if (!isAuthorized(authorizedUser, ASSOCIATE_SELF_WITH_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  const isPractitioner = authorizedUser.role === 'practitioner';
+  const isRespondent = authorizedUser.role === 'respondent';
 
   if (isPractitioner) {
     return await associatePractitionerToCase({

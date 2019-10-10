@@ -11,6 +11,5 @@ exports.validateNoteInteractor = ({ applicationContext, note }) => {
     note,
   ).getFormattedValidationErrors();
   if (!errors) return null;
-
   return errors;
 };

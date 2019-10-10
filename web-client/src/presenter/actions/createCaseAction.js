@@ -52,14 +52,14 @@ export const createCaseAction = async ({
     return path.error();
   }
 
-  const createCoversheet = document => {
-    return applicationContext.getUseCases().createCoverSheetInteractor({
+  const addCoversheet = document => {
+    return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
       documentId: document.documentId,
     });
   };
-  await Promise.all(caseDetail.documents.map(createCoversheet));
+  await Promise.all(caseDetail.documents.map(addCoversheet));
 
   return path.success({
     caseDetail,

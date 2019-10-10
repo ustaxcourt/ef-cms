@@ -1,7 +1,8 @@
+import { props, state } from 'cerebral';
+import { set } from 'cerebral/factories';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
-import { updateFormValueWithoutEmptyStringAction } from '../actions/updateFormValueWithoutEmptyStringAction';
 
 export const updateDocketEntryFormValueSequence = [
-  updateFormValueWithoutEmptyStringAction,
+  set(state.form[props.key], props.value),
   updateDocketEntryWizardDataAction,
 ];

@@ -125,6 +125,7 @@ describe('forwardWorkItemInteractor', () => {
         saveWorkItemForPaper: () => null,
         updateCase: () => null,
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     const workItem = await forwardWorkItemInteractor({
       applicationContext,
@@ -179,6 +180,7 @@ describe('forwardWorkItemInteractor', () => {
         getUserById: ({ userId }) => MOCK_USERS[userId],
         getWorkItemById: async () => mockWorkItem,
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
     let error;
     try {

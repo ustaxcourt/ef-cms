@@ -8,7 +8,12 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store used for setting the state.pdfPreviewUrl
  */
-export const gotoPrintTrialCalendarPreview = ({ get, props, store }) => {
+export const gotoPrintTrialCalendarPreview = ({
+  get,
+  props,
+  router,
+  store,
+}) => {
   const { openNewTab = false, openNewView = true } = props;
 
   if (openNewView) {
@@ -17,6 +22,6 @@ export const gotoPrintTrialCalendarPreview = ({ get, props, store }) => {
 
   if (openNewTab) {
     const pdfPreviewUrl = get(state.pdfPreviewUrl);
-    window.open(pdfPreviewUrl, '_blank', 'noopener, noreferrer');
+    router.openInNewTab(pdfPreviewUrl);
   }
 };

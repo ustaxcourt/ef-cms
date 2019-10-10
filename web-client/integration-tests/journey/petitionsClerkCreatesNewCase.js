@@ -1,3 +1,7 @@
+import { Case } from '../../../shared/src/business/entities/cases/Case';
+
+const { VALIDATION_ERROR_MESSAGES } = Case;
+
 export default (test, fakeFile) => {
   return it('Petitions clerk creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
@@ -8,15 +12,15 @@ export default (test, fakeFile) => {
     );
 
     expect(test.getState('validationErrors.caseCaption')).toEqual(
-      'Case Caption is required.',
+      VALIDATION_ERROR_MESSAGES.caseCaption,
     );
 
     expect(test.getState('validationErrors.receivedAt')).toEqual(
-      'Please enter a valid Date Received.',
+      VALIDATION_ERROR_MESSAGES.receivedAt[1],
     );
 
     expect(test.getState('validationErrors.petitionFile')).toEqual(
-      'Upload or scan a petition.',
+      VALIDATION_ERROR_MESSAGES.petitionFile,
     );
 
     await test.runSequence('updateFormValueSequence', {
@@ -123,7 +127,7 @@ export default (test, fakeFile) => {
     });
 
     await test.runSequence('validatePetitionFromPaperSequence');
-    expect(test.getState('alertError')).toEqual(null);
+    expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('submitPetitionFromPaperSequence');

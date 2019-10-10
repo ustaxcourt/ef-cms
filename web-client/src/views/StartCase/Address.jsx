@@ -11,6 +11,7 @@ export const Address = connect(
     data: state[props.bind],
     type: props.type,
     updateFormValueSequence: sequences[props.onChange],
+    usStates: state.constants.US_STATES,
     validateStartCaseSequence: sequences[props.onBlur],
     validationErrors: state.validationErrors,
   },
@@ -18,6 +19,7 @@ export const Address = connect(
     data,
     type,
     updateFormValueSequence,
+    usStates,
     validateStartCaseSequence,
     validationErrors,
   }) => {
@@ -34,7 +36,7 @@ export const Address = connect(
           }
         >
           <label className="usa-label" htmlFor={`${type}.address1`}>
-            Mailing Address Line 1
+            Mailing address line 1
           </label>
           <input
             autoCapitalize="none"
@@ -60,7 +62,7 @@ export const Address = connect(
         </div>
         <div className="usa-form-group">
           <label className="usa-label" htmlFor={`${type}.address2`}>
-            Address Line 2 <span className="usa-hint">(optional)</span>
+            Address line 2 <span className="usa-hint">(optional)</span>
           </label>
           <input
             autoCapitalize="none"
@@ -82,7 +84,7 @@ export const Address = connect(
         </div>
         <div className="usa-form-group">
           <label className="usa-label" htmlFor={`${type}.address3`}>
-            Address Line 3 <span className="usa-hint">(optional)</span>
+            Address line 3 <span className="usa-hint">(optional)</span>
           </label>
           <input
             autoCapitalize="none"
@@ -143,17 +145,24 @@ export const Address = connect(
                   data={data}
                   type={type}
                   updateFormValueSequence={updateFormValueSequence}
+                  usStates={usStates}
                   validateStartCaseSequence={validateStartCaseSequence}
                 />
               </div>
-              <Text
-                bind={`validationErrors.${type}.city`}
-                className="usa-error-message"
-              />
-              <Text
-                bind={`validationErrors.${type}.state`}
-                className="usa-error-message"
-              />
+            </div>
+            <div className="grid-row grid-gap">
+              <div className="grid-col-8">
+                <Text
+                  bind={`validationErrors.${type}.city`}
+                  className="usa-error-message"
+                />
+              </div>
+              <div className="grid-col-4">
+                <Text
+                  bind={`validationErrors.${type}.state`}
+                  className="usa-error-message"
+                />
+              </div>
             </div>
           </div>
         </NonMobile>
@@ -208,6 +217,7 @@ export const Address = connect(
               data={data}
               type={type}
               updateFormValueSequence={updateFormValueSequence}
+              usStates={usStates}
               validateStartCaseSequence={validateStartCaseSequence}
             />
             <Text
@@ -231,7 +241,7 @@ export const Address = connect(
             className="usa-label"
             htmlFor={`${type}.postalCode`}
           >
-            ZIP Code
+            ZIP code
           </label>
           <input
             autoCapitalize="none"

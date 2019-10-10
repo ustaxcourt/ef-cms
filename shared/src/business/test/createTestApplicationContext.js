@@ -1,5 +1,5 @@
 const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
-
+const uuidv4 = require('uuid/v4');
 const {
   addWorkItemToSectionInbox,
 } = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
@@ -51,6 +51,20 @@ const {
 const {
   saveWorkItemForNonPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForNonPaper');
+
+const {
+  deleteUserOutboxRecord,
+} = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
+const {
+  deleteSectionOutboxRecord,
+} = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
+const {
+  createUserInboxRecord,
+} = require('../../persistence/dynamo/workitems/createUserInboxRecord');
+const {
+  createSectionInboxRecord,
+} = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
+
 const {
   saveWorkItemForPaper,
 } = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
@@ -95,7 +109,11 @@ const createTestApplicationContext = ({ user } = {}) => {
       return {
         addWorkItemToSectionInbox,
         createCase,
+        createSectionInboxRecord,
+        createUserInboxRecord,
         createWorkItem: createWorkItemPersistence,
+        deleteSectionOutboxRecord,
+        deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         getCaseByCaseId,
         getDocumentQCBatchedForSection,
@@ -117,6 +135,9 @@ const createTestApplicationContext = ({ user } = {}) => {
         updateWorkItemInCase,
         verifyCaseForUser,
       };
+    },
+    getUniqueId: () => {
+      return uuidv4();
     },
     isAuthorizedForWorkItems: () => true,
   };

@@ -8,7 +8,6 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
-  # - serverless-apigwy-binary
 
 custom:
   prune:
@@ -86,10 +85,12 @@ provider:
   apiGateway:
     binaryMediaTypes:
       - 'application/pdf'
+      - 'application/zip'
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
     DOCUMENTS_BUCKET_NAME: ${opt:domain}-documents-${opt:stage}-us-east-1
+    TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
     MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
@@ -121,11 +122,8 @@ provider:
       Action:
         - 's3:*'
       Resource:
-        Fn::Join:
-          - ''
-          - - 'arn:aws:s3:::'
-            - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
-            - '/*'
+        - arn:aws:s3:::${self:provider.environment.DOCUMENTS_BUCKET_NAME}/*
+        - arn:aws:s3:::${self:provider.environment.TEMP_DOCUMENTS_BUCKET_NAME}/*
     - Effect: 'Allow'
       Action:
         - dynamodb:Query
@@ -292,13 +290,14 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   batchDownloadTrialSession:
+    runtime: nodejs8.10
     handler: web-api/src/trialSessionsHandlers.batchDownloadTrialSessionLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
-          path: /{trialSessionId}/batch-download
+          path: /{trialSessionId}/batch-download/{zipName}
           method: get
           cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer

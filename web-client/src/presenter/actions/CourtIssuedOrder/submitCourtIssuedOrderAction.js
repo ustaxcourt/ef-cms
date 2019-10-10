@@ -16,15 +16,14 @@ export const submitCourtIssuedOrderAction = async ({
 }) => {
   let caseDetail;
   const { caseId, docketNumber } = get(state.caseDetail);
-  const { primaryDocumentFileId } = props;
-  const documentId = primaryDocumentFileId;
+  const { primaryDocumentFileId: documentId } = props;
+  const formData = get(state.form);
+  const { documentIdToEdit } = formData;
 
-  let documentMetadata = omit(
-    {
-      ...get(state.form),
-    },
-    ['primaryDocumentFile'],
-  );
+  let documentMetadata = omit(formData, [
+    'primaryDocumentFile',
+    'documentIdToEdit',
+  ]);
 
   documentMetadata = {
     ...documentMetadata,
@@ -32,30 +31,40 @@ export const submitCourtIssuedOrderAction = async ({
     caseId,
   };
 
-  if (primaryDocumentFileId) {
-    await applicationContext.getUseCases().virusScanPdfInteractor({
-      applicationContext,
-      documentId,
-    });
+  documentMetadata.draftState = { ...documentMetadata };
 
-    await applicationContext.getUseCases().validatePdfInteractor({
-      applicationContext,
-      documentId,
-    });
+  await applicationContext.getUseCases().virusScanPdfInteractor({
+    applicationContext,
+    documentId,
+  });
 
-    // TODO: ghostscript is causing problems with fonts on generated orders
-    // - this will be resolved in a cleanup issue later
-    /*await applicationContext.getUseCases().sanitizePdfInteractor({
+  await applicationContext.getUseCases().validatePdfInteractor({
+    applicationContext,
+    documentId,
+  });
+
+  // TODO: ghostscript is causing problems with fonts on generated orders
+  // - this will be resolved in a cleanup issue later
+  /*await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
       documentId,
     });*/
 
+  if (documentIdToEdit) {
+    caseDetail = await applicationContext
+      .getUseCases()
+      .updateCourtIssuedOrderInteractor({
+        applicationContext,
+        documentIdToEdit,
+        documentMetadata,
+      });
+  } else {
     caseDetail = await applicationContext
       .getUseCases()
       .fileCourtIssuedOrderInteractor({
         applicationContext,
         documentMetadata,
-        primaryDocumentFileId,
+        primaryDocumentFileId: documentId,
       });
   }
 

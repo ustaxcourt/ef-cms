@@ -1,4 +1,3 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormsAction } from '../actions/clearFormsAction';
 import { clearWorkItemActionMapAction } from '../actions/clearWorkItemActionMapAction';
 import { getCaseAction } from '../actions/getCaseAction';
@@ -26,7 +25,6 @@ import { state } from 'cerebral';
 
 export const gotoDocumentDetailSequence = [
   setCurrentPageAction('Interstitial'),
-  clearAlertsAction,
   clearWorkItemActionMapAction,
   clearFormsAction,
   set(state.documentDetail.tab, 'partyInfo'),
@@ -43,6 +41,7 @@ export const gotoDocumentDetailSequence = [
   setProcedureTypesAction,
   getCaseTypesAction,
   setCaseTypesAction,
+  set(state.editDocumentEntryPoint, 'DocumentDetail'),
   setCurrentPageAction('DocumentDetail'),
   parallel([
     getShouldMarkReadAction,

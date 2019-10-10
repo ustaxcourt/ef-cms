@@ -122,16 +122,9 @@
         "dynamodb:DescribeGlobalTable"
       ],
       "Resource": [
-        "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-dev",
-        "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-prod",
-        "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-stg",
-        "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-dev",
-        "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-prod",
-        "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-stg",
-        "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-terraform-lock",
-        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-dev",
-        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-prod",
-        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-stg"
+        "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-*",
+        "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-*",
+        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-*"
       ]
     },
     {
@@ -139,6 +132,7 @@
       "Effect": "Allow",
       "Action": [
         "iam:GetRole",
+        "iam:CreateRole",
         "iam:DeleteRole",
         "iam:PutRolePolicy",
         "iam:PassRole",
@@ -159,6 +153,9 @@
       "Resource": [
         "arn:aws:iam::ACCOUNT_ID:role/api_gateway_cloudwatch_global_*",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-cases-*-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-case-documents-*-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-case-deadlines-*-lambdaRole",
+        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-case-notes-*-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-*-lambdaRole",
         "arn:aws:iam::ACCOUNT_ID:instance-profile/dynamsoft_role-*",
         "arn:aws:iam::ACCOUNT_ID:role/ef-cms-documents-*-lambdaRole",

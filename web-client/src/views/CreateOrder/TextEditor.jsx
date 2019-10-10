@@ -19,6 +19,7 @@ export const TextEditor = class TextEditorComponent extends React.Component {
 
     return (
       <ReactQuill
+        defaultValue={this.props.defaultValue}
         formats={[
           'size',
           'bold',

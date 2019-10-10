@@ -49,6 +49,6 @@ export const assignSelectedWorkItemsAction = async ({
   );
 
   store.set(state.selectedWorkItems, []);
-  store.set(state.assigneeId, null);
-  store.set(state.assigneeName, null);
+  store.unset(state.assigneeId);
+  store.unset(state.assigneeName);
 };

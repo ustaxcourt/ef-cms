@@ -8,10 +8,14 @@ import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
 import FormData from 'form-data';
 import petitionsClerkAddsOrderToCase from './journey/petitionsClerkAddsOrderToCase';
+import petitionsClerkEditsDraftOrder from './journey/petitionsClerkEditsDraftOrder';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkViewsCaseDetailAfterAddingOrder from './journey/petitionsClerkViewsCaseDetailAfterAddingOrder';
+import petitionsClerkViewsDocumentDetail from './journey/petitionsClerkViewsDocumentDetail';
+import petitionsClerkViewsDraftDocuments from './journey/petitionsClerkViewsDraftDocuments';
+import petitionsDeletesOrderFromCase from './journey/petitionsDeletesOrderFromCase';
 import taxPayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
 import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
@@ -37,15 +41,15 @@ global.Blob = () => {};
 global.File = () => {
   return fakeFile;
 };
-global.URL = {
-  createObjectURL: () => {
-    return fakeData;
-  },
-};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
+  createObjectURL: () => {
+    return 'fakeUrl';
+  },
   externalRoute: () => null,
+  revokeObjectURL: () => {},
   route: async url => {
+    test.currentRouteUrl = url;
     if (url === `/case-detail/${test.docketNumber}`) {
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: test.docketNumber,
@@ -119,7 +123,21 @@ describe('Petitions Clerk Create Order Journey', () => {
 
   petitionsClerkLogIn(test);
   petitionsClerkViewsCaseDetail(test);
+  petitionsClerkViewsDraftDocuments(test);
   petitionsClerkAddsOrderToCase(test);
   petitionsClerkViewsCaseDetailAfterAddingOrder(test);
+  petitionsClerkViewsDraftDocuments(test, 1);
+  petitionsClerkEditsDraftOrder(test, {
+    viewAfterEdit: 'CaseDetail',
+  });
+  petitionsClerkViewsDraftDocuments(test, 1);
+  petitionsClerkViewsDocumentDetail(test);
+  petitionsClerkEditsDraftOrder(test, {
+    currentRichText: '<p>This is an edited test order.</p>',
+    setRichText: '<p>This is a re-edited test order</p>',
+    viewAfterEdit: 'DocumentDetail',
+  });
+  petitionsDeletesOrderFromCase(test);
+  petitionsClerkViewsDraftDocuments(test, 0);
   petitionsClerkSignsOut(test);
 });

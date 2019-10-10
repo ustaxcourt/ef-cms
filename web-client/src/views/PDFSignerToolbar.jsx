@@ -8,12 +8,11 @@ export const PDFSignerToolbar = connect(
     currentPageNumber: state.pdfForSigning.pageNumber,
     disableNext: state.documentSigningHelper.disableNext,
     disablePrevious: state.documentSigningHelper.disablePrevious,
+    isPdfAlreadySigned: state.pdfForSigning.isPdfAlreadySigned,
     nextPageNumber: state.documentSigningHelper.nextPageNumber,
-    pdfObj: state.pdfForSigning.pdfjsObj,
     previousPageNumber: state.documentSigningHelper.previousPageNumber,
     setPage: sequences.setPDFPageForSigningSequence,
     signatureApplied: state.pdfForSigning.signatureApplied,
-    signatureData: state.pdfForSigning.signatureData,
     totalPages: state.documentSigningHelper.totalPages,
   },
   ({
@@ -22,6 +21,7 @@ export const PDFSignerToolbar = connect(
     currentPageNumber,
     disableNext,
     disablePrevious,
+    isPdfAlreadySigned,
     nextPageNumber,
     previousPageNumber,
     setPage,
@@ -68,13 +68,13 @@ export const PDFSignerToolbar = connect(
           <div className="margin-top-3">
             <button
               className="usa-button"
-              disabled={signatureApplied}
+              disabled={signatureApplied || isPdfAlreadySigned}
               onClick={() => applySignature()}
             >
               <FontAwesomeIcon icon={['fas', 'edit']} />
               Apply Signature
             </button>
-            {signatureApplied && (
+            {(signatureApplied || isPdfAlreadySigned) && (
               <button
                 className="usa-button usa-button--unstyled"
                 onClick={() => clearSignature()}

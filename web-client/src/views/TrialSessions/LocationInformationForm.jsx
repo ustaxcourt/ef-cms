@@ -1,5 +1,5 @@
 import { Text } from '../../ustc-ui/Text/Text';
-import { TrialCityOptions } from './TrialCityOptions';
+import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -94,7 +94,7 @@ export const LocationInformationForm = connect(
 
           <div className="usa-form-group">
             <label className="usa-label" htmlFor="address2">
-              Address Line 2 <span className="usa-hint">(optional)</span>
+              Address line 2 <span className="usa-hint">(optional)</span>
             </label>
             <input
               autoCapitalize="none"
@@ -231,7 +231,7 @@ export const LocationInformationForm = connect(
               className="usa-label"
               htmlFor="postal-code"
             >
-              ZIP Code <span className="usa-hint">(optional)</span>
+              ZIP code <span className="usa-hint">(optional)</span>
             </label>
             <input
               autoCapitalize="none"

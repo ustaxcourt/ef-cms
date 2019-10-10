@@ -1,9 +1,9 @@
 import { setCaseToReadyForTrialAction } from '../actions/setCaseToReadyForTrialAction';
-import { setFormSubmittingAction } from '../actions/setFormSubmittingAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const setCaseToReadyForTrialSequence = [
-  setFormSubmittingAction,
+  setWaitingForResponseAction,
   setCaseToReadyForTrialAction,
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
 ];

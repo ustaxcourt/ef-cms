@@ -1,5 +1,4 @@
 const joi = require('joi-browser');
-const uuid = require('uuid');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -11,23 +10,27 @@ const { createISODateString } = require('../utilities/DateHandler');
  * @param {object} rawProps the raw case deadline data
  * @constructor
  */
-function CaseDeadline(rawProps) {
-  this.caseDeadlineId = rawProps.caseDeadlineId || uuid.v4();
+function CaseDeadline(rawProps, { applicationContext }) {
+  if (!applicationContext) {
+    throw new TypeError('applicationContext must be defined');
+  }
+  this.caseDeadlineId =
+    rawProps.caseDeadlineId || applicationContext.getUniqueId();
   this.caseId = rawProps.caseId;
   this.createdAt = rawProps.createdAt || createISODateString();
   this.description = rawProps.description;
   this.deadlineDate = rawProps.deadlineDate;
 }
 
-CaseDeadline.errorToMessageMap = {
+CaseDeadline.VALIDATION_ERROR_MESSAGES = {
   caseId: 'You must have a case id.',
-  deadlineDate: 'Please enter a valid deadline date.',
+  deadlineDate: 'Enter a valid deadline date',
   description: [
     {
       contains: 'length must be less than or equal to',
       message: 'The description is too long. Please enter a valid description.',
     },
-    'Please enter a description.',
+    'Enter a description of this deadline',
   ],
 };
 
@@ -62,7 +65,7 @@ joiValidationDecorator(
   CaseDeadline,
   CaseDeadline.schema,
   undefined,
-  CaseDeadline.errorToMessageMap,
+  CaseDeadline.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { CaseDeadline };

@@ -46,9 +46,20 @@ echo "starting sections service"
 npx sls offline start "$@" --config web-api/serverless-sections.yml &
 echo "starting trial session service"
 npx sls offline start "$@" --config web-api/serverless-trial-sessions.yml &
+echo "starting case documents service"
+npx sls offline start "$@" --config web-api/serverless-case-documents.yml &
+echo "starting case deadlines service"
+npx sls offline start "$@" --config web-api/serverless-case-deadlines.yml &
+echo "starting case notes service"
+npx sls offline start "$@" --config web-api/serverless-case-notes.yml &
 
 echo "starting proxy"
 node ./web-api/proxy.js
 
-pkill -P $DYNAMO_PID
+echo "proxy stopped"
+
+if [ ! -e $CIRCLECI ]; then 
+  echo "killing dynamodb local"
+  pkill -P $DYNAMO_PID
+fi 
 kill $S3RVER_PID

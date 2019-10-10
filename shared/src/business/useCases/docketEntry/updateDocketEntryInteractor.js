@@ -40,20 +40,23 @@ exports.updateDocketEntryInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate);
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const currentDocument = caseEntity.getDocumentById({
     documentId: primaryDocumentFileId,
   });
 
-  const documentEntity = new Document({
-    ...currentDocument,
-    ...documentMetadata,
-    relationship: 'primaryDocument',
-    documentId: primaryDocumentFileId,
-    documentType: documentMetadata.documentType,
-    userId: user.userId,
-  });
+  const documentEntity = new Document(
+    {
+      ...currentDocument,
+      ...documentMetadata,
+      relationship: 'primaryDocument',
+      documentId: primaryDocumentFileId,
+      documentType: documentMetadata.documentType,
+      userId: user.userId,
+    },
+    { applicationContext },
+  );
   documentEntity.generateFiledBy(caseToUpdate);
 
   const docketRecordEntry = new DocketRecord({

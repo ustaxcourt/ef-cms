@@ -1,9 +1,9 @@
 import { ActionRequired } from './CaseDetail/ActionRequired';
 import { CaseDeadlinesExternal } from './CaseDetail/CaseDeadlinesExternal';
+import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseInformationPublic } from './CaseDetail/CaseInformationPublic';
 import { DocketRecord } from './DocketRecord/DocketRecord';
 import { ErrorNotification } from './ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PartyInformation } from './CaseDetail/PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
@@ -14,62 +14,19 @@ import React from 'react';
 
 export const CaseDetail = connect(
   {
-    caseDetail: state.formattedCaseDetail,
-    caseHelper: state.caseDetailHelper,
+    caseDetailHelper: state.caseDetailHelper,
+    formattedCaseDetail: state.formattedCaseDetail,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
   },
-  function CaseDetail({
-    caseDetail,
-    caseHelper,
-    setCaseDetailPageTabSequence,
-  }) {
+  function CaseDetail({ caseDetailHelper, setCaseDetailPageTabSequence }) {
     return (
       <React.Fragment>
-        <div className="big-blue-header">
-          <div className="grid-container">
-            <div className="grid-row">
-              <div className="tablet:grid-col-6">
-                <h1 className="heading-2 captioned" tabIndex="-1">
-                  Docket Number: {caseDetail.docketNumberWithSuffix}
-                </h1>
-                <p className="margin-0">{caseDetail.caseTitle}</p>
-              </div>
-              <div className="tablet:grid-col-6">
-                {caseHelper.showRequestAccessToCaseButton && (
-                  <a
-                    className="usa-button tablet-full-width push-right margin-right-0"
-                    href={`/case-detail/${caseDetail.docketNumber}/request-access`}
-                    id="button-request-access"
-                  >
-                    Request Access to Case
-                  </a>
-                )}
-                {caseHelper.showPendingAccessToCaseButton && (
-                  <span
-                    aria-label="Request for Access Pending"
-                    className="usa-tag push-right margin-right-0 padding-x-3"
-                  >
-                    <span aria-hidden="true">Request for Access Pending</span>
-                  </span>
-                )}
-                {caseHelper.showFileFirstDocumentButton && (
-                  <a
-                    className="usa-button tablet-full-width push-right margin-right-0"
-                    href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
-                    id="button-first-irs-document"
-                  >
-                    <FontAwesomeIcon icon="file" size="1x" /> File First IRS
-                    Document
-                  </a>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+        <CaseDetailHeader />
+
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          {caseHelper.showActionRequired && (
+          {caseDetailHelper.showActionRequired && (
             <div className="margin-bottom-6">
               <div className="title">
                 <h1>Action Required</h1>
@@ -85,7 +42,7 @@ export const CaseDetail = connect(
                 className="usa-select"
                 id="mobile-document-detail-tab-selector"
                 name="partyType"
-                value={caseHelper.documentDetailTab}
+                value={caseDetailHelper.documentDetailTab}
                 onChange={e => {
                   setCaseDetailPageTabSequence({
                     tab: e.target.value,
@@ -114,7 +71,7 @@ export const CaseDetail = connect(
                 tabName="caseInfo"
                 title="Case Information"
               >
-                {caseHelper.showCaseInformationPublic && (
+                {caseDetailHelper.showCaseInformationPublic && (
                   <CaseInformationPublic />
                 )}
                 <div className="case-detail-party-info">

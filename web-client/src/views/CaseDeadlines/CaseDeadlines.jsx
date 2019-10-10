@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateSelectCalendar } from './DateSelectCalendar';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
@@ -8,8 +9,8 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const CaseDeadlines = connect(
-  { helper: state.caseDeadlineReportHelper },
-  ({ helper }) => (
+  { caseDeadlineReportHelper: state.caseDeadlineReportHelper },
+  ({ caseDeadlineReportHelper }) => (
     <>
       <BigHeader text="Reports" />
       <section className="usa-section grid-container">
@@ -29,33 +30,35 @@ export const CaseDeadlines = connect(
               <div className="grid-col-9">
                 <div className="grid-row">
                   <div className="grid-col-6">
-                    <h2>{helper.formattedFilterDateHeader}</h2>
+                    <h2>
+                      {caseDeadlineReportHelper.formattedFilterDateHeader}
+                    </h2>
                   </div>
                   <div className="grid-col-6 text-right margin-top-1">
                     <span className="text-semibold">
-                      Count: {helper.caseDeadlineCount}
+                      Count: {caseDeadlineReportHelper.caseDeadlineCount}
                     </span>
                   </div>
                 </div>
                 <table className="usa-table row-border-only subsection work-queue deadlines">
                   <thead>
                     <tr>
-                      <th>Due Date</th>
+                      <th>Due date</th>
                       <th>Docket</th>
+                      <th>Case name</th>
                       <th>Description</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {helper.caseDeadlines.map((item, idx) => (
+                    {caseDeadlineReportHelper.caseDeadlines.map((item, idx) => (
                       <tr key={idx}>
                         <td className="smaller-column semi-bold">
                           {item.formattedDeadline}
                         </td>
                         <td className="smaller-column semi-bold">
-                          <a href={'/case-detail/' + item.docketNumber}>
-                            {item.formattedDocketNumber}
-                          </a>
+                          <CaseLink formattedCase={item} />
                         </td>
+                        <td>{item.caseTitle}</td>
                         <td className="padding-extra">{item.description}</td>
                       </tr>
                     ))}

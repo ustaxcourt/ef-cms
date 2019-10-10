@@ -64,7 +64,7 @@ exports.sanitizePdfInteractor = async ({ applicationContext, documentId }) => {
       '-dDownsampleMonoImages=true',
       '-dDownsampleGrayImages=true',
       '-dDownsampleColorImages=true',
-      `-dPrinted=true`,
+      '-dPrinted=true',
       `-sOutputFile=${outputPdf.name}`,
       `-f ${intermediatePostscript.name}`,
     ].join(' ');
@@ -97,9 +97,11 @@ exports.sanitizePdfInteractor = async ({ applicationContext, documentId }) => {
   }
 
   applicationContext.logger.time('Saving S3 Document');
-  await applicationContext
-    .getPersistenceGateway()
-    .saveDocument({ applicationContext, document: newPdfData, documentId });
+  await applicationContext.getPersistenceGateway().saveDocument({
+    applicationContext,
+    document: pdfData /*newPdfData*/,
+    documentId,
+  });
   applicationContext.logger.timeEnd('Saving S3 Document');
 
   applicationContext.getStorageClient().putObjectTagging({

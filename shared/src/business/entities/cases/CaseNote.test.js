@@ -1,12 +1,14 @@
 const { CaseNote } = require('./CaseNote');
 
+const errorMessages = CaseNote.VALIDATION_ERROR_MESSAGES;
+
 describe('CaseNote', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const entity = new CaseNote({});
       expect(entity.getFormattedValidationErrors()).toEqual({
         caseId: '"caseId" is required',
-        notes: 'Notes can not be empty.',
+        notes: errorMessages.notes,
         userId: '"userId" is required',
       });
     });

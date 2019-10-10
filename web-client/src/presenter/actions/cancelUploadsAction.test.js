@@ -1,21 +1,18 @@
 import { cancelUploadsAction } from './cancelUploadsAction';
+import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('cancelUploadsAction', () => {
-  it('should change the window.location', async () => {
-    const replaceStub = sinon.stub().returns('');
+  it('should change the window location', async () => {
+    const externalRoute = jest.fn();
+    presenter.providers.router = { externalRoute };
 
-    global.window = {
-      location: {
-        replace: replaceStub,
+    await runAction(cancelUploadsAction, {
+      modules: {
+        presenter,
       },
-    };
+    });
 
-    await runAction(cancelUploadsAction);
-
-    expect(replaceStub.calledOnce).toEqual(true);
-
-    sinon.restore();
+    expect(externalRoute.mock.calls[0][0]).toEqual('/');
   });
 });

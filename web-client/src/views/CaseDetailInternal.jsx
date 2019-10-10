@@ -5,6 +5,7 @@ import { CaseNotes } from './CaseDetail/CaseNotes';
 import { CreateCaseDeadlineModalDialog } from './CaseDetail/CreateCaseDeadlineModalDialog';
 import { DeleteCaseDeadlineModalDialog } from './CaseDetail/DeleteCaseDeadlineModalDialog';
 import { DocketRecord } from './DocketRecord/DocketRecord';
+import { DraftDocuments } from './DraftDocuments/DraftDocuments';
 import { EditCaseDeadlineModalDialog } from './CaseDetail/EditCaseDeadlineModalDialog';
 import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,8 +20,8 @@ import React from 'react';
 export const CaseDetailInternal = connect(
   {
     baseUrl: state.baseUrl,
-    caseDetail: state.formattedCaseDetail,
-    caseHelper: state.caseDetailHelper,
+    caseDetailHelper: state.caseDetailHelper,
+    formattedCaseDetail: state.formattedCaseDetail,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
     setCaseToReadyForTrialSequence: sequences.setCaseToReadyForTrialSequence,
     showModal: state.showModal,
@@ -28,8 +29,8 @@ export const CaseDetailInternal = connect(
   },
   ({
     baseUrl,
-    caseDetail,
-    caseHelper,
+    caseDetailHelper,
+    formattedCaseDetail,
     setCaseDetailPageTabSequence,
     setCaseToReadyForTrialSequence,
     showModal,
@@ -56,7 +57,7 @@ export const CaseDetailInternal = connect(
                 className="usa-select"
                 id="mobile-document-detail-tab-selector"
                 name="partyType"
-                value={caseHelper.documentDetailTab}
+                value={caseDetailHelper.documentDetailTab}
                 onChange={e => {
                   setCaseDetailPageTabSequence({
                     tab: e.target.value,
@@ -81,6 +82,13 @@ export const CaseDetailInternal = connect(
                 <DocketRecord />
               </Tab>
               <Tab
+                id="tab-draft-documents"
+                tabName="draftDocuments"
+                title="Draft Documents"
+              >
+                <DraftDocuments />
+              </Tab>
+              <Tab
                 id="tab-case-info"
                 tabName="caseInfo"
                 title="Case Information"
@@ -90,7 +98,7 @@ export const CaseDetailInternal = connect(
                   <PartyInformation />
                 </div>
               </Tab>
-              {caseHelper.showNotes && (
+              {caseDetailHelper.showNotes && (
                 <Tab id="tab-case-notes" tabName="caseNotes" title="Notes">
                   <CaseNotes />
                 </Tab>
@@ -100,14 +108,14 @@ export const CaseDetailInternal = connect(
         </section>
         {/* This section below will be removed in a future story */}
         <section className="usa-section grid-container">
-          {caseDetail.status === 'General Docket - Not at Issue' && (
+          {formattedCaseDetail.status === 'General Docket - Not at Issue' && (
             <>
-              {caseDetail.contactPrimary && (
+              {formattedCaseDetail.contactPrimary && (
                 <a
                   aria-label="View PDF"
                   href={`${baseUrl}/documents/${
-                    caseDetail.docketNumber
-                  }_${caseDetail.contactPrimary.name.replace(
+                    formattedCaseDetail.docketNumber
+                  }_${formattedCaseDetail.contactPrimary.name.replace(
                     /\s/g,
                     '_',
                   )}.zip/document-download-url?token=${token}`}

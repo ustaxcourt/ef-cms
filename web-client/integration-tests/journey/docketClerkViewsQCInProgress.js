@@ -1,7 +1,7 @@
 export default (test, shouldExist) => {
   return it('Docket clerk views My Document QC - In Progress', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardDocketClerk');
+    await test.runSequence('gotoMessagesSequence');
+    expect(test.getState('currentPage')).toEqual('Messages');
     await test.runSequence('chooseWorkQueueSequence', {
       box: 'inProgress',
       queue: 'my',
@@ -9,9 +9,8 @@ export default (test, shouldExist) => {
     });
 
     const workQueueToDisplay = test.getState('workQueueToDisplay');
-    const workQueueIsInternal = test.getState('workQueueIsInternal');
 
-    expect(workQueueIsInternal).toBeFalsy();
+    expect(workQueueToDisplay.workQueueIsInternal).toBeFalsy();
     expect(workQueueToDisplay.queue).toEqual('my');
     expect(workQueueToDisplay.box).toEqual('inProgress');
 

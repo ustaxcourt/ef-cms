@@ -1,11 +1,12 @@
+import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { ContactFactory } from '../../../shared/src/business/entities/contacts/ContactFactory';
 import { runCompute } from 'cerebral/test';
-const {
-  ContactFactory,
-} = require('../../../shared/src/business/entities/contacts/ContactFactory');
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
+
+const { VALIDATION_ERROR_MESSAGES } = Case;
 
 export default (test, fakeFile, overrides = {}) => {
   return it('Taxpayer creates a new case, testing all form options', async () => {
@@ -242,7 +243,7 @@ export default (test, fakeFile, overrides = {}) => {
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('alertError').messages).toContain(
-      'Ownership Disclosure Statement is required.',
+      VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile,
     );
 
     await test.runSequence('updateStartCaseFormValueSequence', {
@@ -252,7 +253,7 @@ export default (test, fakeFile, overrides = {}) => {
 
     await test.runSequence('submitFilePetitionSequence');
     expect(test.getState('alertError').messages[0]).not.toContain(
-      'Ownership Disclosure Statement is required.',
+      VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile,
     );
 
     // Partnership other than tax matters party type primary contact
@@ -733,7 +734,7 @@ export default (test, fakeFile, overrides = {}) => {
     await test.runSequence('submitFilePetitionSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('alertError')).toEqual(null);
+    expect(test.getState('alertError')).toBeUndefined();
 
     expect(test.getState('alertSuccess')).toEqual({
       message: 'You can access your case at any time from the case list below.',

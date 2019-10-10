@@ -30,6 +30,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
         getEligibleCasesForTrialSession: () => [MOCK_CASE],
         getTrialSessionById: () => MOCK_TRIAL,
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
     let error;
@@ -59,6 +60,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
         getEligibleCasesForTrialSession: () => [MOCK_CASE],
         getTrialSessionById: () => MOCK_TRIAL,
       }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
     let error;

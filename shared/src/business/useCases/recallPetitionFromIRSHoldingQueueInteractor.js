@@ -1,19 +1,4 @@
 const {
-  createSectionInboxRecord,
-} = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
-const {
-  createUserInboxRecord,
-} = require('../../persistence/dynamo/workitems/createUserInboxRecord');
-const {
-  deleteSectionOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
-const {
-  deleteUserOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
-const {
-  deleteWorkItemFromInbox,
-} = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
-const {
   InvalidEntityError,
   NotFoundError,
   UnauthorizedError,
@@ -57,7 +42,9 @@ exports.recallPetitionFromIRSHoldingQueueInteractor = async ({
 
   if (!caseRecord) throw new NotFoundError(`Case ${caseId} was not found`);
 
-  const caseEntity = new Case(caseRecord).validate();
+  const caseEntity = new Case(caseRecord, {
+    applicationContext,
+  }).validate();
 
   const petitionDocument = caseEntity.documents.find(
     document =>
@@ -82,12 +69,13 @@ exports.recallPetitionFromIRSHoldingQueueInteractor = async ({
   await Promise.all(workItemsUpdated);
 
   if (initializeCaseWorkItem) {
-    await deleteWorkItemFromInbox({
+    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,
       workItem: initializeCaseWorkItem,
     });
 
     initializeCaseWorkItem.recallFromIRSBatchSystem({
+      applicationContext,
       user,
     });
     const invalidEntityError = new InvalidEntityError(
@@ -117,21 +105,21 @@ exports.recallPetitionFromIRSHoldingQueueInteractor = async ({
     });
 
     await Promise.all([
-      deleteUserOutboxRecord({
+      applicationContext.getPersistenceGateway().deleteUserOutboxRecord({
         applicationContext,
         createdAt,
         userId: fromUserId,
       }),
-      deleteSectionOutboxRecord({
+      applicationContext.getPersistenceGateway().deleteSectionOutboxRecord({
         applicationContext,
         createdAt,
         section: 'petitions',
       }),
-      createUserInboxRecord({
+      applicationContext.getPersistenceGateway().createUserInboxRecord({
         applicationContext,
         workItem: initializeCaseWorkItem,
       }),
-      createSectionInboxRecord({
+      applicationContext.getPersistenceGateway().createSectionInboxRecord({
         applicationContext,
         workItem: initializeCaseWorkItem,
       }),

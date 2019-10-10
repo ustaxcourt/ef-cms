@@ -1,6 +1,8 @@
 const moment = require('moment');
 const { DocketEntryFactory } = require('./DocketEntryFactory');
 
+const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
+
 describe('DocketEntryFactory', () => {
   let rawEntity;
 
@@ -23,7 +25,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.primaryDocumentFileSize = 0;
       expect(errors().primaryDocumentFile).toEqual(undefined);
       expect(errors().primaryDocumentFileSize).toEqual(
-        'Your document file size is empty.',
+        VALIDATION_ERROR_MESSAGES.primaryDocumentFileSize[1],
       );
     });
 
@@ -32,7 +34,9 @@ describe('DocketEntryFactory', () => {
     });
 
     it('should require received date be entered', () => {
-      expect(errors().dateReceived).toEqual('Enter date received.');
+      expect(errors().dateReceived).toEqual(
+        VALIDATION_ERROR_MESSAGES.dateReceived[1],
+      );
       rawEntity.dateReceived = moment().format();
       expect(errors().dateReceived).toEqual(undefined);
     });
@@ -42,7 +46,7 @@ describe('DocketEntryFactory', () => {
         .add(1, 'days')
         .format();
       expect(errors().dateReceived).toEqual(
-        'Received date is in the future. Please enter a valid date.',
+        VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
       );
     });
 
@@ -62,14 +66,18 @@ describe('DocketEntryFactory', () => {
       });
 
       it('should require non standard fields', () => {
-        expect(errors().ordinalValue).toEqual('Select an iteration.');
+        expect(errors().ordinalValue).toEqual(
+          VALIDATION_ERROR_MESSAGES.ordinalValue,
+        );
         rawEntity.ordinalValue = 'First';
         expect(errors().ordinalValue).toEqual(undefined);
       });
     });
 
     it('should require one of [partyPrimary, partySecondary, partyRespondent] to be selected', () => {
-      expect(errors().partyPrimary).toEqual('Select a filing party.');
+      expect(errors().partyPrimary).toEqual(
+        VALIDATION_ERROR_MESSAGES.partyPrimary,
+      );
       rawEntity.partySecondary = true;
       expect(errors().partyPrimary).toEqual(undefined);
     });
@@ -98,7 +106,7 @@ describe('DocketEntryFactory', () => {
 
         it('should require certificate of service date be entered', () => {
           expect(errors().certificateOfServiceDate).toEqual(
-            'Enter a Certificate of Service Date.',
+            VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
           );
           rawEntity.certificateOfServiceDate = moment().format();
           expect(errors().certificateOfServiceDate).toEqual(undefined);
@@ -109,7 +117,7 @@ describe('DocketEntryFactory', () => {
             .add(1, 'days')
             .format();
           expect(errors().certificateOfServiceDate).toEqual(
-            'Certificate of Service date is in the future. Please enter a valid date.',
+            VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
           );
         });
       });
@@ -133,7 +141,7 @@ describe('DocketEntryFactory', () => {
 
         it('should require Objections', () => {
           expect(errors().objections).toEqual(
-            'Enter selection for Objections.',
+            VALIDATION_ERROR_MESSAGES.objections,
           );
           rawEntity.objections = 'No';
           expect(errors().objections).toEqual(undefined);
@@ -156,8 +164,8 @@ describe('DocketEntryFactory', () => {
 
           it('should validate secondary document', () => {
             expect(errors().secondaryDocument).toEqual({
-              category: 'Select a Category.',
-              documentType: 'Select a Document Type.',
+              category: VALIDATION_ERROR_MESSAGES.category,
+              documentType: VALIDATION_ERROR_MESSAGES.documentType,
             });
           });
         });

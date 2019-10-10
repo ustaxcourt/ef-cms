@@ -35,6 +35,7 @@ export const IRSNotice = connect(
           </legend>
           <div className="usa-radio usa-radio__inline">
             <input
+              aria-describedby="irs-verified-notice-radios"
               checked={caseDetail.hasVerifiedIrsNotice === true}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-yes"
@@ -59,6 +60,7 @@ export const IRSNotice = connect(
           </div>
           <div className="usa-radio usa-radio__inline">
             <input
+              aria-describedby="irs-verified-notice-radios"
               checked={caseDetail.hasVerifiedIrsNotice === false}
               className="usa-radio__input"
               id="hasVerifiedIrsNotice-no"
@@ -86,13 +88,13 @@ export const IRSNotice = connect(
       return (
         <div
           className={
-            'usa-form-group ' +
+            'usa-form-group margin-bottom-0 ' +
             (caseDetailErrors.irsNoticeDate ? 'usa-form-group--error' : '')
           }
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="date-of-notice-legend">
-              Date of Notice
+              Date of Notice <span className="usa-hint">(optional)</span>
             </legend>
             <div className="usa-memorable-date">
               <div className="usa-form-group usa-form-group--month margin-bottom-0">

@@ -1,10 +1,10 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { setAlertFromExceptionAction } from '../actions/setAlertFromExceptionAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { unsetFormSubmittingAction } from '../actions/unsetFormSubmittingAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const notFoundErrorSequence = [
-  unsetFormSubmittingAction,
+  unsetWaitingForResponseAction,
   setAlertFromExceptionAction,
   clearModalAction,
   setCurrentPageAction('Error'),

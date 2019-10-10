@@ -40,7 +40,7 @@ class ErrorNotificationComponent extends React.Component {
               )}
               {alertHelper.showMultipleMessages && (
                 <ul>
-                  {alertError.messages.map((message, idx) => (
+                  {alertHelper.messagesDeduped.map((message, idx) => (
                     <li key={idx}>{message}</li>
                   ))}
                 </ul>

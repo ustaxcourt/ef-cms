@@ -77,10 +77,14 @@ export const submitDocketEntryAction = async ({
   }
 
   if (isFileAttached) {
-    await applicationContext.getUseCases().createCoverSheetInteractor({
+    const documentIdForFile = primaryDocumentFileId
+      ? primaryDocumentFileId
+      : documentId;
+
+    await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
-      documentId: primaryDocumentFileId || documentId,
+      documentId: documentIdForFile,
     });
   }
 

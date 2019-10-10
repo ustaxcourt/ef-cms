@@ -8,7 +8,7 @@ export const workQueueHelper = get => {
   const userRole = get(state.user.role);
   const userRoleMap = mapValueHelper(userRole);
   const { myInboxUnreadCount, qcUnreadCount } = get(state.notifications);
-  const workQueueIsInternal = get(state.workQueueIsInternal);
+  const { workQueueIsInternal } = workQueueToDisplay;
   const showInbox = workQueueToDisplay.box === 'inbox';
   const showInProgress = workQueueToDisplay.box === 'inProgress';
   const showOutbox = workQueueToDisplay.box === 'outbox';

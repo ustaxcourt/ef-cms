@@ -15,6 +15,6 @@ exports.createCaseDeadlineInteractor = ({
   return post({
     applicationContext,
     body: { caseDeadline },
-    endpoint: `/cases/${caseDeadline.caseId}/case-deadline`,
+    endpoint: `/case-deadlines/${caseDeadline.caseId}`,
   });
 };

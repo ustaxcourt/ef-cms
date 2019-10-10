@@ -13,13 +13,14 @@ describe('validateTrialSessionInteractor', () => {
         getEntityConstructors: () => ({
           NewTrialSession,
         }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
       trialSession: {},
     });
 
     expect(Object.keys(errors)).toEqual(
       Object.keys(
-        omit(NewTrialSession.errorToMessageMap, [
+        omit(NewTrialSession.VALIDATION_ERROR_MESSAGES, [
           'postalCode',
           'swingSessionId',
           'startTime',
@@ -43,6 +44,7 @@ describe('validateTrialSessionInteractor', () => {
         getEntityConstructors: () => ({
           NewTrialSession,
         }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
       trialSession: { ...MOCK_TRIAL },
     });

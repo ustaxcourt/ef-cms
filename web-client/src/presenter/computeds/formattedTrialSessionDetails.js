@@ -80,5 +80,13 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     !!result.swingSessionId &&
     !!result.swingSessionLocation;
 
+  const trialDate = applicationContext
+    .getUtilities()
+    .formatDateString(result.startDate, 'MMMM_D_YYYY');
+  const { trialLocation } = result;
+  result.zipName = `${trialDate}-${trialLocation}.zip`
+    .replace(/\s/g, '_')
+    .replace(/,/g, '');
+
   return result;
 };
