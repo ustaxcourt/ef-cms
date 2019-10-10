@@ -88,6 +88,18 @@ const router = {
       }),
     );
 
+    route(
+      '/case-detail/*/documents/*/edit',
+      checkLoggedIn((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
+        );
+        app.getSequence('gotoEditDocketEntrySequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
 
     route(
       '/case-detail/*/documents/*/sign',
