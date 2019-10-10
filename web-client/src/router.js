@@ -81,12 +81,13 @@ const router = {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
         );
-        app.getSequence('gotoEditDocketEntrySequence')({
+        app.getSequence('gotoCompleteDocketEntrySequence')({
           docketNumber,
           documentId,
         });
       }),
     );
+
 
     route(
       '/case-detail/*/documents/*/sign',
