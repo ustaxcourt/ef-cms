@@ -35,7 +35,7 @@ export const PrimaryDocumentForm = connect(
     validationErrors,
   }) => {
     return (
-      <React.Fragment>
+      <>
         <div className="blue-container docket-entry-form">
           <div
             className={classNames(
@@ -468,7 +468,7 @@ export const PrimaryDocumentForm = connect(
             </div>
           )}
         </div>
-      </React.Fragment>
+      </>
     );
   },
 );
