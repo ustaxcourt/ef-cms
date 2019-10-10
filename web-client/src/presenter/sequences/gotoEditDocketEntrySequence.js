@@ -25,7 +25,7 @@ export const gotoEditDocketEntry = [
   setDocketEntryFormForDocketEditAction,
   deconstructReceivedAtDateToFormAction,
   setDocumentIdAction,
-  set(state.wizardStep, 'PrimaryDocumentForm'),
+  set(state.currentTab, 'Document Info'),
   setCurrentPageAction('EditDocketEntry'),
 ];
 
