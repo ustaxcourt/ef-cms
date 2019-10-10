@@ -13,7 +13,7 @@ exports.generatePrintableFilingReceiptInteractor = ({
   return applicationContext
     .getHttpClient()
     .post(
-      `${applicationContext.getBaseUrl()}/api/filing-receipt-pdf`,
+      `${applicationContext.getBaseUrl()}/documents/filing-receipt-pdf`,
       {
         documents,
       },
