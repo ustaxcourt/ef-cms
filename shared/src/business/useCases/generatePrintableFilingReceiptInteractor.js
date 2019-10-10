@@ -10,7 +10,13 @@ exports.generatePrintableFilingReceiptInteractor = async ({
   applicationContext,
   documents,
 }) => {
-  const { caseId, primaryDocument, supportingDocuments } = documents;
+  const {
+    caseId,
+    primaryDocument,
+    secondaryDocument,
+    secondarySupportingDocuments,
+    supportingDocuments,
+  } = documents;
   const { Case } = applicationContext.getEntityConstructors();
   const caseCaptionPostfix = Case.CASE_CAPTION_POSTFIX;
 
@@ -66,6 +72,22 @@ exports.generatePrintableFilingReceiptInteractor = async ({
       documentsFiledContent += getDocumentContent(supportingDocument);
 
       if (idx < supportingDocuments.length - 1) {
+        documentsFiledContent += '<hr />';
+      }
+    });
+  }
+
+  if (secondaryDocument) {
+    documentsFiledContent += '<hr />';
+    documentsFiledContent += getDocumentContent(secondaryDocument);
+  }
+
+  if (secondarySupportingDocuments && secondarySupportingDocuments.length) {
+    documentsFiledContent += '<hr />';
+    secondarySupportingDocuments.forEach((secondarySupportingDocument, idx) => {
+      documentsFiledContent += getDocumentContent(secondarySupportingDocument);
+
+      if (idx < secondarySupportingDocument.length - 1) {
         documentsFiledContent += '<hr />';
       }
     });
