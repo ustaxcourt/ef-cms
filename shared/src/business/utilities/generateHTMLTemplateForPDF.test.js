@@ -2,6 +2,7 @@ import {
   generateChangeOfAddressTemplate,
   generateHTMLTemplateForPDF,
   generatePrintableDocketRecordTemplate,
+  generatePrintableFilingReceiptTemplate,
 } from './generateHTMLTemplateForPDF';
 
 describe('generateHTMLTemplateForPDF', () => {
@@ -348,5 +349,31 @@ describe('generatePrintableDocketRecordTemplate', () => {
     expect(
       result.indexOf('<table id="test-party-info"></table>'),
     ).toBeGreaterThan(-1);
+  });
+});
+
+describe('generatePrintableFilingReceiptTemplate', () => {
+  const content = {
+    caption: 'Test Case Caption',
+    captionPostfix: 'Test Caption Postfix',
+    docketNumberWithSuffix: '123-45S',
+    documentsFiledContent: '<div>Documents Filed Content</div>',
+    filedAt: '10/03/19 3:09 pm ET',
+    filedBy: 'Resp. & Petr. Garrett Carpenter',
+  };
+
+  it('Returns HTML with the given content', () => {
+    const result = generatePrintableFilingReceiptTemplate(content);
+
+    expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
+    expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
+    expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
+    expect(
+      result.indexOf('<div>Documents Filed Content</div>'),
+    ).toBeGreaterThan(-1);
+    expect(
+      result.indexOf('Filed by Resp. & Petr. Garrett Carpenter'),
+    ).toBeGreaterThan(-1);
+    expect(result.indexOf('Filed 10/03/19 3:09 pm ET')).toBeGreaterThan(-1);
   });
 });

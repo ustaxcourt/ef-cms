@@ -335,6 +335,7 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   };
 
   presenter.providers.router = {
+    createObjectURL: () => '/test-url',
     route: async url => {
       if (url === `/case-detail/${test.docketNumber}`) {
         await test.runSequence('gotoCaseDetailSequence', {

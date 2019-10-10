@@ -8,10 +8,14 @@ describe('fileExternalDocumentAction', () => {
   let addCoversheetStub;
   let submitCaseAssociationRequestStub;
 
+  let successMock;
+
   beforeEach(() => {
     uploadExternalDocumentStub = sinon.stub();
     addCoversheetStub = sinon.stub();
     submitCaseAssociationRequestStub = sinon.stub();
+
+    successMock = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -23,7 +27,10 @@ describe('fileExternalDocumentAction', () => {
 
     presenter.providers.path = {
       error: () => null,
-      success: () => null,
+      success: args => {
+        successMock();
+        return args;
+      },
     };
   });
 
@@ -67,5 +74,27 @@ describe('fileExternalDocumentAction', () => {
 
     expect(uploadExternalDocumentStub.calledOnce).toEqual(true);
     expect(submitCaseAssociationRequestStub.calledOnce).toEqual(true);
+  });
+
+  it('should return the success path with caseDetail, caseId, and documentsFiled', async () => {
+    uploadExternalDocumentStub.returns({ documents: [] });
+    const result = await runAction(fileExternalDocumentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {},
+        form: {
+          category: 'Motion',
+          documentType: 'Motion for Judgment on the Pleadings',
+          primaryDocumentFile: {},
+        },
+      },
+    });
+
+    expect(successMock).toHaveBeenCalled();
+    expect(result.output).toHaveProperty('caseDetail');
+    expect(result.output).toHaveProperty('caseId');
+    expect(result.output).toHaveProperty('documentsFiled');
   });
 });
