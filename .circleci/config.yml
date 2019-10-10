@@ -196,7 +196,7 @@ jobs:
 
   deploy-api-east:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: sutt0n/ef-cms:experimental
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -277,7 +277,7 @@ jobs:
 
   deploy-api-west:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: sutt0n/ef-cms:experimental
     steps:
       - restore_cache:
           name: Source - Restoring Cache
