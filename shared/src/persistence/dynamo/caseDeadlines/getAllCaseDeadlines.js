@@ -64,7 +64,5 @@ exports.getAllCaseDeadlines = async ({ applicationContext }) => {
     ]),
   }));
 
-  console.log(stripInternalKeys(afterCaseMapping));
-
   return stripInternalKeys(afterCaseMapping);
 };
