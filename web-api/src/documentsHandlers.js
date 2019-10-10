@@ -1,6 +1,8 @@
 module.exports = {
   downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
     .handler,
+  generateFilingReceiptPdfLambda: require('./documents/generateFilingReceiptPdfLambda')
+    .handler,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrlLambda')
     .handler,
   getUploadPolicyLambda: require('./documents/getUploadPolicyLambda').handler,

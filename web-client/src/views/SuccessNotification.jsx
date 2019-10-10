@@ -45,6 +45,17 @@ class SuccessNotificationComponent extends React.Component {
                       {alertSuccess.title}
                     </p>
                     <p className="usa-alert__text">{alertSuccess.message}</p>
+                    {alertSuccess.linkUrl && (
+                      <Button
+                        link
+                        className="padding-0 margin-top-2"
+                        href={alertSuccess.linkUrl}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        {alertSuccess.linkText || alertSuccess.linkUrl}
+                      </Button>
+                    )}
                   </div>
                   <div className="tablet:grid-col-2 usa-alert__action">
                     <Button

@@ -115,5 +115,6 @@ export const submitCaseAssociationRequestAction = async ({
     caseId: docketNumber,
     documentWithImmediateAssociation,
     documentWithPendingAssociation,
+    documentsFiled: documentMetadata,
   };
 };
