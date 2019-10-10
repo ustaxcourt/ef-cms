@@ -171,7 +171,7 @@ export const DocumentDetail = connect(
                         })
                       }
                     >
-                      <FontAwesomeIcon icon="times-circle" size="sm" /> Remove
+                      <FontAwesomeIcon icon="trash" size="sm" /> Delete
                       Signature
                     </Button>
                   </>
@@ -228,7 +228,7 @@ export const DocumentDetail = connect(
                       });
                     }}
                   >
-                    <FontAwesomeIcon icon="times-circle" size="sm" />
+                    <FontAwesomeIcon icon="trash" size="sm" />
                     Delete
                   </Button>
                 </>

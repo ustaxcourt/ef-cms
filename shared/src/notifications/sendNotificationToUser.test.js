@@ -48,7 +48,7 @@ const applicationContext = {
   }),
 };
 
-describe('update primary contact on a case', () => {
+describe('send websocket notification to browser', () => {
   let deleteStub;
   beforeEach(() => {
     deleteStub = sinon.stub(client, 'delete').resolves({});
@@ -58,7 +58,7 @@ describe('update primary contact on a case', () => {
     client.delete.restore();
   });
 
-  it('sends things', async () => {
+  it('send notification to user', async () => {
     await sendNotificationToUser({
       applicationContext,
       message: 'hello, computer',

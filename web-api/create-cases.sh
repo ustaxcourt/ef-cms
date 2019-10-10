@@ -181,7 +181,7 @@ EOF
     --data-binary '{}' \
     --compressed
 
-  curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/api/runBatchProcess" \
+  curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/api/run-batch-process" \
     -H 'Accept: application/json, text/plain, */*' \
     -H "Authorization: Bearer ${petitionsclerkToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \

@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 import { setConfirmEditModalStateAction } from './setConfirmEditModalStateAction';
 
 describe('setConfirmEditModalStateAction', () => {
-  it('do', async () => {
+  it('sets the case and document to display in the modal', async () => {
     const result = await runAction(setConfirmEditModalStateAction, {
       props: {
         caseId: 'abc-123',

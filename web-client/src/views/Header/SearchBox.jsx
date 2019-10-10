@@ -1,4 +1,4 @@
-import { Button } from '../ustc-ui/Button/Button';
+import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -7,9 +7,15 @@ export const SearchBox = connect(
   {
     searchTerm: state.searchTerm,
     submitCaseSearchSequence: sequences.submitCaseSearchSequence,
+    toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     updateSearchTermSequence: sequences.updateSearchTermSequence,
   },
-  ({ searchTerm, submitCaseSearchSequence, updateSearchTermSequence }) => {
+  ({
+    searchTerm,
+    submitCaseSearchSequence,
+    toggleMobileMenuSequence,
+    updateSearchTermSequence,
+  }) => {
     return (
       <form
         noValidate
@@ -45,6 +51,7 @@ export const SearchBox = connect(
             aria-label="advanced search"
             className="usa-link advanced margin-left-105"
             href="/search"
+            onClick={() => toggleMobileMenuSequence()}
           >
             Advanced
           </a>
