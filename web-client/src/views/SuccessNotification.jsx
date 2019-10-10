@@ -17,15 +17,6 @@ class SuccessNotificationComponent extends React.Component {
     }
   }
 
-  // TODO: Perhaps we could pass a component to the message portion instead of
-  // dangerously setting HTML - or, perhaps, add a link property and move it
-  // below the message. TBD.
-  getMessageContent() {
-    return {
-      __html: this.props.alertSuccess.message,
-    };
-  }
-
   render() {
     const { alertSuccess } = this.props;
     const { dismissAlertSequence } = this.props;
@@ -53,10 +44,18 @@ class SuccessNotificationComponent extends React.Component {
                     <p className="heading-3 usa-alert__heading padding-top-0">
                       {alertSuccess.title}
                     </p>
-                    <p
-                      className="usa-alert__text"
-                      dangerouslySetInnerHTML={this.getMessageContent()}
-                    />
+                    <p className="usa-alert__text">{alertSuccess.message}</p>
+                    {alertSuccess.linkUrl && (
+                      <Button
+                        link
+                        className="padding-0 margin-top-2"
+                        href={alertSuccess.linkUrl}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        {alertSuccess.linkText || alertSuccess.linkUrl}
+                      </Button>
+                    )}
                   </div>
                   <div className="tablet:grid-col-2 usa-alert__action">
                     <Button

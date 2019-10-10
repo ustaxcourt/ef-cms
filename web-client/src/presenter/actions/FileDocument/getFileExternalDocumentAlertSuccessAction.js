@@ -28,17 +28,18 @@ export const getFileExternalDocumentAlertSuccessAction = ({ get, props }) => {
     };
   }
 
-  let message =
-    'You can access your documents at any time from the docket record below.';
+  const alertSuccess = {
+    message:
+      'You can access your documents at any time from the docket record below.',
+    title: 'Your filing has been successfully submitted.',
+  };
 
   if (props.printReceiptLink) {
-    message = `You can <a href="${props.printReceiptLink}" target="_blank">print a receipt</a> for your filing or access your documents at any time from the docket record below.`;
+    alertSuccess.linkUrl = props.printReceiptLink;
+    alertSuccess.linkText = 'Print receipt.';
   }
 
   return {
-    alertSuccess: {
-      message,
-      title: 'Your filing has been successfully submitted.',
-    },
+    alertSuccess,
   };
 };
