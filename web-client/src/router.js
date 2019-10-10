@@ -76,7 +76,7 @@ const router = {
     );
 
     route(
-      '/case-detail/*/documents/*/edit',
+      '/case-detail/*/documents/*/complete',
       checkLoggedIn((docketNumber, documentId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
