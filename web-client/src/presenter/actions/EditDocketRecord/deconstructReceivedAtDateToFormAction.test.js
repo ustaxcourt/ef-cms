@@ -7,7 +7,7 @@ import { runAction } from 'cerebral/test';
 presenter.providers.applicationContext = applicationContext;
 
 describe('deconstructReceivedAtDateToFormAction', () => {
-  it('decontructs the date', async () => {
+  it('deconstructs the date', async () => {
     const result = await runAction(deconstructReceivedAtDateToFormAction, {
       modules: {
         presenter: {
