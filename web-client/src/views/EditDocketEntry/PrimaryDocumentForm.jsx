@@ -1,6 +1,4 @@
-import { Inclusions } from './Inclusions';
-import { NonstandardForm } from '../FileDocument/NonstandardForm';
-import { SecondaryDocumentForm } from './SecondaryDocumentForm';
+import { Inclusions } from '../AddDocketEntry/Inclusions';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import {
@@ -183,12 +181,6 @@ export const PrimaryDocumentForm = connect(
               Document type
             </label>
 
-            <span className="usa-hint">
-              Enter your document name to see available document types,
-              <br />
-              or use the dropdown to select your document type.
-            </span>
-
             <Select
               aria-describedby="document-type-label"
               className="select-react-element"
@@ -227,81 +219,39 @@ export const PrimaryDocumentForm = connect(
             />
           </div>
 
-          {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
-            <div
-              className={classNames(
-                'usa-form-group',
-                validationErrors.secondaryDocument &&
-                  !form.secondaryDocument &&
-                  'usa-form-group--error',
-              )}
-            >
-              <label
-                className="usa-label"
-                htmlFor="react-select-3-input"
-                id="secondary-document-type-label"
-              >
-                Which Document Is This Motion for Leave For?
-                <span className="usa-hint">
-                  You can upload the associated document by creating a new
-                  docket entry for it.
-                </span>
-              </label>
-              <Select
-                aria-describedby="secondary-document-type-label"
-                className="select-react-element"
-                classNamePrefix="select-react-element"
-                id="secondary-document-type"
-                isClearable={true}
-                name="secondaryDocument.eventCode"
-                options={
-                  internalTypesHelper.internalDocumentTypesForSelectSorted
-                }
-                placeholder="- Select -"
-                value={reactSelectValue({
-                  documentTypes:
-                    internalTypesHelper.internalDocumentTypesForSelectSorted,
-                  selectedEventCode:
-                    form.secondaryDocument && form.secondaryDocument.eventCode,
-                })}
-                onChange={(inputValue, { action, name }) => {
-                  docketEntryOnChange({
-                    action,
-                    inputValue,
-                    name,
-                    updateSequence: updateDocketEntryFormValueSequence,
-                    validateSequence: validateDocketEntrySequence,
-                  });
-                  return true;
-                }}
-                onInputChange={(inputText, { action }) => {
-                  onInputChange({
-                    action,
-                    inputText,
-                    updateSequence: updateScreenMetadataSequence,
-                  });
-                }}
-              />
-              {!form.secondaryDocument && (
-                <Text
-                  bind="validationErrors.secondaryDocument"
-                  className="usa-error-message"
-                />
-              )}
-            </div>
-          )}
-
-          {addDocketEntryHelper.primary.showNonstandardForm && (
-            <NonstandardForm
-              helper="addDocketEntryHelper"
-              level="primary"
-              updateSequence="updateDocketEntryFormValueSequence"
-              validateSequence="validateDocketEntrySequence"
-              validationErrors="validationErrors"
+          <div
+            className={classNames(
+              'usa-form-group',
+              validationErrors &&
+                validationErrors.documentTitle &&
+                'usa-form-group--error',
+            )}
+          >
+            <label className="usa-label" htmlFor="documentTitle">
+              Document title
+            </label>
+            <input
+              autoCapitalize="none"
+              className="usa-input"
+              id="document-title"
+              name="documentTitle"
+              type="text"
+              value={form.documentTitle || ''}
+              onBlur={() => {
+                validateDocketEntrySequence();
+              }}
+              onChange={e => {
+                updateDocketEntryFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
             />
-          )}
-
-          {form.secondaryDocument && <SecondaryDocumentForm />}
+            <Text
+              bind="validationErrors.documentTitle"
+              className="usa-error-message"
+            />
+          </div>
 
           <div className="usa-form-group">
             <label
