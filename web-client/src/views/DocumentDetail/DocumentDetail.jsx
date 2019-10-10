@@ -3,7 +3,6 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailEdit } from '../CaseDetailEdit/CaseDetailEdit';
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { CaseDetailReadOnly } from '../CaseDetailReadOnly';
-import { CompletedMessages } from './CompletedMessages';
 import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
 import { CreateMessageModalDialog } from './CreateMessageModalDialog';
 import { DocumentDetailHeader } from './DocumentDetailHeader';
@@ -11,7 +10,6 @@ import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { DocumentMessages } from './DocumentMessages';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { PendingMessages } from './PendingMessages';
 import { RecallPetitionModalDialog } from '../RecallPetitionModalDialog';
 import { ServeConfirmModalDialog } from '../ServeConfirmModalDialog';
 import { ServeToIrsModalDialog } from '../ServeToIrsModalDialog';
@@ -26,7 +24,6 @@ export const DocumentDetail = connect(
   {
     archiveDraftDocumentModalSequence:
       sequences.archiveDraftDocumentModalSequence,
-    baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     caseHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
@@ -42,11 +39,9 @@ export const DocumentDetail = connect(
       sequences.removeSignatureFromOrderSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
     showModal: state.showModal,
-    token: state.token,
   },
   ({
     archiveDraftDocumentModalSequence,
-    baseUrl,
     caseDetail,
     caseHelper,
     clickServeToIrsSequence,
@@ -60,7 +55,6 @@ export const DocumentDetail = connect(
     removeSignatureFromOrderSequence,
     setModalDialogNameSequence,
     showModal,
-    token,
   }) => {
     const renderParentTabs = () => {
       return (
@@ -302,9 +296,6 @@ export const DocumentDetail = connect(
         {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
         {showModal === 'RecallPetitionModalDialog' && (
           <RecallPetitionModalDialog />
-        )}
-        {showModal === 'CreateMessageModalDialog' && (
-          <CreateMessageModalDialog />
         )}
         {showModal === 'ServeConfirmModalDialog' && (
           <ServeConfirmModalDialog
