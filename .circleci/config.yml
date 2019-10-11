@@ -166,18 +166,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Setup Env
-          command: |
-            echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export COMPARE_BRANCH=$(./get-compare-branch.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-      - run:
           name: Build Docker Image
-          command: |
-            git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/clamav" && cd ~/project/web-api/runtimes/clamav && ./build.sh 
-            git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/ghostscript" && cd ~/project/web-api/runtimes/ghostscript && ./build.sh 
-            git diff --name-only origin/${COMPARE_BRANCH} | grep -q "runtimes/puppeteer" && cd ~/project/web-api/runtimes/puppeteer && ./build.sh 
-
-            cd ~/project/ && docker build -t efcms -f Dockerfile .
+          command: cd web-api/runtimes/clamav && ./build.sh && cd ../ghostscript && ./build.sh && cd ../puppeteer && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
+      - run:
+          name: Setup Env
+          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: Setup Dynamsoft Keys
           command: echo "export DYNAMSOFT_PRODUCT_KEYS='$(./get-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
@@ -195,170 +188,115 @@ jobs:
           command: docker run -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" -e "ENV=${ENV}" -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "CIRCLE_SHA1=${CIRCLE_SHA1}" --rm efcms /bin/sh -c "./web-client/build-dist.sh $ENV && aws s3 sync dist s3://ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache && aws s3 sync dist s3://failover-ui-${ENV}.${EFCMS_DOMAIN} --delete --cache-control no-cache"
 
   deploy-api-east:
-    docker:
-      - image: sutt0n/ef-cms:experimental
+    machine:
+      docker_layer_caching: true
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
       - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
       - run:
-          name: NPM - Install
-          command: npm i
+          name: Build Docker Image
+          command: cd web-api/runtimes/clamav && ./build.sh && cd ../ghostscript && ./build.sh && cd ../puppeteer && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
-          command: |
-            echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export COMPARE_BRANCH=$(./get-compare-branch.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-east-1'
-          command: |
-            ./check-deploy-layer.sh puppeteer ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Layers - Ghostscript - us-east-1'
-          command: |
-            ./check-deploy-layer.sh ghostscript ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-ghostscript.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Layers - ClamAV - us-east-1'
-          command: |
-            ./check-deploy-layer.sh clamav ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - API - us-east-1'
-          command: |
-            ./check-deploy-stack.sh api serverless-api ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-api.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Cases - us-east-1'
-          command: |
-            ./check-deploy-stack.sh cases serverless-cases ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-cases.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Case Documents - us-east-1'
-          command: |
-            ./check-deploy-stack.sh caseDocuments serverless-case-documents ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-documents.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Case Deadlines - us-east-1'
-          command: |
-            ./check-deploy-stack.sh caseDeadlines serverless-case-deadlines ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-deadlines.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Case Notes - us-east-1'
-          command: |
-            ./check-deploy-stack.sh caseNotes serverless-case-notes ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-notes.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Users - us-east-1'
-          command: |
-            ./check-deploy-stack.sh users serverless-users ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-users.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Documents - us-east-1'
-          command: |
-            ./check-deploy-stack.sh documents serverless-documents ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-documents.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Work Items - us-east-1'
-          command: |
-            ./check-deploy-stack.sh workItems serverless-work-items ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-work-items.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Sections - us-east-1'
-          command: |
-            ./check-deploy-stack.sh sections serverless-sections ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-sections.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Trial Sessions - us-east-1'
-          command: |
-            ./check-deploy-stack.sh trialSessions serverless-trial-sessions ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-trial-sessions.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Notifications - us-east-1'
-          command: |
-            ./check-deploy-stack.sh notifications serverless-notifications ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-notifications.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Serverless - Streams - us-east-1 (east only)'
-          command: |
-            ./check-deploy-stack.sh streams serverless-streams ${COMPARE_BRANCH} ${ENV} us-east-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-streams.sh ${ENV} us-east-1"
 
   deploy-api-west:
-    docker:
-      - image: sutt0n/ef-cms:experimental
+    machine:
+      docker_layer_caching: true
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
       - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
       - run:
-          name: NPM - Install
-          command: npm i
+          name: Build Docker Image
+          command: cd web-api/runtimes/clamav && ./build.sh && cd ../ghostscript && ./build.sh && cd ../puppeteer && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
-          command: |
-            echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export COMPARE_BRANCH=$(./get-compare-branch.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-west-1'
-          command: |
-            ./check-deploy-layer.sh puppeteer ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Layers - Ghostscript - us-west-1'
-          command: |
-            ./check-deploy-layer.sh ghostscript ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-ghostscript.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Layers - ClamAV - us-west-1'
-          command: |
-            ./check-deploy-layer.sh clamav ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - API - us-west-1'
-          command: |
-            ./check-deploy-stack.sh api serverless-api ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-api.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Cases - us-west-1'
-          command: |
-            ./check-deploy-stack.sh cases serverless-cases ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-cases.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Case Documents - us-west-1'
-          command: |
-            ./check-deploy-stack.sh caseDocuments serverless-case-documents ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-documents.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Case Deadlines - us-west-1'
-          command: |
-            ./check-deploy-stack.sh caseDeadlines serverless-case-deadlines ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-deadlines.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Case Notes - us-west-1'
-          command: |
-            ./check-deploy-stack.sh caseNotes serverless-case-notes ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-case-notes.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Users - us-west-1'
-          command: |
-            ./check-deploy-stack.sh users serverless-users ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-users.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Documents - us-west-1'
-          command: |
-            ./check-deploy-stack.sh documents serverless-documents ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-documents.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Work Items - us-west-1'
-          command: |
-            ./check-deploy-stack.sh workItems serverless-work-items ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-work-items.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Sections - us-west-1'
-          command: |
-            ./check-deploy-stack.sh sections serverless-sections ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-sections.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Trial Sessions - us-west-1'
-          command: |
-            ./check-deploy-stack.sh trialSessions serverless-trial-sessions ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-trial-sessions.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Serverless - Notifications - us-west-1'
-          command: |
-            ./check-deploy-stack.sh notifications serverless-notifications ${COMPARE_BRANCH} ${ENV} us-west-1
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-notifications.sh ${ENV} us-west-1"
 
   post-deploy:
     machine:
