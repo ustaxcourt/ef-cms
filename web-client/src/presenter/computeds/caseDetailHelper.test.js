@@ -433,6 +433,54 @@ describe('case detail computed', () => {
     expect(result.showAddCounsel).toEqual(false);
   });
 
+  it('should show edit practitioners and respondents buttons if user is an internal user and there are practitioners and respondents on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {
+          practitioners: [{ userId: '1' }],
+          respondents: [{ userId: '2' }],
+        },
+        form: {},
+        user: {
+          role: 'docketclerk',
+        },
+      },
+    });
+    expect(result.showEditPractitioners).toBeTruthy();
+    expect(result.showEditRespondents).toBeTruthy();
+  });
+
+  it('should not show edit practitioners or respondents buttons if user is an internal user and there are not practitioners and respondents on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        user: {
+          role: 'docketclerk',
+        },
+      },
+    });
+    expect(result.showEditPractitioners).toBeFalsy();
+    expect(result.showEditRespondents).toBeFalsy();
+  });
+
+  it('should not show edit practitioners or respondents buttons if user is not an internal user', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {
+          practitioners: [{ userId: '1' }],
+          respondents: [{ userId: '2' }],
+        },
+        form: {},
+        user: {
+          role: 'petitioner',
+        },
+      },
+    });
+    expect(result.showEditPractitioners).toBeFalsy();
+    expect(result.showEditRespondents).toBeFalsy();
+  });
+
   it('should show practitioner section if user is an internal user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
