@@ -3,7 +3,7 @@ import { runAction } from 'cerebral/test';
 import { saveIntermediateDocketEntryAction } from './saveIntermediateDocketEntryAction';
 
 describe('saveIntermediateDocketEntryAction', () => {
-  let updateDocketEntryInteractorMock;
+  let saveIntermediateDocketEntryInteractorMock;
   let caseDetail;
 
   beforeEach(() => {
@@ -12,11 +12,11 @@ describe('saveIntermediateDocketEntryAction', () => {
       docketNumber: '123-45',
     };
 
-    updateDocketEntryInteractorMock = jest.fn(() => caseDetail);
+    saveIntermediateDocketEntryInteractorMock = jest.fn(() => caseDetail);
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        updateDocketEntryInteractor: updateDocketEntryInteractorMock,
+        saveIntermediateDocketEntryInteractor: saveIntermediateDocketEntryInteractorMock,
       }),
       getUtilities: () => ({
         createISODateString: () => new Date().toISOString(),
@@ -24,7 +24,7 @@ describe('saveIntermediateDocketEntryAction', () => {
     };
   });
 
-  it('should call updateDocketEntryInteractor and return caseDetail', async () => {
+  it('should call saveIntermediateDocketEntryInteractor and return caseDetail', async () => {
     const result = await runAction(saveIntermediateDocketEntryAction, {
       modules: {
         presenter,
@@ -38,7 +38,7 @@ describe('saveIntermediateDocketEntryAction', () => {
       },
     });
 
-    expect(updateDocketEntryInteractorMock).toHaveBeenCalled();
+    expect(saveIntermediateDocketEntryInteractorMock).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
       caseId: caseDetail.docketNumber,

@@ -16,27 +16,27 @@ export const saveIntermediateDocketEntryAction = async ({
   const { caseId, docketNumber } = get(state.caseDetail);
   const documentId = get(state.documentId);
 
-  let documentMetadata = omit(
+  let entryMetadata = omit(
     {
       ...get(state.form),
     },
-    ['primaryDocumentFile'],
+    ['dateReceivedMonth', 'dateReceivedDay', 'dateReceivedYear'],
   );
 
-  documentMetadata = {
-    ...documentMetadata,
+  entryMetadata = {
+    ...entryMetadata,
     docketNumber,
+    documentId,
     caseId,
-    createdAt: documentMetadata.dateReceived,
-    receivedAt: documentMetadata.dateReceived,
+    createdAt: entryMetadata.dateReceived,
+    receivedAt: entryMetadata.dateReceived,
   };
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .updateDocketEntryInteractor({
+    .saveIntermediateDocketEntryInteractor({
       applicationContext,
-      documentMetadata,
-      primaryDocumentFileId: documentId,
+      entryMetadata,
     });
 
   return {
