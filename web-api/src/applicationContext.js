@@ -427,6 +427,9 @@ const {
   deleteUserOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
+  deleteUserFromCase,
+} = require('../../shared/src/persistence/dynamo/cases/deleteUserFromCase');
+const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
 const {
@@ -501,6 +504,9 @@ const {
 const {
   updateUser,
 } = require('../../shared/src/persistence/dynamo/users/updateUser');
+const {
+  updateUserOnCase,
+} = require('../../shared/src/persistence/dynamo/cases/updateUserOnCase');
 const {
   updateUserContactInformationInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserContactInformationInteractor');
@@ -681,6 +687,7 @@ module.exports = (appContextUser = {}) => {
         deleteDocument,
         deleteSectionOutboxRecord,
         deleteUserConnection,
+        deleteUserFromCase,
         deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
@@ -734,6 +741,7 @@ module.exports = (appContextUser = {}) => {
         updateTrialSession,
         updateTrialSessionWorkingCopy,
         updateUser,
+        updateUserOnCase,
         updateWorkItem,
         updateWorkItemInCase,
         uploadDocument,
