@@ -18,9 +18,8 @@ class EditPractitionersModalComponent extends ModalDialog {
   renderBody() {
     const {
       caseDetail,
-      modal,
-      updateModalValueSequence,
-      validateSequence,
+      form,
+      updateFormValueSequence,
       validationErrors,
     } = this.props;
 
@@ -41,34 +40,42 @@ class EditPractitionersModalComponent extends ModalDialog {
               <div
                 className={classNames(
                   'usa-form-group margin-bottom-0',
-                  validationErrors.representingPrimary &&
+                  validationErrors &&
+                    validationErrors.practitioners &&
+                    validationErrors.practitioners[idx] &&
+                    validationErrors.practitioners[idx].representingPrimary &&
                     'usa-form-group--error',
                 )}
                 id={`practitioner-representing-${idx}`}
               >
                 <fieldset className="usa-fieldset margin-bottom-0">
-                  <legend className="usa-legend usa-legend--text-normal">
+                  <legend
+                    className="usa-legend usa-legend--text-normal"
+                    id={`practitioner-representing-legend-${idx}`}
+                  >
                     Representing
                   </legend>
                   <div className="usa-checkbox">
                     <input
-                      aria-describedby="representing-legend"
-                      checked={this.modal.representingPrimary || false}
+                      aria-describedby={`practitioner-representing-legend-${idx}`}
+                      checked={
+                        form.practitioners[idx].representingPrimary || false
+                      }
                       className="usa-checkbox__input"
-                      id="party-primary"
-                      name="representingPrimary"
+                      id={`representing-primary-${idx}`}
+                      name={`practitioners.${idx}.representingPrimary`}
                       type="checkbox"
                       onChange={e => {
-                        updateModalValueSequence({
+                        updateFormValueSequence({
                           key: e.target.name,
                           value: e.target.checked,
                         });
-                        validateSequence();
+                        //validateSequence(); TODO
                       }}
                     />
                     <label
                       className="usa-checkbox__label"
-                      htmlFor="party-primary"
+                      htmlFor={`representing-primary-${idx}`}
                     >
                       {caseDetail.contactPrimary.name}
                     </label>
@@ -78,14 +85,16 @@ class EditPractitionersModalComponent extends ModalDialog {
                     caseDetail.contactSecondary.name && (
                       <div className="usa-checkbox">
                         <input
-                          aria-describedby="representing-legend"
-                          checked={modal.representingSecondary || false}
+                          aria-describedby={`practitioner-representing-legend-${idx}`}
+                          checked={
+                            form.practitioners[idx].representingPrimary || false
+                          }
                           className="usa-checkbox__input"
-                          id="party-secondary"
-                          name="representingSecondary"
+                          id={`representing-secondary-${idx}`}
+                          name={`practitioners.${idx}.representingSecondary`}
                           type="checkbox"
                           onChange={e => {
-                            updateModalValueSequence({
+                            updateFormValueSequence({
                               key: e.target.name,
                               value: e.target.checked,
                             });
@@ -93,14 +102,14 @@ class EditPractitionersModalComponent extends ModalDialog {
                         />
                         <label
                           className="usa-checkbox__label"
-                          htmlFor="party-secondary"
+                          htmlFor={`representing-secondary-${idx}`}
                         >
                           {caseDetail.contactSecondary.name}
                         </label>
                       </div>
                     )}
                   <Text
-                    bind="validationErrors.representingPrimary"
+                    bind={`validationErrors.practitioners.${idx}.representingPrimary`}
                     className="usa-error-message"
                   />
                 </fieldset>
@@ -109,14 +118,13 @@ class EditPractitionersModalComponent extends ModalDialog {
             <div className="grid-col-4 text-right text-secondary-dark">
               <div className="usa-checkbox">
                 <input
-                  aria-describedby="representing-legend"
-                  checked={modal.representingSecondary || false}
+                  checked={form.practitioners[idx].removeFromCase || false}
                   className="usa-checkbox__input"
                   id={`remove-practitioner-${idx}`}
-                  name={`removePractitioner${idx}`}
+                  name={`practitioners.${idx}.removeFromCase`}
                   type="checkbox"
                   onChange={e => {
-                    updateModalValueSequence({
+                    updateFormValueSequence({
                       key: e.target.name,
                       value: e.target.checked,
                     });
@@ -145,7 +153,7 @@ export const EditPractitionersModal = connect(
     constants: state.constants,
     form: state.form,
     modal: state.modal,
-    updateModalValueSequence: sequences.updateModalValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
   EditPractitionersModalComponent,
