@@ -20,7 +20,7 @@ export const saveIntermediateDocketEntryAction = async ({
     {
       ...get(state.form),
     },
-    ['dateReceivedMonth', 'dateReceivedDay', 'dateReceivedYear'],
+    ['workitems'],
   );
 
   entryMetadata = {
