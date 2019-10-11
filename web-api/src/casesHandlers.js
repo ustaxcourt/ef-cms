@@ -20,6 +20,7 @@ module.exports = {
     .handler,
   setCaseToReadyForTrialLambda: require('./cases/setCaseToReadyForTrialLambda')
     .handler,
+  saveIntermediateDocketEntryLambda: require('./editDocketEntry/saveIntermediateDocketEntryLambda').handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,

@@ -125,6 +125,7 @@ import { removeItem } from '../../shared/src/persistence/localStorage/removeItem
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { runBatchProcessInteractor } from '../../shared/src/proxies/runBatchProcessProxy';
 import { sanitizePdfInteractor } from '../../shared/src/proxies/documents/sanitizePdfProxy';
+import { saveIntermediateDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/saveIntermediateDocketEntryProxy';
 import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { serveSignedStipDecisionInteractor } from '../../shared/src/proxies/serveSignedStipDecisionProxy';
 import { setCaseToReadyForTrialInteractor } from '../../shared/src/proxies/setCaseToReadyForTrialProxy';
@@ -270,6 +271,7 @@ const allUseCases = {
   runBatchProcessInteractor,
   sanitizePdfInteractor: args =>
     process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
+  saveIntermediateDocketEntryInteractor,
   sendPetitionToIRSHoldingQueueInteractor,
   serveSignedStipDecisionInteractor,
   setCaseToReadyForTrialInteractor,
