@@ -1296,7 +1296,11 @@ describe('Case entity', () => {
     it('removes the user from associated case practitioners array', () => {
       const caseToVerify = new Case(
         {
-          practitioners: [new Practitioner({ userId: 'practitioner' })],
+          practitioners: [
+            new Practitioner({ userId: 'practitioner1' }),
+            new Practitioner({ userId: 'practitioner2' }),
+            new Practitioner({ userId: 'practitioner3' }),
+          ],
         },
         {
           applicationContext,
@@ -1304,10 +1308,15 @@ describe('Case entity', () => {
       );
 
       expect(caseToVerify.practitioners).not.toBeNull();
-      expect(caseToVerify.practitioners.length).toEqual(1);
+      expect(caseToVerify.practitioners.length).toEqual(3);
 
-      caseToVerify.removePractitioner({ userId: 'practitioner' });
-      expect(caseToVerify.practitioners.length).toEqual(0);
+      caseToVerify.removePractitioner({ userId: 'practitioner2' });
+      expect(caseToVerify.practitioners.length).toEqual(2);
+      expect(
+        caseToVerify.practitioners.find(
+          practitioner => practitioner.userId === 'practitioner2',
+        ),
+      ).toBeFalsy();
     });
   });
 
@@ -1344,7 +1353,11 @@ describe('Case entity', () => {
     it('removes the user from associated case respondents array', () => {
       const caseToVerify = new Case(
         {
-          respondents: [new Respondent({ userId: 'respondent' })],
+          respondents: [
+            new Respondent({ userId: 'respondent1' }),
+            new Respondent({ userId: 'respondent2' }),
+            new Respondent({ userId: 'respondent3' }),
+          ],
         },
         {
           applicationContext,
@@ -1352,10 +1365,15 @@ describe('Case entity', () => {
       );
 
       expect(caseToVerify.respondents).not.toBeNull();
-      expect(caseToVerify.respondents.length).toEqual(1);
+      expect(caseToVerify.respondents.length).toEqual(3);
 
-      caseToVerify.removeRespondent({ userId: 'respondent' });
-      expect(caseToVerify.respondents.length).toEqual(0);
+      caseToVerify.removeRespondent({ userId: 'respondent2' });
+      expect(caseToVerify.respondents.length).toEqual(2);
+      expect(
+        caseToVerify.respondents.find(
+          respondent => respondent.userId === 'respondent2',
+        ),
+      ).toBeFalsy();
     });
   });
 });
