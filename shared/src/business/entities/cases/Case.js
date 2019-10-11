@@ -460,7 +460,7 @@ Case.prototype.attachRespondent = function(respondent) {
  * updates a respondent on the case
  *
  * @param {string} respondentToUpdate the respondent user object with updated info
- * @returns {Case} the updated case entity
+ * @returns {void} modfies the respondents array on the case
  */
 Case.prototype.updateRespondent = function(respondentToUpdate) {
   this.respondents.some(respondent => {
@@ -469,14 +469,13 @@ Case.prototype.updateRespondent = function(respondentToUpdate) {
       return true;
     }
   });
-  return this;
 };
 
 /**
  * removes the given respondent from the case
  *
  * @param {string} respondentToRemove the respondent user object to remove from the case
- * @returns {Case} the updated case entity
+ * @returns {void} modfies the respondents array on the case
  */
 Case.prototype.removeRespondent = function(respondentToRemove) {
   this.respondents.some((respondent, idx) => {
@@ -495,7 +494,7 @@ Case.prototype.attachPractitioner = function(practitioner) {
  * updates a practitioner on the case
  *
  * @param {string} practitionerToUpdate the practitioner user object with updated info
- * @returns {Case} the updated case entity
+ * @returns {void} modfies the practitioners array on the case
  */
 Case.prototype.updatePractitioner = function(practitionerToUpdate) {
   this.practitioners.some(practitioner => {
@@ -504,14 +503,13 @@ Case.prototype.updatePractitioner = function(practitionerToUpdate) {
       return true;
     }
   });
-  return this;
 };
 
 /**
  * removes the given practitioner from the case
  *
  * @param {string} practitionerToRemove the practitioner user object to remove from the case
- * @returns {Case} the updated case entity
+ * @returns {void} modfies the practitioners array on the case
  */
 Case.prototype.removePractitioner = function(practitionerToRemove) {
   this.practitioners.some((practitioner, idx) => {
