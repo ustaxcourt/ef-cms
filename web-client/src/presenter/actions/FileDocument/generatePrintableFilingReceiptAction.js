@@ -61,16 +61,12 @@ export const generatePrintableFilingReceiptAction = async ({
     );
   }
 
-  const filingReceipt = await applicationContext
+  const filingReceiptUrl = await applicationContext
     .getUseCases()
     .generatePrintableFilingReceiptInteractor({
       applicationContext,
       documents,
     });
 
-  const pdfFile = new Blob([filingReceipt], { type: 'application/pdf' });
-
-  const pdfUrl = router.createObjectURL(pdfFile);
-
-  return { printReceiptLink: pdfUrl };
+  return { printReceiptLink: filingReceiptUrl };
 };

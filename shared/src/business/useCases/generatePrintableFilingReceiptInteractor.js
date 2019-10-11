@@ -1,12 +1,12 @@
 /**
- * generatePrintableFilingReceiptInteractor
+ * generateHtmlForFilingReceipt
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the case id for the filing receipt to be generated
- * @returns {Uint8Array} filing receipt pdf
+ * @param {object} providers.documents object containing the caseId and documents for the filing receipt to be generated
+ * @returns {object} contentHtml, the generated HTML for the receipt; and docketNumber for the case
  */
-exports.generatePrintableFilingReceiptInteractor = async ({
+const generateHtmlForFilingReceipt = async ({
   applicationContext,
   documents,
 }) => {
@@ -119,9 +119,52 @@ exports.generatePrintableFilingReceiptInteractor = async ({
       filedBy: primaryDocument.filedBy,
     });
 
-  return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
+  return { contentHtml, docketNumber };
+};
+
+exports.generateHtmlForFilingReceipt = generateHtmlForFilingReceipt;
+
+/**
+ * generatePrintableFilingReceiptInteractor
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.caseId providers.documents object containing the caseId and documents for the filing receipt to be generated
+ * @returns {string} url for the generated document on the storage client
+ */
+exports.generatePrintableFilingReceiptInteractor = async ({
+  applicationContext,
+  documents,
+}) => {
+  const { contentHtml, docketNumber } = await generateHtmlForFilingReceipt({
     applicationContext,
-    contentHtml,
-    docketNumber,
+    documents,
   });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml,
+      docketNumber,
+    });
+
+  const documentId = applicationContext.getUniqueId();
+
+  await applicationContext.getPersistenceGateway().saveDocument({
+    applicationContext,
+    document: pdf,
+    documentId,
+    useTempBucket: true,
+  });
+
+  const {
+    url,
+  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+    applicationContext,
+    documentId,
+    useTempBucket: true,
+  });
+
+  return url;
 };
