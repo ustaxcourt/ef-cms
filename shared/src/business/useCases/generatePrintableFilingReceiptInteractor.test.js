@@ -1,9 +1,14 @@
 import { Case } from '../entities/cases/Case';
-import { generatePrintableFilingReceiptInteractor } from './generatePrintableFilingReceiptInteractor';
+import {
+  generateHtmlForFilingReceipt,
+  generatePrintableFilingReceiptInteractor,
+} from './generatePrintableFilingReceiptInteractor';
 import { getFormattedCaseDetail } from '../utilities/getFormattedCaseDetail';
 
 let generatePdfFromHtmlInteractorMock;
 let generatePrintableFilingReceiptTemplateMock;
+let saveDocumentMock;
+let getDownloadPolicyUrlMock;
 let applicationContext;
 let caseDetail;
 
@@ -11,6 +16,10 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   beforeEach(() => {
     generatePdfFromHtmlInteractorMock = jest.fn();
     generatePrintableFilingReceiptTemplateMock = jest.fn();
+    saveDocumentMock = jest.fn();
+    getDownloadPolicyUrlMock = jest.fn().mockReturnValue({
+      url: 'a-document-download-url',
+    });
 
     caseDetail = {
       caseCaption: 'Test Case Caption',
@@ -60,6 +69,8 @@ describe('generatePrintableFilingReceiptInteractor', () => {
         getCaseByCaseId: () => ({
           ...caseDetail,
         }),
+        getDownloadPolicyUrl: getDownloadPolicyUrlMock,
+        saveDocument: saveDocumentMock,
       }),
       getTemplateGenerators: () => {
         return {
@@ -71,6 +82,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
           },
         };
       },
+      getUniqueId: () => 'unique-id-1',
       getUseCases: () => {
         return {
           generatePdfFromHtmlInteractor: ({ contentHtml }) => {
@@ -87,8 +99,8 @@ describe('generatePrintableFilingReceiptInteractor', () => {
     };
   });
 
-  it('Calls generatePdfFromHtmlInteractor and generatePrintableFilingReceiptTemplate to build a PDF', async () => {
-    const result = await generatePrintableFilingReceiptInteractor({
+  it('Calls generatePrintableFilingReceiptTemplate and generatePdfFromHtmlInteractor to build a PDF, then saveDocument and getDownloadPolicyUrl to store the PDF and return the link to it', async () => {
+    await generatePrintableFilingReceiptInteractor({
       applicationContext,
       documents: {
         primaryDocument: {
@@ -99,13 +111,14 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       },
     });
 
-    expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(generatePrintableFilingReceiptTemplateMock).toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(getDownloadPolicyUrlMock).toHaveBeenCalled();
   });
 
   it('Displays `Attachment(s)` and Certificate of Service if present on a document', async () => {
-    const result = await generatePrintableFilingReceiptInteractor({
+    const { contentHtml: result } = await generateHtmlForFilingReceipt({
       applicationContext,
       documents: {
         primaryDocument: {
@@ -117,13 +130,14 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       },
     });
 
+    expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(result.indexOf('Document Includes')).toBeGreaterThan(-1);
     expect(result.indexOf('Attachment(s)')).toBeGreaterThan(-1);
     expect(result.indexOf('Certificate of Service')).toBeGreaterThan(-1);
   });
 
   it('Displays Objections status when there are objections', async () => {
-    const result = await generatePrintableFilingReceiptInteractor({
+    const { contentHtml: result } = await generateHtmlForFilingReceipt({
       applicationContext,
       documents: {
         primaryDocument: {
@@ -138,7 +152,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('Displays No Objections status when there are no objections', async () => {
-    const result = await generatePrintableFilingReceiptInteractor({
+    const { contentHtml: result } = await generateHtmlForFilingReceipt({
       applicationContext,
       documents: {
         primaryDocument: {
@@ -153,7 +167,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('Displays Unknown Objections status when there are no objections', async () => {
-    const result = await generatePrintableFilingReceiptInteractor({
+    const { contentHtml: result } = await generateHtmlForFilingReceipt({
       applicationContext,
       documents: {
         primaryDocument: {
@@ -168,7 +182,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('Displays supporting documents if present in the filing', async () => {
-    const result = await generatePrintableFilingReceiptInteractor({
+    const { contentHtml: result } = await generateHtmlForFilingReceipt({
       applicationContext,
       documents: {
         hasSupportingDocuments: true,
@@ -191,7 +205,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('Displays secondary document if present in the filing', async () => {
-    const result = await generatePrintableFilingReceiptInteractor({
+    const { contentHtml: result } = await generateHtmlForFilingReceipt({
       applicationContext,
       documents: {
         primaryDocument: {
@@ -211,7 +225,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('Displays secondary supporting documents if present in the filing', async () => {
-    const result = await generatePrintableFilingReceiptInteractor({
+    const { contentHtml: result } = await generateHtmlForFilingReceipt({
       applicationContext,
       documents: {
         hasSecondarySupportingDocuments: true,
