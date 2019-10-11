@@ -95,6 +95,10 @@ const formatDocketRecordWithDocument = (
       if (document.additionalInfo) {
         record.description += ` ${document.additionalInfo}`;
       }
+
+      document.workItemsCompleted = document.workItems.reduce((acc, wi) => {
+        return acc && wi.completedAt;
+      }, true);
     }
 
     return { document, index, record };
