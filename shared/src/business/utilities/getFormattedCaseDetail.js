@@ -96,9 +96,12 @@ const formatDocketRecordWithDocument = (
         record.description += ` ${document.additionalInfo}`;
       }
 
-      document.workItemsCompleted = document.workItems.reduce((acc, wi) => {
-        return acc && wi.completedAt;
-      }, true);
+      document.workItemsCompleted = (document.workItems || []).reduce(
+        (acc, wi) => {
+          return acc && wi.completedAt;
+        },
+        true,
+      );
     }
 
     return { document, index, record };
