@@ -3,15 +3,10 @@ import { generatePrintableFilingReceiptAction } from './generatePrintableFilingR
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-let createObjectURLMock;
 let generatePrintableFilingReceiptInteractorMock;
-
-global.window = global;
-global.Blob = args => args;
 
 describe('generatePrintableFilingReceiptAction', () => {
   beforeEach(() => {
-    createObjectURLMock = jest.fn();
     generatePrintableFilingReceiptInteractorMock = jest.fn();
 
     presenter.providers.applicationContext = {
@@ -19,17 +14,8 @@ describe('generatePrintableFilingReceiptAction', () => {
         Document,
       }),
       getUseCases: () => ({
-        generatePrintableFilingReceiptInteractor: args => {
-          generatePrintableFilingReceiptInteractorMock();
-          return args;
-        },
+        generatePrintableFilingReceiptInteractor: generatePrintableFilingReceiptInteractorMock,
       }),
-    };
-    presenter.providers.router = {
-      createObjectURL: args => {
-        createObjectURLMock();
-        return args;
-      },
     };
   });
 
@@ -56,31 +42,8 @@ describe('generatePrintableFilingReceiptAction', () => {
     expect(generatePrintableFilingReceiptInteractorMock).toHaveBeenCalled();
   });
 
-  it('should call createObjectURLMock, generating a url', async () => {
-    await runAction(generatePrintableFilingReceiptAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        documentsFiled: {
-          caseId: '123',
-          docketNumber: '123-19',
-          primaryDocumentFile: {},
-        },
-      },
-      state: {
-        form: {
-          category: 'Motion',
-          documentType: 'Motion for Judgment on the Pleadings',
-        },
-      },
-    });
-
-    expect(createObjectURLMock).toHaveBeenCalled();
-  });
-
   it('should generate a receipt with supporting documents', async () => {
-    const result = await runAction(generatePrintableFilingReceiptAction, {
+    await runAction(generatePrintableFilingReceiptAction, {
       modules: {
         presenter,
       },
@@ -101,13 +64,13 @@ describe('generatePrintableFilingReceiptAction', () => {
       },
     });
 
-    const { documents } = result.output.printReceiptLink[0];
-
-    expect(documents).toHaveProperty('supportingDocuments');
+    expect(
+      generatePrintableFilingReceiptInteractorMock.mock.calls[0][0].documents,
+    ).toHaveProperty('supportingDocuments');
   });
 
   it('should generate a receipt with a secondary document', async () => {
-    const result = await runAction(generatePrintableFilingReceiptAction, {
+    await runAction(generatePrintableFilingReceiptAction, {
       modules: {
         presenter,
       },
@@ -128,13 +91,13 @@ describe('generatePrintableFilingReceiptAction', () => {
       },
     });
 
-    const { documents } = result.output.printReceiptLink[0];
-
-    expect(documents).toHaveProperty('secondaryDocument');
+    expect(
+      generatePrintableFilingReceiptInteractorMock.mock.calls[0][0].documents,
+    ).toHaveProperty('secondaryDocument');
   });
 
   it('should generate a receipt with secondary supporting documents', async () => {
-    const result = await runAction(generatePrintableFilingReceiptAction, {
+    await runAction(generatePrintableFilingReceiptAction, {
       modules: {
         presenter,
       },
@@ -157,8 +120,8 @@ describe('generatePrintableFilingReceiptAction', () => {
       },
     });
 
-    const { documents } = result.output.printReceiptLink[0];
-
-    expect(documents).toHaveProperty('secondarySupportingDocuments');
+    expect(
+      generatePrintableFilingReceiptInteractorMock.mock.calls[0][0].documents,
+    ).toHaveProperty('secondarySupportingDocuments');
   });
 });
