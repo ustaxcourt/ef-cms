@@ -15,7 +15,6 @@ export const generatePrintableFilingReceiptAction = async ({
   applicationContext,
   get,
   props,
-  router,
 }) => {
   const { documentsFiled } = props;
   const { Document } = applicationContext.getEntityConstructors();
