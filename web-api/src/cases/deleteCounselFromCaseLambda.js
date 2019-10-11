@@ -20,7 +20,7 @@ exports.handler = event =>
         .deleteCounselFromCaseInteractor({
           applicationContext,
           caseId: event.pathParameters.caseId,
-          userIdToDelete: event.pathParameters.caseId,
+          userIdToDelete: event.pathParameters.userId,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
