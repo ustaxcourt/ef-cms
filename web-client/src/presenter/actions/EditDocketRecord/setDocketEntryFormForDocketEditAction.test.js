@@ -14,6 +14,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       state: {
         caseDetail: {
           caseId: '123',
+          docketRecord: [],
           documents: [
             {
               documentId: '123-abc-123-abc',
@@ -43,6 +44,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       state: {
         caseDetail: {
           caseId: '123',
+          docketRecord: [],
           documents: [
             {
               documentId: '123-abc-123-abc',
