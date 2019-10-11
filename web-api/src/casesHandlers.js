@@ -16,11 +16,12 @@ module.exports = {
   getCaseLambda: require('./cases/getCaseLambda').handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,
+  saveIntermediateDocketEntryLambda: require('./cases/saveIntermediateDocketEntryLambda')
+    .handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
   setCaseToReadyForTrialLambda: require('./cases/setCaseToReadyForTrialLambda')
     .handler,
-  saveIntermediateDocketEntryLambda: require('./editDocketEntry/saveIntermediateDocketEntryLambda').handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,
