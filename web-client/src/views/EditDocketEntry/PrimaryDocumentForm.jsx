@@ -20,8 +20,8 @@ export const PrimaryDocumentForm = connect(
     internalTypesHelper: state.internalTypesHelper,
     saveIntermediateDocketEntrySequence:
       sequences.saveIntermediateDocketEntrySequence,
-    updateDocketEntryFormValueSequence:
-      sequences.updateDocketEntryFormValueSequence,
+    updateEditDocketEntryFormValueSequence:
+      sequences.updateEditDocketEntryFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validationErrors: state.validationErrors,
   },
@@ -31,7 +31,7 @@ export const PrimaryDocumentForm = connect(
     form,
     internalTypesHelper,
     saveIntermediateDocketEntrySequence,
-    updateDocketEntryFormValueSequence,
+    updateEditDocketEntryFormValueSequence,
     updateScreenMetadataSequence,
     validationErrors,
   }) => {
@@ -56,7 +56,7 @@ export const PrimaryDocumentForm = connect(
                     type="radio"
                     value={option}
                     onChange={e => {
-                      updateDocketEntryFormValueSequence({
+                      updateEditDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.value === 'Lodge',
                       });
@@ -105,7 +105,7 @@ export const PrimaryDocumentForm = connect(
                       saveIntermediateDocketEntrySequence();
                     }}
                     onChange={e => {
-                      updateDocketEntryFormValueSequence({
+                      updateEditDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: limitLength(e.target.value, 2),
                       });
@@ -129,7 +129,7 @@ export const PrimaryDocumentForm = connect(
                       saveIntermediateDocketEntrySequence();
                     }}
                     onChange={e => {
-                      updateDocketEntryFormValueSequence({
+                      updateEditDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: limitLength(e.target.value, 2),
                       });
@@ -153,7 +153,7 @@ export const PrimaryDocumentForm = connect(
                       saveIntermediateDocketEntrySequence();
                     }}
                     onChange={e => {
-                      updateDocketEntryFormValueSequence({
+                      updateEditDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: limitLength(e.target.value, 4),
                       });
@@ -201,7 +201,7 @@ export const PrimaryDocumentForm = connect(
                   action,
                   inputValue,
                   name,
-                  updateSequence: updateDocketEntryFormValueSequence,
+                  updateSequence: updateEditDocketEntryFormValueSequence,
                   validateSequence: saveIntermediateDocketEntrySequence,
                 });
                 return true;
@@ -242,7 +242,7 @@ export const PrimaryDocumentForm = connect(
                 saveIntermediateDocketEntrySequence();
               }}
               onChange={e => {
-                updateDocketEntryFormValueSequence({
+                updateEditDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -274,7 +274,7 @@ export const PrimaryDocumentForm = connect(
                 saveIntermediateDocketEntrySequence();
               }}
               onChange={e => {
-                updateDocketEntryFormValueSequence({
+                updateEditDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -290,7 +290,7 @@ export const PrimaryDocumentForm = connect(
                 name="addToCoversheet"
                 type="checkbox"
                 onChange={e => {
-                  updateDocketEntryFormValueSequence({
+                  updateEditDocketEntryFormValueSequence({
                     key: e.target.name,
                     value: e.target.checked,
                   });
@@ -326,7 +326,7 @@ export const PrimaryDocumentForm = connect(
                 saveIntermediateDocketEntrySequence();
               }}
               onChange={e => {
-                updateDocketEntryFormValueSequence({
+                updateEditDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -361,7 +361,7 @@ export const PrimaryDocumentForm = connect(
                   name="partyPrimary"
                   type="checkbox"
                   onChange={e => {
-                    updateDocketEntryFormValueSequence({
+                    updateEditDocketEntryFormValueSequence({
                       key: e.target.name,
                       value: e.target.checked,
                     });
@@ -381,7 +381,7 @@ export const PrimaryDocumentForm = connect(
                     name="partySecondary"
                     type="checkbox"
                     onChange={e => {
-                      updateDocketEntryFormValueSequence({
+                      updateEditDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -404,7 +404,7 @@ export const PrimaryDocumentForm = connect(
                   name="partyRespondent"
                   type="checkbox"
                   onChange={e => {
-                    updateDocketEntryFormValueSequence({
+                    updateEditDocketEntryFormValueSequence({
                       key: e.target.name,
                       value: e.target.checked,
                     });
@@ -446,7 +446,7 @@ export const PrimaryDocumentForm = connect(
                       type="radio"
                       value={option}
                       onChange={e => {
-                        updateDocketEntryFormValueSequence({
+                        updateEditDocketEntryFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
