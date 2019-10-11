@@ -37,7 +37,6 @@ describe('deleteCounselFromCaseInteractor', () => {
           respondents: mockRespondents,
         }),
         getUserById: ({ userId }) => {
-          console.log('user', userId);
           return mockPractitioners
             .concat(mockRespondents)
             .find(user => user.userId === userId);
@@ -51,7 +50,7 @@ describe('deleteCounselFromCaseInteractor', () => {
     await deleteCounselFromCaseInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      userIdToDelete: '456',
+      userIdToDelete: '789',
     });
 
     expect(updateCaseMock).toHaveBeenCalled();
@@ -62,7 +61,7 @@ describe('deleteCounselFromCaseInteractor', () => {
     await deleteCounselFromCaseInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      userIdToDelete: '456',
+      userIdToDelete: '987',
     });
 
     expect(updateCaseMock).toHaveBeenCalled();
