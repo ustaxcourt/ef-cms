@@ -421,7 +421,7 @@ functions:
     handler: web-api/src/casesHandlers.deleteCounselFromCaseLambda
     events:
       - http:
-          path: /{caseId}/delete-counsel/{userId}
+          path: /{caseId}/counsel/{userId}
           method: delete
           cors: true
           authorizer:
