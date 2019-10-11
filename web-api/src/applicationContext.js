@@ -430,6 +430,9 @@ const {
   deleteUserOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
+  deleteUserFromCase,
+} = require('../../shared/src/persistence/dynamo/cases/deleteUserFromCase');
+const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
 const {
@@ -684,6 +687,7 @@ module.exports = (appContextUser = {}) => {
         deleteDocument,
         deleteSectionOutboxRecord,
         deleteUserConnection,
+        deleteUserFromCase,
         deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
