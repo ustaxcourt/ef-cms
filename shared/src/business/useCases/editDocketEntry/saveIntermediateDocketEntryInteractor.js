@@ -12,7 +12,6 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.entryMetadata the entry metadata
- * @param {string} providers.primaryDocumentFileId the id of the primary document file
  * @returns {object} the updated case after the documents are added
  */
 exports.saveIntermediateDocketEntryInteractor = async ({
