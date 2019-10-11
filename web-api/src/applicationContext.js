@@ -505,9 +505,6 @@ const {
   updateUser,
 } = require('../../shared/src/persistence/dynamo/users/updateUser');
 const {
-  updateUserOnCase,
-} = require('../../shared/src/persistence/dynamo/cases/updateUserOnCase');
-const {
   updateUserContactInformationInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserContactInformationInteractor');
 const {
@@ -741,7 +738,6 @@ module.exports = (appContextUser = {}) => {
         updateTrialSession,
         updateTrialSessionWorkingCopy,
         updateUser,
-        updateUserOnCase,
         updateWorkItem,
         updateWorkItemInCase,
         uploadDocument,
