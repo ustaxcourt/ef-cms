@@ -417,6 +417,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  updateCounselOnCase:
+    handler: web-api/src/casesHandlers.updateCounselOnCase
+    events:
+      - http:
+          path: /{caseId}/counsel/{userId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   deleteCounselFromCase:
     handler: web-api/src/casesHandlers.deleteCounselFromCaseLambda
     events:
