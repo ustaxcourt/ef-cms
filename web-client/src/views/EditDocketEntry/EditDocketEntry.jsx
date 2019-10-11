@@ -102,7 +102,7 @@ export const EditDocketEntry = connect(
                       });
                     }}
                   >
-                    Complete & Send Message
+                    Complete &amp; Send Message
                   </Button>
                   <Button
                     link
