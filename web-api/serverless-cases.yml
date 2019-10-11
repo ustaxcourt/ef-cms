@@ -418,7 +418,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCounselOnCase:
-    handler: web-api/src/casesHandlers.updateCounselOnCase
+    handler: web-api/src/casesHandlers.updateCounselOnCaseLambda
     events:
       - http:
           path: /{caseId}/counsel/{userId}
