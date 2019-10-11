@@ -398,6 +398,23 @@ jobs:
 
 workflows:
   version: 2
+  hourly:
+    jobs:
+      - deploy-ui
+      - deploy-api-west
+      - deploy-api-east
+      - post-deploy:
+          requires:
+            - deploy-ui
+            - deploy-api-west
+            - deploy-api-east
+    triggers:
+      - schedule:
+          cron: '0 12-23 * * 1-5'
+          filters:
+            branches:
+              only:
+                - develop
   build-and-deploy:
     jobs:
       - bundle
@@ -429,7 +446,6 @@ workflows:
                 - staging
                 - master
                 - experimental
-                - develop
       - deploy-api-east:
           requires:
             - build-shared
@@ -443,7 +459,6 @@ workflows:
                 - staging
                 - master
                 - experimental
-                - develop
       - deploy-api-west:
           requires:
             - build-shared
@@ -457,7 +472,6 @@ workflows:
                 - staging
                 - master
                 - experimental
-                - develop
       - post-deploy:
           requires:
             - deploy-ui
