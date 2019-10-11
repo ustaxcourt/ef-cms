@@ -2841,7 +2841,7 @@
         }
       }
     },
-    "/filing-receipt-pdf": {
+    "/documents/filing-receipt-pdf": {
       "post": {
         "summary": "create a pdf receipt for filing a document or documents",
         "description": "create a pdf receipt for filing a document or documents.\n",
