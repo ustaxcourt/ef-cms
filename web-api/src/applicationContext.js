@@ -484,6 +484,9 @@ const {
   updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
 const {
+  updateCounselOnCaseInteractor,
+} = require('../../shared/src/business/useCases/caseAssociation/updateCounselOnCaseInteractor');
+const {
   updateDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryInteractor');
 const {
@@ -881,6 +884,7 @@ module.exports = (appContextUser = {}) => {
         updateCaseInteractor,
         updateCaseNoteInteractor,
         updateCaseTrialSortTagsInteractor,
+        updateCounselOnCaseInteractor,
         updateCourtIssuedOrderInteractor,
         updateDocketEntryInteractor,
         updatePrimaryContactInteractor,
