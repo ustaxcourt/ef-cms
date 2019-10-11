@@ -1264,4 +1264,116 @@ describe('Case entity', () => {
       expect(myCase.documents[0].processingStatus).toEqual('success');
     });
   });
+
+  describe('updatePractitioner', () => {
+    it('updates the given practioner on the case', () => {
+      const caseToVerify = new Case(
+        {
+          practitioners: [
+            new Practitioner({
+              representingPrimary: true,
+              userId: 'practitioner',
+            }),
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToVerify.practitioners).not.toBeNull();
+      expect(caseToVerify.practitioners[0].representingPrimary).toBeTruthy();
+
+      caseToVerify.updatePractitioner({
+        representingPrimary: false,
+        userId: 'practitioner',
+      });
+      expect(caseToVerify.practitioners[0].representingPrimary).toBeFalsy();
+    });
+  });
+
+  describe('removePractitioner', () => {
+    it('removes the user from associated case practitioners array', () => {
+      const caseToVerify = new Case(
+        {
+          practitioners: [
+            new Practitioner({ userId: 'practitioner1' }),
+            new Practitioner({ userId: 'practitioner2' }),
+            new Practitioner({ userId: 'practitioner3' }),
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToVerify.practitioners).not.toBeNull();
+      expect(caseToVerify.practitioners.length).toEqual(3);
+
+      caseToVerify.removePractitioner({ userId: 'practitioner2' });
+      expect(caseToVerify.practitioners.length).toEqual(2);
+      expect(
+        caseToVerify.practitioners.find(
+          practitioner => practitioner.userId === 'practitioner2',
+        ),
+      ).toBeFalsy();
+    });
+  });
+
+  describe('updateRespondent', () => {
+    it('updates the given respondent on the case', () => {
+      const caseToVerify = new Case(
+        {
+          respondents: [
+            new Practitioner({
+              email: 'rspndnt',
+              userId: 'respondent',
+            }),
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToVerify.respondents).not.toBeNull();
+      expect(caseToVerify.respondents[0].email).toEqual('rspndnt');
+
+      caseToVerify.updateRespondent({
+        email: 'respondent@example.com',
+        userId: 'respondent',
+      });
+      expect(caseToVerify.respondents[0].email).toEqual(
+        'respondent@example.com',
+      );
+    });
+  });
+
+  describe('removeRespondent', () => {
+    it('removes the user from associated case respondents array', () => {
+      const caseToVerify = new Case(
+        {
+          respondents: [
+            new Respondent({ userId: 'respondent1' }),
+            new Respondent({ userId: 'respondent2' }),
+            new Respondent({ userId: 'respondent3' }),
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToVerify.respondents).not.toBeNull();
+      expect(caseToVerify.respondents.length).toEqual(3);
+
+      caseToVerify.removeRespondent({ userId: 'respondent2' });
+      expect(caseToVerify.respondents.length).toEqual(2);
+      expect(
+        caseToVerify.respondents.find(
+          respondent => respondent.userId === 'respondent2',
+        ),
+      ).toBeFalsy();
+    });
+  });
 });

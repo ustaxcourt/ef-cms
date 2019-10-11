@@ -6,14 +6,17 @@ describe('saveDocument', () => {
     promise: async () => null,
   });
 
-  it('deletes the document', async () => {
+  it('saves the document', async () => {
     let applicationContext = {
-      environment: {
-        documentsBucketName: 'aBucket',
+      getDocumentsBucketName: () => {
+        return 'aBucket';
       },
       getStorageClient: () => ({
         putObject: putObjectStub,
       }),
+      getTempDocumentsBucketName: () => {
+        return 'aTempBucket';
+      },
     };
     const expectedDocumentId = 'abc';
     const expectedArray = new Uint8Array(['a']);
@@ -25,6 +28,34 @@ describe('saveDocument', () => {
     expect(putObjectStub.getCall(0).args[0]).toMatchObject({
       Body: Buffer.from(expectedArray),
       Bucket: 'aBucket',
+      ContentType: 'application/pdf',
+      Key: expectedDocumentId,
+    });
+  });
+
+  it('saves the document in the temp bucket', async () => {
+    let applicationContext = {
+      getDocumentsBucketName: () => {
+        return 'aBucket';
+      },
+      getStorageClient: () => ({
+        putObject: putObjectStub,
+      }),
+      getTempDocumentsBucketName: () => {
+        return 'aTempBucket';
+      },
+    };
+    const expectedDocumentId = 'abc';
+    const expectedArray = new Uint8Array(['a']);
+    await saveDocument({
+      applicationContext,
+      document: new Uint8Array(['a']),
+      documentId: expectedDocumentId,
+      useTempBucket: true,
+    });
+    expect(putObjectStub.getCall(1).args[0]).toMatchObject({
+      Body: Buffer.from(expectedArray),
+      Bucket: 'aTempBucket',
       ContentType: 'application/pdf',
       Key: expectedDocumentId,
     });

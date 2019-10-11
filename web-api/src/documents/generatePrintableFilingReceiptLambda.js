@@ -1,6 +1,8 @@
-const { customHandle } = require('../customHandle');
 const createApplicationContext = require('../applicationContext');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
+const {
+  getUserFromAuthHeader,
+  handle,
+} = require('../middleware/apiGatewayHelper');
 
 /**
  * used for generating a printable filing receipt PDF
@@ -10,13 +12,12 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
  */
 
 exports.handler = event =>
-  customHandle(event, async () => {
+  handle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
-    const { documents } = JSON.parse(event.body);
-
     try {
-      const result = await applicationContext
+      const { documents } = JSON.parse(event.body);
+      const results = await applicationContext
         .getUseCases()
         .generatePrintableFilingReceiptInteractor({
           applicationContext,
@@ -24,7 +25,7 @@ exports.handler = event =>
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Case ID', documents.caseId);
-      return result;
+      return results;
     } catch (e) {
       applicationContext.logger.error(e);
       throw e;
