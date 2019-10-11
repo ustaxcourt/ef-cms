@@ -2,20 +2,62 @@ import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 class EditRespondentsModalComponent extends ModalDialog {
   constructor(props) {
     super(props);
     this.modal = {
       cancelLabel: 'Cancel',
-      classNames: '',
+      classNames: 'edit-counsel-modal',
       confirmLabel: 'Apply Changes',
       title: 'Edit Respondent Counsel',
     };
   }
   renderBody() {
-    return <div className="ustc-create-order-modal">Edit Respondents!</div>;
+    const { caseDetail, form, updateFormValueSequence } = this.props;
+
+    return (
+      <div>
+        {caseDetail.respondents.map((respondent, idx) => (
+          <div
+            className="border border-base-light padding-2 margin-bottom-2 grid-row"
+            key={idx}
+          >
+            <div className="grid-col-8">
+              <label
+                className="usa-label margin-bottom-0"
+                htmlFor={`respondent-${idx}`}
+              >
+                {respondent.name} ({respondent.barNumber})
+              </label>
+            </div>
+            <div className="grid-col-4 text-right text-secondary-dark">
+              <div className="usa-checkbox" id={`respondent-${idx}`}>
+                <input
+                  checked={form.respondents[idx].removeFromCase || false}
+                  className="usa-checkbox__input"
+                  id={`remove-respondent-${idx}`}
+                  name={`respondents.${idx}.removeFromCase`}
+                  type="checkbox"
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor={`remove-respondent-${idx}`}
+                >
+                  Remove from Case
+                </label>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   }
 }
 
@@ -23,6 +65,7 @@ export const EditRespondentsModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     //confirmSequence: sequences.updateCaseDeadlineSequence, //TODO
+    caseDetail: state.caseDetail,
     constants: state.constants,
     form: state.form,
     modal: state.modal,
