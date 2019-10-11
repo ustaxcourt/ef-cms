@@ -456,8 +456,69 @@ Case.prototype.attachRespondent = function(respondent) {
   this.respondents.push(respondent);
 };
 
+/**
+ * updates a respondent on the case
+ *
+ * @param {string} respondentToUpdate the respondent user object with updated info
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.updateRespondent = function(respondentToUpdate) {
+  this.respondents.some(respondent => {
+    if (respondent.userId === respondentToUpdate.userId) {
+      Object.assign(respondent, respondentToUpdate);
+      return true;
+    }
+  });
+  return this;
+};
+
+/**
+ * removes the given respondent from the case
+ *
+ * @param {string} respondentToRemove the respondent user object to remove from the case
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.removeRespondent = function(respondentToRemove) {
+  this.respondents.some((respondent, idx) => {
+    if (respondent.userId === respondentToRemove.userId) {
+      this.respondents.splice(idx, 1);
+    }
+  });
+  return this;
+};
+
 Case.prototype.attachPractitioner = function(practitioner) {
   this.practitioners.push(practitioner);
+};
+
+/**
+ * updates a practitioner on the case
+ *
+ * @param {string} practitionerToUpdate the practitioner user object with updated info
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.updatePractitioner = function(practitionerToUpdate) {
+  this.practitioners.some(practitioner => {
+    if (practitioner.userId === practitionerToUpdate.userId) {
+      Object.assign(practitioner, practitionerToUpdate);
+      return true;
+    }
+  });
+  return this;
+};
+
+/**
+ * removes the given practitioner from the case
+ *
+ * @param {string} practitionerToRemove the practitioner user object to remove from the case
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.removePractitioner = function(practitionerToRemove) {
+  this.practitioners.some((practitioner, idx) => {
+    if (practitioner.userId === practitionerToRemove.userId) {
+      this.practitioners.splice(idx, 1);
+    }
+  });
 };
 
 /**
