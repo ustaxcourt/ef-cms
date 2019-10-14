@@ -19,12 +19,12 @@ export const submitEditRespondentsModalAction = async ({
 
   const { respondents } = form;
 
-  for (let i = 0; i < respondents.length; i++) {
-    if (respondents[i].removeFromCase) {
+  for (const respondent of respondents) {
+    if (respondent.removeFromCase) {
       await applicationContext.getUseCases().deleteCounselFromCaseInteractor({
         applicationContext,
         caseId,
-        userIdToDelete: respondents[i].userId,
+        userIdToDelete: respondent.userId,
       });
     }
   }
