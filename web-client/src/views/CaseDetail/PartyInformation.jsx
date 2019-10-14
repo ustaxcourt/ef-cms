@@ -5,6 +5,8 @@ import { EditPractitionersModal } from './EditPractitionersModal';
 import { EditRespondentsModal } from './EditRespondentsModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PractitionerExistsModal } from './PractitionerExistsModal';
+import { RespondentExistsModal } from './RespondentExistsModal';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -440,6 +442,8 @@ const PartyInformation = connect(
         {showModal === 'AddRespondentModal' && <AddRespondentModal />}
         {showModal === 'EditPractitionersModal' && <EditPractitionersModal />}
         {showModal === 'EditRespondentsModal' && <EditRespondentsModal />}
+        {showModal === 'PractitionerExistsModal' && <PractitionerExistsModal />}
+        {showModal === 'RespondentExistsModal' && <RespondentExistsModal />}
       </>
     );
   },
