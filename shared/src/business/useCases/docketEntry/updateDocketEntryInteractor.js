@@ -96,11 +96,6 @@ exports.updateDocketEntryInteractor = async ({
       sentBy: user.userId,
     });
 
-    workItem.setAsCompleted({
-      message: 'completed',
-      user,
-    });
-
     workItem.assignToUser({
       assigneeId: user.userId,
       assigneeName: user.name,
