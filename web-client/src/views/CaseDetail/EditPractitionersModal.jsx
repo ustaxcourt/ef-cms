@@ -20,6 +20,7 @@ class EditPractitionersModalComponent extends ModalDialog {
       caseDetail,
       form,
       updateFormValueSequence,
+      validateEditPractitionersSequence,
       validationErrors,
     } = this.props;
 
@@ -68,7 +69,7 @@ class EditPractitionersModalComponent extends ModalDialog {
                           key: e.target.name,
                           value: e.target.checked,
                         });
-                        //validateSequence(); TODO
+                        validateEditPractitionersSequence();
                       }}
                     />
                     <label
@@ -94,6 +95,7 @@ class EditPractitionersModalComponent extends ModalDialog {
                               key: e.target.name,
                               value: e.target.checked,
                             });
+                            validateEditPractitionersSequence();
                           }}
                         />
                         <label
@@ -148,6 +150,8 @@ export const EditPractitionersModal = connect(
     confirmSequence: sequences.submitEditPractitionersModalSequence,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateEditPractitionersSequence:
+      sequences.validateEditPractitionersSequence,
     validationErrors: state.validationErrors,
   },
   EditPractitionersModalComponent,
