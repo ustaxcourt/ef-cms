@@ -173,7 +173,7 @@ export const WorkingCopySessionList = connect(
                       <Button
                         link
                         className="red-warning"
-                        icon="times-circle"
+                        icon="trash"
                         onClick={() => {
                           openDeleteCaseNoteConfirmModalSequence({
                             caseId: item.caseId,

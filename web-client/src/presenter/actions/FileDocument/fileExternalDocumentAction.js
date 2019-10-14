@@ -81,5 +81,6 @@ export const fileExternalDocumentAction = async ({
   return path.success({
     caseDetail,
     caseId: docketNumber,
+    documentsFiled: documentMetadata,
   });
 };

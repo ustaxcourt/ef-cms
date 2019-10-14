@@ -76,6 +76,19 @@ const router = {
     );
 
     route(
+      '/case-detail/*/documents/*/complete',
+      checkLoggedIn((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
+        );
+        app.getSequence('gotoCompleteDocketEntrySequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/documents/*/edit',
       checkLoggedIn((docketNumber, documentId) => {
         setPageTitle(

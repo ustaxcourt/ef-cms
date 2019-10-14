@@ -156,6 +156,7 @@ const {
   generateChangeOfAddressTemplate,
   generateHTMLTemplateForPDF,
   generatePrintableDocketRecordTemplate,
+  generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF');
 const {
@@ -167,6 +168,9 @@ const {
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
+const {
+  generatePrintableFilingReceiptInteractor,
+} = require('../../shared/src/business/useCases/generatePrintableFilingReceiptInteractor');
 const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
@@ -423,6 +427,9 @@ const {
   deleteUserOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
+  deleteUserFromCase,
+} = require('../../shared/src/persistence/dynamo/cases/deleteUserFromCase');
+const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
 const {
@@ -677,6 +684,7 @@ module.exports = (appContextUser = {}) => {
         deleteDocument,
         deleteSectionOutboxRecord,
         deleteUserConnection,
+        deleteUserFromCase,
         deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
@@ -783,6 +791,7 @@ module.exports = (appContextUser = {}) => {
         generateChangeOfAddressTemplate,
         generateHTMLTemplateForPDF,
         generatePrintableDocketRecordTemplate,
+        generatePrintableFilingReceiptTemplate,
         generateTrialCalendarTemplate,
       };
     },
@@ -817,6 +826,7 @@ module.exports = (appContextUser = {}) => {
         generateDocketRecordPdfInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
+        generatePrintableFilingReceiptInteractor,
         generateTrialCalendarPdfInteractor,
         getAllCaseDeadlinesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
