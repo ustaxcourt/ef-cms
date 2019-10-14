@@ -5,7 +5,7 @@ const {
 } = require('../middleware/apiGatewayHelper');
 
 /**
- * used for deleting a practitioner or respondent from a case
+ * used for updating a practitioner or respondent on a case
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers

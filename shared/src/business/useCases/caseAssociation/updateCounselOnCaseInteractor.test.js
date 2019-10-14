@@ -43,7 +43,7 @@ describe('updateCounselOnCaseInteractor', () => {
     };
   });
 
-  it('deletes a practitioner with the given userId from the associated case', async () => {
+  it('updates a practitioner with the given userId on the associated case', async () => {
     await updateCounselOnCaseInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -56,7 +56,7 @@ describe('updateCounselOnCaseInteractor', () => {
     expect(updateCaseMock).toHaveBeenCalled();
   });
 
-  it('deletes a respondent with the given userId from the associated case', async () => {
+  it('updates a respondent with the given userId on the associated case', async () => {
     await updateCounselOnCaseInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
