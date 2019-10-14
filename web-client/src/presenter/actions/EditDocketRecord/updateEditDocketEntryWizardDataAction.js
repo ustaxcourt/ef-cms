@@ -17,7 +17,6 @@ export const updateEditDocketEntryWizardDataAction = ({
 }) => {
   const { INTERNAL_CATEGORY_MAP } = get(state.constants);
   let entry, form;
-  let supporting = get(state.screenMetadata.supporting);
   const ENTRY_PROPS = ['documentType'];
 
   switch (props.key) {
@@ -37,81 +36,6 @@ export const updateEditDocketEntryWizardDataAction = ({
         ...pick(entry || {}, ENTRY_PROPS),
       };
       store.set(state.form, form);
-      if (!supporting) {
-        store.unset(state.form.previousDocument);
-      } else {
-        //if there is only one previously selected doc, default that selection on the form
-        const filedDocumentIds = get(state.screenMetadata.filedDocumentIds);
-        if (filedDocumentIds.length === 1) {
-          const caseDetail = get(state.caseDetail);
-
-          const previousDocument = find(caseDetail.documents, doc =>
-            includes(filedDocumentIds, doc.documentId),
-          );
-          if (previousDocument) {
-            store.set(
-              state.form.previousDocument,
-              previousDocument.documentTitle,
-            );
-
-            store.merge(state.form, get(state.screenMetadata.primary));
-          }
-        }
-      }
-      store.unset(state.form.serviceDate);
-      store.unset(state.form.trialLocation);
-      store.unset(state.form.ordinalValue);
-      store.unset(state.form.freeText);
-      store.unset(state.form.secondaryDocument);
-      break;
-    case 'secondaryDocument.eventCode':
-      find(
-        INTERNAL_CATEGORY_MAP,
-        entries => (entry = find(entries, { eventCode: props.value })),
-      );
-      form = {
-        ...omit(get(state.form.secondaryDocument), ENTRY_PROPS),
-        ...pick(entry || {}, ENTRY_PROPS),
-      };
-      store.set(state.form.secondaryDocument, form);
-      store.unset(state.form.secondaryDocument.previousDocument);
-      store.unset(state.form.secondaryDocument.serviceDate);
-      store.unset(state.form.secondaryDocument.trialLocation);
-      store.unset(state.form.secondaryDocument.ordinalValue);
-      store.unset(state.form.secondaryDocument.freeText);
-
-      if (!props.value) {
-        store.unset(state.form.secondaryDocument);
-      }
-      break;
-    case 'previousDocument':
-      if (supporting) {
-        store.unset(state.form.exhibits);
-        store.unset(state.form.attachments);
-        store.unset(state.form.certificateOfService);
-        store.unset(state.form.certificateOfServiceDate);
-        store.unset(state.form.certificateOfServiceMonth);
-        store.unset(state.form.certificateOfServiceDay);
-        store.unset(state.form.certificateOfServiceYear);
-
-        //restore previous doc data from screenMetadata onto form
-        const caseDetail = get(state.caseDetail);
-        const filedDocumentIds = get(state.screenMetadata.filedDocumentIds);
-
-        const previousDocument =
-          props.value &&
-          find(
-            caseDetail.documents,
-            doc =>
-              includes(filedDocumentIds, doc.documentId) &&
-              (doc.documentTitle || doc.documentType) === props.value,
-          );
-        if (previousDocument.relationship === 'primaryDocument') {
-          store.merge(state.form, get(state.screenMetadata.primary));
-        } else if (previousDocument.relationship === 'secondaryDocument') {
-          store.merge(state.form, get(state.screenMetadata.secondary));
-        }
-      }
       break;
     case 'additionalInfo':
     case 'additionalInfo2':
