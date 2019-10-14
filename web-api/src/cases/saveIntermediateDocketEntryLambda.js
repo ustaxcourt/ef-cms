@@ -1,11 +1,9 @@
 const createApplicationContext = require('../applicationContext');
-const {
-  getUserFromAuthHeader,
-  handle,
-} = require('../middleware/apiGatewayHelper');
+const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
+const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
- * used for generating a printable filing receipt PDF
+ * save intermediate docket entry
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
@@ -15,15 +13,14 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const { documents } = JSON.parse(event.body);
       const results = await applicationContext
         .getUseCases()
-        .generatePrintableFilingReceiptInteractor({
+        .saveIntermediateDocketEntryInteractor({
+          ...JSON.parse(event.body),
           applicationContext,
-          documents,
         });
       applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Case ID', documents.caseId);
+      applicationContext.logger.info('Results', results);
       return results;
     } catch (e) {
       applicationContext.logger.error(e);

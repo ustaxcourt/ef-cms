@@ -1,6 +1,8 @@
 import { AddPractitionerModal } from './AddPractitionerModal';
 import { AddRespondentModal } from './AddRespondentModal';
 import { Button } from '../../ustc-ui/Button/Button';
+import { EditPractitionersModal } from './EditPractitionersModal';
+import { EditRespondentsModal } from './EditRespondentsModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Text } from '../../ustc-ui/Text/Text';
@@ -54,6 +56,10 @@ const PartyInformation = connect(
     openAddPractitionerModalSequence:
       sequences.openAddPractitionerModalSequence,
     openAddRespondentModalSequence: sequences.openAddRespondentModalSequence,
+    openEditPractitionersModalSequence:
+      sequences.openEditPractitionersModalSequence,
+    openEditRespondentsModalSequence:
+      sequences.openEditRespondentsModalSequence,
     openEditSecondaryContactModalSequence:
       sequences.openEditSecondaryContactModalSequence,
     showModal: state.showModal,
@@ -67,6 +73,8 @@ const PartyInformation = connect(
     formattedCaseDetail,
     openAddPractitionerModalSequence,
     openAddRespondentModalSequence,
+    openEditPractitionersModalSequence,
+    openEditRespondentsModalSequence,
     openEditSecondaryContactModalSequence,
     showModal,
     updateFormValueSequence,
@@ -386,7 +394,7 @@ const PartyInformation = connect(
                       <Button
                         link
                         className="margin-left-205 padding-0 height-3"
-                        onClick={() => {}}
+                        onClick={() => openEditPractitionersModalSequence()}
                       >
                         <FontAwesomeIcon icon="edit" size="sm" />
                         Edit
@@ -411,7 +419,7 @@ const PartyInformation = connect(
                       <Button
                         link
                         className="margin-left-205 padding-0 height-3"
-                        onClick={() => {}}
+                        onClick={() => openEditRespondentsModalSequence()}
                       >
                         <FontAwesomeIcon icon="edit" size="sm" />
                         Edit
@@ -430,6 +438,8 @@ const PartyInformation = connect(
         )}
         {showModal === 'AddPractitionerModal' && <AddPractitionerModal />}
         {showModal === 'AddRespondentModal' && <AddRespondentModal />}
+        {showModal === 'EditPractitionersModal' && <EditPractitionersModal />}
+        {showModal === 'EditRespondentsModal' && <EditRespondentsModal />}
       </>
     );
   },

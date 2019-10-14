@@ -18,14 +18,22 @@ export const setDocketEntryFormForDocketEditAction = ({
   const caseDetail = get(state.caseDetail);
   const { documentId } = props;
 
-  const docketRecordEntry = caseDetail.documents.find(
+  const initialDocument = caseDetail.documents.find(
     entry => entry.documentId === documentId,
   );
 
-  let docketEntryFormData = omit(docketRecordEntry, ['workItems']);
+  let docketEntryFormData = omit(initialDocument, ['workItems']);
+
+  const docketRecordEntry = caseDetail.docketRecord.find(
+    entry => entry.documentId === documentId,
+  );
+
+  if (docketRecordEntry && docketRecordEntry.editState) {
+    docketEntryFormData = JSON.parse(docketRecordEntry.editState);
+  }
+
   docketEntryFormData.lodged = !!docketEntryFormData.lodged;
 
   store.set(state.form, docketEntryFormData);
-
   return { docketEntry: docketEntryFormData };
 };

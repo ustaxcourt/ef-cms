@@ -5,7 +5,7 @@ const {
 } = require('../middleware/apiGatewayHelper');
 
 /**
- * used for generating a printable filing receipt PDF
+ * used for updating a practitioner or respondent on a case
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
@@ -15,15 +15,16 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
-      const { documents } = JSON.parse(event.body);
       const results = await applicationContext
         .getUseCases()
-        .generatePrintableFilingReceiptInteractor({
+        .updateCounselOnCaseInteractor({
           applicationContext,
-          documents,
+          caseId: event.pathParameters.caseId,
+          userData: JSON.parse(event.body),
+          userIdToUpdate: event.pathParameters.userId,
         });
       applicationContext.logger.info('User', user);
-      applicationContext.logger.info('Case ID', documents.caseId);
+      applicationContext.logger.info('Results', results);
       return results;
     } catch (e) {
       applicationContext.logger.error(e);
