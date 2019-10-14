@@ -14,16 +14,19 @@ export const deconstructReceivedAtDateToFormAction = async ({
 }) => {
   const { docketEntry } = props;
 
-  const receivedAt = applicationContext
-    .getUtilities()
-    .prepareDateFromString(docketEntry.receivedAt);
-  if (
-    receivedAt &&
-    receivedAt.toDate() instanceof Date &&
-    receivedAt.isValid()
-  ) {
-    store.set(state.form.dateReceivedMonth, receivedAt.format('M'));
-    store.set(state.form.dateReceivedDay, receivedAt.format('D'));
-    store.set(state.form.dateReceivedYear, receivedAt.format('YYYY'));
+  if (docketEntry.receivedAt) {
+    const receivedAt = applicationContext
+      .getUtilities()
+      .prepareDateFromString(docketEntry.receivedAt);
+
+    if (
+      receivedAt &&
+      receivedAt.toDate() instanceof Date &&
+      receivedAt.isValid()
+    ) {
+      store.set(state.form.dateReceivedMonth, receivedAt.format('M'));
+      store.set(state.form.dateReceivedDay, receivedAt.format('D'));
+      store.set(state.form.dateReceivedYear, receivedAt.format('YYYY'));
+    }
   }
 };

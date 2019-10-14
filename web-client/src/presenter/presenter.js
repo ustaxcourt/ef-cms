@@ -119,6 +119,8 @@ import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseD
 import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCaseNoteConfirmModalSequence';
 import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDeleteSessionNoteConfirmModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
+import { openEditPractitionersModalSequence } from './sequences/openEditPractitionersModalSequence';
+import { openEditRespondentsModalSequence } from './sequences/openEditRespondentsModalSequence';
 import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
@@ -140,6 +142,7 @@ import { reviewExternalDocumentInformationSequence } from './sequences/reviewExt
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
+import { saveIntermediateDocketEntrySequence } from './sequences/saveIntermediateDocketEntrySequence';
 import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
@@ -188,7 +191,9 @@ import { submitCompleteSequence } from './sequences/submitCompleteSequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
+import { submitEditPractitionersModalSequence } from './sequences/submitEditPractitionersModalSequence';
 import { submitEditPrimaryContactSequence } from './sequences/submitEditPrimaryContactSequence';
+import { submitEditRespondentsModalSequence } from './sequences/submitEditRespondentsModalSequence';
 import { submitEditUserContactSequence } from './sequences/submitEditUserContactSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
@@ -228,6 +233,7 @@ import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreat
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
+import { updateEditDocketEntryFormValueSequence } from './sequences/updateEditDocketEntryFormValueSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
@@ -391,6 +397,8 @@ export const presenter = {
     openDeleteCaseNoteConfirmModalSequence,
     openDeleteSessionNoteConfirmModalSequence,
     openEditCaseDeadlineModalSequence,
+    openEditPractitionersModalSequence,
+    openEditRespondentsModalSequence,
     openEditSecondaryContactModalSequence,
     openPdfPreviewModalSequence,
     openSelectDocumentWizardOverlaySequence,
@@ -412,6 +420,7 @@ export const presenter = {
     reviewRequestAccessInformationSequence,
     runBatchProcessSequence,
     saveDocumentSigningSequence,
+    saveIntermediateDocketEntrySequence,
     scannerShutdownSequence,
     scannerStartupSequence,
     selectAssigneeSequence,
@@ -458,7 +467,9 @@ export const presenter = {
     submitCourtIssuedOrderSequence,
     submitCreateOrderModalSequence,
     submitDocketEntrySequence,
+    submitEditPractitionersModalSequence,
     submitEditPrimaryContactSequence,
+    submitEditRespondentsModalSequence,
     submitEditUserContactSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
@@ -498,6 +509,7 @@ export const presenter = {
     updateCurrentTabSequence,
     updateDocketEntryFormValueSequence,
     updateDocumentValueSequence,
+    updateEditDocketEntryFormValueSequence,
     updateFileDocumentWizardFormValueSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,

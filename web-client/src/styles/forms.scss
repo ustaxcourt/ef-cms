@@ -47,6 +47,10 @@ legend {
     margin-bottom: 2px;
   }
 
+  &.usa-legend--text-normal {
+    font-weight: $font-normal;
+  }
+
   /* little screens */
   @media only screen and (max-width: $medium-screen) {
     line-height: 1.1em;
