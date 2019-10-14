@@ -6,7 +6,7 @@ import sinon from 'sinon';
 let yesStub;
 let noStub;
 
-presenter.path = describe('isRespondentInCaseAction', () => {
+describe('isRespondentInCaseAction', () => {
   beforeEach(() => {
     yesStub = sinon.stub();
     noStub = sinon.stub();
