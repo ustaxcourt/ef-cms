@@ -27,7 +27,7 @@ describe('navigateToOrdersNeededAction', () => {
     expect(routeStub.calledOnce).toEqual(true);
   });
 
-  it('does not navigate to orders needed summary url  when there is no docketNumber', async () => {
+  it('does not navigate to orders needed summary url when there is no docketNumber', async () => {
     await runAction(navigateToOrdersNeededAction, {
       modules: {
         presenter,
