@@ -69,7 +69,6 @@ export const EditRespondentsModal = connect(
     form: state.form,
     modal: state.modal,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validationErrors: state.validationErrors,
   },
   EditRespondentsModalComponent,
 );
