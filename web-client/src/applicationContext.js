@@ -61,6 +61,7 @@ import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSess
 import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/createWorkItemProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
+import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAssociation/deleteCounselFromCaseProxy';
 import { downloadDocumentFileInteractor } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
 import { fileCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/fileCourtIssuedOrderProxy';
 import { fileDocketEntryInteractor } from '../../shared/src/proxies/documents/fileDocketEntryProxy';
@@ -142,6 +143,7 @@ import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadl
 import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
 import { updateCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateCaseNoteProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
+import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAssociation/updateCounselOnCaseProxy';
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
 import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
@@ -218,6 +220,7 @@ const allUseCases = {
   createWorkItemInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
+  deleteCounselFromCaseInteractor,
   downloadDocumentFileInteractor,
   fileCourtIssuedOrderInteractor,
   fileDocketEntryInteractor,
@@ -284,6 +287,7 @@ const allUseCases = {
   updateCaseInteractor,
   updateCaseNoteInteractor,
   updateCaseTrialSortTagsInteractor,
+  updateCounselOnCaseInteractor,
   updateCourtIssuedOrderInteractor,
   updateDocketEntryInteractor,
   updatePrimaryContactInteractor,

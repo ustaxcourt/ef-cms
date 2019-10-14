@@ -14,11 +14,11 @@ class EditRespondentsModalComponent extends ModalDialog {
     };
   }
   renderBody() {
-    const { caseDetail, form, updateFormValueSequence } = this.props;
+    const { form, updateFormValueSequence } = this.props;
 
     return (
       <div>
-        {caseDetail.respondents.map((respondent, idx) => (
+        {form.respondents.map((respondent, idx) => (
           <div
             className="border border-base-light padding-2 margin-bottom-2 grid-row"
             key={idx}
@@ -34,7 +34,7 @@ class EditRespondentsModalComponent extends ModalDialog {
             <div className="grid-col-4 text-right text-secondary-dark">
               <div className="usa-checkbox" id={`respondent-${idx}`}>
                 <input
-                  checked={form.respondents[idx].removeFromCase || false}
+                  checked={respondent.removeFromCase || false}
                   className="usa-checkbox__input"
                   id={`remove-respondent-${idx}`}
                   name={`respondents.${idx}.removeFromCase`}
@@ -64,8 +64,7 @@ class EditRespondentsModalComponent extends ModalDialog {
 export const EditRespondentsModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    //confirmSequence: sequences.updateCaseDeadlineSequence, //TODO
-    caseDetail: state.caseDetail,
+    confirmSequence: sequences.submitEditRespondentsModalSequence,
     constants: state.constants,
     form: state.form,
     modal: state.modal,
