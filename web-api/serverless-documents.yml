@@ -11,9 +11,9 @@ plugins:
   - serverless-plugin-warmup
 
 custom:
-  warmup: 
+  warmup:
     enabled: true
-    
+
   prune:
     automatic: true
     number: 3
@@ -125,11 +125,8 @@ provider:
       Action:
         - 's3:*'
       Resource:
-        Fn::Join:
-          - ''
-          - - 'arn:aws:s3:::'
-            - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
-            - '/*'
+        - arn:aws:s3:::${self:provider.environment.DOCUMENTS_BUCKET_NAME}/*
+        - arn:aws:s3:::${self:provider.environment.TEMP_DOCUMENTS_BUCKET_NAME}/*
     - Effect: 'Allow'
       Action:
         - dynamodb:Query
@@ -259,4 +256,17 @@ functions:
       - http:
           path: /{documentId}/document-download-url
           method: get
+          cors: true
+
+  generatePrintableFilingReceiptLambda:
+    runtime: nodejs8.10
+    handler: web-api/src/documentsHandlers.generatePrintableFilingReceiptLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: /filing-receipt-pdf
+          method: post
           cors: true

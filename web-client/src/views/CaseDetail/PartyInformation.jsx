@@ -377,8 +377,21 @@ const PartyInformation = connect(
             <div className="card">
               <div className="content-wrapper">
                 <div className="grid-row header-row">
-                  <div className="grid-col-6" id="practitioner-label">
+                  <div
+                    className="grid-col-6 display-flex"
+                    id="practitioner-label"
+                  >
                     <h3>Petitioner Counsel</h3>
+                    {caseDetailHelper.showEditPractitioners && (
+                      <Button
+                        link
+                        className="margin-left-205 padding-0 height-3"
+                        onClick={() => {}}
+                      >
+                        <FontAwesomeIcon icon="edit" size="sm" />
+                        Edit
+                      </Button>
+                    )}
                   </div>
                   {caseDetailHelper.showAddCounsel && practitionerSearch()}
                 </div>
@@ -392,8 +405,18 @@ const PartyInformation = connect(
             <div className="card">
               <div className="content-wrapper">
                 <div className="grid-row header-row">
-                  <div className="grid-col-6" id="secondary-label">
+                  <div className="grid-col-6 display-flex" id="secondary-label">
                     <h3>Respondent Counsel</h3>
+                    {caseDetailHelper.showEditRespondents && (
+                      <Button
+                        link
+                        className="margin-left-205 padding-0 height-3"
+                        onClick={() => {}}
+                      >
+                        <FontAwesomeIcon icon="edit" size="sm" />
+                        Edit
+                      </Button>
+                    )}
                   </div>
                   {caseDetailHelper.showAddCounsel && respondentSearch()}
                 </div>
