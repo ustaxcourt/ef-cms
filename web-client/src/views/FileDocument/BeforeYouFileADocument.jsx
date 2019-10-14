@@ -16,7 +16,7 @@ export const BeforeYouFileADocument = connect(
   ({ caseDetail, formCancelToggleCancelSequence, showModal }) => {
     return (
       <>
-        <CaseDetailHeader />
+        <CaseDetailHeader hideActionButtons />
         <section className="usa-section before-filing-document grid-container">
           <h2 className="captioned" tabIndex="-1">
             Before You File a Document…

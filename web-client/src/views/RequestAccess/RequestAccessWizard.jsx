@@ -16,7 +16,7 @@ export const RequestAccessWizard = connect(
   ({ showModal }) => {
     return (
       <>
-        <CaseDetailHeader />
+        <CaseDetailHeader hideActionButtons />
         <section className="usa-section grid-container">
           {showModal == 'FormCancelModalDialog' && (
             <FormCancelModalDialog onCancelSequence="closeModalAndReturnToDashboardSequence" />
