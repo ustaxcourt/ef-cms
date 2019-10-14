@@ -7,6 +7,8 @@ module.exports = {
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
+  deleteCounselFromCaseLambda: require('./cases/deleteCounselFromCaseLambda')
+    .handler,
   fileCourtIssuedOrderToCaseLambda: require('./cases/fileCourtIssuedOrderToCaseLambda')
     .handler,
   fileDocketEntryToCaseLambda: require('./cases/fileDocketEntryToCaseLambda')
@@ -22,6 +24,8 @@ module.exports = {
     .handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
+    .handler,
+  updateCounselOnCaseLambda: require('./cases/updateCounselOnCaseLambda')
     .handler,
   updateCourtIssuedOrderToCaseLambda: require('./cases/updateCourtIssuedOrderToCaseLambda')
     .handler,
