@@ -19,30 +19,22 @@ export const submitEditPractitionersModalAction = async ({
 
   const { practitioners } = form;
 
-  const calls = [];
-
-  practitioners.forEach(practitioner => {
+  for (const practitioner of practitioners) {
     if (practitioner.removeFromCase) {
-      calls.push(
-        applicationContext.getUseCases().deleteCounselFromCaseInteractor({
-          applicationContext,
-          caseId,
-          userIdToDelete: practitioner.userId,
-        }),
-      );
+      await applicationContext.getUseCases().deleteCounselFromCaseInteractor({
+        applicationContext,
+        caseId,
+        userIdToDelete: practitioner.userId,
+      });
     } else {
-      calls.push(
-        applicationContext.getUseCases().updateCounselOnCaseInteractor({
-          applicationContext,
-          caseId,
-          userData: practitioner,
-          userIdToUpdate: practitioner.userId,
-        }),
-      );
+      await applicationContext.getUseCases().updateCounselOnCaseInteractor({
+        applicationContext,
+        caseId,
+        userData: practitioner,
+        userIdToUpdate: practitioner.userId,
+      });
     }
-  });
-
-  await Promise.all(calls);
+  }
 
   return path.success({
     alertSuccess: {
