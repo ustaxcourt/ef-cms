@@ -19,15 +19,21 @@ export const submitEditRespondentsModalAction = async ({
 
   const { respondents } = form;
 
-  for (const respondent of respondents) {
+  const calls = [];
+
+  respondents.forEach(respondent => {
     if (respondent.removeFromCase) {
-      await applicationContext.getUseCases().deleteCounselFromCaseInteractor({
-        applicationContext,
-        caseId,
-        userIdToDelete: respondent.userId,
-      });
+      calls.push(
+        applicationContext.getUseCases().deleteCounselFromCaseInteractor({
+          applicationContext,
+          caseId,
+          userIdToDelete: respondent.userId,
+        }),
+      );
     }
-  }
+  });
+
+  await Promise.all(calls);
 
   return path.success({
     alertSuccess: {
