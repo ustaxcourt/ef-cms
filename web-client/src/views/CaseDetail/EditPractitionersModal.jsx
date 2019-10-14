@@ -25,7 +25,7 @@ class EditPractitionersModalComponent extends ModalDialog {
 
     return (
       <div>
-        {caseDetail.practitioners.map((practitioner, idx) => (
+        {form.practitioners.map((practitioner, idx) => (
           <div
             className="border border-base-light padding-2 margin-bottom-2 grid-row"
             key={idx}
@@ -58,9 +58,7 @@ class EditPractitionersModalComponent extends ModalDialog {
                   <div className="usa-checkbox">
                     <input
                       aria-describedby={`practitioner-representing-legend-${idx}`}
-                      checked={
-                        form.practitioners[idx].representingPrimary || false
-                      }
+                      checked={practitioner.representingPrimary || false}
                       className="usa-checkbox__input"
                       id={`representing-primary-${idx}`}
                       name={`practitioners.${idx}.representingPrimary`}
@@ -86,9 +84,7 @@ class EditPractitionersModalComponent extends ModalDialog {
                       <div className="usa-checkbox">
                         <input
                           aria-describedby={`practitioner-representing-legend-${idx}`}
-                          checked={
-                            form.practitioners[idx].representingPrimary || false
-                          }
+                          checked={practitioner.representingSecondary || false}
                           className="usa-checkbox__input"
                           id={`representing-secondary-${idx}`}
                           name={`practitioners.${idx}.representingSecondary`}
@@ -118,7 +114,7 @@ class EditPractitionersModalComponent extends ModalDialog {
             <div className="grid-col-4 text-right text-secondary-dark">
               <div className="usa-checkbox">
                 <input
-                  checked={form.practitioners[idx].removeFromCase || false}
+                  checked={practitioner.removeFromCase || false}
                   className="usa-checkbox__input"
                   id={`remove-practitioner-${idx}`}
                   name={`practitioners.${idx}.removeFromCase`}
@@ -148,8 +144,8 @@ class EditPractitionersModalComponent extends ModalDialog {
 export const EditPractitionersModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    //confirmSequence: sequences.updateCaseDeadlineSequence, //TODO
     caseDetail: state.caseDetail,
+    confirmSequence: sequences.submitEditPractitionersModalSequence,
     constants: state.constants,
     form: state.form,
     modal: state.modal,
