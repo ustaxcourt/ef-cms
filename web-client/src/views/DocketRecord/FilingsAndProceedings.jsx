@@ -111,7 +111,7 @@ export const FilingsAndProceedings = connect(
               docketNumber: formattedCaseDetail.docketNumber,
               documentId: document.documentId,
               shouldLinkToComplete: document.isFileAttached === false,
-              shouldLinkToEdit: !document.qcWorkItemsCompleted,
+              shouldLinkToEdit: document.canEdit,
             })}
           >
             {document && document.isPaper && (
