@@ -97,9 +97,7 @@ const formatDocketRecordWithDocument = (
       }
 
       document.qcWorkItemsCompleted = (document.workItems || [])
-        .filter(wi => {
-          wi.isInternal === false;
-        })
+        .filter(wi => !wi.isInternal)
         .reduce((acc, wi) => {
           return acc && wi.completedAt;
         }, true);
