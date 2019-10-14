@@ -1,28 +1,6 @@
 import { runAction } from 'cerebral/test';
 import { updateEditDocketEntryWizardDataAction } from './updateEditDocketEntryWizardDataAction';
 
-const caseDetail = {
-  documents: [
-    {
-      documentId: '1',
-      documentTitle: 'A Document',
-      documentType: 'A Document',
-    },
-    {
-      documentId: '2',
-      documentTitle: 'B Document',
-      documentType: 'B Document',
-      relationship: 'secondaryDocument',
-    },
-    {
-      documentId: '3',
-      documentTitle: 'C Document',
-      documentType: 'C Document',
-      relationship: 'primaryDocument',
-    },
-  ],
-};
-
 describe('updateEditDocketEntryWizardDataAction', () => {
   it('clear Certificate Of Service date items when certificateOfService is updated', async () => {
     const result = await runAction(updateEditDocketEntryWizardDataAction, {
