@@ -18,7 +18,7 @@ export const FileDocumentWizard = connect(
   ({ showModal }) => {
     return (
       <>
-        <CaseDetailHeader />
+        <CaseDetailHeader hideActionButtons={true} />
         <section className="usa-section">
           <div className="grid-container">
             {showModal == 'FormCancelModalDialog' && (
