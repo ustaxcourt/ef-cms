@@ -127,7 +127,7 @@ module.exports = [
     ],
     notes: 'checks a11y of edit practitioners modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=edit-practitioners-modal',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=edit-practitioners-modal',
   },
   {
     actions: [
@@ -153,7 +153,7 @@ module.exports = [
     ],
     notes: 'checks a11y of edit respondents modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=edit-respondents-modal',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=edit-respondents-modal',
   },
   {
     actions: [
