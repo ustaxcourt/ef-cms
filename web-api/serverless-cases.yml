@@ -317,6 +317,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  saveIntermediateDocketEntry:
+    handler: web-api/src/casesHandlers.saveIntermediateDocketEntryLambda
+    events:
+      - http:
+          path: /{caseId}/docket-entry-in-progress
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   fileCourtIssuedOrder:
     handler: web-api/src/casesHandlers.fileCourtIssuedOrderToCaseLambda
     events:

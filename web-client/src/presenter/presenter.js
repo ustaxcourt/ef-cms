@@ -142,6 +142,7 @@ import { reviewExternalDocumentInformationSequence } from './sequences/reviewExt
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runBatchProcessSequence } from './sequences/runBatchProcessSequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
+import { saveIntermediateDocketEntrySequence } from './sequences/saveIntermediateDocketEntrySequence';
 import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
@@ -232,6 +233,7 @@ import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreat
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
+import { updateEditDocketEntryFormValueSequence } from './sequences/updateEditDocketEntryFormValueSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
@@ -418,6 +420,7 @@ export const presenter = {
     reviewRequestAccessInformationSequence,
     runBatchProcessSequence,
     saveDocumentSigningSequence,
+    saveIntermediateDocketEntrySequence,
     scannerShutdownSequence,
     scannerStartupSequence,
     selectAssigneeSequence,
@@ -506,6 +509,7 @@ export const presenter = {
     updateCurrentTabSequence,
     updateDocketEntryFormValueSequence,
     updateDocumentValueSequence,
+    updateEditDocketEntryFormValueSequence,
     updateFileDocumentWizardFormValueSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,
