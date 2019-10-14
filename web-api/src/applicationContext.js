@@ -132,6 +132,9 @@ const {
   deleteCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
 const {
+  deleteCounselFromCaseInteractor,
+} = require('../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor');
+const {
   deleteDocument,
 } = require('../../shared/src/persistence/s3/deleteDocument');
 const {
@@ -481,6 +484,9 @@ const {
   updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
 const {
+  updateCounselOnCaseInteractor,
+} = require('../../shared/src/business/useCases/caseAssociation/updateCounselOnCaseInteractor');
+const {
   updateDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryInteractor');
 const {
@@ -819,6 +825,7 @@ module.exports = (appContextUser = {}) => {
         createWorkItemInteractor,
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
+        deleteCounselFromCaseInteractor,
         fileCourtIssuedOrderInteractor,
         fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
@@ -877,6 +884,7 @@ module.exports = (appContextUser = {}) => {
         updateCaseInteractor,
         updateCaseNoteInteractor,
         updateCaseTrialSortTagsInteractor,
+        updateCounselOnCaseInteractor,
         updateCourtIssuedOrderInteractor,
         updateDocketEntryInteractor,
         updatePrimaryContactInteractor,
