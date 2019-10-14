@@ -426,6 +426,10 @@ select[disabled] {
   }
 }
 
+.bg-gold {
+  background: color($theme-color-warning-lighter);
+}
+
 .alert-gold {
   span {
     max-width: 700px;
