@@ -11,7 +11,6 @@ import { state } from 'cerebral';
 export const isRespondentInCaseAction = async ({ get, path }) => {
   const caseDetail = get(state.caseDetail);
   const respondents = get(state.modal.respondentMatches);
-
   if (
     respondents.length === 1 &&
     caseDetail.respondents.find(
