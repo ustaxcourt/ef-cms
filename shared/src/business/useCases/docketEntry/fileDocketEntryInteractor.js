@@ -143,6 +143,13 @@ exports.fileDocketEntryInteractor = async ({
       documentEntity.addWorkItem(workItem);
 
       if (metadata.isPaper) {
+        if (metadata.isFileAttached) {
+          workItem.setAsCompleted({
+            message: 'completed',
+            user,
+          });
+        }
+
         workItem.assignToUser({
           assigneeId: user.userId,
           assigneeName: user.name,
