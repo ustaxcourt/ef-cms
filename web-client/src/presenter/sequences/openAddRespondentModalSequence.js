@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getRespondentsBySearchKeyAction } from '../actions/ManualAssociation/getRespondentsBySearchKeyAction';
+import { isRespondentInCaseAction } from '../actions/isRespondentInCaseAction';
 import { set } from 'cerebral/factories';
 import { setRespondentsAction } from '../actions/ManualAssociation/setRespondentsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -12,6 +13,13 @@ export const openAddRespondentModalSequence = [
   getRespondentsBySearchKeyAction,
   {
     error: [setValidationErrorsAction],
-    success: [setRespondentsAction, set(state.showModal, 'AddRespondentModal')],
+    success: [
+      setRespondentsAction,
+      isRespondentInCaseAction,
+      {
+        no: [set(state.showModal, 'AddRespondentModal')],
+        yes: [set(state.showModal, 'RespondentExistsModal')],
+      },
+    ],
   },
 ];
