@@ -18,6 +18,8 @@ module.exports = {
   getCaseLambda: require('./cases/getCaseLambda').handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,
+  saveIntermediateDocketEntryLambda: require('./cases/saveIntermediateDocketEntryLambda')
+    .handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
   setCaseToReadyForTrialLambda: require('./cases/setCaseToReadyForTrialLambda')

@@ -389,6 +389,9 @@ const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
+  saveIntermediateDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/editDocketEntry/saveIntermediateDocketEntryInteractor');
+const {
   saveSignedDocumentInteractor,
 } = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
 const {
@@ -871,6 +874,7 @@ module.exports = (appContextUser = {}) => {
         runBatchProcessInteractor,
         sanitizePdfInteractor: args =>
           process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
+        saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
         serveSignedStipDecisionInteractor,
