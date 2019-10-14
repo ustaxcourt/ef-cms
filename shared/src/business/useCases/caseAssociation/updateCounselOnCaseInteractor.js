@@ -3,6 +3,8 @@ const {
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { Practitioner } = require('../../entities/Practitioner');
+const { Respondent } = require('../../entities/Respondent');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -44,11 +46,13 @@ exports.updateCounselOnCaseInteractor = async ({
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (userToUpdate.role === 'practitioner') {
-    // should we create a Practitioner entity here and call validate() before saving?
-    caseEntity.updatePractitioner({ userId: userToUpdate.userId, ...userData });
+    caseEntity.updatePractitioner(
+      new Practitioner({ userId: userToUpdate.userId, ...userData }),
+    );
   } else if (userToUpdate.role === 'respondent') {
-    // should we create a Respondent entity here and call validate() before saving?
-    caseEntity.updateRespondent({ userId: userToUpdate.userId, ...userData });
+    caseEntity.updateRespondent(
+      new Respondent({ userId: userToUpdate.userId, ...userData }),
+    );
   }
 
   return await applicationContext.getPersistenceGateway().updateCase({
