@@ -293,3 +293,22 @@ button {
 .edit-counsel-modal {
   width: 700px;
 }
+
+.ustc-counsel-exists-modal {
+  width: 700px;
+
+  .usa-form-group {
+    max-width: unset;
+    margin-bottom: 20px;
+  }
+}
+
+.counsel-modal {
+  width: 700px;
+
+  .usa-form-group,
+  .usa-fieldset {
+    max-width: unset;
+    margin-bottom: 20px;
+  }
+}
