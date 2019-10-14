@@ -15,6 +15,7 @@ import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch'
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { Document } from '../../shared/src/business/entities/Document';
+import { EditPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/EditPractitionerFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
@@ -162,6 +163,7 @@ import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCas
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateCaseSearchInteractor } from '../../shared/src/business/useCases/validateCaseSearchInteractor';
 import { validateDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
+import { validateEditPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateEditPractitionerInteractor';
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateForwardMessageInteractor } from '../../shared/src/business/useCases/workitems/validateForwardMessageInteractor';
@@ -304,6 +306,7 @@ const allUseCases = {
   validateCaseDetailInteractor,
   validateCaseSearchInteractor,
   validateDocketEntryInteractor,
+  validateEditPractitionerInteractor,
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
   validateForwardMessageInteractor,
@@ -398,6 +401,7 @@ const applicationContext = {
     ContactFactory,
     DocketEntryFactory,
     Document,
+    EditPractitionerFactory,
     ExternalDocumentFactory,
     ExternalDocumentInformationFactory,
     ForwardMessage,
