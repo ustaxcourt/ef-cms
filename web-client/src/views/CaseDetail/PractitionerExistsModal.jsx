@@ -15,7 +15,7 @@ class PractitionerExistsModalComponent extends ModalDialog {
   }
 
   renderBody() {
-    const { caseDetailHelper, modal } = this.props;
+    const { caseDetailHelper } = this.props;
 
     return (
       <div>
@@ -37,11 +37,11 @@ class PractitionerExistsModalComponent extends ModalDialog {
 
             {caseDetailHelper.practitionerSearchResultsCount === 1 && (
               <span>
-                {modal.practitionerMatches[0].name} (
-                {modal.practitionerMatches[0].barNumber}
+                {caseDetailHelper.practitionerMatchesFormatted[0].name} (
+                {caseDetailHelper.practitionerMatchesFormatted[0].barNumber}
                 )
                 <br />
-                {modal.practitionerMatches[0].address2}
+                {caseDetailHelper.practitionerMatchesFormatted[0].cityStateZip}
               </span>
             )}
           </fieldset>
@@ -61,7 +61,6 @@ export const PractitionerExistsModal = connect(
     caseDetail: state.formattedCaseDetail,
     caseDetailHelper: state.caseDetailHelper,
     confirmSequence: sequences.clearModalSequence,
-    modal: state.modal,
   },
   PractitionerExistsModalComponent,
 );

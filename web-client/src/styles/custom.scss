@@ -1378,3 +1378,11 @@ button.change-scanner-button {
     margin-top: 39px;
   }
 }
+
+.hide-radio {
+  cursor: default;
+  pointer-events: none;
+  &:before {
+    opacity: 0;
+  }
+}
