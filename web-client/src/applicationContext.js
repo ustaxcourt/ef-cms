@@ -45,6 +45,7 @@ import {
   formatCase as formatCaseForTrialSession,
   formattedTrialSessionDetails,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
@@ -213,6 +214,7 @@ const allUseCases = {
   authorizeCodeInteractor,
   batchDownloadTrialSessionInteractor,
   caseSearchInteractor,
+  completeDocketEntryQCInteractor,
   completeWorkItemInteractor,
   createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,

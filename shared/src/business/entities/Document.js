@@ -68,7 +68,8 @@ function Document(rawDocument, { applicationContext }) {
   this.userId = rawDocument.userId;
   this.workItems = rawDocument.workItems;
   this.archived = rawDocument.archived;
-
+  this.qcAt = rawDocument.qcAt;
+  this.qcByUserId = rawDocument.qcByUserId;
   this.processingStatus = this.processingStatus || 'pending';
   this.workItems = (this.workItems || []).map(
     workItem => new WorkItem(workItem, { applicationContext }),
@@ -174,6 +175,14 @@ joiValidationDecorator(
     isPaper: joi.boolean().optional(),
     lodged: joi.boolean().optional(),
     processingStatus: joi.string().optional(),
+    qcAt: joi
+      .date()
+      .iso()
+      .optional(),
+    qcByUserId: joi
+      .string()
+      .optional()
+      .allow(null),
     receivedAt: joi
       .date()
       .iso()
@@ -278,6 +287,16 @@ Document.prototype.generateFiledBy = function(caseDetail) {
 Document.prototype.setSigned = function(signByUserId) {
   this.signedByUserId = signByUserId;
   this.signedAt = createISODateString();
+};
+
+/**
+ * attaches a qc date to the document
+ *
+ * @param {string} qcByUserId the user id of the user who qc'ed the document
+ */
+Document.prototype.setQCed = function(qcByUserId) {
+  this.qcByUserId = qcByUserId;
+  this.qcAt = createISODateString();
 };
 
 Document.prototype.unsignDocument = function() {
