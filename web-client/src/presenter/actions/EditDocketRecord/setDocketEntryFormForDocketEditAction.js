@@ -29,7 +29,10 @@ export const setDocketEntryFormForDocketEditAction = ({
   );
 
   if (docketRecordEntry && docketRecordEntry.editState) {
-    docketEntryFormData = JSON.parse(docketRecordEntry.editState);
+    const parsedJson = JSON.parse(docketRecordEntry.editState);
+    if (parsedJson.caseId) {
+      docketEntryFormData = JSON.parse(docketRecordEntry.editState);
+    }
   }
 
   docketEntryFormData.lodged = !!docketEntryFormData.lodged;

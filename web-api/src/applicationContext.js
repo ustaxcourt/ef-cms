@@ -94,7 +94,9 @@ const {
   formatCase: formatCaseForTrialSession,
   formattedTrialSessionDetails,
 } = require('../../shared/src/business/utilities/getFormattedTrialSessionDetails');
-
+const {
+  completeDocketEntryQCInteractor,
+} = require('../../shared/src/business/useCases/editDocketEntry/completeDocketEntryQCInteractor');
 const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
@@ -817,6 +819,7 @@ module.exports = (appContextUser = {}) => {
         batchDownloadTrialSessionInteractor,
         caseSearchInteractor,
         checkForReadyForTrialCasesInteractor,
+        completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,

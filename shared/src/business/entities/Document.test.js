@@ -408,4 +408,13 @@ describe('Document entity', () => {
       expect(document.signedAt).toEqual(null);
     });
   });
+
+  describe('setQCed', () => {
+    it('updates the document', () => {
+      const document = new Document(A_VALID_DOCUMENT, { applicationContext });
+      document.setQCed('abc-123');
+      expect(document.qcByUserId).toEqual('abc-123');
+      expect(document.qcAt).toBeDefined();
+    });
+  });
 });
