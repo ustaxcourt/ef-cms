@@ -9,13 +9,13 @@ export default test => {
     await test.runSequence('openEditPractitionersModalSequence');
 
     expect(
-      test.getState('form.practitioners.1.representingPrimary'),
+      test.getState('modal.practitioners.1.representingPrimary'),
     ).toBeFalsy();
-    expect(test.getState('form.practitioners.1.representingSecondary')).toEqual(
-      true,
-    );
+    expect(
+      test.getState('modal.practitioners.1.representingSecondary'),
+    ).toEqual(true);
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateModalValueSequence', {
       key: 'practitioners.1.representingSecondary',
       value: false,
     });
@@ -27,11 +27,11 @@ export default test => {
       representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateModalValueSequence', {
       key: 'practitioners.1.representingPrimary',
       value: true,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateModalValueSequence', {
       key: 'practitioners.1.representingSecondary',
       value: true,
     });

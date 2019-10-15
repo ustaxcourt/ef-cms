@@ -105,6 +105,11 @@ export const caseDetailHelper = (get, applicationContext) => {
       if (practitioner.contact) {
         practitioner.cityStateZip = `${practitioner.contact.city}, ${practitioner.contact.state} ${practitioner.contact.postalCode}`;
       }
+      if (caseDetail.practitioners) {
+        practitioner.isAlreadyInCase = caseDetail.practitioners.find(
+          casePractitioner => casePractitioner.userId === practitioner.userId,
+        );
+      }
     });
   }
   const respondentMatchesFormatted = modalState && modalState.respondentMatches;
@@ -112,6 +117,11 @@ export const caseDetailHelper = (get, applicationContext) => {
     respondentMatchesFormatted.map(respondent => {
       if (respondent.contact) {
         respondent.cityStateZip = `${respondent.contact.city}, ${respondent.contact.state} ${respondent.contact.postalCode}`;
+      }
+      if (caseDetail.respondents) {
+        respondent.isAlreadyInCase = caseDetail.respondents.find(
+          caseRespondent => caseRespondent.userId === respondent.userId,
+        );
       }
     });
   }

@@ -10,9 +10,6 @@ describe('setRespondentsAction', () => {
     const result = await runAction(setRespondentsAction, {
       props: { respondents: [{ name: 'Test Respondent', userId: '123' }] },
       state: {
-        caseDetail: {
-          respondents: [],
-        },
         modal: {},
       },
     });
@@ -34,9 +31,6 @@ describe('setRespondentsAction', () => {
         ],
       },
       state: {
-        caseDetail: {
-          respondents: [],
-        },
         modal: {},
       },
     });

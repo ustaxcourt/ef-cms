@@ -1,12 +1,12 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { set } from 'cerebral/factories';
-import { setEditPractitionersFormAction } from '../actions/CaseDetail/setEditPractitionersFormAction';
+import { setEditPractitionersAction } from '../actions/ManualAssociation/setEditPractitionersAction';
 import { state } from 'cerebral';
 
 export const openEditPractitionersModalSequence = [
   clearModalStateAction,
   clearFormAction,
-  setEditPractitionersFormAction,
+  setEditPractitionersAction,
   set(state.showModal, 'EditPractitionersModal'),
 ];
