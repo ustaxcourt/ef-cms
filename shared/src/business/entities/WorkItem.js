@@ -30,6 +30,7 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberSuffix = rawWorkItem.docketNumberSuffix;
   this.document = rawWorkItem.document;
+  this.inProgress = rawWorkItem.inProgress;
   this.isInitializeCase = rawWorkItem.isInitializeCase;
   this.isInternal =
     rawWorkItem.isInternal === undefined ? true : rawWorkItem.isInternal;
@@ -97,6 +98,7 @@ joiValidationDecorator(
       .allow(null)
       .optional(),
     document: joi.object().required(),
+    inProgress: joi.boolean().optional(),
     isInitializeCase: joi.boolean().optional(),
     isRead: joi.boolean().optional(),
     messages: joi
@@ -268,7 +270,7 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
   this.completedBy = user.name;
   this.completedByUserId = user.userId;
   this.completedMessage = message;
-
+  delete this.inProgress;
   return this;
 };
 
