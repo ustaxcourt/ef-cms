@@ -23,7 +23,7 @@ describe('getUploadPolicyInteractor', () => {
     expect(error.message).toContain('Unauthorized');
   });
 
-  it('returns the expected policy', async () => {
+  it('returns the expected policy when the file does not already exist', async () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
@@ -43,7 +43,7 @@ describe('getUploadPolicyInteractor', () => {
     expect(url).toEqual('policy');
   });
 
-  it('returns the expected policy', async () => {
+  it('throws an unauthorized exception when file already exists', async () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
