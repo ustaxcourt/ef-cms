@@ -10,6 +10,9 @@ describe('completeDocketEntryQCAction', () => {
     caseDetail = {
       caseId: '123',
       docketNumber: '123-45',
+      documents: [
+        { documentId: '123-456-789-abc', documentTitle: "bob's burgers" },
+      ],
     };
 
     completeDocketEntryQCInteractorMock = jest.fn(() => caseDetail);
@@ -31,7 +34,7 @@ describe('completeDocketEntryQCAction', () => {
       },
       state: {
         caseDetail,
-        document: '123-456-789-abc',
+        documentId: '123-456-789-abc',
         form: {
           primaryDocumentFile: {},
         },
@@ -40,6 +43,10 @@ describe('completeDocketEntryQCAction', () => {
 
     expect(completeDocketEntryQCInteractorMock).toHaveBeenCalled();
     expect(result.output).toEqual({
+      alertSuccess: {
+        message: "bob's burgers has been completed.",
+        title: 'QC Completed',
+      },
       caseDetail,
       caseId: caseDetail.docketNumber,
     });
