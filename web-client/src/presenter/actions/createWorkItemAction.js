@@ -9,9 +9,9 @@ export const createWorkItemAction = async ({
   let assigneeId, message;
 
   if (props.message) {
-    { assigneeId, message } = props.message;
+    ({ assigneeId, message } = props.message);
   } else {
-    { assigneeId, message } = get(state.form.assigneeId);
+    ({ assigneeId, message } = get(state.form.assigneeId));
   }
 
   const { caseId } = get(state.caseDetail);
