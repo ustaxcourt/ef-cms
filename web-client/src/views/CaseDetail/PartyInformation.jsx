@@ -290,7 +290,11 @@ const PartyInformation = connect(
                     });
                   }}
                 />
-                <button className="usa-button" type="submit">
+                <button
+                  className="usa-button"
+                  id="search-for-practitioner"
+                  type="submit"
+                >
                   <span className="usa-search__submit-text">Search</span>
                 </button>
               </div>
@@ -356,7 +360,11 @@ const PartyInformation = connect(
                     });
                   }}
                 />
-                <button className="usa-button" type="submit">
+                <button
+                  className="usa-button"
+                  id="search-for-respondent"
+                  type="submit"
+                >
                   <span className="usa-search__submit-text">Search</span>
                 </button>
               </div>
@@ -396,6 +404,7 @@ const PartyInformation = connect(
                       <Button
                         link
                         className="margin-left-205 padding-0 height-3"
+                        id="edit-practitioners-button"
                         onClick={() => openEditPractitionersModalSequence()}
                       >
                         <FontAwesomeIcon icon="edit" size="sm" />
@@ -421,6 +430,7 @@ const PartyInformation = connect(
                       <Button
                         link
                         className="margin-left-205 padding-0 height-3"
+                        id="edit-respondents-button"
                         onClick={() => openEditRespondentsModalSequence()}
                       >
                         <FontAwesomeIcon icon="edit" size="sm" />

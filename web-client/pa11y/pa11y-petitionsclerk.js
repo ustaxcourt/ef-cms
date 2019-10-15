@@ -105,6 +105,58 @@ module.exports = [
   },
   {
     actions: [
+      'wait for #tab-case-info to be visible',
+      'click element #tab-case-info',
+      'wait for #practitioner-search-field to be visible',
+      'set field #practitioner-search-field to GL1111',
+      'check field #practitioner-search-field',
+      'click element button#search-for-practitioner',
+      'wait for #counsel-matches-legend to be visible',
+    ],
+    notes: 'checks a11y of add practitioner modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=add-practitioner-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-info to be visible',
+      'click element #tab-case-info',
+      'wait for button#edit-practitioners-button to be visible',
+      'click element button#edit-practitioners-button',
+      'wait for #practitioner-representing-0 to be visible',
+    ],
+    notes: 'checks a11y of edit practitioners modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=edit-practitioners-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-info to be visible',
+      'click element #tab-case-info',
+      'wait for #respondent-search-field to be visible',
+      'set field #respondent-search-field to WN7777',
+      'check field #respondent-search-field',
+      'click element button#search-for-respondent',
+      'wait for #counsel-matches-legend to be visible',
+    ],
+    notes: 'checks a11y of add respondent modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=add-respondent-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-info to be visible',
+      'click element #tab-case-info',
+      'wait for button#edit-respondents-button to be visible',
+      'click element button#edit-respondents-button',
+      'wait for #respondent-0 to be visible',
+    ],
+    notes: 'checks a11y of edit respondents modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=edit-respondents-modal',
+  },
+  {
+    actions: [
       'wait for #tab-draft-documents to be visible',
       'click element #tab-draft-documents',
       'wait for button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"] to be visible',
