@@ -1,4 +1,4 @@
-import { omit } from 'lodash';
+const { omit } = require('lodash');
 const {
   FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
@@ -63,7 +63,7 @@ exports.completeDocketEntryQCInteractor = async ({
   const docketRecordEntry = new DocketRecord({
     description: entryMetadata.documentTitle,
     documentId: documentEntity.documentId,
-    editState: '',
+    editState: '{}',
     filingDate: documentEntity.receivedAt,
   });
 
