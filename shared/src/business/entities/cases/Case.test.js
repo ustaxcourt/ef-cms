@@ -178,6 +178,32 @@ describe('Case entity', () => {
       );
       expect(myCase.isValid()).toBeFalsy();
     });
+
+    it('Creates an invalid case with blocked set to true but no blockedReason', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: true,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+    });
+
+    it('Creates a valid case with blocked set to false but no blockedReason', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: false,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
   });
 
   describe('validate', () => {
@@ -1374,6 +1400,48 @@ describe('Case entity', () => {
           respondent => respondent.userId === 'respondent2',
         ),
       ).toBeFalsy();
+    });
+  });
+
+  describe('setAsBlocked', () => {
+    it('sets the case as blocked with a blocked reason', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToUpdate.blocked).toBeFalsy();
+
+      caseToUpdate.setAsBlocked('because reasons');
+
+      expect(caseToUpdate.blocked).toEqual(true);
+      expect(caseToUpdate.blockedReason).toEqual('because reasons');
+    });
+  });
+
+  describe('unsetAsBlocked', () => {
+    it('unsets the case as blocked', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: true,
+          blockedReason: 'because reasons',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToUpdate.blocked).toBeTruthy();
+
+      caseToUpdate.unsetAsBlocked();
+
+      expect(caseToUpdate.blocked).toBeFalsy();
+      expect(caseToUpdate.blockedReason).toBeUndefined();
     });
   });
 });
