@@ -47,14 +47,14 @@ exports.deleteCounselFromCaseInteractor = async ({
     caseEntity.removeRespondent(userToDelete);
   }
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
-
-  return await applicationContext.getPersistenceGateway().deleteUserFromCase({
+  await applicationContext.getPersistenceGateway().deleteUserFromCase({
     applicationContext,
     caseId,
     userId: userIdToDelete,
+  });
+
+  return await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
   });
 };
