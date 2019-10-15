@@ -167,6 +167,8 @@ function Case(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.blocked = rawCase.blocked;
+  this.blockedReason = rawCase.blockedReason;
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseType = rawCase.caseType;
@@ -267,6 +269,12 @@ function Case(rawCase, { applicationContext }) {
 joiValidationDecorator(
   Case,
   joi.object().keys({
+    blocked: joi.boolean().optional(),
+    blockedReason: joi.when('blocked', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.string().required(),
+    }),
     caseId: joi
       .string()
       .uuid({
@@ -969,6 +977,29 @@ Case.getDefaultOrderDesignatingPlaceOfTrialValue = function({
     orderDesignatingPlaceOfTrial = false;
   }
   return orderDesignatingPlaceOfTrial;
+};
+
+/**
+ * set as blocked with a blockedReason
+ *
+ * @param {string} blockedReason - the reason the case was blocked
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setAsBlocked = function(blockedReason) {
+  this.blocked = true;
+  this.blockedReason = blockedReason;
+  return this;
+};
+
+/**
+ * unblock the case and remove the blockedReason
+ *
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.unsetAsBlocked = function() {
+  this.blocked = false;
+  this.blockedReason = undefined;
+  return this;
 };
 
 module.exports = { Case };
