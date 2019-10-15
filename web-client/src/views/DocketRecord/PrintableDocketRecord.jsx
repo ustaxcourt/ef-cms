@@ -14,7 +14,7 @@ export const PrintableDocketRecord = connect(
   ({ formattedCaseDetail, navigateToCaseDetailSequence }) => {
     return (
       <>
-        <CaseDetailHeader />
+        <CaseDetailHeader hideActionButtons />
         <div className="grid-container print-docket-record">
           <Button
             link
