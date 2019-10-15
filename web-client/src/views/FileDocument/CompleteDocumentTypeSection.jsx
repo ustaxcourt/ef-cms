@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile } from '../../ustc-ui/Responsive/Responsive';
@@ -12,6 +13,7 @@ import {
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
+import classNames from 'classnames';
 
 export const CompleteDocumentTypeSection = connect(
   {
@@ -40,17 +42,25 @@ export const CompleteDocumentTypeSection = connect(
     return (
       <React.Fragment>
         <div
-          className={`usa-form-group ${
-            validationErrors.documentType ? 'usa-form-group--error' : ''
-          }`}
+          className={classNames(
+            'usa-form-group',
+            validationErrors.documentType && 'usa-form-group--error',
+          )}
         >
           <label
             className="usa-label"
             htmlFor="document-type"
             id="document-type-label"
           >
-            Document Type
+            Document type
           </label>
+
+          <span className="usa-hint">
+            Enter your document name to see available document types,
+            <br />
+            or use the dropdown to select your document type.
+          </span>
+
           <Select
             aria-describedby="document-type-label"
             aria-labelledby="document-type-label"
@@ -86,19 +96,14 @@ export const CompleteDocumentTypeSection = connect(
             }}
           />
           <Mobile>
-            <button
-              className="usa-button usa-button--unstyled margin-top-2"
+            <Button
+              link
+              className="margin-top-1"
               onClick={() => openSelectDocumentWizardOverlaySequence()}
             >
-              <div className="grid-row">
-                <div className="grid-col-1">
-                  <FontAwesomeIcon icon="question-circle" size="sm" />
-                </div>
-                <div className="grid-col-11">
-                  Need help selecting a document?
-                </div>
-              </div>
-            </button>
+              <FontAwesomeIcon icon="question-circle" size="sm" />
+              Need help selecting a document?
+            </Button>
           </Mobile>
           <Text
             bind="validationErrors.documentType"

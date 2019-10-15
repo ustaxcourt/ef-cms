@@ -77,6 +77,15 @@ Case.ANSWER_DOCUMENT_CODES = [
 ];
 
 Case.VALIDATION_ERROR_MESSAGES = {
+  applicationForWaiverOfFilingFeeFile:
+    'Upload an Application for Waiver of Filing Fee',
+  applicationForWaiverOfFilingFeeFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Filing Fee Waiver file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Filing Fee Waiver file size is empty',
+  ],
   caseCaption: 'Enter a case caption',
   caseType: 'Select a case type',
   docketNumber: 'Docket number is required',
@@ -178,7 +187,7 @@ function Case(rawCase, { applicationContext }) {
   this.payGovId = rawCase.payGovId;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
-  this.receivedAt = rawCase.receivedAt;
+  this.receivedAt = rawCase.receivedAt || createISODateString();
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialJudge = rawCase.trialJudge;
@@ -823,7 +832,6 @@ Case.prototype.generateTrialSortTags = function() {
   const {
     caseId,
     caseType,
-    createdAt,
     preferredTrialCity,
     procedureType,
     receivedAt,
@@ -840,10 +848,7 @@ Case.prototype.generateTrialSortTags = function() {
     casePrioritySymbol = 'B';
   }
 
-  const formattedFiledTime = formatDateString(
-    receivedAt || createdAt,
-    'YYYYMMDDHHmmss',
-  );
+  const formattedFiledTime = formatDateString(receivedAt, 'YYYYMMDDHHmmss');
   const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
 
   const nonHybridSortKey = [

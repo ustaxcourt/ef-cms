@@ -3,6 +3,7 @@ import { connect } from '@cerebral/react';
 import { map } from 'lodash';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 class CreateOrderChooseTypeModalComponent extends ModalDialog {
   constructor(props) {
@@ -18,15 +19,13 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
     return (
       <div className="ustc-create-order-modal">
         <div
-          className={
-            'usa-form-group ' +
-            (this.props.validationErrors.eventCode
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            this.props.validationErrors.eventCode && 'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor="eventCode">
-            Select Order Type
+            Select order type
           </label>
 
           <select
@@ -59,15 +58,14 @@ class CreateOrderChooseTypeModalComponent extends ModalDialog {
         </div>
         {this.props.form.eventCode == 'O' && (
           <div
-            className={
-              'usa-form-group ' +
-              (this.props.validationErrors.documentTitle
-                ? 'usa-form-group--error'
-                : '')
-            }
+            className={classNames(
+              'usa-form-group',
+              this.props.validationErrors.documentTitle &&
+                'usa-form-group--error',
+            )}
           >
             <label className="usa-label" htmlFor="documentTitle">
-              Order Title
+              Order title
             </label>
             <input
               className="usa-input"

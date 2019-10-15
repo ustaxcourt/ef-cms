@@ -11,10 +11,14 @@ web-api/.dynamodb
 web-api/.nyc_output
 web-api/.serverless
 web-api/coverage
-web-api/.cache
 web-api/dist
+web-api/.cache
 web-api/terraform/main/.terraform
 shared/node_modules
 shared/coverage
 management/management/.terraform
 .git
+.serverless
+.elasticsearch
+docs
+node_modules

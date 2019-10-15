@@ -59,6 +59,7 @@ describe('Taxpayer files document', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
+      document: {},
       localStorage: {
         removeItem: () => null,
         setItem: () => null,

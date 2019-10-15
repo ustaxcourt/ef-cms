@@ -32,6 +32,7 @@ describe('a user signs and serves a stipulated decision', () => {
     fakeFile.name = 'fakeFile.pdf';
 
     global.window = {
+      document: {},
       localStorage: {
         removeItem: () => null,
         setItem: () => null,

@@ -87,8 +87,15 @@ const {
 const {
   createISODateString,
   formatDateString,
+  formatNow,
   prepareDateFromString,
 } = require('../../shared/src/business/utilities/DateHandler');
+const {
+  compareCasesByDocketNumber,
+  formatCase: formatCaseForTrialSession,
+  formattedTrialSessionDetails,
+} = require('../../shared/src/business/utilities/getFormattedTrialSessionDetails');
+
 const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
@@ -150,7 +157,11 @@ const {
   generateChangeOfAddressTemplate,
   generateHTMLTemplateForPDF,
   generatePrintableDocketRecordTemplate,
+  generateTrialCalendarTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF');
+const {
+  generateTrialCalendarPdfInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
 const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
@@ -335,6 +346,12 @@ const {
   getWorkItemById,
 } = require('../../shared/src/persistence/dynamo/workitems/getWorkItemById');
 const {
+  getWebSocketConnectionsByUserId,
+} = require('../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionsByUserId');
+const {
+  getWebSocketConnectionByConnectionId,
+} = require('../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionByConnectionId');
+const {
   getWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/getWorkItemInteractor');
 const {
@@ -344,6 +361,9 @@ const {
   isAuthorized,
   WORKITEM,
 } = require('../../shared/src/authorization/authorizationClientService');
+const {
+  processStreamRecordsInteractor,
+} = require('../../shared/src/business/useCases/processStreamRecordsInteractor');
 const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
@@ -467,6 +487,9 @@ const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
 const {
+  sendNotificationToUser,
+} = require('../../shared/src/notifications/sendNotificationToUser');
+const {
   updateTrialSessionWorkingCopy,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy');
 const {
@@ -478,6 +501,18 @@ const {
 const {
   updateUserContactInformationInteractor,
 } = require('../../shared/src/business/useCases/users/updateUserContactInformationInteractor');
+const {
+  onConnectInteractor,
+} = require('../../shared/src/business/useCases/notifications/onConnectInteractor');
+const {
+  onDisconnectInteractor,
+} = require('../../shared/src/business/useCases/notifications/onDisconnectInteractor');
+const {
+  saveUserConnection,
+} = require('../../shared/src/persistence/dynamo/notifications/saveUserConnection');
+const {
+  deleteUserConnection,
+} = require('../../shared/src/persistence/dynamo/notifications/deleteUserConnection');
 const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
@@ -517,16 +552,23 @@ const {
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
+const elasticsearch = require('elasticsearch');
 const { exec } = require('child_process');
 const { User } = require('../../shared/src/business/entities/User');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
+const connectionClass = require('http-aws-es');
 
-const { DynamoDB, S3, SES } = AWS;
+// increase the timeout for zip uploads to S3
+AWS.config.httpOptions.timeout = 300000;
+
+const { DynamoDB, EnvironmentCredentials, S3, SES } = AWS;
 const execPromise = util.promisify(exec);
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
   dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
+  elasticsearchEndpoint:
+    process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   masterDynamoDbEndpoint:
     process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
@@ -534,6 +576,7 @@ const environment = {
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
+  wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
 let user;
@@ -547,6 +590,7 @@ const setCurrentUser = newUser => {
 let dynamoClientCache = {};
 let s3Cache;
 let sesCache;
+let searchClientCache;
 
 module.exports = (appContextUser = {}) => {
   setCurrentUser(appContextUser);
@@ -601,6 +645,17 @@ module.exports = (appContextUser = {}) => {
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
     }),
+    getNotificationClient: ({ endpoint }) => {
+      if (endpoint.indexOf('localhost') !== -1) {
+        endpoint = 'http://localhost:3011';
+      }
+      return new AWS.ApiGatewayManagementApi({
+        endpoint,
+      });
+    },
+    getNotificationGateway: () => ({
+      sendNotificationToUser,
+    }),
     getPersistenceGateway: () => {
       return {
         addWorkItemToSectionInbox,
@@ -622,6 +677,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
         deleteSectionOutboxRecord,
+        deleteUserConnection,
         deleteUserOutboxRecord,
         deleteWorkItemFromInbox,
         deleteWorkItemFromSection,
@@ -653,12 +709,15 @@ module.exports = (appContextUser = {}) => {
         getUserById,
         getUsersBySearchKey,
         getUsersInSection,
+        getWebSocketConnectionByConnectionId,
+        getWebSocketConnectionsByUserId,
         getWorkItemById,
         incrementCounter,
         isFileExists,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
         saveDocument,
+        saveUserConnection,
         saveWorkItemForDocketClerkFilingExternalDocument,
         saveWorkItemForDocketEntryWithoutFile,
         saveWorkItemForNonPaper,
@@ -680,6 +739,32 @@ module.exports = (appContextUser = {}) => {
         zipDocuments,
       };
     },
+    getSearchClient: () => {
+      if (!searchClientCache) {
+        if (environment.stage === 'local' && process.env.CI !== 'true') {
+          searchClientCache = new elasticsearch.Client({
+            host: environment.elasticsearchEndpoint,
+          });
+        } else if (environment.stage === 'local' && process.env.CI === 'true') {
+          searchClientCache = { index: () => {}, search: () => {} };
+        } else {
+          searchClientCache = new elasticsearch.Client({
+            amazonES: {
+              credentials: new EnvironmentCredentials('AWS'),
+              region: environment.region,
+            },
+            apiVersion: '7.1',
+            awsConfig: new AWS.Config({ region: 'us-east-1' }),
+            connectionClass: connectionClass,
+            host: environment.elasticsearchEndpoint,
+            log: 'warning',
+            port: 443,
+            protocol: 'https',
+          });
+        }
+      }
+      return searchClientCache;
+    },
     getStorageClient: () => {
       if (!s3Cache) {
         s3Cache = new S3({
@@ -699,6 +784,7 @@ module.exports = (appContextUser = {}) => {
         generateChangeOfAddressTemplate,
         generateHTMLTemplateForPDF,
         generatePrintableDocketRecordTemplate,
+        generateTrialCalendarTemplate,
       };
     },
     getUniqueId: () => {
@@ -732,6 +818,7 @@ module.exports = (appContextUser = {}) => {
         generateDocketRecordPdfInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
+        generateTrialCalendarPdfInteractor,
         getAllCaseDeadlinesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
@@ -761,6 +848,9 @@ module.exports = (appContextUser = {}) => {
         getUserInteractor,
         getUsersInSectionInteractor,
         getWorkItemInteractor,
+        onConnectInteractor,
+        onDisconnectInteractor,
+        processStreamRecordsInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
         runBatchProcessInteractor,
         sanitizePdfInteractor: args =>
@@ -793,8 +883,12 @@ module.exports = (appContextUser = {}) => {
     },
     getUtilities: () => {
       return {
+        compareCasesByDocketNumber,
         createISODateString,
+        formatCaseForTrialSession,
         formatDateString,
+        formatNow,
+        formattedTrialSessionDetails,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
         prepareDateFromString,

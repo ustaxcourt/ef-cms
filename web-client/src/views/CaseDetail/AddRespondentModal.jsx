@@ -29,8 +29,8 @@ class AddRespondentModalComponent extends ModalDialog {
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="counsel-matches-legend">
-              {caseDetailHelper.respondentSearchResultsCount} Counsel Match(es)
-              Found
+              {caseDetailHelper.respondentSearchResultsCount} counsel match(es)
+              found
             </legend>
 
             {caseDetailHelper.respondentSearchResultsCount === 1 && (

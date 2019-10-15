@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
@@ -50,12 +51,13 @@ export const WhatToExpect = () => (
         </span>
       </div>
     </div>
-    <a
-      className="usa-button margin-right-0"
+    <Button
+      className="margin-right-0"
       href="/before-filing-a-petition"
+      icon="file"
       id="init-file-petition"
     >
-      <FontAwesomeIcon icon="file" size="1x" /> File a Petition
-    </a>
+      File a Petition
+    </Button>
   </>
 );

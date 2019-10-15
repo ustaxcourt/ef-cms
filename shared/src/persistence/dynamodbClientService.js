@@ -210,6 +210,31 @@ exports.batchWrite = ({ applicationContext, items }) => {
     .promise();
 };
 
+/**
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.items the items to write
+ * @returns {Promise} the promise of the persistence call
+ */
+exports.batchDelete = ({ applicationContext, items }) => {
+  return applicationContext
+    .getDocumentClient()
+    .batchWrite({
+      RequestItems: {
+        [getTableName({ applicationContext })]: items.map(item => ({
+          DeleteRequest: {
+            Key: {
+              pk: item.pk,
+              sk: item.sk,
+            },
+          },
+        })),
+      },
+    })
+    .promise();
+};
+
 exports.delete = ({ applicationContext, key }) => {
   return applicationContext
     .getDocumentClient()

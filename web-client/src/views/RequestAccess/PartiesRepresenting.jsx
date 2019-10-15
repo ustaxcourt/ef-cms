@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PartiesRepresenting = connect(
   {
@@ -26,15 +27,15 @@ export const PartiesRepresenting = connect(
         </h2>
         <div className="blue-container">
           <div
-            className={`usa-form-group margin-bottom-0 ${
-              requestAccessHelper.partyValidationError
-                ? 'usa-form-group--error'
-                : ''
-            }`}
+            className={classNames(
+              'usa-form-group margin-bottom-0',
+              requestAccessHelper.partyValidationError &&
+                'usa-form-group--error',
+            )}
           >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">
-                Who Are You Representing?
+                Who are you representing?
               </legend>
               <span className="usa-hint">Check all that apply</span>
               <div className="usa-checkbox">
@@ -54,7 +55,7 @@ export const PartiesRepresenting = connect(
                   }}
                 />
                 <label className="usa-checkbox__label" htmlFor="party-primary">
-                  {formattedCaseDetail.contactPrimary.name}
+                  {formattedCaseDetail.contactPrimary.name}, Petitioner
                 </label>
               </div>
               {requestAccessHelper.showSecondaryParty && (
@@ -78,7 +79,7 @@ export const PartiesRepresenting = connect(
                     className="usa-checkbox__label"
                     htmlFor="party-secondary"
                   >
-                    {formattedCaseDetail.contactSecondary.name}
+                    {formattedCaseDetail.contactSecondary.name}, Petitioner
                   </label>
                 </div>
               )}

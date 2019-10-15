@@ -7,7 +7,7 @@ const { ContactFactory } = require('./ContactFactory');
 exports.getPartnershipAsTaxMattersPartnerPrimaryContact = ContactFactory.createContactFactory(
   {
     additionalErrorMappings: {
-      secondaryName: 'Enter tax matters partner name',
+      secondaryName: 'Enter Tax Matters Partner name',
     },
     additionalValidation: {
       secondaryName: joi.string().required(),

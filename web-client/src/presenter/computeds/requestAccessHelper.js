@@ -1,3 +1,4 @@
+import { getDocumentTypesForSelect } from './internalTypesHelper';
 import { state } from 'cerebral';
 
 export const requestAccessHelper = (get, applicationContext) => {
@@ -64,12 +65,17 @@ export const requestAccessHelper = (get, applicationContext) => {
     );
   }
 
-  const documentWithExhibits = [
-    'Motion to Substitute Parties and Change Caption',
-    'Notice of Intervention',
-    'Notice of Election to Participate',
-    'Notice of Election to Intervene',
-  ].includes(documentType);
+  const documentsForSelect = getDocumentTypesForSelect(documents);
+
+  const shouldShowExhibits = !['practitioner', 'respondent'].includes(userRole);
+
+  const documentWithExhibits =
+    [
+      'Motion to Substitute Parties and Change Caption',
+      'Notice of Intervention',
+      'Notice of Election to Participate',
+      'Notice of Election to Intervene',
+    ].includes(documentType) && shouldShowExhibits;
 
   const documentWithAttachments = [
     'Motion to Substitute Parties and Change Caption',
@@ -111,6 +117,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     documentWithObjections,
     documentWithSupportingDocuments,
     documents,
+    documentsForSelect,
     partyValidationError,
     showFilingIncludes,
     showFilingNotIncludes,

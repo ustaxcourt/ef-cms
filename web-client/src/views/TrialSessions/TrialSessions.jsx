@@ -1,6 +1,6 @@
 import { BigHeader } from '../BigHeader';
+import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { UpcomingTrialSessions } from './UpcomingTrialSessions';
@@ -14,9 +14,13 @@ export const TrialSessions = () => (
       <ErrorNotification />
 
       <Tabs bind="trialsessions.group" defaultActiveTab="Upcoming">
-        <a className="usa-button tab-right-button" href="/add-a-trial-session">
-          <FontAwesomeIcon icon="plus-circle" size="1x" /> Add Trial Session
-        </a>
+        <Button
+          className="tab-right-button"
+          href="/add-a-trial-session"
+          icon="plus-circle"
+        >
+          Add Trial Session
+        </Button>
 
         <Tab
           id="upcoming-trialsessions-tab"

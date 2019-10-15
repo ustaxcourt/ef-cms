@@ -6,6 +6,7 @@ import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTri
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { updateCalendaredCaseNoteAction } from '../actions/TrialSessionWorkingCopy/updateCalendaredCaseNoteAction';
 import { updateCaseNoteAction } from '../actions/TrialSession/updateCaseNoteAction';
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
 import { validateNoteAction } from '../actions/validateNoteAction';
@@ -22,6 +23,7 @@ export const updateCaseNoteOnWorkingCopySequence = [
       updateCaseNoteAction,
       getTrialSessionWorkingCopyAction,
       setTrialSessionWorkingCopyAction,
+      updateCalendaredCaseNoteAction,
       clearModalAction,
       clearModalStateAction,
     ],
