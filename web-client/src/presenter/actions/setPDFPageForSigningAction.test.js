@@ -22,7 +22,7 @@ describe('setPDFPageForSigningAction', () => {
     const result = await runAction(setPDFPageForSigningAction, {
       state: {
         pdfForSigning: {
-          pageNumber: 1,
+          pageNumber: undefined,
         },
       },
     });
