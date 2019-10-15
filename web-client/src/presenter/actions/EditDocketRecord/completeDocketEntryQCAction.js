@@ -40,7 +40,7 @@ export const completeDocketEntryQCAction = async ({
       entryMetadata,
     });
 
-  const updatedDocument = (caseDetail.documents || []).filter(
+  const updatedDocument = caseDetail.documents.filter(
     doc => doc.documentId === documentId,
   )[0];
 
