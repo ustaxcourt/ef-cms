@@ -15,7 +15,7 @@ class RespondentExistsModalComponent extends ModalDialog {
   }
 
   renderBody() {
-    const { caseDetailHelper, modal } = this.props;
+    const { caseDetailHelper } = this.props;
 
     return (
       <div>
@@ -61,7 +61,6 @@ export const RespondentExistsModal = connect(
     caseDetail: state.formattedCaseDetail,
     caseDetailHelper: state.caseDetailHelper,
     confirmSequence: sequences.clearModalSequence,
-    modal: state.modal,
   },
   RespondentExistsModalComponent,
 );
