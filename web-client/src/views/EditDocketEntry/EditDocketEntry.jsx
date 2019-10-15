@@ -17,15 +17,15 @@ import React from 'react';
 export const EditDocketEntry = connect(
   {
     caseDetail: state.caseDetail,
+    completeDocketEntryQCSequence: sequences.completeDocketEntryQCSequence,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.showModal,
-    submitDocketEntrySequence: sequences.submitDocketEntrySequence,
   },
   ({
     caseDetail,
+    completeDocketEntryQCSequence,
     formCancelToggleCancelSequence,
     showModal,
-    submitDocketEntrySequence,
   }) => {
     return (
       <>
@@ -87,7 +87,7 @@ export const EditDocketEntry = connect(
                     id="save-and-finish"
                     type="submit"
                     onClick={() => {
-                      submitDocketEntrySequence();
+                      completeDocketEntryQCSequence();
                     }}
                   >
                     Complete
@@ -96,7 +96,7 @@ export const EditDocketEntry = connect(
                     secondary
                     id="save-and-add-supporting"
                     onClick={() => {
-                      submitDocketEntrySequence({
+                      completeDocketEntryQCSequence({
                         docketNumber: caseDetail.docketNumber,
                         isAddAnother: true,
                       });
