@@ -39,6 +39,7 @@ import { associatePractitionerWithCaseInteractor } from '../../shared/src/proxie
 import { associateRespondentWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associateRespondentWithCaseProxy';
 import { authorizeCodeInteractor } from '../../shared/src/business/useCases/authorizeCodeInteractor';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
+import { blockFromTrialInteractor } from '../../shared/src/proxies/blockFromTrialProxy';
 import { caseSearchInteractor } from '../../shared/src/proxies/caseSearchProxy';
 import {
   compareCasesByDocketNumber,
@@ -142,6 +143,7 @@ import { signDocumentInteractor } from '../../shared/src/proxies/documents/signD
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
+import { unblockFromTrialInteractor } from '../../shared/src/proxies/unblockFromTrialProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
 import { updateCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateCaseNoteProxy';
@@ -213,6 +215,7 @@ const allUseCases = {
   associateRespondentWithCaseInteractor,
   authorizeCodeInteractor,
   batchDownloadTrialSessionInteractor,
+  blockFromTrialInteractor,
   caseSearchInteractor,
   completeDocketEntryQCInteractor,
   completeWorkItemInteractor,
@@ -289,6 +292,7 @@ const allUseCases = {
   signDocumentInteractor,
   submitCaseAssociationRequestInteractor,
   submitPendingCaseAssociationRequestInteractor,
+  unblockFromTrialInteractor,
   updateCaseDeadlineInteractor,
   updateCaseInteractor,
   updateCaseNoteInteractor,

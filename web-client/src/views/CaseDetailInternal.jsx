@@ -1,3 +1,4 @@
+import { BlockFromTrialModal } from './CaseDetail/BlockFromTrialModal';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDeadlinesInternal } from './CaseDetail/CaseDeadlinesInternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
@@ -14,6 +15,7 @@ import { MessagesInProgress } from './CaseDetail/MessagesInProgress';
 import { PartyInformation } from './CaseDetail/PartyInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { UnblockFromTrialModal } from './CaseDetail/UnblockFromTrialModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -144,6 +146,8 @@ export const CaseDetailInternal = connect(
         {showModal === 'DeleteCaseDeadlineModalDialog' && (
           <DeleteCaseDeadlineModalDialog />
         )}
+        {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}
+        {showModal === 'UnblockFromTrialModal' && <UnblockFromTrialModal />}
       </>
     );
   },
