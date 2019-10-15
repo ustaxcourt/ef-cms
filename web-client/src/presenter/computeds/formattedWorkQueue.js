@@ -169,7 +169,7 @@ export const filterWorkItems = ({
             !item.completedAt &&
             !item.isInternal &&
             item.section === user.section &&
-            item.document.isFileAttached === false
+            (item.document.isFileAttached === false || !item.inProgress)
           );
         },
         inbox: item => {
@@ -178,7 +178,8 @@ export const filterWorkItems = ({
             !item.completedAt &&
             !item.isInternal &&
             item.section === user.section &&
-            item.document.isFileAttached !== false
+            item.document.isFileAttached !== false &&
+            !item.inProgress
           );
         },
         outbox: item => {
@@ -207,7 +208,7 @@ export const filterWorkItems = ({
             !item.completedAt &&
             !item.isInternal &&
             item.section === user.section &&
-            item.document.isFileAttached === false
+            (item.document.isFileAttached === false || item.inProgress)
           );
         },
         inbox: item => {
@@ -215,7 +216,8 @@ export const filterWorkItems = ({
             !item.completedAt &&
             !item.isInternal &&
             item.section === docQCUserSection &&
-            item.document.isFileAttached !== false
+            item.document.isFileAttached !== false &&
+            !item.inProgress
           );
         },
         outbox: item => {

@@ -46,6 +46,35 @@ exports.saveIntermediateDocketEntryInteractor = async ({
 
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
 
+  const currentDocument = caseEntity.getDocumentById({
+    documentId: entryMetadata.documentId,
+  });
+
+  const workItemsToPutInProgress = currentDocument.workItems
+    .filter(wi => wi.isInternal === false)
+    .filter(wi => !wi.inProgress);
+
+  for (const workItemToUpdate of workItemsToPutInProgress) {
+    Object.assign(workItemToUpdate, {
+      inProgress: true,
+    });
+
+    await applicationContext.getPersistenceGateway().updateWorkItem({
+      applicationContext,
+      workItemToUpdate: workItemToUpdate.validate().toRawObject(),
+    });
+
+    await applicationContext.getPersistenceGateway().createUserInboxRecord({
+      applicationContext,
+      workItem: workItemToUpdate.validate().toRawObject(),
+    });
+
+    await applicationContext.getPersistenceGateway().createSectionInboxRecord({
+      applicationContext,
+      workItem: workItemToUpdate.validate().toRawObject(),
+    });
+  }
+
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
