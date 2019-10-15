@@ -66,6 +66,7 @@ describe('Practitioner requests access to case', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
+      document: {},
       localStorage: {
         removeItem: () => null,
         setItem: () => null,
@@ -103,7 +104,7 @@ describe('Practitioner requests access to case', () => {
         postalCode: '77546',
         state: 'AZ',
       },
-      partyType: 'Petitioner & Spouse',
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
   });
   taxpayerViewsDashboard(test);
@@ -135,7 +136,7 @@ describe('Practitioner requests access to case', () => {
         postalCode: '77546',
         state: 'AZ',
       },
-      partyType: 'Petitioner & Spouse',
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
   });
   taxpayerViewsDashboard(test);

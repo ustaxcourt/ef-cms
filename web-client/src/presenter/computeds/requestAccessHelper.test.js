@@ -63,6 +63,20 @@ describe('requestAccessHelper', () => {
     expect(result.partyValidationError).toBeUndefined();
   });
 
+  it('does not show exhibits for document inclusion for practitioners', () => {
+    const result = runCompute(requestAccessHelper, {
+      state: {
+        ...state,
+        user: { role: 'practitioner' },
+        form: {
+          documentType: 'Motion to Substitute Parties and Change Caption',
+          primaryDocumentFile: { some: 'file' },
+        },
+      },
+    });
+    expect(result.documentWithExhibits).toBeFalsy();
+  });
+
   it('shows party validation error if any one of the party validation errors exists', () => {
     state.validationErrors = { representingPrimary: 'You did something bad.' };
     const result = runCompute(requestAccessHelper, { state });
@@ -81,17 +95,9 @@ describe('requestAccessHelper', () => {
     expect(result.documents.length).toEqual(2);
   });
 
-  it('shows filing includes if certificate of service, exhibits, or attachments is true', () => {
+  it('shows filing includes if certificate of service or attachments is true', () => {
     state.form = { certificateOfService: true };
     let result = runCompute(requestAccessHelper, { state });
-    expect(result.showFilingIncludes).toEqual(true);
-
-    state.form = {
-      certificateOfService: false,
-      documentType: 'Notice of Intervention',
-      exhibits: true,
-    };
-    result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingIncludes).toEqual(true);
 
     state.form = {

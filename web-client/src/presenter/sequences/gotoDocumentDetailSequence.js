@@ -13,6 +13,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypesAction } from '../actions/setCaseTypesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultDocumentDetailTabAction } from '../actions/setDefaultDocumentDetailTabAction';
+import { setDocumentDetailPageTitleAction } from '../actions/setDocumentDetailPageTitleAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setInternalUsersAction } from '../actions/setInternalUsersAction';
@@ -42,6 +43,7 @@ export const gotoDocumentDetailSequence = [
   getCaseTypesAction,
   setCaseTypesAction,
   set(state.editDocumentEntryPoint, 'DocumentDetail'),
+  setDocumentDetailPageTitleAction,
   setCurrentPageAction('DocumentDetail'),
   parallel([
     getShouldMarkReadAction,

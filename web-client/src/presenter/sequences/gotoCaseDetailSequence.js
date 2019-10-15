@@ -1,4 +1,5 @@
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
@@ -17,6 +18,7 @@ import { state } from 'cerebral';
 export const gotoCaseDetailSequence = [
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
+  closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
   getCaseAction,
   setCaseAction,

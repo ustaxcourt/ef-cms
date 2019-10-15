@@ -5,6 +5,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 import {
   createISODateString,
   formatDateString,
+  formatNow,
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
 
@@ -18,6 +19,7 @@ const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
       return {
         createISODateString,
         formatDateString,
+        formatNow,
         prepareDateFromString,
       };
     },

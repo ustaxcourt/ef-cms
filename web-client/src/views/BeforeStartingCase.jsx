@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MAX_FILE_SIZE_MB } from '../../../shared/src/persistence/s3/getUploadPolicy';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
@@ -20,19 +21,19 @@ export const BeforeStartingCase = () => (
       </div>
     </div>
     <section className="usa-section before-starting-case grid-container">
-      <h1 className="captioned margin-bottom-2" tabIndex="-1">
+      <h3 className="captioned margin-bottom-2" tabIndex="-1">
         Tips for Preparing Documents Before You File
-      </h1>
-      <div className="grid-container padding-x-0" role="list">
+      </h3>
+      <div className="grid-container padding-x-0 margin-bottom-5" role="list">
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-6">
             <div className="caseItem" role="listitem">
               <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon="user-check" />
               </div>
-              <h2 className="caseItem__heading">
+              <h3 className="caseItem__heading">
                 1. Are you authorized to file on behalf of this taxpayer?
-              </h2>
+              </h3>
               <div className="caseItem__content">
                 <p>
                   To file a case on behalf of another taxpayer, you must be
@@ -48,9 +49,9 @@ export const BeforeStartingCase = () => (
               <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'copy']} />
               </div>
-              <h2 className="caseItem__heading">
+              <h3 className="caseItem__heading">
                 2. Have the IRS Notice(s) Youʼve Received Available to Submit
-              </h2>
+              </h3>
               <div className="caseItem__content">
                 <p>
                   If you’ve received an IRS notice, such as a Notice of
@@ -70,9 +71,9 @@ export const BeforeStartingCase = () => (
               <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'edit']} />
               </div>
-              <h2 className="caseItem__heading">
+              <h3 className="caseItem__heading">
                 3. Fill Out The Required Forms
-              </h2>
+              </h3>
               <div className="caseItem__content">
                 <p className="label">Petition Form</p>
                 <p>
@@ -135,10 +136,10 @@ export const BeforeStartingCase = () => (
               <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['fa', 'shield-alt']} />
               </div>
-              <h2 className="caseItem__heading">
+              <h3 className="caseItem__heading">
                 4. Remove Personal Information From Your Petition and IRS
                 Notice(s)
-              </h2>
+              </h3>
               <div className="caseItem__content">
                 <p>
                   If the IRS notice includes personal information (such as
@@ -156,9 +157,9 @@ export const BeforeStartingCase = () => (
               <div className="caseItem__icon" role="display">
                 <FontAwesomeIcon icon={['far', 'file-pdf']} />
               </div>
-              <h2 className="caseItem__heading">
+              <h3 className="caseItem__heading">
                 5. Combine Your Petition and IRS Notice(s) Into a Single PDF
-              </h2>
+              </h3>
               <div className="caseItem__content">
                 <p>
                   Scan your Petition and IRS notice into one Petition PDF or
@@ -185,9 +186,9 @@ export const BeforeStartingCase = () => (
                   />
                 </div>
               </div>
-              <h2 className="caseItem__heading">
+              <h3 className="caseItem__heading">
                 6. Donʼt Submit Extra Documents With Your Petition
-              </h2>
+              </h3>
               <div className="caseItem__content">
                 <p>
                   <strong>Do not</strong> include any additional documents with
@@ -199,17 +200,12 @@ export const BeforeStartingCase = () => (
           </div>
         </div>
       </div>
-      <div className="button-box-container">
-        <a
-          className="usa-button margin-right-205 margin-bottom-4"
-          href="/file-a-petition/step-1"
-        >
-          Got It, Letʼs File My Petition
-        </a>
-        <a className="usa-button usa-button--unstyled" href="/">
-          Cancel
-        </a>
-      </div>
+      <Button href="/file-a-petition/step-1">
+        Got It, Letʼs File My Petition
+      </Button>
+      <Button link href="/">
+        Cancel
+      </Button>
     </section>
   </>
 );

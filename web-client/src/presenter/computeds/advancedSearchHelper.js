@@ -1,11 +1,10 @@
-import { compareCasesByDocketNumber } from './formattedTrialSessionDetails';
 import { state } from 'cerebral';
 
 export const advancedSearchHelper = (get, applicationContext) => {
-  const countryType = get(state.form.countryType);
+  const countryType = get(state.advancedSearchForm.countryType);
   const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES } = get(state.constants);
   const searchResults = get(state.searchResults);
-  const currentPage = get(state.form.currentPage);
+  const currentPage = get(state.advancedSearchForm.currentPage);
 
   let result = { showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC };
 
@@ -13,7 +12,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
     const US_STATES = get(state.constants.US_STATES);
 
     const formattedSearchResults = searchResults
-      .sort(compareCasesByDocketNumber)
+      .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
       .map(result => {
         result.contactPrimaryName =
           result.contactPrimary && result.contactPrimary.name;
@@ -22,7 +21,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
 
         result.formattedFiledDate = applicationContext
           .getUtilities()
-          .formatDateString(result.filedDate, 'MMDDYY');
+          .formatDateString(result.receivedAt || result.createdAt, 'MMDDYY');
 
         result.docketNumberWithSuffix = `${result.docketNumber}${
           result.docketNumberSuffix ? result.docketNumberSuffix : ''

@@ -1,11 +1,13 @@
 import { AddPractitionerModal } from './AddPractitionerModal';
 import { AddRespondentModal } from './AddRespondentModal';
+import { Button } from '../../ustc-ui/Button/Button';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
   return (
@@ -90,13 +92,13 @@ const PartyInformation = connect(
 
                 {caseDetailHelper.showEditPrimaryContactButton && (
                   <p>
-                    <a
-                      className="usa-button usa-button--unstyled"
+                    <Button
+                      link
                       href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
                     >
                       <FontAwesomeIcon icon="edit" size="sm" />
                       Edit
-                    </a>
+                    </Button>
                   </p>
                 )}
                 {formattedCaseDetail.contactPrimary.serviceIndicator && (
@@ -121,13 +123,13 @@ const PartyInformation = connect(
                       )}
                   </address>
                   {caseDetailHelper.showEditContactButton && (
-                    <button
-                      className="usa-button usa-button--unstyled"
+                    <Button
+                      link
                       onClick={() => openEditSecondaryContactModalSequence()}
                     >
                       <FontAwesomeIcon icon="question-circle" size="sm" />
                       Why can’t I edit this?
-                    </button>
+                    </Button>
                   )}
                   {formattedCaseDetail.contactSecondary.serviceIndicator && (
                     <div className="margin-top-4">
@@ -148,9 +150,10 @@ const PartyInformation = connect(
           {formattedCaseDetail.practitioners &&
             formattedCaseDetail.practitioners.map((practitioner, index) => (
               <div
-                className={`tablet:grid-col-3 ${
-                  index > 3 ? 'margin-top-3' : ''
-                }`}
+                className={classNames(
+                  'tablet:grid-col-3',
+                  index > 3 && 'margin-top-3',
+                )}
                 key={index}
               >
                 <address aria-labelledby="practitioner-label">
@@ -194,9 +197,10 @@ const PartyInformation = connect(
           {formattedCaseDetail.respondents &&
             formattedCaseDetail.respondents.map((respondent, index) => (
               <div
-                className={`tablet:grid-col-3 ${
-                  index > 3 ? 'margin-top-3' : ''
-                }`}
+                className={classNames(
+                  'tablet:grid-col-3',
+                  index > 3 && 'margin-top-3',
+                )}
                 key={index}
               >
                 <address aria-labelledby="respondent-label">
@@ -236,11 +240,12 @@ const PartyInformation = connect(
         </div>
         <div className="grid-col-3 margin-top-neg-05">
           <div
-            className={`usa-form-group ${
+            className={classNames(
+              'usa-form-group',
               validationErrors.practitionerSearchError
                 ? 'usa-form-group--error margin-bottom-2'
-                : 'margin-bottom-0'
-            }`}
+                : 'margin-bottom-0',
+            )}
           >
             <form
               className="usa-search"
@@ -258,12 +263,11 @@ const PartyInformation = connect(
                 </label>
                 <input
                   aria-describedby="practitioner-counsel-search-description"
-                  className={`usa-input margin-bottom-0
-                    ${
-                      validationErrors.practitionerSearchError
-                        ? 'usa-input--error'
-                        : ''
-                    }`}
+                  className={classNames(
+                    'usa-input margin-bottom-0',
+                    validationErrors.practitionerSearchError &&
+                      'usa-input--error',
+                  )}
                   id="practitioner-search-field"
                   name="practitionerSearch"
                   placeholder="Enter Bar No. or Name"
@@ -302,11 +306,12 @@ const PartyInformation = connect(
         </div>
         <div className="grid-col-3 margin-top-neg-05">
           <div
-            className={`usa-form-group ${
+            className={classNames(
+              'usa-form-group',
               validationErrors.respondentSearchError
                 ? 'usa-form-group--error margin-bottom-2'
-                : 'margin-bottom-0'
-            }`}
+                : 'margin-bottom-0',
+            )}
           >
             <form
               className="usa-search"
@@ -324,12 +329,11 @@ const PartyInformation = connect(
                 </label>
                 <input
                   aria-describedby="respondent-counsel-search-description"
-                  className={`usa-input margin-bottom-0
-                  ${
-                    validationErrors.respondentSearchError
-                      ? 'usa-input--error'
-                      : ''
-                  }`}
+                  className={classNames(
+                    'usa-input margin-bottom-0',
+                    validationErrors.respondentSearchError &&
+                      'usa-input--error',
+                  )}
                   id="respondent-search-field"
                   name="respondentSearch"
                   placeholder="Enter Bar No. or Name"

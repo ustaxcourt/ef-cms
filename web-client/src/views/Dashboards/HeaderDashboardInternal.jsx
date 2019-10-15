@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -20,12 +21,13 @@ export const HeaderDashboardInternal = connect(
             {workQueueHelper.inboxCount}
           </span>
           {workQueueHelper.showIndividualWorkQueue && (
-            <button
-              className="button-switch-box usa-button usa-button--unstyled"
+            <Button
+              link
+              className="button-switch-box"
               onClick={() => {
                 navigateToPathSequence({
                   path: workQueueHelper.getQueuePath({
-                    box: workQueueHelper.currentBoxView,
+                    box: 'inbox',
                     queue: 'section',
                   }),
                 });
@@ -33,16 +35,17 @@ export const HeaderDashboardInternal = connect(
             >
               <FontAwesomeIcon icon={['far', 'clone']} />
               Switch to Section {workQueueHelper.workQueueType}
-            </button>
+            </Button>
           )}
           {workQueueHelper.showSectionWorkQueue &&
             workQueueHelper.showMyQueueToggle && (
-              <button
-                className="button-switch-box usa-button usa-button--unstyled"
+              <Button
+                link
+                className="button-switch-box"
                 onClick={() => {
                   navigateToPathSequence({
                     path: workQueueHelper.getQueuePath({
-                      box: workQueueHelper.currentBoxView,
+                      box: 'inbox',
                       queue: 'my',
                     }),
                   });
@@ -50,7 +53,7 @@ export const HeaderDashboardInternal = connect(
               >
                 <FontAwesomeIcon icon={['far', 'clone']} />
                 Switch to My {workQueueHelper.workQueueType}
-              </button>
+              </Button>
             )}
         </div>
       </div>

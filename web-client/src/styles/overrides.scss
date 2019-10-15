@@ -2,10 +2,6 @@
   max-width: 1440px;
 }
 
-.margin-bottom-0 {
-  margin-bottom: 0 !important;
-}
-
 .usa-header + .usa-section,
 .usa-header + main {
   border: none;
@@ -215,8 +211,16 @@ option:first-child {
   }
 }
 
+.margin-bottom-0 {
+  margin-bottom: 0 !important;
+}
+
 .margin-bottom-2 {
   margin-bottom: 1rem !important;
+}
+
+.margin-top-2 {
+  margin-top: 1rem !important;
 }
 
 .margin-bottom-10 {
@@ -225,6 +229,7 @@ option:first-child {
 
 p {
   max-width: 700px;
+  line-height: 24px;
 
   .usa-form & {
     max-width: 700px;

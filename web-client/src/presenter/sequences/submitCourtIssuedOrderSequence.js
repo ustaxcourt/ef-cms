@@ -8,11 +8,10 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { navigateToDocumentDetailAction } from '../actions/navigateToDocumentDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { overwriteOrderFileAction } from '../actions/CourtIssuedOrder/overwriteOrderFileAction';
-import { set } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { state } from 'cerebral';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
@@ -22,7 +21,7 @@ const onFileUploadedSuccess = [
   setCaseAction,
   getFileExternalDocumentAlertSuccessAction,
   setAlertSuccessAction,
-  set(state.saveAlertsForNavigation, true),
+  setSaveAlertsForNavigationAction,
   getEditedDocumentDetailParamsAction,
   getEditDocumentEntryPointAction,
   {

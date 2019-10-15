@@ -10,7 +10,6 @@ cli_input_json=$2
 region=$3
 
 REST_API_ID=$(aws apigateway get-rest-apis --region="${region}" --query "items[?name=='${stage_name}-ef-cms'].id" --output text)
-
 ACCOUNT_ID=$(aws sts get-caller-identity --query "Account")
 ACCOUNT_ID="${ACCOUNT_ID%\"}"
 ACCOUNT_ID="${ACCOUNT_ID#\"}"

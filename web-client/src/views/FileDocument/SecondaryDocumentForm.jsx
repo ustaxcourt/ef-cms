@@ -6,6 +6,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const SecondaryDocumentForm = connect(
   {
@@ -20,24 +21,19 @@ export const SecondaryDocumentForm = connect(
         <h2 className="margin-top-4">{form.secondaryDocument.documentTitle}</h2>
         <div className="blue-container">
           <div
-            className={`usa-form-group ${
-              validationErrors.secondaryDocumentFile
-                ? 'usa-form-group--error'
-                : ''
-            } ${
+            className={classNames(
+              'usa-form-group',
+              validationErrors.secondaryDocumentFile && 'usa-form-group--error',
               !fileDocumentHelper.showSecondaryDocumentInclusionsForm &&
-              !fileDocumentHelper.secondaryDocument.showObjection
-                ? 'margin-bottom-0'
-                : ''
-            }`}
+                !fileDocumentHelper.secondaryDocument.showObjection &&
+                'margin-bottom-0',
+            )}
           >
             <label
-              className={
-                'usa-label ustc-upload with-hint ' +
-                (fileDocumentHelper.showSecondaryDocumentValid
-                  ? 'validated'
-                  : '')
-              }
+              className={classNames(
+                'usa-label ustc-upload with-hint',
+                fileDocumentHelper.showSecondaryDocumentValid && 'validated',
+              )}
               htmlFor="secondary-document"
               id="secondary-document-label"
             >

@@ -1,14 +1,16 @@
 import { BigHeader } from './BigHeader';
+import { Button } from '../ustc-ui/Button/Button';
 import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
 import { Contacts } from './StartCase/Contacts';
 import { ErrorNotification } from './ErrorNotification';
 import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
+import { Focus } from '../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { ScanBatchPreviewer } from './ScanBatchPreviewer';
-import { Text } from '../ustc-ui/Text/Text';
 import { TrialCityOptions } from './TrialCityOptions';
+import { ValidationText } from '../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { limitLength } from '../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
@@ -68,25 +70,25 @@ export const StartCaseInternal = connect(
             <ErrorNotification />
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h1 className="margin-bottom-105">Case Information</h1>
-                <p className="required-statement margin-top-0 margin-bottom-4">
+                <Focus>
+                  <h2 className="margin-bottom-105">Case Information</h2>
+                </Focus>
+                <p className="margin-bottom-4 margin-top-0 required-statement">
                   *All fields required unless otherwise noted
                 </p>
               </div>
 
               <div className="grid-col-5">
-                <div className="blue-container document-detail-one-third">
+                <div className="blue-container margin-bottom-4 document-detail-one-third">
                   <div
-                    className={`usa-form-group ${
-                      validationErrors.receivedAt ? 'usa-form-group--error' : ''
-                    }`}
+                    className={classNames(
+                      'usa-form-group',
+                      validationErrors.receivedAt && 'usa-form-group--error',
+                    )}
                   >
                     <fieldset className="usa-fieldset margin-bottom-0">
-                      <legend
-                        className="usa-legend with-hint"
-                        id="date-received-legend"
-                      >
-                        Date Received
+                      <legend className="usa-legend" id="date-received-legend">
+                        Date received
                       </legend>
                       <div className="usa-memorable-date">
                         <div className="usa-form-group usa-form-group--month margin-bottom-0">
@@ -156,23 +158,18 @@ export const StartCaseInternal = connect(
                           />
                         </div>
                       </div>
-                      <Text
-                        bind="validationErrors.receivedAt"
-                        className="usa-error-message"
-                      />
+                      <ValidationText field="receivedAt" />
                     </fieldset>
                   </div>
 
                   <div
-                    className={
-                      'usa-form-group ' +
-                      (validationErrors.caseCaption
-                        ? 'usa-form-group--error'
-                        : '')
-                    }
+                    className={classNames(
+                      'usa-form-group',
+                      validationErrors.caseCaption && 'usa-form-group--error',
+                    )}
                   >
                     <label className="usa-label" htmlFor="case-caption">
-                      Case Caption
+                      Case caption
                     </label>
                     <textarea
                       className="usa-textarea"
@@ -191,23 +188,20 @@ export const StartCaseInternal = connect(
                     <p className="margin-top-1">
                       {constants.CASE_CAPTION_POSTFIX}
                     </p>
-                    <Text
-                      bind="validationErrors.caseCaption"
-                      className="usa-error-message"
-                    />
+                    <ValidationText field="caseCaption" />
                   </div>
 
                   <CaseTypeSelect
                     allowDefaultOption={true}
                     caseTypes={caseTypes}
-                    legend="Notice/Case Type"
+                    legend="Notice/case type"
                     validation="validatePetitionFromPaperSequence"
                     value={form.caseType}
                     onChange="updateFormValueSequence"
                   />
 
                   <ProcedureType
-                    legend="Case Procedure"
+                    legend="Case procedure"
                     value={form.procedureType}
                     onChange={e => {
                       updateFormValueSequence({
@@ -226,7 +220,7 @@ export const StartCaseInternal = connect(
                     )}
                   >
                     <label className="usa-label" htmlFor="preferred-trial-city">
-                      Trial Location{' '}
+                      Trial location{' '}
                       <span className="usa-hint">(Required with RQT)</span>
                     </label>
                     <select
@@ -245,20 +239,18 @@ export const StartCaseInternal = connect(
                       <option value="">- Select -</option>
                       <TrialCityOptions />
                     </select>
-                    <Text
-                      bind="validationErrors.preferredTrialCity"
-                      className="usa-error-message"
-                    />
+                    <ValidationText field="preferredTrialCity" />
                   </div>
 
                   <div
                     className={classNames(
                       'usa-form-group',
+                      !form.partyType && 'margin-bottom-0',
                       validationErrors.partyType && 'usa-form-group--error',
                     )}
                   >
                     <label className="usa-label" htmlFor="party-type">
-                      Party Type
+                      Party type
                     </label>
                     <select
                       className="usa-select"
@@ -287,10 +279,7 @@ export const StartCaseInternal = connect(
                         ),
                       )}
                     </select>
-                    <Text
-                      bind="validationErrors.partyType"
-                      className="usa-error-message"
-                    />
+                    <ValidationText field="partyType" />
                   </div>
 
                   {(startCaseInternalHelper.showPrimaryContact ||
@@ -313,27 +302,20 @@ export const StartCaseInternal = connect(
                     </div>
                   )}
                 </div>
-
-                <div className="margin-top-4">
-                  <button
-                    className="usa-button margin-bottom-2"
-                    id="submit-case"
-                    type="submit"
-                  >
-                    Create Case
-                  </button>
-                  <button
-                    className="usa-button usa-button--unstyled ustc-button--unstyled"
-                    type="button"
-                    onClick={() => {
-                      formCancelToggleCancelSequence();
-                      return false;
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </div>
+                <Button id="submit-case" type="submit">
+                  Create Case
+                </Button>
+                <Button
+                  link
+                  onClick={() => {
+                    formCancelToggleCancelSequence();
+                    return false;
+                  }}
+                >
+                  Cancel
+                </Button>
               </div>
+
               <div className="grid-col-7">
                 <ScanBatchPreviewer
                   documentTabs={[
@@ -352,6 +334,10 @@ export const StartCaseInternal = connect(
                     {
                       documentType: 'ownershipDisclosureFile',
                       title: 'ODS',
+                    },
+                    {
+                      documentType: 'applicationForWaiverOfFilingFeeFile',
+                      title: 'Filing Fee Waiver',
                     },
                   ]}
                   documentType={documentSelectedForScan}
