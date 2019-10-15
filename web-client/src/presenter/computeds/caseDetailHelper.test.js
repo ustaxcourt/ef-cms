@@ -559,16 +559,17 @@ describe('case detail computed', () => {
     expect(result.showRespondentSection).toEqual(false);
   });
 
-  it('should format practitioner matches with cityStateZip line', () => {
+  it('should format practitioner matches with cityStateZip string and isAlreadyInCase boolean', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { practitioners: [{ userId: '2' }] },
         form: {},
         modal: {
           practitionerMatches: [
             {
               contact: { city: 'Somewhere', postalCode: '12345', state: 'AL' },
               name: '1',
+              userId: '1',
             },
             {
               contact: {
@@ -577,6 +578,7 @@ describe('case detail computed', () => {
                 state: 'TX',
               },
               name: '2',
+              userId: '2',
             },
           ],
         },
@@ -585,10 +587,12 @@ describe('case detail computed', () => {
     expect(result.practitionerMatchesFormatted).toMatchObject([
       {
         cityStateZip: 'Somewhere, AL 12345',
+        isAlreadyInCase: false,
         name: '1',
       },
       {
         cityStateZip: 'Somewhere Else, TX 54321',
+        isAlreadyInCase: true,
         name: '2',
       },
     ]);
@@ -627,16 +631,17 @@ describe('case detail computed', () => {
     expect(result.practitionerSearchResultsCount).toBeUndefined();
   });
 
-  it('should format respondent matches with cityStateZip line', () => {
+  it('should format respondent matches with cityStateZip string and isAlreadyInCase boolean', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { respondents: [{ userId: '1' }] },
         form: {},
         modal: {
           respondentMatches: [
             {
               contact: { city: 'Somewhere', postalCode: '12345', state: 'AL' },
               name: '1',
+              userId: '1',
             },
             {
               contact: {
@@ -645,6 +650,7 @@ describe('case detail computed', () => {
                 state: 'TX',
               },
               name: '2',
+              userId: '2',
             },
           ],
         },
@@ -653,10 +659,12 @@ describe('case detail computed', () => {
     expect(result.respondentMatchesFormatted).toMatchObject([
       {
         cityStateZip: 'Somewhere, AL 12345',
+        isAlreadyInCase: true,
         name: '1',
       },
       {
         cityStateZip: 'Somewhere Else, TX 54321',
+        isAlreadyInCase: false,
         name: '2',
       },
     ]);
