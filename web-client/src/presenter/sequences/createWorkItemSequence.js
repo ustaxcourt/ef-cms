@@ -7,19 +7,21 @@ import { clearUsersAction } from '../actions/clearUsersAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { updateWorkItemFromPropsOrModalOrFormAction } from '../actions/WorkItem/updateWorkItemFromPropsOrModalOrFormAction';
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
 export const createWorkItemSequence = [
   clearAlertsAction,
   startShowValidationAction,
+  updateWorkItemFromPropsOrModalOrFormAction,
   validateInitialWorkItemMessageAction,
   {
-    error: [setValidationErrorsAction],
+    error: [setValidationErrorsByFlagAction],
     success: [
       setWaitingForResponseAction,
       createWorkItemAction,

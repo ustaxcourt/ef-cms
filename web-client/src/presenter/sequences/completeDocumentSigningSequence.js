@@ -8,26 +8,30 @@ import { parallel } from 'cerebral';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
-import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { updateWorkItemFromPropsOrModalOrFormAction } from '../actions/WorkItem/updateWorkItemFromPropsOrModalOrFormAction';
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
 export const completeDocumentSigningSequence = [
   clearAlertsAction,
   startShowValidationAction,
+  updateWorkItemFromPropsOrModalOrFormAction,
   validateInitialWorkItemMessageAction,
   {
-    error: [setValidationErrorsAction],
+    error: [setValidationErrorsByFlagAction],
     success: [
+      () => ({ message: '' }),
       setWaitingForResponseAction,
       completeDocumentSigningAction,
       parallel([setDocumentIdAction, setDocumentDetailTabAction]),
+      updateWorkItemFromPropsOrModalOrFormAction,
       validateInitialWorkItemMessageAction,
       {
-        error: [setValidationErrorsAction],
+        error: [setValidationErrorsByFlagAction],
         success: [
           createWorkItemAction,
           {
