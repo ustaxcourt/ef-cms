@@ -41,7 +41,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
                 section: e.target.value,
                 value: e.target.value,
               });
-              this.props.validateInitialWorkItemMessageSequence();
+              this.props.validateInitialWorkItemMessageInModalSequence();
             }}
           >
             <option value="">- Select -</option>
@@ -79,7 +79,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
                   section: e.target.value,
                   value: e.target.value,
                 });
-                this.props.validateInitialWorkItemMessageSequence();
+                this.props.validateInitialWorkItemMessageInModalSequence();
               }}
             >
               <option value="">- Select -</option>
@@ -116,7 +116,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
                 key: e.target.name,
                 value: e.target.value,
               });
-              this.props.validateInitialWorkItemMessageSequence();
+              this.props.validateInitialWorkItemMessageInModalSequence();
             }}
           >
             <option value="">- Select -</option>
@@ -151,7 +151,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
                 key: e.target.name,
                 value: e.target.value,
               });
-              this.props.validateInitialWorkItemMessageSequence();
+              this.props.validateInitialWorkItemMessageInModalSequence();
             }}
           />
           {this.props.validationErrors.message && (
@@ -174,8 +174,8 @@ export const CreateMessageModalDialog = connect(
     modal: state.modal,
     updateMessageValueSequence: sequences.updateMessageValueSequence,
     users: state.users,
-    validateInitialWorkItemMessageSequence:
-      sequences.validateInitialWorkItemMessageSequence,
+    validateInitialWorkItemMessageInModalSequence:
+      sequences.validateInitialWorkItemMessageInModalSequence,
     validationErrors: state.validationErrors,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
