@@ -32,7 +32,7 @@ describe('validateEditPractitionersAction', () => {
         presenter,
       },
       state: {
-        form: {
+        modal: {
           practitioners: [
             { representingPrimary: true, userId: '1' },
             { representingPrimary: true, userId: '2' },
@@ -51,7 +51,7 @@ describe('validateEditPractitionersAction', () => {
         presenter,
       },
       state: {
-        form: {
+        modal: {
           practitioners: [
             { userId: '1' },
             { representingPrimary: true, userId: '2' },

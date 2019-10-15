@@ -587,15 +587,15 @@ describe('case detail computed', () => {
     expect(result.practitionerMatchesFormatted).toMatchObject([
       {
         cityStateZip: 'Somewhere, AL 12345',
-        isAlreadyInCase: false,
         name: '1',
       },
       {
         cityStateZip: 'Somewhere Else, TX 54321',
-        isAlreadyInCase: true,
         name: '2',
       },
     ]);
+    expect(result.practitionerMatchesFormatted[0].isAlreadyInCase).toBeFalsy();
+    expect(result.practitionerMatchesFormatted[1].isAlreadyInCase).toBeTruthy();
   });
 
   it('should set practitionerSearchResultsCount to the length of the state.modal.practitionerMatches', () => {
@@ -659,15 +659,15 @@ describe('case detail computed', () => {
     expect(result.respondentMatchesFormatted).toMatchObject([
       {
         cityStateZip: 'Somewhere, AL 12345',
-        isAlreadyInCase: true,
         name: '1',
       },
       {
         cityStateZip: 'Somewhere Else, TX 54321',
-        isAlreadyInCase: false,
         name: '2',
       },
     ]);
+    expect(result.respondentMatchesFormatted[0].isAlreadyInCase).toBeTruthy();
+    expect(result.respondentMatchesFormatted[1].isAlreadyInCase).toBeFalsy();
   });
 
   it('should set respondentSearchResultsCount to the length of the state.modal.respondentMatches', () => {

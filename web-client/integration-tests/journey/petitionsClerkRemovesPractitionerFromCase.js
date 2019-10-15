@@ -4,7 +4,7 @@ export default test => {
 
     await test.runSequence('openEditPractitionersModalSequence');
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateModalValueSequence', {
       key: 'practitioners.0.removeFromCase',
       value: true,
     });
