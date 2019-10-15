@@ -14,6 +14,12 @@ const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases
 const util = require('util');
 const uuidv4 = require('uuid/v4');
 const {
+  unblockCaseInteractor,
+} = require('../../shared/src/business/useCases/unblockCaseInteractor');
+const {
+  blockCaseInteractor,
+} = require('../../shared/src/business/useCases/blockCaseInteractor');
+const {
   addCoversheetInteractor,
 } = require('../../shared/src/business/useCases/addCoversheetInteractor');
 const {
@@ -817,6 +823,7 @@ module.exports = (appContextUser = {}) => {
         associatePractitionerWithCaseInteractor,
         associateRespondentWithCaseInteractor,
         batchDownloadTrialSessionInteractor,
+        blockCaseInteractor,
         caseSearchInteractor,
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
@@ -887,6 +894,7 @@ module.exports = (appContextUser = {}) => {
         setWorkItemAsReadInteractor,
         submitCaseAssociationRequestInteractor,
         submitPendingCaseAssociationRequestInteractor,
+        unblockCaseInteractor,
         updateCaseDeadlineInteractor,
         updateCaseInteractor,
         updateCaseNoteInteractor,

@@ -464,3 +464,27 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  blockCase:
+    handler: web-api/src/casesHandlers.blockCaseLambda
+    events:
+      - http:
+          path: /{caseId}/block
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  unblockCase:
+    handler: web-api/src/casesHandlers.unblockCaseLambda
+    events:
+      - http:
+          path: /{caseId}/block
+          method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
