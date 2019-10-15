@@ -95,6 +95,15 @@ const formatDocketRecordWithDocument = (
       if (document.additionalInfo) {
         record.description += ` ${document.additionalInfo}`;
       }
+
+      document.qcWorkItemsCompleted = (document.workItems || [])
+        .filter(wi => !wi.isInternal)
+        .reduce((acc, wi) => {
+          return acc && !!wi.completedAt;
+        }, true);
+
+      document.isPetition = document.eventCode === 'P';
+      document.canEdit = !document.isPetition && !document.qcWorkItemsCompleted;
     }
 
     return { document, index, record };
