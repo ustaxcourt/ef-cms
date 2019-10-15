@@ -11,7 +11,7 @@ describe('blockedCasesReportHelper', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {},
     });
-    expect(result).toEqual({ blockedCasesCount: undefined });
+    expect(result).toMatchObject({ blockedCasesCount: undefined });
   });
 
   it('returns blockedCasesCount as 0 if the blockedCases array is empty', () => {
@@ -20,7 +20,7 @@ describe('blockedCasesReportHelper', () => {
         blockedCases: [],
       },
     });
-    expect(result).toEqual({ blockedCasesCount: 0 });
+    expect(result).toMatchObject({ blockedCasesCount: 0 });
   });
 
   it('returns blockedCasesCount as the length of the blockedCases array', () => {
@@ -29,6 +29,60 @@ describe('blockedCasesReportHelper', () => {
         blockedCases: [{ caseId: '1' }, { caseId: '2' }, { caseId: '3' }],
       },
     });
-    expect(result).toEqual({ blockedCasesCount: 3 });
+    expect(result).toMatchObject({ blockedCasesCount: 3 });
+  });
+
+  it('formats blocked cases with caseName and docketNumberWithSuffix', () => {
+    const result = runCompute(blockedCasesReportHelper, {
+      state: {
+        blockedCases: [
+          {
+            caseCaption: 'Brett Osborne, Petitioner',
+            caseId: '1',
+            docketNumber: '101-19',
+          },
+          {
+            caseCaption: 'Selma Horn & Cairo Harris, Petitioners',
+            caseId: '2',
+            docketNumber: '102-19',
+          },
+          {
+            caseCaption:
+              'Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)',
+            caseId: '3',
+            docketNumber: '103-19',
+            docketNumberSuffix: 'S',
+          },
+        ],
+      },
+    });
+    expect(result).toEqual({
+      blockedCasesCount: 3,
+      blockedCasesFormatted: [
+        {
+          caseCaption: 'Brett Osborne, Petitioner',
+          caseId: '1',
+          caseName: 'Brett Osborne',
+          docketNumber: '101-19',
+          docketNumberWithSuffix: '101-19',
+        },
+        {
+          caseCaption: 'Selma Horn & Cairo Harris, Petitioners',
+          caseId: '2',
+          caseName: 'Selma Horn & Cairo Harris',
+          docketNumber: '102-19',
+          docketNumberWithSuffix: '102-19',
+        },
+        {
+          caseCaption:
+            'Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)',
+          caseId: '3',
+          caseName: 'Tatum Craig, Wayne Obrien, Partnership Representative',
+          docketNumber: '103-19',
+          docketNumberSuffix: 'S',
+          docketNumberWithSuffix: '103-19S',
+        },
+      ],
+    });
   });
 });
