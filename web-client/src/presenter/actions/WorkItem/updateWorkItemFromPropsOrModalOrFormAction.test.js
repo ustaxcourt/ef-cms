@@ -1,64 +1,49 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { updateDeleteCaseNotePropsFromModalStateAction } from './updateDeleteCaseNotePropsFromModalStateAction';
+import { updateWorkItemFromPropsOrModalOrFormAction } from './updateWorkItemFromPropsOrModalOrFormAction';
 
-describe('updateDeleteCaseNotePropsFromModalStateAction', () => {
+describe('updateWorkItemFromPropsOrModalOrFormAction', () => {
   it('should retain the message prop', async () => {
-    const result = await runAction(
-      updateDeleteCaseNotePropsFromModalStateAction,
-      {
-        modules: {
-          presenter,
-        },
-        props: {
-          message: 'hello',
-        },
-        state: {
-          form: "I'm a form",
-          modal: { form: '123' },
-        },
+    const result = await runAction(updateWorkItemFromPropsOrModalOrFormAction, {
+      modules: {
+        presenter,
       },
-    );
-
-    expect(result.output).toEqual({
-      message: 'hello',
+      props: {
+        message: 'hello',
+      },
+      state: {
+        form: "I'm a form",
+        modal: { form: '123' },
+      },
     });
+
+    expect(result.output.message).toEqual('hello');
   });
 
   it('should fallback to the modal state', async () => {
-    const result = await runAction(
-      updateDeleteCaseNotePropsFromModalStateAction,
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          form: "I'm a form",
-          modal: { form: '123' },
-        },
+    const result = await runAction(updateWorkItemFromPropsOrModalOrFormAction, {
+      modules: {
+        presenter,
       },
-    );
-
-    expect(result.output).toEqual({
-      message: '123',
+      state: {
+        form: "I'm a form",
+        modal: { form: '123' },
+      },
     });
+
+    expect(result.output.message).toEqual('123');
   });
 
   it('should fallback to the form state', async () => {
-    const result = await runAction(
-      updateDeleteCaseNotePropsFromModalStateAction,
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          form: "I'm a form",
-        },
+    const result = await runAction(updateWorkItemFromPropsOrModalOrFormAction, {
+      modules: {
+        presenter,
       },
-    );
-
-    expect(result.output).toEqual({
-      message: "I'm a form",
+      state: {
+        form: "I'm a form",
+      },
     });
+
+    expect(result.output.message).toEqual("I'm a form");
   });
 });
