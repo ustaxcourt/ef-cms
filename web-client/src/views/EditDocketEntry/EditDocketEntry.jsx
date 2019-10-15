@@ -126,7 +126,9 @@ export const EditDocketEntry = connect(
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (
-          <FileUploadErrorModal confirmSequence={submitDocketEntrySequence} />
+          <FileUploadErrorModal
+            confirmSequence={completeDocketEntryQCSequence}
+          />
         )}
       </>
     );
