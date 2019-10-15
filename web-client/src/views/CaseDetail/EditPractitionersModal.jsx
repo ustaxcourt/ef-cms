@@ -148,9 +148,7 @@ export const EditPractitionersModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     caseDetail: state.caseDetail,
     confirmSequence: sequences.submitEditPractitionersModalSequence,
-    constants: state.constants,
     form: state.form,
-    modal: state.modal,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateEditPractitionersSequence:
       sequences.validateEditPractitionersSequence,
