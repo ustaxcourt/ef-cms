@@ -8,22 +8,13 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object containing the props.practitioners
  * @param {object} providers.store the cerebral store used for setting the state.modal.practitionerMatches
  */
-export const setPractitionersAction = ({ get, props, store }) => {
+export const setPractitionersAction = ({ props, store }) => {
   const practitionerMatches = props.practitioners;
-  const caseDetail = get(state.caseDetail);
 
-  const practitionerMatchesWithExistsFlag = practitionerMatches.map(
-    practitionerMatch => ({
-      ...practitionerMatch,
-      isAlreadyInCase: caseDetail.practitioners.find(
-        practitioner => practitioner.userId === practitionerMatch.userId,
-      ),
-    }),
-  );
-  store.set(state.modal.practitionerMatches, practitionerMatchesWithExistsFlag);
+  store.set(state.modal.practitionerMatches, practitionerMatches);
 
-  if (practitionerMatchesWithExistsFlag.length === 1) {
+  if (practitionerMatches.length === 1) {
     //if there is only one result, default select that option on the form
-    store.set(state.modal.user, practitionerMatchesWithExistsFlag[0]);
+    store.set(state.modal.user, practitionerMatches[0]);
   }
 };
