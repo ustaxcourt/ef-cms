@@ -47,7 +47,7 @@ describe('submitEditRespondentsModalAction', () => {
         caseDetail: {
           caseId: '123',
         },
-        form,
+        modal: form,
       },
     });
 

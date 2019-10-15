@@ -18,15 +18,15 @@ class EditPractitionersModalComponent extends ModalDialog {
   renderBody() {
     const {
       caseDetail,
-      form,
-      updateFormValueSequence,
+      modal,
+      updateModalValueSequence,
       validateEditPractitionersSequence,
       validationErrors,
     } = this.props;
 
     return (
       <div>
-        {form.practitioners.map((practitioner, idx) => (
+        {modal.practitioners.map((practitioner, idx) => (
           <div
             className="border border-base-light padding-2 margin-bottom-2 grid-row"
             key={idx}
@@ -65,7 +65,7 @@ class EditPractitionersModalComponent extends ModalDialog {
                       name={`practitioners.${idx}.representingPrimary`}
                       type="checkbox"
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateModalValueSequence({
                           key: e.target.name,
                           value: e.target.checked,
                         });
@@ -91,7 +91,7 @@ class EditPractitionersModalComponent extends ModalDialog {
                           name={`practitioners.${idx}.representingSecondary`}
                           type="checkbox"
                           onChange={e => {
-                            updateFormValueSequence({
+                            updateModalValueSequence({
                               key: e.target.name,
                               value: e.target.checked,
                             });
@@ -122,7 +122,7 @@ class EditPractitionersModalComponent extends ModalDialog {
                   name={`practitioners.${idx}.removeFromCase`}
                   type="checkbox"
                   onChange={e => {
-                    updateFormValueSequence({
+                    updateModalValueSequence({
                       key: e.target.name,
                       value: e.target.checked,
                     });
@@ -148,8 +148,8 @@ export const EditPractitionersModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     caseDetail: state.caseDetail,
     confirmSequence: sequences.submitEditPractitionersModalSequence,
-    form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    modal: state.modal,
+    updateModalValueSequence: sequences.updateModalValueSequence,
     validateEditPractitionersSequence:
       sequences.validateEditPractitionersSequence,
     validationErrors: state.validationErrors,

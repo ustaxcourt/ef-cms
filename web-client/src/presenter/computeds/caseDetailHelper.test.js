@@ -559,16 +559,17 @@ describe('case detail computed', () => {
     expect(result.showRespondentSection).toEqual(false);
   });
 
-  it('should format practitioner matches with cityStateZip line', () => {
+  it('should format practitioner matches with cityStateZip string and isAlreadyInCase boolean', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { practitioners: [{ userId: '2' }] },
         form: {},
         modal: {
           practitionerMatches: [
             {
               contact: { city: 'Somewhere', postalCode: '12345', state: 'AL' },
               name: '1',
+              userId: '1',
             },
             {
               contact: {
@@ -577,6 +578,7 @@ describe('case detail computed', () => {
                 state: 'TX',
               },
               name: '2',
+              userId: '2',
             },
           ],
         },
@@ -592,6 +594,8 @@ describe('case detail computed', () => {
         name: '2',
       },
     ]);
+    expect(result.practitionerMatchesFormatted[0].isAlreadyInCase).toBeFalsy();
+    expect(result.practitionerMatchesFormatted[1].isAlreadyInCase).toBeTruthy();
   });
 
   it('should set practitionerSearchResultsCount to the length of the state.modal.practitionerMatches', () => {
@@ -627,16 +631,17 @@ describe('case detail computed', () => {
     expect(result.practitionerSearchResultsCount).toBeUndefined();
   });
 
-  it('should format respondent matches with cityStateZip line', () => {
+  it('should format respondent matches with cityStateZip string and isAlreadyInCase boolean', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: { respondents: [{ userId: '1' }] },
         form: {},
         modal: {
           respondentMatches: [
             {
               contact: { city: 'Somewhere', postalCode: '12345', state: 'AL' },
               name: '1',
+              userId: '1',
             },
             {
               contact: {
@@ -645,6 +650,7 @@ describe('case detail computed', () => {
                 state: 'TX',
               },
               name: '2',
+              userId: '2',
             },
           ],
         },
@@ -660,6 +666,8 @@ describe('case detail computed', () => {
         name: '2',
       },
     ]);
+    expect(result.respondentMatchesFormatted[0].isAlreadyInCase).toBeTruthy();
+    expect(result.respondentMatchesFormatted[1].isAlreadyInCase).toBeFalsy();
   });
 
   it('should set respondentSearchResultsCount to the length of the state.modal.respondentMatches', () => {

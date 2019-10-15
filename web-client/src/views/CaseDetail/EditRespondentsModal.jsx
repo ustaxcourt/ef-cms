@@ -14,11 +14,11 @@ class EditRespondentsModalComponent extends ModalDialog {
     };
   }
   renderBody() {
-    const { form, updateFormValueSequence } = this.props;
+    const { modal, updateModalValueSequence } = this.props;
 
     return (
       <div>
-        {form.respondents.map((respondent, idx) => (
+        {modal.respondents.map((respondent, idx) => (
           <div
             className="border border-base-light padding-2 margin-bottom-2 grid-row"
             key={idx}
@@ -40,7 +40,7 @@ class EditRespondentsModalComponent extends ModalDialog {
                   name={`respondents.${idx}.removeFromCase`}
                   type="checkbox"
                   onChange={e => {
-                    updateFormValueSequence({
+                    updateModalValueSequence({
                       key: e.target.name,
                       value: e.target.checked,
                     });
@@ -66,9 +66,8 @@ export const EditRespondentsModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.submitEditRespondentsModalSequence,
     constants: state.constants,
-    form: state.form,
     modal: state.modal,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateModalValueSequence: sequences.updateModalValueSequence,
   },
   EditRespondentsModalComponent,
 );

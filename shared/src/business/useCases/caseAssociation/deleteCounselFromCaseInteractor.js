@@ -12,7 +12,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case the user is attached to
  * @param {string} providers.userIdToDelete the id of the user to be removed from the case
- * @returns {Promise} the promise of the delete call
+ * @returns {Promise} the promise of the update case call
  */
 exports.deleteCounselFromCaseInteractor = async ({
   applicationContext,
@@ -47,14 +47,14 @@ exports.deleteCounselFromCaseInteractor = async ({
     caseEntity.removeRespondent(userToDelete);
   }
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
-
-  return await applicationContext.getPersistenceGateway().deleteUserFromCase({
+  await applicationContext.getPersistenceGateway().deleteUserFromCase({
     applicationContext,
     caseId,
     userId: userIdToDelete,
+  });
+
+  return await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
   });
 };
