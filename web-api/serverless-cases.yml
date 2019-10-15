@@ -488,3 +488,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getBlockedCases:
+    handler: web-api/src/casesHandlers.getBlockedCasesLambda
+    events:
+      - http:
+          path: /{trialLocation}/blocked
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

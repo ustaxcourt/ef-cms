@@ -195,6 +195,9 @@ const {
   getAllCatalogCases,
 } = require('../../shared/src/persistence/dynamo/cases/getAllCatalogCases');
 const {
+  getBlockedCasesInteractor,
+} = require('../../shared/src/business/useCases/getBlockedCasesInteractor');
+const {
   getCalendaredCasesForTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession');
 const {
@@ -849,6 +852,7 @@ module.exports = (appContextUser = {}) => {
         generatePrintableFilingReceiptInteractor,
         generateTrialCalendarPdfInteractor,
         getAllCaseDeadlinesInteractor,
+        getBlockedCasesInteractor,
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseInteractor,
