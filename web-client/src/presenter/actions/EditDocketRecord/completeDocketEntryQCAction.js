@@ -40,7 +40,15 @@ export const completeDocketEntryQCAction = async ({
       entryMetadata,
     });
 
+  const updatedDocument = (caseDetail.documents || []).filter(
+    doc => doc.documentId === documentId,
+  )[0];
+
   return {
+    alertSuccess: {
+      message: `${updatedDocument.documentTitle} has been completed.`,
+      title: 'QC Completed',
+    },
     caseDetail,
     caseId: docketNumber,
   };
