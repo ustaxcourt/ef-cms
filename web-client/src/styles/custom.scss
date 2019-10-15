@@ -453,6 +453,29 @@ select[disabled] {
   }
 }
 
+.alert-error {
+  span {
+    max-width: 700px;
+  }
+  display: inline-block;
+  padding: 16px;
+  border-left: 5px solid color($theme-color-error);
+  background: $color-error;
+  color: color($theme-color-base-dark);
+
+  .usa-hint {
+    margin: 0;
+  }
+
+  svg {
+    margin-right: 5px;
+  }
+
+  &.add-bottom-margin {
+    margin-bottom: 20px;
+  }
+}
+
 .alert-gold.full-width {
   span {
     max-width: none;
@@ -1385,4 +1408,9 @@ button.change-scanner-button {
   &:before {
     opacity: 0;
   }
+}
+
+.block-from-trial-btn {
+  top: -6px;
+  position: relative;
 }
