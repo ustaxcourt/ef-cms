@@ -238,6 +238,7 @@
           "postalCode": "61234",
           "state": "IL"
         },
+        "barNumber": "RT6789",
         "iat": 1551480838,
         "respondentId": "respondent",
         "email": "respondent",
@@ -459,7 +460,6 @@
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
     "isInternal": true,
-    "caseTitle": "Samson Workman",
     "createdAt": "2019-08-08T14:33:24.183Z",
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
@@ -501,7 +501,6 @@
     "createdAt": "2019-08-08T14:33:24.183Z",
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-    "caseTitle": "Samson Workman",
     "sk": "2019-08-08T14:33:24.183Z",
     "caseTitle": "Samson Workman",
     "messages": [
@@ -539,11 +538,9 @@
     "sentBySection": "petitions",
     "isInternal": true,
     "createdAt": "2019-08-08T14:33:24.183Z",
-    "caseTitle": "Samson Workman",
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
-    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-08-08T14:33:24.183Z",
@@ -583,7 +580,6 @@
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "workitem-8686ddef-c74d-4d26-8748-6b22914c7687",
-    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-08-08T14:33:24.183Z",
@@ -720,7 +716,6 @@
             "caseTitle": "Samson Workman",
             "assigneeName": "Judge Armen",
             "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
-            "caseTitle": "Samson Workman",
             "messages": [
               {
                 "createdAt": "2019-08-08T14:33:24.183Z",
@@ -844,7 +839,6 @@
     "assigneeName": "Judge Armen",
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "sk": "2019-08-08T14:33:24.183Z",
-    "caseTitle": "Samson Workman",
     "messages": [
       {
         "createdAt": "2019-08-08T14:33:24.183Z",
