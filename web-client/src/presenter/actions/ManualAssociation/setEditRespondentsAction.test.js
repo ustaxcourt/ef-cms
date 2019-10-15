@@ -1,9 +1,9 @@
 import { runAction } from 'cerebral/test';
-import { setEditRespondentsFormAction } from './setEditRespondentsFormAction';
+import { setEditRespondentsAction } from './setEditRespondentsAction';
 
-describe('setEditRespondentsFormAction', () => {
-  it('should set the state.caseDetail.respondents on state.form', async () => {
-    const result = await runAction(setEditRespondentsFormAction, {
+describe('setEditRespondentsAction', () => {
+  it('should set the state.caseDetail.respondents on state.modal', async () => {
+    const result = await runAction(setEditRespondentsAction, {
       state: {
         caseDetail: {
           respondents: [
@@ -14,7 +14,7 @@ describe('setEditRespondentsFormAction', () => {
       },
     });
 
-    expect(result.state.form.respondents).toEqual([
+    expect(result.state.modal.respondents).toEqual([
       { name: 'Test Respondent1', userId: '1' },
       { name: 'Test Respondent2', userId: '2' },
     ]);

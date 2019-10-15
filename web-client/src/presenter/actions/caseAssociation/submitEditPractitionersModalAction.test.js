@@ -54,7 +54,7 @@ describe('submitEditPractitionersModalAction', () => {
         caseDetail: {
           caseId: '123',
         },
-        form,
+        modal: form,
       },
     });
 

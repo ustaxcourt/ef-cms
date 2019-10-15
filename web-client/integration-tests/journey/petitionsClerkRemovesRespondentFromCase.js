@@ -4,7 +4,7 @@ export default test => {
 
     await test.runSequence('openEditRespondentsModalSequence');
 
-    await test.runSequence('updateFormValueSequence', {
+    await test.runSequence('updateModalValueSequence', {
       key: 'respondents.1.removeFromCase',
       value: true,
     });
