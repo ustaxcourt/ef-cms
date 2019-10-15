@@ -10,11 +10,10 @@ import React from 'react';
 
 export const BlockedCasesReport = connect(
   {
-    blockedCases: state.blockedCases,
     blockedCasesReportHelper: state.blockedCasesReportHelper,
     form: state.form,
   },
-  ({ blockedCases, blockedCasesReportHelper, form }) => (
+  ({ blockedCasesReportHelper, form }) => (
     <>
       <BigHeader text="Reports" />
       <section className="usa-section grid-container">
@@ -54,23 +53,26 @@ export const BlockedCasesReport = connect(
                         </tr>
                       </thead>
                       <tbody>
-                        {blockedCasesReportHelper.blockedCasesCount > 0 &&
-                          blockedCases.map((item, idx) => (
+                        {blockedCasesReportHelper.blockedCasesFormatted.map(
+                          (item, idx) => (
                             <tr key={idx}>
                               <td>
                                 <CaseLink formattedCase={item} />
                               </td>
-                              <td>{item.caseCaption}</td>
-                              <td>{item.caseStatus}</td>
+                              <td>{item.caseName}</td>
+                              <td>{item.status}</td>
                               <td>{item.blockedReason}</td>
                             </tr>
-                          ))}
+                          ),
+                        )}
                       </tbody>
                     </table>
                   </>
                 )}
                 {!form.trialLocation && (
-                  <p>Select a trial location to view blocked cases</p>
+                  <p className="margin-0 text-semibold">
+                    Select a trial location to view blocked cases
+                  </p>
                 )}
               </div>
             </div>
