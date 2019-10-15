@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * validate the case or session note
+ * validate the block from trial reason
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case

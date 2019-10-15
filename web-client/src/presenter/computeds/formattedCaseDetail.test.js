@@ -15,8 +15,8 @@ describe('formattedCaseDetail', () => {
     });
     expect(result).toEqual({
       caseDeadlines: [],
-      docketRecordSort: undefined,
       docketRecordWithDocument: [],
+      showBlockFromTrialButton: true,
     });
   });
 
@@ -673,6 +673,28 @@ describe('formattedCaseDetail', () => {
         },
       });
       expect(result.caseDeadlines.length).toEqual(0);
+    });
+
+    it('should not set the showBlockFromTrialButton when the case is calendared', () => {
+      const caseDetail = { blocked: false, status: 'Calendared' };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+      expect(result.showBlockFromTrialButton).toBeFalsy();
+    });
+
+    it('should set the showBlockFromTrialButton to true when case status is something other than calendared', () => {
+      const caseDetail = { blocked: false, status: 'New' };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+      expect(result.showBlockFromTrialButton).toBeTruthy();
     });
   });
 });
