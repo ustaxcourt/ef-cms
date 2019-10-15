@@ -28,7 +28,11 @@ export const setDocketEntryFormForDocketEditAction = ({
     entry => entry.documentId === documentId,
   );
 
-  if (docketRecordEntry && docketRecordEntry.editState) {
+  if (
+    docketRecordEntry &&
+    docketRecordEntry.editState &&
+    docketRecordEntry.editState.documentId
+  ) {
     docketEntryFormData = JSON.parse(docketRecordEntry.editState);
   }
 
