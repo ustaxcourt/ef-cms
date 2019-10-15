@@ -4,7 +4,7 @@ const { MOCK_CASE } = require('../../test/mockCase');
 describe('unblockCaseInteractor', () => {
   let applicationContext;
 
-  it('should update the case with the blocked flag set as true and attach a reason', async () => {
+  it('should set the blocked flag to false and remove the blockedReason', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
@@ -31,7 +31,7 @@ describe('unblockCaseInteractor', () => {
     });
   });
 
-  it('should throw an unauthorized error if the user has no access to block cases', async () => {
+  it('should throw an unauthorized error if the user has no access to unblock the case', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {

@@ -10,7 +10,7 @@ const {
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the caseId to block
+ * @param {string} providers.caseId the caseId to unblock
  * @returns {object} the case data
  */
 exports.unblockCaseInteractor = async ({ applicationContext, caseId }) => {
