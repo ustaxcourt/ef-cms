@@ -33,7 +33,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
   result.showBlockFromTrialButton =
     !caseDetail.blocked && caseDetail.status !== 'Calendared';
-  result.showUnblockHint = !result.showBlockFromTrialButton;
+  result.showUnblockHint =
+    caseDetail.blocked && caseDetail.status !== 'Calendared';
+  result.showBlockedTag = caseDetail.blocked;
   result.docketRecordSort = docketRecordSort;
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
   return result;
