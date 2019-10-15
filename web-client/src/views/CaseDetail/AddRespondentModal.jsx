@@ -10,7 +10,7 @@ class AddRespondentModalComponent extends ModalDialog {
     super(props);
     this.modal = {
       cancelLabel: 'Cancel',
-      classNames: '',
+      classNames: 'counsel-modal',
       confirmLabel: 'Add to Case',
       title: 'Add Respondent Counsel',
     };
@@ -46,28 +46,46 @@ class AddRespondentModalComponent extends ModalDialog {
               {caseDetailHelper.respondentSearchResultsCount > 1 &&
                 caseDetailHelper.respondentMatchesFormatted.map(
                   (counsel, idx) => (
-                    <div className="usa-radio" key={idx}>
-                      <input
-                        aria-describedby="counsel-matches-legend"
-                        checked={
-                          (modal.user &&
-                            modal.user.userId === counsel.userId) ||
-                          false
-                        }
-                        className="usa-radio__input"
-                        id={`counsel-${idx}`}
-                        name="user"
-                        type="radio"
-                        onChange={e => {
-                          updateModalValueSequence({
-                            key: e.target.name,
-                            value: counsel,
-                          });
-                          this.props.validateSequence();
-                        }}
-                      />
+                    <div
+                      className={classNames(
+                        'usa-radio',
+                        'padding-1',
+                        counsel.isAlreadyInCase && 'bg-gold',
+                      )}
+                      key={idx}
+                    >
+                      {counsel.isAlreadyInCase && (
+                        <div className="float-right text-italic padding-right-1">
+                          Counsel is already associated with this case.
+                        </div>
+                      )}
+                      {!counsel.isAlreadyInCase && (
+                        <input
+                          aria-describedby="counsel-matches-legend"
+                          checked={
+                            (modal.user &&
+                              modal.user.userId === counsel.userId) ||
+                            false
+                          }
+                          className="usa-radio__input"
+                          id={`counsel-${idx}`}
+                          name="user"
+                          type="radio"
+                          onChange={e => {
+                            updateModalValueSequence({
+                              key: e.target.name,
+                              value: counsel,
+                            });
+                            this.props.validateSequence();
+                          }}
+                        />
+                      )}
+
                       <label
-                        className="usa-radio__label"
+                        className={classNames(
+                          counsel.isAlreadyInCase && 'hide-radio',
+                          'usa-radio__label',
+                        )}
                         htmlFor={`counsel-${idx}`}
                       >
                         {counsel.name} ({counsel.barNumber})

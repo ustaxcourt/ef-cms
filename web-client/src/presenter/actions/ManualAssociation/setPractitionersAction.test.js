@@ -10,6 +10,9 @@ describe('setPractitionersAction', () => {
     const result = await runAction(setPractitionersAction, {
       props: { practitioners: [{ name: 'Test Practitioner', userId: '123' }] },
       state: {
+        caseDetail: {
+          practitioners: [],
+        },
         modal: {},
       },
     });
@@ -31,6 +34,9 @@ describe('setPractitionersAction', () => {
         ],
       },
       state: {
+        caseDetail: {
+          practitioners: [],
+        },
         modal: {},
       },
     });

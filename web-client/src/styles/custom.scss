@@ -426,6 +426,10 @@ select[disabled] {
   }
 }
 
+.bg-gold {
+  background: color($theme-color-warning-lighter);
+}
+
 .alert-gold {
   span {
     max-width: 700px;
@@ -1372,5 +1376,13 @@ button.change-scanner-button {
 
   .advanced-search__button {
     margin-top: 39px;
+  }
+}
+
+.hide-radio {
+  cursor: default;
+  pointer-events: none;
+  &:before {
+    opacity: 0;
   }
 }
