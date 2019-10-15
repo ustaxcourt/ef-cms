@@ -280,6 +280,16 @@ Document.prototype.setSigned = function(signByUserId) {
   this.signedAt = createISODateString();
 };
 
+/**
+ * attaches a qc date to the document
+ *
+ * @param {string} qcByUserId the user id of the user who qc'ed the document
+ */
+Document.prototype.setQCed = function(qcByUserId) {
+  this.qcByUserId = qcByUserId;
+  this.qcAt = createISODateString();
+};
+
 Document.prototype.unsignDocument = function() {
   this.signedAt = null;
   this.signedByUserId = null;
