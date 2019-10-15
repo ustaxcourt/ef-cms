@@ -144,6 +144,7 @@ export const SectionWorkQueueInProgress = connect(
                         documentId: item.document.documentId,
                         messageId: item.currentMessage.messageId,
                         shouldLinkToComplete: true,
+                        shouldLinkToEdit: true,
                       })}
                       onClick={e => {
                         e.stopPropagation();
