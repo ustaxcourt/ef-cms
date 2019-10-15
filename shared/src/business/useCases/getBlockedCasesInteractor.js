@@ -29,8 +29,8 @@ exports.getBlockedCasesInteractor = async ({
       query: {
         bool: {
           must: [
-            { match: { 'blocked.B': true } },
-            { match: { 'preferredTrialLocation.S': trialLocation } },
+            { match: { 'blocked.BOOL': true } },
+            { match: { 'preferredTrialCity.S': trialLocation } },
           ],
         },
       },
