@@ -99,7 +99,7 @@ const formatDocketRecordWithDocument = (
       document.qcWorkItemsCompleted = (document.workItems || [])
         .filter(wi => !wi.isInternal)
         .reduce((acc, wi) => {
-          return acc && wi.completedAt;
+          return acc && !!wi.completedAt;
         }, true);
 
       document.isPetition = document.eventCode === 'P';

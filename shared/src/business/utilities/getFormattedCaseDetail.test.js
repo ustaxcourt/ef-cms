@@ -47,10 +47,45 @@ describe('formatCase', () => {
           createdAt: getDateISO(),
           documentId: 'd-1-2-3',
           documentType: 'Petition',
+          eventCode: 'P',
           servedAt: getDateISO(),
+          workItems: [
+            {
+              completedAt: getDateISO(),
+              isInternal: false,
+            },
+          ],
+        },
+        {
+          createdAt: getDateISO(),
+          documentId: 'd-1-4-3',
+          documentType: 'Amended Answer',
+          eventCode: 'ABC',
+          servedAt: getDateISO(),
+          workItems: [
+            {
+              completedAt: getDateISO(),
+              isInternal: true,
+            },
+          ],
+        },
+      ],
+      docketRecord: [
+        {
+          documentId: 'd-1-2-3',
+          hi: 'there',
+          index: '1',
+        },
+        {
+          documentId: 'd-1-4-3',
+          hi: 'there',
+          index: '2',
         },
       ],
     });
+    expect(result.documents[0].isPetition).toBeTruthy();
+    expect(result.documents[0].canEdit).toBeFalsy();
+    expect(result.documents[0].qcWorkItemsCompleted).toBeTruthy();
 
     expect(result.documents[0]).toHaveProperty('createdAtFormatted');
     expect(result.documents[0]).toHaveProperty('servedAtFormatted');
@@ -321,23 +356,36 @@ describe('getFormattedCaseDetail', () => {
 
 describe('sortDocketRecords', () => {
   it('should sort docket records by date by default', () => {
+    // following dates selected to ensure test coverage of 'dateStringsCompared'
     const result = sortDocketRecords([
       {
         index: '2',
         record: {
-          filingDate: getDateISO(),
+          filingDate: '2019-07-08',
         },
       },
       {
         index: '1',
         record: {
-          filingDate: getDateISO(),
+          filingDate: '2019-08-03T00:06:44.000Z',
+        },
+      },
+      {
+        index: '4',
+        record: {
+          filingDate: '2019-07-08T00:01:19.000Z',
         },
       },
       {
         index: '3',
         record: {
-          filingDate: '2017-01-01T00:01:02Z',
+          filingDate: '2017-01-01T00:01:02.025Z',
+        },
+      },
+      {
+        index: '5',
+        record: {
+          filingDate: '2017-01-01T00:01:12.025Z',
         },
       },
     ]);
