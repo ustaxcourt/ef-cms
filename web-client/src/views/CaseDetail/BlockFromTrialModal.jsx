@@ -25,48 +25,41 @@ class BlockFromTrialModalComponent extends ModalDialog {
     } = this.props;
 
     return (
-      <div>
+      <div className="margin-bottom-2">
+        <div className="margin-bottom-2">
+          This case will not be set for trial until this block is removed.{' '}
+        </div>
+
         <div
           className={classNames(
-            'usa-form-group',
-            this.props.validationErrors.user && 'usa-form-group--error',
+            'usa-form-group margin-bottom-0',
+            validationErrors.reason && 'usa-form-group--error',
           )}
         >
-          <div className="margin-bottom-2">
-            This case will not be set for trial until this block is removed.{' '}
-          </div>
-
-          <div
-            className={classNames(
-              'usa-form-group margin-bottom-0',
-              validationErrors.reason && 'usa-form-group--error',
-            )}
-          >
-            <fieldset className="usa-fieldset margin-bottom-0">
-              <legend className="display-block" id="year-filed-legend">
-                Why are you blocking this case?
-              </legend>
-              <textarea
-                className="usa-textarea"
-                id="reason"
-                maxLength="120"
-                name="reason"
-                type="text"
-                value={modal.reason}
-                onChange={e => {
-                  updateModalValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                  validateBlockFromTrialSequence();
-                }}
-              />
-              <Text
-                bind="validationErrors.reason"
-                className="usa-error-message"
-              />
-            </fieldset>
-          </div>
+          <fieldset className="usa-fieldset margin-bottom-0">
+            <legend className="display-block" id="year-filed-legend">
+              Why are you blocking this case?
+            </legend>
+            <textarea
+              className="usa-textarea"
+              id="reason"
+              maxLength="120"
+              name="reason"
+              type="text"
+              value={modal.reason}
+              onChange={e => {
+                updateModalValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+                validateBlockFromTrialSequence();
+              }}
+            />
+            <Text
+              bind="validationErrors.reason"
+              className="usa-error-message"
+            />
+          </fieldset>
         </div>
       </div>
     );

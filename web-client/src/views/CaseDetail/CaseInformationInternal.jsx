@@ -84,10 +84,10 @@ export const CaseInformationInternal = connect(
       <div
         className={classNames(
           'internal-information',
-          !formattedCaseDetail.showBlockFromTrialButton && 'less',
+          formattedCaseDetail.showUnblockHint && 'less',
         )}
       >
-        {!formattedCaseDetail.showBlockFromTrialButton && (
+        {formattedCaseDetail.showUnblockHint && (
           <span className="alert-error margin-bottom-2">
             <FontAwesomeIcon
               className="text-secondary-vivid"
