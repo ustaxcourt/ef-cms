@@ -44,10 +44,10 @@ describe('getBlockedCasesInteractor', () => {
     expect(searchSpy).toHaveBeenCalled();
     expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
       {
-        match: { 'blocked.B': true },
+        match: { 'blocked.BOOL': true },
       },
       {
-        match: { 'preferredTrialLocation.S': 'Boise, Idaho' },
+        match: { 'preferredTrialCity.S': 'Boise, Idaho' },
       },
     ]);
     expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
