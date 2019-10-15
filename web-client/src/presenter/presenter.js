@@ -14,6 +14,7 @@ import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
 import { autoSaveTrialSessionWorkingCopySequence } from './sequences/autoSaveTrialSessionWorkingCopySequence';
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
+import { blockFromTrialSequence } from './sequences/blockFromTrialSequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
@@ -106,6 +107,7 @@ import { openAddEditCaseNoteModalFromListSequence } from './sequences/openAddEdi
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddPractitionerModalSequence } from './sequences/openAddPractitionerModalSequence';
 import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
+import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
 import { openChangeScannerSourceModalSequence } from './sequences/openChangeScannerSourceModalSequence';
@@ -129,6 +131,7 @@ import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequ
 import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openServeConfirmModalDialogSequence } from './sequences/openServeConfirmModalDialogSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
+import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
 import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
 import { printFromBrowserSequence } from './sequences/printFromBrowserSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
@@ -217,6 +220,7 @@ import { toggleReportsMenuSequence } from './sequences/toggleReportsMenuSequence
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySortSequence';
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
+import { unblockFromTrialSequence } from './sequences/unblockFromTrialSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
 import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
 import { unsetFormSubmittingSequence } from './sequences/unsetFormSubmittingSequence';
@@ -254,6 +258,7 @@ import { updateUserContactValueSequence } from './sequences/updateUserContactVal
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { validateAddPractitionerSequence } from './sequences/caseAssociation/validateAddPractitionerSequence';
 import { validateAddRespondentSequence } from './sequences/caseAssociation/validateAddRespondentSequence';
+import { validateBlockFromTrialSequence } from './sequences/validateBlockFromTrialSequence';
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
@@ -298,6 +303,7 @@ export const presenter = {
     autoSaveTrialSessionWorkingCopySequence,
     batchDownloadReadySequence,
     batchDownloadTrialSessionSequence,
+    blockFromTrialSequence,
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
@@ -390,6 +396,7 @@ export const presenter = {
     openAddEditSessionNoteModalSequence,
     openAddPractitionerModalSequence,
     openAddRespondentModalSequence,
+    openBlockFromTrialModalSequence,
     openCaseCaptionModalSequence,
     openCaseDifferenceModalSequence,
     openChangeScannerSourceModalSequence,
@@ -413,6 +420,7 @@ export const presenter = {
     openSelectDocumentWizardOverlaySequence,
     openServeConfirmModalDialogSequence,
     openSetCalendarModalSequence,
+    openUnblockFromTrialModalSequence,
     printDocketRecordSequence,
     printFromBrowserSequence,
     printTrialCalendarSequence,
@@ -499,6 +507,7 @@ export const presenter = {
     toggleUsaBannerDetailsSequence,
     toggleWorkingCopySortSequence,
     unauthorizedErrorSequence,
+    unblockFromTrialSequence,
     unidentifiedUserErrorSequence,
     unsetFormSaveSuccessSequence,
     unsetFormSubmittingSequence,
@@ -536,6 +545,7 @@ export const presenter = {
     updateWorkingCopySessionNoteSequence,
     validateAddPractitionerSequence,
     validateAddRespondentSequence,
+    validateBlockFromTrialSequence,
     validateCaseAssociationRequestSequence,
     validateCaseDeadlineSequence,
     validateCaseDetailSequence,
