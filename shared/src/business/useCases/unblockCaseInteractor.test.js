@@ -26,8 +26,8 @@ describe('unblockCaseInteractor', () => {
       reason: 'just because',
     });
     expect(result).toMatchObject({
-      blocked: true,
-      reason: 'just because',
+      blocked: false,
+      blockedReason: undefined,
     });
   });
 
@@ -46,7 +46,6 @@ describe('unblockCaseInteractor', () => {
       await unblockCaseInteractor({
         applicationContext,
         caseId: '123',
-        caseToUpdate: MOCK_CASE,
       });
     } catch (err) {
       error = err;
