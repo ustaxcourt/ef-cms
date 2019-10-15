@@ -1,28 +1,47 @@
-import { ModalDialog } from '../ModalDialog';
+import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-class CreateMessageModalDialogComponent extends ModalDialog {
-  constructor(props) {
-    super(props);
-    this.preventCancelOnBlur = true;
-    this.modal = {
-      cancelLabel: 'Cancel',
-      classNames: '',
-      confirmLabel: 'Send',
-      title: 'Create Message',
-    };
-  }
-  renderBody() {
+export const CreateMessageModalDialog = connect(
+  {
+    constants: state.constants,
+    form: state.modal.form,
+    showChambersSelect: state.modal.showChambersSelect,
+    updateMessageValueInModalSequence:
+      sequences.updateMessageValueInModalSequence,
+    users: state.users,
+    validateInitialWorkItemMessageInModalSequence:
+      sequences.validateInitialWorkItemMessageInModalSequence,
+    validationErrors: state.modal.validationErrors,
+    workQueueSectionHelper: state.workQueueSectionHelper,
+  },
+  ({
+    constants,
+    form,
+    showChambersSelect,
+    updateMessageValueInModalSequence,
+    users,
+    validateInitialWorkItemMessageInModalSequence,
+    validationErrors,
+    workQueueSectionHelper,
+  }) => {
     return (
-      <div className="ustc-create-message-modal">
+      <ConfirmModal
+        cancelLabel="Cancel"
+        className="ustc-create-message-modal"
+        confirmLabel="Send"
+        preventCancelOnBlur={true}
+        title="Create Message"
+        onCancelSequence="clearModalFormSequence"
+        onConfirmSequence="createWorkItemSequence"
+      >
         <div
           className={classNames(
             'usa-form-group',
-            this.props.validationErrors.section &&
-              !this.props.modal.showChambersSelect &&
+            validationErrors.section &&
+              !showChambersSelect &&
               'usa-form-group--error',
           )}
         >
@@ -35,37 +54,35 @@ class CreateMessageModalDialogComponent extends ModalDialog {
             id="section"
             name="section"
             onChange={e => {
-              this.props.updateMessageValueSequence({
-                form: 'form',
+              updateMessageValueInModalSequence({
                 key: e.target.name,
-                section: e.target.value,
                 value: e.target.value,
               });
-              this.props.validateInitialWorkItemMessageSequence();
+              validateInitialWorkItemMessageInModalSequence();
             }}
           >
             <option value="">- Select -</option>
-            {this.props.constants.SECTIONS.map(section => (
+            {constants.SECTIONS.map(section => (
               <option key={section} value={section}>
-                {this.props.workQueueSectionHelper.sectionDisplay(section)}
+                {workQueueSectionHelper.sectionDisplay(section)}
               </option>
             ))}
           </select>
-          {!this.props.modal.showChambersSelect &&
-            this.props.validationErrors.section && (
-              <div className="usa-error-message beneath">
-                {this.props.validationErrors.section}
-              </div>
-            )}
+          {!showChambersSelect && validationErrors.section && (
+            <div className="usa-error-message beneath">
+              {validationErrors.section}
+            </div>
+          )}
         </div>
-        {this.props.modal.showChambersSelect && (
+
+        {showChambersSelect && (
           <div
             className={classNames(
               'usa-form-group',
-              this.props.validationErrors.section && 'usa-form-group--error',
+              validationErrors.section && 'usa-form-group--error',
             )}
           >
-            <label className="usa-label" htmlFor={'chambers'}>
+            <label className="usa-label" htmlFor="chambers">
               Select chambers
             </label>
             <select
@@ -73,62 +90,61 @@ class CreateMessageModalDialogComponent extends ModalDialog {
               id="chambers"
               name="chambers"
               onChange={e => {
-                this.props.updateMessageValueSequence({
-                  form: 'form',
+                updateMessageValueInModalSequence({
                   key: e.target.name,
-                  section: e.target.value,
                   value: e.target.value,
                 });
-                this.props.validateInitialWorkItemMessageSequence();
+                validateInitialWorkItemMessageInModalSequence();
               }}
             >
               <option value="">- Select -</option>
-              {this.props.constants.CHAMBERS_SECTIONS.map(section => (
+              {constants.CHAMBERS_SECTIONS.map(section => (
                 <option key={section} value={section}>
-                  {this.props.workQueueSectionHelper.chambersDisplay(section)}
+                  {workQueueSectionHelper.chambersDisplay(section)}
                 </option>
               ))}
             </select>
-            {this.props.validationErrors.section && (
+            {validationErrors.section && (
               <div className="usa-error-message beneath">
                 Chambers is required.
               </div>
             )}
           </div>
         )}
+
         <div
           className={classNames(
             'usa-form-group',
-            this.props.validationErrors.assigneeId && 'usa-form-group--error',
+            validationErrors.assigneeId && 'usa-form-group--error',
           )}
         >
           <label className="usa-label" htmlFor="assigneeId">
             Select recipient
           </label>
           <select
-            aria-disabled={!this.props.form.section ? 'true' : 'false'}
+            aria-disabled={!form.section ? 'true' : 'false'}
             className="usa-select"
-            disabled={!this.props.form.section}
+            disabled={!form.section}
             id="assigneeId"
             name="assigneeId"
             onChange={e => {
-              this.props.updateMessageValueSequence({
+              updateMessageValueInModalSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-              this.props.validateInitialWorkItemMessageSequence();
+              validateInitialWorkItemMessageInModalSequence();
             }}
           >
             <option value="">- Select -</option>
-            {this.props.users.map(user => (
+            {users.map(user => (
               <option key={user.userId} value={user.userId}>
                 {user.name}
               </option>
             ))}
           </select>
-          {this.props.validationErrors.assigneeId && (
+          {validationErrors.assigneeId && (
             <div className="usa-error-message beneath">
-              {this.props.validationErrors.assigneeId}
+              {validationErrors.assigneeId}
             </div>
           )}
         </div>
@@ -136,7 +152,7 @@ class CreateMessageModalDialogComponent extends ModalDialog {
         <div
           className={classNames(
             'usa-form-group',
-            this.props.validationErrors.message && 'usa-form-group--error',
+            validationErrors.message && 'usa-form-group--error',
           )}
         >
           <label className="usa-label" htmlFor="message">
@@ -147,37 +163,20 @@ class CreateMessageModalDialogComponent extends ModalDialog {
             id="message"
             name="message"
             onChange={e => {
-              this.props.updateMessageValueSequence({
+              updateMessageValueInModalSequence({
                 key: e.target.name,
                 value: e.target.value,
               });
-              this.props.validateInitialWorkItemMessageSequence();
+              validateInitialWorkItemMessageInModalSequence();
             }}
           />
-          {this.props.validationErrors.message && (
+          {validationErrors.message && (
             <div className="usa-error-message beneath">
-              {this.props.validationErrors.message}
+              {validationErrors.message}
             </div>
           )}
         </div>
-      </div>
+      </ConfirmModal>
     );
-  }
-}
-
-export const CreateMessageModalDialog = connect(
-  {
-    cancelSequence: sequences.dismissCreateMessageModalSequence,
-    confirmSequence: sequences.createWorkItemSequence,
-    constants: state.constants,
-    form: state.form,
-    modal: state.modal,
-    updateMessageValueSequence: sequences.updateMessageValueSequence,
-    users: state.users,
-    validateInitialWorkItemMessageSequence:
-      sequences.validateInitialWorkItemMessageSequence,
-    validationErrors: state.validationErrors,
-    workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  CreateMessageModalDialogComponent,
 );

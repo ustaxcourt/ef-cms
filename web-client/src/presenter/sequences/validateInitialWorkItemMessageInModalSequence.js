@@ -4,7 +4,7 @@ import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { updateWorkItemFromPropsOrModalOrFormAction } from '../actions/WorkItem/updateWorkItemFromPropsOrModalOrFormAction';
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
-export const validateInitialWorkItemMessageSequence = [
+export const validateInitialWorkItemMessageInModalSequence = [
   shouldValidateAction,
   {
     ignore: [],
