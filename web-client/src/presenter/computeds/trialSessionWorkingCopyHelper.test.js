@@ -392,7 +392,7 @@ describe('trial session working copy computed', () => {
       expect(result.casesShownCount).toEqual(5);
     });
 
-    it('should return all sessions if none of the case statuses are closed', () => {
+    it('should return sessions without an assigned status', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
           constants: {
