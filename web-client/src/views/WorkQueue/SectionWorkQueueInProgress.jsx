@@ -143,6 +143,7 @@ export const SectionWorkQueueInProgress = connect(
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
                         messageId: item.currentMessage.messageId,
+                        shouldLinkToComplete: true,
                         shouldLinkToEdit: true,
                       })}
                       onClick={e => {
