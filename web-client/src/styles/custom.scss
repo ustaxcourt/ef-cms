@@ -1414,3 +1414,11 @@ button.change-scanner-button {
   top: -6px;
   position: relative;
 }
+
+.usa-tag.red-tag {
+  font-size: 14px;
+  color: white;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  background: color($theme-color-secondary-dark);
+}

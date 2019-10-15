@@ -13,7 +13,7 @@ describe('formattedCaseDetail', () => {
         caseDetail: {},
       },
     });
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       caseDeadlines: [],
       docketRecordWithDocument: [],
       showBlockFromTrialButton: true,
@@ -695,6 +695,28 @@ describe('formattedCaseDetail', () => {
         },
       });
       expect(result.showBlockFromTrialButton).toBeTruthy();
+    });
+
+    it('should set showUnblockHint to true when case status is something other than calendared and blocked', () => {
+      const caseDetail = { blocked: true, status: 'New' };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+      expect(result.showUnblockHint).toBeTruthy();
+    });
+
+    it('should NOT set showUnblockHint to true when case status is something other than calendared and blocked', () => {
+      const caseDetail = { blocked: true, status: 'Calendared' };
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+      expect(result.showUnblockHint).toBeFalsy();
     });
   });
 });
