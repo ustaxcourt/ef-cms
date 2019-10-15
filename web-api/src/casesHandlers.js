@@ -3,6 +3,7 @@ module.exports = {
     .handler,
   associateRespondentWithCaseLambda: require('./manualAssociation/associateRespondentWithCaseLambda')
     .handler,
+  blockCaseLambda: require('./cases/blockCaseLambda').handler,
   caseSearchLambda: require('./cases/caseSearchLambda').handler,
   completeDocketEntryQCLambda: require('./cases/completeDocketEntryQCLambda')
     .handler,
@@ -26,6 +27,7 @@ module.exports = {
     .handler,
   setCaseToReadyForTrialLambda: require('./cases/setCaseToReadyForTrialLambda')
     .handler,
+  unblockCaseLambda: require('./cases/unblockCaseLambda').handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,
