@@ -56,6 +56,16 @@ describe('Document entity', () => {
       expect(myDoc.isValid()).toBeFalsy();
     });
 
+    it('Creates an invalid document with serviceDate of undefined-undefined-undefined', () => {
+      const myDoc = new Document(
+        {
+          serviceDate: 'undefined-undefined-undefined',
+        },
+        { applicationContext },
+      );
+      expect(myDoc.isValid()).toBeFalsy();
+    });
+
     it('addWorkItem', () => {
       const myDoc = new Document(A_VALID_DOCUMENT, { applicationContext });
       const workItem = new WorkItem(
