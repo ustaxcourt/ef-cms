@@ -493,7 +493,7 @@ functions:
     handler: web-api/src/casesHandlers.getBlockedCasesLambda
     events:
       - http:
-          path: /{trialLocation}/blocked
+          path: /blocked/{trialLocation}
           method: get
           cors: true
           authorizer:
