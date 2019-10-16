@@ -45,9 +45,9 @@ export const documentDetailHelper = (get, applicationContext) => {
       });
 
     const qcWorkItemsCompleted = (formattedDocument.workItems || [])
-      .filter(wi => !wi.isInternal)
-      .reduce((acc, wi) => {
-        return acc && !!wi.completedAt;
+      .filter(workItem => !workItem.isInternal)
+      .reduce((acc, workItem) => {
+        return acc && !!workItem.completedAt;
       }, true);
     formattedDocument.canEdit =
       formattedDocument.eventCode !== 'P' && !qcWorkItemsCompleted;
