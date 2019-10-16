@@ -54,26 +54,38 @@ exports.saveIntermediateDocketEntryInteractor = async ({
     .filter(wi => wi.isInternal === false)
     .filter(wi => !wi.inProgress);
 
+  const workItemUpdates = [];
   for (const workItemToUpdate of workItemsToPutInProgress) {
     Object.assign(workItemToUpdate, {
       inProgress: true,
     });
 
-    await applicationContext.getPersistenceGateway().updateWorkItem({
-      applicationContext,
-      workItemToUpdate: workItemToUpdate.validate().toRawObject(),
-    });
+    const rawWorkItem = workItemToUpdate.validate().toRawObject();
 
-    await applicationContext.getPersistenceGateway().createUserInboxRecord({
-      applicationContext,
-      workItem: workItemToUpdate.validate().toRawObject(),
-    });
+    workItemUpdates.push(
+      applicationContext.getPersistenceGateway().updateWorkItem({
+        applicationContext,
+        workItemToUpdate: rawWorkItem,
+      }),
+    );
 
-    await applicationContext.getPersistenceGateway().createSectionInboxRecord({
-      applicationContext,
-      workItem: workItemToUpdate.validate().toRawObject(),
-    });
+    workItemUpdates.push(
+      await applicationContext.getPersistenceGateway().createUserInboxRecord({
+        applicationContext,
+        workItem: rawWorkItem,
+      }),
+    );
+
+    workItemUpdates.push(
+      await applicationContext
+        .getPersistenceGateway()
+        .createSectionInboxRecord({
+          applicationContext,
+          workItem: rawWorkItem,
+        }),
+    );
   }
+  await Promise.all(workItemUpdates);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
