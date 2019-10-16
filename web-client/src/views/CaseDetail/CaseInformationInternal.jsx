@@ -90,7 +90,7 @@ export const CaseInformationInternal = connect(
         {formattedCaseDetail.showUnblockHint && (
           <span className="alert-error margin-bottom-2">
             <FontAwesomeIcon
-              className="text-secondary-vivid"
+              className="text-secondary-dark"
               icon={['fas', 'hand-paper']}
               size="lg"
             />
