@@ -24,7 +24,7 @@ export const DocumentDetail = connect(
     archiveDraftDocumentModalSequence:
       sequences.archiveDraftDocumentModalSequence,
     caseDetail: state.caseDetail,
-    caseHelper: state.caseDetailHelper,
+    caseDetailHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     documentDetailHelper: state.documentDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
@@ -42,7 +42,7 @@ export const DocumentDetail = connect(
   ({
     archiveDraftDocumentModalSequence,
     caseDetail,
-    caseHelper,
+    caseDetailHelper,
     clickServeToIrsSequence,
     documentDetailHelper,
     formattedCaseDetail,
@@ -100,10 +100,10 @@ export const DocumentDetail = connect(
 
     const renderButtons = () => {
       const showingAnyButton = [
-        caseHelper.showServeToIrsButton &&
+        caseDetailHelper.showServeToIrsButton &&
           documentDetailHelper.formattedDocument.isPetition,
         documentDetailHelper.showServeDocumentButton,
-        caseHelper.showRecallButton &&
+        caseDetailHelper.showRecallButton &&
           documentDetailHelper.formattedDocument.isPetition,
         documentDetailHelper.showSignDocumentButton,
       ].some(val => val);
@@ -111,7 +111,7 @@ export const DocumentDetail = connect(
       return (
         <div className="document-detail__action-buttons">
           <div className="float-left">
-            {caseHelper.hasOrders &&
+            {caseDetailHelper.hasOrders &&
               documentDetailHelper.showViewOrdersNeededButton && (
                 <Button
                   link
@@ -215,7 +215,18 @@ export const DocumentDetail = connect(
               </div>
             )}
 
-            {caseHelper.showServeToIrsButton &&
+            {documentDetailHelper.formattedDocument.isPetition === false && (
+              <Button
+                link
+                className="margin-right-0 padding-bottom-0"
+                href={`/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/edit`}
+              >
+                <FontAwesomeIcon icon={['fas', 'edit']} />
+                Edit
+              </Button>
+            )}
+
+            {caseDetailHelper.showServeToIrsButton &&
               documentDetailHelper.formattedDocument.isPetition && (
                 <Button
                   className="serve-to-irs margin-right-0"
@@ -234,7 +245,7 @@ export const DocumentDetail = connect(
                 Serve Document
               </Button>
             )}
-            {caseHelper.showRecallButton &&
+            {caseDetailHelper.showRecallButton &&
               documentDetailHelper.formattedDocument.isPetition && (
                 <span className="recall-button-box">
                   <FontAwesomeIcon icon={['far', 'clock']} size="lg" />

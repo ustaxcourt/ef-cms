@@ -228,7 +228,7 @@ export const PrimaryDocumentForm = connect(
                 'usa-form-group--error',
             )}
           >
-            <label className="usa-label" htmlFor="documentTitle">
+            <label className="usa-label" htmlFor="document-title">
               Document title
             </label>
             <input
