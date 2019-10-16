@@ -94,7 +94,9 @@ export const CaseInformationInternal = connect(
               icon={['fas', 'hand-paper']}
               size="lg"
             />
-            <span className="margin-left-1 text-bold">Blocked from Trial:</span>{' '}
+            <span className="margin-left-1 text-bold">
+              Blocked from Trial {formattedCaseDetail.blockedDateFormatted}:
+            </span>{' '}
             <span className="margin-right-5">
               {formattedCaseDetail.blockedReason}
             </span>

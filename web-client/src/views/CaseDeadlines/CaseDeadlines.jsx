@@ -40,7 +40,7 @@ export const CaseDeadlines = connect(
                     </span>
                   </div>
                 </div>
-                {caseDeadlineReportHelper.caseDeadlines > 0 && (
+                {caseDeadlineReportHelper.caseDeadlines.length > 0 && (
                   <table className="usa-table row-border-only subsection work-queue deadlines">
                     <thead>
                       <tr>
