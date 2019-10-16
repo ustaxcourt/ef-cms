@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getPractitionersBySearchKeyAction } from '../actions/ManualAssociation/getPractitionersBySearchKeyAction';
+import { isPractitionerInCaseAction } from '../actions/isPractitionerInCaseAction';
 import { set } from 'cerebral/factories';
 import { setPractitionersAction } from '../actions/ManualAssociation/setPractitionersAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -14,7 +15,11 @@ export const openAddPractitionerModalSequence = [
     error: [setValidationErrorsAction],
     success: [
       setPractitionersAction,
-      set(state.showModal, 'AddPractitionerModal'),
+      isPractitionerInCaseAction,
+      {
+        no: [set(state.showModal, 'AddPractitionerModal')],
+        yes: [set(state.showModal, 'PractitionerExistsModal')],
+      },
     ],
   },
 ];

@@ -53,6 +53,7 @@ export const IndividualWorkQueueInProgress = connect(
                           docketNumber: item.docketNumber,
                           documentId: item.document.documentId,
                           messageId: item.currentMessage.messageId,
+                          shouldLinkToComplete: true,
                           shouldLinkToEdit: true,
                           workItemIdToMarkAsRead: !item.isRead
                             ? item.workItemId

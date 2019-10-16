@@ -6,6 +6,7 @@ import {
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
+import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
@@ -65,6 +66,7 @@ export const state = {
   betaBar: {
     isVisible: true,
   },
+  blockedCasesReportHelper,
   caseCaption: '',
   caseDeadlineReportHelper,
   caseDetail: {},

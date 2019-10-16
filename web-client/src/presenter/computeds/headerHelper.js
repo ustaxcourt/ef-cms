@@ -36,6 +36,7 @@ export const headerHelper = get => {
     (['docketclerk', 'petitionsclerk', 'seniorattorney'].includes(userRole) &&
       isMessages);
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
+  const isBlockedCasesReport = currentPage.includes('BlockedCasesReport');
 
   return {
     defaultQCBoxPath: isOtherUser(userRole)
@@ -46,7 +47,7 @@ export const headerHelper = get => {
     pageIsInterstitial,
     pageIsMessages: isMessages && workQueueIsInternal,
     pageIsMyCases: isDashboard && isUserExternal(userRole),
-    pageIsReports: isCaseDeadlines,
+    pageIsReports: isCaseDeadlines || isBlockedCasesReport,
     pageIsTrialSessions: isTrialSessions && isUserInternal(userRole),
     showAccountMenu: isLoggedIn,
     showDocumentQC: isUserInternal(userRole),

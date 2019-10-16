@@ -18,10 +18,11 @@ export const PrimaryDocumentForm = connect(
     caseDetail: state.caseDetail,
     form: state.form,
     internalTypesHelper: state.internalTypesHelper,
-    updateDocketEntryFormValueSequence:
-      sequences.updateDocketEntryFormValueSequence,
+    saveIntermediateDocketEntrySequence:
+      sequences.saveIntermediateDocketEntrySequence,
+    updateEditDocketEntryFormValueSequence:
+      sequences.updateEditDocketEntryFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
-    validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -29,9 +30,9 @@ export const PrimaryDocumentForm = connect(
     caseDetail,
     form,
     internalTypesHelper,
-    updateDocketEntryFormValueSequence,
+    saveIntermediateDocketEntrySequence,
+    updateEditDocketEntryFormValueSequence,
     updateScreenMetadataSequence,
-    validateDocketEntrySequence,
     validationErrors,
   }) => {
     return (
@@ -55,11 +56,11 @@ export const PrimaryDocumentForm = connect(
                     type="radio"
                     value={option}
                     onChange={e => {
-                      updateDocketEntryFormValueSequence({
+                      updateEditDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.value === 'Lodge',
                       });
-                      validateDocketEntrySequence();
+                      saveIntermediateDocketEntrySequence();
                     }}
                   />
                   <label
@@ -101,10 +102,10 @@ export const PrimaryDocumentForm = connect(
                     type="number"
                     value={form.dateReceivedMonth || ''}
                     onBlur={() => {
-                      validateDocketEntrySequence();
+                      saveIntermediateDocketEntrySequence();
                     }}
                     onChange={e => {
-                      updateDocketEntryFormValueSequence({
+                      updateEditDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: limitLength(e.target.value, 2),
                       });
@@ -125,10 +126,10 @@ export const PrimaryDocumentForm = connect(
                     type="number"
                     value={form.dateReceivedDay || ''}
                     onBlur={() => {
-                      validateDocketEntrySequence();
+                      saveIntermediateDocketEntrySequence();
                     }}
                     onChange={e => {
-                      updateDocketEntryFormValueSequence({
+                      updateEditDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: limitLength(e.target.value, 2),
                       });
@@ -149,10 +150,10 @@ export const PrimaryDocumentForm = connect(
                     type="number"
                     value={form.dateReceivedYear || ''}
                     onBlur={() => {
-                      validateDocketEntrySequence();
+                      saveIntermediateDocketEntrySequence();
                     }}
                     onChange={e => {
-                      updateDocketEntryFormValueSequence({
+                      updateEditDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: limitLength(e.target.value, 4),
                       });
@@ -200,8 +201,8 @@ export const PrimaryDocumentForm = connect(
                   action,
                   inputValue,
                   name,
-                  updateSequence: updateDocketEntryFormValueSequence,
-                  validateSequence: validateDocketEntrySequence,
+                  updateSequence: updateEditDocketEntryFormValueSequence,
+                  validateSequence: saveIntermediateDocketEntrySequence,
                 });
                 return true;
               }}
@@ -238,10 +239,10 @@ export const PrimaryDocumentForm = connect(
               type="text"
               value={form.documentTitle || ''}
               onBlur={() => {
-                validateDocketEntrySequence();
+                saveIntermediateDocketEntrySequence();
               }}
               onChange={e => {
-                updateDocketEntryFormValueSequence({
+                updateEditDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -270,10 +271,10 @@ export const PrimaryDocumentForm = connect(
               type="text"
               value={form.additionalInfo || ''}
               onBlur={() => {
-                validateDocketEntrySequence();
+                saveIntermediateDocketEntrySequence();
               }}
               onChange={e => {
-                updateDocketEntryFormValueSequence({
+                updateEditDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -289,11 +290,11 @@ export const PrimaryDocumentForm = connect(
                 name="addToCoversheet"
                 type="checkbox"
                 onChange={e => {
-                  updateDocketEntryFormValueSequence({
+                  updateEditDocketEntryFormValueSequence({
                     key: e.target.name,
                     value: e.target.checked,
                   });
-                  validateDocketEntrySequence();
+                  saveIntermediateDocketEntrySequence();
                 }}
               />
               <label
@@ -322,10 +323,10 @@ export const PrimaryDocumentForm = connect(
               type="text"
               value={form.additionalInfo2 || ''}
               onBlur={() => {
-                validateDocketEntrySequence();
+                saveIntermediateDocketEntrySequence();
               }}
               onChange={e => {
-                updateDocketEntryFormValueSequence({
+                updateEditDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -360,11 +361,11 @@ export const PrimaryDocumentForm = connect(
                   name="partyPrimary"
                   type="checkbox"
                   onChange={e => {
-                    updateDocketEntryFormValueSequence({
+                    updateEditDocketEntryFormValueSequence({
                       key: e.target.name,
                       value: e.target.checked,
                     });
-                    validateDocketEntrySequence();
+                    saveIntermediateDocketEntrySequence();
                   }}
                 />
                 <label className="usa-checkbox__label" htmlFor="party-primary">
@@ -380,11 +381,11 @@ export const PrimaryDocumentForm = connect(
                     name="partySecondary"
                     type="checkbox"
                     onChange={e => {
-                      updateDocketEntryFormValueSequence({
+                      updateEditDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
-                      validateDocketEntrySequence();
+                      saveIntermediateDocketEntrySequence();
                     }}
                   />
                   <label
@@ -403,11 +404,11 @@ export const PrimaryDocumentForm = connect(
                   name="partyRespondent"
                   type="checkbox"
                   onChange={e => {
-                    updateDocketEntryFormValueSequence({
+                    updateEditDocketEntryFormValueSequence({
                       key: e.target.name,
                       value: e.target.checked,
                     });
-                    validateDocketEntrySequence();
+                    saveIntermediateDocketEntrySequence();
                   }}
                 />
                 <label
@@ -445,11 +446,11 @@ export const PrimaryDocumentForm = connect(
                       type="radio"
                       value={option}
                       onChange={e => {
-                        updateDocketEntryFormValueSequence({
+                        updateEditDocketEntryFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
-                        validateDocketEntrySequence();
+                        saveIntermediateDocketEntrySequence();
                       }}
                     />
                     <label

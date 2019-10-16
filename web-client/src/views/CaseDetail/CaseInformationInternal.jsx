@@ -1,8 +1,11 @@
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
+import { sequences } from 'cerebral';
 import { state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
+import classNames from 'classnames';
 
 const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
   <React.Fragment>
@@ -67,54 +70,80 @@ export const CaseInformationInternal = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
+    openUnblockFromTrialModalSequence:
+      sequences.openUnblockFromTrialModalSequence,
   },
-  ({ caseDetailHelper, formattedCaseDetail }) => {
+  ({
+    caseDetailHelper,
+    formattedCaseDetail,
+    openBlockFromTrialModalSequence,
+    openUnblockFromTrialModalSequence,
+  }) => {
     return (
-      <div className="internal-information">
+      <div
+        className={classNames(
+          'internal-information',
+          formattedCaseDetail.showUnblockHint && 'less',
+        )}
+      >
+        {formattedCaseDetail.showUnblockHint && (
+          <span className="alert-error margin-bottom-2">
+            <FontAwesomeIcon
+              className="text-secondary-vivid"
+              icon={['fas', 'hand-paper']}
+              size="lg"
+            />
+            <span className="margin-left-1 text-bold">Blocked from Trial:</span>{' '}
+            <span className="margin-right-5">
+              {formattedCaseDetail.blockedReason}
+            </span>
+            <Button
+              link
+              className="red-warning"
+              icon="trash"
+              onClick={() => {
+                openUnblockFromTrialModalSequence();
+              }}
+            >
+              Remove Block
+            </Button>
+          </span>
+        )}
+
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
-            <NonMobile>
-              <div className="tablet:grid-col-6">
-                <div className="card height-full">
-                  <div className="content-wrapper">
-                    <h3 className="underlined">Petition Details</h3>
-                    <PetitionDetails
-                      caseDetail={formattedCaseDetail}
-                      showPaymentRecord={caseDetailHelper.showPaymentRecord}
-                    />
-                  </div>
-                </div>
-              </div>
-            </NonMobile>
-            <Mobile>
-              <div className="tablet:grid-col-6">
-                <div className="case-info-card">
-                  <h3>Petition Details</h3>
+            <div className="tablet:grid-col-6">
+              <div className="card height-full">
+                <div className="content-wrapper">
+                  <h3 className="underlined">Petition Details</h3>
                   <PetitionDetails
                     caseDetail={formattedCaseDetail}
                     showPaymentRecord={caseDetailHelper.showPaymentRecord}
                   />
                 </div>
               </div>
-            </Mobile>
-            <NonMobile>
-              <div className="tablet:grid-col-6">
-                <div className="card height-full">
-                  <div className="content-wrapper">
-                    <h3 className="underlined">Trial Information</h3>
-                    <TrialInformation caseDetail={formattedCaseDetail} />
-                  </div>
-                </div>
-              </div>
-            </NonMobile>
-            <Mobile>
-              <div className="tablet:grid-col-6 margin-top-2">
-                <div className="case-info-card">
-                  <h3>Trial Information</h3>
+            </div>
+            <div className="tablet:grid-col-6">
+              <div className="card height-full">
+                <div className="content-wrapper">
+                  {formattedCaseDetail.showBlockFromTrialButton && (
+                    <Button
+                      link
+                      className="block-from-trial-btn red-warning float-right"
+                      icon="hand-paper"
+                      onClick={() => {
+                        openBlockFromTrialModalSequence();
+                      }}
+                    >
+                      Block From Trial
+                    </Button>
+                  )}
+                  <h3 className="underlined">Trial Information</h3>
                   <TrialInformation caseDetail={formattedCaseDetail} />
                 </div>
               </div>
-            </Mobile>
+            </div>
           </div>
         </div>
       </div>

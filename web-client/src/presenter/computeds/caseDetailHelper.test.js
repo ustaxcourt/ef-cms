@@ -559,6 +559,45 @@ describe('case detail computed', () => {
     expect(result.showRespondentSection).toEqual(false);
   });
 
+  it('should format practitioner matches with cityStateZip string and isAlreadyInCase boolean', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { practitioners: [{ userId: '2' }] },
+        form: {},
+        modal: {
+          practitionerMatches: [
+            {
+              contact: { city: 'Somewhere', postalCode: '12345', state: 'AL' },
+              name: '1',
+              userId: '1',
+            },
+            {
+              contact: {
+                city: 'Somewhere Else',
+                postalCode: '54321',
+                state: 'TX',
+              },
+              name: '2',
+              userId: '2',
+            },
+          ],
+        },
+      },
+    });
+    expect(result.practitionerMatchesFormatted).toMatchObject([
+      {
+        cityStateZip: 'Somewhere, AL 12345',
+        name: '1',
+      },
+      {
+        cityStateZip: 'Somewhere Else, TX 54321',
+        name: '2',
+      },
+    ]);
+    expect(result.practitionerMatchesFormatted[0].isAlreadyInCase).toBeFalsy();
+    expect(result.practitionerMatchesFormatted[1].isAlreadyInCase).toBeTruthy();
+  });
+
   it('should set practitionerSearchResultsCount to the length of the state.modal.practitionerMatches', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
@@ -590,6 +629,45 @@ describe('case detail computed', () => {
       },
     });
     expect(result.practitionerSearchResultsCount).toBeUndefined();
+  });
+
+  it('should format respondent matches with cityStateZip string and isAlreadyInCase boolean', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { respondents: [{ userId: '1' }] },
+        form: {},
+        modal: {
+          respondentMatches: [
+            {
+              contact: { city: 'Somewhere', postalCode: '12345', state: 'AL' },
+              name: '1',
+              userId: '1',
+            },
+            {
+              contact: {
+                city: 'Somewhere Else',
+                postalCode: '54321',
+                state: 'TX',
+              },
+              name: '2',
+              userId: '2',
+            },
+          ],
+        },
+      },
+    });
+    expect(result.respondentMatchesFormatted).toMatchObject([
+      {
+        cityStateZip: 'Somewhere, AL 12345',
+        name: '1',
+      },
+      {
+        cityStateZip: 'Somewhere Else, TX 54321',
+        name: '2',
+      },
+    ]);
+    expect(result.respondentMatchesFormatted[0].isAlreadyInCase).toBeTruthy();
+    expect(result.respondentMatchesFormatted[1].isAlreadyInCase).toBeFalsy();
   });
 
   it('should set respondentSearchResultsCount to the length of the state.modal.respondentMatches', () => {
