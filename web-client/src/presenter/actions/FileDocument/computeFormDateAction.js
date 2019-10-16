@@ -8,14 +8,20 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  */
 export const computeFormDateAction = ({ get, store }) => {
-  let formDate = `${get(state.form.year)}-${get(state.form.month)}-${get(
-    state.form.day,
-  )}`;
+  const year = get(state.form.year);
+  const month = get(state.form.month);
+  const day = get(state.form.day);
 
-  formDate = formDate
-    .split('-')
-    .map(segment => (segment = segment.padStart(2, '0')))
-    .join('-');
+  if (year && month && day) {
+    let formDate = `${year}-${month}-${day}`;
 
-  store.set(state.form.serviceDate, formDate);
+    formDate = formDate
+      .split('-')
+      .map(segment => (segment = segment.padStart(2, '0')))
+      .join('-');
+
+    store.set(state.form.serviceDate, formDate);
+  } else {
+    store.unset(state.form.serviceDate);
+  }
 };
