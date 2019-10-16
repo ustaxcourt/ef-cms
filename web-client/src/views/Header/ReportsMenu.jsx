@@ -45,6 +45,18 @@ export const ReportsMenu = connect(
                 Deadlines
               </a>
             </li>
+            <li className="usa-nav__submenu-item">
+              <a
+                href="/reports/blocked-cases"
+                id="all-blocked-cases"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                }}
+              >
+                Blocked Cases
+              </a>
+            </li>
           </ul>
         )}
       </>

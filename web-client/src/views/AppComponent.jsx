@@ -3,6 +3,7 @@ import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
+import { BlockedCasesReport } from './BlockedCasesReport/BlockedCasesReport';
 import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
@@ -50,6 +51,7 @@ const pages = {
   AdvancedSearch,
   BeforeStartingCase,
   BeforeYouFileADocument,
+  BlockedCasesReport,
   CaseDeadlines,
   CaseDetail,
   CaseDetailInternal,
