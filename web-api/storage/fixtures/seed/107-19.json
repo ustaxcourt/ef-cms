@@ -262,7 +262,6 @@
     "irsNoticeDate": null,
     "orderForFilingFee": false,
     "partyType": "Partnership (as a partnership representative under the BBA regime)",
-    "receivedAt": null,
     "irsSendDate": "2019-08-16T17:30:10.522Z",
     "caseType": "CDP (Lien/Levy)",
     "contactPrimary": {
@@ -279,6 +278,7 @@
       "email": "taxpayer"
     },
     "createdAt": "2019-08-16T17:29:10.132Z",
+    "receivedAt": "2019-08-16T17:29:10.132Z",
     "noticeOfAttachments": false,
     "caseCaption": "Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)",
     "caseId": "58c1f7a3-8062-42f0-a73e-8bd69b419878",

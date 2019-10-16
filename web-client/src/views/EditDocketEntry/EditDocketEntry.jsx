@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CreateMessageModalDialog } from '../DocumentDetail/CreateMessageModalDialog';
 import { DocumentDetailHeader } from '../DocumentDetail/DocumentDetailHeader';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { DocumentMessages } from '../DocumentDetail/DocumentMessages';
@@ -16,15 +17,16 @@ import React from 'react';
 
 export const EditDocketEntry = connect(
   {
-    caseDetail: state.caseDetail,
     completeDocketEntryQCSequence: sequences.completeDocketEntryQCSequence,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    openCreateMessageAlongsideDocketRecordQCModalSequence:
+      sequences.openCreateMessageAlongsideDocketRecordQCModalSequence,
     showModal: state.showModal,
   },
   ({
-    caseDetail,
     completeDocketEntryQCSequence,
     formCancelToggleCancelSequence,
+    openCreateMessageAlongsideDocketRecordQCModalSequence,
     showModal,
   }) => {
     return (
@@ -96,10 +98,7 @@ export const EditDocketEntry = connect(
                     secondary
                     id="save-and-add-supporting"
                     onClick={() => {
-                      completeDocketEntryQCSequence({
-                        docketNumber: caseDetail.docketNumber,
-                        isAddAnother: true,
-                      });
+                      openCreateMessageAlongsideDocketRecordQCModalSequence();
                     }}
                   >
                     Complete &amp; Send Message
@@ -123,6 +122,9 @@ export const EditDocketEntry = connect(
         </section>
         {showModal === 'FormCancelModalDialog' && (
           <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+        )}
+        {showModal === 'CreateMessageAlongsideDocketRecordQCModal' && (
+          <CreateMessageModalDialog onConfirmSequence="completeDocketEntryQCAndSendMessageSequence" />
         )}
         {showModal === 'FileUploadStatusModal' && <FileUploadStatusModal />}
         {showModal === 'FileUploadErrorModal' && (

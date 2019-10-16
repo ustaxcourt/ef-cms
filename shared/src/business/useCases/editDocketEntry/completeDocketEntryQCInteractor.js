@@ -58,7 +58,7 @@ exports.completeDocketEntryQCInteractor = async ({
     { applicationContext },
   );
   documentEntity.generateFiledBy(caseToUpdate);
-  documentEntity.setQCed(user.userId);
+  documentEntity.setQCed(user);
 
   const docketRecordEntry = new DocketRecord({
     description: entryMetadata.documentTitle,

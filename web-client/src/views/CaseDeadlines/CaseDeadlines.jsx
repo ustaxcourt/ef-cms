@@ -40,30 +40,36 @@ export const CaseDeadlines = connect(
                     </span>
                   </div>
                 </div>
-                <table className="usa-table row-border-only subsection work-queue deadlines">
-                  <thead>
-                    <tr>
-                      <th>Due date</th>
-                      <th>Docket</th>
-                      <th>Case name</th>
-                      <th>Description</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {caseDeadlineReportHelper.caseDeadlines.map((item, idx) => (
-                      <tr key={idx}>
-                        <td className="smaller-column semi-bold">
-                          {item.formattedDeadline}
-                        </td>
-                        <td className="smaller-column semi-bold">
-                          <CaseLink formattedCase={item} />
-                        </td>
-                        <td>{item.caseTitle}</td>
-                        <td className="padding-extra">{item.description}</td>
+                {caseDeadlineReportHelper.caseDeadlines.length > 0 && (
+                  <table className="usa-table row-border-only subsection work-queue deadlines">
+                    <thead>
+                      <tr>
+                        <th>Due date</th>
+                        <th>Docket</th>
+                        <th>Case name</th>
+                        <th>Description</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {caseDeadlineReportHelper.caseDeadlines.map(
+                        (item, idx) => (
+                          <tr key={idx}>
+                            <td className="smaller-column semi-bold">
+                              {item.formattedDeadline}
+                            </td>
+                            <td className="smaller-column semi-bold">
+                              <CaseLink formattedCase={item} />
+                            </td>
+                            <td>{item.caseTitle}</td>
+                            <td className="padding-extra">
+                              {item.description}
+                            </td>
+                          </tr>
+                        ),
+                      )}
+                    </tbody>
+                  </table>
+                )}
                 {caseDeadlineReportHelper.caseDeadlines.length === 0 && (
                   <p>There are no deadlines for the selected date(s).</p>
                 )}

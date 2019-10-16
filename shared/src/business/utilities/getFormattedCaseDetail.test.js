@@ -243,6 +243,20 @@ describe('formatCase', () => {
 
     expect(result.irsNoticeDateFormatted).toEqual('No notice provided');
   });
+
+  it('should format blockedDate when blocked is true', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      blocked: true,
+      blockedDate: getDateISO(),
+    });
+
+    expect(result.blockedDateFormatted).toEqual(
+      applicationContext
+        .getUtilities()
+        .formatDateString(getDateISO(), 'MMDDYY'),
+    );
+  });
 });
 
 describe('formatCaseDeadlines', () => {

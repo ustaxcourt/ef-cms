@@ -70,6 +70,7 @@ function Document(rawDocument, { applicationContext }) {
   this.archived = rawDocument.archived;
   this.qcAt = rawDocument.qcAt;
   this.qcByUserId = rawDocument.qcByUserId;
+  this.qcByUser = rawDocument.qcByUser;
   this.processingStatus = this.processingStatus || 'pending';
   this.workItems = (this.workItems || []).map(
     workItem => new WorkItem(workItem, { applicationContext }),
@@ -192,6 +193,12 @@ joiValidationDecorator(
       .iso()
       .optional(),
     servedParties: joi.array().optional(),
+    serviceDate: joi
+      .date()
+      .iso()
+      .max('now')
+      .optional()
+      .allow(null),
     signedAt: joi
       .date()
       .iso()
@@ -290,12 +297,12 @@ Document.prototype.setSigned = function(signByUserId) {
 };
 
 /**
- * attaches a qc date to the document
+ * attaches a qc date and a user to the document
  *
- * @param {string} qcByUserId the user id of the user who qc'ed the document
+ * @param {object} user the user completing QC process
  */
-Document.prototype.setQCed = function(qcByUserId) {
-  this.qcByUserId = qcByUserId;
+Document.prototype.setQCed = function(user) {
+  this.qcByUser = user;
   this.qcAt = createISODateString();
 };
 

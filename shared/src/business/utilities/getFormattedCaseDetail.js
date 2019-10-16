@@ -280,6 +280,12 @@ const formatCase = (applicationContext, caseDetail) => {
     }
   }
 
+  if (result.blocked) {
+    result.blockedDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(result.blockedDate, 'MMDDYY');
+  }
+
   return result;
 };
 
