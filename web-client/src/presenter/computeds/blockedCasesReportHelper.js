@@ -5,19 +5,21 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
 
   let blockedCasesFormatted = [];
   if (blockedCases && blockedCases.length) {
-    blockedCasesFormatted = blockedCases.map(blockedCase => {
-      return {
-        ...blockedCase,
-        caseName: applicationContext.getCaseCaptionNames(
-          blockedCase.caseCaption || '',
-        ),
-        docketNumberWithSuffix:
-          blockedCase.docketNumber + (blockedCase.docketNumberSuffix || ''),
-        blockedDateFormatted: applicationContext
-          .getUtilities()
-          .formatDateString(blockedCase.blockedDate, 'MMDDYY'),
-      };
-    });
+    blockedCasesFormatted = blockedCases
+      .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
+      .map(blockedCase => {
+        return {
+          ...blockedCase,
+          caseName: applicationContext.getCaseCaptionNames(
+            blockedCase.caseCaption || '',
+          ),
+          docketNumberWithSuffix:
+            blockedCase.docketNumber + (blockedCase.docketNumberSuffix || ''),
+          blockedDateFormatted: applicationContext
+            .getUtilities()
+            .formatDateString(blockedCase.blockedDate, 'MMDDYY'),
+        };
+      });
   }
 
   return {
