@@ -31,6 +31,14 @@ exports.unblockCaseInteractor = async ({ applicationContext, caseId }) => {
 
   caseEntity.unsetAsBlocked();
 
+  await applicationContext
+    .getPersistenceGateway()
+    .createCaseTrialSortMappingRecords({
+      applicationContext,
+      caseId: caseEntity.caseId,
+      caseSortTags: caseEntity.generateTrialSortTags(),
+    });
+
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
