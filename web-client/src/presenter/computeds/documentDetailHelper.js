@@ -44,6 +44,13 @@ export const documentDetailHelper = (get, applicationContext) => {
         return formatted;
       });
 
+    const qcWorkItemsCompleted = (formattedDocument.workItems || [])
+      .filter(wi => !wi.isInternal)
+      .reduce((acc, wi) => {
+        return acc && !!wi.completedAt;
+      }, true);
+    formattedDocument.canEdit = formattedDocument.eventCode !== 'P' && !qcWorkItemsCompleted;    
+
     formattedDocument.signUrl =
       formattedDocument.documentType === 'Stipulated Decision'
         ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
