@@ -44,13 +44,11 @@ export const documentDetailHelper = (get, applicationContext) => {
         return formatted;
       });
 
-    const qcWorkItemsCompleted = (formattedDocument.workItems || [])
-      .filter(workItem => !workItem.isInternal)
-      .reduce((acc, workItem) => {
-        return acc && !!workItem.completedAt;
-      }, true);
-    formattedDocument.canEdit =
-      formattedDocument.eventCode !== 'P' && !qcWorkItemsCompleted;
+    if (formattedDocument.qcByUser) {
+      formattedDocument.qcBy = formattedDocument.qcByUser.name;
+    } else if (allWorkItems[0] && allWorkItems[0].completedAt) {
+      formattedDocument.qcBy = allWorkItems[0].completedBy;
+    }
 
     formattedDocument.signUrl =
       formattedDocument.documentType === 'Stipulated Decision'
