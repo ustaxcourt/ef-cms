@@ -91,7 +91,7 @@ describe('a docketclerk user creates a new message for another docketclerk user'
         documentType: 'Agreed Computation for Entry of Decision',
       },
       isInitializeCase: false,
-      isInternal: true,
+      isQC: false,
       messages: [
         {
           from: 'Test Docketclerk',
@@ -114,7 +114,7 @@ describe('a docketclerk user creates a new message for another docketclerk user'
         documentType: 'Agreed Computation for Entry of Decision',
       },
       isInitializeCase: false,
-      isInternal: true,
+      isQC: false,
       messages: [
         {
           from: 'Test Docketclerk',
@@ -138,7 +138,7 @@ describe('a docketclerk user creates a new message for another docketclerk user'
         documentType: 'Agreed Computation for Entry of Decision',
       },
       isInitializeCase: false,
-      isInternal: true,
+      isQC: false,
       messages: [
         {
           from: 'Test Docketclerk',
