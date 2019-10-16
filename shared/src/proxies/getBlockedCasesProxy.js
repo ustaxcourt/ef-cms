@@ -11,6 +11,6 @@ const { get } = require('./requests');
 exports.getBlockedCasesInteractor = ({ applicationContext, trialLocation }) => {
   return get({
     applicationContext,
-    endpoint: `/cases/${trialLocation}/blocked`,
+    endpoint: `/cases/blocked/${trialLocation}`,
   });
 };
