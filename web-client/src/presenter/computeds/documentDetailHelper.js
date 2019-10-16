@@ -49,7 +49,8 @@ export const documentDetailHelper = (get, applicationContext) => {
       .reduce((acc, wi) => {
         return acc && !!wi.completedAt;
       }, true);
-    formattedDocument.canEdit = formattedDocument.eventCode !== 'P' && !qcWorkItemsCompleted;    
+    formattedDocument.canEdit =
+      formattedDocument.eventCode !== 'P' && !qcWorkItemsCompleted;
 
     formattedDocument.signUrl =
       formattedDocument.documentType === 'Stipulated Decision'
