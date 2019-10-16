@@ -544,6 +544,14 @@ const router = {
     );
 
     route(
+      '/reports/blocked-cases',
+      checkLoggedIn(() => {
+        setPageTitle('Blocked cases');
+        app.getSequence('gotoBlockedCasesReportSequence')();
+      }),
+    );
+
+    route(
       '/user/contact/edit',
       checkLoggedIn(() => {
         setPageTitle('Edit user contact');
