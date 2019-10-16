@@ -55,7 +55,7 @@ export const CaseDetailHeader = connect(
                         <FontAwesomeIcon
                           className="margin-right-1"
                           icon="hand-paper"
-                          size="lg"
+                          size="md"
                         />
                         BLOCKED
                       </span>

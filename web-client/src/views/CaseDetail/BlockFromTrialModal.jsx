@@ -25,7 +25,7 @@ class BlockFromTrialModalComponent extends ModalDialog {
     } = this.props;
 
     return (
-      <div className="margin-bottom-2">
+      <div className="margin-bottom-4">
         <div className="margin-bottom-2">
           This case will not be set for trial until this block is removed.{' '}
         </div>

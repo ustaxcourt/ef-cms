@@ -16,7 +16,7 @@ class UnblockFromTrialModalComponent extends ModalDialog {
 
   renderBody() {
     return (
-      <div className="margin-bottom-2">
+      <div className="margin-bottom-4">
         This case will be eligible to be set for the next available trial
         session.{' '}
       </div>
