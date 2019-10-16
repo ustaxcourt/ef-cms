@@ -160,6 +160,14 @@ exports.caseSearchInteractor = async ({
       .getSearchClient()
       .search({
         body: {
+          _source: [
+            'caseCaption',
+            'contactPrimary',
+            'contactSecondary',
+            'docketNumber',
+            'docketNumberSuffix',
+            'receivedAt',
+          ],
           query: {
             bool: {
               must: [...nonExactMatchesQuery, ...commonQuery],
