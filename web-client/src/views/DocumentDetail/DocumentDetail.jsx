@@ -108,7 +108,6 @@ export const DocumentDetail = connect(
         documentDetailHelper.showSignDocumentButton,
       ].some(val => val);
 
-
       return (
         <div className="document-detail__action-buttons">
           <div className="float-left">
