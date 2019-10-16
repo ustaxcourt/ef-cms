@@ -168,6 +168,7 @@ function Case(rawCase, { applicationContext }) {
     throw new TypeError('applicationContext must be defined');
   }
   this.blocked = rawCase.blocked;
+  this.blockedDate = rawCase.blockedDate;
   this.blockedReason = rawCase.blockedReason;
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
@@ -270,6 +271,14 @@ joiValidationDecorator(
   Case,
   joi.object().keys({
     blocked: joi.boolean().optional(),
+    blockedDate: joi.when('blocked', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .date()
+        .iso()
+        .required(),
+    }),
     blockedReason: joi.when('blocked', {
       is: true,
       otherwise: joi.optional().allow(null),
@@ -988,6 +997,7 @@ Case.getDefaultOrderDesignatingPlaceOfTrialValue = function({
 Case.prototype.setAsBlocked = function(blockedReason) {
   this.blocked = true;
   this.blockedReason = blockedReason;
+  this.blockedDate = createISODateString();
   return this;
 };
 
@@ -999,6 +1009,7 @@ Case.prototype.setAsBlocked = function(blockedReason) {
 Case.prototype.unsetAsBlocked = function() {
   this.blocked = false;
   this.blockedReason = undefined;
+  this.blockedDate = undefined;
   return this;
 };
 
