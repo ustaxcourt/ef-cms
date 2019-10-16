@@ -34,6 +34,7 @@ exports.getBlockedCasesInteractor = async ({
           ],
         },
       },
+      size: 5000,
     },
     index: 'efcms',
   });
