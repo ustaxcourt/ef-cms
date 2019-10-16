@@ -135,6 +135,7 @@ exports.caseSearchInteractor = async ({
           must: [...exactMatchesQuery, ...commonQuery],
         },
       },
+      size: 5000,
     },
     index: 'efcms',
   });

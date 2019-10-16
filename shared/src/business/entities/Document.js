@@ -192,6 +192,12 @@ joiValidationDecorator(
       .iso()
       .optional(),
     servedParties: joi.array().optional(),
+    serviceDate: joi
+      .date()
+      .iso()
+      .max('now')
+      .optional()
+      .allow(null),
     signedAt: joi
       .date()
       .iso()
