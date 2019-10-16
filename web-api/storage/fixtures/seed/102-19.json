@@ -87,6 +87,7 @@
       "email": "taxpayer"
     },
     "createdAt": "2019-03-01T21:42:29.073Z",
+    "receivedAt": "2019-03-01T21:42:29.073Z",
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "sk": "0",
     "filingType": "Myself and my spouse",
