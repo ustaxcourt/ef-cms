@@ -26,6 +26,15 @@ exports.getBlockedCasesInteractor = async ({
 
   const body = await applicationContext.getSearchClient().search({
     body: {
+      _source: [
+        'blocked',
+        'blockedDate',
+        'blockedReason',
+        'caseCaption',
+        'docketNumber',
+        'docketNumberSuffix',
+        'status',
+      ],
       query: {
         bool: {
           must: [
