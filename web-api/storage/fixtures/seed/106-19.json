@@ -134,7 +134,7 @@
     "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
       "isPaper": true,
-      "serviceDate": "undefined-undefined-undefined",
+      "serviceDate": null,
       "documentType": "Proposed Stipulated Decision",
       "practitioner": [],
       "partyPrimary": true,
@@ -188,7 +188,7 @@
     "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
       "isPaper": true,
-      "serviceDate": "undefined-undefined-undefined",
+      "serviceDate": null,
       "documentType": "Proposed Stipulated Decision",
       "practitioner": [],
       "partyPrimary": true,
@@ -315,7 +315,7 @@
     "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
       "isPaper": true,
-      "serviceDate": "undefined-undefined-undefined",
+      "serviceDate": null,
       "documentType": "Proposed Stipulated Decision",
       "practitioner": [],
       "partyPrimary": true,
@@ -537,7 +537,7 @@
       },
       {
         "isPaper": true,
-        "serviceDate": "undefined-undefined-undefined",
+        "serviceDate": null,
         "documentType": "Proposed Stipulated Decision",
         "practitioner": [],
         "partyPrimary": true,
@@ -549,7 +549,7 @@
             "completedMessage": "completed",
             "document": {
               "isPaper": true,
-              "serviceDate": "undefined-undefined-undefined",
+              "serviceDate": null,
               "documentType": "Proposed Stipulated Decision",
               "practitioner": [],
               "partyPrimary": true,
@@ -768,7 +768,7 @@
       },
       {
         "isPaper": true,
-        "serviceDate": "undefined-undefined-undefined",
+        "serviceDate": null,
         "documentType": "Proposed Stipulated Decision",
         "practitioner": [],
         "partyPrimary": true,
@@ -780,7 +780,7 @@
             "completedMessage": "completed",
             "document": {
               "isPaper": true,
-              "serviceDate": "undefined-undefined-undefined",
+              "serviceDate": null,
               "documentType": "Proposed Stipulated Decision",
               "practitioner": [],
               "partyPrimary": true,

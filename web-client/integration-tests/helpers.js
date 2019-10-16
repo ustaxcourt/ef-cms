@@ -221,7 +221,7 @@ exports.uploadExternalDecisionDocument = async test => {
     scenario: 'Standard',
     searchError: false,
     secondaryDocument: {},
-    serviceDate: 'undefined-undefined-undefined',
+    serviceDate: null,
     supportingDocument: null,
     supportingDocumentFile: null,
     supportingDocumentFreeText: null,
@@ -248,7 +248,7 @@ exports.uploadProposedStipulatedDecision = async test => {
     scenario: 'Standard',
     searchError: false,
     secondaryDocument: { certificateOfServiceDate: null },
-    serviceDate: 'undefined-undefined-undefined',
+    serviceDate: null,
   });
   await test.runSequence('submitExternalDocumentSequence');
 };
