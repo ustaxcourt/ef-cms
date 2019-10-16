@@ -61,6 +61,8 @@ describe('saveIntermediateDocketEntryInteractor', () => {
           };
         },
         getPersistenceGateway: () => ({
+          createSectionInboxRecord: jest.fn(),
+          createUserInboxRecord: jest.fn(),
           getCaseByCaseId: async () => caseRecord,
           getUserById: async () => ({
             name: 'Olivia Jade',
@@ -69,6 +71,7 @@ describe('saveIntermediateDocketEntryInteractor', () => {
           }),
           saveWorkItemForNonPaper: async () => caseRecord,
           updateCase: async () => caseRecord,
+          updateWorkItem: jest.fn(),
         }),
       };
       await saveIntermediateDocketEntryInteractor({
@@ -102,6 +105,8 @@ describe('saveIntermediateDocketEntryInteractor', () => {
           });
         },
         getPersistenceGateway: () => ({
+          createSectionInboxRecord: jest.fn(),
+          createUserInboxRecord: jest.fn(),
           deleteWorkItemFromInbox: deleteWorkItemFromInboxSpy,
           getCaseByCaseId: getCaseByCaseIdSpy,
           getUserById: async () => ({
@@ -112,14 +117,15 @@ describe('saveIntermediateDocketEntryInteractor', () => {
           }),
           saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
           updateCase: updateCaseSpy,
+          updateWorkItem: jest.fn(),
         }),
       };
       await saveIntermediateDocketEntryInteractor({
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
+          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Memorandum in Support',
-          isFileAttached: false,
         },
       });
     } catch (err) {
