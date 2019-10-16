@@ -13,6 +13,9 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
         ),
         docketNumberWithSuffix:
           blockedCase.docketNumber + (blockedCase.docketNumberSuffix || ''),
+        blockedDateFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(blockedCase.blockedDate, 'MMDDYY'),
       };
     });
   }
