@@ -4,8 +4,16 @@ export const createWorkItemAction = async ({
   applicationContext,
   get,
   path,
+  props,
 }) => {
-  const { assigneeId, message } = get(state.form);
+  let assigneeId, message;
+
+  if (props.message) {
+    ({ assigneeId, message } = props.message);
+  } else {
+    ({ assigneeId, message } = get(state.form));
+  }
+
   const { caseId } = get(state.caseDetail);
   const documentId = get(state.documentId);
 

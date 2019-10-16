@@ -132,11 +132,11 @@
         "dynamodb:UpdateTimeToLive",
         "dynamodb:CreateGlobalTable",
         "dynamodb:DescribeContinuousBackups",
-        "dynamodb:DescribeGlobalTable"
-        "dynamodb:DescribeLimits"
-        "dynamodb:DescribeStream"
-        "dynamodb:GetRecords"
-        "dynamodb:GetShardIterator"
+        "dynamodb:DescribeGlobalTable",
+        "dynamodb:DescribeLimits",
+        "dynamodb:DescribeStream",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
         "dynamodb:ListStreams"
       ],
       "Resource": [

@@ -98,6 +98,7 @@
           "postalCode": "61234",
           "state": "IL"
         },
+        "representingPrimary": true,
         "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
         "name": "Test Practitioner",
         "section": "practitioner",
