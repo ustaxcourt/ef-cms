@@ -70,19 +70,17 @@ exports.saveIntermediateDocketEntryInteractor = async ({
     );
 
     workItemUpdates.push(
-      await applicationContext.getPersistenceGateway().createUserInboxRecord({
+      applicationContext.getPersistenceGateway().createUserInboxRecord({
         applicationContext,
         workItem: rawWorkItem,
       }),
     );
 
     workItemUpdates.push(
-      await applicationContext
-        .getPersistenceGateway()
-        .createSectionInboxRecord({
-          applicationContext,
-          workItem: rawWorkItem,
-        }),
+      applicationContext.getPersistenceGateway().createSectionInboxRecord({
+        applicationContext,
+        workItem: rawWorkItem,
+      }),
     );
   }
   await Promise.all(workItemUpdates);
