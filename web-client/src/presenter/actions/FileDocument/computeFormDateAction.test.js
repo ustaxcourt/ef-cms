@@ -16,4 +16,19 @@ describe('computeFormDateAction', () => {
 
     expect(result.state.form.serviceDate).toEqual('2019-01-06');
   });
+
+  it("unset the document's date when some value needed is not present", async () => {
+    const result = await runAction(computeFormDateAction, {
+      state: {
+        form: {
+          day: '6',
+          documentType: 'Proposed Stipulated Decision',
+          serviceDate: '2019-01-06',
+          year: '2019',
+        },
+      },
+    });
+
+    expect(result.state.form.serviceDate).toBeUndefined();
+  });
 });
