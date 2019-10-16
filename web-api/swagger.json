@@ -290,7 +290,7 @@
         }
       }
     },
-    "/cases/{trialLocation}/blocked": {
+    "/cases/blocked/{trialLocation}": {
       "parameters": [
         {
           "name": "trialLocation",
