@@ -196,7 +196,8 @@ joiValidationDecorator(
       .date()
       .iso()
       .max('now')
-      .optional(),
+      .optional()
+      .allow(null),
     signedAt: joi
       .date()
       .iso()
