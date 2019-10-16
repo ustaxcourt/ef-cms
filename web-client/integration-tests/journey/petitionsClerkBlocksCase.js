@@ -8,7 +8,7 @@ export default test => {
     await test.runSequence('blockFromTrialSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      reason: 'A reason must be provided',
+      reason: 'Provide a reason',
     });
 
     await test.runSequence('updateModalValueSequence', {
