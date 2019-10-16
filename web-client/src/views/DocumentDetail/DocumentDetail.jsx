@@ -215,7 +215,7 @@ export const DocumentDetail = connect(
               </div>
             )}
 
-            {documentDetailHelper.formattedDocument.canEdit && (
+            {documentDetailHelper.formattedDocument.isPetition === false && (
               <Button
                 link
                 className="margin-right-0 padding-bottom-0"
