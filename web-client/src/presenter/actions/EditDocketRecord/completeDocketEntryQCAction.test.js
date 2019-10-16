@@ -49,6 +49,10 @@ describe('completeDocketEntryQCAction', () => {
       },
       caseDetail,
       caseId: caseDetail.docketNumber,
+      updatedDocument: {
+        documentId: '123-456-789-abc',
+        documentTitle: "bob's burgers",
+      },
     });
   });
 });

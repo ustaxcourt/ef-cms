@@ -157,7 +157,6 @@
     "irsNoticeDate": null,
     "orderForFilingFee": false,
     "partyType": "Trust",
-    "receivedAt": null,
     "trialJudge": "Judge Armen",
     "irsSendDate": "2019-08-16T19:22:13.919Z",
     "caseType": "Worker Classification",
@@ -176,6 +175,7 @@
       "email": "taxpayer"
     },
     "createdAt": "2019-08-16T19:21:46.146Z",
+    "receivedAt": "2019-08-16T19:21:46.146Z",
     "noticeOfAttachments": false,
     "trialTime": "10:00",
     "caseCaption": "Garrett Carpenter, Leslie Bullock, Trustee, Petitioner(s)",

@@ -44,6 +44,12 @@ export const documentDetailHelper = (get, applicationContext) => {
         return formatted;
       });
 
+    if (formattedDocument.qcByUser) {
+      formattedDocument.qcBy = formattedDocument.qcByUser.name;
+    } else if (allWorkItems[0] && allWorkItems[0].completedAt) {
+      formattedDocument.qcBy = allWorkItems[0].completedBy;
+    }
+
     formattedDocument.signUrl =
       formattedDocument.documentType === 'Stipulated Decision'
         ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`

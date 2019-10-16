@@ -81,9 +81,7 @@
         "receivedAt": "2019-10-07T14:29:30.288Z",
         "relationship": "primaryDocument",
         "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-        "workItems": [
-
-        ]
+        "workItems": []
       }
     ],
     "partyType": "Petitioner",
@@ -104,6 +102,7 @@
     },
     "preferredTrialCity": "Birmingham, Alabama",
     "createdAt": "2019-03-01T21:40:46.415Z",
+    "receivedAt": "2019-03-01T21:40:46.415Z",
     "caseId": "2fa6da8d-4328-4a20-a5d7-b76637e1dc02",
     "docketRecord": [
       {
