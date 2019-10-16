@@ -459,9 +459,9 @@ select[disabled] {
   }
   display: inline-block;
   padding: 16px;
-  border-left: 5px solid color($theme-color-error);
+  border-left: 5px solid color($theme-color-secondary-dark);
   background: $color-error;
-  color: color($theme-color-base-dark);
+  color: color($theme-color-base-darkest);
 
   .usa-hint {
     margin: 0;

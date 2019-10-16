@@ -3,6 +3,7 @@ const { MOCK_CASE } = require('../../test/mockCase');
 
 describe('blockCaseInteractor', () => {
   let applicationContext;
+  let deleteCaseTrialSortMappingRecordsMock = jest.fn();
 
   it('should update the case with the blocked flag set as true and attach a reason', async () => {
     applicationContext = {
@@ -15,6 +16,7 @@ describe('blockCaseInteractor', () => {
       },
       getPersistenceGateway: () => {
         return {
+          deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
           getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
           updateCase: ({ caseToUpdate }) => caseToUpdate,
         };
@@ -29,6 +31,10 @@ describe('blockCaseInteractor', () => {
       blocked: true,
       blockedReason: 'just because',
     });
+    expect(deleteCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
+    expect(
+      deleteCaseTrialSortMappingRecordsMock.mock.calls[0][0].caseId,
+    ).toEqual(MOCK_CASE.caseId);
   });
 
   it('should throw an unauthorized error if the user has no access to block cases', async () => {

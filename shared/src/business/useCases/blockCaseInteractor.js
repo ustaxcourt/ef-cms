@@ -35,6 +35,13 @@ exports.blockCaseInteractor = async ({
 
   caseEntity.setAsBlocked(reason);
 
+  await applicationContext
+    .getPersistenceGateway()
+    .deleteCaseTrialSortMappingRecords({
+      applicationContext,
+      caseId,
+    });
+
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),

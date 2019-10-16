@@ -1,4 +1,5 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
+import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -8,6 +9,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 const gotoBlockedCasesReport = [
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
+  clearFormAction,
   closeMobileMenuAction,
   clearErrorAlertsAction,
   setCurrentPageAction('BlockedCasesReport'),
