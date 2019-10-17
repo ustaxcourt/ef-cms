@@ -41,6 +41,7 @@ class RemoveFromTrialSessionModalComponent extends ModalDialog {
               Disposition
             </legend>
             <textarea
+              aria-label="remove from trial session"
               className="usa-textarea"
               id="disposition"
               maxLength="120"
