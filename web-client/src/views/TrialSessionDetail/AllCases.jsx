@@ -20,33 +20,23 @@ export const AllCases = connect(
         >
           <thead>
             <tr>
-              <th>Status</th>
               <th>Docket</th>
               <th>Case name</th>
-              <th>Petitioner counsel</th>
-              <th>Respondent counsel</th>
+              <th>Case status</th>
               <th>Disposition</th>
+              <th>Disposition date</th>
             </tr>
           </thead>
           {allCases.map((item, idx) => (
             <tbody key={idx}>
               <tr className="eligible-cases-row">
-                <td>{item.status}</td>
                 <td>
                   <CaseLink formattedCase={item} />
                 </td>
                 <td>{item.caseCaptionNames}</td>
-                <td aria-hidden="true">
-                  {item.practitioners.map((practitioner, idx) => (
-                    <div key={idx}>{practitioner.name}</div>
-                  ))}
-                </td>
-                <td>
-                  {item.respondents.map((respondent, idx) => (
-                    <div key={idx}>{respondent.name}</div>
-                  ))}
-                </td>
+                <td>{item.status}</td>
                 <td>{item.disposition}</td>
+                <td>{item.removedFromTrialDate}</td>
               </tr>
             </tbody>
           ))}
