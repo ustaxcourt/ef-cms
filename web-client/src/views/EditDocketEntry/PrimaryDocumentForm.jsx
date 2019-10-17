@@ -293,10 +293,8 @@ export const PrimaryDocumentForm = connect(
             <NonstandardForm
               helper="addDocketEntryHelper"
               level="primary"
-              saveOnBlur={true}
-              saveSequence="saveIntermediateDocketEntrySequence"
               updateSequence="updateDocketEntryFormValueSequence"
-              validateSequence="validateDocketEntrySequence"
+              validateSequence="saveIntermediateDocketEntrySequence"
               validationErrors="validationErrors"
             />
           )}
