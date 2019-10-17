@@ -25,7 +25,7 @@ class RemoveFromTrialSessionModalComponent extends ModalDialog {
     } = this.props;
 
     return (
-      <div className="margin-bottom-4">
+      <div className="margin-bottom-4" id="remove-from-trial-session-modal">
         <div className="margin-bottom-2">
           This case will be removed from this trial session.{' '}
         </div>
@@ -41,6 +41,7 @@ class RemoveFromTrialSessionModalComponent extends ModalDialog {
               Disposition
             </legend>
             <textarea
+              aria-label="remove from trial session"
               className="usa-textarea"
               id="disposition"
               maxLength="120"
