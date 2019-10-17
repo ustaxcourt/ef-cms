@@ -64,11 +64,8 @@ echo "starting case notes service"
 npx sls offline start "$@" --config web-api/serverless-case-notes.yml &
 echo "starting notifications service"
 npx sls offline start "$@" --config web-api/serverless-notifications.yml &
-
-if [ -z "$CI" ]; then 
-  echo "starting streams service"
-  npx sls offline start "$@" --config web-api/serverless-streams.yml &
-fi
+echo "starting streams service"
+npx sls offline start "$@" --config web-api/serverless-streams.yml &
 
 echo "starting proxy"
 node ./web-api/proxy.js
