@@ -772,8 +772,6 @@ module.exports = (appContextUser = {}) => {
           searchClientCache = new elasticsearch.Client({
             host: environment.elasticsearchEndpoint,
           });
-        } else if (environment.stage === 'local' && process.env.CI === 'true') {
-          searchClientCache = { index: () => {}, search: () => {} };
         } else {
           searchClientCache = new elasticsearch.Client({
             amazonES: {
