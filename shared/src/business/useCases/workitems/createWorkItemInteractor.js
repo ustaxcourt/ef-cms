@@ -82,7 +82,7 @@ exports.createWorkItemInteractor = async ({
         documentType: document.documentType,
       },
       isInitializeCase: false,
-      isQC: true,
+      isQC: false,
     },
     { applicationContext },
   )
