@@ -14,7 +14,7 @@ export const validateBlockFromTrialAction = ({ get, path }) => {
 
   let errors = null;
   if (!reason) {
-    errors = { reason: 'A reason must be provided' };
+    errors = { reason: 'Provide a reason' };
   }
 
   if (!errors) {

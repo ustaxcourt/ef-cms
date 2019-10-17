@@ -249,6 +249,136 @@ describe('formatted work queue computed', () => {
     expect(result.showServeDocumentButton).toEqual(false);
   });
 
+  it('should indicate QC completed by workItem "completedBy" if not indicated on Document', () => {
+    const result = runCompute(documentDetailHelper, {
+      state: {
+        caseDetail: {
+          documents: [
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              documentType: 'Proposed Stipulated Decision',
+              processingStatus: 'pending',
+              reviewDate: '2018-11-21T20:49:28.192Z',
+              userId: 'taxpayer',
+              workItems: [
+                {
+                  caseStatus: 'New',
+                  completedAt: '2018-11-21T20:49:28.192Z',
+                  completedBy: 'William T. Riker',
+                  document: {
+                    receivedAt: '2018-11-21T20:49:28.192Z',
+                  },
+                  messages: [
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+
+                      message: 'Served on IRS',
+                    },
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+                      message: 'Test',
+                    },
+                  ],
+                },
+                {
+                  assigneeId: 'abc',
+                  caseStatus: 'New',
+                  document: {
+                    documentType: 'Proposed Stipulated Decision',
+                    receivedAt: '2018-11-21T20:49:28.192Z',
+                  },
+                  messages: [
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+
+                      message: 'Served on IRS',
+                    },
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+                      message: 'Test',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        workQueueToDisplay: { workQueueIsInternal: true },
+      },
+    });
+
+    expect(result.formattedDocument.qcBy).toBe('William T. Riker');
+  });
+
+  it('should indicate QC completed by "qcByUser" on Document if present', () => {
+    const result = runCompute(documentDetailHelper, {
+      state: {
+        caseDetail: {
+          documents: [
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              documentType: 'Proposed Stipulated Decision',
+              processingStatus: 'pending',
+              qcByUser: {
+                name: 'Reginald Barclay',
+                userId: 'xyzzy',
+              },
+              reviewDate: '2018-11-21T20:49:28.192Z',
+              userId: 'taxpayer',
+              workItems: [
+                {
+                  caseStatus: 'New',
+                  completedAt: '2018-11-21T20:49:28.192Z',
+                  completedBy: 'William T. Riker',
+                  document: {
+                    receivedAt: '2018-11-21T20:49:28.192Z',
+                  },
+                  messages: [
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+
+                      message: 'Served on IRS',
+                    },
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+                      message: 'Test',
+                    },
+                  ],
+                },
+                {
+                  assigneeId: 'abc',
+                  caseStatus: 'New',
+                  document: {
+                    documentType: 'Proposed Stipulated Decision',
+                    receivedAt: '2018-11-21T20:49:28.192Z',
+                  },
+                  messages: [
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+
+                      message: 'Served on IRS',
+                    },
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+                      message: 'Test',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        workQueueToDisplay: { workQueueIsInternal: true },
+      },
+    });
+
+    expect(result.formattedDocument.qcBy).toBe('Reginald Barclay');
+  });
+
   it('should filter out completed work items with Served on IRS messages', () => {
     role = 'seniorattorney';
 

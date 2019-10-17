@@ -3,6 +3,7 @@ const { MOCK_CASE } = require('../../test/mockCase');
 
 describe('unblockCaseInteractor', () => {
   let applicationContext;
+  let createCaseTrialSortMappingRecordsMock = jest.fn();
 
   it('should set the blocked flag to false and remove the blockedReason', async () => {
     applicationContext = {
@@ -15,6 +16,7 @@ describe('unblockCaseInteractor', () => {
       },
       getPersistenceGateway: () => {
         return {
+          createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsMock,
           getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
           updateCase: ({ caseToUpdate }) => caseToUpdate,
         };
@@ -29,6 +31,10 @@ describe('unblockCaseInteractor', () => {
       blocked: false,
       blockedReason: undefined,
     });
+    expect(createCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
+    expect(
+      createCaseTrialSortMappingRecordsMock.mock.calls[0][0].caseId,
+    ).toEqual(MOCK_CASE.caseId);
   });
 
   it('should throw an unauthorized error if the user has no access to unblock the case', async () => {

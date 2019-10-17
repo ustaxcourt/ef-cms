@@ -43,30 +43,37 @@ export const BlockedCasesReport = connect(
                         </span>
                       </div>
                     </div>
-                    <table className="usa-table row-border-only subsection work-queue deadlines">
-                      <thead>
-                        <tr>
-                          <th>Docket</th>
-                          <th>Case name</th>
-                          <th>Case status</th>
-                          <th>Reason</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {blockedCasesReportHelper.blockedCasesFormatted.map(
-                          (item, idx) => (
-                            <tr key={idx}>
-                              <td>
-                                <CaseLink formattedCase={item} />
-                              </td>
-                              <td>{item.caseName}</td>
-                              <td>{item.status}</td>
-                              <td>{item.blockedReason}</td>
-                            </tr>
-                          ),
-                        )}
-                      </tbody>
-                    </table>
+                    {blockedCasesReportHelper.blockedCasesCount > 0 && (
+                      <table className="usa-table row-border-only subsection work-queue deadlines">
+                        <thead>
+                          <tr>
+                            <th>Docket</th>
+                            <th>Date blocked</th>
+                            <th>Case name</th>
+                            <th>Case status</th>
+                            <th>Reason</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {blockedCasesReportHelper.blockedCasesFormatted.map(
+                            (item, idx) => (
+                              <tr key={idx}>
+                                <td>
+                                  <CaseLink formattedCase={item} />
+                                </td>
+                                <td>{item.blockedDateFormatted}</td>
+                                <td>{item.caseName}</td>
+                                <td>{item.status}</td>
+                                <td>{item.blockedReason}</td>
+                              </tr>
+                            ),
+                          )}
+                        </tbody>
+                      </table>
+                    )}
+                    {blockedCasesReportHelper.blockedCasesCount === 0 && (
+                      <p>There are no blocked cases for this location.</p>
+                    )}
                   </>
                 )}
                 {!form.trialLocation && (

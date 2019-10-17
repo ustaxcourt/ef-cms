@@ -179,11 +179,40 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeFalsy();
     });
 
-    it('Creates an invalid case with blocked set to true but no blockedReason', () => {
+    it('Creates an invalid case with blocked set to true but no blockedReason or blockedDate', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
           blocked: true,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+    });
+
+    it('Creates an invalid case with blocked set to true and a blockedDate but no blockedReason', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: true,
+          blockedDate: '2019-03-01T21:42:29.073Z',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+    });
+
+    it('Creates an invalid case with blocked set to true and an invalid blockedDate', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: true,
+          blockedDate: 'undefined-undefined-undefined',
+          blockedReason: 'something',
         },
         {
           applicationContext,
@@ -197,6 +226,21 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           blocked: false,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
+    it('Creates a valid case with blocked set to true and a blockedReason and blockedDate', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: true,
+          blockedReason: 'something',
+          blockedDate: '2019-03-01T21:42:29.073Z',
         },
         {
           applicationContext,
@@ -1420,6 +1464,7 @@ describe('Case entity', () => {
 
       expect(caseToUpdate.blocked).toEqual(true);
       expect(caseToUpdate.blockedReason).toEqual('because reasons');
+      expect(caseToUpdate.blockedDate).toBeDefined();
     });
   });
 
@@ -1442,6 +1487,7 @@ describe('Case entity', () => {
 
       expect(caseToUpdate.blocked).toBeFalsy();
       expect(caseToUpdate.blockedReason).toBeUndefined();
+      expect(caseToUpdate.blockedDate).toBeUndefined();
     });
   });
 });

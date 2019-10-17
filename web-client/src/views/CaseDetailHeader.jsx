@@ -48,14 +48,14 @@ export const CaseDetailHeader = connect(
                 {caseDetailHelper.hidePublicCaseInformation &&
                   formattedCaseDetail.showBlockedTag && (
                     <span
-                      aria-label={'blocked'}
+                      aria-label="blocked"
                       className="margin-left-1 usa-tag red-tag"
                     >
                       <span aria-hidden="true">
                         <FontAwesomeIcon
                           className="margin-right-1"
                           icon="hand-paper"
-                          size="lg"
+                          size="1x"
                         />
                         BLOCKED
                       </span>
