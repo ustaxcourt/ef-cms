@@ -357,7 +357,6 @@ joiValidationDecorator(
     receivedAt: joi
       .date()
       .iso()
-      .max('now')
       .optional()
       .allow(null),
     respondents: joi.array().optional(),
