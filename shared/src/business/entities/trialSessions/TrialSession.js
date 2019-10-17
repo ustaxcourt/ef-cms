@@ -253,6 +253,20 @@ joiValidationDecorator(
         caseId: joi.string().uuid({
           version: ['uuidv4'],
         }),
+        disposition: joi.when('removedFromTrial', {
+          is: true,
+          otherwise: joi.optional().allow(null),
+          then: joi.string().required(),
+        }),
+        removedFromTrial: joi.boolean().optional(),
+        removedFromTrialDate: joi.when('removedFromTrial', {
+          is: true,
+          otherwise: joi.optional().allow(null),
+          then: joi
+            .date()
+            .iso()
+            .required(),
+        }),
       }),
     ),
     isCalendared: joi.boolean().required(),
@@ -320,6 +334,29 @@ TrialSession.prototype.setAsCalendared = function() {
 TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
   const { caseId } = caseEntity;
   this.caseOrder.push({ caseId });
+  return this;
+};
+
+/**
+ * set case as removedFromTrial
+ *
+ * @param {object} arguments the arguments object
+ * @param {string} arguments.caseId the id of the case to remove from the calendar
+ * @param {string} arguments.disposition the reason the case is being removed from the calendar
+ * @returns {TrialSession} the trial session entity
+ */
+TrialSession.prototype.removeCaseFromCalendar = function({
+  caseId,
+  disposition,
+}) {
+  const caseToUpdate = this.caseOrder.find(
+    trialCase => trialCase.caseId === caseId,
+  );
+  if (caseToUpdate) {
+    caseToUpdate.disposition = disposition;
+    caseToUpdate.removedFromTrial = true;
+    caseToUpdate.removedFromTrialDate = createISODateString();
+  }
   return this;
 };
 
