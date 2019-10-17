@@ -10,7 +10,7 @@ export const ClosedCases = connect(
   ({ closedCases }) => {
     return (
       <React.Fragment>
-        <div className="text-semibold push-right margin-bottom-2 margin-top-neg-205">
+        <div className="text-semibold push-right margin-bottom-2">
           Count: {closedCases.length}
         </div>
         <table
@@ -34,7 +34,7 @@ export const ClosedCases = connect(
                 </td>
                 <td>{item.caseCaptionNames}</td>
                 <td>{item.disposition}</td>
-                <td>{item.removedFromTrialDate}</td>
+                <td>{item.removedFromTrialDateFormatted}</td>
               </tr>
             </tbody>
           ))}
