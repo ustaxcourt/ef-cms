@@ -391,6 +391,9 @@ const {
   recallPetitionFromIRSHoldingQueueInteractor,
 } = require('../../shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
+  removeCaseFromTrialInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor');
+const {
   runBatchProcessInteractor,
 } = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
@@ -435,11 +438,9 @@ const {
 const {
   createUserInboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/createUserInboxRecord');
-
 const {
   createSectionInboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/createSectionInboxRecord');
-
 const {
   deleteUserOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
@@ -883,6 +884,7 @@ module.exports = (appContextUser = {}) => {
         onDisconnectInteractor,
         processStreamRecordsInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
+        removeCaseFromTrialInteractor,
         runBatchProcessInteractor,
         sanitizePdfInteractor: args =>
           process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
