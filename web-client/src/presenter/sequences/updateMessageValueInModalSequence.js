@@ -5,9 +5,10 @@ import { isChambersPathAction } from '../actions/ForwardForm/isChambersPathActio
 import { props, state } from 'cerebral';
 import { runKeyPathAction } from '../actions/runKeyPathAction';
 import { set } from 'cerebral/factories';
+import { setModalFormAndSectionAction } from '../actions/setModalFormAndSectionAction';
 
 export const updateMessageValueInModalSequence = [
-  ({ props }) => ({ form: 'modal.form', section: props.value }),
+  setModalFormAndSectionAction,
   runKeyPathAction,
   {
     section: [
