@@ -12,5 +12,17 @@ export default test => {
     );
     expect(test.getState('caseDetail').blocked).toBeFalsy();
     expect(test.getState('caseDetail').blockedReason).toBeUndefined();
+
+    // we need to wait for elasticsearch to get updated by the processing stream lambda
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
+    await test.runSequence('gotoBlockedCasesReportSequence');
+
+    await test.runSequence('getBlockedCasesByTrialLocationSequence', {
+      key: 'trialLocation',
+      value: 'Jackson, Mississippi',
+    });
+
+    expect(test.getState('blockedCases')).toMatchObject([]);
   });
 };
