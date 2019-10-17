@@ -20,7 +20,7 @@ describe('setQCWorkItemIdToMarkAsReadIfNeededAction', () => {
               documentId: '123-abc-123-abc',
               lodged: true,
               workItems: [
-                { isInternal: false, isRead: false, workItemId: 'ThisIsAnId' },
+                { isQC: true, isRead: false, workItemId: 'ThisIsAnId' },
               ],
             },
             { documentId: '321-cba-321-cba' },
