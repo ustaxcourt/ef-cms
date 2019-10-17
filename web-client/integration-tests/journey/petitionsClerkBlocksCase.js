@@ -23,5 +23,27 @@ export default test => {
     );
     expect(test.getState('caseDetail').blocked).toBeTruthy();
     expect(test.getState('caseDetail').blockedReason).toEqual('just because');
+
+    // we need to wait for elasticsearch to get updated by the processing stream lambda
+    await new Promise(resolve => setTimeout(resolve, 5000));
+
+    await test.runSequence('gotoBlockedCasesReportSequence');
+
+    await test.runSequence('getBlockedCasesByTrialLocationSequence', {
+      key: 'trialLocation',
+      value: 'Jackson, Mississippi',
+    });
+
+    expect(test.getState('blockedCases')).toMatchObject([
+      {
+        blocked: true,
+        blockedReason: 'just because',
+        caseCaption:
+          'Test Person, Deceased, Test Person, Surviving Spouse, Petitioner',
+        docketNumber: test.docketNumber,
+        docketNumberSuffix: 'S',
+        status: 'New',
+      },
+    ]);
   });
 };
