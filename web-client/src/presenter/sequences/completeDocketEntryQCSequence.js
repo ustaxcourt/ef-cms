@@ -6,6 +6,7 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -22,6 +23,7 @@ export const completeDocketEntryQCSequence = [
       setValidationAlertErrorsAction,
     ],
     success: [
+      setCurrentPageAction('Interstitial'),
       completeDocketEntryQCAction,
       setCaseAction,
       setAlertSuccessAction,
