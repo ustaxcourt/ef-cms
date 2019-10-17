@@ -10,7 +10,7 @@ export const ClosedCases = connect(
   ({ closedCases }) => {
     return (
       <React.Fragment>
-        <div className="text-semibold push-right margin-bottom-2 margin-top-neg-205">
+        <div className="text-semibold push-right margin-bottom-2">
           Count: {closedCases.length}
         </div>
         <table
@@ -22,9 +22,8 @@ export const ClosedCases = connect(
             <tr>
               <th>Docket</th>
               <th>Case name</th>
-              <th>Petitioner Counsel</th>
-              <th>Respondent Counsel</th>
               <th>Disposition</th>
+              <th>Disposition date</th>
             </tr>
           </thead>
           {closedCases.map((item, idx) => (
@@ -34,17 +33,8 @@ export const ClosedCases = connect(
                   <CaseLink formattedCase={item} />
                 </td>
                 <td>{item.caseCaptionNames}</td>
-                <td>
-                  {item.practitioners.map((practitioner, idx) => (
-                    <div key={idx}>{practitioner.name}</div>
-                  ))}
-                </td>
-                <td>
-                  {item.respondents.map((respondent, idx) => (
-                    <div key={idx}>{respondent.name}</div>
-                  ))}
-                </td>
                 <td>{item.disposition}</td>
+                <td>{item.removedFromTrialDateFormatted}</td>
               </tr>
             </tbody>
           ))}
