@@ -41,7 +41,10 @@ PetitionDetails.propTypes = {
   showPaymentRecord: PropTypes.bool,
 };
 
-const TrialInformation = ({ caseDetail }) => (
+const TrialInformation = ({
+  caseDetail,
+  openRemoveFromTrialSessionModalSequence,
+}) => (
   <React.Fragment>
     <div className="grid-row">
       <div className="grid-col-6">
@@ -59,11 +62,24 @@ const TrialInformation = ({ caseDetail }) => (
         <p>{caseDetail.formattedTrialJudge}</p>
       </div>
     </div>
+    <div className="grid-row">
+      <div className="grid-col-12">
+        <Button
+          link
+          className="red-warning"
+          icon="trash"
+          onClick={() => openRemoveFromTrialSessionModalSequence()}
+        >
+          Remove from Trial Session
+        </Button>
+      </div>
+    </div>
   </React.Fragment>
 );
 
 TrialInformation.propTypes = {
   caseDetail: PropTypes.object,
+  openRemoveFromTrialSessionModalSequence: PropTypes.func,
 };
 
 export const CaseInformationInternal = connect(
@@ -71,6 +87,8 @@ export const CaseInformationInternal = connect(
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
+    openRemoveFromTrialSessionModalSequence:
+      sequences.openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence:
       sequences.openUnblockFromTrialModalSequence,
   },
@@ -78,6 +96,7 @@ export const CaseInformationInternal = connect(
     caseDetailHelper,
     formattedCaseDetail,
     openBlockFromTrialModalSequence,
+    openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
   }) => {
     return (
@@ -142,7 +161,12 @@ export const CaseInformationInternal = connect(
                     </Button>
                   )}
                   <h3 className="underlined">Trial Information</h3>
-                  <TrialInformation caseDetail={formattedCaseDetail} />
+                  <TrialInformation
+                    caseDetail={formattedCaseDetail}
+                    openRemoveFromTrialSessionModalSequence={
+                      openRemoveFromTrialSessionModalSequence
+                    }
+                  />
                 </div>
               </div>
             </div>
