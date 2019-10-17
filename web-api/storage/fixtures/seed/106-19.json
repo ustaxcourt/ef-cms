@@ -134,7 +134,7 @@
     "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
       "isPaper": true,
-      "serviceDate": "undefined-undefined-undefined",
+      "serviceDate": null,
       "documentType": "Proposed Stipulated Decision",
       "practitioner": [],
       "partyPrimary": true,
@@ -188,7 +188,7 @@
     "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
       "isPaper": true,
-      "serviceDate": "undefined-undefined-undefined",
+      "serviceDate": null,
       "documentType": "Proposed Stipulated Decision",
       "practitioner": [],
       "partyPrimary": true,
@@ -315,7 +315,7 @@
     "gsi1pk": "workitem-2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
       "isPaper": true,
-      "serviceDate": "undefined-undefined-undefined",
+      "serviceDate": null,
       "documentType": "Proposed Stipulated Decision",
       "practitioner": [],
       "partyPrimary": true,
@@ -537,7 +537,7 @@
       },
       {
         "isPaper": true,
-        "serviceDate": "undefined-undefined-undefined",
+        "serviceDate": null,
         "documentType": "Proposed Stipulated Decision",
         "practitioner": [],
         "partyPrimary": true,
@@ -549,7 +549,7 @@
             "completedMessage": "completed",
             "document": {
               "isPaper": true,
-              "serviceDate": "undefined-undefined-undefined",
+              "serviceDate": null,
               "documentType": "Proposed Stipulated Decision",
               "practitioner": [],
               "partyPrimary": true,
@@ -659,6 +659,7 @@
       "email": "taxpayer@example.com"
     },
     "createdAt": "2019-07-12T17:09:41.026Z",
+    "receivedAt": "2019-07-12T17:09:41.026Z",
     "noticeOfAttachments": false,
     "caseCaption": "Denise Gould, Petitioner",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
@@ -768,7 +769,7 @@
       },
       {
         "isPaper": true,
-        "serviceDate": "undefined-undefined-undefined",
+        "serviceDate": null,
         "documentType": "Proposed Stipulated Decision",
         "practitioner": [],
         "partyPrimary": true,
@@ -780,7 +781,7 @@
             "completedMessage": "completed",
             "document": {
               "isPaper": true,
-              "serviceDate": "undefined-undefined-undefined",
+              "serviceDate": null,
               "documentType": "Proposed Stipulated Decision",
               "practitioner": [],
               "partyPrimary": true,
@@ -923,6 +924,7 @@
       "email": "taxpayer@example.com"
     },
     "createdAt": "2019-07-12T17:09:41.026Z",
+    "receivedAt": "2019-07-12T17:09:41.026Z",
     "noticeOfAttachments": false,
     "caseCaption": "Denise Gould, Petitioner",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",

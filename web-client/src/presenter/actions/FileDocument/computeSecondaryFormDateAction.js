@@ -11,15 +11,21 @@ export const computeSecondaryFormDateAction = ({ get, store }) => {
   const secondaryDocument = get(state.form.secondaryDocument);
 
   if (secondaryDocument && secondaryDocument.documentType) {
-    let formDate = `${get(state.form.secondaryDocument.year)}-${get(
-      state.form.secondaryDocument.month,
-    )}-${get(state.form.secondaryDocument.day)}`;
+    const year = get(state.form.secondaryDocument.year);
+    const month = get(state.form.secondaryDocument.month);
+    const day = get(state.form.secondaryDocument.day);
 
-    formDate = formDate
-      .split('-')
-      .map(segment => (segment = segment.padStart(2, '0')))
-      .join('-');
+    if (year && month && day) {
+      let formDate = `${year}-${month}-${day}`;
 
-    store.set(state.form.secondaryDocument.serviceDate, formDate);
+      formDate = formDate
+        .split('-')
+        .map(segment => (segment = segment.padStart(2, '0')))
+        .join('-');
+
+      store.set(state.form.secondaryDocument.serviceDate, formDate);
+    } else {
+      store.unset(state.form.secondaryDocument.serviceDate);
+    }
   }
 };
