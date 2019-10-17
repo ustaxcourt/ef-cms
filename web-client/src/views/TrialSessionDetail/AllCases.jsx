@@ -10,7 +10,7 @@ export const AllCases = connect(
   ({ allCases }) => {
     return (
       <React.Fragment>
-        <div className="text-semibold push-right margin-bottom-2 margin-top-neg-205">
+        <div className="text-semibold push-right margin-bottom-2">
           Count: {allCases.length}
         </div>
         <table
@@ -36,7 +36,7 @@ export const AllCases = connect(
                 <td>{item.caseCaptionNames}</td>
                 <td>{item.status}</td>
                 <td>{item.disposition}</td>
-                <td>{item.removedFromTrialDate}</td>
+                <td>{item.removedFromTrialDateFormatted}</td>
               </tr>
             </tbody>
           ))}
