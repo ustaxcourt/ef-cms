@@ -71,7 +71,7 @@ exports.completeDocketEntryQCInteractor = async ({
   caseEntity.updateDocument(documentEntity);
 
   const workItemsToComplete = currentDocument.workItems
-    .filter(wi => wi.isInternal === false)
+    .filter(wi => wi.isQC === true)
     .filter(wi => !wi.completedAt);
 
   for (const workItemToComplete of workItemsToComplete) {
@@ -91,7 +91,6 @@ exports.completeDocketEntryQCInteractor = async ({
         ...documentEntity.toRawObject(),
         createdAt: documentEntity.createdAt,
       },
-      isInternal: false,
       section: DOCKET_SECTION,
       sentBy: user.userId,
     });
