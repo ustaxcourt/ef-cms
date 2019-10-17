@@ -17,7 +17,7 @@ export const setQCWorkItemIdToMarkAsReadIfNeededAction = ({ get, props }) => {
     caseDetail.documents.find(entry => entry.documentId === documentId) || {};
 
   const unreadQCWorkItem = (initialDocument.workItems || []).find(
-    wi => wi.isQC && !wi.isRead,
+    workItem => workItem.isQC && !workItem.isRead,
   );
 
   if (unreadQCWorkItem) {
