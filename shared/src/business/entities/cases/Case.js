@@ -177,7 +177,6 @@ function Case(rawCase, { applicationContext }) {
   this.contactSecondary = rawCase.contactSecondary;
   this.createdAt = rawCase.createdAt || createISODateString();
   this.currentVersion = rawCase.currentVersion;
-  this.disposition = rawCase.disposition;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
@@ -192,8 +191,6 @@ function Case(rawCase, { applicationContext }) {
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
-  this.removedFromTrial = rawCase.removedFromTrial;
-  this.removedFromTrialDate = rawCase.removedFromTrialDate;
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialJudge = rawCase.trialJudge;
