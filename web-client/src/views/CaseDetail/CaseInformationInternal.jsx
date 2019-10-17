@@ -79,6 +79,7 @@ const TrialInformation = ({
           link
           className="red-warning"
           icon="trash"
+          id="remove-from-trial-session-btn"
           onClick={() => {
             openRemoveFromTrialSessionModalSequence();
           }}
