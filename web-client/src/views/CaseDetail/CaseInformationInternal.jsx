@@ -5,26 +5,29 @@ import { sequences } from 'cerebral';
 import { state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from 'classnames';
 
 const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
   <React.Fragment>
     <div className="grid-row">
-      <div className="grid-col-6">
-        <p className="label">Notice/case type</p>
+      <div className="grid-col-4">
+        <p className="label">Notice/Case Type</p>
         <p>{caseDetail.caseType}</p>
       </div>
-      <div className="grid-col-6">
-        <p className="label">Case procedure</p>
+      <div className="grid-col-4">
+        <p className="label">Case Procedure</p>
         <p>{caseDetail.procedureType}</p>
+      </div>
+      <div className="grid-col-4">
+        <p className="label">Requested Place of Trial</p>
+        <p>{caseDetail.formattedPreferredTrialCity}</p>
       </div>
     </div>
     <div className="grid-row">
-      <div className="grid-col-6">
+      <div className="grid-col-4">
         <p className="label">IRS Notice Date</p>
         <p className="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
       </div>
-      <div className="grid-col-6">
+      <div className="grid-col-4">
         {showPaymentRecord && (
           <React.Fragment>
             <p className="label">Petition Fee Paid</p>
@@ -43,43 +46,98 @@ PetitionDetails.propTypes = {
 
 const TrialInformation = ({
   caseDetail,
+  openBlockFromTrialModalSequence,
   openRemoveFromTrialSessionModalSequence,
+  openUnblockFromTrialModalSequence,
 }) => (
   <React.Fragment>
-    <div className="grid-row">
-      <div className="grid-col-6">
-        <p className="label">Place of trial</p>
-        <p>{caseDetail.formattedTrialCity}</p>
-      </div>
-      <div className="grid-col-6">
-        <p className="label">Trial date</p>
-        <p>{caseDetail.formattedTrialDate}</p>
-      </div>
-    </div>
-    <div className="grid-row">
-      <div className="grid-col-6">
-        <p className="label">Assigned judge</p>
-        <p>{caseDetail.formattedTrialJudge}</p>
-      </div>
-    </div>
-    <div className="grid-row">
-      <div className="grid-col-12">
+    {caseDetail.showTrialCalendared && (
+      <>
+        <h3 className="underlined">
+          Trial - Calendared
+          <FontAwesomeIcon
+            className="margin-left-1 mini-success"
+            icon="check-circle"
+            size="1x"
+          />
+        </h3>
+        <div className="grid-row">
+          <div className="grid-col-4">
+            <p className="label">Place of Trial</p>
+            <p>{caseDetail.formattedTrialCity}</p>
+          </div>
+          <div className="grid-col-4">
+            <p className="label">Trial Date</p>
+            <p>{caseDetail.formattedTrialDate}</p>
+          </div>
+          <div className="grid-col-4">
+            <p className="label">Assigned Judge</p>
+            <p>{caseDetail.formattedTrialJudge}</p>
+          </div>
+        </div>
         <Button
           link
           className="red-warning"
           icon="trash"
-          onClick={() => openRemoveFromTrialSessionModalSequence()}
+          onClick={() => {
+            openRemoveFromTrialSessionModalSequence();
+          }}
         >
           Remove from Trial Session
         </Button>
-      </div>
-    </div>
+      </>
+    )}
+    {caseDetail.showBlockedFromTrial && (
+      <>
+        <h3 className="underlined">
+          Trial - Blocked From Trial
+          <FontAwesomeIcon
+            className="text-secondary-dark margin-left-1"
+            icon={['fas', 'hand-paper']}
+            size="1x"
+          />
+        </h3>
+        <div className="grid-row">
+          <p className="label">
+            Blocked from Trial {caseDetail.blockedDateFormatted}:{' '}
+            <span className="text-normal">{caseDetail.blockedReason}</span>
+          </p>
+        </div>
+        <Button
+          link
+          className="red-warning margin-top-2"
+          icon="trash"
+          onClick={() => {
+            openUnblockFromTrialModalSequence();
+          }}
+        >
+          Remove Block
+        </Button>
+      </>
+    )}
+    {caseDetail.showNotScheduled && (
+      <>
+        <h3 className="underlined">Trial - Not Scheduled</h3>
+        <Button
+          link
+          className="block-from-trial-btn red-warning float-right"
+          icon="hand-paper"
+          onClick={() => {
+            openBlockFromTrialModalSequence();
+          }}
+        >
+          Block From Trial
+        </Button>
+      </>
+    )}
   </React.Fragment>
 );
 
 TrialInformation.propTypes = {
   caseDetail: PropTypes.object,
+  openBlockFromTrialModalSequence: PropTypes.func,
   openRemoveFromTrialSessionModalSequence: PropTypes.func,
+  openUnblockFromTrialModalSequence: PropTypes.func,
 };
 
 export const CaseInformationInternal = connect(
@@ -100,38 +158,7 @@ export const CaseInformationInternal = connect(
     openUnblockFromTrialModalSequence,
   }) => {
     return (
-      <div
-        className={classNames(
-          'internal-information',
-          formattedCaseDetail.showUnblockHint && 'less',
-        )}
-      >
-        {formattedCaseDetail.showUnblockHint && (
-          <span className="alert-error margin-bottom-2">
-            <FontAwesomeIcon
-              className="text-secondary-dark"
-              icon={['fas', 'hand-paper']}
-              size="lg"
-            />
-            <span className="margin-left-1 text-bold">
-              Blocked from Trial {formattedCaseDetail.blockedDateFormatted}:
-            </span>{' '}
-            <span className="margin-right-5">
-              {formattedCaseDetail.blockedReason}
-            </span>
-            <Button
-              link
-              className="red-warning"
-              icon="trash"
-              onClick={() => {
-                openUnblockFromTrialModalSequence();
-              }}
-            >
-              Remove Block
-            </Button>
-          </span>
-        )}
-
+      <div className="internal-information">
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-6">
@@ -148,23 +175,16 @@ export const CaseInformationInternal = connect(
             <div className="tablet:grid-col-6">
               <div className="card height-full">
                 <div className="content-wrapper">
-                  {formattedCaseDetail.showBlockFromTrialButton && (
-                    <Button
-                      link
-                      className="block-from-trial-btn red-warning float-right"
-                      icon="hand-paper"
-                      onClick={() => {
-                        openBlockFromTrialModalSequence();
-                      }}
-                    >
-                      Block From Trial
-                    </Button>
-                  )}
-                  <h3 className="underlined">Trial Information</h3>
                   <TrialInformation
                     caseDetail={formattedCaseDetail}
+                    openBlockFromTrialModalSequence={
+                      openBlockFromTrialModalSequence
+                    }
                     openRemoveFromTrialSessionModalSequence={
                       openRemoveFromTrialSessionModalSequence
+                    }
+                    openUnblockFromTrialModalSequence={
+                      openUnblockFromTrialModalSequence
                     }
                   />
                 </div>

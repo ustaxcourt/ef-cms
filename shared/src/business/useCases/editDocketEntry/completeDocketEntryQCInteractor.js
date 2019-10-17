@@ -56,7 +56,8 @@ exports.completeDocketEntryQCInteractor = async ({
       userId: user.userId,
     },
     { applicationContext },
-  );
+  ).validate();
+
   documentEntity.generateFiledBy(caseToUpdate);
   documentEntity.setQCed(user);
 
@@ -71,8 +72,8 @@ exports.completeDocketEntryQCInteractor = async ({
   caseEntity.updateDocument(documentEntity);
 
   const workItemsToComplete = currentDocument.workItems
-    .filter(wi => wi.isQC === true)
-    .filter(wi => !wi.completedAt);
+    .filter(workItem => workItem.isQC === true)
+    .filter(workItem => !workItem.completedAt);
 
   for (const workItemToComplete of workItemsToComplete) {
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
