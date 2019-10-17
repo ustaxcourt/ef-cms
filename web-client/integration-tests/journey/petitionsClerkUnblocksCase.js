@@ -14,7 +14,7 @@ export default test => {
     expect(test.getState('caseDetail').blockedReason).toBeUndefined();
 
     // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 5000));
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 
