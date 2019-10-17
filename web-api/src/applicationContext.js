@@ -768,7 +768,7 @@ module.exports = (appContextUser = {}) => {
     },
     getSearchClient: () => {
       if (!searchClientCache) {
-        if (environment.stage === 'local' && process.env.CI !== 'true') {
+        if (environment.stage === 'local') {
           searchClientCache = new elasticsearch.Client({
             host: environment.elasticsearchEndpoint,
           });
