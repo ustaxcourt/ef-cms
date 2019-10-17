@@ -23,7 +23,7 @@ describe('remove case from trial session', () => {
   let applicationContext;
   const getTrialSessionByIdStub = sinon.stub().returns(MOCK_TRIAL_SESSION);
   const updateTrialSessionStub = sinon.stub().returns();
-  const getCaseByIdStub = sinon.stub().returns({
+  const getCaseByCaseIdStub = sinon.stub().returns({
     ...MOCK_CASE,
     trialLocation: 'Boise, Idaho',
     trialJudge: 'someone',
@@ -44,7 +44,7 @@ describe('remove case from trial session', () => {
       getPersistenceGateway: () => {
         return {
           createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsStub,
-          getCaseById: getCaseByIdStub,
+          getCaseByCaseId: getCaseByCaseIdStub,
           getTrialSessionById: getTrialSessionByIdStub,
           updateCase: updateCaseStub,
           updateTrialSession: updateTrialSessionStub,
@@ -61,7 +61,7 @@ describe('remove case from trial session', () => {
     ).rejects.toThrow();
   });
 
-  it('calls getTrialSessionById, updateTrialSession, getCaseById, and updateCase persistence methods with correct parameters', async () => {
+  it('calls getTrialSessionById, updateTrialSession, getCaseByCaseId, and updateCase persistence methods with correct parameters', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
@@ -73,7 +73,7 @@ describe('remove case from trial session', () => {
       getPersistenceGateway: () => {
         return {
           createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsStub,
-          getCaseById: getCaseByIdStub,
+          getCaseByCaseId: getCaseByCaseIdStub,
           getTrialSessionById: getTrialSessionByIdStub,
           updateCase: updateCaseStub,
           updateTrialSession: updateTrialSessionStub,
@@ -106,8 +106,10 @@ describe('remove case from trial session', () => {
         { caseId: 'fa1179bd-04f5-4934-a716-964d8d7babc6' },
       ],
     });
-    expect(getCaseByIdStub.called).toEqual(true);
-    expect(getCaseByIdStub.getCall(0).args[0].caseId).toEqual(MOCK_CASE.caseId);
+    expect(getCaseByCaseIdStub.called).toEqual(true);
+    expect(getCaseByCaseIdStub.getCall(0).args[0].caseId).toEqual(
+      MOCK_CASE.caseId,
+    );
     expect(createCaseTrialSortMappingRecordsStub.called).toEqual(true);
     expect(
       createCaseTrialSortMappingRecordsStub.getCall(0).args[0].caseId,

@@ -45,10 +45,12 @@ exports.removeCaseFromTrialInteractor = async ({
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 
-  const myCase = await applicationContext.getPersistenceGateway().getCaseById({
-    applicationContext,
-    caseId,
-  });
+  const myCase = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      caseId,
+    });
 
   const caseEntity = new Case(myCase, { applicationContext });
 
