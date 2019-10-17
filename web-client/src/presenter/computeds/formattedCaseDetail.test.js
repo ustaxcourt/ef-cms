@@ -1,3 +1,4 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -16,7 +17,6 @@ describe('formattedCaseDetail', () => {
     expect(result).toMatchObject({
       caseDeadlines: [],
       docketRecordWithDocument: [],
-      showBlockFromTrialButton: true,
     });
   });
 
@@ -529,6 +529,7 @@ describe('formattedCaseDetail', () => {
     it('should provide defaults for trial information if no trial session id exists', () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
+        status: Case.STATUS_TYPES.calendared,
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -544,7 +545,8 @@ describe('formattedCaseDetail', () => {
     it('should provide defaults for trial information if no trial session id exists', () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
-        preferredTrialCity: 'England is my City',
+        status: Case.STATUS_TYPES.calendared,
+        trialLocation: 'England is my City',
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -560,6 +562,7 @@ describe('formattedCaseDetail', () => {
     it('should format trial information if a trial session id exists', () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
+        status: Case.STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialJudge: 'Judge Judy',
         trialLocation: 'England is my City',
@@ -580,6 +583,7 @@ describe('formattedCaseDetail', () => {
     it('should not add time if no time stamp exists', () => {
       const caseDetail = {
         petitioners: [{ name: 'bob' }],
+        status: Case.STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
         trialJudge: 'Judge Judy',
         trialLocation: 'England is my City',
@@ -673,50 +677,6 @@ describe('formattedCaseDetail', () => {
         },
       });
       expect(result.caseDeadlines.length).toEqual(0);
-    });
-
-    it('should not set the showBlockFromTrialButton when the case is calendared', () => {
-      const caseDetail = { blocked: false, status: 'Calendared' };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail,
-          caseDetailErrors: {},
-        },
-      });
-      expect(result.showBlockFromTrialButton).toBeFalsy();
-    });
-
-    it('should set the showBlockFromTrialButton to true when case status is something other than calendared', () => {
-      const caseDetail = { blocked: false, status: 'New' };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail,
-          caseDetailErrors: {},
-        },
-      });
-      expect(result.showBlockFromTrialButton).toBeTruthy();
-    });
-
-    it('should set showUnblockHint to true when case status is something other than calendared and blocked', () => {
-      const caseDetail = { blocked: true, status: 'New' };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail,
-          caseDetailErrors: {},
-        },
-      });
-      expect(result.showUnblockHint).toBeTruthy();
-    });
-
-    it('should NOT set showUnblockHint to true when case status is something other than calendared and blocked', () => {
-      const caseDetail = { blocked: true, status: 'Calendared' };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail,
-          caseDetailErrors: {},
-        },
-      });
-      expect(result.showUnblockHint).toBeFalsy();
     });
   });
 });
