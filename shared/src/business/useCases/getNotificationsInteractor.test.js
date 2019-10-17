@@ -12,13 +12,13 @@ describe('getNotificationsInteractor', () => {
       getPersistenceGateway: () => ({
         getDocumentQCInboxForUser: () => [
           {
-            isInternal: true,
+            isQC: false,
             isRead: true,
           },
         ],
         getInboxMessagesForUser: () => [
           {
-            isInternal: true,
+            isQC: false,
             isRead: false,
           },
         ],
@@ -40,13 +40,13 @@ describe('getNotificationsInteractor', () => {
       getPersistenceGateway: () => ({
         getDocumentQCInboxForUser: () => [
           {
-            isInternal: true,
+            isQC: false,
             isRead: false,
           },
         ],
         getInboxMessagesForUser: () => [
           {
-            isInternal: false,
+            isQC: true,
             isRead: true,
           },
         ],
@@ -68,13 +68,13 @@ describe('getNotificationsInteractor', () => {
       getPersistenceGateway: () => ({
         getDocumentQCInboxForUser: () => [
           {
-            isInternal: true,
+            isQC: false,
             isRead: true,
           },
         ],
         getInboxMessagesForUser: () => [
           {
-            isInternal: true,
+            isQC: false,
             isRead: true,
           },
         ],

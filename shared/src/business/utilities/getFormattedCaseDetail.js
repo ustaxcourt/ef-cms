@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const { Case } = require('../entities/cases/Case');
 
 const formatDocument = (applicationContext, document) => {
   const result = _.cloneDeep(document);
@@ -97,7 +98,7 @@ const formatDocketRecordWithDocument = (
       }
 
       document.qcWorkItemsCompleted = (document.workItems || [])
-        .filter(wi => !wi.isInternal)
+        .filter(wi => wi.isQC)
         .reduce((acc, wi) => {
           return acc && !!wi.completedAt;
         }, true);
@@ -258,32 +259,37 @@ const formatCase = (applicationContext, caseDetail) => {
   result.caseTitleWithoutRespondent =
     caseDetail.caseTitle && caseDetail.caseTitle.replace('Respondent', '');
 
-  result.formattedTrialCity = result.preferredTrialCity || 'Not assigned';
-  result.formattedTrialDate = 'Not scheduled';
-  result.formattedTrialJudge = 'Not assigned';
+  result.formattedPreferredTrialCity =
+    result.preferredTrialCity || 'No location selected';
 
-  if (result.trialSessionId) {
+  if (result.status === Case.STATUS_TYPES.calendared) {
+    result.showTrialCalendared = true;
     result.formattedTrialCity = result.trialLocation || 'Not assigned';
     result.formattedTrialJudge = result.trialJudge || 'Not assigned';
-    result.formattedTrialDate = applicationContext
-      .getUtilities()
-      .formatDateString(result.trialDate, 'YYYY-MM-DD');
-    if (result.trialTime) {
-      result.formattedTrialDate += `T${result.trialTime}:00`;
-      result.formattedTrialDate = applicationContext
-        .getUtilities()
-        .formatDateString(result.formattedTrialDate, 'DATE_TIME');
+    if (result.trialDate) {
+      if (result.trialTime) {
+        result.formattedTrialDate = applicationContext
+          .getUtilities()
+          .formatDateString(result.trialDate, 'YYYY-MM-DD');
+        result.formattedTrialDate += `T${result.trialTime}:00`;
+        result.formattedTrialDate = applicationContext
+          .getUtilities()
+          .formatDateString(result.formattedTrialDate, 'DATE_TIME');
+      } else {
+        result.formattedTrialDate = applicationContext
+          .getUtilities()
+          .formatDateString(result.trialDate, 'MMDDYY');
+      }
     } else {
-      result.formattedTrialDate = applicationContext
-        .getUtilities()
-        .formatDateString(result.formattedTrialDate, 'MMDDYY');
+      result.formattedTrialDate = 'Not scheduled';
     }
-  }
-
-  if (result.blocked) {
+  } else if (result.blocked) {
+    result.showBlockedFromTrial = true;
     result.blockedDateFormatted = applicationContext
       .getUtilities()
       .formatDateString(result.blockedDate, 'MMDDYY');
+  } else {
+    result.showNotScheduled = true;
   }
 
   return result;

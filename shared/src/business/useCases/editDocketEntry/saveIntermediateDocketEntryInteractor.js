@@ -51,7 +51,7 @@ exports.saveIntermediateDocketEntryInteractor = async ({
   });
 
   const workItemsToPutInProgress = currentDocument.workItems
-    .filter(wi => wi.isInternal === false)
+    .filter(wi => wi.isQC === true)
     .filter(wi => !wi.inProgress);
 
   const workItemUpdates = [];

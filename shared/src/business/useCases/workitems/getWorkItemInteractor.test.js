@@ -11,6 +11,7 @@ describe('getWorkItemInteractor', () => {
     document: {
       sentBy: 'taxpayer',
     },
+    isQC: true,
     messages: [],
     section: 'docket',
     sentBy: 'docketclerk',
