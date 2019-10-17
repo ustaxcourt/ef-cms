@@ -30,6 +30,7 @@ describe('remove case from trial session', () => {
     trialSessionId: 'abcd',
   });
   const updateCaseStub = sinon.stub().returns();
+  const createCaseTrialSortMappingRecordsStub = sinon.stub().returns();
 
   it('throws error if user is unauthorized', async () => {
     applicationContext = {
@@ -42,6 +43,7 @@ describe('remove case from trial session', () => {
       },
       getPersistenceGateway: () => {
         return {
+          createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsStub,
           getCaseById: getCaseByIdStub,
           getTrialSessionById: getTrialSessionByIdStub,
           updateCase: updateCaseStub,
@@ -70,6 +72,7 @@ describe('remove case from trial session', () => {
       },
       getPersistenceGateway: () => {
         return {
+          createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsStub,
           getCaseById: getCaseByIdStub,
           getTrialSessionById: getTrialSessionByIdStub,
           updateCase: updateCaseStub,
@@ -105,6 +108,10 @@ describe('remove case from trial session', () => {
     });
     expect(getCaseByIdStub.called).toEqual(true);
     expect(getCaseByIdStub.getCall(0).args[0].caseId).toEqual(MOCK_CASE.caseId);
+    expect(createCaseTrialSortMappingRecordsStub.called).toEqual(true);
+    expect(
+      createCaseTrialSortMappingRecordsStub.getCall(0).args[0].caseId,
+    ).toEqual(MOCK_CASE.caseId);
     expect(updateCaseStub.called).toEqual(true);
     expect(updateCaseStub.getCall(0).args[0].caseToUpdate).toMatchObject({
       caseId: MOCK_CASE.caseId,
