@@ -205,6 +205,7 @@ module.exports = [
       'click element #tab-case-info',
       'wait for #remove-from-trial-session-btn to be visible',
       'click element #remove-from-trial-session-btn',
+      'wait for #remove-from-trial-session-modal to be visible',
     ],
     notes: 'checks the remove from trial session modal',
     url:
