@@ -4,7 +4,9 @@ import { removeFromTrialSessionAction } from '../actions/CaseDetail/removeFromTr
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateRemoveFromTrialSessionAction } from '../actions/CaseDetail/validateRemoveFromTrialSessionAction';
 
 export const removeFromTrialSessionSequence = [
@@ -13,7 +15,9 @@ export const removeFromTrialSessionSequence = [
   {
     error: [setValidationErrorsAction],
     success: [
+      setWaitingForResponseAction,
       removeFromTrialSessionAction,
+      unsetWaitingForResponseAction,
       setAlertSuccessAction,
       clearModalAction,
       clearModalStateAction,
