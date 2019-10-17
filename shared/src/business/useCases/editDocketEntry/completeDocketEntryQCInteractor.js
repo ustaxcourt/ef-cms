@@ -27,7 +27,13 @@ exports.completeDocketEntryQCInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseId, documentId, documentType } = entryMetadata;
+  const {
+    caseId,
+    documentId,
+    documentType,
+    freeText,
+    freeText2,
+  } = entryMetadata;
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -52,6 +58,8 @@ exports.completeDocketEntryQCInteractor = async ({
       ...entryMetadata,
       relationship: 'primaryDocument',
       documentId,
+      freeText,
+      freeText2,
       documentType,
       userId: user.userId,
     },

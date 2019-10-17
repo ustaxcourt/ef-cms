@@ -1,4 +1,6 @@
 import { Inclusions } from '../AddDocketEntry/Inclusions';
+import { NonstandardForm } from '../FileDocument/NonstandardForm';
+import { SecondaryDocumentForm } from '../AddDocketEntry/SecondaryDocumentForm';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import {
@@ -20,9 +22,10 @@ export const PrimaryDocumentForm = connect(
     internalTypesHelper: state.internalTypesHelper,
     saveIntermediateDocketEntrySequence:
       sequences.saveIntermediateDocketEntrySequence,
-    updateEditDocketEntryFormValueSequence:
-      sequences.updateEditDocketEntryFormValueSequence,
+    updateDocketEntryFormValueSequence:
+      sequences.updateDocketEntryFormValueSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
+    validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -31,8 +34,9 @@ export const PrimaryDocumentForm = connect(
     form,
     internalTypesHelper,
     saveIntermediateDocketEntrySequence,
-    updateEditDocketEntryFormValueSequence,
+    updateDocketEntryFormValueSequence,
     updateScreenMetadataSequence,
+    validateDocketEntrySequence,
     validationErrors,
   }) => {
     return (
@@ -56,7 +60,7 @@ export const PrimaryDocumentForm = connect(
                     type="radio"
                     value={option}
                     onChange={e => {
-                      updateEditDocketEntryFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.value === 'Lodge',
                       });
@@ -105,7 +109,7 @@ export const PrimaryDocumentForm = connect(
                       saveIntermediateDocketEntrySequence();
                     }}
                     onChange={e => {
-                      updateEditDocketEntryFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: limitLength(e.target.value, 2),
                       });
@@ -129,7 +133,7 @@ export const PrimaryDocumentForm = connect(
                       saveIntermediateDocketEntrySequence();
                     }}
                     onChange={e => {
-                      updateEditDocketEntryFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: limitLength(e.target.value, 2),
                       });
@@ -153,7 +157,7 @@ export const PrimaryDocumentForm = connect(
                       saveIntermediateDocketEntrySequence();
                     }}
                     onChange={e => {
-                      updateEditDocketEntryFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: limitLength(e.target.value, 4),
                       });
@@ -201,7 +205,7 @@ export const PrimaryDocumentForm = connect(
                   action,
                   inputValue,
                   name,
-                  updateSequence: updateEditDocketEntryFormValueSequence,
+                  updateSequence: updateDocketEntryFormValueSequence,
                   validateSequence: saveIntermediateDocketEntrySequence,
                 });
                 return true;
@@ -220,39 +224,84 @@ export const PrimaryDocumentForm = connect(
             />
           </div>
 
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors &&
-                validationErrors.documentTitle &&
-                'usa-form-group--error',
-            )}
-          >
-            <label className="usa-label" htmlFor="document-title">
-              Document title
-            </label>
-            <input
-              autoCapitalize="none"
-              className="usa-input"
-              id="document-title"
-              name="documentTitle"
-              type="text"
-              value={form.documentTitle || ''}
-              onBlur={() => {
-                saveIntermediateDocketEntrySequence();
-              }}
-              onChange={e => {
-                updateEditDocketEntryFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
+          {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
+            <div
+              className={classNames(
+                'usa-form-group',
+                validationErrors.secondaryDocument &&
+                  !form.secondaryDocument &&
+                  'usa-form-group--error',
+              )}
+            >
+              <label
+                className="usa-label"
+                htmlFor="react-select-3-input"
+                id="secondary-document-type-label"
+              >
+                Which Document Is This Motion for Leave For?
+                <span className="usa-hint">
+                  You can upload the associated document by creating a new
+                  docket entry for it.
+                </span>
+              </label>
+              <Select
+                aria-describedby="secondary-document-type-label"
+                className="select-react-element"
+                classNamePrefix="select-react-element"
+                id="secondary-document-type"
+                isClearable={true}
+                name="secondaryDocument.eventCode"
+                options={
+                  internalTypesHelper.internalDocumentTypesForSelectSorted
+                }
+                placeholder="- Select -"
+                value={reactSelectValue({
+                  documentTypes:
+                    internalTypesHelper.internalDocumentTypesForSelectSorted,
+                  selectedEventCode:
+                    form.secondaryDocument && form.secondaryDocument.eventCode,
+                })}
+                onChange={(inputValue, { action, name }) => {
+                  docketEntryOnChange({
+                    action,
+                    inputValue,
+                    name,
+                    updateSequence: updateDocketEntryFormValueSequence,
+                    validateSequence: validateDocketEntrySequence,
+                  });
+                  saveIntermediateDocketEntrySequence();
+                  return true;
+                }}
+                onInputChange={(inputText, { action }) => {
+                  onInputChange({
+                    action,
+                    inputText,
+                    updateSequence: updateScreenMetadataSequence,
+                  });
+                }}
+              />
+              {!form.secondaryDocument && (
+                <Text
+                  bind="validationErrors.secondaryDocument"
+                  className="usa-error-message"
+                />
+              )}
+            </div>
+          )}
+
+          {addDocketEntryHelper.primary.showNonstandardForm && (
+            <NonstandardForm
+              helper="addDocketEntryHelper"
+              level="primary"
+              saveOnBlur={true}
+              saveSequence="saveIntermediateDocketEntrySequence"
+              updateSequence="updateDocketEntryFormValueSequence"
+              validateSequence="validateDocketEntrySequence"
+              validationErrors="validationErrors"
             />
-            <Text
-              bind="validationErrors.documentTitle"
-              className="usa-error-message"
-            />
-          </div>
+          )}
+
+          {form.secondaryDocument && <SecondaryDocumentForm />}
 
           <div className="usa-form-group">
             <label
@@ -274,7 +323,7 @@ export const PrimaryDocumentForm = connect(
                 saveIntermediateDocketEntrySequence();
               }}
               onChange={e => {
-                updateEditDocketEntryFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -290,7 +339,7 @@ export const PrimaryDocumentForm = connect(
                 name="addToCoversheet"
                 type="checkbox"
                 onChange={e => {
-                  updateEditDocketEntryFormValueSequence({
+                  updateDocketEntryFormValueSequence({
                     key: e.target.name,
                     value: e.target.checked,
                   });
@@ -326,7 +375,7 @@ export const PrimaryDocumentForm = connect(
                 saveIntermediateDocketEntrySequence();
               }}
               onChange={e => {
-                updateEditDocketEntryFormValueSequence({
+                updateDocketEntryFormValueSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -361,7 +410,7 @@ export const PrimaryDocumentForm = connect(
                   name="partyPrimary"
                   type="checkbox"
                   onChange={e => {
-                    updateEditDocketEntryFormValueSequence({
+                    updateDocketEntryFormValueSequence({
                       key: e.target.name,
                       value: e.target.checked,
                     });
@@ -381,7 +430,7 @@ export const PrimaryDocumentForm = connect(
                     name="partySecondary"
                     type="checkbox"
                     onChange={e => {
-                      updateEditDocketEntryFormValueSequence({
+                      updateDocketEntryFormValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
@@ -404,7 +453,7 @@ export const PrimaryDocumentForm = connect(
                   name="partyRespondent"
                   type="checkbox"
                   onChange={e => {
-                    updateEditDocketEntryFormValueSequence({
+                    updateDocketEntryFormValueSequence({
                       key: e.target.name,
                       value: e.target.checked,
                     });
@@ -446,7 +495,7 @@ export const PrimaryDocumentForm = connect(
                       type="radio"
                       value={option}
                       onChange={e => {
-                        updateEditDocketEntryFormValueSequence({
+                        updateDocketEntryFormValueSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
