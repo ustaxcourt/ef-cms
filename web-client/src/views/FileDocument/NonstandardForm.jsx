@@ -13,6 +13,7 @@ export const NonstandardForm = connect(
     helper: state[props.helper],
     level: props.level,
     namespace: props.namespace,
+    saveSequence: sequences[props.saveSequence],
     trialCitiesHelper: state.trialCitiesHelper,
     updateSequence: sequences[props.updateSequence],
     validateSequence: sequences[props.validateSequence],
@@ -24,6 +25,8 @@ export const NonstandardForm = connect(
     helper,
     level,
     namespace,
+    saveOnBlur,
+    saveSequence,
     trialCitiesHelper,
     updateSequence,
     validateSequence,
@@ -53,6 +56,9 @@ export const NonstandardForm = connect(
               value={get(form, `${namespace}freeText`, '')}
               onBlur={() => {
                 validateSequence();
+                if (saveOnBlur) {
+                  saveSequence();
+                }
               }}
               onChange={e => {
                 updateSequence({
@@ -89,6 +95,9 @@ export const NonstandardForm = connect(
               value={get(form, `${namespace}freeText2`, '')}
               onBlur={() => {
                 validateSequence();
+                if (saveOnBlur) {
+                  saveSequence();
+                }
               }}
               onChange={e => {
                 updateSequence({
@@ -136,6 +145,9 @@ export const NonstandardForm = connect(
                   value: e.target.value,
                 });
                 validateSequence();
+                if (saveOnBlur) {
+                  saveSequence();
+                }
               }}
             >
               <option value="">- Select -</option>
@@ -193,6 +205,9 @@ export const NonstandardForm = connect(
                     value={get(form, `${namespace}month`, '')}
                     onBlur={() => {
                       validateSequence();
+                      if (saveOnBlur) {
+                        saveSequence();
+                      }
                     }}
                     onChange={e => {
                       updateSequence({
@@ -227,6 +242,9 @@ export const NonstandardForm = connect(
                     value={get(form, `${namespace}day`, '')}
                     onBlur={() => {
                       validateSequence();
+                      if (saveOnBlur) {
+                        saveSequence();
+                      }
                     }}
                     onChange={e => {
                       updateSequence({
@@ -261,6 +279,9 @@ export const NonstandardForm = connect(
                     value={get(form, `${namespace}year`, '')}
                     onBlur={() => {
                       validateSequence();
+                      if (saveOnBlur) {
+                        saveSequence();
+                      }
                     }}
                     onChange={e => {
                       updateSequence({
@@ -303,6 +324,9 @@ export const NonstandardForm = connect(
                   value: e.target.value,
                 });
                 validateSequence();
+                if (saveOnBlur) {
+                  saveSequence();
+                }
               }}
             />
             <Text
@@ -345,6 +369,9 @@ export const NonstandardForm = connect(
                         value: e.target.value,
                       });
                       validateSequence();
+                      if (saveOnBlur) {
+                        saveSequence();
+                      }
                     }}
                   />
                   <label
