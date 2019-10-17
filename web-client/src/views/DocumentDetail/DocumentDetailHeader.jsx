@@ -20,6 +20,9 @@ export const DocumentDetailHeader = connect(
             {documentDetailHelper.formattedDocument.filedBy &&
               ` by ${documentDetailHelper.formattedDocument.filedBy}`}
           </div>
+          {documentDetailHelper.formattedDocument.qcByUser && (
+            <div>QC’d by {documentDetailHelper.formattedDocument.qcBy}</div>
+          )}
           {documentDetailHelper.formattedDocument.showServedAt && (
             <div>
               Served {documentDetailHelper.formattedDocument.servedAtFormatted}

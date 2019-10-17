@@ -51,5 +51,6 @@ export const completeDocketEntryQCAction = async ({
     },
     caseDetail,
     caseId: docketNumber,
+    updatedDocument,
   };
 };

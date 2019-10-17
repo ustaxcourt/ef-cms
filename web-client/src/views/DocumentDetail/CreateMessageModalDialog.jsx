@@ -20,6 +20,7 @@ export const CreateMessageModalDialog = connect(
   ({
     constants,
     form,
+    onConfirmSequence = 'createWorkItemSequence',
     showChambersSelect,
     updateMessageValueInModalSequence,
     users,
@@ -35,7 +36,7 @@ export const CreateMessageModalDialog = connect(
         preventCancelOnBlur={true}
         title="Create Message"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="createWorkItemSequence"
+        onConfirmSequence={onConfirmSequence}
       >
         <div
           className={classNames(

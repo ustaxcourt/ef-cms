@@ -67,7 +67,7 @@ exports.completeDocketEntryQCInteractor = async ({
   ).validate();
 
   documentEntity.generateFiledBy(caseToUpdate);
-  documentEntity.setQCed(user.userId);
+  documentEntity.setQCed(user);
 
   const docketRecordEntry = new DocketRecord({
     description: entryMetadata.documentTitle,
@@ -80,7 +80,7 @@ exports.completeDocketEntryQCInteractor = async ({
   caseEntity.updateDocument(documentEntity);
 
   const workItemsToComplete = currentDocument.workItems
-    .filter(workItem => workItem.isInternal === false)
+    .filter(workItem => workItem.isQC === true)
     .filter(workItem => !workItem.completedAt);
 
   for (const workItemToComplete of workItemsToComplete) {
@@ -100,7 +100,6 @@ exports.completeDocketEntryQCInteractor = async ({
         ...documentEntity.toRawObject(),
         createdAt: documentEntity.createdAt,
       },
-      isInternal: false,
       section: DOCKET_SECTION,
       sentBy: user.userId,
     });

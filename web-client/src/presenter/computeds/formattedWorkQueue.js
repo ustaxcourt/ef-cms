@@ -157,7 +157,7 @@ export const filterWorkItems = ({
         batched: item => {
           return (
             !item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             item.sentByUserId === user.userId &&
             item.section === IRS_BATCH_SYSTEM_SECTION &&
             item.caseStatus === Case.STATUS_TYPES.batchedForIRS
@@ -167,7 +167,7 @@ export const filterWorkItems = ({
           return (
             item.assigneeId === user.userId &&
             !item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             item.section === user.section &&
             (item.document.isFileAttached === false || !item.inProgress)
           );
@@ -176,7 +176,7 @@ export const filterWorkItems = ({
           return (
             item.assigneeId === user.userId &&
             !item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             item.section === user.section &&
             item.document.isFileAttached !== false &&
             !item.inProgress
@@ -184,7 +184,7 @@ export const filterWorkItems = ({
         },
         outbox: item => {
           return (
-            !item.isInternal &&
+            item.isQC &&
             (user.role === 'petitionsclerk'
               ? item.section === IRS_BATCH_SYSTEM_SECTION
               : true) &&
@@ -198,7 +198,7 @@ export const filterWorkItems = ({
         batched: item => {
           return (
             !item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             item.section === IRS_BATCH_SYSTEM_SECTION &&
             item.caseStatus === Case.STATUS_TYPES.batchedForIRS
           );
@@ -206,7 +206,7 @@ export const filterWorkItems = ({
         inProgress: item => {
           return (
             !item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             item.section === user.section &&
             (item.document.isFileAttached === false || item.inProgress)
           );
@@ -214,7 +214,7 @@ export const filterWorkItems = ({
         inbox: item => {
           return (
             !item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             item.section === docQCUserSection &&
             item.document.isFileAttached !== false &&
             !item.inProgress
@@ -223,7 +223,7 @@ export const filterWorkItems = ({
         outbox: item => {
           return (
             !!item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             (user.role === 'petitionsclerk'
               ? item.section === IRS_BATCH_SYSTEM_SECTION
               : true)
@@ -236,7 +236,7 @@ export const filterWorkItems = ({
         inbox: item => {
           return (
             !item.completedAt &&
-            item.isInternal &&
+            !item.isQC &&
             item.section === user.section &&
             item.assigneeId === user.userId
           );
@@ -244,7 +244,7 @@ export const filterWorkItems = ({
         outbox: item => {
           return (
             !item.completedAt &&
-            item.isInternal &&
+            !item.isQC &&
             item.sentByUserId &&
             item.sentByUserId === user.userId
           );
@@ -253,15 +253,13 @@ export const filterWorkItems = ({
       section: {
         inbox: item => {
           return (
-            !item.completedAt &&
-            item.isInternal &&
-            item.section === user.section
+            !item.completedAt && !item.isQC && item.section === user.section
           );
         },
         outbox: item => {
           return (
             !item.completedAt &&
-            item.isInternal &&
+            !item.isQC &&
             item.sentBySection === user.section
           );
         },
