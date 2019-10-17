@@ -10,7 +10,7 @@ export const OpenCases = connect(
   ({ openCases }) => {
     return (
       <React.Fragment>
-        <div className="text-semibold push-right margin-bottom-2 margin-top-neg-205">
+        <div className="text-semibold push-right margin-bottom-2">
           Count: {openCases.length}
         </div>
         <table

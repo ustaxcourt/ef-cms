@@ -91,7 +91,7 @@ exports.updateDocketEntryInteractor = async ({
         ...documentEntity.toRawObject(),
         createdAt: documentEntity.createdAt,
       },
-      isInternal: false,
+      isQC: true,
       section: DOCKET_SECTION,
       sentBy: user.userId,
     });

@@ -126,6 +126,7 @@ import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/
 import { pdfStyles } from '../../shared/src/tools/pdfStyles.js';
 import { recallPetitionFromIRSHoldingQueueInteractor } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
+import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSessions/removeCaseFromTrialProxy';
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { runBatchProcessInteractor } from '../../shared/src/proxies/runBatchProcessProxy';
@@ -279,6 +280,7 @@ const allUseCases = {
   loadPDFForSigningInteractor,
   recallPetitionFromIRSHoldingQueueInteractor,
   refreshTokenInteractor,
+  removeCaseFromTrialInteractor,
   removeItemInteractor,
   runBatchProcessInteractor,
   sanitizePdfInteractor: args =>

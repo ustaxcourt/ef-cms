@@ -151,7 +151,7 @@ exports.updateUserContactInformationInteractor = async ({
             ...changeOfAddressDocument.toRawObject(),
             createdAt: changeOfAddressDocument.createdAt,
           },
-          isInternal: false,
+          isQC: true,
           section: DOCKET_SECTION,
           sentBy: user.userId,
         },

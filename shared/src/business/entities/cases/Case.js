@@ -1012,4 +1012,19 @@ Case.prototype.unsetAsBlocked = function() {
   return this;
 };
 
+/**
+ * remove from trial, setting case status back to generalDocketReadyForTrial
+ *
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.removeFromTrial = function() {
+  this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
+  this.trialDate = undefined;
+  this.trialJudge = undefined;
+  this.trialLocation = undefined;
+  this.trialSessionId = undefined;
+  this.trialTime = undefined;
+  return this;
+};
+
 module.exports = { Case };
