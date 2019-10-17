@@ -91,9 +91,9 @@
   .chunk {
     margin-bottom: 1rem;
   }
-}
-.internal-information.less {
-  margin-top: 1.5rem;
+  &.less {
+    margin-top: 1.5rem;
+  }
 }
 
 .party-information,
