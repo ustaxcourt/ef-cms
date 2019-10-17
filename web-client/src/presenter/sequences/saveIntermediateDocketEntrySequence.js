@@ -10,10 +10,10 @@ import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocket
 
 export const saveIntermediateDocketEntrySequence = [
   computeDateReceivedAction,
+  startShowValidationAction,
   validateDocketEntryAction,
   {
     error: [
-      startShowValidationAction,
       setAlertErrorAction,
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
