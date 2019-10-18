@@ -2,6 +2,8 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
+import { computeFormDateAction } from '../actions/computeFormDateAction';
+import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -14,8 +16,10 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const completeDocketEntryQCSequence = [
-  computeDateReceivedAction,
+  computeFormDateAction,
+  computeSecondaryFormDateAction,
   computeCertificateOfServiceFormDateAction,
+  computeDateReceivedAction,
   validateDocketEntryAction,
   {
     error: [
