@@ -966,6 +966,15 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
 };
 
 /**
+ * returns true if the case status is already calendared
+ *
+ * @returns {boolean} if the case is calendared
+ */
+Case.prototype.isCalendared = function() {
+  return this.status === Case.STATUS_TYPES.calendared;
+};
+
+/**
  * getDefaultOrderDesignatingPlaceOfTrialValue
  *
  * @returns {boolean} the value of if an order is needed for place of trial.
