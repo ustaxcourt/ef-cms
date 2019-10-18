@@ -324,3 +324,16 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  addCaseToTrialSession:
+    handler: web-api/src/trialSessionsHandlers.addCaseToTrialSessionLambda
+    events:
+      - http:
+          path: /{trialSessionId}/cases/{caseId}
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
