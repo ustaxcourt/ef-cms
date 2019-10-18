@@ -8,6 +8,9 @@ const { createISODateString } = require('../utilities/DateHandler');
 const { flatten } = require('lodash');
 const { Order } = require('./orders/Order');
 const { WorkItem } = require('./WorkItem');
+const {
+  ExternalDocumentFactory,
+} = require('./externalDocument/ExternalDocumentFactory');
 
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
 Document.CATEGORIES = Object.keys(documentMapExternal);
@@ -45,10 +48,13 @@ function Document(rawDocument, { applicationContext }) {
   this.eventCode = rawDocument.eventCode;
   this.exhibits = rawDocument.exhibits;
   this.filedBy = rawDocument.filedBy;
+  this.freeText = rawDocument.freeText;
+  this.freeText2 = rawDocument.freeText2;
   this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
   this.isPaper = rawDocument.isPaper;
   this.lodged = rawDocument.lodged;
   this.objections = rawDocument.objections;
+  this.ordinalValue = rawDocument.ordinalValue;
   this.partyPrimary = rawDocument.partyPrimary;
   this.partyRespondent = rawDocument.partyRespondent;
   this.partySecondary = rawDocument.partySecondary;
@@ -58,6 +64,9 @@ function Document(rawDocument, { applicationContext }) {
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
+  this.secondaryDocument = ExternalDocumentFactory.get(
+    rawDocument.secondaryDocument || {},
+  );
   this.servedAt = rawDocument.servedAt;
   this.servedParties = rawDocument.servedParties;
   this.serviceDate = rawDocument.serviceDate;
@@ -173,8 +182,11 @@ joiValidationDecorator(
       .string()
       .allow('')
       .optional(),
+    freeText: joi.string().optional(),
+    freeText2: joi.string().optional(),
     isPaper: joi.boolean().optional(),
     lodged: joi.boolean().optional(),
+    ordinalValue: joi.string().optional(),
     processingStatus: joi.string().optional(),
     qcAt: joi
       .date()
@@ -188,6 +200,7 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    secondaryDocument: joi.object().optional(),
     servedAt: joi
       .date()
       .iso()
