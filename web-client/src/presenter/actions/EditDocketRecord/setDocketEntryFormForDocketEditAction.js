@@ -38,5 +38,10 @@ export const setDocketEntryFormForDocketEditAction = ({
   docketEntryFormData.lodged = !!docketEntryFormData.lodged;
 
   store.set(state.form, docketEntryFormData);
-  return { docketEntry: docketEntryFormData };
+
+  return {
+    docketEntry: docketEntryFormData,
+    key: 'initEventCode',
+    value: docketEntryFormData.eventCode,
+  };
 };
