@@ -79,7 +79,7 @@
     "noticeOfAttachments": false,
     "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "caseCaption": "Caryn Wall, Petitioner",
-    "sk": "0",
+    "sk": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "filingType": "Individual petitioner",
     "orderForOds": false,
     "orderForRatification": false,
@@ -110,7 +110,6 @@
       }
     ],
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "currentVersion": "1",
     "orderForAmendedPetition": false,
     "orderToShowCause": false,
     "preferredTrialCity": "Jackson, Mississippi",

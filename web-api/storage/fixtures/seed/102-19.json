@@ -89,7 +89,7 @@
     "createdAt": "2019-03-01T21:42:29.073Z",
     "receivedAt": "2019-03-01T21:42:29.073Z",
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
-    "sk": "0",
+    "sk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "filingType": "Myself and my spouse",
     "hasIrsNotice": true,
     "petitioners": [
@@ -108,7 +108,6 @@
     "caseTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
     "initialTitle": "Selma Horn & Cairo Harris, Petitioners v. Commissioner of Internal Revenue, Respondent",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-    "currentVersion": "0",
     "preferredTrialCity": "Boise, Idaho",
     "payGovDate": null,
     "docketRecord": [

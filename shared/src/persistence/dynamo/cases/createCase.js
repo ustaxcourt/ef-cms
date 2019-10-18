@@ -5,8 +5,7 @@ const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
 const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
-
-const { saveVersionedCase } = require('../../dynamo/cases/saveCase');
+const client = require('../../dynamodbClientService');
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
 
 /**
@@ -19,10 +18,13 @@ const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
  */
 exports.createCase = async ({ applicationContext, caseToCreate }) => {
   const [results] = await Promise.all([
-    saveVersionedCase({
+    client.put({
+      Item: {
+        pk: caseToCreate.caseId,
+        sk: caseToCreate.caseId,
+        ...caseToCreate,
+      },
       applicationContext,
-      caseToSave: caseToCreate,
-      existingVersion: caseToCreate.currentVersion,
     }),
     createMappingRecord({
       applicationContext,
