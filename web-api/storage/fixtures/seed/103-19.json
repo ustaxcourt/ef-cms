@@ -65,6 +65,7 @@
         "processingStatus": "complete",
         "documentType": "Answer",
         "filedBy": "Test Respondent",
+        "filingDate": "2019-03-01T22:54:05.993Z",
         "workItems": [
           {
             "docketNumberSuffix": "S",
@@ -269,7 +270,7 @@
         "index": 4,
         "documentId": "dc2664a1-f552-418f-bcc7-8a67f4246568",
         "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"ATOB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Amendment to Simultaneous Opening Brief\",\"documentType\":\"Amendment to Simultaneous Opening Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyRespondent\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"caseId\":\"491b05b4-483f-4b85-8dd7-2dd4c069eb50\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
-        "filingDate": "2001-10-10"
+        "filingDate": "2001-10-10T23:54:05.993Z"
       }
     ],
     "orderForAmendedPetitionAndFilingFee": false,
