@@ -3,14 +3,12 @@ import { state } from 'cerebral';
 
 export const addToTrialSessionModalHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
-  const modalState = get(state.modal);
+  const { showAllLocations, trialSessions } = get(state.modal);
 
-  let trialSessionsFormatted = modalState && modalState.trialSessions;
+  let trialSessionsFormatted = trialSessions;
   let trialSessionsFormattedByState = null;
   let trialSessionStatesSorted = null;
   if (trialSessionsFormatted) {
-    const showAllLocations = modalState && modalState.showAllLocations;
-
     trialSessionsFormatted = trialSessionsFormatted
       .filter(trialSession => trialSession.status === 'Upcoming')
       .map(trialSession => {
