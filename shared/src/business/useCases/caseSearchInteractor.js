@@ -130,11 +130,20 @@ exports.caseSearchInteractor = async ({
 
   const exactMatchesBody = await applicationContext.getSearchClient().search({
     body: {
+      _source: [
+        'caseCaption',
+        'contactPrimary',
+        'contactSecondary',
+        'docketNumber',
+        'docketNumberSuffix',
+        'receivedAt',
+      ],
       query: {
         bool: {
           must: [...exactMatchesQuery, ...commonQuery],
         },
       },
+      size: 5000,
     },
     index: 'efcms',
   });
@@ -151,6 +160,14 @@ exports.caseSearchInteractor = async ({
       .getSearchClient()
       .search({
         body: {
+          _source: [
+            'caseCaption',
+            'contactPrimary',
+            'contactSecondary',
+            'docketNumber',
+            'docketNumberSuffix',
+            'receivedAt',
+          ],
           query: {
             bool: {
               must: [...nonExactMatchesQuery, ...commonQuery],

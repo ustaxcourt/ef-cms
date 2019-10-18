@@ -47,6 +47,21 @@ describe('ExternalDocumentNonStandardD', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
+
+    it('should be invalid when serviceDate is undefined-undefined-undefined', () => {
+      const serviceDate = 'undefined-undefined-undefined';
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Supporting Document',
+        documentTitle: 'Certificate of Service [Document Name] [Date]',
+        documentType: 'Certificate of Service',
+        previousDocument: 'Petition',
+        scenario: 'Nonstandard D',
+        serviceDate,
+      });
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
+        serviceDate: VALIDATION_ERROR_MESSAGES.serviceDate[1],
+      });
+    });
   });
 
   describe('title generation', () => {

@@ -8,17 +8,19 @@ import { state } from 'cerebral';
  * @returns {object} the alertSuccess object with default strings
  */
 export const getFileExternalDocumentAlertSuccessAction = ({ get, props }) => {
+  const documentToEdit = get(state.documentToEdit);
+
+  const alertSuccess = {
+    message:
+      'You can access your documents at any time from the docket record below.',
+    title: 'Your filing has been successfully submitted.',
+  };
+
   if (props.documentWithPendingAssociation) {
-    return {
-      alertSuccess: {
-        message:
-          'If approved, you will gain full access to this case. Please check your dashboard for updates.',
-        title: 'Your filing has been successfully submitted.',
-      },
-    };
+    alertSuccess.message =
+      'If approved, you will gain full access to this case. Please check your dashboard for updates.';
   }
 
-  const documentToEdit = get(state.documentToEdit);
   if (documentToEdit) {
     return {
       alertSuccess: {
@@ -28,11 +30,12 @@ export const getFileExternalDocumentAlertSuccessAction = ({ get, props }) => {
     };
   }
 
+  if (props.printReceiptLink) {
+    alertSuccess.linkUrl = props.printReceiptLink;
+    alertSuccess.linkText = 'Print receipt.';
+  }
+
   return {
-    alertSuccess: {
-      message:
-        'You can access your documents at any time from the docket record below.',
-      title: 'Your filing has been successfully submitted.',
-    },
+    alertSuccess,
   };
 };

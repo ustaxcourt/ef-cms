@@ -9,8 +9,12 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-plugin-warmup
 
 custom:
+  warmup:
+    enabled: true
+
   prune:
     automatic: true
     number: 3
@@ -190,7 +194,7 @@ functions:
     handler: web-api/src/apiHandlers.runBatchProcessLambda
     events:
       - http:
-          path: runBatchProcess
+          path: run-batch-process
           method: post
           cors: true
           authorizer:

@@ -76,7 +76,7 @@ describe('getCasesByUser', () => {
       user,
     });
     expect(client.batchGet.getCall(0).args[0].keys).toEqual([
-      { pk: '123', sk: '0' },
+      { pk: '123', sk: '123' },
     ]);
   });
 });

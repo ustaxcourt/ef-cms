@@ -231,9 +231,9 @@ describe('formattedTrialSessionDetails', () => {
     );
 
     expect(result.openCases.length).toEqual(1);
-    expect(result.closedCases.length).toEqual(1);
+    expect(result.inactiveCases.length).toEqual(1);
     expect(result.openCases[0].docketNumberWithSuffix).toEqual('101-18');
-    expect(result.closedCases[0].docketNumberWithSuffix).toEqual('101-18W');
+    expect(result.inactiveCases[0].docketNumberWithSuffix).toEqual('101-18W');
   });
 
   it('sorts calendared cases by docket number', () => {

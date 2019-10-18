@@ -13,6 +13,7 @@ describe('forwardWorkItemInteractor', () => {
     document: {
       sentBy: 'taxpayer',
     },
+    isQC: true,
     messages: [],
     sentBy: 'docketclerk',
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -59,7 +60,7 @@ describe('forwardWorkItemInteractor', () => {
                   },
                   gsi1pk: 'workitem-c54ba5a9-b37b-479d-9201-067ec6e335bb',
                   isInitializeCase: true,
-                  isInternal: false,
+                  isQC: true,
                   messages: [
                     {
                       createdAt: '2019-07-12T17:09:41.027Z',
@@ -97,7 +98,7 @@ describe('forwardWorkItemInteractor', () => {
                   },
                   gsi1pk: 'workitem-c54ba5a9-b37b-479d-9201-067ec6e335bb',
                   isInitializeCase: true,
-                  isInternal: false,
+                  isQC: true,
                   messages: [
                     {
                       createdAt: '2019-07-12T17:09:41.027Z',
@@ -149,7 +150,7 @@ describe('forwardWorkItemInteractor', () => {
         sentBy: 'taxpayer',
       },
       isInitializeCase: undefined,
-      isInternal: true,
+      isQC: false,
       isRead: undefined,
       messages: [
         {

@@ -73,6 +73,7 @@ export const createCaseFromPaperAction = async ({
   store,
 }) => {
   const {
+    applicationForWaiverOfFilingFeeFile,
     ownershipDisclosureFile,
     petitionFile,
     requestForPlaceOfTrialFile,
@@ -101,6 +102,7 @@ export const createCaseFromPaperAction = async ({
       petition: petitionFile,
       stin: stinFile,
       trial: requestForPlaceOfTrialFile,
+      waiverOfFilingFee: applicationForWaiverOfFilingFeeFile,
     },
     store,
   );
@@ -112,6 +114,9 @@ export const createCaseFromPaperAction = async ({
       .getUseCases()
       .filePetitionFromPaperInteractor({
         applicationContext,
+        applicationForWaiverOfFilingFeeFile,
+        applicationForWaiverOfFilingFeeUploadProgress:
+          progressFunctions.waiverOfFilingFee,
         ownershipDisclosureFile,
         ownershipDisclosureUploadProgress: progressFunctions.ownership,
         petitionFile,

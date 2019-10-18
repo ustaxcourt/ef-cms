@@ -25,7 +25,7 @@ exports.getDocumentQCServedForUser = async ({ applicationContext, userId }) => {
 
   return workItems.filter(
     workItem =>
-      !workItem.isInternal &&
+      workItem.isQC &&
       workItem.completedByUserId &&
       workItem.completedByUserId === userId &&
       !!workItem.completedAt,

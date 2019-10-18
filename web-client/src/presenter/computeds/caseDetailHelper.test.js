@@ -433,6 +433,54 @@ describe('case detail computed', () => {
     expect(result.showAddCounsel).toEqual(false);
   });
 
+  it('should show edit practitioners and respondents buttons if user is an internal user and there are practitioners and respondents on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {
+          practitioners: [{ userId: '1' }],
+          respondents: [{ userId: '2' }],
+        },
+        form: {},
+        user: {
+          role: 'docketclerk',
+        },
+      },
+    });
+    expect(result.showEditPractitioners).toBeTruthy();
+    expect(result.showEditRespondents).toBeTruthy();
+  });
+
+  it('should not show edit practitioners or respondents buttons if user is an internal user and there are not practitioners and respondents on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {},
+        form: {},
+        user: {
+          role: 'docketclerk',
+        },
+      },
+    });
+    expect(result.showEditPractitioners).toBeFalsy();
+    expect(result.showEditRespondents).toBeFalsy();
+  });
+
+  it('should not show edit practitioners or respondents buttons if user is not an internal user', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: {
+          practitioners: [{ userId: '1' }],
+          respondents: [{ userId: '2' }],
+        },
+        form: {},
+        user: {
+          role: 'petitioner',
+        },
+      },
+    });
+    expect(result.showEditPractitioners).toBeFalsy();
+    expect(result.showEditRespondents).toBeFalsy();
+  });
+
   it('should show practitioner section if user is an internal user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
@@ -511,6 +559,45 @@ describe('case detail computed', () => {
     expect(result.showRespondentSection).toEqual(false);
   });
 
+  it('should format practitioner matches with cityStateZip string and isAlreadyInCase boolean', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { practitioners: [{ userId: '2' }] },
+        form: {},
+        modal: {
+          practitionerMatches: [
+            {
+              contact: { city: 'Somewhere', postalCode: '12345', state: 'AL' },
+              name: '1',
+              userId: '1',
+            },
+            {
+              contact: {
+                city: 'Somewhere Else',
+                postalCode: '54321',
+                state: 'TX',
+              },
+              name: '2',
+              userId: '2',
+            },
+          ],
+        },
+      },
+    });
+    expect(result.practitionerMatchesFormatted).toMatchObject([
+      {
+        cityStateZip: 'Somewhere, AL 12345',
+        name: '1',
+      },
+      {
+        cityStateZip: 'Somewhere Else, TX 54321',
+        name: '2',
+      },
+    ]);
+    expect(result.practitionerMatchesFormatted[0].isAlreadyInCase).toBeFalsy();
+    expect(result.practitionerMatchesFormatted[1].isAlreadyInCase).toBeTruthy();
+  });
+
   it('should set practitionerSearchResultsCount to the length of the state.modal.practitionerMatches', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
@@ -542,6 +629,45 @@ describe('case detail computed', () => {
       },
     });
     expect(result.practitionerSearchResultsCount).toBeUndefined();
+  });
+
+  it('should format respondent matches with cityStateZip string and isAlreadyInCase boolean', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { respondents: [{ userId: '1' }] },
+        form: {},
+        modal: {
+          respondentMatches: [
+            {
+              contact: { city: 'Somewhere', postalCode: '12345', state: 'AL' },
+              name: '1',
+              userId: '1',
+            },
+            {
+              contact: {
+                city: 'Somewhere Else',
+                postalCode: '54321',
+                state: 'TX',
+              },
+              name: '2',
+              userId: '2',
+            },
+          ],
+        },
+      },
+    });
+    expect(result.respondentMatchesFormatted).toMatchObject([
+      {
+        cityStateZip: 'Somewhere, AL 12345',
+        name: '1',
+      },
+      {
+        cityStateZip: 'Somewhere Else, TX 54321',
+        name: '2',
+      },
+    ]);
+    expect(result.respondentMatchesFormatted[0].isAlreadyInCase).toBeTruthy();
+    expect(result.respondentMatchesFormatted[1].isAlreadyInCase).toBeFalsy();
   });
 
   it('should set respondentSearchResultsCount to the length of the state.modal.respondentMatches', () => {

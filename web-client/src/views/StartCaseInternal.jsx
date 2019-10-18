@@ -329,11 +329,15 @@ export const StartCaseInternal = connect(
                     },
                     {
                       documentType: 'requestForPlaceOfTrialFile',
-                      title: 'Request for Place of Trial',
+                      title: 'RQT',
                     },
                     {
                       documentType: 'ownershipDisclosureFile',
                       title: 'ODS',
+                    },
+                    {
+                      documentType: 'applicationForWaiverOfFilingFeeFile',
+                      title: 'APW',
                     },
                   ]}
                   documentType={documentSelectedForScan}

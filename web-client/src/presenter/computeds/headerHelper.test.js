@@ -167,4 +167,14 @@ describe('headerHelper', () => {
     });
     expect(result.pageIsReports).toBeTruthy();
   });
+
+  it('should show border under Reports tab when page is BlockedCasesReport', () => {
+    const result = runCompute(headerHelper, {
+      state: {
+        ...getState('petitionsclerk'),
+        currentPage: 'BlockedCasesReport',
+      },
+    });
+    expect(result.pageIsReports).toBeTruthy();
+  });
 });

@@ -1,10 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { navigateBackAction } from '../actions/navigateBackAction';
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const navigateBackSequence = [
   clearAlertsAction,
-  set(state.showValidation, false),
+  stopShowValidationAction,
   navigateBackAction,
 ];

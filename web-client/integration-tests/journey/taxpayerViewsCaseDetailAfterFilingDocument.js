@@ -24,6 +24,10 @@ export default (test, overrides = {}) => {
     expect(caseDetailFormatted.docketNumberWithSuffix).toEqual(
       `${test.docketNumber}${docketNumberSuffix}`,
     );
+
+    // verify that the user was given a link to their receipt
+    expect(test.getState('alertSuccess.linkUrl')).toBeDefined();
+
     expect(caseDetail.documents.length).toEqual(6);
 
     //verify that the documents were added in the correct order

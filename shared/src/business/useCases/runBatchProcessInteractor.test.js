@@ -20,6 +20,7 @@ const MOCK_WORK_ITEMS = [
       documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
     },
     isInitializeCase: true,
+    isQC: true,
     messages: [
       {
         createdAt: '2018-12-27T18:06:02.968Z',

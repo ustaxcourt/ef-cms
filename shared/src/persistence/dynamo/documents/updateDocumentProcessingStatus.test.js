@@ -33,7 +33,7 @@ describe('updateDocumentProcessingStatus', () => {
       documentIndex: 3,
     });
     expect(client.update.getCall(0).args[0]).toMatchObject({
-      Key: { pk: 'abc', sk: '0' },
+      Key: { pk: 'abc', sk: 'abc' },
       UpdateExpression: 'SET #documents[3].#processingStatus = :status',
     });
   });

@@ -1,20 +1,4 @@
-const noop = () => {};
-
-const socketRouter = (app, onMessageCallbackFn) => {
-  return event => {
-    const message = JSON.parse(event.data);
-    const { action } = message;
-
-    // NOTE: convert from if block to switch once three+ actions are present
-    if (action === 'batch_download_ready') {
-      app.getSequence('batchDownloadReadySequence')({
-        ...message,
-      });
-    }
-
-    (onMessageCallbackFn || noop)(message);
-  };
-};
+import socketRouter from './socketRouter';
 
 const createWebSocketClient = token => {
   const notificationsUrl = process.env.WS_URL || 'ws://localhost:3011';

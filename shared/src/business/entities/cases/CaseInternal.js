@@ -16,6 +16,10 @@ const { ContactFactory } = require('../contacts/ContactFactory');
  * @constructor
  */
 function CaseInternal(rawCase) {
+  this.applicationForWaiverOfFilingFeeFile =
+    rawCase.applicationForWaiverOfFilingFeeFile;
+  this.applicationForWaiverOfFilingFeeFileSize =
+    rawCase.applicationForWaiverOfFilingFeeFileSize;
   this.caseCaption = rawCase.caseCaption;
   this.caseType = rawCase.caseType;
   this.ownershipDisclosureFile = rawCase.ownershipDisclosureFile;
@@ -52,6 +56,20 @@ CaseInternal.VALIDATION_ERROR_MESSAGES = Object.assign(
 );
 
 const paperRequirements = joi.object().keys({
+  applicationForWaiverOfFilingFeeFile: joi.object().optional(),
+  applicationForWaiverOfFilingFeeFileSize: joi.when(
+    'applicationForWaiverOfFilingFeeFile',
+    {
+      is: joi.exist().not(null),
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .number()
+        .required()
+        .min(1)
+        .max(MAX_FILE_SIZE_BYTES)
+        .integer(),
+    },
+  ),
   caseCaption: joi.string().required(),
   caseType: joi.string().required(),
   ownershipDisclosureFile: joi.object().optional(),

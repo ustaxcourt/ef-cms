@@ -48,7 +48,7 @@ export const MessagesInProgress = connect(
                         href={documentHelper({
                           docketNumber: workItem.docketNumber,
                           documentId: workItem.document.documentId,
-                          shouldLinkToEdit:
+                          shouldLinkToComplete:
                             workItem.document.isFileAttached === false,
                         })}
                       >

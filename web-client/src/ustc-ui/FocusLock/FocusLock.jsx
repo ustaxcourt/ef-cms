@@ -62,7 +62,8 @@ export class FocusLock extends React.Component {
     appRoot.inert = false;
     appRoot.setAttribute('aria-hidden', 'false');
     document.removeEventListener('keydown', this.onKey);
-    this.restoreFocus();
+    //takes focus away from success/warning notifications
+    //this.restoreFocus();
   }
 
   restoreFocus() {
