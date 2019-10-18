@@ -391,6 +391,9 @@ const {
   recallPetitionFromIRSHoldingQueueInteractor,
 } = require('../../shared/src/business/useCases/recallPetitionFromIRSHoldingQueueInteractor');
 const {
+  removeCaseFromTrialInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor');
+const {
   runBatchProcessInteractor,
 } = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
@@ -435,11 +438,9 @@ const {
 const {
   createUserInboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/createUserInboxRecord');
-
 const {
   createSectionInboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/createSectionInboxRecord');
-
 const {
   deleteUserOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
@@ -768,12 +769,10 @@ module.exports = (appContextUser = {}) => {
     },
     getSearchClient: () => {
       if (!searchClientCache) {
-        if (environment.stage === 'local' && process.env.CI !== 'true') {
+        if (environment.stage === 'local') {
           searchClientCache = new elasticsearch.Client({
             host: environment.elasticsearchEndpoint,
           });
-        } else if (environment.stage === 'local' && process.env.CI === 'true') {
-          searchClientCache = { index: () => {}, search: () => {} };
         } else {
           searchClientCache = new elasticsearch.Client({
             amazonES: {
@@ -885,6 +884,7 @@ module.exports = (appContextUser = {}) => {
         onDisconnectInteractor,
         processStreamRecordsInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
+        removeCaseFromTrialInteractor,
         runBatchProcessInteractor,
         sanitizePdfInteractor: args =>
           process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),

@@ -2,7 +2,7 @@ import { Case } from '../../../shared/src/business/entities/cases/Case';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
-export default (test, fakeFile) => {
+export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
   return it('Petitions clerk creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
     await test.runSequence('submitPetitionFromPaperSequence');
@@ -93,7 +93,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
-      value: 'Birmingham, Alabama',
+      value: trialLocation,
     });
 
     await test.runSequence('updateFormValueSequence', {

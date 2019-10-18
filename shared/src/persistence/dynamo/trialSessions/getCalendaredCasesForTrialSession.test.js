@@ -11,6 +11,8 @@ describe('getCalendaredCasesForTrialSession', () => {
       caseOrder: [
         {
           caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          disposition: 'something',
+          removedFromTrial: true,
         },
       ],
     });
@@ -34,6 +36,8 @@ describe('getCalendaredCasesForTrialSession', () => {
     const result = await getCalendaredCasesForTrialSession({
       applicationContext,
     });
-    expect(result).toMatchObject([MOCK_CASE]);
+    expect(result).toMatchObject([
+      { ...MOCK_CASE, disposition: 'something', removedFromTrial: true },
+    ]);
   });
 });

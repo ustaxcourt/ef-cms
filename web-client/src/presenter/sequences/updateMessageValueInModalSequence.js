@@ -7,7 +7,10 @@ import { runKeyPathAction } from '../actions/runKeyPathAction';
 import { set } from 'cerebral/factories';
 
 export const updateMessageValueInModalSequence = [
-  ({ props }) => ({ form: 'modal.form', section: props.value }),
+  ({ props: sequenceProps }) => ({
+    form: 'modal.form',
+    section: sequenceProps.value,
+  }),
   runKeyPathAction,
   {
     section: [

@@ -1,3 +1,4 @@
+import { Case } from '../entities/cases/Case';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import {
   formatCase,
@@ -52,7 +53,7 @@ describe('formatCase', () => {
           workItems: [
             {
               completedAt: getDateISO(),
-              isInternal: false,
+              isQC: true,
             },
           ],
         },
@@ -65,7 +66,7 @@ describe('formatCase', () => {
           workItems: [
             {
               completedAt: getDateISO(),
-              isInternal: true,
+              isQC: false,
             },
           ],
         },
@@ -163,9 +164,7 @@ describe('formatCase', () => {
     expect(result.caseTitleWithoutRespondent).toEqual(
       'Test Case Caption, Petitioners v. Internal Revenue, ',
     );
-    expect(result.formattedTrialCity).toEqual('Not assigned');
-    expect(result).toHaveProperty('formattedTrialDate');
-    expect(result.formattedTrialJudge).toEqual('Not assigned');
+    expect(result.formattedPreferredTrialCity).toEqual('No location selected');
   });
 
   it('should apply additional information', () => {
@@ -256,6 +255,36 @@ describe('formatCase', () => {
         .getUtilities()
         .formatDateString(getDateISO(), 'MMDDYY'),
     );
+  });
+
+  it('should format trial details if case status is calendared', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      status: Case.STATUS_TYPES.calendared,
+      trialLocation: 'Boise, Idaho',
+      trialDate: getDateISO(),
+    });
+
+    expect(result).toMatchObject({
+      formattedTrialCity: 'Boise, Idaho',
+      formattedTrialDate: applicationContext
+        .getUtilities()
+        .formatDateString(getDateISO(), 'MMDDYY'),
+      formattedTrialJudge: 'Not assigned',
+      showTrialCalendared: true,
+    });
+    expect(result).not.toHaveProperty('showBlockedFromTrial');
+    expect(result).not.toHaveProperty('showNotScheduled');
+  });
+
+  it('should show not scheduled section if case status is not calendared and case is not blocked', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+    });
+
+    expect(result).toMatchObject({
+      showNotScheduled: true,
+    });
   });
 });
 
