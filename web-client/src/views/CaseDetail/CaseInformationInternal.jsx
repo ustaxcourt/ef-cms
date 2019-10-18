@@ -46,6 +46,7 @@ PetitionDetails.propTypes = {
 
 const TrialInformation = ({
   caseDetail,
+  openAddToTrialModalSequence,
   openBlockFromTrialModalSequence,
   openRemoveFromTrialSessionModalSequence,
   openUnblockFromTrialModalSequence,
@@ -119,16 +120,28 @@ const TrialInformation = ({
     {caseDetail.showNotScheduled && (
       <>
         <h3 className="underlined">Trial - Not Scheduled</h3>
-        <Button
-          link
-          className="block-from-trial-btn red-warning float-right"
-          icon="hand-paper"
-          onClick={() => {
-            openBlockFromTrialModalSequence();
-          }}
-        >
-          Block From Trial
-        </Button>
+        <div className="display-flex flex-row flex-justify">
+          <Button
+            link
+            className="add-to-trial-btn"
+            icon="plus-circle"
+            onClick={() => {
+              openAddToTrialModalSequence();
+            }}
+          >
+            Add to Trial
+          </Button>
+          <Button
+            link
+            className="block-from-trial-btn red-warning"
+            icon="hand-paper"
+            onClick={() => {
+              openBlockFromTrialModalSequence();
+            }}
+          >
+            Block From Trial
+          </Button>
+        </div>
       </>
     )}
   </React.Fragment>
@@ -136,6 +149,7 @@ const TrialInformation = ({
 
 TrialInformation.propTypes = {
   caseDetail: PropTypes.object,
+  openAddToTrialModalSequence: PropTypes.func,
   openBlockFromTrialModalSequence: PropTypes.func,
   openRemoveFromTrialSessionModalSequence: PropTypes.func,
   openUnblockFromTrialModalSequence: PropTypes.func,
@@ -145,6 +159,7 @@ export const CaseInformationInternal = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
@@ -154,6 +169,7 @@ export const CaseInformationInternal = connect(
   ({
     caseDetailHelper,
     formattedCaseDetail,
+    openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
@@ -178,6 +194,7 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <TrialInformation
                     caseDetail={formattedCaseDetail}
+                    openAddToTrialModalSequence={openAddToTrialModalSequence}
                     openBlockFromTrialModalSequence={
                       openBlockFromTrialModalSequence
                     }
