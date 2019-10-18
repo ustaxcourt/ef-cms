@@ -59,7 +59,7 @@ describe('verify old served work items do not show up in the outbox', () => {
         documentType: 'Petition',
       },
       isInitializeCase: false,
-      isInternal: false,
+      isQC: true,
       messages: [
         {
           createdAt: CREATED_8_DAYS_AGO.toISOString(),

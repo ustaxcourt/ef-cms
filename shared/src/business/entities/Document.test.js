@@ -77,6 +77,7 @@ describe('Document entity', () => {
           caseTitle: 'testing',
           docketNumber: '101-18',
           document: {},
+          isQC: true,
           sentBy: 'bob',
         },
         { applicationContext },

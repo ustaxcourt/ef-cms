@@ -41,6 +41,7 @@ class BlockFromTrialModalComponent extends ModalDialog {
               Why are you blocking this case?
             </legend>
             <textarea
+              aria-label="block from trial"
               className="usa-textarea"
               id="reason"
               maxLength="120"

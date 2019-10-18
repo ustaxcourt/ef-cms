@@ -6,7 +6,7 @@ let test;
 const setCurrentUserStub = sinon.stub().returns({ section: 'petitions' });
 const getInboxMessagesForSectionStub = sinon
   .stub()
-  .returns([{ document: { isFileAttached: true }, isInternal: true }]);
+  .returns([{ document: { isFileAttached: true }, isQC: false }]);
 presenter.providers.applicationContext = {
   getCurrentUser: setCurrentUserStub,
   getUniqueId: () => new Date().getTime(),

@@ -31,7 +31,6 @@ describe('updateCase', () => {
       applicationContext,
       caseToUpdate: {
         caseId: '123',
-        currentVersion: '10',
         docketNumber: '101-18',
         docketNumberSuffix: null,
         status: 'General Docket - Not at Issue',
@@ -40,11 +39,7 @@ describe('updateCase', () => {
     });
     expect(putStub.getCall(0).args[0].Item).toMatchObject({
       pk: '123',
-      sk: '0',
-    });
-    expect(putStub.getCall(1).args[0].Item).toMatchObject({
-      pk: '123',
-      sk: '11',
+      sk: '123',
     });
   });
 });
