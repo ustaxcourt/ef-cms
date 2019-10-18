@@ -3,20 +3,20 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const ClosedCases = connect(
+export const InactiveCases = connect(
   {
-    closedCases: state.formattedTrialSessionDetails.closedCases,
+    inactiveCases: state.formattedTrialSessionDetails.inactiveCases,
   },
-  ({ closedCases }) => {
+  ({ inactiveCases }) => {
     return (
       <React.Fragment>
         <div className="text-semibold push-right margin-bottom-2">
-          Count: {closedCases.length}
+          Count: {inactiveCases.length}
         </div>
         <table
-          aria-describedby="closed-cases-tab"
+          aria-describedby="inactive-cases-tab"
           className="usa-table ustc-table trial-sessions subsection"
-          id="closed-cases"
+          id="inactive-cases"
         >
           <thead>
             <tr>
@@ -26,7 +26,7 @@ export const ClosedCases = connect(
               <th>Disposition date</th>
             </tr>
           </thead>
-          {closedCases.map((item, idx) => (
+          {inactiveCases.map((item, idx) => (
             <tbody key={idx}>
               <tr className="eligible-cases-row">
                 <td>
@@ -39,7 +39,7 @@ export const ClosedCases = connect(
             </tbody>
           ))}
         </table>
-        {closedCases.length === 0 && <p>There are no closed cases.</p>}
+        {inactiveCases.length === 0 && <p>There are no inactive cases.</p>}
       </React.Fragment>
     );
   },
