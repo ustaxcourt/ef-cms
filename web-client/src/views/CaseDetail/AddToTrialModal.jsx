@@ -26,7 +26,7 @@ class AddToTrialModalComponent extends ModalDialog {
     } = this.props;
 
     return (
-      <div className="margin-bottom-4">
+      <div className="margin-bottom-4" id="add-to-trial-session-modal">
         <div className="usa-form-group">
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="display-block" id="year-filed-legend">
