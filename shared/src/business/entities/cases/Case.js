@@ -176,7 +176,6 @@ function Case(rawCase, { applicationContext }) {
   this.contactPrimary = rawCase.contactPrimary;
   this.contactSecondary = rawCase.contactSecondary;
   this.createdAt = rawCase.createdAt || createISODateString();
-  this.currentVersion = rawCase.currentVersion;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;

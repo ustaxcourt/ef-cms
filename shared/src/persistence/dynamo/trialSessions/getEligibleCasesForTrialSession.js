@@ -26,7 +26,7 @@ exports.getEligibleCasesForTrialSession = async ({
     applicationContext,
     keys: ids.map(id => ({
       pk: id,
-      sk: '0',
+      sk: id,
     })),
   });
 

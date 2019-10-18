@@ -68,7 +68,6 @@ describe('createCase integration test', () => {
       caseCaption: 'Rick Petitioner, Petitioner',
       caseTitle:
         'Rick Petitioner, Petitioner v. Commissioner of Internal Revenue, Respondent',
-      currentVersion: '1',
       docketNumber: '101-19',
       docketNumberSuffix: 'S',
       docketRecord: [
