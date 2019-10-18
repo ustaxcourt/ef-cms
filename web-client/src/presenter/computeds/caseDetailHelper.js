@@ -1,4 +1,3 @@
-import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
@@ -127,50 +126,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     });
   }
 
-  let trialSessionsFormatted = modalState && modalState.trialSessions;
-  if (trialSessionsFormatted) {
-    const showAllLocations = modalState && modalState.showAllLocations;
-
-    if (showAllLocations) {
-      trialSessionsFormatted = sortBy(trialSessionsFormatted, [
-        'trialLocation',
-        'startDate',
-      ]);
-    } else {
-      trialSessionsFormatted = trialSessionsFormatted.filter(
-        trialSession =>
-          trialSession.trialLocation === caseDetail.preferredTrialCity,
-      );
-      trialSessionsFormatted = sortBy(trialSessionsFormatted, 'startDate');
-    }
-    trialSessionsFormatted = trialSessionsFormatted
-      .filter(trialSession => trialSession.status === 'Upcoming')
-      .map(trialSession => {
-        trialSession.startDateFormatted = applicationContext
-          .getUtilities()
-          .formatDateString(trialSession.startDate, 'MMDDYY');
-        switch (trialSession.sessionType) {
-          case 'Regular':
-            trialSession.sessionTypeFormatted = 'R';
-            break;
-          case 'Small':
-            trialSession.sessionTypeFormatted = 'S';
-            break;
-          case 'Hybrid':
-            trialSession.sessionTypeFormatted = 'H';
-            break;
-          case 'Special':
-            trialSession.sessionTypeFormatted = 'SP';
-            break;
-          case 'Motion/Hearing':
-            trialSession.sessionTypeFormatted = 'M/H';
-            break;
-        }
-        trialSession.optionText = `${trialSession.trialLocation} ${trialSession.startDateFormatted} (${trialSession.sessionTypeFormatted})`;
-        return trialSession;
-      });
-  }
-
   const hasOrders = [
     noticeOfAttachments,
     orderForAmendedPetition,
@@ -241,7 +196,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),
     showServeToIrsButton,
-    trialSessionsFormatted,
     userHasAccessToCase,
   };
 };
