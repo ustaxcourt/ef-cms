@@ -60,7 +60,10 @@ exports.addCaseToTrialSessionInteractor = async ({
     throw new Error('The case is already part of this trial session.');
   }
 
-  trialSessionEntity.addCaseToCalendar(caseEntity);
+  trialSessionEntity
+    .deleteCaseFromCalendar({ caseId: caseEntity.caseId }) // we delete because it might have been manually removed
+    .manuallyAddCaseToCalendar(caseEntity);
+
   caseEntity.setAsCalendared(trialSessionEntity);
 
   await applicationContext
