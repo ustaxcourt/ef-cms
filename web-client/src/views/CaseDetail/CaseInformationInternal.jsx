@@ -123,8 +123,8 @@ const TrialInformation = ({
         <div className="display-flex flex-row flex-justify">
           <Button
             link
-            className="add-to-trial-btn"
             icon="plus-circle"
+            id="add-to-trial-session-btn"
             onClick={() => {
               openAddToTrialModalSequence();
             }}
