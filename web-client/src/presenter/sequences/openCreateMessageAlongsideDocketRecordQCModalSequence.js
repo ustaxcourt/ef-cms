@@ -1,4 +1,5 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { set } from 'cerebral/factories';
 import { setCreateMessageModalDialogModalStateAction } from '../actions/WorkItem/setCreateMessageModalDialogModalStateAction';
 import { state } from 'cerebral';
@@ -9,6 +10,7 @@ export const openCreateMessageAlongsideDocketRecordQCModalSequence = [
   {
     success: [
       clearModalStateAction,
+      generateTitleAction,
       setCreateMessageModalDialogModalStateAction,
       set(state.showModal, 'CreateMessageAlongsideDocketRecordQCModal'),
     ],

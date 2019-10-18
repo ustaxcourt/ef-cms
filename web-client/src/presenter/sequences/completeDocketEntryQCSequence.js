@@ -2,6 +2,7 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
+import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -24,6 +25,7 @@ export const completeDocketEntryQCSequence = [
     ],
     success: [
       setCurrentPageAction('Interstitial'),
+      generateTitleAction,
       completeDocketEntryQCAction,
       setCaseAction,
       setAlertSuccessAction,
