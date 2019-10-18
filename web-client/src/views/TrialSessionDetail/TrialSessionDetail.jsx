@@ -1,8 +1,8 @@
 import { AllCases } from './AllCases';
 import { Button } from '../../ustc-ui/Button/Button';
-import { ClosedCases } from './ClosedCases';
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
+import { InactiveCases } from './InactiveCases';
 import { OpenCases } from './OpenCases';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
@@ -70,12 +70,12 @@ export const TrialSessionDetail = connect(
               </div>
             </Tab>
             <Tab
-              id="closed-cases-tab"
-              tabName="ClosedCases"
-              title="Closed Cases"
+              id="inactive-cases-tab"
+              tabName="InactiveCases"
+              title="Inactive Cases"
             >
-              <div id="closed-cases-tab-content">
-                <ClosedCases />
+              <div id="inactive-cases-tab-content">
+                <InactiveCases />
               </div>
             </Tab>
             <Tab id="all-cases-tab" tabName="AllCases" title="All Cases">

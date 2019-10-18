@@ -169,7 +169,7 @@ export const filterWorkItems = ({
             !item.completedAt &&
             item.isQC &&
             item.section === user.section &&
-            (item.document.isFileAttached === false || !item.inProgress)
+            (item.document.isFileAttached === false || item.inProgress)
           );
         },
         inbox: item => {

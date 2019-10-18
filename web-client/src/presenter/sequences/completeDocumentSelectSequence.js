@@ -9,6 +9,7 @@ import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocumentTypeAction';
 
 export const completeDocumentSelectSequence = [
@@ -21,7 +22,7 @@ export const completeDocumentSelectSequence = [
     error: [setValidationErrorsAction],
     success: [
       clearAlertsAction,
-      set(state.showValidation, false),
+      stopShowValidationAction,
       generateTitleAction,
       setDocketNumberPropAction,
       setDefaultFileDocumentFormValuesAction,
