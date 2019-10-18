@@ -46,6 +46,10 @@ exports.addCaseToTrialSessionInteractor = async ({
     applicationContext,
   });
 
+  if (caseEntity.isCalendared()) {
+    throw new Error('The case is already calendared');
+  }
+
   if (!trialSession.isCalendared) {
     throw new Error(
       'The trial session must already be calendared to manually add a case.',
