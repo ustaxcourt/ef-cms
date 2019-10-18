@@ -87,6 +87,9 @@ const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
 const {
+  addCaseToTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor');
+const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
@@ -819,6 +822,7 @@ module.exports = (appContextUser = {}) => {
     },
     getUseCases: () => {
       return {
+        addCaseToTrialSessionInteractor,
         addCoversheetInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,

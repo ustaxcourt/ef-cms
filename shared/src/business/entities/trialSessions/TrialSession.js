@@ -338,6 +338,16 @@ TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
 };
 
 /**
+ * checks if a case is already on the session
+ *
+ * @param {object} caseEntity the case entity to check if already on the case
+ * @returns {boolean} if the case is already on the trial session
+ */
+TrialSession.prototype.isCaseAlreadyCalendared = function(caseEntity) {
+  return !!this.caseOrder.find(order => order.caseId === caseEntity.caseId);
+};
+
+/**
  * set case as removedFromTrial
  *
  * @param {object} arguments the arguments object
