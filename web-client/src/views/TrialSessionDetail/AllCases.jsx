@@ -1,4 +1,5 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -21,6 +22,7 @@ export const AllCases = connect(
           <thead>
             <tr>
               <th>Docket</th>
+              <th></th>
               <th>Case name</th>
               <th>Case status</th>
               <th>Disposition</th>
@@ -32,6 +34,12 @@ export const AllCases = connect(
               <tr className="eligible-cases-row">
                 <td>
                   <CaseLink formattedCase={item} />
+                </td>
+
+                <td>
+                  {item.isManuallyAdded && (
+                    <FontAwesomeIcon icon="calendar-plus" />
+                  )}
                 </td>
                 <td>{item.caseCaptionNames}</td>
                 <td>{item.status}</td>

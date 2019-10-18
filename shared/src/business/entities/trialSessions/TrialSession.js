@@ -338,13 +338,27 @@ TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
 };
 
 /**
+ * manually add case to calendar
+ *
+ * @param {object} caseEntity the case entity to add to the calendar
+ * @returns {TrialSession} the trial session entity
+ */
+TrialSession.prototype.manuallyAddCaseToCalendar = function(caseEntity) {
+  const { caseId } = caseEntity;
+  this.caseOrder.push({ caseId, isManuallyAdded: true });
+  return this;
+};
+
+/**
  * checks if a case is already on the session
  *
  * @param {object} caseEntity the case entity to check if already on the case
  * @returns {boolean} if the case is already on the trial session
  */
 TrialSession.prototype.isCaseAlreadyCalendared = function(caseEntity) {
-  return !!this.caseOrder.find(order => order.caseId === caseEntity.caseId);
+  return !!this.caseOrder
+    .filter(order => order.caseId === caseEntity.caseId)
+    .filter(order => order.removedFromTrial !== true).length;
 };
 
 /**
@@ -366,6 +380,24 @@ TrialSession.prototype.removeCaseFromCalendar = function({
     caseToUpdate.disposition = disposition;
     caseToUpdate.removedFromTrial = true;
     caseToUpdate.removedFromTrialDate = createISODateString();
+  }
+  return this;
+};
+
+/**
+ * removes the case totatlly from the trial session
+ *
+ * @param {object} arguments the arguments object
+ * @param {string} arguments.caseId the id of the case to remove from the calendar
+ * @param {string} arguments.disposition the reason the case is being removed from the calendar
+ * @returns {TrialSession} the trial session entity
+ */
+TrialSession.prototype.deleteCaseFromCalendar = function({ caseId }) {
+  const index = this.caseOrder.findIndex(
+    trialCase => trialCase.caseId === caseId,
+  );
+  if (index >= 0) {
+    this.caseOrder.splice(index, 1);
   }
   return this;
 };
