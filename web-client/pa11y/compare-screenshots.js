@@ -2,27 +2,25 @@ const fs = require('fs');
 const { PNG } = require('pngjs');
 const pixelmatch = require('pixelmatch');
 
-const filesToTest = fs.readdirSync('./web-client/pa11y/pa11y-screenshots/new');
+const screenshotsPath = './web-client/pa11y/pa11y-screenshots';
+
+const filesToTest = fs.readdirSync(`${screenshotsPath}/new`);
+
+console.log(`Comparing ${filesToTest.length} screenshots`);
 
 filesToTest.forEach(filename => {
+  console.log(filename);
+  const newFilePath = `${screenshotsPath}/new/${filename}`;
+  const oldFilePath = `${screenshotsPath}/old/${filename}`;
+
   const isNewFile =
-    fs.existsSync(`./web-client/pa11y/pa11y-screenshots/new/${filename}`) &&
-    fs
-      .lstatSync(`./web-client/pa11y/pa11y-screenshots/new/${filename}`)
-      .isFile();
+    fs.existsSync(newFilePath) && fs.lstatSync(newFilePath).isFile();
   const isOldFile =
-    fs.existsSync(`./web-client/pa11y/pa11y-screenshots/old/${filename}`) &&
-    fs
-      .lstatSync(`./web-client/pa11y/pa11y-screenshots/old/${filename}`)
-      .isFile();
+    fs.existsSync(oldFilePath) && fs.lstatSync(oldFilePath).isFile();
 
   if (isNewFile && isOldFile) {
-    const oldImg = PNG.sync.read(
-      fs.readFileSync(`./web-client/pa11y/pa11y-screenshots/old/${filename}`),
-    );
-    const newImg = PNG.sync.read(
-      fs.readFileSync(`./web-client/pa11y/pa11y-screenshots/new/${filename}`),
-    );
+    const oldImg = PNG.sync.read(fs.readFileSync(oldFilePath));
+    const newImg = PNG.sync.read(fs.readFileSync(newFilePath));
     const { height, width } = oldImg;
     const diff = new PNG({ height, width });
 
@@ -31,8 +29,12 @@ filesToTest.forEach(filename => {
     });
 
     fs.writeFileSync(
-      `./web-client/pa11y/pa11y-screenshots/diffs/${filename}`,
+      `${screenshotsPath}/diffs/${filename}`,
       PNG.sync.write(diff),
     );
   }
 });
+
+console.log(
+  'Comparison complete - diffs are at web-client/pa11y/pa11y-screenshots/diffs',
+);
