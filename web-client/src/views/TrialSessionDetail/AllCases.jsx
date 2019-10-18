@@ -22,7 +22,7 @@ export const AllCases = connect(
           <thead>
             <tr>
               <th>Docket</th>
-              <th></th>
+              <th aria-label="manually added inditicator"></th>
               <th>Case name</th>
               <th>Case status</th>
               <th>Disposition</th>
