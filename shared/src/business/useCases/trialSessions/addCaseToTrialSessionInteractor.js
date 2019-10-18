@@ -13,7 +13,7 @@ const { Case } = require('../../entities/cases/Case');
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session
  * @param {string} providers.caseId the id of the case
- * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
+ * @returns {Promise} the promise of the addCaseToTrialSessionInteractor call
  */
 exports.addCaseToTrialSessionInteractor = async ({
   applicationContext,
