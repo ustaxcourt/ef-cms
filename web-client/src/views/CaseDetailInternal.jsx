@@ -1,3 +1,4 @@
+import { AddToTrialModal } from './CaseDetail/AddToTrialModal';
 import { BlockFromTrialModal } from './CaseDetail/BlockFromTrialModal';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDeadlinesInternal } from './CaseDetail/CaseDeadlinesInternal';
@@ -147,6 +148,7 @@ export const CaseDetailInternal = connect(
         {showModal === 'DeleteCaseDeadlineModalDialog' && (
           <DeleteCaseDeadlineModalDialog />
         )}
+        {showModal === 'AddToTrialModal' && <AddToTrialModal />}
         {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}
         {showModal === 'UnblockFromTrialModal' && <UnblockFromTrialModal />}
         {showModal === 'RemoveFromTrialSessionModal' && (

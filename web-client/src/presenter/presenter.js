@@ -108,6 +108,7 @@ import { openAddEditCaseNoteModalFromListSequence } from './sequences/openAddEdi
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddPractitionerModalSequence } from './sequences/openAddPractitionerModalSequence';
 import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
+import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
 import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
@@ -401,6 +402,7 @@ export const presenter = {
     openAddEditSessionNoteModalSequence,
     openAddPractitionerModalSequence,
     openAddRespondentModalSequence,
+    openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
     openCaseCaptionModalSequence,
     openCaseDifferenceModalSequence,
