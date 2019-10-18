@@ -20,7 +20,7 @@ exports.getCalendaredCasesForTrialSession = async ({
     applicationContext,
     keys: caseOrder.map(myCase => ({
       pk: myCase.caseId,
-      sk: '0',
+      sk: myCase.caseId,
     })),
   });
 

@@ -186,7 +186,6 @@ describe('updateCase', () => {
           state: 'FL',
         },
         createdAt: '2019-07-24T16:30:01.940Z',
-        currentVersion: '1',
         docketNumber: '168-19',
         docketNumberSuffix: 'S',
         filingType: 'Myself and my spouse',

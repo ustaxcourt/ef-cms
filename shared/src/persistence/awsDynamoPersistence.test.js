@@ -62,10 +62,8 @@ describe('awsDynamoPersistence', function() {
     it('should map respondent to active case', async () => {
       const key = '5678';
       const type = '234';
-      const isVersioned = undefined;
       await getRecordViaMapping({
         applicationContext,
-        isVersioned,
         key,
         type,
       });
