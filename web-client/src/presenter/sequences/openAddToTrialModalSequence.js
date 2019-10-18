@@ -2,9 +2,10 @@ import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessions
 import { set } from 'cerebral/factories';
 import { setTrialSessionsOnModalAction } from '../actions/TrialSession/setTrialSessionsOnModalAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const openAddToTrialModalSequence = [
-  set(state.showValidation, false),
+  stopShowValidationAction,
   getTrialSessionsAction,
   setTrialSessionsOnModalAction,
   set(state.modal.showAllLocations, false),

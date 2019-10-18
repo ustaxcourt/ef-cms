@@ -7,10 +7,11 @@ import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoFileDocument = [
   setCurrentPageAction('Interstitial'),
-  set(state.showValidation, false),
+  stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
   getCaseAction,
