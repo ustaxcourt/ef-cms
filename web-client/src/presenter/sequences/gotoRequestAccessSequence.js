@@ -13,10 +13,11 @@ import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoRequestAccess = [
   setCurrentPageAction('Interstitial'),
-  set(state.showValidation, false),
+  stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
   getCaseAction,
