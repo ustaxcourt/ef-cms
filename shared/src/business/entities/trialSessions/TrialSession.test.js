@@ -219,4 +219,35 @@ describe('TrialSession entity', () => {
       expect(trialSession.caseOrder[2]).not.toHaveProperty('removedFromTrial');
     });
   });
+
+  describe('isCaseAlreadyCalendared', () => {
+    it('should return true when a case is already part of the trial session', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          caseOrder: [{ caseId: '123' }],
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(
+        trialSession.isCaseAlreadyCalendared({ caseId: '123' }),
+      ).toBeTruthy();
+    });
+    it('should return false when a case is not already part of the trial session', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          caseOrder: [{ caseId: 'abc' }],
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(
+        trialSession.isCaseAlreadyCalendared({ caseId: '123' }),
+      ).toBeFalsy();
+    });
+  });
 });
