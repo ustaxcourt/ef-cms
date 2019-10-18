@@ -1,3 +1,4 @@
+import { Case } from '../entities/cases/Case';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import {
   formatCase,
@@ -47,10 +48,45 @@ describe('formatCase', () => {
           createdAt: getDateISO(),
           documentId: 'd-1-2-3',
           documentType: 'Petition',
+          eventCode: 'P',
           servedAt: getDateISO(),
+          workItems: [
+            {
+              completedAt: getDateISO(),
+              isQC: true,
+            },
+          ],
+        },
+        {
+          createdAt: getDateISO(),
+          documentId: 'd-1-4-3',
+          documentType: 'Amended Answer',
+          eventCode: 'ABC',
+          servedAt: getDateISO(),
+          workItems: [
+            {
+              completedAt: getDateISO(),
+              isQC: false,
+            },
+          ],
+        },
+      ],
+      docketRecord: [
+        {
+          documentId: 'd-1-2-3',
+          hi: 'there',
+          index: '1',
+        },
+        {
+          documentId: 'd-1-4-3',
+          hi: 'there',
+          index: '2',
         },
       ],
     });
+    expect(result.documents[0].isPetition).toBeTruthy();
+    expect(result.documents[0].canEdit).toBeFalsy();
+    expect(result.documents[0].qcWorkItemsCompleted).toBeTruthy();
 
     expect(result.documents[0]).toHaveProperty('createdAtFormatted');
     expect(result.documents[0]).toHaveProperty('servedAtFormatted');
@@ -128,9 +164,7 @@ describe('formatCase', () => {
     expect(result.caseTitleWithoutRespondent).toEqual(
       'Test Case Caption, Petitioners v. Internal Revenue, ',
     );
-    expect(result.formattedTrialCity).toEqual('Not assigned');
-    expect(result).toHaveProperty('formattedTrialDate');
-    expect(result.formattedTrialJudge).toEqual('Not assigned');
+    expect(result.formattedPreferredTrialCity).toEqual('No location selected');
   });
 
   it('should apply additional information', () => {
@@ -207,6 +241,50 @@ describe('formatCase', () => {
     });
 
     expect(result.irsNoticeDateFormatted).toEqual('No notice provided');
+  });
+
+  it('should format blockedDate when blocked is true', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      blocked: true,
+      blockedDate: getDateISO(),
+    });
+
+    expect(result.blockedDateFormatted).toEqual(
+      applicationContext
+        .getUtilities()
+        .formatDateString(getDateISO(), 'MMDDYY'),
+    );
+  });
+
+  it('should format trial details if case status is calendared', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      status: Case.STATUS_TYPES.calendared,
+      trialLocation: 'Boise, Idaho',
+      trialDate: getDateISO(),
+    });
+
+    expect(result).toMatchObject({
+      formattedTrialCity: 'Boise, Idaho',
+      formattedTrialDate: applicationContext
+        .getUtilities()
+        .formatDateString(getDateISO(), 'MMDDYY'),
+      formattedTrialJudge: 'Not assigned',
+      showTrialCalendared: true,
+    });
+    expect(result).not.toHaveProperty('showBlockedFromTrial');
+    expect(result).not.toHaveProperty('showNotScheduled');
+  });
+
+  it('should show not scheduled section if case status is not calendared and case is not blocked', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+    });
+
+    expect(result).toMatchObject({
+      showNotScheduled: true,
+    });
   });
 });
 
@@ -321,23 +399,36 @@ describe('getFormattedCaseDetail', () => {
 
 describe('sortDocketRecords', () => {
   it('should sort docket records by date by default', () => {
+    // following dates selected to ensure test coverage of 'dateStringsCompared'
     const result = sortDocketRecords([
       {
         index: '2',
         record: {
-          filingDate: getDateISO(),
+          filingDate: '2019-07-08',
         },
       },
       {
         index: '1',
         record: {
-          filingDate: getDateISO(),
+          filingDate: '2019-08-03T00:06:44.000Z',
+        },
+      },
+      {
+        index: '4',
+        record: {
+          filingDate: '2019-07-08T00:01:19.000Z',
         },
       },
       {
         index: '3',
         record: {
-          filingDate: '2017-01-01T00:01:02Z',
+          filingDate: '2017-01-01T00:01:02.025Z',
+        },
+      },
+      {
+        index: '5',
+        record: {
+          filingDate: '2017-01-01T00:01:12.025Z',
         },
       },
     ]);

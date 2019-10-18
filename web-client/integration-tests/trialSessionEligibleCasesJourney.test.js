@@ -1,13 +1,5 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
-import { CerebralTest } from 'cerebral/test';
-import { Document } from '../../shared/src/business/entities/Document';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { applicationContext } from '../src/applicationContext';
-import { isFunction, mapValues } from 'lodash';
-import { presenter } from '../src/presenter/presenter';
+import { setupTest } from './helpers';
 import { uploadPetition } from './helpers';
-import { withAppContextDecorator } from '../src/withAppContext';
-import FormData from 'form-data';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
@@ -22,59 +14,12 @@ import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy
 import taxpayerLogin from './journey/taxpayerLogIn';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 import userSignsOut from './journey/taxpayerSignsOut';
-const {
-  ContactFactory,
-} = require('../../shared/src/business/entities/contacts/ContactFactory');
 
-let test;
-global.FormData = FormData;
-global.Blob = () => {};
-presenter.providers.applicationContext = applicationContext;
-presenter.providers.router = {
-  externalRoute: () => {},
-  route: async url => {
-    if (url === `/case-detail/${test.docketNumber}`) {
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: test.docketNumber,
-      });
-    }
-
-    if (url === '/') {
-      await test.runSequence('gotoDashboardSequence');
-    }
-  },
-};
-
-presenter.state = mapValues(presenter.state, value => {
-  if (isFunction(value)) {
-    return withAppContextDecorator(value, applicationContext);
-  }
-  return value;
-});
-
-test = CerebralTest(presenter);
+const test = setupTest();
 
 describe('Trial Session Eligible Cases Journey', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.setTimeout(30000);
-    global.window = {
-      document: {},
-      localStorage: {
-        removeItem: () => null,
-        setItem: () => null,
-      },
-    };
-
-    test.setState('constants', {
-      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-      CATEGORIES: Document.CATEGORIES,
-      CATEGORY_MAP: Document.CATEGORY_MAP,
-      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-      INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
-      PARTY_TYPES: ContactFactory.PARTY_TYPES,
-      STATUS_TYPES: Case.STATUS_TYPES,
-      TRIAL_CITIES: TrialSession.TRIAL_CITIES,
-    });
   });
 
   const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
@@ -310,6 +255,72 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[4],
       });
       expect(test.getState('caseDetail.status')).toEqual('Calendared');
+    });
+
+    it(`verify case #1 can be manually removed from '${trialLocation}' session`, async () => {
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[0],
+      });
+
+      await test.runSequence('removeFromTrialSessionSequence');
+
+      expect(test.getState('validationErrors')).toEqual({
+        disposition: 'Enter a disposition',
+      });
+
+      await test.runSequence('updateModalValueSequence', {
+        key: 'disposition',
+        value: 'testing',
+      });
+
+      await test.runSequence('removeFromTrialSessionSequence');
+
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[0],
+      });
+      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+
+      await test.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: test.trialSessionId,
+      });
+
+      expect(
+        test.getState('trialSession.calendaredCases.2.removedFromTrial'),
+      ).toBeTruthy();
+    });
+
+    it(`verify case #1 can be manually added back to the '${trialLocation}' session`, async () => {
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[0],
+      });
+      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+
+      await test.runSequence('addToTrialSessionSequence');
+
+      expect(test.getState('validationErrors')).toEqual({
+        trialSessionId: 'Select a Trial Session',
+      });
+
+      test.setState('modal.trialSessionId', test.trialSessionId);
+
+      await test.runSequence('addToTrialSessionSequence');
+
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[0],
+      });
+      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+
+      await test.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: test.trialSessionId,
+      });
+
+      expect(
+        test.getState('trialSession.calendaredCases.2.removedFromTrial'),
+      ).toBeFalsy();
+
+      expect(
+        test.getState('trialSession.calendaredCases.2.isManuallyAdded'),
+      ).toBeTruthy();
     });
 
     userSignsOut(test);

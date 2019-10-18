@@ -1,3 +1,5 @@
+import { AddToTrialModal } from './CaseDetail/AddToTrialModal';
+import { BlockFromTrialModal } from './CaseDetail/BlockFromTrialModal';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDeadlinesInternal } from './CaseDetail/CaseDeadlinesInternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
@@ -12,8 +14,10 @@ import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './CaseDetail/MessagesInProgress';
 import { PartyInformation } from './CaseDetail/PartyInformation';
+import { RemoveFromTrialSessionModal } from './CaseDetail/RemoveFromTrialSessionModal';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { UnblockFromTrialModal } from './CaseDetail/UnblockFromTrialModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -143,6 +147,12 @@ export const CaseDetailInternal = connect(
         )}
         {showModal === 'DeleteCaseDeadlineModalDialog' && (
           <DeleteCaseDeadlineModalDialog />
+        )}
+        {showModal === 'AddToTrialModal' && <AddToTrialModal />}
+        {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}
+        {showModal === 'UnblockFromTrialModal' && <UnblockFromTrialModal />}
+        {showModal === 'RemoveFromTrialSessionModal' && (
+          <RemoveFromTrialSessionModal />
         )}
       </>
     );

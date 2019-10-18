@@ -77,6 +77,15 @@ Case.ANSWER_DOCUMENT_CODES = [
 ];
 
 Case.VALIDATION_ERROR_MESSAGES = {
+  applicationForWaiverOfFilingFeeFile:
+    'Upload an Application for Waiver of Filing Fee',
+  applicationForWaiverOfFilingFeeFileSize: [
+    {
+      contains: 'must be less than or equal to',
+      message: `Your Filing Fee Waiver file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+    },
+    'Your Filing Fee Waiver file size is empty',
+  ],
   caseCaption: 'Enter a case caption',
   caseType: 'Select a case type',
   docketNumber: 'Docket number is required',
@@ -158,13 +167,15 @@ function Case(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.blocked = rawCase.blocked;
+  this.blockedDate = rawCase.blockedDate;
+  this.blockedReason = rawCase.blockedReason;
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
   this.contactSecondary = rawCase.contactSecondary;
   this.createdAt = rawCase.createdAt || createISODateString();
-  this.currentVersion = rawCase.currentVersion;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
@@ -258,6 +269,20 @@ function Case(rawCase, { applicationContext }) {
 joiValidationDecorator(
   Case,
   joi.object().keys({
+    blocked: joi.boolean().optional(),
+    blockedDate: joi.when('blocked', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .date()
+        .iso()
+        .required(),
+    }),
+    blockedReason: joi.when('blocked', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.string().required(),
+    }),
     caseId: joi
       .string()
       .uuid({
@@ -331,7 +356,6 @@ joiValidationDecorator(
     receivedAt: joi
       .date()
       .iso()
-      .max('now')
       .optional()
       .allow(null),
     respondents: joi.array().optional(),
@@ -447,8 +471,67 @@ Case.prototype.attachRespondent = function(respondent) {
   this.respondents.push(respondent);
 };
 
+/**
+ * updates a respondent on the case
+ *
+ * @param {string} respondentToUpdate the respondent user object with updated info
+ * @returns {void} modfies the respondents array on the case
+ */
+Case.prototype.updateRespondent = function(respondentToUpdate) {
+  this.respondents.some(respondent => {
+    if (respondent.userId === respondentToUpdate.userId) {
+      Object.assign(respondent, respondentToUpdate);
+      return true;
+    }
+  });
+};
+
+/**
+ * removes the given respondent from the case
+ *
+ * @param {string} respondentToRemove the respondent user object to remove from the case
+ * @returns {void} modfies the respondents array on the case
+ */
+Case.prototype.removeRespondent = function(respondentToRemove) {
+  this.respondents.some((respondent, idx) => {
+    if (respondent.userId === respondentToRemove.userId) {
+      this.respondents.splice(idx, 1);
+    }
+  });
+  return this;
+};
+
 Case.prototype.attachPractitioner = function(practitioner) {
   this.practitioners.push(practitioner);
+};
+
+/**
+ * updates a practitioner on the case
+ *
+ * @param {string} practitionerToUpdate the practitioner user object with updated info
+ * @returns {void} modfies the practitioners array on the case
+ */
+Case.prototype.updatePractitioner = function(practitionerToUpdate) {
+  this.practitioners.some(practitioner => {
+    if (practitioner.userId === practitionerToUpdate.userId) {
+      Object.assign(practitioner, practitionerToUpdate);
+      return true;
+    }
+  });
+};
+
+/**
+ * removes the given practitioner from the case
+ *
+ * @param {string} practitionerToRemove the practitioner user object to remove from the case
+ * @returns {void} modfies the practitioners array on the case
+ */
+Case.prototype.removePractitioner = function(practitionerToRemove) {
+  this.practitioners.some((practitioner, idx) => {
+    if (practitioner.userId === practitionerToRemove.userId) {
+      this.practitioners.splice(idx, 1);
+    }
+  });
 };
 
 /**
@@ -883,6 +966,15 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
 };
 
 /**
+ * returns true if the case status is already calendared
+ *
+ * @returns {boolean} if the case is calendared
+ */
+Case.prototype.isCalendared = function() {
+  return this.status === Case.STATUS_TYPES.calendared;
+};
+
+/**
  * getDefaultOrderDesignatingPlaceOfTrialValue
  *
  * @returns {boolean} the value of if an order is needed for place of trial.
@@ -901,6 +993,46 @@ Case.getDefaultOrderDesignatingPlaceOfTrialValue = function({
     orderDesignatingPlaceOfTrial = false;
   }
   return orderDesignatingPlaceOfTrial;
+};
+
+/**
+ * set as blocked with a blockedReason
+ *
+ * @param {string} blockedReason - the reason the case was blocked
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setAsBlocked = function(blockedReason) {
+  this.blocked = true;
+  this.blockedReason = blockedReason;
+  this.blockedDate = createISODateString();
+  return this;
+};
+
+/**
+ * unblock the case and remove the blockedReason
+ *
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.unsetAsBlocked = function() {
+  this.blocked = false;
+  this.blockedReason = undefined;
+  this.blockedDate = undefined;
+  return this;
+};
+
+/**
+ * remove from trial, setting case status back to generalDocketReadyForTrial
+ *
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.removeFromTrial = function() {
+  this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
+  this.trialDate = undefined;
+  this.trialJudge = undefined;
+  this.trialLocation = undefined;
+  this.trialSessionId = undefined;
+  this.trialTime = undefined;
+  return this;
 };
 
 module.exports = { Case };

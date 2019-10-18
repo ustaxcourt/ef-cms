@@ -51,11 +51,13 @@ export const CompleteDocumentTypeSectionRemainder = connect(
 
         {completeDocumentTypeSectionHelper.secondary && (
           <>
-            <Focus>
-              <h4 className="focusable" tabIndex="-1">
-                Which Document Are You Requesting Leave to File For?
-              </h4>
-            </Focus>
+            <div className="usa-label">
+              <Focus>
+                <h4 className="focusable usa-label" tabIndex="-1">
+                  Which Document Are You Requesting Leave to File For?
+                </h4>
+              </Focus>
+            </div>
             <div
               className={classNames(
                 'usa-form-group',
@@ -71,6 +73,13 @@ export const CompleteDocumentTypeSectionRemainder = connect(
               >
                 Document type
               </label>
+
+              <span className="usa-hint">
+                Enter your document name to see available document types,
+                <br />
+                or use the dropdown to select your document type.
+              </span>
+
               <Select
                 aria-describedby="secondary-document-type-label"
                 aria-labelledby="secondary-document-type-label"

@@ -8,14 +8,29 @@ export const TrialSessionInformation = connect(
   {
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     printTrialCalendarSequence: sequences.printTrialCalendarSequence,
+    trialSessionHeaderHelper: state.trialSessionHeaderHelper,
   },
-  ({ formattedTrialSessionDetails, printTrialCalendarSequence }) => {
+  ({
+    formattedTrialSessionDetails,
+    printTrialCalendarSequence,
+    trialSessionHeaderHelper,
+  }) => {
     return (
       <>
         <div className="grid-container padding-x-0">
           <div className="grid-row">
             <div className="grid-col-10">
-              <h1>Session Information</h1>
+              <h1>
+                Session Information
+                {trialSessionHeaderHelper.showSwitchToWorkingCopy && (
+                  <a
+                    className="button-switch-box margin-left-2"
+                    href={`/trial-session-working-copy/${formattedTrialSessionDetails.trialSessionId}`}
+                  >
+                    View Judge Session Copy
+                  </a>
+                )}
+              </h1>
             </div>
             <div className="grid-col-2">
               {formattedTrialSessionDetails.isCalendared && (

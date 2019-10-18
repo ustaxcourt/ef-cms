@@ -1,4 +1,5 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -10,7 +11,7 @@ export const OpenCases = connect(
   ({ openCases }) => {
     return (
       <React.Fragment>
-        <div className="text-semibold push-right margin-bottom-2 margin-top-neg-205">
+        <div className="text-semibold push-right margin-bottom-2">
           Count: {openCases.length}
         </div>
         <table
@@ -21,6 +22,7 @@ export const OpenCases = connect(
           <thead>
             <tr>
               <th>Docket</th>
+              <th aria-label="manually added indicator"></th>
               <th>Case name</th>
               <th>Petitioner Counsel</th>
               <th>Respondent Counsel</th>
@@ -31,6 +33,17 @@ export const OpenCases = connect(
               <tr className="eligible-cases-row">
                 <td>
                   <CaseLink formattedCase={item} />
+                </td>
+
+                <td>
+                  {item.isManuallyAdded && (
+                    <span aria-label="manually added indicator">
+                      <FontAwesomeIcon
+                        className="mini-success"
+                        icon="calendar-plus"
+                      />
+                    </span>
+                  )}
                 </td>
                 <td>{item.caseCaptionNames}</td>
                 <td>

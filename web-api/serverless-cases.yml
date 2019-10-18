@@ -8,8 +8,12 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-plugin-warmup
 
 custom:
+  warmup:
+    enabled: true
+
   prune:
     automatic: true
     number: 3
@@ -313,6 +317,30 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  saveIntermediateDocketEntry:
+    handler: web-api/src/casesHandlers.saveIntermediateDocketEntryLambda
+    events:
+      - http:
+          path: /{caseId}/docket-entry-in-progress
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  completeDocketEntryQC:
+    handler: web-api/src/casesHandlers.completeDocketEntryQCLambda
+    events:
+      - http:
+          path: /{caseId}/docket-entry-complete
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   fileCourtIssuedOrder:
     handler: web-api/src/casesHandlers.fileCourtIssuedOrderToCaseLambda
     events:
@@ -407,6 +435,66 @@ functions:
       - http:
           path: /{caseId}/associate-respondent
           method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCounselOnCase:
+    handler: web-api/src/casesHandlers.updateCounselOnCaseLambda
+    events:
+      - http:
+          path: /{caseId}/counsel/{userId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  deleteCounselFromCase:
+    handler: web-api/src/casesHandlers.deleteCounselFromCaseLambda
+    events:
+      - http:
+          path: /{caseId}/counsel/{userId}
+          method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  blockCase:
+    handler: web-api/src/casesHandlers.blockCaseLambda
+    events:
+      - http:
+          path: /{caseId}/block
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  unblockCase:
+    handler: web-api/src/casesHandlers.unblockCaseLambda
+    events:
+      - http:
+          path: /{caseId}/block
+          method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getBlockedCases:
+    handler: web-api/src/casesHandlers.getBlockedCasesLambda
+    events:
+      - http:
+          path: /blocked/{trialLocation}
+          method: get
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

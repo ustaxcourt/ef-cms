@@ -98,6 +98,34 @@ export const caseDetailHelper = (get, applicationContext) => {
   const showServeToIrsButton = ['New', 'Recalled'].includes(caseDetail.status);
   const showRecallButton = caseDetail.status === 'Batched for IRS';
 
+  const practitionerMatchesFormatted =
+    modalState && modalState.practitionerMatches;
+  if (practitionerMatchesFormatted) {
+    practitionerMatchesFormatted.map(practitioner => {
+      if (practitioner.contact) {
+        practitioner.cityStateZip = `${practitioner.contact.city}, ${practitioner.contact.state} ${practitioner.contact.postalCode}`;
+      }
+      if (caseDetail.practitioners) {
+        practitioner.isAlreadyInCase = caseDetail.practitioners.find(
+          casePractitioner => casePractitioner.userId === practitioner.userId,
+        );
+      }
+    });
+  }
+  const respondentMatchesFormatted = modalState && modalState.respondentMatches;
+  if (respondentMatchesFormatted) {
+    respondentMatchesFormatted.map(respondent => {
+      if (respondent.contact) {
+        respondent.cityStateZip = `${respondent.contact.city}, ${respondent.contact.state} ${respondent.contact.postalCode}`;
+      }
+      if (caseDetail.respondents) {
+        respondent.isAlreadyInCase = caseDetail.respondents.find(
+          caseRespondent => caseRespondent.userId === respondent.userId,
+        );
+      }
+    });
+  }
+
   const hasOrders = [
     noticeOfAttachments,
     orderForAmendedPetition,
@@ -115,10 +143,12 @@ export const caseDetailHelper = (get, applicationContext) => {
     documentDetailTab,
     hasOrders,
     hidePublicCaseInformation: !isExternalUser,
+    practitionerMatchesFormatted,
     practitionerSearchResultsCount:
       modalState &&
       modalState.practitionerMatches &&
       modalState.practitionerMatches.length,
+    respondentMatchesFormatted,
     respondentSearchResultsCount:
       modalState &&
       modalState.respondentMatches &&
@@ -139,7 +169,13 @@ export const caseDetailHelper = (get, applicationContext) => {
     showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContactButton: isExternalUser,
+    showEditPractitioners:
+      !isExternalUser &&
+      (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showEditPrimaryContactButton,
+    showEditRespondents:
+      !isExternalUser &&
+      (caseDetail.respondents && !!caseDetail.respondents.length),
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,

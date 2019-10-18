@@ -40,12 +40,12 @@ export const SupportingDocumentForm = connect(
             <Button
               link
               className="red-warning text-left padding-0 margin-left-1"
-              icon="times-circle"
+              icon="trash"
               onClick={() => {
                 removeSupportingDocumentSequence({ index });
               }}
             >
-              Remove
+              Delete
             </Button>
           </div>
         </h2>
@@ -93,7 +93,7 @@ export const SupportingDocumentForm = connect(
                 });
                 updateFileDocumentWizardFormValueSequence({
                   key: `supportingDocuments.${index}.previousDocument`,
-                  value: form.documentTitle,
+                  value: form.documentTitle || form.documentType,
                 });
                 updateFileDocumentWizardFormValueSequence({
                   key: e.target.name,

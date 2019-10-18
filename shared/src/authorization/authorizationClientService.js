@@ -22,7 +22,10 @@ exports.VIEW_DOCUMENTS = 'VIEW_DOCUMENTS';
 exports.PENDING_CASE_ASSOCIATE = 'PENDING_CASE_ASSOCIATE';
 exports.UPLOAD_DOCUMENT = 'UPLOAD_DOCUMENT';
 exports.ASSOCIATE_SELF_WITH_CASE = 'ASSOCIATE_SELF_WITH_CASE';
+exports.BLOCK_CASE = 'BLOCK_CASE';
+exports.ADD_CASE_TO_TRIAL_SESSION = 'ADD_CASE_TO_TRIAL_SESSION';
 
+// TODO: review all these for accuracy!
 const AUTHORIZATION_MAP = {
   admin: [exports.CREATE_USER],
   docketclerk: [
@@ -44,9 +47,10 @@ const AUTHORIZATION_MAP = {
     exports.UPDATE_CASE,
     exports.WORKITEM,
     exports.ARCHIVE_DOCUMENT,
+    exports.BLOCK_CASE,
+    exports.ADD_CASE_TO_TRIAL_SESSION,
   ],
   judge: [
-    // TODO: review this list for accuracy!
     exports.VIEW_DOCUMENTS,
     exports.ASSOCIATE_USER_WITH_CASE,
     exports.CASE_DEADLINE,
@@ -68,6 +72,8 @@ const AUTHORIZATION_MAP = {
     exports.WORKITEM,
     exports.BATCH_DOWNLOAD_TRIAL_SESSION,
     exports.ARCHIVE_DOCUMENT,
+    exports.ADD_CASE_TO_TRIAL_SESSION,
+    exports.BLOCK_CASE,
   ],
   petitioner: [
     exports.FILE_EXTERNAL_DOCUMENT,
@@ -92,6 +98,8 @@ const AUTHORIZATION_MAP = {
     exports.TRIAL_SESSIONS,
     exports.UPLOAD_DOCUMENT,
     exports.UPDATE_CASE,
+    exports.BLOCK_CASE,
+    exports.ADD_CASE_TO_TRIAL_SESSION,
     exports.WORKITEM,
   ],
   practitioner: [
@@ -128,6 +136,8 @@ const AUTHORIZATION_MAP = {
     exports.UPDATE_CASE,
     exports.WORKITEM,
     exports.ARCHIVE_DOCUMENT,
+    exports.BLOCK_CASE,
+    exports.ADD_CASE_TO_TRIAL_SESSION,
   ],
 };
 

@@ -1,13 +1,12 @@
 import { navigateToOrdersNeededAction } from './navigateToOrdersNeededAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import sinon from 'sinon';
 
 describe('navigateToOrdersNeededAction', () => {
   let routeStub;
 
   beforeEach(() => {
-    routeStub = sinon.stub();
+    routeStub = jest.fn();
 
     presenter.providers.router = {
       route: routeStub,
@@ -24,16 +23,19 @@ describe('navigateToOrdersNeededAction', () => {
       },
     });
 
-    expect(routeStub.calledOnce).toEqual(true);
+    expect(routeStub.mock.calls.length).toBe(1);
+    expect(routeStub.mock.calls[0][0]).toBe(
+      '/case-detail/123-19/orders-needed',
+    );
   });
 
-  it('does not navigate to orders needed summary url  when there is no docketNumber', async () => {
+  it('does not navigate to orders needed summary url when there is no docketNumber', async () => {
     await runAction(navigateToOrdersNeededAction, {
       modules: {
         presenter,
       },
     });
 
-    expect(routeStub.calledOnce).toEqual(false);
+    expect(routeStub.mock.calls.length).toBe(0);
   });
 });

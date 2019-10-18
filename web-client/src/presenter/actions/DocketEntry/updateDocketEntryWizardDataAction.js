@@ -16,7 +16,22 @@ export const updateDocketEntryWizardDataAction = ({ get, props, store }) => {
   let supporting = get(state.screenMetadata.supporting);
   const ENTRY_PROPS = ['category', 'documentTitle', 'documentType', 'scenario'];
 
+  const updateBaseDocumentProps = eventCode => {
+    find(
+      INTERNAL_CATEGORY_MAP,
+      entries => (entry = find(entries, { eventCode })),
+    );
+    form = {
+      ...omit(get(state.form), ENTRY_PROPS),
+      ...pick(entry || {}, ENTRY_PROPS),
+    };
+    store.set(state.form, form);
+  };
+
   switch (props.key) {
+    case 'initEventCode':
+      updateBaseDocumentProps(props.value);
+      break;
     case 'certificateOfService':
       store.unset(state.form.certificateOfServiceDate);
       store.unset(state.form.certificateOfServiceMonth);
@@ -24,15 +39,7 @@ export const updateDocketEntryWizardDataAction = ({ get, props, store }) => {
       store.unset(state.form.certificateOfServiceYear);
       break;
     case 'eventCode':
-      find(
-        INTERNAL_CATEGORY_MAP,
-        entries => (entry = find(entries, { eventCode: props.value })),
-      );
-      form = {
-        ...omit(get(state.form), ENTRY_PROPS),
-        ...pick(entry || {}, ENTRY_PROPS),
-      };
-      store.set(state.form, form);
+      updateBaseDocumentProps(props.value);
       if (!supporting) {
         store.unset(state.form.previousDocument);
       } else {

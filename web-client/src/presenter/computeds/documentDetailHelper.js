@@ -43,6 +43,13 @@ export const documentDetailHelper = (get, applicationContext) => {
         );
         return formatted;
       });
+    const qcItem = (allWorkItems || []).filter(item => !item.isInternal)[0];
+
+    if (formattedDocument.qcByUser) {
+      formattedDocument.qcBy = formattedDocument.qcByUser.name;
+    } else if (qcItem && qcItem.completedAt) {
+      formattedDocument.qcBy = qcItem.completedBy;
+    }
 
     formattedDocument.signUrl =
       formattedDocument.documentType === 'Stipulated Decision'

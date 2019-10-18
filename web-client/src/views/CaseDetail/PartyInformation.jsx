@@ -1,8 +1,12 @@
 import { AddPractitionerModal } from './AddPractitionerModal';
 import { AddRespondentModal } from './AddRespondentModal';
 import { Button } from '../../ustc-ui/Button/Button';
+import { EditPractitionersModal } from './EditPractitionersModal';
+import { EditRespondentsModal } from './EditRespondentsModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PractitionerExistsModal } from './PractitionerExistsModal';
+import { RespondentExistsModal } from './RespondentExistsModal';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -54,6 +58,10 @@ const PartyInformation = connect(
     openAddPractitionerModalSequence:
       sequences.openAddPractitionerModalSequence,
     openAddRespondentModalSequence: sequences.openAddRespondentModalSequence,
+    openEditPractitionersModalSequence:
+      sequences.openEditPractitionersModalSequence,
+    openEditRespondentsModalSequence:
+      sequences.openEditRespondentsModalSequence,
     openEditSecondaryContactModalSequence:
       sequences.openEditSecondaryContactModalSequence,
     showModal: state.showModal,
@@ -67,6 +75,8 @@ const PartyInformation = connect(
     formattedCaseDetail,
     openAddPractitionerModalSequence,
     openAddRespondentModalSequence,
+    openEditPractitionersModalSequence,
+    openEditRespondentsModalSequence,
     openEditSecondaryContactModalSequence,
     showModal,
     updateFormValueSequence,
@@ -280,7 +290,11 @@ const PartyInformation = connect(
                     });
                   }}
                 />
-                <button className="usa-button" type="submit">
+                <button
+                  className="usa-button"
+                  id="search-for-practitioner"
+                  type="submit"
+                >
                   <span className="usa-search__submit-text">Search</span>
                 </button>
               </div>
@@ -346,7 +360,11 @@ const PartyInformation = connect(
                     });
                   }}
                 />
-                <button className="usa-button" type="submit">
+                <button
+                  className="usa-button"
+                  id="search-for-respondent"
+                  type="submit"
+                >
                   <span className="usa-search__submit-text">Search</span>
                 </button>
               </div>
@@ -377,8 +395,22 @@ const PartyInformation = connect(
             <div className="card">
               <div className="content-wrapper">
                 <div className="grid-row header-row">
-                  <div className="grid-col-6" id="practitioner-label">
+                  <div
+                    className="grid-col-6 display-flex"
+                    id="practitioner-label"
+                  >
                     <h3>Petitioner Counsel</h3>
+                    {caseDetailHelper.showEditPractitioners && (
+                      <Button
+                        link
+                        className="margin-left-205 padding-0 height-3"
+                        id="edit-practitioners-button"
+                        onClick={() => openEditPractitionersModalSequence()}
+                      >
+                        <FontAwesomeIcon icon="edit" size="sm" />
+                        Edit
+                      </Button>
+                    )}
                   </div>
                   {caseDetailHelper.showAddCounsel && practitionerSearch()}
                 </div>
@@ -392,8 +424,19 @@ const PartyInformation = connect(
             <div className="card">
               <div className="content-wrapper">
                 <div className="grid-row header-row">
-                  <div className="grid-col-6" id="secondary-label">
+                  <div className="grid-col-6 display-flex" id="secondary-label">
                     <h3>Respondent Counsel</h3>
+                    {caseDetailHelper.showEditRespondents && (
+                      <Button
+                        link
+                        className="margin-left-205 padding-0 height-3"
+                        id="edit-respondents-button"
+                        onClick={() => openEditRespondentsModalSequence()}
+                      >
+                        <FontAwesomeIcon icon="edit" size="sm" />
+                        Edit
+                      </Button>
+                    )}
                   </div>
                   {caseDetailHelper.showAddCounsel && respondentSearch()}
                 </div>
@@ -407,6 +450,10 @@ const PartyInformation = connect(
         )}
         {showModal === 'AddPractitionerModal' && <AddPractitionerModal />}
         {showModal === 'AddRespondentModal' && <AddRespondentModal />}
+        {showModal === 'EditPractitionersModal' && <EditPractitionersModal />}
+        {showModal === 'EditRespondentsModal' && <EditRespondentsModal />}
+        {showModal === 'PractitionerExistsModal' && <PractitionerExistsModal />}
+        {showModal === 'RespondentExistsModal' && <RespondentExistsModal />}
       </>
     );
   },

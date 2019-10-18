@@ -33,9 +33,8 @@ const getAddressPhoneDiff = ({ newData, oldData }) => {
  */
 const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
   let documentType;
-  if (!diff) {
-    diff = getAddressPhoneDiff({ newData, oldData });
-  }
+
+  const initialDiff = diff || getAddressPhoneDiff({ newData, oldData });
 
   const addressFields = [
     'country',
@@ -49,10 +48,10 @@ const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
     'inCareOf',
   ];
 
-  const isAddressChange = Object.keys(diff).some(field =>
+  const isAddressChange = Object.keys(initialDiff).some(field =>
     addressFields.includes(field),
   );
-  const isPhoneChange = !!diff.phone;
+  const isPhoneChange = !!initialDiff.phone;
 
   if (isAddressChange && !isPhoneChange) {
     documentType = {

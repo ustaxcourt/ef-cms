@@ -258,14 +258,14 @@ describe('filterWorkItems', () => {
       assigneeId: petitionsClerk1.userId,
       completedAt: null,
       docketNumber: '100-01',
-      isInternal: true,
+      isQC: false,
       section: CONSTANTS.PETITIONS_SECTION,
     });
 
     workItemPetitionsMyMessagesSent = generateWorkItem({
       assigneeId: petitionsClerk2.userId,
       docketNumber: '100-02',
-      isInternal: true,
+      isQC: false,
       section: CONSTANTS.PETITIONS_SECTION,
       sentBySection: CONSTANTS.PETITIONS_SECTION,
       sentByUserId: petitionsClerk1.userId,
@@ -274,13 +274,13 @@ describe('filterWorkItems', () => {
     workItemPetitionsSectionMessagesInbox = generateWorkItem({
       completedAt: null,
       docketNumber: '100-03',
-      isInternal: true,
+      isQC: false,
       section: CONSTANTS.PETITIONS_SECTION,
     });
 
     workItemPetitionsSectionMessagesSent = generateWorkItem({
       docketNumber: '100-04',
-      isInternal: true,
+      isQC: false,
       sentBySection: CONSTANTS.PETITIONS_SECTION,
       sentByUserId: petitionsClerk2.userId,
     });
@@ -288,14 +288,14 @@ describe('filterWorkItems', () => {
     workItemPetitionsMyDocumentQCInbox = generateWorkItem({
       assigneeId: petitionsClerk1.userId,
       docketNumber: '100-05',
-      isInternal: false,
+      isQC: true,
       section: CONSTANTS.PETITIONS_SECTION,
     });
 
     workItemPetitionsMyDocumentQCBatched = generateWorkItem({
       caseStatus: Case.STATUS_TYPES.batchedForIRS,
       docketNumber: '100-06',
-      isInternal: false,
+      isQC: true,
       section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,
       sentByUserId: petitionsClerk1.userId,
     });
@@ -306,7 +306,7 @@ describe('filterWorkItems', () => {
       completedAt: '2019-07-18T18:05:54.166Z',
       completedByUserId: petitionsClerk1.userId,
       docketNumber: '100-07',
-      isInternal: false,
+      isQC: true,
       section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,
       sentByUserId: petitionsClerk1.userId,
     });
@@ -314,7 +314,7 @@ describe('filterWorkItems', () => {
     workItemPetitionsSectionDocumentQCInbox = generateWorkItem({
       completedAt: null,
       docketNumber: '100-08',
-      isInternal: false,
+      isQC: true,
       section: CONSTANTS.PETITIONS_SECTION,
     });
 
@@ -322,7 +322,7 @@ describe('filterWorkItems', () => {
       assigneeId: petitionsClerk2.userId,
       caseStatus: Case.STATUS_TYPES.batchedForIRS,
       docketNumber: '100-09',
-      isInternal: false,
+      isQC: true,
       section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,
     });
 
@@ -332,7 +332,7 @@ describe('filterWorkItems', () => {
       completedAt: '2019-07-18T18:05:54.166Z',
       completedByUserId: petitionsClerk2.userId,
       docketNumber: '100-10',
-      isInternal: false,
+      isQC: true,
       section: CONSTANTS.IRS_BATCH_SYSTEM_SECTION,
       sentByUserId: petitionsClerk2.userId,
     });
@@ -341,14 +341,14 @@ describe('filterWorkItems', () => {
       assigneeId: docketClerk1.userId,
       completedAt: null,
       docketNumber: '100-11',
-      isInternal: true,
+      isQC: false,
       section: CONSTANTS.DOCKET_SECTION,
     });
 
     workItemDocketMyMessagesSent = generateWorkItem({
       assigneeId: docketClerk2.userId,
       docketNumber: '100-12',
-      isInternal: true,
+      isQC: false,
       sentBySection: CONSTANTS.DOCKET_SECTION,
       sentByUserId: docketClerk1.userId,
     });
@@ -356,13 +356,13 @@ describe('filterWorkItems', () => {
     workItemDocketSectionMessagesInbox = generateWorkItem({
       completedAt: null,
       docketNumber: '100-13',
-      isInternal: true,
+      isQC: false,
       section: CONSTANTS.DOCKET_SECTION,
     });
 
     workItemDocketSectionMessagesSent = generateWorkItem({
       docketNumber: '100-14',
-      isInternal: true,
+      isQC: false,
       sentBySection: CONSTANTS.DOCKET_SECTION,
       sentByUserId: docketClerk2.userId,
     });
@@ -371,14 +371,14 @@ describe('filterWorkItems', () => {
       assigneeId: docketClerk1.userId,
       completedAt: null,
       docketNumber: '100-15',
-      isInternal: false,
+      isQC: true,
       section: CONSTANTS.DOCKET_SECTION,
     });
 
     workItemDocketSectionDocumentQCInbox = generateWorkItem({
       completedAt: null,
       docketNumber: '100-17',
-      isInternal: false,
+      isQC: true,
       section: CONSTANTS.DOCKET_SECTION,
     });
 
@@ -387,7 +387,7 @@ describe('filterWorkItems', () => {
         assigneeId: docketClerk1.userId,
         completedAt: null,
         docketNumber: '100-18',
-        isInternal: false,
+        isQC: true,
         section: CONSTANTS.DOCKET_SECTION,
       },
       {
@@ -400,7 +400,7 @@ describe('filterWorkItems', () => {
         assigneeId: docketClerk2.userId,
         completedAt: null,
         docketNumber: '100-19',
-        isInternal: false,
+        isQC: true,
         section: CONSTANTS.DOCKET_SECTION,
       },
       {

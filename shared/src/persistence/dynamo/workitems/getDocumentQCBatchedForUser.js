@@ -29,7 +29,7 @@ exports.getDocumentQCBatchedForUser = async ({
   return workItems.filter(
     workItem =>
       !workItem.completedAt &&
-      !workItem.isInternal &&
+      workItem.isQC &&
       workItem.sentByUserId === userId,
   );
 };
