@@ -134,10 +134,10 @@ export const AddToTrialModal = connect(
   {
     addToTrialSessionModalHelper: state.addToTrialSessionModalHelper,
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.addToTrialSequence,
+    confirmSequence: sequences.addToTrialSessionSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateAddToTrialSequence: sequences.validateAddToTrialSequence,
+    validateAddToTrialSequence: sequences.validateAddToTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
   AddToTrialModalComponent,

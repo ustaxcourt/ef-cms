@@ -15,6 +15,19 @@ describe('getBlockedCasesByTrialLocationAction', () => {
     };
   });
 
+  it('should not call getBlockedCasesInteractorSpy if the trialLocation is not on the form', async () => {
+    await runAction(getBlockedCasesByTrialLocationAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {},
+      },
+    });
+
+    expect(getBlockedCasesInteractorSpy).not.toHaveBeenCalled();
+  });
+
   it('should call getBlockedCasesInteractorSpy with the passed in trialLocation and return the result from the use case', async () => {
     const result = await runAction(getBlockedCasesByTrialLocationAction, {
       modules: {

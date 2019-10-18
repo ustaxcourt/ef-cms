@@ -5,6 +5,7 @@ import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError'
 import { UnauthorizedRequestError } from './errors/UnauthorizedRequestError';
 import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
+import { addToTrialSessionSequence } from './sequences/addToTrialSessionSequence';
 import { archiveDraftDocumentModalSequence } from './sequences/archiveDraftDocumentModalSequence';
 import { archiveDraftDocumentSequence } from './sequences/archiveDraftDocumentSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
@@ -262,6 +263,7 @@ import { updateUserContactValueSequence } from './sequences/updateUserContactVal
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
 import { validateAddPractitionerSequence } from './sequences/caseAssociation/validateAddPractitionerSequence';
 import { validateAddRespondentSequence } from './sequences/caseAssociation/validateAddRespondentSequence';
+import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
 import { validateBlockFromTrialSequence } from './sequences/validateBlockFromTrialSequence';
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
@@ -299,6 +301,7 @@ export const presenter = {
   providers: {},
   sequences: {
     addSupportingDocumentToFormSequence,
+    addToTrialSessionSequence,
     archiveDraftDocumentModalSequence,
     archiveDraftDocumentSequence,
     assignSelectedWorkItemsSequence,
@@ -554,6 +557,7 @@ export const presenter = {
     updateWorkingCopySessionNoteSequence,
     validateAddPractitionerSequence,
     validateAddRespondentSequence,
+    validateAddToTrialSessionSequence,
     validateBlockFromTrialSequence,
     validateCaseAssociationRequestSequence,
     validateCaseDeadlineSequence,
