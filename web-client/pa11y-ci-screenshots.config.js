@@ -44,15 +44,6 @@ const screenshotUrls = urls.map(item => {
   return item;
 });
 
-if (process.env.CI) {
-  initialUrls.push({
-    actions: ['wait for element #ci-environment to be visible'],
-    notes: 'Confirm Pa11y is running against client in CI mode',
-    url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/&info=verify-ci-client-environment',
-  });
-}
-
 // see https://github.com/pa11y/pa11y#command-line-interface
 
 module.exports = {
