@@ -22,7 +22,9 @@ exports.customHandle = async (event, fun) => {
       statusCode: 200,
     };
   } catch (err) {
-    console.error('err', err);
+    if (!process.env.CI) {
+      console.error('err', err);
+    }
     if (err instanceof NotFoundError) {
       err.statusCode = 404;
       return sendError(err);
