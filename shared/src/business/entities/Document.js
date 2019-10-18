@@ -69,6 +69,7 @@ function Document(rawDocument, { applicationContext }) {
   this.signedByUserId = rawDocument.signedByUserId;
   this.status = rawDocument.status;
   this.supportingDocument = rawDocument.supportingDocument;
+  this.trialLocation = rawDocument.trialLocation;
   this.userId = rawDocument.userId;
   this.workItems = rawDocument.workItems;
   this.archived = rawDocument.archived;
@@ -217,6 +218,7 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     status: joi.string().optional(),
+    trialLocation: joi.string().optional(),
     userId: joi.string().required(),
   }),
   function() {
