@@ -20,7 +20,11 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
 
   let formattedCases = (trialSession.calendaredCases || [])
     .slice()
-    .filter(calendaredCase => calendaredCase.status !== STATUS_TYPES.closed)
+    .filter(
+      calendaredCase =>
+        calendaredCase.status !== STATUS_TYPES.closed &&
+        calendaredCase.removedFromTrial !== true,
+    )
     .filter(
       calendaredCase =>
         (trueFilters.includes('statusUnassigned') &&
