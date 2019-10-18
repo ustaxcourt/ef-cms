@@ -34,7 +34,7 @@ const postToConnection = jest
 
 const getWebSocketConnectionsByUserIdMock = jest.fn(() => connections);
 
-const applicationContext = {
+let applicationContext = {
   getNotificationClient: jest
     .fn()
     .mockImplementationOnce(() => {
@@ -66,5 +66,24 @@ describe('send websocket notification to browser', () => {
     });
     expect(postToConnection.mock.calls.length).toBe(3);
     expect(deleteStub.callCount).toBe(1);
+  });
+
+  it('throws exception', async () => {
+    let getNotificationClientStub = jest.fn().mockImplementation(() => {
+      throw notificationError;
+    });
+
+    applicationContext = {
+      ...applicationContext,
+      getNotificationClient: getNotificationClientStub,
+    };
+
+    await sendNotificationToUser({
+      applicationContext,
+      message: 'hello, computer',
+      userId: 'userId-000-000-0000',
+    });
+
+    expect(getNotificationClientStub).toThrow();
   });
 });
