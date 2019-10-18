@@ -1,5 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { ModalDialog } from '../ModalDialog';
+import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -124,6 +125,10 @@ class AddToTrialModalComponent extends ModalDialog {
                 ),
               )}
           </BindedSelect>
+          <Text
+            bind="validationErrors.trialSessionId"
+            className="usa-error-message"
+          />
         </div>
       </div>
     );
