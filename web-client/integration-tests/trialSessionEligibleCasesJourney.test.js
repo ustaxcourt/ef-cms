@@ -317,6 +317,10 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(
         test.getState('trialSession.calendaredCases.2.removedFromTrial'),
       ).toBeFalsy();
+
+      expect(
+        test.getState('trialSession.calendaredCases.2.isManuallyAdded'),
+      ).toBeTruthy();
     });
 
     userSignsOut(test);
