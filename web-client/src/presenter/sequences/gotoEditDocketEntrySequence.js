@@ -16,6 +16,7 @@ import { setQCWorkItemIdToMarkAsReadIfNeededAction } from '../actions/EditDocket
 import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
 export const gotoEditDocketEntry = [
   setCurrentPageAction('Interstitial'),
@@ -28,6 +29,7 @@ export const gotoEditDocketEntry = [
   setBaseUrlAction,
   setDocketEntryFormForDocketEditAction,
   deconstructReceivedAtDateToFormAction,
+  updateDocketEntryWizardDataAction,
   setDocumentIdAction,
   setQCWorkItemIdToMarkAsReadIfNeededAction,
   set(state.currentTab, 'Document Info'),
