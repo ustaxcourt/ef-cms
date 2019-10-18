@@ -146,7 +146,7 @@
     "build:_api": "parcel build --no-source-maps --bundle-node-modules --target node",
     "build:client": "USTC_ENV=prod parcel build --no-source-maps web-client/src/index.pug; npm run build:jsdoc",
     "build:jsdoc": "jsdoc -c web-client/jsdoc.conf.json",
-    "clean": "rm -rf dist/ web-client/.cache/",
+    "clean": "rm -rf dist/ web-client/.cache/ .elasticsearch/",
     "cypress:open": "cypress open --config watchForFileChanges=true",
     "cypress": "cypress run",
     "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
