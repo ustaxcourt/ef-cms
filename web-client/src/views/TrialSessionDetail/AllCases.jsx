@@ -22,7 +22,7 @@ export const AllCases = connect(
           <thead>
             <tr>
               <th>Docket</th>
-              <th aria-label="manually added inditicator"></th>
+              <th aria-label="manually added indicator"></th>
               <th>Case name</th>
               <th>Case status</th>
               <th>Disposition</th>
@@ -38,10 +38,12 @@ export const AllCases = connect(
 
                 <td>
                   {item.isManuallyAdded && (
-                    <FontAwesomeIcon
-                      className="mini-success"
-                      icon="calendar-plus"
-                    />
+                    <span aria-label="manually added indicator">
+                      <FontAwesomeIcon
+                        className="mini-success"
+                        icon="calendar-plus"
+                      />
+                    </span>
                   )}
                 </td>
                 <td>{item.caseCaptionNames}</td>
