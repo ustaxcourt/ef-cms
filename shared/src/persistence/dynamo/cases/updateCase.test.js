@@ -41,9 +41,5 @@ describe('updateCase', () => {
       pk: '123',
       sk: '123',
     });
-    expect(putStub.getCall(1).args[0].Item).toMatchObject({
-      pk: '123',
-      sk: '11',
-    });
   });
 });
