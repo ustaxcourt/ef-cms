@@ -86,7 +86,6 @@
     ],
     "partyType": "Petitioner",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-    "currentVersion": "0",
     "caseType": "Whistleblower",
     "contactPrimary": {
       "address3": "Architecto assumenda",
@@ -117,7 +116,7 @@
         "index": 2
       }
     ],
-    "sk": "0",
+    "sk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
     "blocked": true,
     "blockedDate": "2019-03-01T21:40:46.415Z",
     "blockedReason": "petitioner is in jail",
