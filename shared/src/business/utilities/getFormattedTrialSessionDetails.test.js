@@ -227,10 +227,10 @@ describe('formattedTrialSessionDetails', () => {
     expect(result.allCases[2].caseCaptionNames).toEqual('Test Taxpayer');
 
     expect(result.openCases.length).toEqual(1);
-    expect(result.closedCases.length).toEqual(2);
+    expect(result.inactiveCases.length).toEqual(2);
     expect(result.openCases[0].docketNumberWithSuffix).toEqual('101-18');
-    expect(result.closedCases[0].docketNumberWithSuffix).toEqual('101-16S');
-    expect(result.closedCases[1].docketNumberWithSuffix).toEqual('102-17W');
+    expect(result.inactiveCases[0].docketNumberWithSuffix).toEqual('101-16S');
+    expect(result.inactiveCases[1].docketNumberWithSuffix).toEqual('102-17W');
   });
 
   it('sorts calendared cases by docket number', () => {
