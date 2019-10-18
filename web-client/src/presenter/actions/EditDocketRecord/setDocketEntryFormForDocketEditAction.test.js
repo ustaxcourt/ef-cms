@@ -18,6 +18,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
           documents: [
             {
               documentId: '123-abc-123-abc',
+              eventCode: 'OPP',
               lodged: true,
             },
             { documentId: '321-cba-321-cba' },
@@ -29,6 +30,7 @@ describe('setDocketEntryFormForDocketEditAction', () => {
 
     const expectedResult = {
       documentId: '123-abc-123-abc',
+      eventCode: 'OPP',
       lodged: true,
     };
 
