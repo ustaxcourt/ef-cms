@@ -8,9 +8,6 @@ const { createISODateString } = require('../utilities/DateHandler');
 const { flatten } = require('lodash');
 const { Order } = require('./orders/Order');
 const { WorkItem } = require('./WorkItem');
-const {
-  ExternalDocumentFactory,
-} = require('./externalDocument/ExternalDocumentFactory');
 
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
 Document.CATEGORIES = Object.keys(documentMapExternal);
