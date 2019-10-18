@@ -5,7 +5,6 @@ const {
 const {
   updateWorkItemDocketNumberSuffix,
 } = require('../workitems/updateWorkItemDocketNumberSuffix');
-const { saveVersionedCase } = require('./saveCase');
 /**
  * updateCase
  *
@@ -18,7 +17,7 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   const oldCase = await client.get({
     Key: {
       pk: caseToUpdate.caseId,
-      sk: '0',
+      sk: caseToUpdate.caseId,
     },
     applicationContext,
   });
@@ -57,10 +56,13 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   }
 
   const [results] = await Promise.all([
-    saveVersionedCase({
+    client.put({
+      Item: {
+        pk: caseToUpdate.caseId,
+        sk: caseToUpdate.caseId,
+        ...caseToUpdate,
+      },
       applicationContext,
-      caseToSave: caseToUpdate,
-      existingVersion: caseToUpdate.currentVersion,
     }),
     ...requests,
   ]);

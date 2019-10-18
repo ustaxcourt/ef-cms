@@ -43,7 +43,7 @@ exports.getAllCaseDeadlines = async ({ applicationContext }) => {
     applicationContext,
     keys: caseIds.map(id => ({
       pk: id,
-      sk: '0',
+      sk: id,
     })),
   });
 

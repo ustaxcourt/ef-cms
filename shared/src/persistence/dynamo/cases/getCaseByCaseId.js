@@ -15,7 +15,7 @@ exports.getCaseByCaseId = ({ applicationContext, caseId }) => {
     .get({
       Key: {
         pk: caseId,
-        sk: '0',
+        sk: caseId,
       },
       applicationContext,
     })

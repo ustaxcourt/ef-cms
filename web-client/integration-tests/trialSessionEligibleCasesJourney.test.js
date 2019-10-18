@@ -257,6 +257,30 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('caseDetail.status')).toEqual('Calendared');
     });
 
+    it(`verify case #1 can be manually removed from '${trialLocation}' session`, async () => {
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[0],
+      });
+
+      await test.runSequence('removeFromTrialSessionSequence');
+
+      expect(test.getState('validationErrors')).toEqual({
+        disposition: 'Enter a disposition',
+      });
+
+      await test.runSequence('updateModalValueSequence', {
+        key: 'disposition',
+        value: 'testing',
+      });
+
+      await test.runSequence('removeFromTrialSessionSequence');
+
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[0],
+      });
+      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+    });
+
     userSignsOut(test);
   });
 });

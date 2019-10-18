@@ -160,4 +160,63 @@ describe('TrialSession entity', () => {
       expect(trialSession.caseOrder[0]).toEqual({ caseId: '123' });
     });
   });
+
+  describe('removeCaseFromCalendar', () => {
+    it('should set case on calendar to removedFromTrial with removedFromTrialDate and disposition', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionType: 'Hybrid',
+        },
+        {
+          applicationContext,
+        },
+      );
+      trialSession.addCaseToCalendar({ caseId: '123' });
+      trialSession.addCaseToCalendar({ caseId: '234' });
+      trialSession.addCaseToCalendar({ caseId: '456' });
+      expect(trialSession.caseOrder.length).toEqual(3);
+
+      trialSession.removeCaseFromCalendar({
+        caseId: '123',
+        disposition: 'because',
+      });
+
+      expect(trialSession.caseOrder.length).toEqual(3);
+      expect(trialSession.caseOrder[0]).toMatchObject({
+        caseId: '123',
+        disposition: 'because',
+        removedFromTrial: true,
+      });
+      expect(trialSession.caseOrder[0].removedFromTrialDate).toBeDefined();
+      expect(trialSession.caseOrder[1]).not.toHaveProperty('removedFromTrial');
+      expect(trialSession.caseOrder[2]).not.toHaveProperty('removedFromTrial');
+    });
+
+    it('should not modify case calendar if caseId is not in caseOrder', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionType: 'Hybrid',
+        },
+        {
+          applicationContext,
+        },
+      );
+      trialSession.addCaseToCalendar({ caseId: '123' });
+      trialSession.addCaseToCalendar({ caseId: '234' });
+      trialSession.addCaseToCalendar({ caseId: '456' });
+      expect(trialSession.caseOrder.length).toEqual(3);
+
+      trialSession.removeCaseFromCalendar({
+        caseId: 'abc',
+        disposition: 'because',
+      });
+
+      expect(trialSession.caseOrder.length).toEqual(3);
+      expect(trialSession.caseOrder[0]).not.toHaveProperty('removedFromTrial');
+      expect(trialSession.caseOrder[1]).not.toHaveProperty('removedFromTrial');
+      expect(trialSession.caseOrder[2]).not.toHaveProperty('removedFromTrial');
+    });
+  });
 });

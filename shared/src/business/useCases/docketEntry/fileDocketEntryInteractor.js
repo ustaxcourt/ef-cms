@@ -120,7 +120,7 @@ exports.fileDocketEntryInteractor = async ({
             ...documentEntity.toRawObject(),
             createdAt: documentEntity.createdAt,
           },
-          isInternal: false,
+          isQC: true,
           isRead: user.role !== 'practitioner',
           section: DOCKET_SECTION,
           sentBy: user.userId,

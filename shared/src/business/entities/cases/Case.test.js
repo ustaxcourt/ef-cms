@@ -2,6 +2,7 @@ const moment = require('moment');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { Practitioner } = require('../Practitioner');
@@ -1031,6 +1032,7 @@ describe('Case entity', () => {
           caseTitle: 'testing',
           docketNumber: '101-18',
           document: {},
+          isQC: true,
           sentBy: 'bob',
         },
         { applicationContext },
@@ -1047,6 +1049,7 @@ describe('Case entity', () => {
           caseTitle: 'testing',
           docketNumber: '101-18',
           document: {},
+          isQC: true,
           sentBy: 'bob',
         },
       ]);
@@ -1255,7 +1258,7 @@ describe('Case entity', () => {
   });
 
   describe('setAsCalendared', () => {
-    it('should set case as calendared', () => {
+    it('should set case as calendared with only judge and trialSessionId', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -1267,6 +1270,37 @@ describe('Case entity', () => {
       });
       expect(myCase.trialSessionId).toBeTruthy();
       expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
+    });
+
+    it('should set case as calendared with all trial session fields', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, AL',
+        },
+        { applicationContext },
+      );
+      myCase.setAsCalendared(trialSession);
+
+      expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(myCase.trialDate).toBeTruthy();
+      expect(myCase.trialJudge).toBeTruthy();
+      expect(myCase.trialLocation).toBeTruthy();
+      expect(myCase.trialSessionId).toBeTruthy();
+      expect(myCase.trialTime).toBeTruthy();
     });
   });
 
@@ -1488,6 +1522,50 @@ describe('Case entity', () => {
       expect(caseToUpdate.blocked).toBeFalsy();
       expect(caseToUpdate.blockedReason).toBeUndefined();
       expect(caseToUpdate.blockedDate).toBeUndefined();
+    });
+  });
+
+  describe('removeFromTrial', () => {
+    it('removes the case from trial, unsetting trial details and setting status to general docket ready for trial', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, AL',
+        },
+        { applicationContext },
+      );
+      caseToUpdate.setAsCalendared(trialSession);
+
+      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(caseToUpdate.trialDate).toBeTruthy();
+      expect(caseToUpdate.trialJudge).toBeTruthy();
+      expect(caseToUpdate.trialLocation).toBeTruthy();
+      expect(caseToUpdate.trialSessionId).toBeTruthy();
+      expect(caseToUpdate.trialTime).toBeTruthy();
+
+      caseToUpdate.removeFromTrial();
+
+      expect(caseToUpdate.status).toEqual(
+        Case.STATUS_TYPES.generalDocketReadyForTrial,
+      );
+      expect(caseToUpdate.trialDate).toBeFalsy();
+      expect(caseToUpdate.trialJudge).toBeFalsy();
+      expect(caseToUpdate.trialLocation).toBeFalsy();
+      expect(caseToUpdate.trialSessionId).toBeFalsy();
+      expect(caseToUpdate.trialTime).toBeFalsy();
     });
   });
 });

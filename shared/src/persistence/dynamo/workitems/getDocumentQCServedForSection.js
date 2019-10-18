@@ -26,7 +26,5 @@ exports.getDocumentQCServedForSection = async ({
     applicationContext,
   });
 
-  return workItems.filter(
-    workItem => !!workItem.completedAt && !workItem.isInternal,
-  );
+  return workItems.filter(workItem => !!workItem.completedAt && workItem.isQC);
 };

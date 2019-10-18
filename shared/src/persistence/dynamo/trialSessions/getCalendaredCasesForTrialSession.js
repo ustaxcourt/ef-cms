@@ -14,25 +14,26 @@ exports.getCalendaredCasesForTrialSession = async ({
     applicationContext,
   });
 
-  const ids = trialSession.caseOrder.map(metadata => metadata.caseId);
+  const { caseOrder } = trialSession;
 
   const results = await client.batchGet({
     applicationContext,
-    keys: ids.map(id => ({
-      pk: id,
-      sk: '0',
+    keys: caseOrder.map(myCase => ({
+      pk: myCase.caseId,
+      sk: myCase.caseId,
     })),
   });
 
-  const afterMapping = ids.map(caseId => ({
-    ...results.find(r => caseId === r.pk),
+  const afterMapping = caseOrder.map(myCase => ({
+    ...myCase,
+    ...results.find(r => myCase.caseId === r.pk),
   }));
 
   const notes = await client
     .batchGet({
       applicationContext,
-      keys: ids.map(caseId => ({
-        pk: `case-note|${caseId}`,
+      keys: caseOrder.map(myCase => ({
+        pk: `case-note|${myCase.caseId}`,
         sk: userId,
       })),
     })
