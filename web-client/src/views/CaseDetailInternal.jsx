@@ -13,6 +13,7 @@ import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './CaseDetail/MessagesInProgress';
 import { PartyInformation } from './CaseDetail/PartyInformation';
+import { RemoveFromTrialSessionModal } from './CaseDetail/RemoveFromTrialSessionModal';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { UnblockFromTrialModal } from './CaseDetail/UnblockFromTrialModal';
@@ -148,6 +149,9 @@ export const CaseDetailInternal = connect(
         )}
         {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}
         {showModal === 'UnblockFromTrialModal' && <UnblockFromTrialModal />}
+        {showModal === 'RemoveFromTrialSessionModal' && (
+          <RemoveFromTrialSessionModal />
+        )}
       </>
     );
   },

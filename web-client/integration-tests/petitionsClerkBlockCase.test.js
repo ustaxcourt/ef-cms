@@ -12,7 +12,7 @@ describe('Blocking a Case', () => {
   });
 
   petitionsClerkLogIn(test);
-  petitionsClerkCreatesNewCase(test, fakeFile);
+  petitionsClerkCreatesNewCase(test, fakeFile, 'Jackson, Mississippi');
   petitionsClerkBlocksCase(test);
   petitionsClerkUnblocksCase(test);
 });

@@ -68,7 +68,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
       caseTitle:
         'Bob Jones2, Petitioner v. Commissioner of Internal Revenue, Respondent',
       createdAt: RECEIVED_DATE,
-      currentVersion: '1',
       docketNumber: '101-19',
       docketNumberSuffix: null,
       docketRecord: [

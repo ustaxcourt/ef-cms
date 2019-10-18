@@ -30,7 +30,7 @@ const addPetitionDocumentToCase = ({
         createdAt: documentEntity.createdAt,
       },
       isInitializeCase: documentEntity.isPetitionDocument() ? true : false,
-      isInternal: false,
+      isQC: true,
       section: PETITIONS_SECTION,
       sentBy: user.userId,
     },

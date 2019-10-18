@@ -187,7 +187,30 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/orders-needed&info=orders-needed-summary',
   },
+  {
+    actions: [
+      'wait for #trial-location to be visible',
+      'set field #trial-location to Birmingham, Alabama',
+      'check field #trial-location',
+    ],
+    notes: 'checks the blocked cases screen',
 
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/reports/blocked-cases&info=blocked-cases-alabama',
+  },
+
+  {
+    actions: [
+      'wait for #tab-case-info to be visible',
+      'click element #tab-case-info',
+      'wait for #remove-from-trial-session-btn to be visible',
+      'click element #remove-from-trial-session-btn',
+      'wait for #remove-from-trial-session-modal to be visible',
+    ],
+    notes: 'checks the remove from trial session modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/108-19&info=remove-case-from-session-modal',
+  },
   //this url probably needs to be moved to calendaring when those users are created
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=non-calendared-case',
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/reports/case-deadlines',

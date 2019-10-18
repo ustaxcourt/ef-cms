@@ -134,7 +134,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         state: 'AP',
       },
       contactSecondary: {},
-      currentVersion: '2',
       docketNumber: '101-19',
       docketNumberSuffix: 'S',
       docketRecord: [
