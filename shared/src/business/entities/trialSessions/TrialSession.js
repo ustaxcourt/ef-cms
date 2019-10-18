@@ -385,11 +385,10 @@ TrialSession.prototype.removeCaseFromCalendar = function({
 };
 
 /**
- * removes the case totatlly from the trial session
+ * removes the case totatly from the trial session
  *
  * @param {object} arguments the arguments object
  * @param {string} arguments.caseId the id of the case to remove from the calendar
- * @param {string} arguments.disposition the reason the case is being removed from the calendar
  * @returns {TrialSession} the trial session entity
  */
 TrialSession.prototype.deleteCaseFromCalendar = function({ caseId }) {

@@ -37,7 +37,10 @@ export const OpenCases = connect(
 
                 <td>
                   {item.isManuallyAdded && (
-                    <FontAwesomeIcon icon="calendar-plus" />
+                    <FontAwesomeIcon
+                      className="mini-success"
+                      icon="calendar-plus"
+                    />
                   )}
                 </td>
                 <td>{item.caseCaptionNames}</td>
