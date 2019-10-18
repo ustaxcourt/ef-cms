@@ -18,7 +18,7 @@ class AddToTrialModalComponent extends ModalDialog {
 
   renderBody() {
     const {
-      caseDetailHelper,
+      addToTrialSessionModalHelper,
       modal,
       updateModalValueSequence,
       validateAddToTrialSequence,
@@ -95,14 +95,34 @@ class AddToTrialModalComponent extends ModalDialog {
             }}
           >
             <option value="">- Select -</option>
-            {caseDetailHelper.trialSessionsFormatted.map(trialSession => (
-              <option
-                key={trialSession.trialSessionId}
-                value={trialSession.trialSessionId}
-              >
-                {trialSession.optionText}
-              </option>
-            ))}
+            {!modal.showAllLocations &&
+              addToTrialSessionModalHelper.trialSessionsFormatted.map(
+                trialSession => (
+                  <option
+                    key={trialSession.trialSessionId}
+                    value={trialSession.trialSessionId}
+                  >
+                    {trialSession.optionText}
+                  </option>
+                ),
+              )}
+            {modal.showAllLocations &&
+              addToTrialSessionModalHelper.trialSessionStatesSorted.map(
+                (stateName, idx) => (
+                  <optgroup key={idx} label={stateName}>
+                    {addToTrialSessionModalHelper.trialSessionsFormattedByState[
+                      stateName
+                    ].map(trialSession => (
+                      <option
+                        key={trialSession.trialSessionId}
+                        value={trialSession.trialSessionId}
+                      >
+                        {trialSession.optionText}
+                      </option>
+                    ))}
+                  </optgroup>
+                ),
+              )}
           </BindedSelect>
         </div>
       </div>
@@ -112,8 +132,8 @@ class AddToTrialModalComponent extends ModalDialog {
 
 export const AddToTrialModal = connect(
   {
+    addToTrialSessionModalHelper: state.addToTrialSessionModalHelper,
     cancelSequence: sequences.clearModalSequence,
-    caseDetailHelper: state.caseDetailHelper,
     confirmSequence: sequences.addToTrialSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
