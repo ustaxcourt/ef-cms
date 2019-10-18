@@ -42,7 +42,7 @@ exports.formattedTrialSessionDetails = ({
   trialSession.openCases = trialSession.allCases.filter(
     item => item.status !== 'Closed' && item.removedFromTrial !== true,
   );
-  trialSession.closedCases = trialSession.allCases.filter(
+  trialSession.inactiveCases = trialSession.allCases.filter(
     item => item.status === 'Closed' || item.removedFromTrial === true,
   );
 
