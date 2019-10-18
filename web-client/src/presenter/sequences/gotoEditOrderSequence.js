@@ -9,7 +9,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import {  unset } from 'cerebral/factories';
+import { unset } from 'cerebral/factories';
 
 const gotoEditOrder = [
   unset(state.documentToEdit),
