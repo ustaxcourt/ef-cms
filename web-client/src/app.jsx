@@ -78,6 +78,7 @@ import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
+import { socketRouter } from './providers/socketRouter';
 import { withAppContextDecorator } from './withAppContext';
 import App from 'cerebral';
 import React from 'react';
@@ -204,7 +205,9 @@ const app = {
     const cerebralApp = App(presenter, debugTools);
 
     router.initialize(cerebralApp);
-    initializeSocketProvider(cerebralApp);
+    initializeSocketProvider({
+      socketRouter,
+    });
 
     ReactDOM.render(
       <Container app={cerebralApp}>
