@@ -11,6 +11,7 @@ import { createWorkItemAction } from '../actions/createWorkItemAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCompleteDocketEntryAlertAction } from '../actions/setCompleteDocketEntryAlertAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
@@ -41,12 +42,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
           clearUsersAction,
           clearModalAction,
           clearModalStateAction,
-          ({ props }) => ({
-            alertSuccess: {
-              message: `${props.updatedDocument.documentTitle} has been completed and message sent.`,
-              title: 'QC Completed',
-            },
-          }),
+          setCompleteDocketEntryAlertAction,
           setSaveAlertsForNavigationAction,
           setCaseAction,
           setAlertSuccessAction,
