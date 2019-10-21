@@ -1,5 +1,3 @@
-import socketRouter from './socketRouter';
-
 const createWebSocketClient = token => {
   const notificationsUrl = process.env.WS_URL || 'ws://localhost:3011';
   const connectionUrl = `${notificationsUrl}?token=${token}`;
@@ -7,7 +5,7 @@ const createWebSocketClient = token => {
   return socket;
 };
 
-export const socketProvider = () => {
+export const socketProvider = ({ socketRouter }) => {
   let app;
   let socket;
 

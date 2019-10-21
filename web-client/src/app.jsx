@@ -79,6 +79,7 @@ import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
+import { socketRouter } from './providers/socketRouter';
 import { withAppContextDecorator } from './withAppContext';
 import App from 'cerebral';
 import React from 'react';
@@ -200,7 +201,9 @@ const app = {
       initialize: initializeSocketProvider,
       start,
       stop,
-    } = socketProvider();
+    } = socketProvider({
+      socketRouter,
+    });
     presenter.providers.socket = { start, stop };
 
     const cerebralApp = App(presenter, debugTools);
