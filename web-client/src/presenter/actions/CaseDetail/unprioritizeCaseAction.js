@@ -21,8 +21,8 @@ export const unprioritizeCaseAction = async ({ applicationContext, get }) => {
   return {
     alertSuccess: {
       message:
-        'This case will be eligible to be set for the next available trial session.',
-      title: 'The block on this case has been removed',
+        'This case will be set for trial according to standard priority.',
+      title: 'The high priority on this case has been removed.',
     },
     caseDetail,
   };
