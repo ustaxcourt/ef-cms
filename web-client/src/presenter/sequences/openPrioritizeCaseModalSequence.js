@@ -3,8 +3,8 @@ import { set } from 'cerebral/factories';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const openBlockFromTrialModalSequence = [
+export const openPrioritizeCaseModalSequence = [
   stopShowValidationAction,
   clearModalAction,
-  set(state.showModal, 'BlockFromTrialModal'),
+  set(state.showModal, 'PrioritizeCaseModal'),
 ];

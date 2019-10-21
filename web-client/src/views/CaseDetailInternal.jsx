@@ -14,6 +14,7 @@ import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './CaseDetail/MessagesInProgress';
 import { PartyInformation } from './CaseDetail/PartyInformation';
+import { PrioritizeCaseModal } from './CaseDetail/PrioritizeCaseModal';
 import { RemoveFromTrialSessionModal } from './CaseDetail/RemoveFromTrialSessionModal';
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
@@ -151,6 +152,7 @@ export const CaseDetailInternal = connect(
         {showModal === 'AddToTrialModal' && <AddToTrialModal />}
         {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}
         {showModal === 'UnblockFromTrialModal' && <UnblockFromTrialModal />}
+        {showModal === 'PrioritizeCaseModal' && <PrioritizeCaseModal />}
         {showModal === 'RemoveFromTrialSessionModal' && (
           <RemoveFromTrialSessionModal />
         )}
