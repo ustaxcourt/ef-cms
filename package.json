@@ -104,7 +104,7 @@
     "s3rver": "github:ustaxcourt/s3rver#created_presigned_post_support",
     "sanitize-filename": "^1.6.3",
     "serverless": "^1.52.0",
-    "serverless-domain-manager": "^3.3.1",
+    "serverless-domain-manager": "github:codyseibert/serverless-domain-manager",
     "serverless-latest-layer-version": "^1.0.3",
     "serverless-offline": "^5.11.0",
     "serverless-offline-dynamodb-streams": "^3.0.0",
