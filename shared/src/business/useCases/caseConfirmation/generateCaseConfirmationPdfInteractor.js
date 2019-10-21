@@ -53,7 +53,6 @@ exports.generateCaseConfirmationPdfInteractor = async ({
       <html>
         <head>
           <style>
-            ${pdfStyles}
           </style>
         </head>
         <body>
@@ -89,19 +88,21 @@ exports.generateCaseConfirmationPdfInteractor = async ({
   }
 
   const documentId = `Case ${caseToUpdate.docketNumber} Confirmation.pdf`;
-  const caseConfirmationBlob = new Blob([result], { type: 'application/pdf' });
-  const caseConfirmationPdf = new File([caseConfirmationBlob], documentId, {
-    type: 'application/pdf',
+
+  await new Promise(resolve => {
+    const documentsBucket = applicationContext.environment.documentsBucketName;
+    const s3Client = applicationContext.getStorageClient();
+
+    const params = {
+      Body: result,
+      Bucket: documentsBucket,
+      Key: documentId,
+    };
+
+    s3Client.upload(params, function() {
+      resolve();
+    });
   });
 
-  const caseConfirmationDocumentId = await applicationContext
-    .getPersistenceGateway()
-    .uploadDocument({
-      applicationContext,
-      document: caseConfirmationPdf,
-      documentId: documentId,
-      onUploadProgress: () => {},
-    });
-
-  return caseConfirmationDocumentId;
+  return documentId;
 };
