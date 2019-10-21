@@ -31,3 +31,4 @@ web-client/coverage-unit/*
 web-client/reports
 web-client/tests_output/
 web-client/coverage-e2e
+web-client/pa11y/pa11y-screenshots
