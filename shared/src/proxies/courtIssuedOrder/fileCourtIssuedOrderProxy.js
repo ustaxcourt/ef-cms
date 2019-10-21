@@ -21,6 +21,6 @@ exports.fileCourtIssuedOrderInteractor = ({
       documentMetadata,
       primaryDocumentFileId,
     },
-    endpoint: `/cases/${caseId}/court-issued-order`,
+    endpoint: `/case-documents/${caseId}/court-issued-order`,
   });
 };

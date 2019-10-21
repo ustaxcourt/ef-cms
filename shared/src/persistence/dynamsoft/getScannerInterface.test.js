@@ -140,6 +140,28 @@ describe('getScannerInterface', () => {
     expect(mockAcquireImage).toHaveBeenCalled();
   });
 
+  describe('startScanSessions', () => {
+    const scannerAPI = getScannerInterface();
+    scannerAPI.setDWObject(DWObject);
+    beforeEach(() => {
+      jest.spyOn(DWObject, 'RemoveAllImages').mockImplementation(() => {
+        throw new Error('RemoveAllImages Mock Error');
+      });
+    });
+    afterEach(() => {
+      DWObject.RemoveAllImages.mockRestore();
+    });
+    it('gracefully deals with failed blob conversion', async () => {
+      let error;
+      try {
+        await scannerAPI.startScanSession({ applicationContext });
+      } catch (err) {
+        error = err;
+      }
+      expect(error).toBeDefined();
+    });
+  });
+
   it('throws an exception if the hopper is empty', async () => {
     const scannerAPI = getScannerInterface();
     scannerAPI.setDWObject({
