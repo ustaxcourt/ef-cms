@@ -1,12 +1,11 @@
 import { state } from 'cerebral';
 
 /**
- * upload document to s3.
+ * sets the current user on state.form.practitioner if that user is a practitioner
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
- * @returns {object} the next path based on if validation was successful or error
  */
 export const setPractitionerOnFormAction = async ({ get, store }) => {
   const user = get(state.user);
