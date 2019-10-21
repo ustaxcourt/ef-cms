@@ -104,5 +104,12 @@ exports.generateCaseConfirmationPdfInteractor = async ({
     });
   });
 
-  return documentId;
+  const {
+    url,
+  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+    applicationContext,
+    documentId,
+  });
+
+  return url;
 };
