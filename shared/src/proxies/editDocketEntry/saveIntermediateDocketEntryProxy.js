@@ -18,6 +18,6 @@ exports.saveIntermediateDocketEntryInteractor = ({
     body: {
       entryMetadata,
     },
-    endpoint: `/cases/${caseId}/docket-entry-in-progress`,
+    endpoint: `/case-documents/${caseId}/docket-entry-in-progress`,
   });
 };
