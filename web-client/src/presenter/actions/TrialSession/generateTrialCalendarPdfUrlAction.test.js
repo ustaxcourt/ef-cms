@@ -10,6 +10,9 @@ const mockCreateObjectUrl = jest.fn();
 
 describe('generateTrialCalendarPdfUrlAction', () => {
   beforeEach(() => {
+    global.window = global;
+    global.Blob = () => {};
+
     presenter.providers.applicationContext = {
       getUseCases: () => ({
         generateTrialCalendarPdfInteractor: () => {
