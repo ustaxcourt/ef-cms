@@ -154,7 +154,7 @@ describe('getScannerInterface', () => {
     it('gracefully deals with failed blob conversion', async () => {
       let error;
       try {
-        result = await scannerAPI.startScanSession({ applicationContext });
+        await scannerAPI.startScanSession({ applicationContext });
       } catch (err) {
         error = err;
       }
