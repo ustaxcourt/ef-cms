@@ -3122,6 +3122,55 @@
         }
       }
     },
+    "/case-documents/{caseId}/court-issued-order": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "summary": "files a court issued order on the case",
+        "description": "files a court issued order on the case.\n",
+        "produces": ["application/pdf"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/case-documents/{caseId}/court-issued-orders/{documentId}": {
       "parameters": [
         {
@@ -3213,7 +3262,7 @@
         }
       }
     },
-    "/case-documents/{caseId}/court-issued-order": {
+    "/court-issued-order": {
       "post": {
         "summary": "create a court issued order pdf preview",
         "description": "create a court issued order pdf preview.\n",
