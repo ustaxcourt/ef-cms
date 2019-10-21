@@ -18,6 +18,6 @@ exports.completeDocketEntryQCInteractor = ({
     body: {
       entryMetadata,
     },
-    endpoint: `/cases/${caseId}/docket-entry-complete`,
+    endpoint: `/case-documents/${caseId}/docket-entry-complete`,
   });
 };
