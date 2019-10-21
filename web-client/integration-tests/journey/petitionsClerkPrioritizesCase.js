@@ -3,7 +3,7 @@ export default test => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-    expect(test.getState('caseDetail').blocked).toBeFalsy();
+    expect(test.getState('caseDetail').highPriority).toBeFalsy();
 
     await test.runSequence('prioritizeCaseSequence');
 
