@@ -19,6 +19,7 @@ import { RemoveFromTrialSessionModal } from './CaseDetail/RemoveFromTrialSession
 import { SuccessNotification } from './SuccessNotification';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { UnblockFromTrialModal } from './CaseDetail/UnblockFromTrialModal';
+import { UnprioritizeCaseModal } from './CaseDetail/UnprioritizeCaseModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -153,6 +154,7 @@ export const CaseDetailInternal = connect(
         {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}
         {showModal === 'UnblockFromTrialModal' && <UnblockFromTrialModal />}
         {showModal === 'PrioritizeCaseModal' && <PrioritizeCaseModal />}
+        {showModal === 'UnprioritizeCaseModal' && <UnprioritizeCaseModal />}
         {showModal === 'RemoveFromTrialSessionModal' && (
           <RemoveFromTrialSessionModal />
         )}

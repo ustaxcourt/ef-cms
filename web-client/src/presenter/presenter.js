@@ -138,6 +138,7 @@ import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectD
 import { openServeConfirmModalDialogSequence } from './sequences/openServeConfirmModalDialogSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
+import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
 import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
 import { printFromBrowserSequence } from './sequences/printFromBrowserSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
@@ -230,6 +231,7 @@ import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySort
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
 import { unblockFromTrialSequence } from './sequences/unblockFromTrialSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
+import { unprioritizeCaseSequence } from './sequences/unprioritizeCaseSequence';
 import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
 import { unsetFormSubmittingSequence } from './sequences/unsetFormSubmittingSequence';
 import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsInternalSequence';
@@ -437,6 +439,7 @@ export const presenter = {
     openServeConfirmModalDialogSequence,
     openSetCalendarModalSequence,
     openUnblockFromTrialModalSequence,
+    openUnprioritizeCaseModalSequence,
     printDocketRecordSequence,
     printFromBrowserSequence,
     printTrialCalendarSequence,
@@ -527,6 +530,7 @@ export const presenter = {
     unauthorizedErrorSequence,
     unblockFromTrialSequence,
     unidentifiedUserErrorSequence,
+    unprioritizeCaseSequence,
     unsetFormSaveSuccessSequence,
     unsetFormSubmittingSequence,
     unsetWorkQueueIsInternalSequence,

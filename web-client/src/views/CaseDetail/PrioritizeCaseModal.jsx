@@ -11,8 +11,8 @@ class PrioritizeCaseModalComponent extends ModalDialog {
     this.modal = {
       cancelLabel: 'Cancel',
       classNames: '',
-      confirmLabel: 'Mark High Priority',
-      title: 'Mark as High Priority ',
+      confirmLabel: 'Mark high priority',
+      title: 'Mark as High Priority',
     };
   }
 
