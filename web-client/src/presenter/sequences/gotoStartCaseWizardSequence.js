@@ -11,12 +11,13 @@ import { setCaseTypesAction } from '../actions/setCaseTypesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setFilingTypesAction } from '../actions/setFilingTypesAction';
 import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoStartCaseWizardSequence = [
   clearFormAction,
   clearScreenMetadataAction,
   prepareFormAction,
-  set(state.showValidation, false),
+  stopShowValidationAction,
   getCaseTypesAction,
   setCaseTypesAction,
   getProcedureTypesAction,

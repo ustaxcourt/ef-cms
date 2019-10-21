@@ -13,7 +13,7 @@ const { Case } = require('../../entities/cases/Case');
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id of the trial session
  * @param {string} providers.caseId the id of the case
- * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
+ * @returns {Promise} the promise of the addCaseToTrialSessionInteractor call
  */
 exports.addCaseToTrialSessionInteractor = async ({
   applicationContext,
@@ -46,6 +46,10 @@ exports.addCaseToTrialSessionInteractor = async ({
     applicationContext,
   });
 
+  if (caseEntity.isCalendared()) {
+    throw new Error('The case is already calendared');
+  }
+
   if (!trialSession.isCalendared) {
     throw new Error(
       'The trial session must already be calendared to manually add a case.',
@@ -56,7 +60,10 @@ exports.addCaseToTrialSessionInteractor = async ({
     throw new Error('The case is already part of this trial session.');
   }
 
-  trialSessionEntity.addCaseToCalendar(caseEntity);
+  trialSessionEntity
+    .deleteCaseFromCalendar({ caseId: caseEntity.caseId }) // we delete because it might have been manually removed
+    .manuallyAddCaseToCalendar(caseEntity);
+
   caseEntity.setAsCalendared(trialSessionEntity);
 
   await applicationContext

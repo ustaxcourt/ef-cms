@@ -1,15 +1,17 @@
 import { set } from 'cerebral/factories';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocumentTypeAction';
 
 export const selectSecondaryDocumentSequence = [
-  set(state.showValidation, true),
+  startShowValidationAction,
   validateSelectDocumentTypeAction,
   {
     error: [setValidationErrorsAction],
     success: [
-      set(state.showValidation, false),
+      stopShowValidationAction,
       set(state.screenMetadata.isSecondaryDocumentTypeSelected, true),
     ],
   },
