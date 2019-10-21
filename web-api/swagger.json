@@ -490,7 +490,7 @@
         }
       }
     },
-    "/cases/{caseId}/external-document": {
+    "/case-documents/{caseId}/external-document": {
       "parameters": [
         {
           "name": "caseId",
@@ -542,7 +542,7 @@
         }
       }
     },
-    "/cases/{caseId}/docket-entry": {
+    "/case-documents/{caseId}/docket-entry": {
       "parameters": [
         {
           "name": "caseId",
@@ -613,7 +613,7 @@
         }
       }
     },
-    "/cases/{caseId}/docket-entry-in-progress": {
+    "/case-documents/{caseId}/docket-entry-in-progress": {
       "parameters": [
         {
           "name": "caseId",
@@ -665,7 +665,7 @@
         }
       }
     },
-    "/cases/{caseId}/docket-entry-complete": {
+    "/case-documents/{caseId}/docket-entry-complete": {
       "parameters": [
         {
           "name": "caseId",
@@ -3051,7 +3051,7 @@
         }
       }
     },
-    "/cases/{caseId}/court-issued-orders/{documentId}": {
+    "/case-documents/{caseId}/court-issued-orders/{documentId}": {
       "parameters": [
         {
           "name": "caseId",
@@ -3142,7 +3142,7 @@
         }
       }
     },
-    "/court-issued-order": {
+    "/case-documents/{caseId}/court-issued-order": {
       "post": {
         "summary": "create a court issued order pdf preview",
         "description": "create a court issued order pdf preview.\n",
