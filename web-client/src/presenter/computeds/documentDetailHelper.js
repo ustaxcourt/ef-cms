@@ -46,9 +46,19 @@ export const documentDetailHelper = (get, applicationContext) => {
     const qcItem = (allWorkItems || []).filter(item => !item.isInternal)[0];
 
     if (formattedDocument.qcByUser) {
-      formattedDocument.qcBy = formattedDocument.qcByUser.name;
+      formattedDocument.qcInfo = {
+        date: applicationContext
+          .getUtilities()
+          .formatDateString(formattedDocument.qcAt, 'MMDDYY'),
+        name: formattedDocument.qcByUser.name,
+      };
     } else if (qcItem && qcItem.completedAt) {
-      formattedDocument.qcBy = qcItem.completedBy;
+      formattedDocument.qcInfo = {
+        date: applicationContext
+          .getUtilities()
+          .formatDateString(qcItem.completedAt, 'MMDDYY'),
+        name: qcItem.completedBy,
+      };
     }
 
     formattedDocument.signUrl =
