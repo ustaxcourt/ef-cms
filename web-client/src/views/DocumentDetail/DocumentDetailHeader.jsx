@@ -21,8 +21,11 @@ export const DocumentDetailHeader = connect(
               ` by ${documentDetailHelper.formattedDocument.filedBy}`}
           </div>
           {documentDetailHelper.formattedDocument.qcInfo && (
-            <div>QC completed on {documentDetailHelper.formattedDocument.qcInfo.date} by {' '}
-            {documentDetailHelper.formattedDocument.qcInfo.name}</div>
+            <div>
+              QC completed on{' '}
+              {documentDetailHelper.formattedDocument.qcInfo.date} by{' '}
+              {documentDetailHelper.formattedDocument.qcInfo.name}
+            </div>
           )}
           {documentDetailHelper.formattedDocument.showServedAt && (
             <div>
