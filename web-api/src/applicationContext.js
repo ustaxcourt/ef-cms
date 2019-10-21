@@ -382,6 +382,9 @@ const {
   WORKITEM,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
+  prioritizeCaseInteractor,
+} = require('../../shared/src/business/useCases/prioritizeCaseInteractor');
+const {
   processStreamRecordsInteractor,
 } = require('../../shared/src/business/useCases/processStreamRecordsInteractor');
 const {
@@ -480,6 +483,9 @@ const {
 const {
   archiveDraftDocumentInteractor,
 } = require('../../shared/src/business/useCases/archiveDraftDocumentInteractor');
+const {
+  unprioritizeCaseInteractor,
+} = require('../../shared/src/business/useCases/unprioritizeCaseInteractor');
 const {
   updateCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
@@ -886,6 +892,7 @@ module.exports = (appContextUser = {}) => {
         getWorkItemInteractor,
         onConnectInteractor,
         onDisconnectInteractor,
+        prioritizeCaseInteractor,
         processStreamRecordsInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
         removeCaseFromTrialInteractor,
@@ -903,6 +910,7 @@ module.exports = (appContextUser = {}) => {
         submitCaseAssociationRequestInteractor,
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseInteractor,
+        unprioritizeCaseInteractor,
         updateCaseDeadlineInteractor,
         updateCaseInteractor,
         updateCaseNoteInteractor,

@@ -416,3 +416,27 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  prioritizeCase:
+    handler: web-api/src/casesHandlers.prioritizeCaseLambda
+    events:
+      - http:
+          path: /{caseId}/high-priority
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  unprioritizeCase:
+    handler: web-api/src/casesHandlers.unprioritizeCaseLambda
+    events:
+      - http:
+          path: /{caseId}/high-priority
+          method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

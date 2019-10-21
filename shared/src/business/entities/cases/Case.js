@@ -181,6 +181,8 @@ function Case(rawCase, { applicationContext }) {
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
+  this.highPriority = rawCase.highPriority;
+  this.highPriorityReason = rawCase.highPriorityReason;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
@@ -310,6 +312,12 @@ joiValidationDecorator(
       .boolean()
       .optional()
       .allow(null),
+    highPriority: joi.boolean().optional(),
+    highPriorityReason: joi.when('highPriority', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.string().required(),
+    }),
     initialDocketNumberSuffix: joi
       .string()
       .allow(null)
@@ -1017,6 +1025,29 @@ Case.prototype.unsetAsBlocked = function() {
   this.blocked = false;
   this.blockedReason = undefined;
   this.blockedDate = undefined;
+  return this;
+};
+
+/**
+ * set as high priority with a highPriorityReason
+ *
+ * @param {string} highPriorityReason - the reason the case was set to high priority
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setAsHighPriority = function(highPriorityReason) {
+  this.highPriority = true;
+  this.highPriorityReason = highPriorityReason;
+  return this;
+};
+
+/**
+ * unset as high priority and remove the highPriorityReason
+ *
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.unsetAsHighPriority = function() {
+  this.highPriority = false;
+  this.highPriorityReason = undefined;
   return this;
 };
 

@@ -249,6 +249,33 @@ describe('Case entity', () => {
       );
       expect(myCase.isValid()).toBeTruthy();
     });
+
+    it('Creates an invalid case with highPriority set to true but no highPriorityReason', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          highPriority: true,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeFalsy();
+    });
+
+    it('Creates a valid case with highPriority set to true and a highPriorityReason', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          highPriority: true,
+          highPriorityReason: 'something',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
   });
 
   describe('validate', () => {
@@ -1522,6 +1549,48 @@ describe('Case entity', () => {
       expect(caseToUpdate.blocked).toBeFalsy();
       expect(caseToUpdate.blockedReason).toBeUndefined();
       expect(caseToUpdate.blockedDate).toBeUndefined();
+    });
+  });
+
+  describe('setAsHighPriority', () => {
+    it('sets the case as high priority with a high priority reason', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToUpdate.highPriority).toBeFalsy();
+
+      caseToUpdate.setAsHighPriority('because reasons');
+
+      expect(caseToUpdate.highPriority).toEqual(true);
+      expect(caseToUpdate.highPriorityReason).toEqual('because reasons');
+    });
+  });
+
+  describe('unsetAsHighPriority', () => {
+    it('unsets the case as high priority', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+          highPriority: true,
+          highPriorityReason: 'because reasons',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToUpdate.highPriority).toBeTruthy();
+
+      caseToUpdate.unsetAsHighPriority();
+
+      expect(caseToUpdate.highPriority).toBeFalsy();
+      expect(caseToUpdate.highPriorityReason).toBeUndefined();
     });
   });
 
