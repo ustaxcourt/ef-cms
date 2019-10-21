@@ -309,7 +309,10 @@ describe('formatted work queue computed', () => {
       },
     });
 
-    expect(result.formattedDocument.qcBy).toBe('William T. Riker');
+    expect(result.formattedDocument.qcInfo).toMatchObject({
+      date: '11/21/18',
+      name: 'William T. Riker',
+    });
   });
 
   it('should indicate QC completed by "qcByUser" on Document if present', () => {
@@ -322,6 +325,7 @@ describe('formatted work queue computed', () => {
               documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
               documentType: 'Proposed Stipulated Decision',
               processingStatus: 'pending',
+              qcAt: '2019-10-27T20:49:28.192Z',
               qcByUser: {
                 name: 'Reginald Barclay',
                 userId: 'xyzzy',
@@ -376,7 +380,10 @@ describe('formatted work queue computed', () => {
       },
     });
 
-    expect(result.formattedDocument.qcBy).toBe('Reginald Barclay');
+    expect(result.formattedDocument.qcInfo).toMatchObject({
+      date: '10/27/19',
+      name: 'Reginald Barclay',
+    });
   });
 
   it('should filter out completed work items with Served on IRS messages', () => {
