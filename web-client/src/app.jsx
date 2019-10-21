@@ -201,15 +201,15 @@ const app = {
       initialize: initializeSocketProvider,
       start,
       stop,
-    } = socketProvider();
+    } = socketProvider({
+      socketRouter,
+    });
     presenter.providers.socket = { start, stop };
 
     const cerebralApp = App(presenter, debugTools);
 
     router.initialize(cerebralApp);
-    initializeSocketProvider({
-      socketRouter,
-    });
+    initializeSocketProvider(cerebralApp);
 
     ReactDOM.render(
       <Container app={cerebralApp}>
