@@ -161,6 +161,25 @@ describe('TrialSession entity', () => {
     });
   });
 
+  describe('manuallyAddCaseToCalendar', () => {
+    it('should add case to calendar of valid trial session when provided a raw case entity with a caseId', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionType: 'Hybrid',
+        },
+        {
+          applicationContext,
+        },
+      );
+      trialSession.manuallyAddCaseToCalendar({ caseId: '123' });
+      expect(trialSession.caseOrder[0]).toEqual({
+        caseId: '123',
+        isManuallyAdded: true,
+      });
+    });
+  });
+
   describe('removeCaseFromCalendar', () => {
     it('should set case on calendar to removedFromTrial with removedFromTrialDate and disposition', () => {
       const trialSession = new TrialSession(
@@ -235,6 +254,7 @@ describe('TrialSession entity', () => {
         trialSession.isCaseAlreadyCalendared({ caseId: '123' }),
       ).toBeTruthy();
     });
+
     it('should return false when a case is not already part of the trial session', () => {
       const trialSession = new TrialSession(
         {
@@ -248,6 +268,56 @@ describe('TrialSession entity', () => {
       expect(
         trialSession.isCaseAlreadyCalendared({ caseId: '123' }),
       ).toBeFalsy();
+    });
+
+    it('should return false even for cases that have been manually removed', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          caseOrder: [{ caseId: 'abc', removedFromTrial: true }],
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(
+        trialSession.isCaseAlreadyCalendared({ caseId: '123' }),
+      ).toBeFalsy();
+    });
+  });
+
+  describe('deleteCaseFromCalendar', () => {
+    it('should remove the expected case from the order', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          caseOrder: [{ caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5' }],
+        },
+        {
+          applicationContext,
+        },
+      );
+      trialSession.deleteCaseFromCalendar({
+        caseId: '58c1f7a3-8062-42f0-a73e-8bd69b419878',
+      });
+      expect(trialSession.caseOrder).toEqual([
+        { caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5' },
+      ]);
+    });
+    it('should remove the expected case from the order', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          caseOrder: [{ caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5' }],
+        },
+        {
+          applicationContext,
+        },
+      );
+      trialSession.deleteCaseFromCalendar({
+        caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5',
+      });
+      expect(trialSession.caseOrder).toEqual([]);
     });
   });
 });

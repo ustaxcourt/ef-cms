@@ -45,10 +45,13 @@ function Document(rawDocument, { applicationContext }) {
   this.eventCode = rawDocument.eventCode;
   this.exhibits = rawDocument.exhibits;
   this.filedBy = rawDocument.filedBy;
+  this.freeText = rawDocument.freeText;
+  this.freeText2 = rawDocument.freeText2;
   this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
   this.isPaper = rawDocument.isPaper;
   this.lodged = rawDocument.lodged;
   this.objections = rawDocument.objections;
+  this.ordinalValue = rawDocument.ordinalValue;
   this.partyPrimary = rawDocument.partyPrimary;
   this.partyRespondent = rawDocument.partyRespondent;
   this.partySecondary = rawDocument.partySecondary;
@@ -58,6 +61,7 @@ function Document(rawDocument, { applicationContext }) {
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
+  this.secondaryDocument = rawDocument.secondaryDocument;
   this.servedAt = rawDocument.servedAt;
   this.servedParties = rawDocument.servedParties;
   this.serviceDate = rawDocument.serviceDate;
@@ -65,6 +69,7 @@ function Document(rawDocument, { applicationContext }) {
   this.signedByUserId = rawDocument.signedByUserId;
   this.status = rawDocument.status;
   this.supportingDocument = rawDocument.supportingDocument;
+  this.trialLocation = rawDocument.trialLocation;
   this.userId = rawDocument.userId;
   this.workItems = rawDocument.workItems;
   this.archived = rawDocument.archived;
@@ -173,8 +178,11 @@ joiValidationDecorator(
       .string()
       .allow('')
       .optional(),
+    freeText: joi.string().optional(),
+    freeText2: joi.string().optional(),
     isPaper: joi.boolean().optional(),
     lodged: joi.boolean().optional(),
+    ordinalValue: joi.string().optional(),
     processingStatus: joi.string().optional(),
     qcAt: joi
       .date()
@@ -188,6 +196,7 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    secondaryDocument: joi.object().optional(),
     servedAt: joi
       .date()
       .iso()
@@ -209,6 +218,7 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     status: joi.string().optional(),
+    trialLocation: joi.string().optional(),
     userId: joi.string().required(),
   }),
   function() {

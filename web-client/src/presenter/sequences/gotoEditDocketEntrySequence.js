@@ -1,7 +1,7 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { deconstructReceivedAtDateToFormAction } from '../actions/EditDocketRecord/deconstructReceivedAtDateToFormAction';
+import { deconstructDatesToFormAction } from '../actions/EditDocketRecord/deconstructDatesToFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getShouldMarkReadAction } from '../actions/getShouldMarkReadAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -28,7 +28,7 @@ export const gotoEditDocketEntry = [
   setCaseAction,
   setBaseUrlAction,
   setDocketEntryFormForDocketEditAction,
-  deconstructReceivedAtDateToFormAction,
+  deconstructDatesToFormAction,
   updateDocketEntryWizardDataAction,
   setDocumentIdAction,
   setQCWorkItemIdToMarkAsReadIfNeededAction,
