@@ -48,10 +48,56 @@ const TrialInformation = ({
   caseDetail,
   openAddToTrialModalSequence,
   openBlockFromTrialModalSequence,
+  openPrioritizeCaseModalSequence,
   openRemoveFromTrialSessionModalSequence,
   openUnblockFromTrialModalSequence,
+  openUnprioritizeCaseModalSequence,
 }) => (
   <React.Fragment>
+    {caseDetail.showPrioritized && (
+      <>
+        <h3 className="underlined">
+          Trial - Not Scheduled - High Priority
+          <FontAwesomeIcon
+            className="margin-left-1 text-secondary-dark"
+            icon={['fas', 'exclamation-circle']}
+            size="1x"
+          />
+        </h3>
+        <div className="grid-row">
+          <div className="grid-col-4">
+            <p className="label">Place of Trial</p>
+            <p>{caseDetail.formattedPreferredTrialCity}</p>
+          </div>
+          <div className="grid-col-4">
+            <p className="label">Trial Date</p>
+            <p>{caseDetail.formattedTrialDate}</p>
+          </div>
+          <div className="grid-col-4">
+            <p className="label">Assigned Judge</p>
+            <p>{caseDetail.formattedTrialJudge}</p>
+          </div>
+        </div>
+        <div className="grid-row">
+          <div className="grid-col-4">
+            <p className="label">Reason</p>
+            <p>{caseDetail.highPriorityReason}</p>
+          </div>
+        </div>
+        <Button
+          link
+          className="red-warning"
+          icon="trash"
+          id="remove-high-priority-btn"
+          onClick={() => {
+            openUnprioritizeCaseModalSequence();
+          }}
+        >
+          Remove High Priority
+        </Button>
+      </>
+    )}
+
     {caseDetail.showTrialCalendared && (
       <>
         <h3 className="underlined">
@@ -133,6 +179,16 @@ const TrialInformation = ({
           </Button>
           <Button
             link
+            className="high-priority-btn"
+            icon="exclamation-circle"
+            onClick={() => {
+              openPrioritizeCaseModalSequence();
+            }}
+          >
+            Mark High Priority
+          </Button>
+          <Button
+            link
             className="block-from-trial-btn red-warning"
             icon="hand-paper"
             onClick={() => {
@@ -151,8 +207,10 @@ TrialInformation.propTypes = {
   caseDetail: PropTypes.object,
   openAddToTrialModalSequence: PropTypes.func,
   openBlockFromTrialModalSequence: PropTypes.func,
+  openPrioritizeCaseModalSequence: PropTypes.func,
   openRemoveFromTrialSessionModalSequence: PropTypes.func,
   openUnblockFromTrialModalSequence: PropTypes.func,
+  openUnprioritizeCaseModalSequence: PropTypes.func,
 };
 
 export const CaseInformationInternal = connect(
@@ -161,18 +219,23 @@ export const CaseInformationInternal = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
+    openPrioritizeCaseModalSequence: sequences.openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence:
       sequences.openUnblockFromTrialModalSequence,
+    openUnprioritizeCaseModalSequence:
+      sequences.openUnprioritizeCaseModalSequence,
   },
   ({
     caseDetailHelper,
     formattedCaseDetail,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
+    openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
+    openUnprioritizeCaseModalSequence,
   }) => {
     return (
       <div className="internal-information">
@@ -198,11 +261,17 @@ export const CaseInformationInternal = connect(
                     openBlockFromTrialModalSequence={
                       openBlockFromTrialModalSequence
                     }
+                    openPrioritizeCaseModalSequence={
+                      openPrioritizeCaseModalSequence
+                    }
                     openRemoveFromTrialSessionModalSequence={
                       openRemoveFromTrialSessionModalSequence
                     }
                     openUnblockFromTrialModalSequence={
                       openUnblockFromTrialModalSequence
+                    }
+                    openUnprioritizeCaseModalSequence={
+                      openUnprioritizeCaseModalSequence
                     }
                   />
                 </div>

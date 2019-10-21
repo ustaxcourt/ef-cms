@@ -30,6 +30,6 @@ exports.fileDocketEntryInteractor = ({
       secondarySupportingDocumentFileId,
       supportingDocumentFileId,
     },
-    endpoint: `/cases/${caseId}/docket-entry`,
+    endpoint: `/case-documents/${caseId}/docket-entry`,
   });
 };

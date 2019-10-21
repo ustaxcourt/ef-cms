@@ -288,6 +288,10 @@ const formatCase = (applicationContext, caseDetail) => {
     result.blockedDateFormatted = applicationContext
       .getUtilities()
       .formatDateString(result.blockedDate, 'MMDDYY');
+  } else if (result.highPriority) {
+    result.formattedTrialDate = 'Not scheduled';
+    result.formattedTrialJudge = 'Not assigned';
+    result.showPrioritized = true;
   } else {
     result.showNotScheduled = true;
   }
