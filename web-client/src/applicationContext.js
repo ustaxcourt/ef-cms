@@ -125,6 +125,7 @@ import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getU
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { pdfStyles } from '../../shared/src/tools/pdfStyles.js';
+import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
 import { recallPetitionFromIRSHoldingQueueInteractor } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
 import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSessions/removeCaseFromTrialProxy';
@@ -147,6 +148,7 @@ import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { unblockFromTrialInteractor } from '../../shared/src/proxies/unblockFromTrialProxy';
+import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritizeCaseProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
 import { updateCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateCaseNoteProxy';
@@ -280,6 +282,7 @@ const allUseCases = {
   getUsersInSectionInteractor,
   getWorkItemInteractor,
   loadPDFForSigningInteractor,
+  prioritizeCaseInteractor,
   recallPetitionFromIRSHoldingQueueInteractor,
   refreshTokenInteractor,
   removeCaseFromTrialInteractor,
@@ -299,6 +302,7 @@ const allUseCases = {
   submitCaseAssociationRequestInteractor,
   submitPendingCaseAssociationRequestInteractor,
   unblockFromTrialInteractor,
+  unprioritizeCaseInteractor,
   updateCaseDeadlineInteractor,
   updateCaseInteractor,
   updateCaseNoteInteractor,
