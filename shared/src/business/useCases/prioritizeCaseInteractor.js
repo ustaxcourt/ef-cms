@@ -34,7 +34,22 @@ exports.prioritizeCaseInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
+  if (caseEntity.isCalendared()) {
+    throw new Error('Cannot set a calendared case as high priority');
+  }
+  if (caseEntity.blocked === true) {
+    throw new Error('Cannot set a blocked case as high priority');
+  }
+
   caseEntity.setAsHighPriority(reason);
+
+  await applicationContext
+    .getPersistenceGateway()
+    .updateCaseTrialSortMappingRecords({
+      applicationContext,
+      caseId: caseEntity.caseId,
+      caseSortTags: caseEntity.generateTrialSortTags(),
+    });
 
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

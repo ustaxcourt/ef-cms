@@ -132,14 +132,17 @@ import { openEditPractitionersModalSequence } from './sequences/openEditPractiti
 import { openEditRespondentsModalSequence } from './sequences/openEditRespondentsModalSequence';
 import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
+import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openServeConfirmModalDialogSequence } from './sequences/openServeConfirmModalDialogSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
+import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
 import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
 import { printFromBrowserSequence } from './sequences/printFromBrowserSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
+import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
@@ -228,6 +231,7 @@ import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySort
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
 import { unblockFromTrialSequence } from './sequences/unblockFromTrialSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
+import { unprioritizeCaseSequence } from './sequences/unprioritizeCaseSequence';
 import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSequence';
 import { unsetFormSubmittingSequence } from './sequences/unsetFormSubmittingSequence';
 import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsInternalSequence';
@@ -278,6 +282,7 @@ import { validateInitialWorkItemMessageSequence } from './sequences/validateInit
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
+import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
@@ -428,14 +433,17 @@ export const presenter = {
     openEditRespondentsModalSequence,
     openEditSecondaryContactModalSequence,
     openPdfPreviewModalSequence,
+    openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openSelectDocumentWizardOverlaySequence,
     openServeConfirmModalDialogSequence,
     openSetCalendarModalSequence,
     openUnblockFromTrialModalSequence,
+    openUnprioritizeCaseModalSequence,
     printDocketRecordSequence,
     printFromBrowserSequence,
     printTrialCalendarSequence,
+    prioritizeCaseSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
     removeBatchSequence,
@@ -522,6 +530,7 @@ export const presenter = {
     unauthorizedErrorSequence,
     unblockFromTrialSequence,
     unidentifiedUserErrorSequence,
+    unprioritizeCaseSequence,
     unsetFormSaveSuccessSequence,
     unsetFormSubmittingSequence,
     unsetWorkQueueIsInternalSequence,
@@ -572,6 +581,7 @@ export const presenter = {
     validateNoteSequence,
     validateOrderWithoutBodySequence,
     validatePetitionFromPaperSequence,
+    validatePrioritizeCaseSequence,
     validateRemoveFromTrialSessionSequence,
     validateSelectDocumentTypeSequence,
     validateStartCaseWizardSequence,
