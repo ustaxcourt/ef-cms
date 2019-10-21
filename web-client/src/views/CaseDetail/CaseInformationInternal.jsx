@@ -48,6 +48,7 @@ const TrialInformation = ({
   caseDetail,
   openAddToTrialModalSequence,
   openBlockFromTrialModalSequence,
+  openPrioritizeCaseModalSequence,
   openRemoveFromTrialSessionModalSequence,
   openUnblockFromTrialModalSequence,
 }) => (
@@ -133,6 +134,16 @@ const TrialInformation = ({
           </Button>
           <Button
             link
+            className="high-priority-btn"
+            icon="exclamation-circle"
+            onClick={() => {
+              openPrioritizeCaseModalSequence();
+            }}
+          >
+            Mark High Priority
+          </Button>
+          <Button
+            link
             className="block-from-trial-btn red-warning"
             icon="hand-paper"
             onClick={() => {
@@ -151,6 +162,7 @@ TrialInformation.propTypes = {
   caseDetail: PropTypes.object,
   openAddToTrialModalSequence: PropTypes.func,
   openBlockFromTrialModalSequence: PropTypes.func,
+  openPrioritizeCaseModalSequence: PropTypes.func,
   openRemoveFromTrialSessionModalSequence: PropTypes.func,
   openUnblockFromTrialModalSequence: PropTypes.func,
 };
@@ -161,6 +173,7 @@ export const CaseInformationInternal = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
+    openPrioritizeCaseModalSequence: sequences.openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence:
@@ -171,6 +184,7 @@ export const CaseInformationInternal = connect(
     formattedCaseDetail,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
+    openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
   }) => {
@@ -197,6 +211,9 @@ export const CaseInformationInternal = connect(
                     openAddToTrialModalSequence={openAddToTrialModalSequence}
                     openBlockFromTrialModalSequence={
                       openBlockFromTrialModalSequence
+                    }
+                    openPrioritizeCaseModalSequence={
+                      openPrioritizeCaseModalSequence
                     }
                     openRemoveFromTrialSessionModalSequence={
                       openRemoveFromTrialSessionModalSequence
