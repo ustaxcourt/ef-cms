@@ -51,8 +51,53 @@ const TrialInformation = ({
   openPrioritizeCaseModalSequence,
   openRemoveFromTrialSessionModalSequence,
   openUnblockFromTrialModalSequence,
+  openUnprioritizeCaseModalSequence,
 }) => (
   <React.Fragment>
+    {caseDetail.showPrioritized && (
+      <>
+        <h3 className="underlined">
+          Trial - Not Scheduled - High Priority
+          <FontAwesomeIcon
+            className="margin-left-1 text-secondary-dark"
+            icon={['fas', 'exclamation-circle']}
+            size="1x"
+          />
+        </h3>
+        <div className="grid-row">
+          <div className="grid-col-4">
+            <p className="label">Place of Trial</p>
+            <p>{caseDetail.formattedPreferredTrialCity}</p>
+          </div>
+          <div className="grid-col-4">
+            <p className="label">Trial Date</p>
+            <p>{caseDetail.formattedTrialDate}</p>
+          </div>
+          <div className="grid-col-4">
+            <p className="label">Assigned Judge</p>
+            <p>{caseDetail.formattedTrialJudge}</p>
+          </div>
+        </div>
+        <div className="grid-row">
+          <div className="grid-col-4">
+            <p className="label">Reason</p>
+            <p>{caseDetail.highPriorityReason}</p>
+          </div>
+        </div>
+        <Button
+          link
+          className="red-warning"
+          icon="trash"
+          id="remove-high-priority-btn"
+          onClick={() => {
+            openUnprioritizeCaseModalSequence();
+          }}
+        >
+          Remove High Priority
+        </Button>
+      </>
+    )}
+
     {caseDetail.showTrialCalendared && (
       <>
         <h3 className="underlined">
@@ -165,6 +210,7 @@ TrialInformation.propTypes = {
   openPrioritizeCaseModalSequence: PropTypes.func,
   openRemoveFromTrialSessionModalSequence: PropTypes.func,
   openUnblockFromTrialModalSequence: PropTypes.func,
+  openUnprioritizeCaseModalSequence: PropTypes.func,
 };
 
 export const CaseInformationInternal = connect(
@@ -178,6 +224,8 @@ export const CaseInformationInternal = connect(
       sequences.openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence:
       sequences.openUnblockFromTrialModalSequence,
+    openUnprioritizeCaseModalSequence:
+      sequences.openUnprioritizeCaseModalSequence,
   },
   ({
     caseDetailHelper,
@@ -187,6 +235,7 @@ export const CaseInformationInternal = connect(
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
+    openUnprioritizeCaseModalSequence,
   }) => {
     return (
       <div className="internal-information">
@@ -220,6 +269,9 @@ export const CaseInformationInternal = connect(
                     }
                     openUnblockFromTrialModalSequence={
                       openUnblockFromTrialModalSequence
+                    }
+                    openUnprioritizeCaseModalSequence={
+                      openUnprioritizeCaseModalSequence
                     }
                   />
                 </div>
