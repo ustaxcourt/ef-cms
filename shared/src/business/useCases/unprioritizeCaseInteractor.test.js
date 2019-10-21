@@ -3,6 +3,7 @@ const { MOCK_CASE } = require('../../test/mockCase');
 
 describe('unprioritizeCaseInteractor', () => {
   let applicationContext;
+  let updateCaseTrialSortMappingRecordsMock = jest.fn();
 
   it('should set the highPriority flag to false and remove the highPriorityReason', async () => {
     applicationContext = {
@@ -22,6 +23,7 @@ describe('unprioritizeCaseInteractor', () => {
               highPriorityReason: 'because',
             }),
           updateCase: ({ caseToUpdate }) => caseToUpdate,
+          updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsMock,
         };
       },
     };
@@ -33,6 +35,10 @@ describe('unprioritizeCaseInteractor', () => {
       highPriority: false,
       highPriorityReason: undefined,
     });
+    expect(updateCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
+    expect(
+      updateCaseTrialSortMappingRecordsMock.mock.calls[0][0].caseId,
+    ).toEqual(MOCK_CASE.caseId);
   });
 
   it('should throw an unauthorized error if the user has no access to unprioritize the case', async () => {
