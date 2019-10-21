@@ -262,19 +262,31 @@ describe('formatCase', () => {
       ...mockCaseDetail,
       status: Case.STATUS_TYPES.calendared,
       trialLocation: 'Boise, Idaho',
-      trialDate: getDateISO(),
+      trialDate: '2011-11-11',
+      trialTime: '11',
     });
 
     expect(result).toMatchObject({
       formattedTrialCity: 'Boise, Idaho',
-      formattedTrialDate: applicationContext
-        .getUtilities()
-        .formatDateString(getDateISO(), 'MMDDYY'),
+      formattedTrialDate: '11/11/11 11:00 am',
       formattedTrialJudge: 'Not assigned',
       showTrialCalendared: true,
     });
     expect(result).not.toHaveProperty('showBlockedFromTrial');
     expect(result).not.toHaveProperty('showNotScheduled');
+  });
+
+  it('should format trial details with incomplete trialDate information', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      status: Case.STATUS_TYPES.calendared,
+      trialLocation: 'Boise, Idaho',
+      trialDate: undefined,
+    });
+
+    expect(result).toMatchObject({
+      formattedTrialDate: 'Not scheduled',
+    });
   });
 
   it('should show not scheduled section if case status is not calendared and case is not blocked', () => {
@@ -400,40 +412,43 @@ describe('getFormattedCaseDetail', () => {
 describe('sortDocketRecords', () => {
   it('should sort docket records by date by default', () => {
     // following dates selected to ensure test coverage of 'dateStringsCompared'
-    const result = sortDocketRecords([
-      {
-        index: '2',
-        record: {
-          filingDate: '2019-07-08',
+    const result = sortDocketRecords(
+      [
+        {
+          index: '2',
+          record: {
+            filingDate: '2019-07-08',
+          },
         },
-      },
-      {
-        index: '1',
-        record: {
-          filingDate: '2019-08-03T00:06:44.000Z',
+        {
+          index: '1',
+          record: {
+            filingDate: '2019-08-03T00:06:44.000Z',
+          },
         },
-      },
-      {
-        index: '4',
-        record: {
-          filingDate: '2019-07-08T00:01:19.000Z',
+        {
+          index: '4',
+          record: {
+            filingDate: '2019-07-08T00:01:19.000Z',
+          },
         },
-      },
-      {
-        index: '3',
-        record: {
-          filingDate: '2017-01-01T00:01:02.025Z',
+        {
+          index: '3',
+          record: {
+            filingDate: '2017-01-01T00:01:02.025Z',
+          },
         },
-      },
-      {
-        index: '5',
-        record: {
-          filingDate: '2017-01-01T00:01:12.025Z',
+        {
+          index: '5',
+          record: {
+            filingDate: '2017-01-01T00:01:12.025Z',
+          },
         },
-      },
-    ]);
+      ],
+      'Desc',
+    );
 
-    expect(result[0].index).toEqual('3');
+    expect(result[0].index).toEqual('1');
   });
 
   it('should sort docket records by index when sortBy is byIndex', () => {
