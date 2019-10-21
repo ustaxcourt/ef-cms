@@ -25,8 +25,10 @@ import { setIsUpdatingWithFileAction } from '../actions/DocketEntry/setIsUpdatin
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stashWizardDataAction } from '../actions/DocketEntry/stashWizardDataAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitDocketEntryWithFileAction } from '../actions/DocketEntry/submitDocketEntryWithFileAction';
 import { submitDocketEntryWithoutFileAction } from '../actions/DocketEntry/submitDocketEntryWithoutFileAction';
 import { updateDocketEntryWithFileAction } from '../actions/DocketEntry/updateDocketEntryWithFileAction';
@@ -44,7 +46,7 @@ const afterEntryCreatedOrUpdated = [
       setDocumentUploadModeAction,
       getDocketEntryAlertSuccessAction,
       setAlertSuccessAction,
-      set(state.showValidation, false),
+      stopShowValidationAction,
       clearFormAction,
       clearScreenMetadataAction,
       set(state.form.lodged, false),
@@ -66,7 +68,7 @@ export const submitDocketEntrySequence = [
     hasActiveBatches: [set(state.showModal, 'UnfinishedScansModal')],
     noActiveBatches: [
       clearAlertsAction,
-      set(state.showValidation, true),
+      startShowValidationAction,
       computeFormDateAction,
       computeSecondaryFormDateAction,
       computeCertificateOfServiceFormDateAction,
@@ -81,7 +83,7 @@ export const submitDocketEntrySequence = [
         success: [
           unset(state.isUpdatingWithFile),
           generateTitleAction,
-          set(state.showValidation, false),
+          stopShowValidationAction,
           clearAlertsAction,
           setIsUpdatingWithFileAction,
           isFileAttachedAction,

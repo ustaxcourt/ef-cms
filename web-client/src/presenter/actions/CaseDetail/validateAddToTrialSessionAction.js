@@ -1,19 +1,19 @@
 import { state } from 'cerebral';
 
 /**
- * validate the block from trial reason
+ * validate the add to trial session form
  *
  * @param {object} providers the providers object
- * @param {Function} providers.get the cerebral get function used for getting state.modal
+ * @param {Function} providers.get the cerebral get function used for getting state.modal.trialSessionId
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateBlockFromTrialAction = ({ get, path }) => {
-  const { reason } = get(state.modal);
+export const validateAddToTrialSessionAction = ({ get, path }) => {
+  const { trialSessionId } = get(state.modal);
 
   let errors = null;
-  if (!reason) {
-    errors = { reason: 'Provide a reason' };
+  if (!trialSessionId) {
+    errors = { trialSessionId: 'Select a Trial Session' };
   }
 
   if (!errors) {

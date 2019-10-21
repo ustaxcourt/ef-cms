@@ -5,19 +5,19 @@ import { getCreateCaseAlertSuccessAction } from '../actions/getCreateCaseAlertSu
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
-import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { state } from 'cerebral';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validatePetitionAction } from '../actions/validatePetitionAction';
 
 export const submitFilePetitionSequence = [
   clearAlertsAction,
-  set(state.showValidation, true),
+  startShowValidationAction,
   validatePetitionAction,
   {
     error: [
@@ -26,7 +26,7 @@ export const submitFilePetitionSequence = [
       setValidationAlertErrorsAction,
     ],
     success: [
-      set(state.showValidation, false),
+      stopShowValidationAction,
       openFileUploadStatusModalAction,
       createCaseAction,
       {
