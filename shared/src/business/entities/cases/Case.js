@@ -914,6 +914,7 @@ Case.prototype.generateTrialSortTags = function() {
   const {
     caseId,
     caseType,
+    highPriority,
     preferredTrialCity,
     procedureType,
     receivedAt,
@@ -922,12 +923,14 @@ Case.prototype.generateTrialSortTags = function() {
   const caseProcedureSymbol =
     procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
 
-  let casePrioritySymbol = 'C';
+  let casePrioritySymbol = 'D';
 
-  if (caseType.toLowerCase() === 'cdp (lien/levy)') {
+  if (highPriority === true) {
     casePrioritySymbol = 'A';
-  } else if (caseType.toLowerCase() === 'passport') {
+  } else if (caseType.toLowerCase() === 'cdp (lien/levy)') {
     casePrioritySymbol = 'B';
+  } else if (caseType.toLowerCase() === 'passport') {
+    casePrioritySymbol = 'C';
   }
 
   const formattedFiledTime = formatDateString(receivedAt, 'YYYYMMDDHHmmss');
