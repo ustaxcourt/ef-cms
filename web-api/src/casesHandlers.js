@@ -5,24 +5,14 @@ module.exports = {
     .handler,
   blockCaseLambda: require('./cases/blockCaseLambda').handler,
   caseSearchLambda: require('./cases/caseSearchLambda').handler,
-  completeDocketEntryQCLambda: require('./cases/completeDocketEntryQCLambda')
-    .handler,
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
   deleteCounselFromCaseLambda: require('./cases/deleteCounselFromCaseLambda')
     .handler,
-  fileCourtIssuedOrderToCaseLambda: require('./cases/fileCourtIssuedOrderToCaseLambda')
-    .handler,
-  fileDocketEntryToCaseLambda: require('./cases/fileDocketEntryToCaseLambda')
-    .handler,
-  fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
-    .handler,
   getBlockedCasesLambda: require('./cases/getBlockedCasesLambda').handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
-    .handler,
-  saveIntermediateDocketEntryLambda: require('./cases/saveIntermediateDocketEntryLambda')
     .handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
@@ -33,10 +23,6 @@ module.exports = {
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,
   updateCounselOnCaseLambda: require('./cases/updateCounselOnCaseLambda')
-    .handler,
-  updateCourtIssuedOrderToCaseLambda: require('./cases/updateCourtIssuedOrderToCaseLambda')
-    .handler,
-  updateDocketEntryOnCaseLambda: require('./cases/updateDocketEntryOnCaseLambda')
     .handler,
   updatePrimaryContactLambda: require('./cases/updatePrimaryContactLambda')
     .handler,
