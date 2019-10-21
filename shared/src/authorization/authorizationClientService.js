@@ -24,6 +24,7 @@ exports.UPLOAD_DOCUMENT = 'UPLOAD_DOCUMENT';
 exports.ASSOCIATE_SELF_WITH_CASE = 'ASSOCIATE_SELF_WITH_CASE';
 exports.BLOCK_CASE = 'BLOCK_CASE';
 exports.ADD_CASE_TO_TRIAL_SESSION = 'ADD_CASE_TO_TRIAL_SESSION';
+exports.PRIORITIZE_CASE = 'PRIORITIZE_CASE';
 
 // TODO: review all these for accuracy!
 const AUTHORIZATION_MAP = {
@@ -49,6 +50,7 @@ const AUTHORIZATION_MAP = {
     exports.ARCHIVE_DOCUMENT,
     exports.BLOCK_CASE,
     exports.ADD_CASE_TO_TRIAL_SESSION,
+    exports.PRIORITIZE_CASE,
   ],
   judge: [
     exports.VIEW_DOCUMENTS,
@@ -74,6 +76,7 @@ const AUTHORIZATION_MAP = {
     exports.ARCHIVE_DOCUMENT,
     exports.ADD_CASE_TO_TRIAL_SESSION,
     exports.BLOCK_CASE,
+    exports.PRIORITIZE_CASE,
   ],
   petitioner: [
     exports.FILE_EXTERNAL_DOCUMENT,
@@ -101,6 +104,7 @@ const AUTHORIZATION_MAP = {
     exports.BLOCK_CASE,
     exports.ADD_CASE_TO_TRIAL_SESSION,
     exports.WORKITEM,
+    exports.PRIORITIZE_CASE,
   ],
   practitioner: [
     exports.FILE_EXTERNAL_DOCUMENT,
@@ -138,6 +142,7 @@ const AUTHORIZATION_MAP = {
     exports.ARCHIVE_DOCUMENT,
     exports.BLOCK_CASE,
     exports.ADD_CASE_TO_TRIAL_SESSION,
+    exports.PRIORITIZE_CASE,
   ],
 };
 
