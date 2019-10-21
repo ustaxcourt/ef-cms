@@ -279,6 +279,48 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[0],
       });
       expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+
+      await test.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: test.trialSessionId,
+      });
+
+      expect(
+        test.getState('trialSession.calendaredCases.2.removedFromTrial'),
+      ).toBeTruthy();
+    });
+
+    it(`verify case #1 can be manually added back to the '${trialLocation}' session`, async () => {
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[0],
+      });
+      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+
+      await test.runSequence('addToTrialSessionSequence');
+
+      expect(test.getState('validationErrors')).toEqual({
+        trialSessionId: 'Select a Trial Session',
+      });
+
+      test.setState('modal.trialSessionId', test.trialSessionId);
+
+      await test.runSequence('addToTrialSessionSequence');
+
+      await test.runSequence('gotoCaseDetailSequence', {
+        docketNumber: createdDocketNumbers[0],
+      });
+      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+
+      await test.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: test.trialSessionId,
+      });
+
+      expect(
+        test.getState('trialSession.calendaredCases.2.removedFromTrial'),
+      ).toBeFalsy();
+
+      expect(
+        test.getState('trialSession.calendaredCases.2.isManuallyAdded'),
+      ).toBeTruthy();
     });
 
     userSignsOut(test);

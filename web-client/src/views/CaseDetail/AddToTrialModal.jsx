@@ -1,5 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { ModalDialog } from '../ModalDialog';
+import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -26,7 +27,7 @@ class AddToTrialModalComponent extends ModalDialog {
     } = this.props;
 
     return (
-      <div className="margin-bottom-4">
+      <div className="margin-bottom-4" id="add-to-trial-session-modal">
         <div className="usa-form-group">
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="display-block" id="year-filed-legend">
@@ -124,6 +125,10 @@ class AddToTrialModalComponent extends ModalDialog {
                 ),
               )}
           </BindedSelect>
+          <Text
+            bind="validationErrors.trialSessionId"
+            className="usa-error-message"
+          />
         </div>
       </div>
     );

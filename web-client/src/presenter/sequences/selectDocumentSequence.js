@@ -12,11 +12,13 @@ import { setDocumentScenarioAction } from '../actions/FileDocument/setDocumentSc
 import { setSecondaryDocumentScenarioAction } from '../actions/FileDocument/setSecondaryDocumentScenarioAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldProceedAction } from '../actions/FileDocument/shouldProceedAction';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocumentTypeAction';
 
 export const selectDocumentSequence = [
-  set(state.showValidation, true),
+  startShowValidationAction,
   computeFormDateAction,
   computeSecondaryFormDateAction,
   defaultSecondaryDocumentAction,
@@ -25,7 +27,7 @@ export const selectDocumentSequence = [
     error: [setValidationErrorsAction],
     success: [
       clearAlertsAction,
-      set(state.showValidation, false),
+      stopShowValidationAction,
       setDocumentScenarioAction,
       primeDoNotProceedPropAction,
       set(state.screenMetadata.isDocumentTypeSelected, true),

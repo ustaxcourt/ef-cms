@@ -4,17 +4,18 @@ import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { set, unset } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { unset } from 'cerebral/factories';
 
 const gotoEditOrder = [
   unset(state.documentToEdit),
   clearModalAction,
   setCurrentPageAction('Interstitial'),
-  set(state.showValidation, false),
+  stopShowValidationAction,
   clearFormAction,
   getCaseAction,
   setCaseAction,

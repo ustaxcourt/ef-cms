@@ -9,10 +9,11 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersAction } from '../actions/setUsersAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoAddTrialSession = [
   setCurrentPageAction('Interstitial'),
-  set(state.showValidation, false),
+  stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
   getTrialSessionsAction,

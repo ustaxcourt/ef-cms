@@ -1,5 +1,13 @@
 import { state } from 'cerebral';
 
+/**
+ * calls the blockFromTrialInteractor to add the block the case from being set for trial
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
+ * @returns {object} the alertSuccess and updated caseDetail object
+ */
 export const blockFromTrialAction = async ({ applicationContext, get }) => {
   const { caseId } = get(state.caseDetail);
   const { reason } = get(state.modal);
