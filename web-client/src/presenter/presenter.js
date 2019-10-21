@@ -132,6 +132,7 @@ import { openEditPractitionersModalSequence } from './sequences/openEditPractiti
 import { openEditRespondentsModalSequence } from './sequences/openEditRespondentsModalSequence';
 import { openEditSecondaryContactModalSequence } from './sequences/openEditSecondaryContactModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
+import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
 import { openServeConfirmModalDialogSequence } from './sequences/openServeConfirmModalDialogSequence';
@@ -140,6 +141,7 @@ import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTr
 import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
 import { printFromBrowserSequence } from './sequences/printFromBrowserSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
+import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
@@ -278,6 +280,7 @@ import { validateInitialWorkItemMessageSequence } from './sequences/validateInit
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
+import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
@@ -428,6 +431,7 @@ export const presenter = {
     openEditRespondentsModalSequence,
     openEditSecondaryContactModalSequence,
     openPdfPreviewModalSequence,
+    openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openSelectDocumentWizardOverlaySequence,
     openServeConfirmModalDialogSequence,
@@ -436,6 +440,7 @@ export const presenter = {
     printDocketRecordSequence,
     printFromBrowserSequence,
     printTrialCalendarSequence,
+    prioritizeCaseSequence,
     redirectToLoginSequence,
     refreshCaseSequence,
     removeBatchSequence,
@@ -572,6 +577,7 @@ export const presenter = {
     validateNoteSequence,
     validateOrderWithoutBodySequence,
     validatePetitionFromPaperSequence,
+    validatePrioritizeCaseSequence,
     validateRemoveFromTrialSessionSequence,
     validateSelectDocumentTypeSequence,
     validateStartCaseWizardSequence,
