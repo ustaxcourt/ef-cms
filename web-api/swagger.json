@@ -490,7 +490,78 @@
         }
       }
     },
-    "/cases/{caseId}/external-document": {
+    "/cases/{caseId}/high-priority": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["cases"],
+        "summary": "sets a case as high priority",
+        "description": "sets a case as high priority.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["cases"],
+        "summary": "removes the high priority from a case",
+        "description": "removes the high priority from a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-documents/{caseId}/external-document": {
       "parameters": [
         {
           "name": "caseId",
@@ -542,7 +613,7 @@
         }
       }
     },
-    "/cases/{caseId}/docket-entry": {
+    "/case-documents/{caseId}/docket-entry": {
       "parameters": [
         {
           "name": "caseId",
@@ -613,7 +684,7 @@
         }
       }
     },
-    "/cases/{caseId}/docket-entry-in-progress": {
+    "/case-documents/{caseId}/docket-entry-in-progress": {
       "parameters": [
         {
           "name": "caseId",
@@ -665,7 +736,7 @@
         }
       }
     },
-    "/cases/{caseId}/docket-entry-complete": {
+    "/case-documents/{caseId}/docket-entry-complete": {
       "parameters": [
         {
           "name": "caseId",
@@ -3051,7 +3122,56 @@
         }
       }
     },
-    "/cases/{caseId}/court-issued-orders/{documentId}": {
+    "/case-documents/{caseId}/court-issued-order": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "summary": "files a court issued order on the case",
+        "description": "files a court issued order on the case.\n",
+        "produces": ["application/pdf"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-documents/{caseId}/court-issued-orders/{documentId}": {
       "parameters": [
         {
           "name": "caseId",
