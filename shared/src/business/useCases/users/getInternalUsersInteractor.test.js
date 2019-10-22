@@ -1,9 +1,10 @@
 const { getInternalUsersInteractor } = require('./getInternalUsersInteractor');
+const { User } = require('../../entities/User');
 
 describe('Get internal users', () => {
   const applicationContext = {
     getCurrentUser: () => {
-      return { role: 'docketclerk', userId: 'docketclerk' };
+      return { role: User.ROLES.docketClerk, userId: 'docketclerk' };
     },
     getPersistenceGateway: () => ({
       getInternalUsers: () => [
@@ -41,7 +42,7 @@ describe('Get internal users', () => {
       await getInternalUsersInteractor({
         applicationContext: {
           getCurrentUser: () => ({
-            role: 'petitioner',
+            role: User.ROLES.petitioner,
             userId: 'taxpayer',
           }),
         },

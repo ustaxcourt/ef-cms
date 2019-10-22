@@ -25,7 +25,7 @@ describe('getSentMessagesForSectionInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
@@ -51,7 +51,7 @@ describe('getSentMessagesForSectionInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },

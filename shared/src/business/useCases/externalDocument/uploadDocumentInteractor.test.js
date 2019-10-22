@@ -25,7 +25,7 @@ describe('uploadDocumentInteractor', () => {
         userId: 'respondent',
       },
     ],
-    role: 'petitioner',
+    role: User.ROLES.petitioner,
     userId: 'taxpayer',
   };
 
@@ -140,7 +140,7 @@ describe('uploadDocumentInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: 'docketclerk',
+            role: User.ROLES.docketClerk,
             userId: 'docketclerk',
           };
         },

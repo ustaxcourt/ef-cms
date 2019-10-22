@@ -18,7 +18,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       await addCaseToTrialSessionInteractor({
         applicationContext: {
           getCurrentUser: () => ({
-            role: 'petitioner',
+            role: User.ROLES.petitioner,
             userId: '8675309b-18d0-43ec-bafb-654e83405411',
           }),
           getPersistenceGateway: () => ({

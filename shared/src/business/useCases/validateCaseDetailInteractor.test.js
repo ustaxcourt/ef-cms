@@ -3,6 +3,7 @@ const {
 } = require('./validateCaseDetailInteractor');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { User } = require('../entities/User');
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -50,7 +51,7 @@ describe('validate case detail', () => {
             createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: 'petitioner',
+            role: User.ROLES.petitioner,
             userId: 'taxpayer',
             workItems: [],
           },
@@ -58,7 +59,7 @@ describe('validate case detail', () => {
             createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: 'petitioner',
+            role: User.ROLES.petitioner,
             userId: 'taxpayer',
             workItems: [],
           },
@@ -101,7 +102,7 @@ describe('validate case detail', () => {
             createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: 'petitioner',
+            role: User.ROLES.petitioner,
             userId: 'taxpayer',
             workItems: [],
           },
@@ -109,7 +110,7 @@ describe('validate case detail', () => {
             createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: 'petitioner',
+            role: User.ROLES.petitioner,
             userId: 'taxpayer',
             workItems: [],
           },
@@ -138,7 +139,7 @@ describe('validate case detail', () => {
             createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: 'petitioner',
+            role: User.ROLES.petitioner,
             userId: 'taxpayer',
             workItems: [],
           },
@@ -146,7 +147,7 @@ describe('validate case detail', () => {
             createdAt: '2018-11-21T20:49:28.192Z',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
-            role: 'petitioner',
+            role: User.ROLES.petitioner,
             userId: 'taxpayer',
             workItems: [],
           },

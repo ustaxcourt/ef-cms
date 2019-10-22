@@ -175,7 +175,7 @@ describe('forwardWorkItemInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => ({
         name: 'Tax Payer',
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
         userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
       }),
       getPersistenceGateway: () => ({

@@ -1,12 +1,13 @@
 const sinon = require('sinon');
 const { uploadPdf } = require('./uploadPdf');
+const { User } = require('../../business/entities/User');
 
 describe('uploadPdf', () => {
   it('makes a post request to the expected endpoint with the expected data', async () => {
     let postStub = sinon.stub().resolves(null);
     const applicationContext = {
       getCurrentUser: () => {
-        return { role: 'petitioner', userId: 'taxpayer' };
+        return { role: User.ROLES.petitioner, userId: 'taxpayer' };
       },
       getCurrentUserToken: () => {
         return '';
@@ -52,7 +53,7 @@ describe('uploadPdf', () => {
     let postStub = sinon.stub().resolves(null);
     const applicationContext = {
       getCurrentUser: () => {
-        return { role: 'petitioner', userId: 'taxpayer' };
+        return { role: User.ROLES.petitioner, userId: 'taxpayer' };
       },
       getCurrentUserToken: () => {
         return '';

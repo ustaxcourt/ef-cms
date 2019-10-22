@@ -1,3 +1,4 @@
+import { User } from '../entities/User';
 import {
   constants,
   setServiceIndicatorsForCase,
@@ -15,14 +16,14 @@ const basePractitioner = {
   email: 'practitioner1@example.com',
   name: 'Test Practitioner',
   representingPrimary: true,
-  role: 'practitioner',
+  role: User.ROLES.petitioner,
 };
 
 const baseRespondent = {
   email: 'flexionustc+respondent@gmail.com',
   name: 'Test Respondent',
   respondentId: '123-abc-123-abc',
-  role: 'respondent',
+  role: User.ROLES.respondent,
   userId: 'abc-123-abc-123',
 };
 

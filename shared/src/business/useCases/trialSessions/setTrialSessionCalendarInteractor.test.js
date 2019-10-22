@@ -23,7 +23,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Petitioner',
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -57,7 +57,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Docket Clerk',
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },

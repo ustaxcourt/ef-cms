@@ -8,6 +8,7 @@ const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
 const { WorkItem } = require('../WorkItem');
+const { User } = require('../User');
 
 describe('Case entity', () => {
   let applicationContext;
@@ -857,7 +858,7 @@ describe('Case entity', () => {
 
   describe('getFilingTypes', () => {
     it('returns the filing types for user role petitioner', () => {
-      const filingTypes = Case.getFilingTypes('petitioner');
+      const filingTypes = Case.getFilingTypes(User.ROLES.petitioner);
       expect(filingTypes).not.toBeNull();
       expect(filingTypes.length).toEqual(4);
       expect(filingTypes[0]).toEqual('Myself');
@@ -878,7 +879,7 @@ describe('Case entity', () => {
     });
 
     it('returns the filing types for user role practitioner', () => {
-      const filingTypes = Case.getFilingTypes('practitioner');
+      const filingTypes = Case.getFilingTypes(User.ROLES.practitioner);
       expect(filingTypes).not.toBeNull();
       expect(filingTypes.length).toEqual(4);
       expect(filingTypes[0]).toEqual('Individual petitioner');

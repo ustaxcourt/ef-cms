@@ -57,7 +57,7 @@ describe('getBlockedCasesInteractor', () => {
   it('should throw an unauthorized error if the user does not have access to blocked cases', async () => {
     applicationContext.getCurrentUser = () => {
       return {
-        role: 'taxpayer',
+        role: User.ROLES.petitioner,
         userId: 'taxpayer',
       };
     };

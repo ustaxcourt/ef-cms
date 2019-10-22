@@ -97,12 +97,12 @@ export const documentDetailHelper = (get, applicationContext) => {
 
     showSignDocumentButton =
       !!stipulatedWorkItem &&
-      currentUser.role === 'seniorattorney' &&
+      currentUser.role === USER_ROLES.seniorAttorney &&
       !signedDocument;
 
     showServeDocumentButton =
       document.status !== 'served' &&
-      currentUser.role === 'docketclerk' &&
+      currentUser.role === USER_ROLES.docketClerk &&
       document.documentType === SIGNED_STIPULATED_DECISION;
 
     const { ORDER_TYPES_MAP } = applicationContext.getConstants();
