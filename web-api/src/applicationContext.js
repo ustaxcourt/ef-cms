@@ -590,6 +590,9 @@ const {
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const elasticsearch = require('elasticsearch');
 const { exec } = require('child_process');
+const {
+  generateCaseConfirmationPdfInteractor,
+} = require('../../shared/src/business/useCases/caseConfirmation/generateCaseConfirmationPdfInteractor');
 const { User } = require('../../shared/src/business/entities/User');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const connectionClass = require('http-aws-es');
@@ -855,6 +858,7 @@ module.exports = (appContextUser = {}) => {
         fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
+        generateCaseConfirmationPdfInteractor,
         generateDocketRecordPdfInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,

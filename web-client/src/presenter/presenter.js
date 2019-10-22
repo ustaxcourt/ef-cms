@@ -82,6 +82,7 @@ import { gotoLoginSequence } from './sequences/gotoLoginSequence';
 import { gotoMessagesSequence } from './sequences/gotoMessagesSequence';
 import { gotoOrdersNeededSequence } from './sequences/gotoOrdersNeededSequence';
 import { gotoPrimaryContactEditSequence } from './sequences/gotoPrimaryContactEditSequence';
+import { gotoPrintableCaseConfirmationSequence } from './sequences/gotoPrintableCaseConfirmationSequence';
 import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDocketRecordSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
@@ -102,6 +103,7 @@ import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
+import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { navigateToPrintableDocketRecordSequence } from './sequences/navigateToPrintableDocketRecordSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAddEditCaseNoteModalFromDetailSequence } from './sequences/openAddEditCaseNoteModalFromDetailSequence';
@@ -383,6 +385,7 @@ export const presenter = {
     gotoMessagesSequence,
     gotoOrdersNeededSequence,
     gotoPrimaryContactEditSequence,
+    gotoPrintableCaseConfirmationSequence,
     gotoPrintableDocketRecordSequence,
     gotoRequestAccessSequence,
     gotoSelectDocumentTypeSequence,
@@ -403,6 +406,7 @@ export const presenter = {
     navigateToCaseDetailSequence,
     navigateToEditOrderSequence,
     navigateToPathSequence,
+    navigateToPrintableCaseConfirmationSequence,
     navigateToPrintableDocketRecordSequence,
     notFoundErrorSequence,
     openAddEditCaseNoteModalFromDetailSequence,
