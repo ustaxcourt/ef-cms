@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  PETITION,
+  UPLOAD_DOCUMENT,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -18,7 +18,7 @@ exports.generateCaseConfirmationPdfInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, PETITION)) {
+  if (!isAuthorized(user, UPLOAD_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -89,7 +89,7 @@ exports.generateCaseConfirmationPdfInteractor = async ({
     }
   }
 
-  const documentId = `Case ${caseToUpdate.docketNumber} Confirmation.pdf`;
+  const documentId = `case-${caseToUpdate.docketNumber}-confirmation.pdf`;
 
   await new Promise(resolve => {
     const documentsBucket = applicationContext.environment.documentsBucketName;
