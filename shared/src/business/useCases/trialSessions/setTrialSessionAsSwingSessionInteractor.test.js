@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const {
   setTrialSessionAsSwingSessionInteractor,
 } = require('./setTrialSessionAsSwingSessionInteractor');
+const { User } = require('../../entities/User');
 
 const MOCK_TRIAL_SESSION = {
   maxCases: 100,
@@ -60,7 +61,7 @@ describe('Set trial session as swing session', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },

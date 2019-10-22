@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const { assignWorkItemsInteractor } = require('./assignWorkItemsInteractor');
+const { User } = require('../../entities/User');
 
 const MOCK_WORK_ITEM = {
   assigneeId: null,
@@ -60,7 +61,7 @@ describe('assignWorkItemsInteractor', () => {
       },
       user: {
         name: 'bob',
-        role: 'petitionsclerk',
+        role: User.ROLES.petitionsClerk,
       },
     };
     let error;

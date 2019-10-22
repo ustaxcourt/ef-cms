@@ -1,4 +1,5 @@
 const { getBlockedCasesInteractor } = require('./getBlockedCasesInteractor');
+const { User } = require('../entities/User');
 
 describe('getBlockedCasesInteractor', () => {
   let searchSpy;
@@ -7,7 +8,7 @@ describe('getBlockedCasesInteractor', () => {
     environment: { stage: 'local' },
     getCurrentUser: () => {
       return {
-        role: 'petitionsclerk',
+        role: User.ROLES.petitionsClerk,
         userId: 'petitionsclerk',
       };
     },

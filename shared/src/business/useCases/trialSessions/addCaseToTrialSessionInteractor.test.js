@@ -1,5 +1,5 @@
 import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
-
+const { User } = require('../../entities/User');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 const MOCK_TRIAL = {
@@ -44,7 +44,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       await addCaseToTrialSessionInteractor({
         applicationContext: {
           getCurrentUser: () => ({
-            role: 'petitionsclerk',
+            role: User.ROLES.petitionsClerk,
             userId: '8675309b-18d0-43ec-bafb-654e83405411',
           }),
           getPersistenceGateway: () => ({
@@ -74,7 +74,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       await addCaseToTrialSessionInteractor({
         applicationContext: {
           getCurrentUser: () => ({
-            role: 'petitionsclerk',
+            role: User.ROLES.petitionsClerk,
             userId: '8675309b-18d0-43ec-bafb-654e83405411',
           }),
           getPersistenceGateway: () => ({
@@ -104,7 +104,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       await addCaseToTrialSessionInteractor({
         applicationContext: {
           getCurrentUser: () => ({
-            role: 'petitionsclerk',
+            role: User.ROLES.petitionsClerk,
             userId: '8675309b-18d0-43ec-bafb-654e83405411',
           }),
           getPersistenceGateway: () => ({
@@ -136,7 +136,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     const latestCase = await addCaseToTrialSessionInteractor({
       applicationContext: {
         getCurrentUser: () => ({
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '8675309b-18d0-43ec-bafb-654e83405411',
         }),
         getPersistenceGateway: () => ({

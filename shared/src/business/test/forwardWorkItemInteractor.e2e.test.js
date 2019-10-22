@@ -26,7 +26,7 @@ describe('forwardWorkItemInteractor integration test', () => {
     applicationContext = createTestApplicationContext({
       user: {
         name: 'Rick Petitioner',
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
         userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
@@ -67,7 +67,7 @@ describe('forwardWorkItemInteractor integration test', () => {
     applicationContext.getCurrentUser = () => {
       return new User({
         name: 'richard',
-        role: 'petitionsclerk',
+        role: User.ROLES.petitionsClerk,
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };

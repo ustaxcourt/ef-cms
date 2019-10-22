@@ -85,7 +85,7 @@ describe('Send petition to IRS Holding Queue', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Petitionsclerk',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },
@@ -139,7 +139,7 @@ describe('Send petition to IRS Holding Queue', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Petitionsclerk1',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },
@@ -175,7 +175,7 @@ describe('Send petition to IRS Holding Queue', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Petitionsclerk1',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },

@@ -13,6 +13,7 @@ const {
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { User } = require('../entities/User');
 
 const RECEIVED_DATE = '2019-02-01T22:54:06.000Z';
 
@@ -24,7 +25,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
     applicationContext = createTestApplicationContext({
       user: {
         name: 'Alex Petitionsclerk',
-        role: 'petitionsclerk',
+        role: User.ROLES.petitionsClerk,
         userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });

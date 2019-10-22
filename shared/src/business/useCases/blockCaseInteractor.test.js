@@ -1,5 +1,6 @@
 const { blockCaseInteractor } = require('./blockCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { User } = require('../entities/User');
 
 describe('blockCaseInteractor', () => {
   let applicationContext;
@@ -10,7 +11,7 @@ describe('blockCaseInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },

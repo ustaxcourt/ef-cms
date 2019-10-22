@@ -1,8 +1,8 @@
 const sinon = require('sinon');
 const { getCaseInteractor } = require('./getCaseInteractor');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { User } = require('../entities/User');
 const { MOCK_CASE } = require('../../test/mockCase');
-
 const { documents } = MOCK_CASE;
 
 describe('Get case', () => {
@@ -15,7 +15,7 @@ describe('Get case', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -37,7 +37,7 @@ describe('Get case', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -66,7 +66,7 @@ describe('Get case', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -90,7 +90,7 @@ describe('Get case', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -163,7 +163,7 @@ describe('Get case', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
