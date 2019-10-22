@@ -217,6 +217,8 @@ export const CaseInformationInternal = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    navigateToPrintableCaseConfirmationSequence:
+      sequences.navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
     openPrioritizeCaseModalSequence: sequences.openPrioritizeCaseModalSequence,
@@ -230,6 +232,7 @@ export const CaseInformationInternal = connect(
   ({
     caseDetailHelper,
     formattedCaseDetail,
+    navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
     openPrioritizeCaseModalSequence,
@@ -244,7 +247,26 @@ export const CaseInformationInternal = connect(
             <div className="tablet:grid-col-6">
               <div className="card height-full">
                 <div className="content-wrapper">
-                  <h3 className="underlined">Petition Details</h3>
+                  <h3 className="underlined">
+                    Petition Details
+                    <Button
+                      link
+                      className="margin-right-0 margin-top-1 padding-0 float-right"
+                      onClick={() => {
+                        navigateToPrintableCaseConfirmationSequence({
+                          docketNumber: formattedCaseDetail.docketNumber,
+                        });
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        className="margin-right-05"
+                        icon="print"
+                        size="1x"
+                      />
+                      Print confirmation
+                    </Button>
+                  </h3>
+
                   <PetitionDetails
                     caseDetail={formattedCaseDetail}
                     showPaymentRecord={caseDetailHelper.showPaymentRecord}
