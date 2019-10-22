@@ -56,11 +56,24 @@ export const CaseDetailEdit = connect(
         <Button
           aria-disabled={waitingForResponse ? 'true' : 'false'}
           disabled={waitingForResponse}
-          secondary={!waitingForResponse}
           type="submit"
         >
           {waitingForResponse && <div className="spinner" />}
           Save
+        </Button>
+
+        <Button
+          secondary
+          aria-disabled={waitingForResponse ? 'true' : 'false'}
+          disabled={waitingForResponse}
+          onClick={() => {
+            submitCaseDetailEditSaveSequence({
+              navigateToConfirmation: true,
+            });
+          }}
+        >
+          {waitingForResponse && <div className="spinner" />}
+          Save & Print Confirmation
         </Button>
         {screenMetadata.showSaveSuccess && (
           <span aria-live="polite" className="mini-success" role="alert">

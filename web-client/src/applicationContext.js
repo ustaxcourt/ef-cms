@@ -81,6 +81,7 @@ import {
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
+import { generateCaseConfirmationPdfInteractor } from '../../shared/src/proxies/caseConfirmation/generateCaseConfirmationPdfProxy';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
 import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
@@ -161,7 +162,6 @@ import { updateTrialSessionWorkingCopyInteractor } from '../../shared/src/proxie
 import { updateUserContactInformationInteractor } from '../../shared/src/proxies/users/updateUserContactInformationProxy';
 import { uploadDocument } from '../../shared/src/persistence/s3/uploadDocument';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
-import { uploadExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
 import { uploadPdf } from '../../shared/src/persistence/s3/uploadPdf';
@@ -243,6 +243,7 @@ const allUseCases = {
   filePetitionInteractor,
   forwardWorkItemInteractor,
   generateCaseAssociationDocumentTitleInteractor,
+  generateCaseConfirmationPdfInteractor,
   generateDocketRecordPdfInteractor,
   generateDocumentTitleInteractor,
   generatePDFFromJPGDataInteractor,
@@ -314,7 +315,6 @@ const allUseCases = {
   updateTrialSessionWorkingCopyInteractor,
   updateUserContactInformationInteractor,
   uploadDocumentInteractor,
-  uploadExternalDocumentInteractor,
   uploadExternalDocumentsInteractor,
   uploadOrderDocumentInteractor,
   validateAddPractitioner,
@@ -404,6 +404,7 @@ const applicationContext = {
     TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
     TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
     US_STATES: ContactFactory.US_STATES,
+    USER_ROLES: User.ROLES,
   }),
   getCurrentUser,
   getCurrentUserToken,
@@ -475,6 +476,8 @@ const applicationContext = {
       formatNow,
       formattedTrialSessionDetails,
       getFormattedCaseDetail,
+      isExternalUser: User.isExternalUser,
+      isInternalUser: User.isInternalUser,
       isStringISOFormatted,
       prepareDateFromString,
       setServiceIndicatorsForCase,
