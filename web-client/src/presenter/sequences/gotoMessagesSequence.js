@@ -23,6 +23,7 @@ const goToMessages = [
   clearErrorAlertsAction,
   getUserRoleAction,
   {
+    adc: [],
     docketclerk: [
       getUsersInSectionAction({ section: 'docket' }),
       setUsersAction,
@@ -32,7 +33,6 @@ const goToMessages = [
       getUsersInSectionAction({ section: 'petitions' }),
       setUsersAction,
     ],
-    seniorattorney: [],
   },
   setCurrentPageAction('Messages'),
   ...chooseWorkQueueSequence,

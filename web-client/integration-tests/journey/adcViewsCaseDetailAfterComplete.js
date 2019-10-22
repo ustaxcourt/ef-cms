@@ -7,7 +7,7 @@ const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
 );
 
 export default test => {
-  return it('Senior Attorney views case detail', async () => {
+  return it('ADC views case detail', async () => {
     test.setState('caseDetail', {});
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
@@ -19,6 +19,6 @@ export default test => {
     const workItem = pendingMessages.find(
       item => item.workItemId === test.stipulatedDecisionWorkItemId,
     );
-    expect(workItem).toBeDefined();
+    expect(workItem).toBeUndefined();
   });
 };

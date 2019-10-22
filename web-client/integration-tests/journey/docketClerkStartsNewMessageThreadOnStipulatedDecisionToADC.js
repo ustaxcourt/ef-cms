@@ -3,7 +3,7 @@ import { InitialWorkItemMessage } from '../../../shared/src/business/entities/In
 const { VALIDATION_ERROR_MESSAGES } = InitialWorkItemMessage;
 
 export default test => {
-  return it('Docket clerk starts a new message thread on the Stipulated Decision document to senior attorney', async () => {
+  return it('Docket clerk starts a new message thread on the Stipulated Decision document to adc', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
       documentId: test.stipulatedDecisionDocumentId,
@@ -21,17 +21,17 @@ export default test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'section',
-      value: 'seniorattorney',
+      value: 'adc',
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'assigneeId',
-      value: '6805d1ab-18d0-43ec-bafb-654e83405416', // seniorattorney
+      value: '6805d1ab-18d0-43ec-bafb-654e83405416', // adc
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'message',
-      value: 'this is a new thread test message to a senior attorney',
+      value: 'this is a new thread test message to an adc',
     });
 
     await test.runSequence('createWorkItemSequence');
@@ -41,23 +41,23 @@ export default test => {
       document => document.documentId === test.stipulatedDecisionDocumentId,
     );
     const workItem = stipulatedDecision.workItems.find(
-      workItem => workItem.assigneeName === 'Test Seniorattorney',
+      workItem => workItem.assigneeName === 'Test ADC',
     );
 
     test.stipulatedDecisionWorkItemId = workItem.workItemId;
     expect(workItem).toMatchObject({
-      assigneeName: 'Test Seniorattorney',
+      assigneeName: 'Test ADC',
       isInitializeCase: false,
       messages: [
         {
           from: 'Test Docketclerk',
           fromUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'this is a new thread test message to a senior attorney',
-          to: 'Test Seniorattorney',
+          message: 'this is a new thread test message to an adc',
+          to: 'Test ADC',
           toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
       ],
-      section: 'seniorattorney',
+      section: 'adc',
       sentBy: 'Test Docketclerk',
     });
 
@@ -73,7 +73,7 @@ export default test => {
       workItem => workItem.workItemId === test.stipulatedDecisionWorkItemId,
     );
     expect(answerWorkItem.messages[0]).toMatchObject({
-      message: 'this is a new thread test message to a senior attorney',
+      message: 'this is a new thread test message to an adc',
     });
   });
 };
