@@ -3,6 +3,7 @@ const {
   UPLOAD_DOCUMENT,
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
+const { User } = require('../entities/User');
 
 /**
  *
@@ -21,7 +22,7 @@ exports.getUploadPolicyInteractor = async ({
   }
 
   // we don't want external users to be able to overwrite existing s3 files
-  if (user.isExternalUser()) {
+  if (User.isExternalUser(user.role)) {
     const isFileExists = await applicationContext
       .getPersistenceGateway()
       .isFileExists({
