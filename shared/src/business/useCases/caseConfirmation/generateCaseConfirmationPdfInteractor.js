@@ -89,7 +89,7 @@ exports.generateCaseConfirmationPdfInteractor = async ({
     }
   }
 
-  const documentId = `Case ${caseToUpdate.docketNumber} Confirmation.pdf`;
+  const documentId = `case-${caseToUpdate.docketNumber}-confirmation.pdf`;
 
   await new Promise(resolve => {
     const documentsBucket = applicationContext.environment.documentsBucketName;
