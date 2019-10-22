@@ -14,7 +14,7 @@ const applicationContext = {
   getCurrentUser: () => {
     return new User({
       name: 'bob',
-      role: 'docketclerk',
+      role: User.ROLES.docketClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
   },

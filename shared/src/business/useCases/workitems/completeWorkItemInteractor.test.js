@@ -1,4 +1,5 @@
 const { completeWorkItemInteractor } = require('./completeWorkItemInteractor');
+const { User } = require('../../entities/User');
 
 describe('completeWorkItemInteractor', () => {
   let applicationContext;
@@ -24,7 +25,7 @@ describe('completeWorkItemInteractor', () => {
       getCurrentUser: () => {
         return {
           name: 'Petitioner',
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },

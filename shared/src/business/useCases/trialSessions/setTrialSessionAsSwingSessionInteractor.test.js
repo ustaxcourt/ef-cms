@@ -36,7 +36,7 @@ describe('Set trial session as swing session', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'petitioner',
         };
       },

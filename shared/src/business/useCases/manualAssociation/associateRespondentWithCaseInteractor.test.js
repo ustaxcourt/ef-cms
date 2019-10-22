@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const {
   associateRespondentWithCaseInteractor,
 } = require('./associateRespondentWithCaseInteractor');
+const { User } = require('../../entities/User');
 
 describe('associateRespondentWithCaseInteractor', () => {
   let applicationContext;
@@ -19,7 +20,7 @@ describe('associateRespondentWithCaseInteractor', () => {
         getCurrentUser: () => {
           return {
             name: 'Olivia Jade',
-            role: 'petitioner',
+            role: User.ROLES.petitioner,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
@@ -27,7 +28,7 @@ describe('associateRespondentWithCaseInteractor', () => {
           getCaseByCaseId: async () => caseRecord,
           getUserById: async () => ({
             name: 'Olivia Jade',
-            role: 'seniorattorney',
+            role: User.ROLES.seniorAttorney,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           }),
           updateCase: async () => caseRecord,
@@ -53,7 +54,7 @@ describe('associateRespondentWithCaseInteractor', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: 'seniorattorney',
+          role: User.ROLES.seniorAttorney,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
@@ -62,7 +63,7 @@ describe('associateRespondentWithCaseInteractor', () => {
         getCaseByCaseId: async () => caseRecord,
         getUserById: async () => ({
           name: 'Olivia Jade',
-          role: 'respondent',
+          role: User.ROLES.respondent,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         updateCase: updateCaseSpy,

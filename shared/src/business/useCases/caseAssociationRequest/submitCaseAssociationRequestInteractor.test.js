@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const {
   submitCaseAssociationRequestInteractor,
 } = require('./submitCaseAssociationRequestInteractor');
+const { User } = require('../../entities/User');
 
 describe('submitCaseAssociationRequest', () => {
   let applicationContext;
@@ -19,7 +20,7 @@ describe('submitCaseAssociationRequest', () => {
         getCurrentUser: () => {
           return {
             name: 'Olivia Jade',
-            role: 'seniorattorney',
+            role: User.ROLES.seniorAttorney,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
@@ -54,7 +55,7 @@ describe('submitCaseAssociationRequest', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
@@ -73,7 +74,7 @@ describe('submitCaseAssociationRequest', () => {
             state: 'IL',
           },
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         updateCase: updateCaseSpy,
@@ -113,7 +114,7 @@ describe('submitCaseAssociationRequest', () => {
             state: 'IL',
           },
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
@@ -132,7 +133,7 @@ describe('submitCaseAssociationRequest', () => {
             state: 'IL',
           },
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         updateCase: updateCaseSpy,
@@ -162,7 +163,7 @@ describe('submitCaseAssociationRequest', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: 'respondent',
+          role: User.ROLES.respondent,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
@@ -181,7 +182,7 @@ describe('submitCaseAssociationRequest', () => {
             state: 'IL',
           },
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         updateCase: updateCaseSpy,

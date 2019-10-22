@@ -1,6 +1,7 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { Document } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { User } from '../../../../shared/src/business/entities/User';
 import { requestAccessHelper as requestAccessHelperComputed } from './requestAccessHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -67,7 +68,7 @@ describe('requestAccessHelper', () => {
     const result = runCompute(requestAccessHelper, {
       state: {
         ...state,
-        user: { role: 'practitioner' },
+        user: { role: User.ROLES.practitioner },
         form: {
           documentType: 'Motion to Substitute Parties and Change Caption',
           primaryDocumentFile: { some: 'file' },
@@ -84,13 +85,13 @@ describe('requestAccessHelper', () => {
   });
 
   it('returns correct number of document options for user role practitioner', () => {
-    state.user = { role: 'practitioner' };
+    state.user = { role: User.ROLES.practitioner };
     const result = runCompute(requestAccessHelper, { state });
     expect(result.documents.length).toEqual(6);
   });
 
   it('returns correct number of document options for user role respondent', () => {
-    state.user = { role: 'respondent' };
+    state.user = { role: User.ROLES.respondent };
     const result = runCompute(requestAccessHelper, { state });
     expect(result.documents.length).toEqual(2);
   });

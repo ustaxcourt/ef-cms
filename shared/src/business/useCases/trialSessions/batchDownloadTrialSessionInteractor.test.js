@@ -2,6 +2,7 @@ import { batchDownloadTrialSessionInteractor } from './batchDownloadTrialSession
 
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
+const { User } = require('../../entities/User');
 
 describe('batchDownloadTrialSessionInteractor', () => {
   let applicationContext, getCalendaredCasesForTrialSessionMock;
@@ -23,7 +24,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
     ]);
     applicationContext = {
       getCurrentUser: () => ({
-        role: 'judge',
+        role: User.ROLES.judge,
         userId: 'abc-123',
       }),
       getNotificationGateway: () => ({ sendNotificationToUser: () => {} }),
@@ -42,7 +43,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
     let error;
     applicationContext.getCurrentUser = () => ({
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       userId: 'abc-123',
     });
     try {

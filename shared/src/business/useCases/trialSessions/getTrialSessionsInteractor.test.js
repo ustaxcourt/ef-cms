@@ -18,7 +18,7 @@ describe('Get trial sessions', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'petitioner',
         };
       },

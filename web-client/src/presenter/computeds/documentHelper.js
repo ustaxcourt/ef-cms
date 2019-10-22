@@ -15,7 +15,7 @@ export const documentHelper = get => ({
 
   const shouldLinkToMessagesTab = () => {
     let linkToMessagesTab = false;
-    if (userRole == 'docketclerk' || workQueueIsInternal) {
+    if (userRole == USER_ROLES.docketClerk || workQueueIsInternal) {
       linkToMessagesTab = true;
     } else if (
       userRole == USER_ROLES.petitionsClerk &&

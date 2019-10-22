@@ -17,6 +17,7 @@ const { find, includes } = require('lodash');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
+const { User } = require('../User');
 
 Case.STATUS_TYPES = {
   batchedForIRS: 'Batched for IRS',
@@ -51,8 +52,13 @@ Case.CASE_TYPES = [
 Case.PROCEDURE_TYPES = ['Regular', 'Small'];
 
 Case.FILING_TYPES = {
-  petitioner: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
-  practitioner: [
+  [User.ROLES.petitioner]: [
+    'Myself',
+    'Myself and my spouse',
+    'A business',
+    'Other',
+  ],
+  [User.ROLES.practitioner]: [
     'Individual petitioner',
     'Petitioner and spouse',
     'A business',

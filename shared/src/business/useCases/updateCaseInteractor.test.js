@@ -13,19 +13,19 @@ const MOCK_CASE = {
     {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       userId: 'taxpayer',
     },
     {
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       userId: 'taxpayer',
     },
     {
       documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       userId: 'taxpayer',
     },
   ],

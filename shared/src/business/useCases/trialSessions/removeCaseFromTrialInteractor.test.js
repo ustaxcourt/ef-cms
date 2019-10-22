@@ -38,7 +38,7 @@ describe('remove case from trial session', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'petitioner',
         };
       },
