@@ -1,6 +1,7 @@
 const {
   getDocumentQCServedForUserInteractor,
 } = require('./getDocumentQCServedForUserInteractor');
+const { User } = require('../../entities/User');
 
 describe('getDocumentQCServedForUserInteractor', () => {
   let applicationContext;
@@ -73,7 +74,7 @@ describe('getDocumentQCServedForUserInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },

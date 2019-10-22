@@ -2,6 +2,7 @@ const {
   getUsersInSectionInteractor,
 } = require('./getUsersInSectionInteractor');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 const MOCK_SECTION = [
   {
@@ -21,7 +22,7 @@ describe('Get users in section', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -45,7 +46,7 @@ describe('Get users in section', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },

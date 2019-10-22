@@ -2,6 +2,7 @@ const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 const { omit } = require('lodash');
 const { updateCaseInteractor } = require('./updateCaseInteractor');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { User } = require('../entities/User');
 
 const MOCK_CASE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -46,7 +47,7 @@ describe('updateCase', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -78,7 +79,7 @@ describe('updateCase', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -109,7 +110,7 @@ describe('updateCase', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -144,7 +145,7 @@ describe('updateCase', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -211,7 +212,7 @@ describe('updateCase', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },

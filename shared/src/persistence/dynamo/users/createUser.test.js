@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const { createUserRecords } = require('./createUser');
+const { User } = require('../../../business/entities/User');
 
 describe('createUser', () => {
   let applicationContext;
@@ -25,7 +26,7 @@ describe('createUser', () => {
   it('attempts to persist a petitionsclerk user with a section mapping record', async () => {
     const petitionsclerkUser = {
       name: 'Test Petitionsclerk',
-      role: 'petitionsclerk',
+      role: User.ROLES.petitionsClerk,
       section: 'petitions',
     };
     await createUserRecords({
@@ -54,7 +55,7 @@ describe('createUser', () => {
   it('attempts to persist a judge user with a section mapping record for the chambers and the judge', async () => {
     const judgeUser = {
       name: 'Judge Adam',
-      role: 'judge',
+      role: User.ROLES.judge,
       section: 'adamsChambers',
     };
     await createUserRecords({
@@ -91,7 +92,7 @@ describe('createUser', () => {
     const practitionerUser = {
       barNumber: 'PT1234',
       name: 'Test Practitioner',
-      role: 'practitioner',
+      role: User.ROLES.practitioner,
       section: 'practitioner',
     };
     await createUserRecords({
@@ -135,7 +136,7 @@ describe('createUser', () => {
     const practitionerUser = {
       barNumber: '',
       name: 'Test Practitioner',
-      role: 'practitioner',
+      role: User.ROLES.practitioner,
       section: 'practitioner',
     };
     await createUserRecords({

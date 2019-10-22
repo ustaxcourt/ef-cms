@@ -57,7 +57,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       getCurrentUser: () => {
         return new User({
           name: 'bob',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -139,7 +139,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       getCurrentUser: () => {
         return new User({
           name: 'bob',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -201,7 +201,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       getCurrentUser: () => {
         return new User({
           name: 'bob',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },

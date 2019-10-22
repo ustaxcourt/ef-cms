@@ -1,6 +1,7 @@
 const { prioritizeCaseInteractor } = require('./prioritizeCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { Case } = require('../entities/cases/Case');
+const { User } = require('../entities/User');
 
 describe('prioritizeCaseInteractor', () => {
   let applicationContext;
@@ -11,7 +12,7 @@ describe('prioritizeCaseInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -66,7 +67,7 @@ describe('prioritizeCaseInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -103,7 +104,7 @@ describe('prioritizeCaseInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },

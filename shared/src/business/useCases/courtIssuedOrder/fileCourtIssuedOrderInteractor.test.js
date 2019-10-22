@@ -74,7 +74,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         getCurrentUser: () => {
           return new User({
             name: 'Olivia Jade',
-            role: 'petitionsclerk',
+            role: User.ROLES.petitionsClerk,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           });
         },

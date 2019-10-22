@@ -4,6 +4,7 @@ const {
 } = require('./removeCaseFromTrialInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
+const { User } = require('../../entities/User');
 
 const MOCK_TRIAL_SESSION = {
   caseOrder: [
@@ -66,7 +67,7 @@ describe('remove case from trial session', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },

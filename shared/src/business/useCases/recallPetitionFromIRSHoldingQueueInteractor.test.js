@@ -65,7 +65,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Petitions Clerk',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -107,7 +107,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return new User({
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },
@@ -142,7 +142,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return new User({
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },
