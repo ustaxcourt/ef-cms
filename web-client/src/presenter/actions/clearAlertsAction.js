@@ -16,7 +16,6 @@ export const clearAlertsAction = ({ get, props, store }) => {
   }
   store.set(state.caseDetailErrors, {});
   store.set(state.saveAlertsForNavigation, false);
-  store.set(state.validationErrors, {});
   if (props.fromModal) {
     store.set(state.modal.validationErrors, {});
   } else {
