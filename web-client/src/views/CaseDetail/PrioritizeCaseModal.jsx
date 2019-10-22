@@ -25,7 +25,7 @@ class PrioritizeCaseModalComponent extends ModalDialog {
     } = this.props;
 
     return (
-      <div className="margin-bottom-4">
+      <div className="margin-bottom-4" id="prioritize-case-modal">
         <div className="margin-bottom-2">
           This case will be set for trial for the next available trial session.{' '}
         </div>
