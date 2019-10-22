@@ -1,4 +1,3 @@
-import { isEmpty, negate, omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -12,18 +11,11 @@ import { state } from 'cerebral';
 export const submitCaseAssociationRequestAction = async ({
   applicationContext,
   get,
-  props,
 }) => {
   const { caseId, docketNumber } = get(state.caseDetail);
-  const { primaryDocumentFileId, supportingDocumentFileId } = props;
   const user = get(state.user);
 
-  let documentMetadata = omit(
-    {
-      ...get(state.form),
-    },
-    ['primaryDocumentFile'],
-  );
+  let documentMetadata = get(state.form);
 
   documentMetadata = {
     ...documentMetadata,
@@ -36,37 +28,6 @@ export const submitCaseAssociationRequestAction = async ({
       },
     ],
   };
-
-  const documentIds = [primaryDocumentFileId, supportingDocumentFileId].filter(
-    negate(isEmpty),
-  );
-
-  const makePdfSafe = async documentId => {
-    await applicationContext.getUseCases().virusScanPdfInteractor({
-      applicationContext,
-      documentId,
-    });
-
-    await applicationContext.getUseCases().validatePdfInteractor({
-      applicationContext,
-      documentId,
-    });
-
-    await applicationContext.getUseCases().sanitizePdfInteractor({
-      applicationContext,
-      documentId,
-    });
-  };
-  await Promise.all(documentIds.map(makePdfSafe));
-
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .fileDocketEntryInteractor({
-      applicationContext,
-      documentMetadata,
-      primaryDocumentFileId,
-      supportingDocumentFileId,
-    });
 
   const documentWithImmediateAssociation = [
     'Entry of Appearance',
@@ -98,20 +59,7 @@ export const submitCaseAssociationRequestAction = async ({
       });
   }
 
-  const pendingDocuments = caseDetail.documents.filter(
-    document => document.processingStatus === 'pending',
-  );
-  const addCoversheet = document => {
-    return applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      caseId: caseDetail.caseId,
-      documentId: document.documentId,
-    });
-  };
-  await Promise.all(pendingDocuments.map(addCoversheet));
-
   return {
-    caseDetail,
     caseId: docketNumber,
     documentWithImmediateAssociation,
     documentWithPendingAssociation,
