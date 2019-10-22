@@ -131,7 +131,7 @@ respondent
 respondent1 - respondent4
 practitioner
 practitioner1 - practitioner4
-seniorattorney
+adc
 judgeArmen
 judgeAshford
 judgeBuch
@@ -151,7 +151,7 @@ petitionsclerk1@example.com – petitionsclerk5@example.com
 docketclerk1@example.com – docketclerk5@example.com
 respondent1@example.com – respondent10@example.com
 practitioner1@example.com – practitioner10@example.com
-seniorattorney1@example.com – seniorattorney5@example.com
+adc1@example.com – adc5@example.com
 judgeArmen@example.com
 judgeAshford@example.com
 judgeBuch@example.com

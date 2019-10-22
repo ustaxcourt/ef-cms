@@ -1,8 +1,8 @@
 export default test => {
-  return it('the seniorattorney logs in', async () => {
+  return it('the adc logs in', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
-      value: 'seniorattorney',
+      value: 'adc',
     });
     await test.runSequence('submitLoginSequence');
   });

@@ -2,7 +2,7 @@ const docketclerk = require('./pa11y/pa11y-docketclerk');
 const petitionsclerk = require('./pa11y/pa11y-petitionsclerk');
 const practitioner = require('./pa11y/pa11y-practitioner');
 const respondent = require('./pa11y/pa11y-respondent');
-const seniorattorney = require('./pa11y/pa11y-seniorattorney');
+const adc = require('./pa11y/pa11y-adc');
 const petitioner = require('./pa11y/pa11y-petitioner');
 const judge = require('./pa11y/pa11y-judge');
 
@@ -13,7 +13,7 @@ const userUrls = [
   ...petitionsclerk,
   ...practitioner,
   ...respondent,
-  ...seniorattorney,
+  ...adc,
 ];
 
 const initialUrls = [

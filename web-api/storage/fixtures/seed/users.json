@@ -164,17 +164,17 @@
   },
 
   {
-    "pk": "seniorattorney|user",
+    "pk": "adc|user",
     "sk": "6805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "role": "seniorattorney",
+    "role": "adc",
     "sk": "6805d1ab-18d0-43ec-bafb-654e83405416",
-    "name": "Test Seniorattorney",
-    "section": "seniorattorney",
+    "name": "Test ADC",
+    "section": "adc",
     "pk": "6805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "6805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "seniorattorney"
+    "email": "adc"
   },
 
   {

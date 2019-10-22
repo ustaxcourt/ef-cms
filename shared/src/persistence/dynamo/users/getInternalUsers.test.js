@@ -23,8 +23,8 @@ describe('getInternalUsers', () => {
         userId: 'docketclerk1',
       },
       {
-        pk: 'seniorattorney|user',
-        userId: 'seniorattorney1',
+        pk: 'adc|user',
+        userId: 'adc1',
       },
     ]);
 
@@ -38,8 +38,8 @@ describe('getInternalUsers', () => {
         userId: 'docketclerk1',
       },
       {
-        pk: 'seniorattorney|user',
-        userId: 'seniorattorney1',
+        pk: 'adc|user',
+        userId: 'adc1',
       },
     ]);
   });

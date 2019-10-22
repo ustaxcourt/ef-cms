@@ -36,9 +36,9 @@ exports.MOCK_USERS = {
     userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
   },
   'g7d90c05-f6cd-442c-a168-202db587f16f': {
-    name: 'Seniorattorney',
-    role: 'seniorattorney',
-    section: 'seniorattorney',
+    name: 'ADC',
+    role: 'adc',
+    section: 'adc',
     userId: 'g7d90c05-f6cd-442c-a168-202db587f16f',
   },
 };

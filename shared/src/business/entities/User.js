@@ -8,13 +8,13 @@ const {
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
 User.ROLES = {
+  adc: 'adc',
   docketClerk: 'docketclerk',
   judge: 'judge',
   petitioner: 'petitioner',
   petitionsClerk: 'petitionsclerk',
   practitioner: 'practitioner',
   respondent: 'respondent',
-  seniorAttorney: 'seniorattorney',
 };
 
 const userDecorator = (obj, rawObj) => {
@@ -149,7 +149,7 @@ User.isInternalUser = function(role) {
     User.ROLES.petitionsClerk,
     User.ROLES.docketClerk,
     User.ROLES.judge,
-    User.ROLES.seniorAttorney,
+    User.ROLES.adc,
   ];
   return internalRoles.includes(role);
 };

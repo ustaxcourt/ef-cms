@@ -2,6 +2,13 @@
  * Mock users for logging in locally
  */
 exports.userMap = {
+  adc: {
+    'custom:role': 'adc',
+    email: 'adc@example.com',
+    name: 'Test ADC',
+    role: 'adc',
+    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  },
   docketclerk: {
     'custom:role': 'docketclerk',
     email: 'docketclerk@example.com',
@@ -9,6 +16,7 @@ exports.userMap = {
     role: 'docketclerk',
     userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
   },
+
   docketclerk1: {
     'custom:role': 'docketclerk',
     email: 'docketclerk1@example.com',
@@ -16,7 +24,6 @@ exports.userMap = {
     role: 'docketclerk',
     userId: '2805d1ab-18d0-43ec-bafb-654e83405416',
   },
-
   judgeArmen: {
     'custom:role': 'judge',
     email: 'judgeArmen',
@@ -66,6 +73,7 @@ exports.userMap = {
     role: 'judge',
     userId: 'dabbad06-18d0-43ec-bafb-654e83405416',
   },
+
   judgeUrda: {
     'custom:role': 'judge',
     email: 'judgeUrda',
@@ -73,7 +81,6 @@ exports.userMap = {
     role: 'judge',
     userId: 'dabbad0a-18d0-43ec-bafb-654e83405416',
   },
-
   petitionsclerk: {
     'custom:role': 'petitionsclerk',
     email: 'petitionsclerk@example.com',
@@ -267,13 +274,6 @@ exports.userMap = {
     name: 'Jaquelyn Lane',
     role: 'respondent',
     userId: '726c38b1-1432-49b3-9383-77a998c0ba4f',
-  },
-  seniorattorney: {
-    'custom:role': 'seniorattorney',
-    email: 'seniorattorney@example.com',
-    name: 'Test Seniorattorney',
-    role: 'seniorattorney',
-    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
   },
   taxpayer: {
     'custom:role': 'petitioner',
