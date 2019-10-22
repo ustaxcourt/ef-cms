@@ -1,5 +1,6 @@
 import * as CONSTANTS from '../../../../shared/src/business/entities/WorkQueue';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { filterWorkItems } from './formattedWorkQueue';
 
@@ -87,31 +88,31 @@ const SECTION_DOCUMENT_QC_OUTBOX = {
 };
 
 const petitionsClerk1 = {
-  role: 'petitionsclerk',
+  role: User.ROLES.petitionsClerk,
   section: 'petitions',
   userId: 'p1',
 };
 
 const petitionsClerk2 = {
-  role: 'petitionsclerk',
+  role: User.ROLES.petitionsClerk,
   section: 'petitions',
   userId: 'p2',
 };
 
 const docketClerk1 = {
-  role: 'docketclerk',
+  role: User.ROLES.docketClerk,
   section: 'docket',
   userId: 'd1',
 };
 
 const docketClerk2 = {
-  role: 'docketclerk',
+  role: User.ROLES.docketClerk,
   section: 'docket',
   userId: 'd2',
 };
 
 const seniorAttorney = {
-  role: 'seniorattorney',
+  role: User.ROLES.seniorAttorney,
   section: 'seniorattorney',
   userId: 'd2',
 };
@@ -561,6 +562,7 @@ describe('filterWorkItems', () => {
     const filtered = workQueueOutbox.filter(
       filterWorkItems({
         applicationContext,
+        USER_ROLES: User.ROLES,
         ...MY_DOCUMENT_QC_OUTBOX,
         user: petitionsClerk1,
       }),
@@ -638,6 +640,7 @@ describe('filterWorkItems', () => {
     const filtered = workQueueOutbox.filter(
       filterWorkItems({
         applicationContext,
+        USER_ROLES: User.ROLES,
         ...SECTION_DOCUMENT_QC_OUTBOX,
         user,
       }),

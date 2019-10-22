@@ -78,7 +78,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     applicationContext.getCurrentUser = () => {
       return new User({
         name: 'Test Petitionsclerk',
-        role: 'petitionsclerk',
+        role: User.ROLES.petitionsClerk,
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
@@ -171,7 +171,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     applicationContext.getCurrentUser = () => {
       return new User({
         name: 'alex',
-        role: 'docketclerk',
+        role: User.ROLES.docketClerk,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
@@ -240,7 +240,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     applicationContext.getCurrentUser = () => {
       return new User({
         name: 'Test Petitionsclerk',
-        role: 'petitionsclerk',
+        role: User.ROLES.petitionsClerk,
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
@@ -366,7 +366,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
     applicationContext.getCurrentUser = () => {
       return new User({
         name: 'Test Petitionsclerk',
-        role: 'docketclerk',
+        role: User.ROLES.docketClerk,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };

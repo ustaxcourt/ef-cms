@@ -44,7 +44,7 @@ describe('completeDocketEntryQCInteractor', () => {
         workItems: [workItem],
       },
     ],
-    role: 'petitioner',
+    role: User.ROLES.petitioner,
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
   it('should throw an error if not authorized', async () => {
@@ -55,7 +55,7 @@ describe('completeDocketEntryQCInteractor', () => {
         getCurrentUser: () => {
           return {
             name: 'Olivia Jade',
-            role: 'seniorattorney',
+            role: User.ROLES.seniorAttorney,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
@@ -82,7 +82,7 @@ describe('completeDocketEntryQCInteractor', () => {
         getCurrentUser: () => {
           return new User({
             name: 'Olivia Jade',
-            role: 'docketclerk',
+            role: User.ROLES.docketClerk,
             section: 'docket',
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           });
@@ -92,7 +92,7 @@ describe('completeDocketEntryQCInteractor', () => {
           getCaseByCaseId: getCaseByCaseIdSpy,
           getUserById: async () => ({
             name: 'Olivia Jade',
-            role: 'docketclerk',
+            role: User.ROLES.docketClerk,
             section: 'docket',
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           }),

@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const {
   filePetitionFromPaperInteractor,
 } = require('./filePetitionFromPaperInteractor');
+const { User } = require('../entities/User');
 
 let uploadDocumentStub;
 let createCaseStub;
@@ -22,7 +23,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     return {
       getCurrentUser: () => ({
-        role: 'docketclerk',
+        role: User.ROLES.docketClerk,
         userId: 'Don Clark',
       }),
       getPersistenceGateway: () => ({
@@ -63,7 +64,7 @@ describe('filePetitionFromPaperInteractor', () => {
       await filePetitionFromPaperInteractor({
         applicationContext: createApplicationContext({
           getCurrentUser: () => ({
-            role: 'respondent',
+            role: User.ROLES.respondent,
             userId: 'respondent',
           }),
         }),

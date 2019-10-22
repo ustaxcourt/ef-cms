@@ -1,3 +1,4 @@
+import { User } from '../../../../shared/src/business/entities/User';
 import { dashboardExternalHelper } from './dashboardExternalHelper';
 import { runCompute } from 'cerebral/test';
 
@@ -26,7 +27,7 @@ describe('petitioner dashboard helper', () => {
     const result = runCompute(dashboardExternalHelper, {
       state: {
         cases: [{ something: true }],
-        user: { role: 'practitioner' },
+        user: { role: User.ROLES.practitioner },
       },
     });
     expect(result.showCaseList).toEqual(true);
@@ -38,7 +39,7 @@ describe('petitioner dashboard helper', () => {
     const result = runCompute(dashboardExternalHelper, {
       state: {
         cases: [{ something: true }],
-        user: { role: 'respondent' },
+        user: { role: User.ROLES.respondent },
       },
     });
     expect(result.showCaseList).toEqual(true);
@@ -50,7 +51,7 @@ describe('petitioner dashboard helper', () => {
     const result = runCompute(dashboardExternalHelper, {
       state: {
         cases: [{ something: true }],
-        user: { role: 'petitionsclerk' },
+        user: { role: User.ROLES.petitionsClerk },
       },
     });
     expect(result.showCaseList).toEqual(true);

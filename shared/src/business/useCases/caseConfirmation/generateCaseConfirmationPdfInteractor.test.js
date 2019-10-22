@@ -1,6 +1,7 @@
 const {
   generateCaseConfirmationPdfInteractor,
 } = require('./generateCaseConfirmationPdfInteractor');
+const { User } = require('../../entities/User');
 
 const PDF_MOCK_BUFFER = 'Hello World';
 
@@ -33,7 +34,7 @@ describe('generateCaseConfirmationPdfInteractor', () => {
         },
         getChromium: () => chromiumMock,
         getCurrentUser: () => {
-          return { role: 'petitioner', userId: 'taxpayer' };
+          return { role: User.ROLES.petitioner, userId: 'taxpayer' };
         },
         getPersistenceGateway: () => ({
           getCaseByCaseId: () => ({ docketNumber: '101-19' }),

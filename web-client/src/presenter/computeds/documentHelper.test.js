@@ -1,5 +1,10 @@
+import { User } from '../../../../shared/src/business/entities/User';
 import { documentHelper } from './documentHelper';
 import { runCompute } from 'cerebral/test';
+
+const baseState = {
+  constants: { USER_ROLES: User.ROLES },
+};
 
 const MY_INBOX = { box: 'inbox', queue: 'my', workQueueIsInternal: true };
 const MY_BATCHED = { box: 'batched', queue: 'my', workQueueIsInternal: true };
@@ -24,8 +29,9 @@ describe('documentHelper', () => {
   it('should return a correctly-assembled URI to document details based on docket number and document id', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: MY_INBOX,
       },
@@ -39,8 +45,9 @@ describe('documentHelper', () => {
   it('should return a correctly-assembled URI to document details based on docket number, document id, and messageId', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: MY_INBOX,
       },
@@ -55,8 +62,9 @@ describe('documentHelper', () => {
   it('should return a correctly-assembled URI to document details based on docket number, document id, and workItemIdToMarkAsRead', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: MY_INBOX,
       },
@@ -71,8 +79,9 @@ describe('documentHelper', () => {
   it('should return a correctly-assembled URI to document details based on docket number, document id, messageId, and workItemIdToMarkAsRead', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: MY_INBOX,
       },
@@ -91,8 +100,9 @@ describe('documentHelper', () => {
   it('Petitions Clerk: Links from My Messages Inbox to individual Message tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: MY_INBOX,
       },
@@ -108,8 +118,9 @@ describe('documentHelper', () => {
   it('Petitions Clerk: Links from My Messages Sent to individual Message tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: MY_OUTBOX,
       },
@@ -125,8 +136,9 @@ describe('documentHelper', () => {
   it('Petitions Clerk: Links from Section Messages Inbox to individual Message tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: SECTION_INBOX,
       },
@@ -142,8 +154,9 @@ describe('documentHelper', () => {
   it('Petitions Clerk: Links from Section Messages Sent to individual Message tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: SECTION_OUTBOX,
       },
@@ -159,8 +172,9 @@ describe('documentHelper', () => {
   it('Petitions Clerk: Links from My Document QC Inbox to Document Info tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: {
           ...MY_INBOX,
@@ -179,8 +193,9 @@ describe('documentHelper', () => {
   it('Petitions Clerk: Links from My Document QC Batched to Document Info tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: {
           ...MY_BATCHED,
@@ -199,8 +214,9 @@ describe('documentHelper', () => {
   it('Petitions Clerk: Links from My Document QC Served to individual Message Info tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: {
           ...MY_OUTBOX,
@@ -219,8 +235,9 @@ describe('documentHelper', () => {
   it('Petitions Clerk: Links from Section Document QC Inbox to Document Info tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: {
           ...SECTION_INBOX,
@@ -239,8 +256,9 @@ describe('documentHelper', () => {
   it('Petitions Clerk: Links from Section Document QC Batched to Document Info tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: {
           ...SECTION_BATCHED,
@@ -259,8 +277,9 @@ describe('documentHelper', () => {
   it('Petitions Clerk: Links from Section Document QC Served to individual Message Info tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
         workQueueToDisplay: {
           ...SECTION_OUTBOX,
@@ -279,8 +298,9 @@ describe('documentHelper', () => {
   it('Docket Clerk: Links from My Messages Inbox to individual Message tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
         workQueueToDisplay: MY_INBOX,
       },
@@ -296,8 +316,9 @@ describe('documentHelper', () => {
   it('Docket Clerk: Links from My Messages Sent to individual Message tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
         workQueueToDisplay: MY_OUTBOX,
       },
@@ -313,8 +334,9 @@ describe('documentHelper', () => {
   it('Docket Clerk: Links from Section Messages Inbox to individual Message tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
         workQueueToDisplay: SECTION_INBOX,
       },
@@ -330,8 +352,9 @@ describe('documentHelper', () => {
   it('Docket Clerk: Links from Section Messages Sent to individual Message tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
         workQueueToDisplay: SECTION_OUTBOX,
       },
@@ -347,8 +370,9 @@ describe('documentHelper', () => {
   it('Docket Clerk: Links from MY Document QC Inbox to individual Message tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
         workQueueToDisplay: {
           ...MY_INBOX,
@@ -367,8 +391,9 @@ describe('documentHelper', () => {
   it('Docket Clerk: Links from MY Document QC Processed to individual Message tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
         workQueueToDisplay: { ...MY_OUTBOX, workQueueIsInternal: false },
       },
@@ -384,8 +409,9 @@ describe('documentHelper', () => {
   it('Docket Clerk: Links from Section Document QC Inbox to individual Message tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
         workQueueToDisplay: { ...SECTION_INBOX, workQueueIsInternal: false },
       },
@@ -401,8 +427,9 @@ describe('documentHelper', () => {
   it('Docket Clerk: Links from Section Document QC Processed to individual Message tab', () => {
     const result = runCompute(documentHelper, {
       state: {
+        ...baseState,
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
         workQueueToDisplay: { ...SECTION_OUTBOX, workQueueIsInternal: false },
       },

@@ -2,16 +2,17 @@ const {
   getUsersInSectionInteractor,
 } = require('./getUsersInSectionInteractor');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 const MOCK_SECTION = [
   {
     name: 'Test Petitioner',
-    role: 'petitions',
+    role: User.ROLES.petitioner,
     userId: 'petitioner1@example.com',
   },
   {
     name: 'Test Petitioner',
-    role: 'petitions',
+    role: User.ROLES.petitioner,
     userId: 'petitioner2@example.com',
   },
 ];
@@ -21,7 +22,7 @@ describe('Get users in section', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -45,7 +46,7 @@ describe('Get users in section', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -75,7 +76,7 @@ describe('Get users in section', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },

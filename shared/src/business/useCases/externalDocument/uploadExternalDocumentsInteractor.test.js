@@ -1,6 +1,7 @@
 const {
   uploadExternalDocumentsInteractor,
 } = require('./uploadExternalDocumentsInteractor');
+const { User } = require('../../entities/User');
 
 describe('uploadExternalDocumentsInteractor', () => {
   let applicationContext;
@@ -26,7 +27,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         userId: 'respondent',
       },
     ],
-    role: 'petitioner',
+    role: User.ROLES.petitioner,
     userId: 'taxpayer',
   };
 
@@ -35,7 +36,7 @@ describe('uploadExternalDocumentsInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -70,7 +71,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: 'respondent',
+            role: User.ROLES.respondent,
             userId: 'respondent',
           };
         },
@@ -107,7 +108,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: 'respondent',
+            role: User.ROLES.respondent,
             userId: 'respondent',
           };
         },
@@ -155,7 +156,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: 'practitioner',
+            role: User.ROLES.practitioner,
             userId: 'practitioner',
           };
         },

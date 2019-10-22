@@ -49,7 +49,7 @@ describe('createCaseFromPaperInteractor', () => {
       getCurrentUser: () =>
         new User({
           name: 'Test Taxpayer',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
       getEntityConstructors: () => ({
@@ -59,7 +59,7 @@ describe('createCaseFromPaperInteractor', () => {
         createCase: async () => null,
         getUserById: () => ({
           name: 'Test Taxpayer',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           section: 'petitions',
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
@@ -127,7 +127,7 @@ describe('createCaseFromPaperInteractor', () => {
       getCurrentUser: () =>
         new User({
           name: 'Test Taxpayer',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
       getEntityConstructors: () => ({
@@ -137,7 +137,7 @@ describe('createCaseFromPaperInteractor', () => {
         createCase: async () => null,
         getUserById: () => ({
           name: 'Test Taxpayer',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           section: 'petitions',
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
@@ -205,7 +205,7 @@ describe('createCaseFromPaperInteractor', () => {
       getCurrentUser: () =>
         new User({
           name: 'Test Taxpayer',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
       getEntityConstructors: () => ({
@@ -215,7 +215,7 @@ describe('createCaseFromPaperInteractor', () => {
         createCase: async () => null,
         getUserById: () => ({
           name: 'Test Taxpayer',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           section: 'petitions',
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
@@ -284,7 +284,7 @@ describe('createCaseFromPaperInteractor', () => {
       getCurrentUser: () =>
         new User({
           name: 'Test Taxpayer',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
       getEntityConstructors: () => ({
@@ -294,7 +294,7 @@ describe('createCaseFromPaperInteractor', () => {
         createCase: async () => null,
         getUserById: () => ({
           name: 'Test Taxpayer',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           section: 'petitions',
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
