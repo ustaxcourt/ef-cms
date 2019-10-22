@@ -6,19 +6,13 @@ import sinon from 'sinon';
 describe('submitCaseAssociationRequestAction', () => {
   let submitCaseAssociationRequestStub;
   let submitPendingCaseAssociationRequestStub;
-  let addCoversheetInteractorStub;
-  let fileDocketEntryStub;
 
   beforeEach(() => {
     submitCaseAssociationRequestStub = sinon.stub();
     submitPendingCaseAssociationRequestStub = sinon.stub();
-    addCoversheetInteractorStub = sinon.stub();
-    fileDocketEntryStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        addCoversheetInteractor: addCoversheetInteractorStub,
-        fileDocketEntryInteractor: fileDocketEntryStub,
         submitCaseAssociationRequestInteractor: submitCaseAssociationRequestStub,
         submitPendingCaseAssociationRequestInteractor: submitPendingCaseAssociationRequestStub,
       }),
@@ -26,7 +20,6 @@ describe('submitCaseAssociationRequestAction', () => {
   });
 
   it('should call submitCaseAssociationRequest', async () => {
-    fileDocketEntryStub.returns({ documents: [] });
     await runAction(submitCaseAssociationRequestAction, {
       modules: {
         presenter,
@@ -44,7 +37,6 @@ describe('submitCaseAssociationRequestAction', () => {
   });
 
   it('should call submitPendingCaseAssociationRequest', async () => {
-    fileDocketEntryStub.returns({ documents: [] });
     await runAction(submitCaseAssociationRequestAction, {
       modules: {
         presenter,
