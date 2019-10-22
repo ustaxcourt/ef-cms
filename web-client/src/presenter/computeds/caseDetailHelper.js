@@ -2,21 +2,23 @@ import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
   const { Case } = applicationContext.getEntityConstructors();
+  const USER_ROLES = get(state.constants.USER_ROLES);
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const caseHasRespondent =
     !!caseDetail && !!caseDetail.respondents && !!caseDetail.respondents.length;
   const userRole = get(state.user.role);
-  const showActionRequired = !caseDetail.payGovId && userRole === 'petitioner';
+  const showActionRequired =
+    !caseDetail.payGovId && userRole === USER_ROLES.petitioner;
   const documentDetailTab =
     get(state.caseDetailPage.informationTab) || 'docketRecord';
   const form = get(state.form);
   const currentPage = get(state.currentPage);
   const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
   const caseIsPaid = caseDetail.payGovId && !form.paymentType;
-  const isExternalUser = ['practitioner', 'petitioner', 'respondent'].includes(
-    userRole,
-  );
+  const isExternalUser = applicationContext
+    .getUtilities()
+    .isExternalUser(userRole);
   const isRequestAccessForm = currentPage === 'RequestAccessWizard';
   const isJudge = 'judge' == userRole;
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
@@ -35,12 +37,16 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
   let showAddDocketEntryButton =
-    ['CaseDetailInternal'].includes(currentPage) && userRole === 'docketclerk';
+    ['CaseDetailInternal'].includes(currentPage) &&
+    userRole === USER_ROLES.docketClerk;
   let showCreateOrderButton =
     ['CaseDetailInternal'].includes(currentPage) &&
-    ['docketclerk', 'judge', 'petitionsclerk', 'seniorattorney'].includes(
-      userRole,
-    );
+    [
+      USER_ROLES.docketClerk,
+      USER_ROLES.judge,
+      USER_ROLES.petitionsClerk,
+      USER_ROLES.seniorAttorney,
+    ].includes(userRole);
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
@@ -87,11 +93,11 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   let showEditPrimaryContactButton = false;
 
-  if (userRole === 'petitioner') {
+  if (userRole === USER_ROLES.petitioner) {
     showEditPrimaryContactButton = true;
-  } else if (userRole === 'respondent') {
+  } else if (userRole === USER_ROLES.respondent) {
     showEditPrimaryContactButton = false;
-  } else if (userRole === 'practitioner') {
+  } else if (userRole === USER_ROLES.practitioner) {
     showEditPrimaryContactButton = userAssociatedWithCase;
   }
 

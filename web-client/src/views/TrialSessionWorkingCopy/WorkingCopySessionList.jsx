@@ -72,6 +72,7 @@ export const WorkingCopySessionList = connect(
                   )) || <FontAwesomeIcon icon="caret-down" />}
                 </Button>
               </th>
+              <th aria-label="manually added indicator"></th>
               <th className="no-wrap">Case name</th>
               <th className="no-wrap">
                 <Button
@@ -108,6 +109,16 @@ export const WorkingCopySessionList = connect(
                 <tr className="vertical-align-middle-row">
                   <td>
                     <CaseLink formattedCase={item} />
+                  </td>
+                  <td>
+                    {item.isManuallyAdded && (
+                      <span aria-label="manually added indicator">
+                        <FontAwesomeIcon
+                          className="mini-success"
+                          icon="calendar-plus"
+                        />
+                      </span>
+                    )}
                   </td>
                   <td>{item.caseCaptionNames}</td>
                   <td>

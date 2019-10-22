@@ -1,4 +1,5 @@
 const { getUploadPolicyInteractor } = require('./getUploadPolicyInteractor');
+const { User } = require('../entities/User');
 
 describe('getUploadPolicyInteractor', () => {
   beforeEach(() => {});
@@ -28,7 +29,7 @@ describe('getUploadPolicyInteractor', () => {
       getCurrentUser: () => {
         return {
           isExternalUser: () => true,
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },
@@ -48,7 +49,7 @@ describe('getUploadPolicyInteractor', () => {
       getCurrentUser: () => {
         return {
           isExternalUser: () => true,
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },
