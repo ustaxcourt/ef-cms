@@ -5,7 +5,10 @@ import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { set } from 'cerebral/factories';
+import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCreateMessageModalDialogModalStateAction } from '../actions/WorkItem/setCreateMessageModalDialogModalStateAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
+import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { state } from 'cerebral';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
@@ -16,6 +19,11 @@ export const openCreateMessageAlongsideDocketRecordQCModalSequence = [
   computeDateReceivedAction,
   validateDocketEntryAction,
   {
+    error: [
+      setAlertErrorAction,
+      setValidationErrorsAction,
+      setValidationAlertErrorsAction,
+    ],
     success: [
       clearModalStateAction,
       generateTitleAction,

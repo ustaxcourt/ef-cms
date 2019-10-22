@@ -8,11 +8,11 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
-  - serverless-plugin-warmup
+  # - serverless-plugin-warmup
 
 custom:
-  warmup:
-    enabled: true
+  #warmup:
+  #enabled: true
 
   prune:
     automatic: true

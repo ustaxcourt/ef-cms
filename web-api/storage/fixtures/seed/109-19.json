@@ -25,6 +25,7 @@
             "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
             "isInternal": false,
             "isInitializeCase": true,
+            "isQC": true,
             "assigneeId": null,
             "sentBy": "taxpayer",
             "createdAt": "2019-03-01T21:40:46.415Z",
@@ -139,5 +140,9 @@
     ],
     "docketNumber": "109-19",
     "status": "New"
+  },
+  {
+    "sk": "2fb2da8d-4328-4a20-a5d7-b76637e1dc02",
+    "pk": "109-19|case"
   }
 ]

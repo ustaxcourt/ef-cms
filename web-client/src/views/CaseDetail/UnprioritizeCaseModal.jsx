@@ -16,7 +16,7 @@ class UnprioritizeCaseModalComponent extends ModalDialog {
 
   renderBody() {
     return (
-      <div className="margin-bottom-4">
+      <div className="margin-bottom-4" id="unprioritize-modal">
         <div className="margin-bottom-2">
           This case will be set for trial according to standard priority.{' '}
         </div>

@@ -7,11 +7,21 @@ const {
 } = require('../../utilities/JoiValidationConstants');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 
+User.ROLES = {
+  docketClerk: 'docketclerk',
+  judge: 'judge',
+  petitioner: 'petitioner',
+  petitionsClerk: 'petitionsclerk',
+  practitioner: 'practitioner',
+  respondent: 'respondent',
+  seniorAttorney: 'seniorattorney',
+};
+
 const userDecorator = (obj, rawObj) => {
   obj.barNumber = rawObj.barNumber;
   obj.email = rawObj.email;
   obj.name = rawObj.name;
-  obj.role = rawObj.role || 'petitioner';
+  obj.role = rawObj.role || User.ROLES.petitioner;
   obj.section = rawObj.section;
   obj.token = rawObj.token;
   obj.userId = rawObj.userId;
@@ -81,6 +91,10 @@ const userValidation = {
     .optional(),
   email: joi.string().optional(),
   name: joi.string().optional(),
+  role: joi
+    .string()
+    .valid(Object.values(User.ROLES))
+    .required(),
   token: joi.string().optional(),
   userId: joi.string().required(),
 };
@@ -121,17 +135,23 @@ joiValidationDecorator(
   VALIDATION_ERROR_MESSAGES,
 );
 
-User.ROLES = {
-  EXTERNAL: ['petitioner', 'practitioner', 'respondent'],
-  INTERNAL: ['docketclerk', 'judge', 'petitionsclerk', 'seniorattorney'],
+User.isExternalUser = function(role) {
+  const externalRoles = [
+    User.ROLES.petitioner,
+    User.ROLES.practitioner,
+    User.ROLES.respondent,
+  ];
+  return externalRoles.includes(role);
 };
 
-User.prototype.isExternalUser = function() {
-  return User.ROLES.EXTERNAL.includes(this.role);
-};
-
-User.prototype.isInternalUser = function() {
-  return User.ROLES.INTERNAL.includes(this.role);
+User.isInternalUser = function(role) {
+  const internalRoles = [
+    User.ROLES.petitionsClerk,
+    User.ROLES.docketClerk,
+    User.ROLES.judge,
+    User.ROLES.seniorAttorney,
+  ];
+  return internalRoles.includes(role);
 };
 
 module.exports = {

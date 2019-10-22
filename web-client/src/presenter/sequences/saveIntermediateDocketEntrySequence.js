@@ -4,10 +4,8 @@ import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateRec
 import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
 import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
 import { saveIntermediateDocketEntryAction } from '../actions/EditDocketRecord/saveIntermediateDocketEntryAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
@@ -16,15 +14,16 @@ export const saveIntermediateDocketEntrySequence = [
   computeSecondaryFormDateAction,
   computeCertificateOfServiceFormDateAction,
   computeDateReceivedAction,
-  startShowValidationAction,
-  validateDocketEntryAction,
+  shouldValidateAction,
   {
-    error: [
-      setAlertErrorAction,
-      setValidationErrorsAction,
-      setValidationAlertErrorsAction,
+    ignore: [],
+    validate: [
+      validateDocketEntryAction,
+      {
+        error: [setValidationErrorsAction],
+        success: [clearAlertsAction, stopShowValidationAction],
+      },
     ],
-    success: [clearAlertsAction, stopShowValidationAction],
   },
   saveIntermediateDocketEntryAction,
 ];

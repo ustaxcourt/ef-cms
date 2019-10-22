@@ -4,6 +4,7 @@ import { Document } from '../../shared/src/business/entities/Document';
 import { Order } from '../../shared/src/business/entities/orders/Order';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { User } from '../../shared/src/business/entities/User';
 import { applicationContext } from '../src/applicationContext';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import {
@@ -437,6 +438,7 @@ exports.setupTest = ({ useCases = {} } = {}) => {
     STATUS_TYPES: Case.STATUS_TYPES,
     TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+    USER_ROLES: User.ROLES,
   });
 
   return test;
