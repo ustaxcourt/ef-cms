@@ -1,6 +1,7 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
+import { User } from '../../shared/src/business/entities/User';
 import { isFunction, mapValues } from 'lodash';
 import FormData from 'form-data';
 const {
@@ -115,6 +116,7 @@ describe('Case journey', () => {
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
       STATUS_TYPES: Case.STATUS_TYPES,
       TRIAL_CITIES: TrialSession.TRIAL_CITIES,
+      USER_ROLES: User.ROLES,
     });
   });
 
