@@ -326,7 +326,7 @@ jobs:
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-ui.sh ${ENV}"
       - run:
           name: 'Deploy - Web API - Cognito Create Users'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-users.sh ${ENV}"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "USTC_ADMIN_PASS=${USTC_ADMIN_PASS}" --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-users.sh ${ENV} && ./setup-court-users.sh ${ENV}"
       - run:
           name: 'Deploy - Web API - Smoke Tests - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" --rm efcms /bin/sh -c "cd web-api && ./run-smoketests.sh ${ENV} us-east-1"

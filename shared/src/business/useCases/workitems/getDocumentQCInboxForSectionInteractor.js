@@ -1,7 +1,4 @@
-const {
-  DOCKET_SECTION,
-  SENIOR_ATTORNEY_SECTION,
-} = require('../../entities/WorkQueue');
+const { ADC_SECTION, DOCKET_SECTION } = require('../../entities/WorkQueue');
 const {
   isAuthorized,
   WORKITEM,
@@ -32,7 +29,7 @@ exports.getDocumentQCInboxForSectionInteractor = async ({
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const sectionToExcept =
-    user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : section;
+    user.section === ADC_SECTION ? DOCKET_SECTION : section;
 
   const workItems = await applicationContext
     .getPersistenceGateway()

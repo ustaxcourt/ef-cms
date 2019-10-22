@@ -1,5 +1,5 @@
 export default test => {
-  return it('Senior Attorney views document detail', async () => {
+  return it('ADC views document detail', async () => {
     await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: test.docketNumber,
       documentId: test.documentId,
@@ -17,7 +17,7 @@ export default test => {
     );
     expect(workItem).toMatchObject({
       assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      assigneeName: 'Test Seniorattorney',
+      assigneeName: 'Test ADC',
     });
 
     expect(workItem.messages[0]).toMatchObject({

@@ -64,12 +64,9 @@ describe('Authorization client service', () => {
     ).toBeTruthy();
   });
 
-  it('should authorize a seniorattorney for workitems', () => {
+  it('should authorize an adc user for workitems', () => {
     expect(
-      isAuthorized(
-        { role: User.ROLES.seniorAttorney, userId: 'seniorattorney' },
-        WORKITEM,
-      ),
+      isAuthorized({ role: User.ROLES.adc, userId: 'adc' }, WORKITEM),
     ).toBeTruthy();
   });
 

@@ -24,7 +24,7 @@ export const headerHelper = (get, applicationContext) => {
     ([
       USER_ROLES.docketClerk,
       USER_ROLES.petitionsClerk,
-      USER_ROLES.seniorAttorney,
+      USER_ROLES.adc,
     ].includes(userRole) &&
       isMessages);
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');

@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const extractedDocument = withAppContextDecorator(extractedDocumentComputed);
 
 export default test => {
-  return it('Senior Attorney marks the work item as completed', async () => {
+  return it('ADC marks the work item as completed', async () => {
     await test.runSequence('updateCompleteFormValueSequence', {
       key: 'completeMessage',
       value: 'good job',

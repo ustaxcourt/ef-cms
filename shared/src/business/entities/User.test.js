@@ -122,8 +122,8 @@ describe('User entity', () => {
     it('should return true when the user role is judge', () => {
       expect(User.isInternalUser(User.ROLES.judge)).toEqual(true);
     });
-    it('should return true when the user role is seniorattorney', () => {
-      expect(User.isInternalUser(User.ROLES.seniorAttorney)).toEqual(true);
+    it('should return true when the user role is adc', () => {
+      expect(User.isInternalUser(User.ROLES.adc)).toEqual(true);
     });
   });
 });

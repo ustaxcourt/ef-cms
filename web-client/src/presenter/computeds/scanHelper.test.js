@@ -34,11 +34,11 @@ describe('scanHelper', () => {
     expect(result.hasScanFeature).toBeTruthy();
   });
 
-  it('sets hasScanFeature to `true` for `seniorattorney` user roles', () => {
+  it('sets hasScanFeature to `true` for `adc` user roles', () => {
     const result = runCompute(scanHelper, {
       state: {
         user: {
-          role: User.ROLES.seniorAttorney,
+          role: User.ROLES.adc,
         },
       },
     });
