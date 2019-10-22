@@ -1,6 +1,7 @@
 const { getCaseNoteInteractor } = require('./getCaseNoteInteractor');
 const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 const MOCK_NOTE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -39,7 +40,7 @@ describe('Get case note', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'judge',
+          role: User.ROLES.judge,
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
@@ -68,7 +69,7 @@ describe('Get case note', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'judge',
+          role: User.ROLES.judge,
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
@@ -90,7 +91,7 @@ describe('Get case note', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'judge',
+          role: User.ROLES.judge,
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },

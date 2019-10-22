@@ -34,7 +34,7 @@ describe('fileExternalDocumentInteractor', () => {
       },
     ],
     partyType: ContactFactory.PARTY_TYPES.petitioner,
-    role: 'petitioner',
+    role: User.ROLES.petitioner,
     userId: 'taxpayer',
   };
   it('should throw an error if not authorized', async () => {
@@ -45,7 +45,7 @@ describe('fileExternalDocumentInteractor', () => {
         getCurrentUser: () => {
           return {
             name: 'Seniorattorney',
-            role: 'seniorattorney',
+            role: User.ROLES.seniorAttorney,
             userId: 'g7d90c05-f6cd-442c-a168-202db587f16f',
           };
         },
@@ -82,7 +82,7 @@ describe('fileExternalDocumentInteractor', () => {
         getCurrentUser: () => {
           return new User({
             name: 'Respondent',
-            role: 'respondent',
+            role: User.ROLES.respondent,
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           });
         },
@@ -123,7 +123,7 @@ describe('fileExternalDocumentInteractor', () => {
         getCurrentUser: () => {
           return {
             name: 'Docketclerk',
-            role: 'docketclerk',
+            role: User.ROLES.docketClerk,
             userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
           };
         },

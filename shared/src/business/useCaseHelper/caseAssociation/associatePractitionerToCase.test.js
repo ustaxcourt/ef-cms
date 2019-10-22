@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const {
   associatePractitionerToCase,
 } = require('./associatePractitionerToCase');
+const { User } = require('../../entities/User');
 
 describe('associatePractitionerToCase', () => {
   let applicationContext;
@@ -18,7 +19,7 @@ describe('associatePractitionerToCase', () => {
 
     const user = {
       name: 'Olivia Jade',
-      role: 'practitioner',
+      role: User.ROLES.practitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
@@ -50,7 +51,7 @@ describe('associatePractitionerToCase', () => {
 
     const user = {
       name: 'Olivia Jade',
-      role: 'practitioner',
+      role: User.ROLES.practitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 

@@ -1,4 +1,5 @@
 const { getWorkItemInteractor } = require('./getWorkItemInteractor');
+const { User } = require('../../entities/User');
 
 describe('getWorkItemInteractor', () => {
   let applicationContext;
@@ -23,7 +24,7 @@ describe('getWorkItemInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },
@@ -48,7 +49,7 @@ describe('getWorkItemInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },
@@ -73,7 +74,7 @@ describe('getWorkItemInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
           userId: 'docketclerk',
         };
       },

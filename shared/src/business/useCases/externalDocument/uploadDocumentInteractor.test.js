@@ -1,4 +1,5 @@
 const { uploadDocumentInteractor } = require('./uploadDocumentInteractor');
+const { User } = require('../../entities/User');
 
 describe('uploadDocumentInteractor', () => {
   let applicationContext;
@@ -24,7 +25,7 @@ describe('uploadDocumentInteractor', () => {
         userId: 'respondent',
       },
     ],
-    role: 'petitioner',
+    role: User.ROLES.petitioner,
     userId: 'taxpayer',
   };
 
@@ -66,7 +67,7 @@ describe('uploadDocumentInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: 'petitionsclerk',
+            role: User.ROLES.petitionsClerk,
             userId: 'petitionsclerk',
           };
         },
@@ -97,7 +98,7 @@ describe('uploadDocumentInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: 'petitionsclerk',
+            role: User.ROLES.petitionsClerk,
             userId: 'petitionsclerk',
           };
         },
@@ -139,7 +140,7 @@ describe('uploadDocumentInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: 'docketclerk',
+            role: User.ROLES.docketClerk,
             userId: 'docketclerk',
           };
         },

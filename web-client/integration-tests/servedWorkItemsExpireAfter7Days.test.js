@@ -1,3 +1,4 @@
+import { User } from '../../shared/src/business/entities/User';
 import {
   getFormattedDocumentQCMyOutbox,
   getFormattedDocumentQCSectionOutbox,
@@ -27,7 +28,7 @@ describe('verify old served work items do not show up in the outbox', () => {
     caseDetail = await uploadPetition(test);
 
     const applicationContext = applicationContextFactory({
-      role: 'petitionsclerk',
+      role: User.ROLES.petitionsClerk,
       section: 'petitions',
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });

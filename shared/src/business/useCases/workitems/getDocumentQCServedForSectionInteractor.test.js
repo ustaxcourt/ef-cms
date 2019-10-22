@@ -2,6 +2,7 @@ const {
   getDocumentQCServedForSectionInteractor,
 } = require('./getDocumentQCServedForSectionInteractor');
 const { MOCK_USERS } = require('../../../test/mockUsers');
+const { User } = require('../../entities/User');
 
 describe('getDocumentQCServedForSectionInteractor', () => {
   let applicationContext;
@@ -24,7 +25,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
@@ -50,7 +51,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
@@ -76,7 +77,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
           userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },

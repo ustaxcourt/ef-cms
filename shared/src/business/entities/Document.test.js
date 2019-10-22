@@ -1,10 +1,11 @@
 const { Document } = require('./Document');
 const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
+const { User } = require('./User');
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
-  role: 'petitioner',
+  role: User.ROLES.petitioner,
   userId: 'taxpayer',
 };
 const caseDetail = {

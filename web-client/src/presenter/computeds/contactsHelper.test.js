@@ -1,7 +1,7 @@
-import { runCompute } from 'cerebral/test';
-
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
+import { User } from '../../../../shared/src/business/entities/User';
 import { contactsHelper } from './contactsHelper';
+import { runCompute } from 'cerebral/test';
 
 describe('contactsHelper', () => {
   it('should validate form view information for party type Conservator and user role petitioner', () => {
@@ -12,7 +12,7 @@ describe('contactsHelper', () => {
         },
         form: { partyType: ContactFactory.PARTY_TYPES.conservator },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -34,7 +34,7 @@ describe('contactsHelper', () => {
         },
         form: { partyType: ContactFactory.PARTY_TYPES.corporation },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -55,7 +55,7 @@ describe('contactsHelper', () => {
         },
         form: { partyType: ContactFactory.PARTY_TYPES.custodian },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -77,7 +77,7 @@ describe('contactsHelper', () => {
         },
         form: { partyType: ContactFactory.PARTY_TYPES.donor },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -99,7 +99,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.estate,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -125,7 +125,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -148,7 +148,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.guardian,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -172,7 +172,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -197,7 +197,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -221,7 +221,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -245,7 +245,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -270,7 +270,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -294,7 +294,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -316,7 +316,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -344,7 +344,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -370,7 +370,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -394,7 +394,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.transferee,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -416,7 +416,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.trust,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -438,7 +438,7 @@ describe('contactsHelper', () => {
         },
         form: { partyType: ContactFactory.PARTY_TYPES.conservator },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -460,7 +460,7 @@ describe('contactsHelper', () => {
         },
         form: { partyType: ContactFactory.PARTY_TYPES.corporation },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -481,7 +481,7 @@ describe('contactsHelper', () => {
         },
         form: { partyType: ContactFactory.PARTY_TYPES.custodian },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -503,7 +503,7 @@ describe('contactsHelper', () => {
         },
         form: { partyType: ContactFactory.PARTY_TYPES.donor },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -525,7 +525,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.estate,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -551,7 +551,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -574,7 +574,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.guardian,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -598,7 +598,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -623,7 +623,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -647,7 +647,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -671,7 +671,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -695,7 +695,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -719,7 +719,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -741,7 +741,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -769,7 +769,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -795,7 +795,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -819,7 +819,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.transferee,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -841,7 +841,7 @@ describe('contactsHelper', () => {
           partyType: ContactFactory.PARTY_TYPES.trust,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });

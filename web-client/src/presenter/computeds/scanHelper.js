@@ -1,10 +1,9 @@
 import { state } from 'cerebral';
 
-export const scanHelper = get => {
+export const scanHelper = (get, applicationContext) => {
   // Master switch for the time being
   const scanFeatureEnabled = true;
 
-  const internalRoles = ['petitionsclerk', 'docketclerk', 'seniorattorney'];
   const user = get(state.user);
   const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);
   const configScriptLoaded = get(state.scanner.configScriptLoaded);
@@ -23,7 +22,11 @@ export const scanHelper = get => {
   return {
     applicationForWaiverOfFilingFeeFileCompleted,
     hasLoadedScanDependencies: initiateScriptLoaded && configScriptLoaded,
-    hasScanFeature: !!(user && user.role && internalRoles.includes(user.role)),
+    hasScanFeature: !!(
+      user &&
+      user.role &&
+      applicationContext.getUtilities().isInternalUser(user.role)
+    ),
     ownershipDisclosureFileCompleted,
     petitionFileCompleted,
     requestForPlaceOfTrialFileCompleted,
