@@ -19,7 +19,7 @@ describe('Update case trial sort tags', () => {
       getCurrentUser: () => {
         return new User({
           name: 'bob',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -73,7 +73,7 @@ describe('Update case trial sort tags', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Suzie Petitionsclerk',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -105,7 +105,7 @@ describe('Update case trial sort tags', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Suzie Petitionsclerk',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },

@@ -1,28 +1,16 @@
 import { state } from 'cerebral';
 
-export const headerHelper = get => {
+export const headerHelper = (get, applicationContext) => {
   const user = get(state.user);
   const isLoggedIn = !!user;
   const userRole = get(state.user.role);
   const currentPage = get(state.currentPage) || '';
   const notifications = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueToDisplay.workQueueIsInternal);
+  const USER_ROLES = get(state.constants.USER_ROLES);
 
-  const isUserInternal = role => {
-    const internalRoles = [
-      'docketclerk',
-      'judge',
-      'petitionsclerk',
-      'seniorattorney',
-    ];
-    return internalRoles.includes(role);
-  };
-  const isUserExternal = role => {
-    const externalRoles = ['petitioner', 'practitioner', 'respondent'];
-    return externalRoles.includes(role);
-  };
   const isOtherUser = role => {
-    const externalRoles = ['petitionsclerk', 'docketclerk'];
+    const externalRoles = [USER_ROLES.petitionsClerk, USER_ROLES.docketClerk];
     return !externalRoles.includes(role);
   };
 
@@ -33,7 +21,11 @@ export const headerHelper = get => {
   const pageIsInterstitial = currentPage == 'Interstitial';
   const pageIsHome =
     isDashboard ||
-    (['docketclerk', 'petitionsclerk', 'seniorattorney'].includes(userRole) &&
+    ([
+      USER_ROLES.docketClerk,
+      USER_ROLES.petitionsClerk,
+      USER_ROLES.seniorAttorney,
+    ].includes(userRole) &&
       isMessages);
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
   const isBlockedCasesReport = currentPage.includes('BlockedCasesReport');
@@ -46,21 +38,26 @@ export const headerHelper = get => {
     pageIsHome,
     pageIsInterstitial,
     pageIsMessages: isMessages && workQueueIsInternal,
-    pageIsMyCases: isDashboard && isUserExternal(userRole),
+    pageIsMyCases:
+      isDashboard && applicationContext.getUtilities().isExternalUser(userRole),
     pageIsReports: isCaseDeadlines || isBlockedCasesReport,
-    pageIsTrialSessions: isTrialSessions && isUserInternal(userRole),
+    pageIsTrialSessions:
+      isTrialSessions &&
+      applicationContext.getUtilities().isInternalUser(userRole),
     showAccountMenu: isLoggedIn,
-    showDocumentQC: isUserInternal(userRole),
-    showHomeIcon: userRole == 'judge',
-    showMessages: isUserInternal(userRole),
+    showDocumentQC: applicationContext.getUtilities().isInternalUser(userRole),
+    showHomeIcon: userRole === USER_ROLES.judge,
+    showMessages: applicationContext.getUtilities().isInternalUser(userRole),
     showMessagesIcon: notifications.myInboxUnreadCount > 0,
-    showMyCases: isUserExternal(userRole),
-    showReports: isUserInternal(userRole),
+    showMyCases: applicationContext.getUtilities().isExternalUser(userRole),
+    showReports: applicationContext.getUtilities().isInternalUser(userRole),
     showSearchInHeader:
       user &&
       userRole &&
-      userRole !== 'practitioner' &&
-      userRole !== 'respondent',
-    showTrialSessions: isUserInternal(userRole),
+      userRole !== USER_ROLES.practitioner &&
+      userRole !== USER_ROLES.respondent,
+    showTrialSessions: applicationContext
+      .getUtilities()
+      .isInternalUser(userRole),
   };
 };

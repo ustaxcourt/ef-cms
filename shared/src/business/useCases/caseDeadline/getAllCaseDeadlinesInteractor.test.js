@@ -39,7 +39,7 @@ describe('getAllCaseDeadlinesInteractor', () => {
       getCurrentUser: () =>
         new User({
           name: 'Test Taxpayer',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
       getPersistenceGateway: () => ({

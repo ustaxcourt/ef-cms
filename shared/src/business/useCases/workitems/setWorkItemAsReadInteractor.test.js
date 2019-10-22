@@ -2,6 +2,7 @@ const {
   setWorkItemAsReadInteractor,
 } = require('./setWorkItemAsReadInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 describe('setWorkItemAsReadInteractor', () => {
   it('unauthorized user tries to invoke this interactor', async () => {
@@ -28,7 +29,7 @@ describe('setWorkItemAsReadInteractor', () => {
     const applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => ({
-        role: 'petitionsclerk',
+        role: User.ROLES.petitionsClerk,
         userId: 'petitionsclerk',
       }),
       getPersistenceGateway: () => {

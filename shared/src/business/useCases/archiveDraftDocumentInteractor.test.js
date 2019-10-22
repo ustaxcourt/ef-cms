@@ -2,6 +2,7 @@ const {
   archiveDraftDocumentInteractor,
 } = require('./archiveDraftDocumentInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { User } = require('../entities/User');
 
 describe('archiveDraftDocumentInteractor', () => {
   let applicationContext;
@@ -9,7 +10,7 @@ describe('archiveDraftDocumentInteractor', () => {
   it('returns an unauthorized error on non petitionsclerk users', async () => {
     applicationContext = {
       getCurrentUser: () => ({
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
       }),
       getPersistenceGateway: () => ({
         updateCase: () => null,
@@ -32,7 +33,7 @@ describe('archiveDraftDocumentInteractor', () => {
     const updateCaseSpy = jest.fn();
     applicationContext = {
       getCurrentUser: () => ({
-        role: 'petitionsclerk',
+        role: User.ROLES.petitionsClerk,
       }),
       getPersistenceGateway: () => ({
         getCaseByCaseId: () => MOCK_CASE,

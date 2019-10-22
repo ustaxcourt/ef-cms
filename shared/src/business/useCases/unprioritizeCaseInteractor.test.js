@@ -1,5 +1,6 @@
 const { unprioritizeCaseInteractor } = require('./unprioritizeCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { User } = require('../entities/User');
 
 describe('unprioritizeCaseInteractor', () => {
   let applicationContext;
@@ -10,7 +11,7 @@ describe('unprioritizeCaseInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },

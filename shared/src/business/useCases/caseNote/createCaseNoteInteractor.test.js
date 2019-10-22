@@ -36,7 +36,7 @@ describe('createCaseNoteInteractor', () => {
       getCurrentUser: () =>
         new User({
           name: 'Judge Armen',
-          role: 'judge',
+          role: User.ROLES.judge,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
       getPersistenceGateway: () => ({

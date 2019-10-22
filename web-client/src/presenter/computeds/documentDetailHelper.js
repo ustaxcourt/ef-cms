@@ -7,6 +7,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   const currentUser = applicationContext.getCurrentUser();
   const userRole = get(state.user.role);
   const caseDetail = get(state.caseDetail);
+  const USER_ROLES = get(state.constants.USER_ROLES);
 
   const SIGNED_STIPULATED_DECISION = 'Stipulated Decision';
 
@@ -33,11 +34,21 @@ export const documentDetailHelper = (get, applicationContext) => {
     );
     formattedDocument.workItems = (allWorkItems || [])
       .filter(items => !items.completedAt)
-      .map(items => formatWorkItem(applicationContext, items));
+      .map(items =>
+        formatWorkItem({
+          USER_ROLES,
+          applicationContext,
+          workItem: items,
+        }),
+      );
     formattedDocument.completedWorkItems = (allWorkItems || [])
       .filter(items => items.completedAt)
       .map(items => {
-        const formatted = formatWorkItem(applicationContext, items);
+        const formatted = formatWorkItem({
+          USER_ROLES,
+          applicationContext,
+          workItem: items,
+        });
         formatted.messages = formatted.messages.filter(
           message => !message.message.includes('Served on IRS'),
         );
@@ -86,12 +97,12 @@ export const documentDetailHelper = (get, applicationContext) => {
 
     showSignDocumentButton =
       !!stipulatedWorkItem &&
-      currentUser.role === 'seniorattorney' &&
+      currentUser.role === USER_ROLES.seniorAttorney &&
       !signedDocument;
 
     showServeDocumentButton =
       document.status !== 'served' &&
-      currentUser.role === 'docketclerk' &&
+      currentUser.role === USER_ROLES.docketClerk &&
       document.documentType === SIGNED_STIPULATED_DECISION;
 
     const { ORDER_TYPES_MAP } = applicationContext.getConstants();
@@ -128,7 +139,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showViewOrdersNeededButton =
     ((document && document.status === 'served') ||
       caseDetail.status === 'Batched for IRS') &&
-    userRole === 'petitionsclerk';
+    userRole === USER_ROLES.petitionsClerk;
 
   return {
     documentEditUrl,

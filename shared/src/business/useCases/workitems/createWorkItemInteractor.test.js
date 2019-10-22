@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const { createWorkItemInteractor } = require('./createWorkItemInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
+const { User } = require('../../entities/User');
 
 describe('createWorkItem', () => {
   let createWorkItemStub;
@@ -16,7 +17,7 @@ describe('createWorkItem', () => {
     environment: { stage: 'local' },
     getCurrentUser: () => ({
       name: 'Tax Payer',
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     }),
     getPersistenceGateway: () => ({
@@ -50,7 +51,7 @@ describe('createWorkItem', () => {
     const applicationContext = createApplicationContext({
       getCurrentUser: () => ({
         name: 'Docketclerk',
-        role: 'docketclerk',
+        role: User.ROLES.docketClerk,
         userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       }),
     });
@@ -95,7 +96,7 @@ describe('createWorkItem', () => {
     const applicationContext = createApplicationContext({
       getCurrentUser: () => ({
         name: 'Docketclerk',
-        role: 'docketclerk',
+        role: User.ROLES.docketClerk,
         userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       }),
     });

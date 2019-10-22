@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const {
   submitPendingCaseAssociationRequestInteractor,
 } = require('./submitPendingCaseAssociationRequestInteractor');
+const { User } = require('../../entities/User');
 
 describe('submitPendingCaseAssociationRequest', () => {
   let applicationContext;
@@ -19,7 +20,7 @@ describe('submitPendingCaseAssociationRequest', () => {
         getCurrentUser: () => {
           return {
             name: 'Olivia Jade',
-            role: 'seniorattorney',
+            role: User.ROLES.seniorAttorney,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
@@ -53,7 +54,7 @@ describe('submitPendingCaseAssociationRequest', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
@@ -61,7 +62,7 @@ describe('submitPendingCaseAssociationRequest', () => {
         associateUserWithCasePending: associateUserWithCasePendingSpy,
         getUserById: () => ({
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         verifyCaseForUser: verifyCaseForUserSpy,
@@ -88,7 +89,7 @@ describe('submitPendingCaseAssociationRequest', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
@@ -96,7 +97,7 @@ describe('submitPendingCaseAssociationRequest', () => {
         associateUserWithCasePending: associateUserWithCasePendingSpy,
         getUserById: () => ({
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         verifyCaseForUser: verifyCaseForUserSpy,
@@ -124,7 +125,7 @@ describe('submitPendingCaseAssociationRequest', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },
@@ -132,7 +133,7 @@ describe('submitPendingCaseAssociationRequest', () => {
         associateUserWithCasePending: associateUserWithCasePendingSpy,
         getUserById: () => ({
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         }),
         verifyCaseForUser: verifyCaseForUserSpy,

@@ -1,6 +1,7 @@
 const {
   getSentMessagesForUserInteractor,
 } = require('./getSentMessagesForUserInteractor');
+const { User } = require('../../entities/User');
 
 describe('getSentMessagesForUserInteractor', () => {
   let applicationContext;
@@ -23,7 +24,7 @@ describe('getSentMessagesForUserInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },
@@ -48,7 +49,7 @@ describe('getSentMessagesForUserInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },
@@ -73,7 +74,7 @@ describe('getSentMessagesForUserInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },

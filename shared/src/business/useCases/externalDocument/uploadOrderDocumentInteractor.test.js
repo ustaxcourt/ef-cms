@@ -2,6 +2,7 @@ const {
   uploadOrderDocumentInteractor,
 } = require('./uploadOrderDocumentInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 describe('uploadOrderDocumentInteractor', () => {
   let applicationContext;
@@ -33,7 +34,7 @@ describe('uploadOrderDocumentInteractor', () => {
     applicationContext = {
       getCurrentUser: () => {
         return {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
           userId: 'admin',
         };
       },

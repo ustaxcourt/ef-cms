@@ -1,21 +1,22 @@
 const {
   deleteCounselFromCaseInteractor,
 } = require('./deleteCounselFromCaseInteractor');
+const { User } = require('../../entities/User');
 
 let applicationContext;
 let updateCaseMock;
 let deleteUserFromCaseMock;
 
 const mockPractitioners = [
-  { role: 'practitioner', userId: '456' },
-  { role: 'practitioner', userId: '789' },
-  { role: 'practitioner', userId: '012' },
+  { role: User.ROLES.practitioner, userId: '456' },
+  { role: User.ROLES.practitioner, userId: '789' },
+  { role: User.ROLES.practitioner, userId: '012' },
 ];
 
 const mockRespondents = [
-  { role: 'respondent', userId: '654' },
-  { role: 'respondent', userId: '987' },
-  { role: 'respondent', userId: '210' },
+  { role: User.ROLES.respondent, userId: '654' },
+  { role: User.ROLES.respondent, userId: '987' },
+  { role: User.ROLES.respondent, userId: '210' },
 ];
 
 describe('deleteCounselFromCaseInteractor', () => {
@@ -25,7 +26,7 @@ describe('deleteCounselFromCaseInteractor', () => {
 
     applicationContext = {
       getCurrentUser: () => ({
-        role: 'docketclerk',
+        role: User.ROLES.docketClerk,
         userId: '001',
       }),
       getPersistenceGateway: () => ({

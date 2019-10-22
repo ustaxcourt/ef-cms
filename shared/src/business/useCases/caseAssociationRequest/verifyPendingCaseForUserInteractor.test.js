@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const {
   verifyPendingCaseForUserInteractor,
 } = require('./verifyPendingCaseForUserInteractor');
+const { User } = require('../../entities/User');
 
 describe('verifyPendingCaseForUser', () => {
   let applicationContext;
@@ -19,7 +20,7 @@ describe('verifyPendingCaseForUser', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },

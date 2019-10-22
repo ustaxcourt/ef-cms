@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const { associateRespondentToCase } = require('./associateRespondentToCase');
+const { User } = require('../../entities/User');
 
 describe('associateRespondentToCase', () => {
   let applicationContext;
@@ -16,7 +17,7 @@ describe('associateRespondentToCase', () => {
 
     const user = {
       name: 'Olivia Jade',
-      role: 'respondent',
+      role: User.ROLES.respondent,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
@@ -46,7 +47,7 @@ describe('associateRespondentToCase', () => {
 
     const user = {
       name: 'Olivia Jade',
-      role: 'respondent',
+      role: User.ROLES.respondent,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
