@@ -313,6 +313,18 @@ const router = {
     );
 
     route(
+      '/case-detail/*/confirmation',
+      checkLoggedIn(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Case Confirmation`,
+        );
+        app.getSequence('gotoPrintableCaseConfirmationSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/request-access',
       checkLoggedIn(docketNumber => {
         setPageTitle(
