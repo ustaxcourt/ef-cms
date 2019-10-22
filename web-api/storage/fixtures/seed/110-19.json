@@ -24,6 +24,7 @@
             "section": "petitions",
             "workItemId": "2611344f-f7bf-4f47-8ba0-60c70cb25446",
             "isInternal": false,
+            "isQC": true,
             "isInitializeCase": true,
             "assigneeId": null,
             "sentBy": "taxpayer",
@@ -40,7 +41,7 @@
                 "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
               }
             ],
-            "docketNumber": "109-19",
+            "docketNumber": "110-19",
             "updatedAt": "2019-03-01T21:40:46.415Z"
           }
         ],
@@ -61,7 +62,7 @@
       {
         "caseId": "2fb2da8d-4328-4a20-a5d7-a76637e1dc01",
         "createdAt": "2019-10-07T14:29:30.288Z",
-        "docketNumber": "109-19",
+        "docketNumber": "110-19",
         "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
         "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
         "documentType": "Order of Dismissal for Lack of Jurisdiction",
@@ -70,7 +71,7 @@
           "documentType": "Order of Dismissal for Lack of Jurisdiction",
           "eventCode": "ODJ",
           "richText": "<p>Testing</p>",
-          "docketNumber": "109-19",
+          "docketNumber": "110-19",
           "caseId": "2fb2da8d-4328-4a20-a5d7-a76637e1dc01"
         },
         "signedAt": "2019-10-07T14:29:30.288Z",
@@ -139,5 +140,9 @@
     ],
     "docketNumber": "110-19",
     "status": "New"
+  },
+  {
+    "sk": "2fb2da8d-4328-4a20-a5d7-a76637e1dc01",
+    "pk": "110-19|case"
   }
 ]
