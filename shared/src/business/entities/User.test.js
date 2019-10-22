@@ -16,7 +16,7 @@ describe('User entity', () => {
       },
       firstName: 'firstName',
       lastName: 'lastName',
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       userId: 'taxpayer',
     });
     expect(user.isValid()).toBeTruthy();
@@ -36,7 +36,7 @@ describe('User entity', () => {
       },
       firstName: 'firstName',
       lastName: 'lastName',
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       userId: 'taxpayer',
     });
     expect(user.isValid()).toBeTruthy();
@@ -54,7 +54,7 @@ describe('User entity', () => {
       },
       firstName: 'firstName',
       lastName: 'lastName',
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       userId: 'taxpayer',
     });
     expect(user.isValid()).toBeTruthy();
@@ -64,8 +64,8 @@ describe('User entity', () => {
     const user = new User({
       firstName: 'firstName',
       lastName: 'lastName',
-      role: 'Tester',
-      userId: 'petitioner',
+      role: User.ROLES.petitioner,
+      userId: 'Tester',
     });
     expect(user.isValid()).toBeTruthy();
   });
@@ -75,16 +75,16 @@ describe('User entity', () => {
       barNumber: 'gg',
       firstName: 'firstName',
       lastName: 'bob',
-      role: 'Tester',
+      role: User.ROLES.respondent,
       token: 'abc',
-      userId: 'respondent',
+      userId: 'Tester',
     });
     expect(user.isValid()).toBeTruthy();
   });
 
   it('Creates a valid respondent user', () => {
     const user = new User({
-      role: 'respondent',
+      role: User.ROLES.respondent,
       userId: 'respondent',
     });
     expect(user.isValid()).toBeTruthy();
@@ -97,28 +97,33 @@ describe('User entity', () => {
       role: undefined,
       userId: 'bobbymcgee',
     });
-    expect(user.role).toBe('petitioner');
+    expect(user.role).toBe(User.ROLES.petitioner);
   });
 
   describe('isExternalUser', () => {
-    it('should return true when the user has the role of petitioner', () => {
-      const u = new User({ role: 'petitioner' });
-      expect(u.isExternalUser()).toEqual(true);
+    it('should return true when the user role is petitioner', () => {
+      expect(User.isExternalUser(User.ROLES.petitioner)).toEqual(true);
     });
-    it('should return true when the user has the role of practitioner', () => {
-      const u = new User({ role: 'practitioner' });
-      expect(u.isExternalUser()).toEqual(true);
+    it('should return true when the user role is practitioner', () => {
+      expect(User.isExternalUser(User.ROLES.practitioner)).toEqual(true);
     });
-    it('should return true when the user has the role of respondent', () => {
-      const u = new User({ role: 'respondent' });
-      expect(u.isExternalUser()).toEqual(true);
+    it('should return true when the user role is respondent', () => {
+      expect(User.isExternalUser(User.ROLES.respondent)).toEqual(true);
     });
   });
 
   describe('isInternalUser', () => {
-    it('should return true when the user has the role of docketclerk', () => {
-      const u = new User({ role: 'docketclerk' });
-      expect(u.isInternalUser()).toEqual(true);
+    it('should return true when the user role is docketclerk', () => {
+      expect(User.isInternalUser(User.ROLES.docketClerk)).toEqual(true);
+    });
+    it('should return true when the user role is petitionsclerk', () => {
+      expect(User.isInternalUser(User.ROLES.petitionsClerk)).toEqual(true);
+    });
+    it('should return true when the user role is judge', () => {
+      expect(User.isInternalUser(User.ROLES.judge)).toEqual(true);
+    });
+    it('should return true when the user role is seniorattorney', () => {
+      expect(User.isInternalUser(User.ROLES.seniorAttorney)).toEqual(true);
     });
   });
 });
