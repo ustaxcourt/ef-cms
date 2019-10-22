@@ -45,7 +45,9 @@ exports.generateCaseConfirmationPdfInteractor = async ({
     let page = await browser.newPage();
 
     await page.setContent(
-      ' <div style="font-size: 10px; font-family: serif; width: 100%; margin: 20px 62px 20px 62px;"></div>',
+      ' <div style="font-size: 10px; font-family: serif; width: 100%; margin: 20px 62px 20px 62px;">' +
+        JSON.stringify(caseToUpdate, null, 2) +
+        '</div>',
     );
 
     const headerTemplate = `
