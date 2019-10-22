@@ -29,21 +29,31 @@ export const validateCaseAssociationRequestAction = ({
     return path.success();
   } else {
     const errorDisplayOrder = [
+      'supportingDocument',
+      'supportingDocumentFreeText',
+      'supportingDocumentFile',
       'documentType',
       'primaryDocumentFile',
       'certificateOfService',
       'certificateOfServiceDate',
-      'exhibits',
       'attachments',
       'objections',
       'hasSupportingDocuments',
+      'supportingDocuments',
       'representingPrimary',
       'representingSecondary',
     ];
+
+    const errorDisplayMap = {
+      secondarySupportingDocuments: 'Secondary Supporting Document',
+      supportingDocuments: 'Supporting Document',
+    };
+
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
+      errorDisplayMap,
       errorDisplayOrder,
       errors,
     });

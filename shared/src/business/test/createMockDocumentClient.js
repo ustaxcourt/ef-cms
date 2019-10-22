@@ -1,10 +1,12 @@
+const { User } = require('../entities/User');
+
 const createMockDocumentClient = () => {
   const data = {
     ['1805d1ab-18d0-43ec-bafb-654e83405416 1805d1ab-18d0-43ec-bafb-654e83405416']: {
       email: 'docketclerk',
       name: 'Test Docketclerk',
       pk: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      role: 'docketclerk',
+      role: User.ROLES.docketClerk,
       section: 'docket',
       sk: '1805d1ab-18d0-43ec-bafb-654e83405416',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -13,7 +15,7 @@ const createMockDocumentClient = () => {
       email: 'pettitionsclerk',
       name: 'Test Petitionsclerk',
       pk: '3805d1ab-18d0-43ec-bafb-654e83405416',
-      role: 'petitionsclerk',
+      role: User.ROLES.petitionsClerk,
       section: 'petitions',
       sk: '3805d1ab-18d0-43ec-bafb-654e83405416',
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -22,7 +24,7 @@ const createMockDocumentClient = () => {
       email: 'taxpayer',
       name: 'Test Petitioner',
       pk: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       sk: '7805d1ab-18d0-43ec-bafb-654e83405416',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     },
@@ -30,7 +32,7 @@ const createMockDocumentClient = () => {
       email: 'pettitionsclerk',
       name: 'Alex Petitionsclerk',
       pk: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-      role: 'petitionsclerk',
+      role: User.ROLES.petitionsClerk,
       section: 'petitions',
       sk: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
