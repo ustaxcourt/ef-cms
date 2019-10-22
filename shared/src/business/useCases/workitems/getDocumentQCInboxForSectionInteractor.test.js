@@ -1,6 +1,7 @@
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('./getDocumentQCInboxForSectionInteractor');
+const { User } = require('../../entities/User');
 
 describe('getDocumentQCInboxForSectionInteractor', () => {
   let applicationContext;
@@ -23,7 +24,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },

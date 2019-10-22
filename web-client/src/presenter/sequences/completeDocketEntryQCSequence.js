@@ -13,9 +13,12 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const completeDocketEntryQCSequence = [
+  startShowValidationAction,
   computeFormDateAction,
   computeSecondaryFormDateAction,
   computeCertificateOfServiceFormDateAction,
@@ -28,6 +31,7 @@ export const completeDocketEntryQCSequence = [
       setValidationAlertErrorsAction,
     ],
     success: [
+      stopShowValidationAction,
       setCurrentPageAction('Interstitial'),
       generateTitleAction,
       completeDocketEntryQCAction,

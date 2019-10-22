@@ -1,6 +1,7 @@
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');
 const { getCasesByUser } = require('./getCasesByUser');
+const { User } = require('../../../business/entities/User');
 
 const applicationContext = {
   environment: {
@@ -11,7 +12,7 @@ const applicationContext = {
 };
 
 const user = {
-  role: 'petitioner',
+  role: User.ROLES.petitioner,
   userId: 'taxpayer',
 };
 

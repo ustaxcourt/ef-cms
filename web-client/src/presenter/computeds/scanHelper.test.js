@@ -1,12 +1,22 @@
+import { User } from '../../../../shared/src/business/entities/User';
 import { runCompute } from 'cerebral/test';
-import { scanHelper } from './scanHelper';
+import { scanHelper as scanHelperComputed } from './scanHelper';
+import { withAppContextDecorator } from '../../../src/withAppContext';
+
+const scanHelper = withAppContextDecorator(scanHelperComputed, {
+  getUtilities: () => {
+    return {
+      isInternalUser: User.isInternalUser,
+    };
+  },
+});
 
 describe('scanHelper', () => {
   it('sets hasScanFeature to `true` for `petitionsclerk` user roles', () => {
     const result = runCompute(scanHelper, {
       state: {
         user: {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
         },
       },
     });
@@ -17,7 +27,7 @@ describe('scanHelper', () => {
     const result = runCompute(scanHelper, {
       state: {
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
       },
     });
@@ -28,7 +38,7 @@ describe('scanHelper', () => {
     const result = runCompute(scanHelper, {
       state: {
         user: {
-          role: 'seniorattorney',
+          role: User.ROLES.seniorAttorney,
         },
       },
     });
@@ -39,7 +49,7 @@ describe('scanHelper', () => {
     const result = runCompute(scanHelper, {
       state: {
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -50,7 +60,7 @@ describe('scanHelper', () => {
     const result = runCompute(scanHelper, {
       state: {
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -61,7 +71,7 @@ describe('scanHelper', () => {
     const result = runCompute(scanHelper, {
       state: {
         user: {
-          role: 'respondent',
+          role: User.ROLES.respondent,
         },
       },
     });

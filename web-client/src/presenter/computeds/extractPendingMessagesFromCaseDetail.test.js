@@ -1,3 +1,4 @@
+import { User } from '../../../../shared/src/business/entities/User';
 import { extractedPendingMessagesFromCaseDetail as extractPendingMessagesFromCaseDetailComputed } from './extractPendingMessagesFromCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -13,7 +14,7 @@ const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractPendingMessagesFromCaseDetailComputed,
   {
     getCurrentUser: () => ({
-      role: 'petitionsclerk',
+      role: User.ROLES.petitionsClerk,
     }),
     getUtilities: () => {
       return {
@@ -26,10 +27,15 @@ const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   },
 );
 
+const baseState = {
+  constants: { USER_ROLES: User.ROLES },
+};
+
 describe('extractPendingMessagesFromCaseDetail', () => {
   it('should not fail if work items is not defined', () => {
     const result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
+        ...baseState,
         caseDetail: {
           documents: [{}],
         },
@@ -41,6 +47,7 @@ describe('extractPendingMessagesFromCaseDetail', () => {
   it('should not fail if documents is not defined', () => {
     const result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
+        ...baseState,
         caseDetail: {},
       },
     });
@@ -50,6 +57,7 @@ describe('extractPendingMessagesFromCaseDetail', () => {
   it('sorts the workQueue by the latest currentMessage for each work item', () => {
     const result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
+        ...baseState,
         caseDetail: {
           documents: [
             {
@@ -132,6 +140,7 @@ describe('extractPendingMessagesFromCaseDetail', () => {
   it('should filter out the batched for IRS messages', () => {
     const result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
+        ...baseState,
         caseDetail: {
           documents: [
             {

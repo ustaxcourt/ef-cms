@@ -2,12 +2,13 @@ const {
   UnauthorizedError,
 } = require('../../../../../shared/src/errors/errors');
 const { createUserInteractor } = require('./createUserInteractor');
+const { User } = require('../../entities/User');
 
 describe('create user', () => {
   it('creates the user', async () => {
     const mockUser = {
       name: 'Test PetitionsClerk',
-      role: 'petitions',
+      role: User.ROLES.petitionsClerk,
       userId: 'petitionsclerk1@example.com',
     };
     const applicationContext = {
@@ -35,14 +36,14 @@ describe('create user', () => {
   it('throws unauthorized for any user without an "admin" role', async () => {
     const mockUser = {
       name: 'Test Petitioner',
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       userId: 'petitioner1@example.com',
     };
     const applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'admin',
         };
       },

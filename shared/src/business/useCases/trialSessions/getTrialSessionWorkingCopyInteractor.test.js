@@ -3,6 +3,7 @@ const {
 } = require('./getTrialSessionWorkingCopyInteractor');
 const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 const MOCK_WORKING_COPY = {
   sort: 'practitioner',
@@ -42,7 +43,7 @@ describe('Get trial session working copy', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'judge',
+          role: User.ROLES.judge,
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
@@ -72,7 +73,7 @@ describe('Get trial session working copy', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'judge',
+          role: User.ROLES.judge,
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },

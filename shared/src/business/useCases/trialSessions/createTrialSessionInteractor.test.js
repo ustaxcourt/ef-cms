@@ -20,7 +20,7 @@ describe('createTrialSessionInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'petitioner',
         };
       },
@@ -42,7 +42,7 @@ describe('createTrialSessionInteractor', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Docket Clerk',
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -73,7 +73,7 @@ describe('createTrialSessionInteractor', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Docket Clerk',
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -102,7 +102,7 @@ describe('createTrialSessionInteractor', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Docket Clerk',
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -135,7 +135,7 @@ describe('createTrialSessionInteractor', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Docket Clerk',
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -161,7 +161,7 @@ describe('createTrialSessionInteractor', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Docket Clerk',
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -187,7 +187,7 @@ describe('createTrialSessionInteractor', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Docket Clerk',
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },

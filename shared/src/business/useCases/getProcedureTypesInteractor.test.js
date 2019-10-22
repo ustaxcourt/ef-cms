@@ -2,6 +2,7 @@ const {
   getProcedureTypesInteractor,
 } = require('./getProcedureTypesInteractor');
 const { Case } = require('../entities/cases/Case');
+const { User } = require('../entities/User');
 
 const validateProcedureTypes = procedureTypes => {
   procedureTypes.forEach(procedureType => {
@@ -17,7 +18,7 @@ describe('Get case procedure types', () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },
