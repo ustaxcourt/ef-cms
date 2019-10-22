@@ -211,7 +211,30 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/108-19&info=remove-case-from-session-modal',
   },
-
+  {
+    actions: [
+      'wait for #tab-case-info to be visible',
+      'click element #tab-case-info',
+      'wait for .high-priority-btn to be visible',
+      'click element .high-priority-btn',
+      'wait for #prioritize-case-modal to be visible',
+    ],
+    notes: 'opens the prioritize case modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19&info=prioritize-case-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-info to be visible',
+      'click element #tab-case-info',
+      'wait for #remove-high-priority-btn to be visible',
+      'click element #remove-high-priority-btn',
+      'wait for #unprioritize-modal to be visible',
+    ],
+    notes: 'opens the unprioritize case modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/110-19&info=unprioritize-case-modal',
+  },
   {
     actions: [
       'wait for #tab-case-info to be visible',
@@ -225,7 +248,7 @@ module.exports = [
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19&info=add-case-to-session-modal',
   },
 
-  //this url probably needs to be moved to calendaring when those users are created
+  // this url probably needs to be moved to calendaring when those users are created
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=non-calendared-case',
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/reports/case-deadlines',
 ];
