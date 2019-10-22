@@ -487,5 +487,173 @@
     "address1": "3202 Elk Avenue",
     "address2": "Hanover, MI 49241",
     "phone": "517-563-1536"
+  },
+
+  {
+    "pk": "admissions|user",
+    "sk": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f"
+  },
+  {
+    "role": "admissionsclerk",
+    "sk": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
+    "name": "Test Admissions Clerk",
+    "section": "admissions",
+    "pk": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
+    "userId": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
+    "email": "admissionsclerk"
+  },
+
+  {
+    "pk": "calendar|user",
+    "sk": "106249e9-ded0-4baa-9a35-c0073712c3d1"
+  },
+  {
+    "role": "calendarclerk",
+    "sk": "106249e9-ded0-4baa-9a35-c0073712c3d1",
+    "name": "Test Calendar Clerk",
+    "section": "calendar",
+    "pk": "106249e9-ded0-4baa-9a35-c0073712c3d1",
+    "userId": "106249e9-ded0-4baa-9a35-c0073712c3d1",
+    "email": "calendarclerk"
+  },
+
+  {
+    "pk": "clerkofcourt|user",
+    "sk": "23dd8806-c0c7-4265-81f0-5f264ef78248"
+  },
+  {
+    "role": "clerkofcourt",
+    "sk": "23dd8806-c0c7-4265-81f0-5f264ef78248",
+    "name": "Test Clerk of Court",
+    "section": "clerkofcourt",
+    "pk": "23dd8806-c0c7-4265-81f0-5f264ef78248",
+    "userId": "23dd8806-c0c7-4265-81f0-5f264ef78248",
+    "email": "clerkofcourt"
+  },
+
+  {
+    "pk": "trialClerks|user",
+    "sk": "f0a1e52a-876f-4c03-853c-f66e407e5a1e"
+  },
+  {
+    "role": "trialclerk",
+    "sk": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
+    "name": "Test Trial Clerk",
+    "section": "trialClerks",
+    "pk": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
+    "userId": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
+    "email": "trialclerk"
+  },
+
+  {
+    "pk": "armensChambers|user",
+    "sk": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5"
+  },
+  {
+    "role": "chambers",
+    "sk": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
+    "name": "Test Armen's Chambers",
+    "section": "armensChambers",
+    "pk": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
+    "userId": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
+    "email": "armensChambers"
+  },
+
+  {
+    "pk": "ashfordsChambers|user",
+    "sk": "817b48c5-d4e5-4544-9e11-9ba0102918f4"
+  },
+  {
+    "role": "chambers",
+    "sk": "817b48c5-d4e5-4544-9e11-9ba0102918f4",
+    "name": "Test Ashford's Chambers",
+    "section": "ashfordsChambers",
+    "pk": "817b48c5-d4e5-4544-9e11-9ba0102918f4",
+    "userId": "817b48c5-d4e5-4544-9e11-9ba0102918f4",
+    "email": "ashfordsChambers"
+  },
+
+  {
+    "pk": "buchsChambers|user",
+    "sk": "49421c68-0c09-4b4b-b32c-a535279be8d0"
+  },
+  {
+    "role": "chambers",
+    "sk": "49421c68-0c09-4b4b-b32c-a535279be8d0",
+    "name": "Test Buch's Chambers",
+    "section": "buchsChambers",
+    "pk": "49421c68-0c09-4b4b-b32c-a535279be8d0",
+    "userId": "49421c68-0c09-4b4b-b32c-a535279be8d0",
+    "email": "buchsChambers"
+  },
+
+  {
+    "pk": "carluzzosChambers|user",
+    "sk": "8c0902ab-d156-4cca-b80d-43f595aa5ab0"
+  },
+  {
+    "role": "chambers",
+    "sk": "8c0902ab-d156-4cca-b80d-43f595aa5ab0",
+    "name": "Test Carluzzo's Chambers",
+    "section": "carluzzosChambers",
+    "pk": "8c0902ab-d156-4cca-b80d-43f595aa5ab0",
+    "userId": "8c0902ab-d156-4cca-b80d-43f595aa5ab0",
+    "email": "carluzzosChambers"
+  },
+
+  {
+    "pk": "cohensChambers|user",
+    "sk": "0bd3bc49-4e46-4caa-adeb-4960c56e17c8"
+  },
+  {
+    "role": "chambers",
+    "sk": "0bd3bc49-4e46-4caa-adeb-4960c56e17c8",
+    "name": "Test Cohen's Chambers",
+    "section": "cohensChambers",
+    "pk": "0bd3bc49-4e46-4caa-adeb-4960c56e17c8",
+    "userId": "0bd3bc49-4e46-4caa-adeb-4960c56e17c8",
+    "email": "cohensChambers"
+  },
+
+  {
+    "pk": "gustafsonsChambers|user",
+    "sk": "3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2"
+  },
+  {
+    "role": "chambers",
+    "sk": "3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2",
+    "name": "Test Gustafson's Chambers",
+    "section": "gustafsonsChambers",
+    "pk": "3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2",
+    "userId": "3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2",
+    "email": "gustafsonsChambers"
+  },
+
+  {
+    "pk": "pughsChambers|user",
+    "sk": "9fbae83a-a55b-4132-96df-e04a8ee675e3"
+  },
+  {
+    "role": "chambers",
+    "sk": "9fbae83a-a55b-4132-96df-e04a8ee675e3",
+    "name": "Test Pugh's Chambers",
+    "section": "pughsChambers",
+    "pk": "9fbae83a-a55b-4132-96df-e04a8ee675e3",
+    "userId": "9fbae83a-a55b-4132-96df-e04a8ee675e3",
+    "email": "pughsChambers"
+  },
+
+  {
+    "pk": "urdasChambers|user",
+    "sk": "44f02385-e4c6-49f9-a554-ecf93531d8a3"
+  },
+  {
+    "role": "chambers",
+    "sk": "44f02385-e4c6-49f9-a554-ecf93531d8a3",
+    "name": "Test Urda's Chambers",
+    "section": "urdasChambers",
+    "pk": "44f02385-e4c6-49f9-a554-ecf93531d8a3",
+    "userId": "44f02385-e4c6-49f9-a554-ecf93531d8a3",
+    "email": "urdasChambers"
   }
 ]
