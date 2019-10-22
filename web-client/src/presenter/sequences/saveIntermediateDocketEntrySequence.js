@@ -6,7 +6,6 @@ import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeS
 import { saveIntermediateDocketEntryAction } from '../actions/EditDocketRecord/saveIntermediateDocketEntryAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
@@ -15,7 +14,6 @@ export const saveIntermediateDocketEntrySequence = [
   computeSecondaryFormDateAction,
   computeCertificateOfServiceFormDateAction,
   computeDateReceivedAction,
-  startShowValidationAction,
   shouldValidateAction,
   {
     ignore: [],
