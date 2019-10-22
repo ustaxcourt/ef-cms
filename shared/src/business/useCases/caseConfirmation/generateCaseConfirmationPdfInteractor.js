@@ -98,6 +98,7 @@ exports.generateCaseConfirmationPdfInteractor = async ({
     const params = {
       Body: result,
       Bucket: documentsBucket,
+      'Content-Type': 'application/pdf',
       Key: documentId,
     };
 
