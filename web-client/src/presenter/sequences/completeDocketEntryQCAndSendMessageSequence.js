@@ -5,8 +5,6 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
-import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -31,6 +29,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
     success: [
       stopShowValidationAction,
       setWaitingForResponseAction,
+      completeDocketEntryQCAction,
       createWorkItemAction,
       {
         success: [
