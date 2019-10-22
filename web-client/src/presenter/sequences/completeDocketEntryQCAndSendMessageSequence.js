@@ -31,9 +31,6 @@ export const completeDocketEntryQCAndSendMessageSequence = [
     success: [
       stopShowValidationAction,
       setWaitingForResponseAction,
-      computeDateReceivedAction,
-      computeCertificateOfServiceFormDateAction,
-      completeDocketEntryQCAction,
       createWorkItemAction,
       {
         success: [
