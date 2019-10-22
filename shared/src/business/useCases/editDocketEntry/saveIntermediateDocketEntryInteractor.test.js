@@ -57,7 +57,7 @@ describe('saveIntermediateDocketEntryInteractor', () => {
         getCurrentUser: () => {
           return {
             name: 'Olivia Jade',
-            role: User.ROLES.seniorAttorney,
+            role: User.ROLES.adc,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
@@ -67,7 +67,7 @@ describe('saveIntermediateDocketEntryInteractor', () => {
           getCaseByCaseId: async () => caseRecord,
           getUserById: async () => ({
             name: 'Olivia Jade',
-            role: User.ROLES.seniorAttorney,
+            role: User.ROLES.adc,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           }),
           saveWorkItemForNonPaper: async () => caseRecord,

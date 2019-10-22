@@ -45,7 +45,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       USER_ROLES.docketClerk,
       USER_ROLES.judge,
       USER_ROLES.petitionsClerk,
-      USER_ROLES.seniorAttorney,
+      USER_ROLES.adc,
     ].includes(userRole);
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;

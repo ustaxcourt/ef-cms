@@ -405,7 +405,7 @@ describe('formatted work queue computed', () => {
   });
 
   it('should filter out completed work items with Served on IRS messages', () => {
-    role = User.ROLES.seniorAttorney;
+    role = User.ROLES.adc;
 
     const result = runCompute(documentDetailHelper, {
       state: {

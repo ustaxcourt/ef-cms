@@ -28,6 +28,25 @@ exports.PRIORITIZE_CASE = 'PRIORITIZE_CASE';
 
 // TODO: review all these for accuracy!
 const AUTHORIZATION_MAP = {
+  adc: [
+    exports.ASSOCIATE_USER_WITH_CASE,
+    exports.CASE_METADATA,
+    exports.CREATE_COURT_ISSUED_ORDER,
+    exports.UPLOAD_DOCUMENT,
+    exports.GET_CASE,
+    exports.VIEW_DOCUMENTS,
+    exports.GET_CASES_BY_DOCUMENT_ID,
+    exports.GET_READ_MESSAGES,
+    exports.EDIT_COURT_ISSUED_ORDER,
+    exports.GET_USERS_IN_SECTION,
+    exports.TRIAL_SESSIONS,
+    exports.UPDATE_CASE,
+    exports.WORKITEM,
+    exports.ARCHIVE_DOCUMENT,
+    exports.BLOCK_CASE,
+    exports.ADD_CASE_TO_TRIAL_SESSION,
+    exports.PRIORITIZE_CASE,
+  ],
   admin: [exports.CREATE_USER],
   docketclerk: [
     exports.VIEW_DOCUMENTS,
@@ -124,25 +143,6 @@ const AUTHORIZATION_MAP = {
     exports.VIEW_DOCUMENTS,
     exports.UPLOAD_DOCUMENT,
     exports.UPDATE_CONTACT_INFO,
-  ],
-  seniorattorney: [
-    exports.ASSOCIATE_USER_WITH_CASE,
-    exports.CASE_METADATA,
-    exports.CREATE_COURT_ISSUED_ORDER,
-    exports.UPLOAD_DOCUMENT,
-    exports.GET_CASE,
-    exports.VIEW_DOCUMENTS,
-    exports.GET_CASES_BY_DOCUMENT_ID,
-    exports.GET_READ_MESSAGES,
-    exports.EDIT_COURT_ISSUED_ORDER,
-    exports.GET_USERS_IN_SECTION,
-    exports.TRIAL_SESSIONS,
-    exports.UPDATE_CASE,
-    exports.WORKITEM,
-    exports.ARCHIVE_DOCUMENT,
-    exports.BLOCK_CASE,
-    exports.ADD_CASE_TO_TRIAL_SESSION,
-    exports.PRIORITIZE_CASE,
   ],
 };
 
