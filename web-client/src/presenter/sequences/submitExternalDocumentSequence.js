@@ -1,5 +1,4 @@
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
-import { fileExternalDocumentAction } from '../actions/FileDocument/fileExternalDocumentAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
 import { getPrintableFilingReceiptSequence } from './getPrintableFilingReceiptSequence';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -8,19 +7,22 @@ import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatus
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { submitRespondentCaseAssociationRequestAction } from '../actions/FileDocument/submitRespondentCaseAssociationRequestAction';
+import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 
 export const submitExternalDocumentSequence = [
   openFileUploadStatusModalAction,
-  fileExternalDocumentAction,
+  uploadExternalDocumentsAction,
   {
     error: [openFileUploadErrorModal],
     success: [
+      submitRespondentCaseAssociationRequestAction,
       setCaseAction,
+      closeFileUploadStatusModalAction,
       ...getPrintableFilingReceiptSequence,
       getFileExternalDocumentAlertSuccessAction,
-      closeFileUploadStatusModalAction,
-      setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
+      setSaveAlertsForNavigationAction,
       navigateToCaseDetailAction,
     ],
   },

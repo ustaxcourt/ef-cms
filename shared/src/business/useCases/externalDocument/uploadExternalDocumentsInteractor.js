@@ -1,5 +1,4 @@
 const {
-  CREATE_COURT_ISSUED_ORDER,
   FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
@@ -8,42 +7,78 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.uploadExternalDocumentsInteractor = async ({
   applicationContext,
   documentFiles,
-  onUploadProgresses,
+  documentMetadata,
+  progressFunctions,
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (
-    !(
-      isAuthorized(user, FILE_EXTERNAL_DOCUMENT) ||
-      isAuthorized(user, CREATE_COURT_ISSUED_ORDER)
-    )
-  ) {
+  if (!isAuthorized(user, FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const uploadedDocumentPromises = [];
+
   /**
-   * produces a promise even if document is not defined
+   * uploads a document and then immediately processes it to scan for viruses,
+   * validate the PDF content, and sanitize the document.
    *
-   * @param {object} document the document to be uploaded
-   * @param {number} idx the index of the document and progress function
-   *
-   * @returns {Promise<number|undefined>} resolving to undefined if no document, otherwise the uploaded documentId
+   * @param {string} documentLabel the string identifying which documentFile and progressFunction
+   * @returns {Promise<string>} the documentId returned from a successful upload
    */
-  const uploadDocument = (document, idx) => {
-    if (!document) {
-      return Promise.resolve(undefined);
-    }
-    return applicationContext.getPersistenceGateway().uploadDocument({
+  const uploadDocumentAndMakeSafe = async documentLabel => {
+    const documentId = await applicationContext
+      .getPersistenceGateway()
+      .uploadDocument({
+        applicationContext,
+        document: documentFiles[documentLabel],
+        onUploadProgress: progressFunctions[documentLabel],
+      });
+    await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
-      document,
-      onUploadProgress: onUploadProgresses[idx],
+      documentId,
     });
+    await applicationContext.getUseCases().validatePdfInteractor({
+      applicationContext,
+      documentId,
+    });
+    await applicationContext.getUseCases().sanitizePdfInteractor({
+      applicationContext,
+      documentId,
+    });
+    return documentId;
   };
 
-  documentFiles = documentFiles || [];
+  uploadedDocumentPromises.push(uploadDocumentAndMakeSafe('primary'));
 
-  // will produce a possibly sparse array
-  const documentIds = await Promise.all(documentFiles.map(uploadDocument));
+  if (documentFiles.secondary) {
+    uploadedDocumentPromises.push(uploadDocumentAndMakeSafe('secondary'));
+  }
 
-  return documentIds;
+  if (documentMetadata.hasSupportingDocuments) {
+    for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
+      uploadedDocumentPromises.push(
+        uploadDocumentAndMakeSafe(`primarySupporting${i}`),
+      );
+    }
+  }
+
+  if (documentMetadata.hasSecondarySupportingDocuments) {
+    for (
+      let i = 0;
+      i < documentMetadata.secondarySupportingDocuments.length;
+      i++
+    ) {
+      uploadedDocumentPromises.push(
+        uploadDocumentAndMakeSafe(`secondarySupporting${i}`),
+      );
+    }
+  }
+
+  const documentIds = await Promise.all(uploadedDocumentPromises);
+
+  return await applicationContext.getUseCases().fileExternalDocumentInteractor({
+    applicationContext,
+    documentIds,
+    documentMetadata,
+  });
 };

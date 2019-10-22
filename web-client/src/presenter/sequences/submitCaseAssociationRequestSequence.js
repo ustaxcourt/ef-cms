@@ -6,12 +6,14 @@ import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setPractitionerOnFormAction } from '../actions/FileDocument/setPractitionerOnFormAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { submitCaseAssociationRequestAction } from '../actions/FileDocument/submitCaseAssociationRequestAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 
 export const submitCaseAssociationRequestSequence = [
   openFileUploadStatusModalAction,
+  setPractitionerOnFormAction,
   uploadExternalDocumentsAction,
   {
     error: [openFileUploadErrorModal],

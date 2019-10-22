@@ -7,6 +7,6 @@
  * @returns {object} the results of the executed path
  */
 export const shouldNavigateToConfirmationAction = ({ path, props }) => {
-  if (!props.navigateToConfirmation) return path.ignore();
-  return path.proceed();
+  if (props.navigateToConfirmation) return path.proceed();
+  return path.ignore();
 };
