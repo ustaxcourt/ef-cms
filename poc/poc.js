@@ -1,10 +1,15 @@
 const pug = require('pug');
+const sass = require('node-sass');
+
+const { css } = sass.renderSync({ file: './poc.scss' });
+
 const fs = require('fs');
 
 const data = {
   address1: '1889 Trails End Ct.',
   address2: 'Apt 42',
   city: 'Beverly Hills',
+  css,
   docketNumber: '101-19',
   initialTitle:
     'Brett Osborne, Petitioner v. Commissioner of Internal Revenue, Respondent',
