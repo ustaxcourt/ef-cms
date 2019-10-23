@@ -1,8 +1,8 @@
+import { User } from '../../../../shared/src/business/entities/User';
 import { getUserRoleAction } from './getUserRoleAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
-import { User } from '../../../../shared/src/business/entities/User';
 
 let petitionerStub;
 let practitionerStub;
@@ -30,13 +30,13 @@ describe('getUserRoleAction', () => {
     otherInternalUserStub = sinon.stub();
 
     presenter.providers.path = {
-      petitioner: petitionerStub,
-      practitioner: practitionerStub,
-      respondent: respondentStub,
-      petitionsclerk: petitionsclerkStub,
       docketclerk: docketclerkStub,
       judge: judgeStub,
       otherInternalUser: otherInternalUserStub,
+      petitioner: petitionerStub,
+      petitionsclerk: petitionsclerkStub,
+      practitioner: practitionerStub,
+      respondent: respondentStub,
     };
   });
 
@@ -46,8 +46,8 @@ describe('getUserRoleAction', () => {
         presenter,
       },
       state: {
-        user: { role: User.ROLES.petitioner },
         constants: { USER_ROLES: User.ROLES },
+        user: { role: User.ROLES.petitioner },
       },
     });
     expect(petitionerStub.calledOnce).toEqual(true);
@@ -59,8 +59,8 @@ describe('getUserRoleAction', () => {
         presenter,
       },
       state: {
-        user: { role: User.ROLES.practitioner },
         constants: { USER_ROLES: User.ROLES },
+        user: { role: User.ROLES.practitioner },
       },
     });
     expect(practitionerStub.calledOnce).toEqual(true);
@@ -72,8 +72,8 @@ describe('getUserRoleAction', () => {
         presenter,
       },
       state: {
-        user: { role: User.ROLES.respondent },
         constants: { USER_ROLES: User.ROLES },
+        user: { role: User.ROLES.respondent },
       },
     });
     expect(respondentStub.calledOnce).toEqual(true);
@@ -85,8 +85,8 @@ describe('getUserRoleAction', () => {
         presenter,
       },
       state: {
-        user: { role: User.ROLES.petitionsClerk },
         constants: { USER_ROLES: User.ROLES },
+        user: { role: User.ROLES.petitionsClerk },
       },
     });
     expect(petitionsclerkStub.calledOnce).toEqual(true);
@@ -98,8 +98,8 @@ describe('getUserRoleAction', () => {
         presenter,
       },
       state: {
-        user: { role: User.ROLES.docketClerk },
         constants: { USER_ROLES: User.ROLES },
+        user: { role: User.ROLES.docketClerk },
       },
     });
     expect(docketclerkStub.calledOnce).toEqual(true);
@@ -111,8 +111,8 @@ describe('getUserRoleAction', () => {
         presenter,
       },
       state: {
-        user: { role: User.ROLES.judge },
         constants: { USER_ROLES: User.ROLES },
+        user: { role: User.ROLES.judge },
       },
     });
     expect(judgeStub.calledOnce).toEqual(true);
@@ -124,8 +124,8 @@ describe('getUserRoleAction', () => {
         presenter,
       },
       state: {
-        user: { role: User.ROLES.adc },
         constants: { USER_ROLES: User.ROLES },
+        user: { role: User.ROLES.adc },
       },
     });
     expect(otherInternalUserStub.calledOnce).toEqual(true);
@@ -137,8 +137,8 @@ describe('getUserRoleAction', () => {
         presenter,
       },
       state: {
-        user: { role: 'somethingelse' },
         constants: { USER_ROLES: User.ROLES },
+        user: { role: 'somethingelse' },
       },
     });
     expect(otherInternalUserStub.calledOnce).toEqual(false);
