@@ -68,7 +68,8 @@ exports.formattedTrialSessionDetails = ({
   trialSession.formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
   trialSession.formattedJudge =
     (trialSession.judge && trialSession.judge.name) || 'Not assigned';
-  trialSession.formattedTrialClerk = trialSession.trialClerk || 'Not assigned';
+  trialSession.formattedTrialClerk =
+    (trialSession.trialClerk && trialSession.trialClerk.name) || 'Not assigned';
   trialSession.formattedCourtReporter =
     trialSession.courtReporter || 'Not assigned';
   trialSession.formattedIrsCalendarAdministrator =
