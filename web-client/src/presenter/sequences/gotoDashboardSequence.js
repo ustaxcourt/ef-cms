@@ -25,7 +25,6 @@ const goToDashboard = [
   clearErrorAlertsAction,
   getUserRoleAction,
   {
-    adc: [navigateToMessagesAction],
     docketclerk: [navigateToMessagesAction],
     judge: [
       setMessageInboxPropsAction,
@@ -34,6 +33,7 @@ const goToDashboard = [
       setTrialSessionsAction,
       setCurrentPageAction('DashboardJudge'),
     ],
+    otherInternalUser: [navigateToMessagesAction],
     petitioner: [
       getCasesByUserAction,
       setCasesAction,

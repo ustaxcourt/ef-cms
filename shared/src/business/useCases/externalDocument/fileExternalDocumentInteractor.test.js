@@ -110,47 +110,4 @@ describe('fileExternalDocumentInteractor', () => {
     expect(saveWorkItemForNonPaperSpy.called).toEqual(true);
     expect(updateCaseSpy.called).toEqual(true);
   });
-
-  it('add documents but not workitems for paper filed documents', async () => {
-    let error;
-    let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
-    let saveWorkItemForNonPaperSpy = sinon.spy();
-    let saveWorkItemForDocketClerkFilingExternalDocumentSpy = sinon.spy();
-    let updateCaseSpy = sinon.spy();
-    try {
-      applicationContext = {
-        environment: { stage: 'local' },
-        getCurrentUser: () => {
-          return {
-            name: 'Docketclerk',
-            role: User.ROLES.docketClerk,
-            userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
-          };
-        },
-        getPersistenceGateway: () => ({
-          getCaseByCaseId: getCaseByCaseIdSpy,
-          getUserById: ({ userId }) => MOCK_USERS[userId],
-          saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
-          saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
-          updateCase: updateCaseSpy,
-        }),
-        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      };
-      await fileExternalDocumentInteractor({
-        applicationContext,
-        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
-        documentMetadata: {
-          caseId: caseRecord.caseId,
-          documentType: 'Memorandum in Support',
-          isPaper: true,
-        },
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeUndefined();
-    expect(getCaseByCaseIdSpy.called).toEqual(true);
-    expect(saveWorkItemForNonPaperSpy.called).toEqual(false);
-    expect(updateCaseSpy.called).toEqual(true);
-  });
 });
