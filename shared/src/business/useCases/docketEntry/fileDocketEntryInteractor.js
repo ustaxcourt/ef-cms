@@ -1,5 +1,5 @@
 const {
-  FILE_EXTERNAL_DOCUMENT,
+  DOCKET_ENTRY,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
@@ -33,7 +33,7 @@ exports.fileDocketEntryInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

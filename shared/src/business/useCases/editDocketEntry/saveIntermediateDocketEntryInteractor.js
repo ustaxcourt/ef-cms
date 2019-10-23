@@ -1,5 +1,5 @@
 const {
-  FILE_EXTERNAL_DOCUMENT,
+  DOCKET_ENTRY,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
@@ -20,7 +20,7 @@ exports.saveIntermediateDocketEntryInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
