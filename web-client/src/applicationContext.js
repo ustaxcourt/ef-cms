@@ -133,7 +133,6 @@ import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSes
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { runBatchProcessInteractor } from '../../shared/src/proxies/runBatchProcessProxy';
-import { sanitizePdfInteractor } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { saveIntermediateDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/saveIntermediateDocketEntryProxy';
 import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { serveSignedStipDecisionInteractor } from '../../shared/src/proxies/serveSignedStipDecisionProxy';
@@ -188,7 +187,6 @@ import { validateTrialSessionInteractor } from '../../shared/src/business/useCas
 import { validateUserInteractor } from '../../shared/src/business/useCases/users/validateUserInteractor';
 import { verifyCaseForUserInteractor } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
-import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virusScanPdfProxy';
 import axios from 'axios';
 import pdfjsLib from 'pdfjs-dist';
 import uuidv4 from 'uuid/v4';
@@ -289,8 +287,6 @@ const allUseCases = {
   removeCaseFromTrialInteractor,
   removeItemInteractor,
   runBatchProcessInteractor,
-  sanitizePdfInteractor: args =>
-    process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
   saveIntermediateDocketEntryInteractor,
   sendPetitionToIRSHoldingQueueInteractor,
   serveSignedStipDecisionInteractor,
@@ -340,8 +336,6 @@ const allUseCases = {
   validateUserInteractor,
   verifyCaseForUserInteractor,
   verifyPendingCaseForUserInteractor,
-  virusScanPdfInteractor: args =>
-    process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
 };
 tryCatchDecorator(allUseCases);
 
