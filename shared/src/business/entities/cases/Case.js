@@ -992,6 +992,15 @@ Case.prototype.isCalendared = function() {
 };
 
 /**
+ * returns true if the case status is ready for trial
+ *
+ * @returns {boolean} if the case is calendared
+ */
+Case.prototype.isReadyForTrial = function() {
+  return this.status === Case.STATUS_TYPES.generalDocketReadyForTrial;
+};
+
+/**
  * getDefaultOrderDesignatingPlaceOfTrialValue
  *
  * @returns {boolean} the value of if an order is needed for place of trial.
