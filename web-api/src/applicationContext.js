@@ -403,9 +403,6 @@ const {
   runBatchProcessInteractor,
 } = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
-  sanitizePdfInteractor,
-} = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
-const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
@@ -585,9 +582,6 @@ const {
 const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
-const {
-  virusScanPdfInteractor,
-} = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
 const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
@@ -905,8 +899,6 @@ module.exports = (appContextUser = {}) => {
         recallPetitionFromIRSHoldingQueueInteractor,
         removeCaseFromTrialInteractor,
         runBatchProcessInteractor,
-        sanitizePdfInteractor: args =>
-          process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
         saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
@@ -933,8 +925,6 @@ module.exports = (appContextUser = {}) => {
         validatePdfInteractor,
         verifyCaseForUserInteractor,
         verifyPendingCaseForUserInteractor,
-        virusScanPdfInteractor: args =>
-          process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
       };
     },
     getUtilities: () => {
@@ -970,13 +960,6 @@ module.exports = (appContextUser = {}) => {
         // eslint-disable-next-line no-console
         console.timeEnd(key);
       },
-    },
-    runVirusScan: async ({ filePath }) => {
-      return execPromise(
-        `clamscan ${
-          process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
-        } ${filePath}`,
-      );
     },
   };
 };
