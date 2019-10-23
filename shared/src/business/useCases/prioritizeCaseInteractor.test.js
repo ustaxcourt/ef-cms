@@ -5,7 +5,7 @@ const { User } = require('../entities/User');
 
 describe('prioritizeCaseInteractor', () => {
   let applicationContext;
-  let updateCaseTrialSortMappingRecordsMock = jest.fn();
+  let updateHighPriorityCaseTrialSortMappingRecordsMock = jest.fn();
 
   it('should update the case with the highPriority flag set as true and attach a reason', async () => {
     applicationContext = {
@@ -20,7 +20,7 @@ describe('prioritizeCaseInteractor', () => {
         return {
           getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
           updateCase: ({ caseToUpdate }) => caseToUpdate,
-          updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsMock,
+          updateHighPriorityCaseTrialSortMappingRecords: updateHighPriorityCaseTrialSortMappingRecordsMock,
         };
       },
     };
@@ -33,9 +33,11 @@ describe('prioritizeCaseInteractor', () => {
       highPriority: true,
       highPriorityReason: 'just because',
     });
-    expect(updateCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
     expect(
-      updateCaseTrialSortMappingRecordsMock.mock.calls[0][0].caseId,
+      updateHighPriorityCaseTrialSortMappingRecordsMock,
+    ).toHaveBeenCalled();
+    expect(
+      updateHighPriorityCaseTrialSortMappingRecordsMock.mock.calls[0][0].caseId,
     ).toEqual(MOCK_CASE.caseId);
   });
 
@@ -79,7 +81,7 @@ describe('prioritizeCaseInteractor', () => {
               status: Case.STATUS_TYPES.calendared,
             }),
           updateCase: ({ caseToUpdate }) => caseToUpdate,
-          updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsMock,
+          updateHighPriorityCaseTrialSortMappingRecords: updateHighPriorityCaseTrialSortMappingRecordsMock,
         };
       },
     };
@@ -118,7 +120,7 @@ describe('prioritizeCaseInteractor', () => {
               blockedDate: '2019-08-16T17:29:10.132Z',
             }),
           updateCase: ({ caseToUpdate }) => caseToUpdate,
-          updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsMock,
+          updateHighPriorityCaseTrialSortMappingRecords: updateHighPriorityCaseTrialSortMappingRecordsMock,
         };
       },
     };

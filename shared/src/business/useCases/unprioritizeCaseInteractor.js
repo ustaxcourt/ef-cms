@@ -31,13 +31,22 @@ exports.unprioritizeCaseInteractor = async ({ applicationContext, caseId }) => {
 
   caseEntity.unsetAsHighPriority();
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateCaseTrialSortMappingRecords({
-      applicationContext,
-      caseId: caseEntity.caseId,
-      caseSortTags: caseEntity.generateTrialSortTags(),
-    });
+  if (caseEntity.isReadyForTrial()) {
+    await applicationContext
+      .getPersistenceGateway()
+      .updateCaseTrialSortMappingRecords({
+        applicationContext,
+        caseId: caseEntity.caseId,
+        caseSortTags: caseEntity.generateTrialSortTags(),
+      });
+  } else {
+    await applicationContext
+      .getPersistenceGateway()
+      .deleteCaseTrialSortMappingRecords({
+        applicationContext,
+        caseId: caseEntity.caseId,
+      });
+  }
 
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
