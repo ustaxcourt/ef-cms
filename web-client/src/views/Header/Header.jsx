@@ -4,8 +4,7 @@ import { ReportsMenu } from './ReportsMenu';
 import { SearchBox } from './SearchBox';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import close from '../../../../node_modules/uswds/dist/img/close.svg';
 import seal from '../../images/ustc_seal.svg';
@@ -137,67 +136,59 @@ const NavigationItems = (
   );
 };
 
-export class HeaderComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.clearAlertSequence = props.clearAlertSequence;
-    this.resetSequence = props.resetHeaderAccordionsSequence;
-    this.headerRef = React.createRef();
+export const Header = connect(
+  {
+    betaBar: state.betaBar,
+    helper: state.headerHelper,
+    isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
+    isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
+    mobileMenu: state.mobileMenu,
+    resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
+    toggleBetaBarSequence: sequences.toggleBetaBarSequence,
+    toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
+    user: state.user,
+  },
+  ({
+    betaBar,
+    helper,
+    isAccountMenuOpen,
+    isReportsMenuOpen,
+    mobileMenu,
+    resetHeaderAccordionsSequence,
+    toggleBetaBarSequence,
+    toggleMobileMenuSequence,
+    user,
+  }) => {
+    const headerRef = useRef(null);
 
-    this.headerNavClick = this.headerNavClick.bind(this);
-    this.keydown = this.keydown.bind(this);
-    this.reset = this.reset.bind(this);
-  }
+    useEffect(() => {
+      document.addEventListener('mousedown', reset, false);
+      document.addEventListener('keydown', keydown, false);
+      return () => {
+        document.removeEventListener('mousedown', reset, false);
+        document.removeEventListener('keydown', keydown, false);
+      };
+    }, []);
 
-  headerNavClick(e) {
-    e.stopPropagation();
-    this.resetSequence();
-    this.clearAlertSequence();
-    return true;
-  }
+    const keydown = event => {
+      if (event.keyCode === 27) {
+        return resetHeaderAccordionsSequence();
+      }
+    };
 
-  componentDidMount() {
-    document.addEventListener('mousedown', this.reset, false);
-    document.addEventListener('keydown', this.keydown, false);
-  }
+    const reset = e => {
+      const clickedWithinComponent = headerRef.current.contains(e.target);
+      const clickedOnMenuButton = e.target.closest('.usa-accordion__button');
+      const clickedOnSubnav = e.target.closest('.usa-nav__submenu-item');
+      if (!clickedWithinComponent) {
+        return resetHeaderAccordionsSequence();
+      } else if (!clickedOnMenuButton && !clickedOnSubnav) {
+        return resetHeaderAccordionsSequence();
+      }
+    };
 
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.reset, false);
-    document.removeEventListener('keydown', this.keydown, false);
-  }
-
-  keydown(event) {
-    if (event.keyCode === 27) {
-      return this.reset(event);
-    }
-  }
-
-  reset(e) {
-    const clickedWithinThisComponent = this.headerRef.current.contains(
-      e.target,
-    );
-    const clickedOnMenuButton = e.target.closest('.usa-accordion__button');
-    const clickedOnSubnav = e.target.closest('.usa-nav__submenu-item');
-    if (!clickedWithinThisComponent) {
-      return this.resetSequence();
-    } else if (!clickedOnMenuButton && !clickedOnSubnav) {
-      return this.resetSequence();
-    }
-  }
-
-  render() {
-    const {
-      betaBar,
-      helper,
-      isAccountMenuOpen,
-      isReportsMenuOpen,
-      mobileMenu,
-      toggleBetaBarSequence,
-      toggleMobileMenuSequence,
-      user,
-    } = this.props;
     return (
-      <div ref={this.headerRef}>
+      <div ref={headerRef}>
         {betaBar.isVisible && BetaBar(toggleBetaBarSequence)}
         <div className="grid-container no-mobile-padding">
           <header
@@ -250,34 +241,5 @@ export class HeaderComponent extends React.Component {
         </div>
       </div>
     );
-  }
-}
-
-HeaderComponent.propTypes = {
-  betaBar: PropTypes.object,
-  clearAlertSequence: PropTypes.func,
-  helper: PropTypes.object,
-  isAccountMenuOpen: PropTypes.bool,
-  isReportsMenuOpen: PropTypes.bool,
-  mobileMenu: PropTypes.object,
-  resetHeaderAccordionsSequence: PropTypes.func,
-  toggleBetaBarSequence: PropTypes.func,
-  toggleMobileMenuSequence: PropTypes.func,
-  user: PropTypes.object,
-};
-
-export const Header = connect(
-  {
-    betaBar: state.betaBar,
-    clearAlertSequence: sequences.clearAlertSequence,
-    helper: state.headerHelper,
-    isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
-    isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
-    mobileMenu: state.mobileMenu,
-    resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
-    toggleBetaBarSequence: sequences.toggleBetaBarSequence,
-    toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
-    user: state.user,
   },
-  HeaderComponent,
 );

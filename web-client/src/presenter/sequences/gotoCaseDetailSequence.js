@@ -28,13 +28,13 @@ export const gotoCaseDetailSequence = [
   set(state.editDocumentEntryPoint, 'CaseDetail'),
   getUserRoleAction,
   {
-    adc: [setCurrentPageAction('CaseDetailInternal')],
     docketclerk: [setCurrentPageAction('CaseDetailInternal')],
     judge: [
       getCaseNoteForCaseAction,
       setCaseNoteOnCaseDetailAction,
       setCurrentPageAction('CaseDetailInternal'),
     ],
+    otherInternalUser: [setCurrentPageAction('CaseDetailInternal')],
     petitioner: [
       getCaseAssociationAction,
       setCaseAssociationAction,

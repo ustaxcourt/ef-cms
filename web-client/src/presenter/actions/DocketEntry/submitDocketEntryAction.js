@@ -39,17 +39,7 @@ export const submitDocketEntryAction = async ({
   };
 
   if (isFileAttached) {
-    await applicationContext.getUseCases().virusScanPdfInteractor({
-      applicationContext,
-      documentId: primaryDocumentFileId,
-    });
-
     await applicationContext.getUseCases().validatePdfInteractor({
-      applicationContext,
-      documentId: primaryDocumentFileId,
-    });
-
-    await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
       documentId: primaryDocumentFileId,
     });

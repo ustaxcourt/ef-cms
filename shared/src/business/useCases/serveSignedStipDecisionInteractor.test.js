@@ -14,7 +14,7 @@ const applicationContext = {
   getCurrentUser: () => {
     return new User({
       name: 'bob',
-      role: User.ROLES.docketClerk,
+      role: User.ROLES.petitionsClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
   },
@@ -103,11 +103,11 @@ describe('Serves Signed Stipulated Decsion on all parties', () => {
     expect(updatedCase.documents[0].servedParties).toHaveLength(3);
   });
 
-  it('throws an unauthorized error when a non docketclerk role attempts to serve', async () => {
+  it('throws an unauthorized error when a non docketclerk or petitionsclerk role attempts to serve', async () => {
     applicationContext.getCurrentUser = () => {
       return new User({
         name: 'bob',
-        role: User.ROLES.petitionsClerk,
+        role: User.ROLES.adc,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
