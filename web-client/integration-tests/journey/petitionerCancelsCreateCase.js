@@ -1,5 +1,5 @@
 export default test => {
-  it('taxpayer navigates to create case and cancels', async () => {
+  it('petitioner navigates to create case and cancels', async () => {
     await test.runSequence('gotoStartCaseWizardSequence', {
       step: '1',
       wizardStep: 'StartCaseStep1',

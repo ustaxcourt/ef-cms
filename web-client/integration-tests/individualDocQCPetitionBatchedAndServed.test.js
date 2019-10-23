@@ -1,4 +1,11 @@
 import { fakeFile, setupTest } from './helpers';
+import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
+import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
+import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
+import petitionerLogIn from './journey/petitionerLogIn';
+import petitionerNavigatesToCreateCase from './journey/petitionerNavigatesToCreateCase';
+import petitionerSignsOut from './journey/petitionerSignsOut';
+import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
@@ -8,13 +15,6 @@ import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
 import petitionsClerkViewsMyDocumentQC from './journey/petitionsClerkViewsMyDocumentQC';
 import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsSectionDocumentQC';
-import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
-import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
-import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
-import taxpayerLogIn from './journey/taxpayerLogIn';
-import taxpayerNavigatesToCreateCase from './journey/taxpayerNavigatesToCreateCase';
-import taxpayerSignsOut from './journey/taxpayerSignsOut';
-import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 
 const test = setupTest();
 
@@ -23,13 +23,13 @@ describe('INDIVIDUAL DOC QC: Petition Gets Batched and Served', () => {
     jest.setTimeout(30000);
   });
 
-  taxpayerLogIn(test);
-  taxpayerNavigatesToCreateCase(test);
-  taxpayerChoosesProcedureType(test);
-  taxpayerChoosesCaseType(test);
-  taxpayerCreatesNewCase(test, fakeFile);
-  taxpayerViewsDashboard(test);
-  taxpayerSignsOut(test);
+  petitionerLogIn(test);
+  petitionerNavigatesToCreateCase(test);
+  petitionerChoosesProcedureType(test);
+  petitionerChoosesCaseType(test);
+  petitionerCreatesNewCase(test, fakeFile);
+  petitionerViewsDashboard(test);
+  petitionerSignsOut(test);
   petitionsClerkLogIn(test);
   petitionsClerkViewsSectionDocumentQC(test);
   petitionsClerkAssignsWorkItemToSelf(test);

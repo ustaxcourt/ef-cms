@@ -7,7 +7,7 @@ describe('uploadPdf', () => {
     let postStub = sinon.stub().resolves(null);
     const applicationContext = {
       getCurrentUser: () => {
-        return { role: User.ROLES.petitioner, userId: 'taxpayer' };
+        return { role: User.ROLES.petitioner, userId: 'petitioner' };
       },
       getCurrentUserToken: () => {
         return '';
@@ -53,7 +53,7 @@ describe('uploadPdf', () => {
     let postStub = sinon.stub().resolves(null);
     const applicationContext = {
       getCurrentUser: () => {
-        return { role: User.ROLES.petitioner, userId: 'taxpayer' };
+        return { role: User.ROLES.petitioner, userId: 'petitioner' };
       },
       getCurrentUserToken: () => {
         return '';

@@ -176,7 +176,7 @@ describe('formattedTrialSessionDetails', () => {
       '101-18',
     );
     expect(result.formattedEligibleCases[0].caseCaptionNames).toEqual(
-      'Test Taxpayer',
+      'Test Petitioner',
     );
     expect(result.formattedEligibleCases[1].docketNumberWithSuffix).toEqual(
       '101-18W',
@@ -224,7 +224,7 @@ describe('formattedTrialSessionDetails', () => {
       'Test Person & Someone Else',
     );
     expect(result.allCases[2].docketNumberWithSuffix).toEqual('101-18');
-    expect(result.allCases[2].caseCaptionNames).toEqual('Test Taxpayer');
+    expect(result.allCases[2].caseCaptionNames).toEqual('Test Petitioner');
 
     expect(result.openCases.length).toEqual(1);
     expect(result.inactiveCases.length).toEqual(2);

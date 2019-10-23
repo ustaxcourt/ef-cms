@@ -59,7 +59,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           address3: 'Aut magna expedita f',
           city: 'Magna sit nemo magna',
           countryType: 'domestic',
-          email: 'taxpayer@example.com',
+          email: 'petitioner@example.com',
           name: 'Adele Carver',
           phone: '+1 (349) 328-1083',
           postalCode: '28371',
