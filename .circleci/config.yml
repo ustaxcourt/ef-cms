@@ -167,7 +167,7 @@ jobs:
       - checkout
       - run:
           name: Build Docker Image
-          command: cd web-api/runtimes/clamav && ./build.sh && cd ../ghostscript && ./build.sh && cd ../puppeteer && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
+          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
@@ -194,7 +194,7 @@ jobs:
       - checkout
       - run:
           name: Build Docker Image
-          command: cd ../puppeteer && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
+          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
@@ -245,7 +245,7 @@ jobs:
       - checkout
       - run:
           name: Build Docker Image
-          command: cd ../puppeteer && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
+          command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
