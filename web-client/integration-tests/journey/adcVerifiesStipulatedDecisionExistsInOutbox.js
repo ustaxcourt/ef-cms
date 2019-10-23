@@ -1,6 +1,6 @@
 import { getFormattedMyOutbox } from '../helpers';
 export default test => {
-  describe('Senior Attorney navigates to My Outbox', () => {
+  describe('ADC navigates to My Outbox', () => {
     it('navigates to outbox', async () => {
       await test.runSequence('navigateToPathSequence', {
         path: '/messages/my/outbox',

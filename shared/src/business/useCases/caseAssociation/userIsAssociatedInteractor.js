@@ -1,3 +1,4 @@
+const { User } = require('../../entities/User');
 /**
  * userIsAssociated
  *
@@ -14,7 +15,7 @@ exports.userIsAssociated = ({ caseDetail, user }) => {
     return true;
   }
 
-  if (!['respondent', 'practitioner'].includes(role)) {
+  if (![User.ROLES.respondent, User.ROLES.practitioner].includes(role)) {
     return false;
   }
 

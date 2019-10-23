@@ -63,7 +63,7 @@
       "documentTitle": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
-    "section": "seniorattorney",
+    "section": "adc",
     "workItemId": "5059e127-1796-45aa-96bc-351cd5705c66",
     "isInitializeCase": false,
     "assigneeId": "6805d1ab-18d0-43ec-bafb-654e83405416",
@@ -71,7 +71,7 @@
     "sentBySection": "docket",
     "isQC": false,
     "createdAt": "2019-07-12T17:11:47.010Z",
-    "assigneeName": "Test Seniorattorney",
+    "assigneeName": "Test ADC",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "sk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "messages": [
@@ -80,7 +80,7 @@
         "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
         "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
         "from": "Test Docketclerk",
-        "to": "Test Seniorattorney",
+        "to": "Test ADC",
         "message": "sign this please",
         "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
       }
@@ -99,7 +99,7 @@
       "documentType": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
-    "section": "seniorattorney",
+    "section": "adc",
     "workItemId": "5059e127-1796-45aa-96bc-351cd5705c66",
     "isInitializeCase": false,
     "assigneeId": "6805d1ab-18d0-43ec-bafb-654e83405416",
@@ -107,7 +107,7 @@
     "sentBySection": "docket",
     "isQC": false,
     "createdAt": "2019-07-12T17:11:47.010Z",
-    "assigneeName": "Test Seniorattorney",
+    "assigneeName": "Test ADC",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "sk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "messages": [
@@ -116,12 +116,12 @@
         "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
         "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
         "from": "Test Docketclerk",
-        "to": "Test Seniorattorney",
+        "to": "Test ADC",
         "message": "sign this please",
         "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
-    "pk": "section-seniorattorney",
+    "pk": "section-adc",
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-07-12T17:11:47.010Z"
@@ -243,7 +243,7 @@
       "documentType": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
-    "section": "seniorattorney",
+    "section": "adc",
     "workItemId": "5059e127-1796-45aa-96bc-351cd5705c66",
     "isInitializeCase": false,
     "assigneeId": "6805d1ab-18d0-43ec-bafb-654e83405416",
@@ -251,7 +251,7 @@
     "sentBySection": "docket",
     "isQC": false,
     "createdAt": "2019-07-12T17:11:47.010Z",
-    "assigneeName": "Test Seniorattorney",
+    "assigneeName": "Test ADC",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "sk": "2019-07-12T17:11:47.010Z",
     "messages": [
@@ -260,7 +260,7 @@
         "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
         "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
         "from": "Test Docketclerk",
-        "to": "Test Seniorattorney",
+        "to": "Test ADC",
         "message": "sign this please",
         "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
       }
@@ -370,7 +370,7 @@
       "documentType": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
-    "section": "seniorattorney",
+    "section": "adc",
     "workItemId": "5059e127-1796-45aa-96bc-351cd5705c66",
     "isInitializeCase": false,
     "assigneeId": "6805d1ab-18d0-43ec-bafb-654e83405416",
@@ -378,7 +378,7 @@
     "sentBySection": "docket",
     "isQC": false,
     "createdAt": "2019-07-12T17:11:47.010Z",
-    "assigneeName": "Test Seniorattorney",
+    "assigneeName": "Test ADC",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "sk": "2019-07-12T17:11:47.010Z",
     "messages": [
@@ -387,7 +387,7 @@
         "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
         "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
         "from": "Test Docketclerk",
-        "to": "Test Seniorattorney",
+        "to": "Test ADC",
         "message": "sign this please",
         "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
       }
@@ -406,7 +406,7 @@
       "documentType": "Proposed Stipulated Decision",
       "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
     },
-    "section": "seniorattorney",
+    "section": "adc",
     "workItemId": "5059e127-1796-45aa-96bc-351cd5705c66",
     "isInitializeCase": false,
     "assigneeId": "6805d1ab-18d0-43ec-bafb-654e83405416",
@@ -414,7 +414,7 @@
     "sentBySection": "docket",
     "isQC": false,
     "createdAt": "2019-07-12T17:11:47.010Z",
-    "assigneeName": "Test Seniorattorney",
+    "assigneeName": "Test ADC",
     "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
     "sk": "workitem-5059e127-1796-45aa-96bc-351cd5705c66",
     "messages": [
@@ -423,7 +423,7 @@
         "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
         "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
         "from": "Test Docketclerk",
-        "to": "Test Seniorattorney",
+        "to": "Test ADC",
         "message": "sign this please",
         "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
       }
@@ -601,7 +601,7 @@
               "documentType": "Proposed Stipulated Decision",
               "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f"
             },
-            "section": "seniorattorney",
+            "section": "adc",
             "workItemId": "5059e127-1796-45aa-96bc-351cd5705c66",
             "isInitializeCase": false,
             "assigneeId": "6805d1ab-18d0-43ec-bafb-654e83405416",
@@ -609,7 +609,7 @@
             "sentBySection": "docket",
             "isQC": false,
             "createdAt": "2019-07-12T17:11:47.010Z",
-            "assigneeName": "Test Seniorattorney",
+            "assigneeName": "Test ADC",
             "caseId": "d3d92ca6-d9b3-4bd6-8328-e94a9fc36f88",
             "messages": [
               {
@@ -617,7 +617,7 @@
                 "fromUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
                 "messageId": "e6c9a265-cb21-4eb5-86d1-df9c44ef0791",
                 "from": "Test Docketclerk",
-                "to": "Test Seniorattorney",
+                "to": "Test ADC",
                 "message": "sign this please",
                 "toUserId": "6805d1ab-18d0-43ec-bafb-654e83405416"
               }

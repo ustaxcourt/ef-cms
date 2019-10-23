@@ -111,10 +111,10 @@ const docketClerk2 = {
   userId: 'd2',
 };
 
-const seniorAttorney = {
-  role: User.ROLES.seniorAttorney,
-  section: 'seniorattorney',
-  userId: 'd2',
+const adc = {
+  role: User.ROLES.adc,
+  section: 'adc',
+  userId: 'd3',
 };
 
 const generateWorkItem = (data, document) => {
@@ -222,7 +222,7 @@ const generateWorkItem = (data, document) => {
 // - !!item.completedAt
 // - item.section === 'docket'
 
-// Sr Attny Document QC Inbox
+// ADC Document QC Inbox
 // - item.section == 'docket'
 // - isInternal === false
 // - !item.completedAt
@@ -781,8 +781,8 @@ describe('filterWorkItems', () => {
     );
   });
 
-  it('Returns docket section work items for a Senior Attorney in Document QC Inbox', () => {
-    const user = seniorAttorney;
+  it('Returns docket section work items for an ADC in Document QC Inbox', () => {
+    const user = adc;
     const filtered = workQueueInbox.filter(
       filterWorkItems({
         applicationContext,

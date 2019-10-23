@@ -92,7 +92,8 @@ export const IndividualWorkQueueInbox = connect(
                           messageId: item.currentMessage.messageId,
                           shouldLinkToComplete:
                             item.document.isFileAttached === false,
-                          shouldLinkToEdit: item.document.eventCode !== 'P',
+                          shouldLinkToEdit:
+                            item.isQC && item.document.eventCode !== 'P',
                           workItemIdToMarkAsRead: !item.isRead
                             ? item.workItemId
                             : null,

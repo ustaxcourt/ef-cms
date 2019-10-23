@@ -4,7 +4,7 @@ import { fakeFile, setupTest } from './helpers';
 
 // docketclerk
 import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkSendsStipDecisionToSrAttorney from './journey/docketClerkSendsStipDecisionToSrAttorney';
+import docketClerkSendsStipDecisionToADC from './journey/docketClerkSendsStipDecisionToADC';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
 import docketClerkVerifiesStipulatedDecisionExistsInInbox from './journey/docketClerkVerifiesStipulatedDecisionExistsInInbox';
 import docketClerkVerifiesStipulatedDecisionExistsInOutbox from './journey/docketClerkVerifiesStipulatedDecisionExistsInOutbox';
@@ -25,12 +25,12 @@ import taxpayerNavigatesToCreateCase from './journey/taxpayerNavigatesToCreateCa
 import taxpayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 
-// seniorattorney
-import seniorAttorneyLogIn from './journey/seniorAttorneyLogIn';
-import seniorAttorneySignsOut from './journey/seniorAttorneySignsOut';
-import seniorAttorneyVerifiesStipulatedDecisionDoesNotExistInInbox from './journey/seniorAttorneyVerifiesStipulatedDecisionDoesNotExistInInbox';
-import seniorAttorneyVerifiesStipulatedDecisionExistsInOutbox from './journey/seniorAttorneyVerifiesStipulatedDecisionExistsInOutbox';
-import seniorAttorneyViewsStipulatedDecisionForSigning from './journey/seniorAttorneyViewsStipulatedDecisionForSigning';
+// adc
+import adcLogIn from './journey/adcLogIn';
+import adcSignsOut from './journey/adcSignsOut';
+import adcVerifiesStipulatedDecisionDoesNotExistInInbox from './journey/adcVerifiesStipulatedDecisionDoesNotExistInInbox';
+import adcVerifiesStipulatedDecisionExistsInOutbox from './journey/adcVerifiesStipulatedDecisionExistsInOutbox';
+import adcViewsStipulatedDecisionForSigning from './journey/adcViewsStipulatedDecisionForSigning';
 
 const test = setupTest({
   useCases: {
@@ -69,14 +69,14 @@ describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
 
   docketClerkLogIn(test);
   docketClerkViewsStipulatedDecision(test);
-  docketClerkSendsStipDecisionToSrAttorney(test);
+  docketClerkSendsStipDecisionToADC(test);
   docketClerkSignsOut(test);
 
-  seniorAttorneyLogIn(test);
-  seniorAttorneyViewsStipulatedDecisionForSigning(test);
-  seniorAttorneyVerifiesStipulatedDecisionDoesNotExistInInbox(test);
-  seniorAttorneyVerifiesStipulatedDecisionExistsInOutbox(test);
-  seniorAttorneySignsOut(test);
+  adcLogIn(test);
+  adcViewsStipulatedDecisionForSigning(test);
+  adcVerifiesStipulatedDecisionDoesNotExistInInbox(test);
+  adcVerifiesStipulatedDecisionExistsInOutbox(test);
+  adcSignsOut(test);
 
   docketClerkLogIn(test);
   docketClerkVerifiesStipulatedDecisionExistsInOutbox(
