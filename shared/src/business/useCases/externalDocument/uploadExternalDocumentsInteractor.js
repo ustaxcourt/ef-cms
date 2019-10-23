@@ -19,8 +19,7 @@ exports.uploadExternalDocumentsInteractor = async ({
   const uploadedDocumentPromises = [];
 
   /**
-   * uploads a document and then immediately processes it to scan for viruses,
-   * validate the PDF content, and sanitize the document.
+   * uploads a document and then immediately processes it to validate the document
    *
    * @param {string} documentLabel the string identifying which documentFile and progressFunction
    * @returns {Promise<string>} the documentId returned from a successful upload
@@ -33,15 +32,7 @@ exports.uploadExternalDocumentsInteractor = async ({
         document: documentFiles[documentLabel],
         onUploadProgress: progressFunctions[documentLabel],
       });
-    await applicationContext.getUseCases().virusScanPdfInteractor({
-      applicationContext,
-      documentId,
-    });
     await applicationContext.getUseCases().validatePdfInteractor({
-      applicationContext,
-      documentId,
-    });
-    await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
       documentId,
     });
