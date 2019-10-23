@@ -7,8 +7,14 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-const confirmSassContent = fs.readFileSync('./caseConfirmation.scss', 'utf-8');
-const confirmPugContent = fs.readFileSync('./caseConfirmation.pug', 'utf-8');
+const confirmSassContent = fs.readFileSync(
+  './shared/src/business/useCases/caseConfirmation/caseConfirmation.scss',
+  'utf-8',
+);
+const confirmPugContent = fs.readFileSync(
+  './shared/src/business/useCases/caseConfirmation/caseConfirmation.pug',
+  'utf-8',
+);
 
 /**
  * NOTE: to make this work, you must save the petition as a petitionsclerk
@@ -17,7 +23,7 @@ const confirmPugContent = fs.readFileSync('./caseConfirmation.pug', 'utf-8');
  * @returns {string} an html string resulting from rendering template with caseInfo
  */
 
-const generatecaseConfirmationPage = async caseInfo => {
+const generateCaseConfirmationPage = async caseInfo => {
   const { css } = await new Promise(resolve => {
     sass.render({ data: confirmSassContent }, (err, result) => {
       return resolve(result);
@@ -68,7 +74,7 @@ exports.generateCaseConfirmationPdfInteractor = async ({
 
     let page = await browser.newPage();
 
-    await page.setContent(await generatecaseConfirmationPage(caseToUpdate));
+    await page.setContent(await generateCaseConfirmationPage(caseToUpdate));
 
     result = await page.pdf({
       displayHeaderFooter: false,
