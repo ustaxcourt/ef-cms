@@ -186,5 +186,8 @@
   "staticFiles": {
     "staticPath": "node_modules/pdfjs-dist/build",
     "watcherGlob": false
+  },
+  "dependencies": {
+    "serverless-jetpack": "^0.6.0"
   }
 }

@@ -9,8 +9,13 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-jetpack
 
 custom:
+  jetpack:
+    mode: yarn
+    individually: true
+
   prune:
     automatic: true
     number: 3
