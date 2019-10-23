@@ -53,8 +53,8 @@ export const SessionAssignmentsForm = connect(
               aria-describedby="trial-clerk-label"
               className="usa-select"
               id="trial-clerk"
-              name="trialClerk"
-              value={form.trialClerk || ''}
+              name="trialClerkId"
+              value={form.trialClerkId || ''}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
                   key: e.target.name,
