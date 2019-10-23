@@ -598,7 +598,6 @@ const connectionClass = require('http-aws-es');
 AWS.config.httpOptions.timeout = 300000;
 
 const { DynamoDB, EnvironmentCredentials, S3, SES } = AWS;
-const execPromise = util.promisify(exec);
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
