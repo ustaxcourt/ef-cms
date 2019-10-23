@@ -69,7 +69,7 @@ export const UsaBanner = connect(
                 </div>
                 <div className="usa-banner__guidance tablet:grid-col-6">
                   <img
-                    alt="Https"
+                    alt="https"
                     className="usa-banner__icon usa-media-block__img"
                     src={iconHttps}
                   />
