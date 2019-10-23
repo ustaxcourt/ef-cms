@@ -2,7 +2,6 @@ const {
   GET_CASE,
   GET_CASES_BY_STATUS,
   isAuthorized,
-  PETITION,
   START_PAPER_CASE,
   UPDATE_CASE,
   WORKITEM,
