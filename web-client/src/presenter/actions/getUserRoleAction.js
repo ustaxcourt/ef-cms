@@ -15,7 +15,7 @@ export const getUserRoleAction = ({ applicationContext, get, path }) => {
 
   if (applicationContext.getUtilities().isExternalUser(user.role)) {
     return path[user.role]();
-  } else {
+  } else if (applicationContext.getUtilities().isInternalUser(user.role)) {
     if (
       [
         USER_ROLES.petitionsClerk,
