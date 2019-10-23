@@ -9,7 +9,6 @@ export const workQueueSectionHelper = () => {
         clerkofcourt: 'Clerk of the Court',
         docket: 'Docket',
         petitions: 'Petitions',
-        seniorattorney: 'Senior Attorney',
         trialClerks: 'Trial Clerks',
       }[key] || chambersDisplay(key)
     );

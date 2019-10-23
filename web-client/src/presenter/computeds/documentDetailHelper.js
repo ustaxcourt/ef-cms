@@ -97,7 +97,7 @@ export const documentDetailHelper = (get, applicationContext) => {
 
     showSignDocumentButton =
       !!stipulatedWorkItem &&
-      currentUser.role === USER_ROLES.seniorAttorney &&
+      currentUser.role === USER_ROLES.adc &&
       !signedDocument;
 
     showServeDocumentButton =

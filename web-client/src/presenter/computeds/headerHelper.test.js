@@ -26,7 +26,7 @@ const getState = role => {
 
 const internal = [
   User.ROLES.petitionsClerk,
-  User.ROLES.seniorAttorney,
+  User.ROLES.adc,
   User.ROLES.docketClerk,
 ];
 const external = [

@@ -45,7 +45,7 @@ export default test => {
       [test.workItemId]: {
         assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         forwardMessage: 'hello world',
-        section: 'seniorattorney',
+        section: 'adc',
       },
     });
 
@@ -63,7 +63,7 @@ export default test => {
     );
     expect(workItem).toMatchObject({
       assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      assigneeName: 'Test Seniorattorney',
+      assigneeName: 'Test ADC',
     });
     const messages = _.orderBy(workItem.messages, 'createdAt', 'desc');
     expect(messages.length).toEqual(2);

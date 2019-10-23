@@ -44,8 +44,8 @@ describe('fileExternalDocumentInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            name: 'Seniorattorney',
-            role: User.ROLES.seniorAttorney,
+            name: 'adc',
+            role: User.ROLES.adc,
             userId: 'g7d90c05-f6cd-442c-a168-202db587f16f',
           };
         },

@@ -54,7 +54,7 @@ describe('a user signs and serves a stipulated decision', () => {
     await uploadProposedStipulatedDecision(test);
   });
 
-  it('docketclerk assigns the stipulated decision to the seniorattorney', async () => {
+  it('docketclerk assigns the stipulated decision to the adc', async () => {
     await loginAs(test, 'docketclerk');
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       test,
@@ -76,8 +76,8 @@ describe('a user signs and serves a stipulated decision', () => {
     });
   });
 
-  it('senior attorney signs the proposed stipulated decision', async () => {
-    await loginAs(test, 'seniorattorney');
+  it('adc signs the proposed stipulated decision', async () => {
+    await loginAs(test, 'adc');
     const inbox = await getFormattedMyInbox(test);
     const stipulatedDecision = inbox.find(
       item =>

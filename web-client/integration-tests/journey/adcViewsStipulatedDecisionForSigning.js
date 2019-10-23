@@ -1,6 +1,6 @@
 import { getFormattedMyInbox, viewDocumentDetailMessage } from '../helpers';
 export default test => {
-  describe('Senior Attorney views inbox and selects a Stipulated Decision for signing', () => {
+  describe('ADC views inbox and selects a Stipulated Decision for signing', () => {
     it('views inbox', async () => {
       const myInbox = await getFormattedMyInbox(test);
       const stipDecision = myInbox.find(

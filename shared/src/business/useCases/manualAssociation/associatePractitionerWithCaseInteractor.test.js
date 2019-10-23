@@ -28,7 +28,7 @@ describe('associateRespondentWithCaseInteractor', () => {
           getCaseByCaseId: async () => caseRecord,
           getUserById: async () => ({
             name: 'Olivia Jade',
-            role: User.ROLES.seniorAttorney,
+            role: User.ROLES.adc,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           }),
           updateCase: async () => caseRecord,
@@ -54,7 +54,7 @@ describe('associateRespondentWithCaseInteractor', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: User.ROLES.seniorAttorney,
+          role: User.ROLES.adc,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },

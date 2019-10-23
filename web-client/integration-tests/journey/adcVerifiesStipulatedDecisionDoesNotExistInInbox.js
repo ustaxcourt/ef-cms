@@ -2,7 +2,7 @@ import { applicationContext } from '../../src/applicationContext';
 
 import { getFormattedMyInbox } from '../helpers';
 export default test => {
-  describe('Senior Attorney verifies Stipulated Decision does not exist in inbox', () => {
+  describe('ADC verifies Stipulated Decision does not exist in inbox', () => {
     it('navigates to inbox', async () => {
       await test.runSequence('navigateToPathSequence', {
         path: '/messages/my/inbox',

@@ -185,13 +185,13 @@ exports.getNotifications = test => {
 
 exports.assignWorkItems = async (test, to, workItems) => {
   const users = {
+    adc: {
+      name: 'Test ADC',
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    },
     docketclerk: {
       name: 'Test Docketclerk',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-    },
-    seniorattorney: {
-      name: 'Test Seniorattorney',
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     },
   };
   await test.runSequence('selectAssigneeSequence', {

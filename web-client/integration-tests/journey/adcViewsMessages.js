@@ -1,5 +1,5 @@
 export default test => {
-  return it('Senior Attorney views messages to verify the work item that was forward by the docket clerk is now present', async () => {
+  return it('ADC views messages to verify the work item that was forward by the docket clerk is now present', async () => {
     await test.runSequence('gotoMessagesSequence');
     expect(test.getState('currentPage')).toEqual('Messages');
     await test.runSequence('chooseWorkQueueSequence', {
@@ -18,7 +18,7 @@ export default test => {
     test.workItemId = workItem.workItemId;
     expect(workItem).toMatchObject({
       assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      assigneeName: 'Test Seniorattorney',
+      assigneeName: 'Test ADC',
     });
     expect(workItem.messages).toMatchObject([
       {
