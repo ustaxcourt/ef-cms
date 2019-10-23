@@ -1,149 +1,108 @@
-exports.CASE_METADATA = 'CASE_METADATA';
-exports.FILE_EXTERNAL_DOCUMENT = 'FILE_EXTERNAL_DOCUMENT';
-exports.GET_CASE = 'GET_CASE';
-exports.PETITION = 'PETITION';
-exports.UPDATE_CASE = 'UPDATE_CASE';
-exports.WORKITEM = 'WORKITEM';
-exports.CREATE_USER = 'CREATE_USER';
-exports.GET_USERS_IN_SECTIION = 'GET_USERS_IN_SECTIION';
-exports.START_PAPER_CASE = 'START_PAPER_CASE';
-exports.GET_READ_MESSAGES = 'GET_READ_MESSAGES';
-exports.EDIT_COURT_ISSUED_ORDER = 'EDIT_COURT_ISSUED_ORDER';
-exports.TRIAL_SESSIONS = 'TRIAL_SESSIONS';
-exports.TRIAL_SESSION_WORKING_COPY = 'TRIAL_SESSION_WORKING_COPY';
-exports.CREATE_COURT_ISSUED_ORDER = 'CREATE_COURT_ISSUED_ORDER';
-exports.CASE_DEADLINE = 'CASE_DEADLINE';
-exports.SERVE_DOCUMENT = 'SERVE_DOCUMENT';
+exports.ADD_CASE_TO_TRIAL_SESSION = 'ADD_CASE_TO_TRIAL_SESSION';
+exports.ARCHIVE_DOCUMENT = 'ARCHIVE_DOCUMENT';
+exports.ASSOCIATE_SELF_WITH_CASE = 'ASSOCIATE_SELF_WITH_CASE';
 exports.ASSOCIATE_USER_WITH_CASE = 'ASSOCIATE_USER_WITH_CASE';
 exports.BATCH_DOWNLOAD_TRIAL_SESSION = 'BATCH_DOWNLOAD_TRIAL_SESSION';
-exports.UPDATE_CONTACT_INFO = 'UPDATE_CONTACT_INFO';
-exports.ARCHIVE_DOCUMENT = 'ARCHIVE_DOCUMENT';
-exports.VIEW_DOCUMENTS = 'VIEW_DOCUMENTS';
-exports.PENDING_CASE_ASSOCIATE = 'PENDING_CASE_ASSOCIATE';
-exports.UPLOAD_DOCUMENT = 'UPLOAD_DOCUMENT';
-exports.ASSOCIATE_SELF_WITH_CASE = 'ASSOCIATE_SELF_WITH_CASE';
 exports.BLOCK_CASE = 'BLOCK_CASE';
-exports.ADD_CASE_TO_TRIAL_SESSION = 'ADD_CASE_TO_TRIAL_SESSION';
+exports.CASE_DEADLINE = 'CASE_DEADLINE';
+exports.CREATE_COURT_ISSUED_ORDER = 'CREATE_COURT_ISSUED_ORDER';
+exports.CREATE_USER = 'CREATE_USER';
+exports.DOCKET_ENTRY = 'DOCKET_ENTRY';
+exports.EDIT_COURT_ISSUED_ORDER = 'EDIT_COURT_ISSUED_ORDER';
+exports.FILE_EXTERNAL_DOCUMENT = 'FILE_EXTERNAL_DOCUMENT';
+exports.GET_CASE = 'GET_CASE';
+exports.GET_READ_MESSAGES = 'GET_READ_MESSAGES';
+exports.GET_USERS_IN_SECTION = 'GET_USERS_IN_SECTION';
+exports.PETITION = 'PETITION';
 exports.PRIORITIZE_CASE = 'PRIORITIZE_CASE';
+exports.SERVE_DOCUMENT = 'SERVE_DOCUMENT';
+exports.START_PAPER_CASE = 'START_PAPER_CASE';
+exports.TRIAL_SESSION_WORKING_COPY = 'TRIAL_SESSION_WORKING_COPY';
+exports.TRIAL_SESSIONS = 'TRIAL_SESSIONS';
+exports.UPDATE_CASE = 'UPDATE_CASE';
+exports.UPDATE_CONTACT_INFO = 'UPDATE_CONTACT_INFO';
+exports.UPLOAD_DOCUMENT = 'UPLOAD_DOCUMENT';
+exports.VIEW_DOCUMENTS = 'VIEW_DOCUMENTS';
+exports.WORKITEM = 'WORKITEM';
 
-// TODO: review all these for accuracy!
+const allInternalUserPermissions = [
+  exports.ADD_CASE_TO_TRIAL_SESSION,
+  exports.ARCHIVE_DOCUMENT,
+  exports.ASSOCIATE_USER_WITH_CASE,
+  exports.BLOCK_CASE,
+  exports.CASE_DEADLINE,
+  exports.CREATE_COURT_ISSUED_ORDER,
+  exports.EDIT_COURT_ISSUED_ORDER,
+  exports.GET_CASE,
+  exports.GET_CASES_BY_DOCUMENT_ID,
+  exports.GET_READ_MESSAGES,
+  exports.GET_USERS_IN_SECTION,
+  exports.PRIORITIZE_CASE,
+  exports.TRIAL_SESSIONS,
+  exports.UPDATE_CASE,
+  exports.UPLOAD_DOCUMENT,
+  exports.VIEW_DOCUMENTS,
+  exports.WORKITEM,
+];
+
 const AUTHORIZATION_MAP = {
-  adc: [
-    exports.ASSOCIATE_USER_WITH_CASE,
-    exports.CASE_METADATA,
-    exports.CREATE_COURT_ISSUED_ORDER,
-    exports.UPLOAD_DOCUMENT,
-    exports.GET_CASE,
-    exports.VIEW_DOCUMENTS,
-    exports.GET_CASES_BY_DOCUMENT_ID,
-    exports.GET_READ_MESSAGES,
-    exports.EDIT_COURT_ISSUED_ORDER,
-    exports.GET_USERS_IN_SECTION,
-    exports.TRIAL_SESSIONS,
-    exports.UPDATE_CASE,
-    exports.WORKITEM,
-    exports.ARCHIVE_DOCUMENT,
-    exports.BLOCK_CASE,
-    exports.ADD_CASE_TO_TRIAL_SESSION,
-    exports.PRIORITIZE_CASE,
-  ],
+  adc: allInternalUserPermissions,
   admin: [exports.CREATE_USER],
-  docketclerk: [
-    exports.VIEW_DOCUMENTS,
-    exports.UPLOAD_DOCUMENT,
-    exports.ASSOCIATE_USER_WITH_CASE,
-    exports.CASE_DEADLINE,
-    exports.CASE_METADATA,
-    exports.CREATE_COURT_ISSUED_ORDER,
-    exports.FILE_EXTERNAL_DOCUMENT,
-    exports.GET_CASE,
-    exports.GET_CASES_BY_DOCUMENT_ID,
-    exports.GET_READ_MESSAGES,
-    exports.GET_USERS_IN_SECTION,
+  admissionsclerk: allInternalUserPermissions,
+  calendarclerk: allInternalUserPermissions,
+  chambers: [
+    ...allInternalUserPermissions,
+    exports.BATCH_DOWNLOAD_TRIAL_SESSION,
+    exports.TRIAL_SESSION_WORKING_COPY,
+  ],
+  clerkofcourt: [
+    ...allInternalUserPermissions,
+    exports.DOCKET_ENTRY,
     exports.SERVE_DOCUMENT,
     exports.START_PAPER_CASE,
-    exports.TRIAL_SESSIONS,
-    exports.EDIT_COURT_ISSUED_ORDER,
-    exports.UPDATE_CASE,
-    exports.WORKITEM,
-    exports.ARCHIVE_DOCUMENT,
-    exports.BLOCK_CASE,
-    exports.ADD_CASE_TO_TRIAL_SESSION,
-    exports.PRIORITIZE_CASE,
+  ],
+  docketclerk: [
+    ...allInternalUserPermissions,
+    exports.DOCKET_ENTRY,
+    exports.SERVE_DOCUMENT,
+    exports.START_PAPER_CASE,
   ],
   judge: [
-    exports.VIEW_DOCUMENTS,
-    exports.ASSOCIATE_USER_WITH_CASE,
-    exports.CASE_DEADLINE,
-    exports.UPLOAD_DOCUMENT,
-    exports.CASE_METADATA,
-    exports.CREATE_COURT_ISSUED_ORDER,
-    exports.FILE_EXTERNAL_DOCUMENT,
-    exports.GET_CASE,
-    exports.GET_CASES_BY_DOCUMENT_ID,
-    exports.GET_READ_MESSAGES,
-    exports.GET_USERS_IN_SECTION,
-    exports.EDIT_COURT_ISSUED_ORDER,
-    exports.PETITION,
-    exports.SERVE_DOCUMENT,
-    exports.START_PAPER_CASE,
-    exports.TRIAL_SESSION_WORKING_COPY,
-    exports.TRIAL_SESSIONS,
-    exports.UPDATE_CASE,
-    exports.WORKITEM,
+    ...allInternalUserPermissions,
     exports.BATCH_DOWNLOAD_TRIAL_SESSION,
-    exports.ARCHIVE_DOCUMENT,
-    exports.ADD_CASE_TO_TRIAL_SESSION,
-    exports.BLOCK_CASE,
-    exports.PRIORITIZE_CASE,
+    exports.TRIAL_SESSION_WORKING_COPY,
   ],
   petitioner: [
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.PETITION,
-    exports.VIEW_DOCUMENTS,
+    exports.UPDATE_CONTACT_INFO,
     exports.UPLOAD_DOCUMENT,
+    exports.VIEW_DOCUMENTS,
   ],
   petitionsclerk: [
-    exports.ASSOCIATE_USER_WITH_CASE,
-    exports.VIEW_DOCUMENTS,
-    exports.CASE_DEADLINE,
-    exports.CASE_METADATA,
-    exports.ARCHIVE_DOCUMENT,
-    exports.CREATE_COURT_ISSUED_ORDER,
-    exports.GET_CASE,
-    exports.GET_CASES_BY_DOCUMENT_ID,
-    exports.GET_READ_MESSAGES,
-    exports.GET_USERS_IN_SECTION,
-    exports.PETITION,
+    ...allInternalUserPermissions,
+    exports.SERVE_DOCUMENT,
     exports.START_PAPER_CASE,
-    exports.EDIT_COURT_ISSUED_ORDER,
-    exports.TRIAL_SESSIONS,
-    exports.UPLOAD_DOCUMENT,
-    exports.UPDATE_CASE,
-    exports.BLOCK_CASE,
-    exports.ADD_CASE_TO_TRIAL_SESSION,
-    exports.WORKITEM,
-    exports.PRIORITIZE_CASE,
   ],
   practitioner: [
+    exports.ASSOCIATE_SELF_WITH_CASE,
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.GET_CASE,
-    exports.VIEW_DOCUMENTS,
-    exports.UPLOAD_DOCUMENT,
-    exports.ASSOCIATE_SELF_WITH_CASE,
     exports.PETITION,
-    exports.PENDING_CASE_ASSOCIATE,
     exports.UPDATE_CONTACT_INFO,
+    exports.UPLOAD_DOCUMENT,
+    exports.VIEW_DOCUMENTS,
   ],
   respondent: [
+    exports.ASSOCIATE_SELF_WITH_CASE,
     exports.FILE_EXTERNAL_DOCUMENT,
     exports.GET_CASE,
     exports.UPDATE_CASE,
-    exports.ASSOCIATE_SELF_WITH_CASE,
-    exports.VIEW_DOCUMENTS,
-    exports.UPLOAD_DOCUMENT,
     exports.UPDATE_CONTACT_INFO,
+    exports.UPLOAD_DOCUMENT,
+    exports.VIEW_DOCUMENTS,
   ],
+  trialclerk: allInternalUserPermissions,
 };
 
 /**

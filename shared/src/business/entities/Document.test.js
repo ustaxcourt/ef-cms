@@ -422,7 +422,7 @@ describe('Document entity', () => {
   });
 
   describe('setQCed', () => {
-    it('updates the document', () => {
+    it('updates the document QC information with user name, id, and date', () => {
       const document = new Document(A_VALID_DOCUMENT, { applicationContext });
       const user = { name: 'Jean Luc', userId: 'ncc-1701-c' };
       document.setQCed(user);

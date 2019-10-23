@@ -18,6 +18,7 @@ module.exports = {
     'security',
     'sort-destructure-keys',
     'sort-keys-fix',
+    'spellcheck',
   ],
   rules: {
     'no-prototype-builtins': 0,
@@ -101,6 +102,28 @@ module.exports = {
       },
       {
         enforceForRenamedProperties: false,
+      },
+    ],
+    'spellcheck/spell-checker': [
+      1,
+      {
+        comments: true,
+        strings: true,
+        identifiers: true,
+        lang: 'en_US',
+        skipWords: [
+          'checkbox',
+          'Falsy',
+          'fieldset',
+          'param',
+          'textarea',
+          'Truthy',
+          'usa',
+          'ustc',
+          'assignee',
+          'petitionsclerk',
+        ],
+        minLength: 4,
       },
     ],
   },

@@ -11,7 +11,6 @@ const AWS = require('aws-sdk');
 // ^ must come first --------------------
 
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
-const util = require('util');
 const uuidv4 = require('uuid/v4');
 const {
   unblockCaseInteractor,
@@ -403,9 +402,6 @@ const {
   runBatchProcessInteractor,
 } = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
-  sanitizePdfInteractor,
-} = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
-const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
@@ -517,6 +513,9 @@ const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
+  updateHighPriorityCaseTrialSortMappingRecords,
+} = require('../../shared/src/persistence/dynamo/cases/updateHighPriorityCaseTrialSortMappingRecords');
+const {
   updatePrimaryContactInteractor,
 } = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
 const {
@@ -583,13 +582,9 @@ const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
 const {
-  virusScanPdfInteractor,
-} = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
-const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const elasticsearch = require('elasticsearch');
-const { exec } = require('child_process');
 const {
   generateCaseConfirmationPdfInteractor,
 } = require('../../shared/src/business/useCases/caseConfirmation/generateCaseConfirmationPdfInteractor');
@@ -601,7 +596,6 @@ const connectionClass = require('http-aws-es');
 AWS.config.httpOptions.timeout = 300000;
 
 const { DynamoDB, EnvironmentCredentials, S3, SES } = AWS;
-const execPromise = util.promisify(exec);
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
@@ -768,6 +762,7 @@ module.exports = (appContextUser = {}) => {
         updateCaseNote,
         updateCaseTrialSortMappingRecords,
         updateDocumentProcessingStatus,
+        updateHighPriorityCaseTrialSortMappingRecords,
         updateTrialSession,
         updateTrialSessionWorkingCopy,
         updateUser,
@@ -901,8 +896,6 @@ module.exports = (appContextUser = {}) => {
         recallPetitionFromIRSHoldingQueueInteractor,
         removeCaseFromTrialInteractor,
         runBatchProcessInteractor,
-        sanitizePdfInteractor: args =>
-          process.env.SKIP_SANITIZE ? null : sanitizePdfInteractor(args),
         saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
@@ -929,8 +922,6 @@ module.exports = (appContextUser = {}) => {
         validatePdfInteractor,
         verifyCaseForUserInteractor,
         verifyPendingCaseForUserInteractor,
-        virusScanPdfInteractor: args =>
-          process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
       };
     },
     getUtilities: () => {
@@ -966,13 +957,6 @@ module.exports = (appContextUser = {}) => {
         // eslint-disable-next-line no-console
         console.timeEnd(key);
       },
-    },
-    runVirusScan: async ({ filePath }) => {
-      return execPromise(
-        `clamscan ${
-          process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
-        } ${filePath}`,
-      );
     },
   };
 };

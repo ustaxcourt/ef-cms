@@ -180,7 +180,7 @@ describe('updateUserContactInformationInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: User.ROLES.petitioner,
+          role: User.ROLES.petitionsClerk,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },

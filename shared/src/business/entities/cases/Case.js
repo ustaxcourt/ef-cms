@@ -489,29 +489,26 @@ Case.prototype.attachRespondent = function(respondent) {
  * updates a respondent on the case
  *
  * @param {string} respondentToUpdate the respondent user object with updated info
- * @returns {void} modfies the respondents array on the case
+ * @returns {void} modifies the respondents array on the case
  */
 Case.prototype.updateRespondent = function(respondentToUpdate) {
-  this.respondents.some(respondent => {
-    if (respondent.userId === respondentToUpdate.userId) {
-      Object.assign(respondent, respondentToUpdate);
-      return true;
-    }
-  });
+  const respondent = this.respondents.find(
+    respondent => respondent.userId === respondentToUpdate.userId,
+  );
+  if (respondent) Object.assign(respondent, respondentToUpdate);
 };
 
 /**
  * removes the given respondent from the case
  *
  * @param {string} respondentToRemove the respondent user object to remove from the case
- * @returns {void} modfies the respondents array on the case
+ * @returns {Case} the modified case entity
  */
 Case.prototype.removeRespondent = function(respondentToRemove) {
-  this.respondents.some((respondent, idx) => {
-    if (respondent.userId === respondentToRemove.userId) {
-      this.respondents.splice(idx, 1);
-    }
-  });
+  const index = this.respondents.findIndex(
+    respondent => respondent.userId === respondentToRemove.userId,
+  );
+  if (index > -1) this.respondents.splice(index, 1);
   return this;
 };
 
@@ -523,29 +520,24 @@ Case.prototype.attachPractitioner = function(practitioner) {
  * updates a practitioner on the case
  *
  * @param {string} practitionerToUpdate the practitioner user object with updated info
- * @returns {void} modfies the practitioners array on the case
  */
 Case.prototype.updatePractitioner = function(practitionerToUpdate) {
-  this.practitioners.some(practitioner => {
-    if (practitioner.userId === practitionerToUpdate.userId) {
-      Object.assign(practitioner, practitionerToUpdate);
-      return true;
-    }
-  });
+  const practitioner = this.practitioners.find(
+    practitioner => practitioner.userId === practitionerToUpdate.userId,
+  );
+  if (practitioner) Object.assign(practitioner, practitionerToUpdate);
 };
 
 /**
  * removes the given practitioner from the case
  *
  * @param {string} practitionerToRemove the practitioner user object to remove from the case
- * @returns {void} modfies the practitioners array on the case
  */
 Case.prototype.removePractitioner = function(practitionerToRemove) {
-  this.practitioners.some((practitioner, idx) => {
-    if (practitioner.userId === practitionerToRemove.userId) {
-      this.practitioners.splice(idx, 1);
-    }
-  });
+  const index = this.practitioners.findIndex(
+    practitioner => practitioner.userId === practitionerToRemove.userId,
+  );
+  if (index > -1) this.practitioners.splice(index, 1);
 };
 
 /**
@@ -778,12 +770,10 @@ Case.prototype.addDocketRecord = function(docketRecordEntity) {
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocketRecordEntry = function(updatedDocketEntry) {
-  this.docketRecord.some(entry => {
-    if (entry.documentId === updatedDocketEntry.documentId) {
-      Object.assign(entry, updatedDocketEntry);
-      return true;
-    }
-  });
+  const entry = this.docketRecord.find(
+    entry => entry.documentId === updatedDocketEntry.documentId,
+  );
+  if (entry) Object.assign(entry, updatedDocketEntry);
   return this;
 };
 
@@ -807,12 +797,10 @@ Case.prototype.updateDocketRecord = function(
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocument = function(updatedDocument) {
-  this.documents.some(document => {
-    if (document.documentId === updatedDocument.documentId) {
-      Object.assign(document, updatedDocument);
-      return true;
-    }
-  });
+  const document = this.documents.find(
+    document => document.documentId === updatedDocument.documentId,
+  );
+  if (document) Object.assign(document, updatedDocument);
   return this;
 };
 
@@ -989,6 +977,15 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
  */
 Case.prototype.isCalendared = function() {
   return this.status === Case.STATUS_TYPES.calendared;
+};
+
+/**
+ * returns true if the case status is ready for trial
+ *
+ * @returns {boolean} if the case is calendared
+ */
+Case.prototype.isReadyForTrial = function() {
+  return this.status === Case.STATUS_TYPES.generalDocketReadyForTrial;
 };
 
 /**
