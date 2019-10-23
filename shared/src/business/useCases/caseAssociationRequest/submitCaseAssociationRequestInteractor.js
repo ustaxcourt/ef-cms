@@ -5,6 +5,7 @@ const {
   associateRespondentToCase,
 } = require('../../useCaseHelper/caseAssociation/associateRespondentToCase');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 const {
   ASSOCIATE_SELF_WITH_CASE,
   isAuthorized,
@@ -38,8 +39,8 @@ exports.submitCaseAssociationRequestInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const isPractitioner = authorizedUser.role === 'practitioner';
-  const isRespondent = authorizedUser.role === 'respondent';
+  const isPractitioner = authorizedUser.role === User.ROLES.practitioner;
+  const isRespondent = authorizedUser.role === User.ROLES.respondent;
 
   if (isPractitioner) {
     return await associatePractitionerToCase({
