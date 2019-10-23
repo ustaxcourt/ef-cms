@@ -1,5 +1,6 @@
 const {
   CREATE_COURT_ISSUED_ORDER,
+  DOCKET_ENTRY,
   FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
@@ -16,7 +17,8 @@ exports.uploadDocumentInteractor = async ({
   if (
     !(
       isAuthorized(user, FILE_EXTERNAL_DOCUMENT) ||
-      isAuthorized(user, CREATE_COURT_ISSUED_ORDER)
+      isAuthorized(user, CREATE_COURT_ISSUED_ORDER) ||
+      isAuthorized(user, DOCKET_ENTRY)
     )
   ) {
     throw new UnauthorizedError('Unauthorized');

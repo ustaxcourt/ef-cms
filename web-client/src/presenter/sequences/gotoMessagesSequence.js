@@ -23,12 +23,12 @@ const goToMessages = [
   clearErrorAlertsAction,
   getUserRoleAction,
   {
-    adc: [],
     docketclerk: [
       getUsersInSectionAction({ section: 'docket' }),
       setUsersAction,
     ],
     judge: [getTrialSessionsAction, setTrialSessionsAction],
+    otherInternalUser: [],
     petitionsclerk: [
       getUsersInSectionAction({ section: 'petitions' }),
       setUsersAction,

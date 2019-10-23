@@ -29,6 +29,11 @@ export const gotoStartCaseWizardSequence = [
       set(state.documentSelectedForScan, 'petitionFile'),
       setCurrentPageAction('StartCaseInternal'),
     ],
+    otherInternalUser: [
+      set(state.documentUploadMode, 'scan'),
+      set(state.documentSelectedForScan, 'petitionFile'),
+      setCurrentPageAction('StartCaseInternal'),
+    ],
     petitioner: [
       getFilingTypesAction,
       setFilingTypesAction,
