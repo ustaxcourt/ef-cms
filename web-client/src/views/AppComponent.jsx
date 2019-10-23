@@ -42,7 +42,7 @@ import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 
 const pages = {
   AddDocketEntry,
