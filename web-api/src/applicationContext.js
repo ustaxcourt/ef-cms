@@ -517,6 +517,9 @@ const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
 const {
+  updateHighPriorityCaseTrialSortMappingRecords,
+} = require('../../shared/src/persistence/dynamo/cases/updateHighPriorityCaseTrialSortMappingRecords');
+const {
   updatePrimaryContactInteractor,
 } = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
 const {
@@ -768,6 +771,7 @@ module.exports = (appContextUser = {}) => {
         updateCaseNote,
         updateCaseTrialSortMappingRecords,
         updateDocumentProcessingStatus,
+        updateHighPriorityCaseTrialSortMappingRecords,
         updateTrialSession,
         updateTrialSessionWorkingCopy,
         updateUser,

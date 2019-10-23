@@ -1,12 +1,19 @@
 const { unprioritizeCaseInteractor } = require('./unprioritizeCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
+const { Case } = require('../entities/cases/Case');
 
 describe('unprioritizeCaseInteractor', () => {
   let applicationContext;
-  let updateCaseTrialSortMappingRecordsMock = jest.fn();
+  let updateCaseTrialSortMappingRecordsMock;
+  let deleteCaseTrialSortMappingRecordsMock;
 
-  it('should set the highPriority flag to false and remove the highPriorityReason', async () => {
+  beforeEach(() => {
+    updateCaseTrialSortMappingRecordsMock = jest.fn();
+    deleteCaseTrialSortMappingRecordsMock = jest.fn();
+  });
+
+  it('should set the highPriority flag to false and remove the highPriorityReason and call updateCaseTrialSortMappingRecords if the case status is ready for trial', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
@@ -17,9 +24,11 @@ describe('unprioritizeCaseInteractor', () => {
       },
       getPersistenceGateway: () => {
         return {
+          deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
           getCaseByCaseId: () =>
             Promise.resolve({
               ...MOCK_CASE,
+              status: Case.STATUS_TYPES.generalDocketReadyForTrial,
               highPriority: true,
               highPriorityReason: 'because',
             }),
@@ -36,9 +45,49 @@ describe('unprioritizeCaseInteractor', () => {
       highPriority: false,
       highPriorityReason: undefined,
     });
+    expect(deleteCaseTrialSortMappingRecordsMock).not.toHaveBeenCalled();
     expect(updateCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
     expect(
       updateCaseTrialSortMappingRecordsMock.mock.calls[0][0].caseId,
+    ).toEqual(MOCK_CASE.caseId);
+  });
+
+  it('should set the highPriority flag to false and remove the highPriorityReason and call deleteCaseTrialSortMappingRecords if the case status is NOT ready for trial', async () => {
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: User.ROLES.petitionsClerk,
+          userId: 'petitionsclerk',
+        };
+      },
+      getPersistenceGateway: () => {
+        return {
+          deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
+          getCaseByCaseId: () =>
+            Promise.resolve({
+              ...MOCK_CASE,
+              status: Case.STATUS_TYPES.new,
+              highPriority: true,
+              highPriorityReason: 'because',
+            }),
+          updateCase: ({ caseToUpdate }) => caseToUpdate,
+          updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsMock,
+        };
+      },
+    };
+    const result = await unprioritizeCaseInteractor({
+      applicationContext,
+      caseId: MOCK_CASE.caseId,
+    });
+    expect(result).toMatchObject({
+      highPriority: false,
+      highPriorityReason: undefined,
+    });
+    expect(updateCaseTrialSortMappingRecordsMock).not.toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
+    expect(
+      deleteCaseTrialSortMappingRecordsMock.mock.calls[0][0].caseId,
     ).toEqual(MOCK_CASE.caseId);
   });
 
