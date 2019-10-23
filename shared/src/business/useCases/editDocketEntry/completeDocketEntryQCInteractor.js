@@ -71,19 +71,17 @@ exports.completeDocketEntryQCInteractor = async ({
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
   caseEntity.updateDocument(documentEntity);
 
-  const workItemsToComplete = currentDocument.workItems
-    .filter(workItem => workItem.isQC === true)
-    .filter(workItem => !workItem.completedAt);
+  const workItemsToUpdate = currentDocument.workItems.filter(
+    workItem => workItem.isQC === true,
+  );
 
-  for (const workItemToComplete of workItemsToComplete) {
+  for (const workItemToUpdate of workItemsToUpdate) {
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,
-      workItem: workItemToComplete,
+      workItem: workItemToUpdate,
     });
 
-    Object.assign(workItemToComplete, {
-      assigneeId: null,
-      assigneeName: null,
+    Object.assign(workItemToUpdate, {
       caseId: caseId,
       caseStatus: caseToUpdate.status,
       docketNumber: caseToUpdate.docketNumber,
@@ -92,29 +90,36 @@ exports.completeDocketEntryQCInteractor = async ({
         ...documentEntity.toRawObject(),
         createdAt: documentEntity.createdAt,
       },
-      section: DOCKET_SECTION,
-      sentBy: user.userId,
     });
 
-    workItemToComplete.setAsCompleted({
-      message: 'completed',
-      user,
-    });
+    if (!workItemToUpdate.completedAt) {
+      Object.assign(workItemToUpdate, {
+        assigneeId: null,
+        assigneeName: null,
+        section: DOCKET_SECTION,
+        sentBy: user.userId,
+      });
 
-    workItemToComplete.assignToUser({
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      section: user.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-    });
+      workItemToUpdate.setAsCompleted({
+        message: 'completed',
+        user,
+      });
+
+      workItemToUpdate.assignToUser({
+        assigneeId: user.userId,
+        assigneeName: user.name,
+        section: user.section,
+        sentBy: user.name,
+        sentBySection: user.section,
+        sentByUserId: user.userId,
+      });
+    }
 
     await applicationContext
       .getPersistenceGateway()
       .saveWorkItemForDocketClerkFilingExternalDocument({
         applicationContext,
-        workItem: workItemToComplete.validate().toRawObject(),
+        workItem: workItemToUpdate.validate().toRawObject(),
       });
   }
 
