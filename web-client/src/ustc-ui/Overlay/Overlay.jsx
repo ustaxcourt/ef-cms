@@ -1,115 +1,100 @@
 import { FocusLock } from '../FocusLock/FocusLock';
 import { connect } from '@cerebral/react';
 import { props, sequences } from 'cerebral';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
 const modalRoot = document.getElementById('modal-root');
 
-class OverlayComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.el = document.createElement('div');
-    this.preventEsc = !!this.props.preventEsc;
-    this.preventScrolling = !!this.props.preventScrolling;
-    this.keydownTriggered = this.keydownTriggered.bind(this);
-    this.blurDialog = this.blurDialog.bind(this);
-    this.toggleNoScroll = this.toggleNoScroll.bind(this);
-    this.onEscSequence = () => {};
-    if (this.props.onEscSequence) {
-      this.onEscSequence = this.props.onEscSequence.bind(this);
-    }
-  }
-
-  toggleNoScroll(scrollingOn) {
-    if (this.preventScrolling && scrollingOn) {
-      document.body.classList.add('no-scroll');
-      document.addEventListener('touchmove', this.touchmoveTriggered, {
-        passive: false,
-      });
-    } else {
-      document.body.classList.remove('no-scroll');
-      document.removeEventListener('touchmove', this.touchmoveTriggered, {
-        passive: false,
-      });
-    }
-  }
-
-  keydownTriggered(event) {
-    if (event.keyCode === 27) {
-      return this.blurDialog(event);
-    }
-  }
-
-  touchmoveTriggered(event) {
-    return event.preventDefault();
-  }
-
-  blurDialog(event) {
-    if (this.preventEsc) {
-      return false;
-    }
-    return this.onEscSequence(event);
-  }
-
-  componentDidMount() {
-    modalRoot.appendChild(this.el);
-    document.addEventListener('keydown', this.keydownTriggered, false);
-    this.toggleNoScroll(true);
-  }
-
-  componentWillUnmount() {
-    modalRoot.removeChild(this.el);
-    document.removeEventListener('keydown', this.keydownTriggered, false);
-    this.toggleNoScroll(false);
-  }
-
-  render() {
-    return ReactDOM.createPortal(this.renderModalContent(), this.el);
-  }
-
-  renderModalContent() {
-    return (
-      <FocusLock>
-        <dialog
-          open
-          className={classNames(
-            'modal-screen',
-            'overlay-full',
-            this.props.className,
-          )}
-          ref={this.props.forwardedRef}
-        >
-          <div
-            aria-live="assertive"
-            aria-modal="true"
-            className="modal-overlay"
-            role="dialog"
-          >
-            {this.props.children}
-          </div>
-        </dialog>
-      </FocusLock>
-    );
-  }
-}
-
-OverlayComponent.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  forwardedRef: PropTypes.any,
-  onEscSequence: PropTypes.func,
-  preventEsc: PropTypes.bool,
-  preventScrolling: PropTypes.bool,
-};
-
 const OverlayUnRef = connect(
   {
     onEscSequence: sequences[props.onEscSequence],
   },
-  OverlayComponent,
+  ({
+    children,
+    className,
+    forwardedRef,
+    onEscSequence,
+    preventEsc,
+    preventScrolling,
+  }) => {
+    if (!onEscSequence) onEscSequence = () => {};
+
+    const elRef = React.useRef(null);
+
+    const getEl = () => {
+      if (!elRef.current) {
+        elRef.current = document.createElement('div');
+      }
+      return elRef.current;
+    };
+
+    useEffect(() => {
+      const toggleNoScroll = scrollingOn => {
+        if (preventScrolling && scrollingOn) {
+          document.body.classList.add('no-scroll');
+          document.addEventListener('touchmove', touchmoveTriggered, {
+            passive: false,
+          });
+        } else {
+          document.body.classList.remove('no-scroll');
+          document.removeEventListener('touchmove', touchmoveTriggered, {
+            passive: false,
+          });
+        }
+      };
+
+      const keydownTriggered = event => {
+        if (event.keyCode === 27) {
+          return blurDialog(event);
+        }
+      };
+
+      const touchmoveTriggered = event => {
+        return event.preventDefault();
+      };
+
+      const blurDialog = event => {
+        if (preventEsc) {
+          return false;
+        }
+        return onEscSequence(event);
+      };
+
+      modalRoot.appendChild(getEl());
+      document.addEventListener('keydown', keydownTriggered, false);
+      toggleNoScroll(true);
+      return () => {
+        modalRoot.removeChild(getEl());
+        document.removeEventListener('keydown', keydownTriggered, false);
+        toggleNoScroll(false);
+      };
+    }, []);
+
+    const renderModalContent = () => {
+      return (
+        <FocusLock>
+          <dialog
+            open
+            className={classNames('modal-screen', 'overlay-full', className)}
+            ref={forwardedRef}
+          >
+            <div
+              aria-live="assertive"
+              aria-modal="true"
+              className="modal-overlay"
+              role="dialog"
+            >
+              {children}
+            </div>
+          </dialog>
+        </FocusLock>
+      );
+    };
+
+    return ReactDOM.createPortal(renderModalContent(), getEl());
+  },
 );
 
 /**
