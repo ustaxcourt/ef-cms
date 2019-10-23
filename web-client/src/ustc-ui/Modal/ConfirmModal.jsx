@@ -17,14 +17,16 @@ export const ConfirmModal = connect(
     noCancel,
     noCloseBtn,
     noConfirm,
+    cancelLabel,
+    confirmLabel,
     onCancel,
     onCancelSequence,
     onConfirm,
     preventCancelOnBlur,
     title,
   }) => {
-    const confirmLabel = confirmLabel || 'Ok';
-    const cancelLabel = cancelLabel || 'Cancel';
+    confirmLabel = confirmLabel || 'Ok';
+    cancelLabel = cancelLabel || 'Cancel';
 
     const runCancelSequence = event => {
       event.stopPropagation();
