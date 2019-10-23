@@ -1,10 +1,10 @@
+import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { state, sequences } from 'cerebral';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button } from '../../ustc-ui/Button/Button';
 
 const PetitionDetails = ({ caseDetail }) => (
   <React.Fragment>
