@@ -9,6 +9,7 @@ const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
@@ -121,7 +122,7 @@ exports.fileDocketEntryInteractor = async ({
             createdAt: documentEntity.createdAt,
           },
           isQC: true,
-          isRead: user.role !== 'practitioner',
+          isRead: user.role !== User.ROLES.practitioner,
           section: DOCKET_SECTION,
           sentBy: user.userId,
         },
