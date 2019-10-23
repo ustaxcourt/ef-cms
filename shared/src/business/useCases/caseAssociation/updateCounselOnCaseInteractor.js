@@ -3,6 +3,7 @@ const {
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { User } = require('../../entities/User');
 const { Practitioner } = require('../../entities/Practitioner');
 const { Respondent } = require('../../entities/Respondent');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -45,11 +46,11 @@ exports.updateCounselOnCaseInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  if (userToUpdate.role === 'practitioner') {
+  if (userToUpdate.role === User.ROLES.practitioner) {
     caseEntity.updatePractitioner(
       new Practitioner({ userId: userToUpdate.userId, ...userData }),
     );
-  } else if (userToUpdate.role === 'respondent') {
+  } else if (userToUpdate.role === User.ROLES.respondent) {
     caseEntity.updateRespondent(
       new Respondent({ userId: userToUpdate.userId, ...userData }),
     );
