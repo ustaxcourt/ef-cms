@@ -1,8 +1,32 @@
+const pug = require('pug');
+const sass = require('node-sass');
+const fs = require('fs');
 const {
   isAuthorized,
   UPLOAD_DOCUMENT,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+
+const confirmSassContent = fs.readFileSync('./caseConfirmation.scss', 'utf-8');
+const confirmPugContent = fs.readFileSync('./caseConfirmation.pug', 'utf-8');
+
+/**
+ * NOTE: to make this work, you must save the petition as a petitionsclerk
+ *
+ * @param {object} caseInfo a raw object representing a petition
+ * @returns {string} an html string resulting from rendering template with caseInfo
+ */
+
+const generatecaseConfirmationPage = async caseInfo => {
+  const { css } = await new Promise(resolve => {
+    sass.render({ data: confirmSassContent }, (err, result) => {
+      return resolve(result);
+    });
+  });
+  const compiledFunction = pug.compile(confirmPugContent);
+  const html = compiledFunction({ ...caseInfo, css });
+  return html;
+};
 
 /**
  * generateCaseConfirmationPdfInteractor
@@ -44,41 +68,11 @@ exports.generateCaseConfirmationPdfInteractor = async ({
 
     let page = await browser.newPage();
 
-    await page.setContent(
-      ' <div style="font-size: 10px; font-family: serif; width: 100%; margin: 20px 62px 20px 62px;">' +
-        JSON.stringify(caseToUpdate, null, 2) +
-        '</div>',
-    );
-
-    const headerTemplate = `
-      <!doctype html>
-      <html>
-        <head>
-          <style>
-          </style>
-        </head>
-        <body>
-          <div style="font-size: 10px; font-family: 'nimbus_roman', serif; width: 100%; margin: 20px 62px 20px 62px;">
-          </div>
-        </body>
-      </html>
-    `;
-
-    const footerTemplate = `
-      <!doctype html>
-      <html>
-        <body>
-          <div style="font-size: 10px; font-family: serif; width: 100%; margin: 20px 62px 20px 62px;">
-          </div>
-        </body>
-      </html>
-    `;
+    await page.setContent(await generatecaseConfirmationPage(caseToUpdate));
 
     result = await page.pdf({
-      displayHeaderFooter: true,
-      footerTemplate,
+      displayHeaderFooter: false,
       format: 'letter',
-      headerTemplate,
     });
   } catch (error) {
     applicationContext.logger.error(error);
