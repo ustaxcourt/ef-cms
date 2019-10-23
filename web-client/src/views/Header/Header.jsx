@@ -15,8 +15,8 @@ const BetaBar = toggleBetaBarSequence => {
       <div className="grid-container">
         <div className="grid-row">
           <div className="grid-col-10">
-            is a testing site for the U.S. Tax Court and not intended for public
-            use. To learn more about starting a case, visit the{' '}
+            This is a testing site for the U.S. Tax Court and not intended for
+            public use. To learn more about starting a case, visit the{' '}
             <a href="https://www.ustaxcourt.gov/">U.S. Tax Court website</a>.
           </div>
           <div className="grid-col-2">
