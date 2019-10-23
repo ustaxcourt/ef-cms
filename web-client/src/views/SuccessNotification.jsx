@@ -1,28 +1,25 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
-class SuccessNotificationComponent extends React.Component {
-  componentDidUpdate() {
-    this.focusNotification();
-  }
-
-  focusNotification() {
-    const notification = this.notificationRef.current;
-    if (notification) {
-      window.scrollTo(0, 0);
-    }
-  }
-
-  render() {
-    const { alertSuccess } = this.props;
-    const { dismissAlertSequence } = this.props;
-    this.notificationRef = React.createRef();
+export const SuccessNotification = connect(
+  {
+    alertSuccess: state.alertSuccess,
+    dismissAlertSequence: sequences.dismissAlertSequence,
+  },
+  ({ alertSuccess, dismissAlertSequence }) => {
+    const notificationRef = useRef(null);
     const isMessageOnly =
       alertSuccess && alertSuccess.message && !alertSuccess.title;
+
+    useEffect(() => {
+      const notification = notificationRef.current;
+      if (notification) {
+        window.scrollTo(0, 0);
+      }
+    });
 
     return (
       <>
@@ -34,7 +31,7 @@ class SuccessNotificationComponent extends React.Component {
               'usa-alert--success',
               isMessageOnly && 'usa-alert-success-message-only',
             )}
-            ref={this.notificationRef}
+            ref={notificationRef}
             role="alert"
           >
             <div className="usa-alert__body">
@@ -74,18 +71,5 @@ class SuccessNotificationComponent extends React.Component {
         )}
       </>
     );
-  }
-}
-
-SuccessNotificationComponent.propTypes = {
-  alertSuccess: PropTypes.object,
-  dismissAlertSequence: PropTypes.func,
-};
-
-export const SuccessNotification = connect(
-  {
-    alertSuccess: state.alertSuccess,
-    dismissAlertSequence: sequences.dismissAlertSequence,
   },
-  SuccessNotificationComponent,
 );

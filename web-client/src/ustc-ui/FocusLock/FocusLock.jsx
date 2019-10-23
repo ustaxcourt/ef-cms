@@ -1,24 +1,19 @@
 import 'wicg-inert';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const appRoot = document.getElementById('app');
 const tabbableSelector =
   'a:enabled,button:enabled,input:enabled,select:enabled,textarea:enabled';
-export class FocusLock extends React.Component {
-  constructor() {
-    super();
-    this.el = React.createRef();
-    this.lastFocused = this.componentWithFocus();
-    this.onKey = this.onKey.bind(this);
-  }
 
-  onKey(event) {
-    if (event.keyCode != 9 || !this.el.current.contains(event.target)) {
+export const FocusLock = ({ children }) => {
+  const el = useRef(null);
+
+  const onKey = event => {
+    if (event.keyCode != 9 || !el.current.contains(event.target)) {
       // not tab key on element within this component
       return;
     }
-    const lockedElements = this.gatherTabbables();
+    const lockedElements = el.current.querySelectorAll(tabbableSelector);
     const [firstTabbable, lastTabbable] = [
       lockedElements.item(0),
       lockedElements.item(lockedElements.length - 1),
@@ -36,49 +31,23 @@ export class FocusLock extends React.Component {
       return false;
     }
     return true;
-  }
+  };
 
-  gatherTabbables() {
-    return this.el.current.querySelectorAll(tabbableSelector);
-  }
-
-  componentWithFocus() {
-    const focusedElement =
-      (document.hasFocus() &&
-        document.activeElement !== document.body &&
-        document.activeElement !== document.documentElement &&
-        document.activeElement) ||
-      {};
-    return focusedElement;
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     appRoot.inert = true; // leverages wicg-inert polyfill
     appRoot.setAttribute('aria-hidden', 'true');
-    document.addEventListener('keydown', this.onKey);
-  }
+    document.addEventListener('keydown', onKey);
 
-  componentWillUnmount() {
-    appRoot.inert = false;
-    appRoot.setAttribute('aria-hidden', 'false');
-    document.removeEventListener('keydown', this.onKey);
-    //takes focus away from success/warning notifications
-    //this.restoreFocus();
-  }
+    return () => {
+      appRoot.inert = false;
+      appRoot.setAttribute('aria-hidden', 'false');
+      document.removeEventListener('keydown', onKey);
+    };
+  }, []);
 
-  restoreFocus() {
-    this.lastFocused.focus && this.lastFocused.focus();
-  }
-
-  render() {
-    return (
-      <div className="ustc-focus-lock" ref={this.el}>
-        {this.props.children}
-      </div>
-    );
-  }
-}
-
-FocusLock.propTypes = {
-  children: PropTypes.node,
+  return (
+    <div className="ustc-focus-lock" ref={el}>
+      {children}
+    </div>
+  );
 };
