@@ -11,7 +11,6 @@ const AWS = require('aws-sdk');
 // ^ must come first --------------------
 
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
-const util = require('util');
 const uuidv4 = require('uuid/v4');
 const {
   unblockCaseInteractor,
@@ -586,7 +585,6 @@ const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const elasticsearch = require('elasticsearch');
-const { exec } = require('child_process');
 const {
   generateCaseConfirmationPdfInteractor,
 } = require('../../shared/src/business/useCases/caseConfirmation/generateCaseConfirmationPdfInteractor');
