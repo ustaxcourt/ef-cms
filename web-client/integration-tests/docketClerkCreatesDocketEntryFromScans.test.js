@@ -1,4 +1,5 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
+import { User } from '../../shared/src/business/entities/User';
 import { CerebralTest } from 'cerebral/test';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { JSDOM } from 'jsdom';
@@ -116,6 +117,7 @@ describe('Create Docket Entry From Scans', () => {
       MAX_FILE_SIZE_MB,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
       TRIAL_CITIES: TrialSession.TRIAL_CITIES,
+      USER_ROLES: User.ROLES,
     });
   });
 
