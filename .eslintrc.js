@@ -26,6 +26,7 @@ module.exports = {
     'security/detect-child-process': 0,
     'security/detect-non-literal-fs-filename': 0,
     'security/detect-object-injection': 0,
+    'react/prop-types': 0,
     'react/jsx-sort-props': [
       'error',
       {

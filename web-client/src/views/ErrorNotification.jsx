@@ -1,26 +1,22 @@
 import { Focus } from '../ustc-ui/Focus/Focus';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-class ErrorNotificationComponent extends React.Component {
-  componentDidUpdate() {
-    this.focusNotification();
-  }
+export const ErrorNotification = connect(
+  {
+    alertError: state.alertError,
+    alertHelper: state.alertHelper,
+  },
+  ({ alertError, alertHelper }) => {
+    const notificationRef = useRef(null);
 
-  focusNotification() {
-    const notification = this.notificationRef.current;
-    if (notification) {
-      window.scrollTo(0, 0);
-    }
-  }
-
-  render() {
-    const { alertHelper } = this.props;
-    const { alertError } = this.props;
-
-    this.notificationRef = React.createRef();
+    useEffect(() => {
+      const notification = notificationRef.current;
+      if (notification) {
+        window.scrollTo(0, 0);
+      }
+    });
 
     return (
       <React.Fragment>
@@ -28,7 +24,7 @@ class ErrorNotificationComponent extends React.Component {
           <div
             aria-live="assertive"
             className="usa-alert usa-alert--error"
-            ref={this.notificationRef}
+            ref={notificationRef}
             role="alert"
           >
             <div className="usa-alert__body">
@@ -53,18 +49,5 @@ class ErrorNotificationComponent extends React.Component {
         )}
       </React.Fragment>
     );
-  }
-}
-
-ErrorNotificationComponent.propTypes = {
-  alertError: PropTypes.object,
-  alertHelper: PropTypes.object,
-};
-
-export const ErrorNotification = connect(
-  {
-    alertError: state.alertError,
-    alertHelper: state.alertHelper,
   },
-  ErrorNotificationComponent,
 );

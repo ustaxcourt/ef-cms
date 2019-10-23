@@ -2,134 +2,139 @@ import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PDFSignerPageButtons } from './PDFSignerPageButtons';
-import { PropTypes } from 'prop-types';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-class SignOrderComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.canvasRef = React.createRef();
-    this.clear = this.clear.bind(this);
-    this.signatureRef = React.createRef();
-    this.renderPDFPage = this.renderPDFPage.bind(this);
-    this.start = this.start.bind(this);
-    this.stop = this.stop.bind(this);
-    this.moveSig = this.moveSig.bind(this);
-  }
+export const SignOrder = connect(
+  {
+    currentPageNumber: state.pdfForSigning.pageNumber,
+    docketNumber: state.caseDetail.docketNumber,
+    documentId: state.documentId,
+    pdfForSigning: state.pdfForSigning,
+    pdfObj: state.pdfForSigning.pdfjsObj,
+    pdfSignerHelper: state.pdfSignerHelper,
+    saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
+    setSignatureData: sequences.setPDFSignatureDataSequence,
+    signatureApplied: state.pdfForSigning.signatureApplied,
+    signatureData: state.pdfForSigning.signatureData,
+  },
+  ({
+    currentPageNumber,
+    docketNumber,
+    documentId,
+    pdfForSigning,
+    pdfObj,
+    pdfSignerHelper,
+    saveDocumentSigningSequence,
+    setSignatureData,
+    signatureApplied,
+    signatureData,
+  }) => {
+    const canvasRef = useRef(null);
+    const signatureRef = useRef(null);
 
-  componentDidMount() {
-    this.renderPDFPage(this.props.currentPageNumber);
-    this.start();
-  }
+    const renderPDFPage = pageNumber => {
+      if (process.env.CI) {
+        return;
+      }
+      const canvas = canvasRef.current;
+      const context = canvas.getContext('2d');
 
-  componentDidUpdate() {
-    if (!this.props.signatureData) {
-      this.renderPDFPage(this.props.currentPageNumber);
-    }
-  }
+      pdfObj.getPage(pageNumber).then(page => {
+        const scale = 1;
+        const viewport = page.getViewport({ scale });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
 
-  renderPDFPage(pageNumber) {
-    if (process.env.CI) {
-      return;
-    }
-    const canvas = this.canvasRef.current;
-    const context = canvas.getContext('2d');
+        var renderContext = {
+          canvasContext: context,
+          viewport: viewport,
+        };
+        page.render(renderContext);
+      });
+    };
 
-    this.props.pdfObj.getPage(pageNumber).then(page => {
-      const scale = 1;
-      const viewport = page.getViewport({ scale });
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
+    const moveSig = (sig, x, y) => {
+      sig.style.top = y + 'px';
+      sig.style.left = x + 'px';
+    };
 
-      var renderContext = {
-        canvasContext: context,
-        viewport: viewport,
+    const clear = () => {
+      setSignatureData({
+        isPdfAlreadySigned: false,
+        signatureApplied: false,
+        signatureData: null,
+      });
+    };
+
+    const restart = () => {
+      clear();
+      start();
+    };
+
+    const stop = (canvasEl, sigEl, x, y, scale = 1) => {
+      setSignatureData({
+        signatureApplied: true,
+        signatureData: { scale, x, y },
+      });
+      canvasEl.onmousemove = null;
+      canvasEl.onmousedown = null;
+      sigEl.onmousemove = null;
+      sigEl.onmousedown = null;
+    };
+
+    const start = () => {
+      const sigEl = signatureRef.current;
+      const canvasEl = canvasRef.current;
+      let x;
+      let y;
+
+      setSignatureData({
+        signatureApplied: true,
+        signatureData: null,
+      });
+
+      canvasEl.onmousemove = e => {
+        const { pageX, pageY } = e;
+        const canvasBounds = canvasEl.getBoundingClientRect();
+        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
+        const scrollYOffset = window.scrollY;
+
+        x = pageX - canvasBounds.x;
+        y = pageY - canvasBounds.y - scrollYOffset;
+
+        const uiPosX = pageX - sigParentBounds.x;
+        const uiPosY =
+          pageY -
+          canvasBounds.y -
+          scrollYOffset +
+          (canvasBounds.y - sigParentBounds.y);
+
+        moveSig(sigEl, uiPosX, uiPosY);
       };
-      page.render(renderContext);
-    });
-  }
 
-  moveSig(sig, x, y) {
-    sig.style.top = y + 'px';
-    sig.style.left = x + 'px';
-  }
+      canvasEl.onmousedown = () => {
+        stop(canvasEl, sigEl, x, y);
+      };
 
-  clear() {
-    this.props.setSignatureData({
-      isPdfAlreadySigned: false,
-      signatureApplied: false,
-      signatureData: null,
-    });
-  }
-
-  restart() {
-    this.clear();
-    this.start();
-  }
-
-  stop(canvasEl, sigEl, x, y, scale = 1) {
-    this.props.setSignatureData({
-      signatureApplied: true,
-      signatureData: { scale, x, y },
-    });
-    canvasEl.onmousemove = null;
-    canvasEl.onmousedown = null;
-    sigEl.onmousemove = null;
-    sigEl.onmousedown = null;
-  }
-
-  start() {
-    const sigEl = this.signatureRef.current;
-    const canvasEl = this.canvasRef.current;
-    let x;
-    let y;
-
-    this.props.setSignatureData({
-      signatureApplied: true,
-      signatureData: null,
-    });
-
-    canvasEl.onmousemove = e => {
-      const { pageX, pageY } = e;
-      const canvasBounds = canvasEl.getBoundingClientRect();
-      const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
-      const scrollYOffset = window.scrollY;
-
-      x = pageX - canvasBounds.x;
-      y = pageY - canvasBounds.y - scrollYOffset;
-
-      const uiPosX = pageX - sigParentBounds.x;
-      const uiPosY =
-        pageY -
-        canvasBounds.y -
-        scrollYOffset +
-        (canvasBounds.y - sigParentBounds.y);
-
-      this.moveSig(sigEl, uiPosX, uiPosY);
+      // sometimes the cursor falls on top of the signature
+      // and catches these events
+      sigEl.onmousemove = canvasEl.onmousemove;
+      sigEl.onmousedown = canvasEl.onmousedown;
     };
 
-    canvasEl.onmousedown = () => {
-      this.stop(canvasEl, sigEl, x, y);
-    };
+    useEffect(() => {
+      renderPDFPage(currentPageNumber);
+      start();
+    }, []);
 
-    // sometimes the cursor falls on top of the signature
-    // and catches these events
-    sigEl.onmousemove = canvasEl.onmousemove;
-    sigEl.onmousedown = canvasEl.onmousedown;
-  }
+    useEffect(() => {
+      if (!signatureData) {
+        renderPDFPage(currentPageNumber);
+      }
+    });
 
-  render() {
-    const {
-      docketNumber,
-      documentId,
-      pdfForSigning,
-      pdfSignerHelper,
-      saveDocumentSigningSequence,
-      signatureApplied,
-      signatureData,
-    } = this.props;
     return (
       <>
         <CaseDetailHeader />
@@ -149,7 +154,7 @@ class SignOrderComponent extends React.Component {
             </div>
             <div className="grid-col-4 text-align-right">
               {pdfSignerHelper.isPlaced && (
-                <Button link onClick={() => this.restart()}>
+                <Button link onClick={() => restart()}>
                   <FontAwesomeIcon icon={['fas', 'trash']} />
                   Delete Signature
                 </Button>
@@ -174,7 +179,7 @@ class SignOrderComponent extends React.Component {
                 <span
                   className={pdfSignerHelper.signatureClass}
                   id="signature"
-                  ref={this.signatureRef}
+                  ref={signatureRef}
                 >
                   (Signed) {pdfForSigning.nameForSigning}
                   <br />
@@ -188,7 +193,7 @@ class SignOrderComponent extends React.Component {
                         : 'cursor-grab'
                     }
                     id="sign-pdf-canvas"
-                    ref={this.canvasRef}
+                    ref={canvasRef}
                   ></canvas>
                 )}
               </div>
@@ -197,45 +202,5 @@ class SignOrderComponent extends React.Component {
         </section>
       </>
     );
-  }
-}
-
-SignOrderComponent.propTypes = {
-  completeDocumentSigningSequence: PropTypes.func,
-  currentPageNumber: PropTypes.number,
-  docketNumber: PropTypes.string,
-  documentDetailHelper: PropTypes.object,
-  documentId: PropTypes.string,
-  loadOriginalProposedStipulatedDecisionSequence: PropTypes.func,
-  navigateToPathSequence: PropTypes.func,
-  pdfForSigning: PropTypes.object,
-  pdfObj: PropTypes.object,
-  pdfSignerHelper: PropTypes.object,
-  saveDocumentSigningSequence: PropTypes.func,
-  setCanvas: PropTypes.func,
-  setSignatureData: PropTypes.func,
-  signatureApplied: PropTypes.bool,
-  signatureData: PropTypes.object,
-};
-
-export const SignOrder = connect(
-  {
-    completeDocumentSigningSequence: sequences.completeDocumentSigningSequence,
-    currentPageNumber: state.pdfForSigning.pageNumber,
-    docketNumber: state.caseDetail.docketNumber,
-    documentDetailHelper: state.documentDetailHelper,
-    documentId: state.documentId,
-    loadOriginalProposedStipulatedDecisionSequence:
-      sequences.loadOriginalProposedStipulatedDecisionSequence,
-    navigateToPathSequence: sequences.navigateToPathSequence,
-    pdfForSigning: state.pdfForSigning,
-    pdfObj: state.pdfForSigning.pdfjsObj,
-    pdfSignerHelper: state.pdfSignerHelper,
-    saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
-    setCanvas: sequences.setCanvasForPDFSigningSequence,
-    setSignatureData: sequences.setPDFSignatureDataSequence,
-    signatureApplied: state.pdfForSigning.signatureApplied,
-    signatureData: state.pdfForSigning.signatureData,
   },
-  SignOrderComponent,
 );
