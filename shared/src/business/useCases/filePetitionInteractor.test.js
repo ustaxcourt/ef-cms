@@ -18,7 +18,7 @@ describe('filePetitionInteractor', () => {
     return {
       getCurrentUser: () => ({
         role: User.ROLES.petitioner,
-        userId: 'taxpayer',
+        userId: 'petitioner',
       }),
       getPersistenceGateway: () => ({
         uploadDocument: uploadDocumentStub,

@@ -107,13 +107,13 @@ describe('advancedSearchHelper', () => {
         },
         searchResults: [
           {
-            caseCaption: 'Test Taxpayer, Petitioner',
+            caseCaption: 'Test Petitioner, Petitioner',
             contactPrimary: { name: 'Test Person', state: 'TN' },
             createdAt: '2019-03-01T05:00:00.000Z',
             docketNumber: '101-19',
           },
           {
-            caseCaption: 'Test Taxpayer & Another Taxpayer, Petitioner(s)',
+            caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: { name: 'Test Person', state: 'TX' },
             contactSecondary: { name: 'Another Person', state: 'TX' },
             createdAt: '2019-05-01T05:00:00.000Z',
@@ -126,7 +126,7 @@ describe('advancedSearchHelper', () => {
     });
     expect(result.formattedSearchResults).toMatchObject([
       {
-        caseCaptionNames: 'Test Taxpayer & Another Taxpayer',
+        caseCaptionNames: 'Test Petitioner & Another Petitioner',
         contactPrimaryName: 'Test Person',
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
@@ -134,7 +134,7 @@ describe('advancedSearchHelper', () => {
         fullStateNamePrimary: 'Texas',
       },
       {
-        caseCaptionNames: 'Test Taxpayer',
+        caseCaptionNames: 'Test Petitioner',
         contactPrimaryName: 'Test Person',
         contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
@@ -155,13 +155,13 @@ describe('advancedSearchHelper', () => {
         },
         searchResults: [
           {
-            caseCaption: 'Test Taxpayer, Petitioner',
+            caseCaption: 'Test Petitioner, Petitioner',
             contactPrimary: { name: 'Test Person', state: 'TN' },
             createdAt: '2019-03-01T05:00:00.000Z',
             docketNumber: '101-19',
           },
           {
-            caseCaption: 'Test Taxpayer & Another Taxpayer, Petitioner(s)',
+            caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: { name: 'Test Person', state: 'TX' },
             contactSecondary: { name: 'Another Person', state: 'TX' },
             createdAt: '2018-05-01T05:00:00.000Z',
@@ -175,7 +175,7 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults.length).toEqual(1);
     expect(result.formattedSearchResults).toMatchObject([
       {
-        caseCaptionNames: 'Test Taxpayer & Another Taxpayer',
+        caseCaptionNames: 'Test Petitioner & Another Petitioner',
         contactPrimaryName: 'Test Person',
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
@@ -194,13 +194,13 @@ describe('advancedSearchHelper', () => {
         },
         searchResults: [
           {
-            caseCaption: 'Test Taxpayer, Petitioner',
+            caseCaption: 'Test Petitioner, Petitioner',
             contactPrimary: { name: 'Test Person', state: 'TN' },
             createdAt: '2019-03-01T05:00:00.000Z',
             docketNumber: '101-19',
           },
           {
-            caseCaption: 'Test Taxpayer & Another Taxpayer, Petitioner(s)',
+            caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: { name: 'Test Person', state: 'TX' },
             contactSecondary: { name: 'Another Person', state: 'TX' },
             createdAt: '2018-05-01T05:00:00.000Z',
@@ -231,7 +231,7 @@ describe('advancedSearchHelper', () => {
         fullStateNameSecondary: 'Tennessee',
       },
       {
-        caseCaptionNames: 'Test Taxpayer & Another Taxpayer',
+        caseCaptionNames: 'Test Petitioner & Another Petitioner',
         contactPrimaryName: 'Test Person',
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
@@ -239,7 +239,7 @@ describe('advancedSearchHelper', () => {
         fullStateNamePrimary: 'Texas',
       },
       {
-        caseCaptionNames: 'Test Taxpayer',
+        caseCaptionNames: 'Test Petitioner',
         contactPrimaryName: 'Test Person',
         contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',

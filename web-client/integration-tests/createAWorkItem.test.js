@@ -156,7 +156,7 @@ describe('Create a work item', () => {
   let petitionDocument;
 
   it('create the case for this test', async () => {
-    await loginAs('taxpayer');
+    await loginAs('petitioner');
     await waitForRouter();
     await createCase(test);
   });
