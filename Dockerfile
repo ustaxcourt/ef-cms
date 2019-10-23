@@ -17,11 +17,10 @@ RUN apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 lib
   libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
   ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget \
   git bash openssh-client python python-dev python-pip python-setuptools ca-certificates groff less \
-  unzip wget jq shellcheck ghostscript libgs-dev clamav
+  unzip wget jq shellcheck libgs-dev
 
 ENV AWS_CLI_VERSION 1.16.31
 
-RUN freshclam
 RUN pip install --upgrade pip
 RUN apt-get install -y awscli && \
   pip install --upgrade awscli==${AWS_CLI_VERSION} && \
@@ -38,7 +37,6 @@ RUN apt-get install -y awscli && \
 
 ENV SONAR_RUNNER_HOME=/home/app/sonar_home
 ENV PATH ${SONAR_RUNNER_HOME}/bin:$PATH
-ENV GS4JS_HOME=/usr/lib
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 COPY package.json /home/app/package.json
