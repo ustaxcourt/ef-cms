@@ -13,7 +13,7 @@ export const getUserRoleAction = ({ applicationContext, get, path }) => {
   const user = get(state.user);
   const USER_ROLES = get(state.constants.USER_ROLES);
 
-  if (applicationContext.getUtilities().isExternalUser()) {
+  if (applicationContext.getUtilities().isExternalUser(user.role)) {
     return path[user.role]();
   } else {
     if (
