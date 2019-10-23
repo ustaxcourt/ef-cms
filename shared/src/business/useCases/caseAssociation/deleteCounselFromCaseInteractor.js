@@ -2,6 +2,7 @@ const {
   ASSOCIATE_USER_WITH_CASE,
   isAuthorized,
 } = require('../../../authorization/authorizationClientService');
+const { User } = require('../../entities/User');
 const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -41,9 +42,9 @@ exports.deleteCounselFromCaseInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  if (userToDelete.role === 'practitioner') {
+  if (userToDelete.role === User.ROLES.practitioner) {
     caseEntity.removePractitioner(userToDelete);
-  } else if (userToDelete.role === 'respondent') {
+  } else if (userToDelete.role === User.ROLES.respondent) {
     caseEntity.removeRespondent(userToDelete);
   }
 
