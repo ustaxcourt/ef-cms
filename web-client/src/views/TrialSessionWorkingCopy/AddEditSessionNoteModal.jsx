@@ -27,6 +27,7 @@ export const AddEditSessionNoteModal = connect(
         <div
           className={classNames(
             'usa-form-group',
+            'margin-bottom-2',
             validationErrors.notes && 'usa-form-group--error',
           )}
         >

@@ -3,76 +3,79 @@ import { Button } from '../Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props, sequences } from 'cerebral';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
-export class ConfirmModalComponent extends React.Component {
-  constructor(props) {
-    super(props);
+export const ConfirmModal = connect(
+  {
+    onCancel: sequences[props.onCancelSequence],
+    onConfirm: sequences[props.onConfirmSequence],
+  },
+  ({
+    cancelLabel,
+    children,
+    className,
+    confirmLabel,
+    noCancel,
+    noCloseBtn,
+    noConfirm,
+    onCancel,
+    onCancelSequence,
+    onConfirm,
+    preventCancelOnBlur,
+    title,
+  }) => {
+    confirmLabel = confirmLabel || 'Ok';
+    cancelLabel = cancelLabel || 'Cancel';
 
-    this.title = this.props.title;
-    this.confirmLabel = this.props.confirmLabel || 'Ok';
-    this.cancelLabel = this.props.cancelLabel || 'Cancel';
-    this.noConfirm = this.props.noConfirm;
-    this.noCancel = this.props.noCancel;
-    this.noCloseBtn = this.props.noCloseBtn;
+    const runCancelSequence = event => {
+      event.stopPropagation();
+      if (onCancel) {
+        onCancel.call();
+      }
+    };
 
-    this.runCancelSequence = this.runCancelSequence.bind(this);
-    this.runConfirmSequence = this.runConfirmSequence.bind(this);
-  }
+    const runConfirmSequence = event => {
+      event.stopPropagation();
+      if (onConfirm) {
+        onConfirm.call();
+      }
+    };
 
-  runCancelSequence(event) {
-    event.stopPropagation();
-    if (this.props.onCancel) {
-      this.props.onCancel.call();
-    }
-  }
+    useEffect(() => {
+      const focusModal = () => {
+        const modalHeader = document.querySelector(
+          '.modal-header .modal-header__title',
+        );
+        modalHeader && modalHeader.focus();
+      };
 
-  runConfirmSequence(event) {
-    event.stopPropagation();
-    if (this.props.onConfirm) {
-      this.props.onConfirm.call();
-    }
-  }
+      focusModal();
+    }, []);
 
-  componentDidMount() {
-    this.focusModal();
-  }
-
-  focusModal() {
-    const modalHeader = document.querySelector(
-      '.modal-header .modal-header__title',
-    );
-    modalHeader.focus();
-  }
-
-  render() {
     return (
       <BaseModal
-        className={this.props.className}
-        preventCancelOnBlur={this.props.preventCancelOnBlur}
-        onBlurSequence={this.props.onCancelSequence}
+        className={className}
+        preventCancelOnBlur={preventCancelOnBlur}
+        onBlurSequence={onCancelSequence}
       >
         <div className="modal-header grid-container padding-x-0">
           <div className="grid-row">
             <div
               className={classNames(
-                this.noCloseBtn
-                  ? 'mobile-lg:grid-col-12'
-                  : 'mobile-lg:grid-col-9',
+                noCloseBtn ? 'mobile-lg:grid-col-12' : 'mobile-lg:grid-col-9',
               )}
             >
               <h3 className="modal-header__title" tabIndex="-1">
-                {this.title}
+                {title}
               </h3>
             </div>
-            {!this.noCloseBtn && (
+            {!noCloseBtn && (
               <div className="mobile-lg:grid-col-3">
                 <Button
                   link
                   className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
-                  onClick={this.runCancelSequence}
+                  onClick={runCancelSequence}
                 >
                   Close
                   <FontAwesomeIcon
@@ -84,46 +87,20 @@ export class ConfirmModalComponent extends React.Component {
             )}
           </div>
         </div>
-        {this.props.children}
-        {(!this.noConfirm || !this.noCancel) && (
+        {children}
+        {(!noConfirm || !noCancel) && (
           <>
-            {!this.noConfirm && (
-              <Button onClick={this.runConfirmSequence}>
-                {this.confirmLabel}
-              </Button>
+            {!noConfirm && (
+              <Button onClick={runConfirmSequence}>{confirmLabel}</Button>
             )}
-            {!this.noCancel && (
-              <Button secondary onClick={this.runCancelSequence}>
-                {this.cancelLabel}
+            {!noCancel && (
+              <Button secondary onClick={runCancelSequence}>
+                {cancelLabel}
               </Button>
             )}
           </>
         )}
       </BaseModal>
     );
-  }
-}
-
-ConfirmModalComponent.propTypes = {
-  cancelLabel: PropTypes.string,
-  children: PropTypes.node,
-  className: PropTypes.string,
-  confirmLabel: PropTypes.string,
-  noCancel: PropTypes.bool,
-  noCloseBtn: PropTypes.bool,
-  noConfirm: PropTypes.bool,
-  onCancel: PropTypes.func,
-  onCancelSequence: PropTypes.string,
-  onConfirm: PropTypes.func,
-  onConfirmSequence: PropTypes.string,
-  preventCancelOnBlur: PropTypes.bool,
-  title: PropTypes.string,
-};
-
-export const ConfirmModal = connect(
-  {
-    onCancel: sequences[props.onCancelSequence],
-    onConfirm: sequences[props.onConfirmSequence],
   },
-  ConfirmModalComponent,
 );
