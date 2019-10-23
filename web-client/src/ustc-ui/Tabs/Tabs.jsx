@@ -95,7 +95,7 @@ export function TabsComponent({
     const tabContentId = `tabContent-${camelCase(tabName)}`;
 
     let contentProps = {
-      className: 'tabcontent',
+      className: 'tab-content',
       id: tabContentId,
       role: 'tabpanel',
     };

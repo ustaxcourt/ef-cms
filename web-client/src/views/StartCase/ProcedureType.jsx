@@ -32,7 +32,7 @@ export const ProcedureType = connect(
             <div className="usa-radio usa-radio__inline" key={procedureType}>
               <input
                 aria-describedby="procedure-type-legend"
-                aria-labelledby={`proc-type-${idx}`}
+                aria-labelledby={`procedure-type-${idx}`}
                 checked={value === procedureType}
                 className="usa-radio__input"
                 data-type={procedureType}
@@ -45,7 +45,7 @@ export const ProcedureType = connect(
               <label
                 className="usa-radio__label"
                 htmlFor={procedureType}
-                id={`proc-type-${idx}`}
+                id={`procedure-type-${idx}`}
               >
                 {procedureType} case
               </label>
