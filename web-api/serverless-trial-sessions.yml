@@ -157,7 +157,6 @@ package:
   include:
     - web-api/src/trialSessionsHandlers.js
 
-  individually: true
   excludeDevDependencies: true
 
 resources:

@@ -158,7 +158,6 @@ package:
   include:
     - web-api/src/notificationHandlers.js
 
-  individually: true
   excludeDevDependencies: true
 
 resources:

@@ -157,7 +157,6 @@ package:
     - ./**
   include:
     - web-api/src/caseDeadlinesHandlers.js
-  individually: true
   excludeDevDependencies: true
 
 resources:

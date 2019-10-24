@@ -152,7 +152,6 @@ package:
     - ./**
   include:
     - web-api/src/usersHandlers.js
-  individually: true
   excludeDevDependencies: true
 
 resources:
