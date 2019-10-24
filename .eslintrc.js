@@ -215,6 +215,8 @@ module.exports = {
           'backend',
           'doctype',
           'payGovDate',
+          'params',
+          'dynamodb',
           'armens',
           'armen',
           'ashfords',
