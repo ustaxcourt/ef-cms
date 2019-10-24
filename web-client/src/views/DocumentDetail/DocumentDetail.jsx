@@ -9,6 +9,7 @@ import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { DocumentMessages } from './DocumentMessages';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { If } from '../../ustc-ui/If/If';
 import { RecallPetitionModalDialog } from '../RecallPetitionModalDialog';
 import { ServeConfirmModalDialog } from '../ServeConfirmModalDialog';
 import { ServeToIrsModalDialog } from '../ServeToIrsModalDialog';
@@ -215,16 +216,18 @@ export const DocumentDetail = connect(
               </div>
             )}
 
-            {documentDetailHelper.formattedDocument.isPetition === false && (
-              <Button
-                link
-                className="margin-right-0 padding-bottom-0"
-                href={`/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/edit`}
-              >
-                <FontAwesomeIcon icon={['fas', 'edit']} />
-                Edit
-              </Button>
-            )}
+            <If bind="mappedUserHelper.role.docketclerk">
+              {documentDetailHelper.formattedDocument.isPetition === false && (
+                <Button
+                  link
+                  className="margin-right-0 padding-bottom-0"
+                  href={`/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/edit`}
+                >
+                  <FontAwesomeIcon icon={['fas', 'edit']} />
+                  Edit
+                </Button>
+              )}
+            </If>
 
             {caseDetailHelper.showServeToIrsButton &&
               documentDetailHelper.formattedDocument.isPetition && (
