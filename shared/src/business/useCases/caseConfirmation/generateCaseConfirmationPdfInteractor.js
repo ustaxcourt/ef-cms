@@ -1,6 +1,7 @@
 const pug = require('pug');
 const sass = require('node-sass');
 const fs = require('fs');
+const DateHandler = require('../../utilities/DateHandler');
 const {
   isAuthorized,
   UPLOAD_DOCUMENT,
@@ -16,6 +17,22 @@ const confirmPugContent = fs.readFileSync(
   'utf-8',
 );
 const ustcLogoBuffer = fs.readFileSync('./shared/static/images/ustc_seal.png');
+
+const formattedCaseInfo = caseInfo => {
+  const formattedInfo = Object.assign(
+    {
+      docketNumber: caseInfo.docketNumber + caseInfo.docketNumberSuffix,
+      preferredTrialCity: caseInfo.preferredTrialCity,
+      receivedAtFormatted: DateHandler.formatDateString(
+        caseInfo.receivedAt,
+        'MONTH_DAY_YEAR',
+      ),
+      servedDate: 'Unsure',
+    },
+    caseInfo.contactPrimary,
+  );
+  return formattedInfo;
+};
 
 /**
  * NOTE: to make this work, you must save the petition as a petitionsclerk
@@ -34,7 +51,11 @@ const generateCaseConfirmationPage = async caseInfo => {
     });
   });
   const compiledFunction = pug.compile(confirmPugContent);
-  const html = compiledFunction({ ...caseInfo, css, logo: logoBase64 });
+  const html = compiledFunction({
+    ...formattedCaseInfo(caseInfo),
+    css,
+    logo: logoBase64,
+  });
   return html;
 };
 
