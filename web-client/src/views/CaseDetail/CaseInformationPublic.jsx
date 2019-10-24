@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 const PetitionDetails = ({ caseDetail }) => (
@@ -37,10 +36,6 @@ const TrialInformation = ({ caseDetail }) => (
     </div>
   </React.Fragment>
 );
-
-TrialInformation.propTypes = {
-  caseDetail: PropTypes.object,
-};
 
 export const CaseInformationPublic = connect(
   {
