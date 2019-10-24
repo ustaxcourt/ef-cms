@@ -1,11 +1,15 @@
 /**
  * creates the default success alert object
  *
+ * @param {object} provider the provider object
+ * @param {object} provider.props the props object
  * @returns {object} the alertSuccess object with default strings
  */
-export const getCreateCaseAlertSuccessAction = () => {
+export const getCreateCaseAlertSuccessAction = ({ props }) => {
   return {
     alertSuccess: {
+      linkText: 'Print receipt.',
+      linkUrl: `/case-detail/${props.docketNumber}/confirmation`,
       message: 'You can access your case at any time from the case list below.',
       title: 'Your petition has been successfully submitted.',
     },
