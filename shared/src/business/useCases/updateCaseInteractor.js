@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  UPDATE_CASE,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const {
   UnauthorizedError,
@@ -26,7 +26,7 @@ exports.updateCaseInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, UPDATE_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
 

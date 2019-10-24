@@ -1,6 +1,6 @@
 const {
-  FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
@@ -28,7 +28,7 @@ exports.fileExternalDocumentInteractor = async ({
   const authorizedUser = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
 
-  if (!isAuthorized(authorizedUser, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

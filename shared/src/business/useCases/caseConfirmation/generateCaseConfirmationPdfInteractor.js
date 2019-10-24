@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  UPLOAD_DOCUMENT,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -18,7 +18,7 @@ exports.generateCaseConfirmationPdfInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, UPLOAD_DOCUMENT)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

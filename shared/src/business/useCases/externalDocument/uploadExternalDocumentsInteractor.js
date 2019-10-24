@@ -1,6 +1,6 @@
 const {
-  FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -12,7 +12,7 @@ exports.uploadExternalDocumentsInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

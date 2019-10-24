@@ -1,7 +1,7 @@
 const { ADC_SECTION, DOCKET_SECTION } = require('../../entities/WorkQueue');
 const {
   isAuthorized,
-  WORKITEM,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -18,7 +18,7 @@ exports.getDocumentQCInboxForSectionInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, WORKITEM)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
     );
