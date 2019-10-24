@@ -3,11 +3,15 @@ import { state } from 'cerebral';
 import _ from 'lodash';
 
 export const documentDetailHelper = (get, applicationContext) => {
+  const user = applicationContext.getCurrentUser();
+  if (!user) {
+    return;
+  }
+
   let showSignDocumentButton = false;
-  const currentUser = applicationContext.getCurrentUser();
-  const userRole = get(state.user.role);
   const caseDetail = get(state.caseDetail);
   const USER_ROLES = get(state.constants.USER_ROLES);
+  const permissions = get(state.permissions);
 
   const SIGNED_STIPULATED_DECISION = 'Stipulated Decision';
 
@@ -85,7 +89,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     const stipulatedWorkItem = formattedDocument.workItems.find(
       workItem =>
         workItem.document.documentType === 'Proposed Stipulated Decision' &&
-        workItem.assigneeId === currentUser.userId &&
+        workItem.assigneeId === user.userId &&
         !workItem.completedAt,
     );
 
@@ -96,13 +100,13 @@ export const documentDetailHelper = (get, applicationContext) => {
     );
 
     showSignDocumentButton =
+      permissions.COURT_ISSUED_DOCUMENT &&
       !!stipulatedWorkItem &&
-      currentUser.role === USER_ROLES.adc &&
       !signedDocument;
 
     showServeDocumentButton =
+      permissions.SERVE_DOCUMENT &&
       document.status !== 'served' &&
-      currentUser.role === USER_ROLES.docketClerk &&
       document.documentType === SIGNED_STIPULATED_DECISION;
 
     const { ORDER_TYPES_MAP } = applicationContext.getConstants();
@@ -139,7 +143,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showViewOrdersNeededButton =
     ((document && document.status === 'served') ||
       caseDetail.status === 'Batched for IRS') &&
-    userRole === USER_ROLES.petitionsClerk;
+    user.role === USER_ROLES.petitionsClerk;
 
   return {
     documentEditUrl,

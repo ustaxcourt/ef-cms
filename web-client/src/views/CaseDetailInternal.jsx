@@ -105,7 +105,7 @@ export const CaseDetailInternal = connect(
                   <PartyInformation />
                 </div>
               </Tab>
-              {caseDetailHelper.showNotes && (
+              {caseDetailHelper.showCaseNotes && (
                 <Tab id="tab-case-notes" tabName="caseNotes" title="Notes">
                   <CaseNotes />
                 </Tab>

@@ -11,10 +11,7 @@ exports.uploadOrderDocumentInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (
-    !isAuthorized(user, ROLE_PERMISSIONS.CREATE_COURT_ISSUED_ORDER) &&
-    !isAuthorized(user, ROLE_PERMISSIONS.EDIT_COURT_ISSUED_ORDER)
-  ) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
