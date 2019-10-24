@@ -23,15 +23,13 @@ const formattedCaseInfo = caseInfo => {
     {
       docketNumber: `${caseInfo.docketNumber}${caseInfo.docketNumberSuffix ||
         ''}`,
+      initialTitle: caseInfo.initialTitle,
       preferredTrialCity: caseInfo.preferredTrialCity,
       receivedAtFormatted: DateHandler.formatDateString(
         caseInfo.receivedAt,
         'MONTH_DAY_YEAR',
       ),
-      servedDate: DateHandler.formatDateString(
-        caseInfo.receivedAt,
-        'MONTH_DAY_YEAR',
-      ),
+      servedDate: '(SERVED ON DATE)',
       todaysDate: DateHandler.formatNow('MONTH_DAY_YEAR'),
     },
     caseInfo.contactPrimary,

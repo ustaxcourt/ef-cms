@@ -11,12 +11,22 @@ body {
     position: relative;
     margin: 0.5in;
 
+    .margin-top-80 {
+      margin-top: 80px;
+    }
+
+    .margin-bottom-20 {
+      margin-bottom: 20px;
+    }
+
     .float-left {
       float: left;
     }
+
     .float-right {
       float: right;
     }
+
     .text-center {
       text-align: center;
     }
@@ -28,8 +38,6 @@ body {
     .width-half {
       width: 50%;
     }
-
-
 
     h1, h2 {
       font-family: serif;
@@ -45,6 +53,7 @@ body {
       height: 100px;
       width: 100px;
     }
+
     .clear {
       clear: both;
     }
@@ -64,6 +73,7 @@ body {
         margin-bottom: 0;
         margin-top: 0;
       }
+
       p {
         padding: 10px;
         margin: 0;

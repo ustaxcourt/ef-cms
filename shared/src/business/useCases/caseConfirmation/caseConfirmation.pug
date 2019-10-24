@@ -19,8 +19,8 @@ html(lang="en")
       p.float-left.width-half= initialTitle
       p.float-right Docket Number: #{docketNumber} 
 
-      p.clear The Court received and filed your petition on #{receivedAtFormatted} and served it on respondent on #{servedDate}.
-      p 
+      p.clear.margin-top-80 The Court received and filed your petition on #{receivedAtFormatted} and served it on respondent on #{servedDate}.
+      p.margin-bottom-20
         | (X) Filing Fee Paid.
         br
         | (X) Request for Place of Trial at #{preferredTrialCity}.
@@ -48,8 +48,7 @@ html(lang="en")
         br
         | Clerk of the Court
 
-      pre= raw
-      hr.clear
+      hr.clear.margin-top-80
 
     .address
       | #{name}
