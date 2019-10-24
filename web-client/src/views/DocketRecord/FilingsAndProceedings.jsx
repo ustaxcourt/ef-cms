@@ -17,6 +17,7 @@ export const FilingsAndProceedings = connect(
     showDocketRecordDetailModalSequence:
       sequences.showDocketRecordDetailModalSequence,
     token: state.token,
+    userIsDocketClerk: state.mappedUserHelper.role.docketclerk,
   },
   ({
     arrayIndex,
@@ -28,6 +29,7 @@ export const FilingsAndProceedings = connect(
     record,
     showDocketRecordDetailModalSequence,
     token,
+    userIsDocketClerk,
   }) => {
     const renderDocumentLink = (
       documentId,
@@ -111,7 +113,7 @@ export const FilingsAndProceedings = connect(
               docketNumber: formattedCaseDetail.docketNumber,
               documentId: document.documentId,
               shouldLinkToComplete: document.isFileAttached === false,
-              shouldLinkToEdit: document.canEdit,
+              shouldLinkToEdit: userIsDocketClerk && document.canEdit,
             })}
           >
             {document && document.isPaper && (

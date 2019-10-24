@@ -1,7 +1,7 @@
 const { omit } = require('lodash');
 const {
-  DOCKET_ENTRY,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { Case } = require('../../entities/cases/Case');
@@ -23,7 +23,7 @@ exports.completeDocketEntryQCInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, DOCKET_ENTRY)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

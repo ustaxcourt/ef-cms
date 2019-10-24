@@ -3,32 +3,26 @@ import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
 
-class ServeConfirmModalDialogComponent extends ModalDialog {
-  constructor(props) {
-    super(props);
-    this.modal = {
-      cancelLabel: 'No, take me back',
-      classNames: 'serve-confirm=modal',
-      confirmLabel: 'Yes, serve',
-      documentType: props.documentType,
-      title: 'Are you ready to initiate service?',
-    };
-  }
-
-  renderBody() {
-    return (
-      <>
-        <div>The following document will be served on all parties:</div>
-        <p className="semi-bold">{this.props.documentType}</p>
-      </>
-    );
-  }
-}
-
 export const ServeConfirmModalDialog = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.serveDocumentSequence,
   },
-  ServeConfirmModalDialogComponent,
+  ({ cancelSequence, confirmSequence, documentType }) => {
+    return (
+      <ModalDialog
+        cancelLabel="No, take me back"
+        cancelSequence={cancelSequence}
+        className="serve-confirm-modal"
+        confirmLabel="Yes, serve"
+        confirmSequence={confirmSequence}
+        title="Are you ready to initiate service?"
+      >
+        <>
+          <div>The following document will be served on all parties:</div>
+          <p className="semi-bold">{documentType}</p>
+        </>
+      </ModalDialog>
+    );
+  },
 );
