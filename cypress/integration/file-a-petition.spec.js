@@ -17,7 +17,7 @@ describe('File a petition', function() {
       .then($trs => {
         rowCount = $trs.length;
       });
-    cy.get('#init-file-petition').click();
+    cy.get('#file-a-petition').click();
   });
 
   describe('USA Banner', () => {
