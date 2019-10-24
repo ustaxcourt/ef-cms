@@ -5,7 +5,6 @@ import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setPathAction } from '../actions/setPathAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
-import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 import { startRefreshIntervalAction } from '../actions/startRefreshIntervalAction';
 
 /**
@@ -21,7 +20,6 @@ export const loginWithCodeSequence = [
   startRefreshIntervalAction,
   getUserAction,
   setUserAction,
-  setUserPermissionsAction,
   setPathAction,
   navigateToPathAction,
 ];

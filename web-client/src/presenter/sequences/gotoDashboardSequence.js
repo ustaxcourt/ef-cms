@@ -14,7 +14,6 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
-import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 import { state } from 'cerebral';
 
 const goToDashboard = [
@@ -22,7 +21,6 @@ const goToDashboard = [
   closeMobileMenuAction,
   getUserAction,
   setUserAction,
-  setUserPermissionsAction,
   set(state.selectedWorkItems, []),
   clearErrorAlertsAction,
   getUserRoleAction,
