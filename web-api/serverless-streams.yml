@@ -14,7 +14,6 @@ plugins:
 custom:
   jetpack:
     mode: yarn
-    individually: true
 
   prune:
     automatic: true
@@ -179,6 +178,7 @@ package:
   include:
     - web-api/src/streamsHandlers.js
 
+  individually: true
   excludeDevDependencies: true
 
 functions:

@@ -17,7 +17,6 @@ custom:
 
   jetpack:
     mode: yarn
-    individually: true
 
   prune:
     automatic: true
@@ -154,6 +153,7 @@ package:
   include:
     - web-api/src/sectionsHandlers.js
 
+  individually: true
   excludeDevDependencies: true
 
 resources:

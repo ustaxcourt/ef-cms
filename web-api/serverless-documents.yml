@@ -17,7 +17,6 @@ custom:
 
   jetpack:
     mode: yarn
-    individually: true
 
   prune:
     automatic: true
@@ -151,6 +150,7 @@ package:
   include:
     - web-api/src/documentsHandlers.js
 
+  individually: true
   excludeDevDependencies: true
 
 resources:
