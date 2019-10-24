@@ -29,6 +29,10 @@ import { NewTrialSession } from '../../shared/src/business/entities/trialSession
 import { Note } from '../../shared/src/business/entities/Note';
 import { Order } from '../../shared/src/business/entities/orders/Order';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../shared/src/authorization/authorizationClientService';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
@@ -387,6 +391,7 @@ const applicationContext = {
     OTHER_TYPES: ContactFactory.OTHER_TYPES,
     PARTY_TYPES: ContactFactory.PARTY_TYPES,
     REFRESH_INTERVAL: 20 * MINUTES,
+    ROLE_PERMISSIONS,
     SECTIONS,
     SESSION_DEBOUNCE: 250,
     SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
@@ -484,6 +489,7 @@ const applicationContext = {
     const socket = new WebSocket(connectionUrl);
     return socket;
   },
+  isAuthorized,
   setCurrentUser,
   setCurrentUserToken,
 };

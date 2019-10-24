@@ -141,6 +141,7 @@ export const state = {
   pdfPreviewModalHelper,
   pdfSignerHelper,
   percentComplete: 0,
+  permissions: null,
   petition: {},
   previewPdfFile: null,
   primaryContactEditHelper,

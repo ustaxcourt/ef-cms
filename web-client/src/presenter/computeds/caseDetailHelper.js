@@ -1,15 +1,19 @@
 import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
+  const user = get(state.user);
+  if (!user) {
+    return;
+  }
+
   const { Case } = applicationContext.getEntityConstructors();
   const USER_ROLES = get(state.constants.USER_ROLES);
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const caseHasRespondent =
     !!caseDetail && !!caseDetail.respondents && !!caseDetail.respondents.length;
-  const userRole = get(state.user.role);
   const showActionRequired =
-    !caseDetail.payGovId && userRole === USER_ROLES.petitioner;
+    !caseDetail.payGovId && user.role === USER_ROLES.petitioner;
   const documentDetailTab =
     get(state.caseDetailPage.informationTab) || 'docketRecord';
   const form = get(state.form);
@@ -18,9 +22,9 @@ export const caseDetailHelper = (get, applicationContext) => {
   const caseIsPaid = caseDetail.payGovId && !form.paymentType;
   const isExternalUser = applicationContext
     .getUtilities()
-    .isExternalUser(userRole);
+    .isExternalUser(user.role);
   const isRequestAccessForm = currentPage === 'RequestAccessWizard';
-  const isJudge = 'judge' == userRole;
+  const isJudge = 'judge' == user.role;
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
   const modalState = get(state.modal);
@@ -34,11 +38,12 @@ export const caseDetailHelper = (get, applicationContext) => {
     orderForRatification,
     orderToShowCause,
   } = caseDetail;
+  const permissions = get(state.permissions);
 
-  let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
+  let showFileDocumentButton =
+    permissions.FILE_EXTERNAL_DOCUMENT && ['CaseDetail'].includes(currentPage);
   let showAddDocketEntryButton =
-    ['CaseDetailInternal'].includes(currentPage) &&
-    userRole === USER_ROLES.docketClerk;
+    permissions.DOCKET_ENTRY && ['CaseDetailInternal'].includes(currentPage);
   let showCreateOrderButton =
     ['CaseDetailInternal'].includes(currentPage) &&
     [
@@ -46,7 +51,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       USER_ROLES.judge,
       USER_ROLES.petitionsClerk,
       USER_ROLES.adc,
-    ].includes(userRole);
+    ].includes(user.role);
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
@@ -68,12 +73,12 @@ export const caseDetailHelper = (get, applicationContext) => {
       }
     } else {
       showFileDocumentButton = false;
-      if (userRole === USER_ROLES.practitioner) {
+      if (user.role === USER_ROLES.practitioner) {
         showRequestAccessToCaseButton =
           !pendingAssociation && !isRequestAccessForm;
         showPendingAccessToCaseButton = pendingAssociation;
       }
-      if (userRole === USER_ROLES.respondent) {
+      if (user.role === USER_ROLES.respondent) {
         showFileFirstDocumentButton = !caseHasRespondent;
         showRequestAccessToCaseButton =
           caseHasRespondent && !isRequestAccessForm;
@@ -93,11 +98,11 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   let showEditPrimaryContactButton = false;
 
-  if (userRole === USER_ROLES.petitioner) {
+  if (user.role === USER_ROLES.petitioner) {
     showEditPrimaryContactButton = true;
-  } else if (userRole === USER_ROLES.respondent) {
+  } else if (user.role === USER_ROLES.respondent) {
     showEditPrimaryContactButton = false;
-  } else if (userRole === USER_ROLES.practitioner) {
+  } else if (user.role === USER_ROLES.practitioner) {
     showEditPrimaryContactButton = userAssociatedWithCase;
   }
 
