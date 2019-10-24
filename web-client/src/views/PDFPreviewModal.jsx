@@ -85,7 +85,7 @@ class PDFPreviewModalComponent extends ModalDialog {
                     'disabled',
                 )}
                 icon={['fas', 'caret-left']}
-                id="prev"
+                id="previous"
                 size="2x"
               />
             </Button>
