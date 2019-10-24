@@ -1,5 +1,5 @@
 export default test => {
-  return it('Taxpayer updates primary contact phone', async () => {
+  return it('petitioner updates primary contact phone', async () => {
     await test.runSequence('updateCaseValueSequence', {
       key: 'contactPrimary.phone',
       value: '9999999999',

@@ -1,10 +1,10 @@
 import { applicationContext } from '../../src/applicationContext';
 
 export default test => {
-  return it('Taxpayer logs in', async () => {
+  return it('petitioner logs in', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
-      value: 'taxpayer',
+      value: 'petitioner',
     });
     await test.runSequence('submitLoginSequence');
     expect(test.getState('user.userId')).toEqual(

@@ -1,5 +1,5 @@
 export default test => {
-  it('Taxpayer views primary contact edit page', async () => {
+  it('petitioner views primary contact edit page', async () => {
     await test.runSequence('gotoPrimaryContactEditSequence', {
       docketNumber: test.getState('caseDetail.docketNumber'),
     });

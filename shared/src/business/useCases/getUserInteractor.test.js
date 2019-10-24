@@ -9,13 +9,13 @@ describe('getUserInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () =>
         new User({
-          name: 'Test Taxpayer',
+          name: 'Test Petitionsclerk',
           role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
       getPersistenceGateway: () => ({
         getUserById: () => ({
-          name: 'Test Taxpayer',
+          name: 'Test Petitionsclerk',
           role: User.ROLES.petitionsClerk,
           section: 'petitions',
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -37,7 +37,7 @@ describe('getUserInteractor', () => {
 
     expect(error).toBeUndefined();
     expect(user).toEqual({
-      name: 'Test Taxpayer',
+      name: 'Test Petitionsclerk',
       role: User.ROLES.petitionsClerk,
       section: 'petitions',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',

@@ -39,8 +39,8 @@ describe('a user signs and serves a stipulated decision', () => {
   let signedDocumentId = null;
   let caseDetail;
 
-  it('login as a taxpayer and create a case', async () => {
-    await loginAs(test, 'taxpayer');
+  it('login as a petitioner and create a case', async () => {
+    await loginAs(test, 'petitioner');
     caseDetail = await uploadPetition(test);
     ({ docketNumber } = caseDetail.docketNumber);
   });

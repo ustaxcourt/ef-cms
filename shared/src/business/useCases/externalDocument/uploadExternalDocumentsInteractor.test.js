@@ -28,7 +28,7 @@ describe('uploadExternalDocumentsInteractor', () => {
       },
     ],
     role: User.ROLES.petitioner,
-    userId: 'taxpayer',
+    userId: 'petitioner',
   };
 
   it('throws an error when an unauthorized user tries to access the use case', async () => {

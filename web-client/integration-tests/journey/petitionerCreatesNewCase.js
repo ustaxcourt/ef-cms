@@ -1,5 +1,5 @@
 export default (test, fakeFile, overrides = {}) => {
-  return it('Taxpayer creates a new case', async () => {
+  return it('petitioner creates a new case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
 
     await test.runSequence('updateStartCaseFormValueSequence', {
