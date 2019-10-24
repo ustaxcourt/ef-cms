@@ -27,7 +27,7 @@ const applicationContext = {
         ...MOCK_CASE,
         contactPrimary: {
           email: 'contactprimary@example.com',
-          name: 'Test Taxpayer',
+          name: 'Test Petitioner',
           title: 'Executor',
         },
         documents: [
@@ -36,7 +36,7 @@ const applicationContext = {
             documentId: '1805d1ab-18d0-43ec-bafb-654e83405416',
             documentType: 'Stipulated Decision',
             processingStatus: 'pending',
-            userId: 'taxpayer',
+            userId: 'petitioner',
             workItems: [],
           },
         ],

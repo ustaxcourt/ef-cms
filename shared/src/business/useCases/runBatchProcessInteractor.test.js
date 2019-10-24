@@ -119,7 +119,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
         'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       ],
-      zipName: '101-18_Test_Taxpayer.zip',
+      zipName: '101-18_Test_Petitioner.zip',
     });
     expect(deleteDocumentStub.getCall(0).args[0]).toMatchObject({
       key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -239,7 +239,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
         'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
         'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       ],
-      zipName: '101-18_Test_Taxpayer.zip',
+      zipName: '101-18_Test_Petitioner.zip',
     });
     expect(deleteDocumentStub.getCall(2)).toEqual(null);
     expect(updateCaseStub.getCall(2).args[0]).toMatchObject({

@@ -1,7 +1,7 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 
 export default (test, fakeFile) => {
-  return it('Taxpayer files document for case', async () => {
+  return it('petitioner files document for case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });

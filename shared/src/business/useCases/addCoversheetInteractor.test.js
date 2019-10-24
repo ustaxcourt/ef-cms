@@ -25,7 +25,7 @@ describe('addCoversheetInteractor', () => {
   const testingCaseData = {
     caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     contactPrimary: {
-      name: 'Johnny Taxpayer',
+      name: 'Johnny Petitioner',
     },
     createdAt: '2019-04-19T14:45:15.595Z',
     docketNumber: '101-19',
@@ -46,10 +46,10 @@ describe('addCoversheetInteractor', () => {
   const optionalTestingCaseData = {
     ...testingCaseData,
     contactPrimary: {
-      name: 'Janie Taxpayer',
+      name: 'Janie Petitioner',
     },
     contactSecondary: {
-      name: 'Janie Taxpayer',
+      name: 'Janie Petitioner',
     },
     docketNumber: '102-19',
     documents: [

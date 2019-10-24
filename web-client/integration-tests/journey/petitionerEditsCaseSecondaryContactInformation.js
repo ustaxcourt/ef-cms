@@ -1,5 +1,5 @@
 export default test => {
-  return it('Taxpayer is shown a modal for Change of Address', async () => {
+  return it('petitioner is shown a modal for Change of Address', async () => {
     await test.runSequence('openEditSecondaryContactModalSequence');
 
     expect(test.getState('showModal')).toEqual('EditSecondaryContact');
