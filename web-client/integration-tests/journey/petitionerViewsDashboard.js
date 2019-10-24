@@ -1,5 +1,5 @@
 export default test => {
-  return it('Taxpayer views dashboard', async () => {
+  return it('petitioner views dashboard', async () => {
     await test.runSequence('gotoDashboardSequence');
     expect(test.getState('currentPage')).toEqual('DashboardPetitioner');
     expect(test.getState('cases').length).toBeGreaterThan(0);

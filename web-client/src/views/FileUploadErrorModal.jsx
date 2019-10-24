@@ -15,9 +15,15 @@ export const FileUploadErrorModal = connect(
         className="file-upload-error"
         confirmLabel="Try Again"
         confirmSequence={confirmSequence}
-        message="An error occured while uploading your document and it wasn’t completed."
-        title="Uh-oh!"
-      ></ModalDialog>
+      >
+        <div>
+          <div className="uh-oh">Uh-oh!</div>
+          <div className="message">
+            An error occured while uploading your document and it wasn’t
+            completed.
+          </div>
+        </div>
+      </ModalDialog>
     );
   },
 );

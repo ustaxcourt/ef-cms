@@ -7,7 +7,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
-import { setUsersAction } from '../actions/setUsersAction';
+import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
@@ -19,7 +19,9 @@ const gotoAddTrialSession = [
   getTrialSessionsAction,
   setTrialSessionsAction,
   getUsersInSectionAction({ section: 'judge' }),
-  setUsersAction,
+  setUsersByKeyAction('judges'),
+  getUsersInSectionAction({ section: 'trialClerks' }),
+  setUsersByKeyAction('trialClerks'),
   set(state.form.startTimeExtension, 'am'),
   set(state.form.startTimeHours, '10'),
   set(state.form.startTimeMinutes, '00'),

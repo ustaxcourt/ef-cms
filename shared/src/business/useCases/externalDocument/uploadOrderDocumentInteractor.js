@@ -1,7 +1,6 @@
 const {
-  CREATE_COURT_ISSUED_ORDER,
-  EDIT_COURT_ISSUED_ORDER,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -13,8 +12,8 @@ exports.uploadOrderDocumentInteractor = async ({
   const user = applicationContext.getCurrentUser();
 
   if (
-    !isAuthorized(user, CREATE_COURT_ISSUED_ORDER) &&
-    !isAuthorized(user, EDIT_COURT_ISSUED_ORDER)
+    !isAuthorized(user, ROLE_PERMISSIONS.CREATE_COURT_ISSUED_ORDER) &&
+    !isAuthorized(user, ROLE_PERMISSIONS.EDIT_COURT_ISSUED_ORDER)
   ) {
     throw new UnauthorizedError('Unauthorized');
   }

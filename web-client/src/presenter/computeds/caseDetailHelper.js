@@ -68,12 +68,12 @@ export const caseDetailHelper = (get, applicationContext) => {
       }
     } else {
       showFileDocumentButton = false;
-      if (userRole === 'practitioner') {
+      if (userRole === USER_ROLES.practitioner) {
         showRequestAccessToCaseButton =
           !pendingAssociation && !isRequestAccessForm;
         showPendingAccessToCaseButton = pendingAssociation;
       }
-      if (userRole === 'respondent') {
+      if (userRole === USER_ROLES.respondent) {
         showFileFirstDocumentButton = !caseHasRespondent;
         showRequestAccessToCaseButton =
           caseHasRespondent && !isRequestAccessForm;
