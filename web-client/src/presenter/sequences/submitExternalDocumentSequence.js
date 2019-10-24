@@ -16,14 +16,15 @@ export const submitExternalDocumentSequence = [
   {
     error: [openFileUploadErrorModal],
     success: [
-      submitRespondentCaseAssociationRequestAction,
-      setCaseAction,
-      closeFileUploadStatusModalAction,
-      ...getPrintableFilingReceiptSequence,
-      getFileExternalDocumentAlertSuccessAction,
-      setAlertSuccessAction,
-      setSaveAlertsForNavigationAction,
-      navigateToCaseDetailAction,
+      openFileUploadErrorModal,
+      // submitRespondentCaseAssociationRequestAction,
+      // setCaseAction,
+      // closeFileUploadStatusModalAction,
+      // ...getPrintableFilingReceiptSequence,
+      // getFileExternalDocumentAlertSuccessAction,
+      // setAlertSuccessAction,
+      // setSaveAlertsForNavigationAction,
+      // navigateToCaseDetailAction,
     ],
   },
 ];
