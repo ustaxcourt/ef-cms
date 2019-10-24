@@ -1,3 +1,13 @@
+html {
+  // to ensure background-colors display in pdf
+  -webkit-print-color-adjust: exact;
+}
+.page-container {
+  position: relative;
+  margin: 0.5in;
+  font-size: 12px;
+}
+
 .float-left {
   float: left;
 }
@@ -25,7 +35,7 @@ h2 {
 
 .logo {
   position: absolute;
-  top: 10px;
+  top: 0px;
   height: 100px;
   width: 100px;
 }
