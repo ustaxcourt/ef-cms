@@ -186,7 +186,8 @@ export default (test, fakeFile) => {
 
     expect(test.getState('alertError')).toBeUndefined();
 
-    expect(test.getState('alertSuccess')).toEqual({
+    expect(test.getState('alertSuccess')).toMatchObject({
+      linkText: 'Print receipt.',
       message: 'You can access your case at any time from the case list below.',
       title: 'Your petition has been successfully submitted.',
     });
