@@ -1,6 +1,6 @@
 const {
-  ASSOCIATE_USER_WITH_CASE,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const {
   associatePractitionerToCase,
@@ -29,7 +29,9 @@ exports.associatePractitionerWithCaseInteractor = async ({
 }) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authenticatedUser, ASSOCIATE_USER_WITH_CASE)) {
+  if (
+    !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 

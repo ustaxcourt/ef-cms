@@ -1,6 +1,6 @@
 const {
-  ASSOCIATE_USER_WITH_CASE,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { User } = require('../../entities/User');
@@ -26,7 +26,7 @@ exports.updateCounselOnCaseInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ASSOCIATE_USER_WITH_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

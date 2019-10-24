@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { createCaseAction } from '../actions/createCaseAction';
+import { generateCaseConfirmationPdfAction } from '../actions/CaseConfirmation/generateCaseConfirmationPdfAction';
 import { getCreateCaseAlertSuccessAction } from '../actions/getCreateCaseAlertSuccessAction';
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -33,6 +34,7 @@ export const submitFilePetitionSequence = [
         error: [openFileUploadErrorModal],
         success: [
           setCaseAction,
+          generateCaseConfirmationPdfAction,
           closeFileUploadStatusModalAction,
           getCreateCaseAlertSuccessAction,
           setAlertSuccessAction,
