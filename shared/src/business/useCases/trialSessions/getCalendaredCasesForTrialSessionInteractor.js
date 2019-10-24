@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  TRIAL_SESSIONS,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -17,7 +17,7 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, TRIAL_SESSIONS)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

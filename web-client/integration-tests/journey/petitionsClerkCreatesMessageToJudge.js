@@ -1,9 +1,9 @@
 export default (test, message) => {
   return it('Petitions clerk sends message to judgeArmen', async () => {
-    const workItem = test.taxpayerNewCases[0].documents[0].workItems[0];
+    const workItem = test.petitionerNewCases[0].documents[0].workItems[0];
     await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: test.taxpayerNewCases[0].docketNumber,
-      documentId: test.taxpayerNewCases[0].documents[0].documentId,
+      docketNumber: test.petitionerNewCases[0].docketNumber,
+      documentId: test.petitionerNewCases[0].documents[0].documentId,
     });
 
     // judgeArmen

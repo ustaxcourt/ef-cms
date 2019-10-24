@@ -21,7 +21,7 @@ describe('Get case filing types', () => {
       getCurrentUser: () => {
         return {
           role: User.ROLES.petitioner,
-          userId: 'taxpayer',
+          userId: 'petitioner',
         };
       },
     };

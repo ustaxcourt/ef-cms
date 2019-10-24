@@ -5,5 +5,5 @@ import { state } from 'cerebral';
  */
 
 export const setDefaultTrialSessionDetailTabAction = ({ store }) => {
-  store.unset(state.trialsessiondetails.calendaredCaseList);
+  store.unset(state.trialSessionDetailsTab.calendaredCaseList);
 };

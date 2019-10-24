@@ -12,7 +12,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
     document: {
-      sentBy: 'taxpayer',
+      sentBy: 'petitioner',
     },
     messages: [],
     section: 'docket',
@@ -25,7 +25,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       getCurrentUser: () => {
         return {
           role: User.ROLES.petitioner,
-          userId: 'taxpayer',
+          userId: 'petitioner',
         };
       },
       getPersistenceGateway: () => ({

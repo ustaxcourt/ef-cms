@@ -233,7 +233,7 @@ TrialSession.validationRules = {
       .valid(TrialSession.SESSION_TERMS)
       .required(),
     termYear: joi.string().required(),
-    trialClerk: joi.string().optional(),
+    trialClerk: joi.object().optional(),
     trialLocation: joi.string().required(),
     trialSessionId: joi
       .string()

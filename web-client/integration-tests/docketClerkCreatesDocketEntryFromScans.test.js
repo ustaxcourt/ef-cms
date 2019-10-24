@@ -1,10 +1,10 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { User } from '../../shared/src/business/entities/User';
 import { CerebralTest } from 'cerebral/test';
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { JSDOM } from 'jsdom';
 import { MAX_FILE_SIZE_MB } from '../../shared/src/persistence/s3/getUploadPolicy';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
+import { User } from '../../shared/src/business/entities/User';
 import {
   addBatchesForScanning,
   createPDFFromScannedBatches,
@@ -23,12 +23,12 @@ import docketClerkSavesDocketEntry from './journey/docketClerkSavesDocketEntry';
 import docketClerkViewsEditDocketRecord from './journey/docketClerkViewsEditDocketRecord';
 import docketClerkViewsQCInProgress from './journey/docketClerkViewsQCInProgress';
 import docketClerkViewsSectionQCInProgress from './journey/docketClerkViewsSectionQCInProgress';
-import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
-import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
-import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
-import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxpayerSignsOut from './journey/taxpayerSignsOut';
+import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
+import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
+import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
+import petitionerLogin from './journey/petitionerLogIn';
+import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
+import petitionerSignsOut from './journey/petitionerSignsOut';
 
 let test;
 global.FormData = FormData;
@@ -121,12 +121,12 @@ describe('Create Docket Entry From Scans', () => {
     });
   });
 
-  taxpayerLogin(test);
-  taxpayerNavigatesToCreateCase(test);
-  taxpayerChoosesProcedureType(test, { procedureType: 'Regular' });
-  taxpayerChoosesCaseType(test);
-  taxpayerCreatesNewCase(test, fakeFile, { caseType: 'CDP (Lien/Levy)' });
-  taxpayerSignsOut(test);
+  petitionerLogin(test);
+  petitionerNavigatesToCreateCase(test);
+  petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
+  petitionerChoosesCaseType(test);
+  petitionerCreatesNewCase(test, fakeFile, { caseType: 'CDP (Lien/Levy)' });
+  petitionerSignsOut(test);
 
   docketClerkLogIn(test);
   docketClerkAddsDocketEntryWithoutFile(test);

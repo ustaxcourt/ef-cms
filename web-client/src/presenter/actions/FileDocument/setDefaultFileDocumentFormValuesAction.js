@@ -9,8 +9,9 @@ import { state } from 'cerebral';
  */
 export const setDefaultFileDocumentFormValuesAction = ({ get, store }) => {
   const userRole = get(state.user.role);
+  const USER_ROLES = get(state.constants.USER_ROLES);
 
-  if (userRole === 'petitioner') {
+  if (userRole === USER_ROLES.petitioner) {
     store.set(state.form.partyPrimary, true);
   }
 

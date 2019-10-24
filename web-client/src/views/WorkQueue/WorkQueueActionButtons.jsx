@@ -17,7 +17,7 @@ export const WorkQueueActionButtons = connect(
             <Button
               href="/file-a-petition/step-1"
               icon="plus-circle"
-              id="init-file-petition"
+              id="file-a-petition"
             >
               Create a Case
             </Button>

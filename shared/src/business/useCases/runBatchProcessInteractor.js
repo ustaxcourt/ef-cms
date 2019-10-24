@@ -5,7 +5,7 @@ const {
 } = require('../entities/WorkQueue');
 const {
   isAuthorized,
-  UPDATE_CASE,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
@@ -22,7 +22,7 @@ const { UnauthorizedError } = require('../../errors/errors');
 exports.runBatchProcessInteractor = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, UPDATE_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for send to IRS Holding Queue');
   }
 

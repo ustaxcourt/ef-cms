@@ -54,7 +54,7 @@ export const CaseListPractitioner = connect(
         )}
         href="/file-a-petition/step-1"
         icon="file"
-        id="init-file-petition"
+        id="file-a-petition"
       >
         File a Petition
       </Button>

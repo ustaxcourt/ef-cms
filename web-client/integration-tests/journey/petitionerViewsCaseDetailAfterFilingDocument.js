@@ -3,7 +3,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export default (test, overrides = {}) => {
-  return it('Taxpayer views case detail after filing a document', async () => {
+  return it('petitioner views case detail after filing a document', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });

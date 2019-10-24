@@ -1,4 +1,11 @@
 import { fakeFile, setupTest } from './helpers';
+import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
+import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
+import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
+import petitionerLogin from './journey/petitionerLogIn';
+import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
+import petitionerSignsOut from './journey/petitionerSignsOut';
+import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import respondent1ViewsCaseDetailOfAssociatedCase from './journey/respondent1ViewsCaseDetailOfAssociatedCase';
 import respondentFilesDocumentForAssociatedCase from './journey/respondentFilesDocumentForAssociatedCase';
 import respondentFilesFirstIRSDocumentOnCase from './journey/respondentFilesFirstIRSDocumentOnCase';
@@ -11,13 +18,6 @@ import respondentViewsCaseDetail from './journey/respondentViewsCaseDetail';
 import respondentViewsCaseDetailOfAssociatedCase from './journey/respondentViewsCaseDetailOfAssociatedCase';
 import respondentViewsCaseDetailOfUnassociatedCase from './journey/respondentViewsCaseDetailOfUnassociatedCase';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
-import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
-import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
-import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
-import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxpayerSignsOut from './journey/taxpayerSignsOut';
-import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 
 const test = setupTest();
 
@@ -26,13 +26,13 @@ describe('Respondent requests access to a case', () => {
     jest.setTimeout(30000);
   });
 
-  taxpayerLogin(test);
-  taxpayerNavigatesToCreateCase(test);
-  taxpayerChoosesProcedureType(test);
-  taxpayerChoosesCaseType(test);
-  taxpayerCreatesNewCase(test, fakeFile);
-  taxpayerViewsDashboard(test);
-  taxpayerSignsOut(test);
+  petitionerLogin(test);
+  petitionerNavigatesToCreateCase(test);
+  petitionerChoosesProcedureType(test);
+  petitionerChoosesCaseType(test);
+  petitionerCreatesNewCase(test, fakeFile);
+  petitionerViewsDashboard(test);
+  petitionerSignsOut(test);
 
   respondentLogin(test);
   respondentSearchesForNonexistentCase(test);

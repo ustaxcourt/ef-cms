@@ -102,7 +102,7 @@ export const PDFPreviewModal = connect(
                   pdfPreviewModalHelper.disableLeftButtons && 'disabled',
                 )}
                 icon={['fas', 'caret-left']}
-                id="prev"
+                id="previous"
                 size="2x"
               />
             </Button>
