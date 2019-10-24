@@ -1,8 +1,8 @@
 const { Case } = require('../entities/cases/Case');
 const { UnauthorizedError } = require('../../errors/errors');
 const {
-  BLOCK_CASE,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 
 /**
@@ -16,7 +16,7 @@ const {
 exports.unblockCaseInteractor = async ({ applicationContext, caseId }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, BLOCK_CASE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.BLOCK_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
