@@ -2,7 +2,7 @@ doctype html
 html(lang="en")
   head
     meta(charset="utf-8")
-    title U.S. Tax Court Electronic Filing and Case Management System
+    title NOTIFICATION OF RECEIPT OF PETITION, U.S. Tax Court Electronic Filing and Case Management System
     style= css
   body
     .page-container
@@ -19,27 +19,27 @@ html(lang="en")
       p.float-left= initialTitle
       p.float-right Docket Number: #{docketNumber} 
 
-      p.clear The Court received and filed your petition on #{receivedDate} and served it on respondent on #{servedDate}.
+      p.clear The Court received and filed your petition on #{receivedAtFormatted} and served it on respondent on #{servedDate}.
       p 
         | (X) Filing Fee Paid.
         br
-        | (X) Request for Place of Trial at #{trialLocation}.
+        | (X) Request for Place of Trial at #{preferredTrialCity}.
 
       .info-box
         h3 Your Docket Number: #{docketNumber}
-        p Your docket number is displayed. Please use this docket number on all papers and correspondence that you send to the Tax Court. Do not include your Social Security or Taxpayer Identification numbers on any documents you file with the Court. except on Form 4.
+        p Your docket number is displayed. Please use this docket number on all papers and correspondence that you send to the Tax Court. Do not include your Social Security or Taxpayer Identification numbers on any documents you file with the Court, except on Form 4.
 
       .info-box
         h3 Internet Access:
         p 
           | To obtain further information about proceeding in the Tax Court, please visit 
           b.link www.ustaxcourt.gov
-          |  and select "Tax Payer Information".
+          |  and select “Tax Payer Information”.
 
       .info-box
         h3 Change of Address:
         p 
-          | You must notify the Clerk of the Court if you change your address. If you filed your petition in paper, see Tax Court Form 10, Notice of Change of Address, under "Forms" on the Tax Court's Website at 
+          | You must notify the Clerk of the Court if you change your address. If you filed your petition in paper, see Tax Court Form 10, Notice of Change of Address, under “Forms” on the Tax Court’s Website at 
           b.link www.ustaxcourt.gov
           |. If you filed your petition electronically, you may update your address under the “Case Information” tab in your case online. Failure to notify the Clerk of the Court of a change of your address can mean you do not receive notices and documents essential to your case and can lead to dismissal of your case.
 
@@ -51,7 +51,7 @@ html(lang="en")
       hr.clear
 
       .address
-        | #{petitionerNames}
+        | #{name}
         br
         | #{address1}
         br
