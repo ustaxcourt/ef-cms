@@ -378,7 +378,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
 const {
   isAuthorized,
-  WORKITEM,
+  ROLE_PERMISSIONS,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
   prioritizeCaseInteractor,
@@ -939,7 +939,8 @@ module.exports = (appContextUser = {}) => {
       };
     },
     isAuthorized,
-    isAuthorizedForWorkItems: () => isAuthorized(user, WORKITEM),
+    isAuthorizedForWorkItems: () =>
+      isAuthorized(user, ROLE_PERMISSIONS.WORKITEM),
     logger: {
       error: value => {
         // eslint-disable-next-line no-console

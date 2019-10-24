@@ -1,6 +1,6 @@
 const {
-  ADD_CASE_TO_TRIAL_SESSION,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
@@ -22,7 +22,7 @@ exports.addCaseToTrialSessionInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ADD_CASE_TO_TRIAL_SESSION)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

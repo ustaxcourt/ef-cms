@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  TRIAL_SESSION_WORKING_COPY,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { CaseNote } = require('../../entities/cases/CaseNote');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -20,7 +20,7 @@ exports.createCaseNoteInteractor = async ({
   notes,
 }) => {
   const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, TRIAL_SESSION_WORKING_COPY)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
