@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  WORKITEM,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { Case } = require('../../entities/cases/Case');
@@ -23,7 +23,7 @@ exports.completeWorkItemInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, WORKITEM)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError('Unauthorized for complete workItem');
   }
 

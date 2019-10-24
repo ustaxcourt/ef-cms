@@ -1,6 +1,6 @@
 const {
-  GET_CASE,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
@@ -39,7 +39,7 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
   if (
     !isAuthorized(
       applicationContext.getCurrentUser(),
-      GET_CASE,
+      ROLE_PERMISSIONS.GET_CASE,
       caseRecord.userId,
     )
   ) {

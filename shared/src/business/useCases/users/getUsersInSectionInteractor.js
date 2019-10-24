@@ -1,6 +1,6 @@
 const {
-  GET_USERS_IN_SECTION,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 /**
@@ -13,7 +13,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.getUsersInSectionInteractor = ({ applicationContext, section }) => {
   const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, GET_USERS_IN_SECTION)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.GET_USERS_IN_SECTION)) {
     throw new UnauthorizedError('Unauthorized');
   }
   return applicationContext.getPersistenceGateway().getUsersInSection({
