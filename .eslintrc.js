@@ -110,6 +110,7 @@ module.exports = {
         comments: true,
         strings: false,
         identifiers: false,
+        templates: false,
         lang: 'en_US',
         skipWords: [
           'fieldset',
