@@ -13,7 +13,7 @@ const applicationContext = {
 
 const user = {
   role: User.ROLES.petitioner,
-  userId: 'taxpayer',
+  userId: 'petitioner',
 };
 
 describe('getCasesByUser', () => {

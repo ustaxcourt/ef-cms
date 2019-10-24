@@ -48,7 +48,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
           address3: 'Anim est dolor animi',
           city: 'Rerum eaque cupidata',
           countryType: 'domestic',
-          email: 'taxpayer@example.com',
+          email: 'petitioner@example.com',
           name: 'Rick Petitioner',
           phone: '+1 (599) 681-5435',
           postalCode: '89614',

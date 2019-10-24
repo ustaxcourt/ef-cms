@@ -29,7 +29,7 @@ scenarios:
                 postalCode: '49958'
                 phone: '+1 (756) 528-3696'
                 state: 'OR'
-                email: 'taxpayer'
+                email: 'petitioner'
               filingType: 'Myself'
               partyType: 'Petitioner'
               contactSecondary: {}

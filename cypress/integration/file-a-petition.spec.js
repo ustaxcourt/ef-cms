@@ -4,7 +4,7 @@ let createdDocketNumber;
 describe('File a petition', function() {
   before(() => {
     cy.seed();
-    cy.login('taxpayer');
+    cy.login('petitioner');
   });
 
   it('finds footer element', () => {
@@ -39,7 +39,7 @@ describe('File a petition', function() {
 
 describe('creation form', () => {
   before(() => {
-    cy.login('taxpayer', 'file-a-petition/step-1');
+    cy.login('petitioner', 'file-a-petition/step-1');
   });
 
   it('has a stin file input', () => {
