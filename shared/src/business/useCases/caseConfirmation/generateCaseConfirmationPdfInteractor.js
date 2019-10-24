@@ -21,13 +21,18 @@ const ustcLogoBuffer = fs.readFileSync('./shared/static/images/ustc_seal.png');
 const formattedCaseInfo = caseInfo => {
   const formattedInfo = Object.assign(
     {
-      docketNumber: caseInfo.docketNumber + caseInfo.docketNumberSuffix,
+      docketNumber: `${caseInfo.docketNumber}${caseInfo.docketNumberSuffix ||
+        ''}`,
       preferredTrialCity: caseInfo.preferredTrialCity,
       receivedAtFormatted: DateHandler.formatDateString(
         caseInfo.receivedAt,
         'MONTH_DAY_YEAR',
       ),
-      servedDate: 'Unsure',
+      servedDate: DateHandler.formatDateString(
+        caseInfo.receivedAt,
+        'MONTH_DAY_YEAR',
+      ),
+      todaysDate: DateHandler.formatNow('MONTH_DAY_YEAR'),
     },
     caseInfo.contactPrimary,
   );
@@ -54,6 +59,7 @@ const generateCaseConfirmationPage = async caseInfo => {
   const html = compiledFunction({
     ...formattedCaseInfo(caseInfo),
     css,
+    raw: JSON.stringify(caseInfo, null, 4),
     logo: logoBase64,
   });
   return html;

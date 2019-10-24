@@ -16,7 +16,7 @@ html(lang="en")
       p.text-center= todaysDate
       h2.text-center.clear NOTIFICATION OF RECEIPT OF PETITION
 
-      p.float-left= initialTitle
+      p.float-left.width-half= initialTitle
       p.float-right Docket Number: #{docketNumber} 
 
       p.clear The Court received and filed your petition on #{receivedAtFormatted} and served it on respondent on #{servedDate}.
@@ -48,17 +48,18 @@ html(lang="en")
         br
         | Clerk of the Court
 
+      pre= raw
       hr.clear
 
-      .address
-        | #{name}
+    .address
+      | #{name}
+      br
+      | #{address1}
+      br
+      if address2
+        | #{address2}   
         br
-        | #{address1}
+      if address3
+        | #{address3}   
         br
-        if address2
-          | #{address2}   
-          br
-        if address3
-          | #{address3}   
-          br
-        | #{city}, #{state}  #{postalCode}
+      | #{city}, #{state}  #{postalCode}
