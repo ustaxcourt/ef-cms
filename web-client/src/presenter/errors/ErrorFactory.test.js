@@ -63,7 +63,7 @@ describe('ErrorFactory', () => {
   it('creates ActionError errors for responses without status code', () => {
     const error = new Error();
     error.response = {
-      data: 'I am a jelly donut',
+      data: 'I am a jelly doughnut',
     };
     const result = ErrorFactory.getError(error);
     expect(result.className).toEqual('ActionError');

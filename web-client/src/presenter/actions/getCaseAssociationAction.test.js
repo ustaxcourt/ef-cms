@@ -4,6 +4,10 @@ import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 
+const baseState = {
+  constants: { USER_ROLES: User.ROLES },
+};
+
 describe('getCaseAssociation', () => {
   it('should return that practitioner is associated', async () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(false);
@@ -19,6 +23,7 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
+        ...baseState,
         caseDetail: {
           practitioners: [{ userId: '123' }],
         },
@@ -48,6 +53,7 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
+        ...baseState,
         caseDetail: {
           practitioners: [{ userId: '123' }],
         },
@@ -77,6 +83,7 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
+        ...baseState,
         caseDetail: {
           practitioners: [{ userId: '123' }],
         },
@@ -106,6 +113,7 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
+        ...baseState,
         caseDetail: {
           respondents: [{ userId: '789' }],
         },
@@ -135,6 +143,7 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
+        ...baseState,
         caseDetail: {
           respondent: { userId: '123' },
         },
@@ -164,6 +173,7 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
+        ...baseState,
         caseDetail: {
           userId: '123',
         },
@@ -193,6 +203,7 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
+        ...baseState,
         caseDetail: {
           userId: '123',
         },

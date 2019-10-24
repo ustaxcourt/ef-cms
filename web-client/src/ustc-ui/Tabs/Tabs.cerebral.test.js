@@ -95,7 +95,7 @@ describe('TabsComponent', () => {
     const testRenderer = TestRenderer.create(
       <Container app={app}>
         <Tabs asSwitch bind="tab" className="yeah">
-          <Tab id="tab-work-queue" tabName="section" title="asdlkj">
+          <Tab id="tab-work-queue" tabName="section" title="something">
             <div id="tab-section-panel">Section</div>
           </Tab>
           <Tab id="tab-my-queue" tabName="my">
