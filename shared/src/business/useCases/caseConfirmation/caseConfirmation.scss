@@ -2,70 +2,79 @@ html {
   // to ensure background-colors display in pdf
   -webkit-print-color-adjust: exact;
 }
-.page-container {
-  position: relative;
-  margin: 0.5in;
-  font-size: 12px;
-}
-
-.float-left {
-  float: left;
-}
-.float-right {
-  float: right;
-}
-.text-center {
-  text-align: center;
-}
-.width-third {
-  width: 33%;
-}
 
 body {
   font-family: sans-serif;
-}
+  font-size: 12px;
 
-h1, h2 {
-  font-family: serif;
-}
+  .page-container {
+    position: relative;
+    margin: 0.5in;
 
-h2 {
-  font-weight: normal;
-}
+    .float-left {
+      float: left;
+    }
+    .float-right {
+      float: right;
+    }
+    .text-center {
+      text-align: center;
+    }
 
-.logo {
-  position: absolute;
-  top: 0px;
-  height: 100px;
-  width: 100px;
-}
-.clear {
-  clear: both;
-}
+    .width-third {
+      width: 33%;
+    }
 
-.link {
-  text-decoration: underline;
-}
+    .width-half {
+      width: 50%;
+    }
 
-.info-box {
-  margin-bottom: 20px;
-  border: 1px solid #D6D7D9;
 
-  h3 {
-    background-color: #f1f1f1;
-    border-bottom: 1px solid #D6D7D9;
-    padding: 10px;
-    margin-bottom: 0;
-    margin-top: 0;
+
+    h1, h2 {
+      font-family: serif;
+    }
+
+    h2 {
+      font-weight: normal;
+    }
+
+    .logo {
+      position: absolute;
+      top: 0px;
+      height: 100px;
+      width: 100px;
+    }
+    .clear {
+      clear: both;
+    }
+
+    .link {
+      text-decoration: underline;
+    }
+
+    .info-box {
+      margin-bottom: 20px;
+      border: 1px solid #D6D7D9;
+
+      h3 {
+        background-color: #f1f1f1;
+        border-bottom: 1px solid #D6D7D9;
+        padding: 10px;
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      p {
+        padding: 10px;
+        margin: 0;
+      }
+    }
   }
-  p {
-    padding: 10px;
-    margin: 0;
-  }
-}
 
-.address {
-  position: absolute;
-  top: 9.5in;
-  left: 1.0in;
+  .address {
+    position: absolute;
+    top: 9.5in;
+    left: 1.0in;
+  }
+
 }
