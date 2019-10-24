@@ -15,6 +15,7 @@ const confirmPugContent = fs.readFileSync(
   './shared/src/business/useCases/caseConfirmation/caseConfirmation.pug',
   'utf-8',
 );
+const ustcLogoBuffer = fs.readFileSync('./shared/static/images/ustc_seal.png');
 
 /**
  * NOTE: to make this work, you must save the petition as a petitionsclerk
@@ -24,13 +25,16 @@ const confirmPugContent = fs.readFileSync(
  */
 
 const generateCaseConfirmationPage = async caseInfo => {
+  const logoBase64 = `data:image/png;base64,${ustcLogoBuffer.toString(
+    'base64',
+  )}`;
   const { css } = await new Promise(resolve => {
     sass.render({ data: confirmSassContent }, (err, result) => {
       return resolve(result);
     });
   });
   const compiledFunction = pug.compile(confirmPugContent);
-  const html = compiledFunction({ ...caseInfo, css });
+  const html = compiledFunction({ ...caseInfo, css, logo: logoBase64 });
   return html;
 };
 
