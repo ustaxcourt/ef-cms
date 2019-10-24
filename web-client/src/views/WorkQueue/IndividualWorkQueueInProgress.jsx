@@ -7,9 +7,15 @@ export const IndividualWorkQueueInProgress = connect(
   {
     documentHelper: state.documentHelper,
     formattedWorkQueue: state.formattedWorkQueue,
+    userIsDocketClerk: state.mappedUserHelper.role.docketclerk,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({
+    documentHelper,
+    formattedWorkQueue,
+    userIsDocketClerk,
+    workQueueHelper,
+  }) => {
     return (
       <React.Fragment>
         <table
@@ -56,7 +62,9 @@ export const IndividualWorkQueueInProgress = connect(
                           shouldLinkToComplete:
                             item.document.isFileAttached === false,
                           shouldLinkToEdit:
-                            item.isQC && item.document.eventCode !== 'P',
+                            userIsDocketClerk &&
+                            item.isQC &&
+                            item.document.eventCode !== 'P',
                           workItemIdToMarkAsRead: !item.isRead
                             ? item.workItemId
                             : null,
