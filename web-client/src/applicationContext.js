@@ -29,10 +29,7 @@ import { NewTrialSession } from '../../shared/src/business/entities/trialSession
 import { Note } from '../../shared/src/business/entities/Note';
 import { Order } from '../../shared/src/business/entities/orders/Order';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '../../shared/src/authorization/authorizationClientService';
+import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
@@ -126,6 +123,7 @@ import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trial
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
 import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
+import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
@@ -408,70 +406,7 @@ const applicationContext = {
   getCurrentUser,
   getCurrentUserPermissions: () => {
     const user = getCurrentUser();
-    if (user) {
-      const permissions = {
-        ADD_CASE_TO_TRIAL_SESSION: isAuthorized(
-          user,
-          ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION,
-        ),
-        ARCHIVE_DOCUMENT: isAuthorized(user, ROLE_PERMISSIONS.ARCHIVE_DOCUMENT),
-        ASSOCIATE_SELF_WITH_CASE: isAuthorized(
-          user,
-          ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE,
-        ),
-        ASSOCIATE_USER_WITH_CASE: isAuthorized(
-          user,
-          ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE,
-        ),
-        BATCH_DOWNLOAD_TRIAL_SESSION: isAuthorized(
-          user,
-          ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION,
-        ),
-        BLOCK_CASE: isAuthorized(user, ROLE_PERMISSIONS.BLOCK_CASE),
-        CASE_DEADLINE: isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE),
-        CREATE_COURT_ISSUED_ORDER: isAuthorized(
-          user,
-          ROLE_PERMISSIONS.CREATE_COURT_ISSUED_ORDER,
-        ),
-        CREATE_USER: isAuthorized(user, ROLE_PERMISSIONS.CREATE_USER),
-        DOCKET_ENTRY: isAuthorized(user, ROLE_PERMISSIONS.DOCKET_ENTRY),
-        EDIT_COURT_ISSUED_ORDER: isAuthorized(
-          user,
-          ROLE_PERMISSIONS.EDIT_COURT_ISSUED_ORDER,
-        ),
-        FILE_EXTERNAL_DOCUMENT: isAuthorized(
-          user,
-          ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT,
-        ),
-        GET_CASE: isAuthorized(user, ROLE_PERMISSIONS.GET_CASE),
-        GET_READ_MESSAGES: isAuthorized(
-          user,
-          ROLE_PERMISSIONS.GET_READ_MESSAGES,
-        ),
-        GET_USERS_IN_SECTION: isAuthorized(
-          user,
-          ROLE_PERMISSIONS.GET_USERS_IN_SECTION,
-        ),
-        PETITION: isAuthorized(user, ROLE_PERMISSIONS.PETITION),
-        PRIORITIZE_CASE: isAuthorized(user, ROLE_PERMISSIONS.PRIORITIZE_CASE),
-        SERVE_DOCUMENT: isAuthorized(user, ROLE_PERMISSIONS.SERVE_DOCUMENT),
-        START_PAPER_CASE: isAuthorized(user, ROLE_PERMISSIONS.START_PAPER_CASE),
-        TRIAL_SESSION_WORKING_COPY: isAuthorized(
-          user,
-          ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY,
-        ),
-        TRIAL_SESSIONS: isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS),
-        UPDATE_CASE: isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE),
-        UPDATE_CONTACT_INFO: isAuthorized(
-          user,
-          ROLE_PERMISSIONS.UPDATE_CONTACT_INFO,
-        ),
-        UPLOAD_DOCUMENT: isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT),
-        VIEW_DOCUMENTS: isAuthorized(user, ROLE_PERMISSIONS.VIEW_DOCUMENTS),
-        WORKITEM: isAuthorized(user, ROLE_PERMISSIONS.WORKITEM),
-      };
-      return permissions;
-    }
+    return getUserPermissions(user);
   },
   getCurrentUserToken,
   getEntityConstructors: () => ({
@@ -530,6 +465,7 @@ const applicationContext = {
     return uuidv4();
   },
   getUseCases: () => allUseCases,
+  getUserPermissions,
   getUtilities: () => {
     return {
       compareCasesByDocketNumber,
