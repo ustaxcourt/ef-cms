@@ -9,7 +9,7 @@ const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
 export default (test, fakeFile, overrides = {}) => {
-  return it('Taxpayer creates a new case, testing all form options', async () => {
+  return it('petitioner creates a new case, testing all form options', async () => {
     await test.runSequence('updateStartCaseFormValueSequence', {
       key: 'petitionFile',
       value: fakeFile,

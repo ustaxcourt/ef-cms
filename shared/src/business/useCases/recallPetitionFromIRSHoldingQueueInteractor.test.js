@@ -85,7 +85,7 @@ describe('Recall petition from IRS Holding Queue', () => {
   it('throws unauthorized error if user is unauthorized', async () => {
     let error;
     applicationContext.getCurrentUser = () => {
-      return new User({ role: User.ROLES.petitioner, userId: 'taxpayer' });
+      return new User({ role: User.ROLES.petitioner, userId: 'petitioner' });
     };
 
     try {

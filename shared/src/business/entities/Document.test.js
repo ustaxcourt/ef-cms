@@ -6,7 +6,7 @@ const { User } = require('./User');
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
   role: User.ROLES.petitioner,
-  userId: 'taxpayer',
+  userId: 'petitioner',
 };
 const caseDetail = {
   contactPrimary: {

@@ -277,7 +277,7 @@ describe('formatted work queue computed', () => {
               documentType: 'Proposed Stipulated Decision',
               processingStatus: 'pending',
               reviewDate: '2018-11-21T20:49:28.192Z',
-              userId: 'taxpayer',
+              userId: 'petitioner',
               workItems: [
                 {
                   caseStatus: 'New',
@@ -349,7 +349,7 @@ describe('formatted work queue computed', () => {
                 userId: 'xyzzy',
               },
               reviewDate: '2018-11-21T20:49:28.192Z',
-              userId: 'taxpayer',
+              userId: 'petitioner',
               workItems: [
                 {
                   caseStatus: 'New',
@@ -418,7 +418,7 @@ describe('formatted work queue computed', () => {
               documentType: 'Proposed Stipulated Decision',
               processingStatus: 'pending',
               reviewDate: '2018-11-21T20:49:28.192Z',
-              userId: 'taxpayer',
+              userId: 'petitioner',
               workItems: [
                 {
                   caseStatus: 'New',

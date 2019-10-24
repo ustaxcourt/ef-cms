@@ -1,5 +1,5 @@
 export default test => {
-  it('taxpayer chooses the case type', async () => {
+  it('petitioner chooses the case type', async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'hasIrsNotice',
       value: true,

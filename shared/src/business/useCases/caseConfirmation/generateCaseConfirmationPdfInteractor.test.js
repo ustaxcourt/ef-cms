@@ -34,7 +34,7 @@ describe('generateCaseConfirmationPdfInteractor', () => {
         },
         getChromium: () => chromiumMock,
         getCurrentUser: () => {
-          return { role: User.ROLES.petitioner, userId: 'taxpayer' };
+          return { role: User.ROLES.petitioner, userId: 'petitioner' };
         },
         getPersistenceGateway: () => ({
           getCaseByCaseId: () => ({ docketNumber: '101-19' }),
