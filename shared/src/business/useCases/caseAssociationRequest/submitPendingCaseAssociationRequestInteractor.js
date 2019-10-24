@@ -1,8 +1,8 @@
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const {
-  ASSOCIATE_SELF_WITH_CASE,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 
 /**
@@ -19,7 +19,9 @@ exports.submitPendingCaseAssociationRequestInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ASSOCIATE_SELF_WITH_CASE)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 

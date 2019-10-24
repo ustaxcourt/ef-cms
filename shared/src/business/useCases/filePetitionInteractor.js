@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  PETITION,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -16,7 +16,7 @@ exports.filePetitionInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, PETITION)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
