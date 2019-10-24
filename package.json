@@ -106,6 +106,7 @@
     "sanitize-filename": "^1.6.3",
     "serverless": "^1.52.0",
     "serverless-domain-manager": "github:codyseibert/serverless-domain-manager",
+    "serverless-jetpack": "^0.6.0",
     "serverless-latest-layer-version": "^1.0.3",
     "serverless-offline": "^5.11.0",
     "serverless-offline-dynamodb-streams": "^3.0.0",
@@ -186,8 +187,5 @@
   "staticFiles": {
     "staticPath": "node_modules/pdfjs-dist/build",
     "watcherGlob": false
-  },
-  "dependencies": {
-    "serverless-jetpack": "^0.6.0"
   }
 }
