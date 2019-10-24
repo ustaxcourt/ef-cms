@@ -17,7 +17,6 @@ custom:
 
   jetpack:
     mode: yarn
-    individually: true
 
   prune:
     automatic: true
@@ -169,6 +168,7 @@ package:
   include:
     - web-api/src/casesHandlers.js
 
+  individually: true
   excludeDevDependencies: true
 
 resources:
