@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -37,15 +36,4 @@ export const Button = props => {
       {children}
     </Element>
   );
-};
-
-Button.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  href: PropTypes.string,
-  icon: PropTypes.string,
-  link: PropTypes.bool,
-  marginDirection: PropTypes.string,
-  secondary: PropTypes.bool,
-  type: PropTypes.string,
 };

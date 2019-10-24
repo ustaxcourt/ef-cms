@@ -15,7 +15,6 @@ import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { ValidationText } from '../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import PropTypes from 'prop-types';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
@@ -512,13 +511,3 @@ export const ScanBatchPreviewer = connect(
     );
   },
 );
-
-ScanBatchPreviewer.propTypes = {
-  documentTabs: PropTypes.arrayOf(
-    PropTypes.shape({
-      documentType: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-    }),
-  ),
-  title: PropTypes.string.isRequired,
-};

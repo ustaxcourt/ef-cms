@@ -77,7 +77,7 @@ describe('DateHandler', () => {
       jest.restoreAllMocks();
     });
 
-    it('formats current timestamp using requested format', () => {
+    it('formats current time stamp using requested format', () => {
       const result = DateHandler.formatNow('YY');
       expect(result).toEqual('96');
     });
