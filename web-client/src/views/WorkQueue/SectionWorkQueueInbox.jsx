@@ -13,6 +13,7 @@ export const SectionWorkQueueInbox = connect(
     selectWorkItemSequence: sequences.selectWorkItemSequence,
     selectedWorkItems: state.selectedWorkItems,
     setFocusedWorkItemSequence: sequences.setFocusedWorkItemSequence,
+    userIsDocketClerk: state.mappedUserHelper.role.docketclerk,
     users: state.users,
     workQueueHelper: state.workQueueHelper,
   },
@@ -24,6 +25,7 @@ export const SectionWorkQueueInbox = connect(
     selectedWorkItems,
     selectWorkItemSequence,
     setFocusedWorkItemSequence,
+    userIsDocketClerk,
     users,
     workQueueHelper,
   }) => {
@@ -178,7 +180,9 @@ export const SectionWorkQueueInbox = connect(
                         shouldLinkToComplete:
                           item.document.isFileAttached === false,
                         shouldLinkToEdit:
-                          item.isQC && item.document.eventCode !== 'P',
+                          userIsDocketClerk &&
+                          item.isQC &&
+                          item.document.eventCode !== 'P',
                       })}
                       onClick={e => {
                         e.stopPropagation();
