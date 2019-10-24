@@ -35,7 +35,7 @@ export const TrialSessionDetail = connect(
 
         {!formattedTrialSessionDetails.isCalendared && (
           <Tabs
-            bind="trialsessiondetails.caseList"
+            bind="trialSessionDetailsTab.caseList"
             defaultActiveTab="EligibleCases"
           >
             <Button
@@ -61,7 +61,7 @@ export const TrialSessionDetail = connect(
 
         {formattedTrialSessionDetails.isCalendared && (
           <Tabs
-            bind="trialsessiondetails.calendaredCaseList"
+            bind="trialSessionDetailsTab.calendaredCaseList"
             defaultActiveTab="OpenCases"
           >
             <Tab id="open-cases-tab" tabName="OpenCases" title="Open Cases">

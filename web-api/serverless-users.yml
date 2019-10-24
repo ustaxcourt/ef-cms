@@ -8,11 +8,15 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-jetpack
   # - serverless-plugin-warmup
 
 custom:
   #warmup:
   #enabled: true
+
+  jetpack:
+    mode: yarn
 
   prune:
     automatic: true
@@ -148,7 +152,6 @@ package:
     - ./**
   include:
     - web-api/src/usersHandlers.js
-
   excludeDevDependencies: true
 
 resources:
