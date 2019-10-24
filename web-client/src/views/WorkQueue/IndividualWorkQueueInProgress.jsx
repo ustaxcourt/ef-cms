@@ -13,8 +13,8 @@ export const IndividualWorkQueueInProgress = connect(
   ({
     documentHelper,
     formattedWorkQueue,
-    workQueueHelper,
     userIsDocketClerk,
+    workQueueHelper,
   }) => {
     return (
       <React.Fragment>
