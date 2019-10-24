@@ -11,6 +11,7 @@ const state = {
   constants: {
     CATEGORY_MAP: Document.CATEGORY_MAP,
     PARTY_TYPES: ContactFactory.PARTY_TYPES,
+    USER_ROLES: User.ROLES,
   },
   form: {},
   validationErrors: {},
