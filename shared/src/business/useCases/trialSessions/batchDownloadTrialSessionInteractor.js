@@ -1,7 +1,7 @@
 const sanitize = require('sanitize-filename');
 const {
-  BATCH_DOWNLOAD_TRIAL_SESSION,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { formatDateString } = require('../../../business/utilities/DateHandler');
@@ -22,7 +22,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, BATCH_DOWNLOAD_TRIAL_SESSION)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

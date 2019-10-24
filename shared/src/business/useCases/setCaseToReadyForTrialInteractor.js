@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  UPDATE_CASE,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
@@ -19,7 +19,7 @@ exports.setCaseToReadyForTrialInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, UPDATE_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
