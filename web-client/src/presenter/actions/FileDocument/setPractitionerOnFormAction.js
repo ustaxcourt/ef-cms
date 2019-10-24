@@ -9,8 +9,9 @@ import { state } from 'cerebral';
  */
 export const setPractitionerOnFormAction = async ({ get, store }) => {
   const user = get(state.user);
+  const USER_ROLES = get(state.constants.USER_ROLES);
 
-  if (user.role === 'practitioner') {
+  if (user.role === USER_ROLES.practitioner) {
     store.set(state.form.practitioner, [{ ...user, partyPractitioner: true }]);
   }
 };

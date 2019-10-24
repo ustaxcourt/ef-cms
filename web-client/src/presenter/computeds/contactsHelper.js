@@ -11,11 +11,11 @@ import { state } from 'cerebral';
 export const contactsHelper = get => {
   const form = get(state.form);
   const userRole = get(state.user.role);
-  const { PARTY_TYPES } = get(state.constants);
+  const { PARTY_TYPES, USER_ROLES } = get(state.constants);
 
   let contactPrimary, contactSecondary;
   let showEmail = true;
-  if (userRole === 'petitioner') {
+  if (userRole === USER_ROLES.petitioner) {
     switch (form.partyType) {
       case PARTY_TYPES.conservator:
         contactPrimary = {
