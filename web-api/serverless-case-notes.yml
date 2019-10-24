@@ -159,7 +159,6 @@ package:
   include:
     - web-api/src/caseNotesHandlers.js
 
-  individually: true
   excludeDevDependencies: true
 
 resources:

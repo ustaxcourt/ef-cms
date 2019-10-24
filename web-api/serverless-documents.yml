@@ -150,7 +150,6 @@ package:
   include:
     - web-api/src/documentsHandlers.js
 
-  individually: true
   excludeDevDependencies: true
 
 resources:
