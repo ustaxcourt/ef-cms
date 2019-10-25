@@ -742,4 +742,158 @@ describe('formatted work queue computed', () => {
       expect(result.showRemoveSignature).toEqual(false);
     });
   });
+
+  describe('showDocumentEditButton', () => {
+    it("should show the 'edit' link if the document is not a petition and the user is a docketclerk", () => {
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+                status: 'served',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.showDocumentEditButton).toEqual(true);
+    });
+
+    it("should not show the 'edit' link if the document is a petition", () => {
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+                status: 'served',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.showDocumentEditButton).toEqual(false);
+    });
+
+    it("should not show the 'edit' link if the user is not a docketclerk", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+                status: 'served',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.showDocumentEditButton).toEqual(false);
+    });
+  });
+
+  describe('showPrintCaseConfirmationButton', () => {
+    it("should show the 'print confirmation' button if a document has been served and the document is a petition ", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+                status: 'served',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.showPrintCaseConfirmationButton).toEqual(true);
+    });
+
+    it("should not show the 'print confirmation' button if a document has not been served", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+                status: 'new',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.showPrintCaseConfirmationButton).toEqual(false);
+    });
+
+    it("should not show the 'print confirmation' button if the document is not a petition ", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+                status: 'served',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.showPrintCaseConfirmationButton).toEqual(false);
+    });
+  });
 });
