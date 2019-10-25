@@ -9,14 +9,16 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const confirmSassContent = fs.readFileSync(
-  './shared/src/business/useCases/caseConfirmation/caseConfirmation.scss',
+  `${__dirname}/caseConfirmation.scss`,
   'utf-8',
 );
 const confirmPugContent = fs.readFileSync(
-  './shared/src/business/useCases/caseConfirmation/caseConfirmation.pug',
+  `${__dirname}/caseConfirmation.pug`,
   'utf-8',
 );
-const ustcLogoBuffer = fs.readFileSync('./shared/static/images/ustc_seal.png');
+const ustcLogoBuffer = fs.readFileSync(
+  `${__dirname}/../../../../../shared/static/images/ustc_seal.png`,
+);
 
 const formattedCaseInfo = caseInfo => {
   const formattedInfo = Object.assign(
