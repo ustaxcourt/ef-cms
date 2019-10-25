@@ -15,13 +15,13 @@ node ./web-api/start-s3rver &
 S3RVER_PID=$!
 
 echo "seeding s3"
-npm run seed:s3
+yarn seed:s3
 
 echo "creating & seeding dynamo tables"
-npm run seed:db
+yarn seed:db
 
 echo "creating elasticsearch index"
-npm run seed:elasticsearch
+yarn seed:elasticsearch
 
 # these exported values expire when script terminates
 export AWS_ACCESS_KEY_ID=noop
