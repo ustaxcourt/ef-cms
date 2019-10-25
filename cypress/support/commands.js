@@ -88,7 +88,9 @@ Cypress.Commands.add('login', (username, route = '/') => {
 });
 
 /**
- *
+ * @param b64Data
+ * @param contentType
+ * @param sliceSize
  */
 function b64toBlob(b64Data, contentType, sliceSize) {
   contentType = contentType || '';
