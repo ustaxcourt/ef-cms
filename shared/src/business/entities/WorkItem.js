@@ -308,4 +308,4 @@ WorkItem.prototype.setAsSentToIRS = function({
   return this;
 };
 
-module.exports = { WorkItem };
+module.exports = { IRS_BATCH_SYSTEM_USER_ID, WorkItem };
