@@ -3,7 +3,6 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
-import { generateCaseConfirmationPdfAction } from '../actions/CaseConfirmation/generateCaseConfirmationPdfAction';
 import { gotoDocumentDetailSequence } from '../sequences/gotoDocumentDetailSequence';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
@@ -41,7 +40,6 @@ export const submitPetitionFromPaperSequence = [
             error: [openFileUploadErrorModal],
             success: [
               setCaseAction,
-              generateCaseConfirmationPdfAction,
               setPetitionIdAction,
               closeFileUploadStatusModalAction,
               ...gotoDocumentDetailSequence,
