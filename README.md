@@ -84,11 +84,11 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the top-level directory.
 
-- `npm i`
+- `yarn`
 
 #### Terminal A
 
-- `npm run start:api`
+- `yarn start:api`
 
 ##### Other Start Commands
 
@@ -96,7 +96,7 @@ Both the front-end (`/web-client`) and API (`/web-api`) share code that exists i
 
 #### Terminal B
 
-- `npm run start:client`
+- `yarn start:client`
 
 ## Login and test users
 
@@ -128,7 +128,7 @@ No password is required.
 
 ### AWS Cognito
 
-To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with:
+To use Cognito, start the web client with `yarn dev:cognito` (instead of `npm start`) You can then log in with:
 
 ```
 petitioner1@example.com – petitioner5@example.com
@@ -180,8 +180,8 @@ See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
 
 ## Testing / Coverage Tips
 
-- Run all tests with `npm run test`
-- The web client, api, and shared code can be tested with `npm run test:client`, `npm run test:api`, and `npm run test:shared`, respectively.
+- Run all tests with `yarn test`
+- The web client, api, and shared code can be tested with `yarn test:client`, `yarn test:api`, and `yarn test:shared`, respectively.
 - TIP: When working through a single test, you can run a single test with `jest /path/to/test/file.js` (you may need to `npm -i -g jest`). Additionally, you can use `--watch` and `--coverage` flags to to continually run the specified test on save and provide a coverage report. For example: `jest /path/to/test/file.js --watch --coverage`
 
 Example coverage output:
