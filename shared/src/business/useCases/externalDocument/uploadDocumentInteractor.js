@@ -15,7 +15,7 @@ exports.uploadDocumentInteractor = async ({
   if (
     !(
       isAuthorized(user, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT) ||
-      isAuthorized(user, ROLE_PERMISSIONS.CREATE_COURT_ISSUED_ORDER) ||
+      isAuthorized(user, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT) ||
       isAuthorized(user, ROLE_PERMISSIONS.DOCKET_ENTRY)
     )
   ) {

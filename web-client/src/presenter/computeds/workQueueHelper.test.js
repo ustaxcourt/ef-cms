@@ -1,16 +1,36 @@
 import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../applicationContext';
+import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
-import { workQueueHelper } from './workQueueHelper';
+import { withAppContextDecorator } from '../../../src/withAppContext';
+import { workQueueHelper as workQueueHelperComputed } from './workQueueHelper';
 
-const baseState = {
-  constants: { USER_ROLES: User.ROLES },
+let globalUser;
+
+const workQueueHelper = withAppContextDecorator(workQueueHelperComputed, {
+  ...applicationContext,
+  getCurrentUser: () => {
+    return globalUser;
+  },
+});
+
+const getBaseState = user => {
+  globalUser = user;
+  return {
+    constants: { USER_ROLES: User.ROLES },
+    permissions: getUserPermissions(user),
+  };
 };
 
 describe('workQueueHelper', () => {
-  it('returns the expected state when set', () => {
+  it('returns the expected state when selected work items are set', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         notifications: {
           myInboxUnreadCount: 0,
           qcUnreadCount: 0,
@@ -25,14 +45,18 @@ describe('workQueueHelper', () => {
       showOutbox: false,
       showSectionWorkQueue: true,
       showSendToBar: true,
-      showStartCaseButton: false,
+      showStartCaseButton: true,
     });
   });
 
-  it('returns the expected state when not set', () => {
+  it('returns the expected state when selected work items are not set', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         notifications: {
           myInboxUnreadCount: 0,
           qcUnreadCount: 0,
@@ -47,22 +71,23 @@ describe('workQueueHelper', () => {
       showOutbox: true,
       showSectionWorkQueue: false,
       showSendToBar: false,
-      showStartCaseButton: false,
+      showStartCaseButton: true,
     });
   });
 
   it('shows the start a case button when role is petitions clerk', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         notifications: {
           myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
@@ -72,17 +97,18 @@ describe('workQueueHelper', () => {
   });
 
   it('shows the start a case button when role is docket clerk', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '123',
+    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         notifications: {
           myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
-        user: {
-          role: User.ROLES.docketClerk,
-        },
         workQueueToDisplay: { box: 'outbox', queue: 'my' },
       },
     });
@@ -92,17 +118,18 @@ describe('workQueueHelper', () => {
   });
 
   it('shows the case status column when role is judge', () => {
+    const user = {
+      role: User.ROLES.judge,
+      userId: '123',
+    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         notifications: {
           myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
-        user: {
-          role: User.ROLES.judge,
-        },
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
     });
@@ -110,17 +137,18 @@ describe('workQueueHelper', () => {
   });
 
   it('shows the from column when role is judge', () => {
+    const user = {
+      role: User.ROLES.judge,
+      userId: '123',
+    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         notifications: {
           myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
-        user: {
-          role: User.ROLES.judge,
-        },
         workQueueToDisplay: { box: 'inbox', queue: 'my' },
       },
     });
@@ -128,17 +156,18 @@ describe('workQueueHelper', () => {
   });
 
   it('shows the batched by column when role is petitions clerk and box is the doc QC outbox', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         notifications: {
           myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: {
           box: 'outbox',
           queue: 'my',
@@ -150,17 +179,18 @@ describe('workQueueHelper', () => {
   });
 
   it('does not show the batched by column when role is not petitions clerk', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '123',
+    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         notifications: {
           myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
-        user: {
-          role: User.ROLES.docketClerk,
-        },
         workQueueToDisplay: {
           box: 'outbox',
           queue: 'my',
@@ -172,17 +202,18 @@ describe('workQueueHelper', () => {
   });
 
   it('does not show the batched by column when role is petitions clerk and box is not the doc QC outbox', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(workQueueHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         notifications: {
           myInboxUnreadCount: 0,
           qcUnreadCount: 0,
         },
         selectedWorkItems: [],
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: {
           box: 'outbox',
           queue: 'my',
