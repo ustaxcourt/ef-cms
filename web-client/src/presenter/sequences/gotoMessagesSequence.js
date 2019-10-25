@@ -35,7 +35,7 @@ const goToMessages = [
       ],
       [],
     ),
-    docketClerk: [
+    docketclerk: [
       getUsersInSectionAction({ section: 'docket' }),
       setUsersAction,
     ],
