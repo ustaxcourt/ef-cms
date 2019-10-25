@@ -79,7 +79,7 @@ describe('addDocketEntryHelper', () => {
     expect(result.showPrimaryDocumentValid).toBeTruthy();
   });
 
-  it('shows secondary party for petionerSpouse or petitionerDeceasedSpouse', () => {
+  it('shows secondary party for petitionerSpouse or petitionerDeceasedSpouse', () => {
     state.caseDetail.partyType = ContactFactory.PARTY_TYPES.petitionerSpouse;
     const result = runCompute(addDocketEntryHelper, { state });
     expect(result.showSecondaryParty).toBeTruthy();

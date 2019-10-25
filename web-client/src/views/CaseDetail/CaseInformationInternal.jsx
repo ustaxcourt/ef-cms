@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import { state } from 'cerebral';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
@@ -38,11 +37,6 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
     </div>
   </React.Fragment>
 );
-
-PetitionDetails.propTypes = {
-  caseDetail: PropTypes.object,
-  showPaymentRecord: PropTypes.bool,
-};
 
 const TrialInformation = ({
   caseDetail,
@@ -202,16 +196,6 @@ const TrialInformation = ({
     )}
   </React.Fragment>
 );
-
-TrialInformation.propTypes = {
-  caseDetail: PropTypes.object,
-  openAddToTrialModalSequence: PropTypes.func,
-  openBlockFromTrialModalSequence: PropTypes.func,
-  openPrioritizeCaseModalSequence: PropTypes.func,
-  openRemoveFromTrialSessionModalSequence: PropTypes.func,
-  openUnblockFromTrialModalSequence: PropTypes.func,
-  openUnprioritizeCaseModalSequence: PropTypes.func,
-};
 
 export const CaseInformationInternal = connect(
   {

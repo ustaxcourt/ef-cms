@@ -574,7 +574,7 @@ Case.prototype.closeCase = function() {
 
 /**
  *
- * @param {Date} sendDate the timestamp when the case was sent to the IRS
+ * @param {Date} sendDate the time stamp when the case was sent to the IRS
  * @returns {Case} the updated case entity
  */
 Case.prototype.markAsSentToIRS = function(sendDate) {
@@ -689,7 +689,7 @@ Case.prototype.getShowCaseNameForPrimary = function() {
 
 /**
  *
- * @param {string} payGovDate an ISO formatted datestring
+ * @param {string} payGovDate an ISO formatted date string
  * @returns {Case} the updated case entity
  */
 Case.prototype.markAsPaidByPayGov = function(payGovDate) {

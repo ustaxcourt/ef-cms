@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * invokes the path in the sequeneces depending on if the user is logged in or not
+ * invokes the path in the sequences depending on if the user is logged in or not
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get method for getting the state.user

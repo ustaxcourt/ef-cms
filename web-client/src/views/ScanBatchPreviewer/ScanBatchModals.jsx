@@ -77,7 +77,7 @@ export const ScanErrorModal = connect(
       <ConfirmModal
         noCancel
         confirmLabel="OK"
-        title="An error occured while scanning"
+        title="An error occurred while scanning"
         onCancelSequence="clearModalSequence"
         onConfirmSequence="clearModalSequence"
       >
