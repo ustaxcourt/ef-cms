@@ -14,7 +14,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     get(state.caseDetailPage.informationTab) || 'docketRecord';
   const form = get(state.form);
   const currentPage = get(state.currentPage);
-  const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
   const caseIsPaid = caseDetail.payGovId && !form.paymentType;
   const isExternalUser = applicationContext
     .getUtilities()
@@ -99,7 +98,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditPrimaryContactButton = userAssociatedWithCase;
   }
 
-  const showServeToIrsButton = ['New', 'Recalled'].includes(caseDetail.status);
   const showRecallButton = caseDetail.status === 'Batched for IRS';
 
   const practitionerMatchesFormatted =
@@ -158,7 +156,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState.respondentMatches &&
       modalState.respondentMatches.length,
     showActionRequired,
-    showAddCounsel: !isExternalUser,
     showAddDocketEntryButton,
     showCaptionEditButton:
       caseDetail.status !== 'Batched for IRS' && !isExternalUser,
@@ -169,18 +166,10 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseNameForPrimary,
     showCaseNotes,
     showCreateOrderButton,
-    showDirectDownloadLink: directDocumentLinkDesired,
     showDocketRecordInProgressState: !isExternalUser,
-    showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContactButton: isExternalUser,
-    showEditPractitioners:
-      !isExternalUser &&
-      (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showEditPrimaryContactButton,
-    showEditRespondents:
-      !isExternalUser &&
-      (caseDetail.respondents && !!caseDetail.respondents.length),
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
@@ -199,7 +188,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showRespondentSection:
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),
-    showServeToIrsButton,
     userHasAccessToCase,
   };
 };
