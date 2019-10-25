@@ -182,7 +182,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
       petitionDocumentEntity.addWorkItem(workItemEntity);
 
       casePromises.push(
-        await applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+        applicationContext.getPersistenceGateway().saveWorkItemForPaper({
           applicationContext,
           messageId: newMessage.messageId,
           workItem: workItemEntity.validate().toRawObject(),
