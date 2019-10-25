@@ -12,11 +12,14 @@ import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
+import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
+import { docketRecordHeaderHelper } from './computeds/docketRecordHeaderHelper';
+import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentHelper } from './computeds/documentHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
@@ -77,6 +80,7 @@ export const state = {
   caseDetailEditHelper,
   caseDetailErrors: {},
   caseDetailHelper,
+  caseInformationHelper,
   caseTypeDescriptionHelper,
   caseTypes: [],
   cases: [],
@@ -90,6 +94,8 @@ export const state = {
   currentPageIndex: 0,
   currentTab: '',
   dashboardExternalHelper,
+  docketRecordHelper,
+  docketRecordHeaderHelper,
   docketRecordIndex: 0,
   document: {},
   documentDetail: {
