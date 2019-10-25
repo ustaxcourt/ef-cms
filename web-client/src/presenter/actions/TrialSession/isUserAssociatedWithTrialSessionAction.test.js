@@ -1,8 +1,8 @@
-import { isJudgeAssociatedWithTrialSessionAction } from './isJudgeAssociatedWithTrialSessionAction';
+import { isUserAsociatedWithTrialSessionAction } from './isUserAsociatedWithTrialSessionAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-describe('isJudgeAssociatedWithTrialSessionAction', () => {
+describe('isUserAsociatedWithTrialSessionAction', () => {
   let pathYesStub;
   let pathNoStub;
 
@@ -17,7 +17,7 @@ describe('isJudgeAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.yes() if the judge is associated with the trial session', async () => {
-    await runAction(isJudgeAssociatedWithTrialSessionAction, {
+    await runAction(isUserAsociatedWithTrialSessionAction, {
       modules: {
         presenter,
       },
@@ -33,7 +33,7 @@ describe('isJudgeAssociatedWithTrialSessionAction', () => {
   });
 
   it('should return path.no() if the judge is not associated with the trial session', async () => {
-    await runAction(isJudgeAssociatedWithTrialSessionAction, {
+    await runAction(isUserAsociatedWithTrialSessionAction, {
       modules: {
         presenter,
       },
