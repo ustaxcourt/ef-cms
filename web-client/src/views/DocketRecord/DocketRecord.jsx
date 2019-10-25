@@ -11,12 +11,14 @@ export const DocketRecord = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     clearDocumentSequence: sequences.clearDocumentSequence,
+    docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.showModal,
   },
   ({
     caseDetailHelper,
+    docketRecordHelper,
     formattedCaseDetail,
     refreshCaseSequence,
     showModal,
@@ -89,7 +91,7 @@ export const DocketRecord = connect(
                       )}
 
                       {document &&
-                        caseDetailHelper.showDirectDownloadLink &&
+                        docketRecordHelper.showDirectDownloadLink &&
                         caseDetailHelper.showDocketRecordInProgressState &&
                         document.processingStatus !== 'complete' && (
                           <FontAwesomeIcon

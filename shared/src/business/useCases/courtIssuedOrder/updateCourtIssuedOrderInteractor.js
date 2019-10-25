@@ -22,7 +22,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
   const authorizedUser = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_COURT_ISSUED_ORDER)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
