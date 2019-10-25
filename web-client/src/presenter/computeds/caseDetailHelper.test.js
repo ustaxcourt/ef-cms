@@ -1,17 +1,24 @@
 import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../applicationContext';
+import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
+const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed, {
+  ...applicationContext,
+  getCurrentUser: () => {
+    return globalUser;
+  },
+});
 
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
+let globalUser;
 
 const getBaseState = user => {
+  globalUser = user;
   return {
     constants: { USER_ROLES: User.ROLES },
     permissions: getUserPermissions(user),
-    user,
   };
 };
 
@@ -450,90 +457,6 @@ describe('case detail computed', () => {
     expect(result.showCaseDeadlinesInternalEmpty).toEqual(true);
     expect(result.showCaseDeadlinesInternal).toEqual(false);
     expect(result.showCaseDeadlinesExternal).toEqual(false);
-  });
-
-  it('should show add counsel section if user is an internal user', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        form: {},
-      },
-    });
-    expect(result.showAddCounsel).toEqual(true);
-  });
-
-  it('should not show add counsel section if user is an external user', () => {
-    const user = {
-      role: User.ROLES.practitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        form: {},
-      },
-    });
-    expect(result.showAddCounsel).toEqual(false);
-  });
-
-  it('should show edit practitioners and respondents buttons if user is an internal user and there are practitioners and respondents on the case', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          practitioners: [{ userId: '1' }],
-          respondents: [{ userId: '2' }],
-        },
-        form: {},
-      },
-    });
-    expect(result.showEditPractitioners).toBeTruthy();
-    expect(result.showEditRespondents).toBeTruthy();
-  });
-
-  it('should not show edit practitioners or respondents buttons if user is an internal user and there are not practitioners and respondents on the case', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        form: {},
-      },
-    });
-    expect(result.showEditPractitioners).toBeFalsy();
-    expect(result.showEditRespondents).toBeFalsy();
-  });
-
-  it('should not show edit practitioners or respondents buttons if user is not an internal user', () => {
-    const user = {
-      role: User.ROLES.petitioner,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          practitioners: [{ userId: '1' }],
-          respondents: [{ userId: '2' }],
-        },
-        form: {},
-      },
-    });
-    expect(result.showEditPractitioners).toBeFalsy();
-    expect(result.showEditRespondents).toBeFalsy();
   });
 
   it('should show practitioner section if user is an internal user', () => {

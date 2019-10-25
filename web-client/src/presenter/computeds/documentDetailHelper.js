@@ -3,11 +3,11 @@ import { state } from 'cerebral';
 import _ from 'lodash';
 
 export const documentDetailHelper = (get, applicationContext) => {
+  const user = applicationContext.getCurrentUser();
   let showSignDocumentButton = false;
-  const currentUser = applicationContext.getCurrentUser();
-  const userRole = get(state.user.role);
   const caseDetail = get(state.caseDetail);
   const USER_ROLES = get(state.constants.USER_ROLES);
+  const permissions = get(state.permissions);
 
   const SIGNED_STIPULATED_DECISION = 'Stipulated Decision';
 
@@ -23,7 +23,12 @@ export const documentDetailHelper = (get, applicationContext) => {
   let isSigned = false;
   let isStipDecision = false;
   let isOrder = false;
+
+  let showServeToIrsButton = false;
+  let showRecallButton = false;
+
   if (document) {
+    // TODO: why do we need to check if document exists when it should always exist
     formattedDocument = applicationContext
       .getUtilities()
       .formatDocument(applicationContext, document);
@@ -85,7 +90,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     const stipulatedWorkItem = formattedDocument.workItems.find(
       workItem =>
         workItem.document.documentType === 'Proposed Stipulated Decision' &&
-        workItem.assigneeId === currentUser.userId &&
+        workItem.assigneeId === user.userId &&
         !workItem.completedAt,
     );
 
@@ -96,13 +101,13 @@ export const documentDetailHelper = (get, applicationContext) => {
     );
 
     showSignDocumentButton =
+      permissions.COURT_ISSUED_DOCUMENT &&
       !!stipulatedWorkItem &&
-      currentUser.role === USER_ROLES.adc &&
       !signedDocument;
 
     showServeDocumentButton =
+      permissions.SERVE_DOCUMENT &&
       document.status !== 'served' &&
-      currentUser.role === USER_ROLES.docketClerk &&
       document.documentType === SIGNED_STIPULATED_DECISION;
 
     const { ORDER_TYPES_MAP } = applicationContext.getConstants();
@@ -121,6 +126,12 @@ export const documentDetailHelper = (get, applicationContext) => {
           ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
           : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`;
     }
+
+    showServeToIrsButton =
+      ['New', 'Recalled'].includes(caseDetail.status) &&
+      formattedDocument.isPetition;
+    showRecallButton =
+      caseDetail.status === 'Batched for IRS' && formattedDocument.isPetition;
   }
 
   const formattedDocumentIsPetition =
@@ -139,7 +150,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showViewOrdersNeededButton =
     ((document && document.status === 'served') ||
       caseDetail.status === 'Batched for IRS') &&
-    userRole === USER_ROLES.petitionsClerk;
+    user.role === USER_ROLES.petitionsClerk;
 
   return {
     documentEditUrl,
@@ -154,8 +165,10 @@ export const documentDetailHelper = (get, applicationContext) => {
     showConfirmEditOrder: isSigned && isOrder,
     showDocumentInfoTab,
     showDocumentViewerTopMargin,
+    showRecallButton,
     showRemoveSignature: isOrder && isSigned,
     showServeDocumentButton,
+    showServeToIrsButton,
     showSignDocumentButton,
     showViewOrdersNeededButton,
   };

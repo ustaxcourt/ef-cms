@@ -1,11 +1,7 @@
 import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
-  const user = get(state.user);
-  if (!user) {
-    return;
-  }
-
+  const user = applicationContext.getCurrentUser();
   const { Case } = applicationContext.getEntityConstructors();
   const USER_ROLES = get(state.constants.USER_ROLES);
   const caseDetail = get(state.caseDetail);
@@ -18,13 +14,11 @@ export const caseDetailHelper = (get, applicationContext) => {
     get(state.caseDetailPage.informationTab) || 'docketRecord';
   const form = get(state.form);
   const currentPage = get(state.currentPage);
-  const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
   const caseIsPaid = caseDetail.payGovId && !form.paymentType;
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
   const isRequestAccessForm = currentPage === 'RequestAccessWizard';
-  const isJudge = 'judge' == user.role;
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
   const modalState = get(state.modal);
@@ -40,18 +34,16 @@ export const caseDetailHelper = (get, applicationContext) => {
   } = caseDetail;
   const permissions = get(state.permissions);
 
+  const showAddDocketEntryButton =
+    permissions.DOCKET_ENTRY && ['CaseDetailInternal'].includes(currentPage);
+  const showCreateOrderButton =
+    permissions.COURT_ISSUED_DOCUMENT &&
+    ['CaseDetailInternal'].includes(currentPage);
+  const showCaseNotes = permissions.TRIAL_SESSION_WORKING_COPY;
+
   let showFileDocumentButton =
     permissions.FILE_EXTERNAL_DOCUMENT && ['CaseDetail'].includes(currentPage);
-  let showAddDocketEntryButton =
-    permissions.DOCKET_ENTRY && ['CaseDetailInternal'].includes(currentPage);
-  let showCreateOrderButton =
-    ['CaseDetailInternal'].includes(currentPage) &&
-    [
-      USER_ROLES.docketClerk,
-      USER_ROLES.judge,
-      USER_ROLES.petitionsClerk,
-      USER_ROLES.adc,
-    ].includes(user.role);
+
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
@@ -106,7 +98,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditPrimaryContactButton = userAssociatedWithCase;
   }
 
-  const showServeToIrsButton = ['New', 'Recalled'].includes(caseDetail.status);
   const showRecallButton = caseDetail.status === 'Batched for IRS';
 
   const practitionerMatchesFormatted =
@@ -165,7 +156,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState.respondentMatches &&
       modalState.respondentMatches.length,
     showActionRequired,
-    showAddCounsel: !isExternalUser,
     showAddDocketEntryButton,
     showCaptionEditButton:
       caseDetail.status !== 'Batched for IRS' && !isExternalUser,
@@ -174,25 +164,17 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesInternalEmpty,
     showCaseInformationPublic: isExternalUser,
     showCaseNameForPrimary,
+    showCaseNotes,
     showCreateOrderButton,
-    showDirectDownloadLink: directDocumentLinkDesired,
     showDocketRecordInProgressState: !isExternalUser,
-    showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContactButton: isExternalUser,
-    showEditPractitioners:
-      !isExternalUser &&
-      (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showEditPrimaryContactButton,
-    showEditRespondents:
-      !isExternalUser &&
-      (caseDetail.respondents && !!caseDetail.respondents.length),
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
     showFileFirstDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
-    showNotes: isJudge,
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !caseIsPaid,
     showPaymentRecord: caseIsPaid,
@@ -206,7 +188,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showRespondentSection:
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),
-    showServeToIrsButton,
     userHasAccessToCase,
   };
 };
