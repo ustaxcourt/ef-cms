@@ -70,7 +70,7 @@ export const CaseInformationPublic = connect(
                             icon="print"
                             size="1x"
                           />
-                          Print confirmation
+                          Print receipt
                         </Button>
                       </If>
                     </h3>
@@ -106,7 +106,7 @@ export const CaseInformationPublic = connect(
                       icon="print"
                       size="1x"
                     />
-                    Print confirmation
+                    Print receipt
                   </Button>
                 </If>
                 <PetitionDetails caseDetail={formattedCaseDetail} />
