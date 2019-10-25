@@ -1,7 +1,8 @@
-const pug = require('pug');
-const sass = require('node-sass');
 const fs = require('fs');
+const sass = require('node-sass');
+const pug = require('pug');
 const DateHandler = require('../../utilities/DateHandler');
+
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -59,7 +60,6 @@ const generateCaseConfirmationPage = async caseInfo => {
   const html = compiledFunction({
     ...formattedCaseInfo(caseInfo),
     css,
-    raw: JSON.stringify(caseInfo, null, 4),
     logo: logoBase64,
   });
   return html;
