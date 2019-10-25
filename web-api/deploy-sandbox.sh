@@ -34,13 +34,8 @@ function prepare_serverless() {
     echo "Preparing to run Serverless."
     export NODE_PRESERVE_SYMLINKS=1
     rm -rf ./node_modules/
-    rm package-lock.json || true
-    pushd ../shared
-    rm -rf ./node_modules/
-    rm package-lock.json || true
-    npm install --production
-    popd
-    npm i
+    rm yarn.lock || true
+    yarn install
 }
 
 function run_development() {
