@@ -2,10 +2,6 @@ import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
-  if (!user) {
-    return;
-  }
-
   const { Case } = applicationContext.getEntityConstructors();
   const USER_ROLES = get(state.constants.USER_ROLES);
   const caseDetail = get(state.caseDetail);

@@ -4,10 +4,6 @@ import _ from 'lodash';
 
 export const documentDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
-  if (!user) {
-    return;
-  }
-
   let showSignDocumentButton = false;
   const caseDetail = get(state.caseDetail);
   const USER_ROLES = get(state.constants.USER_ROLES);

@@ -2,10 +2,6 @@ import { state } from 'cerebral';
 
 export const workQueueHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
-  if (!user) {
-    return;
-  }
-
   const selectedWorkItems = get(state.selectedWorkItems);
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const USER_ROLES = get(state.constants.USER_ROLES);
