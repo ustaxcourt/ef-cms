@@ -1,67 +1,8 @@
-const pug = require('pug');
-const sass = require('node-sass');
-const fs = require('fs');
-const DateHandler = require('../../utilities/DateHandler');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
-
-const confirmSassContent = fs.readFileSync(
-  './shared/src/business/useCases/caseConfirmation/caseConfirmation.scss',
-  'utf-8',
-);
-const confirmPugContent = fs.readFileSync(
-  './shared/src/business/useCases/caseConfirmation/caseConfirmation.pug',
-  'utf-8',
-);
-const ustcLogoBuffer = fs.readFileSync('./shared/static/images/ustc_seal.png');
-
-const formattedCaseInfo = caseInfo => {
-  const formattedInfo = Object.assign(
-    {
-      docketNumber: `${caseInfo.docketNumber}${caseInfo.docketNumberSuffix ||
-        ''}`,
-      initialTitle: caseInfo.initialTitle,
-      preferredTrialCity: caseInfo.preferredTrialCity,
-      receivedAtFormatted: DateHandler.formatDateString(
-        caseInfo.receivedAt,
-        'MONTH_DAY_YEAR',
-      ),
-      servedDate: '(SERVED ON DATE)',
-      todaysDate: DateHandler.formatNow('MONTH_DAY_YEAR'),
-    },
-    caseInfo.contactPrimary,
-  );
-  return formattedInfo;
-};
-
-/**
- * NOTE: to make this work, you must save the petition as a petitionsclerk
- *
- * @param {object} caseInfo a raw object representing a petition
- * @returns {string} an html string resulting from rendering template with caseInfo
- */
-
-const generateCaseConfirmationPage = async caseInfo => {
-  const logoBase64 = `data:image/png;base64,${ustcLogoBuffer.toString(
-    'base64',
-  )}`;
-  const { css } = await new Promise(resolve => {
-    sass.render({ data: confirmSassContent }, (err, result) => {
-      return resolve(result);
-    });
-  });
-  const compiledFunction = pug.compile(confirmPugContent);
-  const html = compiledFunction({
-    ...formattedCaseInfo(caseInfo),
-    css,
-    raw: JSON.stringify(caseInfo, null, 4),
-    logo: logoBase64,
-  });
-  return html;
-};
 
 /**
  * generateCaseConfirmationPdfInteractor
@@ -103,7 +44,9 @@ exports.generateCaseConfirmationPdfInteractor = async ({
 
     let page = await browser.newPage();
 
-    await page.setContent(await generateCaseConfirmationPage(caseToUpdate));
+    await page.setContent(
+      `<pre>${JSON.stringify(caseToUpdate, null, 2)}</pre>`,
+    );
 
     result = await page.pdf({
       displayHeaderFooter: false,

@@ -104,10 +104,10 @@ export const DocumentDetail = connect(
 
     const renderButtons = () => {
       const showingAnyButton = [
-        caseDetailHelper.showServeToIrsButton &&
+        documentDetailHelper.showServeToIrsButton &&
           documentDetailHelper.formattedDocument.isPetition,
         documentDetailHelper.showServeDocumentButton,
-        caseDetailHelper.showRecallButton &&
+        documentDetailHelper.showRecallButton &&
           documentDetailHelper.formattedDocument.isPetition,
         documentDetailHelper.showSignDocumentButton,
         documentDetailHelper.showDocumentEditButton,
@@ -250,16 +250,15 @@ export const DocumentDetail = connect(
               </Button>
             </If>
 
-            {caseDetailHelper.showServeToIrsButton &&
-              documentDetailHelper.formattedDocument.isPetition && (
-                <Button
-                  className="serve-to-irs margin-right-0"
-                  onClick={() => clickServeToIrsSequence()}
-                >
-                  <FontAwesomeIcon icon={['fas', 'clock']} />
-                  Serve to IRS
-                </Button>
-              )}
+            {documentDetailHelper.showServeToIrsButton && (
+              <Button
+                className="serve-to-irs margin-right-0"
+                onClick={() => clickServeToIrsSequence()}
+              >
+                <FontAwesomeIcon icon={['fas', 'clock']} />
+                Serve to IRS
+              </Button>
+            )}
             {documentDetailHelper.showServeDocumentButton && (
               <Button
                 className="serve-to-irs margin-right-0"
@@ -269,23 +268,22 @@ export const DocumentDetail = connect(
                 Serve Document
               </Button>
             )}
-            {caseDetailHelper.showRecallButton &&
-              documentDetailHelper.formattedDocument.isPetition && (
-                <span className="recall-button-box">
-                  <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
-                  <span className="batched-message">Batched for IRS</span>
-                  <Button
-                    className="recall-petition"
-                    onClick={() =>
-                      setModalDialogNameSequence({
-                        showModal: 'RecallPetitionModalDialog',
-                      })
-                    }
-                  >
-                    Recall
-                  </Button>
-                </span>
-              )}
+            {documentDetailHelper.showRecallButton && (
+              <span className="recall-button-box">
+                <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
+                <span className="batched-message">Batched for IRS</span>
+                <Button
+                  className="recall-petition"
+                  onClick={() =>
+                    setModalDialogNameSequence({
+                      showModal: 'RecallPetitionModalDialog',
+                    })
+                  }
+                >
+                  Recall
+                </Button>
+              </span>
+            )}
             {documentDetailHelper.showSignDocumentButton && (
               <Button
                 className="serve-to-irs margin-right-0"
