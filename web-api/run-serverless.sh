@@ -18,7 +18,7 @@ ACCOUNT_ID="${ACCOUNT_ID#\"}"
 export NODE_PRESERVE_SYMLINKS=1
 find ./web-api/src -type f -exec chmod -R ugo+r {} ";"
 
-yarn "${build}"
+npm run "${build}"
 cp "./web-api/src/${handler}" /tmp
 cp "./dist/${handler}" web-api/src
 
