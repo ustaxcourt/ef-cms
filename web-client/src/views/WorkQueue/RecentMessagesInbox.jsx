@@ -7,15 +7,9 @@ export const RecentMessagesInbox = connect(
   {
     documentHelper: state.documentHelper,
     formattedWorkQueue: state.formattedWorkQueue,
-    userIsDocketClerk: state.mappedUserHelper.role.docketclerk,
     workQueueHelper: state.workQueueHelper,
   },
-  ({
-    documentHelper,
-    formattedWorkQueue,
-    userIsDocketClerk,
-    workQueueHelper,
-  }) => {
+  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -64,7 +58,7 @@ export const RecentMessagesInbox = connect(
                           shouldLinkToComplete:
                             item.document.isFileAttached === false,
                           shouldLinkToEdit:
-                            userIsDocketClerk &&
+                            workQueueHelper.showEditDocketEntry &&
                             item.isQC &&
                             item.document.eventCode !== 'P',
                           workItemIdToMarkAsRead: !item.isRead
