@@ -1,17 +1,24 @@
 import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../applicationContext';
+import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
+const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed, {
+  ...applicationContext,
+  getCurrentUser: () => {
+    return globalUser;
+  },
+});
 
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
+let globalUser;
 
 const getBaseState = user => {
+  globalUser = user;
   return {
     constants: { USER_ROLES: User.ROLES },
     permissions: getUserPermissions(user),
-    user,
   };
 };
 

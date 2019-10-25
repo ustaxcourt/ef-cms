@@ -1,22 +1,18 @@
 import { User } from '../../../../shared/src/business/entities/User';
-import {
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} from '../../../../shared/src/business/utilities/DateHandler';
+import { applicationContext } from '../../applicationContext';
 import { documentDetailHelper as documentDetailHelperComputed } from './documentDetailHelper';
-import { formatDocument } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
+import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
-let role = User.ROLES.petitionsClerk;
-
 const getDateISO = () => new Date().toISOString();
+
+let globalUser;
 
 const documentDetailHelper = withAppContextDecorator(
   documentDetailHelperComputed,
   {
+    ...applicationContext,
     getConstants: () => ({
       ORDER_TYPES_MAP: [
         {
@@ -26,35 +22,29 @@ const documentDetailHelper = withAppContextDecorator(
         },
       ],
     }),
-    getCurrentUser: () => ({
-      role,
-      userId: 'abc',
-    }),
-    getUtilities: () => {
-      return {
-        createISODateString,
-        formatDateString,
-        formatDocument,
-        formatNow,
-        prepareDateFromString,
-      };
+    getCurrentUser: () => {
+      return globalUser;
     },
   },
 );
 
-const baseState = {
-  constants: { USER_ROLES: User.ROLES },
+const getBaseState = user => {
+  globalUser = user;
+  return {
+    constants: { USER_ROLES: User.ROLES },
+    permissions: getUserPermissions(user),
+  };
 };
 
 describe('formatted work queue computed', () => {
-  beforeEach(() => {
-    role = User.ROLES.petitionsClerk;
-  });
-
   it('formats the workitems', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [],
           status: 'General Docket - Not at Issue',
@@ -69,9 +59,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('sets the showCaseDetailsEdit boolean false when case status is general docket', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [],
           status: 'General Docket - Not at Issue',
@@ -86,9 +80,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('sets the showCaseDetailsEdit boolean true when case status new', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [],
           status: 'New',
@@ -103,9 +101,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('sets the showCaseDetailsEdit boolean true when case status recalled', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [],
           status: 'Recalled',
@@ -121,9 +123,13 @@ describe('formatted work queue computed', () => {
 
   describe('showDocumentInfoTab', () => {
     it('should be false if document is not a petition', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -143,9 +149,13 @@ describe('formatted work queue computed', () => {
     });
 
     it('should be true if document is a petition and status is New, Recalled, or Batched for IRS', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -165,9 +175,13 @@ describe('formatted work queue computed', () => {
     });
 
     it('should be false if document is a petition and status is not New, Recalled, or Batched for IRS', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -187,10 +201,13 @@ describe('formatted work queue computed', () => {
     });
 
     it('should show the serve button when a docketclerk and the document is a Stipulated Decision and the document is not served already', () => {
-      role = User.ROLES.docketClerk;
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -206,11 +223,14 @@ describe('formatted work queue computed', () => {
       expect(result.showServeDocumentButton).toEqual(true);
     });
 
-    it('should NOT show the serve button when user is a NOT a docketclerk', () => {
-      role = User.ROLES.petitionsClerk;
+    it('should NOT show the serve button when user does not have serve document permission', () => {
+      const user = {
+        role: User.ROLES.admissionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -226,10 +246,13 @@ describe('formatted work queue computed', () => {
     });
 
     it('should NOT show the serve button when the document is NOT a signed stipulated decision', () => {
-      role = User.ROLES.petitionsClerk;
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -246,10 +269,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('should NOT show the serve button when a docketclerk and the document is a Stipulated Decision and document has already been served', () => {
-    role = User.ROLES.docketClerk;
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [
             {
@@ -266,9 +292,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('should indicate QC completed by workItem "completedBy" if not indicated on Document', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [
             {
@@ -333,9 +363,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('should indicate QC completed by "qcByUser" on Document if present', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [
             {
@@ -405,11 +439,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('should filter out completed work items with Served on IRS messages', () => {
-    role = User.ROLES.adc;
-
+    const user = {
+      role: User.ROLES.adc,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [
             {
@@ -470,9 +506,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('default to empty array when caseDetail.documents is undefined', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: undefined,
         },
@@ -483,9 +523,13 @@ describe('formatted work queue computed', () => {
   });
 
   it("default to empty array when a document's workItems are non-existent", () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [
             {
@@ -505,9 +549,13 @@ describe('formatted work queue computed', () => {
 
   describe('showViewOrdersNeededButton', () => {
     it("should show the 'view orders needed' link if a document has been served and user is petitionsclerk", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -528,9 +576,13 @@ describe('formatted work queue computed', () => {
     });
 
     it("should NOT show the 'view orders needed' link if a document has been served and user is NOT a petitionsclerk", () => {
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -551,9 +603,13 @@ describe('formatted work queue computed', () => {
     });
 
     it("should NOT show the 'view orders needed' link if a document has NOT been served and user is a petitionsclerk", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -574,9 +630,13 @@ describe('formatted work queue computed', () => {
     });
 
     it("should NOT show the 'view orders needed' link if a document has NOT been served and user is NOT a petitionsclerk", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -599,9 +659,13 @@ describe('formatted work queue computed', () => {
 
   describe('showConfirmEditOrder and showRemoveSignature', () => {
     it('should show confirm edit order and remove signature', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -623,9 +687,13 @@ describe('formatted work queue computed', () => {
     });
 
     it('should NOT show confirm edit order OR remove signature when the documentType is not an order', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -647,9 +715,13 @@ describe('formatted work queue computed', () => {
     });
 
     it('should NOT show confirm edit order OR remove signature when the document has not been signed', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {

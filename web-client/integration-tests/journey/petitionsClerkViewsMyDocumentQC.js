@@ -1,5 +1,8 @@
 import { runCompute } from 'cerebral/test';
-import { workQueueHelper } from '../../src/presenter/computeds/workQueueHelper';
+import { withAppContextDecorator } from '../../src/withAppContext';
+import { workQueueHelper as workQueueHelperComputed } from '../../src/presenter/computeds/workQueueHelper';
+
+const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
 export default (test, storeCount) => {
   return it('Petitions clerk views My Document QC', async () => {
