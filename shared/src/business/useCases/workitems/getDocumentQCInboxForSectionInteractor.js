@@ -1,4 +1,8 @@
-const { ADC_SECTION, DOCKET_SECTION } = require('../../entities/WorkQueue');
+const {
+  DOCKET_SECTION,
+  IRS_BATCH_SYSTEM_SECTION,
+  PETITIONS_SECTION,
+} = require('../../entities/WorkQueue');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -24,18 +28,16 @@ exports.getDocumentQCInboxForSectionInteractor = async ({
     );
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
-  const sectionToExcept =
-    user.section === ADC_SECTION ? DOCKET_SECTION : section;
+  let sectionToShow = section;
+  if (section !== IRS_BATCH_SYSTEM_SECTION && section !== PETITIONS_SECTION) {
+    sectionToShow = DOCKET_SECTION;
+  }
 
   const workItems = await applicationContext
     .getPersistenceGateway()
     .getDocumentQCInboxForSection({
       applicationContext,
-      section: sectionToExcept,
+      section: sectionToShow,
     });
 
   return workItems;
