@@ -225,7 +225,7 @@ describe('formatted work queue computed', () => {
       expect(result.showServeDocumentButton).toEqual(false);
     });
 
-    it('should NOT show the serve button when the document is NOT a signed stipulated decisiion', () => {
+    it('should NOT show the serve button when the document is NOT a signed stipulated decision', () => {
       role = User.ROLES.petitionsClerk;
       const result = runCompute(documentDetailHelper, {
         state: {

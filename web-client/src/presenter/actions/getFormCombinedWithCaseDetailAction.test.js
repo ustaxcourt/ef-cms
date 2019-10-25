@@ -199,7 +199,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output.combinedCaseDetailWithForm.receivedAt).toEqual(null);
   });
 
-  it('delets the payGovDate if the user cleared the form', async () => {
+  it('deletes the payGovDate if the user cleared the form', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
 
