@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
   let contacts;
-  console.log('partyType', partyType);
   switch (partyType) {
     case PARTY_TYPES.conservator:
       contacts = {
