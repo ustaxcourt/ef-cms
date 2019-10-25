@@ -1,5 +1,5 @@
 /**
- * fetches the document qc batched work items in a sectiom.
+ * fetches the document qc batched work items in a section.
  *
  * @param {object} applicationContext object that contains all the context specific methods
  * @returns {Promise<{workItems: Array}>} a list of work items
