@@ -44,14 +44,14 @@ jobs:
       - run:
           name: Lint
           command: |
-            yarn lint
+            npm run lint
       - run:
           name: Shellcheck
           command: |
             ./run-shellcheck.sh
       - run:
           name: Web API - Test
-          command: yarn test:api
+          command: npm run test:api
       - run:
           name: Web API - SonarQube
           command: |
@@ -75,7 +75,7 @@ jobs:
           at: ~/
       - run:
           name: Shared - Test
-          command: yarn test:shared
+          command: npm run test:shared
       - run:
           name: Shared - SonarQube
           command: |
@@ -101,9 +101,9 @@ jobs:
       - run:
           name: Web Client - Test
           command: |
-            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop yarn start:api:ci > /dev/null &
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npm run start:api:ci > /dev/null &
             ./wait-until.sh http://localhost:3000/api/swagger
-            yarn test:client
+            npm run test:client
       - run:
           name: Web Client - SonarQube
           command: |
@@ -133,7 +133,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
-            yarn test:pa11y
+            npm run test:pa11y
 
   e2e-cypress:
     docker:
@@ -156,7 +156,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
-            yarn cypress
+            npm run cypress
       - store_artifacts:
           path: /home/circleci/project/cypress/videos/
 
