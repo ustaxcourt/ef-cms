@@ -1,12 +1,7 @@
-import { runCompute } from 'cerebral/test';
-
-import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { documentDetailHelper as documentDetailHelperComputed } from '../../src/presenter/computeds/documentDetailHelper';
-
+import { runCompute } from 'cerebral/test';
 import { waitForRouter } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
-
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 const documentDetailHelper = withAppContextDecorator(
   documentDetailHelperComputed,
@@ -60,16 +55,13 @@ export default test => {
       documentId,
     });
 
-    const caseDetailHelperBatched = runCompute(caseDetailHelper, {
-      state: test.getState(),
-    });
     const documentDetailHelperBatched = runCompute(documentDetailHelper, {
       state: test.getState(),
     });
     expect(documentDetailHelperBatched.showCaseDetailsView).toEqual(true);
     expect(documentDetailHelperBatched.showCaseDetailsEdit).toEqual(false);
-    expect(caseDetailHelperBatched.showServeToIrsButton).toEqual(false);
-    expect(caseDetailHelperBatched.showRecallButton).toEqual(true);
+    expect(documentDetailHelperBatched.showServeToIrsButton).toEqual(false);
+    expect(documentDetailHelperBatched.showRecallButton).toEqual(true);
 
     await test.runSequence('submitRecallPetitionFromIRSHoldingQueueSequence');
     await test.runSequence('gotoMessagesSequence');
@@ -118,17 +110,14 @@ export default test => {
     expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
     expect(test.getState('caseDetail.status')).toEqual('Recalled');
 
-    const caseDetailHelperRecalled = runCompute(caseDetailHelper, {
-      state: test.getState(),
-    });
     const documentDetailHelperRecalled = runCompute(documentDetailHelper, {
       state: test.getState(),
     });
 
     expect(documentDetailHelperRecalled.showCaseDetailsView).toEqual(false);
     expect(documentDetailHelperRecalled.showCaseDetailsEdit).toEqual(true);
-    expect(caseDetailHelperRecalled.showServeToIrsButton).toEqual(true);
-    expect(caseDetailHelperRecalled.showRecallButton).toEqual(false);
+    expect(documentDetailHelperRecalled.showServeToIrsButton).toEqual(true);
+    expect(documentDetailHelperRecalled.showRecallButton).toEqual(false);
 
     // assign to another petitionsclerk
     workItem = test.getState('workQueue').find(item => {
