@@ -94,8 +94,8 @@ export const state = {
   currentPageIndex: 0,
   currentTab: '',
   dashboardExternalHelper,
-  docketRecordHelper,
   docketRecordHeaderHelper,
+  docketRecordHelper,
   docketRecordIndex: 0,
   document: {},
   documentDetail: {
