@@ -496,7 +496,7 @@ describe('filterWorkItems', () => {
     expect(filtered.length).toEqual(2);
     // One item is assigned to user
     expect(assigned).toEqual(workItemPetitionsMyMessagesInbox.docketNumber);
-    // One item is assigend to another user
+    // One item is assigned to another user
     expect(unassigned).toEqual(
       workItemPetitionsSectionMessagesInbox.docketNumber,
     );
@@ -597,7 +597,7 @@ describe('filterWorkItems', () => {
     expect(filtered.length).toEqual(2);
     // One item is assigned to user
     expect(assigned).toEqual(workItemPetitionsMyDocumentQCInbox.docketNumber);
-    // One item is assigend to another user
+    // One item is assigned to another user
     expect(unassigned).toEqual(
       workItemPetitionsSectionDocumentQCInbox.docketNumber,
     );
@@ -711,7 +711,7 @@ describe('filterWorkItems', () => {
     expect(filtered.length).toEqual(2);
     // One item is assigned to user
     expect(assigned).toEqual(workItemDocketMyMessagesInbox.docketNumber);
-    // One item is assigend to another user
+    // One item is assigned to another user
     expect(unassigned).toEqual(workItemDocketSectionMessagesInbox.docketNumber);
   });
 
@@ -775,7 +775,7 @@ describe('filterWorkItems', () => {
     expect(filtered.length).toEqual(2);
     // One item is assigned to user
     expect(assigned).toEqual(workItemDocketMyDocumentQCInbox.docketNumber);
-    // One item is assigend to another user
+    // One item is assigned to another user
     expect(unassigned).toEqual(
       workItemDocketSectionDocumentQCInbox.docketNumber,
     );

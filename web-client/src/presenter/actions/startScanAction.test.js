@@ -26,7 +26,7 @@ presenter.providers.path = {
 global.alert = () => null;
 
 describe('startScanAction', () => {
-  it('tells the TWAIN library to begin image aquisition', async () => {
+  it('tells the TWAIN library to begin image acquisition', async () => {
     const result = await runAction(startScanAction, {
       modules: {
         presenter,
