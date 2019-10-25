@@ -13,7 +13,6 @@ export const SectionWorkQueueInProgress = connect(
     selectWorkItemSequence: sequences.selectWorkItemSequence,
     selectedWorkItems: state.selectedWorkItems,
     setFocusedWorkItemSequence: sequences.setFocusedWorkItemSequence,
-    userIsDocketClerk: state.mappedUserHelper.role.docketclerk,
     users: state.users,
     workQueueHelper: state.workQueueHelper,
   },
@@ -25,7 +24,6 @@ export const SectionWorkQueueInProgress = connect(
     selectedWorkItems,
     selectWorkItemSequence,
     setFocusedWorkItemSequence,
-    userIsDocketClerk,
     users,
     workQueueHelper,
   }) => {
@@ -148,7 +146,7 @@ export const SectionWorkQueueInProgress = connect(
                         shouldLinkToComplete:
                           item.document.isFileAttached === false,
                         shouldLinkToEdit:
-                          userIsDocketClerk &&
+                          workQueueHelper.showEditDocketEntry &&
                           item.isQC &&
                           item.document.eventCode !== 'P',
                       })}
