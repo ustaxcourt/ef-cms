@@ -23,7 +23,12 @@ export const documentDetailHelper = (get, applicationContext) => {
   let isSigned = false;
   let isStipDecision = false;
   let isOrder = false;
+
+  let showServeToIrsButton = false;
+  let showRecallButton = false;
+
   if (document) {
+    // TODO: why do we need to check if document exists when it should always exist
     formattedDocument = applicationContext
       .getUtilities()
       .formatDocument(applicationContext, document);
@@ -121,6 +126,12 @@ export const documentDetailHelper = (get, applicationContext) => {
           ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
           : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`;
     }
+
+    showServeToIrsButton =
+      ['New', 'Recalled'].includes(caseDetail.status) &&
+      formattedDocument.isPetition;
+    showRecallButton =
+      caseDetail.status === 'Batched for IRS' && formattedDocument.isPetition;
   }
 
   const formattedDocumentIsPetition =
@@ -154,8 +165,10 @@ export const documentDetailHelper = (get, applicationContext) => {
     showConfirmEditOrder: isSigned && isOrder,
     showDocumentInfoTab,
     showDocumentViewerTopMargin,
+    showRecallButton,
     showRemoveSignature: isOrder && isSigned,
     showServeDocumentButton,
+    showServeToIrsButton,
     showSignDocumentButton,
     showViewOrdersNeededButton,
   };

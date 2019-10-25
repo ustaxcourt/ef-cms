@@ -79,7 +79,7 @@ export const workQueueHelper = (get, applicationContext) => {
     showOutbox,
     showProcessedByColumn: isDisplayingQC && userIsDocketClerk && showOutbox,
     showReceivedColumn: isDisplayingQC,
-    showRunBatchIRSProcessButton: user.section === 'petitions',
+    showRunBatchIRSProcessButton: permissions.UPDATE_CASE,
     showSectionSentTab:
       workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
