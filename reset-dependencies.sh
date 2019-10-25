@@ -1,4 +1,4 @@
 #!/bin/bash
 
-rm -rf node_modules dist package-lock.json
-npm i
+rm -rf node_modules dist yarn.lock
+yarn install
