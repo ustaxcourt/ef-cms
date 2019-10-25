@@ -32,6 +32,8 @@ export const DocumentDetail = connect(
     gotoOrdersNeededSequence: sequences.gotoOrdersNeededSequence,
     messageId: state.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
+    navigateToPrintableCaseConfirmationSequence:
+      sequences.navigateToPrintableCaseConfirmationSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
     openServeConfirmModalDialogSequence:
       sequences.openServeConfirmModalDialogSequence,
@@ -50,6 +52,7 @@ export const DocumentDetail = connect(
     gotoOrdersNeededSequence,
     messageId,
     navigateToPathSequence,
+    navigateToPrintableCaseConfirmationSequence,
     openConfirmEditModalSequence,
     openServeConfirmModalDialogSequence,
     removeSignatureFromOrderSequence,
@@ -107,6 +110,8 @@ export const DocumentDetail = connect(
         caseDetailHelper.showRecallButton &&
           documentDetailHelper.formattedDocument.isPetition,
         documentDetailHelper.showSignDocumentButton,
+        documentDetailHelper.showDocumentEditButton,
+        documentDetailHelper.showPrintCaseConfirmationButton,
       ].some(val => val);
 
       return (
@@ -216,17 +221,33 @@ export const DocumentDetail = connect(
               </div>
             )}
 
-            <If bind="mappedUserHelper.role.docketclerk">
-              {documentDetailHelper.formattedDocument.isPetition === false && (
-                <Button
-                  link
-                  className="margin-right-0 padding-bottom-0"
-                  href={`/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/edit`}
-                >
-                  <FontAwesomeIcon icon={['fas', 'edit']} />
-                  Edit
-                </Button>
-              )}
+            <If bind="documentDetailHelper.showPrintCaseConfirmationButton">
+              <Button
+                className="margin-right-0"
+                onClick={() => {
+                  navigateToPrintableCaseConfirmationSequence({
+                    docketNumber: formattedCaseDetail.docketNumber,
+                  });
+                }}
+              >
+                <FontAwesomeIcon
+                  className="margin-right-05"
+                  icon="print"
+                  size="1x"
+                />
+                Print Confirmation
+              </Button>
+            </If>
+
+            <If bind="documentDetailHelper.showDocumentEditButton">
+              <Button
+                link
+                className="margin-right-0 padding-bottom-0"
+                href={`/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/edit`}
+              >
+                <FontAwesomeIcon icon={['fas', 'edit']} />
+                Edit
+              </Button>
             </If>
 
             {caseDetailHelper.showServeToIrsButton &&
