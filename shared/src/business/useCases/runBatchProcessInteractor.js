@@ -142,12 +142,12 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
         wi => wi.isQC === true,
       );
 
-      const message = 'Case confirmation is ready for to be printed.';
+      const message = 'Case confirmation is ready to be printed.';
 
       const workItemEntity = new WorkItem(
         {
-          assigneeId: qcWorkItem.assigneeId,
-          assigneeName: qcWorkItem.assigneeName,
+          assigneeId: qcWorkItem.completedByUserId,
+          assigneeName: qcWorkItem.completedBy,
           caseId: caseEntity.caseId,
           caseStatus: caseEntity.status,
           caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
@@ -159,7 +159,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
           },
           isInitializeCase: false,
           isQC: false,
-          section: qcWorkItem.section,
+          section: 'petitions',
           sentBy: 'IRS Holding Queue',
           sentBySection: IRS_BATCH_SYSTEM_SECTION,
           sentByUserId: IRS_BATCH_SYSTEM_USER_ID,
@@ -172,14 +172,15 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
           from: 'IRS Holding Queue',
           fromUserId: IRS_BATCH_SYSTEM_USER_ID,
           message,
-          to: qcWorkItem.assigneeName,
-          toUserId: qcWorkItem.assigneeId,
+          to: qcWorkItem.completedBy,
+          toUserId: qcWorkItem.completedByUserId,
         },
         { applicationContext },
       );
 
       workItemEntity.addMessage(newMessage);
       petitionDocumentEntity.addWorkItem(workItemEntity);
+      caseEntity.updateDocument(petitionDocumentEntity);
 
       casePromises.push(
         applicationContext.getPersistenceGateway().saveWorkItemForPaper({
