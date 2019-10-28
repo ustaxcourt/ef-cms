@@ -58,7 +58,7 @@ describe('getBlockedCasesInteractor', () => {
     applicationContext.getCurrentUser = () => {
       return {
         role: User.ROLES.petitioner,
-        userId: 'taxpayer',
+        userId: 'petitioner',
       };
     };
 

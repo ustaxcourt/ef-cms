@@ -32,7 +32,7 @@ describe('fileDocketEntryInteractor', () => {
     ],
     partyType: ContactFactory.PARTY_TYPES.petitioner,
     role: User.ROLES.petitioner,
-    userId: 'taxpayer',
+    userId: 'petitioner',
   };
   it('should throw an error if not authorized', async () => {
     let error;

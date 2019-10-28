@@ -31,7 +31,7 @@ describe('createCaseInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return new User({
-          name: 'Test Taxpayer',
+          name: 'Test Petitioner',
           role: User.ROLES.petitioner,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
@@ -43,7 +43,7 @@ describe('createCaseInteractor', () => {
         return {
           createCase: async () => null,
           getUserById: () => ({
-            name: 'Test Taxpayer',
+            name: 'Test Petitioner',
             role: User.ROLES.petitioner,
             section: 'petitioner',
             userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -127,7 +127,7 @@ describe('createCaseInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return new User({
-          name: 'Test Taxpayer',
+          name: 'Test Petitioner',
           role: User.ROLES.petitioner,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
@@ -139,7 +139,7 @@ describe('createCaseInteractor', () => {
         return {
           createCase: async () => null,
           getUserById: () => ({
-            name: 'Test Taxpayer',
+            name: 'Test Petitioner',
             role: User.ROLES.petitioner,
             section: 'petitioner',
             userId: '6805d1ab-18d0-43ec-bafb-654e83405416',

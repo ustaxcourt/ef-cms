@@ -8,11 +8,15 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-jetpack
   # - serverless-plugin-warmup
 
 custom:
   #warmup:
   #enabled: true
+
+  jetpack:
+    mode: yarn
 
   prune:
     automatic: true
@@ -163,7 +167,6 @@ package:
     - ./**
   include:
     - web-api/src/casesHandlers.js
-
   excludeDevDependencies: true
 
 resources:
@@ -324,23 +327,6 @@ functions:
       - http:
           path: /{caseId}/recall-from-irs-holding-queue
           method: delete
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  generateCaseConfirmationPdf:
-    runtime: nodejs8.10
-    handler: web-api/src/casesHandlers.generateCaseConfirmationPdfLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: /{caseId}/confirmation
-          method: post
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

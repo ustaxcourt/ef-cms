@@ -10,8 +10,6 @@ module.exports = {
   createCaseLambda: require('./cases/createCaseLambda').handler,
   deleteCounselFromCaseLambda: require('./cases/deleteCounselFromCaseLambda')
     .handler,
-  generateCaseConfirmationPdfLambda: require('./cases/generateCaseConfirmationPdfLambda')
-    .handler,
   getBlockedCasesLambda: require('./cases/getBlockedCasesLambda').handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
   prioritizeCaseLambda: require('./cases/prioritizeCaseLambda').handler,

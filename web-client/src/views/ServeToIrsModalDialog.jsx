@@ -1,25 +1,24 @@
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
-
-class ServeToIrsModalDialogComponent extends ModalDialog {
-  constructor(props) {
-    super(props);
-    this.modal = {
-      cancelLabel: 'No, take me back',
-      classNames: '',
-      confirmLabel: 'Yes, serve',
-      message:
-        'This Petition will be added to the batch to serve to the IRS at 3pm.',
-      title: 'Are you sure you want to serve this Petition to the IRS?',
-    };
-  }
-}
+import React from 'react';
 
 export const ServeToIrsModalDialog = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.submitPetitionToIRSHoldingQueueSequence,
   },
-  ServeToIrsModalDialogComponent,
+  ({ cancelSequence, confirmSequence }) => {
+    return (
+      <ModalDialog
+        cancelLabel="No, take me back"
+        cancelSequence={cancelSequence}
+        className=""
+        confirmLabel="Yes, serve"
+        confirmSequence={confirmSequence}
+        message="This Petition will be added to the batch to serve to the IRS at 3pm."
+        title="Are you sure you want to serve this Petition to the IRS?"
+      ></ModalDialog>
+    );
+  },
 );

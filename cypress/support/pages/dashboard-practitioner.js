@@ -3,7 +3,7 @@ exports.navigateTo = username => {
 };
 
 exports.getStartCaseButton = () => {
-  return cy.get('a#init-file-petition');
+  return cy.get('a#file-a-petition');
 };
 
 exports.getCaseList = () => {

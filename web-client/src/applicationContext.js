@@ -29,6 +29,7 @@ import { NewTrialSession } from '../../shared/src/business/entities/trialSession
 import { Note } from '../../shared/src/business/entities/Note';
 import { Order } from '../../shared/src/business/entities/orders/Order';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
+import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
@@ -81,7 +82,6 @@ import {
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { forwardWorkItemInteractor } from '../../shared/src/proxies/workitems/forwardWorkItemProxy';
 import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateCaseAssociationDocumentTitleInteractor';
-import { generateCaseConfirmationPdfInteractor } from '../../shared/src/proxies/caseConfirmation/generateCaseConfirmationPdfProxy';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
 import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
@@ -122,6 +122,7 @@ import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trial
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
 import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
+import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
@@ -241,7 +242,6 @@ const allUseCases = {
   filePetitionInteractor,
   forwardWorkItemInteractor,
   generateCaseAssociationDocumentTitleInteractor,
-  generateCaseConfirmationPdfInteractor,
   generateDocketRecordPdfInteractor,
   generateDocumentTitleInteractor,
   generatePDFFromJPGDataInteractor,
@@ -387,6 +387,7 @@ const applicationContext = {
     OTHER_TYPES: ContactFactory.OTHER_TYPES,
     PARTY_TYPES: ContactFactory.PARTY_TYPES,
     REFRESH_INTERVAL: 20 * MINUTES,
+    ROLE_PERMISSIONS,
     SECTIONS,
     SESSION_DEBOUNCE: 250,
     SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
@@ -401,6 +402,10 @@ const applicationContext = {
     USER_ROLES: User.ROLES,
   }),
   getCurrentUser,
+  getCurrentUserPermissions: () => {
+    const user = getCurrentUser();
+    return getUserPermissions(user);
+  },
   getCurrentUserToken,
   getEntityConstructors: () => ({
     AddPractitionerFactory,
@@ -458,6 +463,7 @@ const applicationContext = {
     return uuidv4();
   },
   getUseCases: () => allUseCases,
+  getUserPermissions,
   getUtilities: () => {
     return {
       compareCasesByDocketNumber,

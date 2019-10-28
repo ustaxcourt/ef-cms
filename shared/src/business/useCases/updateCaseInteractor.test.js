@@ -14,25 +14,25 @@ const MOCK_CASE = {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
       role: User.ROLES.petitioner,
-      userId: 'taxpayer',
+      userId: 'petitioner',
     },
     {
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
       role: User.ROLES.petitioner,
-      userId: 'taxpayer',
+      userId: 'petitioner',
     },
     {
       documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
       role: User.ROLES.petitioner,
-      userId: 'taxpayer',
+      userId: 'petitioner',
     },
   ],
   filingType: 'Myself',
   hasIrsNotice: false,
   partyType: ContactFactory.PARTY_TYPES.petitioner,
-  petitioners: [{ name: 'Test Taxpayer' }],
+  petitioners: [{ name: 'Test Petitioner' }],
   preferredTrialCity: 'Washington, D.C.',
   procedureType: 'Regular',
   status: 'New',
@@ -63,7 +63,7 @@ describe('updateCase', () => {
         applicationContext,
         caseId: MOCK_CASE.caseId,
         caseToUpdate: omit(MOCK_CASE, 'docketNumber'),
-        petitioners: [{ name: 'Test Taxpayer' }],
+        petitioners: [{ name: 'Test Petitioner' }],
       });
     } catch (err) {
       error = err;
@@ -94,7 +94,7 @@ describe('updateCase', () => {
       await updateCaseInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
-        petitioners: [{ name: 'Test Taxpayer' }],
+        petitioners: [{ name: 'Test Petitioner' }],
       });
     } catch (err) {
       error = err;
@@ -126,7 +126,7 @@ describe('updateCase', () => {
       applicationContext,
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
-      petitioners: [{ name: 'Test Taxpayer' }],
+      petitioners: [{ name: 'Test Petitioner' }],
     });
 
     const returnedDocument = omit(updatedCase.documents[0], [
@@ -169,7 +169,7 @@ describe('updateCase', () => {
           address3: 'Culpa ex aliquip ven',
           city: 'Aperiam minim sunt r',
           countryType: 'domestic',
-          email: 'taxpayer@example.com',
+          email: 'petitioner@example.com',
           name: 'Iola Snow',
           phone: '+1 (772) 246-3448',
           postalCode: '26037',
@@ -233,7 +233,7 @@ describe('updateCase', () => {
           contactPrimary: null,
           contactSecondary: {},
         },
-        petitioners: [{ name: 'Test Taxpayer' }],
+        petitioners: [{ name: 'Test Petitioner' }],
       });
     } catch (err) {
       error = err;
@@ -261,7 +261,7 @@ describe('updateCase', () => {
         applicationContext,
         caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
-        petitioners: [{ name: 'Test Taxpayer' }],
+        petitioners: [{ name: 'Test Petitioner' }],
       });
     } catch (err) {
       error = err;

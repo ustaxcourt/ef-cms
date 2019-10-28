@@ -261,4 +261,19 @@ describe('computeTrialSessionFormDataAction', () => {
       userId: '123',
     });
   });
+
+  it('should correctly store the trialClerk on the form', async () => {
+    const result = await runAction(computeTrialSessionFormDataAction, {
+      props: {
+        key: 'trialClerkId',
+        value: { name: 'Test Clerk', userId: '321' },
+      },
+      state: { form },
+    });
+    expect(result.state.form.trialClerkId).toEqual('321');
+    expect(result.state.form.trialClerk).toEqual({
+      name: 'Test Clerk',
+      userId: '321',
+    });
+  });
 });

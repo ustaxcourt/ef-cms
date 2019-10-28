@@ -2,7 +2,7 @@ import { getDocumentTypesForSelect } from './internalTypesHelper';
 import { state } from 'cerebral';
 
 export const requestAccessHelper = (get, applicationContext) => {
-  const { PARTY_TYPES } = get(state.constants);
+  const { PARTY_TYPES, USER_ROLES } = get(state.constants);
   const caseDetail = get(state.caseDetail);
   const userRole = get(state.user.role);
   const form = get(state.form);
@@ -35,7 +35,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     },
   ];
 
-  if (userRole === 'practitioner') {
+  if (userRole === USER_ROLES.practitioner) {
     documents.push(
       {
         documentTitleTemplate:
@@ -108,7 +108,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     (documentWithAttachments && !form.attachments) ||
     (documentWithSupportingDocuments && !form.hasSupportingDocuments);
 
-  const showPartiesRepresenting = userRole === 'practitioner';
+  const showPartiesRepresenting = userRole === USER_ROLES.practitioner;
 
   let exported = {
     certificateOfServiceDateFormatted,

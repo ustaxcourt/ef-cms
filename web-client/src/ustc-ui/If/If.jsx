@@ -1,3 +1,4 @@
+// This is fine.
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 

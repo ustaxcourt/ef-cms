@@ -146,7 +146,9 @@ export const SectionWorkQueueInProgress = connect(
                         shouldLinkToComplete:
                           item.document.isFileAttached === false,
                         shouldLinkToEdit:
-                          item.isQC && item.document.eventCode !== 'P',
+                          workQueueHelper.showEditDocketEntry &&
+                          item.isQC &&
+                          item.document.eventCode !== 'P',
                       })}
                       onClick={e => {
                         e.stopPropagation();

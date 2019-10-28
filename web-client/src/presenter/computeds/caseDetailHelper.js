@@ -1,26 +1,24 @@
 import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
+  const user = applicationContext.getCurrentUser();
   const { Case } = applicationContext.getEntityConstructors();
   const USER_ROLES = get(state.constants.USER_ROLES);
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const caseHasRespondent =
     !!caseDetail && !!caseDetail.respondents && !!caseDetail.respondents.length;
-  const userRole = get(state.user.role);
   const showActionRequired =
-    !caseDetail.payGovId && userRole === USER_ROLES.petitioner;
+    !caseDetail.payGovId && user.role === USER_ROLES.petitioner;
   const documentDetailTab =
     get(state.caseDetailPage.informationTab) || 'docketRecord';
   const form = get(state.form);
   const currentPage = get(state.currentPage);
-  const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
   const caseIsPaid = caseDetail.payGovId && !form.paymentType;
   const isExternalUser = applicationContext
     .getUtilities()
-    .isExternalUser(userRole);
+    .isExternalUser(user.role);
   const isRequestAccessForm = currentPage === 'RequestAccessWizard';
-  const isJudge = 'judge' == userRole;
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const pendingAssociation = get(state.screenMetadata.pendingAssociation);
   const modalState = get(state.modal);
@@ -34,19 +32,18 @@ export const caseDetailHelper = (get, applicationContext) => {
     orderForRatification,
     orderToShowCause,
   } = caseDetail;
+  const permissions = get(state.permissions);
 
-  let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
-  let showAddDocketEntryButton =
-    ['CaseDetailInternal'].includes(currentPage) &&
-    userRole === USER_ROLES.docketClerk;
-  let showCreateOrderButton =
-    ['CaseDetailInternal'].includes(currentPage) &&
-    [
-      USER_ROLES.docketClerk,
-      USER_ROLES.judge,
-      USER_ROLES.petitionsClerk,
-      USER_ROLES.adc,
-    ].includes(userRole);
+  const showAddDocketEntryButton =
+    permissions.DOCKET_ENTRY && ['CaseDetailInternal'].includes(currentPage);
+  const showCreateOrderButton =
+    permissions.COURT_ISSUED_DOCUMENT &&
+    ['CaseDetailInternal'].includes(currentPage);
+  const showCaseNotes = permissions.TRIAL_SESSION_WORKING_COPY;
+
+  let showFileDocumentButton =
+    permissions.FILE_EXTERNAL_DOCUMENT && ['CaseDetail'].includes(currentPage);
+
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
@@ -68,12 +65,12 @@ export const caseDetailHelper = (get, applicationContext) => {
       }
     } else {
       showFileDocumentButton = false;
-      if (userRole === 'practitioner') {
+      if (user.role === USER_ROLES.practitioner) {
         showRequestAccessToCaseButton =
           !pendingAssociation && !isRequestAccessForm;
         showPendingAccessToCaseButton = pendingAssociation;
       }
-      if (userRole === 'respondent') {
+      if (user.role === USER_ROLES.respondent) {
         showFileFirstDocumentButton = !caseHasRespondent;
         showRequestAccessToCaseButton =
           caseHasRespondent && !isRequestAccessForm;
@@ -93,15 +90,14 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   let showEditPrimaryContactButton = false;
 
-  if (userRole === USER_ROLES.petitioner) {
+  if (user.role === USER_ROLES.petitioner) {
     showEditPrimaryContactButton = true;
-  } else if (userRole === USER_ROLES.respondent) {
+  } else if (user.role === USER_ROLES.respondent) {
     showEditPrimaryContactButton = false;
-  } else if (userRole === USER_ROLES.practitioner) {
+  } else if (user.role === USER_ROLES.practitioner) {
     showEditPrimaryContactButton = userAssociatedWithCase;
   }
 
-  const showServeToIrsButton = ['New', 'Recalled'].includes(caseDetail.status);
   const showRecallButton = caseDetail.status === 'Batched for IRS';
 
   const practitionerMatchesFormatted =
@@ -160,7 +156,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState.respondentMatches &&
       modalState.respondentMatches.length,
     showActionRequired,
-    showAddCounsel: !isExternalUser,
     showAddDocketEntryButton,
     showCaptionEditButton:
       caseDetail.status !== 'Batched for IRS' && !isExternalUser,
@@ -169,25 +164,17 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesInternalEmpty,
     showCaseInformationPublic: isExternalUser,
     showCaseNameForPrimary,
+    showCaseNotes,
     showCreateOrderButton,
-    showDirectDownloadLink: directDocumentLinkDesired,
     showDocketRecordInProgressState: !isExternalUser,
-    showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContactButton: isExternalUser,
-    showEditPractitioners:
-      !isExternalUser &&
-      (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showEditPrimaryContactButton,
-    showEditRespondents:
-      !isExternalUser &&
-      (caseDetail.respondents && !!caseDetail.respondents.length),
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
     showFileFirstDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
-    showNotes: isJudge,
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !caseIsPaid,
     showPaymentRecord: caseIsPaid,
@@ -201,7 +188,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showRespondentSection:
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),
-    showServeToIrsButton,
     userHasAccessToCase,
   };
 };
