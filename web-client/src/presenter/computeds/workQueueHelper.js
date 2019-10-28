@@ -68,6 +68,7 @@ export const workQueueHelper = (get, applicationContext) => {
     showBatchedByColumn: isDisplayingQC && userIsPetitionsClerk && showOutbox,
     showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
     showCaseStatusColumn: isJudge,
+    showEditDocketEntry: permissions.DOCKET_ENTRY,
     showFromColumn: isJudge,
     showInProgressTab: isDisplayingQC && userIsDocketClerk,
     showInbox,
@@ -83,9 +84,7 @@ export const workQueueHelper = (get, applicationContext) => {
     showSectionSentTab:
       workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
-    showSelectColumn:
-      (isDisplayingQC && (userIsPetitionsClerk || userIsDocketClerk)) ||
-      (workQueueIsInternal && !isDisplayingQC),
+    showSelectColumn: isDisplayingQC && permissions.ASSIGN_WORK_ITEM,
     showSendToBar: selectedWorkItems.length > 0,
     showSentColumn: !isDisplayingQC,
     showServedColumn: userIsPetitionsClerk && isDisplayingQC,

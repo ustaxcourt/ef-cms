@@ -430,7 +430,7 @@ const router = {
       ifHasAccess(trialSessionId => {
         setPageTitle('Trial session information');
         app.getSequence('gotoTrialSessionDetailSequence')({ trialSessionId });
-      }),
+      }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
     );
 
     route(
@@ -440,7 +440,7 @@ const router = {
         app.getSequence('gotoTrialSessionWorkingCopySequence')({
           trialSessionId,
         });
-      }),
+      }, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY),
     );
 
     route(
@@ -452,7 +452,7 @@ const router = {
         });
         setPageTitle('Trial sessions');
         app.getSequence('gotoTrialSessionsSequence')({ query });
-      }),
+      }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
     );
 
     route('/idle-logout', () => {
@@ -518,7 +518,7 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Add a trial session');
         app.getSequence('gotoAddTrialSessionSequence')();
-      }),
+      }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
     );
 
     route('/style-guide', () => {

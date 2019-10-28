@@ -9,7 +9,6 @@ import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { DocumentMessages } from './DocumentMessages';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { If } from '../../ustc-ui/If/If';
 import { RecallPetitionModalDialog } from '../RecallPetitionModalDialog';
 import { ServeConfirmModalDialog } from '../ServeConfirmModalDialog';
 import { ServeToIrsModalDialog } from '../ServeToIrsModalDialog';
@@ -221,7 +220,7 @@ export const DocumentDetail = connect(
               </div>
             )}
 
-            <If bind="documentDetailHelper.showPrintCaseConfirmationButton">
+            {documentDetailHelper.showPrintCaseConfirmationButton && (
               <Button
                 className="margin-right-0"
                 onClick={() => {
@@ -237,9 +236,9 @@ export const DocumentDetail = connect(
                 />
                 Print Confirmation
               </Button>
-            </If>
+            )}
 
-            <If bind="documentDetailHelper.showDocumentEditButton">
+            {documentDetailHelper.showEditDocketEntry && (
               <Button
                 link
                 className="margin-right-0 padding-bottom-0"
@@ -248,7 +247,7 @@ export const DocumentDetail = connect(
                 <FontAwesomeIcon icon={['fas', 'edit']} />
                 Edit
               </Button>
-            </If>
+            )}
 
             {documentDetailHelper.showServeToIrsButton && (
               <Button

@@ -1,7 +1,7 @@
 import { User } from '../../../../shared/src/business/entities/User';
-import { getUserRoleAction } from './getUserRoleAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
+import { runPathForUserRoleAction } from './runPathForUserRoleAction';
 import sinon from 'sinon';
 
 let petitionerStub;
@@ -19,7 +19,7 @@ presenter.providers.applicationContext = {
   }),
 };
 
-describe('getUserRoleAction', () => {
+describe('runPathForUserRoleAction', () => {
   beforeEach(() => {
     petitionerStub = sinon.stub();
     practitionerStub = sinon.stub();
@@ -41,7 +41,7 @@ describe('getUserRoleAction', () => {
   });
 
   it('should return the petitioner path for user role petitioner', async () => {
-    await runAction(getUserRoleAction, {
+    await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
@@ -54,7 +54,7 @@ describe('getUserRoleAction', () => {
   });
 
   it('should return the practitioner path for user role practitioner', async () => {
-    await runAction(getUserRoleAction, {
+    await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
@@ -67,7 +67,7 @@ describe('getUserRoleAction', () => {
   });
 
   it('should return the respondent path for user role respondent', async () => {
-    await runAction(getUserRoleAction, {
+    await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
@@ -80,7 +80,7 @@ describe('getUserRoleAction', () => {
   });
 
   it('should return the petitionsclerk path for user role petitionsclerk', async () => {
-    await runAction(getUserRoleAction, {
+    await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
@@ -93,7 +93,7 @@ describe('getUserRoleAction', () => {
   });
 
   it('should return the docketclerk path for user role docketclerk', async () => {
-    await runAction(getUserRoleAction, {
+    await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
@@ -106,7 +106,7 @@ describe('getUserRoleAction', () => {
   });
 
   it('should return the judge path for user role judge', async () => {
-    await runAction(getUserRoleAction, {
+    await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
@@ -116,31 +116,5 @@ describe('getUserRoleAction', () => {
       },
     });
     expect(judgeStub.calledOnce).toEqual(true);
-  });
-
-  it('should return the otherInternalUser path for other internal user type', async () => {
-    await runAction(getUserRoleAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        constants: { USER_ROLES: User.ROLES },
-        user: { role: User.ROLES.adc },
-      },
-    });
-    expect(otherInternalUserStub.calledOnce).toEqual(true);
-  });
-
-  it('should not call otherInternalUser path if the user is an unrecognized role', async () => {
-    await runAction(getUserRoleAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        constants: { USER_ROLES: User.ROLES },
-        user: { role: 'somethingelse' },
-      },
-    });
-    expect(otherInternalUserStub.calledOnce).toEqual(false);
   });
 });
