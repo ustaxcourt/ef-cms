@@ -34,7 +34,7 @@ describe('updateWorkItemFromPropsOrModalOrFormAction', () => {
     expect(result.output.message).toEqual('123');
   });
 
-  it('should fallback to the form state', async () => {
+  it('should fall back to the form state', async () => {
     const result = await runAction(updateWorkItemFromPropsOrModalOrFormAction, {
       modules: {
         presenter,
