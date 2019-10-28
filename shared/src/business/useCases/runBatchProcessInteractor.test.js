@@ -49,6 +49,11 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
   const updateWorkItemStub = sinon.stub().resolves(null);
   const putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
   const saveWorkItemForPaperStub = sinon.stub().resolves(null);
+  const getUserByIdStub = sinon.stub().resolves({
+    name: 'Petitioner',
+    section: 'petitions',
+    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  });
 
   let applicationContext;
   let mockCase;
@@ -280,6 +285,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
           getCaseByCaseId: () => Promise.resolve(mockCase),
           getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          getUserById: getUserByIdStub,
           putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
           saveWorkItemForPaper: saveWorkItemForPaperStub,
           updateCase: updateCaseStub,
