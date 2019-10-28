@@ -1,10 +1,9 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const AddToTrialModal = connect(
   {
@@ -85,12 +84,7 @@ export const AddToTrialModal = connect(
             </fieldset>
           </div>
 
-          <div
-            className={classNames(
-              'usa-form-group margin-bottom-0',
-              validationErrors.trialSessionId && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.trialSessionId}>
             <label className="usa-label" htmlFor="trial-session">
               Select Trial Session
             </label>
@@ -132,11 +126,7 @@ export const AddToTrialModal = connect(
                   ),
                 )}
             </BindedSelect>
-            <Text
-              bind="validationErrors.trialSessionId"
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
         </div>
       </ModalDialog>
     );
