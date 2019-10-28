@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { If } from '../../ustc-ui/If/If';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import { state } from 'cerebral';
@@ -233,22 +234,24 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Petition Details
-                    <Button
-                      link
-                      className="margin-right-0 margin-top-1 padding-0 float-right"
-                      onClick={() => {
-                        navigateToPrintableCaseConfirmationSequence({
-                          docketNumber: formattedCaseDetail.docketNumber,
-                        });
-                      }}
-                    >
-                      <FontAwesomeIcon
-                        className="margin-right-05"
-                        icon="print"
-                        size="1x"
-                      />
-                      Print confirmation
-                    </Button>
+                    <If bind="caseDetail.irsSendDate">
+                      <Button
+                        link
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        onClick={() => {
+                          navigateToPrintableCaseConfirmationSequence({
+                            docketNumber: formattedCaseDetail.docketNumber,
+                          });
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          className="margin-right-05"
+                          icon="print"
+                          size="1x"
+                        />
+                        Print confirmation
+                      </Button>
+                    </If>
                   </h3>
 
                   <PetitionDetails

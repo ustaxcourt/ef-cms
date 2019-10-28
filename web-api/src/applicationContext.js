@@ -586,8 +586,8 @@ const {
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const elasticsearch = require('elasticsearch');
 const {
-  generateCaseConfirmationPdfInteractor,
-} = require('../../shared/src/business/useCases/caseConfirmation/generateCaseConfirmationPdfInteractor');
+  generateCaseConfirmationPdf,
+} = require('../../shared/src/business/useCaseHelper/caseConfirmation/generateCaseConfirmationPdf');
 const { User } = require('../../shared/src/business/entities/User');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const connectionClass = require('http-aws-es');
@@ -824,6 +824,11 @@ module.exports = (appContextUser = {}) => {
     getUniqueId: () => {
       return uuidv4();
     },
+    getUseCaseHelpers: () => {
+      return {
+        generateCaseConfirmationPdf,
+      };
+    },
     getUseCases: () => {
       return {
         addCaseToTrialSessionInteractor,
@@ -853,7 +858,6 @@ module.exports = (appContextUser = {}) => {
         fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
-        generateCaseConfirmationPdfInteractor,
         generateDocketRecordPdfInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,

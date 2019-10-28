@@ -10,6 +10,8 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
 const { Document } = require('../entities/Document');
+const { IRS_BATCH_SYSTEM_USER_ID, WorkItem } = require('../entities/WorkItem');
+const { Message } = require('../entities/Message');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -34,6 +36,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     });
 
   let zips = [];
+
   const processWorkItem = async workItem => {
     const caseToBatch = await applicationContext
       .getPersistenceGateway()
@@ -110,22 +113,85 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
       batchedByUserId,
     });
 
-    await Promise.all([
+    const casePromises = [
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
         applicationContext,
         section: PETITIONS_SECTION,
         userId: batchedByUserId,
         workItem: initializeCaseWorkItem,
       }),
-      applicationContext.getPersistenceGateway().updateCase({
-        applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
-      }),
       applicationContext.getPersistenceGateway().updateWorkItem({
         applicationContext,
         workItemToUpdate: initializeCaseWorkItem,
       }),
-    ]);
+      applicationContext.getUseCaseHelpers().generateCaseConfirmationPdf({
+        applicationContext,
+        caseId: caseEntity.caseId,
+      }),
+    ];
+
+    if (caseEntity.isPaper) {
+      const qcWorkItem = petitionDocument.workItems.find(
+        wi => wi.isQC === true,
+      );
+
+      const message = 'Case confirmation is ready to be printed.';
+
+      const workItemEntity = new WorkItem(
+        {
+          assigneeId: qcWorkItem.completedByUserId,
+          assigneeName: qcWorkItem.completedBy,
+          caseId: caseEntity.caseId,
+          caseStatus: caseEntity.status,
+          caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
+          docketNumber: caseEntity.docketNumber,
+          docketNumberSuffix: caseEntity.docketNumberSuffix,
+          document: {
+            ...petitionDocumentEntity.toRawObject(),
+            createdAt: petitionDocumentEntity.createdAt,
+          },
+          isInitializeCase: false,
+          isQC: false,
+          section: 'petitions',
+          sentBy: 'IRS Holding Queue',
+          sentBySection: IRS_BATCH_SYSTEM_SECTION,
+          sentByUserId: IRS_BATCH_SYSTEM_USER_ID,
+        },
+        { applicationContext },
+      );
+
+      const newMessage = new Message(
+        {
+          from: 'IRS Holding Queue',
+          fromUserId: IRS_BATCH_SYSTEM_USER_ID,
+          message,
+          to: qcWorkItem.completedBy,
+          toUserId: qcWorkItem.completedByUserId,
+        },
+        { applicationContext },
+      );
+
+      workItemEntity.addMessage(newMessage);
+      petitionDocumentEntity.addWorkItem(workItemEntity);
+      caseEntity.updateDocument(petitionDocumentEntity);
+
+      casePromises.push(
+        applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+          applicationContext,
+          messageId: newMessage.messageId,
+          workItem: workItemEntity.validate().toRawObject(),
+        }),
+      );
+    }
+
+    casePromises.push(
+      applicationContext.getPersistenceGateway().updateCase({
+        applicationContext,
+        caseToUpdate: caseEntity.validate().toRawObject(),
+      }),
+    );
+
+    await Promise.all(casePromises);
 
     zips = zips.concat({
       fileNames,

@@ -333,23 +333,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  generateCaseConfirmationPdf:
-    runtime: nodejs8.10
-    handler: web-api/src/casesHandlers.generateCaseConfirmationPdfLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: /{caseId}/confirmation
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   associatePractitionerWithCase:
     handler: web-api/src/casesHandlers.associatePractitionerWithCaseLambda
     events:

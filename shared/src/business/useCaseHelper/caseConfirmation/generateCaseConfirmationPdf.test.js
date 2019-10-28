@@ -1,6 +1,6 @@
 const {
-  generateCaseConfirmationPdfInteractor,
-} = require('./generateCaseConfirmationPdfInteractor');
+  generateCaseConfirmationPdf,
+} = require('./generateCaseConfirmationPdf');
 const { User } = require('../../entities/User');
 
 const PDF_MOCK_BUFFER = 'Hello World';
@@ -25,9 +25,9 @@ const chromiumMock = {
   },
 };
 
-describe('generateCaseConfirmationPdfInteractor', () => {
+describe('generateCaseConfirmationPdf', () => {
   it('returns the pdf buffer produced by chromium', async () => {
-    const result = await generateCaseConfirmationPdfInteractor({
+    const result = await generateCaseConfirmationPdf({
       applicationContext: {
         environment: {
           documentsBucketName: 'something',

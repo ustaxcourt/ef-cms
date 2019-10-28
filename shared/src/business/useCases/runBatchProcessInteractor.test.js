@@ -11,6 +11,9 @@ const MOCK_WORK_ITEMS = [
     assigneeName: 'IRSBatchSystem',
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
     caseStatus: 'Batched for IRS',
+    completedAt: '2018-12-27T18:06:02.968Z',
+    completedBy: 'Petitioner',
+    completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     createdAt: '2018-12-27T18:06:02.971Z',
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
@@ -45,6 +48,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
   const updateCaseStub = sinon.stub().resolves(null);
   const updateWorkItemStub = sinon.stub().resolves(null);
   const putWorkItemInUsersOutboxStub = sinon.stub().resolves(null);
+  const saveWorkItemForPaperStub = sinon.stub().resolves(null);
 
   let applicationContext;
   let mockCase;
@@ -75,6 +79,9 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
         };
       },
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        generateCaseConfirmationPdf: () => {},
+      }),
     };
   });
 
@@ -149,14 +156,17 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
           getCaseByCaseId: () => Promise.resolve(mockCase),
           getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
-
           putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
+          saveWorkItemForPaper: saveWorkItemForPaperStub,
           updateCase: updateCaseStub,
           updateWorkItem: updateWorkItemStub,
           zipDocuments: zipDocumentsStub,
         };
       },
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        generateCaseConfirmationPdf: () => {},
+      }),
     };
     await runBatchProcessInteractor({
       applicationContext,
@@ -218,6 +228,9 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
         };
       },
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        generateCaseConfirmationPdf: () => {},
+      }),
     };
     await runBatchProcessInteractor({
       applicationContext,
@@ -247,5 +260,70 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
         status: 'General Docket - Not at Issue',
       },
     });
+  });
+
+  it('runs batch process for case in IRS queue and sends internal message for a paper case', async () => {
+    mockCase = { ...MOCK_CASE, isPaper: true };
+    mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'bob',
+          role: User.ROLES.petitionsClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => {
+        return {
+          deleteDocument: deleteDocumentStub,
+          deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
+          getCaseByCaseId: () => Promise.resolve(mockCase),
+          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
+          saveWorkItemForPaper: saveWorkItemForPaperStub,
+          updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
+          zipDocuments: zipDocumentsStub,
+        };
+      },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        generateCaseConfirmationPdf: () => {},
+      }),
+    };
+    await runBatchProcessInteractor({
+      applicationContext,
+    });
+    expect(deleteWorkItemFromSectionStub.getCall(1).args[0]).toMatchObject({
+      workItem: {
+        section: 'irsBatchSection',
+        workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
+      },
+    });
+    expect(zipDocumentsStub.getCall(1).args[0]).toMatchObject({
+      fileNames: [
+        'Petition.pdf',
+        'Statement of Taxpayer Identification.pdf',
+        'Answer.pdf',
+        'Proposed Stipulated Decision.pdf',
+      ],
+      s3Ids: [
+        'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      ],
+      zipName: '101-18.zip',
+    });
+    expect(deleteDocumentStub.getCall(1).args[0]).toMatchObject({
+      key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    });
+    expect(updateCaseStub.getCall(1).args[0]).toMatchObject({
+      caseToUpdate: {
+        status: 'General Docket - Not at Issue',
+      },
+    });
+    expect(saveWorkItemForPaperStub.calledOnce).toEqual(true);
   });
 });

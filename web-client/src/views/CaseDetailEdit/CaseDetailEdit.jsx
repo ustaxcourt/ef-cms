@@ -11,6 +11,7 @@ import React from 'react';
 
 export const CaseDetailEdit = connect(
   {
+    navigateBackSequence: sequences.navigateBackSequence,
     screenMetadata: state.screenMetadata,
     submitCaseDetailEditSaveSequence:
       sequences.submitCaseDetailEditSaveSequence,
@@ -18,6 +19,7 @@ export const CaseDetailEdit = connect(
     waitingForResponse: state.waitingForResponse,
   },
   ({
+    navigateBackSequence,
     screenMetadata,
     submitCaseDetailEditSaveSequence,
     unsetFormSaveSuccessSequence,
@@ -56,24 +58,14 @@ export const CaseDetailEdit = connect(
         <Button
           aria-disabled={waitingForResponse ? 'true' : 'false'}
           disabled={waitingForResponse}
+          secondary={!waitingForResponse}
           type="submit"
         >
           {waitingForResponse && <div className="spinner" />}
           Save
         </Button>
-
-        <Button
-          secondary
-          aria-disabled={waitingForResponse ? 'true' : 'false'}
-          disabled={waitingForResponse}
-          onClick={() => {
-            submitCaseDetailEditSaveSequence({
-              navigateToConfirmation: true,
-            });
-          }}
-        >
-          {waitingForResponse && <div className="spinner" />}
-          Save & Print Confirmation
+        <Button link onClick={() => navigateBackSequence()}>
+          Cancel
         </Button>
         {screenMetadata.showSaveSuccess && (
           <span aria-live="polite" className="mini-success" role="alert">
