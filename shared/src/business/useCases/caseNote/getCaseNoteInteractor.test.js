@@ -26,6 +26,9 @@ describe('Get case note', () => {
           getCaseNote: () => {},
         };
       },
+      getUseCases: () => ({
+        getJudgeForUserChambersInteractor: () => null,
+      }),
     };
     await expect(
       getCaseNoteInteractor({
@@ -49,6 +52,12 @@ describe('Get case note', () => {
           getCaseNote: () => Promise.resolve(omit(MOCK_NOTE, 'userId')),
         };
       },
+      getUseCases: () => ({
+        getJudgeForUserChambersInteractor: () => ({
+          role: User.ROLES.judge,
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        }),
+      }),
     };
     let error;
     try {
@@ -78,6 +87,12 @@ describe('Get case note', () => {
           getCaseNote: () => Promise.resolve(MOCK_NOTE),
         };
       },
+      getUseCases: () => ({
+        getJudgeForUserChambersInteractor: () => ({
+          role: User.ROLES.judge,
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        }),
+      }),
     };
     const result = await getCaseNoteInteractor({
       applicationContext,
@@ -100,6 +115,12 @@ describe('Get case note', () => {
           getCaseNote: () => null,
         };
       },
+      getUseCases: () => ({
+        getJudgeForUserChambersInteractor: () => ({
+          role: User.ROLES.judge,
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        }),
+      }),
     };
     const result = await getCaseNoteInteractor({
       applicationContext,
