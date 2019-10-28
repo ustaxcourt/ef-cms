@@ -132,7 +132,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     );
   });
 
-  it('returns the expected casee with new trial session info', async () => {
+  it('returns the expected case with new trial session info', async () => {
     const latestCase = await addCaseToTrialSessionInteractor({
       applicationContext: {
         getCurrentUser: () => ({

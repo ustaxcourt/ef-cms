@@ -9,7 +9,7 @@ describe('generateCaseConfirmationPdfUrlAction', () => {
         presenter,
       },
       state: {
-        baseUrl: 'http://www.demo.com',
+        baseUrl: 'http://www.example.com',
         caseDetail: {
           caseId: 'ca123',
           docketNumber: '123-45',
@@ -19,7 +19,7 @@ describe('generateCaseConfirmationPdfUrlAction', () => {
     });
 
     const expectedUrl =
-      'http://www.demo.com/documents/case-123-45-confirmation.pdf/document-download-url?token=abcdefg';
+      'http://www.example.com/documents/case-123-45-confirmation.pdf/document-download-url?token=abcdefg';
     expect(result.state.pdfPreviewUrl).toEqual(expectedUrl);
   });
 });
