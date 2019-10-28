@@ -1,3 +1,4 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -36,12 +37,7 @@ export const BlockFromTrialModal = connect(
             This case will not be set for trial until this block is removed.{' '}
           </div>
 
-          <div
-            className={classNames(
-              'usa-form-group margin-bottom-0',
-              validationErrors.reason && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.reason}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="display-block" id="year-filed-legend">
                 Why are you blocking this case?
@@ -62,12 +58,8 @@ export const BlockFromTrialModal = connect(
                   validateBlockFromTrialSequence();
                 }}
               />
-              <Text
-                bind="validationErrors.reason"
-                className="usa-error-message"
-              />
             </fieldset>
-          </div>
+          </FormGroup>
         </div>
       </ModalDialog>
     );
