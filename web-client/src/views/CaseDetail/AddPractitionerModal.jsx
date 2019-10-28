@@ -1,5 +1,5 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -36,12 +36,7 @@ export const AddPractitionerModal = connect(
         title="Add Petitioner Counsel"
       >
         <div className="ustc-add-counsel-modal">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.user && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.user}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="counsel-matches-legend">
                 {caseDetailHelper.practitionerSearchResultsCount} Counsel
@@ -113,20 +108,10 @@ export const AddPractitionerModal = connect(
                     ),
                   )}
               </div>
-
-              <Text
-                bind="validationErrors.user"
-                className="usa-error-message"
-              />
             </fieldset>
-          </div>
+          </FormGroup>
 
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.representingPrimary && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.representingPrimary}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend id="representing-legend">
                 Who is this counsel representing?
@@ -176,12 +161,8 @@ export const AddPractitionerModal = connect(
                   </label>
                 </div>
               )}
-              <Text
-                bind="validationErrors.representingPrimary"
-                className="usa-error-message"
-              />
             </fieldset>
-          </div>
+          </FormGroup>
         </div>
       </ModalDialog>
     );
