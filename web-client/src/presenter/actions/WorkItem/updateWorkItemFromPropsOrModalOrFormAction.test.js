@@ -20,7 +20,7 @@ describe('updateWorkItemFromPropsOrModalOrFormAction', () => {
     expect(result.output.message).toEqual('hello');
   });
 
-  it('should fallback to the modal state', async () => {
+  it('should fall back to the modal state', async () => {
     const result = await runAction(updateWorkItemFromPropsOrModalOrFormAction, {
       modules: {
         presenter,
