@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  WORKITEM,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -27,7 +27,7 @@ exports.getWorkItemInteractor = async ({ applicationContext, workItemId }) => {
 
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, WORKITEM, workItem.assigneeId)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM, workItem.assigneeId)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

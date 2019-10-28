@@ -3,11 +3,13 @@ import { extractNotesFromCalendaredCasesAction } from '../actions/TrialSession/e
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
+import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { gotoTrialSessionDetailSequence } from './gotoTrialSessionDetailSequence';
-import { isJudgeAssociatedWithTrialSessionAction } from '../actions/TrialSession/isJudgeAssociatedWithTrialSessionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
+import { isUserAssociatedWithTrialSessionAction } from '../actions/TrialSession/isUserAssociatedWithTrialSessionAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
+import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -15,15 +17,11 @@ import { setDefaultWorkingCopyValuesAction } from '../actions/TrialSessionWorkin
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
+import { setUsersAction } from '../actions/setUsersAction';
+import { takePathForRoles } from './takePathForRoles';
 
-const gotoTrialSessionDetails = [
-  setCurrentPageAction('Interstitial'),
-  clearErrorAlertsAction,
-  setBaseUrlAction,
-  setTrialSessionIdAction,
-  getTrialSessionDetailsAction,
-  setTrialSessionDetailsAction,
-  isJudgeAssociatedWithTrialSessionAction,
+const checkUserAssociationAndProceed = [
+  isUserAssociatedWithTrialSessionAction,
   {
     no: [...gotoTrialSessionDetailSequence],
     yes: [
@@ -41,6 +39,36 @@ const gotoTrialSessionDetails = [
       },
       setCurrentPageAction('TrialSessionWorkingCopy'),
     ],
+  },
+];
+
+const gotoTrialSessionDetails = [
+  setCurrentPageAction('Interstitial'),
+  clearErrorAlertsAction,
+  setBaseUrlAction,
+  setTrialSessionIdAction,
+  getTrialSessionDetailsAction,
+  setTrialSessionDetailsAction,
+  runPathForUserRoleAction,
+  {
+    ...takePathForRoles(
+      [
+        'adc',
+        'admissionsclerk',
+        'calendarclerk',
+        'clerkofcourt',
+        'docketclerk',
+        'petitionsclerk',
+        'trialclerk',
+      ],
+      gotoTrialSessionDetailSequence,
+    ),
+    chambers: [
+      getUsersInSectionAction({}),
+      setUsersAction,
+      ...checkUserAssociationAndProceed,
+    ],
+    judge: checkUserAssociationAndProceed,
   },
 ];
 

@@ -1,6 +1,6 @@
 const {
-  DOCKET_ENTRY,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
@@ -33,7 +33,7 @@ exports.fileDocketEntryInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, DOCKET_ENTRY)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  SERVE_DOCUMENT,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
@@ -38,7 +38,7 @@ exports.serveSignedStipDecisionInteractor = async ({
   const user = applicationContext.getCurrentUser();
   const dateOfService = applicationContext.getUtilities().createISODateString();
 
-  if (!isAuthorized(user, SERVE_DOCUMENT)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized for document service');
   }
 

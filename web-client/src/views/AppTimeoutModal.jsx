@@ -1,27 +1,7 @@
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
-
-class AppTimeoutModalComponent extends ModalDialog {
-  constructor(props) {
-    super(props);
-    this.modal = {
-      classNames: 'app-timeout-modal',
-      confirmLabel: 'Yes!',
-    };
-  }
-
-  componentDidUpdate() {
-    if (this.props.shouldIdleLogout === true) {
-      this.props.idleLogoutSequence();
-    }
-  }
-
-  renderBody() {
-    return <div>Are you still there?</div>;
-  }
-}
+import React, { useEffect } from 'react';
 
 export const AppTimeoutModal = connect(
   {
@@ -29,5 +9,21 @@ export const AppTimeoutModal = connect(
     idleLogoutSequence: sequences.gotoIdleLogoutSequence,
     shouldIdleLogout: state.shouldIdleLogout,
   },
-  AppTimeoutModalComponent,
+  ({ confirmSequence, idleLogoutSequence, shouldIdleLogout }) => {
+    useEffect(() => {
+      if (shouldIdleLogout === true) {
+        idleLogoutSequence();
+      }
+    });
+
+    return (
+      <ModalDialog
+        className="app-timeout-modal"
+        confirmLabel="Yes!"
+        confirmSequence={confirmSequence}
+      >
+        <div>Are you still there?</div>
+      </ModalDialog>
+    );
+  },
 );

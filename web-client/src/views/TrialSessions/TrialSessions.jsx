@@ -13,7 +13,7 @@ export const TrialSessions = () => (
       <SuccessNotification />
       <ErrorNotification />
 
-      <Tabs bind="trialsessions.group" defaultActiveTab="Upcoming">
+      <Tabs bind="trialSessionsTab.group" defaultActiveTab="Upcoming">
         <Button
           className="tab-right-button"
           href="/add-a-trial-session"
@@ -23,7 +23,7 @@ export const TrialSessions = () => (
         </Button>
 
         <Tab
-          id="upcoming-trialsessions-tab"
+          id="upcoming-trial-sessions-tab"
           tabName="Upcoming"
           title="Upcoming"
         >

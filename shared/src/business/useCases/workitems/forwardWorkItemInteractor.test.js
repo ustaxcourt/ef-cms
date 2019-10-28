@@ -12,7 +12,7 @@ describe('forwardWorkItemInteractor', () => {
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
     document: {
-      sentBy: 'taxpayer',
+      sentBy: 'petitioner',
     },
     isQC: true,
     messages: [],
@@ -39,7 +39,7 @@ describe('forwardWorkItemInteractor', () => {
               documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
               documentType: 'Proposed Stipulated Decision',
               processingStatus: 'pending',
-              userId: 'taxpayer',
+              userId: 'petitioner',
               workItems: [
                 {
                   assigneeId: null,
@@ -148,7 +148,7 @@ describe('forwardWorkItemInteractor', () => {
       docketNumber: '101-18',
       docketNumberSuffix: 'S',
       document: {
-        sentBy: 'taxpayer',
+        sentBy: 'petitioner',
       },
       isInitializeCase: undefined,
       isQC: false,

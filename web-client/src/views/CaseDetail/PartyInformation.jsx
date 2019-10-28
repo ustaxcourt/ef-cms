@@ -52,6 +52,7 @@ const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
 const PartyInformation = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
+    caseInformationHelper: state.caseInformationHelper,
     constants: state.constants,
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
@@ -70,6 +71,7 @@ const PartyInformation = connect(
   },
   ({
     caseDetailHelper,
+    caseInformationHelper,
     constants,
     form,
     formattedCaseDetail,
@@ -400,7 +402,7 @@ const PartyInformation = connect(
                     id="practitioner-label"
                   >
                     <h3>Petitioner Counsel</h3>
-                    {caseDetailHelper.showEditPractitioners && (
+                    {caseInformationHelper.showEditPractitioners && (
                       <Button
                         link
                         className="margin-left-205 padding-0 height-3"
@@ -412,7 +414,7 @@ const PartyInformation = connect(
                       </Button>
                     )}
                   </div>
-                  {caseDetailHelper.showAddCounsel && practitionerSearch()}
+                  {caseInformationHelper.showAddCounsel && practitionerSearch()}
                 </div>
                 {practitionerPartyInformation()}
               </div>
@@ -426,7 +428,7 @@ const PartyInformation = connect(
                 <div className="grid-row header-row">
                   <div className="grid-col-6 display-flex" id="secondary-label">
                     <h3>Respondent Counsel</h3>
-                    {caseDetailHelper.showEditRespondents && (
+                    {caseInformationHelper.showEditRespondents && (
                       <Button
                         link
                         className="margin-left-205 padding-0 height-3"
@@ -438,7 +440,7 @@ const PartyInformation = connect(
                       </Button>
                     )}
                   </div>
-                  {caseDetailHelper.showAddCounsel && respondentSearch()}
+                  {caseInformationHelper.showAddCounsel && respondentSearch()}
                 </div>
                 {respondentPartyInformation()}
               </div>

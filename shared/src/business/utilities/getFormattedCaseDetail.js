@@ -318,7 +318,7 @@ const dateStringsCompared = (a, b) => {
   const aDate = new Date(a);
   const bDate = new Date(b);
   if (Math.abs(aDate - bDate) < secondsDifference) {
-    // treat as equal timestamps
+    // treat as equal time stamps
     return 0;
   }
   return aDate - bDate;

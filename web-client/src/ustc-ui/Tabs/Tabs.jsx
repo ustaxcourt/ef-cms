@@ -4,7 +4,6 @@ import { decorateWithPostCallback } from '../utils/useCerebralState';
 import { getDefaultAttribute, map } from '../utils/ElementChildren';
 import { props, sequences, state } from 'cerebral';
 import { useCerebralStateFactory } from '../utils/useCerebralState';
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
@@ -95,7 +94,7 @@ export function TabsComponent({
     const tabContentId = `tabContent-${camelCase(tabName)}`;
 
     let contentProps = {
-      className: 'tabcontent',
+      className: 'tab-content',
       id: tabContentId,
       role: 'tabpanel',
     };
@@ -153,19 +152,6 @@ export function TabsComponent({
     </div>
   );
 }
-
-TabsComponent.propTypes = {
-  asSwitch: PropTypes.bool,
-  bind: PropTypes.string,
-  boxed: PropTypes.bool,
-  children: PropTypes.node,
-  className: PropTypes.string,
-  defaultActiveTab: PropTypes.string,
-  id: PropTypes.string,
-  onSelect: PropTypes.func,
-  simpleSetter: PropTypes.func,
-  value: PropTypes.any,
-};
 
 export const Tabs = connect(
   {

@@ -1,7 +1,7 @@
 import {
-  ADC_SECTION,
   DOCKET_SECTION,
   IRS_BATCH_SYSTEM_SECTION,
+  PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/WorkQueue';
 import { state } from 'cerebral';
 import _ from 'lodash';
@@ -149,8 +149,11 @@ export const filterWorkItems = ({
   workQueueToDisplay,
 }) => {
   const { box, queue, workQueueIsInternal } = workQueueToDisplay;
-  const docQCUserSection =
-    user.section === ADC_SECTION ? DOCKET_SECTION : user.section;
+  let docQCUserSection = user.section;
+
+  if (user.section !== PETITIONS_SECTION) {
+    docQCUserSection = DOCKET_SECTION;
+  }
   const { Case } = applicationContext.getEntityConstructors();
 
   const filters = {
