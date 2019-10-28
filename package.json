@@ -145,7 +145,7 @@
     "build:api:users": "npm run build:_api -- web-api/src/usersHandlers.js",
     "build:api:workItems": "npm run build:_api -- web-api/src/workItemsHandlers.js",
     "build:api": "npm run build:_api -- web-api/src/apiHandlers.js",
-    "build:_api": "parcel build --no-source-maps --bundle-node-modules --target node",
+    "build:_api": "parcel build --no-source-maps --bundle-node-modules",
     "build:client": "USTC_ENV=prod parcel build --no-source-maps web-client/src/index.pug; npm run build:jsdoc",
     "build:jsdoc": "jsdoc -c web-client/jsdoc.conf.json",
     "clean": "rm -rf dist/ web-client/.cache/",
