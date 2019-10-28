@@ -8,5 +8,6 @@ export const docketRecordHelper = get => {
   return {
     showDirectDownloadLink,
     showDocumentDetailLink: !showDirectDownloadLink,
+    showEditDocketEntry: permissions.DOCKET_ENTRY,
   };
 };

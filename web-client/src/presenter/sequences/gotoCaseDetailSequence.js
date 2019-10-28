@@ -4,7 +4,7 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { getCaseNoteForCaseAction } from '../actions/TrialSession/getCaseNoteForCaseAction';
-import { getUserRoleAction } from '../actions/getUserRoleAction';
+import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -14,6 +14,14 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { state } from 'cerebral';
+import { takePathForRoles } from './takePathForRoles';
+
+const gotoCaseDetailInternal = [setCurrentPageAction('CaseDetailInternal')];
+const gotoCaseDetailExternal = [
+  getCaseAssociationAction,
+  setCaseAssociationAction,
+  setCurrentPageAction('CaseDetail'),
+];
 
 export const gotoCaseDetailSequence = [
   setCurrentPageAction('Interstitial'),
@@ -26,30 +34,29 @@ export const gotoCaseDetailSequence = [
   setDefaultDocketRecordSortAction,
   setBaseUrlAction,
   set(state.editDocumentEntryPoint, 'CaseDetail'),
-  getUserRoleAction,
+  runPathForUserRoleAction,
   {
-    docketclerk: [setCurrentPageAction('CaseDetailInternal')],
+    ...takePathForRoles(
+      [
+        'adc',
+        'admissionsclerk',
+        'calendarclerk',
+        'chambers',
+        'clerkofcourt',
+        'docketclerk',
+        'petitionsclerk',
+        'trialclerk',
+      ],
+      gotoCaseDetailInternal,
+    ),
+    ...takePathForRoles(
+      ['petitioner', 'practitioner', 'respondent'],
+      gotoCaseDetailExternal,
+    ),
     judge: [
       getCaseNoteForCaseAction,
       setCaseNoteOnCaseDetailAction,
-      setCurrentPageAction('CaseDetailInternal'),
-    ],
-    otherInternalUser: [setCurrentPageAction('CaseDetailInternal')],
-    petitioner: [
-      getCaseAssociationAction,
-      setCaseAssociationAction,
-      setCurrentPageAction('CaseDetail'),
-    ],
-    petitionsclerk: [setCurrentPageAction('CaseDetailInternal')],
-    practitioner: [
-      getCaseAssociationAction,
-      setCaseAssociationAction,
-      setCurrentPageAction('CaseDetail'),
-    ],
-    respondent: [
-      getCaseAssociationAction,
-      setCaseAssociationAction,
-      setCurrentPageAction('CaseDetail'),
+      ...gotoCaseDetailInternal,
     ],
   },
 ];

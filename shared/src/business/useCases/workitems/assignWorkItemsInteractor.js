@@ -25,7 +25,7 @@ exports.assignWorkItemsInteractor = async ({
   workItemId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSIGN_WORK_ITEM)) {
     throw new UnauthorizedError('Unauthorized to assign work item');
   }
 

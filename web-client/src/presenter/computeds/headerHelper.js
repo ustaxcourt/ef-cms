@@ -8,6 +8,7 @@ export const headerHelper = (get, applicationContext) => {
   const notifications = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueToDisplay.workQueueIsInternal);
   const USER_ROLES = get(state.constants.USER_ROLES);
+  const permissions = get(state.permissions);
 
   const isOtherUser = role => {
     const externalRoles = [USER_ROLES.petitionsClerk, USER_ROLES.docketClerk];
@@ -56,8 +57,6 @@ export const headerHelper = (get, applicationContext) => {
       userRole &&
       userRole !== USER_ROLES.practitioner &&
       userRole !== USER_ROLES.respondent,
-    showTrialSessions: applicationContext
-      .getUtilities()
-      .isInternalUser(userRole),
+    showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
   };
 };
