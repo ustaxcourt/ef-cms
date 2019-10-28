@@ -165,6 +165,8 @@ export const documentDetailHelper = (get, applicationContext) => {
     showConfirmEditOrder: isSigned && isOrder,
     showDocumentInfoTab,
     showDocumentViewerTopMargin,
+    showEditDocketEntry:
+      permissions.DOCKET_ENTRY && formattedDocument.isPetition === false,
     showRecallButton,
     showRemoveSignature: isOrder && isSigned,
     showServeDocumentButton,
