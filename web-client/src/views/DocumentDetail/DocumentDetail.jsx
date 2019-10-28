@@ -31,6 +31,8 @@ export const DocumentDetail = connect(
     gotoOrdersNeededSequence: sequences.gotoOrdersNeededSequence,
     messageId: state.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
+    navigateToPrintableCaseConfirmationSequence:
+      sequences.navigateToPrintableCaseConfirmationSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
     openServeConfirmModalDialogSequence:
       sequences.openServeConfirmModalDialogSequence,
@@ -49,6 +51,7 @@ export const DocumentDetail = connect(
     gotoOrdersNeededSequence,
     messageId,
     navigateToPathSequence,
+    navigateToPrintableCaseConfirmationSequence,
     openConfirmEditModalSequence,
     openServeConfirmModalDialogSequence,
     removeSignatureFromOrderSequence,
@@ -106,6 +109,8 @@ export const DocumentDetail = connect(
         documentDetailHelper.showRecallButton &&
           documentDetailHelper.formattedDocument.isPetition,
         documentDetailHelper.showSignDocumentButton,
+        documentDetailHelper.showEditDocketEntry,
+        documentDetailHelper.showPrintCaseConfirmationButton,
       ].some(val => val);
 
       return (
@@ -213,6 +218,24 @@ export const DocumentDetail = connect(
                   </Button>
                 </>
               </div>
+            )}
+
+            {documentDetailHelper.showPrintCaseConfirmationButton && (
+              <Button
+                className="margin-right-0"
+                onClick={() => {
+                  navigateToPrintableCaseConfirmationSequence({
+                    docketNumber: formattedCaseDetail.docketNumber,
+                  });
+                }}
+              >
+                <FontAwesomeIcon
+                  className="margin-right-05"
+                  icon="print"
+                  size="1x"
+                />
+                Print Confirmation
+              </Button>
             )}
 
             {documentDetailHelper.showEditDocketEntry && (

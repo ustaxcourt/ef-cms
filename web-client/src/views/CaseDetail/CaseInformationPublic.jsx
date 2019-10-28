@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { If } from '../../ustc-ui/If/If';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -54,22 +55,24 @@ export const CaseInformationPublic = connect(
                   <div className="content-wrapper">
                     <h3 className="underlined">
                       Petition Details
-                      <Button
-                        link
-                        className="margin-right-0 margin-top-1 padding-0 float-right"
-                        onClick={() => {
-                          navigateToPrintableCaseConfirmationSequence({
-                            docketNumber: formattedCaseDetail.docketNumber,
-                          });
-                        }}
-                      >
-                        <FontAwesomeIcon
-                          className="margin-right-05"
-                          icon="print"
-                          size="1x"
-                        />
-                        Print confirmation
-                      </Button>
+                      <If bind="caseDetail.irsSendDate">
+                        <Button
+                          link
+                          className="margin-right-0 margin-top-1 padding-0 float-right"
+                          onClick={() => {
+                            navigateToPrintableCaseConfirmationSequence({
+                              docketNumber: formattedCaseDetail.docketNumber,
+                            });
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            className="margin-right-05"
+                            icon="print"
+                            size="1x"
+                          />
+                          Print receipt
+                        </Button>
+                      </If>
                     </h3>
                     <PetitionDetails caseDetail={formattedCaseDetail} />
                   </div>
@@ -89,21 +92,23 @@ export const CaseInformationPublic = connect(
             <div className="margin-top-2">
               <div className="case-info-card">
                 <h3 className="underlined">Petition Details</h3>{' '}
-                <Button
-                  link
-                  onClick={() => {
-                    navigateToPrintableCaseConfirmationSequence({
-                      docketNumber: formattedCaseDetail.docketNumber,
-                    });
-                  }}
-                >
-                  <FontAwesomeIcon
-                    className="margin-right-05"
-                    icon="print"
-                    size="1x"
-                  />
-                  Print confirmation
-                </Button>
+                <If bind="caseDetail.irsSendDate">
+                  <Button
+                    link
+                    onClick={() => {
+                      navigateToPrintableCaseConfirmationSequence({
+                        docketNumber: formattedCaseDetail.docketNumber,
+                      });
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      className="margin-right-05"
+                      icon="print"
+                      size="1x"
+                    />
+                    Print receipt
+                  </Button>
+                </If>
                 <PetitionDetails caseDetail={formattedCaseDetail} />
               </div>
             </div>

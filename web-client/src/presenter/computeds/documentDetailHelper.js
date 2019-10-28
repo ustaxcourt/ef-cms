@@ -152,6 +152,11 @@ export const documentDetailHelper = (get, applicationContext) => {
       caseDetail.status === 'Batched for IRS') &&
     user.role === USER_ROLES.petitionsClerk;
 
+  const showPrintCaseConfirmationButton =
+    document &&
+    document.status === 'served' &&
+    formattedDocument.isPetition === true;
+
   return {
     documentEditUrl,
     formattedDocument,
@@ -167,6 +172,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     showDocumentViewerTopMargin,
     showEditDocketEntry:
       permissions.DOCKET_ENTRY && formattedDocument.isPetition === false,
+    showPrintCaseConfirmationButton,
     showRecallButton,
     showRemoveSignature: isOrder && isSigned,
     showServeDocumentButton,
