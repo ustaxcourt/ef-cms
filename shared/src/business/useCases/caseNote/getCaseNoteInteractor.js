@@ -19,12 +19,16 @@ exports.getCaseNoteInteractor = async ({ applicationContext, caseId }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const judgeUser = await applicationContext
+    .getUseCases()
+    .getJudgeForUserChambersInteractor({ applicationContext, user });
+
   const caseNote = await applicationContext
     .getPersistenceGateway()
     .getCaseNote({
       applicationContext,
       caseId,
-      userId: user.userId,
+      userId: judgeUser.userId,
     });
 
   if (caseNote) {

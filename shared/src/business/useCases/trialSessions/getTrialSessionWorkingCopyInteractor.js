@@ -1,4 +1,3 @@
-const { User } = require('../../entities/User');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -25,34 +24,16 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let judgeUserId;
-  if (user.role === User.ROLES.judge) {
-    judgeUserId = user.userId;
-  } else if (user.role === User.ROLES.chambers) {
-    // TODO: Currently getCurrentUser does not return the user's section
-    const chambersUser = await applicationContext
-      .getUseCases()
-      .getUserInteractor({ applicationContext });
-
-    const sectionUsers = await applicationContext
-      .getUseCases()
-      .getUsersInSectionInteractor({
-        applicationContext,
-        section: chambersUser.section,
-      });
-
-    const sectionJudge = sectionUsers.find(
-      user => user.role === User.ROLES.judge,
-    );
-    judgeUserId = sectionJudge.userId;
-  }
+  const judgeUser = await applicationContext
+    .getUseCases()
+    .getJudgeForUserChambersInteractor({ applicationContext, user });
 
   const trialSessionWorkingCopy = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionWorkingCopy({
       applicationContext,
       trialSessionId,
-      userId: judgeUserId,
+      userId: judgeUser.userId,
     });
 
   if (trialSessionWorkingCopy) {
