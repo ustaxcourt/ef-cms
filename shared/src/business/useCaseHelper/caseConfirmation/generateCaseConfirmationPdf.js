@@ -12,7 +12,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.caseId the id of the case
  * @returns {Promise<*>} the promise of the document having been uploaded
  */
-exports.generateCaseConfirmationPdfInteractor = async ({
+exports.generateCaseConfirmationPdf = async ({
   applicationContext,
   caseId,
 }) => {

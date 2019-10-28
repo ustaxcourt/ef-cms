@@ -75,8 +75,8 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
         };
       },
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUseCases: () => ({
-        generateCaseConfirmationPdfInteractor: () => {},
+      getUseCaseHelpers: () => ({
+        generateCaseConfirmationPdf: () => {},
       }),
     };
   });
@@ -152,7 +152,6 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
           deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
           getCaseByCaseId: () => Promise.resolve(mockCase),
           getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
-
           putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
           updateCase: updateCaseStub,
           updateWorkItem: updateWorkItemStub,
@@ -160,8 +159,8 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
         };
       },
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUseCases: () => ({
-        generateCaseConfirmationPdfInteractor: () => {},
+      getUseCaseHelpers: () => ({
+        generateCaseConfirmationPdf: () => {},
       }),
     };
     await runBatchProcessInteractor({
@@ -224,8 +223,8 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
         };
       },
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUseCases: () => ({
-        generateCaseConfirmationPdfInteractor: () => {},
+      getUseCaseHelpers: () => ({
+        generateCaseConfirmationPdf: () => {},
       }),
     };
     await runBatchProcessInteractor({

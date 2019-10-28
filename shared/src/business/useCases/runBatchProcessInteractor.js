@@ -124,20 +124,13 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
         applicationContext,
         workItemToUpdate: initializeCaseWorkItem,
       }),
-      applicationContext.getUseCases().generateCaseConfirmationPdfInteractor({
+      applicationContext.getUseCaseHelpers().generateCaseConfirmationPdf({
         applicationContext,
         caseId: caseEntity.caseId,
       }),
     ];
 
     if (caseEntity.isPaper) {
-      // create workitem; send to qc'er
-      // IRS_BATCH_SYSTEM_SECTION
-
-      //from: 'IRS Holding Queue',
-      // fromUserId: IRS_BATCH_SYSTEM_USER_ID,
-      // IRS_BATCH_SYSTEM_USER_ID
-
       const qcWorkItem = petitionDocument.workItems.find(
         wi => wi.isQC === true,
       );
