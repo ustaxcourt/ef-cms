@@ -1,9 +1,9 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { map } from 'lodash';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const CreateOrderChooseTypeModal = connect(
   {
@@ -34,12 +34,7 @@ export const CreateOrderChooseTypeModal = connect(
         title="Create Order"
       >
         <div className="ustc-create-order-modal">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.eventCode && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.eventCode}>
             <label className="usa-label" htmlFor="eventCode">
               Select order type
             </label>
@@ -63,19 +58,9 @@ export const CreateOrderChooseTypeModal = connect(
                 </option>
               ))}
             </select>
-            {validationErrors.eventCode && (
-              <div className="usa-error-message beneath">
-                {validationErrors.eventCode}
-              </div>
-            )}
-          </div>
+          </FormGroup>
           {form.eventCode == 'O' && (
-            <div
-              className={classNames(
-                'usa-form-group',
-                validationErrors.documentTitle && 'usa-form-group--error',
-              )}
-            >
+            <FormGroup errorText={validationErrors.documentTitle}>
               <label className="usa-label" htmlFor="documentTitle">
                 Order title
               </label>
@@ -92,12 +77,7 @@ export const CreateOrderChooseTypeModal = connect(
                   validateSequence();
                 }}
               />
-              {validationErrors.documentTitle && (
-                <div className="usa-error-message beneath">
-                  {validationErrors.documentTitle}
-                </div>
-              )}
-            </div>
+            </FormGroup>
           )}
         </div>
       </ModalDialog>
