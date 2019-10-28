@@ -1,3 +1,4 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -24,12 +25,7 @@ export const SessionInformationForm = connect(
       <>
         <h2 className="margin-top-0">Session Information</h2>
         <div className="blue-container">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.startDate && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.startDate}>
             <fieldset className="start-date usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="start-date-legend">
                 Start date
@@ -106,14 +102,8 @@ export const SessionInformationForm = connect(
                 </div>
               </div>
             </fieldset>
-            <ValidationText field="startDate" />
-          </div>
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.startTime && 'usa-form-group--error',
-            )}
-          >
+          </FormGroup>
+          <FormGroup errorText={validationErrors.startTime}>
             <fieldset className="start-time usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="start-time-legend">
                 Time <span className="usa-hint">(optional)</span>
@@ -194,8 +184,8 @@ export const SessionInformationForm = connect(
                 </div>
               </div>
             </fieldset>
-            <ValidationText field="startTime" />
-          </div>
+          </FormGroup>
+
           {formattedTrialSessions.showSwingSessionOption && (
             <>
               <div className="usa-form-group">
@@ -222,12 +212,7 @@ export const SessionInformationForm = connect(
                 </div>
               </div>
               {formattedTrialSessions.showSwingSessionList && (
-                <div
-                  className={classNames(
-                    'usa-form-group',
-                    validationErrors.swingSessionId && 'usa-form-group--error',
-                  )}
-                >
+                <FormGroup errorText={validationErrors.swingSessionId}>
                   <label
                     className="usa-label"
                     htmlFor="swing-session-id"
@@ -261,17 +246,11 @@ export const SessionInformationForm = connect(
                       ),
                     )}
                   </select>
-                  <ValidationText field="swingSessionId" />
-                </div>
+                </FormGroup>
               )}
             </>
           )}
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.sessionType && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.sessionType}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="session-type-legend">
                 Session type
@@ -305,14 +284,9 @@ export const SessionInformationForm = connect(
                 ),
               )}
             </fieldset>
-            <ValidationText field="sessionType" />
-          </div>
-          <div
-            className={classNames(
-              'usa-form-group margin-bottom-0',
-              validationErrors.maxCases && 'usa-form-group--error',
-            )}
-          >
+          </FormGroup>
+
+          <FormGroup errorText={validationErrors.maxCases}>
             <label className="usa-label" htmlFor="max-cases">
               Number of cases allowed
             </label>
@@ -333,8 +307,7 @@ export const SessionInformationForm = connect(
                 });
               }}
             />
-            <ValidationText field="maxCases" />
-          </div>
+          </FormGroup>
         </div>
       </>
     );
