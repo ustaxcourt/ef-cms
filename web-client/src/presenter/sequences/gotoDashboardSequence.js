@@ -4,10 +4,10 @@ import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getCasesByUserAction } from '../actions/getCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
-import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
+import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -15,6 +15,9 @@ import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsActio
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
 import { state } from 'cerebral';
+import { takePathForRoles } from './takePathForRoles';
+
+const proceedToMessages = [navigateToMessagesAction];
 
 const goToDashboard = [
   setCurrentPageAction('Interstitial'),
@@ -23,9 +26,21 @@ const goToDashboard = [
   setUserAction,
   set(state.selectedWorkItems, []),
   clearErrorAlertsAction,
-  getUserRoleAction,
+  runPathForUserRoleAction,
   {
-    docketclerk: [navigateToMessagesAction],
+    ...takePathForRoles(
+      [
+        'adc',
+        'admissionsclerk',
+        'calendarclerk',
+        'chambers',
+        'clerkofcourt',
+        'docketclerk',
+        'petitionsclerk',
+        'trialclerk',
+      ],
+      proceedToMessages,
+    ),
     judge: [
       setMessageInboxPropsAction,
       ...chooseWorkQueueSequence,
@@ -33,13 +48,11 @@ const goToDashboard = [
       setTrialSessionsAction,
       setCurrentPageAction('DashboardJudge'),
     ],
-    otherInternalUser: [navigateToMessagesAction],
     petitioner: [
       getCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPetitioner'),
     ],
-    petitionsclerk: [navigateToMessagesAction],
     practitioner: [
       getCasesByUserAction,
       setCasesAction,
