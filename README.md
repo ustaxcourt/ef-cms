@@ -50,11 +50,11 @@ Server:
 
 The backlog is stored [in GitHub Issues in Flexion’s repository](https://github.com/flexion/ef-cms/issues), _not_ on this repository. Although they can be viewed like any other GitHub issues, they are managed on a scrum board that requires the [ZenHub browser plugin](https://www.zenhub.com/) to see.
 
-## Building everything
+## Testing everything
 
 To exercise the CI/CD pipeline locally, run the following:
 
-`./build-all.sh`
+`./test-all.sh`
 
 This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral tests, Pa11y, etc. over all the components.
 
