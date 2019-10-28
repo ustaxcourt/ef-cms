@@ -109,7 +109,7 @@ export const DocumentDetail = connect(
         documentDetailHelper.showRecallButton &&
           documentDetailHelper.formattedDocument.isPetition,
         documentDetailHelper.showSignDocumentButton,
-        documentDetailHelper.showDocumentEditButton,
+        documentDetailHelper.showEditDocketEntry,
         documentDetailHelper.showPrintCaseConfirmationButton,
       ].some(val => val);
 
