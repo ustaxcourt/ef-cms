@@ -1,3 +1,6 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 module.exports = {
   createCaseDeadlineLambda: require('./caseDeadline/createCaseDeadlineLambda')
     .handler,

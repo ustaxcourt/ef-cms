@@ -1,3 +1,6 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 module.exports = {
   addCoversheetLambda: require('./documents/addCoversheetLambda').handler,
   archiveDraftDocumentLambda: require('./documents/archiveDraftDocumentLambda')

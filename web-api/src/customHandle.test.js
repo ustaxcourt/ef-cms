@@ -1,3 +1,6 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 const { customHandle } = require('./customHandle');
 const {
   NotFoundError,
