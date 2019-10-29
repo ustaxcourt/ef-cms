@@ -3,7 +3,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 export const FormGroup = connect(props => {
-  const { children, className, errorText, hideError, id } = props;
+  const { children, className, errorText, id } = props;
 
   let hasError = false;
 
@@ -39,12 +39,8 @@ export const FormGroup = connect(props => {
       id={id}
     >
       {children}
-      {!hideError && (
-        <>
-          {Array.isArray(errorText) && renderMultipleErrors()}
-          {!Array.isArray(errorText) && renderSingleError()}
-        </>
-      )}
+      {Array.isArray(errorText) && renderMultipleErrors()}
+      {!Array.isArray(errorText) && renderSingleError()}
     </div>
   );
 });
