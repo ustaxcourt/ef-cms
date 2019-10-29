@@ -1,8 +1,8 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const CreateMessageModalDialog = connect(
   {
@@ -41,14 +41,7 @@ export const CreateMessageModalDialog = connect(
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence={onConfirmSequence}
       >
-        <div
-          className={classNames(
-            'usa-form-group',
-            validationErrors.section &&
-              !showChambersSelect &&
-              'usa-form-group--error',
-          )}
-        >
+        <FormGroup errorText={!showChambersSelect && validationErrors.section}>
           <label className="usa-label" htmlFor="section">
             Select section
           </label>
@@ -72,19 +65,11 @@ export const CreateMessageModalDialog = connect(
               </option>
             ))}
           </select>
-          {!showChambersSelect && validationErrors.section && (
-            <div className="usa-error-message beneath">
-              {validationErrors.section}
-            </div>
-          )}
-        </div>
+        </FormGroup>
 
         {showChambersSelect && (
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.section && 'usa-form-group--error',
-            )}
+          <FormGroup
+            errorText={validationErrors.section && 'Chambers is required.'}
           >
             <label className="usa-label" htmlFor="chambers">
               Select chambers
@@ -108,20 +93,10 @@ export const CreateMessageModalDialog = connect(
                 </option>
               ))}
             </select>
-            {validationErrors.section && (
-              <div className="usa-error-message beneath">
-                Chambers is required.
-              </div>
-            )}
-          </div>
+          </FormGroup>
         )}
 
-        <div
-          className={classNames(
-            'usa-form-group',
-            validationErrors.assigneeId && 'usa-form-group--error',
-          )}
-        >
+        <FormGroup errorText={validationErrors.assigneeId}>
           <label className="usa-label" htmlFor="assigneeId">
             Select recipient
           </label>
@@ -146,19 +121,9 @@ export const CreateMessageModalDialog = connect(
               </option>
             ))}
           </select>
-          {validationErrors.assigneeId && (
-            <div className="usa-error-message beneath">
-              {validationErrors.assigneeId}
-            </div>
-          )}
-        </div>
+        </FormGroup>
 
-        <div
-          className={classNames(
-            'usa-form-group',
-            validationErrors.message && 'usa-form-group--error',
-          )}
-        >
+        <FormGroup errorText={validationErrors.message}>
           <label className="usa-label" htmlFor="message">
             Add message
           </label>
@@ -174,12 +139,7 @@ export const CreateMessageModalDialog = connect(
               validateInitialWorkItemMessageInModalSequence();
             }}
           />
-          {validationErrors.message && (
-            <div className="usa-error-message beneath">
-              {validationErrors.message}
-            </div>
-          )}
-        </div>
+        </FormGroup>
       </ConfirmModal>
     );
   },

@@ -161,7 +161,7 @@ exports.addCoverToPdf = async ({
   };
 
   // Point of origin is bottom left, this flips the y-axis
-  // coord to a traditional top left value
+  // coordinate to a traditional top left value
   const translateY = (yPos, screenToPrintDpi) => {
     const newY = dimensionsY - yPos;
     if (screenToPrintDpi) {
@@ -186,7 +186,7 @@ exports.addCoverToPdf = async ({
       // Single line of text
       totalContentHeight = textHeight;
     }
-    // we subtract here because coords start at bottom left;
+    // we subtract here because coordinates start at bottom left;
     return Math.round(
       previousContentArea.yPos - totalContentHeight - offsetMargin,
     );
@@ -202,7 +202,7 @@ exports.addCoverToPdf = async ({
       // break the text up and test its width
       const textArry = text.split(' ');
 
-      // This doesn't feel super effecient, so maybe come back to this
+      // This doesn't feel super efficient, so maybe come back to this
       const textLines = textArry.reduce(function(acc, cur) {
         const accLength = acc.length;
         const lastIndex = accLength > 0 ? acc.length - 1 : 0;
