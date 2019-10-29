@@ -48,7 +48,7 @@ describe('document detail helper', () => {
         ...getBaseState(user),
         caseDetail: {
           documents: [],
-          status: 'General Docket - Not at Issue',
+          status: Case.STATUS_TYPES.generalDocket,
         },
         documentId: 'abc',
         workItemActions: {
@@ -69,7 +69,7 @@ describe('document detail helper', () => {
         ...getBaseState(user),
         caseDetail: {
           documents: [],
-          status: 'General Docket - Not at Issue',
+          status: Case.STATUS_TYPES.generalDocket,
         },
         documentId: 'abc',
         workItemActions: {
@@ -90,7 +90,7 @@ describe('document detail helper', () => {
         ...getBaseState(user),
         caseDetail: {
           documents: [],
-          status: 'New',
+          status: Case.STATUS_TYPES.new,
         },
         documentId: 'abc',
         workItemActions: {
@@ -111,7 +111,7 @@ describe('document detail helper', () => {
         ...getBaseState(user),
         caseDetail: {
           documents: [],
-          status: 'Recalled',
+          status: Case.STATUS_TYPES.recalled,
         },
         documentId: 'abc',
         workItemActions: {
@@ -120,6 +120,46 @@ describe('document detail helper', () => {
       },
     });
     expect(result.showCaseDetailsEdit).toEqual(true);
+  });
+
+  it('should set showSignDocumentButton to true when user has COURT_ISSUED_DOCUMENT permission and there is a valid document to sign that is not already signed', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
+    const result = runCompute(documentDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          documents: [
+            {
+              documentId: 'abc',
+              documentType: 'Proposed Stipulated Decision',
+              workItems: [
+                {
+                  assigneeId: user.userId,
+                  caseStatus: Case.STATUS_TYPES.new,
+                  document: {
+                    documentId: 'abc',
+                    documentType: 'Proposed Stipulated Decision',
+                    receivedAt: '2018-11-21T20:49:28.192Z',
+                  },
+                  messages: [
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+                      message: 'Test',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          status: Case.STATUS_TYPES.new,
+        },
+        documentId: 'abc',
+      },
+    });
+    expect(result.showSignDocumentButton).toEqual(true);
   });
 
   describe('showServeToIrsButton and showRecallButton', () => {
@@ -275,7 +315,7 @@ describe('document detail helper', () => {
                 documentType: 'NotAPetition',
               },
             ],
-            status: 'Recalled',
+            status: Case.STATUS_TYPES.recalled,
           },
           documentId: 'abc',
           workItemActions: {
@@ -301,7 +341,7 @@ describe('document detail helper', () => {
                 documentType: 'Petition',
               },
             ],
-            status: 'Recalled',
+            status: Case.STATUS_TYPES.recalled,
           },
           documentId: 'abc',
           workItemActions: {
@@ -327,7 +367,7 @@ describe('document detail helper', () => {
                 documentType: 'Petition',
               },
             ],
-            status: 'General Docket - Not at Issue',
+            status: Case.STATUS_TYPES.generalDocket,
           },
           documentId: 'abc',
           workItemActions: {
@@ -448,7 +488,7 @@ describe('document detail helper', () => {
               userId: 'petitioner',
               workItems: [
                 {
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   completedAt: '2018-11-21T20:49:28.192Z',
                   completedBy: 'William T. Riker',
                   document: {
@@ -468,7 +508,7 @@ describe('document detail helper', () => {
                 },
                 {
                   assigneeId: 'abc',
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   document: {
                     documentType: 'Proposed Stipulated Decision',
                     receivedAt: '2018-11-21T20:49:28.192Z',
@@ -524,7 +564,7 @@ describe('document detail helper', () => {
               userId: 'petitioner',
               workItems: [
                 {
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   completedAt: '2018-11-21T20:49:28.192Z',
                   completedBy: 'William T. Riker',
                   document: {
@@ -544,7 +584,7 @@ describe('document detail helper', () => {
                 },
                 {
                   assigneeId: 'abc',
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   document: {
                     documentType: 'Proposed Stipulated Decision',
                     receivedAt: '2018-11-21T20:49:28.192Z',
@@ -595,7 +635,7 @@ describe('document detail helper', () => {
               userId: 'petitioner',
               workItems: [
                 {
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   completedAt: '2018-11-21T20:49:28.192Z',
                   document: {
                     receivedAt: '2018-11-21T20:49:28.192Z',
@@ -614,7 +654,7 @@ describe('document detail helper', () => {
                 },
                 {
                   assigneeId: 'abc',
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   document: {
                     documentType: 'Proposed Stipulated Decision',
                     receivedAt: '2018-11-21T20:49:28.192Z',

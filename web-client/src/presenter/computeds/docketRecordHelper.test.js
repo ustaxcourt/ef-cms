@@ -41,4 +41,85 @@ describe('docket record helper', () => {
     expect(result.showDocumentDetailLink).toEqual(true);
     expect(result.showDirectDownloadLink).toEqual(false);
   });
+
+  it('should show links for editing docket entries if user has DOCKET_ENTRY permission', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(docketRecordHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        form: {},
+      },
+    });
+    expect(result.showEditDocketEntry).toEqual(true);
+  });
+
+  it('should not show links for editing docket entries if user does not have DOCKET_ENTRY permission', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '789',
+    };
+    const result = runCompute(docketRecordHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        form: {},
+      },
+    });
+    expect(result.showEditDocketEntry).toEqual(false);
+  });
+
+  it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case', () => {
+    const user = {
+      role: User.ROLES.respondent,
+      userId: '789',
+    };
+    const result = runCompute(docketRecordHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        screenMetadata: { isAssociated: true },
+        form: {},
+      },
+    });
+    expect(result.showFileDocumentButton).toEqual(true);
+  });
+
+  it('should not show file document button if user does not have FILE_EXTERNAL_DOCUMENT permission', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '789',
+    };
+    const result = runCompute(docketRecordHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        screenMetadata: { isAssociated: true },
+        form: {},
+      },
+    });
+    expect(result.showFileDocumentButton).toEqual(false);
+  });
+
+  it('should not show file document button if user has FILE_EXTERNAL_DOCUMENT permission but the user is not associated with the case', () => {
+    const user = {
+      role: User.ROLES.petitioner,
+      userId: '789',
+    };
+    const result = runCompute(docketRecordHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        screenMetadata: { isAssociated: false },
+        form: {},
+      },
+    });
+    expect(result.showFileDocumentButton).toEqual(false);
+  });
 });
