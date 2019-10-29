@@ -3,6 +3,7 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SearchResults } from './SearchResults';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
@@ -61,13 +62,7 @@ export const AdvancedSearch = connect(
             >
               <div className="grid-row grid-gap">
                 <div className="tablet:grid-col-4 right-gray-border">
-                  <div
-                    className={classNames(
-                      'usa-form-group margin-bottom-0',
-                      validationErrors.petitionerName &&
-                        'usa-form-group--error',
-                    )}
-                  >
+                  <FormGroup errorText={validationErrors.petitionerName}>
                     <label className="usa-label" htmlFor="petitioner-name">
                       Petitioner name{' '}
                       <span className="usa-hint">(required)</span>
@@ -85,11 +80,7 @@ export const AdvancedSearch = connect(
                         });
                       }}
                     />
-                    <Text
-                      bind="validationErrors.petitionerName"
-                      className="usa-error-message"
-                    />
-                  </div>
+                  </FormGroup>
                 </div>
 
                 <div className="tablet:grid-col-4 right-gray-border">
