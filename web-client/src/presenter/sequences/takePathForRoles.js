@@ -1,2 +1,5 @@
 export const takePathForRoles = (users, actions) =>
-  users.reduce((paths, role) => ((paths[role] = actions), paths), {});
+  users.reduce((paths, role) => {
+    paths[role] = actions;
+    return paths;
+  }, {});
