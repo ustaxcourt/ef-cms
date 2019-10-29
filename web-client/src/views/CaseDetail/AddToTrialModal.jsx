@@ -131,7 +131,7 @@ export const AddToTrialModal = connect(
           {addToTrialSessionModalHelper.showSessionNotSetAlert && (
             <Hint>
               This trial session has not been set. This case will be added to
-              the eligilble cases for this session and prioritized when the
+              the eligible cases for this session and prioritized when the
               calendar is set.{' '}
             </Hint>
           )}
