@@ -1,9 +1,8 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const EditPractitionersModal = connect(
   {
@@ -47,15 +46,13 @@ export const EditPractitionersModal = connect(
                 >
                   {practitioner.name} ({practitioner.barNumber})
                 </label>
-                <div
-                  className={classNames(
-                    'usa-form-group margin-bottom-0',
+                <FormGroup
+                  errorText={
                     validationErrors &&
-                      validationErrors.practitioners &&
-                      validationErrors.practitioners[idx] &&
-                      validationErrors.practitioners[idx].representingPrimary &&
-                      'usa-form-group--error',
-                  )}
+                    validationErrors.practitioners &&
+                    validationErrors.practitioners[idx] &&
+                    validationErrors.practitioners[idx].representingPrimary
+                  }
                   id={`practitioner-representing-${idx}`}
                 >
                   <fieldset className="usa-fieldset margin-bottom-0">
@@ -117,12 +114,8 @@ export const EditPractitionersModal = connect(
                           </label>
                         </div>
                       )}
-                    <Text
-                      bind={`validationErrors.practitioners.${idx}.representingPrimary`}
-                      className="usa-error-message"
-                    />
                   </fieldset>
-                </div>
+                </FormGroup>
               </div>
               <div className="grid-col-4 text-right text-secondary-dark">
                 <div className="usa-checkbox">
