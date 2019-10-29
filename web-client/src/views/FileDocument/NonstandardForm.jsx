@@ -1,4 +1,4 @@
-import { Text } from '../../ustc-ui/Text/Text';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
 import { get } from 'lodash';
@@ -33,14 +33,7 @@ export const NonstandardForm = connect(
     return (
       <div className="nonstandard-form">
         {helper[level].showTextInput && (
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors &&
-                validationErrors.freeText &&
-                'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors && validationErrors.freeText}>
             <label className="usa-label" htmlFor={`${namespace}free-text`}>
               {helper[level].textInputLabel}
             </label>
@@ -61,22 +54,11 @@ export const NonstandardForm = connect(
                 });
               }}
             />
-            <Text
-              bind={`validationErrors.${namespace}freeText`}
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
         )}
 
         {helper[level].showTextInput2 && (
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors &&
-                validationErrors.freeText2 &&
-                'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors && validationErrors.freeText2}>
             <label className="usa-label" htmlFor={`${namespace}free-text2`}>
               {helper[level].textInputLabel2}
             </label>
@@ -97,21 +79,12 @@ export const NonstandardForm = connect(
                 });
               }}
             />
-            <Text
-              bind={`validationErrors.${namespace}freeText2`}
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
         )}
 
         {helper[level].previousDocumentSelectLabel && (
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors &&
-                validationErrors.previousDocument &&
-                'usa-form-group--error',
-            )}
+          <FormGroup
+            errorText={validationErrors && validationErrors.previousDocument}
           >
             <label
               className="usa-label"
@@ -149,21 +122,12 @@ export const NonstandardForm = connect(
                 },
               )}
             </select>
-            <Text
-              bind={`validationErrors.${namespace}previousDocument`}
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
         )}
 
         {helper[level].showDateFields && (
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors &&
-                validationErrors.serviceDate &&
-                'usa-form-group--error',
-            )}
+          <FormGroup
+            errorText={validationErrors && validationErrors.serviceDate}
           >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend id="date-of-service-legend">Service date</legend>
@@ -272,21 +236,12 @@ export const NonstandardForm = connect(
                 </div>
               </div>
             </fieldset>
-            <Text
-              bind={`validationErrors.${namespace}serviceDate`}
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
         )}
 
         {helper[level].showTrialLocationSelect && (
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors &&
-                validationErrors.trialLocation &&
-                'usa-form-group--error',
-            )}
+          <FormGroup
+            errorText={validationErrors && validationErrors.trialLocation}
           >
             <TrialCity
               label={helper[level].textInputLabel}
@@ -305,21 +260,12 @@ export const NonstandardForm = connect(
                 validateSequence();
               }}
             />
-            <Text
-              bind={`validationErrors.${namespace}trialLocation`}
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
         )}
 
         {helper[level].ordinalField && (
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors &&
-                validationErrors.ordinalValue &&
-                'usa-form-group--error',
-            )}
+          <FormGroup
+            errorText={validationErrors && validationErrors.ordinalValue}
           >
             <fieldset
               className="usa-fieldset margin-bottom-0"
@@ -355,12 +301,8 @@ export const NonstandardForm = connect(
                   </label>
                 </div>
               ))}
-              <Text
-                bind={`validationErrors.${namespace}ordinalValue`}
-                className="usa-error-message"
-              />
             </fieldset>
-          </div>
+          </FormGroup>
         )}
       </div>
     );
