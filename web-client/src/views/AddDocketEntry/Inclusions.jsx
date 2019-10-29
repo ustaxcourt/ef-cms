@@ -1,5 +1,4 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -68,13 +67,12 @@ export const Inclusions = connect(
               Certificate of Service
             </label>
             {form.certificateOfService && (
-              <fieldset
-                className={classNames(
-                  'margin-bottom-0 usa-fieldset service-date',
-                )}
+              <FormGroup
+                className="service-date"
+                errorText={validationErrors.certificateOfServiceDate}
               >
-                <FormGroup
-                  errorText={validationErrors.certificateOfServiceDate}
+                <fieldset
+                  className={classNames('margin-bottom-0 usa-fieldset')}
                 >
                   <legend
                     className="usa-legend usa-sr-only"
@@ -153,8 +151,8 @@ export const Inclusions = connect(
                       />
                     </div>
                   </div>
-                </FormGroup>
-              </fieldset>
+                </fieldset>
+              </FormGroup>
             )}
           </div>
         </fieldset>

@@ -1,10 +1,8 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { TrialCityOptions } from '../TrialCityOptions';
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const LocationInformationForm = connect(
   {
@@ -215,7 +213,7 @@ export const LocationInformationForm = connect(
             </div>
           </div>
 
-          <FormGroup errorText={validationErrors.postalCode} >
+          <FormGroup errorText={validationErrors.postalCode}>
             <label
               aria-label="zip code"
               className="usa-label"

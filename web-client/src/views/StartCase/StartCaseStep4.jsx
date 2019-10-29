@@ -149,7 +149,6 @@ export const StartCaseStep4 = connect(
                   validateStartCaseWizardSequence();
                 }}
               />
-              <ValidationText field="preferredTrialCity" />
             </div>
           </>
         )}

@@ -1,5 +1,4 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';

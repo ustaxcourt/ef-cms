@@ -11,12 +11,10 @@ import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { ScanBatchPreviewer } from './ScanBatchPreviewer';
 import { TrialCityOptions } from './TrialCityOptions';
-import { ValidationText } from '../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { limitLength } from '../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const StartCaseInternal = connect(
   {
