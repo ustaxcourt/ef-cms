@@ -24,10 +24,14 @@ exports.createCaseNoteInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const judgeUser = await applicationContext
+    .getUseCases()
+    .getJudgeForUserChambersInteractor({ applicationContext, user });
+
   const caseNote = {
     caseId,
     notes,
-    userId: user.userId,
+    userId: judgeUser.userId,
   };
 
   const createdCaseNote = await applicationContext

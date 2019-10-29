@@ -24,10 +24,14 @@ exports.updateCaseNoteInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const judgeUser = await applicationContext
+    .getUseCases()
+    .getJudgeForUserChambersInteractor({ applicationContext, user });
+
   const caseNoteEntity = new CaseNote({
     caseId,
     notes,
-    userId: user.userId,
+    userId: judgeUser.userId,
   });
 
   const caseNoteToUpdate = caseNoteEntity.validate().toRawObject();
