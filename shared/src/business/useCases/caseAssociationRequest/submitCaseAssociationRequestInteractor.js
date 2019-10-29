@@ -21,7 +21,7 @@ const {
  * the primary contact on the case, false otherwise
  * @param {string} providers.representingSecondary true if the user is representing
  * the secondary contact on the case, false otherwise
- * @returns {Promise<*>} the promise of the case assocation request
+ * @returns {Promise<*>} the promise of the case association request
  */
 exports.submitCaseAssociationRequestInteractor = async ({
   applicationContext,
