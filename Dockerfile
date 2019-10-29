@@ -16,7 +16,7 @@ RUN apt-get install -yq gconf-service libasound2 libatk1.0-0 libc6 libcairo2 lib
   libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 \
   libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
   ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget \
-  git bash openssh-client python python-dev python-pip python-setuptools ca-certificates groff less \
+  git bash openssh-client python python-dev python-pip python-setuptools ca-certificates less \
   unzip wget jq shellcheck
 
 ENV AWS_CLI_VERSION 1.16.31
