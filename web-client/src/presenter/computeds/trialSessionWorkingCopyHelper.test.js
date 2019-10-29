@@ -20,7 +20,7 @@ const TRIAL_SESSION = {
   state: 'CT',
   term: 'Fall',
   termYear: '2019',
-  trialClerk: 'Test Trial Clerk',
+  trialClerk: { name: 'Test Trial Clerk' },
   trialLocation: 'Hartford, Connecticut',
 };
 

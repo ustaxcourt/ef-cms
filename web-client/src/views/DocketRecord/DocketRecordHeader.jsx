@@ -7,7 +7,7 @@ import React from 'react';
 export const DocketRecordHeader = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
-    docketRecordHeaderHelper: state.docketRecordHeaderHelper,
+    docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableDocketRecordSequence:
       sequences.navigateToPrintableDocketRecordSequence,
@@ -18,7 +18,7 @@ export const DocketRecordHeader = connect(
   },
   ({
     caseDetailHelper,
-    docketRecordHeaderHelper,
+    docketRecordHelper,
     formattedCaseDetail,
     navigateToPrintableDocketRecordSequence,
     printDocketRecordSequence,
@@ -46,7 +46,7 @@ export const DocketRecordHeader = connect(
                   Entry
                 </Button>
               )}
-              {docketRecordHeaderHelper.showFileDocumentButton && (
+              {docketRecordHelper.showFileDocumentButton && (
                 <Button
                   href={`/case-detail/${formattedCaseDetail.docketNumber}/before-you-file-a-document`}
                   id="button-file-document"
