@@ -1,9 +1,8 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { TrialCityOptions } from '../TrialCityOptions';
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const LocationInformationForm = connect(
   {
@@ -23,12 +22,7 @@ export const LocationInformationForm = connect(
       <>
         <h2 className="margin-top-4">Location Information</h2>
         <div className="blue-container">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.trialLocation && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.trialLocation}>
             <label className="usa-label" htmlFor="trial-location">
               Trial location
             </label>
@@ -48,8 +42,7 @@ export const LocationInformationForm = connect(
               <option value="">-- Select --</option>
               <TrialCityOptions />
             </select>
-            <ValidationText field="trialLocation" />
-          </div>
+          </FormGroup>
 
           <div className="usa-form-group">
             <label className="usa-label" htmlFor="courthouse-name">
@@ -220,12 +213,7 @@ export const LocationInformationForm = connect(
             </div>
           </div>
 
-          <div
-            className={classNames(
-              'usa-form-group margin-bottom-0',
-              validationErrors.postalCode && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.postalCode}>
             <label
               aria-label="zip code"
               className="usa-label"
@@ -250,8 +238,7 @@ export const LocationInformationForm = connect(
                 });
               }}
             />
-            <ValidationText field="postalCode" />
-          </div>
+          </FormGroup>
         </div>
       </>
     );

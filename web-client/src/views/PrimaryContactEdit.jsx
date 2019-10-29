@@ -2,13 +2,12 @@ import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
 import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
+import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { InternationalAddress } from './StartCase/InternationalAddress';
-import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const PrimaryContactEdit = connect(
   {
@@ -71,13 +70,11 @@ export const PrimaryContactEdit = connect(
             </div>
 
             {primaryContactEditHelper.showInCareOf && (
-              <div
-                className={classNames(
-                  'usa-form-group',
+              <FormGroup
+                errorText={
                   validationErrors.contactPrimary &&
-                    validationErrors.contactPrimary.inCareOf &&
-                    'usa-form-group--error',
-                )}
+                  validationErrors.contactPrimary.inCareOf
+                }
               >
                 <label className="usa-label" htmlFor="inCareOf">
                   <span>
@@ -101,11 +98,7 @@ export const PrimaryContactEdit = connect(
                     });
                   }}
                 />
-                <Text
-                  bind="validationErrors.contactPrimary.inCareOf"
-                  className="usa-error-message"
-                />
-              </div>
+              </FormGroup>
             )}
 
             <Country
@@ -129,14 +122,12 @@ export const PrimaryContactEdit = connect(
                 onChange="updateCaseValueSequence"
               />
             )}
-            <div
-              className={classNames(
-                'usa-form-group margin-bottom-0',
+            <FormGroup
+              errorText={
                 validationErrors &&
-                  validationErrors.contactPrimary &&
-                  validationErrors.contactPrimary.phone &&
-                  'usa-form-group--error',
-              )}
+                validationErrors.contactPrimary &&
+                validationErrors.contactPrimary.phone
+              }
             >
               <label className="usa-label" htmlFor="phone">
                 Phone number
@@ -158,11 +149,7 @@ export const PrimaryContactEdit = connect(
                   });
                 }}
               />
-              <Text
-                bind={'validationErrors.contactPrimary.phone'}
-                className="usa-error-message"
-              />
-            </div>
+            </FormGroup>
           </div>
           <Button
             onClick={() => {
