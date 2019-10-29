@@ -1,3 +1,6 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 module.exports = {
   createUserLambda: require('./users/createUserLambda').handler,
   getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,

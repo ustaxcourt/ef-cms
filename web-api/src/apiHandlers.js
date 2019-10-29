@@ -1,3 +1,6 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 module.exports = {
   checkForReadyForTrialCases: require('./cases/checkForReadyForTrialCasesLambda')
     .handler,
