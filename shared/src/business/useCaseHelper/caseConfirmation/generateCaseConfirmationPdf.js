@@ -18,7 +18,13 @@ const confirmPugContent = fs.readFileSync(
 );
 const ustcLogoBuffer = fs.readFileSync('./shared/static/images/ustc_seal.png');
 
+/**
+ *
+ * @param {object} caseInfo a case entity
+ * @returns {object} the formatted information needed by the PDF
+ */
 const formattedCaseInfo = caseInfo => {
+  const { servedAt } = caseInfo.documents.find(doc => doc.servedAt);
   const formattedInfo = Object.assign(
     {
       docketNumber: `${caseInfo.docketNumber}${caseInfo.docketNumberSuffix ||
@@ -29,7 +35,7 @@ const formattedCaseInfo = caseInfo => {
         caseInfo.receivedAt,
         'MONTH_DAY_YEAR',
       ),
-      servedDate: '(SERVED ON DATE)',
+      servedDate: DateHandler.formatDateString(servedAt, 'MONTH_DAY_YEAR'),
       todaysDate: DateHandler.formatNow('MONTH_DAY_YEAR'),
     },
     caseInfo.contactPrimary,
@@ -38,7 +44,6 @@ const formattedCaseInfo = caseInfo => {
 };
 
 /**
- * NOTE: to make this work, you must save the petition as a petitionsclerk
  *
  * @param {object} caseInfo a raw object representing a petition
  * @returns {string} an html string resulting from rendering template with caseInfo
@@ -66,25 +71,18 @@ const generateCaseConfirmationPage = async caseInfo => {
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case
+ * @param {string} providers.caseEntity a case entity with its documents
  * @returns {Promise<*>} the promise of the document having been uploaded
  */
 exports.generateCaseConfirmationPdf = async ({
   applicationContext,
-  caseId,
+  caseEntity,
 }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByCaseId({
-      applicationContext,
-      caseId,
-    });
 
   let browser = null;
   let result = null;
@@ -101,7 +99,7 @@ exports.generateCaseConfirmationPdf = async ({
 
     let page = await browser.newPage();
 
-    const contentResult = await generateCaseConfirmationPage(caseToUpdate);
+    const contentResult = await generateCaseConfirmationPage(caseEntity);
     await page.setContent(contentResult);
 
     result = await page.pdf({
@@ -117,7 +115,7 @@ exports.generateCaseConfirmationPdf = async ({
     }
   }
 
-  const documentId = `case-${caseToUpdate.docketNumber}-confirmation.pdf`;
+  const documentId = `case-${caseEntity.docketNumber}-confirmation.pdf`;
 
   await new Promise(resolve => {
     const documentsBucket = applicationContext.environment.documentsBucketName;
