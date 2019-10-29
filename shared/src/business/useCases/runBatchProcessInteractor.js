@@ -124,10 +124,6 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
         applicationContext,
         workItemToUpdate: initializeCaseWorkItem,
       }),
-      applicationContext.getUseCaseHelpers().generateCaseConfirmationPdf({
-        applicationContext,
-        caseId: caseEntity.caseId,
-      }),
     ];
 
     if (caseEntity.isPaper) {
@@ -195,6 +191,10 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
       applicationContext.getPersistenceGateway().updateCase({
         applicationContext,
         caseToUpdate: caseEntity.validate().toRawObject(),
+      }),
+      applicationContext.getUseCaseHelpers().generateCaseConfirmationPdf({
+        applicationContext,
+        caseEntity,
       }),
     );
 
