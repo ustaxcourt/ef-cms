@@ -6,6 +6,7 @@ import { generateTitleAction } from '../actions/FileDocument/generateTitleAction
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCreateMessageModalDialogModalStateAction } from '../actions/WorkItem/setCreateMessageModalDialogModalStateAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { state } from 'cerebral';
@@ -26,7 +27,7 @@ export const openCreateMessageAlongsideDocketRecordQCModalSequence = [
       clearModalStateAction,
       generateTitleAction,
       setCreateMessageModalDialogModalStateAction,
-      set(state.showModal, 'CreateMessageAlongsideDocketRecordQCModal'),
+      setShowModalFactoryAction('CreateMessageAlongsideDocketRecordQCModal'),
     ],
   },
 ];

@@ -1,8 +1,7 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { setShowModalAction } from '../actions/setShowModalAction';
 
 export const openCleanModalSequence = [
   clearModalStateAction,
-  set(state.showModal, props.value),
+  setShowModalAction,
 ];
