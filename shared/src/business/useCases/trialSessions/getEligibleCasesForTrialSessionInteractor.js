@@ -32,6 +32,8 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
       trialSessionId,
     });
 
+  // Some manually added cases are considered calendared even when the
+  // trial session itself is not considered calendared (see issue #3254).
   let calendaredCases = [];
   if (trialSession.isCalendared === false && trialSession.caseOrder) {
     calendaredCases = await applicationContext
