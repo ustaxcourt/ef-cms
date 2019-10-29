@@ -18,7 +18,6 @@ import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentT
 import { contactsHelper } from './computeds/contactsHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
-import { docketRecordHeaderHelper } from './computeds/docketRecordHeaderHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentHelper } from './computeds/documentHelper';
@@ -93,7 +92,6 @@ export const state = {
   currentPageIndex: 0,
   currentTab: '',
   dashboardExternalHelper,
-  docketRecordHeaderHelper,
   docketRecordHelper,
   docketRecordIndex: 0,
   document: {},
