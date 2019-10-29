@@ -11,7 +11,7 @@ const {
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the case id
- * @returns {Promise<*>} the promise of the pending case assocation request
+ * @returns {Promise<*>} the promise of the pending case association request
  */
 exports.submitPendingCaseAssociationRequestInteractor = async ({
   applicationContext,
