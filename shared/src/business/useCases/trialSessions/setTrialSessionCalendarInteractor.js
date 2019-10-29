@@ -37,6 +37,16 @@ exports.setTrialSessionCalendarInteractor = async ({
 
   trialSessionEntity.validate();
 
+  trialSessionEntity.setAsCalendared();
+
+  //get cases that have been manually added so we can set them as calendared
+  const manuallyAddedCases = await applicationContext
+    .getPersistenceGateway()
+    .getCalendaredCasesForTrialSession({
+      applicationContext,
+      trialSessionId,
+    });
+
   const eligibleCases = await applicationContext
     .getPersistenceGateway()
     .getEligibleCasesForTrialSession({
@@ -45,7 +55,18 @@ exports.setTrialSessionCalendarInteractor = async ({
       skPrefix: trialSessionEntity.generateSortKeyPrefix(),
     });
 
-  const setTrialSessionCalendar = async caseRecord => {
+  const setManuallyAddedCaseAsCalendared = async caseRecord => {
+    const caseEntity = new Case(caseRecord, { applicationContext });
+
+    caseEntity.setAsCalendared(trialSessionEntity);
+
+    await applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+  };
+
+  const setTrialSessionCalendarForEligibleCase = async caseRecord => {
     const { caseId } = caseRecord;
     const caseEntity = new Case(caseRecord, { applicationContext });
 
@@ -66,9 +87,8 @@ exports.setTrialSessionCalendarInteractor = async ({
       });
   };
 
-  await Promise.all(eligibleCases.map(setTrialSessionCalendar));
-
-  trialSessionEntity.setAsCalendared();
+  await Promise.all(manuallyAddedCases.map(setManuallyAddedCaseAsCalendared));
+  await Promise.all(eligibleCases.map(setTrialSessionCalendarForEligibleCase));
 
   return await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
