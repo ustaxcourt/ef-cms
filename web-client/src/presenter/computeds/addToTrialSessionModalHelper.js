@@ -5,9 +5,9 @@ export const addToTrialSessionModalHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const { showAllLocations, trialSessionId, trialSessions } = get(state.modal);
 
-  const selectedTrialSession = trialSessions.find(
-    session => session.trialSessionId === trialSessionId,
-  );
+  const selectedTrialSession =
+    trialSessions &&
+    trialSessions.find(session => session.trialSessionId === trialSessionId);
 
   let trialSessionsFormatted = trialSessions;
   let trialSessionsFormattedByState = null;
