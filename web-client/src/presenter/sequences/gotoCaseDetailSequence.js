@@ -23,6 +23,12 @@ const gotoCaseDetailExternal = [
   setCurrentPageAction('CaseDetail'),
 ];
 
+const gotoCaseDetailInternalWithNotes = [
+  getCaseNoteForCaseAction,
+  setCaseNoteOnCaseDetailAction,
+  ...gotoCaseDetailInternal,
+];
+
 export const gotoCaseDetailSequence = [
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
@@ -41,7 +47,6 @@ export const gotoCaseDetailSequence = [
         'adc',
         'admissionsclerk',
         'calendarclerk',
-        'chambers',
         'clerkofcourt',
         'docketclerk',
         'petitionsclerk',
@@ -53,10 +58,7 @@ export const gotoCaseDetailSequence = [
       ['petitioner', 'practitioner', 'respondent'],
       gotoCaseDetailExternal,
     ),
-    judge: [
-      getCaseNoteForCaseAction,
-      setCaseNoteOnCaseDetailAction,
-      ...gotoCaseDetailInternal,
-    ],
+    chambers: gotoCaseDetailInternalWithNotes,
+    judge: gotoCaseDetailInternalWithNotes,
   },
 ];
