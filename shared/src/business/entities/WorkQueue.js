@@ -48,7 +48,7 @@ exports.SECTIONS = sortBy([
   exports.CHAMBERS_SECTION,
   exports.CLERK_OF_COURT_SECTION,
   exports.DOCKET_SECTION,
-  // intentially leavinvg out IRS_BATCH_SYSTEM_SECTION since that is an internal section
+  // intentionally leaving out IRS_BATCH_SYSTEM_SECTION since that is an internal section
   exports.PETITIONS_SECTION,
   exports.TRIAL_CLERKS_SECTION,
 ]);
