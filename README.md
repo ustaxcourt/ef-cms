@@ -118,10 +118,19 @@ practitioner
 practitioner1 - practitioner4
 adc
 judgeArmen
+armensChambers
 judgeAshford
+ashfordsChambers
 judgeBuch
+buchsChambers
 judgeCarluzzo
+carluzzosChambers
 judgeCohen
+cohensChambers
+admissionsclerk
+calendarclerk
+clerkofcourt
+trialclerk
 ```
 
 No password is required.
@@ -143,6 +152,8 @@ judgeBuch@example.com
 judgeCarluzzo@example.com
 judgeCohen@example.com
 ```
+
+For a full list of available users, see [court_users.csv](web-api/court_users.csv)
 
 The password for all accounts is:
 
