@@ -1,5 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { Hint } from '../../ustc-ui/Hint/Hint';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -127,6 +128,13 @@ export const AddToTrialModal = connect(
                 )}
             </BindedSelect>
           </FormGroup>
+          {addToTrialSessionModalHelper.showSessionNotSetAlert && (
+            <Hint>
+              This trial session has not been set. This case will be added to
+              the eligilble cases for this session and prioritized when the
+              calendar is set.{' '}
+            </Hint>
+          )}
         </div>
       </ModalDialog>
     );
