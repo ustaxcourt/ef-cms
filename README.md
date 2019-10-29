@@ -153,7 +153,7 @@ judgeCarluzzo@example.com
 judgeCohen@example.com
 ```
 
-For a full list of available users, see [court_users.csv](web-api/court_users.csv)
+For a full list of available users, see [court_users.csv](web-api/court_users.csv).
 
 The password for all accounts is:
 
