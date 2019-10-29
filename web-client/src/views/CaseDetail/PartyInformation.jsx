@@ -5,9 +5,9 @@ import { EditPractitionersModal } from './EditPractitionersModal';
 import { EditRespondentsModal } from './EditRespondentsModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
 import { RespondentExistsModal } from './RespondentExistsModal';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -251,14 +251,7 @@ const PartyInformation = connect(
           </span>
         </div>
         <div className="grid-col-3 margin-top-neg-05">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.practitionerSearchError
-                ? 'usa-form-group--error margin-bottom-2'
-                : 'margin-bottom-0',
-            )}
-          >
+          <FormGroup errorText={validationErrors.practitionerSearchError}>
             <form
               className="usa-search"
               onSubmit={e => {
@@ -300,12 +293,8 @@ const PartyInformation = connect(
                   <span className="usa-search__submit-text">Search</span>
                 </button>
               </div>
-              <Text
-                bind="validationErrors.practitionerSearchError"
-                className="usa-error-message"
-              />
             </form>
-          </div>
+          </FormGroup>
         </div>
       </>
     );
@@ -321,14 +310,7 @@ const PartyInformation = connect(
           </span>
         </div>
         <div className="grid-col-3 margin-top-neg-05">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.respondentSearchError
-                ? 'usa-form-group--error margin-bottom-2'
-                : 'margin-bottom-0',
-            )}
-          >
+          <FormGroup errorText={validationErrors.respondentSearchError}>
             <form
               className="usa-search"
               onSubmit={e => {
@@ -370,12 +352,8 @@ const PartyInformation = connect(
                   <span className="usa-search__submit-text">Search</span>
                 </button>
               </div>
-              <Text
-                bind="validationErrors.respondentSearchError"
-                className="usa-error-message"
-              />
             </form>
-          </div>
+          </FormGroup>
         </div>
       </>
     );
