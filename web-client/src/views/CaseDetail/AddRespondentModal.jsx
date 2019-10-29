@@ -1,5 +1,5 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -34,12 +34,7 @@ export const AddRespondentModal = connect(
         title="Add Respondent Counsel"
       >
         <div className="ustc-add-counsel-modal">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.user && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.user}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="counsel-matches-legend">
                 {caseDetailHelper.respondentSearchResultsCount} counsel
@@ -109,12 +104,8 @@ export const AddRespondentModal = connect(
                     ),
                   )}
               </div>
-              <Text
-                bind="validationErrors.user"
-                className="usa-error-message"
-              />
             </fieldset>
-          </div>
+          </FormGroup>
         </div>
       </ModalDialog>
     );

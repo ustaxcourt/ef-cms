@@ -1,9 +1,8 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const RemoveFromTrialSessionModal = connect(
   {
@@ -37,12 +36,7 @@ export const RemoveFromTrialSessionModal = connect(
             This case will be removed from this trial session.{' '}
           </div>
 
-          <div
-            className={classNames(
-              'usa-form-group margin-bottom-0',
-              validationErrors.disposition && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.disposition}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="display-block" id="disposition-legend">
                 Disposition
@@ -63,12 +57,8 @@ export const RemoveFromTrialSessionModal = connect(
                   validateRemoveFromTrialSessionSequence();
                 }}
               />
-              <Text
-                bind="validationErrors.disposition"
-                className="usa-error-message"
-              />
             </fieldset>
-          </div>
+          </FormGroup>
         </div>
       </ModalDialog>
     );
