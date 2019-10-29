@@ -302,6 +302,9 @@ const {
   getInternalUsersInteractor,
 } = require('../../shared/src/business/useCases/users/getInternalUsersInteractor');
 const {
+  getJudgeForUserChambersInteractor,
+} = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
+const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
@@ -881,6 +884,7 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,
+        getJudgeForUserChambersInteractor,
         getNotificationsInteractor,
         getPractitionersBySearchKeyInteractor,
         getRespondentsBySearchKeyInteractor,

@@ -24,12 +24,16 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const judgeUser = await applicationContext
+    .getUseCases()
+    .getJudgeForUserChambersInteractor({ applicationContext, user });
+
   const trialSessionWorkingCopy = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionWorkingCopy({
       applicationContext,
       trialSessionId,
-      userId: user.userId,
+      userId: judgeUser.userId,
     });
 
   if (trialSessionWorkingCopy) {

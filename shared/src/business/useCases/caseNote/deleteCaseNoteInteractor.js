@@ -19,9 +19,13 @@ exports.deleteCaseNoteInteractor = async ({ applicationContext, caseId }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const judgeUser = await applicationContext
+    .getUseCases()
+    .getJudgeForUserChambersInteractor({ applicationContext, user });
+
   return await applicationContext.getPersistenceGateway().deleteCaseNote({
     applicationContext,
     caseId,
-    userId: user.userId,
+    userId: judgeUser.userId,
   });
 };

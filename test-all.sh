@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # This runs the same build steps that run in Circle, except sonar
-rm -rf node_modules dist
+rm -rf node_modules dist .elasticsearch .dynamodb
 npm i
 docker build -t efcms -f Dockerfile .
 docker run --rm efcms /bin/sh -c 'npm run lint'

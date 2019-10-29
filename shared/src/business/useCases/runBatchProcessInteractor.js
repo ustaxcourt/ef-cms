@@ -135,12 +135,19 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
         wi => wi.isQC === true,
       );
 
+      const qcWorkItemUser = await applicationContext
+        .getPersistenceGateway()
+        .getUserById({
+          applicationContext,
+          userId: qcWorkItem.completedByUserId,
+        });
+
       const message = 'Case confirmation is ready to be printed.';
 
       const workItemEntity = new WorkItem(
         {
-          assigneeId: qcWorkItem.completedByUserId,
-          assigneeName: qcWorkItem.completedBy,
+          assigneeId: qcWorkItemUser.userId,
+          assigneeName: qcWorkItemUser.name,
           caseId: caseEntity.caseId,
           caseStatus: caseEntity.status,
           caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
@@ -152,7 +159,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
           },
           isInitializeCase: false,
           isQC: false,
-          section: 'petitions',
+          section: qcWorkItemUser.section,
           sentBy: 'IRS Holding Queue',
           sentBySection: IRS_BATCH_SYSTEM_SECTION,
           sentByUserId: IRS_BATCH_SYSTEM_USER_ID,
@@ -165,8 +172,8 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
           from: 'IRS Holding Queue',
           fromUserId: IRS_BATCH_SYSTEM_USER_ID,
           message,
-          to: qcWorkItem.completedBy,
-          toUserId: qcWorkItem.completedByUserId,
+          to: qcWorkItemUser.name,
+          toUserId: qcWorkItemUser.userId,
         },
         { applicationContext },
       );
