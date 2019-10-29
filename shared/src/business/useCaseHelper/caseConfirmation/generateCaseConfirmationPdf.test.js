@@ -47,7 +47,7 @@ describe('generateCaseConfirmationPdf', () => {
         }),
         logger: { error: () => {}, info: () => {} },
       },
-      htmlString: 'Hello World from the use case',
+      caseEntity: { documents: [{ servedAt: 'servedAt' }] },
     });
 
     expect(result).toEqual('https://www.example.com');
