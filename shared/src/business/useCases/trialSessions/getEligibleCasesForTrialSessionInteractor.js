@@ -32,17 +32,32 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
       trialSessionId,
     });
 
+  let calendaredCases = [];
+  if (trialSession.isCalendared === false && trialSession.caseOrder) {
+    calendaredCases = await applicationContext
+      .getUseCases()
+      .getCalendaredCasesForTrialSessionInteractor({
+        applicationContext,
+        trialSessionId,
+      });
+  }
+
   const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
   });
 
   trialSessionEntity.validate();
 
-  return await applicationContext
+  const eligibleCases = await applicationContext
     .getPersistenceGateway()
     .getEligibleCasesForTrialSession({
       applicationContext,
-      limit: trialSessionEntity.maxCases + ELIGIBLE_CASES_BUFFER,
+      limit:
+        trialSessionEntity.maxCases +
+        ELIGIBLE_CASES_BUFFER -
+        calendaredCases.length,
       skPrefix: trialSessionEntity.generateSortKeyPrefix(),
     });
+
+  return calendaredCases.concat(eligibleCases);
 };
