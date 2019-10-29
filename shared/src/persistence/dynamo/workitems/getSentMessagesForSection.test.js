@@ -55,7 +55,7 @@ describe('getSentMessagesForSection', () => {
     };
     const items = await getSentMessagesForSection({
       applicationContext,
-      seciton: 'docket',
+      section: 'docket',
     });
     expect(items).toEqual([
       {
