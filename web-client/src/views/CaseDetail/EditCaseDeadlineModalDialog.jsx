@@ -1,3 +1,4 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -31,12 +32,7 @@ export const EditCaseDeadlineModalDialog = connect(
         title="Edit Deadline"
       >
         <div className="ustc-create-order-modal">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.deadlineDate && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.deadlineDate}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="deadline-date-legend">
                 Due date
@@ -116,19 +112,9 @@ export const EditCaseDeadlineModalDialog = connect(
                 </div>
               </div>
             </fieldset>
-            {validationErrors.deadlineDate && (
-              <div className="usa-error-message beneath">
-                {validationErrors.deadlineDate}
-              </div>
-            )}
-          </div>
+          </FormGroup>
 
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.description && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.description}>
             <label className="usa-label" htmlFor="description">
               What is this deadline for?
             </label>
@@ -147,12 +133,7 @@ export const EditCaseDeadlineModalDialog = connect(
                 validateCaseDeadlineSequence();
               }}
             />
-            {validationErrors.description && (
-              <div className="usa-error-message beneath">
-                {validationErrors.description}
-              </div>
-            )}
-          </div>
+          </FormGroup>
         </div>
       </ModalDialog>
     );

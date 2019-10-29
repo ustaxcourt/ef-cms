@@ -1,4 +1,5 @@
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -86,12 +87,7 @@ export const IRSNotice = connect(
 
     const renderIrsNoticeDate = () => {
       return (
-        <div
-          className={classNames(
-            'usa-form-group margin-bottom-0',
-            caseDetailErrors.irsNoticeDate && 'usa-form-group--error',
-          )}
-        >
+        <FormGroup errorText={caseDetailErrors.irsNoticeDate}>
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="date-of-notice-legend">
               Date of notice <span className="usa-hint">(optional)</span>
@@ -177,12 +173,7 @@ export const IRSNotice = connect(
               </div>
             </div>
           </fieldset>
-          {caseDetailErrors.irsNoticeDate && (
-            <div className="usa-error-message" role="alert">
-              {caseDetailErrors.irsNoticeDate}
-            </div>
-          )}
-        </div>
+        </FormGroup>
       );
     };
 

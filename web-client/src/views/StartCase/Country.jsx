@@ -1,8 +1,7 @@
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const Country = connect(
   {
@@ -25,14 +24,12 @@ export const Country = connect(
   }) => {
     return (
       <React.Fragment>
-        <div
-          className={classNames(
-            'usa-form-group',
+        <FormGroup
+          errorText={
             validationErrors &&
-              validationErrors[type] &&
-              validationErrors[type].countryType &&
-              'usa-form-group--error',
-          )}
+            validationErrors[type] &&
+            validationErrors[type].countryType
+          }
         >
           <label className="usa-label" htmlFor={`${type}.countryType`}>
             Country
@@ -61,17 +58,14 @@ export const Country = connect(
               - International -
             </option>
           </select>
-          <ValidationText field={`${type}.countryType`} />
-        </div>
+        </FormGroup>
         {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
-          <div
-            className={classNames(
-              'usa-form-group',
+          <FormGroup
+            errorText={
               validationErrors &&
-                validationErrors[type] &&
-                validationErrors[type].country &&
-                'usa-form-group--error',
-            )}
+              validationErrors[type] &&
+              validationErrors[type].country
+            }
           >
             <label className="usa-label" htmlFor={`${type}.country`}>
               Country name
@@ -95,8 +89,7 @@ export const Country = connect(
                 });
               }}
             />
-            <ValidationText field={`${type}.country`} />
-          </div>
+          </FormGroup>
         )}
       </React.Fragment>
     );
