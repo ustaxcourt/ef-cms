@@ -4,13 +4,14 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
 const { runBatchProcessInteractor } = require('./runBatchProcessInteractor');
 const { User } = require('../entities/User');
+const { Case } = require('../entities/cases/Case');
 
 const MOCK_WORK_ITEMS = [
   {
     assigneeId: null,
     assigneeName: 'IRSBatchSystem',
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: 'Batched for IRS',
+    caseStatus: Case.STATUS_TYPES.batchedForIRS,
     completedAt: '2018-12-27T18:06:02.968Z',
     completedBy: 'Petitioner',
     completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -138,7 +139,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     });
     expect(updateCaseStub.getCall(0).args[0]).toMatchObject({
       caseToUpdate: {
-        status: 'General Docket - Not at Issue',
+        status: Case.STATUS_TYPES.generalDocket,
       },
     });
   });
@@ -202,7 +203,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     });
     expect(updateCaseStub.getCall(1).args[0]).toMatchObject({
       caseToUpdate: {
-        status: 'General Docket - Not at Issue',
+        status: Case.STATUS_TYPES.generalDocket,
       },
     });
   });
@@ -262,7 +263,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     expect(deleteDocumentStub.getCall(2)).toEqual(null);
     expect(updateCaseStub.getCall(2).args[0]).toMatchObject({
       caseToUpdate: {
-        status: 'General Docket - Not at Issue',
+        status: Case.STATUS_TYPES.generalDocket,
       },
     });
   });
@@ -327,7 +328,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     });
     expect(updateCaseStub.getCall(1).args[0]).toMatchObject({
       caseToUpdate: {
-        status: 'General Docket - Not at Issue',
+        status: Case.STATUS_TYPES.generalDocket,
       },
     });
     expect(saveWorkItemForPaperStub.calledOnce).toEqual(true);
