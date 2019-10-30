@@ -1,7 +1,7 @@
 import { batchDownloadTrialSessionInteractor } from './batchDownloadTrialSessionInteractor';
 
-const { MOCK_CASE } = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
 describe('batchDownloadTrialSessionInteractor', () => {

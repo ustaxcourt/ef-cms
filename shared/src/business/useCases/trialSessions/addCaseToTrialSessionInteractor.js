@@ -2,9 +2,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { Case } = require('../../entities/cases/Case');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * addCaseToTrialSessionInteractor
@@ -48,12 +48,6 @@ exports.addCaseToTrialSessionInteractor = async ({
 
   if (caseEntity.isCalendared()) {
     throw new Error('The case is already calendared');
-  }
-
-  if (!trialSession.isCalendared) {
-    throw new Error(
-      'The trial session must already be calendared to manually add a case.',
-    );
   }
 
   if (trialSessionEntity.isCaseAlreadyCalendared(caseEntity)) {

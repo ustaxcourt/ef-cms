@@ -4,8 +4,8 @@ const {
   CaseExternalIncomplete,
 } = require('../entities/cases/CaseExternalIncomplete');
 const { CaseExternal } = require('../entities/cases/CaseExternal');
-const { createCaseInteractor } = require('./createCaseInteractor');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { createCaseInteractor } = require('./createCaseInteractor');
 const { User } = require('../entities/User');
 
 describe('createCaseInteractor', () => {

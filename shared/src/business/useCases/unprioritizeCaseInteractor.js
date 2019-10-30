@@ -1,9 +1,9 @@
-const { Case } = require('../entities/cases/Case');
-const { UnauthorizedError } = require('../../errors/errors');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const { Case } = require('../entities/cases/Case');
+const { UnauthorizedError } = require('../../errors/errors');
 
 /**
  * used for removing the high priority from a case

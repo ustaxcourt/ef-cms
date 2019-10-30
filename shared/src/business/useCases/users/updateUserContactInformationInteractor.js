@@ -1,8 +1,8 @@
-const { addCoverToPdf } = require('../addCoversheetInteractor');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { addCoverToPdf } = require('../addCoversheetInteractor');
 const { capitalize, clone } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');

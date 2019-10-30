@@ -1,9 +1,6 @@
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
+import { clearPreferredTrialCityAction } from '../actions/clearPreferredTrialCityAction';
 
 /**
  * clear state.form.preferredTrialCity
  */
-export const clearPreferredTrialCitySequence = [
-  set(state.form.preferredTrialCity, ''),
-];
+export const clearPreferredTrialCitySequence = [clearPreferredTrialCityAction];
