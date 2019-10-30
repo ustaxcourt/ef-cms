@@ -9,7 +9,7 @@ export default (test, adjustExpectedCountBy = 0) => {
     const helper = await runCompute(workQueueHelper, {
       state: test.getState(),
     });
-    if (test.petitionsClerkMyMessagesInboxCount) {
+    if (test.petitionsClerkMyMessagesInboxCount != null) {
       expect(helper.inboxCount).toEqual(
         test.petitionsClerkMyMessagesInboxCount + adjustExpectedCountBy,
       );
