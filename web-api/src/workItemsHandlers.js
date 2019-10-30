@@ -1,6 +1,3 @@
-require('core-js/stable');
-require('regenerator-runtime/runtime');
-
 module.exports = {
   assignWorkItemsLambda: require('./workitems/assignWorkItemsLambda').handler,
   completeWorkItemLambda: require('./workitems/completeWorkItemLambda').handler,

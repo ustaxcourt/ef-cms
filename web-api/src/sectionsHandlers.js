@@ -1,6 +1,3 @@
-require('core-js/stable');
-require('regenerator-runtime/runtime');
-
 module.exports = {
   getDocumentQCBatchedForSectionLambda: require('./workitems/getDocumentQCBatchedForSectionLambda')
     .handler,
