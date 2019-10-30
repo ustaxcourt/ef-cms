@@ -1,3 +1,4 @@
+import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { documentDetailHelper as documentDetailHelperComputed } from '../../src/presenter/computeds/documentDetailHelper';
 import { runCompute } from 'cerebral/test';
 import { waitForRouter } from '../helpers';
@@ -40,7 +41,7 @@ export default test => {
       .find(
         item =>
           item.docketNumber === test.docketNumber &&
-          item.caseStatus === 'Batched for IRS',
+          item.caseStatus === Case.STATUS_TYPES.batchedForIRS,
       );
 
     // verify that the section workitems are in state
@@ -85,7 +86,9 @@ export default test => {
       workQueueIsInternal: false,
     });
 
-    expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
+    expect(test.getState('workQueue.0.caseStatus')).toEqual(
+      Case.STATUS_TYPES.recalled,
+    );
     const recalledWorkItem = test
       .getState('workQueue')
       .find(
@@ -107,8 +110,12 @@ export default test => {
     });
 
     expect(test.getState('caseDetail.docketNumber')).toEqual(docketNumber);
-    expect(test.getState('workQueue.0.caseStatus')).toEqual('Recalled');
-    expect(test.getState('caseDetail.status')).toEqual('Recalled');
+    expect(test.getState('workQueue.0.caseStatus')).toEqual(
+      Case.STATUS_TYPES.recalled,
+    );
+    expect(test.getState('caseDetail.status')).toEqual(
+      Case.STATUS_TYPES.recalled,
+    );
 
     const documentDetailHelperRecalled = runCompute(documentDetailHelper, {
       state: test.getState(),
@@ -172,7 +179,7 @@ export default test => {
       .find(
         item =>
           item.docketNumber === test.docketNumber &&
-          item.caseStatus === 'Batched for IRS',
+          item.caseStatus === Case.STATUS_TYPES.batchedForIRS,
       );
     expect(workItem).toBeDefined();
   });
