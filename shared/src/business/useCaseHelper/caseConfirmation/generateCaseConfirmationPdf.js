@@ -1,5 +1,4 @@
 const DateHandler = require('../../utilities/DateHandler');
-const fs = require('fs');
 const pug = require('pug');
 const sass = require('node-sass');
 const {
