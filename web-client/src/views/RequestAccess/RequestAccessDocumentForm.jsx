@@ -80,7 +80,7 @@ export const RequestAccessDocumentForm = connect(
                   className="margin-top-1"
                   onClick={() =>
                     openCleanModalSequence({
-                      value: 'WhatCanIIncludeModalOverlay',
+                      showModal: 'WhatCanIIncludeModalOverlay',
                     })
                   }
                 >

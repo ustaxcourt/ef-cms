@@ -1,8 +1,8 @@
 const sinon = require('sinon');
-const { getCaseInteractor } = require('./getCaseInteractor');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { User } = require('../entities/User');
+const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { User } = require('../entities/User');
 const { documents } = MOCK_CASE;
 
 describe('Get case', () => {

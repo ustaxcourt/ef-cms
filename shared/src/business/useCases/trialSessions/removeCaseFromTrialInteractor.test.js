@@ -2,8 +2,8 @@ const sinon = require('sinon');
 const {
   removeCaseFromTrialInteractor,
 } = require('./removeCaseFromTrialInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
 const MOCK_TRIAL_SESSION = {

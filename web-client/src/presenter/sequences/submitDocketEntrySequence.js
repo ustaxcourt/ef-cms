@@ -23,6 +23,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
 import { setIsUpdatingWithFileAction } from '../actions/DocketEntry/setIsUpdatingWithFileAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -65,7 +66,7 @@ const afterEntryCreatedOrUpdated = [
 export const submitDocketEntrySequence = [
   checkForActiveBatchesAction,
   {
-    hasActiveBatches: [set(state.showModal, 'UnfinishedScansModal')],
+    hasActiveBatches: [setShowModalFactoryAction('UnfinishedScansModal')],
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,

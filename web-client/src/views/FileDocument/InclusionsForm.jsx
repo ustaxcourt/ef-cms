@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Text } from '../../ustc-ui/Text/Text';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -16,7 +16,6 @@ export const InclusionsForm = connect(
       sequences.updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
-    validationBind: props.validationBind,
     validationData: state[props.validationBind],
   },
   ({
@@ -26,7 +25,6 @@ export const InclusionsForm = connect(
     type,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
-    validationBind,
     validationData,
   }) => {
     return (
@@ -46,7 +44,7 @@ export const InclusionsForm = connect(
                 link
                 onClick={() =>
                   openCleanModalSequence({
-                    value: 'WhatCanIIncludeModalOverlay',
+                    showModal: 'WhatCanIIncludeModalOverlay',
                   })
                 }
               >
@@ -115,14 +113,10 @@ export const InclusionsForm = connect(
           </fieldset>
         </div>
         {data.certificateOfService && (
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationData &&
-                validationData.certificateOfServiceDate &&
-                'usa-form-group--error',
-              !fileDocumentHelper[type].showObjection && 'margin-bottom-0',
-            )}
+          <FormGroup
+            errorText={
+              validationData && validationData.certificateOfServiceDate
+            }
           >
             <fieldset className="service-date usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id={`${type}-service-date-legend`}>
@@ -230,11 +224,7 @@ export const InclusionsForm = connect(
                 </div>
               </div>
             </fieldset>
-            <Text
-              bind={`${validationBind}.certificateOfServiceDate`}
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
         )}
       </>
     );

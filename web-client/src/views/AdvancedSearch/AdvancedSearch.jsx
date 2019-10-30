@@ -5,11 +5,9 @@ import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SearchResults } from './SearchResults';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const AdvancedSearch = connect(
   {
@@ -145,13 +143,11 @@ export const AdvancedSearch = connect(
                 <div className="tablet:grid-col-4">
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-7">
-                      <div
-                        className={classNames(
-                          'usa-form-group margin-bottom-0',
-                          (validationErrors.yearFiledMin ||
-                            validationErrors.yearFiledMax) &&
-                            'usa-form-group--error',
-                        )}
+                      <FormGroup
+                        errorText={[
+                          validationErrors.yearFiledMin,
+                          validationErrors.yearFiledMax,
+                        ]}
                       >
                         <fieldset className="usa-fieldset margin-bottom-0">
                           <legend
@@ -195,16 +191,8 @@ export const AdvancedSearch = connect(
                               }}
                             />
                           </div>
-                          <Text
-                            bind="validationErrors.yearFiledMin"
-                            className="usa-error-message"
-                          />{' '}
-                          <Text
-                            bind="validationErrors.yearFiledMax"
-                            className="usa-error-message"
-                          />
                         </fieldset>
-                      </div>
+                      </FormGroup>
                     </div>
 
                     <div className="tablet:grid-col-5">
