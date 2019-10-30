@@ -11,6 +11,14 @@ import { state } from 'cerebral';
 export const addToTrialSessionAction = async ({ applicationContext, get }) => {
   const { caseId } = get(state.caseDetail);
   const { trialSessionId } = get(state.modal);
+  const trialSessions = get(state.trialSessions);
+
+  const selectedTrialSession =
+    trialSessions &&
+    trialSessions.find(session => session.trialSessionId === trialSessionId);
+
+  const sessionIsCalendared =
+    selectedTrialSession && selectedTrialSession.isCalendared;
 
   const caseDetail = await applicationContext
     .getUseCases()
@@ -20,11 +28,20 @@ export const addToTrialSessionAction = async ({ applicationContext, get }) => {
       trialSessionId,
     });
 
-  return {
-    alertSuccess: {
+  let alertSuccess;
+  if (sessionIsCalendared) {
+    alertSuccess = {
       message: 'Trial details are visible under Trial Information.',
       title: 'This case has been set for trial',
-    },
+    };
+  } else {
+    alertSuccess = {
+      message: 'This case will be set for trial when the calendar is set.',
+      title: 'This case has been scheduled for trial',
+    };
+  }
+  return {
+    alertSuccess,
     caseDetail,
   };
 };
