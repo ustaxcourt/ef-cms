@@ -79,7 +79,7 @@ RUN cp /lib64/libgcrypt.so.11 lib/.
 RUN cp /lib64/libgcrypt.so.11.8.2 lib/.
 RUN cp /usr/lib64/libgpg-error.so.0 lib/.
 RUN cp /usr/lib64/libgpg-error.so.0.10.0 lib/.
-RUN cp /usr/lib64/libelf-0.170.so lib/.
+RUN cp /usr/lib64/libelf-*.so lib/.
 RUN cp /usr/lib64/libelf.so.1 lib/.
 RUN cp /usr/lib64/libbz2.so.1 lib/.
 RUN cp /usr/lib64/libbz2.so.1.0.6 lib/.
