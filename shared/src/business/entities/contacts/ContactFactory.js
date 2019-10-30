@@ -1,11 +1,11 @@
 const joi = require('joi-browser');
 
 const {
-  joiValidationDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
-const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
+const {
+  joiValidationDecorator,
+} = require('../../../utilities/JoiValidationDecorator');
 
 const ContactFactory = {};
 

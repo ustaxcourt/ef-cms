@@ -2,13 +2,13 @@ const moment = require('moment');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
-const { TrialSession } = require('../trialSessions/TrialSession');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
-const { WorkItem } = require('../WorkItem');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
+const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
   let applicationContext;

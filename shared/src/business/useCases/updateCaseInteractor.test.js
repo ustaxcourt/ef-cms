@@ -1,7 +1,7 @@
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 const { omit } = require('lodash');
 const { updateCaseInteractor } = require('./updateCaseInteractor');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { User } = require('../entities/User');
 
 const MOCK_CASE = {

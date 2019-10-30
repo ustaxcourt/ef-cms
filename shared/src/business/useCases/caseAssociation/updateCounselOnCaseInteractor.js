@@ -3,10 +3,10 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { User } = require('../../entities/User');
 const { Practitioner } = require('../../entities/Practitioner');
 const { Respondent } = require('../../entities/Respondent');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 /**
  * updateCounselOnCaseInteractor

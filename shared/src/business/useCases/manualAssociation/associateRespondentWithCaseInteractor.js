@@ -1,10 +1,10 @@
 const {
+  associateRespondentToCase,
+} = require('../../useCaseHelper/caseAssociation/associateRespondentToCase');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const {
-  associateRespondentToCase,
-} = require('../../useCaseHelper/caseAssociation/associateRespondentToCase');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
