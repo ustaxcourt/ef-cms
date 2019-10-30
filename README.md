@@ -146,11 +146,10 @@ docketclerk1@example.com – docketclerk5@example.com
 respondent1@example.com – respondent10@example.com
 practitioner1@example.com – practitioner10@example.com
 adc1@example.com – adc5@example.com
-judgeArmen@example.com
-judgeAshford@example.com
-judgeBuch@example.com
-judgeCarluzzo@example.com
-judgeCohen@example.com
+jashford@example.com
+jbuch@example.com
+jcarluzzo@example.com
+jcohen@example.com
 ```
 
 For a full list of available users, see [court_users.csv](web-api/court_users.csv).
