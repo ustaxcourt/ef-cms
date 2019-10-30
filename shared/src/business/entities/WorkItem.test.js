@@ -1,5 +1,5 @@
-const { Message } = require('./Message');
 const { Case } = require('./cases/Case');
+const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
 
 describe('WorkItem', () => {

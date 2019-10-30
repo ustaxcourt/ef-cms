@@ -2,8 +2,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
 const { Case } = require('../../entities/cases/Case');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * getAllCaseDeadlinesInteractor

@@ -2,9 +2,9 @@ const sinon = require('sinon');
 const {
   fileExternalDocumentInteractor,
 } = require('./fileExternalDocumentInteractor');
+const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { User } = require('../../entities/User');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 
 describe('fileExternalDocumentInteractor', () => {
   let applicationContext;

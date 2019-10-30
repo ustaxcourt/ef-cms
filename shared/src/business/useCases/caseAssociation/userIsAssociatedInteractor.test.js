@@ -1,5 +1,5 @@
-const { userIsAssociated } = require('./userIsAssociatedInteractor');
 const { User } = require('../../entities/User');
+const { userIsAssociated } = require('./userIsAssociatedInteractor');
 
 describe('userIsAssociated', () => {
   const applicationContext = {};

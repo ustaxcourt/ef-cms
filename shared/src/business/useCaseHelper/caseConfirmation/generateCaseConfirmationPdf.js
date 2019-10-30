@@ -1,6 +1,6 @@
+const DateHandler = require('../../utilities/DateHandler');
 const pug = require('pug');
 const sass = require('node-sass');
-const DateHandler = require('../../utilities/DateHandler');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,

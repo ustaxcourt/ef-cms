@@ -1,7 +1,7 @@
 const sinon = require('sinon');
+const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { fileDocketEntryInteractor } = require('./fileDocketEntryInteractor');
 const { User } = require('../../entities/User');
-const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 
 describe('fileDocketEntryInteractor', () => {
   let applicationContext;
