@@ -183,7 +183,7 @@ const internationalValidationObject = {
  *
  * @param {options} options the options object
  * @param {options} options.countryType the country type of the contact
- * @returns {object} the joi validaiton object
+ * @returns {object} the joi validation object
  */
 ContactFactory.getValidationObject = ({
   countryType = ContactFactory.COUNTRY_TYPES.DOMESTIC,

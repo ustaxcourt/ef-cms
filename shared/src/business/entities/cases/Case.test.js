@@ -599,7 +599,7 @@ describe('Case entity', () => {
         applicationContext,
       });
       caseRecord.sendToIRSHoldingQueue();
-      expect(caseRecord.status).toEqual('Batched for IRS');
+      expect(caseRecord.status).toEqual(Case.STATUS_TYPES.batchedForIRS);
     });
   });
 
@@ -1058,7 +1058,7 @@ describe('Case entity', () => {
           assigneeId: 'bob',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: 'new',
+          caseStatus: Case.STATUS_TYPES.new,
           caseTitle: 'testing',
           docketNumber: '101-18',
           document: {},
@@ -1075,7 +1075,7 @@ describe('Case entity', () => {
           assigneeId: 'bob',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: 'new',
+          caseStatus: Case.STATUS_TYPES.new,
           caseTitle: 'testing',
           docketNumber: '101-18',
           document: {},

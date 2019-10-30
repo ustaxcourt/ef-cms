@@ -34,9 +34,9 @@ const INTERNAL_CATEGORY_MAP = {
       scenario: 'Nonstandard G',
     },
   ],
-  'Seriatum Brief': [
+  'Seriatim Brief': [
     {
-      category: 'Seriatum Brief',
+      category: 'Seriatim Brief',
       documentTitle: 'Seriatim Answering Memorandum Brief',
       documentType: 'Seriatim Answering Memorandum Brief',
       eventCode: 'SAMB',
