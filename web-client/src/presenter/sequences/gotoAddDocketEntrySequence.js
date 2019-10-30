@@ -4,27 +4,22 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { set, unset } from 'cerebral/factories';
+import { resetAddDocketEntryAction } from '../actions/resetAddDocketEntryAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { unsetDocumentIdAction } from '../actions/unsetDocumentIdAction';
 
 export const gotoAddDocketEntry = [
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScansAction,
   clearFormAction,
-  unset(state.documentId),
+  unsetDocumentIdAction,
   clearScreenMetadataAction,
   getCaseAction,
   setCaseAction,
-  set(state.isEditingDocketEntry, false),
-  set(state.form.lodged, false),
-  set(state.form.practitioner, []),
-  set(state.wizardStep, 'PrimaryDocumentForm'),
-  set(state.documentUploadMode, 'scan'),
-  set(state.documentSelectedForScan, 'primaryDocumentFile'),
+  resetAddDocketEntryAction,
   setCurrentPageAction('AddDocketEntry'),
 ];
 
