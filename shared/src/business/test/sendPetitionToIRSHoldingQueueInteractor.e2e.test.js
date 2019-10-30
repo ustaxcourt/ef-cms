@@ -29,10 +29,10 @@ const {
 const {
   sendPetitionToIRSHoldingQueueInteractor,
 } = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
+const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { User } = require('../entities/User');
-const { Case } = require('../entities/cases/Case');
 
 const DATE = '2019-03-01T22:54:06.000Z';
 
