@@ -6,9 +6,12 @@ import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionsClerkCreatesNewCase from './journey/petitionsClerkCreatesNewCase';
+import petitionsClerkGetsMyMessagesInboxCount from './journey/petitionsClerkGetsMyMessagesInboxCount';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
 import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
+import petitionsClerkViewsMyMessagesInbox from './journey/petitionsClerkViewsMyMessagesInbox';
+import userNavigatesToCreateCaseConfirmation from './journey/userNavigatesToCreateCaseConfirmation';
 import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
@@ -28,24 +31,19 @@ describe('Case Confirmation', () => {
     userSignsOut(test);
     petitionsClerkLogIn(test);
     petitionsClerkSendsCaseToIRSHoldingQueue(test);
-    petitionsClerkRunsBatchProcess(test);
     userSignsOut(test);
   });
 
-  describe('Petitonsclerk creates a case and qcs another', () => {
+  describe('Petitonsclerk creates a case then serves case then gets message for case confirmation', () => {
     petitionsClerkLogIn(test);
     petitionsClerkCreatesNewCase(test, fakeFile);
+    petitionsClerkViewsMyMessagesInbox(test, true);
+    petitionsClerkGetsMyMessagesInboxCount(test);
     petitionsClerkSendsCaseToIRSHoldingQueue(test);
-    userSignsOut(test);
-  });
-
-  describe('Cases Are served to the IRS', () => {
-    petitionsClerkLogIn(test);
     petitionsClerkRunsBatchProcess(test);
+    petitionsClerkViewsMyMessagesInbox(test);
+    petitionsClerkGetsMyMessagesInboxCount(test, 1);
+    userNavigatesToCreateCaseConfirmation(test);
     userSignsOut(test);
   });
-
-  describe('Result petitoner sees the link to view the case confirmation created', () => {});
-
-  describe('Petitonsclerk gets a workitem message and has the ability to print the case confirmation', () => {});
 });
