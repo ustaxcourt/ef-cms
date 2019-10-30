@@ -3,10 +3,9 @@ import { getCachedScannerSourceAction } from '../actions/getCachedScannerSourceA
 import { getScannerSourcesAction } from '../actions/getScannerSourcesAction';
 import { handleInvalidScannerSourceAction } from '../actions/handleInvalidScannerSourceAction';
 import { handleScanErrorAction } from '../actions/handleScanErrorAction';
-import { set } from 'cerebral/factories';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startScanAction } from '../actions/startScanAction';
-import { state } from 'cerebral';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateScannerSourceAction } from '../actions/validateScannerSourceAction';
 import { waitForSpinnerAction } from '../actions/waitForSpinnerAction';
@@ -32,7 +31,7 @@ export const startScanSequence = [
     ],
     sourceNotInCache: [
       getScannerSourcesAction,
-      set(state.showModal, 'SelectScannerSourceModal'),
+      setShowModalFactoryAction('SelectScannerSourceModal'),
     ],
   },
   unsetWaitingForResponseAction,
