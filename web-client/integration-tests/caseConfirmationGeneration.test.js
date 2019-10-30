@@ -27,7 +27,6 @@ describe('Case Confirmation', () => {
     petitionerChoosesProcedureType(test);
     petitionerChoosesCaseType(test);
     petitionerCreatesNewCase(test, fakeFile);
-    petitionerAddNewCaseToTestObj(test);
     userSignsOut(test);
     petitionsClerkLogIn(test);
     petitionsClerkSendsCaseToIRSHoldingQueue(test);
