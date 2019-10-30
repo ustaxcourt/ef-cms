@@ -17,8 +17,6 @@ const mockCaseDetailBase = {
   irsSendDate: new Date(),
   payGovDate: new Date(),
   receivedAt: new Date(),
-  trialDate: new Date(),
-  trialSessionId: 'ts123',
 };
 
 const getDateISO = () => new Date().toISOString();
@@ -264,6 +262,7 @@ describe('formatCase', () => {
       trialLocation: 'Boise, Idaho',
       trialDate: '2011-11-11',
       trialTime: '11',
+      trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
     });
 
     expect(result).toMatchObject({
@@ -274,6 +273,27 @@ describe('formatCase', () => {
     });
     expect(result).not.toHaveProperty('showBlockedFromTrial');
     expect(result).not.toHaveProperty('showNotScheduled');
+    expect(result).not.toHaveProperty('showScheduled');
+  });
+
+  it('should format trial details if case status is not calendared but the case has a trialSessionId', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      trialLocation: 'Boise, Idaho',
+      trialDate: '2011-11-11',
+      trialTime: '11',
+      trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+    });
+
+    expect(result).toMatchObject({
+      formattedTrialCity: 'Boise, Idaho',
+      formattedTrialDate: '11/11/11 11:00 am',
+      formattedTrialJudge: 'Not assigned',
+      showScheduled: true,
+    });
+    expect(result).not.toHaveProperty('showTrialCalendared');
+    expect(result).not.toHaveProperty('showBlockedFromTrial');
+    expect(result).not.toHaveProperty('showNotScheduled');
   });
 
   it('should format trial details with incomplete trialDate information', () => {
@@ -282,6 +302,7 @@ describe('formatCase', () => {
       status: Case.STATUS_TYPES.calendared,
       trialLocation: 'Boise, Idaho',
       trialDate: undefined,
+      trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
     });
 
     expect(result).toMatchObject({
