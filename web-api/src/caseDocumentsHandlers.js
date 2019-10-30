@@ -1,5 +1,5 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
+require('core-js/stable');
+require('regenerator-runtime/runtime');
 
 module.exports = {
   addCoversheetLambda: require('./documents/addCoversheetLambda').handler,
