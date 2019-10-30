@@ -23,7 +23,7 @@ describe('set case status to ready for trial', () => {
       },
       getPersistenceGateway: () => {
         return {
-          createCaseTrialSortMappingRecords: () => {},
+          createCaseTrialSortMappingRecords: () => null,
           getCaseByCaseId: () => Promise.resolve(mockCase),
           updateCase: ({ caseToUpdate }) =>
             Promise.resolve(new Case(caseToUpdate, { applicationContext })),
@@ -120,5 +120,70 @@ describe('set case status to ready for trial', () => {
     expect(error.message).toContain(
       'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
     );
+  });
+
+  it('calls createCaseTrialSortMappingRecords if the case is not already associated with a trial session', async () => {
+    const caseId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+    const createCaseTrialSortMappingRecordsMock = jest.fn();
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'Suzie Petitionsclerk',
+          role: User.ROLES.petitionsClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => {
+        return {
+          createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsMock,
+          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
+          updateCase: ({ caseToUpdate }) =>
+            Promise.resolve(new Case(caseToUpdate, { applicationContext })),
+        };
+      },
+    };
+    await setCaseToReadyForTrialInteractor({
+      applicationContext,
+      caseId,
+    });
+    expect(createCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
+    expect(
+      createCaseTrialSortMappingRecordsMock.mock.calls[0][0].caseId,
+    ).toEqual(caseId);
+  });
+
+  it('does not call createCaseTrialSortMappingRecords if the case is already associated with a trial session', async () => {
+    const caseId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+    const createCaseTrialSortMappingRecordsMock = jest.fn();
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'Suzie Petitionsclerk',
+          role: User.ROLES.petitionsClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => {
+        return {
+          createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsMock,
+          getCaseByCaseId: () =>
+            Promise.resolve({
+              ...MOCK_CASE,
+              trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+            }),
+          updateCase: ({ caseToUpdate }) =>
+            Promise.resolve(new Case(caseToUpdate, { applicationContext })),
+        };
+      },
+    };
+    await setCaseToReadyForTrialInteractor({
+      applicationContext,
+      caseId,
+    });
+    expect(createCaseTrialSortMappingRecordsMock).not.toHaveBeenCalled();
   });
 });

@@ -966,7 +966,9 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
     this.trialJudge = trialSessionEntity.judge.name;
   }
   this.trialLocation = trialSessionEntity.trialLocation;
-  this.status = Case.STATUS_TYPES.calendared;
+  if (trialSessionEntity.isCalendared === true) {
+    this.status = Case.STATUS_TYPES.calendared;
+  }
   return this;
 };
 
