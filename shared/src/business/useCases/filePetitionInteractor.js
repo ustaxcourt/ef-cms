@@ -24,7 +24,7 @@ exports.filePetitionInteractor = async ({
    * uploads a document and then immediately processes it to validate the document.
    *
    * @param {object} document the documentFile
-   * @param {func} onUploadProgress the progressFunction
+   * @param {Function} onUploadProgress the progressFunction
    * @returns {Promise<string>} the documentId returned from a successful upload
    */
   const uploadDocumentAndMakeSafe = async (document, onUploadProgress) => {
