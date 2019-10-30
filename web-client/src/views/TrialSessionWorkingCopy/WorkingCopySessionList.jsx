@@ -175,7 +175,7 @@ export const WorkingCopySessionList = connect(
                     <td className="text-right font-body-2xs">
                       <strong>Notes:</strong>
                     </td>
-                    <td className="font-body-2xs" colSpan="3">
+                    <td className="font-body-2xs" colSpan="4">
                       <Text
                         bind={`trialSessionWorkingCopy.caseNotes.${item.caseId}.notes`}
                       />
