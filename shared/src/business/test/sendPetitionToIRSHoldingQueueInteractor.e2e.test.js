@@ -29,8 +29,8 @@ const {
 const {
   sendPetitionToIRSHoldingQueueInteractor,
 } = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
-const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { User } = require('../entities/User');
 
 const DATE = '2019-03-01T22:54:06.000Z';

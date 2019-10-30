@@ -1,5 +1,5 @@
-const { unblockCaseInteractor } = require('./unblockCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { unblockCaseInteractor } = require('./unblockCaseInteractor');
 const { User } = require('../entities/User');
 
 describe('unblockCaseInteractor', () => {

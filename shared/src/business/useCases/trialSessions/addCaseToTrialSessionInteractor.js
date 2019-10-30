@@ -2,9 +2,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { Case } = require('../../entities/cases/Case');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * addCaseToTrialSessionInteractor
