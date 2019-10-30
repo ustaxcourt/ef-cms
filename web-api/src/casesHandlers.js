@@ -3,29 +3,30 @@ module.exports = {
     .handler,
   associateRespondentWithCaseLambda: require('./manualAssociation/associateRespondentWithCaseLambda')
     .handler,
+  blockCaseLambda: require('./cases/blockCaseLambda').handler,
   caseSearchLambda: require('./cases/caseSearchLambda').handler,
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
-  fileCourtIssuedOrderToCaseLambda: require('./cases/fileCourtIssuedOrderToCaseLambda')
+  deleteCounselFromCaseLambda: require('./cases/deleteCounselFromCaseLambda')
     .handler,
-  fileDocketEntryToCaseLambda: require('./cases/fileDocketEntryToCaseLambda')
+  generateCaseConfirmationPdfLambda: require('./cases/generateCaseConfirmationPdfLambda')
     .handler,
-  fileExternalDocumentToCaseLambda: require('./cases/fileExternalDocumentToCaseLambda')
-    .handler,
+  getBlockedCasesLambda: require('./cases/getBlockedCasesLambda').handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
+  prioritizeCaseLambda: require('./cases/prioritizeCaseLambda').handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
   setCaseToReadyForTrialLambda: require('./cases/setCaseToReadyForTrialLambda')
     .handler,
+  unblockCaseLambda: require('./cases/unblockCaseLambda').handler,
+  unprioritizeCaseLambda: require('./cases/unprioritizeCaseLambda').handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,
-  updateCourtIssuedOrderToCaseLambda: require('./cases/updateCourtIssuedOrderToCaseLambda')
-    .handler,
-  updateDocketEntryOnCaseLambda: require('./cases/updateDocketEntryOnCaseLambda')
+  updateCounselOnCaseLambda: require('./cases/updateCounselOnCaseLambda')
     .handler,
   updatePrimaryContactLambda: require('./cases/updatePrimaryContactLambda')
     .handler,

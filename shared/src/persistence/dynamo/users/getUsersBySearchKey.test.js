@@ -1,6 +1,7 @@
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');
 const { getUsersBySearchKey } = require('./getUsersBySearchKey');
+const { User } = require('../../../business/entities/User');
 
 const applicationContext = {
   environment: {
@@ -15,7 +16,7 @@ describe('getUsersBySearchKey', () => {
         barNumber: 'PT1234',
         name: 'Test Practitioner',
         pk: '9805d1ab-18d0-43ec-bafb-654e83405416',
-        role: 'practitioner',
+        role: User.ROLES.practitioner,
         section: 'practitioner',
         sk: '9805d1ab-18d0-43ec-bafb-654e83405416',
         userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
@@ -44,7 +45,7 @@ describe('getUsersBySearchKey', () => {
       {
         barNumber: 'PT1234',
         name: 'Test Practitioner',
-        role: 'practitioner',
+        role: User.ROLES.practitioner,
         section: 'practitioner',
         userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
       },

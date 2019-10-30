@@ -1,7 +1,7 @@
 import {
+  ADC_SECTION,
   DOCKET_SECTION,
   IRS_BATCH_SYSTEM_SECTION,
-  SENIOR_ATTORNEY_SECTION,
 } from '../../../../shared/src/business/entities/WorkQueue';
 import { state } from 'cerebral';
 import _ from 'lodash';
@@ -41,12 +41,13 @@ const formatDateIfToday = (date, applicationContext) => {
   return formattedDate;
 };
 
-export const formatWorkItem = (
+export const formatWorkItem = ({
   applicationContext,
   workItem = {},
   selectedWorkItems = [],
   workQueueIsInternal,
-) => {
+  USER_ROLES,
+}) => {
   const result = _.cloneDeep(workItem);
 
   result.createdAtFormatted = applicationContext
@@ -100,7 +101,7 @@ export const formatWorkItem = (
       result.showRecalledStatusIcon = false;
   }
 
-  if (applicationContext.getCurrentUser().role !== 'petitionsclerk') {
+  if (applicationContext.getCurrentUser().role !== USER_ROLES.petitionsClerk) {
     result.showRecalledStatusIcon = false;
     result.showBatchedStatusIcon = false;
   }
@@ -144,11 +145,12 @@ export const formatWorkItem = (
 export const filterWorkItems = ({
   applicationContext,
   user,
+  USER_ROLES,
   workQueueToDisplay,
 }) => {
   const { box, queue, workQueueIsInternal } = workQueueToDisplay;
   const docQCUserSection =
-    user.section === SENIOR_ATTORNEY_SECTION ? DOCKET_SECTION : user.section;
+    user.section === ADC_SECTION ? DOCKET_SECTION : user.section;
   const { Case } = applicationContext.getEntityConstructors();
 
   const filters = {
@@ -157,7 +159,7 @@ export const filterWorkItems = ({
         batched: item => {
           return (
             !item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             item.sentByUserId === user.userId &&
             item.section === IRS_BATCH_SYSTEM_SECTION &&
             item.caseStatus === Case.STATUS_TYPES.batchedForIRS
@@ -167,24 +169,25 @@ export const filterWorkItems = ({
           return (
             item.assigneeId === user.userId &&
             !item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             item.section === user.section &&
-            item.document.isFileAttached === false
+            (item.document.isFileAttached === false || item.inProgress)
           );
         },
         inbox: item => {
           return (
             item.assigneeId === user.userId &&
             !item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             item.section === user.section &&
-            item.document.isFileAttached !== false
+            item.document.isFileAttached !== false &&
+            !item.inProgress
           );
         },
         outbox: item => {
           return (
-            !item.isInternal &&
-            (user.role === 'petitionsclerk'
+            item.isQC &&
+            (user.role === USER_ROLES.petitionsClerk
               ? item.section === IRS_BATCH_SYSTEM_SECTION
               : true) &&
             item.completedByUserId &&
@@ -197,7 +200,7 @@ export const filterWorkItems = ({
         batched: item => {
           return (
             !item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             item.section === IRS_BATCH_SYSTEM_SECTION &&
             item.caseStatus === Case.STATUS_TYPES.batchedForIRS
           );
@@ -205,24 +208,25 @@ export const filterWorkItems = ({
         inProgress: item => {
           return (
             !item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             item.section === user.section &&
-            item.document.isFileAttached === false
+            (item.document.isFileAttached === false || item.inProgress)
           );
         },
         inbox: item => {
           return (
             !item.completedAt &&
-            !item.isInternal &&
+            item.isQC &&
             item.section === docQCUserSection &&
-            item.document.isFileAttached !== false
+            item.document.isFileAttached !== false &&
+            !item.inProgress
           );
         },
         outbox: item => {
           return (
             !!item.completedAt &&
-            !item.isInternal &&
-            (user.role === 'petitionsclerk'
+            item.isQC &&
+            (user.role === USER_ROLES.petitionsClerk
               ? item.section === IRS_BATCH_SYSTEM_SECTION
               : true)
           );
@@ -234,7 +238,7 @@ export const filterWorkItems = ({
         inbox: item => {
           return (
             !item.completedAt &&
-            item.isInternal &&
+            !item.isQC &&
             item.section === user.section &&
             item.assigneeId === user.userId
           );
@@ -242,7 +246,7 @@ export const filterWorkItems = ({
         outbox: item => {
           return (
             !item.completedAt &&
-            item.isInternal &&
+            !item.isQC &&
             item.sentByUserId &&
             item.sentByUserId === user.userId
           );
@@ -251,15 +255,13 @@ export const filterWorkItems = ({
       section: {
         inbox: item => {
           return (
-            !item.completedAt &&
-            item.isInternal &&
-            item.section === user.section
+            !item.completedAt && !item.isQC && item.section === user.section
           );
         },
         outbox: item => {
           return (
             !item.completedAt &&
-            item.isInternal &&
+            !item.isQC &&
             item.sentBySection === user.section
           );
         },
@@ -278,22 +280,25 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const { workQueueIsInternal } = workQueueToDisplay;
   const selectedWorkItems = get(state.selectedWorkItems);
+  const USER_ROLES = get(state.constants.USER_ROLES);
 
   let workQueue = workItems
     .filter(
       filterWorkItems({
+        USER_ROLES,
         applicationContext,
         user,
         workQueueToDisplay,
       }),
     )
     .map(item =>
-      formatWorkItem(
+      formatWorkItem({
+        USER_ROLES,
         applicationContext,
-        item,
         selectedWorkItems,
+        workItem: item,
         workQueueIsInternal,
-      ),
+      }),
     );
 
   const sortFields = {
@@ -302,13 +307,19 @@ export const formattedWorkQueue = (get, applicationContext) => {
         batched: 'batchedAt',
         inProgress: 'receivedAt',
         inbox: 'receivedAt',
-        outbox: user.role === 'petitionsclerk' ? 'completedAt' : 'receivedAt',
+        outbox:
+          user.role === USER_ROLES.petitionsClerk
+            ? 'completedAt'
+            : 'receivedAt',
       },
       section: {
         batched: 'batchedAt',
         inProgress: 'receivedAt',
         inbox: 'receivedAt',
-        outbox: user.role === 'petitionsclerk' ? 'completedAt' : 'receivedAt',
+        outbox:
+          user.role === USER_ROLES.petitionsClerk
+            ? 'completedAt'
+            : 'receivedAt',
       },
     },
     messages: {

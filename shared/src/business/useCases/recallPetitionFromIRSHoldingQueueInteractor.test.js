@@ -31,7 +31,7 @@ const MOCK_WORK_ITEMS = [
         fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'Petition batched for IRS',
         messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
         sentBy: 'Petitioner',
         to: null,
       },
@@ -41,7 +41,7 @@ const MOCK_WORK_ITEMS = [
         fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'Petition ready for review',
         messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
         sentBy: 'Petitioner',
         to: null,
       },
@@ -65,7 +65,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Petitions Clerk',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -85,7 +85,7 @@ describe('Recall petition from IRS Holding Queue', () => {
   it('throws unauthorized error if user is unauthorized', async () => {
     let error;
     applicationContext.getCurrentUser = () => {
-      return new User({ role: 'petitioner', userId: 'taxpayer' });
+      return new User({ role: User.ROLES.petitioner, userId: 'taxpayer' });
     };
 
     try {
@@ -107,7 +107,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return new User({
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },
@@ -142,7 +142,7 @@ describe('Recall petition from IRS Holding Queue', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return new User({
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },

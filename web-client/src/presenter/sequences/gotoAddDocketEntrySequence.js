@@ -8,10 +8,11 @@ import { set, unset } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoAddDocketEntry = [
   setCurrentPageAction('Interstitial'),
-  set(state.showValidation, false),
+  stopShowValidationAction,
   clearScansAction,
   clearFormAction,
   unset(state.documentId),

@@ -3,7 +3,6 @@ const {
   WORKITEM,
 } = require('../../../authorization/authorizationClientService');
 const { createISODateString } = require('../../utilities/DateHandler');
-
 const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');

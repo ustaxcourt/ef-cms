@@ -1,7 +1,7 @@
 const {
   uploadExternalDocumentsInteractor,
 } = require('./uploadExternalDocumentsInteractor');
-const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 describe('uploadExternalDocumentsInteractor', () => {
   let applicationContext;
@@ -27,7 +27,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         userId: 'respondent',
       },
     ],
-    role: 'petitioner',
+    role: User.ROLES.petitioner,
     userId: 'taxpayer',
   };
 
@@ -36,8 +36,8 @@ describe('uploadExternalDocumentsInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'admin',
-          userId: 'admin',
+          role: User.ROLES.petitionsClerk,
+          userId: 'petitionsclerk',
         };
       },
       getPersistenceGateway: () => ({
@@ -51,15 +51,17 @@ describe('uploadExternalDocumentsInteractor', () => {
     try {
       await uploadExternalDocumentsInteractor({
         applicationContext,
-        documentFiles: ['something'],
+        documentFiles: [
+          {
+            primary: 'something',
+          },
+        ],
         documentMetadata: {},
-        onUploadProgresses: [() => null],
       });
     } catch (e) {
       error = e;
     }
     expect(error).toBeDefined();
-    expect(error).toBeInstanceOf(UnauthorizedError);
   });
 
   it('runs successfully with no errors with minimum data and valid user', async () => {
@@ -69,7 +71,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: 'respondent',
+            role: User.ROLES.respondent,
             userId: 'respondent',
           };
         },
@@ -78,13 +80,20 @@ describe('uploadExternalDocumentsInteractor', () => {
         }),
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
+          sanitizePdfInteractor: () => null,
+          validatePdfInteractor: () => null,
+          virusScanPdfInteractor: () => null,
         }),
       };
       await uploadExternalDocumentsInteractor({
         applicationContext,
-        documentFiles: ['something'],
+        documentFiles: {
+          primary: 'something',
+        },
         documentMetadata: {},
-        onUploadProgresses: [() => null],
+        progressFunctions: {
+          primary: 'something',
+        },
       });
     } catch (err) {
       error = err;
@@ -99,7 +108,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         environment: { stage: 'local' },
         getCurrentUser: () => {
           return {
-            role: 'respondent',
+            role: User.ROLES.respondent,
             userId: 'respondent',
           };
         },
@@ -108,16 +117,75 @@ describe('uploadExternalDocumentsInteractor', () => {
         }),
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
+          sanitizePdfInteractor: () => null,
+          validatePdfInteractor: () => null,
+          virusScanPdfInteractor: () => null,
         }),
       };
-      const docIds = await uploadExternalDocumentsInteractor({
+      await uploadExternalDocumentsInteractor({
         applicationContext,
-        documentFiles: ['something', 'something2', undefined, 'something4'],
-        documentMetadata: {},
-        onUploadProgresses: [() => null, () => null, null, () => null],
+        documentFiles: {
+          primary: 'something',
+          primarySupporting0: 'something3',
+          secondary: 'something2',
+          secondarySupporting0: 'something4',
+        },
+        documentMetadata: {
+          hasSecondarySupportingDocuments: true,
+          hasSupportingDocuments: true,
+          secondarySupportingDocuments: [{ supportingDocument: 'something' }],
+          supportingDocuments: [{ supportingDocument: 'something' }],
+        },
+        progressFunctions: {
+          primary: 'something',
+          primarySupporting0: 'something3',
+          secondary: 'something2',
+          secondarySupporting0: 'something4',
+        },
       });
-      expect(docIds[2]).toBeUndefined();
-      expect(docIds.length).toEqual(4);
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeUndefined();
+  });
+
+  it('runs successfully with no errors with all data and valid user who is a practitioner', async () => {
+    let error;
+    try {
+      applicationContext = {
+        environment: { stage: 'local' },
+        getCurrentUser: () => {
+          return {
+            role: User.ROLES.practitioner,
+            userId: 'practitioner',
+          };
+        },
+        getPersistenceGateway: () => ({
+          uploadDocument: async () => caseRecord,
+        }),
+        getUseCases: () => ({
+          fileExternalDocumentInteractor: () => {},
+          sanitizePdfInteractor: () => null,
+          validatePdfInteractor: () => null,
+          virusScanPdfInteractor: () => null,
+        }),
+      };
+      await uploadExternalDocumentsInteractor({
+        applicationContext,
+        documentFiles: {
+          primary: 'something',
+          primarySupporting0: 'something3',
+          secondary: 'something2',
+          secondarySupporting0: 'something4',
+        },
+        documentMetadata: {},
+        progressFunctions: {
+          primary: 'something',
+          primarySupporting0: 'something3',
+          secondary: 'something2',
+          secondarySupporting0: 'something4',
+        },
+      });
     } catch (err) {
       error = err;
     }

@@ -18,6 +18,7 @@ module.exports = {
     'security',
     'sort-destructure-keys',
     'sort-keys-fix',
+    'spellcheck',
   ],
   rules: {
     'no-prototype-builtins': 0,
@@ -25,6 +26,7 @@ module.exports = {
     'security/detect-child-process': 0,
     'security/detect-non-literal-fs-filename': 0,
     'security/detect-object-injection': 0,
+    'react/prop-types': 0,
     'react/jsx-sort-props': [
       'error',
       {
@@ -100,6 +102,28 @@ module.exports = {
       },
       {
         enforceForRenamedProperties: false,
+      },
+    ],
+    'spellcheck/spell-checker': [
+      1,
+      {
+        comments: true,
+        strings: true,
+        identifiers: true,
+        lang: 'en_US',
+        skipWords: [
+          'checkbox',
+          'Falsy',
+          'fieldset',
+          'param',
+          'textarea',
+          'Truthy',
+          'usa',
+          'ustc',
+          'assignee',
+          'petitionsclerk',
+        ],
+        minLength: 4,
       },
     ],
   },

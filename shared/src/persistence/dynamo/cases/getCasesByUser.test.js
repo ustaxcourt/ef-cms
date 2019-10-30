@@ -1,6 +1,7 @@
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');
 const { getCasesByUser } = require('./getCasesByUser');
+const { User } = require('../../../business/entities/User');
 
 const applicationContext = {
   environment: {
@@ -11,7 +12,7 @@ const applicationContext = {
 };
 
 const user = {
-  role: 'petitioner',
+  role: User.ROLES.petitioner,
   userId: 'taxpayer',
 };
 
@@ -76,7 +77,7 @@ describe('getCasesByUser', () => {
       user,
     });
     expect(client.batchGet.getCall(0).args[0].keys).toEqual([
-      { pk: '123', sk: '0' },
+      { pk: '123', sk: '123' },
     ]);
   });
 });

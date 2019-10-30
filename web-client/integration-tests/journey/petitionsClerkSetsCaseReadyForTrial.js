@@ -1,3 +1,5 @@
+const { Case } = require('../../../shared/src/business/entities/cases/Case');
+
 export default test => {
   return it('Petitions clerk set a case ready for trial', async () => {
     test.setState('caseDetail', {});
@@ -6,7 +8,7 @@ export default test => {
     });
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.status')).toEqual(
-      'General Docket - Not at Issue',
+      Case.STATUS_TYPES.generalDocket,
     );
 
     await test.runSequence('setCaseToReadyForTrialSequence');
@@ -17,7 +19,7 @@ export default test => {
     });
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.status')).toEqual(
-      'General Docket - At Issue (Ready for Trial)',
+      Case.STATUS_TYPES.generalDocketReadyForTrial,
     );
   });
 };

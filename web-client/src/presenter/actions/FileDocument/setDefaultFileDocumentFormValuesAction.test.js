@@ -1,3 +1,4 @@
+import { User } from '../../../../../shared/src/business/entities/User';
 import { runAction } from 'cerebral/test';
 import { setDefaultFileDocumentFormValuesAction } from './setDefaultFileDocumentFormValuesAction';
 
@@ -9,7 +10,7 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
           partyPrimary: false,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -23,7 +24,7 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
           partyPrimary: false,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });

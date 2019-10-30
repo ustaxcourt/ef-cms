@@ -1,3 +1,4 @@
+import { User } from '../../../../shared/src/business/entities/User';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
@@ -22,7 +23,7 @@ describe('getCaseAssociation', () => {
           practitioners: [{ userId: '123' }],
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: '123',
         },
       },
@@ -51,7 +52,7 @@ describe('getCaseAssociation', () => {
           practitioners: [{ userId: '123' }],
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: '1234',
         },
       },
@@ -80,7 +81,7 @@ describe('getCaseAssociation', () => {
           practitioners: [{ userId: '123' }],
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: '1234',
         },
       },
@@ -109,7 +110,7 @@ describe('getCaseAssociation', () => {
           respondents: [{ userId: '789' }],
         },
         user: {
-          role: 'respondent',
+          role: User.ROLES.respondent,
           userId: '789',
         },
       },
@@ -138,7 +139,7 @@ describe('getCaseAssociation', () => {
           respondent: { userId: '123' },
         },
         user: {
-          role: 'respondent',
+          role: User.ROLES.respondent,
           userId: '789',
         },
       },
@@ -167,7 +168,7 @@ describe('getCaseAssociation', () => {
           userId: '123',
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: '123',
         },
       },
@@ -196,7 +197,7 @@ describe('getCaseAssociation', () => {
           userId: '123',
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: '789',
         },
       },

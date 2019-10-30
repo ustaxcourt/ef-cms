@@ -4,8 +4,10 @@ import {
 } from './computeds/formattedCaseDetail';
 
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
+import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
+import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
@@ -51,6 +53,7 @@ import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 export const state = {
   addDocketEntryHelper,
+  addToTrialSessionModalHelper,
   advancedSearchForm: {},
   advancedSearchHelper,
   alertHelper,
@@ -65,6 +68,7 @@ export const state = {
   betaBar: {
     isVisible: true,
   },
+  blockedCasesReportHelper,
   caseCaption: '',
   caseDeadlineReportHelper,
   caseDetail: {},

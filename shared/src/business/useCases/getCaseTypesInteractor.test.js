@@ -1,4 +1,5 @@
 const { getCaseTypesInteractor } = require('./getCaseTypesInteractor');
+const { User } = require('../entities/User');
 
 describe('Get case types', () => {
   beforeEach(() => {});
@@ -7,7 +8,7 @@ describe('Get case types', () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },

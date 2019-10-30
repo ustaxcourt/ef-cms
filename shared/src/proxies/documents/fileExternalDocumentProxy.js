@@ -22,6 +22,6 @@ exports.fileExternalDocumentInteractor = ({
       documentIds,
       documentMetadata,
     },
-    endpoint: `/cases/${caseId}/external-document`,
+    endpoint: `/case-documents/${caseId}/external-document`,
   });
 };

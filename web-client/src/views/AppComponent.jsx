@@ -3,6 +3,7 @@ import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
+import { BlockedCasesReport } from './BlockedCasesReport/BlockedCasesReport';
 import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
@@ -12,11 +13,12 @@ import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
-import { DocumentDetail } from './DocumentDetail';
+import { DocumentDetail } from './DocumentDetail/DocumentDetail';
+import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { Error } from './Error';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { Footer } from './Footer';
-import { Header } from './Header';
+import { Header } from './Header/Header';
 import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
@@ -49,6 +51,7 @@ const pages = {
   AdvancedSearch,
   BeforeStartingCase,
   BeforeYouFileADocument,
+  BlockedCasesReport,
   CaseDeadlines,
   CaseDetail,
   CaseDetailInternal,
@@ -59,6 +62,7 @@ const pages = {
   DashboardPractitioner,
   DashboardRespondent,
   DocumentDetail,
+  EditDocketEntry,
   Error,
   FileDocumentWizard,
   IdleLogout,

@@ -1,3 +1,4 @@
+import { User } from '../../../../shared/src/business/entities/User';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -5,10 +6,15 @@ import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
+const baseState = {
+  constants: { USER_ROLES: User.ROLES },
+};
+
 describe('case detail computed', () => {
   it('should set showFileDocumentButton to true if current page is CaseDetail, user role is practitioner, and case is owned by user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: { practitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
@@ -16,7 +22,7 @@ describe('case detail computed', () => {
           isAssociated: true,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: '123',
         },
       },
@@ -27,6 +33,7 @@ describe('case detail computed', () => {
   it('should set showFileDocumentButton to false if current page is CaseDetail, user role is practitioner, and case is not owned by user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: { practitioners: [] },
         currentPage: 'CaseDetail',
         form: {},
@@ -34,7 +41,7 @@ describe('case detail computed', () => {
           isAssociated: false,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -44,6 +51,7 @@ describe('case detail computed', () => {
   it('should set showFileDocumentButton to true if current page is CaseDetail, user role is petitioner, and the user is associated with the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
@@ -51,7 +59,7 @@ describe('case detail computed', () => {
           isAssociated: true,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -61,6 +69,7 @@ describe('case detail computed', () => {
   it('should set showPendingAccessToCaseButton to true if user role is practitioner and case is not owned by user but has pending request', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
@@ -69,7 +78,7 @@ describe('case detail computed', () => {
           pendingAssociation: true,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -79,6 +88,7 @@ describe('case detail computed', () => {
   it('should set showRequestAccessToCaseButton to true if user role is practitioner and case is not owned by user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
@@ -86,7 +96,7 @@ describe('case detail computed', () => {
           isAssociated: false,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -96,6 +106,7 @@ describe('case detail computed', () => {
   it('should set showRequestAccessToCaseButton to false if user role is practitioner and case is owned by user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: { practitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
@@ -103,7 +114,7 @@ describe('case detail computed', () => {
           isAssociated: true,
         },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: '123',
         },
       },
@@ -114,6 +125,7 @@ describe('case detail computed', () => {
   it('should set showRequestAccessToCaseButton to false if user role is petitioner and user is not associated with the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
@@ -121,7 +133,7 @@ describe('case detail computed', () => {
           isAssociated: false,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -131,6 +143,7 @@ describe('case detail computed', () => {
   it('should set userHasAccessToCase to true if user role is petitioner and user is associated with case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
@@ -138,7 +151,7 @@ describe('case detail computed', () => {
           isAssociated: true,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -148,12 +161,13 @@ describe('case detail computed', () => {
   it('should set userHasAccessToCase to true if user role is practitioner and the practitioner is associated with the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: { practitioners: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: { isAssociated: true },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: '123',
         },
       },
@@ -164,12 +178,13 @@ describe('case detail computed', () => {
   it('should set userHasAccessToCase to false if user role is practitioner and the practitioner is not associated with the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: { practitioners: [{ userId: '234' }] },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: { isAssociated: false },
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: '123',
         },
       },
@@ -180,6 +195,7 @@ describe('case detail computed', () => {
   it('should set userHasAccessToCase and showFileDocumentButton to true if user role is respondent and the respondent is associated with the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: { respondents: [{ userId: '789' }] },
         currentPage: 'CaseDetail',
         form: {},
@@ -187,7 +203,7 @@ describe('case detail computed', () => {
           isAssociated: true,
         },
         user: {
-          role: 'respondent',
+          role: User.ROLES.respondent,
           userId: '789',
         },
       },
@@ -201,6 +217,7 @@ describe('case detail computed', () => {
   it('should set showRequestAccessToCaseButton to true if user role is respondent and the respondent is not associated with the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: { respondents: [{ userId: '123' }] },
         currentPage: 'CaseDetail',
         form: {},
@@ -208,7 +225,7 @@ describe('case detail computed', () => {
           isAssociated: false,
         },
         user: {
-          role: 'respondent',
+          role: User.ROLES.respondent,
           userId: '789',
         },
       },
@@ -222,6 +239,7 @@ describe('case detail computed', () => {
   it('should set showFileFirstDocumentButton to true if user role is respondent and there is no respondent associated with the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
@@ -229,7 +247,7 @@ describe('case detail computed', () => {
           isAssociated: false,
         },
         user: {
-          role: 'respondent',
+          role: User.ROLES.respondent,
           userId: '789',
         },
       },
@@ -243,11 +261,12 @@ describe('case detail computed', () => {
   it('should show add docket entry button if current page is CaseDetailInternal and user role is docketclerk', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         currentPage: 'CaseDetailInternal',
         form: {},
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
           userId: '789',
         },
       },
@@ -258,11 +277,12 @@ describe('case detail computed', () => {
   it('should not show add docket entry button if current page is not CaseDetailInternal or user role is not docketclerk', () => {
     let result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
           userId: '789',
         },
       },
@@ -271,11 +291,12 @@ describe('case detail computed', () => {
 
     result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: '789',
         },
       },
@@ -286,11 +307,12 @@ describe('case detail computed', () => {
   it('should show payment record and not payment options if case is paid', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: { payGovId: '123' },
         currentPage: 'CaseDetail',
         form: {},
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -301,11 +323,12 @@ describe('case detail computed', () => {
   it('should not show payment record and show payment options if case is not paid', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -316,6 +339,7 @@ describe('case detail computed', () => {
   it('should show case deadlines external view for external user who is associated with the case if there are deadlines on the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDeadlines: ['something'],
         caseDetail: {},
         currentPage: 'CaseDetail',
@@ -324,7 +348,7 @@ describe('case detail computed', () => {
           isAssociated: true,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -336,6 +360,7 @@ describe('case detail computed', () => {
   it('should not show case deadlines external view for external user who is associated with the case if there are not deadlines on the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDeadlines: [],
         caseDetail: {},
         currentPage: 'CaseDetail',
@@ -344,7 +369,7 @@ describe('case detail computed', () => {
           isAssociated: true,
         },
         user: {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
         },
       },
     });
@@ -356,6 +381,7 @@ describe('case detail computed', () => {
   it('should not show case deadlines external view for external user who is not associated with the case and there are deadlines on the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDeadlines: ['something'],
         caseDetail: {},
         currentPage: 'CaseDetail',
@@ -364,7 +390,7 @@ describe('case detail computed', () => {
           isAssociated: false,
         },
         user: {
-          role: 'respondent',
+          role: User.ROLES.respondent,
         },
       },
     });
@@ -376,12 +402,13 @@ describe('case detail computed', () => {
   it('should show case deadlines internal view and not show case deadlines external view for internal user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDeadlines: ['something'],
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
       },
     });
@@ -393,12 +420,13 @@ describe('case detail computed', () => {
   it('should show case deadlines internal view as empty and not show case deadlines external view for internal user if case deadlines is empty', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDeadlines: [],
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
       },
     });
@@ -410,10 +438,11 @@ describe('case detail computed', () => {
   it('should show add counsel section if user is an internal user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         form: {},
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
       },
     });
@@ -423,23 +452,76 @@ describe('case detail computed', () => {
   it('should not show add counsel section if user is an external user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         form: {},
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
     expect(result.showAddCounsel).toEqual(false);
   });
 
-  it('should show practitioner section if user is an internal user', () => {
+  it('should show edit practitioners and respondents buttons if user is an internal user and there are practitioners and respondents on the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
+        caseDetail: {
+          practitioners: [{ userId: '1' }],
+          respondents: [{ userId: '2' }],
+        },
+        form: {},
+        user: {
+          role: User.ROLES.docketClerk,
+        },
+      },
+    });
+    expect(result.showEditPractitioners).toBeTruthy();
+    expect(result.showEditRespondents).toBeTruthy();
+  });
+
+  it('should not show edit practitioners or respondents buttons if user is an internal user and there are not practitioners and respondents on the case', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...baseState,
         caseDetail: {},
         form: {},
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
+        },
+      },
+    });
+    expect(result.showEditPractitioners).toBeFalsy();
+    expect(result.showEditRespondents).toBeFalsy();
+  });
+
+  it('should not show edit practitioners or respondents buttons if user is not an internal user', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...baseState,
+        caseDetail: {
+          practitioners: [{ userId: '1' }],
+          respondents: [{ userId: '2' }],
+        },
+        form: {},
+        user: {
+          role: User.ROLES.petitioner,
+        },
+      },
+    });
+    expect(result.showEditPractitioners).toBeFalsy();
+    expect(result.showEditRespondents).toBeFalsy();
+  });
+
+  it('should show practitioner section if user is an internal user', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...baseState,
+        caseDetail: {},
+        form: {},
+        user: {
+          role: User.ROLES.docketClerk,
         },
       },
     });
@@ -449,10 +531,11 @@ describe('case detail computed', () => {
   it('should show practitioner section if user is an external user and there are practitioners on the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: { practitioners: [{ name: 'Test Practitioner' }] },
         form: {},
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -462,10 +545,11 @@ describe('case detail computed', () => {
   it('should not show practitioner section if user is an external user and there are no practitioners on the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: { practitioners: [] },
         form: {},
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -475,10 +559,11 @@ describe('case detail computed', () => {
   it('should show respondent section if user is an internal user', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         form: {},
         user: {
-          role: 'docketclerk',
+          role: User.ROLES.docketClerk,
         },
       },
     });
@@ -488,10 +573,11 @@ describe('case detail computed', () => {
   it('should show respondent section if user is an external user and there are respondents on the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: { respondents: [{ name: 'Test Respondents' }] },
         form: {},
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
@@ -501,19 +587,61 @@ describe('case detail computed', () => {
   it('should not show respondent section if user is an external user and there are no respondents on the case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: { respondents: [] },
         form: {},
         user: {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
         },
       },
     });
     expect(result.showRespondentSection).toEqual(false);
   });
 
+  it('should format practitioner matches with cityStateZip string and isAlreadyInCase boolean', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...baseState,
+        caseDetail: { practitioners: [{ userId: '2' }] },
+        form: {},
+        modal: {
+          practitionerMatches: [
+            {
+              contact: { city: 'Somewhere', postalCode: '12345', state: 'AL' },
+              name: '1',
+              userId: '1',
+            },
+            {
+              contact: {
+                city: 'Somewhere Else',
+                postalCode: '54321',
+                state: 'TX',
+              },
+              name: '2',
+              userId: '2',
+            },
+          ],
+        },
+      },
+    });
+    expect(result.practitionerMatchesFormatted).toMatchObject([
+      {
+        cityStateZip: 'Somewhere, AL 12345',
+        name: '1',
+      },
+      {
+        cityStateZip: 'Somewhere Else, TX 54321',
+        name: '2',
+      },
+    ]);
+    expect(result.practitionerMatchesFormatted[0].isAlreadyInCase).toBeFalsy();
+    expect(result.practitionerMatchesFormatted[1].isAlreadyInCase).toBeTruthy();
+  });
+
   it('should set practitionerSearchResultsCount to the length of the state.modal.practitionerMatches', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         form: {},
         modal: { practitionerMatches: [{ name: '1' }, { name: '2' }] },
@@ -525,6 +653,7 @@ describe('case detail computed', () => {
   it('should set practitionerSearchResultsCount to 0 if the state.modal.practitionerMatches is an empty array', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         form: {},
         modal: { practitionerMatches: [] },
@@ -536,6 +665,7 @@ describe('case detail computed', () => {
   it('should not set practitionerSearchResultsCount if state.modal is an empty object', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         form: {},
         modal: {},
@@ -544,9 +674,50 @@ describe('case detail computed', () => {
     expect(result.practitionerSearchResultsCount).toBeUndefined();
   });
 
+  it('should format respondent matches with cityStateZip string and isAlreadyInCase boolean', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...baseState,
+        caseDetail: { respondents: [{ userId: '1' }] },
+        form: {},
+        modal: {
+          respondentMatches: [
+            {
+              contact: { city: 'Somewhere', postalCode: '12345', state: 'AL' },
+              name: '1',
+              userId: '1',
+            },
+            {
+              contact: {
+                city: 'Somewhere Else',
+                postalCode: '54321',
+                state: 'TX',
+              },
+              name: '2',
+              userId: '2',
+            },
+          ],
+        },
+      },
+    });
+    expect(result.respondentMatchesFormatted).toMatchObject([
+      {
+        cityStateZip: 'Somewhere, AL 12345',
+        name: '1',
+      },
+      {
+        cityStateZip: 'Somewhere Else, TX 54321',
+        name: '2',
+      },
+    ]);
+    expect(result.respondentMatchesFormatted[0].isAlreadyInCase).toBeTruthy();
+    expect(result.respondentMatchesFormatted[1].isAlreadyInCase).toBeFalsy();
+  });
+
   it('should set respondentSearchResultsCount to the length of the state.modal.respondentMatches', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         form: {},
         modal: { respondentMatches: [{ name: '1' }, { name: '2' }] },
@@ -558,6 +729,7 @@ describe('case detail computed', () => {
   it('should set respondentSearchResultsCount to 0 if the state.modal.respondentMatches is an empty array', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         form: {},
         modal: { respondentMatches: [] },
@@ -569,6 +741,7 @@ describe('case detail computed', () => {
   it('should not set respondentSearchResultsCount if state.modal is an empty object', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
+        ...baseState,
         caseDetail: {},
         form: {},
         modal: {},
@@ -581,6 +754,7 @@ describe('case detail computed', () => {
     it('should signify a given case has orders (hasOrders=TRUE) if any of the order-related props are true', () => {
       const result = runCompute(caseDetailHelper, {
         state: {
+          ...baseState,
           caseDetail: {
             noticeOfAttachments: true,
             orderDesignatingPlaceOfTrial: true,
@@ -603,6 +777,7 @@ describe('case detail computed', () => {
     it('should signify a given case does NOT have orders if all of the order-related props are false', () => {
       const result = runCompute(caseDetailHelper, {
         state: {
+          ...baseState,
           caseDetail: {
             noticeOfAttachments: false,
             orderDesignatingPlaceOfTrial: false,
@@ -625,6 +800,7 @@ describe('case detail computed', () => {
     it('should signify a given case has orders if one of the order-related props is true', () => {
       const result = runCompute(caseDetailHelper, {
         state: {
+          ...baseState,
           caseDetail: {
             noticeOfAttachments: false,
             orderDesignatingPlaceOfTrial: false,

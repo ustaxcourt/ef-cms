@@ -1,6 +1,7 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
+import { User } from '../../shared/src/business/entities/User';
 import { isFunction, mapValues } from 'lodash';
 import FormData from 'form-data';
 const {
@@ -10,6 +11,13 @@ import { Document } from '../../shared/src/business/entities/Document';
 import { applicationContext } from '../src/applicationContext';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
+import adcLogIn from './journey/adcLogIn';
+import adcMarksStipulatedWorkItemAsCompleted from './journey/adcMarksStipulatedWorkItemAsCompleted';
+import adcViewsCaseDetail from './journey/adcViewsCaseDetail';
+import adcViewsCaseDetailAfterComplete from './journey/adcViewsCaseDetailAfterComplete';
+import adcViewsDocumentDetail from './journey/adcViewsDocumentDetail';
+import adcViewsMessages from './journey/adcViewsMessages';
+import adcViewsMessagesAfterComplete from './journey/adcViewsMessagesAfterComplete';
 import docketClerkAddsDocketEntries from './journey/docketClerkAddsDocketEntries';
 import docketClerkAssignWorkItems from './journey/docketClerkAssignWorkItems';
 import docketClerkDocketDashboard from './journey/docketClerkDocketDashboard';
@@ -18,7 +26,7 @@ import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSelectsAssignee from './journey/docketClerkSelectsAssignee';
 import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
 import docketClerkStartsNewMessageThreadOnAnswer from './journey/docketClerkStartsNewMessageThreadOnAnswer';
-import docketClerkStartsNewMessageThreadOnStipulatedDecisionToSeniorAttorney from './journey/docketClerkStartsNewMessageThreadOnStipulatedDecisionToSeniorAttorney';
+import docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC from './journey/docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC';
 import docketClerkViewsCaseDetail from './journey/docketClerkViewsCaseDetail';
 import docketClerkViewsDecisionDocument from './journey/docketClerkViewsDecisionDocument';
 import docketClerkViewsDocument from './journey/docketClerkViewsDocument';
@@ -43,13 +51,6 @@ import respondentAddsStipulatedDecision from './journey/respondentAddsStipulated
 import respondentLogIn from './journey/respondentLogIn';
 import respondentViewsCaseDetailOfBatchedCase from './journey/respondentViewsCaseDetailOfBatchedCase';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
-import seniorAttorneyLogIn from './journey/seniorAttorneyLogIn';
-import seniorAttorneyMarksStipulatedWorkItemAsCompleted from './journey/seniorAttorneyMarksStipulatedWorkItemAsCompleted';
-import seniorAttorneyViewsCaseDetail from './journey/seniorAttorneyViewsCaseDetail';
-import seniorAttorneyViewsCaseDetailAfterComplete from './journey/seniorAttorneyViewsCaseDetailAfterComplete';
-import seniorAttorneyViewsDocumentDetail from './journey/seniorAttorneyViewsDocumentDetail';
-import seniorAttorneyViewsMessages from './journey/seniorAttorneyViewsMessages';
-import seniorAttorneyViewsMessagesAfterComplete from './journey/seniorAttorneyViewsMessagesAfterComplete';
 import taxPayerSignsOut from './journey/taxpayerSignsOut';
 import taxpayerCancelsCreateCase from './journey/taxpayerCancelsCreateCase';
 import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
@@ -65,6 +66,7 @@ global.FormData = FormData;
 global.Blob = () => {};
 presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
+  createObjectURL: () => '/test-url',
   externalRoute: () => {},
   route: async url => {
     if (url === `/case-detail/${test.docketNumber}`) {
@@ -114,6 +116,7 @@ describe('Case journey', () => {
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
       STATUS_TYPES: Case.STATUS_TYPES,
       TRIAL_CITIES: TrialSession.TRIAL_CITIES,
+      USER_ROLES: User.ROLES,
     });
   });
 
@@ -152,7 +155,7 @@ describe('Case journey', () => {
   docketClerkViewsCaseDetail(test);
   docketClerkViewsDecisionDocument(test);
   docketClerkStartsNewMessageThreadOnAnswer(test);
-  docketClerkStartsNewMessageThreadOnStipulatedDecisionToSeniorAttorney(test);
+  docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC(test);
 
   docketClerkLogIn(test, 'docketclerk1');
   docketClerkDocketDashboard(test);
@@ -167,11 +170,11 @@ describe('Case journey', () => {
   docketClerkViewsOutboxAfterForward(test);
   docketClerkAddsDocketEntries(test, fakeFile);
 
-  seniorAttorneyLogIn(test);
-  seniorAttorneyViewsMessages(test);
-  seniorAttorneyViewsCaseDetail(test);
-  seniorAttorneyViewsDocumentDetail(test);
-  seniorAttorneyMarksStipulatedWorkItemAsCompleted(test);
-  seniorAttorneyViewsCaseDetailAfterComplete(test);
-  seniorAttorneyViewsMessagesAfterComplete(test);
+  adcLogIn(test);
+  adcViewsMessages(test);
+  adcViewsCaseDetail(test);
+  adcViewsDocumentDetail(test);
+  adcMarksStipulatedWorkItemAsCompleted(test);
+  adcViewsCaseDetailAfterComplete(test);
+  adcViewsMessagesAfterComplete(test);
 });

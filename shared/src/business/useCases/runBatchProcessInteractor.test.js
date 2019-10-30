@@ -20,6 +20,7 @@ const MOCK_WORK_ITEMS = [
       documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
     },
     isInitializeCase: true,
+    isQC: true,
     messages: [
       {
         createdAt: '2018-12-27T18:06:02.968Z',
@@ -27,7 +28,7 @@ const MOCK_WORK_ITEMS = [
         fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'Petition ready for review',
         messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
         to: null,
       },
     ],
@@ -56,7 +57,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       getCurrentUser: () => {
         return new User({
           name: 'bob',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -138,7 +139,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       getCurrentUser: () => {
         return new User({
           name: 'bob',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -200,7 +201,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       getCurrentUser: () => {
         return new User({
           name: 'bob',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },

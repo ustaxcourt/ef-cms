@@ -1,6 +1,7 @@
 const {
   getDocumentQCBatchedForUserInteractor,
 } = require('./getDocumentQCBatchedForUserInteractor');
+const { User } = require('../../entities/User');
 
 describe('getDocumentQCBatchedForUserInteractor', () => {
   let applicationContext;
@@ -23,7 +24,7 @@ describe('getDocumentQCBatchedForUserInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },

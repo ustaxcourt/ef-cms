@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const { updateUser } = require('./updateUser');
+const { User } = require('../../../business/entities/User');
 
 describe('updateUser', () => {
   let applicationContext;
@@ -25,7 +26,7 @@ describe('updateUser', () => {
   it('makes put request with the given user data for the matching user id', async () => {
     const user = {
       name: 'Test User',
-      role: 'petitionsclerk',
+      role: User.ROLES.petitionsClerk,
       section: 'petitions',
       userId,
     };

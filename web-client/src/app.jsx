@@ -27,6 +27,7 @@ import {
   faArrowAltCircleLeft as faArrowAltCircleLeftSolid,
   faCalendarAlt,
   faCalendarCheck,
+  faCalendarPlus,
   faCaretDown,
   faCaretLeft,
   faCaretRight,
@@ -47,6 +48,7 @@ import {
   faFileAlt as faFileAltSolid,
   faFilePdf,
   faFlag,
+  faHandPaper,
   faHome,
   faLaptop,
   faLink,
@@ -77,6 +79,7 @@ import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
+import { socketRouter } from './providers/socketRouter';
 import { withAppContextDecorator } from './withAppContext';
 import App from 'cerebral';
 import React from 'react';
@@ -127,6 +130,7 @@ const app = {
       faArrowAltCircleLeftSolid,
       faCalendarAlt,
       faCalendarCheck,
+      faCalendarPlus,
       faCaretDown,
       faExclamationCircle,
       faCaretLeft,
@@ -140,6 +144,7 @@ const app = {
       faStepForward,
       faStepBackward,
       faClockSolid,
+      faHandPaper,
       faClone,
       faCloudDownloadAlt,
       faCloudUploadAlt,
@@ -196,7 +201,9 @@ const app = {
       initialize: initializeSocketProvider,
       start,
       stop,
-    } = socketProvider();
+    } = socketProvider({
+      socketRouter,
+    });
     presenter.providers.socket = { start, stop };
 
     const cerebralApp = App(presenter, debugTools);

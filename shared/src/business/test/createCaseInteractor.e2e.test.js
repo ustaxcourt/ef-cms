@@ -8,7 +8,6 @@ const {
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
-
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -21,7 +20,7 @@ describe('createCase integration test', () => {
     applicationContext = createTestApplicationContext({
       user: {
         name: 'Rick Petitioner',
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
         userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
@@ -68,7 +67,6 @@ describe('createCase integration test', () => {
       caseCaption: 'Rick Petitioner, Petitioner',
       caseTitle:
         'Rick Petitioner, Petitioner v. Commissioner of Internal Revenue, Respondent',
-      currentVersion: '1',
       docketNumber: '101-19',
       docketNumberSuffix: 'S',
       docketRecord: [
@@ -138,7 +136,7 @@ describe('createCase integration test', () => {
     applicationContext.getCurrentUser = () => {
       return new User({
         name: 'richard',
-        role: 'petitionsclerk',
+        role: User.ROLES.petitionsClerk,
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };

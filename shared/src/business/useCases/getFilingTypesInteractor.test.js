@@ -1,4 +1,5 @@
 const { Case } = require('../entities/cases/Case');
+const { User } = require('../entities/User');
 const { getFilingTypesInteractor } = require('./getFilingTypesInteractor');
 
 const validateFilingTypes = filingTypes => {
@@ -19,7 +20,7 @@ describe('Get case filing types', () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },
@@ -42,7 +43,7 @@ describe('Get case filing types', () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
-          role: 'practitioner',
+          role: User.ROLES.practitioner,
           userId: 'someLawyer',
         };
       },

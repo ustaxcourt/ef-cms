@@ -44,6 +44,23 @@ export const CaseDetailHeader = connect(
                     <span aria-hidden="true">{formattedCaseDetail.status}</span>
                   </span>
                 )}
+
+                {caseDetailHelper.hidePublicCaseInformation &&
+                  formattedCaseDetail.showBlockedTag && (
+                    <span
+                      aria-label="blocked"
+                      className="margin-left-1 usa-tag red-tag"
+                    >
+                      <span aria-hidden="true">
+                        <FontAwesomeIcon
+                          className="margin-right-1"
+                          icon="hand-paper"
+                          size="1x"
+                        />
+                        BLOCKED
+                      </span>
+                    </span>
+                  )}
               </div>
               <p className="margin-y-0" id="case-title">
                 {!caseDetailHelper.showCaptionEditButton && (
