@@ -1,6 +1,6 @@
 const { Case } = require('../entities/cases/Case');
-const { User } = require('../entities/User');
 const { getFilingTypesInteractor } = require('./getFilingTypesInteractor');
+const { User } = require('../entities/User');
 
 const validateFilingTypes = filingTypes => {
   filingTypes.forEach(filingType => {

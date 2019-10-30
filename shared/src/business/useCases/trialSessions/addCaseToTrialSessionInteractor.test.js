@@ -1,6 +1,6 @@
 import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
-const { User } = require('../../entities/User');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { User } = require('../../entities/User');
 
 const MOCK_TRIAL = {
   maxCases: 100,

@@ -1,10 +1,10 @@
-const { UnauthorizedError } = require('../../errors/errors');
+const AWS = require('aws-sdk');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const AWS = require('aws-sdk');
 const { get } = require('lodash');
+const { UnauthorizedError } = require('../../errors/errors');
 
 /**
  * getBlockedCasesInteractor

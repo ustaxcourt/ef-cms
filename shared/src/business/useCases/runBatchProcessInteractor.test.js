@@ -1,10 +1,10 @@
 const sinon = require('sinon');
+const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
 const { runBatchProcessInteractor } = require('./runBatchProcessInteractor');
 const { User } = require('../entities/User');
-const { Case } = require('../entities/cases/Case');
 
 const MOCK_WORK_ITEMS = [
   {

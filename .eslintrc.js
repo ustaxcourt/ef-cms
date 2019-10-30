@@ -18,6 +18,7 @@ module.exports = {
     'security',
     'sort-destructure-keys',
     'sort-keys-fix',
+    'sort-requires',
     'spellcheck',
   ],
   rules: {
@@ -104,6 +105,7 @@ module.exports = {
         enforceForRenamedProperties: false,
       },
     ],
+    'sort-requires/sort-requires': 2,
     'spellcheck/spell-checker': [
       1,
       {

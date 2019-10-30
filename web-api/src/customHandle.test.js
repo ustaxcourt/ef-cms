@@ -1,8 +1,8 @@
-const { customHandle } = require('./customHandle');
 const {
   NotFoundError,
   UnauthorizedError,
 } = require('../../shared/src/errors/errors');
+const { customHandle } = require('./customHandle');
 
 jest.mock('./middleware/apiGatewayHelper');
 const { sendError, sendOk } = require('./middleware/apiGatewayHelper');

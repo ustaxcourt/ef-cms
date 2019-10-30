@@ -11,10 +11,10 @@ const {
 const {
   setWorkItemAsReadInteractor,
 } = require('../useCases/workitems/setWorkItemAsReadInteractor');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { User } = require('../entities/User');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { WorkItem } = require('../entities/WorkItem');
 
 const DATETIME = '2019-03-01T22:54:06.000Z';
