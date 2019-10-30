@@ -203,7 +203,7 @@ describe('updateUserContactInformationInteractor', () => {
     expect(result).toEqual('error');
   });
 
-  it('returns unauthorized error when the user attempts to update a different user not owned by themself', async () => {
+  it('returns unauthorized error when the user attempts to update a different user not owned by them', async () => {
     const applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {

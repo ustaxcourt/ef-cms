@@ -1,3 +1,6 @@
+require('core-js/stable');
+require('regenerator-runtime/runtime');
+
 module.exports = {
   addCaseToTrialSessionLambda: require('./trialSessions/addCaseToTrialSessionLambda')
     .handler,

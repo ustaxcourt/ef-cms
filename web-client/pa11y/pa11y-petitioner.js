@@ -331,6 +331,7 @@ module.exports = [
       'click element #add-supporting-document-button',
       'wait for element #supporting-document-0-label to be visible',
       'wait for element #secondary-document to be visible',
+      'wait for element #secondaryDocument-certificateOfService-label to be visible',
       'click #secondaryDocument-certificateOfService-label',
       'wait for element fieldset.service-date to be visible',
       'wait for element #add-secondary-supporting-document-button to be visible',

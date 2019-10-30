@@ -14,7 +14,7 @@ const MOCK_WORK_ITEMS = [
     assigneeId: null,
     assigneeName: 'IRSBatchSystem',
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: 'Batched for IRS',
+    caseStatus: Case.STATUS_TYPES.batchedForIRS,
     createdAt: '2018-12-27T18:06:02.971Z',
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
@@ -45,7 +45,7 @@ const MOCK_WORK_ITEMS = [
     assigneeId: null,
     assigneeName: 'Test Petitionsclerk',
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: 'Batched for IRS',
+    caseStatus: Case.STATUS_TYPES.batchedForIRS,
     createdAt: '2018-12-27T18:12:02.971Z',
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
@@ -114,7 +114,7 @@ describe('Send petition to IRS Holding Queue', () => {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(result.status).toEqual('Batched for IRS');
+    expect(result.status).toEqual(Case.STATUS_TYPES.batchedForIRS);
   });
 
   it('throws unauthorized error if user is unauthorized', async () => {

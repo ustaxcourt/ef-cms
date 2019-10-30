@@ -44,7 +44,7 @@ export const InclusionsForm = connect(
                 link
                 onClick={() =>
                   openCleanModalSequence({
-                    value: 'WhatCanIIncludeModalOverlay',
+                    showModal: 'WhatCanIIncludeModalOverlay',
                   })
                 }
               >

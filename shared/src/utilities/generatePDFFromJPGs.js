@@ -1,11 +1,11 @@
 const { PDFDocument } = require('pdf-lib');
 
 /**
- * takes an array of JPG images (each a bytearray) and combines
+ * takes an array of JPG images (each a byte array) and combines
  * them into one PDF file
  *
- * @param {Array} imgData array of bytearrays
- * @returns {Uint8Array} bytearray of PDF
+ * @param {Array} imgData array of byte arrays
+ * @returns {Uint8Array} byte array of PDF
  */
 
 exports.generatePDFFromJPGs = async imgData => {
