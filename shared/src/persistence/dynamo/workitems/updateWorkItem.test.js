@@ -9,7 +9,7 @@ describe('updateWorkItem', () => {
     });
   });
 
-  it('invokes the peristence layer with pk of {workItemId}, sk of {workItemId} and other expected params', async () => {
+  it('invokes the persistence layer with pk of {workItemId}, sk of {workItemId} and other expected params', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
