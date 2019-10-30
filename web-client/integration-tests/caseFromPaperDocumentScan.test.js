@@ -4,6 +4,7 @@ import { ContactFactory } from '../../shared/src/business/entities/contacts/Cont
 import { JSDOM } from 'jsdom';
 import { MAX_FILE_SIZE_MB } from '../../shared/src/persistence/s3/getUploadPolicy';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
+import { User } from '../../shared/src/business/entities/User';
 import { applicationContext } from '../src/applicationContext';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { isFunction, mapValues } from 'lodash';
@@ -107,6 +108,7 @@ describe('Case from Paper Document Scan journey', () => {
       MAX_FILE_SIZE_MB,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
       TRIAL_CITIES: TrialSession.TRIAL_CITIES,
+      USER_ROLES: User.ROLES,
     });
   });
 

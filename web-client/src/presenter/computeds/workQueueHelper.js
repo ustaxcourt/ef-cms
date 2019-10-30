@@ -6,7 +6,8 @@ export const workQueueHelper = get => {
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const userSection = get(state.user.section);
   const userRole = get(state.user.role);
-  const isJudge = userRole === 'judge';
+  const USER_ROLES = get(state.constants.USER_ROLES);
+  const isJudge = userRole === USER_ROLES.judge;
   const userRoleMap = mapValueHelper(userRole);
   const { myInboxUnreadCount, qcUnreadCount } = get(state.notifications);
   const { workQueueIsInternal } = workQueueToDisplay;
@@ -20,9 +21,12 @@ export const workQueueHelper = get => {
     : qcUnreadCount;
   const workQueueType = workQueueIsInternal ? 'Messages' : 'Document QC';
   const isDisplayingQC = !workQueueIsInternal;
-  const userIsPetitionsClerk = userRole === 'petitionsclerk';
-  const userIsDocketClerk = userRole === 'docketclerk';
-  const userIsOther = !['docketclerk', 'petitionsclerk'].includes(userRole);
+  const userIsPetitionsClerk = userRole === USER_ROLES.petitionsClerk;
+  const userIsDocketClerk = userRole === USER_ROLES.docketClerk;
+  const userIsOther = ![
+    USER_ROLES.docketClerk,
+    USER_ROLES.petitionsClerk,
+  ].includes(userRole);
   const workQueueTitle = `${
     showIndividualWorkQueue
       ? 'My'

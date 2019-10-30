@@ -1,4 +1,5 @@
 const { uploadDocument } = require('./uploadDocument');
+const { User } = require('../../business/entities/User');
 
 describe('uploadDocument', () => {
   it('returns the expected documentId after the upload was successful', async () => {
@@ -6,7 +7,7 @@ describe('uploadDocument', () => {
     let applicationContext = {
       getBaseUrl: () => 'http://localhost',
       getCurrentUser: () => {
-        return { role: 'petitioner', userId: 'taxpayer' };
+        return { role: User.ROLES.petitioner, userId: 'taxpayer' };
       },
       getCurrentUserToken: () => {
         return '';

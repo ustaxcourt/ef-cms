@@ -175,6 +175,10 @@ export const SectionWorkQueueInbox = connect(
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
                         messageId: item.currentMessage.messageId,
+                        shouldLinkToComplete:
+                          item.document.isFileAttached === false,
+                        shouldLinkToEdit:
+                          item.isQC && item.document.eventCode !== 'P',
                       })}
                       onClick={e => {
                         e.stopPropagation();

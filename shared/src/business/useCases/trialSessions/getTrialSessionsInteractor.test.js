@@ -1,5 +1,6 @@
 const { getTrialSessionsInteractor } = require('./getTrialSessionsInteractor');
 const { omit } = require('lodash');
+const { User } = require('../../entities/User');
 
 const MOCK_TRIAL_SESSION = {
   maxCases: 100,
@@ -17,7 +18,7 @@ describe('Get trial sessions', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'petitioner',
         };
       },
@@ -40,7 +41,7 @@ describe('Get trial sessions', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },

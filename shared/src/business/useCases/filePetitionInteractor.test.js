@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const { filePetitionInteractor } = require('./filePetitionInteractor');
+const { User } = require('../entities/User');
 
 let uploadDocumentStub;
 let createCaseStub;
@@ -20,7 +21,7 @@ describe('filePetitionInteractor', () => {
 
     return {
       getCurrentUser: () => ({
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
         userId: 'taxpayer',
       }),
       getPersistenceGateway: () => ({
@@ -61,7 +62,7 @@ describe('filePetitionInteractor', () => {
       await filePetitionInteractor({
         applicationContext: createApplicationContext({
           getCurrentUser: () => ({
-            role: 'respondent',
+            role: User.ROLES.respondent,
             userId: 'respondent',
           }),
         }),

@@ -3,6 +3,7 @@ const {
   PETITION,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { User } = require('../entities/User');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
@@ -30,7 +31,7 @@ const addPetitionDocumentToCase = ({
         createdAt: documentEntity.createdAt,
       },
       isInitializeCase: documentEntity.isPetitionDocument() ? true : false,
-      isInternal: false,
+      isQC: true,
       section: PETITIONS_SECTION,
       sentBy: user.userId,
     },
@@ -97,7 +98,7 @@ exports.createCaseInteractor = async ({
   );
 
   let practitioners = [];
-  if (user.role === 'practitioner') {
+  if (user.role === User.ROLES.practitioner) {
     const practitionerUser = await applicationContext
       .getPersistenceGateway()
       .getUserById({

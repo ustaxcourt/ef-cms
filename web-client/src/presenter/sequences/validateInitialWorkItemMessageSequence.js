@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
+import { updateWorkItemFromPropsOrModalOrFormAction } from '../actions/WorkItem/updateWorkItemFromPropsOrModalOrFormAction';
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
 export const validateInitialWorkItemMessageSequence = [
@@ -8,9 +9,10 @@ export const validateInitialWorkItemMessageSequence = [
   {
     ignore: [],
     validate: [
+      updateWorkItemFromPropsOrModalOrFormAction,
       validateInitialWorkItemMessageAction,
       {
-        error: [setValidationErrorsAction],
+        error: [setValidationErrorsByFlagAction],
         success: [clearAlertsAction],
       },
     ],

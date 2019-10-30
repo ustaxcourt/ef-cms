@@ -1,5 +1,5 @@
 import { applicationContext } from '../../src/applicationContext';
-import { userMap } from '../../../shared/src/persistence/dynamo/users/getUserById';
+import { userMap } from '../../../shared/src/test/mockUserTokenMap';
 
 export default (test, token = 'docketclerk') => {
   it('the docketclerk logs in', async () => {

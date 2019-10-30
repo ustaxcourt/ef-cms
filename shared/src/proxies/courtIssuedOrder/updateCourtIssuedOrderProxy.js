@@ -20,6 +20,6 @@ exports.updateCourtIssuedOrderInteractor = ({
     body: {
       documentMetadata,
     },
-    endpoint: `/cases/${caseId}/court-issued-orders/${documentIdToEdit}`,
+    endpoint: `/case-documents/${caseId}/court-issued-orders/${documentIdToEdit}`,
   });
 };

@@ -1,10 +1,11 @@
 const { Document } = require('./Document');
 const { Message } = require('./Message');
 const { WorkItem } = require('./WorkItem');
+const { User } = require('./User');
 
 const A_VALID_DOCUMENT = {
   documentType: 'Petition',
-  role: 'petitioner',
+  role: User.ROLES.petitioner,
   userId: 'taxpayer',
 };
 const caseDetail = {
@@ -56,6 +57,16 @@ describe('Document entity', () => {
       expect(myDoc.isValid()).toBeFalsy();
     });
 
+    it('Creates an invalid document with serviceDate of undefined-undefined-undefined', () => {
+      const myDoc = new Document(
+        {
+          serviceDate: 'undefined-undefined-undefined',
+        },
+        { applicationContext },
+      );
+      expect(myDoc.isValid()).toBeFalsy();
+    });
+
     it('addWorkItem', () => {
       const myDoc = new Document(A_VALID_DOCUMENT, { applicationContext });
       const workItem = new WorkItem(
@@ -67,6 +78,7 @@ describe('Document entity', () => {
           caseTitle: 'testing',
           docketNumber: '101-18',
           document: {},
+          isQC: true,
           sentBy: 'bob',
         },
         { applicationContext },
@@ -406,6 +418,17 @@ describe('Document entity', () => {
 
       expect(document.signedByUserId).toEqual(null);
       expect(document.signedAt).toEqual(null);
+    });
+  });
+
+  describe('setQCed', () => {
+    it('updates the document QC information with user name, id, and date', () => {
+      const document = new Document(A_VALID_DOCUMENT, { applicationContext });
+      const user = { name: 'Jean Luc', userId: 'ncc-1701-c' };
+      document.setQCed(user);
+      expect(document.qcByUser.name).toEqual('Jean Luc');
+      expect(document.qcByUser.userId).toEqual('ncc-1701-c');
+      expect(document.qcAt).toBeDefined();
     });
   });
 });

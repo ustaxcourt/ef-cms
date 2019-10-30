@@ -1,5 +1,5 @@
 import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
-
+import { User } from '../../../../../shared/src/business/entities/User';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { updatePartyTypeAction } from './updatePartyTypeAction';
@@ -25,7 +25,7 @@ const getFixtures = (props, state = {}) => ({
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
     },
     user: {
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
     },
   },
 });

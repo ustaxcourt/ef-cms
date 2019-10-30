@@ -1,6 +1,7 @@
 const {
   getDownloadPolicyUrlInteractor,
 } = require('./getDownloadPolicyUrlInteractor');
+const { User } = require('../entities/User');
 
 describe('getDownloadPolicyUrlInteractor', () => {
   beforeEach(() => {});
@@ -29,7 +30,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     const applicationContext = {
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },

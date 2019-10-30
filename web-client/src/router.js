@@ -76,6 +76,19 @@ const router = {
     );
 
     route(
+      '/case-detail/*/documents/*/complete',
+      checkLoggedIn((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
+        );
+        app.getSequence('gotoCompleteDocketEntrySequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/documents/*/edit',
       checkLoggedIn((docketNumber, documentId) => {
         setPageTitle(
@@ -296,6 +309,18 @@ const router = {
       checkLoggedIn(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Docket record`);
         app.getSequence('gotoPrintableDocketRecordSequence')({ docketNumber });
+      }),
+    );
+
+    route(
+      '/case-detail/*/confirmation',
+      checkLoggedIn(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Case Confirmation`,
+        );
+        app.getSequence('gotoPrintableCaseConfirmationSequence')({
+          docketNumber,
+        });
       }),
     );
 
@@ -527,6 +552,14 @@ const router = {
       checkLoggedIn(() => {
         setPageTitle('Case deadlines');
         app.getSequence('gotoAllCaseDeadlinesSequence')();
+      }),
+    );
+
+    route(
+      '/reports/blocked-cases',
+      checkLoggedIn(() => {
+        setPageTitle('Blocked cases');
+        app.getSequence('gotoBlockedCasesReportSequence')();
       }),
     );
 

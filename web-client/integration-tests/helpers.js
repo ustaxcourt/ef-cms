@@ -1,6 +1,10 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
+import { Document } from '../../shared/src/business/entities/Document';
+import { Order } from '../../shared/src/business/entities/orders/Order';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
+import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { User } from '../../shared/src/business/entities/User';
 import { applicationContext } from '../src/applicationContext';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import {
@@ -25,6 +29,8 @@ const fakeFile = new Buffer.from(fakeData, 'base64', {
   type: 'application/pdf',
 });
 fakeFile.name = 'fakeFile.pdf';
+
+exports.fakeFile = fakeFile;
 
 exports.getFormattedDocumentQCMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
@@ -179,13 +185,13 @@ exports.getNotifications = test => {
 
 exports.assignWorkItems = async (test, to, workItems) => {
   const users = {
+    adc: {
+      name: 'Test ADC',
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    },
     docketclerk: {
       name: 'Test Docketclerk',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-    },
-    seniorattorney: {
-      name: 'Test Seniorattorney',
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     },
   };
   await test.runSequence('selectAssigneeSequence', {
@@ -216,7 +222,7 @@ exports.uploadExternalDecisionDocument = async test => {
     scenario: 'Standard',
     searchError: false,
     secondaryDocument: {},
-    serviceDate: 'undefined-undefined-undefined',
+    serviceDate: null,
     supportingDocument: null,
     supportingDocumentFile: null,
     supportingDocumentFreeText: null,
@@ -243,7 +249,7 @@ exports.uploadProposedStipulatedDecision = async test => {
     scenario: 'Standard',
     searchError: false,
     secondaryDocument: { certificateOfServiceDate: null },
-    serviceDate: 'undefined-undefined-undefined',
+    serviceDate: null,
   });
   await test.runSequence('submitExternalDocumentSequence');
 };
@@ -325,6 +331,9 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   let test;
   global.FormData = FormData;
   global.Blob = () => {};
+  global.File = () => {
+    return fakeFile;
+  };
   presenter.providers.applicationContext = applicationContext;
   const originalUseCases = applicationContext.getUseCases();
   presenter.providers.applicationContext.getUseCases = () => {
@@ -335,15 +344,48 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   };
 
   presenter.providers.router = {
+    createObjectURL: () => {
+      return 'fakeUrl';
+    },
+    externalRoute: () => {},
+    revokeObjectURL: () => {},
     route: async url => {
-      if (url === `/case-detail/${test.docketNumber}`) {
-        await test.runSequence('gotoCaseDetailSequence', {
-          docketNumber: test.docketNumber,
-        });
-      }
-
-      if (url === '/') {
-        await test.runSequence('gotoDashboardSequence');
+      test.currentRouteUrl = url;
+      switch (url) {
+        case '/document-qc/section/inbox':
+          await test.runSequence('gotoMessagesSequence', {
+            box: 'inbox',
+            queue: 'section',
+            workQueueIsInternal: false,
+          });
+          break;
+        case '/document-qc/my/inbox':
+          await test.runSequence('gotoMessagesSequence', {
+            box: 'inbox',
+            queue: 'my',
+            workQueueIsInternal: false,
+          });
+          break;
+        case '/messages/my/inbox':
+          await test.runSequence('gotoMessagesSequence', {
+            box: 'inbox',
+            queue: 'my',
+            workQueueIsInternal: true,
+          });
+          break;
+        case `/case-detail/${test.docketNumber}`:
+          await test.runSequence('gotoCaseDetailSequence', {
+            docketNumber: test.docketNumber,
+          });
+          break;
+        case '/search/no-matches':
+          await test.runSequence('gotoCaseSearchNoMatchesSequence');
+          break;
+        case '/':
+          await test.runSequence('gotoDashboardSequence');
+          break;
+        default:
+          break;
       }
     },
   };
@@ -358,6 +400,26 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   test = CerebralTest(presenter);
 
   global.window = {
+    DOMParser: () => {
+      return {
+        parseFromString: () => {
+          return {
+            children: [
+              {
+                innerHTML: 'something',
+              },
+            ],
+            querySelector: () => {},
+          };
+        },
+      };
+    },
+    URL: {
+      createObjectURL: () => {
+        return fakeData;
+      },
+      revokeObjectURL: () => {},
+    },
     document: {},
     localStorage: {
       removeItem: () => null,
@@ -367,9 +429,16 @@ exports.setupTest = ({ useCases = {} } = {}) => {
 
   test.setState('constants', {
     CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+    CATEGORIES: Document.CATEGORIES,
+    CATEGORY_MAP: Document.CATEGORY_MAP,
     COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+    INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
+    ORDER_TYPES_MAP: Order.ORDER_TYPES,
     PARTY_TYPES: ContactFactory.PARTY_TYPES,
+    STATUS_TYPES: Case.STATUS_TYPES,
     TRIAL_CITIES: TrialSession.TRIAL_CITIES,
+    TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+    USER_ROLES: User.ROLES,
   });
 
   return test;

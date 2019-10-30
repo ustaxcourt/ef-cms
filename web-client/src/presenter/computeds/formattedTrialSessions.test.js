@@ -1,3 +1,4 @@
+import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import {
   formatSession,
@@ -11,7 +12,7 @@ const formattedTrialSessions = withAppContextDecorator(
 );
 
 const testJudgeUser = {
-  role: 'judge',
+  role: User.ROLES.judge,
   userId: '1',
 };
 
@@ -249,7 +250,7 @@ describe('formattedTrialSessions', () => {
     const result = runCompute(formattedTrialSessions, {
       state: {
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: { role: 'petitionsclerk', userId: '1' },
+        user: { role: User.ROLES.petitionsClerk, userId: '1' },
       },
     });
     expect(result.formattedSessions).toMatchObject([

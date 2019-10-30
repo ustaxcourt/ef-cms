@@ -1,4 +1,5 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -10,7 +11,7 @@ export const AllCases = connect(
   ({ allCases }) => {
     return (
       <React.Fragment>
-        <div className="text-semibold push-right margin-bottom-2 margin-top-neg-205">
+        <div className="text-semibold push-right margin-bottom-2">
           Count: {allCases.length}
         </div>
         <table
@@ -20,33 +21,35 @@ export const AllCases = connect(
         >
           <thead>
             <tr>
-              <th>Status</th>
               <th>Docket</th>
+              <th aria-label="manually added indicator"></th>
               <th>Case name</th>
-              <th>Petitioner counsel</th>
-              <th>Respondent counsel</th>
+              <th>Case status</th>
               <th>Disposition</th>
+              <th>Disposition date</th>
             </tr>
           </thead>
           {allCases.map((item, idx) => (
             <tbody key={idx}>
               <tr className="eligible-cases-row">
-                <td>{item.status}</td>
                 <td>
                   <CaseLink formattedCase={item} />
                 </td>
-                <td>{item.caseCaptionNames}</td>
-                <td aria-hidden="true">
-                  {item.practitioners.map((practitioner, idx) => (
-                    <div key={idx}>{practitioner.name}</div>
-                  ))}
-                </td>
+
                 <td>
-                  {item.respondents.map((respondent, idx) => (
-                    <div key={idx}>{respondent.name}</div>
-                  ))}
+                  {item.isManuallyAdded && (
+                    <span aria-label="manually added indicator">
+                      <FontAwesomeIcon
+                        className="mini-success"
+                        icon="calendar-plus"
+                      />
+                    </span>
+                  )}
                 </td>
+                <td>{item.caseCaptionNames}</td>
+                <td>{item.status}</td>
                 <td>{item.disposition}</td>
+                <td>{item.removedFromTrialDateFormatted}</td>
               </tr>
             </tbody>
           ))}

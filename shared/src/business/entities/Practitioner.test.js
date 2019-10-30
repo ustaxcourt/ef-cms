@@ -1,4 +1,5 @@
 const { Practitioner } = require('./Practitioner');
+const { User } = require('./User');
 
 describe('Practitioner', () => {
   it('Creates a valid Practitioner', () => {
@@ -16,7 +17,7 @@ describe('Practitioner', () => {
       },
       firstName: 'firstName',
       lastName: 'lastName',
-      role: 'petitioner',
+      role: User.ROLES.practitioner,
       userId: 'taxpayer',
     });
     expect(user.isValid()).toBeTruthy();
@@ -24,7 +25,7 @@ describe('Practitioner', () => {
 
   it('Creates an invalid', () => {
     const user = new Practitioner({
-      role: 'Practitioner',
+      role: User.ROLES.practitioner,
     });
     expect(user.isValid()).toBeFalsy();
   });
