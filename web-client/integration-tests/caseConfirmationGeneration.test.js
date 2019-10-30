@@ -31,6 +31,7 @@ describe('Case Confirmation', () => {
     userSignsOut(test);
     petitionsClerkLogIn(test);
     petitionsClerkSendsCaseToIRSHoldingQueue(test);
+    userNavigatesToCreateCaseConfirmation(test);
     userSignsOut(test);
   });
 
