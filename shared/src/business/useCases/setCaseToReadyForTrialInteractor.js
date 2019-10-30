@@ -45,13 +45,15 @@ exports.setCaseToReadyForTrialInteractor = async ({
       caseToUpdate: caseEntity.validate().toRawObject(),
     });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .createCaseTrialSortMappingRecords({
-      applicationContext,
-      caseId,
-      caseSortTags: caseEntity.validate().generateTrialSortTags(),
-    });
+  if (!caseEntity.trialSessionId) {
+    await applicationContext
+      .getPersistenceGateway()
+      .createCaseTrialSortMappingRecords({
+        applicationContext,
+        caseId,
+        caseSortTags: caseEntity.validate().generateTrialSortTags(),
+      });
+  }
 
   return updatedCase;
 };

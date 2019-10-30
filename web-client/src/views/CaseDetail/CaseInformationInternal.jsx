@@ -195,6 +195,36 @@ const TrialInformation = ({
         </div>
       </>
     )}
+    {caseDetail.showScheduled && (
+      <>
+        <h3 className="underlined">Trial - Scheduled</h3>
+        <div className="grid-row">
+          <div className="grid-col-4">
+            <p className="label">Place of Trial</p>
+            <p>{caseDetail.formattedTrialCity}</p>
+          </div>
+          <div className="grid-col-4">
+            <p className="label">Trial Date</p>
+            <p>{caseDetail.formattedTrialDate}</p>
+          </div>
+          <div className="grid-col-4">
+            <p className="label">Assigned Judge</p>
+            <p>{caseDetail.formattedTrialJudge}</p>
+          </div>
+        </div>
+        <Button
+          link
+          className="red-warning"
+          icon="trash"
+          id="remove-from-trial-session-btn"
+          onClick={() => {
+            openRemoveFromTrialSessionModalSequence();
+          }}
+        >
+          Remove from Trial Session
+        </Button>
+      </>
+    )}
   </React.Fragment>
 );
 
