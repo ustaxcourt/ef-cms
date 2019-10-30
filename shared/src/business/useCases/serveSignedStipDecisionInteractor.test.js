@@ -73,7 +73,7 @@ const applicationContext = {
   },
 };
 
-describe('Serves Signed Stipulated Decsion on all parties', () => {
+describe('Serves Signed Stipulated Decision on all parties', () => {
   it('updates case status to closed', async () => {
     await serveSignedStipDecisionInteractor({
       applicationContext,

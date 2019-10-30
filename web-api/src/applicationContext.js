@@ -1,4 +1,4 @@
-/* eslint-disable security/detect-object-injection, security/detect-child-process */
+/* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker */
 // const AWSXRay = require('aws-xray-sdk');
 //
 // const AWS =

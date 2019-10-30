@@ -52,7 +52,7 @@ exports.updateCourtIssuedOrderInteractor = async ({
   );
   documentEntity.setAsProcessingStatusAsCompleted();
 
-  // we always unsign the order document on updates because the court user will need to sign it again
+  // we always un-sign the order document on updates because the court user will need to sign it again
   documentEntity.unsignDocument();
 
   caseEntity.updateDocument(documentEntity);
