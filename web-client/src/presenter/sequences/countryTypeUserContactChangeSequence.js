@@ -1,12 +1,11 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { countryTypeUserContactChangeAction } from '../actions/countryTypeUserContactChangeAction';
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { updateUserPropertyAction } from '../actions/updateUserPropertyAction';
 
 export const countryTypeUserContactChangeSequence = [
   countryTypeUserContactChangeAction,
   stopShowValidationAction,
-  set(state.user[props.key], props.value),
+  updateUserPropertyAction,
   clearAlertsAction,
 ];
