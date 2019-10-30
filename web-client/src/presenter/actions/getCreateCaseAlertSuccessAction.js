@@ -1,8 +1,6 @@
 /**
  * creates the default success alert object
  *
- * @param {object} provider the provider object
- * @param {object} provider.props the props object
  * @returns {object} the alertSuccess object with default strings
  */
 export const getCreateCaseAlertSuccessAction = () => {
