@@ -1,3 +1,6 @@
+require('core-js/stable');
+require('regenerator-runtime/runtime');
+
 const { headers, sendError, sendOk } = require('./middleware/apiGatewayHelper');
 
 const {

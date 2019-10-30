@@ -1,3 +1,6 @@
+require('core-js/stable');
+require('regenerator-runtime/runtime');
+
 module.exports = {
   associatePractitionerWithCaseLambda: require('./manualAssociation/associatePractitionerWithCaseLambda')
     .handler,
