@@ -47,11 +47,17 @@ exports.setTrialSessionCalendarInteractor = async ({
       trialSessionId,
     });
 
+  let eligibleCasesLimit = trialSessionEntity.maxCases;
+
+  if (manuallyAddedCases && manuallyAddedCases.length > 0) {
+    eligibleCasesLimit -= manuallyAddedCases.length;
+  }
+
   const eligibleCases = await applicationContext
     .getPersistenceGateway()
     .getEligibleCasesForTrialSession({
       applicationContext,
-      limit: trialSessionEntity.maxCases,
+      limit: eligibleCasesLimit,
       skPrefix: trialSessionEntity.generateSortKeyPrefix(),
     });
 
