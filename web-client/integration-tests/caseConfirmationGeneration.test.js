@@ -34,7 +34,7 @@ describe('Case Confirmation', () => {
     userSignsOut(test);
   });
 
-  describe('Petitonsclerk creates a case then serves case then gets message for case confirmation', () => {
+  describe('Petitionsclerk creates a case then serves case then gets message for case confirmation', () => {
     petitionsClerkLogIn(test);
     petitionsClerkCreatesNewCase(test, fakeFile);
     petitionsClerkViewsMyMessagesInbox(test, true);
