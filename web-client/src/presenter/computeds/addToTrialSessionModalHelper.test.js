@@ -55,6 +55,7 @@ describe('add to trial session modal helper', () => {
       },
     });
 
+    expect(result.showSessionNotSetAlert).toBeFalsy();
     expect(result.trialSessionsFormatted).toBeFalsy();
     expect(result.trialSessionsFormattedByState).toBeFalsy();
   });
@@ -78,6 +79,7 @@ describe('add to trial session modal helper', () => {
       },
     });
 
+    expect(result.showSessionNotSetAlert).toBeFalsy();
     expect(result.trialSessionsFormatted).toBeFalsy();
     expect(result.trialSessionsFormattedByState).toMatchObject({
       Alabama: [
@@ -114,6 +116,7 @@ describe('add to trial session modal helper', () => {
       },
     });
 
+    expect(result.showSessionNotSetAlert).toBeFalsy();
     expect(result.trialSessionsFormattedByState).toBeFalsy();
     expect(result.trialSessionsFormatted.length).toEqual(2);
     expect(result.trialSessionsFormatted).toMatchObject([
@@ -134,6 +137,7 @@ describe('add to trial session modal helper', () => {
       },
     });
 
+    expect(result.showSessionNotSetAlert).toBeFalsy();
     expect(result.trialSessionsFormatted).toBeFalsy();
     expect(result.trialSessionsFormattedByState).toMatchObject({
       Alabama: [
@@ -177,6 +181,7 @@ describe('add to trial session modal helper', () => {
       },
     });
 
+    expect(result.showSessionNotSetAlert).toBeFalsy();
     expect(result.trialSessionsFormattedByState).toBeFalsy();
     expect(result.trialSessionsFormatted.length).toEqual(2);
     expect(result.trialSessionsFormatted).toMatchObject([
@@ -189,5 +194,31 @@ describe('add to trial session modal helper', () => {
         trialSessionId: '1',
       },
     ]);
+  });
+
+  it('should show a "session not set" alert if the selected trial session has yet to be calendared', async () => {
+    const result = runCompute(addToTrialSessionModalHelper, {
+      state: {
+        caseDetail: { preferredTrialCity: 'Birmingham, Alabama' },
+        form: {},
+        modal: {
+          showAllLocations: false,
+          trialSessionId: '6',
+          trialSessions: [
+            ...trialSessions,
+            {
+              isCalendared: false,
+              sessionType: 'Small',
+              startDate: '2019-05-01T21:40:46.415Z',
+              status: 'Upcoming',
+              trialLocation: 'Boise, Idaho',
+              trialSessionId: '6',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showSessionNotSetAlert).toBeTruthy();
   });
 });
