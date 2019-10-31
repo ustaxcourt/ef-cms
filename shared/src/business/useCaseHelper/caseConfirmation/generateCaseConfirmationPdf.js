@@ -1,7 +1,7 @@
 const DateHandler = require('../../utilities/DateHandler');
-const Handlebars = require('handlebars');
-const sass = require('node-sass');
-const staticResources = require('./caseConfirmationResources');
+// const Handlebars = require('handlebars');
+// const sass = require('node-sass');
+// const staticResources = require('./caseConfirmationResources');
 
 const {
   isAuthorized,
@@ -44,19 +44,21 @@ const formattedCaseInfo = caseInfo => {
  * @returns {string} an html string resulting from rendering template with caseInfo
  */
 const generateCaseConfirmationPage = async caseInfo => {
-  const { css } = await new Promise(resolve => {
-    sass.render({ data: staticResources.confirmSassContent }, (err, result) => {
-      return resolve(result);
-    });
-  });
-  const compiledFunction = Handlebars.compile(
-    staticResources.confirmTemplateContent,
-  );
-  const html = compiledFunction({
-    ...formattedCaseInfo(caseInfo),
-    styles: `<style>${css}</style>`,
-    logo: staticResources.ustcLogoBufferBase64,
-  });
+  // const { css } = await new Promise(resolve => {
+  //   sass.render({ data: staticResources.confirmSassContent }, (err, result) => {
+  //     return resolve(result);
+  //   });
+  // });
+  // const compiledFunction = Handlebars.compile(
+  //   staticResources.confirmTemplateContent,
+  // );
+  // const html = compiledFunction({
+  //   ...formattedCaseInfo(caseInfo),
+  //   styles: `<style>${css}</style>`,
+  //   logo: staticResources.ustcLogoBufferBase64,
+  // });
+  formattedCaseInfo(caseInfo); // putting this here for lint
+  const html = '';
   return html;
 };
 /**
