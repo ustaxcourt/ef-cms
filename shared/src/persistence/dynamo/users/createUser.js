@@ -104,12 +104,27 @@ exports.createUser = async ({ applicationContext, user }) => {
       .promise();
     userId = response.User.Username;
   } catch (err) {
+    // the user already exists
     const response = await cognito
       .adminGetUser({
         UserPoolId: process.env.USER_POOL_ID,
         Username: user.email,
       })
       .promise();
+
+    await cognito
+      .adminUpdateUserAttributes({
+        UserAttributes: [
+          {
+            Name: 'custom:role',
+            Value: user.role,
+          },
+        ],
+        UserPoolId: process.env.USER_POOL_ID,
+        Username: response.Username,
+      })
+      .promise();
+
     userId = response.Username;
   }
 
