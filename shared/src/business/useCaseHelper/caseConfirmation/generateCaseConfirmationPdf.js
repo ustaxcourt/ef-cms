@@ -1,25 +1,13 @@
 const DateHandler = require('../../utilities/DateHandler');
-const fs = require('fs');
 const Handlebars = require('handlebars');
-const path = require('path');
 const sass = require('node-sass');
+const staticResources = require('./caseConfirmationResources');
 
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
-
-const confirmSassContent = fs.readFileSync(
-  path.resolve(__dirname, 'caseConfirmation.scss'),
-  'utf8',
-);
-const confirmTemplateContent = fs.readFileSync(
-  path.resolve(__dirname, 'caseConfirmation.handlebars'),
-  'utf8',
-);
-
-const ustcLogoBuffer = fs.readFileSync('./shared/static/images/ustc_seal.png');
 
 /**
  *
@@ -33,10 +21,10 @@ const formattedCaseInfo = caseInfo => {
     caseInfo.contactPrimary.country;
   const formattedInfo = Object.assign(
     {
+      caseTitle: caseInfo.caseTitle,
       countryName,
       docketNumber: `${caseInfo.docketNumber}${caseInfo.docketNumberSuffix ||
         ''}`,
-      initialTitle: caseInfo.initialTitle,
       preferredTrialCity: caseInfo.preferredTrialCity,
       receivedAtFormatted: DateHandler.formatDateString(
         caseInfo.receivedAt,
@@ -56,19 +44,18 @@ const formattedCaseInfo = caseInfo => {
  * @returns {string} an html string resulting from rendering template with caseInfo
  */
 const generateCaseConfirmationPage = async caseInfo => {
-  const logoBase64 = `data:image/png;base64,${ustcLogoBuffer.toString(
-    'base64',
-  )}`;
   const { css } = await new Promise(resolve => {
-    sass.render({ data: confirmSassContent }, (err, result) => {
+    sass.render({ data: staticResources.confirmSassContent }, (err, result) => {
       return resolve(result);
     });
   });
-  const compiledFunction = Handlebars.compile(confirmTemplateContent);
+  const compiledFunction = Handlebars.compile(
+    staticResources.confirmTemplateContent,
+  );
   const html = compiledFunction({
     ...formattedCaseInfo(caseInfo),
     styles: `<style>${css}</style>`,
-    logo: logoBase64,
+    logo: staticResources.ustcLogoBufferBase64,
   });
   return html;
 };
