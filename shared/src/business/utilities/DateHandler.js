@@ -8,7 +8,6 @@ const FORMATS = {
   MONTH_DAY_YEAR: 'MMMM D, YYYY',
   TIME: 'hh:mm a',
   TIME_TZ: 'h:mm a [ET]',
-  YEAR: 'YYYY',
 };
 
 const USTC_TZ = 'America/New_York';
