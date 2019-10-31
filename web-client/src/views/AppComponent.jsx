@@ -36,6 +36,7 @@ import { StartCaseInternal } from './StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
+import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
@@ -93,8 +94,9 @@ export const AppComponent = connect(
   {
     currentPage: state.currentPage,
     currentPageHeader: state.currentPageHeader,
+    showModal: state.showModal,
   },
-  ({ currentPage }) => {
+  ({ currentPage, showModal }) => {
     const focusMain = e => {
       e && e.preventDefault();
       const header = document.querySelector('#main-content h1');
@@ -124,6 +126,9 @@ export const AppComponent = connect(
         </main>
         <Footer />
         <Loading />
+        {showModal === 'TrialSessionPlanningModal' && (
+          <TrialSessionPlanningModal />
+        )}
       </React.Fragment>
     );
   },

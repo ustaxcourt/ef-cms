@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -5,6 +6,8 @@ import classNames from 'classnames';
 
 export const ReportsMenu = connect(
   {
+    openTrialSessionPlanningModalSequence:
+      sequences.openTrialSessionPlanningModalSequence,
     pageIsReports: state.headerHelper.pageIsReports,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
@@ -12,6 +15,7 @@ export const ReportsMenu = connect(
   },
   ({
     isExpanded,
+    openTrialSessionPlanningModalSequence,
     pageIsReports,
     resetHeaderAccordionsSequence,
     toggleMenuSequence,
@@ -56,6 +60,19 @@ export const ReportsMenu = connect(
               >
                 Blocked Cases
               </a>
+            </li>
+            <li className="usa-nav__submenu-item">
+              <Button
+                link
+                id="trial-session-planning"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                  openTrialSessionPlanningModalSequence();
+                }}
+              >
+                Trial Session Planning
+              </Button>
             </li>
           </ul>
         )}
