@@ -108,8 +108,10 @@ describe('formatCase', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       hasVerifiedIrsNotice: true,
-      caseCaption: 'Test Case Caption',
       trialTime: 11,
+      caseCaption: 'Test Case Caption',
+      caseTitle:
+        'Test Case Caption, Petitioners v. Internal Revenue, Respondent',
     });
 
     expect(result).toHaveProperty('createdAtFormatted');
@@ -123,6 +125,9 @@ describe('formatCase', () => {
     );
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
     expect(result.caseName).toEqual('Test Case Caption');
+    expect(result.caseTitleWithoutRespondent).toEqual(
+      'Test Case Caption, Petitioners v. Internal Revenue, ',
+    );
     expect(result.formattedTrialCity).toEqual('Not assigned');
     expect(result).toHaveProperty('formattedTrialDate');
     expect(result.formattedTrialJudge).toEqual('Not assigned');
@@ -289,6 +294,28 @@ describe('getFormattedCaseDetail', () => {
     expect(result).toHaveProperty('docketRecordWithDocument');
     expect(result).toHaveProperty('docketRecordSort');
     expect(result).toHaveProperty('caseDeadlines');
+  });
+
+  it('should format draft documents', () => {
+    const result = getFormattedCaseDetail({
+      applicationContext,
+      caseDetail: {
+        ...mockCaseDetailBase,
+        documents: [
+          {
+            archived: false,
+            createdAt: getDateISO(),
+            documentId: 'd-1-2-3',
+            documentType: 'Order',
+          },
+        ],
+      },
+      docketRecordSort: 'byDate',
+    });
+
+    expect(result.draftDocuments[0]).toHaveProperty('signUrl');
+    expect(result.draftDocuments[0]).toHaveProperty('editUrl');
+    expect(result.draftDocuments[0]).toHaveProperty('signedAtFormatted');
   });
 });
 

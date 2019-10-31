@@ -10,7 +10,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 (async function() {
   let hasMoreResults = true;
   let lastKey = null;
-  let count = 0;
   while (hasMoreResults) {
     hasMoreResults = false;
 
@@ -25,7 +24,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
         lastKey = results.LastEvaluatedKey;
         const recordsUpdated = [];
         for (const result of results.Items) {
-          console.log(count++);
           if (result.respondents) {
             result.respondents = result.respondents.map(r => ({
               ...r,

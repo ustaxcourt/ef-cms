@@ -1,4 +1,5 @@
 const { CaseInternal } = require('./CaseInternal');
+const { ContactFactory } = require('../contacts/ContactFactory');
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
@@ -19,7 +20,7 @@ describe('CaseInternal entity', () => {
           postalCode: '05198',
           state: 'AK',
         },
-        partyType: 'Petitioner',
+        partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitionFile: { anObject: true },
         petitionFileSize: 1,
         procedureType: 'Small',
@@ -49,6 +50,21 @@ describe('CaseInternal entity', () => {
       expect(
         caseInternal.getFormattedValidationErrors().petitionFileSize,
       ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
+    });
+
+    it('fails validation if applicationForWaiverOfFilingFeeFile is set, but applicationForWaiverOfFilingFeeFileSize is not', () => {
+      const caseInternal = new CaseInternal({
+        applicationForWaiverOfFilingFeeFile: new File([], 'test.pdf'),
+        caseCaption: 'Dr. Leo Marvin, Petitioner',
+        receivedAt: new Date().toISOString(),
+      });
+
+      expect(
+        caseInternal.getFormattedValidationErrors()
+          .applicationForWaiverOfFilingFeeFileSize,
+      ).toEqual(
+        VALIDATION_ERROR_MESSAGES.applicationForWaiverOfFilingFeeFileSize[1],
+      );
     });
 
     it('fails validation if stinFile is set, but stinFileSize is not', () => {

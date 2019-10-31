@@ -64,6 +64,9 @@ export const CaseDeadlines = connect(
                     ))}
                   </tbody>
                 </table>
+                {caseDeadlineReportHelper.caseDeadlines.length === 0 && (
+                  <p>There are no deadlines for the selected date(s).</p>
+                )}
               </div>
             </div>
           </Tab>

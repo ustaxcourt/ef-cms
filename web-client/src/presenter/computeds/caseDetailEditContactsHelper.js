@@ -8,8 +8,8 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Conservator Information',
-          nameLabel: 'Name of Taxpayer',
-          secondaryNameLabel: 'Name of Conservator',
+          nameLabel: 'Name of taxpayer',
+          secondaryNameLabel: 'Name of conservator',
         },
       };
       break;
@@ -18,9 +18,9 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displayInCareOf: true,
           header: 'Corporation Information',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'Your Name',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
         },
       };
       break;
@@ -29,8 +29,8 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Custodian Information',
-          nameLabel: 'Name of Taxpayer',
-          secondaryNameLabel: 'Name of Custodian',
+          nameLabel: 'Name of taxpayer',
+          secondaryNameLabel: 'Name of custodian',
         },
       };
       break;
@@ -38,7 +38,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       contacts = {
         contactPrimary: {
           header: 'Donor Information',
-          nameLabel: 'Name of Petitioner',
+          nameLabel: 'Name of petitioner',
         },
       };
       break;
@@ -48,8 +48,8 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
           displaySecondaryName: true,
           displayTitle: true,
           header: 'Executor/Personal Representative/Etc.',
-          nameLabel: 'Name of Decedent',
-          secondaryNameLabel: 'Name of Executor/Personal Representative, etc.',
+          nameLabel: 'Name of decedent',
+          secondaryNameLabel: 'Name of executor/personal representative, etc.',
           titleHint: 'optional',
         },
       };
@@ -59,9 +59,9 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displayInCareOf: true,
           header: 'Estate Information',
-          inCareOfLabel: 'In Care Of',
+          inCareOfLabel: 'In care of',
           inCareOfLabelHint: 'optional',
-          nameLabel: 'Name of Decedent',
+          nameLabel: 'Name of decedent',
         },
       };
       break;
@@ -70,8 +70,8 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Guardian Information',
-          nameLabel: 'Name of Taxpayer',
-          secondaryNameLabel: 'Name of Guardian',
+          nameLabel: 'Name of taxpayer',
+          secondaryNameLabel: 'Name of guardian',
         },
       };
       break;
@@ -80,8 +80,8 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Next Friend Information',
-          nameLabel: 'Name of Legally Incompetent Person',
-          secondaryNameLabel: 'Name of Next Friend',
+          nameLabel: 'Name of legally incompetent person',
+          secondaryNameLabel: 'Name of next friend',
         },
       };
       break;
@@ -90,8 +90,8 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Next Friend Information',
-          nameLabel: 'Name of Minor',
-          secondaryNameLabel: 'Name of Next Friend',
+          nameLabel: 'Name of minor',
+          secondaryNameLabel: 'Name of next friend',
         },
       };
       break;
@@ -100,8 +100,8 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Partnership Representative',
-          nameLabel: 'Business Name',
-          secondaryNameLabel: 'Name of Partnership Representative',
+          nameLabel: 'Business name',
+          secondaryNameLabel: 'Name of partnership representative',
         },
       };
       break;
@@ -110,8 +110,8 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Partnership (Other than Tax Matters Partner) Information',
-          nameLabel: 'Business Name',
-          secondaryNameLabel: 'Name of Partner (Other than TMP)',
+          nameLabel: 'Business name',
+          secondaryNameLabel: 'Name of partner (other than TMP)',
         },
       };
       break;
@@ -120,7 +120,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Tax Matters Partner Information',
-          nameLabel: 'Business Name',
+          nameLabel: 'Business name',
           secondaryNameLabel: 'Name of Tax Matters Partner',
         },
       };
@@ -143,7 +143,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactSecondary: {
           displayPhone: true,
           header: 'Spouse Information',
-          nameLabel: "Spouse's Name",
+          nameLabel: "Spouse's name",
         },
       };
       break;
@@ -151,14 +151,14 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       contacts = {
         contactPrimary: {
           header: 'Petitioner Information',
-          nameLabel: 'Name of Petitioner/Surviving Spouse',
+          nameLabel: 'Name of petitioner/surviving spouse',
         },
         contactSecondary: {
           displayInCareOf: true,
           displayPhone: true,
           header: 'Deceased Spouse Information',
-          inCareOfLabel: 'In Care Of',
-          nameLabel: 'Name of Deceased Spouse',
+          inCareOfLabel: 'In care of',
+          nameLabel: 'Name of deceased spouse',
         },
       };
       break;
@@ -167,8 +167,8 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Petitioner Information',
-          nameLabel: 'Name of Deceased Spouse',
-          secondaryNameLabel: 'Name of Surviving Spouse',
+          nameLabel: 'Name of deceased spouse',
+          secondaryNameLabel: 'Name of surviving spouse',
         },
       };
       break;
@@ -176,7 +176,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
       contacts = {
         contactPrimary: {
           header: 'Transferee Information',
-          nameLabel: 'Name of Petitioner',
+          nameLabel: 'Name of petitioner',
         },
       };
       break;
@@ -185,8 +185,8 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
         contactPrimary: {
           displaySecondaryName: true,
           header: 'Trustee Information',
-          nameLabel: 'Name of Trust',
-          secondaryNameLabel: 'Name of Trustee',
+          nameLabel: 'Name of trust',
+          secondaryNameLabel: 'Name of trustee',
         },
       };
       break;

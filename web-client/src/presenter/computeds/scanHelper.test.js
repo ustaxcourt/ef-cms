@@ -88,4 +88,24 @@ describe('scanHelper', () => {
     });
     expect(result.sources.length).toEqual(2);
   });
+
+  it('sets applicationForWaiverOfFilingFeeFileCompleted if document is on form', () => {
+    const result = runCompute(scanHelper, {
+      state: {
+        form: {
+          applicationForWaiverOfFilingFeeFile: null,
+        },
+      },
+    });
+    expect(result.applicationForWaiverOfFilingFeeFileCompleted).toBeFalsy();
+
+    const result2 = runCompute(scanHelper, {
+      state: {
+        form: {
+          applicationForWaiverOfFilingFeeFile: {},
+        },
+      },
+    });
+    expect(result2.applicationForWaiverOfFilingFeeFileCompleted).toBeTruthy();
+  });
 });

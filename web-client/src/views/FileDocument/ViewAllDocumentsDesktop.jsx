@@ -1,4 +1,5 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
+import { Button } from '../../ustc-ui/Button/Button';
 import { CompleteSelectDocumentModalDialog } from './CompleteSelectDocumentModalDialog';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { connect } from '@cerebral/react';
@@ -27,7 +28,7 @@ export const ViewAllDocumentsDesktop = connect(
     return (
       <React.Fragment>
         <div className="grid-container">
-          <div className="grid-row grid-gap">
+          <div className="grid-row grid-gap margin-bottom-5">
             <div className="tablet:grid-col-12">
               <h1
                 className="margin-bottom-05"
@@ -47,8 +48,9 @@ export const ViewAllDocumentsDesktop = connect(
                       <div className="all-columns-view">
                         {viewAllDocumentsHelper.categoryMap[title].map(
                           (document, index) => (
-                            <button
-                              className="usa-button usa-button--unstyled margin-bottom-1"
+                            <Button
+                              link
+                              className="text-left"
                               key={`${title}-document-${index}`}
                               onClick={() => {
                                 updateFileDocumentWizardFormValueSequence({
@@ -75,7 +77,7 @@ export const ViewAllDocumentsDesktop = connect(
                               }}
                             >
                               {document.documentType}
-                            </button>
+                            </Button>
                           ),
                         )}
                       </div>
@@ -85,23 +87,19 @@ export const ViewAllDocumentsDesktop = connect(
               </Accordion>
             </div>
           </div>
-          <div className="button-box-container margin-bottom-4">
-            <button
-              className="usa-button margin-right-205"
-              id="back-button"
-              onClick={() => navigateBackSequence()}
-            >
+          <div className="margin-bottom-4">
+            <Button id="back-button" onClick={() => navigateBackSequence()}>
               Back to File a Document
-            </button>
-            <button
-              className="usa-button usa-button--unstyled"
+            </Button>
+            <Button
+              link
               id="cancel-button"
               onClick={() => {
                 formCancelToggleCancelSequence();
               }}
             >
               Cancel
-            </button>
+            </Button>
             {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
             )}

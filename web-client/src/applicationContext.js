@@ -37,7 +37,13 @@ import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/as
 import { associatePractitionerWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associatePractitionerWithCaseProxy';
 import { associateRespondentWithCaseInteractor } from '../../shared/src/proxies/manualAssociation/associateRespondentWithCaseProxy';
 import { authorizeCodeInteractor } from '../../shared/src/business/useCases/authorizeCodeInteractor';
+import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { caseSearchInteractor } from '../../shared/src/proxies/caseSearchProxy';
+import {
+  compareCasesByDocketNumber,
+  formatCase as formatCaseForTrialSession,
+  formattedTrialSessionDetails,
+} from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
@@ -47,6 +53,7 @@ import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/pr
 import {
   createISODateString,
   formatDateString,
+  formatNow,
   isStringISOFormatted,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
@@ -73,6 +80,7 @@ import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/gene
 import { generateDocumentTitleInteractor } from '../../shared/src/business/useCases/externalDocument/generateDocumentTitleInteractor';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
+import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfUrlProxy';
 import { getAllCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadline/getAllCaseDeadlinesProxy';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
@@ -197,6 +205,7 @@ const allUseCases = {
   associatePractitionerWithCaseInteractor,
   associateRespondentWithCaseInteractor,
   authorizeCodeInteractor,
+  batchDownloadTrialSessionInteractor,
   caseSearchInteractor,
   completeWorkItemInteractor,
   createCaseDeadlineInteractor,
@@ -220,6 +229,7 @@ const allUseCases = {
   generateDocumentTitleInteractor,
   generatePDFFromJPGDataInteractor,
   generateSignedDocumentInteractor,
+  generateTrialCalendarPdfInteractor,
   getAllCaseDeadlinesInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
@@ -426,17 +436,27 @@ const applicationContext = {
   getUseCases: () => allUseCases,
   getUtilities: () => {
     return {
+      compareCasesByDocketNumber,
       createISODateString,
       formatCase,
       formatCaseDeadlines,
+      formatCaseForTrialSession,
       formatDateString,
       formatDocument,
+      formatNow,
+      formattedTrialSessionDetails,
       getFormattedCaseDetail,
       isStringISOFormatted,
       prepareDateFromString,
       setServiceIndicatorsForCase,
       sortDocketRecords,
     };
+  },
+  getWebSocketClient: token => {
+    const notificationsUrl = process.env.WS_URL || 'ws://localhost:3011';
+    const connectionUrl = `${notificationsUrl}?token=${token}`;
+    const socket = new WebSocket(connectionUrl);
+    return socket;
   },
   setCurrentUser,
   setCurrentUserToken,

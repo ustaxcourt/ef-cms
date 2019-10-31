@@ -1,7 +1,7 @@
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
+import { last } from 'lodash';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
-import { last } from 'lodash';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 

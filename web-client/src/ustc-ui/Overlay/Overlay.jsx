@@ -1,12 +1,11 @@
+import { FocusLock } from '../FocusLock/FocusLock';
 import { connect } from '@cerebral/react';
 import { props, sequences } from 'cerebral';
-import FocusLock from 'react-focus-lock';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
-const appRoot = document.getElementById('app');
 const modalRoot = document.getElementById('modal-root');
 
 class OverlayComponent extends React.Component {
@@ -57,16 +56,12 @@ class OverlayComponent extends React.Component {
 
   componentDidMount() {
     modalRoot.appendChild(this.el);
-    appRoot.inert = true;
-    appRoot.setAttribute('aria-hidden', 'true');
     document.addEventListener('keydown', this.keydownTriggered, false);
     this.toggleNoScroll(true);
   }
 
   componentWillUnmount() {
     modalRoot.removeChild(this.el);
-    appRoot.inert = false;
-    appRoot.setAttribute('aria-hidden', 'false');
     document.removeEventListener('keydown', this.keydownTriggered, false);
     this.toggleNoScroll(false);
   }
@@ -88,9 +83,9 @@ class OverlayComponent extends React.Component {
           ref={this.props.forwardedRef}
         >
           <div
+            aria-live="assertive"
             aria-modal="true"
             className="modal-overlay"
-            data-aria-live="assertive"
             role="dialog"
           >
             {this.props.children}

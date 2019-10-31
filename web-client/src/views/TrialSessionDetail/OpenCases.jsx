@@ -47,6 +47,7 @@ export const OpenCases = connect(
             </tbody>
           ))}
         </table>
+        {openCases.length === 0 && <p>There are no open cases.</p>}
       </React.Fragment>
     );
   },

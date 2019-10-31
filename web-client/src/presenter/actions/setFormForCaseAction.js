@@ -7,7 +7,11 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function used for getting the state.caseDetail
  * @param {object} providers.store the cerebral store used for setting the state.form
  */
-export const setFormForCaseAction = ({ applicationContext, get, store }) => {
+export const setFormForCaseAction = async ({
+  applicationContext,
+  get,
+  store,
+}) => {
   const caseDetail = get(state.caseDetail);
   const irsNoticeDate = applicationContext
     .getUtilities()

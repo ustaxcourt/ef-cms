@@ -58,7 +58,7 @@ export const completeDocumentSigningAction = async ({
     }
 
     let documentIdToOverwrite = null;
-    if (document.documentType === 'Stipulated Decision') {
+    if (document.documentType !== 'Proposed Stipulated Decision') {
       documentIdToOverwrite = originalDocumentId;
     }
 
@@ -93,5 +93,13 @@ export const completeDocumentSigningAction = async ({
     });
   }
 
-  return { caseId, documentId: documentIdToReturn, tab: 'docketRecord' };
+  return {
+    alertSuccess: {
+      message: 'Your signature has been added',
+      title: '',
+    },
+    caseId,
+    documentId: documentIdToReturn,
+    tab: 'docketRecord',
+  };
 };

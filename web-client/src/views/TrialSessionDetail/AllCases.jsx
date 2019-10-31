@@ -51,6 +51,7 @@ export const AllCases = connect(
             </tbody>
           ))}
         </table>
+        {allCases.length === 0 && <p>There are no cases.</p>}
       </React.Fragment>
     );
   },

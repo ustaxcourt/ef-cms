@@ -30,7 +30,7 @@ const INTERNAL_CATEGORY_MAP = {
       eventCode: 'ATAN',
       labelFreeText: '',
       labelPreviousDocument: '',
-      ordinalField: 'What Iteration Is This Filing?',
+      ordinalField: 'What iteration is this filing?',
       scenario: 'Nonstandard G',
     },
   ],

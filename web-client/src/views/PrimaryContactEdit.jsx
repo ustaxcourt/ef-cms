@@ -1,4 +1,5 @@
 import { Address } from './StartCase/Address';
+import { Button } from '../ustc-ui/Button/Button';
 import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
 import { Hint } from '../ustc-ui/Hint/Hint';
@@ -7,6 +8,7 @@ import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PrimaryContactEdit = connect(
   {
@@ -41,14 +43,12 @@ export const PrimaryContactEdit = connect(
       <>
         <div className="big-blue-header">
           <div className="grid-container">
-            <h1>Contact Information</h1>
+            <h1>Edit Contact Information</h1>
           </div>
         </div>
 
         <section className="usa-section grid-container">
           <ErrorNotification />
-
-          <h2>Edit Contact Information</h2>
 
           <p>
             This form will automatically create and submit a change of contact
@@ -60,9 +60,9 @@ export const PrimaryContactEdit = connect(
             To change the case caption, please file a Motion to Change Caption
           </Hint>
 
-          <div className="blue-container">
+          <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
-              <p className="usa-label">Contact Name</p>
+              <p className="usa-label">Contact name</p>
               <p className="margin-top-0">
                 {caseDetailHelper.showCaseNameForPrimary
                   ? formattedCaseDetail.caseName
@@ -72,17 +72,16 @@ export const PrimaryContactEdit = connect(
 
             {primaryContactEditHelper.showInCareOf && (
               <div
-                className={
-                  'usa-form-group ' +
-                  (validationErrors.contactPrimary &&
-                  validationErrors.contactPrimary.inCareOf
-                    ? 'usa-form-group--error'
-                    : '')
-                }
+                className={classNames(
+                  'usa-form-group',
+                  validationErrors.contactPrimary &&
+                    validationErrors.contactPrimary.inCareOf &&
+                    'usa-form-group--error',
+                )}
               >
                 <label className="usa-label" htmlFor="inCareOf">
                   <span>
-                    In Care Of <span className="usa-hint">(Your Name)</span>
+                    In care of <span className="usa-hint">(your name)</span>
                   </span>
                 </label>
                 <input
@@ -131,21 +130,20 @@ export const PrimaryContactEdit = connect(
               />
             )}
             <div
-              className={
-                'usa-form-group margin-bottom-0 ' +
-                (validationErrors &&
-                validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.phone
-                  ? 'usa-form-group--error'
-                  : '')
-              }
+              className={classNames(
+                'usa-form-group margin-bottom-0',
+                validationErrors &&
+                  validationErrors.contactPrimary &&
+                  validationErrors.contactPrimary.phone &&
+                  'usa-form-group--error',
+              )}
             >
               <label className="usa-label" htmlFor="phone">
-                Phone Number
+                Phone number
               </label>
               <input
                 autoCapitalize="none"
-                className="usa-input"
+                className="usa-input max-width-200"
                 id="phone"
                 name="contactPrimary.phone"
                 type="tel"
@@ -166,16 +164,15 @@ export const PrimaryContactEdit = connect(
               />
             </div>
           </div>
-          <button
-            className="usa-button margin-top-3 margin-right-3"
+          <Button
             onClick={() => {
               submitEditPrimaryContactSequence();
             }}
           >
             Save
-          </button>
-          <button
-            className="usa-button usa-button--unstyled margin-top-3 margin-right-3"
+          </Button>
+          <Button
+            link
             onClick={() => {
               cancelEditPrimaryContactSequence({
                 caseId: caseDetail.docketNumber,
@@ -183,7 +180,7 @@ export const PrimaryContactEdit = connect(
             }}
           >
             Cancel
-          </button>
+          </Button>
         </section>
       </>
     );

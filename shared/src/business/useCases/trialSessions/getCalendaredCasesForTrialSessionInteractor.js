@@ -26,5 +26,6 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
     .getCalendaredCasesForTrialSession({
       applicationContext,
       trialSessionId,
+      userId: user.userId,
     });
 };

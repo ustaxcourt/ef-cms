@@ -45,6 +45,8 @@ const addPetitionDocumentWithWorkItemToCase = ({
       from: user.name,
       fromUserId: user.userId,
       message,
+      to: user.name,
+      toUserId: user.userId,
     },
     { applicationContext },
   );
@@ -73,6 +75,7 @@ const addPetitionDocumentWithWorkItemToCase = ({
  */
 exports.createCaseFromPaperInteractor = async ({
   applicationContext,
+  applicationForWaiverOfFilingFeeFileId,
   ownershipDisclosureFileId,
   petitionFileId,
   petitionMetadata,
@@ -92,6 +95,7 @@ exports.createCaseFromPaperInteractor = async ({
   const { CaseInternal } = applicationContext.getEntityConstructors();
   const petitionEntity = new CaseInternal({
     ...petitionMetadata,
+    applicationForWaiverOfFilingFeeFileId,
     ownershipDisclosureFileId,
     petitionFileId,
     stinFileId,
@@ -117,7 +121,14 @@ exports.createCaseFromPaperInteractor = async ({
   );
 
   caseToAdd.caseCaption = petitionEntity.caseCaption;
-  const caseCaptionNames = Case.getCaseCaptionNames(caseToAdd.caseCaption);
+
+  let partySecondary = false;
+  if (
+    petitionMetadata.contactSecondary &&
+    petitionMetadata.contactSecondary.name
+  ) {
+    partySecondary = true;
+  }
 
   const petitionDocumentEntity = new Document(
     {
@@ -125,13 +136,15 @@ exports.createCaseFromPaperInteractor = async ({
       documentId: petitionFileId,
       documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
-      filedBy: caseCaptionNames,
       isPaper: true,
+      partyPrimary: true,
+      partySecondary,
       receivedAt: caseToAdd.receivedAt,
       userId: user.userId,
     },
     { applicationContext },
   );
+  petitionDocumentEntity.generateFiledBy(caseToAdd);
 
   const {
     message: newMessage,
@@ -142,6 +155,35 @@ exports.createCaseFromPaperInteractor = async ({
     documentEntity: petitionDocumentEntity,
     user,
   });
+
+  if (applicationForWaiverOfFilingFeeFileId) {
+    let {
+      documentTitle,
+    } = Document.INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
+
+    const applicationForWaiverOfFilingFeeDocumentEntity = new Document(
+      {
+        createdAt: caseToAdd.receivedAt,
+        documentId: applicationForWaiverOfFilingFeeFileId,
+        documentTitle,
+        documentType:
+          Document.INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee
+            .documentType,
+        eventCode:
+          Document.INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee
+            .eventCode,
+        isPaper: true,
+        partyPrimary: true,
+        partySecondary,
+        receivedAt: caseToAdd.receivedAt,
+        userId: user.userId,
+      },
+      { applicationContext },
+    );
+
+    applicationForWaiverOfFilingFeeDocumentEntity.generateFiledBy(caseToAdd);
+    caseToAdd.addDocument(applicationForWaiverOfFilingFeeDocumentEntity);
+  }
 
   if (requestForPlaceOfTrialFileId) {
     let {
@@ -163,13 +205,15 @@ exports.createCaseFromPaperInteractor = async ({
           Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
         eventCode:
           Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-        filedBy: caseCaptionNames,
         isPaper: true,
+        partyPrimary: true,
+        partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
       },
       { applicationContext },
     );
+    requestForPlaceOfTrialDocumentEntity.generateFiledBy(caseToAdd);
     caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity);
   }
 
@@ -180,13 +224,15 @@ exports.createCaseFromPaperInteractor = async ({
         documentId: stinFileId,
         documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
         eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
-        filedBy: caseCaptionNames,
         isPaper: true,
+        partyPrimary: true,
+        partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
       },
       { applicationContext },
     );
+    stinDocumentEntity.generateFiledBy(caseToAdd);
     caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
   }
 
@@ -199,13 +245,15 @@ exports.createCaseFromPaperInteractor = async ({
           Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode:
           Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
-        filedBy: caseCaptionNames,
         isPaper: true,
+        partyPrimary: true,
+        partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
       },
       { applicationContext },
     );
+    odsDocumentEntity.generateFiledBy(caseToAdd);
     caseToAdd.addDocument(odsDocumentEntity);
   }
 

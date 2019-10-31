@@ -295,7 +295,7 @@ exports.uploadPetition = async (test, overrides = {}) => {
     contactSecondary: overrides.contactSecondary || {},
     filingType: 'Myself',
     hasIrsNotice: false,
-    partyType: overrides.partyType || 'Petitioner',
+    partyType: overrides.partyType || ContactFactory.PARTY_TYPES.petitioner,
     petitionFile: fakeFile,
     petitionFileSize: 1,
     preferredTrialCity: overrides.preferredTrialCity || 'Seattle, Washington',
@@ -358,6 +358,7 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   test = CerebralTest(presenter);
 
   global.window = {
+    document: {},
     localStorage: {
       removeItem: () => null,
       setItem: () => null,

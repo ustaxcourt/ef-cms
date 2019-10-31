@@ -133,5 +133,7 @@ export default (test, fakeFile) => {
     await test.runSequence('submitPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('DocumentDetail');
+
+    test.docketNumber = test.getState('caseDetail.docketNumber');
   });
 };

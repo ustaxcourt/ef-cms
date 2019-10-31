@@ -42,7 +42,7 @@ describe('generateDocketRecordPdfUrlAction', () => {
         docketNumber: '123-45',
       },
       state: {
-        formattedCaseDetail: {
+        caseDetail: {
           caseId: 'ca123',
           docketNumber: '123-45',
         },

@@ -1,12 +1,12 @@
+import { Button } from '../../ustc-ui/Button/Button';
+import { FocusLock } from '../../ustc-ui/FocusLock/FocusLock';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import FocusLock from 'react-focus-lock';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const appRoot = document.getElementById('app');
 const modalRoot = document.getElementById('modal-root');
 
 class DocketRecordOverlayComponent extends React.Component {
@@ -43,15 +43,11 @@ class DocketRecordOverlayComponent extends React.Component {
   }
   componentDidMount() {
     modalRoot.appendChild(this.el);
-    appRoot.inert = true;
-    appRoot.setAttribute('aria-hidden', 'true');
     document.addEventListener('keydown', this.keydownTriggered, false);
     this.toggleNoScroll(true);
   }
   componentWillUnmount() {
     modalRoot.removeChild(this.el);
-    appRoot.inert = false;
-    appRoot.setAttribute('aria-hidden', 'false');
     document.removeEventListener('keydown', this.keydownTriggered, false);
 
     this.toggleNoScroll(false);
@@ -77,31 +73,32 @@ class DocketRecordOverlayComponent extends React.Component {
           className="modal-screen overlay mobile-document-details-overlay"
         >
           <div
+            aria-live="assertive"
             aria-modal="true"
             className={'modal-overlay'}
-            data-aria-live="assertive"
             role="dialog"
           >
-            <button
+            <Button
+              link
               aria-roledescription="button to return to docket record"
-              className="heading-2 usa-button usa-button--unstyled"
+              className="heading-2 text-left"
               onClick={() => closeFunc()}
             >
               <FontAwesomeIcon icon="caret-left" />
               Document Details
-            </button>
+            </Button>
             <hr className="margin-top-1 margin-bottom-2" />
             <h3 tabIndex="-1">{record.description}</h3>
-            <a
+            <Button
               aria-label={'View PDF'}
-              className="usa-button view-pdf-button tablet-full-width"
+              className="view-pdf-button tablet-full-width"
               href={`${baseUrl}/documents/${document.documentId}/document-download-url?token=${token}`}
               rel="noreferrer noopener"
               target="_blank"
             >
               <FontAwesomeIcon icon={['fas', 'file-pdf']} />
               View PDF
-            </a>
+            </Button>
             <p className="semi-bold label margin-top-3">Date</p>
             <p className="margin-top-0">{document.createdAtFormatted}</p>
             <p className="semi-bold label margin-top-3">Filed By</p>

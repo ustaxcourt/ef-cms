@@ -10,6 +10,13 @@ const formatDocument = (applicationContext, document) => {
     .getUtilities()
     .formatDateString(result.servedAt, 'DATE_TIME');
 
+  result.signedAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(result.signedAt, 'MMDDYY');
+
+  result.signedAtFormattedTZ = applicationContext
+    .getUtilities()
+    .formatDateString(result.signedAt, 'DATE_TIME_TZ');
   result.showServedAt = !!result.servedAt;
   result.isStatusServed = result.status === 'served';
   result.isPetition = result.documentType === 'Petition';
@@ -45,7 +52,7 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
     .getUtilities()
     .formatDateString(result.deadlineDate, 'MMDDYY');
 
-  //use the app context utility function so the time zones match when comparing dates
+  // use the app context utility function so the time zones match when comparing dates
   const deadlineDateMomented = applicationContext
     .getUtilities()
     .prepareDateFromString(result.deadlineDate);
@@ -167,6 +174,16 @@ const formatCase = (applicationContext, caseDetail) => {
 
   result.draftDocuments = result.draftDocuments.map(document => ({
     ...document,
+    signedAtFormatted: applicationContext
+      .getUtilities()
+      .formatDateString(document.signedAt, 'MMDDYY'),
+    signedAtFormattedTZ: applicationContext
+      .getUtilities()
+      .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
+    signUrl:
+      document.documentType === 'Stipulated Decision'
+        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
     editUrl:
       document.documentType === 'Stipulated Decision'
         ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
@@ -229,6 +246,8 @@ const formatCase = (applicationContext, caseDetail) => {
   result.caseName = applicationContext.getCaseCaptionNames(
     caseDetail.caseCaption || '',
   );
+  result.caseTitleWithoutRespondent =
+    caseDetail.caseTitle && caseDetail.caseTitle.replace('Respondent', '');
 
   result.formattedTrialCity = result.preferredTrialCity || 'Not assigned';
   result.formattedTrialDate = 'Not scheduled';

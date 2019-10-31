@@ -82,4 +82,38 @@ describe('workQueueHelper', () => {
       showStartCaseButton: true,
     });
   });
+
+  it('shows the case status column when role is judge', () => {
+    const result = runCompute(workQueueHelper, {
+      state: {
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        user: {
+          role: 'judge',
+        },
+        workQueueToDisplay: { box: 'inbox', queue: 'my' },
+      },
+    });
+    expect(result.showCaseStatusColumn).toBeTruthy();
+  });
+
+  it('shows the from column when role is judge', () => {
+    const result = runCompute(workQueueHelper, {
+      state: {
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        user: {
+          role: 'judge',
+        },
+        workQueueToDisplay: { box: 'inbox', queue: 'my' },
+      },
+    });
+    expect(result.showFromColumn).toBeTruthy();
+  });
 });

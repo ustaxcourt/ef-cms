@@ -29,7 +29,7 @@ export const IndividualWorkQueueInbox = connect(
                 &nbsp;
               </th>
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+              {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               <th>Case status</th>
               {!workQueueHelper.hideFromColumn && <th>From</th>}
               {!workQueueHelper.hideSectionColumn && (
@@ -132,6 +132,9 @@ export const IndividualWorkQueueInbox = connect(
             );
           })}
         </table>
+        {formattedWorkQueue.length === 0 && (
+          <p>{workQueueHelper.queueEmptyMessage}</p>
+        )}
       </React.Fragment>
     );
   },

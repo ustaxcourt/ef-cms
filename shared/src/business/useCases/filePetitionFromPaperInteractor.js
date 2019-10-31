@@ -6,6 +6,8 @@ const { UnauthorizedError } = require('../../errors/errors');
 
 exports.filePetitionFromPaperInteractor = async ({
   applicationContext,
+  applicationForWaiverOfFilingFeeFile,
+  applicationForWaiverOfFilingFeeUploadProgress,
   ownershipDisclosureFile,
   ownershipDisclosureUploadProgress,
   petitionFile,
@@ -53,6 +55,14 @@ exports.filePetitionFromPaperInteractor = async ({
     return documentId;
   };
 
+  let applicationForWaiverOfFilingFeeUpload;
+  if (applicationForWaiverOfFilingFeeFile) {
+    applicationForWaiverOfFilingFeeUpload = uploadDocumentAndMakeSafe(
+      applicationForWaiverOfFilingFeeFile,
+      applicationForWaiverOfFilingFeeUploadProgress,
+    );
+  }
+
   const petitionFileUpload = uploadDocumentAndMakeSafe(
     petitionFile,
     petitionUploadProgress,
@@ -80,6 +90,7 @@ exports.filePetitionFromPaperInteractor = async ({
   }
 
   await Promise.all([
+    applicationForWaiverOfFilingFeeUpload,
     ownershipDisclosureFileUpload,
     petitionFileUpload,
     requestForPlaceOfTrialFileUpload,
@@ -88,6 +99,7 @@ exports.filePetitionFromPaperInteractor = async ({
 
   return await applicationContext.getUseCases().createCaseFromPaperInteractor({
     applicationContext,
+    applicationForWaiverOfFilingFeeFileId: await applicationForWaiverOfFilingFeeUpload,
     ownershipDisclosureFileId: await ownershipDisclosureFileUpload,
     petitionFileId: await petitionFileUpload,
     petitionMetadata,

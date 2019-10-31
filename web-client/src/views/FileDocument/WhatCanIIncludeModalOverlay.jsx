@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
@@ -82,14 +83,15 @@ export const WhatCanIIncludeModalOverlay = connect(
           >
             <div className="overlay-blue-header">
               <div className="grid-container">
-                <button
+                <Button
+                  link
                   aria-roledescription="button to return to document selection"
-                  className="heading-3 usa-button usa-button--unstyled"
+                  className="heading-3"
                   onClick={() => clearModalSequence()}
                 >
                   <FontAwesomeIcon icon="caret-left" />
                   Back to File a Document Form
-                </button>
+                </Button>
               </div>
             </div>
             <div className="grid-container">
