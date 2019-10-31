@@ -28,7 +28,7 @@ export const TrialSessionPlanningModal = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        className=""
+        className="trial-session-planning-modal"
         confirmLabel="Run report"
         confirmSequence={confirmSequence}
         title="Run Trial Session Planning Report"
