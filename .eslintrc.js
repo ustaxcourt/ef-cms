@@ -275,6 +275,7 @@ module.exports = {
           'xpos',
           'checkbox',
           'middleware',
+          'elasticsearch',
         ],
         skipIfMatch: ['^https?://[^\\s]*$', '^[^\\s]{35,}$'],
         minLength: 4,

@@ -107,16 +107,22 @@ There are two login mechanisms available — the legacy mock login system, and a
 You can log in using these usernames:
 
 ```
+External Users:
 petitioner
-petitionsclerk
-petitionsclerk1
-docketclerk
-docketclerk1
-respondent
-respondent1 - respondent4
 practitioner
 practitioner1 - practitioner4
+respondent
+respondent1 - respondent4
+Internal Users:
 adc
+admissionsclerk
+calendarclerk
+clerkofcourt
+docketclerk
+docketclerk1
+petitionsclerk
+petitionsclerk1
+trialclerk
 judgeArmen
 armensChambers
 judgeAshford
@@ -127,10 +133,6 @@ judgeCarluzzo
 carluzzosChambers
 judgeCohen
 cohensChambers
-admissionsclerk
-calendarclerk
-clerkofcourt
-trialclerk
 ```
 
 No password is required.
@@ -140,16 +142,24 @@ No password is required.
 To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with:
 
 ```
+External Users:
 petitioner1@example.com – petitioner5@example.com
-petitionsclerk1@example.com – petitionsclerk5@example.com
-docketclerk1@example.com – docketclerk5@example.com
-respondent1@example.com – respondent10@example.com
 practitioner1@example.com – practitioner10@example.com
+respondent1@example.com – respondent10@example.com
+Internal Users:
 adc1@example.com – adc5@example.com
+admissionsclerk1@example.com – admissionsclerk5@example.com
+calendarclerk1@example.com – calendarclerk5@example.com
+clerkofcourt1@example.com – clerkofcourt5@example.com
+docketclerk1@example.com – docketclerk5@example.com
+petitionsclerk1@example.com – petitionsclerk5@example.com
+trialclerk1@example.com – trialclerk5@example.com
 jashford@example.com
+ashfordsChambers1@example.com - ashfordsChambers5@example.com
 jbuch@example.com
-jcarluzzo@example.com
+buchsChambers1@example.com - buchsChambers5@example.com
 jcohen@example.com
+cohensChambers1@example.com - cohensChambers5@example.com
 ```
 
 For a full list of available users, see [court_users.csv](web-api/court_users.csv).
