@@ -110,6 +110,16 @@ createManyAccounts() {
   done
 }
 
+createChambersAccount() {
+  emailPrefix=$1
+  section=$1
+  role=$2
+  for i in $(seq 1 5);
+  do
+    createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}" "" "${section}"
+  done
+}
+
 createPractitionerAccount() {
   index=$1
   barNumber=$2
