@@ -207,7 +207,11 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     });
   };
 
-  await Promise.all(workItemsInHoldingQueue.map(processWorkItem));
+  // can't use promise.all here because generating the case confirmation PDFs
+  // all at the same time causes errors
+  for (const workItem of workItemsInHoldingQueue) {
+    await processWorkItem(workItem);
+  }
 
   return {
     processedCases: zips,
