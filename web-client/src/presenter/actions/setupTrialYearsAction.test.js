@@ -4,7 +4,7 @@ import { setupTrialYearsAction } from './setupTrialYearsAction';
 
 presenter.providers.applicationContext = {
   getUtilities: () => ({
-    getCurrentYear: () => '2000',
+    formatNow: () => '2000',
   }),
 };
 
