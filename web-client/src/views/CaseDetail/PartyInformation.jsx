@@ -102,7 +102,7 @@ const PartyInformation = connect(
                   )}
                 </address>
 
-                {caseDetailHelper.showEditPrimaryContactButton && (
+                {caseDetailHelper.showEditContacts && (
                   <p>
                     <Button
                       link
@@ -134,7 +134,7 @@ const PartyInformation = connect(
                         {},
                       )}
                   </address>
-                  {caseDetailHelper.showEditContactButton && (
+                  {caseDetailHelper.showEditContacts && (
                     <Button
                       link
                       onClick={() => openEditSecondaryContactModalSequence()}

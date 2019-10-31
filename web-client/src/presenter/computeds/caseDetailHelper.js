@@ -88,14 +88,14 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const showCaseNameForPrimary = !get(state.caseDetail.contactSecondary.name);
 
-  let showEditPrimaryContactButton = false;
+  let showEditContacts = false;
 
   if (user.role === USER_ROLES.petitioner) {
-    showEditPrimaryContactButton = true;
+    showEditContacts = true;
   } else if (user.role === USER_ROLES.respondent) {
-    showEditPrimaryContactButton = false;
+    showEditContacts = false;
   } else if (user.role === USER_ROLES.practitioner) {
-    showEditPrimaryContactButton = userAssociatedWithCase;
+    showEditContacts = userAssociatedWithCase;
   }
 
   const showRecallButton = caseDetail.status === 'Batched for IRS';
@@ -168,8 +168,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCreateOrderButton,
     showDocketRecordInProgressState: !isExternalUser,
     showDocumentStatus: !caseDetail.irsSendDate,
-    showEditContactButton: isExternalUser,
-    showEditPrimaryContactButton,
+    showEditContacts,
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
