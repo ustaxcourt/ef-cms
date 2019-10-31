@@ -120,6 +120,7 @@ provider:
       Action:
         - cognito-idp:AdminCreateUser
         - cognito-idp:AdminGetUser
+        - cognito-idp:AdminUpdateUserAttributes
       Resource:
         - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
     - Effect: 'Allow'

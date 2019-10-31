@@ -1,8 +1,8 @@
 const {
   generateCaseConfirmationPdf,
 } = require('./generateCaseConfirmationPdf');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
-
 const PDF_MOCK_BUFFER = 'Hello World';
 
 const pageMock = {
@@ -47,7 +47,7 @@ describe('generateCaseConfirmationPdf', () => {
         }),
         logger: { error: () => {}, info: () => {} },
       },
-      caseEntity: { documents: [{ servedAt: 'servedAt' }] },
+      caseEntity: { ...MOCK_CASE, documents: [{ servedAt: 'servedAt' }] },
     });
 
     expect(result).toEqual('https://www.example.com');
