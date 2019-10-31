@@ -22,6 +22,8 @@ export default test => {
       Case.STATUS_TYPES.generalDocketReadyForTrial,
     );
 
-    test.casesReadyForTrial.push(test.getState('caseDetail'));
+    if (test.casesReadyForTrial) {
+      test.casesReadyForTrial.push(test.getState('caseDetail'));
+    }
   });
 };
