@@ -38,7 +38,11 @@ exports.removeCaseFromTrialInteractor = async ({
     applicationContext,
   });
 
-  trialSessionEntity.removeCaseFromCalendar({ caseId, disposition });
+  if (trialSessionEntity.isCalendared) {
+    trialSessionEntity.removeCaseFromCalendar({ caseId, disposition });
+  } else {
+    trialSessionEntity.deleteCaseFromCalendar({ caseId });
+  }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
