@@ -15,14 +15,14 @@ describe('setupTrialYearsAction', () => {
         presenter,
       },
       state: {
-        modal: {
-          caseId: 'abc-123',
-          docketNumber: 'abc-123',
-          documentIdToEdit: 'abc-123',
-        },
+        modal: {},
       },
     });
 
-    expect(result.state.trialYears).toMatchObject(['2000', '2001', '2002']);
+    expect(result.state.modal.trialYears).toMatchObject([
+      '2000',
+      '2001',
+      '2002',
+    ]);
   });
 });

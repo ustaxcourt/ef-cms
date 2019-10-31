@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.trialYears
+ * sets the state.modal.trialYears
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
@@ -12,7 +12,7 @@ export const setupTrialYearsAction = ({ applicationContext, store }) => {
   const currentYearPlus1 = `${currentYearInt + 1}`;
   const currentYearPlus2 = `${currentYearInt + 2}`;
 
-  store.set(state.trialYears, [
+  store.set(state.modal.trialYears, [
     currentYearString,
     currentYearPlus1,
     currentYearPlus2,
