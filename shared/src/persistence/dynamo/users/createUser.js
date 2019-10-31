@@ -121,7 +121,7 @@ exports.createUser = async ({ applicationContext, user }) => {
           },
         ],
         UserPoolId: process.env.USER_POOL_ID,
-        Username: user.email,
+        Username: response.Username,
       })
       .promise();
 
