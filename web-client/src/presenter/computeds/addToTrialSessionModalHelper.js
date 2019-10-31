@@ -78,8 +78,9 @@ export const addToTrialSessionModalHelper = (get, applicationContext) => {
   }
 
   return {
-    showSessionNotSetAlert:
-      selectedTrialSession && selectedTrialSession.isCalendared === false,
+    showSessionNotSetAlert: !!(
+      selectedTrialSession && selectedTrialSession.isCalendared === false
+    ),
     trialSessionStatesSorted,
     trialSessionsFormatted,
     trialSessionsFormattedByState,
