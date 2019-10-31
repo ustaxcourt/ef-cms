@@ -29,6 +29,7 @@ export const ReportsMenu = connect(
             'usa-accordion__button usa-nav__link',
             pageIsReports && 'usa-current',
           )}
+          id="reports-btn"
           onClick={() => {
             toggleMenuSequence({ openMenu: 'ReportsMenu' });
           }}
@@ -61,10 +62,10 @@ export const ReportsMenu = connect(
                 Blocked Cases
               </a>
             </li>
-            <li className="usa-nav__submenu-item">
+            <li className="usa-nav__submenu-item" id="reports-nav">
               <Button
                 link
-                id="trial-session-planning"
+                id="trial-session-planning-btn"
                 onClick={() => {
                   resetHeaderAccordionsSequence();
                   toggleMobileMenuSequence();
