@@ -251,4 +251,16 @@ module.exports = [
   // this url probably needs to be moved to calendaring when those users are created
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=non-calendared-case',
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/reports/case-deadlines',
+  {
+    actions: [
+      'wait for #reports-btn to be visible',
+      'click element #reports-btn',
+      'wait for #trial-session-planning-btn to be visible',
+      'click element #trial-session-planning-btn',
+      'wait for .trial-session-planning-modal to be visible',
+    ],
+    notes: 'checks the trial session planning modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/&info=trial-session-planning-modal',
+  },
 ];
