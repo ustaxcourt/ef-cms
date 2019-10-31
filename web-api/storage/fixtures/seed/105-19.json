@@ -216,24 +216,6 @@
   {
     "sk": "case-6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-    "pk": "catalog",
-    "docketNumber": "105-19",
-    "docketNumberSuffix": null,
-    "contactPrimary": {
-      "address3": "Aliquam molestias fu",
-      "address2": "Est asperiores ullam",
-      "city": "Consequatur duis ut",
-      "phone": "+1 (669) 779-5845",
-      "address1": "472 North Green Cowley Boulevard",
-      "postalCode": "49767",
-      "name": "Caryn Wall",
-      "state": "AE",
-      "countryType": "domestic",
-      "email": "taxpayer@example.com"
-    },
-    "contactSecondary": {},
-    "yearFiled": "2019",
-    "caseCaption": "Caryn Wall, Petitioner",
-    "filedDate": "2019-03-27T21:53:00.297Z"
+    "pk": "catalog"
   }
 ]

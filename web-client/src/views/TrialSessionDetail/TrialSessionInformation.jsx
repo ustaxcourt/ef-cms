@@ -1,36 +1,49 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const TrialSessionInformation = connect(
   {
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     printTrialCalendarSequence: sequences.printTrialCalendarSequence,
+    trialSessionHeaderHelper: state.trialSessionHeaderHelper,
   },
-  ({ formattedTrialSessionDetails, printTrialCalendarSequence }) => {
+  ({
+    formattedTrialSessionDetails,
+    printTrialCalendarSequence,
+    trialSessionHeaderHelper,
+  }) => {
     return (
       <>
         <div className="grid-container padding-x-0">
           <div className="grid-row">
             <div className="grid-col-10">
-              <h1>Session Information</h1>
+              <h1>
+                Session Information
+                {trialSessionHeaderHelper.showSwitchToWorkingCopy && (
+                  <a
+                    className="button-switch-box margin-left-2"
+                    href={`/trial-session-working-copy/${formattedTrialSessionDetails.trialSessionId}`}
+                  >
+                    View Judge Session Copy
+                  </a>
+                )}
+              </h1>
             </div>
             <div className="grid-col-2">
               {formattedTrialSessionDetails.isCalendared && (
-                <button
-                  className="usa-button usa-button--unstyled float-right margin-top-2"
+                <Button
+                  link
+                  className="float-right margin-top-2"
+                  icon="print"
                   onClick={() => {
                     printTrialCalendarSequence();
                   }}
                 >
-                  <FontAwesomeIcon
-                    className="margin-right-05"
-                    icon="print"
-                    size="1x"
-                  />
                   Printable Trial Calendar
-                </button>
+                </Button>
               )}
             </div>
           </div>
@@ -58,11 +71,10 @@ export const TrialSessionInformation = connect(
                         <div className="grid-col-6">
                           <p className="label">Date</p>
                           <p
-                            className={
-                              formattedTrialSessionDetails.showSwingSession
-                                ? ''
-                                : 'margin-bottom-0'
-                            }
+                            className={classNames(
+                              !formattedTrialSessionDetails.showSwingSession &&
+                                'margin-bottom-0',
+                            )}
                           >
                             {formattedTrialSessionDetails.formattedStartDate}{' '}
                             {formattedTrialSessionDetails.formattedStartTime}
@@ -71,11 +83,10 @@ export const TrialSessionInformation = connect(
                         <div className="grid-col-6">
                           <p className="label">Max # of Cases</p>
                           <p
-                            className={
-                              formattedTrialSessionDetails.showSwingSession
-                                ? ''
-                                : 'margin-bottom-0'
-                            }
+                            className={classNames(
+                              !formattedTrialSessionDetails.showSwingSession &&
+                                'margin-bottom-0',
+                            )}
                           >
                             {formattedTrialSessionDetails.maxCases}
                           </p>
@@ -121,11 +132,11 @@ export const TrialSessionInformation = connect(
                       </div>
 
                       <div
-                        className={`grid-row grid-gap ${
-                          formattedTrialSessionDetails.showSwingSession
-                            ? 'margin-bottom-8'
-                            : ''
-                        }`}
+                        className={classNames(
+                          'grid-row grid-gap',
+                          formattedTrialSessionDetails.showSwingSession &&
+                            'margin-bottom-8',
+                        )}
                       >
                         <div className="grid-col-6">
                           <p className="label">Court Reporter</p>

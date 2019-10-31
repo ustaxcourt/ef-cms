@@ -39,14 +39,10 @@ describe('updateCase', () => {
       },
     });
     expect(putStub.getCall(0).args[0].Item).toMatchObject({
-      pk: 'catalog',
-      sk: 'case-123',
-    });
-    expect(putStub.getCall(1).args[0].Item).toMatchObject({
       pk: '123',
       sk: '0',
     });
-    expect(putStub.getCall(2).args[0].Item).toMatchObject({
+    expect(putStub.getCall(1).args[0].Item).toMatchObject({
       pk: '123',
       sk: '11',
     });

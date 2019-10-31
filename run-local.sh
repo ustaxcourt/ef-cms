@@ -5,6 +5,13 @@ pkill -f DynamoDBLocal
 echo "starting dynamo"
 ./web-api/start-dynamo.sh &
 DYNAMO_PID=$!
+./wait-until.sh http://localhost:8000/shell
+
+if [ -z "$SKIP_ELASTICSEARCH" ]; then 
+  ./web-api/start-elasticsearch.sh &
+  ESEARCH_PID=$!
+  ./wait-until.sh http://localhost:9200/ 200
+fi
 
 node ./web-api/start-s3rver &
 S3RVER_PID=$!
@@ -14,6 +21,11 @@ npm run seed:s3
 
 echo "creating & seeding dynamo tables"
 npm run seed:db
+
+if [ -z "$SKIP_ELASTICSEARCH" ]; then 
+  echo "creating elasticsearch index"
+  npm run seed:elasticsearch
+fi
 
 # these exported values expire when script terminates
 export SKIP_SANITIZE=true
@@ -30,7 +42,9 @@ set -- \
   --noAuth \
   --noTimeout \
   --region us-east-1 \
-  --stage local
+  --stage local \
+  --dynamo_stream_arn "arn:aws:dynamodb:ddblocal:000000000000:table/efcms-local/stream/*" \
+  --elasticsearch_endpoint "http://localhost:9200"
 
 echo "starting api service"
 npx sls offline start "$@" --config web-api/serverless-api.yml &
@@ -52,14 +66,22 @@ echo "starting case deadlines service"
 npx sls offline start "$@" --config web-api/serverless-case-deadlines.yml &
 echo "starting case notes service"
 npx sls offline start "$@" --config web-api/serverless-case-notes.yml &
+echo "starting notifications service"
+npx sls offline start "$@" --config web-api/serverless-notifications.yml &
+
+if [ -z "$CI" ]; then 
+  echo "starting streams service"
+  npx sls offline start "$@" --config web-api/serverless-streams.yml &
+fi
 
 echo "starting proxy"
 node ./web-api/proxy.js
 
 echo "proxy stopped"
 
-if [ ! -e $CIRCLECI ]; then 
+if [ ! -e "$CIRCLECI" ]; then 
   echo "killing dynamodb local"
   pkill -P $DYNAMO_PID
+  pkill -p $ESEARCH_PID
 fi 
 kill $S3RVER_PID

@@ -1,4 +1,6 @@
 import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/OrderWithoutBody';
+import { applicationContext } from '../../src/applicationContext';
+import { first } from 'lodash';
 
 const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
@@ -37,5 +39,16 @@ export default test => {
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
     expect(test.getState('form.primaryDocumentFile')).toBeDefined();
+
+    const {
+      draftDocuments,
+    } = applicationContext.getUtilities().getFormattedCaseDetail({
+      applicationContext,
+      caseDetail: test.getState('caseDetail'),
+    });
+
+    test.documentId = first(draftDocuments)
+      ? first(draftDocuments).documentId
+      : undefined;
   });
 };

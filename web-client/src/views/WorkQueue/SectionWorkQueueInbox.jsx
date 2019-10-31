@@ -76,7 +76,7 @@ export const SectionWorkQueueInbox = connect(
                 <th aria-label="Status Icon" className="padding-right-0" />
               )}
               <th>Document</th>
-              {!workQueueHelper.hideFiledByColumn && <th>Filed By</th>}
+              {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               <th>Case Status</th>
               {workQueueHelper.showAssignedToColumn && (
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
@@ -212,6 +212,9 @@ export const SectionWorkQueueInbox = connect(
             </tbody>
           ))}
         </table>
+        {formattedWorkQueue.length === 0 && (
+          <p>{workQueueHelper.queueEmptyMessage}</p>
+        )}
       </React.Fragment>
     );
   },

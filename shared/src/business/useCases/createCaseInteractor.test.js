@@ -5,6 +5,7 @@ const {
 } = require('../entities/cases/CaseExternalIncomplete');
 const { CaseExternal } = require('../entities/cases/CaseExternal');
 const { createCaseInteractor } = require('./createCaseInteractor');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { User } = require('../entities/User');
 
 describe('createCaseInteractor', () => {
@@ -79,7 +80,7 @@ describe('createCaseInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
-          partyType: 'Petitioner',
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
           preferredTrialCity: 'Chattanooga, TN',
           procedureType: 'Small',
         },
@@ -106,7 +107,7 @@ describe('createCaseInteractor', () => {
           caseType: 'other',
           filingType: 'Myself',
           hasIrsNotice: true,
-          partyType: 'Petitioner',
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
           preferredTrialCity: 'Chattanooga, TN',
           procedureType: 'Small',
         },
@@ -180,7 +181,7 @@ describe('createCaseInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
-          partyType: 'Petitioner',
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: 1,
           preferredTrialCity: 'Chattanooga, TN',
@@ -261,7 +262,7 @@ describe('createCaseInteractor', () => {
           contactSecondary: {},
           filingType: 'Myself',
           hasIrsNotice: true,
-          partyType: 'Petitioner',
+          partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: 1,
           preferredTrialCity: 'Chattanooga, TN',
@@ -355,7 +356,7 @@ describe('createCaseInteractor', () => {
           filingType: 'Myself and my spouse',
           hasIrsNotice: true,
           isSpouseDeceased: 'No',
-          partyType: 'Petitioner & Spouse',
+          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: 1,
           preferredTrialCity: 'Chattanooga, TN',

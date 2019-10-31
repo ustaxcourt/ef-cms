@@ -74,7 +74,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       docketRecord: [
         {
           description: 'Petition',
-          filedBy: 'Bob Jones2',
+          filedBy: 'Petr. Bob Jones',
           filingDate: RECEIVED_DATE,
           status: undefined,
         },
@@ -84,7 +84,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           createdAt: RECEIVED_DATE,
           documentType: 'Petition',
           eventCode: 'P',
-          filedBy: 'Bob Jones2',
+          filedBy: 'Petr. Bob Jones',
           receivedAt: RECEIVED_DATE,
           workItems: [
             {
@@ -97,7 +97,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
               document: {
                 documentId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
                 documentType: 'Petition',
-                filedBy: 'Bob Jones2',
+                filedBy: 'Petr. Bob Jones',
                 workItems: [],
               },
               isInitializeCase: true,
@@ -106,7 +106,8 @@ describe('createCaseFromPaperInteractor integration test', () => {
                   createdAt: RECEIVED_DATE,
                   from: 'Alex Petitionsclerk',
                   fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-                  message: 'Petition filed by Bob Jones2 is ready for review.',
+                  message:
+                    'Petition filed by Petr. Bob Jones is ready for review.',
                 },
               ],
               section: 'petitions',
@@ -152,7 +153,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           {
             from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Bob Jones2 is ready for review.',
+            message: 'Petition filed by Petr. Bob Jones is ready for review.',
           },
         ],
         section: 'petitions',
@@ -181,7 +182,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           {
             from: 'Alex Petitionsclerk',
             fromUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-            message: 'Petition filed by Bob Jones2 is ready for review.',
+            message: 'Petition filed by Petr. Bob Jones is ready for review.',
           },
         ],
         section: 'petitions',

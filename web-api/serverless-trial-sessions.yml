@@ -93,7 +93,7 @@ provider:
     TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
-    MASTER_REGION: ${self:custom.vars.masterRegion, self:provider.masterRegion}
+    MASTER_REGION: ${self:provider.masterRegion}
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
@@ -124,6 +124,12 @@ provider:
       Resource:
         - arn:aws:s3:::${self:provider.environment.DOCUMENTS_BUCKET_NAME}/*
         - arn:aws:s3:::${self:provider.environment.TEMP_DOCUMENTS_BUCKET_NAME}/*
+    - Effect: 'Allow'
+      Action:
+        - execute-api:Invoke
+        - execute-api:ManageConnections
+      Resource:
+        - '*'
     - Effect: 'Allow'
       Action:
         - dynamodb:Query
@@ -300,4 +306,5 @@ functions:
       - http:
           path: /{trialSessionId}/batch-download/{zipName}
           method: get
+          async: true
           cors: true

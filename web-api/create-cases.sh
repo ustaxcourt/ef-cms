@@ -28,7 +28,7 @@ response=$(aws cognito-idp admin-initiate-auth \
   --auth-parameters USERNAME="petitionsclerk1@example.com"',PASSWORD'="Testing1234$")
 petitionsclerkToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
-while read line
+while read -r line
 do
   IFS=';' read -ra ADDR <<< "$line"
   partyType="${ADDR[0]}"
@@ -46,7 +46,7 @@ do
   stinFileId=$(uuidgen)
 
   secondaryContactJson="{}"
-  if [ ! -z "$secondaryContact" ] ; then
+  if [ -n "$secondaryContact" ] ; then
     secondaryContactJson=$(cat <<EOF
 {
   "countryType": "domestic",
@@ -89,7 +89,7 @@ EOF
     "procedureType": "${caseProcedure}",
     "preferredTrialCity": "${placeOfTrial}"
   }
-}  
+}
 EOF
   )
 
@@ -106,15 +106,15 @@ EOF
   docketNumber=$(echo "${case}" | jq -r ".docketNumber")
   echo "${docketNumber} ${caseId}" >> cases.txt
 
-  aws s3 cp "./assets/small_pdf.pdf" "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${petitionFileId}"
-  aws s3 cp "./assets/small_pdf.pdf" "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${stinFileId}"
+  aws s3 cp ./assets/small_pdf.pdf "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${petitionFileId}"
+  aws s3 cp ./assets/small_pdf.pdf "s3://${EFCMS_DOMAIN}-documents-${ENV}-us-east-1/${stinFileId}"
 
-  if [ ! -z "$petitionerCounsel" ] ; then
-    if [ "$petitionerCounsel" == 'practitioner1' ] ; then 
-      barNumber="PT1234" 
+  if [ -n "$petitionerCounsel" ] ; then
+    if [ "$petitionerCounsel" == 'practitioner1' ] ; then
+      barNumber="PT1234"
     fi
-    if [ "$petitionerCounsel" == 'practitioner2' ] ; then 
-      barNumber="PT5432" 
+    if [ "$petitionerCounsel" == 'practitioner2' ] ; then
+      barNumber="PT5432"
     fi
 
     searchResults=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/users/practitioners/search?searchKey=${barNumber}" \
@@ -142,12 +142,12 @@ EOF
       --compressed
   fi
 
-  if [ ! -z "$respondentCounsel" ] ; then
-    if [ "$respondentCounsel" == 'respondent1' ] ; then 
-      barNumber="RT6789" 
+  if [ -n "$respondentCounsel" ] ; then
+    if [ "$respondentCounsel" == 'respondent1' ] ; then
+      barNumber="RT6789"
     fi
-    if [ "$respondentCounsel" == 'respondent2' ] ; then 
-      barNumber="RT0987" 
+    if [ "$respondentCounsel" == 'respondent2' ] ; then
+      barNumber="RT0987"
     fi
 
     searchResults=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/users/respondents/search?searchKey=${barNumber}" \

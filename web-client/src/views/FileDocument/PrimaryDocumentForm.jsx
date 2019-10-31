@@ -6,6 +6,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PrimaryDocumentForm = connect(
   {
@@ -20,17 +21,16 @@ export const PrimaryDocumentForm = connect(
         <h2 className="margin-top-4">{form.documentTitle}</h2>
         <div className="blue-container">
           <div
-            className={`usa-form-group ${
-              validationErrors.primaryDocumentFile
-                ? 'usa-form-group--error'
-                : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.primaryDocumentFile && 'usa-form-group--error',
+            )}
           >
             <label
-              className={
-                'usa-label ustc-upload with-hint ' +
-                (fileDocumentHelper.showPrimaryDocumentValid ? 'validated' : '')
-              }
+              className={classNames(
+                'usa-label ustc-upload with-hint',
+                fileDocumentHelper.showPrimaryDocumentValid && 'validated',
+              )}
               htmlFor="primary-document"
               id="primary-document-label"
             >

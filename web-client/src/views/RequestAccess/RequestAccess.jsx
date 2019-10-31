@@ -1,11 +1,14 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PartiesRepresenting } from './PartiesRepresenting';
 import { RequestAccessDocumentForm } from './RequestAccessDocumentForm';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
-import { find } from 'lodash';
+import { reactSelectValue } from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import Select from 'react-select';
+import classNames from 'classnames';
 
 export const RequestAccess = connect(
   {
@@ -32,11 +35,15 @@ export const RequestAccess = connect(
     return (
       <React.Fragment>
         <Focus>
-          <h1 id="file-a-document-header" tabIndex="-1">
+          <h1
+            className="margin-bottom-105"
+            id="file-a-document-header"
+            tabIndex="-1"
+          >
             Request Access to This Case
           </h1>
         </Focus>
-        <p className="required-statement margin-top-05 margin-bottom-5">
+        <p className="margin-bottom-4 margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
         <div>
@@ -46,58 +53,59 @@ export const RequestAccess = connect(
         </div>
         <div className="blue-container">
           <div
-            className={`usa-form-group margin-bottom-0 ${
-              validationErrors.documentType ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group margin-bottom-0',
+              validationErrors.documentType && 'usa-form-group--error',
+            )}
           >
             <label
               className="usa-label"
-              htmlFor="document-type"
+              htmlFor="react-select-2-input"
               id="document-type-label"
             >
-              Document Type
+              Document type
             </label>
-            <select
+            <span className="usa-hint">
+              Enter your document name to see available document types,
+              <br />
+              or use the dropdown to select your document type.
+            </span>
+
+            <Select
               aria-describedby="document-type-label"
-              className={`usa-select ${
-                validationErrors.documentType ? 'usa-select--error' : ''
-              }`}
+              className={classNames(
+                'select-react-element',
+                validationErrors.documentType && 'usa-select--error',
+              )}
+              classNamePrefix="select-react-element"
               id="document-type"
               name="documentType"
-              value={form.documentType || ''}
+              options={requestAccessHelper.documentsForSelect}
+              placeholder="- Select -"
+              value={reactSelectValue({
+                documentTypes: requestAccessHelper.documentsForSelect,
+                selectedEventCode: form.eventCode,
+              })}
               onChange={e => {
-                const documentType = e.target.value;
-                const entry = find(requestAccessHelper.documents, {
-                  documentType,
-                });
                 updateCaseAssociationFormValueSequence({
                   key: 'documentType',
-                  value: e.target.value,
+                  value: e.label,
                 });
                 updateCaseAssociationFormValueSequence({
                   key: 'documentTitleTemplate',
-                  value: entry.documentTitleTemplate,
+                  value: e.documentTitleTemplate,
                 });
                 updateCaseAssociationFormValueSequence({
                   key: 'eventCode',
-                  value: entry.eventCode,
+                  value: e.eventCode,
                 });
                 updateCaseAssociationFormValueSequence({
                   key: 'scenario',
-                  value: entry.scenario,
+                  value: e.scenario,
                 });
                 validateCaseAssociationRequestSequence();
               }}
-            >
-              <option value="">- Select -</option>
-              {requestAccessHelper.documents.map(entry => {
-                return (
-                  <option key={entry.documentType} value={entry.documentType}>
-                    {entry.documentType}
-                  </option>
-                );
-              })}
-            </select>
+            />
             <Text
               bind="validationErrors.documentType"
               className="usa-error-message"
@@ -106,9 +114,8 @@ export const RequestAccess = connect(
         </div>
         <RequestAccessDocumentForm />
         {requestAccessHelper.showPartiesRepresenting && <PartiesRepresenting />}
-        <div className="button-box-container">
-          <button
-            className="usa-button"
+        <div className="margin-top-5">
+          <Button
             id="submit-document"
             type="submit"
             onClick={() => {
@@ -116,16 +123,15 @@ export const RequestAccess = connect(
             }}
           >
             Review Filing
-          </button>
-          <button
-            className="usa-button usa-button--unstyled"
-            type="button"
+          </Button>
+          <Button
+            link
             onClick={() => {
               formCancelToggleCancelSequence();
             }}
           >
             Cancel
-          </button>
+          </Button>
         </div>
       </React.Fragment>
     );

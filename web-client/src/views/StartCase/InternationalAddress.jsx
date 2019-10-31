@@ -1,7 +1,8 @@
-import { Text } from '../../ustc-ui/Text/Text';
+import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const InternationalAddress = connect(
   {
@@ -21,14 +22,13 @@ export const InternationalAddress = connect(
     return (
       <React.Fragment>
         <div
-          className={
-            'usa-form-group ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].address1
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            validationErrors &&
+              validationErrors[type] &&
+              validationErrors[type].address1 &&
+              'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor={`${type}.address1`}>
             Mailing address line 1
@@ -50,10 +50,7 @@ export const InternationalAddress = connect(
               });
             }}
           />
-          <Text
-            bind={`validationErrors.${type}.address1`}
-            className="usa-error-message"
-          />
+          <ValidationText field={`${type}.address1`} />
         </div>
         <div className="usa-form-group">
           <label className="usa-label" htmlFor={`${type}.address2`}>
@@ -120,20 +117,16 @@ export const InternationalAddress = connect(
               });
             }}
           />
-          <Text
-            bind={`validationErrors.${type}.state`}
-            className="usa-error-message"
-          />
+          <ValidationText field={`${type}.state`} />
         </div>
         <div
-          className={
-            'usa-form-group ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].city
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            validationErrors &&
+              validationErrors[type] &&
+              validationErrors[type].city &&
+              'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor={`${type}.city`}>
             City
@@ -155,27 +148,22 @@ export const InternationalAddress = connect(
               });
             }}
           />
-          <Text
-            bind={`validationErrors.${type}.city`}
-            className="usa-error-message"
-          />
+          <ValidationText field={`${type}.city`} />
         </div>
         <div
-          className={
-            'usa-form-group ' +
-            (validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].postalCode
-              ? 'usa-form-group--error'
-              : '')
-          }
+          className={classNames(
+            'usa-form-group ' + validationErrors &&
+              validationErrors[type] &&
+              validationErrors[type].postalCode &&
+              'usa-form-group--error',
+          )}
         >
           <label
             aria-label="postal code"
             className="usa-label"
             htmlFor={`${type}.postalCode`}
           >
-            Postal Code
+            Postal code
           </label>
           <input
             autoCapitalize="none"
@@ -194,10 +182,7 @@ export const InternationalAddress = connect(
               });
             }}
           />
-          <Text
-            bind={`validationErrors.${type}.postalCode`}
-            className="usa-error-message"
-          />
+          <ValidationText field={`${type}.postalCode`} />
         </div>
       </React.Fragment>
     );

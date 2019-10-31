@@ -1,4 +1,5 @@
 import { Address } from './StartCase/Address';
+import { Button } from '../ustc-ui/Button/Button';
 import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
 import { Hint } from '../ustc-ui/Hint/Hint';
@@ -7,6 +8,7 @@ import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const UserContactEdit = connect(
   {
@@ -33,13 +35,11 @@ export const UserContactEdit = connect(
       <>
         <div className="big-blue-header">
           <div className="grid-container">
-            <h1>Contact Information</h1>
+            <h1>Edit Contact Information</h1>
           </div>
         </div>
         <section className="usa-section grid-container">
           <ErrorNotification />
-
-          <h2>Edit Contact Information</h2>
 
           <p>
             This form will automatically create and submit change of contact
@@ -49,12 +49,12 @@ export const UserContactEdit = connect(
 
           <Hint wider>
             For name and Bar Number changes, please contact the Court’s
-            Admissions section at (202)-521-0700
+            Admissions section at (202) 521-0700
           </Hint>
 
-          <div className="blue-container">
+          <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
-              <p className="usa-label">Contact Name</p>
+              <p className="usa-label">Contact name</p>
               <p className="margin-top-0">
                 {user.name} ({user.barNumber})
               </p>
@@ -83,21 +83,20 @@ export const UserContactEdit = connect(
               />
             )}
             <div
-              className={
-                'usa-form-group margin-bottom-0 ' +
-                (validationErrors &&
-                validationErrors.contact &&
-                validationErrors.contact.phone
-                  ? 'usa-form-group--error'
-                  : '')
-              }
+              className={classNames(
+                'usa-form-group margin-bottom-0',
+                validationErrors &&
+                  validationErrors.contact &&
+                  validationErrors.contact.phone &&
+                  'usa-form-group--error',
+              )}
             >
               <label className="usa-label" htmlFor="phone">
-                Phone Number
+                Phone number
               </label>
               <input
                 autoCapitalize="none"
-                className="usa-input"
+                className="usa-input max-width-200"
                 id="phone"
                 name="contact.phone"
                 type="tel"
@@ -118,20 +117,16 @@ export const UserContactEdit = connect(
               />
             </div>
           </div>
-          <button
-            className="usa-button margin-top-3 margin-right-3"
+          <Button
             onClick={() => {
               submitEditUserContactSequence();
             }}
           >
             Save
-          </button>
-          <button
-            className="usa-button usa-button--unstyled margin-top-3 margin-right-3"
-            onClick={() => navigateBackSequence()}
-          >
+          </Button>
+          <Button link onClick={() => navigateBackSequence()}>
             Cancel
-          </button>
+          </Button>
         </section>
       </>
     );

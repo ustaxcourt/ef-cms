@@ -28,7 +28,7 @@ export const submitDocketEntryWithoutFileAction = async ({
     isPaper: true,
     docketNumber,
     caseId,
-    createdAt: applicationContext.getUtilities().createISODateString(),
+    createdAt: documentMetadata.dateReceived,
     receivedAt: documentMetadata.dateReceived,
   };
 

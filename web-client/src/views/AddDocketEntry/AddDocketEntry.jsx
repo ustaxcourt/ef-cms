@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
@@ -52,9 +53,8 @@ export const AddDocketEntry = connect(
             <div className="grid-col-5">
               <section className="usa-section DocumentDetail">
                 <PrimaryDocumentForm />
-                <div className="button-box-container">
-                  <button
-                    className="usa-button"
+                <div className="margin-top-5">
+                  <Button
                     id="save-and-finish"
                     type="submit"
                     onClick={() => {
@@ -62,11 +62,10 @@ export const AddDocketEntry = connect(
                     }}
                   >
                     Finish
-                  </button>
-                  <button
-                    className="usa-button usa-button--outline margin-left-1"
+                  </Button>
+                  <Button
+                    secondary
                     id="save-and-add-supporting"
-                    type="button"
                     onClick={() => {
                       submitDocketEntrySequence({
                         docketNumber: caseDetail.docketNumber,
@@ -75,16 +74,16 @@ export const AddDocketEntry = connect(
                     }}
                   >
                     Add Another Entry
-                  </button>
-                  <button
-                    className="usa-button usa-button--unstyled margin-left-1"
+                  </Button>
+                  <Button
+                    link
                     id="cancel-button"
                     onClick={() => {
                       formCancelToggleCancelSequence();
                     }}
                   >
                     Cancel
-                  </button>
+                  </Button>
                   {showModal === 'FormCancelModalDialog' && (
                     <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
                   )}

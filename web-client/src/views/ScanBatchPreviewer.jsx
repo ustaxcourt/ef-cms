@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import {
   ConfirmRescanBatchModal,
   DeleteBatchModal,
@@ -11,11 +12,12 @@ import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
-import { Text } from '../ustc-ui/Text/Text';
+import { ValidationText } from '../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import PropTypes from 'prop-types';
 import React, { useEffect, useRef } from 'react';
+import classNames from 'classnames';
 
 export const ScanBatchPreviewer = connect(
   {
@@ -145,10 +147,9 @@ export const ScanBatchPreviewer = connect(
             />
           </div>
 
-          <button
+          <Button
             aria-label="create pdf"
-            className="usa-button margin-top-4"
-            type="button"
+            className="margin-top-4"
             onClick={e => {
               e.preventDefault();
               generatePdfFromScanSessionSequence({
@@ -159,7 +160,7 @@ export const ScanBatchPreviewer = connect(
           >
             <FontAwesomeIcon icon={['fas', 'file-pdf']} />
             Create PDF
-          </button>
+          </Button>
         </>
       );
     };
@@ -170,76 +171,96 @@ export const ScanBatchPreviewer = connect(
           ? 'margin-top-2'
           : 'margin-top-0';
       return (
-        <div
-          className={`usa-form-group ${
-            validationErrors[documentType] ? 'usa-form-group--error' : ''
-          }`}
-        >
-          <fieldset
-            aria-label="scan mode selection"
-            className={`usa-fieldset margin-bottom-3 ${headerMargin}`}
-            id="scan-mode-radios"
-          >
-            <legend
-              className="usa-legend with-hint margin-bottom-2"
-              id="scan-mode-radios-legend"
+        <div className="grid-row">
+          <div className="grid-col-8">
+            <div
+              className={classNames(
+                'usa-form-group',
+                validationErrors[documentType] && 'usa-form-group--error',
+              )}
             >
-              How do you want to add this document?
-            </legend>
-            <div className="usa-radio usa-radio__inline">
-              <input
-                aria-describedby="scan-mode-radios-legend"
-                aria-labelledby="upload-mode-scan"
-                checked={scanBatchPreviewerHelper.uploadMode === 'scan'}
-                className="usa-radio__input"
-                id="scanMode"
-                name="uploadMode"
-                type="radio"
-                value="scan"
-                onChange={() =>
-                  setDocumentUploadModeSequence({
-                    documentUploadMode: 'scan',
-                  })
-                }
-              />
-              <label
-                className="usa-radio__label"
-                htmlFor="scanMode"
-                id="upload-mode-scan"
+              <fieldset
+                aria-label="scan mode selection"
+                className={classNames(
+                  'usa-fieldset margin-bottom-3',
+                  headerMargin,
+                )}
+                id="scan-mode-radios"
               >
-                Scan
-              </label>
-            </div>
+                <legend
+                  className="usa-legend with-hint margin-bottom-2"
+                  id="scan-mode-radios-legend"
+                >
+                  How do you want to add this document?
+                </legend>
+                <div className="usa-radio usa-radio__inline">
+                  <input
+                    aria-describedby="scan-mode-radios-legend"
+                    aria-labelledby="upload-mode-scan"
+                    checked={scanBatchPreviewerHelper.uploadMode === 'scan'}
+                    className="usa-radio__input"
+                    id="scanMode"
+                    name="uploadMode"
+                    type="radio"
+                    value="scan"
+                    onChange={() =>
+                      setDocumentUploadModeSequence({
+                        documentUploadMode: 'scan',
+                      })
+                    }
+                  />
+                  <label
+                    className="usa-radio__label"
+                    htmlFor="scanMode"
+                    id="upload-mode-scan"
+                  >
+                    Scan
+                  </label>
+                </div>
 
-            <div className="usa-radio usa-radio__inline">
-              <input
-                aria-describedby="scan-mode-radios-legend"
-                aria-labelledby="upload-mode-upload"
-                checked={scanBatchPreviewerHelper.uploadMode === 'upload'}
-                className="usa-radio__input"
-                id="uploadMode"
-                name="uploadMode"
-                type="radio"
-                value="upload"
-                onChange={() =>
-                  setDocumentUploadModeSequence({
-                    documentUploadMode: 'upload',
-                  })
-                }
-              />
-              <label
-                className="usa-radio__label"
-                htmlFor="uploadMode"
-                id="upload-mode-upload"
-              >
-                Upload
-              </label>
+                <div className="usa-radio usa-radio__inline">
+                  <input
+                    aria-describedby="scan-mode-radios-legend"
+                    aria-labelledby="upload-mode-upload"
+                    checked={scanBatchPreviewerHelper.uploadMode === 'upload'}
+                    className="usa-radio__input"
+                    id="uploadMode"
+                    name="uploadMode"
+                    type="radio"
+                    value="upload"
+                    onChange={() =>
+                      setDocumentUploadModeSequence({
+                        documentUploadMode: 'upload',
+                      })
+                    }
+                  />
+                  <label
+                    className="usa-radio__label"
+                    htmlFor="uploadMode"
+                    id="upload-mode-upload"
+                  >
+                    Upload
+                  </label>
+                </div>
+              </fieldset>
+              <ValidationText field={`${documentType}`} />
             </div>
-          </fieldset>
-          <Text
-            bind={`validationErrors.${documentType}`}
-            className="usa-error-message"
-          />
+          </div>
+
+          <div className="grid-col-4 margin-top-4 text-align-right">
+            {scanBatchPreviewerHelper.uploadMode === 'scan' &&
+              scanBatchPreviewerHelper.scannerSource && (
+                <Button
+                  onClick={e => {
+                    e.preventDefault();
+                    startScanSequence();
+                  }}
+                >
+                  <FontAwesomeIcon icon={['fas', 'plus-circle']} />
+                  Start Scan
+                </Button>
+              )}
+          </div>
         </div>
       );
     };
@@ -250,8 +271,9 @@ export const ScanBatchPreviewer = connect(
           {showModal === 'ConfirmDeletePDFModal' && <DeletePDFModal />}
           <div className="padding-top-4">
             <PdfPreview />
-            <button
-              className="margin-top-3 usa-button usa-button--outline red-warning bg-white"
+            <Button
+              secondary
+              className="margin-top-3 red-warning bg-white"
               onClick={e => {
                 e.preventDefault();
                 openConfirmDeletePDFModalSequence();
@@ -259,7 +281,7 @@ export const ScanBatchPreviewer = connect(
             >
               <FontAwesomeIcon icon={['fas', 'times-circle']} />
               Delete PDF
-            </button>
+            </Button>
           </div>
         </>
       );
@@ -267,21 +289,21 @@ export const ScanBatchPreviewer = connect(
 
     const renderScan = () => {
       return (
-        <>
-          <h5 className="header-scanned-batches">Scanned Batches</h5>
-          <div className="batches-table-wrapper" ref={batchWrapperRef}>
-            {scanBatchPreviewerHelper.batches.length > 0 ? (
+        scanBatchPreviewerHelper.batches.length > 0 && (
+          <>
+            <h5 className="header-scanned-batches">Scanned batches</h5>
+            <div className="batches-table-wrapper" ref={batchWrapperRef}>
               <table className="batches-table">
                 <tbody>
                   {scanBatchPreviewerHelper.batches.map(batch => (
-                    <tr key={batch.index}>
+                    <tr className="no-blue-hover" key={batch.index}>
                       <td>
                         {selectedBatchIndex !== batch.index && (
-                          <button
+                          <Button
+                            link
                             aria-label={`batch ${batch.index + 1} -- ${
                               batch.pages.length
                             } pages total`}
-                            className="usa-button usa-button--unstyled"
                             onClick={e => {
                               e.preventDefault();
                               setSelectedBatchIndexSequence({
@@ -290,7 +312,7 @@ export const ScanBatchPreviewer = connect(
                             }}
                           >
                             Batch {batch.index + 1}
-                          </button>
+                          </Button>
                         )}
                         {selectedBatchIndex === batch.index && (
                           <span className="batch-index">
@@ -302,9 +324,10 @@ export const ScanBatchPreviewer = connect(
                         <span>{batch.pages.length} pages</span>
                       </td>
                       <td>
-                        <button
+                        <Button
+                          link
                           aria-label={`rescan batch ${batch.index + 1}`}
-                          className="usa-button usa-button--unstyled no-underline"
+                          className="no-underline"
                           onClick={e => {
                             e.preventDefault();
                             openConfirmRescanBatchModalSequence({
@@ -314,14 +337,15 @@ export const ScanBatchPreviewer = connect(
                         >
                           <FontAwesomeIcon icon={['fas', 'redo-alt']} />
                           Rescan
-                        </button>
+                        </Button>
                       </td>
                       <td>
-                        <button
+                        <Button
+                          link
                           aria-label={`delete batch ${batch.index + 1} - with ${
                             batch.pages.length
                           } total pages`}
-                          className="usa-button usa-button--unstyled no-underline red-warning float-right"
+                          className="no-underline red-warning float-right"
                           onClick={e => {
                             e.preventDefault();
                             openConfirmDeleteBatchModalSequence({
@@ -332,32 +356,17 @@ export const ScanBatchPreviewer = connect(
                         >
                           <FontAwesomeIcon icon={['fas', 'times-circle']} />
                           Delete
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            ) : (
-              <div>None</div>
-            )}
-          </div>
+            </div>
 
-          <hr className="lighter" />
-
-          {scanBatchPreviewerHelper.scannerSource && (
-            <button
-              className="usa-button usa-button--unstyled no-underline"
-              onClick={e => {
-                e.preventDefault();
-                startScanSequence();
-              }}
-            >
-              <FontAwesomeIcon icon={['fas', 'plus-circle']} />
-              Add Batch
-            </button>
-          )}
-        </>
+            <hr className="lighter" />
+          </>
+        )
       );
     };
 
@@ -365,16 +374,17 @@ export const ScanBatchPreviewer = connect(
       return (
         <div className="document-detail-one-third">
           <div
-            className={`usa-form-group ${
-              validationErrors.stinFile ? 'usa-form-group--error' : ''
-            }`}
+            className={classNames(
+              'usa-form-group',
+              validationErrors.stinFile && 'usa-form-group--error',
+            )}
           >
             <label
-              className={'usa-label ustc-upload-stin with-hint '}
+              className="usa-label ustc-upload-stin with-hint"
               htmlFor={`${documentType}-file`}
               id={`${documentType}-label`}
             >
-              Upload Your File{' '}
+              Upload your file{' '}
               <span className="success-message">
                 <FontAwesomeIcon icon="check-circle" size="1x" />
               </span>
@@ -461,11 +471,12 @@ export const ScanBatchPreviewer = connect(
                 <span className="margin-right-1">
                   Scanner: {scanBatchPreviewerHelper.scannerSource || 'None'}
                 </span>
-                <button
+                <Button
+                  link
                   aria-label={`${
                     scanBatchPreviewerHelper.scannerSource ? 'Change' : 'Select'
                   } scanner source`}
-                  className="usa-button usa-button--unstyled change-scanner-button margin-right-3"
+                  className="change-scanner-button padding-0"
                   onClick={e => {
                     e.preventDefault();
                     openChangeScannerSourceModalSequence();
@@ -474,7 +485,7 @@ export const ScanBatchPreviewer = connect(
                   {scanBatchPreviewerHelper.scannerSource
                     ? 'Change'
                     : 'Select Scanner'}
-                </button>
+                </Button>
               </div>
             </div>
           </div>

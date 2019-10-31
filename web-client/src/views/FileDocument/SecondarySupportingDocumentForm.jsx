@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { SupportingDocumentInclusionsForm } from './SupportingDocumentInclusionsForm';
@@ -5,6 +6,7 @@ import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const SecondarySupportingDocumentForm = connect(
   {
@@ -12,6 +14,8 @@ export const SecondarySupportingDocumentForm = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     index: props.index,
+    removeSecondarySupportingDocumentSequence:
+      sequences.removeSecondarySupportingDocumentSequence,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence:
@@ -23,6 +27,7 @@ export const SecondarySupportingDocumentForm = connect(
     fileDocumentHelper,
     form,
     index,
+    removeSecondarySupportingDocumentSequence,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationErrors,
@@ -30,22 +35,32 @@ export const SecondarySupportingDocumentForm = connect(
     return (
       <>
         <h2 className="margin-top-4">
-          Secondary Supporting Document {index + 1}
+          <div className="display-flex">
+            Secondary Supporting Document {index + 1}{' '}
+            <Button
+              link
+              className="red-warning text-left padding-0 margin-left-1"
+              icon="times-circle"
+              onClick={() => {
+                removeSecondarySupportingDocumentSequence({ index });
+              }}
+            >
+              Remove
+            </Button>
+          </div>
         </h2>
         <div className="blue-container">
           <div
-            className={`usa-form-group ${
+            className={classNames(
+              'usa-form-group',
               validationErrors.secondarySupportingDocuments &&
-              validationErrors.secondarySupportingDocuments[index] &&
-              validationErrors.secondarySupportingDocuments[index]
-                .supportingDocument
-                ? 'usa-form-group--error'
-                : ''
-            } ${
-              !form.secondarySupportingDocuments[index].supportingDocument
-                ? 'margin-bottom-0'
-                : ''
-            }`}
+                validationErrors.secondarySupportingDocuments[index] &&
+                validationErrors.secondarySupportingDocuments[index]
+                  .supportingDocument &&
+                'usa-form-group--error',
+              !form.secondarySupportingDocuments[index].supportingDocument &&
+                'margin-bottom-0',
+            )}
           >
             <label
               className="usa-label"
@@ -56,14 +71,14 @@ export const SecondarySupportingDocumentForm = connect(
             </label>
             <select
               aria-describedby={`secondary-supporting-document-${index}-label`}
-              className={`usa-select ${
+              className={classNames(
+                'usa-select',
                 validationErrors.secondarySupportingDocuments &&
-                validationErrors.secondarySupportingDocuments[index] &&
-                validationErrors.secondarySupportingDocuments[index]
-                  .supportingDocument
-                  ? 'usa-select--error'
-                  : ''
-              }`}
+                  validationErrors.secondarySupportingDocuments[index] &&
+                  validationErrors.secondarySupportingDocuments[index]
+                    .supportingDocument &&
+                  'usa-select--error',
+              )}
               id={`secondary-supporting-document-${index}`}
               name={`secondarySupportingDocuments.${index}.supportingDocument`}
               value={
@@ -108,21 +123,21 @@ export const SecondarySupportingDocumentForm = connect(
           {fileDocumentHelper.secondarySupportingDocuments[index]
             .showSupportingDocumentFreeText && (
             <div
-              className={`usa-form-group ${
+              className={classNames(
+                'usa-form-group',
                 validationErrors.secondarySupportingDocuments &&
-                validationErrors.secondarySupportingDocuments[index] &&
-                validationErrors.secondarySupportingDocuments[index]
-                  .supportingDocumentFreeText
-                  ? 'usa-form-group--error'
-                  : ''
-              }`}
+                  validationErrors.secondarySupportingDocuments[index] &&
+                  validationErrors.secondarySupportingDocuments[index]
+                    .supportingDocumentFreeText &&
+                  'usa-form-group--error',
+              )}
             >
               <label
                 className="usa-label"
                 htmlFor={`secondary-supporting-document-free-text-${index}`}
                 id={`secondary-supporting-document-free-text-${index}-label`}
               >
-                Supporting Document Signed By
+                Supporting document signed by
               </label>
               <input
                 aria-describedby={`secondary-supporting-document-free-text-${index}-label`}
@@ -160,27 +175,25 @@ export const SecondarySupportingDocumentForm = connect(
             .showSupportingDocumentUpload && (
             <>
               <div
-                className={`usa-form-group ${
+                className={classNames(
+                  'usa-form-group',
                   validationErrors.secondarySupportingDocuments &&
-                  validationErrors.secondarySupportingDocuments[index] &&
-                  validationErrors.secondarySupportingDocuments[index]
-                    .supportingDocumentFile
-                    ? 'usa-form-group--error'
-                    : ''
-                }`}
+                    validationErrors.secondarySupportingDocuments[index] &&
+                    validationErrors.secondarySupportingDocuments[index]
+                      .supportingDocumentFile &&
+                    'usa-form-group--error',
+                )}
               >
                 <label
-                  className={
-                    'usa-label ustc-upload with-hint ' +
-                    (fileDocumentHelper.secondarySupportingDocuments[index]
-                      .showSupportingDocumentValid
-                      ? 'validated'
-                      : '')
-                  }
+                  className={classNames(
+                    'usa-label ustc-upload with-hint',
+                    fileDocumentHelper.secondarySupportingDocuments[index]
+                      .showSupportingDocumentValid && 'validated',
+                  )}
                   htmlFor={`secondary-supporting-document-file-${index}`}
                   id={`secondary-supporting-document-file-${index}-label`}
                 >
-                  Upload Your Supporting Document{' '}
+                  Upload your supporting document{' '}
                   <span className="success-message padding-left-1">
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>

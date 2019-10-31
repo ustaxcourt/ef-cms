@@ -80,6 +80,7 @@ describe('Case from Paper Document Scan journey', () => {
     };
     global.window = {
       URL: global.URL,
+      document: {},
       localStorage: {
         getItem: key => {
           if (key === 'scannerSourceIndex') {

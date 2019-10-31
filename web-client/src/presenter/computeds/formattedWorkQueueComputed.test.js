@@ -6,6 +6,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 import {
   createISODateString,
   formatDateString,
+  formatNow,
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
 
@@ -20,6 +21,7 @@ const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
     return {
       createISODateString,
       formatDateString,
+      formatNow,
       prepareDateFromString,
     };
   },

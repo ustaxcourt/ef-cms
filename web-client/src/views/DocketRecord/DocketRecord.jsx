@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
+import classNames from 'classnames';
 
 export const DocketRecord = connect(
   {
@@ -46,8 +47,8 @@ export const DocketRecord = connect(
               <th>Date</th>
               <th className="center-column">Event</th>
               <th aria-hidden="true" className="icon-column" />
-              <th>Filings and Proceedings</th>
-              <th>Filed By</th>
+              <th>Filings and proceedings</th>
+              <th>Filed by</th>
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
@@ -61,7 +62,10 @@ export const DocketRecord = connect(
                   document &&
                   document.isFileAttached === false;
                 return (
-                  <tr className={isInProgress ? 'in-progress' : ''} key={index}>
+                  <tr
+                    className={classNames(isInProgress && 'in-progress')}
+                    key={index}
+                  >
                     <td className="center-column hide-on-mobile">{index}</td>
                     <td>
                       <span className="no-wrap">

@@ -22,6 +22,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
 import { setIsUpdatingWithFileAction } from '../actions/DocketEntry/setIsUpdatingWithFileAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { stashWizardDataAction } from '../actions/DocketEntry/stashWizardDataAction';
@@ -53,7 +54,7 @@ const afterEntryCreatedOrUpdated = [
     caseDetail: [
       getDocketEntryAlertSuccessAction,
       setAlertSuccessAction,
-      set(state.saveAlertsForNavigation, true),
+      setSaveAlertsForNavigationAction,
       navigateToCaseDetailAction,
     ],
   },

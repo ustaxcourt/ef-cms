@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PDFSignerMessage = connect(
   {
@@ -29,14 +30,14 @@ export const PDFSignerMessage = connect(
         </h3>
         <div className="usa-form-group">
           <label className="usa-label" htmlFor="section">
-            Select Section
+            Select section
           </label>
 
           <div
-            className={
-              'usa-form-group ' +
-              (validationErrors.section ? 'usa-form-group--error' : '')
-            }
+            className={classNames(
+              'usa-form-group',
+              validationErrors.section && 'usa-form-group--error',
+            )}
           >
             <select
               className="usa-select"
@@ -69,13 +70,13 @@ export const PDFSignerMessage = connect(
         </div>
 
         <div
-          className={
-            'usa-form-group ' +
-            (validationErrors.assigneeId ? 'usa-form-group--error' : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            validationErrors.assigneeId && 'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor="assigneeId">
-            Select Recipient
+            Select recipient
           </label>
           <select
             aria-disabled={!form.section ? 'true' : 'false'}
@@ -106,13 +107,13 @@ export const PDFSignerMessage = connect(
         </div>
 
         <div
-          className={
-            'usa-form-group ' +
-            (validationErrors.message ? 'usa-form-group--error' : '')
-          }
+          className={classNames(
+            'usa-form-group',
+            validationErrors.message && 'usa-form-group--error',
+          )}
         >
           <label className="usa-label" htmlFor="message">
-            Add Message
+            Add message
           </label>
           <textarea
             className="usa-textarea"
