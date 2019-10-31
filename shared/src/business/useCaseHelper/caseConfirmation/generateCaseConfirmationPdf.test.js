@@ -33,9 +33,12 @@ describe('generateCaseConfirmationPdf', () => {
           documentsBucketName: 'something',
         },
         getChromium: () => chromiumMock,
+
         getCurrentUser: () => {
           return { role: User.ROLES.petitioner, userId: 'petitioner' };
         },
+        getHandlebars: () => ({ compile: () => () => '' }),
+        getNodeSass: () => ({ render: (data, cb) => cb(data, { css: '' }) }),
         getPersistenceGateway: () => ({
           getCaseByCaseId: () => ({ docketNumber: '101-19' }),
           getDownloadPolicyUrl: () => ({
