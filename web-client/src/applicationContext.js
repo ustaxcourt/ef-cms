@@ -59,6 +59,7 @@ import {
   createISODateString,
   formatDateString,
   formatNow,
+  getCurrentYear,
   isStringISOFormatted,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
@@ -475,6 +476,7 @@ const applicationContext = {
       formatDocument,
       formatNow,
       formattedTrialSessionDetails,
+      getCurrentYear,
       getFormattedCaseDetail,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,

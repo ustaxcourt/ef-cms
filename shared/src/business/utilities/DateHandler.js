@@ -8,6 +8,7 @@ const FORMATS = {
   MONTH_DAY_YEAR: 'MMMM D, YYYY',
   TIME: 'hh:mm a',
   TIME_TZ: 'h:mm a [ET]',
+  YEAR: 'YYYY',
 };
 
 const USTC_TZ = 'America/New_York';
@@ -58,11 +59,16 @@ const formatNow = formatStr => {
   return module.exports.formatDateString(now, formatStr);
 };
 
+const getCurrentYear = () => {
+  return new Date().getFullYear();
+};
+
 module.exports = {
   FORMATS,
   createISODateString,
   formatDateString,
   formatNow,
+  getCurrentYear,
   isStringISOFormatted,
   prepareDateFromString,
 };
