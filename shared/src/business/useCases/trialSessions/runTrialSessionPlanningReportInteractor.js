@@ -151,11 +151,7 @@ exports.runTrialSessionPlanningReportInteractor = async ({
     .generatePdfFromHtmlInteractor({
       applicationContext,
       contentHtml,
-      docketNumber: '123-19',
     });
-
-  const fs = require('fs');
-  fs.writeFileSync('out.pdf', pdf);
 
   return pdf;
 };
