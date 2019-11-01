@@ -82,7 +82,7 @@ const getTrialSessionPlanningReportData = async ({
     previousTerms.forEach(previousTerm => {
       const previousTermSession = allTrialSessions.find(
         trialSession =>
-          trialSession.term === previousTerm.term &&
+          trialSession.term.toLowerCase() === previousTerm.term.toLowerCase() &&
           trialSession.termYear === previousTerm.year &&
           trialSession.trialLocation === trialCityState,
       );
@@ -143,6 +143,7 @@ exports.runTrialSessionPlanningReportInteractor = async ({
   const contentHtml = await applicationContext
     .getTemplateGenerators()
     .generateTrialSessionPlanningReportTemplate({
+      previousTerms: reportData.previousTerms,
       rows: reportData.trialLocationData,
     });
 
@@ -151,6 +152,7 @@ exports.runTrialSessionPlanningReportInteractor = async ({
     .generatePdfFromHtmlInteractor({
       applicationContext,
       contentHtml,
+      headerHtml: ' ',
     });
 
   return pdf;
