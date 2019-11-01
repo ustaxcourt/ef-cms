@@ -764,7 +764,7 @@ const generateTrialSessionPlanningReportTemplate = content => {
     overwriteMain: true,
     styles: `
       @page {
-        margin: 1.25cm 0cm 3cm;
+        margin: 1.75cm 0cm 1.5cm;
         size: 8.5in 11in;
       }
       @page :first {
