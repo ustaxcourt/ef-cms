@@ -1,6 +1,11 @@
 const DateHandler = require('../../utilities/DateHandler');
-const staticResources = require('./caseConfirmationResources');
-
+const Handlebars = require('handlebars');
+const sass = require('sass');
+const {
+  confirmSassContent,
+  confirmTemplateContent,
+  ustcLogoBufferBase64,
+} = require('./caseConfirmationResources');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -37,6 +42,25 @@ const formattedCaseInfo = caseInfo => {
 };
 
 /**
+ *
+ * @param {object} caseInfo a raw object representing a petition
+ * @returns {string} an html string resulting from rendering template with caseInfo
+ */
+const generateCaseConfirmationPage = async caseInfo => {
+  const { css } = await new Promise(resolve => {
+    sass.render({ data: confirmSassContent }, (err, result) => {
+      return resolve(result);
+    });
+  });
+  const compiledFunction = Handlebars.compile(confirmTemplateContent);
+  const html = compiledFunction({
+    ...formattedCaseInfo(caseInfo),
+    styles: `<style>${css}</style>`,
+    logo: ustcLogoBufferBase64,
+  });
+  return html;
+};
+/**
  * generateCaseConfirmationPdfInteractor
  *
  * @param {object} providers the providers object
@@ -58,35 +82,6 @@ exports.generateCaseConfirmationPdf = async ({
   let result = null;
 
   try {
-    const Handlebars = applicationContext.getHandlebars();
-    const sass = applicationContext.getNodeSass();
-
-    /**
-     *
-     * @param {object} caseInfo a raw object representing a petition
-     * @returns {string} an html string resulting from rendering template with caseInfo
-     */
-    const generateCaseConfirmationPage = async caseInfo => {
-      const { css } = await new Promise(resolve => {
-        sass.render(
-          { data: staticResources.confirmSassContent },
-          (err, renderResult) => {
-            return resolve(renderResult);
-          },
-        );
-      });
-      const compiledFunction = Handlebars.compile(
-        staticResources.confirmTemplateContent,
-      );
-      const contenthtml = compiledFunction({
-        ...formattedCaseInfo(caseInfo),
-        styles: `<style>${css}</style>`,
-        logo: staticResources.ustcLogoBufferBase64,
-      });
-      formattedCaseInfo(caseInfo); // putting this here for lint
-      return contenthtml;
-    };
-
     const chromium = applicationContext.getChromium();
 
     browser = await chromium.puppeteer.launch({
