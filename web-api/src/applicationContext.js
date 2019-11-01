@@ -193,6 +193,7 @@ const {
   generatePrintableDocketRecordTemplate,
   generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
+  generateTrialSessionPlanningReportTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF');
 const {
   generateDocketRecordPdfInteractor,
@@ -851,6 +852,7 @@ module.exports = (appContextUser = {}) => {
         generatePrintableDocketRecordTemplate,
         generatePrintableFilingReceiptTemplate,
         generateTrialCalendarTemplate,
+        generateTrialSessionPlanningReportTemplate,
       };
     },
     getUniqueId: () => {
