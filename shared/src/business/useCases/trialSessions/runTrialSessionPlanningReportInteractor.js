@@ -142,8 +142,8 @@ exports.runTrialSessionPlanningReportInteractor = async ({
 
   return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
     applicationContext,
-    contentHtml: reportData,
-    headerHtml: 'HEADER',
+    contentHtml: 'something',
+    docketNumber: '123-19',
   });
 };
 

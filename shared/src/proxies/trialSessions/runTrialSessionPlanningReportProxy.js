@@ -15,5 +15,5 @@ exports.runTrialSessionPlanningReportInteractor = ({
   return get({
     applicationContext,
     endpoint: `/trial-sessions/planning-report?term=${term}&year=${year}`,
-  });
+  }).then(response => new Blob([response.data], { type: 'application/pdf' }));
 };
