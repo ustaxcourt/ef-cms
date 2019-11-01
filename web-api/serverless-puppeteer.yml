@@ -25,7 +25,7 @@ layers:
     name: ${self:provider.stage}-puppeteer
     description: Chrome headless binary provided via chrome-aws-lambda and puppeteer-core for interaction.
     compatibleRuntimes:
-      - nodejs8.10
+      - nodejs10.x
     path: web-api/runtimes/puppeteer
     package:
       exclude:
