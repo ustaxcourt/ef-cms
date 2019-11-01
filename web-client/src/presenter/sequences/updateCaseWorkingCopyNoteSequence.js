@@ -17,7 +17,6 @@ export const updateCaseWorkingCopyNoteSequence = [
   {
     error: [setValidationErrorsAction],
     success: [
-      () => console.log('WTF'),
       setWaitingForResponseAction,
       stopShowValidationAction,
       clearAlertsAction,
