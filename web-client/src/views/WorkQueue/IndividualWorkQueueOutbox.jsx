@@ -46,7 +46,7 @@ export const IndividualWorkQueueOutbox = connect(
                 </th>
               )}
               {!workQueueHelper.hideSectionColumn && (
-                <th className="max-width-7">Section</th>
+                <th className="small">Section</th>
               )}
               {workQueueHelper.showServedColumn && <th>Served</th>}
             </tr>
@@ -121,7 +121,7 @@ export const IndividualWorkQueueOutbox = connect(
                   </td>
                 )}
                 {!workQueueHelper.hideSectionColumn && (
-                  <td className="message-queue-row max-width-7">
+                  <td className="message-queue-row small">
                     {workQueueSectionHelper.sectionDisplay(item.section)}
                   </td>
                 )}
