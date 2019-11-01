@@ -7,6 +7,7 @@ import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateTrialSessionPlanningAction } from '../actions/validateTrialSessionPlanningAction';
 
@@ -22,6 +23,7 @@ export const runTrialSessionPlanningReportSequence = [
       setCurrentPageAction('TrialSessionPlanningReport'),
       unsetWaitingForResponseAction,
       setAlertSuccessAction,
+      stopShowValidationAction,
       clearModalAction,
       clearModalStateAction,
     ],
