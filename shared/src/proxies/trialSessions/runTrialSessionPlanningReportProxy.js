@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+const { post } = require('../requests');
 
 /**
  * runTrialSessionPlanningReportInteractor
@@ -12,8 +12,18 @@ exports.runTrialSessionPlanningReportInteractor = ({
   term,
   year,
 }) => {
-  return get({
+  return post({
     applicationContext,
-    endpoint: `/trial-sessions/planning-report?term=${term}&year=${year}`,
+    body: {
+      term,
+      year,
+    },
+    endpoint: '/trial-sessions/planning-report',
+    headers: {
+      Accept: 'application/pdf',
+    },
+    options: {
+      responseType: 'blob',
+    },
   });
 };

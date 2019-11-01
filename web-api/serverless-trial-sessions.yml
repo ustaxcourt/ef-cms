@@ -346,7 +346,7 @@ functions:
     events:
       - http:
           path: /planning-report
-          method: get
+          method: post
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
