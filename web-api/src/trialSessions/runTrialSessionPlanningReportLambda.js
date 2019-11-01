@@ -19,7 +19,7 @@ exports.handler = event =>
         .getUseCases()
         .runTrialSessionPlanningReportInteractor({
           applicationContext,
-          ...JSON.parse(event.body),
+          ...event.queryStringParameters,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);

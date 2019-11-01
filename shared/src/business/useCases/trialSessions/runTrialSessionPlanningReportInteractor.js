@@ -7,7 +7,7 @@ const { invert } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-export const getPreviousTerm = (currentTerm, currentYear) => {
+const getPreviousTerm = (currentTerm, currentYear) => {
   const terms = [
     `winter ${+currentYear - 1}`,
     `spring ${currentYear}`,
@@ -22,6 +22,8 @@ export const getPreviousTerm = (currentTerm, currentYear) => {
     year,
   };
 };
+
+exports.getPreviousTerm = getPreviousTerm;
 
 /**
  * runTrialSessionPlanningReportInteractor
