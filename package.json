@@ -30,7 +30,7 @@
     "babel-plugin-transform-html-import-require-to-string": "^0.0.3",
     "bluebird": "^3.7.1",
     "cerebral": "^5.2.0",
-    "chrome-aws-lambda": "^1.20.2",
+    "chrome-aws-lambda": "^2.0.0",
     "classnames": "^2.2.6",
     "core-js": "^3.3.6",
     "csv-parse": "^4.6.3",
