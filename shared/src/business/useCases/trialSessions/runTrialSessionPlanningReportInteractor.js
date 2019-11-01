@@ -140,7 +140,11 @@ exports.runTrialSessionPlanningReportInteractor = async ({
     year,
   });
 
-  return reportData;
+  return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
+    applicationContext,
+    contentHtml: reportData,
+    headerHtml: 'HEADER',
+  });
 };
 
 exports.getPreviousTerm = getPreviousTerm;
