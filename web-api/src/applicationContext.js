@@ -193,6 +193,7 @@ const {
   generatePrintableDocketRecordTemplate,
   generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
+  generateTrialSessionPlanningReportTemplate,
 } = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF');
 const {
   generateDocketRecordPdfInteractor,
@@ -299,6 +300,9 @@ const {
 const {
   getDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/getDownloadPolicyUrlInteractor');
+const {
+  getEligibleCasesForTrialCity,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialCity');
 const {
   getEligibleCasesForTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialSession');
@@ -438,6 +442,9 @@ const {
 const {
   runBatchProcessInteractor,
 } = require('../../shared/src/business/useCases/runBatchProcessInteractor');
+const {
+  runTrialSessionPlanningReportInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
@@ -755,6 +762,7 @@ module.exports = (appContextUser = {}) => {
         getDocumentQCServedForSection,
         getDocumentQCServedForUser,
         getDownloadPolicyUrl,
+        getEligibleCasesForTrialCity,
         getEligibleCasesForTrialSession,
         getInboxMessagesForSection,
         getInboxMessagesForUser,
@@ -844,6 +852,7 @@ module.exports = (appContextUser = {}) => {
         generatePrintableDocketRecordTemplate,
         generatePrintableFilingReceiptTemplate,
         generateTrialCalendarTemplate,
+        generateTrialSessionPlanningReportTemplate,
       };
     },
     getUniqueId: () => {
@@ -926,6 +935,7 @@ module.exports = (appContextUser = {}) => {
         recallPetitionFromIRSHoldingQueueInteractor,
         removeCaseFromTrialInteractor,
         runBatchProcessInteractor,
+        runTrialSessionPlanningReportInteractor,
         saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,

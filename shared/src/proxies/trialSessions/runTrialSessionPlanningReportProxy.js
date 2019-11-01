@@ -1,26 +1,29 @@
 const { post } = require('../requests');
 
 /**
- * generateTrialCalendarPdfInteractor (proxy)
+ * runTrialSessionPlanningReportInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.trialSessionId the trial session number
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generateTrialCalendarPdfInteractor = ({
+exports.runTrialSessionPlanningReportInteractor = ({
   applicationContext,
-  trialSessionId,
+  term,
+  year,
 }) => {
   return post({
     applicationContext,
     body: {
-      trialSessionId,
+      term,
+      year,
     },
-    endpoint: '/api/trial-calendar-pdf',
+    endpoint: '/trial-sessions/planning-report',
     headers: {
       Accept: 'application/pdf',
     },
-    options: { responseType: 'blob' },
+    options: {
+      responseType: 'blob',
+    },
   });
 };

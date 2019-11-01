@@ -37,6 +37,7 @@ import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
+import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
@@ -82,6 +83,7 @@ const pages = {
   StartCaseWizard,
   StyleGuide,
   TrialSessionDetail,
+  TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
   UserContactEdit,

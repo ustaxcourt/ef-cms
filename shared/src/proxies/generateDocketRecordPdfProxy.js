@@ -1,3 +1,5 @@
+const { post } = require('./requests');
+
 /**
  * generateDocketRecordPdfInteractor (proxy)
  *
@@ -12,21 +14,16 @@ exports.generateDocketRecordPdfInteractor = ({
   caseId,
   docketRecordSort,
 }) => {
-  return applicationContext
-    .getHttpClient()
-    .post(
-      `${applicationContext.getBaseUrl()}/api/docket-record-pdf`,
-      {
-        caseId,
-        docketRecordSort,
-      },
-      {
-        headers: {
-          Accept: 'application/pdf',
-          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-        },
-        responseType: 'blob',
-      },
-    )
-    .then(response => new Blob([response.data], { type: 'application/pdf' }));
+  return post({
+    applicationContext,
+    body: {
+      caseId,
+      docketRecordSort,
+    },
+    endpoint: '/api/docket-record-pdf',
+    headers: {
+      Accept: 'application/pdf',
+    },
+    options: { responseType: 'blob' },
+  });
 };

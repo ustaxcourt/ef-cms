@@ -8,5 +8,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.pdfPreviewUrl
  */
 export const setPdfPreviewUrlAction = ({ props, store }) => {
+  console.log('pdf url here is', props.pdfUrl);
   store.set(state.pdfPreviewUrl, props.pdfUrl);
 };
