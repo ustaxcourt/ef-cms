@@ -713,6 +713,21 @@ const generatePrintableFilingReceiptTemplate = content => {
 const generateTrialSessionPlanningReportTemplate = content => {
   const { rows } = content;
 
+  const contentRows = rows.map(row => {
+    return `
+      <tr>
+        <th>${row.stateAbbreviation}</th>
+        <th>${row.trialCityState}</th>
+        <th>${row.allCaseCount}</th>
+        <th>${row.smallCaseCount}</th>
+        <th>${row.regularCaseCount}</th>
+        <th>[JUDGE]</th>
+        <th>[JUDGE]</th>
+        <th>[JUDGE]</th>
+      </tr>
+    `;
+  });
+
   const templateContent = {
     main: `
     <div class="court-header">
@@ -734,7 +749,7 @@ const generateTrialSessionPlanningReportTemplate = content => {
         </tr>
       </thead>
       <tbody>
-        ${rows.join('')}
+        ${contentRows.join('')}
       </tbody>
     </table>
   `,
