@@ -140,9 +140,15 @@ exports.runTrialSessionPlanningReportInteractor = async ({
     year,
   });
 
+  const contentHtml = await applicationContext
+    .getTemplateGenerators()
+    .generateTrialSessionPlanningReportTemplate({
+      rows: reportData.trialLocationData,
+    });
+
   return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
     applicationContext,
-    contentHtml: 'something',
+    contentHtml,
     docketNumber: '123-19',
   });
 };
