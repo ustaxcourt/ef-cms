@@ -23,26 +23,11 @@ const getPreviousTerm = (currentTerm, currentYear) => {
   };
 };
 
-exports.getPreviousTerm = getPreviousTerm;
-
-/**
- * runTrialSessionPlanningReportInteractor
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @returns {Promise} the promise of the runTrialSessionPlanningReportInteractor call
- */
-exports.runTrialSessionPlanningReportInteractor = async ({
+const getTrialSessionPlanningReportData = async ({
   applicationContext,
   term,
   year,
 }) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
   const previousTerms = [];
   let currentTerm = term;
   let currentYear = year;
@@ -130,3 +115,33 @@ exports.runTrialSessionPlanningReportInteractor = async ({
 
   return { previousTerms, trialLocationData };
 };
+
+/**
+ * runTrialSessionPlanningReportInteractor
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @returns {Promise} the promise of the runTrialSessionPlanningReportInteractor call
+ */
+exports.runTrialSessionPlanningReportInteractor = async ({
+  applicationContext,
+  term,
+  year,
+}) => {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const reportData = await getTrialSessionPlanningReportData({
+    applicationContext,
+    term,
+    year,
+  });
+
+  return reportData;
+};
+
+exports.getPreviousTerm = getPreviousTerm;
+exports.getTrialSessionPlanningReportData = getTrialSessionPlanningReportData;

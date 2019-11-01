@@ -1,6 +1,7 @@
 const sinon = require('sinon');
 const {
   getPreviousTerm,
+  getTrialSessionPlanningReportData,
   runTrialSessionPlanningReportInteractor,
 } = require('./runTrialSessionPlanningReportInteractor');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
@@ -62,7 +63,7 @@ describe('run trial session planning report', () => {
         };
       },
     };
-    const results = await runTrialSessionPlanningReportInteractor({
+    const results = await getTrialSessionPlanningReportData({
       applicationContext,
       term: 'winter',
       year: '2020',
