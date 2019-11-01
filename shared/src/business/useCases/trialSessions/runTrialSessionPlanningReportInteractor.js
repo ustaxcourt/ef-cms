@@ -146,11 +146,18 @@ exports.runTrialSessionPlanningReportInteractor = async ({
       rows: reportData.trialLocationData,
     });
 
-  return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
-    applicationContext,
-    contentHtml,
-    docketNumber: '123-19',
-  });
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor({
+      applicationContext,
+      contentHtml,
+      docketNumber: '123-19',
+    });
+
+  const fs = require('fs');
+  fs.writeFileSync('out.pdf', pdf);
+
+  return pdf;
 };
 
 exports.getPreviousTerm = getPreviousTerm;
