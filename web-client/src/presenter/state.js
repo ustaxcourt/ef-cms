@@ -157,6 +157,7 @@ export const state = {
   screenMetadata: {},
   searchTerm: '',
   sectionInboxCount: 0,
+  sectionUsers: [],
   selectDocumentSelectHelper,
   selectDocumentTypeHelper,
   selectedBatchIndex: 0,

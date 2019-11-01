@@ -11,7 +11,7 @@ export const trialSessionHeaderHelper = (get, applicationContext) => {
   if (user.role === USER_ROLES.judge) {
     judgeIsAssignedToSession = sessionJudgeId == user.userId;
   } else if (user.role === USER_ROLES.chambers) {
-    const sectionUsers = get(state.users);
+    const sectionUsers = get(state.sectionUsers);
 
     const judgeUser = sectionUsers.find(
       sectionUser => sectionUser.role === USER_ROLES.judge,
