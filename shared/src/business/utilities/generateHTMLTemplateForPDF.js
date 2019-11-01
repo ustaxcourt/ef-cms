@@ -710,10 +710,49 @@ const generatePrintableFilingReceiptTemplate = content => {
   return generateHTMLTemplateForPDF(templateContent, options);
 };
 
+const generateTrialSessionPlanningReportTemplate = content => {
+  const { rows } = content;
+
+  const templateContent = {
+    main: `
+    <div class="court-header">
+      <div class="us-tax-court-seal"></div>
+      <h1>United States Tax Court</h1>
+      <h2>Trial Session Planning Report</h2>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>State</th>
+          <th>Location</th>
+          <th>All</th>
+          <th>Small</th>
+          <th>Regular</th>
+          <th>Term 1</th>
+          <th>Term 2</th>
+          <th>Term 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.join('')}
+      </tbody>
+    </table>
+  `,
+  };
+
+  const options = {
+    overwriteMain: true,
+    title: 'Trial Session Planning Report',
+  };
+
+  return generateHTMLTemplateForPDF(templateContent, options);
+};
+
 module.exports = {
   generateChangeOfAddressTemplate,
   generateHTMLTemplateForPDF,
   generatePrintableDocketRecordTemplate,
   generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
+  generateTrialSessionPlanningReportTemplate,
 };
