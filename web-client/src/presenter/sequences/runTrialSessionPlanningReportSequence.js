@@ -19,8 +19,8 @@ export const runTrialSessionPlanningReportSequence = [
     success: [
       clearModalAction,
       setWaitingForResponseAction,
-      clearModalStateAction,
       runTrialSessionPlanningReportAction,
+      clearModalStateAction,
       ...setPdfPreviewUrlSequence,
       setCurrentPageAction('TrialSessionPlanningReport'),
       unsetWaitingForResponseAction,
