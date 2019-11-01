@@ -338,7 +338,6 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   runTrialSessionPlanningReport:
-    runtime: nodejs8.10
     handler: web-api/src/trialSessionsHandlers.runTrialSessionPlanningReportLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
@@ -349,3 +348,7 @@ functions:
           path: /planning-report
           method: get
           cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
