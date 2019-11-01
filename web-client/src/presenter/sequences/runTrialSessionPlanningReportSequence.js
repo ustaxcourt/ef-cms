@@ -18,8 +18,8 @@ export const runTrialSessionPlanningReportSequence = [
     error: [setValidationErrorsAction],
     success: [
       clearModalAction,
-      clearModalStateAction,
       setWaitingForResponseAction,
+      clearModalStateAction,
       runTrialSessionPlanningReportAction,
       ...setPdfPreviewUrlSequence,
       setCurrentPageAction('TrialSessionPlanningReport'),
