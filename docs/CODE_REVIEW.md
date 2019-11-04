@@ -92,7 +92,7 @@ We use this list when performing a code review to ensure that all tasks have bee
 	- [ ] read the description of the pull request, which should summarize the changes made
 	- [ ] read through every task on the Scrum board that's encompassed by this pull request
 	- [ ] read the description of the commits that comprise the pull request
-- [ ] stand up the site locally
+- [ ] stand up the site locally, with `./docker-run.sh`
 	- [ ] test all functionality in all major browsers, emphasizing the functionality that this pull request addresses
 		- [ ] for internal Court functionality, perform the most thorough testing in Chrome, though also test in Edge and Firefox
 		- [ ] for public-facing functionality, test in browsers consistent with [public browser use data](https://analytics.usa.gov/), including Internet Explorer 11
