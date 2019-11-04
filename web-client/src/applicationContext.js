@@ -20,6 +20,9 @@ import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
+const {
+  getJudgeForUserChambersInteractor,
+} = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
 import {
   MAX_FILE_SIZE_BYTES,
@@ -269,6 +272,7 @@ const allUseCases = {
   getInboxMessagesForUserInteractor,
   getInternalUsersInteractor,
   getItemInteractor,
+  getJudgeForUserChambersInteractor,
   getNotificationsInteractor,
   getPractitionersBySearchKeyInteractor,
   getProcedureTypesInteractor,
