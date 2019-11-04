@@ -47,9 +47,13 @@ const getTrialSessionPlanningReportData = async ({
     }
   });
 
-  const allTrialSessions = await applicationContext
+  let allTrialSessions = await applicationContext
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });
+
+  allTrialSessions = allTrialSessions.filter(session =>
+    ['Regular', 'Small', 'Hybrid'].includes(session.sessionType),
+  );
 
   const trialLocationData = [];
   for (const trialLocation of trialCities) {
@@ -80,27 +84,37 @@ const getTrialSessionPlanningReportData = async ({
 
     const previousTermsData = [];
     previousTerms.forEach(previousTerm => {
-      const previousTermSession = allTrialSessions.find(
+      const previousTermSessions = allTrialSessions.filter(
         trialSession =>
           trialSession.term.toLowerCase() === previousTerm.term.toLowerCase() &&
           trialSession.termYear === previousTerm.year &&
           trialSession.trialLocation === trialCityState,
       );
 
-      if (
-        previousTermSession &&
-        previousTermSession.sessionType &&
-        previousTermSession.judge
-      ) {
-        const sessionTypeChar = previousTermSession.sessionType.charAt(0);
-        const strippedJudgeName = previousTermSession.judge.name.replace(
-          'Judge ',
-          '',
-        );
-        previousTermsData.push(`(${sessionTypeChar}) ${strippedJudgeName}`);
-      } else {
-        previousTermsData.push('');
-      }
+      previousTermSessions.sort((a, b) => {
+        return new Date(a.startDate) - new Date(b.startDate);
+      });
+
+      const previousTermSessionList = [];
+      previousTermSessions.forEach(previousTermSession => {
+        if (
+          previousTermSession &&
+          previousTermSession.sessionType &&
+          previousTermSession.judge
+        ) {
+          const sessionTypeChar = previousTermSession.sessionType.charAt(0);
+          const strippedJudgeName = previousTermSession.judge.name.replace(
+            'Judge ',
+            '',
+          );
+          previousTermSessionList.push(
+            `(${sessionTypeChar}) ${strippedJudgeName}`,
+          );
+        } else {
+          previousTermSessionList.push('');
+        }
+      });
+      previousTermsData.push(previousTermSessionList);
     });
 
     trialLocationData.push({
