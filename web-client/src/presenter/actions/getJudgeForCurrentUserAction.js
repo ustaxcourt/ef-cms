@@ -3,7 +3,7 @@
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
- * @returns {object} Associated Judge user object
+ * @returns {object} Associated Judge user object if found
  */
 export const getJudgeForCurrentUserAction = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
