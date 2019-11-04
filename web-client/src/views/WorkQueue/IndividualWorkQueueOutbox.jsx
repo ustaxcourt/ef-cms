@@ -29,7 +29,7 @@ export const IndividualWorkQueueOutbox = connect(
               <th aria-label="Docket Number" className="small" colSpan="2">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              {workQueueHelper.showReceivedColumn && <th>Filed</th>}
+              {workQueueHelper.showReceivedColumn && <th>Received</th>}
               {workQueueHelper.showSentColumn && (
                 <th className="small">Sent</th>
               )}
