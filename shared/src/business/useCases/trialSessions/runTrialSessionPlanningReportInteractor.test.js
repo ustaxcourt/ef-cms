@@ -1,10 +1,13 @@
 const sinon = require('sinon');
 const {
+  compareISODateStrings,
+  compareStrings,
+} = require('../../utilities/sortFunctions');
+const {
   getPreviousTerm,
   getTrialSessionPlanningReportData,
   runTrialSessionPlanningReportInteractor,
 } = require('./runTrialSessionPlanningReportInteractor');
-const { compareDateStrings } = require('../../utilities/sortFunctions');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { User } = require('../../entities/User');
 
@@ -26,7 +29,7 @@ describe('run trial session planning report', () => {
         };
       },
       getUtilities: () => {
-        return { compareDateStrings };
+        return { compareISODateStrings, compareStrings };
       },
     };
     await expect(
@@ -95,7 +98,7 @@ describe('run trial session planning report', () => {
         };
       },
       getUtilities: () => {
-        return { compareDateStrings };
+        return { compareISODateStrings, compareStrings };
       },
     };
     const results = await getTrialSessionPlanningReportData({

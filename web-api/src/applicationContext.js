@@ -65,7 +65,8 @@ const {
   formattedTrialSessionDetails,
 } = require('../../shared/src/business/utilities/getFormattedTrialSessionDetails');
 const {
-  compareDateStrings,
+  compareISODateStrings,
+  compareStrings,
 } = require('../../shared/src/business/utilities/sortFunctions');
 const {
   completeDocketEntryQCInteractor,
@@ -970,7 +971,8 @@ module.exports = (appContextUser = {}) => {
     getUtilities: () => {
       return {
         compareCasesByDocketNumber,
-        compareDateStrings,
+        compareISODateStrings,
+        compareStrings,
         createISODateString,
         formatCaseForTrialSession,
         formatDateString,
