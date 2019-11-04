@@ -70,8 +70,8 @@ exports.generateCaseConfirmationPdf = async ({
       const { css } = await new Promise(resolve => {
         sass.render(
           { data: staticResources.confirmSassContent },
-          (err, result) => {
-            return resolve(result);
+          (err, renderResult) => {
+            return resolve(renderResult);
           },
         );
       });
