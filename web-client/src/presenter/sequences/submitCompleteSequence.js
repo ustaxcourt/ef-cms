@@ -13,7 +13,7 @@ export const submitCompleteSequence = [
   completeWorkItemAction,
   clearCompleteFormAction,
   unsetShowForwardInputs,
-  navigateToMessagesAction
+  navigateToMessagesAction,
   setAlertSuccessAction,
   unsetWaitingForResponseAction,
 ];
