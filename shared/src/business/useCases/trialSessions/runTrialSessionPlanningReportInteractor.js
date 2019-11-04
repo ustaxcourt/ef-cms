@@ -91,9 +91,9 @@ const getTrialSessionPlanningReportData = async ({
           trialSession.trialLocation === trialCityState,
       );
 
-      previousTermSessions.sort((a, b) => {
-        return new Date(a.startDate) - new Date(b.startDate);
-      });
+      previousTermSessions.sort(
+        applicationContext.getUtilities().compareDateStrings,
+      );
 
       const previousTermSessionList = [];
       previousTermSessions.forEach(previousTermSession => {

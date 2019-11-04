@@ -4,6 +4,7 @@ const {
   getTrialSessionPlanningReportData,
   runTrialSessionPlanningReportInteractor,
 } = require('./runTrialSessionPlanningReportInteractor');
+const { compareDateStrings } = require('../../utilities/sortFunctions');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { User } = require('../../entities/User');
 
@@ -23,6 +24,9 @@ describe('run trial session planning report', () => {
         return {
           getEligibleCasesForTrialCity: sinon.stub().returns([]),
         };
+      },
+      getUtilities: () => {
+        return { compareDateStrings };
       },
     };
     await expect(
@@ -89,6 +93,9 @@ describe('run trial session planning report', () => {
           getEligibleCasesForTrialCity: getEligibleCasesForTrialCityStub,
           getTrialSessions: getTrialSessionsStub,
         };
+      },
+      getUtilities: () => {
+        return { compareDateStrings };
       },
     };
     const results = await getTrialSessionPlanningReportData({
