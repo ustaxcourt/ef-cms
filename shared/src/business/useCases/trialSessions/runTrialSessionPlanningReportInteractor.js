@@ -41,9 +41,9 @@ const getTrialSessionPlanningReportData = async ({
   const trialCities = TrialSession.TRIAL_CITIES.ALL;
   trialCities.sort((a, b) => {
     if (a.state === b.state) {
-      return a.city.localeCompare(b.city);
+      return applicationContext.getUtilities().compareStrings(a.city, b.city);
     } else {
-      return a.state.localeCompare(b.state);
+      return applicationContext.getUtilities().compareStrings(a.state, b.state);
     }
   });
 
@@ -92,7 +92,9 @@ const getTrialSessionPlanningReportData = async ({
       );
 
       previousTermSessions.sort((a, b) => {
-        return new Date(a.startDate) - new Date(b.startDate);
+        return applicationContext
+          .getUtilities()
+          .compareISODateStrings(a.startDate, b.startDate);
       });
 
       const previousTermSessionList = [];
