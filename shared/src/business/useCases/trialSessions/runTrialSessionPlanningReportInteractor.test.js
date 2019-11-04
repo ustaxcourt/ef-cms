@@ -1,5 +1,9 @@
 const sinon = require('sinon');
 const {
+  compareISODateStrings,
+  compareStrings,
+} = require('../../utilities/sortFunctions');
+const {
   getPreviousTerm,
   getTrialSessionPlanningReportData,
   runTrialSessionPlanningReportInteractor,
@@ -23,6 +27,9 @@ describe('run trial session planning report', () => {
         return {
           getEligibleCasesForTrialCity: sinon.stub().returns([]),
         };
+      },
+      getUtilities: () => {
+        return { compareISODateStrings, compareStrings };
       },
     };
     await expect(
@@ -89,6 +96,9 @@ describe('run trial session planning report', () => {
           getEligibleCasesForTrialCity: getEligibleCasesForTrialCityStub,
           getTrialSessions: getTrialSessionsStub,
         };
+      },
+      getUtilities: () => {
+        return { compareISODateStrings, compareStrings };
       },
     };
     const results = await getTrialSessionPlanningReportData({
