@@ -75,9 +75,11 @@ describe('run trial session planning report', () => {
           generateTrialSessionPlanningReportTemplate: ({
             previousTerms,
             rows,
+            selectedTerm,
+            selectedYear,
           }) => {
             generateTrialSessionPlanningReportTemplateStub();
-            return `<!DOCTYPE html>${previousTerms} ${rows}</html>`;
+            return `<!DOCTYPE html>${previousTerms} ${rows} ${selectedTerm} ${selectedYear}</html>`;
           },
         };
       },
@@ -114,45 +116,45 @@ describe('run trial session planning report', () => {
         {
           judge: { name: 'Judge Armen' },
           sessionType: 'Regular',
-          startDate: '2020-05-01T21:40:46.415Z',
+          startDate: '2019-05-01T21:40:46.415Z',
           term: 'spring',
-          termYear: '2020',
+          termYear: '2019',
           trialLocation: 'Birmingham, Alabama',
           trialSessionId: '123',
         },
         {
           judge: { name: 'Judge Buch' },
           sessionType: 'Small',
-          startDate: '2020-04-01T21:40:46.415Z',
+          startDate: '2019-04-01T21:40:46.415Z',
           term: 'spring',
-          termYear: '2020',
+          termYear: '2019',
           trialLocation: 'Birmingham, Alabama',
           trialSessionId: '234',
         },
         {
           //judge is missing, so this one should not show up in the list
           sessionType: 'Small',
-          startDate: '2020-06-01T21:40:46.415Z',
+          startDate: '2019-06-01T21:40:46.415Z',
           term: 'spring',
-          termYear: '2020',
+          termYear: '2019',
           trialLocation: 'Birmingham, Alabama',
           trialSessionId: '234',
         },
         {
           judge: { name: 'Judge Ashford' },
           sessionType: 'Small',
-          startDate: '2020-09-01T21:40:46.415Z',
+          startDate: '2019-09-01T21:40:46.415Z',
           term: 'fall',
-          termYear: '2020',
+          termYear: '2019',
           trialLocation: 'Birmingham, Alabama',
           trialSessionId: '345',
         },
         {
           judge: { name: 'Judge Ashford' },
           sessionType: 'Special',
-          startDate: '2020-10-01T21:40:46.415Z',
+          startDate: '2019-10-01T21:40:46.415Z',
           term: 'fall',
-          termYear: '2020',
+          termYear: '2019',
           trialLocation: 'Birmingham, Alabama',
           trialSessionId: '456',
         },
@@ -182,8 +184,8 @@ describe('run trial session planning report', () => {
       });
 
       expect(results.previousTerms).toMatchObject([
-        { term: 'fall', year: '2020' },
-        { term: 'spring', year: '2020' },
+        { term: 'fall', year: '2019' },
+        { term: 'spring', year: '2019' },
         { term: 'winter', year: '2019' },
       ]);
       expect(results.trialLocationData.length).toEqual(
@@ -201,17 +203,17 @@ describe('run trial session planning report', () => {
   });
 
   describe('get previous term', () => {
-    it('returns previous term and same year if the previous term is winter', () => {
+    it('returns previous term and previous year if the previous term is winter', () => {
       const result = getPreviousTerm('winter', '2020');
-      expect(result).toEqual({ term: 'fall', year: '2020' });
+      expect(result).toEqual({ term: 'fall', year: '2019' });
     });
     it('returns previous term and same year if the previous term is fall', () => {
       const result = getPreviousTerm('fall', '2020');
       expect(result).toEqual({ term: 'spring', year: '2020' });
     });
-    it('returns previous term and previous year if the previous term is spring', () => {
+    it('returns previous term and same year if the previous term is spring', () => {
       const result = getPreviousTerm('spring', '2020');
-      expect(result).toEqual({ term: 'winter', year: '2019' });
+      expect(result).toEqual({ term: 'winter', year: '2020' });
     });
   });
 });

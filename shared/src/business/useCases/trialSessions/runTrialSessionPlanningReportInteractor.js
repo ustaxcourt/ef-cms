@@ -9,10 +9,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 const getPreviousTerm = (currentTerm, currentYear) => {
   const terms = [
-    `winter ${+currentYear - 1}`,
+    `fall ${+currentYear - 1}`,
+    `winter ${currentYear}`,
     `spring ${currentYear}`,
     `fall ${currentYear}`,
-    `winter ${currentYear}`,
   ];
   const termsReversed = terms.reverse();
   const termI = terms.findIndex(t => `${currentTerm} ${currentYear}` === t);
@@ -159,6 +159,8 @@ exports.runTrialSessionPlanningReportInteractor = async ({
     .generateTrialSessionPlanningReportTemplate({
       previousTerms: reportData.previousTerms,
       rows: reportData.trialLocationData,
+      selectedTerm: term,
+      selectedYear: year,
     });
 
   const pdf = await applicationContext
