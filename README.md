@@ -16,11 +16,13 @@ API | Front-End | Shared Code
     
 [![Known Vulnerabilities](https://snyk.io//test/github/flexion/ef-cms/badge.svg?targetFile=package.json)](https://snyk.io//test/github/flexion/ef-cms?targetFile=package.json)
 
-<a href="docs/images/screenshot-new-petition.png"><img src="docs/images/screenshot-new-petition.png" width="49%" style="float: left; border: 2px solid #000; margin: 0 4px;" /></a>
-<a href="docs/images/screenshot-cases.png"><img src="docs/images/screenshot-cases.png" width="49%" style="float: left;" /></a>
+<a href="docs/images/screenshot-petitioner.png"><img src="docs/images/screenshot-petitioner.png" width="47%" style="float: left; border: 2px solid #000; margin: 0 4px;" /></a>
+<a href="docs/images/screenshot-case.png"><img src="docs/images/screenshot-case.png" width="47%" style="float: left; border: 2px solid #000; margin: 0 4px;" /></a>
 
-<a href="docs/images/screenshot-docket-record.png"><img src="docs/images/screenshot-docket-record.png" width="49%" style="float: left;" /></a>
-<a href="docs/images/screenshot-answer.png"><img src="docs/images/screenshot-answer.png" width="49%" style="float: left;" /></a>
+<a href="docs/images/screenshot-judge.png"><img src="docs/images/screenshot-judge.png" width="47%" style="float: left; border: 2px solid #000; margin: 4px 4px 0 0;" /></a>
+<a href="docs/images/screenshot-sessions.png"><img src="docs/images/screenshot-sessions.png" width="47%" style="float: left; border: 2px solid #000; margin: 4px 0 0 4px;" /></a>
+
+<br clear="both">
 
 The fork of this project in which the bulk of development is occurring is [Flexion’s fork](https://github.com/flexion/ef-cms).
 
