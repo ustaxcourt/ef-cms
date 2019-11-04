@@ -98,7 +98,6 @@ describe('createCaseFromPaperInteractor integration test', () => {
                 documentId: 'c7eb4dd9-2e0b-4312-ba72-3e576fd7efd8',
                 documentType: 'Petition',
                 filedBy: 'Petr. Bob Jones',
-                workItems: [],
               },
               isInitializeCase: true,
               messages: [
