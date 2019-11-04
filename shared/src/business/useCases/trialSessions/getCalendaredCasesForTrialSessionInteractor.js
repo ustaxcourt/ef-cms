@@ -25,11 +25,15 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
     .getUseCases()
     .getJudgeForUserChambersInteractor({ applicationContext, user });
 
-  return await applicationContext
-    .getPersistenceGateway()
-    .getCalendaredCasesForTrialSession({
-      applicationContext,
-      trialSessionId,
-      userId: judgeUser.userId,
-    });
+  if (judgeUser) {
+    return await applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession({
+        applicationContext,
+        trialSessionId,
+        userId: judgeUser.userId,
+      });
+  } else {
+    return [];
+  }
 };
