@@ -5,7 +5,6 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
-import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
