@@ -112,8 +112,6 @@ const getTrialSessionPlanningReportData = async ({
           previousTermSessionList.push(
             `(${sessionTypeChar}) ${strippedJudgeName}`,
           );
-        } else {
-          previousTermSessionList.push('');
         }
       });
       previousTermsData.push(previousTermSessionList);
