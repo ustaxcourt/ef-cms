@@ -34,9 +34,8 @@ export const completeDocumentSigningSequence = [
         error: [setValidationErrorsByFlagAction],
         success: [
           createWorkItemAction,
-          {
-            success: [stopShowValidationAction, setAlertSuccessAction],
-          },
+          stopShowValidationAction,
+          setAlertSuccessAction,
           clearFormAction,
         ],
       },
