@@ -25,15 +25,15 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
     .getUseCases()
     .getJudgeForUserChambersInteractor({ applicationContext, user });
 
-  if (judgeUser) {
-    return await applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession({
-        applicationContext,
-        trialSessionId,
-        userId: judgeUser.userId,
-      });
-  } else {
-    return [];
-  }
+  // any user with permission can fetch the calendared cases, but a judge
+  // userId is required for case notes.
+  const userId = judgeUser ? judgeUser.userId : user.userId;
+
+  return await applicationContext
+    .getPersistenceGateway()
+    .getCalendaredCasesForTrialSession({
+      applicationContext,
+      trialSessionId,
+      userId,
+    });
 };

@@ -17,6 +17,7 @@ const trialSessionHeaderHelper = withAppContextDecorator(
 
 const baseState = {
   constants: { USER_ROLES: User.ROLES },
+  judgeUser: { role: User.ROLES.judge, userId: '777' },
 };
 
 describe('trial session helper computed', () => {
