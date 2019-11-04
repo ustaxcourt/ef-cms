@@ -723,11 +723,11 @@ const generateTrialSessionPlanningReportTemplate = content => {
         <td>${row.allCaseCount}</td>
         <td>${row.smallCaseCount}</td>
         <td>${row.regularCaseCount}</td>
-        <td>${row.previousTermsData[0] ||
+        <td>${row.previousTermsData[0].join('<br />') ||
           '<div class="calendar-icon"></div>'}</td>
-        <td>${row.previousTermsData[1] ||
+        <td>${row.previousTermsData[1].join('<br />') ||
           '<div class="calendar-icon"></div>'}</td>
-        <td>${row.previousTermsData[2] ||
+        <td>${row.previousTermsData[2].join('<br />') ||
           '<div class="calendar-icon"></div>'}</td>
       </tr>
     `;

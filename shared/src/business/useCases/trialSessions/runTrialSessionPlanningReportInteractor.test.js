@@ -42,10 +42,38 @@ describe('run trial session planning report', () => {
       {
         judge: { name: 'Judge Armen' },
         sessionType: 'Regular',
+        startDate: '2020-05-01T21:40:46.415Z',
         term: 'spring',
         termYear: '2020',
         trialLocation: 'Birmingham, Alabama',
         trialSessionId: '123',
+      },
+      {
+        judge: { name: 'Judge Buch' },
+        sessionType: 'Small',
+        startDate: '2020-04-01T21:40:46.415Z',
+        term: 'spring',
+        termYear: '2020',
+        trialLocation: 'Birmingham, Alabama',
+        trialSessionId: '234',
+      },
+      {
+        judge: { name: 'Judge Ashford' },
+        sessionType: 'Small',
+        startDate: '2020-09-01T21:40:46.415Z',
+        term: 'fall',
+        termYear: '2020',
+        trialLocation: 'Birmingham, Alabama',
+        trialSessionId: '345',
+      },
+      {
+        judge: { name: 'Judge Ashford' },
+        sessionType: 'Special',
+        startDate: '2020-10-01T21:40:46.415Z',
+        term: 'fall',
+        termYear: '2020',
+        trialLocation: 'Birmingham, Alabama',
+        trialSessionId: '456',
       },
     ]);
     applicationContext = {
@@ -79,7 +107,7 @@ describe('run trial session planning report', () => {
     );
     expect(results.trialLocationData[0]).toMatchObject({
       allCaseCount: 4,
-      previousTermsData: ['', '(R) Armen', ''],
+      previousTermsData: [['(S) Ashford'], ['(S) Buch', '(R) Armen'], []],
       regularCaseCount: 2,
       smallCaseCount: 2,
       stateAbbreviation: 'AL',
