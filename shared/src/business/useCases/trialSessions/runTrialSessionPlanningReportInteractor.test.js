@@ -41,48 +41,9 @@ describe('run trial session planning report', () => {
     ).rejects.toThrow();
   });
 
-  it('returns previous terms and the trial locations and case counts', async () => {
-    const getEligibleCasesForTrialCityStub = sinon
-      .stub()
-      .returns([{ caseId: '123' }, { caseId: '123' }]);
-    const getTrialSessionsStub = sinon.stub().returns([
-      {
-        judge: { name: 'Judge Armen' },
-        sessionType: 'Regular',
-        startDate: '2020-05-01T21:40:46.415Z',
-        term: 'spring',
-        termYear: '2020',
-        trialLocation: 'Birmingham, Alabama',
-        trialSessionId: '123',
-      },
-      {
-        judge: { name: 'Judge Buch' },
-        sessionType: 'Small',
-        startDate: '2020-04-01T21:40:46.415Z',
-        term: 'spring',
-        termYear: '2020',
-        trialLocation: 'Birmingham, Alabama',
-        trialSessionId: '234',
-      },
-      {
-        judge: { name: 'Judge Ashford' },
-        sessionType: 'Small',
-        startDate: '2020-09-01T21:40:46.415Z',
-        term: 'fall',
-        termYear: '2020',
-        trialLocation: 'Birmingham, Alabama',
-        trialSessionId: '345',
-      },
-      {
-        judge: { name: 'Judge Ashford' },
-        sessionType: 'Special',
-        startDate: '2020-10-01T21:40:46.415Z',
-        term: 'fall',
-        termYear: '2020',
-        trialLocation: 'Birmingham, Alabama',
-        trialSessionId: '456',
-      },
-    ]);
+  it('returns the created pdf', async () => {
+    const generateTrialSessionPlanningReportTemplateStub = sinon.stub();
+    const generatePdfFromHtmlInteractorStub = sinon.stub();
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
@@ -93,35 +54,149 @@ describe('run trial session planning report', () => {
       },
       getPersistenceGateway: () => {
         return {
-          getEligibleCasesForTrialCity: getEligibleCasesForTrialCityStub,
-          getTrialSessions: getTrialSessionsStub,
+          getEligibleCasesForTrialCity: sinon
+            .stub()
+            .returns([{ caseId: '123' }]),
+          getTrialSessions: sinon.stub().returns([
+            {
+              judge: { name: 'Judge Armen' },
+              sessionType: 'Regular',
+              startDate: '2020-05-01T21:40:46.415Z',
+              term: 'spring',
+              termYear: '2020',
+              trialLocation: 'Birmingham, Alabama',
+              trialSessionId: '123',
+            },
+          ]),
+        };
+      },
+      getTemplateGenerators: () => {
+        return {
+          generateTrialSessionPlanningReportTemplate: ({
+            previousTerms,
+            rows,
+          }) => {
+            generateTrialSessionPlanningReportTemplateStub();
+            return `<!DOCTYPE html>${previousTerms} ${rows}</html>`;
+          },
+        };
+      },
+      getUseCases: () => {
+        return {
+          generatePdfFromHtmlInteractor: ({ contentHtml }) => {
+            generatePdfFromHtmlInteractorStub();
+            return contentHtml;
+          },
         };
       },
       getUtilities: () => {
         return { compareISODateStrings, compareStrings };
       },
     };
-    const results = await getTrialSessionPlanningReportData({
+
+    const result = await runTrialSessionPlanningReportInteractor({
       applicationContext,
       term: 'winter',
       year: '2020',
     });
 
-    expect(results.previousTerms).toMatchObject([
-      { term: 'fall', year: '2020' },
-      { term: 'spring', year: '2020' },
-      { term: 'winter', year: '2019' },
-    ]);
-    expect(results.trialLocationData.length).toEqual(
-      TrialSession.TRIAL_CITIES.ALL.length,
-    );
-    expect(results.trialLocationData[0]).toMatchObject({
-      allCaseCount: 4,
-      previousTermsData: [['(S) Ashford'], ['(S) Buch', '(R) Armen'], []],
-      regularCaseCount: 2,
-      smallCaseCount: 2,
-      stateAbbreviation: 'AL',
-      trialCityState: 'Birmingham, Alabama',
+    expect(generateTrialSessionPlanningReportTemplateStub.called).toEqual(true);
+    expect(generatePdfFromHtmlInteractorStub.called).toEqual(true);
+    expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
+  });
+
+  describe('getTrialSessionPlanningReportData', () => {
+    it('returns previous terms and the trial locations and case counts', async () => {
+      const getEligibleCasesForTrialCityStub = sinon
+        .stub()
+        .returns([{ caseId: '123' }, { caseId: '123' }]);
+      const getTrialSessionsStub = sinon.stub().returns([
+        {
+          judge: { name: 'Judge Armen' },
+          sessionType: 'Regular',
+          startDate: '2020-05-01T21:40:46.415Z',
+          term: 'spring',
+          termYear: '2020',
+          trialLocation: 'Birmingham, Alabama',
+          trialSessionId: '123',
+        },
+        {
+          judge: { name: 'Judge Buch' },
+          sessionType: 'Small',
+          startDate: '2020-04-01T21:40:46.415Z',
+          term: 'spring',
+          termYear: '2020',
+          trialLocation: 'Birmingham, Alabama',
+          trialSessionId: '234',
+        },
+        {
+          //judge is missing, so this one should not show up in the list
+          sessionType: 'Small',
+          startDate: '2020-06-01T21:40:46.415Z',
+          term: 'spring',
+          termYear: '2020',
+          trialLocation: 'Birmingham, Alabama',
+          trialSessionId: '234',
+        },
+        {
+          judge: { name: 'Judge Ashford' },
+          sessionType: 'Small',
+          startDate: '2020-09-01T21:40:46.415Z',
+          term: 'fall',
+          termYear: '2020',
+          trialLocation: 'Birmingham, Alabama',
+          trialSessionId: '345',
+        },
+        {
+          judge: { name: 'Judge Ashford' },
+          sessionType: 'Special',
+          startDate: '2020-10-01T21:40:46.415Z',
+          term: 'fall',
+          termYear: '2020',
+          trialLocation: 'Birmingham, Alabama',
+          trialSessionId: '456',
+        },
+      ]);
+      applicationContext = {
+        environment: { stage: 'local' },
+        getCurrentUser: () => {
+          return {
+            role: User.ROLES.petitionsClerk,
+            userId: 'petitionsClerk',
+          };
+        },
+        getPersistenceGateway: () => {
+          return {
+            getEligibleCasesForTrialCity: getEligibleCasesForTrialCityStub,
+            getTrialSessions: getTrialSessionsStub,
+          };
+        },
+        getUtilities: () => {
+          return { compareISODateStrings, compareStrings };
+        },
+      };
+      const results = await getTrialSessionPlanningReportData({
+        applicationContext,
+        term: 'winter',
+        year: '2020',
+      });
+
+      expect(results.previousTerms).toMatchObject([
+        { term: 'fall', year: '2020' },
+        { term: 'spring', year: '2020' },
+        { term: 'winter', year: '2019' },
+      ]);
+      expect(results.trialLocationData.length).toEqual(
+        TrialSession.TRIAL_CITIES.ALL.length,
+      );
+      expect(results.trialLocationData[0]).toMatchObject({
+        allCaseCount: 4,
+        previousTermsData: [['(S) Ashford'], ['(S) Buch', '(R) Armen'], []],
+        regularCaseCount: 2,
+        smallCaseCount: 2,
+        stateAbbreviation: 'AL',
+        trialCityState: 'Birmingham, Alabama',
+      });
     });
   });
 
