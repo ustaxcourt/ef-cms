@@ -763,6 +763,14 @@ const generateTrialSessionPlanningReportTemplate = content => {
   const options = {
     overwriteMain: true,
     styles: `
+      @page {
+        margin: 1.75cm 0cm 1.5cm;
+        size: 8.5in 11in;
+      }
+      @page :first {
+        margin-top: 1cm;
+        margin-bottom: 2cm;
+      }
       .calendar-icon {
         width: 12px;
         height: 12px;
