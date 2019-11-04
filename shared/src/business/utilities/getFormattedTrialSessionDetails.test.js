@@ -200,24 +200,37 @@ describe('formattedTrialSessionDetails', () => {
           {
             ...MOCK_CASE,
             caseCaption: 'Test Person & Someone Else, Petitioners',
+            docketNumber: '102-17',
             docketNumberSuffix: 'W',
             status: 'Closed',
+          },
+          {
+            ...MOCK_CASE,
+            caseCaption: 'Someone Else, Petitioner',
+            docketNumber: '101-16',
+            docketNumberSuffix: 'S',
+            removedFromTrial: true,
+            removedFromTrialDate: '2019-03-01T21:40:46.415Z',
+            disposition: 'omg',
           },
         ],
       },
     });
-    expect(result.allCases.length).toEqual(2);
-    expect(result.allCases[0].docketNumberWithSuffix).toEqual('101-18');
-    expect(result.allCases[0].caseCaptionNames).toEqual('Test Taxpayer');
-    expect(result.allCases[1].docketNumberWithSuffix).toEqual('101-18W');
+    expect(result.allCases.length).toEqual(3);
+    expect(result.allCases[0].docketNumberWithSuffix).toEqual('101-16S');
+    expect(result.allCases[0].caseCaptionNames).toEqual('Someone Else');
+    expect(result.allCases[1].docketNumberWithSuffix).toEqual('102-17W');
     expect(result.allCases[1].caseCaptionNames).toEqual(
       'Test Person & Someone Else',
     );
+    expect(result.allCases[2].docketNumberWithSuffix).toEqual('101-18');
+    expect(result.allCases[2].caseCaptionNames).toEqual('Test Taxpayer');
 
     expect(result.openCases.length).toEqual(1);
-    expect(result.closedCases.length).toEqual(1);
+    expect(result.inactiveCases.length).toEqual(2);
     expect(result.openCases[0].docketNumberWithSuffix).toEqual('101-18');
-    expect(result.closedCases[0].docketNumberWithSuffix).toEqual('101-18W');
+    expect(result.inactiveCases[0].docketNumberWithSuffix).toEqual('101-16S');
+    expect(result.inactiveCases[1].docketNumberWithSuffix).toEqual('102-17W');
   });
 
   it('sorts calendared cases by docket number', () => {

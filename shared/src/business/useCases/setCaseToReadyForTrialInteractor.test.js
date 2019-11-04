@@ -17,7 +17,7 @@ describe('set case status to ready for trial', () => {
       getCurrentUser: () => {
         return new User({
           name: 'bob',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -32,15 +32,13 @@ describe('set case status to ready for trial', () => {
     };
   });
 
-  it('sets the case status to General Docket - At Issue (Ready for Trial)', async () => {
+  it(`sets the case status to ${Case.STATUS_TYPES.generalDocketReadyForTrial}`, async () => {
     const result = await setCaseToReadyForTrialInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    expect(result.status).toEqual(
-      'General Docket - At Issue (Ready for Trial)',
-    );
+    expect(result.status).toEqual(Case.STATUS_TYPES.generalDocketReadyForTrial);
   });
 
   it('throws unauthorized error if user is unauthorized', async () => {
@@ -65,7 +63,7 @@ describe('set case status to ready for trial', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Suzie Petitionsclerk',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -97,7 +95,7 @@ describe('set case status to ready for trial', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Suzie Petitionsclerk',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },

@@ -1,6 +1,7 @@
 const {
   getInboxMessagesForUserInteractor,
 } = require('./getInboxMessagesForUserInteractor');
+const { User } = require('../../entities/User');
 
 describe('getInboxMessagesForUserInteractor', () => {
   let applicationContext;
@@ -23,7 +24,7 @@ describe('getInboxMessagesForUserInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'taxpayer',
         };
       },

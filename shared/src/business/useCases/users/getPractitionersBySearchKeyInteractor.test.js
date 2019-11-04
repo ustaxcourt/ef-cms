@@ -1,6 +1,7 @@
 const {
   getPractitionersBySearchKeyInteractor,
 } = require('./getPractitionersBySearchKeyInteractor');
+const { User } = require('../../entities/User');
 
 describe('getPractitionersBySearchKeyInteractor', () => {
   let applicationContext;
@@ -13,7 +14,7 @@ describe('getPractitionersBySearchKeyInteractor', () => {
         getCurrentUser: () => {
           return {
             name: 'Olivia Jade',
-            role: 'petitioner',
+            role: User.ROLES.petitioner,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
@@ -37,7 +38,7 @@ describe('getPractitionersBySearchKeyInteractor', () => {
       getCurrentUser: () => {
         return {
           name: 'Olivia Jade',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         };
       },

@@ -32,7 +32,7 @@ describe('createCaseInteractor', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Test Taxpayer',
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -44,7 +44,7 @@ describe('createCaseInteractor', () => {
           createCase: async () => null,
           getUserById: () => ({
             name: 'Test Taxpayer',
-            role: 'petitioner',
+            role: User.ROLES.petitioner,
             section: 'petitioner',
             userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           }),
@@ -128,7 +128,7 @@ describe('createCaseInteractor', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Test Taxpayer',
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
@@ -140,7 +140,7 @@ describe('createCaseInteractor', () => {
           createCase: async () => null,
           getUserById: () => ({
             name: 'Test Taxpayer',
-            role: 'petitioner',
+            role: User.ROLES.petitioner,
             section: 'petitioner',
             userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
           }),
@@ -203,7 +203,7 @@ describe('createCaseInteractor', () => {
   it('should create a case successfully as a practitioner', async () => {
     const practitionerUser = new User({
       name: 'Olivia Jade',
-      role: 'practitioner',
+      role: User.ROLES.practitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -221,7 +221,7 @@ describe('createCaseInteractor', () => {
           createCase: async () => null,
           getUserById: () => ({
             name: 'Olivia Jade',
-            role: 'practitioner',
+            role: User.ROLES.practitioner,
             section: 'practitioner',
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           }),
@@ -286,7 +286,7 @@ describe('createCaseInteractor', () => {
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
     const practitionerUser = new User({
       name: 'Olivia Jade',
-      role: 'practitioner',
+      role: User.ROLES.practitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -304,7 +304,7 @@ describe('createCaseInteractor', () => {
           createCase: async () => null,
           getUserById: () => ({
             name: 'Olivia Jade',
-            role: 'practitioner',
+            role: User.ROLES.practitioner,
             section: 'practitioner',
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           }),

@@ -7,7 +7,6 @@ const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 exports.getCasesByUser = async ({ applicationContext, userId }) => {
   const cases = await getRecordsViaMapping({
     applicationContext,
-    isVersioned: true,
     key: userId,
     type: 'case',
   });

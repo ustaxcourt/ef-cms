@@ -28,7 +28,7 @@ export const IndividualWorkQueueBatched = connect(
               <th>Case name</th>
               <th aria-label="Status Icon padding-right-0">&nbsp;</th>
               <th>Document</th>
-              <th>Filed by</th>
+              {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               <th>Batched</th>
             </tr>
           </thead>
@@ -81,7 +81,9 @@ export const IndividualWorkQueueBatched = connect(
                     </div>
                   )}
                 </td>
-                <td className="message-queue-row">{item.document.filedBy}</td>
+                {!workQueueHelper.hideFiledByColumn && (
+                  <td className="message-queue-row">{item.document.filedBy}</td>
+                )}
                 <td className="message-queue-row">{item.batchedAt}</td>
               </tr>
             </tbody>

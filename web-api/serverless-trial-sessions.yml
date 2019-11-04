@@ -8,8 +8,12 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  # - serverless-plugin-warmup
 
 custom:
+  #warmup:
+  #enabled: true
+
   prune:
     automatic: true
     number: 3
@@ -308,3 +312,27 @@ functions:
           method: get
           async: true
           cors: true
+
+  removeCaseFromTrial:
+    handler: web-api/src/trialSessionsHandlers.removeCaseFromTrialLambda
+    events:
+      - http:
+          path: /{trialSessionId}/remove-case/{caseId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  addCaseToTrialSession:
+    handler: web-api/src/trialSessionsHandlers.addCaseToTrialSessionLambda
+    events:
+      - http:
+          path: /{trialSessionId}/cases/{caseId}
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

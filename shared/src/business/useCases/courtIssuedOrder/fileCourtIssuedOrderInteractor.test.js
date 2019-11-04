@@ -28,7 +28,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         userId: 'respondent',
       },
     ],
-    role: 'petitioner',
+    role: User.ROLES.petitioner,
     userId: 'taxpayer',
   };
 
@@ -40,7 +40,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         getCurrentUser: () => {
           return {
             name: 'Olivia Jade',
-            role: 'practitioner',
+            role: User.ROLES.practitioner,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           };
         },
@@ -74,7 +74,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         getCurrentUser: () => {
           return new User({
             name: 'Olivia Jade',
-            role: 'petitionsclerk',
+            role: User.ROLES.petitionsClerk,
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           });
         },

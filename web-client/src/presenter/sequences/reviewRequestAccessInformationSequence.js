@@ -3,17 +3,17 @@ import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocume
 import { generateCaseAssociationTitleAction } from '../actions/CaseAssociationRequest/generateCaseAssociationTitleAction';
 import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocument/generateTitleForSupportingDocumentsAction';
 import { navigateToRequestAccessReviewAction } from '../actions/navigateToRequestAccessReviewAction';
-import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setFileDocumentValidationAlertErrorsAction } from '../actions/FileDocument/setFileDocumentValidationAlertErrorsAction';
 import { setSupportingDocumentScenarioAction } from '../actions/FileDocument/setSupportingDocumentScenarioAction';
-import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { state } from 'cerebral';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateCaseAssociationRequestAction } from '../actions/validateCaseAssociationRequestAction';
 
 export const reviewRequestAccessInformationSequence = [
   clearAlertsAction,
-  set(state.showValidation, true),
+  startShowValidationAction,
   computeCertificateOfServiceFormDateAction,
   setSupportingDocumentScenarioAction,
   validateCaseAssociationRequestAction,
@@ -21,12 +21,12 @@ export const reviewRequestAccessInformationSequence = [
     error: [
       setAlertErrorAction,
       setValidationErrorsAction,
-      setValidationAlertErrorsAction,
+      setFileDocumentValidationAlertErrorsAction,
     ],
     success: [
       generateCaseAssociationTitleAction,
       generateTitleForSupportingDocumentsAction,
-      set(state.showValidation, false),
+      stopShowValidationAction,
       clearAlertsAction,
       navigateToRequestAccessReviewAction,
     ],

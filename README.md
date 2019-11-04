@@ -1,6 +1,6 @@
 # Electronic Filing / Case Management System
 
-An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS, which began in October 2018. **All work can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging).** For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
+An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS, which began in October 2018. Work is not yet in production, so `master` does not deploy. For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
 ### Build Status
 
@@ -52,11 +52,11 @@ Server:
 
 The backlog is stored [in GitHub Issues in Flexion’s repository](https://github.com/flexion/ef-cms/issues), _not_ on this repository. Although they can be viewed like any other GitHub issues, they are managed on a scrum board that requires the [ZenHub browser plugin](https://www.zenhub.com/) to see.
 
-## Building everything
+## Testing everything
 
 To exercise the CI/CD pipeline locally, run the following:
 
-`./build-all.sh`
+`./test-all.sh`
 
 This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral tests, Pa11y, etc. over all the components.
 
@@ -133,7 +133,7 @@ respondent
 respondent1 - respondent4
 practitioner
 practitioner1 - practitioner4
-seniorattorney
+adc
 judgeArmen
 judgeAshford
 judgeBuch
@@ -153,7 +153,7 @@ petitionsclerk1@example.com – petitionsclerk5@example.com
 docketclerk1@example.com – docketclerk5@example.com
 respondent1@example.com – respondent10@example.com
 practitioner1@example.com – practitioner10@example.com
-seniorattorney1@example.com – seniorattorney5@example.com
+adc1@example.com – adc5@example.com
 judgeArmen@example.com
 judgeAshford@example.com
 judgeBuch@example.com

@@ -23,9 +23,7 @@ export const DraftDocuments = connect(
     return (
       <>
         {formattedCaseDetail.draftDocuments.length === 0 && (
-          <p className="heading-3 margin-bottom-10">
-            There are no draft documents.
-          </p>
+          <p>There are no draft documents.</p>
         )}
         {formattedCaseDetail.draftDocuments.length > 0 && (
           <table
@@ -95,7 +93,7 @@ export const DraftDocuments = connect(
                         <Button
                           link
                           className="red-warning"
-                          icon="times-circle"
+                          icon="trash"
                           onClick={() => {
                             archiveDraftDocumentModalSequence({
                               caseId: formattedCaseDetail.caseId,

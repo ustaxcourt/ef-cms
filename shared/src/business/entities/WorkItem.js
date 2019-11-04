@@ -30,9 +30,9 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberSuffix = rawWorkItem.docketNumberSuffix;
   this.document = rawWorkItem.document;
+  this.inProgress = rawWorkItem.inProgress;
   this.isInitializeCase = rawWorkItem.isInitializeCase;
-  this.isInternal =
-    rawWorkItem.isInternal === undefined ? true : rawWorkItem.isInternal;
+  this.isQC = rawWorkItem.isQC;
   this.isRead = rawWorkItem.isRead;
   this.section = rawWorkItem.section;
   this.sentBy = rawWorkItem.sentBy;
@@ -97,7 +97,9 @@ joiValidationDecorator(
       .allow(null)
       .optional(),
     document: joi.object().required(),
+    inProgress: joi.boolean().optional(),
     isInitializeCase: joi.boolean().optional(),
+    isQC: joi.boolean().required(),
     isRead: joi.boolean().optional(),
     messages: joi
       .array()
@@ -139,7 +141,7 @@ WorkItem.prototype.addMessage = function(message) {
 };
 
 WorkItem.prototype.setAsInternal = function() {
-  this.isInternal = true;
+  this.isQC = false;
   return this;
 };
 
@@ -268,7 +270,7 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
   this.completedBy = user.name;
   this.completedByUserId = user.userId;
   this.completedMessage = message;
-
+  delete this.inProgress;
   return this;
 };
 

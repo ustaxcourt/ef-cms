@@ -253,6 +253,20 @@ joiValidationDecorator(
         caseId: joi.string().uuid({
           version: ['uuidv4'],
         }),
+        disposition: joi.when('removedFromTrial', {
+          is: true,
+          otherwise: joi.optional().allow(null),
+          then: joi.string().required(),
+        }),
+        removedFromTrial: joi.boolean().optional(),
+        removedFromTrialDate: joi.when('removedFromTrial', {
+          is: true,
+          otherwise: joi.optional().allow(null),
+          then: joi
+            .date()
+            .iso()
+            .required(),
+        }),
       }),
     ),
     isCalendared: joi.boolean().required(),
@@ -320,6 +334,70 @@ TrialSession.prototype.setAsCalendared = function() {
 TrialSession.prototype.addCaseToCalendar = function(caseEntity) {
   const { caseId } = caseEntity;
   this.caseOrder.push({ caseId });
+  return this;
+};
+
+/**
+ * manually add case to calendar
+ *
+ * @param {object} caseEntity the case entity to add to the calendar
+ * @returns {TrialSession} the trial session entity
+ */
+TrialSession.prototype.manuallyAddCaseToCalendar = function(caseEntity) {
+  const { caseId } = caseEntity;
+  this.caseOrder.push({ caseId, isManuallyAdded: true });
+  return this;
+};
+
+/**
+ * checks if a case is already on the session
+ *
+ * @param {object} caseEntity the case entity to check if already on the case
+ * @returns {boolean} if the case is already on the trial session
+ */
+TrialSession.prototype.isCaseAlreadyCalendared = function(caseEntity) {
+  return !!this.caseOrder
+    .filter(order => order.caseId === caseEntity.caseId)
+    .filter(order => order.removedFromTrial !== true).length;
+};
+
+/**
+ * set case as removedFromTrial
+ *
+ * @param {object} arguments the arguments object
+ * @param {string} arguments.caseId the id of the case to remove from the calendar
+ * @param {string} arguments.disposition the reason the case is being removed from the calendar
+ * @returns {TrialSession} the trial session entity
+ */
+TrialSession.prototype.removeCaseFromCalendar = function({
+  caseId,
+  disposition,
+}) {
+  const caseToUpdate = this.caseOrder.find(
+    trialCase => trialCase.caseId === caseId,
+  );
+  if (caseToUpdate) {
+    caseToUpdate.disposition = disposition;
+    caseToUpdate.removedFromTrial = true;
+    caseToUpdate.removedFromTrialDate = createISODateString();
+  }
+  return this;
+};
+
+/**
+ * removes the case totally from the trial session
+ *
+ * @param {object} arguments the arguments object
+ * @param {string} arguments.caseId the id of the case to remove from the calendar
+ * @returns {TrialSession} the trial session entity
+ */
+TrialSession.prototype.deleteCaseFromCalendar = function({ caseId }) {
+  const index = this.caseOrder.findIndex(
+    trialCase => trialCase.caseId === caseId,
+  );
+  if (index >= 0) {
+    this.caseOrder.splice(index, 1);
+  }
   return this;
 };
 
