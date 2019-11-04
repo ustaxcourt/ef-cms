@@ -36,15 +36,12 @@ For documentation about the CI/CD setup, API, style guide, UX, code review, etc.
 
 ## AWS diagram
 
-<a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000; " /></a>
+<a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000;" /></a>
 
 ## Dependency diagrams
 
-Client:
-<a href="docs/images/client-dependencies.png"><img src="docs/images/client-dependencies.png" style="border: 2px solid #000; " /></a>
-
-Server:
-<a href="docs/images/server-dependencies.png"><img src="docs/images/server-dependencies.png" style="border: 2px solid #000; " /></a>
+- <a href="docs/images/client-dependencies.png">Client</a>
+- <a href="docs/images/server-dependencies.png">Server</a>
 
 ## Backlog
 
