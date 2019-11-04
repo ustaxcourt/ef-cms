@@ -17,15 +17,15 @@ export const runTrialSessionPlanningReportSequence = [
   {
     error: [setValidationErrorsAction],
     success: [
+      clearModalAction,
       setWaitingForResponseAction,
       runTrialSessionPlanningReportAction,
+      clearModalStateAction,
       ...setPdfPreviewUrlSequence,
       setCurrentPageAction('TrialSessionPlanningReport'),
       unsetWaitingForResponseAction,
       setAlertSuccessAction,
       stopShowValidationAction,
-      clearModalAction,
-      clearModalStateAction,
     ],
   },
 ];
