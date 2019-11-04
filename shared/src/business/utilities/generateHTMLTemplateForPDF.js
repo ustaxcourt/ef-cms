@@ -713,7 +713,7 @@ const generatePrintableFilingReceiptTemplate = content => {
 };
 
 const generateTrialSessionPlanningReportTemplate = content => {
-  const { previousTerms, rows } = content;
+  const { previousTerms, rows, selectedTerm, selectedYear } = content;
 
   const contentRows = rows.map(row => {
     return `
@@ -738,7 +738,9 @@ const generateTrialSessionPlanningReportTemplate = content => {
     <div class="court-header">
       <div class="us-tax-court-seal"></div>
       <h1>United States Tax Court</h1>
-      <h2>Trial Session Planning Report</h2>
+      <h2>Trial Session Planning Report - ${capitalize(
+        selectedTerm,
+      )} ${selectedYear}</h2>
     </div>
     <table>
       <thead>
