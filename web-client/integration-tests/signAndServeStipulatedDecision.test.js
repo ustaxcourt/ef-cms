@@ -1,5 +1,6 @@
 import {
   createMessage,
+  fakeFile,
   getFormattedDocumentQCSectionInbox,
   getFormattedMyInbox,
   loginAs,
@@ -23,26 +24,13 @@ const test = setupTest({
 });
 
 describe('a user signs and serves a stipulated decision', () => {
-  beforeEach(() => {
+  beforeAll(() => {
     jest.setTimeout(30000);
-
-    const fakeData =
-      'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
-    const fakeFile = Buffer.from(fakeData, 'base64');
-    fakeFile.name = 'fakeFile.pdf';
-
-    global.window = {
-      document: {},
-      localStorage: {
-        removeItem: () => null,
-        setItem: () => null,
-      },
-      pdfjsObj: {
-        getData: () => {
-          return new Promise(resolve => {
-            resolve(new Uint8Array(fakeFile));
-          });
-        },
+    global.window.pdfjsObj = {
+      getData: () => {
+        return new Promise(resolve => {
+          resolve(new Uint8Array(fakeFile));
+        });
       },
     };
   });
@@ -66,7 +54,7 @@ describe('a user signs and serves a stipulated decision', () => {
     await uploadProposedStipulatedDecision(test);
   });
 
-  it('docketclerk assigns the stipulated decision to the seniorattorney', async () => {
+  it('docketclerk assigns the stipulated decision to the adc', async () => {
     await loginAs(test, 'docketclerk');
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       test,
@@ -88,8 +76,8 @@ describe('a user signs and serves a stipulated decision', () => {
     });
   });
 
-  it('senior attorney signs the proposed stipulated decision', async () => {
-    await loginAs(test, 'seniorattorney');
+  it('adc signs the proposed stipulated decision', async () => {
+    await loginAs(test, 'adc');
     const inbox = await getFormattedMyInbox(test);
     const stipulatedDecision = inbox.find(
       item =>

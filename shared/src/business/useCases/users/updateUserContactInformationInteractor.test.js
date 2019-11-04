@@ -4,6 +4,7 @@ const {
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 const saveDocumentStub = jest.fn();
 
@@ -179,7 +180,7 @@ describe('updateUserContactInformationInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitioner',
+          role: User.ROLES.petitioner,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },

@@ -1,4 +1,5 @@
 const { userIsAssociated } = require('./userIsAssociatedInteractor');
+const { User } = require('../../entities/User');
 
 describe('userIsAssociated', () => {
   const applicationContext = {};
@@ -9,7 +10,7 @@ describe('userIsAssociated', () => {
       userId: 'abc-123',
     };
     const user = {
-      role: 'practitioner',
+      role: User.ROLES.practitioner,
       userId: 'abc-123',
     };
 
@@ -28,14 +29,14 @@ describe('userIsAssociated', () => {
       userId: 'def-321',
     };
     const user = {
-      role: 'practitioner',
+      role: User.ROLES.practitioner,
       userId: 'abc-123',
     };
 
     const result = userIsAssociated({ applicationContext, caseDetail, user });
     expect(result).toEqual(true);
 
-    user.role = 'respondent';
+    user.role = User.ROLES.practitioner;
     caseDetail.respondents = [{ userId: 'abc-123' }];
 
     const result2 = userIsAssociated({ applicationContext, caseDetail, user });
@@ -52,7 +53,7 @@ describe('userIsAssociated', () => {
       userId: 'def-321',
     };
     const user = {
-      role: 'practitioner',
+      role: User.ROLES.practitioner,
       userId: 'abc-123',
     };
 
@@ -66,7 +67,7 @@ describe('userIsAssociated', () => {
       userId: 'def-321',
     };
     const user = {
-      role: 'docketclerk',
+      role: User.ROLES.docketClerk,
       userId: 'abc-123',
     };
 

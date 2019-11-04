@@ -12,6 +12,7 @@ const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { User } = require('../entities/User');
+const { Case } = require('../entities/cases/Case');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
 
@@ -23,7 +24,7 @@ describe('assignWorkItemsInteractor integration test', () => {
     applicationContext = createTestApplicationContext({
       user: {
         name: 'Rick Petitioner',
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
         userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
@@ -64,7 +65,7 @@ describe('assignWorkItemsInteractor integration test', () => {
     applicationContext.getCurrentUser = () => {
       return new User({
         name: 'Test Petitionsclerk',
-        role: 'petitionsclerk',
+        role: User.ROLES.petitionsClerk,
         userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };
@@ -98,7 +99,7 @@ describe('assignWorkItemsInteractor integration test', () => {
       {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Petitionsclerk',
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {

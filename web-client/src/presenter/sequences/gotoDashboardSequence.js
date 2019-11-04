@@ -25,6 +25,7 @@ const goToDashboard = [
   clearErrorAlertsAction,
   getUserRoleAction,
   {
+    adc: [navigateToMessagesAction],
     docketclerk: [navigateToMessagesAction],
     judge: [
       setMessageInboxPropsAction,
@@ -49,7 +50,6 @@ const goToDashboard = [
       setCasesAction,
       setCurrentPageAction('DashboardRespondent'),
     ],
-    seniorattorney: [navigateToMessagesAction],
   },
 ];
 

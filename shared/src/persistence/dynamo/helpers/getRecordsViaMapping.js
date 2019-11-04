@@ -1,12 +1,7 @@
 const client = require('../../dynamodbClientService');
 const { stripInternalKeys } = require('./stripInternalKeys');
 
-exports.getRecordsViaMapping = async ({
-  applicationContext,
-  isVersioned = false,
-  key,
-  type,
-}) => {
+exports.getRecordsViaMapping = async ({ applicationContext, key, type }) => {
   const mappings = await client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -24,7 +19,7 @@ exports.getRecordsViaMapping = async ({
     applicationContext,
     keys: ids.map(id => ({
       pk: id,
-      sk: isVersioned ? '0' : id,
+      sk: id,
     })),
   });
 

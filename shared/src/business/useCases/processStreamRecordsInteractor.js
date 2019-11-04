@@ -13,24 +13,21 @@ exports.processStreamRecordsInteractor = async ({
   applicationContext.logger.info('Time', createISODateString());
   const searchClient = applicationContext.getSearchClient();
 
-  const indexCalls = [];
+  const results = [];
   for (const record of recordsToProcess) {
     if (['INSERT', 'MODIFY'].includes(record.eventName)) {
-      indexCalls.push(
-        searchClient.index({
-          body: { ...record.dynamodb.NewImage },
-          id: record.dynamodb.Keys.pk.S,
-          index: 'efcms',
-        }),
-      );
+      try {
+        results.push(
+          await searchClient.index({
+            body: { ...record.dynamodb.NewImage },
+            id: record.dynamodb.Keys.pk.S,
+            index: 'efcms',
+          }),
+        );
+      } catch (e) {
+        applicationContext.logger.info('Error', e);
+      }
     }
-  }
-
-  let results;
-  try {
-    results = await Promise.all(indexCalls);
-  } catch (e) {
-    applicationContext.logger.info('Error', e);
   }
 
   applicationContext.logger.info('Time', createISODateString());

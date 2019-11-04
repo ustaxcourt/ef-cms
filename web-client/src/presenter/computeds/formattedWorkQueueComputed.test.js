@@ -1,3 +1,4 @@
+import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
@@ -13,7 +14,7 @@ import {
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
   ...applicationContext,
   getCurrentUser: () => ({
-    role: 'petitionsclerk',
+    role: User.ROLES.petitionsClerk,
     section: 'petitions',
     userId: 'abc',
   }),
@@ -26,6 +27,10 @@ const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
     };
   },
 });
+
+const baseState = {
+  constants: { USER_ROLES: User.ROLES },
+};
 
 const FORMATTED_WORK_ITEM = {
   assigneeId: 'abc',
@@ -96,7 +101,7 @@ describe('formatted work queue computed', () => {
       documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',
     },
-    isInternal: true,
+    isQC: false,
     messages: [
       {
         createdAt: '2018-12-27T18:05:54.164Z',
@@ -123,6 +128,7 @@ describe('formatted work queue computed', () => {
   beforeEach(() => {
     result = runCompute(formattedWorkQueue, {
       state: {
+        ...baseState,
         selectedWorkItems: [workItem],
         workQueue: [workItem],
         workQueueToDisplay: {
@@ -155,6 +161,7 @@ describe('formatted work queue computed', () => {
     workItem.isInitializeCase = true;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
+        ...baseState,
         selectedWorkItems: [],
         workQueue: [workItem],
         workQueueToDisplay: {
@@ -171,6 +178,7 @@ describe('formatted work queue computed', () => {
     workItem.isInitializeCase = true;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
+        ...baseState,
         selectedWorkItems: [],
         workQueue: [workItem],
         workQueueToDisplay: {
@@ -187,6 +195,7 @@ describe('formatted work queue computed', () => {
     workItem.caseStatus = 'Batched for IRS';
     const result2 = runCompute(formattedWorkQueue, {
       state: {
+        ...baseState,
         selectedWorkItems: [],
         workQueue: [workItem],
         workQueueToDisplay: {
@@ -204,6 +213,7 @@ describe('formatted work queue computed', () => {
     workItem.caseStatus = 'Recalled';
     const result2 = runCompute(formattedWorkQueue, {
       state: {
+        ...baseState,
         selectedWorkItems: [],
         workQueue: [workItem],
         workQueueToDisplay: {
@@ -222,6 +232,7 @@ describe('formatted work queue computed', () => {
 
     const result = runCompute(formattedWorkQueue, {
       state: {
+        ...baseState,
         selectedWorkItems: [],
         workQueue: [workItem],
         workQueueToDisplay: {
@@ -240,6 +251,7 @@ describe('formatted work queue computed', () => {
 
     const result = runCompute(formattedWorkQueue, {
       state: {
+        ...baseState,
         selectedWorkItems: [],
         workQueue: [workItem],
         workQueueToDisplay: {

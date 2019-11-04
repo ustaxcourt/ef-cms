@@ -28,6 +28,7 @@ export const gotoCaseDetailSequence = [
   set(state.editDocumentEntryPoint, 'CaseDetail'),
   getUserRoleAction,
   {
+    adc: [setCurrentPageAction('CaseDetailInternal')],
     docketclerk: [setCurrentPageAction('CaseDetailInternal')],
     judge: [
       getCaseNoteForCaseAction,
@@ -50,6 +51,5 @@ export const gotoCaseDetailSequence = [
       setCaseAssociationAction,
       setCurrentPageAction('CaseDetail'),
     ],
-    seniorattorney: [setCurrentPageAction('CaseDetailInternal')],
   },
 ];

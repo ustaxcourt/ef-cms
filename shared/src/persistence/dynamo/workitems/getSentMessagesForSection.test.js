@@ -11,27 +11,27 @@ describe('getSentMessagesForSection', () => {
           {
             completedAt: 'today',
             completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-            isInternal: false,
+            isQC: true,
             section: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: 'today',
             completedByUserId: 'bob',
-            isInternal: false,
+            isQC: true,
             section: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: 'today',
-            isInternal: true,
+            isQC: false,
             section: 'docket',
             sentBySection: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: null,
-            isInternal: true,
+            isQC: false,
             section: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
@@ -60,7 +60,7 @@ describe('getSentMessagesForSection', () => {
     expect(items).toEqual([
       {
         completedAt: null,
-        isInternal: true,
+        isQC: false,
         section: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },

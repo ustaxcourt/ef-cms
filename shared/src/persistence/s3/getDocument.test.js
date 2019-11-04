@@ -1,4 +1,5 @@
 const { getDocument } = require('./getDocument');
+const { User } = require('../../business/entities/User');
 
 const getObjectMock = jest.fn();
 
@@ -8,7 +9,7 @@ describe('getDocument', () => {
     let applicationContext = {
       getBaseUrl: () => 'http://localhost',
       getCurrentUser: () => {
-        return { role: 'petitioner', userId: 'taxpayer' };
+        return { role: User.ROLES.petitioner, userId: 'taxpayer' };
       },
       getCurrentUserToken: () => {
         return '';

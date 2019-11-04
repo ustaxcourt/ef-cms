@@ -2,6 +2,7 @@ const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 const { omit } = require('lodash');
 const { updateCaseInteractor } = require('./updateCaseInteractor');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { User } = require('../entities/User');
 
 const MOCK_CASE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -12,19 +13,19 @@ const MOCK_CASE = {
     {
       documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       userId: 'taxpayer',
     },
     {
       documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       userId: 'taxpayer',
     },
     {
       documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       documentType: 'Petition',
-      role: 'petitioner',
+      role: User.ROLES.petitioner,
       userId: 'taxpayer',
     },
   ],
@@ -46,7 +47,7 @@ describe('updateCase', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -78,7 +79,7 @@ describe('updateCase', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -109,7 +110,7 @@ describe('updateCase', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -144,7 +145,7 @@ describe('updateCase', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },
@@ -186,7 +187,6 @@ describe('updateCase', () => {
           state: 'FL',
         },
         createdAt: '2019-07-24T16:30:01.940Z',
-        currentVersion: '1',
         docketNumber: '168-19',
         docketNumberSuffix: 'S',
         filingType: 'Myself and my spouse',
@@ -212,7 +212,7 @@ describe('updateCase', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'petitionsclerk',
         };
       },

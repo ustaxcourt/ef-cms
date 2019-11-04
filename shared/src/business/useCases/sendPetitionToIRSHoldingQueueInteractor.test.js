@@ -24,6 +24,7 @@ const MOCK_WORK_ITEMS = [
       documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
     },
     isInitializeCase: true,
+    isQC: true,
     messages: [
       {
         createdAt: '2018-12-27T18:06:02.968Z',
@@ -31,7 +32,7 @@ const MOCK_WORK_ITEMS = [
         fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'Petition ready for review',
         messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
         to: null,
       },
     ],
@@ -54,6 +55,7 @@ const MOCK_WORK_ITEMS = [
       documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
     },
     isInitializeCase: false,
+    isQC: true,
     messages: [
       {
         createdAt: '2018-12-27T18:06:02.968Z',
@@ -61,7 +63,7 @@ const MOCK_WORK_ITEMS = [
         fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         message: 'Test messsage',
         messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
         to: null,
       },
     ],
@@ -83,7 +85,7 @@ describe('Send petition to IRS Holding Queue', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Petitionsclerk',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },
@@ -137,7 +139,7 @@ describe('Send petition to IRS Holding Queue', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Petitionsclerk1',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },
@@ -173,7 +175,7 @@ describe('Send petition to IRS Holding Queue', () => {
       getCurrentUser: () => {
         return new User({
           name: 'Petitionsclerk1',
-          role: 'petitionsclerk',
+          role: User.ROLES.petitionsClerk,
           userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
         });
       },

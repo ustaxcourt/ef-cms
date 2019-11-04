@@ -7,6 +7,11 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
   caseItem.caseCaptionNames = applicationContext.getCaseCaptionNames(
     caseItem.caseCaption || '',
   );
+  if (caseItem.removedFromTrialDate) {
+    caseItem.removedFromTrialDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(caseItem.removedFromTrialDate, 'MMDDYY');
+  }
   return caseItem;
 };
 
@@ -35,10 +40,10 @@ exports.formattedTrialSessionDetails = ({
     .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
     .sort(exports.compareCasesByDocketNumber);
   trialSession.openCases = trialSession.allCases.filter(
-    item => item.status != 'Closed',
+    item => item.status !== 'Closed' && item.removedFromTrial !== true,
   );
-  trialSession.closedCases = trialSession.allCases.filter(
-    item => item.status == 'Closed',
+  trialSession.inactiveCases = trialSession.allCases.filter(
+    item => item.status === 'Closed' || item.removedFromTrial === true,
   );
 
   trialSession.formattedTerm = `${

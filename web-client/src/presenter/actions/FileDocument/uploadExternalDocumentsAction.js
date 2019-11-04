@@ -14,48 +14,63 @@ export const uploadExternalDocumentsAction = async ({
   path,
   store,
 }) => {
-  const {
-    primaryDocumentFile,
-    secondaryDocumentFile,
-    supportingDocumentFile,
-  } = get(state.form);
+  const { caseId, docketNumber } = get(state.caseDetail);
+  const form = get(state.form);
 
-  const progressFunctions = setupPercentDone(
-    {
-      primary: primaryDocumentFile,
-      secondary: secondaryDocumentFile,
-      supporting: supportingDocumentFile,
-    },
-    store,
-  );
+  const documentMetadata = { ...form, docketNumber, caseId };
+
+  const documentFiles = {
+    primary: form.primaryDocumentFile,
+  };
+
+  if (form.secondaryDocumentFile) {
+    documentFiles.secondary = form.secondaryDocumentFile;
+  }
+
+  if (form.hasSupportingDocuments) {
+    form.supportingDocuments.forEach((item, idx) => {
+      documentFiles[`primarySupporting${idx}`] = item.supportingDocumentFile;
+    });
+  }
+
+  if (form.hasSecondarySupportingDocuments) {
+    form.secondarySupportingDocuments.forEach((item, idx) => {
+      documentFiles[`secondarySupporting${idx}`] = item.supportingDocumentFile;
+    });
+  }
+
+  const progressFunctions = setupPercentDone(documentFiles, store);
+
+  let caseDetail;
 
   try {
-    const [
-      primaryDocumentFileId,
-      secondaryDocumentFileId,
-      supportingDocumentFileId,
-    ] = await applicationContext
+    caseDetail = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor({
         applicationContext,
-        documentFiles: [
-          primaryDocumentFile,
-          secondaryDocumentFile,
-          supportingDocumentFile,
-        ],
-        onUploadProgresses: [
-          progressFunctions.primary,
-          progressFunctions.secondary,
-          progressFunctions.supporting,
-        ],
+        documentFiles,
+        documentMetadata,
+        progressFunctions,
       });
-
-    return path.success({
-      primaryDocumentFileId,
-      secondaryDocumentFileId,
-      supportingDocumentFileId,
-    });
   } catch (err) {
     return path.error();
   }
+
+  const pendingDocuments = caseDetail.documents.filter(
+    document => document.processingStatus === 'pending',
+  );
+  const addCoversheet = document => {
+    return applicationContext.getUseCases().addCoversheetInteractor({
+      applicationContext,
+      caseId: caseDetail.caseId,
+      documentId: document.documentId,
+    });
+  };
+  await Promise.all(pendingDocuments.map(addCoversheet));
+
+  return path.success({
+    caseDetail,
+    caseId: docketNumber,
+    documentsFiled: documentMetadata,
+  });
 };

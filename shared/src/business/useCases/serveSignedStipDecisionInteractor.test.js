@@ -14,7 +14,7 @@ const applicationContext = {
   getCurrentUser: () => {
     return new User({
       name: 'bob',
-      role: 'docketclerk',
+      role: User.ROLES.docketClerk,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
   },
@@ -107,7 +107,7 @@ describe('Serves Signed Stipulated Decsion on all parties', () => {
     applicationContext.getCurrentUser = () => {
       return new User({
         name: 'bob',
-        role: 'petitionsclerk',
+        role: User.ROLES.petitionsClerk,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };

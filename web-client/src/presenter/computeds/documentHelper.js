@@ -4,19 +4,21 @@ export const documentHelper = get => ({
   docketNumber,
   documentId,
   messageId,
+  shouldLinkToComplete,
   shouldLinkToEdit,
   workItemIdToMarkAsRead,
 }) => {
   const currentUser = get(state.user);
   const userRole = currentUser.role;
   const { box, workQueueIsInternal } = get(state.workQueueToDisplay);
+  const USER_ROLES = get(state.constants.USER_ROLES);
 
   const shouldLinkToMessagesTab = () => {
     let linkToMessagesTab = false;
-    if (userRole == 'docketclerk' || workQueueIsInternal) {
+    if (userRole == USER_ROLES.docketClerk || workQueueIsInternal) {
       linkToMessagesTab = true;
     } else if (
-      userRole == 'petitionsclerk' &&
+      userRole == USER_ROLES.petitionsClerk &&
       !workQueueIsInternal &&
       box == 'outbox'
     ) {
@@ -31,7 +33,9 @@ export const documentHelper = get => ({
     ? `/mark/${workItemIdToMarkAsRead}`
     : '';
 
-  if (shouldLinkToEdit) {
+  if (shouldLinkToComplete) {
+    return `${baseUri}/complete`;
+  } else if (shouldLinkToEdit) {
     return `${baseUri}/edit`;
   } else if (shouldLinkToMessagesTab()) {
     return `${baseUri}/messages/${messageId}${markReadPath}`;

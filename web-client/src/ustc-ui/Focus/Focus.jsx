@@ -1,38 +1,30 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 
 const focusableChildren =
   'h1[tabindex], h2[tabindex], h3[tabindex], .focusable[tabindex]';
 
-// first child of Focus component matching above selector will receive focus
-class FocusComponent extends React.Component {
-  componentDidMount() {
-    this.focused || this.setFocus();
-  }
+export const Focus = ({ children, className }) => {
+  const [focused, setFocused] = useState(false);
+  const node = useRef(null);
 
-  setFocus(e) {
+  const setFocus = e => {
     e && e.preventDefault();
-    const focusEl = this.node.querySelector(focusableChildren);
+    const focusEl = node.current.querySelector(focusableChildren);
     if (focusEl && focusEl.focus) focusEl.focus();
-    this.focused = true;
+    setFocused(true);
     return false;
-  }
+  };
 
-  render() {
-    const className = classNames('focus-component', this.props.className);
-    const child = (
-      <div className={className} ref={el => (this.node = el)}>
-        {this.props.children}
-      </div>
-    );
-    return child;
-  }
-}
+  useEffect(() => {
+    focused || setFocus();
+  }, []);
 
-FocusComponent.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
+  const focusClassName = classNames('focus-component', className);
+  const child = (
+    <div className={focusClassName} ref={node}>
+      {children}
+    </div>
+  );
+  return child;
 };
-
-export const Focus = FocusComponent;

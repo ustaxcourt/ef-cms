@@ -1,3 +1,4 @@
+import { User } from '../../shared/src/business/entities/User';
 import {
   getFormattedMyOutbox,
   getFormattedSectionOutbox,
@@ -26,7 +27,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
     caseDetail = await uploadPetition(test);
 
     const applicationContext = applicationContextFactory({
-      role: 'petitionsclerk',
+      role: User.ROLES.petitionsClerk,
       section: 'petitions',
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -56,7 +57,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
         documentType: 'Petition',
       },
       isInitializeCase: false,
-      isInternal: true,
+      isQC: false,
       messages: [
         {
           createdAt: CREATED_8_DAYS_AGO.toISOString(),

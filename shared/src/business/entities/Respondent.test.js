@@ -1,4 +1,5 @@
 const { Respondent } = require('./Respondent');
+const { User } = require('./User');
 
 describe('Respondent', () => {
   it('Creates a valid respondent', () => {
@@ -16,7 +17,7 @@ describe('Respondent', () => {
       },
       firstName: 'firstName',
       lastName: 'lastName',
-      role: 'petitioner',
+      role: User.ROLES.respondent,
       userId: 'taxpayer',
     });
     expect(user.isValid()).toBeTruthy();
@@ -24,7 +25,7 @@ describe('Respondent', () => {
 
   it('Creates an invalid', () => {
     const user = new Respondent({
-      role: 'respondent',
+      role: User.ROLES.respondent,
     });
     expect(user.isValid()).toBeFalsy();
   });

@@ -1,6 +1,7 @@
 const { forwardWorkItemInteractor } = require('./forwardWorkItemInteractor');
 const { MOCK_CASE } = require('../../../../src/test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
+const { User } = require('../../entities/User');
 
 describe('forwardWorkItemInteractor', () => {
   let applicationContext;
@@ -13,6 +14,7 @@ describe('forwardWorkItemInteractor', () => {
     document: {
       sentBy: 'taxpayer',
     },
+    isQC: true,
     messages: [],
     sentBy: 'docketclerk',
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -23,7 +25,7 @@ describe('forwardWorkItemInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => ({
         name: 'Petitionsclerk',
-        role: 'petitionsclerk',
+        role: User.ROLES.petitionsClerk,
         section: 'petitions',
         userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
       }),
@@ -59,7 +61,7 @@ describe('forwardWorkItemInteractor', () => {
                   },
                   gsi1pk: 'workitem-c54ba5a9-b37b-479d-9201-067ec6e335bb',
                   isInitializeCase: true,
-                  isInternal: false,
+                  isQC: true,
                   messages: [
                     {
                       createdAt: '2019-07-12T17:09:41.027Z',
@@ -97,7 +99,7 @@ describe('forwardWorkItemInteractor', () => {
                   },
                   gsi1pk: 'workitem-c54ba5a9-b37b-479d-9201-067ec6e335bb',
                   isInitializeCase: true,
-                  isInternal: false,
+                  isQC: true,
                   messages: [
                     {
                       createdAt: '2019-07-12T17:09:41.027Z',
@@ -149,7 +151,7 @@ describe('forwardWorkItemInteractor', () => {
         sentBy: 'taxpayer',
       },
       isInitializeCase: undefined,
-      isInternal: true,
+      isQC: false,
       isRead: undefined,
       messages: [
         {
@@ -173,7 +175,7 @@ describe('forwardWorkItemInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => ({
         name: 'Tax Payer',
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
         userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
       }),
       getPersistenceGateway: () => ({

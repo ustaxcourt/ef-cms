@@ -26,7 +26,7 @@ exports.getSentMessagesForSection = async ({ applicationContext, section }) => {
   return workItems.filter(
     workItem =>
       !workItem.completedAt &&
-      workItem.isInternal &&
+      !workItem.isQC &&
       workItem.sentBySection === section,
   );
 };

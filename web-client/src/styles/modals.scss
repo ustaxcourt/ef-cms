@@ -80,7 +80,6 @@
 }
 
 .file-upload-status-modal {
-
   .status-message {
     margin-bottom: 10px;
     font-size: 48px;
@@ -289,4 +288,27 @@ button {
   max-height: 250px;
   padding: 6px;
   margin: -6px;
+}
+
+.edit-counsel-modal {
+  width: 700px;
+}
+
+.ustc-counsel-exists-modal {
+  width: 700px;
+
+  .usa-form-group {
+    max-width: unset;
+    margin-bottom: 20px;
+  }
+}
+
+.counsel-modal {
+  width: 700px;
+
+  .usa-form-group,
+  .usa-fieldset {
+    max-width: unset;
+    margin-bottom: 20px;
+  }
 }

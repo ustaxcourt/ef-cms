@@ -12,7 +12,9 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validatePetitionFromPaperAction } from '../actions/validatePetitionFromPaperAction';
 
 export const submitPetitionFromPaperSequence = [
@@ -21,7 +23,7 @@ export const submitPetitionFromPaperSequence = [
     hasActiveBatches: [set(state.showModal, 'UnfinishedScansModal')],
     noActiveBatches: [
       clearAlertsAction,
-      set(state.showValidation, true),
+      startShowValidationAction,
       computeFormDateAction,
       validatePetitionFromPaperAction,
       {
@@ -31,7 +33,7 @@ export const submitPetitionFromPaperSequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
-          set(state.showValidation, false),
+          stopShowValidationAction,
           openFileUploadStatusModalAction,
           createCaseFromPaperAction,
           {

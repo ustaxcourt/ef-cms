@@ -23,7 +23,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
     applicationContext = createTestApplicationContext({
       user: {
         name: 'Test Petitioner',
-        role: 'petitioner',
+        role: User.ROLES.petitioner,
         userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
       },
     });
@@ -134,7 +134,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
         state: 'AP',
       },
       contactSecondary: {},
-      currentVersion: '2',
       docketNumber: '101-19',
       docketNumberSuffix: 'S',
       docketRecord: [
@@ -416,7 +415,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
     applicationContext.getCurrentUser = () => {
       return new User({
         name: 'Test Docketclerk',
-        role: 'docketclerk',
+        role: User.ROLES.docketClerk,
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       });
     };

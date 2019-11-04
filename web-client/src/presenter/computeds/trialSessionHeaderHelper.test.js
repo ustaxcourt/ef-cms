@@ -1,9 +1,10 @@
+import { User } from '../../../../shared/src/business/entities/User';
 import { runCompute } from 'cerebral/test';
 import { trialSessionHeaderHelper as trialSessionHeaderHelperComputed } from './trialSessionHeaderHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
 let currentUser = {
-  role: 'judge',
+  role: User.ROLES.judge,
   userId: '777',
 };
 
