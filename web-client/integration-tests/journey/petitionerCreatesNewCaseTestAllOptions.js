@@ -735,7 +735,7 @@ export default (test, fakeFile, overrides = {}) => {
 
     expect(test.getState('alertSuccess')).toEqual({
       message:
-        'Your petition receipt will appear in the case information tab on the docket once processed by the court.',
+        'Your receipt will appear under the Case Information tab in your case once your petition is processed by the court.',
       title: 'Your petition has been successfully submitted.',
     });
   });
