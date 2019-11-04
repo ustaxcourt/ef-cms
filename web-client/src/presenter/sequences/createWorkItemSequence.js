@@ -6,6 +6,7 @@ import { clearUsersAction } from '../actions/clearUsersAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -23,19 +24,16 @@ export const createWorkItemSequence = [
     success: [
       setWaitingForResponseAction,
       createWorkItemAction,
-      {
-        success: [
-          stopShowValidationAction,
-          navigateToMessagesAction,
-          setAlertSuccessAction,
-        ],
-      },
+      stopShowValidationAction,
+      setAlertSuccessAction,
+      setSaveAlertsForNavigationAction,
       clearFormAction,
       clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
       clearModalStateAction,
       unsetWaitingForResponseAction,
+      navigateToMessagesAction,
     ],
   },
 ];
