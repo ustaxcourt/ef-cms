@@ -418,6 +418,8 @@ describe('generateTrialSessionPlanningReportTemplate', () => {
         trialCityState: 'Birmingham, Alabama',
       },
     ],
+    selectedTerm: 'winter',
+    selectedYear: '2020',
   };
 
   it('generates a trial session planning report', () => {
