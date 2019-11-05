@@ -11,17 +11,11 @@ presenter.providers.applicationContext = {
   }),
 };
 
-const successStub = sinon.stub();
-
-presenter.providers.path = {
-  success: successStub,
-};
-
 describe('createWorkItemAction', () => {
-  it('should call createWorkItemInteractor with the expected parameters for a message on props and call the success path when finished', async () => {
+  it('should call createWorkItemInteractor with the expected parameters for a message on props and return the alertSuccess', async () => {
     createWorkItemInteractorStub = sinon.stub();
 
-    await runAction(createWorkItemAction, {
+    const result = await runAction(createWorkItemAction, {
       modules: {
         presenter,
       },
@@ -43,14 +37,13 @@ describe('createWorkItemAction', () => {
       documentId: '333',
       message: 'this is a test message',
     });
-    expect(successStub.called).toEqual(true);
-    expect(successStub.getCall(0).args[0]).toHaveProperty('alertSuccess');
+    expect(result.output).toHaveProperty('alertSuccess');
   });
 
-  it('should call createWorkItemInteractor with the expected parameters for a message on state.form and call the success path when finished', async () => {
+  it('should call createWorkItemInteractor with the expected parameters for a message on state.form and return the alertSuccess', async () => {
     createWorkItemInteractorStub = sinon.stub();
 
-    await runAction(createWorkItemAction, {
+    const result = await runAction(createWorkItemAction, {
       modules: {
         presenter,
       },
@@ -73,6 +66,6 @@ describe('createWorkItemAction', () => {
       documentId: '789',
       message: 'this is a different test message',
     });
-    expect(successStub.getCall(1).args[0]).toHaveProperty('alertSuccess');
+    expect(result.output).toHaveProperty('alertSuccess');
   });
 });
