@@ -1,5 +1,5 @@
 import { applicationContext } from '../../applicationContext';
-import { gotoPrintDocketRecordPreview } from './gotoPrintDocketRecordPreview';
+import { gotoPrintDocketRecordPreviewAction } from './gotoPrintDocketRecordPreviewAction';
 
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
@@ -7,7 +7,7 @@ import { runAction } from 'cerebral/test';
 const routeMock = jest.fn();
 const openInNewTabMock = jest.fn();
 
-describe('gotoPrintDocketRecordPreview', () => {
+describe('gotoPrintDocketRecordPreviewAction', () => {
   beforeEach(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
@@ -17,7 +17,7 @@ describe('gotoPrintDocketRecordPreview', () => {
   });
 
   it('should use default values and open the pdf in a new view if no props are passed', async () => {
-    await runAction(gotoPrintDocketRecordPreview, {
+    await runAction(gotoPrintDocketRecordPreviewAction, {
       modules: {
         presenter,
       },
@@ -31,7 +31,7 @@ describe('gotoPrintDocketRecordPreview', () => {
   });
 
   it('should open the pdf in a new view if props.openNewView is true', async () => {
-    await runAction(gotoPrintDocketRecordPreview, {
+    await runAction(gotoPrintDocketRecordPreviewAction, {
       modules: {
         presenter,
       },
@@ -48,7 +48,7 @@ describe('gotoPrintDocketRecordPreview', () => {
   });
 
   it('should open the pdf in a new window/tab if props.openNewTab is true', async () => {
-    const result = await runAction(gotoPrintDocketRecordPreview, {
+    const result = await runAction(gotoPrintDocketRecordPreviewAction, {
       modules: {
         presenter,
       },
