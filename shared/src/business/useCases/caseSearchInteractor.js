@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { CaseSearch } = require('../entities/cases/CaseSearch');
 const { get } = require('lodash');
 
 /**
@@ -21,7 +22,6 @@ exports.caseSearchInteractor = async ({
   yearFiledMax,
   yearFiledMin,
 }) => {
-  const { CaseSearch } = applicationContext.getEntityConstructors();
   const exactMatchesQuery = [];
   const nonExactMatchesQuery = [];
   const commonQuery = [];

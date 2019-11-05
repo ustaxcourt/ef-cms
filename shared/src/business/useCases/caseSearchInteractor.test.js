@@ -7,9 +7,6 @@ describe('caseSearchInteractor', () => {
 
   const applicationContext = {
     environment: { stage: 'local' },
-    getEntityConstructors: () => ({
-      CaseSearch,
-    }),
     getSearchClient: () => ({
       search: searchSpy,
     }),
