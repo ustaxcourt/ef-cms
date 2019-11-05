@@ -9,10 +9,10 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 const getPreviousTerm = (currentTerm, currentYear) => {
   const terms = [
-    `winter ${+currentYear - 1}`,
+    `fall ${+currentYear - 1}`,
+    `winter ${currentYear}`,
     `spring ${currentYear}`,
     `fall ${currentYear}`,
-    `winter ${currentYear}`,
   ];
   const termsReversed = terms.reverse();
   const termI = terms.findIndex(t => `${currentTerm} ${currentYear}` === t);
@@ -41,15 +41,19 @@ const getTrialSessionPlanningReportData = async ({
   const trialCities = TrialSession.TRIAL_CITIES.ALL;
   trialCities.sort((a, b) => {
     if (a.state === b.state) {
-      return a.city.localeCompare(b.city);
+      return applicationContext.getUtilities().compareStrings(a.city, b.city);
     } else {
-      return a.state.localeCompare(b.state);
+      return applicationContext.getUtilities().compareStrings(a.state, b.state);
     }
   });
 
-  const allTrialSessions = await applicationContext
+  let allTrialSessions = await applicationContext
     .getPersistenceGateway()
     .getTrialSessions({ applicationContext });
+
+  allTrialSessions = allTrialSessions.filter(session =>
+    ['Regular', 'Small', 'Hybrid'].includes(session.sessionType),
+  );
 
   const trialLocationData = [];
   for (const trialLocation of trialCities) {
@@ -80,27 +84,37 @@ const getTrialSessionPlanningReportData = async ({
 
     const previousTermsData = [];
     previousTerms.forEach(previousTerm => {
-      const previousTermSession = allTrialSessions.find(
+      const previousTermSessions = allTrialSessions.filter(
         trialSession =>
           trialSession.term.toLowerCase() === previousTerm.term.toLowerCase() &&
           trialSession.termYear === previousTerm.year &&
           trialSession.trialLocation === trialCityState,
       );
 
-      if (
-        previousTermSession &&
-        previousTermSession.sessionType &&
-        previousTermSession.judge
-      ) {
-        const sessionTypeChar = previousTermSession.sessionType.charAt(0);
-        const strippedJudgeName = previousTermSession.judge.name.replace(
-          'Judge ',
-          '',
-        );
-        previousTermsData.push(`(${sessionTypeChar}) ${strippedJudgeName}`);
-      } else {
-        previousTermsData.push('');
-      }
+      previousTermSessions.sort((a, b) => {
+        return applicationContext
+          .getUtilities()
+          .compareISODateStrings(a.startDate, b.startDate);
+      });
+
+      const previousTermSessionList = [];
+      previousTermSessions.forEach(previousTermSession => {
+        if (
+          previousTermSession &&
+          previousTermSession.sessionType &&
+          previousTermSession.judge
+        ) {
+          const sessionTypeChar = previousTermSession.sessionType.charAt(0);
+          const strippedJudgeName = previousTermSession.judge.name.replace(
+            'Judge ',
+            '',
+          );
+          previousTermSessionList.push(
+            `(${sessionTypeChar}) ${strippedJudgeName}`,
+          );
+        }
+      });
+      previousTermsData.push(previousTermSessionList);
     });
 
     trialLocationData.push({
@@ -145,6 +159,8 @@ exports.runTrialSessionPlanningReportInteractor = async ({
     .generateTrialSessionPlanningReportTemplate({
       previousTerms: reportData.previousTerms,
       rows: reportData.trialLocationData,
+      selectedTerm: term,
+      selectedYear: year,
     });
 
   const pdf = await applicationContext

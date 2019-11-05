@@ -21,6 +21,13 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
       getPersistenceGateway: () => ({
         getCalendaredCasesForTrialSession: () => [MOCK_CASE],
       }),
+      getUseCases: () => ({
+        getJudgeForUserChambersInteractor: () => ({
+          role: 'judge',
+          section: 'judgeChambers',
+          userId: '123',
+        }),
+      }),
     };
 
     await expect(
@@ -42,6 +49,13 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
       },
       getPersistenceGateway: () => ({
         getCalendaredCasesForTrialSession: () => [MOCK_CASE],
+      }),
+      getUseCases: () => ({
+        getJudgeForUserChambersInteractor: () => ({
+          role: 'judge',
+          section: 'judgeChambers',
+          userId: '123',
+        }),
       }),
     };
 

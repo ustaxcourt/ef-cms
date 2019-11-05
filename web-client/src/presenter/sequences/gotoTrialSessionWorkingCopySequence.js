@@ -1,6 +1,7 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { extractNotesFromCalendaredCasesAction } from '../actions/TrialSession/extractNotesFromCalendaredCasesAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
+import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
@@ -14,6 +15,7 @@ import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultWorkingCopyValuesAction } from '../actions/TrialSessionWorkingCopy/setDefaultWorkingCopyValuesAction';
+import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
@@ -49,6 +51,8 @@ const gotoTrialSessionDetails = [
   setTrialSessionIdAction,
   getTrialSessionDetailsAction,
   setTrialSessionDetailsAction,
+  getJudgeForCurrentUserAction,
+  setJudgeUserAction,
   runPathForUserRoleAction,
   {
     ...takePathForRoles(

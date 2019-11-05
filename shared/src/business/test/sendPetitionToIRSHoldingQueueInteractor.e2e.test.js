@@ -102,7 +102,6 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           documentType: 'Petition',
           filedBy: 'Petr. Adele Carver',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         isInitializeCase: true,
         messages: [
@@ -285,7 +284,6 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           documentType: 'Petition',
           filedBy: 'Petr. Adele Carver',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         isInitializeCase: true,
         messages: [
@@ -333,7 +331,6 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           documentType: 'Petition',
           filedBy: 'Petr. Adele Carver',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         isInitializeCase: true,
         messages: [
