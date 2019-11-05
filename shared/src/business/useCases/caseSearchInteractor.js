@@ -117,12 +117,16 @@ exports.caseSearchInteractor = async ({
     });
   }
   if (yearFiledMin || yearFiledMax) {
+    const yearMin = yearFiledMin || '1900';
+    const yearMax =
+      yearFiledMax || applicationContext.getUtilities().formatNow('YYYY');
+
     commonQuery.push({
       range: {
         'receivedAt.S': {
           format: 'yyyy',
-          gte: `${yearFiledMin}||/y`,
-          lte: `${yearFiledMax}||/y`,
+          gte: `${yearMin}||/y`,
+          lte: `${yearMax}||/y`,
         },
       },
     });
