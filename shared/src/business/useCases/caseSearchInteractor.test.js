@@ -1,4 +1,7 @@
-const { caseSearchInteractor } = require('./caseSearchInteractor');
+const {
+  CASE_SEARCH_MIN_YEAR,
+  caseSearchInteractor,
+} = require('./caseSearchInteractor');
 import { formatNow } from '../utilities/DateHandler';
 
 describe('caseSearchInteractor', () => {
@@ -219,7 +222,7 @@ describe('caseSearchInteractor', () => {
     expect(searchSpy.mock.calls[0][0].body.query.bool.must[1].range).toEqual({
       'receivedAt.S': {
         format: 'yyyy',
-        gte: '1900||/y',
+        gte: `${CASE_SEARCH_MIN_YEAR}||/y`,
         lte: '2018||/y',
       },
     });
