@@ -21,11 +21,19 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const judgeUser = await applicationContext
+    .getUseCases()
+    .getJudgeForUserChambersInteractor({ applicationContext, user });
+
+  // any user with permission can fetch the calendared cases, but a judge
+  // userId is required for case notes.
+  const userId = judgeUser ? judgeUser.userId : user.userId;
+
   return await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,
       trialSessionId,
-      userId: user.userId,
+      userId,
     });
 };
