@@ -26,7 +26,7 @@ describe('remove case from trial session', () => {
   const getCaseByCaseIdStub = sinon.stub().returns({
     ...MOCK_CASE,
     trialLocation: 'Boise, Idaho',
-    trialJudge: 'someone',
+    associatedJudge: 'someone',
     trialSessionId: 'abcd',
   });
   const updateCaseStub = sinon.stub().returns();
@@ -121,9 +121,9 @@ describe('remove case from trial session', () => {
     ).toEqual(MOCK_CASE.caseId);
     expect(updateCaseStub.called).toEqual(true);
     expect(updateCaseStub.getCall(0).args[0].caseToUpdate).toMatchObject({
+      associatedJudge: Case.CHIEF_JUDGE,
       caseId: MOCK_CASE.caseId,
       status: Case.STATUS_TYPES.generalDocketReadyForTrial,
-      trialJudge: undefined,
       trialLocation: undefined,
       trialSessionId: undefined,
     });
@@ -181,9 +181,9 @@ describe('remove case from trial session', () => {
     ).toEqual(MOCK_CASE.caseId);
     expect(updateCaseStub.called).toEqual(true);
     expect(updateCaseStub.getCall(1).args[0].caseToUpdate).toMatchObject({
+      associatedJudge: Case.CHIEF_JUDGE,
       caseId: MOCK_CASE.caseId,
       status: Case.STATUS_TYPES.generalDocketReadyForTrial,
-      trialJudge: undefined,
       trialLocation: undefined,
       trialSessionId: undefined,
     });

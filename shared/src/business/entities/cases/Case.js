@@ -82,6 +82,8 @@ Case.ANSWER_DOCUMENT_CODES = [
   'AATT',
 ];
 
+Case.CHIEF_JUDGE = 'Chief Judge';
+
 Case.VALIDATION_ERROR_MESSAGES = {
   applicationForWaiverOfFilingFeeFile:
     'Upload an Application for Waiver of Filing Fee',
@@ -173,6 +175,7 @@ function Case(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
   this.blocked = rawCase.blocked;
   this.blockedDate = rawCase.blockedDate;
   this.blockedReason = rawCase.blockedReason;
@@ -200,7 +203,6 @@ function Case(rawCase, { applicationContext }) {
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
-  this.trialJudge = rawCase.trialJudge;
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
   this.trialTime = rawCase.trialTime;
@@ -277,6 +279,7 @@ function Case(rawCase, { applicationContext }) {
 joiValidationDecorator(
   Case,
   joi.object().keys({
+    associatedJudge: joi.string().required(),
     blocked: joi.boolean().optional(),
     blockedDate: joi.when('blocked', {
       is: true,
@@ -382,7 +385,6 @@ joiValidationDecorator(
       .iso()
       .optional()
       .allow(null),
-    trialJudge: joi.string().optional(),
     trialLocation: joi.string().optional(),
     trialSessionId: joi
       .string()
@@ -959,12 +961,12 @@ Case.prototype.generateTrialSortTags = function() {
  * @returns {Case} the updated case entity
  */
 Case.prototype.setAsCalendared = function(trialSessionEntity) {
+  if (trialSessionEntity.judge && trialSessionEntity.judge.name) {
+    this.associatedJudge = trialSessionEntity.judge.name;
+  }
   this.trialSessionId = trialSessionEntity.trialSessionId;
   this.trialDate = trialSessionEntity.startDate;
   this.trialTime = trialSessionEntity.startTime;
-  if (trialSessionEntity.judge && trialSessionEntity.judge.name) {
-    this.trialJudge = trialSessionEntity.judge.name;
-  }
   this.trialLocation = trialSessionEntity.trialLocation;
   if (trialSessionEntity.isCalendared === true) {
     this.status = Case.STATUS_TYPES.calendared;
@@ -1066,8 +1068,8 @@ Case.prototype.unsetAsHighPriority = function() {
  */
 Case.prototype.removeFromTrial = function() {
   this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
+  this.associatedJudge = Case.CHIEF_JUDGE;
   this.trialDate = undefined;
-  this.trialJudge = undefined;
   this.trialLocation = undefined;
   this.trialSessionId = undefined;
   this.trialTime = undefined;

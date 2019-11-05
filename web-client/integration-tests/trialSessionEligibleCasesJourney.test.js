@@ -1,3 +1,4 @@
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { setupTest } from './helpers';
 import { uploadPetition } from './helpers';
 import captureCreatedCase from './journey/captureCreatedCase';
@@ -310,7 +311,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('caseDetail.trialDate')).toEqual(
         '2025-12-12T05:00:00.000Z',
       );
-      expect(test.getState('caseDetail.trialJudge')).toEqual('Judge Cohen');
+      expect(test.getState('caseDetail.associatedJudge')).toEqual(
+        'Judge Cohen',
+      );
 
       //Case #2 - not assigned
       await test.runSequence('gotoCaseDetailSequence', {
@@ -319,7 +322,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
       expect(test.getState('caseDetail.trialLocation')).toBeUndefined();
       expect(test.getState('caseDetail.trialDate')).toBeUndefined();
-      expect(test.getState('caseDetail.trialJudge')).toBeUndefined();
+      expect(test.getState('caseDetail.associatedJudge')).toEqual(
+        Case.CHIEF_JUDGE,
+      );
 
       //Case #3 - not assigned
       await test.runSequence('gotoCaseDetailSequence', {

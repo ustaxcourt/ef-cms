@@ -1349,7 +1349,7 @@ describe('Case entity', () => {
 
       expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
       expect(myCase.trialDate).toBeTruthy();
-      expect(myCase.trialJudge).toBeTruthy();
+      expect(myCase.associatedJudge).toBeTruthy();
       expect(myCase.trialLocation).toBeTruthy();
       expect(myCase.trialSessionId).toBeTruthy();
       expect(myCase.trialTime).toBeTruthy();
@@ -1381,7 +1381,7 @@ describe('Case entity', () => {
 
       expect(myCase.status).toEqual(Case.STATUS_TYPES.new);
       expect(myCase.trialDate).toBeTruthy();
-      expect(myCase.trialJudge).toBeTruthy();
+      expect(myCase.associatedJudge).toBeTruthy();
       expect(myCase.trialLocation).toBeTruthy();
       expect(myCase.trialSessionId).toBeTruthy();
       expect(myCase.trialTime).toBeTruthy();
@@ -1678,7 +1678,7 @@ describe('Case entity', () => {
 
       expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
       expect(caseToUpdate.trialDate).toBeTruthy();
-      expect(caseToUpdate.trialJudge).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
       expect(caseToUpdate.trialLocation).toBeTruthy();
       expect(caseToUpdate.trialSessionId).toBeTruthy();
       expect(caseToUpdate.trialTime).toBeTruthy();
@@ -1689,7 +1689,7 @@ describe('Case entity', () => {
         Case.STATUS_TYPES.generalDocketReadyForTrial,
       );
       expect(caseToUpdate.trialDate).toBeFalsy();
-      expect(caseToUpdate.trialJudge).toBeFalsy();
+      expect(caseToUpdate.associatedJudge).toEqual(Case.CHIEF_JUDGE);
       expect(caseToUpdate.trialLocation).toBeFalsy();
       expect(caseToUpdate.trialSessionId).toBeFalsy();
       expect(caseToUpdate.trialTime).toBeFalsy();

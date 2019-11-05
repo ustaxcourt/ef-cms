@@ -130,7 +130,8 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
     "docketNumber": "105-19",
-    "status": "New"
+    "status": "New",
+    "associatedJudge": "Chief Judge"
   },
   {
     "sk": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
