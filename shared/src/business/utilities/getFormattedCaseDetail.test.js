@@ -266,9 +266,9 @@ describe('formatCase', () => {
     });
 
     expect(result).toMatchObject({
+      formattedAssociatedJudge: 'Not assigned',
       formattedTrialCity: 'Boise, Idaho',
       formattedTrialDate: '11/11/11 11:00 am',
-      formattedTrialJudge: 'Not assigned',
       showTrialCalendared: true,
     });
     expect(result).not.toHaveProperty('showBlockedFromTrial');
@@ -286,9 +286,9 @@ describe('formatCase', () => {
     });
 
     expect(result).toMatchObject({
+      formattedAssociatedJudge: 'Not assigned',
       formattedTrialCity: 'Boise, Idaho',
       formattedTrialDate: '11/11/11 11:00 am',
-      formattedTrialJudge: 'Not assigned',
       showScheduled: true,
     });
     expect(result).not.toHaveProperty('showTrialCalendared');

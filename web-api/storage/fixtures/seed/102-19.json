@@ -126,7 +126,8 @@
     "pk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "docketNumber": "102-19",
     "status": "New",
-    "hasVerifiedIrsNotice": true
+    "hasVerifiedIrsNotice": true,
+    "associatedJudge": "Chief Judge"
   },
   {
     "sk": "fa1179bd-04f5-4934-a716-964d8d7babc6",

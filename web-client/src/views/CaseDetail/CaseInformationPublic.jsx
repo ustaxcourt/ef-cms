@@ -32,7 +32,7 @@ const TrialInformation = ({ caseDetail }) => (
     <div className="grid-row">
       <div className="tablet:grid-col-6">
         <p className="label">Assigned judge</p>
-        <p>{caseDetail.formattedTrialJudge}</p>
+        <p>{caseDetail.formattedAssociatedJudge}</p>
       </div>
     </div>
   </React.Fragment>
