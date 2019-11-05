@@ -31,6 +31,8 @@ export default (test, message) => {
       }),
     );
 
+    test.workItemToCheck = workItem.workItemId;
+
     expect(updatedWorkItem.assigneeId).toEqual(assigneeId);
   });
 };

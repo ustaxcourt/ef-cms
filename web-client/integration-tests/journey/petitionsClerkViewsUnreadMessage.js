@@ -4,14 +4,14 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export default (test, message) => {
+export default test => {
   it('Views an unread message marking it read', async () => {
     const workQueue = await runCompute(formattedWorkQueue, {
       state: test.getState(),
     });
 
     const workItem = workQueue.find(
-      item => item.currentMessage.message == message,
+      item => item.workItemId === test.workItemToCheck,
     );
 
     await test.runSequence('gotoDocumentDetailSequence', {
