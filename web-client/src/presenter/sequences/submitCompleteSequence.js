@@ -3,6 +3,7 @@ import { clearCompleteFormAction } from '../actions/clearCompleteFormAction';
 import { completeWorkItemAction } from '../actions/completeWorkItemAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { unsetShowForwardInputs } from '../actions/unsetShowForwardInputs';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
@@ -13,7 +14,8 @@ export const submitCompleteSequence = [
   completeWorkItemAction,
   clearCompleteFormAction,
   unsetShowForwardInputs,
-  navigateToMessagesAction,
   setAlertSuccessAction,
+  setSaveAlertsForNavigationAction,
   unsetWaitingForResponseAction,
+  navigateToMessagesAction,
 ];
