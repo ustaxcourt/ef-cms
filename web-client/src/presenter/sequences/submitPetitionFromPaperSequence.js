@@ -41,7 +41,7 @@ export const submitPetitionFromPaperSequence = [
               setCaseAction,
               setPetitionIdAction,
               closeFileUploadStatusModalAction,
-              ...gotoDocumentDetailSequence,
+              gotoDocumentDetailSequence,
             ],
           },
         ],
