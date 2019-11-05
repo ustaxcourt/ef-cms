@@ -38,7 +38,7 @@ describe('Create a work item ', () => {
     getModal().should('not.exist');
   });
 
-  it('creates another work item card in the in progress of the document', () => {
+  it('creates another work item card in the in progress tab of the document', () => {
     navigateToDocumentDetail(
       'petitionsclerk',
       '104-19',
