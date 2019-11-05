@@ -39,6 +39,13 @@ describe('Create a work item ', () => {
   });
 
   it('creates another work item card in the in progress of the document', () => {
+    navigateToDocumentDetail(
+      'petitionsclerk',
+      '104-19',
+      'c63be3f2-2240-451e-b6bd-8206d52a070b',
+    );
+    getMessagesTab().click();
+    getInProgressTab().click();
     getCardContaining('yolo').should('exist');
   });
 
