@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store used for setting the state.pdfPreviewUrl
  */
-export const gotoPrintTrialCalendarPreview = ({
+export const gotoPrintTrialCalendarPreviewAction = ({
   get,
   props,
   router,
