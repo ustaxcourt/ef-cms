@@ -109,7 +109,7 @@ describe('getJudgeAssociationForCaseStatus', () => {
 
   xit('should return [Docket Assigned] for a case that has a status of Assigned - Motion where a motion is assigned a judge for disposition', () => {});
 
-  xit('should return the last associated Judge before closing when a case is Closed', () => {
+  it('should return the last associated Judge before closing when a case is Closed', () => {
     const caseDetail = {
       ...baseCase,
       status: Case.STATUS_TYPES.closed,
