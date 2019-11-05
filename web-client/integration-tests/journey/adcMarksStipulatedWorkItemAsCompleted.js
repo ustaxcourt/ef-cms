@@ -1,8 +1,8 @@
-import { extractedDocument as extractedDocumentComputed } from '../../src/presenter/computeds/extractDocument';
+import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const extractedDocument = withAppContextDecorator(extractedDocumentComputed);
+const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 export default test => {
   return it('ADC marks the work item as completed', async () => {
@@ -14,11 +14,11 @@ export default test => {
     await test.runSequence('submitCompleteSequence', {
       workItemId: test.stipulatedDecisionWorkItemId,
     });
-    const document = runCompute(extractedDocument, {
+    const workItems = runCompute(formattedWorkQueue, {
       state: test.getState(),
     });
 
-    const workItem = document.workItems.find(
+    const workItem = workItems.find(
       item => item.workItemId === test.stipulatedDecisionWorkItemId,
     );
     expect(workItem).toBeUndefined();
