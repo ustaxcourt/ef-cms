@@ -1,7 +1,5 @@
-const {
-  CASE_SEARCH_MIN_YEAR,
-  caseSearchInteractor,
-} = require('./caseSearchInteractor');
+const { caseSearchInteractor } = require('./caseSearchInteractor');
+import { CaseSearch } from '../entities/cases/CaseSearch';
 import { formatNow } from '../utilities/DateHandler';
 
 describe('caseSearchInteractor', () => {
@@ -9,6 +7,9 @@ describe('caseSearchInteractor', () => {
 
   const applicationContext = {
     environment: { stage: 'local' },
+    getEntityConstructors: () => ({
+      CaseSearch,
+    }),
     getSearchClient: () => ({
       search: searchSpy,
     }),
@@ -222,7 +223,7 @@ describe('caseSearchInteractor', () => {
     expect(searchSpy.mock.calls[0][0].body.query.bool.must[1].range).toEqual({
       'receivedAt.S': {
         format: 'yyyy',
-        gte: `${CASE_SEARCH_MIN_YEAR}||/y`,
+        gte: `${CaseSearch.CASE_SEARCH_MIN_YEAR}||/y`,
         lte: '2018||/y',
       },
     });

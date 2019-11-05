@@ -54,6 +54,9 @@ const {
   CaseInternal,
 } = require('../../shared/src/business/entities/cases/CaseInternal');
 const {
+  CaseSearch,
+} = require('../../shared/src/business/entities/cases/CaseSearch');
+const {
   caseSearchInteractor,
 } = require('../../shared/src/business/useCases/caseSearchInteractor');
 const {
@@ -691,6 +694,7 @@ module.exports = (appContextUser = {}) => {
       Case,
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
+      CaseSearch,
     }),
     getHandlebars: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
