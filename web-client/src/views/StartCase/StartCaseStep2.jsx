@@ -94,7 +94,7 @@ export const StartCaseStep2 = connect(
         <div className="blue-container margin-bottom-5">
           <div className="usa-form-group">
             <FormGroup errorText={validationErrors.hasIrsNotice}>
-              <fieldset id="irs-notice-radios">
+              <fieldset className="usa-fieldset" id="irs-notice-radios">
                 <legend className="usa-legend" id="notice-legend">
                   {startCaseHelper.noticeLegend}
                 </legend>
