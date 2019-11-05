@@ -1,3 +1,4 @@
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
@@ -5,6 +6,7 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
+import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
@@ -27,11 +29,13 @@ export const createWorkItemSequence = [
       stopShowValidationAction,
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
+      clearAlertsAction,
       clearFormAction,
       clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
       clearModalStateAction,
+      refreshCaseAction,
       unsetWaitingForResponseAction,
       navigateToMessagesAction,
     ],

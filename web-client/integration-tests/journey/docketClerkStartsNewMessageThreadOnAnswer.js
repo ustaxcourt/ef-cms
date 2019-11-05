@@ -33,7 +33,33 @@ export default test => {
       key: 'message',
       value: 'this is a new thread test message',
     });
+
     await test.runSequence('createWorkItemSequence');
+
+    const documents = test.getState('caseDetail.documents');
+    const answer = documents.find(
+      document => document.documentId === test.answerDocumentId,
+    );
+    const workItem = answer.workItems.find(
+      workItem => workItem.sentBy === 'Test Docketclerk',
+    );
+
+    test.answerWorkItemId = workItem.workItemId;
+    expect(workItem).toMatchObject({
+      assigneeName: 'Test Docketclerk1',
+      isInitializeCase: false,
+      messages: [
+        {
+          from: 'Test Docketclerk',
+          fromUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+          message: 'this is a new thread test message',
+          to: 'Test Docketclerk1',
+          toUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      section: 'docket',
+      sentBy: 'Test Docketclerk',
+    });
 
     expect(test.getState('form')).toEqual({});
 
