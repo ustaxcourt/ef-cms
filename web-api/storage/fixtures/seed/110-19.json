@@ -139,7 +139,8 @@
       }
     ],
     "docketNumber": "110-19",
-    "status": "New"
+    "status": "New",
+    "associatedJudge": "Chief Judge"
   },
   {
     "sk": "2fb2da8d-4328-4a20-a5d7-a76637e1dc01",

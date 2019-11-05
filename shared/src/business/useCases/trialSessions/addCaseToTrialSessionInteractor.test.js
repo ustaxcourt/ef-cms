@@ -1,4 +1,5 @@
 import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
+const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 
@@ -127,9 +128,9 @@ describe('addCaseToTrialSessionInteractor', () => {
     });
 
     expect(latestCase).toMatchObject({
+      associatedJudge: Case.CHIEF_JUDGE,
       status: 'Calendared',
       trialDate: '2025-12-01T00:00:00.000Z',
-      trialJudge: undefined,
       trialLocation: 'Birmingham, AL',
       trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       trialTime: '10:00',
