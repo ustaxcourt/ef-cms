@@ -17,6 +17,15 @@ resource "aws_cognito_user_pool" "pool" {
     prevent_destroy = false
   }
 
+  lambda_config {
+    post_confirmation = "${aws_lambda_function.cognito_post_confirmation_lambda.arn}"
+  }
+
+  admin_create_user_config {
+    allow_admin_create_user_only = false
+    unused_account_validity_days = 0
+  }
+
   schema {
     attribute_data_type = "String"
     name                = "email"
