@@ -2,9 +2,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
 const { Case } = require('../../entities/cases/Case');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * removeCaseFromTrialInteractor
@@ -38,7 +38,11 @@ exports.removeCaseFromTrialInteractor = async ({
     applicationContext,
   });
 
-  trialSessionEntity.removeCaseFromCalendar({ caseId, disposition });
+  if (trialSessionEntity.isCalendared) {
+    trialSessionEntity.removeCaseFromCalendar({ caseId, disposition });
+  } else {
+    trialSessionEntity.deleteCaseFromCalendar({ caseId });
+  }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,

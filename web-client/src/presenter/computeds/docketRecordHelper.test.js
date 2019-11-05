@@ -10,9 +10,41 @@ const getBaseState = user => {
 };
 
 describe('docket record helper', () => {
-  it('should show direct download link and not document detail link if the user does not have UPDATE_CASE permission', () => {
+  it('should show direct download link and not document detail link if the user is a petitioner', () => {
     const user = {
       role: User.ROLES.petitioner,
+      userId: '789',
+    };
+    const result = runCompute(docketRecordHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        form: {},
+      },
+    });
+    expect(result.showDirectDownloadLink).toEqual(true);
+    expect(result.showDocumentDetailLink).toEqual(false);
+  });
+
+  it('should show direct download link and not document detail link if the user is a practitioner', () => {
+    const user = {
+      role: User.ROLES.practitioner,
+      userId: '789',
+    };
+    const result = runCompute(docketRecordHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        form: {},
+      },
+    });
+    expect(result.showDirectDownloadLink).toEqual(true);
+    expect(result.showDocumentDetailLink).toEqual(false);
+  });
+
+  it('should show direct download link and not document detail link if the user is a respondent', () => {
+    const user = {
+      role: User.ROLES.respondent,
       userId: '789',
     };
     const result = runCompute(docketRecordHelper, {

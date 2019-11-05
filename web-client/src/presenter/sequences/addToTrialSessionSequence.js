@@ -16,11 +16,11 @@ export const addToTrialSessionSequence = [
     error: [setValidationErrorsAction],
     success: [
       setWaitingForResponseAction,
+      clearModalAction,
       addToTrialSessionAction,
+      clearModalStateAction,
       unsetWaitingForResponseAction,
       setAlertSuccessAction,
-      clearModalAction,
-      clearModalStateAction,
       setCaseAction,
     ],
   },

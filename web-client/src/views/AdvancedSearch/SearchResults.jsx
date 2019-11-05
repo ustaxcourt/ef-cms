@@ -33,7 +33,7 @@ export const SearchResults = connect(
               <tbody>
                 {advancedSearchHelper.formattedSearchResults.map(
                   (result, idx) => (
-                    <tr key={idx}>
+                    <tr className="search-result" key={idx}>
                       <td className="center-column">{idx + 1}</td>
                       <td>
                         {result.contactPrimaryName}

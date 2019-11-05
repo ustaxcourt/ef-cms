@@ -5,6 +5,7 @@ import { isChambersPathAction } from '../actions/ForwardForm/isChambersPathActio
 import { props, state } from 'cerebral';
 import { runKeyPathAction } from '../actions/runKeyPathAction';
 import { set } from 'cerebral/factories';
+import { setFormValueAction } from '../actions/setFormValueAction';
 
 export const updateMessageValueSequence = [
   runKeyPathAction,
@@ -20,7 +21,7 @@ export const updateMessageValueSequence = [
         ],
         no: [
           set(state.modal.showChambersSelect, false),
-          set(state.form[props.key], props.value),
+          setFormValueAction,
           ...getUsersInSectionSequence,
         ],
       },
@@ -29,6 +30,6 @@ export const updateMessageValueSequence = [
       set(state.form.section, props.value),
       ...getUsersInSectionSequence,
     ],
-    default: [set(state.form[props.key], props.value)],
+    default: [setFormValueAction],
   },
 ];

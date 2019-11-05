@@ -3,14 +3,13 @@ import { getCachedScannerSourceAction } from '../actions/getCachedScannerSourceA
 import { getScannerSourcesAction } from '../actions/getScannerSourcesAction';
 import { rescanBatchAction } from '../actions/rescanBatchAction';
 
-import { set } from 'cerebral/factories';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { state } from 'cerebral';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { waitForSpinnerAction } from '../actions/waitForSpinnerAction';
 
 import { handleInvalidScannerSourceAction } from '../actions/handleInvalidScannerSourceAction';
 import { handleScanErrorAction } from '../actions/handleScanErrorAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { validateScannerSourceAction } from '../actions/validateScannerSourceAction';
 
 export const rescanBatchSequence = [
@@ -34,7 +33,7 @@ export const rescanBatchSequence = [
     ],
     sourceNotInCache: [
       getScannerSourcesAction,
-      set(state.showModal, 'SelectScannerSourceModal'),
+      setShowModalFactoryAction('SelectScannerSourceModal'),
     ],
   },
   unsetWaitingForResponseAction,

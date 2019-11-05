@@ -1,12 +1,12 @@
+const client = require('../../dynamodbClientService');
 const {
   createCaseCatalogRecord,
 } = require('../../dynamo/cases/createCaseCatalogRecord');
 const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
-const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
-const client = require('../../dynamodbClientService');
 const { stripInternalKeys } = require('../../dynamo/helpers/stripInternalKeys');
+const { stripWorkItems } = require('../../dynamo/helpers/stripWorkItems');
 
 /**
  * createCase

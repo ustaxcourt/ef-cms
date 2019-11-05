@@ -20,6 +20,9 @@ import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
+const {
+  getJudgeForUserChambersInteractor,
+} = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
 import { InitialWorkItemMessage } from '../../shared/src/business/entities/InitialWorkItemMessage';
 import {
   MAX_FILE_SIZE_BYTES,
@@ -134,6 +137,7 @@ import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSes
 import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { runBatchProcessInteractor } from '../../shared/src/proxies/runBatchProcessProxy';
+import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
 import { saveIntermediateDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/saveIntermediateDocketEntryProxy';
 import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { serveSignedStipDecisionInteractor } from '../../shared/src/proxies/serveSignedStipDecisionProxy';
@@ -268,6 +272,7 @@ const allUseCases = {
   getInboxMessagesForUserInteractor,
   getInternalUsersInteractor,
   getItemInteractor,
+  getJudgeForUserChambersInteractor,
   getNotificationsInteractor,
   getPractitionersBySearchKeyInteractor,
   getProcedureTypesInteractor,
@@ -287,6 +292,7 @@ const allUseCases = {
   removeCaseFromTrialInteractor,
   removeItemInteractor,
   runBatchProcessInteractor,
+  runTrialSessionPlanningReportInteractor,
   saveIntermediateDocketEntryInteractor,
   sendPetitionToIRSHoldingQueueInteractor,
   serveSignedStipDecisionInteractor,

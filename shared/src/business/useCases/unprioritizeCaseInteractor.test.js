@@ -1,7 +1,7 @@
-const { unprioritizeCaseInteractor } = require('./unprioritizeCaseInteractor');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
 const { Case } = require('../entities/cases/Case');
+const { MOCK_CASE } = require('../../test/mockCase');
+const { unprioritizeCaseInteractor } = require('./unprioritizeCaseInteractor');
+const { User } = require('../entities/User');
 
 describe('unprioritizeCaseInteractor', () => {
   let applicationContext;

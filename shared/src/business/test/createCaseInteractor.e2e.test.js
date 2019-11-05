@@ -5,9 +5,9 @@ const {
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -95,7 +95,6 @@ describe('createCase integration test', () => {
               document: {
                 documentType: 'Petition',
                 filedBy: 'Petr. Rick Petitioner',
-                workItems: [],
               },
               isInitializeCase: true,
               messages: [
@@ -157,7 +156,6 @@ describe('createCase integration test', () => {
           eventCode: 'P',
           filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         isInitializeCase: true,
         messages: [

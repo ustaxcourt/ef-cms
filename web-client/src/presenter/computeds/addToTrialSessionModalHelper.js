@@ -3,7 +3,11 @@ import { state } from 'cerebral';
 
 export const addToTrialSessionModalHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
-  const { showAllLocations, trialSessions } = get(state.modal);
+  const { showAllLocations, trialSessionId, trialSessions } = get(state.modal);
+
+  const selectedTrialSession =
+    trialSessions &&
+    trialSessions.find(session => session.trialSessionId === trialSessionId);
 
   let trialSessionsFormatted = trialSessions;
   let trialSessionsFormattedByState = null;
@@ -74,6 +78,9 @@ export const addToTrialSessionModalHelper = (get, applicationContext) => {
   }
 
   return {
+    showSessionNotSetAlert: !!(
+      selectedTrialSession && selectedTrialSession.isCalendared === false
+    ),
     trialSessionStatesSorted,
     trialSessionsFormatted,
     trialSessionsFormattedByState,

@@ -4,12 +4,12 @@ const {
 const {
   associateRespondentToCase,
 } = require('../../useCaseHelper/caseAssociation/associateRespondentToCase');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 /**
  * submitCaseAssociationRequestInteractor

@@ -47,7 +47,7 @@ exports.handle = async (event, fun) => {
 /**
  * @param {Function} event the api gateway event
  * @param {Function} fun an async function which returns an object containing a url property to redirect the user to
- * @param {number} statusCode the statusCode to return in the api gateway response object (deaults to 302)
+ * @param {number} statusCode the statusCode to return in the api gateway response object (defaults to 302)
  * @returns {object} the api gateway response object with the Location set to the url returned from fun
  */
 exports.redirect = async (event, fun, statusCode = 302) => {
@@ -97,9 +97,9 @@ exports.sendOk = (response, statusCode = '200') => {
 };
 
 /**
- * Extracts and validates the auth header from the api-gateway event's header or query string.
+ * Extracts and validates the authorization header from the api-gateway event's header or query string.
  *
- * This assumes the auth header is formatted with either:
+ * This assumes the authorization header is formatted with either:
  *  - Authorization: "Bearer SOME_TOKEN"
  *  - authorization: "Bearer SOME_TOKEN"
  *  - http://example.com?token=SOME_TOKEN
@@ -123,10 +123,10 @@ exports.getAuthHeader = event => {
     if (!usernameTokenArray || !usernameTokenArray[1]) {
       throw new UnauthorizedError(
         'Error: Authorization Bearer token is required',
-      ); //temp until actual auth is added
+      ); //temp until actual authorization is added
     }
   } else {
-    throw new UnauthorizedError('Error: Authorization is required'); //temp until actual auth is added
+    throw new UnauthorizedError('Error: Authorization is required'); //temp until actual authorization is added
   }
 
   return usernameTokenArray[1];

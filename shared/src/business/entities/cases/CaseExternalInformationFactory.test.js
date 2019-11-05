@@ -1,10 +1,10 @@
 const {
   CaseExternalInformationFactory,
 } = require('./CaseExternalInformationFactory');
-const { ContactFactory } = require('../contacts/ContactFactory');
 const {
   MAX_FILE_SIZE_BYTES,
 } = require('../../../persistence/s3/getUploadPolicy');
+const { ContactFactory } = require('../contacts/ContactFactory');
 
 const caseExternalErrorMessages =
   CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES;

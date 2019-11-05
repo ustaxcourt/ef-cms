@@ -262,8 +262,12 @@ const formatCase = (applicationContext, caseDetail) => {
   result.formattedPreferredTrialCity =
     result.preferredTrialCity || 'No location selected';
 
-  if (result.status === Case.STATUS_TYPES.calendared) {
-    result.showTrialCalendared = true;
+  if (result.trialSessionId) {
+    if (result.status === Case.STATUS_TYPES.calendared) {
+      result.showTrialCalendared = true;
+    } else {
+      result.showScheduled = true;
+    }
     result.formattedTrialCity = result.trialLocation || 'Not assigned';
     result.formattedTrialJudge = result.trialJudge || 'Not assigned';
     if (result.trialDate) {

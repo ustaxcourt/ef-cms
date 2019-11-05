@@ -120,6 +120,7 @@ provider:
       Action:
         - cognito-idp:AdminCreateUser
         - cognito-idp:AdminGetUser
+        - cognito-idp:AdminUpdateUserAttributes
       Resource:
         - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
     - Effect: 'Allow'
@@ -346,7 +347,6 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateUserContactInformation:
-    runtime: nodejs8.10
     handler: web-api/src/usersHandlers.updateUserContactInformationLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
