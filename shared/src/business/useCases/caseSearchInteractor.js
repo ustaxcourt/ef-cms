@@ -1,9 +1,6 @@
 const AWS = require('aws-sdk');
 const { get } = require('lodash');
 
-const caseMinYear = 1986;
-exports.CASE_SEARCH_MIN_YEAR = caseMinYear;
-
 /**
  * caseSearchInteractor
  *
@@ -24,6 +21,7 @@ exports.caseSearchInteractor = async ({
   yearFiledMax,
   yearFiledMin,
 }) => {
+  const { CaseSearch } = applicationContext.getEntityConstructors();
   const exactMatchesQuery = [];
   const nonExactMatchesQuery = [];
   const commonQuery = [];
@@ -120,7 +118,7 @@ exports.caseSearchInteractor = async ({
     });
   }
   if (yearFiledMin || yearFiledMax) {
-    const yearMin = yearFiledMin || caseMinYear;
+    const yearMin = yearFiledMin || CaseSearch.CASE_SEARCH_MIN_YEAR;
     const yearMax =
       yearFiledMax || applicationContext.getUtilities().formatNow('YYYY');
 
