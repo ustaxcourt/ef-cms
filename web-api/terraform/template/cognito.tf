@@ -6,7 +6,7 @@ resource "aws_cognito_user_pool" "pool" {
   username_attributes = ["email"]
 
   verification_message_template {
-    default_email_option  = "CONFIRM_WITH_LINK"
+    default_email_option = "CONFIRM_WITH_LINK"
     email_message_by_link = "Please click the link below to verify your email address. {##Verify Email##} "
     email_subject_by_link = "U.S. Tax Court account verification"
   }
