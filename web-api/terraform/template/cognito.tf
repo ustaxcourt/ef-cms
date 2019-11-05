@@ -11,6 +11,8 @@ resource "aws_cognito_user_pool" "pool" {
     email_subject_by_link = "U.S. Tax Court account verification"
   }
 
+  sms_authentication_message = "{####}"
+
   lifecycle {
     prevent_destroy = false
   }
