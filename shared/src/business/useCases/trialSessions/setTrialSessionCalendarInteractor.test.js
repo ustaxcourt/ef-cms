@@ -63,6 +63,13 @@ describe('setTrialSessionCalendarInteractor', () => {
       },
       getPersistenceGateway: () => ({
         deleteCaseTrialSortMappingRecords: () => {},
+        getCalendaredCasesForTrialSession: () => [
+          {
+            ...MOCK_CASE,
+            caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+            docketNumber: '102-19',
+          },
+        ],
         getEligibleCasesForTrialSession: () => [MOCK_CASE],
         getTrialSessionById: () => MOCK_TRIAL,
         updateCase: () => {},

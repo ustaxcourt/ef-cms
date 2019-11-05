@@ -11,13 +11,14 @@ const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
 );
 
-const baseState = {
-  constants: { USER_ROLES: User.ROLES },
-};
-
 const testJudgeUser = {
   role: User.ROLES.judge,
   userId: '1',
+};
+
+const baseState = {
+  constants: { USER_ROLES: User.ROLES },
+  judgeUser: testJudgeUser,
 };
 
 describe('formattedTrialSessions', () => {
@@ -258,10 +259,11 @@ describe('formattedTrialSessions', () => {
     ]);
   });
 
-  it('sets userIsAssignedToSession false for all sessions if the logged in user is not a judge role', () => {
+  it('sets userIsAssignedToSession false for all sessions if there is no associated judgeUser', () => {
     const result = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
+        judgeUser: undefined,
         trialSessions: TRIAL_SESSIONS_LIST,
         user: { role: User.ROLES.petitionsClerk, userId: '1' },
       },

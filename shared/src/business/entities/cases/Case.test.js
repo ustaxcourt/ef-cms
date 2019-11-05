@@ -2,13 +2,13 @@ const moment = require('moment');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
-const { TrialSession } = require('../trialSessions/TrialSession');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
-const { WorkItem } = require('../WorkItem');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
+const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
   let applicationContext;
@@ -599,7 +599,7 @@ describe('Case entity', () => {
         applicationContext,
       });
       caseRecord.sendToIRSHoldingQueue();
-      expect(caseRecord.status).toEqual('Batched for IRS');
+      expect(caseRecord.status).toEqual(Case.STATUS_TYPES.batchedForIRS);
     });
   });
 
@@ -1058,7 +1058,7 @@ describe('Case entity', () => {
           assigneeId: 'bob',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: 'new',
+          caseStatus: Case.STATUS_TYPES.new,
           caseTitle: 'testing',
           docketNumber: '101-18',
           document: {},
@@ -1075,7 +1075,7 @@ describe('Case entity', () => {
           assigneeId: 'bob',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: 'new',
+          caseStatus: Case.STATUS_TYPES.new,
           caseTitle: 'testing',
           docketNumber: '101-18',
           document: {},
@@ -1308,11 +1308,12 @@ describe('Case entity', () => {
   });
 
   describe('setAsCalendared', () => {
-    it('should set case as calendared with only judge and trialSessionId', () => {
+    it('should set case as calendared with only judge and trialSessionId if the trial session is calendared', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
       myCase.setAsCalendared({
+        isCalendared: true,
         judge: {
           name: 'Judge Judy',
         },
@@ -1322,7 +1323,7 @@ describe('Case entity', () => {
       expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
     });
 
-    it('should set case as calendared with all trial session fields', () => {
+    it('should set case as calendared with all trial session fields if the trial session is calendared', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -1333,6 +1334,7 @@ describe('Case entity', () => {
       );
       const trialSession = new TrialSession(
         {
+          isCalendared: true,
           judge: { name: 'Judge Buch' },
           maxCases: 100,
           sessionType: 'Regular',
@@ -1346,6 +1348,38 @@ describe('Case entity', () => {
       myCase.setAsCalendared(trialSession);
 
       expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(myCase.trialDate).toBeTruthy();
+      expect(myCase.trialJudge).toBeTruthy();
+      expect(myCase.trialLocation).toBeTruthy();
+      expect(myCase.trialSessionId).toBeTruthy();
+      expect(myCase.trialTime).toBeTruthy();
+    });
+
+    it('should set all trial session fields but not set the case as calendared if the trial session is not calendared', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: false,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, AL',
+        },
+        { applicationContext },
+      );
+      myCase.setAsCalendared(trialSession);
+
+      expect(myCase.status).toEqual(Case.STATUS_TYPES.new);
       expect(myCase.trialDate).toBeTruthy();
       expect(myCase.trialJudge).toBeTruthy();
       expect(myCase.trialLocation).toBeTruthy();
@@ -1629,6 +1663,7 @@ describe('Case entity', () => {
       );
       const trialSession = new TrialSession(
         {
+          isCalendared: true,
           judge: { name: 'Judge Buch' },
           maxCases: 100,
           sessionType: 'Regular',

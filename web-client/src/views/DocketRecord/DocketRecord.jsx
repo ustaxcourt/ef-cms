@@ -51,7 +51,6 @@ export const DocketRecord = connect(
               <th aria-hidden="true" className="icon-column" />
               <th>Filings and proceedings</th>
               <th>Filed by</th>
-              <th>Status</th>
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
@@ -109,9 +108,6 @@ export const DocketRecord = connect(
                     </td>
                     <td className="hide-on-mobile">
                       {document && document.filedBy}
-                    </td>
-                    <td className="hide-on-mobile">
-                      {document && document.processingStatus}
                     </td>
                     <td className="hide-on-mobile">{record.action}</td>
                     <td>

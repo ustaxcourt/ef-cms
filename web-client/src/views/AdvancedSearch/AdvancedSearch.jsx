@@ -196,7 +196,11 @@ export const AdvancedSearch = connect(
                     </div>
 
                     <div className="tablet:grid-col-5">
-                      <Button className="advanced-search__button" type="submit">
+                      <Button
+                        className="advanced-search__button"
+                        id="advanced-search-button"
+                        type="submit"
+                      >
                         Search
                       </Button>
                     </div>

@@ -1,13 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 const sinon = require('sinon');
-const { addCoversheetInteractor } = require('./addCoversheetInteractor.js');
 const {
   createISODateString,
   formatDateString,
   formatNow,
   prepareDateFromString,
 } = require('../utilities/DateHandler');
+const { addCoversheetInteractor } = require('./addCoversheetInteractor.js');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { PDFDocument } = require('pdf-lib');
 

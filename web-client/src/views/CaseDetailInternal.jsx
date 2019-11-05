@@ -120,6 +120,7 @@ export const CaseDetailInternal = connect(
               {formattedCaseDetail.contactPrimary && (
                 <a
                   aria-label="View PDF"
+                  className="usa-button usa-button--unstyled margin-right-1"
                   href={`${baseUrl}/documents/${
                     formattedCaseDetail.docketNumber
                   }_${formattedCaseDetail.contactPrimary.name.replace(

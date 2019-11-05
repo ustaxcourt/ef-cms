@@ -3,15 +3,15 @@ const {
   ExternalDocumentFactory,
 } = require('../externalDocument/ExternalDocumentFactory');
 const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('../externalDocument/ExternalDocumentInformationFactory');
-const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
+const {
+  VALIDATION_ERROR_MESSAGES,
+} = require('../externalDocument/ExternalDocumentInformationFactory');
 const { includes, omit } = require('lodash');
 
 DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
