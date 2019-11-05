@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearCompleteFormAction } from '../actions/clearCompleteFormAction';
 import { completeWorkItemAction } from '../actions/completeWorkItemAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
+import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
@@ -12,6 +13,7 @@ export const submitCompleteSequence = [
   setWaitingForResponseAction,
   clearAlertsAction,
   completeWorkItemAction,
+  refreshCaseAction,
   clearCompleteFormAction,
   unsetShowForwardInputs,
   setAlertSuccessAction,
