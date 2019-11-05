@@ -218,4 +218,34 @@ describe('getCaseAssociation', () => {
       pendingAssociation: false,
     });
   });
+
+  it('should return false for isAssociated and pendingAssociation if the user is not an external user', async () => {
+    let verifyPendingCaseForUserStub = sinon.stub().returns(false);
+    presenter.providers.applicationContext = {
+      getUseCases: () => ({
+        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
+      }),
+    };
+
+    const results = await runAction(getCaseAssociationAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        ...baseState,
+        caseDetail: {
+          practitioners: [{ userId: '123' }],
+        },
+        user: {
+          role: User.ROLES.petitionsClerk,
+          userId: '123',
+        },
+      },
+    });
+    expect(results.output).toEqual({
+      isAssociated: false,
+      pendingAssociation: false,
+    });
+  });
 });
