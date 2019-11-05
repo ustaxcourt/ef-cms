@@ -95,7 +95,6 @@ describe('createCase integration test', () => {
               document: {
                 documentType: 'Petition',
                 filedBy: 'Petr. Rick Petitioner',
-                workItems: [],
               },
               isInitializeCase: true,
               messages: [
@@ -157,7 +156,6 @@ describe('createCase integration test', () => {
           eventCode: 'P',
           filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         isInitializeCase: true,
         messages: [

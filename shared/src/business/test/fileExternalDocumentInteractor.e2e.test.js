@@ -182,7 +182,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 documentType: 'Petition',
                 filedBy: 'Petr. Test Petitioner',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                workItems: [],
               },
               isInitializeCase: true,
               messages: [
@@ -246,7 +245,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 scenario: 'Nonstandard H',
                 supportingDocument: 'Brief in Support',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                workItems: [],
               },
               messages: [
                 {
@@ -288,7 +286,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 previousDocument: 'Amended Answer',
                 scenario: 'Nonstandard A',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                workItems: [],
               },
               messages: [
                 {
@@ -331,7 +328,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 previousDocument: 'Petition',
                 scenario: 'Nonstandard A',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                workItems: [],
               },
               messages: [
                 {
@@ -374,7 +370,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
                 previousDocument: 'Amended Answer',
                 scenario: 'Nonstandard A',
                 userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-                workItems: [],
               },
               messages: [
                 {
@@ -449,7 +444,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           scenario: 'Nonstandard H',
           supportingDocument: 'Brief in Support',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         messages: [
           {
@@ -478,7 +472,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           previousDocument: 'Amended Answer',
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         messages: [
           {
@@ -508,7 +501,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           previousDocument: 'Petition',
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         messages: [
           {
@@ -538,7 +530,6 @@ describe('fileExternalDocumentInteractor integration test', () => {
           previousDocument: 'Amended Answer',
           scenario: 'Nonstandard A',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         messages: [
           {
