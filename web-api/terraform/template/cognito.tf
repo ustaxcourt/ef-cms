@@ -1,5 +1,5 @@
 resource "aws_cognito_user_pool" "pool" {
-  name           = "efcms-${var.environment}"
+  name = "efcms-${var.environment}"
 
   auto_verified_attributes = ["email"]
 
@@ -13,6 +13,15 @@ resource "aws_cognito_user_pool" "pool" {
 
   lifecycle {
     prevent_destroy = false
+  }
+
+  lambda_config {
+    post_confirmation = "${aws_lambda_function.cognito_post_confirmation_lambda.arn}"
+  }
+
+  admin_create_user_config {
+    allow_admin_create_user_only = false
+    unused_account_validity_days = 0
   }
 
   schema {
@@ -65,17 +74,17 @@ resource "aws_cognito_user_pool_client" "client" {
 
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH"]
 
-  generate_secret     = false
-  refresh_token_validity = 30
+  generate_secret                      = false
+  refresh_token_validity               = 30
   allowed_oauth_flows_user_pool_client = true
 
-  callback_urls          = [
+  callback_urls = [
     "http://localhost:1234/log-in",
-    "https://ui-${var.environment}.${var.dns_domain}/log-in"
+    "https://ui-${var.environment}.${var.dns_domain}/log-in",
   ]
 
-  allowed_oauth_flows    = ["code", "implicit"]
-  allowed_oauth_scopes   = ["email", "openid", "profile", "phone", "aws.cognito.signin.user.admin"]
+  allowed_oauth_flows          = ["code", "implicit"]
+  allowed_oauth_scopes         = ["email", "openid", "profile", "phone", "aws.cognito.signin.user.admin"]
   supported_identity_providers = ["COGNITO"]
 
   user_pool_id = "${aws_cognito_user_pool.pool.id}"
