@@ -48,7 +48,7 @@ export const CaseDetailHeader = connect(
                 {caseDetailHelper.hidePublicCaseInformation &&
                   formattedCaseDetail.associatedJudge && (
                     <span
-                      aria-label="associated judge"
+                      aria-label={`associated judge: ${formattedCaseDetail.associatedJudge}`}
                       className="margin-left-1 usa-tag"
                     >
                       <span aria-hidden="true">
