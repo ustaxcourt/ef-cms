@@ -8,7 +8,11 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.router the riot.router object that is used for changing the route
  */
-export const gotoPrintDocketRecordPreview = async ({ get, props, router }) => {
+export const gotoPrintDocketRecordPreviewAction = async ({
+  get,
+  props,
+  router,
+}) => {
   const { openNewTab = false, openNewView = true } = props;
 
   if (openNewView) {
