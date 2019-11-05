@@ -46,6 +46,23 @@ export const CaseDetailHeader = connect(
                 )}
 
                 {caseDetailHelper.hidePublicCaseInformation &&
+                  formattedCaseDetail.associatedJudge && (
+                    <span
+                      aria-label="associated judge"
+                      className="margin-left-1 usa-tag"
+                    >
+                      <span aria-hidden="true">
+                        <FontAwesomeIcon
+                          className="margin-right-05"
+                          icon="gavel"
+                          size="1x"
+                        />
+                        {formattedCaseDetail.associatedJudge}
+                      </span>
+                    </span>
+                  )}
+
+                {caseDetailHelper.hidePublicCaseInformation &&
                   formattedCaseDetail.showBlockedTag && (
                     <span
                       aria-label="blocked"

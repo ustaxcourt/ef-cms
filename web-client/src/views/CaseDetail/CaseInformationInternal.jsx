@@ -70,7 +70,7 @@ const TrialInformation = ({
           </div>
           <div className="grid-col-4">
             <p className="label">Assigned Judge</p>
-            <p>{caseDetail.formattedTrialJudge}</p>
+            <p>{caseDetail.formattedAssociatedJudge}</p>
           </div>
         </div>
         <div className="grid-row">
@@ -114,7 +114,7 @@ const TrialInformation = ({
           </div>
           <div className="grid-col-4">
             <p className="label">Assigned Judge</p>
-            <p>{caseDetail.formattedTrialJudge}</p>
+            <p>{caseDetail.formattedAssociatedJudge}</p>
           </div>
         </div>
         <Button
@@ -209,7 +209,7 @@ const TrialInformation = ({
           </div>
           <div className="grid-col-4">
             <p className="label">Assigned Judge</p>
-            <p>{caseDetail.formattedTrialJudge}</p>
+            <p>{caseDetail.formattedAssociatedJudge}</p>
           </div>
         </div>
         <Button
