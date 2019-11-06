@@ -38,7 +38,12 @@ exports.updateCaseStatusInteractor = async ({
     .validate()
     .toRawObject();
 
-  let caseToUpdate = newCase;
+  let updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: newCase,
+    });
 
   // if this case status is changing FROM calendared
   // we need to remove it from the trial session
@@ -46,7 +51,7 @@ exports.updateCaseStatusInteractor = async ({
     oldCase.status === Case.STATUS_TYPES.calendared &&
     caseStatus !== oldCase.status
   ) {
-    caseToUpdate = await applicationContext
+    updatedCase = await applicationContext
       .getUseCases()
       .removeCaseFromTrialInteractor({
         applicationContext,
@@ -55,9 +60,5 @@ exports.updateCaseStatusInteractor = async ({
         trialSessionId: oldCase.trialSessionId,
       });
   }
-
-  return await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate,
-  });
+  return updatedCase;
 };
