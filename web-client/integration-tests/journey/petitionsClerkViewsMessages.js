@@ -1,3 +1,5 @@
+import { Case } from '../../../shared/src/business/entities/cases/Case';
+
 export default test => {
   return it('Petitions clerk views messages', async () => {
     await test.runSequence('gotoMessagesSequence');
@@ -17,7 +19,7 @@ export default test => {
           workItem.document.documentType === 'Petition',
       );
     expect(workItem).toBeDefined();
-    expect(workItem.caseStatus).toEqual('New');
+    expect(workItem.caseStatus).toEqual(Case.STATUS_TYPES.new);
     expect(workItem.messages[0].message).toEqual(
       'Petition filed by Test Person, Deceased, Test Person 2, Surviving Spouse is ready for review.',
     );

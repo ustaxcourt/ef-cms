@@ -93,6 +93,8 @@ module.exports = [
   },
   {
     actions: [
+      'wait for #tab-draft-documents to be visible',
+      'click element #tab-draft-documents',
       'wait for #button-create-order to be visible',
       'click element #button-create-order',
       'wait for #eventCode to be visible',

@@ -13,7 +13,7 @@ export default test => {
     });
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('New');
+    expect(test.getState('caseDetail.status')).toEqual(Case.STATUS_TYPES.new);
     expect(test.getState('caseDetail.documents').length).toEqual(2);
     expect(test.getState('caseDetail.associatedJudge')).toEqual(
       Case.CHIEF_JUDGE,

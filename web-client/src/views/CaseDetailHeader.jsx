@@ -1,6 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
-import { CreateOrderChooseTypeModal } from './CreateOrder/CreateOrderChooseTypeModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UpdateCaseModalDialog } from './CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@cerebral/react';
@@ -12,9 +11,9 @@ export const CaseDetailHeader = connect(
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     hideActionButtons: props.hideActionButtons,
-    openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
+    openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     showModal: state.showModal,
   },
   ({
@@ -22,7 +21,6 @@ export const CaseDetailHeader = connect(
     formattedCaseDetail,
     hideActionButtons,
     openUpdateCaseModalSequence,
-    openCreateOrderChooseTypeModalSequence,
     showModal,
   }) => {
     return (
@@ -73,32 +71,8 @@ export const CaseDetailHeader = connect(
                   )}
               </div>
               <p className="margin-y-0" id="case-title">
-                {!caseDetailHelper.showCaptionEditButton && (
-                  <span>{formattedCaseDetail.caseTitle}</span>
-                )}
-                {caseDetailHelper.showCaptionEditButton && !hideActionButtons && (
-                  <span>
-                    {formattedCaseDetail.caseTitleWithoutRespondent}
-                    <span className="display-inline-block">
-                      <span>Respondent</span>
-                      <Button
-                        link
-                        className="margin-left-05 padding-0"
-                        id="caption-edit-button"
-                        onClick={() => {
-                          openUpdateCaseModalSequence();
-                        }}
-                      >
-                        <FontAwesomeIcon icon="edit" size="sm" />
-                        Edit
-                      </Button>
-                    </span>
-                  </span>
-                )}
+                <span>{formattedCaseDetail.caseTitle}</span>
               </p>
-              {showModal == 'UpdateCaseModalDialog' && (
-                <UpdateCaseModalDialog />
-              )}
             </div>
 
             {!hideActionButtons && (
@@ -133,18 +107,22 @@ export const CaseDetailHeader = connect(
                   </Button>
                 )}
 
-                {caseDetailHelper.showCreateOrderButton && (
-                  <Button
-                    className="margin-right-0 float-right"
-                    id="button-create-order"
-                    onClick={() => openCreateOrderChooseTypeModalSequence()}
-                  >
-                    <FontAwesomeIcon icon="clipboard-list" size="1x" /> Create
-                    Order
-                  </Button>
-                )}
-                {showModal == 'CreateOrderChooseTypeModal' && (
-                  <CreateOrderChooseTypeModal />
+                {caseDetailHelper.showEditCaseButton && (
+                  <>
+                    <Button
+                      className="tablet-full-width push-right margin-right-0"
+                      id="caption-edit-button"
+                      onClick={() => {
+                        openUpdateCaseModalSequence();
+                      }}
+                    >
+                      <FontAwesomeIcon icon="edit" size="sm" />
+                      Edit
+                    </Button>
+                    {showModal == 'UpdateCaseModalDialog' && (
+                      <UpdateCaseModalDialog />
+                    )}
+                  </>
                 )}
               </div>
             )}

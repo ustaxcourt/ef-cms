@@ -8,6 +8,7 @@ const {
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
+const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
@@ -174,7 +175,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               assigneeId: null,
               assigneeName: null,
               caseId,
-              caseStatus: 'New',
+              caseStatus: Case.STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
@@ -226,7 +227,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               assigneeId: null,
               assigneeName: null,
               caseId,
-              caseStatus: 'New',
+              caseStatus: Case.STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
@@ -274,7 +275,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
               assigneeId: null,
               assigneeName: null,
               caseId,
-              caseStatus: 'New',
+              caseStatus: Case.STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
@@ -315,7 +316,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseStatus: 'New',
+              caseStatus: Case.STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
@@ -357,7 +358,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseStatus: 'New',
+              caseStatus: Case.STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
@@ -403,7 +404,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       practitioners: [],
       preferredTrialCity: 'Aberdeen, South Dakota',
       procedureType: 'Small',
-      status: 'New',
+      status: Case.STATUS_TYPES.new,
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -426,7 +427,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       {
         assigneeId: null,
         assigneeName: null,
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {
@@ -460,7 +461,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         assigneeId: null,
         assigneeName: null,
         caseId,
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {
@@ -488,7 +489,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       {
         assigneeId: null,
         assigneeName: null,
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {
@@ -517,7 +518,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       {
         assigneeId: null,
         assigneeName: null,
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {
