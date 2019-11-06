@@ -25,6 +25,7 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
 import { OrdersNeededSummary } from './CaseDetailEdit/OrdersNeededSummary';
+import { PendingReport } from './PendingReport/PendingReport';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
@@ -72,6 +73,7 @@ const pages = {
   LogIn,
   Messages,
   OrdersNeededSummary,
+  PendingReport,
   PrimaryContactEdit,
   PrintableDocketRecord,
   PrintableTrialCalendar,

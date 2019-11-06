@@ -75,6 +75,18 @@ export const ReportsMenu = connect(
                 Trial Session Planning
               </Button>
             </li>
+            <li className="usa-nav__submenu-item">
+              <a
+                href="/reports/pending-report"
+                id="pending-report"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                }}
+              >
+                Pending report
+              </a>
+            </li>
           </ul>
         )}
       </>
