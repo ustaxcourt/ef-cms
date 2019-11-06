@@ -5,9 +5,9 @@ import React from 'react';
 
 export const UpdateCaseModalDialog = connect(
   {
-    cancelSequence: sequences.dismissCaseCaptionModalSequence,
-    caseCaption: state.caseCaption,
-    confirmSequence: sequences.updateCaseDetailSequence,
+    cancelSequence: sequences.clearModalSequence,
+    caseCaption: state.caseDetail.caseCaption,
+    confirmSequence: sequences.submitUpdateCaseModalSequence,
     constants: state.constants,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },

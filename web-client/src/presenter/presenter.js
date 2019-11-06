@@ -220,6 +220,7 @@ import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromP
 import { submitPetitionToIRSHoldingQueueSequence } from './sequences/submitPetitionToIRSHoldingQueueSequence';
 import { submitRecallPetitionFromIRSHoldingQueueSequence } from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
+import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
 import { submitUpdateCaseSequence } from './sequences/submitUpdateCaseSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
@@ -240,7 +241,6 @@ import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsIn
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
-import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
 import { updateCaseNoteOnCaseDetailSequence } from './sequences/updateCaseNoteOnCaseDetailSequence';
 import { updateCaseNoteOnWorkingCopySequence } from './sequences/updateCaseNoteOnWorkingCopySequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
@@ -436,7 +436,6 @@ export const presenter = {
     openEditRespondentsModalSequence,
     openEditSecondaryContactModalSequence,
     openPdfPreviewModalSequence,
-    openUpdateCaseModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openSelectDocumentWizardOverlaySequence,
@@ -445,6 +444,7 @@ export const presenter = {
     openTrialSessionPlanningModalSequence,
     openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence,
+    openUpdateCaseModalSequence,
     printDocketRecordSequence,
     printFromBrowserSequence,
     printTrialCalendarSequence,
@@ -522,6 +522,7 @@ export const presenter = {
     submitPetitionToIRSHoldingQueueSequence,
     submitRecallPetitionFromIRSHoldingQueueSequence,
     submitTrialSessionSequence,
+    submitUpdateCaseModalSequence,
     submitUpdateCaseSequence,
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
@@ -542,7 +543,6 @@ export const presenter = {
     updateAdvancedSearchFormValueSequence,
     updateCaseAssociationFormValueSequence,
     updateCaseDeadlineSequence,
-    updateCaseDetailSequence,
     updateCaseNoteOnCaseDetailSequence,
     updateCaseNoteOnWorkingCopySequence,
     updateCasePartyTypeSequence,

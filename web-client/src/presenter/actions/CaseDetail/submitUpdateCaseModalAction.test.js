@@ -24,23 +24,6 @@ describe('submitUpdateCaseModalAction', () => {
     };
   });
 
-  it('Does nothing if caseDetail is not set on state', async () => {
-    await runAction(submitUpdateCaseModalAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        modal: {
-          caseCaption: 'Updated Test Caption',
-          caseStatus: 'General Docket - Not at Issue',
-        },
-      },
-    });
-
-    expect(updateCaseCaptionInteractorMock).not.toHaveBeenCalled();
-    expect(updateCaseStatusInteractorMock).not.toHaveBeenCalled();
-  });
-
   it('Calls the update case caption interactor if the case caption has been updated', async () => {
     await runAction(submitUpdateCaseModalAction, {
       modules: {
@@ -55,6 +38,10 @@ describe('submitUpdateCaseModalAction', () => {
     });
 
     expect(updateCaseCaptionInteractorMock).toHaveBeenCalled();
+    expect(updateCaseCaptionInteractorMock.mock.calls[0][0]).toMatchObject({
+      caseCaption: 'Updated Test Caption',
+      caseId: '123',
+    });
     expect(updateCaseStatusInteractorMock).not.toHaveBeenCalled();
   });
 
@@ -72,6 +59,10 @@ describe('submitUpdateCaseModalAction', () => {
     });
 
     expect(updateCaseStatusInteractorMock).toHaveBeenCalled();
+    expect(updateCaseStatusInteractorMock.mock.calls[0][0]).toMatchObject({
+      caseId: '123',
+      caseStatus: 'General Docket - Not at Issue',
+    });
     expect(updateCaseCaptionInteractorMock).not.toHaveBeenCalled();
   });
 });

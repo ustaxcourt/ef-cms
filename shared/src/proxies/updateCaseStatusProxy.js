@@ -16,7 +16,7 @@ exports.updateCaseStatusInteractor = ({
 }) => {
   return put({
     applicationContext,
-    body: caseStatus,
+    body: { caseStatus },
     endpoint: `/cases/${caseId}/case-status`,
   });
 };

@@ -2,9 +2,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
-
 const { Case } = require('../entities/cases/Case');
+const { UnauthorizedError } = require('../../errors/errors');
 
 /**
  * updateCaseCaptionInteractor
@@ -15,7 +14,6 @@ const { Case } = require('../entities/cases/Case');
  * @param {object} providers.caseCaption the caption to set on the case
  * @returns {object} the updated case data
  */
-
 exports.updateCaseCaptionInteractor = async ({
   applicationContext,
   caseCaption,
@@ -27,7 +25,7 @@ exports.updateCaseCaptionInteractor = async ({
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  const oldCase = applicationContext
+  const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({ applicationContext, caseId });
 
