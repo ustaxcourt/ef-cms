@@ -33,7 +33,7 @@ export const workQueueHelper = (get, applicationContext) => {
   } ${workQueueType}`;
   const permissions = get(state.permissions);
 
-  const inboxFiledColumnLabel = workQueueIsInternal ? 'Recieved' : 'Filed';
+  const inboxFiledColumnLabel = workQueueIsInternal ? 'Received' : 'Filed';
 
   const showStartCaseButton = permissions.START_PAPER_CASE && isDisplayingQC;
 

@@ -224,7 +224,7 @@ describe('workQueueHelper', () => {
     expect(result.showBatchedByColumn).toBeFalsy();
   });
 
-  it('shows "Recieved" as filed label on messages inbox', () => {
+  it('shows "Received" as filed label on messages inbox', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
       userId: '123',
@@ -244,6 +244,6 @@ describe('workQueueHelper', () => {
         },
       },
     });
-    expect(result.inboxFiledColumnLabel).toEqual('Recieved');
+    expect(result.inboxFiledColumnLabel).toEqual('Received');
   });
 });
