@@ -30,6 +30,7 @@ Case.STATUS_TYPES = {
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
   jurisdictionRetained: 'Jurisdiction Retained',
   new: 'New',
+  onAppeal: 'On Appeal',
   recalled: 'Recalled',
   rule155: 'Rule 155',
   submitted: 'Submitted',
