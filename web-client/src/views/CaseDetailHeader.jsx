@@ -51,31 +51,24 @@ export const CaseDetailHeader = connect(
                       aria-label="associated judge"
                       className="margin-left-1 usa-tag"
                     >
-                      <span aria-hidden="true">
-                        <FontAwesomeIcon
-                          className="margin-right-05"
-                          icon="gavel"
-                          size="1x"
-                        />
-                      </span>
+                      <FontAwesomeIcon
+                        className="margin-right-05"
+                        icon="gavel"
+                        size="1x"
+                      />
                       {formattedCaseDetail.associatedJudge}
                     </span>
                   )}
 
                 {caseDetailHelper.hidePublicCaseInformation &&
                   formattedCaseDetail.showBlockedTag && (
-                    <span
-                      aria-label="blocked"
-                      className="margin-left-1 usa-tag red-tag"
-                    >
-                      <span aria-hidden="true">
-                        <FontAwesomeIcon
-                          className="margin-right-1"
-                          icon="hand-paper"
-                          size="1x"
-                        />
-                        BLOCKED
-                      </span>
+                    <span className="margin-left-1 usa-tag red-tag">
+                      <FontAwesomeIcon
+                        className="margin-right-1"
+                        icon="hand-paper"
+                        size="1x"
+                      />
+                      BLOCKED
                     </span>
                   )}
               </div>
