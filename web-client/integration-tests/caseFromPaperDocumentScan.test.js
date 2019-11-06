@@ -107,6 +107,7 @@ describe('Case from Paper Document Scan journey', () => {
       COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
       MAX_FILE_SIZE_MB,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
+      STATUS_TYPES: Case.STATUS_TYPES,
       TRIAL_CITIES: TrialSession.TRIAL_CITIES,
       USER_ROLES: User.ROLES,
     });

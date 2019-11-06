@@ -6,10 +6,11 @@ export const documentDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   let showSignDocumentButton = false;
   const caseDetail = get(state.caseDetail);
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { STATUS_TYPES, USER_ROLES } = get(state.constants);
   const permissions = get(state.permissions);
 
-  const SIGNED_STIPULATED_DECISION = 'Stipulated Decision';
+  const STIPULATED_DECISION_DOCUMENT_TYPE = 'Stipulated Decision';
+  const newOrRecalledStatus = [STATUS_TYPES.new, STATUS_TYPES.recalled];
 
   let showServeDocumentButton = false;
 
@@ -41,7 +42,6 @@ export const documentDetailHelper = (get, applicationContext) => {
       .filter(items => !items.completedAt)
       .map(items =>
         formatWorkItem({
-          USER_ROLES,
           applicationContext,
           workItem: items,
         }),
@@ -50,7 +50,6 @@ export const documentDetailHelper = (get, applicationContext) => {
       .filter(items => items.completedAt)
       .map(items => {
         const formatted = formatWorkItem({
-          USER_ROLES,
           applicationContext,
           workItem: items,
         });
@@ -78,12 +77,12 @@ export const documentDetailHelper = (get, applicationContext) => {
     }
 
     formattedDocument.signUrl =
-      formattedDocument.documentType === 'Stipulated Decision'
+      formattedDocument.documentType === STIPULATED_DECISION_DOCUMENT_TYPE
         ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
         : `/case-detail/${caseDetail.docketNumber}/edit-order/${formattedDocument.documentId}/sign`;
 
     formattedDocument.editUrl =
-      formattedDocument.documentType === 'Stipulated Decision'
+      formattedDocument.documentType === STIPULATED_DECISION_DOCUMENT_TYPE
         ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
         : `/case-detail/${caseDetail.docketNumber}/edit-order/${formattedDocument.documentId}`;
 
@@ -97,7 +96,8 @@ export const documentDetailHelper = (get, applicationContext) => {
     // Check all documents associated with the case
     // to see if there is a signed stip decision
     const signedDocument = caseDetail.documents.find(
-      doc => doc.documentType === SIGNED_STIPULATED_DECISION && !doc.archived,
+      doc =>
+        doc.documentType === STIPULATED_DECISION_DOCUMENT_TYPE && !doc.archived,
     );
 
     showSignDocumentButton =
@@ -108,12 +108,13 @@ export const documentDetailHelper = (get, applicationContext) => {
     showServeDocumentButton =
       permissions.SERVE_DOCUMENT &&
       document.status !== 'served' &&
-      document.documentType === SIGNED_STIPULATED_DECISION;
+      document.documentType === STIPULATED_DECISION_DOCUMENT_TYPE;
 
     const { ORDER_TYPES_MAP } = applicationContext.getConstants();
 
     isSigned = !!document.signedAt;
-    isStipDecision = document.documentType === 'Stipulated Decision';
+    isStipDecision =
+      document.documentType === STIPULATED_DECISION_DOCUMENT_TYPE;
     isOrder = !!ORDER_TYPES_MAP.find(
       order => order.documentType === document.documentType,
     );
@@ -122,35 +123,38 @@ export const documentDetailHelper = (get, applicationContext) => {
 
     if (isDraftDocument) {
       documentEditUrl =
-        document.documentType === 'Stipulated Decision'
+        document.documentType === STIPULATED_DECISION_DOCUMENT_TYPE
           ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
           : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`;
     }
 
     showServeToIrsButton =
-      ['New', 'Recalled'].includes(caseDetail.status) &&
+      newOrRecalledStatus.includes(caseDetail.status) &&
       formattedDocument.isPetition &&
       user.role === USER_ROLES.petitionsClerk;
     showRecallButton =
-      caseDetail.status === 'Batched for IRS' && formattedDocument.isPetition;
+      caseDetail.status === STATUS_TYPES.batchedForIRS &&
+      formattedDocument.isPetition;
   }
 
   const formattedDocumentIsPetition =
     (formattedDocument && formattedDocument.isPetition) || false;
-  const showCaseDetailsEdit = ['New', 'Recalled'].includes(caseDetail.status);
-  const showCaseDetailsView = ['Batched for IRS'].includes(caseDetail.status);
+  const showCaseDetailsEdit = newOrRecalledStatus.includes(caseDetail.status);
+  const showCaseDetailsView = [STATUS_TYPES.batchedForIRS].includes(
+    caseDetail.status,
+  );
   const showDocumentInfoTab =
     formattedDocumentIsPetition && (showCaseDetailsEdit || showCaseDetailsView);
 
   const showDocumentViewerTopMargin =
     !showServeDocumentButton &&
     (!showSignDocumentButton &&
-      (!['New', 'Recalled'].includes(caseDetail.status) ||
+      (!newOrRecalledStatus.includes(caseDetail.status) ||
         !formattedDocument.isPetition));
 
   const showViewOrdersNeededButton =
     ((document && document.status === 'served') ||
-      caseDetail.status === 'Batched for IRS') &&
+      caseDetail.status === STATUS_TYPES.batchedForIRS) &&
     user.role === USER_ROLES.petitionsClerk;
 
   const showPrintCaseConfirmationButton =
