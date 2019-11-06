@@ -93,6 +93,7 @@ provider:
   apiGateway:
     binaryMediaTypes:
       - 'application/pdf'
+  clamavDefDir: /opt/var/lib/clamav
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
@@ -104,6 +105,7 @@ provider:
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
+    CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
 
   iamRoleStatements:
     - Effect: 'Allow'

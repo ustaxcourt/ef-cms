@@ -21,7 +21,7 @@ exports.filePetitionInteractor = async ({
   }
 
   /**
-   * uploads a document and then immediately processes it to validate the document.
+   * uploads a document and then immediately processes it to scan for viruses and validate the document.
    *
    * @param {object} document the documentFile
    * @param {Function} onUploadProgress the progressFunction
@@ -36,6 +36,10 @@ exports.filePetitionInteractor = async ({
         onUploadProgress,
       });
 
+    await applicationContext.getUseCases().virusScanPdfInteractor({
+      applicationContext,
+      documentId,
+    });
     await applicationContext.getUseCases().validatePdfInteractor({
       applicationContext,
       documentId,

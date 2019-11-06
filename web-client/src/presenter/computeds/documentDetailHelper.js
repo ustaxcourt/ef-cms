@@ -130,7 +130,8 @@ export const documentDetailHelper = (get, applicationContext) => {
 
     showServeToIrsButton =
       newOrRecalledStatus.includes(caseDetail.status) &&
-      formattedDocument.isPetition;
+      formattedDocument.isPetition &&
+      user.role === USER_ROLES.petitionsClerk;
     showRecallButton =
       caseDetail.status === STATUS_TYPES.batchedForIRS &&
       formattedDocument.isPetition;
