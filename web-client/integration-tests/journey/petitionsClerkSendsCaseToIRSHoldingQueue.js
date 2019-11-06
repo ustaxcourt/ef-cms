@@ -1,3 +1,5 @@
+import { Case } from '../../../shared/src/business/entities/cases/Case';
+
 export default test => {
   return it('Petitions clerk sends case to holding queue', async () => {
     test.setState('caseDetail', {});
@@ -5,7 +7,7 @@ export default test => {
       docketNumber: test.docketNumber,
     });
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('New');
+    expect(test.getState('caseDetail.status')).toEqual(Case.STATUS_TYPES.new);
 
     await test.runSequence('submitPetitionToIRSHoldingQueueSequence');
 
@@ -14,6 +16,8 @@ export default test => {
       docketNumber: test.docketNumber,
     });
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
+    expect(test.getState('caseDetail.status')).toEqual(
+      Case.STATUS_TYPES.batchedForIRS,
+    );
   });
 };
