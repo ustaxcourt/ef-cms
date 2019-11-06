@@ -1,6 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
-import { CreateOrderChooseTypeModal } from './CreateOrder/CreateOrderChooseTypeModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UpdateCaseCaptionModalDialog } from './CaseDetailEdit/UpdateCaseCaptionModalDialog';
 import { connect } from '@cerebral/react';
@@ -22,7 +21,6 @@ export const CaseDetailHeader = connect(
     formattedCaseDetail,
     hideActionButtons,
     openCaseCaptionModalSequence,
-    openCreateOrderChooseTypeModalSequence,
     showModal,
   }) => {
     return (
@@ -73,28 +71,7 @@ export const CaseDetailHeader = connect(
                   )}
               </div>
               <p className="margin-y-0" id="case-title">
-                {!caseDetailHelper.showCaptionEditButton && (
-                  <span>{formattedCaseDetail.caseTitle}</span>
-                )}
-                {caseDetailHelper.showCaptionEditButton && !hideActionButtons && (
-                  <span>
-                    {formattedCaseDetail.caseTitleWithoutRespondent}
-                    <span className="display-inline-block">
-                      <span>Respondent</span>
-                      <Button
-                        link
-                        className="margin-left-05 padding-0"
-                        id="caption-edit-button"
-                        onClick={() => {
-                          openCaseCaptionModalSequence();
-                        }}
-                      >
-                        <FontAwesomeIcon icon="edit" size="sm" />
-                        Edit
-                      </Button>
-                    </span>
-                  </span>
-                )}
+                <span>{formattedCaseDetail.caseTitle}</span>
               </p>
               {showModal == 'UpdateCaseCaptionModalDialog' && (
                 <UpdateCaseCaptionModalDialog />
@@ -133,18 +110,17 @@ export const CaseDetailHeader = connect(
                   </Button>
                 )}
 
-                {caseDetailHelper.showCreateOrderButton && (
+                {caseDetailHelper.showEditCaseButton && (
                   <Button
-                    className="margin-right-0 float-right"
-                    id="button-create-order"
-                    onClick={() => openCreateOrderChooseTypeModalSequence()}
+                    className="tablet-full-width push-right margin-right-0"
+                    id="caption-edit-button"
+                    onClick={() => {
+                      openCaseCaptionModalSequence();
+                    }}
                   >
-                    <FontAwesomeIcon icon="clipboard-list" size="1x" /> Create
-                    Order
+                    <FontAwesomeIcon icon="edit" size="sm" />
+                    Edit
                   </Button>
-                )}
-                {showModal == 'CreateOrderChooseTypeModal' && (
-                  <CreateOrderChooseTypeModal />
                 )}
               </div>
             )}

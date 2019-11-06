@@ -157,8 +157,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState.respondentMatches.length,
     showActionRequired,
     showAddDocketEntryButton,
-    showCaptionEditButton:
-      caseDetail.status !== 'Batched for IRS' && !isExternalUser,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
@@ -168,6 +166,8 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCreateOrderButton,
     showDocketRecordInProgressState: !isExternalUser,
     showDocumentStatus: !caseDetail.irsSendDate,
+    showEditCaseButton:
+      caseDetail.status !== 'Batched for IRS' && !isExternalUser,
     showEditContacts,
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',

@@ -159,9 +159,6 @@ describe('formatCase', () => {
     );
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
     expect(result.caseName).toEqual('Test Case Caption');
-    expect(result.caseTitleWithoutRespondent).toEqual(
-      'Test Case Caption, Petitioners v. Internal Revenue, ',
-    );
     expect(result.formattedPreferredTrialCity).toEqual('No location selected');
   });
 
