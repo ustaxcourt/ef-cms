@@ -1,3 +1,4 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWorkQueue';
@@ -36,7 +37,7 @@ const FORMATTED_WORK_ITEM = {
   assigneeId: 'abc',
   assigneeName: 'Unassigned',
   caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-  caseStatus: 'General Docket - Not at Issue',
+  caseStatus: Case.STATUS_TYPES.generalDocket,
   createdAtFormatted: '12/27/18',
   currentMessage: {
     createdAtFormatted: '12/27/18',
@@ -92,7 +93,7 @@ describe('formatted work queue computed', () => {
     assigneeId: 'abc',
     assigneeName: null,
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: 'General Docket - Not at Issue',
+    caseStatus: Case.STATUS_TYPES.generalDocket,
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '101-18',
     document: {
@@ -192,7 +193,7 @@ describe('formatted work queue computed', () => {
   });
   it('sets showBatchedStatusIcon when true', () => {
     workItem.isInitializeCase = true;
-    workItem.caseStatus = 'Batched for IRS';
+    workItem.caseStatus = Case.STATUS_TYPES.batchedForIRS;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
         ...baseState,
@@ -210,7 +211,7 @@ describe('formatted work queue computed', () => {
 
   it('sets showBatchedStatusIcon to recalled', () => {
     workItem.isInitializeCase = true;
-    workItem.caseStatus = 'Recalled';
+    workItem.caseStatus = Case.STATUS_TYPES.recalled;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
         ...baseState,
