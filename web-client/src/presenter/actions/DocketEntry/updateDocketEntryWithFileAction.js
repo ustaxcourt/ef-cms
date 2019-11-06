@@ -33,6 +33,11 @@ export const updateDocketEntryWithFileAction = async ({
     receivedAt: documentMetadata.dateReceived,
   };
 
+  await applicationContext.getUseCases().virusScanPdfInteractor({
+    applicationContext,
+    documentId,
+  });
+
   await applicationContext.getUseCases().validatePdfInteractor({
     applicationContext,
     documentId,

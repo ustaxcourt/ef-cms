@@ -99,6 +99,7 @@ provider:
   apiGateway:
     binaryMediaTypes:
       - 'application/pdf'
+  clamavDefDir: /opt/var/lib/clamav
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
@@ -114,6 +115,7 @@ provider:
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
+    CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
 
   iamRoleStatements:
     - Effect: 'Allow'

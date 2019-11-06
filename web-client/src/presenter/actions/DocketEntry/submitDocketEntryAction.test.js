@@ -8,6 +8,7 @@ describe('submitDocketEntryAction', () => {
   let addCoversheetStub;
   let fileDocketEntryStub;
   let validatePdfStub;
+  let virusScanPdfStub;
   let updateDocketEntryStub;
 
   beforeEach(() => {
@@ -15,6 +16,7 @@ describe('submitDocketEntryAction', () => {
     fileDocketEntryStub = sinon.stub();
     validatePdfStub = sinon.stub();
     updateDocketEntryStub = sinon.stub();
+    virusScanPdfStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       ...applicationContext,
@@ -24,6 +26,7 @@ describe('submitDocketEntryAction', () => {
         fileDocketEntryInteractor: fileDocketEntryStub,
         updateDocketEntryInteractor: updateDocketEntryStub,
         validatePdfInteractor: validatePdfStub,
+        virusScanPdfInteractor: virusScanPdfStub,
       }),
     };
   });
@@ -45,7 +48,7 @@ describe('submitDocketEntryAction', () => {
     expect(fileDocketEntryStub.calledOnce).toEqual(true);
   });
 
-  it('should call validation and if a file is attached', async () => {
+  it('should call virusScan and validation and if a file is attached', async () => {
     fileDocketEntryStub.returns({
       caseId: applicationContext.getUniqueId(),
     });
@@ -67,6 +70,7 @@ describe('submitDocketEntryAction', () => {
     });
 
     expect(validatePdfStub.calledOnce).toEqual(true);
+    expect(virusScanPdfStub.calledOnce).toEqual(true);
   });
 
   it('should update docket entry with attached file', async () => {
@@ -92,6 +96,7 @@ describe('submitDocketEntryAction', () => {
     });
 
     expect(validatePdfStub.calledOnce).toEqual(true);
+    expect(virusScanPdfStub.calledOnce).toEqual(true);
     expect(updateDocketEntryStub.calledOnce).toEqual(true);
   });
 });

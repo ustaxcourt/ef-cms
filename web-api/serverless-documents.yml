@@ -92,6 +92,7 @@ provider:
   apiGateway:
     binaryMediaTypes:
       - 'application/pdf'
+  clamavDefDir: /opt/var/lib/clamav
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
@@ -103,6 +104,7 @@ provider:
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
+    CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
 
   iamRoleStatements:
     - Effect: 'Allow'
@@ -240,3 +242,16 @@ functions:
           path: /filing-receipt-pdf
           method: post
           cors: true
+
+  virusScan:
+    handler: web-api/src/documentsHandlers.virusScanPdfLambda
+    memorySize: 3008
+    timeout: 900
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
+    events:
+      - http:
+          path: /{documentId}/virus-scan
+          method: post
+          cors: true
+          async: true

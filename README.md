@@ -79,8 +79,14 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 - Node v10.15.3
 - npm v6.4.1
+- ClamAV v0.101.2 (see Setup below)
 
 ### Setup
+
+For ClamAV, macOS users can do the following:	
+- `brew install clamav`	
+- `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`	
+- `sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)
 
 Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the top-level directory.
 

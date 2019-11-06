@@ -24,6 +24,7 @@ echo "creating elasticsearch index"
 npm run seed:elasticsearch
 
 # these exported values expire when script terminates
+export SKIP_VIRUS_SCAN=true
 export AWS_ACCESS_KEY_ID=noop
 export AWS_SECRET_ACCESS_KEY=noop
 export SLS_DEPLOYMENT_BUCKET=noop
