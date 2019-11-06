@@ -1,6 +1,7 @@
 const {
   serveSignedStipDecisionInteractor,
 } = require('./serveSignedStipDecisionInteractor');
+const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 let updatedCase;
@@ -81,7 +82,7 @@ describe('Serves Signed Stipulated Decision on all parties', () => {
       documentId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     });
     expect(updateCaseStub).toHaveBeenCalled();
-    expect(updatedCase.status).toEqual('Closed');
+    expect(updatedCase.status).toEqual(Case.STATUS_TYPES.closed);
   });
 
   it('updates the document status to served', async () => {

@@ -1,3 +1,4 @@
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import {
   createMessage,
   fakeFile,
@@ -118,6 +119,6 @@ describe('a user signs and serves a stipulated decision', () => {
       d => d.documentId === signedDocumentId,
     );
     expect(signedDocument.status).toEqual('served');
-    expect(caseDetail.status).toEqual('Closed');
+    expect(caseDetail.status).toEqual(Case.STATUS_TYPES.closed);
   });
 });

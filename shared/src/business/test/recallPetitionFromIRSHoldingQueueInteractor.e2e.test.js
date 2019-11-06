@@ -77,7 +77,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       applicationContext,
       caseId,
     });
-    expect(theCase.status).toEqual('New');
+    expect(theCase.status).toEqual(Case.STATUS_TYPES.new);
 
     await sendPetitionToIRSHoldingQueueInteractor({
       applicationContext,
@@ -143,7 +143,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       applicationContext,
       caseId,
     });
-    expect(theCase.status).toEqual('Recalled');
+    expect(theCase.status).toEqual(Case.STATUS_TYPES.recalled);
 
     const petitionSectionInbox = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
