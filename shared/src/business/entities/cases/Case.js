@@ -20,13 +20,20 @@ const { Respondent } = require('../Respondent');
 const { User } = require('../User');
 
 Case.STATUS_TYPES = {
+  assignedCase: 'Assigned - Case',
+  assignedMotion: 'Assigned - Motion',
   batchedForIRS: 'Batched for IRS',
   calendared: 'Calendared',
+  cav: 'CAV',
   closed: 'Closed',
   generalDocket: 'General Docket - Not at Issue',
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
+  jurisdictionRetained: 'Jurisdiction Retained',
   new: 'New',
+  onAppeal: 'On Appeal',
   recalled: 'Recalled',
+  rule155: 'Rule 155',
+  submitted: 'Submitted',
 };
 
 Case.ANSWER_CUTOFF_AMOUNT = 45;
