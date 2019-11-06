@@ -129,7 +129,8 @@ export const documentDetailHelper = (get, applicationContext) => {
 
     showServeToIrsButton =
       ['New', 'Recalled'].includes(caseDetail.status) &&
-      formattedDocument.isPetition;
+      formattedDocument.isPetition &&
+      user.role === USER_ROLES.petitionsClerk;
     showRecallButton =
       caseDetail.status === 'Batched for IRS' && formattedDocument.isPetition;
   }
