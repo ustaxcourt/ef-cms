@@ -33,6 +33,8 @@ export const workQueueHelper = (get, applicationContext) => {
   } ${workQueueType}`;
   const permissions = get(state.permissions);
 
+  const inboxFiledColumnLabel = workQueueIsInternal ? 'Received' : 'Filed';
+
   const showStartCaseButton = permissions.START_PAPER_CASE && isDisplayingQC;
 
   return {
@@ -49,6 +51,7 @@ export const workQueueHelper = (get, applicationContext) => {
     hideIconColumn: !workQueueIsInternal && userIsOther,
     hideSectionColumn: isDisplayingQC,
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
+    inboxFiledColumnLabel,
     isDisplayingQC,
     linkToDocumentMessages: !isDisplayingQC,
     queueEmptyMessage: workQueueIsInternal
