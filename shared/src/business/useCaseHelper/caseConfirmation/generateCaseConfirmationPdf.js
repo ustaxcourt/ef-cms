@@ -1,6 +1,6 @@
 const DateHandler = require('../../utilities/DateHandler');
 const Handlebars = require('handlebars');
-const sass = require('sass');
+const sass = require('node-sass');
 const {
   confirmSassContent,
   confirmTemplateContent,
