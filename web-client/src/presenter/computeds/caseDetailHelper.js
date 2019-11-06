@@ -98,7 +98,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditContacts = userAssociatedWithCase;
   }
 
-  const showRecallButton = caseDetail.status === STATUS_TYPES.batchedForIrs;
+  const showRecallButton = caseDetail.status === STATUS_TYPES.batchedForIRS;
 
   const practitionerMatchesFormatted =
     modalState && modalState.practitionerMatches;
@@ -158,7 +158,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showActionRequired,
     showAddDocketEntryButton,
     showCaptionEditButton:
-      caseDetail.status !== STATUS_TYPES.batchedForIrs && !isExternalUser,
+      caseDetail.status !== STATUS_TYPES.batchedForIRS && !isExternalUser,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,

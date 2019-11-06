@@ -9,7 +9,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   const { STATUS_TYPES, USER_ROLES } = get(state.constants);
   const permissions = get(state.permissions);
 
-  const STIPULATED_DECISION_DOCUMENT_TYPE = STIPULATED_DECISION_DOCUMENT_TYPE;
+  const STIPULATED_DECISION_DOCUMENT_TYPE = 'Stipulated Decision';
   const newOrRecalledStatus = [STATUS_TYPES.new, STATUS_TYPES.recalled];
 
   let showServeDocumentButton = false;
@@ -42,7 +42,6 @@ export const documentDetailHelper = (get, applicationContext) => {
       .filter(items => !items.completedAt)
       .map(items =>
         formatWorkItem({
-          USER_ROLES,
           applicationContext,
           workItem: items,
         }),
@@ -51,7 +50,6 @@ export const documentDetailHelper = (get, applicationContext) => {
       .filter(items => items.completedAt)
       .map(items => {
         const formatted = formatWorkItem({
-          USER_ROLES,
           applicationContext,
           workItem: items,
         });
@@ -134,14 +132,14 @@ export const documentDetailHelper = (get, applicationContext) => {
       newOrRecalledStatus.includes(caseDetail.status) &&
       formattedDocument.isPetition;
     showRecallButton =
-      caseDetail.status === STATUS_TYPES.batchedForIrs &&
+      caseDetail.status === STATUS_TYPES.batchedForIRS &&
       formattedDocument.isPetition;
   }
 
   const formattedDocumentIsPetition =
     (formattedDocument && formattedDocument.isPetition) || false;
   const showCaseDetailsEdit = newOrRecalledStatus.includes(caseDetail.status);
-  const showCaseDetailsView = [STATUS_TYPES.batchedForIrs].includes(
+  const showCaseDetailsView = [STATUS_TYPES.batchedForIRS].includes(
     caseDetail.status,
   );
   const showDocumentInfoTab =
@@ -155,7 +153,7 @@ export const documentDetailHelper = (get, applicationContext) => {
 
   const showViewOrdersNeededButton =
     ((document && document.status === 'served') ||
-      caseDetail.status === STATUS_TYPES.batchedForIrs) &&
+      caseDetail.status === STATUS_TYPES.batchedForIRS) &&
     user.role === USER_ROLES.petitionsClerk;
 
   const showPrintCaseConfirmationButton =
