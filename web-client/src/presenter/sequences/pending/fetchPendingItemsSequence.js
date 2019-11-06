@@ -1,7 +1,4 @@
-import { props, state } from 'cerebral';
 import { set } from 'cerebral/factories';
+import { state } from 'cerebral';
 
-export const fetchPendingItemsSequence = [
-  getPendingItemsAction,
-  setPendingItemsAction,
-];
+export const fetchPendingItemsSequence = [set(state.pendingItems, [])];
