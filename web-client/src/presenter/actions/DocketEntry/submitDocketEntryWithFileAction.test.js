@@ -3,6 +3,7 @@ import { runAction } from 'cerebral/test';
 import { submitDocketEntryWithFileAction } from './submitDocketEntryWithFileAction';
 
 describe('submitDocketEntryWithFileAction', () => {
+  let virusScanPdfInteractorMock;
   let validatePdfInteractorMock;
   let fileDocketEntryInteractorMock;
   let addCoversheetInteractorMock;
@@ -15,6 +16,7 @@ describe('submitDocketEntryWithFileAction', () => {
     };
 
     validatePdfInteractorMock = jest.fn();
+    virusScanPdfInteractorMock = jest.fn();
     fileDocketEntryInteractorMock = jest.fn(() => caseDetail);
     addCoversheetInteractorMock = jest.fn();
 
@@ -25,6 +27,7 @@ describe('submitDocketEntryWithFileAction', () => {
         addCoversheetInteractor: addCoversheetInteractorMock,
         fileDocketEntryInteractor: fileDocketEntryInteractorMock,
         validatePdfInteractor: validatePdfInteractorMock,
+        virusScanPdfInteractor: virusScanPdfInteractorMock,
       }),
       getUtilities: () => ({
         createISODateString: () => new Date().toISOString(),
@@ -49,6 +52,7 @@ describe('submitDocketEntryWithFileAction', () => {
     expect(addCoversheetInteractorMock).toHaveBeenCalled();
     expect(fileDocketEntryInteractorMock).toHaveBeenCalled();
     expect(validatePdfInteractorMock).toHaveBeenCalled();
+    expect(virusScanPdfInteractorMock).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
       caseId: caseDetail.docketNumber,
