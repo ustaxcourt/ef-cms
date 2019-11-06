@@ -16,7 +16,7 @@ exports.updateCaseCaptionInteractor = ({
 }) => {
   return put({
     applicationContext,
-    body: caseCaption,
+    body: { caseCaption },
     endpoint: `/cases/${caseId}/case-caption`,
   });
 };

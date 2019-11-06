@@ -19,8 +19,8 @@ exports.handler = event =>
         .getUseCases()
         .updateCaseCaptionInteractor({
           applicationContext,
-          caseCaption: event.body,
           caseId: event.pathParameters.caseId,
+          ...JSON.parse(event.body),
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);

@@ -1,41 +1,21 @@
 const { Case } = require('../entities/cases/Case');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { MOCK_CASE } = require('../../test/mockCase');
 const { updateCaseStatusInteractor } = require('./updateCaseStatusInteractor');
 const { User } = require('../entities/User');
 
-const MOCK_CASE = {
-  caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-  caseType: 'Other',
-  createdAt: new Date().toISOString(),
-  docketNumber: '56789-18',
-  documents: [
-    {
-      documentId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-      role: User.ROLES.petitioner,
-      userId: 'petitioner',
-    },
-    {
-      documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-      role: User.ROLES.petitioner,
-      userId: 'petitioner',
-    },
-    {
-      documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      documentType: 'Petition',
-      role: User.ROLES.petitioner,
-      userId: 'petitioner',
-    },
+const MOCK_TRIAL_SESSION = {
+  caseOrder: [
+    { caseId: MOCK_CASE.caseId },
+    { caseId: 'fa1179bd-04f5-4934-a716-964d8d7babc6' },
   ],
-  filingType: 'Myself',
-  hasIrsNotice: false,
-  partyType: ContactFactory.PARTY_TYPES.petitioner,
-  petitioners: [{ name: 'Test Petitioner' }],
-  preferredTrialCity: 'Washington, D.C.',
-  procedureType: 'Regular',
-  status: 'New',
-  userId: 'userId',
+  isCalendared: true,
+  maxCases: 100,
+  sessionType: 'Regular',
+  startDate: '3000-03-01T00:00:00.000Z',
+  term: 'Fall',
+  termYear: '3000',
+  trialLocation: 'Birmingham, AL',
+  trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
 describe('updateCaseStatusInteractor', () => {
@@ -46,12 +26,14 @@ describe('updateCaseStatusInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
+          role: User.ROLES.petitioner,
           userId: 'nope',
         };
       },
       getPersistenceGateway: () => {
         return {
-          updateCase: () => Promise.resolve(MOCK_CASE),
+          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
+          updateCase: caseToUpdate => Promise.resolve(caseToUpdate),
         };
       },
     };
@@ -67,5 +49,74 @@ describe('updateCaseStatusInteractor', () => {
     }
     expect(error).not.toBeNull();
     expect(error.message).toContain('Unauthorized for update case');
+  });
+
+  it('should call updateCase with the updated case status and return the updated case', async () => {
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: User.ROLES.petitionsClerk,
+          userId: 'petitionsclerk',
+        };
+      },
+      getPersistenceGateway: () => {
+        return {
+          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
+          updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
+        };
+      },
+    };
+    const result = await updateCaseStatusInteractor({
+      applicationContext,
+      caseId: MOCK_CASE.caseId,
+      caseStatus: Case.STATUS_TYPES.cav,
+    });
+    expect(result.status).toEqual(Case.STATUS_TYPES.cav);
+  });
+
+  it('should call updateCase with the updated case status and call removeCaseFromTrial if the old case status was calendared and return the updated case', async () => {
+    const getTrialSessionByIdStub = jest.fn(async () => {
+      return MOCK_TRIAL_SESSION;
+    });
+    const updateTrialSessionStub = jest.fn(async updatedTrialSession => {
+      return updatedTrialSession;
+    });
+    const getCaseByCaseIdStub = jest
+      .fn()
+      .mockReturnValueOnce({
+        ...MOCK_CASE,
+        status: Case.STATUS_TYPES.calendared,
+      })
+      .mockReturnValueOnce({
+        ...MOCK_CASE,
+        status: Case.STATUS_TYPES.cav,
+      });
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: User.ROLES.petitionsClerk,
+          userId: 'petitionsclerk',
+        };
+      },
+      getPersistenceGateway: () => {
+        return {
+          createCaseTrialSortMappingRecords: () => {},
+          getCaseByCaseId: getCaseByCaseIdStub,
+          getTrialSessionById: getTrialSessionByIdStub,
+          updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
+          updateTrialSession: updateTrialSessionStub,
+        };
+      },
+    };
+    const result = await updateCaseStatusInteractor({
+      applicationContext,
+      caseId: MOCK_CASE.caseId,
+      caseStatus: Case.STATUS_TYPES.cav,
+    });
+    expect(result.status).toEqual(Case.STATUS_TYPES.cav);
+    expect(result.trialSessionId).toBeUndefined();
   });
 });

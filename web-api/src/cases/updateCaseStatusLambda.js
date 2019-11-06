@@ -20,7 +20,7 @@ exports.handler = event =>
         .updateCaseStatusInteractor({
           applicationContext,
           caseId: event.pathParameters.caseId,
-          caseStatus: event.body,
+          ...JSON.parse(event.body),
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
