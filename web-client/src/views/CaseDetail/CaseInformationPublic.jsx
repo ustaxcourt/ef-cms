@@ -31,7 +31,7 @@ const TrialInformation = ({ caseDetail }) => (
     </div>
     <div className="grid-row">
       <div className="tablet:grid-col-6">
-        <p className="label">Assigned judge</p>
+        <p className="label">Trial judge</p>
         <p>{caseDetail.formattedAssociatedJudge}</p>
       </div>
     </div>
