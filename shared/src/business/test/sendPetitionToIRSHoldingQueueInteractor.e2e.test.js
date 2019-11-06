@@ -94,7 +94,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       {
         assigneeId: null,
         assigneeName: null,
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: 'L',
         document: {
@@ -135,7 +135,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Petitionsclerk',
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         isInitializeCase: true,
         messages: [
           {
@@ -183,7 +183,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Docketclerk',
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: 'L',
         isInitializeCase: false,
@@ -212,7 +212,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Docketclerk',
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: 'L',
         document: {

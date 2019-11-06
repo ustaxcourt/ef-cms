@@ -48,6 +48,7 @@ export const formatWorkItem = ({
   workQueueIsInternal,
   USER_ROLES,
 }) => {
+  const { STATUS_TYPES } = applicationContext.getConstants();
   const result = _.cloneDeep(workItem);
 
   result.createdAtFormatted = applicationContext
@@ -85,17 +86,17 @@ export const formatWorkItem = ({
   }
 
   switch (result.caseStatus.trim()) {
-    case 'Batched for IRS':
+    case STATUS_TYPES.batchedForIrs:
       result.showBatchedStatusIcon = true;
       result.showUnreadStatusIcon = false;
       result.showUnassignedIcon = false;
       break;
-    case 'Recalled':
+    case STATUS_TYPES.recalled:
       result.showRecalledStatusIcon = true;
       result.showUnreadStatusIcon = false;
       break;
-    case 'General Docket - Not at Issue':
-    case 'New':
+    case STATUS_TYPES.generalDocket:
+    case STATUS_TYPES.new:
     default:
       result.showBatchedStatusIcon = false;
       result.showRecalledStatusIcon = false;
