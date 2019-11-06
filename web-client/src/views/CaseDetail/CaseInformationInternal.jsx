@@ -69,7 +69,7 @@ const TrialInformation = ({
             <p>{caseDetail.formattedTrialDate}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Assigned Judge</p>
+            <p className="label">Trial Judge</p>
             <p>{caseDetail.formattedAssociatedJudge}</p>
           </div>
         </div>
@@ -113,7 +113,7 @@ const TrialInformation = ({
             <p>{caseDetail.formattedTrialDate}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Assigned Judge</p>
+            <p className="label">Trial Judge</p>
             <p>{caseDetail.formattedAssociatedJudge}</p>
           </div>
         </div>
@@ -208,7 +208,7 @@ const TrialInformation = ({
             <p>{caseDetail.formattedTrialDate}</p>
           </div>
           <div className="grid-col-4">
-            <p className="label">Assigned Judge</p>
+            <p className="label">Trial Judge</p>
             <p>{caseDetail.formattedAssociatedJudge}</p>
           </div>
         </div>
