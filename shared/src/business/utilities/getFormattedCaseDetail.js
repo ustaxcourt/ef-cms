@@ -256,8 +256,6 @@ const formatCase = (applicationContext, caseDetail) => {
   result.caseName = applicationContext.getCaseCaptionNames(
     caseDetail.caseCaption || '',
   );
-  result.caseTitleWithoutRespondent =
-    caseDetail.caseTitle && caseDetail.caseTitle.replace('Respondent', '');
 
   result.formattedPreferredTrialCity =
     result.preferredTrialCity || 'No location selected';
