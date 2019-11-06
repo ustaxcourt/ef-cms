@@ -87,6 +87,7 @@ describe('updateCaseStatusInteractor', () => {
       .mockReturnValueOnce({
         ...MOCK_CASE,
         status: Case.STATUS_TYPES.calendared,
+        trialSessionId: '83ed63e7-0583-4ecf-882d-d6d6069637ff',
       })
       .mockReturnValueOnce({
         ...MOCK_CASE,
