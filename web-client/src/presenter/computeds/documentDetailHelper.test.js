@@ -22,6 +22,8 @@ const documentDetailHelper = withAppContextDecorator(
           eventCode: 'OD',
         },
       ],
+      STATUS_TYPES: Case.STATUS_TYPES,
+      USER_ROLES: User.ROLES,
     }),
     getCurrentUser: () => {
       return globalUser;
@@ -32,7 +34,7 @@ const documentDetailHelper = withAppContextDecorator(
 const getBaseState = user => {
   globalUser = user;
   return {
-    constants: { USER_ROLES: User.ROLES },
+    constants: { STATUS_TYPES: Case.STATUS_TYPES, USER_ROLES: User.ROLES },
     permissions: getUserPermissions(user),
   };
 };
