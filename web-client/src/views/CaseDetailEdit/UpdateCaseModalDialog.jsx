@@ -46,13 +46,13 @@ export const UpdateCaseModalDialog = connect(
           />
         </div>
         <div className="margin-bottom-4">
-          <label className="usa-label" htmlFor="caseStatusType">
+          <label className="usa-label" htmlFor="caseStatus">
             Case Status
           </label>
           <select
             className="case-status usa-select"
-            id="caseStatusType"
-            name="caseStatusType"
+            id="caseStatus"
+            name="caseStatus"
             onChange={e => {
               updateModalValueSequence({
                 key: e.target.name,
