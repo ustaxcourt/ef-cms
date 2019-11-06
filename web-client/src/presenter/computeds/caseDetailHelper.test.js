@@ -1,3 +1,4 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
@@ -17,7 +18,7 @@ let globalUser;
 const getBaseState = user => {
   globalUser = user;
   return {
-    constants: { USER_ROLES: User.ROLES },
+    constants: { STATUS_TYPES: Case.STATUS_TYPES, USER_ROLES: User.ROLES },
     permissions: getUserPermissions(user),
   };
 };
