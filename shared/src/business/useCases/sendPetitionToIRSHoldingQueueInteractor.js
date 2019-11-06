@@ -18,7 +18,9 @@ exports.sendPetitionToIRSHoldingQueueInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_TO_IRS_HOLDING_QUEUE)
+  ) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
 

@@ -297,6 +297,33 @@ describe('document detail helper', () => {
       expect(result.showServeToIrsButton).toEqual(false);
       expect(result.showRecallButton).toEqual(false);
     });
+
+    it('should not show the showServeToIrsButton for a docketclerk', () => {
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showServeToIrsButton).toEqual(false);
+      expect(result.showRecallButton).toEqual(false);
+    });
   });
 
   describe('showDocumentInfoTab', () => {
