@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * invokes the path in the sequeneces depending on if work item should be marked read
+ * invokes the path in the sequences depending on if work item should be marked read
  *
  * @param {object} providers the providers object
  * @param {object} providers.path the cerebral path which is contains the next paths that can be invoked

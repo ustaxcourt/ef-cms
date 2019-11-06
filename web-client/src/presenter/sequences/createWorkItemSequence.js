@@ -5,8 +5,10 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { createWorkItemAction } from '../actions/createWorkItemAction';
+import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -16,7 +18,6 @@ import { updateWorkItemFromPropsOrModalOrFormAction } from '../actions/WorkItem/
 import { validateInitialWorkItemMessageAction } from '../actions/validateInitialWorkItemMessageAction';
 
 export const createWorkItemSequence = [
-  clearAlertsAction,
   startShowValidationAction,
   updateWorkItemFromPropsOrModalOrFormAction,
   validateInitialWorkItemMessageAction,
@@ -25,9 +26,10 @@ export const createWorkItemSequence = [
     success: [
       setWaitingForResponseAction,
       createWorkItemAction,
-      {
-        success: [stopShowValidationAction, setAlertSuccessAction],
-      },
+      stopShowValidationAction,
+      setAlertSuccessAction,
+      setSaveAlertsForNavigationAction,
+      clearAlertsAction,
       clearFormAction,
       clearScreenMetadataAction,
       clearUsersAction,
@@ -35,6 +37,7 @@ export const createWorkItemSequence = [
       clearModalStateAction,
       refreshCaseAction,
       unsetWaitingForResponseAction,
+      navigateToMessagesAction,
     ],
   },
 ];

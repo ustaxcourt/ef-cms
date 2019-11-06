@@ -25,7 +25,7 @@
             "workItemId": "9055257a-0a95-4b80-a728-5bb754c60e59",
             "isInitializeCase": true,
             "assigneeId": null,
-            "sentBy": "taxpayer",
+            "sentBy": "petitioner",
             "isQC": true,
             "createdAt": "2019-03-01T22:53:50.098Z",
             "assigneeName": null,
@@ -204,7 +204,7 @@
       "name": "Samson Workman",
       "state": "MA",
       "countryType": "domestic",
-      "email": "taxpayer"
+      "email": "petitioner"
     },
     "createdAt": "2019-03-01T22:53:50.097Z",
     "receivedAt": "2019-03-01T22:53:50.097Z",
@@ -276,7 +276,8 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
     "docketNumber": "103-19",
-    "status": "New"
+    "status": "New",
+    "associatedJudge": "Chief Judge"
   },
   {
     "sk": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
@@ -311,7 +312,7 @@
     "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
-    "sentBy": "taxpayer",
+    "sentBy": "petitioner",
     "createdAt": "2019-03-01T22:53:50.098Z",
     "assigneeName": null,
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",
@@ -349,7 +350,7 @@
     "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
-    "sentBy": "taxpayer",
+    "sentBy": "petitioner",
     "createdAt": "2019-03-01T22:53:50.098Z",
     "assigneeName": null,
     "caseId": "491b05b4-483f-4b85-8dd7-2dd4c069eb50",

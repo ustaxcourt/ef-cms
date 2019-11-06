@@ -18,7 +18,7 @@ response=$(aws cognito-idp admin-initiate-auth \
   --region "${REGION}" \
   --auth-flow ADMIN_NO_SRP_AUTH \
   --auth-parameters USERNAME="petitioner1@example.com"',PASSWORD'="Testing1234$")
-taxpayerToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
+petitionerToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
 response=$(aws cognito-idp admin-initiate-auth \
   --user-pool-id "${USER_POOL_ID}" \
@@ -58,7 +58,7 @@ do
   "postalCode": "23117",
   "phone": "+1 (513) 248-2715",
   "state": "TX",
-  "email": "taxpayer"
+  "email": "petitioner"
 }
 EOF
 )
@@ -79,7 +79,7 @@ EOF
       "postalCode": "23117",
       "phone": "+1 (513) 248-2715",
       "state": "TX",
-      "email": "taxpayer"
+      "email": "petitioner"
     },
     "hasIrsNotice": false,
     "caseType": "${caseType}",
@@ -97,7 +97,7 @@ EOF
 
   case=$(curl "https://efcms-${ENV}.${EFCMS_DOMAIN}/cases" \
     -H 'Accept: application/json, text/plain, */*' \
-    -H "Authorization: Bearer ${taxpayerToken}" \
+    -H "Authorization: Bearer ${petitionerToken}" \
     -H 'Content-Type: application/json;charset=UTF-8' \
     --compressed \
     -d "${caseJson}")

@@ -1,6 +1,5 @@
 exports.navigateTo = username => {
   cy.login(username, '/');
-  cy.wait(3000);
 };
 
 exports.viewMyOutbox = () => {
@@ -43,6 +42,14 @@ exports.getWorkItemCheckboxLabel = workItemId => {
 
 exports.getSectionUsersSelect = () => {
   return cy.get('select#options');
+};
+
+exports.selectAssignee = user => {
+  cy.server();
+  cy.route('PUT', '/work-items').as('assignWorkItem');
+  exports.getSectionUsersSelect().select(user);
+  cy.wait('@assignWorkItem');
+  cy.server({ enable: false });
 };
 
 exports.getWorkItemRow = docketNumber => {

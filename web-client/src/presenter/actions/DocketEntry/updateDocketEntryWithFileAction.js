@@ -43,11 +43,6 @@ export const updateDocketEntryWithFileAction = async ({
     documentId,
   });
 
-  await applicationContext.getUseCases().sanitizePdfInteractor({
-    applicationContext,
-    documentId,
-  });
-
   const caseDetail = await applicationContext
     .getUseCases()
     .updateDocketEntryInteractor({

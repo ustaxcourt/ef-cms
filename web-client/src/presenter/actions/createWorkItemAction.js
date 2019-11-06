@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 export const createWorkItemAction = async ({
   applicationContext,
   get,
-  path,
   props,
 }) => {
   let assigneeId, message;
@@ -25,10 +24,10 @@ export const createWorkItemAction = async ({
     message,
   });
 
-  return path.success({
+  return {
     alertSuccess: {
       message: 'You can view it in the Sent tab on your Message Queue.',
       title: 'Your message was created successfully.',
     },
-  });
+  };
 };

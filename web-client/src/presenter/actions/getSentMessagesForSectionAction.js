@@ -1,5 +1,5 @@
 /**
- * fetches the sent messages for a secton.
+ * fetches the sent messages for a section.
  *
  * @param {object} applicationContext object that contains all the context specific methods
  * @returns {object} a list of sent work items

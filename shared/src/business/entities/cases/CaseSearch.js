@@ -3,6 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
+CaseSearch.CASE_SEARCH_MIN_YEAR = 1986;
 CaseSearch.CASE_SEARCH_PAGE_SIZE = 5;
 
 CaseSearch.validationName = 'CaseSearch';
@@ -15,7 +16,7 @@ CaseSearch.validationName = 'CaseSearch';
  */
 function CaseSearch(rawProps) {
   this.petitionerName = rawProps.petitionerName;
-  this.yearFiledMin = rawProps.yearFiledMin || 1900;
+  this.yearFiledMin = rawProps.yearFiledMin || CaseSearch.CASE_SEARCH_MIN_YEAR;
   this.yearFiledMax = rawProps.yearFiledMax || undefined;
   this.petitionerState = rawProps.petitionerState || undefined;
   this.countryType = rawProps.countryType || undefined;

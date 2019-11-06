@@ -10,7 +10,7 @@ describe('getWorkItemInteractor', () => {
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
     document: {
-      sentBy: 'taxpayer',
+      sentBy: 'petitioner',
     },
     isQC: true,
     messages: [],
@@ -25,7 +25,7 @@ describe('getWorkItemInteractor', () => {
       getCurrentUser: () => {
         return {
           role: User.ROLES.petitioner,
-          userId: 'taxpayer',
+          userId: 'petitioner',
         };
       },
       getPersistenceGateway: () => ({
@@ -50,7 +50,7 @@ describe('getWorkItemInteractor', () => {
       getCurrentUser: () => {
         return {
           role: User.ROLES.petitioner,
-          userId: 'taxpayer',
+          userId: 'petitioner',
         };
       },
       getPersistenceGateway: () => ({
@@ -90,7 +90,7 @@ describe('getWorkItemInteractor', () => {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       docketNumber: '101-18',
       docketNumberSuffix: 'S',
-      document: { sentBy: 'taxpayer' },
+      document: { sentBy: 'petitioner' },
       messages: [],
       section: 'docket',
       sentBy: 'docketclerk',
