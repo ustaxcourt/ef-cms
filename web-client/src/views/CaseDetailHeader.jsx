@@ -2,7 +2,7 @@ import { Button } from '../ustc-ui/Button/Button';
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { CreateOrderChooseTypeModal } from './CreateOrder/CreateOrderChooseTypeModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UpdateCaseCaptionModalDialog } from './CaseDetailEdit/UpdateCaseCaptionModalDialog';
+import { UpdateCaseModalDialog } from './CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -12,7 +12,7 @@ export const CaseDetailHeader = connect(
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     hideActionButtons: props.hideActionButtons,
-    openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
+    openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
     showModal: state.showModal,
@@ -21,7 +21,7 @@ export const CaseDetailHeader = connect(
     caseDetailHelper,
     formattedCaseDetail,
     hideActionButtons,
-    openCaseCaptionModalSequence,
+    openUpdateCaseModalSequence,
     openCreateOrderChooseTypeModalSequence,
     showModal,
   }) => {
@@ -86,7 +86,7 @@ export const CaseDetailHeader = connect(
                         className="margin-left-05 padding-0"
                         id="caption-edit-button"
                         onClick={() => {
-                          openCaseCaptionModalSequence();
+                          openUpdateCaseModalSequence();
                         }}
                       >
                         <FontAwesomeIcon icon="edit" size="sm" />
@@ -96,8 +96,8 @@ export const CaseDetailHeader = connect(
                   </span>
                 )}
               </p>
-              {showModal == 'UpdateCaseCaptionModalDialog' && (
-                <UpdateCaseCaptionModalDialog />
+              {showModal == 'UpdateCaseModalDialog' && (
+                <UpdateCaseModalDialog />
               )}
             </div>
 
