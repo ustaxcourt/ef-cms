@@ -1,3 +1,4 @@
+const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 const { omit } = require('lodash');
@@ -35,7 +36,7 @@ const MOCK_CASE = {
   petitioners: [{ name: 'Test Petitioner' }],
   preferredTrialCity: 'Washington, D.C.',
   procedureType: 'Regular',
-  status: 'New',
+  status: Case.STATUS_TYPES.new,
   userId: 'userId',
 };
 
