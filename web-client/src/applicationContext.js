@@ -192,6 +192,7 @@ import { validateTrialSessionInteractor } from '../../shared/src/business/useCas
 import { validateUserInteractor } from '../../shared/src/business/useCases/users/validateUserInteractor';
 import { verifyCaseForUserInteractor } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
+import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virusScanPdfProxy';
 import axios from 'axios';
 import pdfjsLib from 'pdfjs-dist';
 import uuidv4 from 'uuid/v4';
@@ -342,6 +343,8 @@ const allUseCases = {
   validateUserInteractor,
   verifyCaseForUserInteractor,
   verifyPendingCaseForUserInteractor,
+  virusScanPdfInteractor: args =>
+    process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
 };
 tryCatchDecorator(allUseCases);
 

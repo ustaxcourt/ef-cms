@@ -87,7 +87,7 @@ export const ConfirmModal = connect(
             )}
           </div>
         </div>
-        {children}
+        <div className="margin-bottom-2">{children}</div>
         {(!noConfirm || !noCancel) && (
           <>
             {!noConfirm && (
