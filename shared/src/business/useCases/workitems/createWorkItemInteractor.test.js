@@ -1,4 +1,5 @@
 const sinon = require('sinon');
+const { Case } = require('../../entities/cases/Case');
 const { createWorkItemInteractor } = require('./createWorkItemInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -68,7 +69,7 @@ describe('createWorkItem', () => {
       assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
       assigneeName: 'Docketclerk1',
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseStatus: 'New',
+      caseStatus: Case.STATUS_TYPES.new,
       docketNumber: '101-18',
       docketNumberSuffix: undefined,
       document: {
@@ -115,7 +116,7 @@ describe('createWorkItem', () => {
       assigneeId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
       assigneeName: 'Docketclerk1',
       caseId: 'b54ba5a9-b37b-479d-9201-067ec6e335bb',
-      caseStatus: 'New',
+      caseStatus: Case.STATUS_TYPES.new,
       docketNumber: '101-18',
       docketNumberSuffix: undefined,
       document: {

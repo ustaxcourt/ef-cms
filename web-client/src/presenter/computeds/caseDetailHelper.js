@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 export const caseDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const { Case } = applicationContext.getEntityConstructors();
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { STATUS_TYPES, USER_ROLES } = get(state.constants);
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const caseHasRespondent =
@@ -98,7 +98,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditContacts = userAssociatedWithCase;
   }
 
-  const showRecallButton = caseDetail.status === 'Batched for IRS';
+  const showRecallButton = caseDetail.status === STATUS_TYPES.batchedForIRS;
 
   const practitionerMatchesFormatted =
     modalState && modalState.practitionerMatches;
@@ -158,7 +158,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showActionRequired,
     showAddDocketEntryButton,
     showCaptionEditButton:
-      caseDetail.status !== 'Batched for IRS' && !isExternalUser,
+      caseDetail.status !== STATUS_TYPES.batchedForIRS && !isExternalUser,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
