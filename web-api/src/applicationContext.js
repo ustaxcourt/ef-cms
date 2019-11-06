@@ -13,6 +13,7 @@ const AWS = require('aws-sdk');
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
+const util = require('util');
 const uuidv4 = require('uuid/v4');
 const {
   addCaseToTrialSessionInteractor,
@@ -603,9 +604,13 @@ const {
   verifyPendingCaseForUserInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor');
 const {
+  virusScanPdfInteractor,
+} = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
+const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
+const { exec } = require('child_process');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
 const { User } = require('../../shared/src/business/entities/User');
 
@@ -613,6 +618,7 @@ const { User } = require('../../shared/src/business/entities/User');
 AWS.config.httpOptions.timeout = 300000;
 
 const { DynamoDB, EnvironmentCredentials, S3, SES } = AWS;
+const execPromise = util.promisify(exec);
 
 const environment = {
   documentsBucketName: process.env.DOCUMENTS_BUCKET_NAME || '',
@@ -970,6 +976,8 @@ module.exports = (appContextUser = {}) => {
         validatePdfInteractor,
         verifyCaseForUserInteractor,
         verifyPendingCaseForUserInteractor,
+        virusScanPdfInteractor: args =>
+          process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
       };
     },
     getUtilities: () => {
@@ -1008,6 +1016,13 @@ module.exports = (appContextUser = {}) => {
         // eslint-disable-next-line no-console
         console.timeEnd(key);
       },
+    },
+    runVirusScan: async ({ filePath }) => {
+      return execPromise(
+        `clamscan ${
+          process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
+        } ${filePath}`,
+      );
     },
   };
 };
