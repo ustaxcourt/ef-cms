@@ -38,22 +38,26 @@ exports.updateCaseStatusInteractor = async ({
     .validate()
     .toRawObject();
 
+  let caseToUpdate = newCase;
+
   // if this case status is changing FROM calendared
   // we need to remove it from the trial session
   if (
     oldCase.status === Case.STATUS_TYPES.calendared &&
     caseStatus !== oldCase.status
   ) {
-    applicationContext.getUseCases().removeCaseFromTrialInteractor({
-      applicationContext,
-      caseId,
-      disposition: `Status was changed to ${caseStatus}`,
-      trialSessionId: oldCase.trialSessionId,
-    });
+    caseToUpdate = await applicationContext
+      .getUseCases()
+      .removeCaseFromTrialInteractor({
+        applicationContext,
+        caseId,
+        disposition: `Status was changed to ${caseStatus}`,
+        trialSessionId: oldCase.trialSessionId,
+      });
   }
 
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: newCase,
+    caseToUpdate,
   });
 };
