@@ -51,7 +51,6 @@ import { deleteCaseNoteFromCaseDetailSequence } from './sequences/deleteCaseNote
 import { deleteCaseNoteFromWorkingCopySequence } from './sequences/deleteCaseNoteFromWorkingCopySequence';
 import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingCopySessionNoteSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
-import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
@@ -113,7 +112,6 @@ import { openAddPractitionerModalSequence } from './sequences/openAddPractitione
 import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
-import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
 import { openChangeScannerSourceModalSequence } from './sequences/openChangeScannerSourceModalSequence';
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
@@ -142,6 +140,7 @@ import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSe
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
 import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
+import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
 import { printFromBrowserSequence } from './sequences/printFromBrowserSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
@@ -356,7 +355,6 @@ export const presenter = {
     deleteCaseNoteFromWorkingCopySequence,
     deleteWorkingCopySessionNoteSequence,
     dismissAlertSequence,
-    dismissCaseCaptionModalSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,
     editSelectedDocumentSequence,
@@ -418,7 +416,6 @@ export const presenter = {
     openAddRespondentModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
-    openUpdateCaseModalSequence,
     openCaseDifferenceModalSequence,
     openChangeScannerSourceModalSequence,
     openCleanModalSequence,
@@ -439,6 +436,7 @@ export const presenter = {
     openEditRespondentsModalSequence,
     openEditSecondaryContactModalSequence,
     openPdfPreviewModalSequence,
+    openUpdateCaseModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openSelectDocumentWizardOverlaySequence,
