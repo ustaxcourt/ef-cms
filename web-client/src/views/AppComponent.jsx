@@ -36,14 +36,15 @@ import { StartCaseInternal } from './StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
+import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
+import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const pages = {
   AddDocketEntry,
@@ -82,6 +83,7 @@ const pages = {
   StartCaseWizard,
   StyleGuide,
   TrialSessionDetail,
+  TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
   UserContactEdit,
@@ -90,27 +92,32 @@ const pages = {
 /**
  * Root application component
  */
-class App extends React.Component {
-  componentDidUpdate() {
-    this.focusMain();
-  }
+export const AppComponent = connect(
+  {
+    currentPage: state.currentPage,
+    currentPageHeader: state.currentPageHeader,
+    showModal: state.showModal,
+  },
+  ({ currentPage, showModal }) => {
+    const focusMain = e => {
+      e && e.preventDefault();
+      const header = document.querySelector('#main-content h1');
+      if (header) header.focus();
+      return false;
+    };
 
-  focusMain(e) {
-    e && e.preventDefault();
-    const header = document.querySelector('#main-content h1');
-    if (header) header.focus();
-    return false;
-  }
+    useEffect(() => {
+      focusMain();
+    });
 
-  render() {
-    const CurrentPage = pages[this.props.currentPage];
+    const CurrentPage = pages[currentPage];
     return (
       <React.Fragment>
         <a
           className="usa-skipnav"
           href="#main-content"
           tabIndex="0"
-          onClick={this.focusMain}
+          onClick={focusMain}
         >
           Skip to main content
         </a>
@@ -121,20 +128,10 @@ class App extends React.Component {
         </main>
         <Footer />
         <Loading />
+        {showModal === 'TrialSessionPlanningModal' && (
+          <TrialSessionPlanningModal />
+        )}
       </React.Fragment>
     );
-  }
-}
-
-App.propTypes = {
-  currentPage: PropTypes.string,
-  currentPageHeader: PropTypes.string,
-};
-
-export const AppComponent = connect(
-  {
-    currentPage: state.currentPage,
-    currentPageHeader: state.currentPageHeader,
   },
-  App,
 );

@@ -21,5 +21,9 @@ export default test => {
     expect(test.getState('caseDetail.status')).toEqual(
       Case.STATUS_TYPES.generalDocketReadyForTrial,
     );
+
+    if (test.casesReadyForTrial) {
+      test.casesReadyForTrial.push(test.getState('caseDetail'));
+    }
   });
 };

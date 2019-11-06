@@ -526,45 +526,12 @@ describe('formattedCaseDetail', () => {
   });
 
   describe('trial detail mapping mapping', () => {
-    it('should provide defaults for trial information if no trial session id exists', () => {
-      const caseDetail = {
-        petitioners: [{ name: 'bob' }],
-        status: Case.STATUS_TYPES.calendared,
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail,
-          caseDetailErrors: {},
-        },
-      });
-      expect(result.formattedTrialCity).toEqual('Not assigned');
-      expect(result.formattedTrialDate).toEqual('Not scheduled');
-      expect(result.formattedTrialJudge).toEqual('Not assigned');
-    });
-
-    it('should provide defaults for trial information if no trial session id exists', () => {
-      const caseDetail = {
-        petitioners: [{ name: 'bob' }],
-        status: Case.STATUS_TYPES.calendared,
-        trialLocation: 'England is my City',
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          caseDetail,
-          caseDetailErrors: {},
-        },
-      });
-      expect(result.formattedTrialCity).toEqual('England is my City');
-      expect(result.formattedTrialDate).toEqual('Not scheduled');
-      expect(result.formattedTrialJudge).toEqual('Not assigned');
-    });
-
     it('should format trial information if a trial session id exists', () => {
       const caseDetail = {
+        associatedJudge: 'Judge Judy',
         petitioners: [{ name: 'bob' }],
         status: Case.STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
-        trialJudge: 'Judge Judy',
         trialLocation: 'England is my City',
         trialSessionId: '123',
         trialTime: '20:30',
@@ -577,15 +544,15 @@ describe('formattedCaseDetail', () => {
       });
       expect(result.formattedTrialCity).toEqual('England is my City');
       expect(result.formattedTrialDate).toEqual('12/11/18 08:30 pm');
-      expect(result.formattedTrialJudge).toEqual('Judge Judy');
+      expect(result.formattedAssociatedJudge).toEqual('Judge Judy');
     });
 
     it('should not add time if no time stamp exists', () => {
       const caseDetail = {
+        associatedJudge: 'Judge Judy',
         petitioners: [{ name: 'bob' }],
         status: Case.STATUS_TYPES.calendared,
         trialDate: '2018-12-11T05:00:00Z',
-        trialJudge: 'Judge Judy',
         trialLocation: 'England is my City',
         trialSessionId: '123',
       };
@@ -597,7 +564,7 @@ describe('formattedCaseDetail', () => {
       });
       expect(result.formattedTrialCity).toEqual('England is my City');
       expect(result.formattedTrialDate).toEqual('12/11/18');
-      expect(result.formattedTrialJudge).toEqual('Judge Judy');
+      expect(result.formattedAssociatedJudge).toEqual('Judge Judy');
     });
   });
 

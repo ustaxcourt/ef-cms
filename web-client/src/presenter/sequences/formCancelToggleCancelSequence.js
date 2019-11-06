@@ -1,6 +1,5 @@
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const formCancelToggleCancelSequence = [
-  set(state.showModal, 'FormCancelModalDialog'),
+  setShowModalFactoryAction('FormCancelModalDialog'),
 ];

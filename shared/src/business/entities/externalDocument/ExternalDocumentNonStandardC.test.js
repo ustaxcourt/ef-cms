@@ -1,7 +1,7 @@
-const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 const {
   ExternalDocumentNonStandardC,
 } = require('./ExternalDocumentNonStandardC');
+const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 
 const { VALIDATION_ERROR_MESSAGES } = ExternalDocumentNonStandardC;
 

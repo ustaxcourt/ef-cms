@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-BEARER_AUTH="Bearer taxpayer"
+BEARER_AUTH="Bearer petitioner"
 echo "$BEARER_AUTH"
 
 echo "----> Building prop file:"

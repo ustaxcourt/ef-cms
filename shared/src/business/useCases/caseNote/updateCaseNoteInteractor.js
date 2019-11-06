@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  TRIAL_SESSION_WORKING_COPY,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { CaseNote } = require('../../entities/cases/CaseNote');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -20,14 +20,18 @@ exports.updateCaseNoteInteractor = async ({
   notes,
 }) => {
   const user = applicationContext.getCurrentUser();
-  if (!isAuthorized(user, TRIAL_SESSION_WORKING_COPY)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const judgeUser = await applicationContext
+    .getUseCases()
+    .getJudgeForUserChambersInteractor({ applicationContext, user });
 
   const caseNoteEntity = new CaseNote({
     caseId,
     notes,
-    userId: user.userId,
+    userId: judgeUser.userId,
   });
 
   const caseNoteToUpdate = caseNoteEntity.validate().toRawObject();

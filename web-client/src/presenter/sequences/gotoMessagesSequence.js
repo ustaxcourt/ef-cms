@@ -3,16 +3,17 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
-import { getUserRoleAction } from '../actions/getUserRoleAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
+import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
 import { setUsersAction } from '../actions/setUsersAction';
 import { state } from 'cerebral';
+import { takePathForRoles } from './takePathForRoles';
 
 const goToMessages = [
   setCurrentPageAction('Interstitial'),
@@ -21,9 +22,23 @@ const goToMessages = [
   setUserAction,
   set(state.selectedWorkItems, []),
   clearErrorAlertsAction,
-  getUserRoleAction,
+  runPathForUserRoleAction,
   {
-    adc: [],
+    ...takePathForRoles(
+      [
+        'adc',
+        'admissionsclerk',
+        'calendarclerk',
+        'chambers',
+        'clerkofcourt',
+        'trialclerk',
+      ],
+      [],
+    ),
+    clerkofcourt: [
+      getUsersInSectionAction({ section: 'docket' }),
+      setUsersAction,
+    ],
     docketclerk: [
       getUsersInSectionAction({ section: 'docket' }),
       setUsersAction,

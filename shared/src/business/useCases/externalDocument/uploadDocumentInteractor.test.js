@@ -26,7 +26,7 @@ describe('uploadDocumentInteractor', () => {
       },
     ],
     role: User.ROLES.petitioner,
-    userId: 'taxpayer',
+    userId: 'petitioner',
   };
 
   it('throws an error when an unauthorized user tries to access the use case', async () => {
@@ -34,8 +34,8 @@ describe('uploadDocumentInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: 'taxpayer',
-          userId: 'taxpayer',
+          role: 'other',
+          userId: 'other',
         };
       },
       getPersistenceGateway: () => ({

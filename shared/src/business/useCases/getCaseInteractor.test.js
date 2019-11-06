@@ -1,8 +1,8 @@
 const sinon = require('sinon');
-const { getCaseInteractor } = require('./getCaseInteractor');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { User } = require('../entities/User');
+const { getCaseInteractor } = require('./getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { User } = require('../entities/User');
 const { documents } = MOCK_CASE;
 
 describe('Get case', () => {
@@ -51,7 +51,7 @@ describe('Get case', () => {
       await getCaseInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        petitioners: [{ name: 'Test Taxpayer' }],
+        petitioners: [{ name: 'Test Petitioner' }],
       });
     } catch (error) {
       expect(error.message).toEqual(
@@ -102,7 +102,7 @@ describe('Get case', () => {
             createdAt: new Date().toISOString(),
             docketNumber: '00101-00',
             documents,
-            petitioners: [{ name: 'Test Taxpayer' }],
+            petitioners: [{ name: 'Test Petitioner' }],
             preferredTrialCity: 'Washington, D.C.',
             procedureType: 'Regular',
           }),
@@ -138,7 +138,7 @@ describe('Get case', () => {
               createdAt: new Date().toISOString(),
               docketNumber: '00101-00',
               documents,
-              petitioners: [{ name: 'Test Taxpayer' }],
+              petitioners: [{ name: 'Test Petitioner' }],
               preferredTrialCity: 'Washington, D.C.',
               procedureType: 'Regular',
             },
@@ -176,7 +176,7 @@ describe('Get case', () => {
               createdAt: new Date().toISOString(),
               hasIrsNotice: false,
               partyType: ContactFactory.PARTY_TYPES.petitioner,
-              petitioners: [{ name: 'Test Taxpayer' }],
+              petitioners: [{ name: 'Test Petitioner' }],
               preferredTrialCity: 'Washington, D.C.',
               procedureType: 'Regular',
             }),

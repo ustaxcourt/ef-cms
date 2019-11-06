@@ -4,6 +4,7 @@ import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setPathAction } from '../actions/setPathAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
+import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 
 /**
  * Combine several sequences; set login value, and
@@ -16,6 +17,7 @@ export const loginWithTokenSequence = [
   setTokenAction,
   getUserAction,
   setUserAction,
+  setUserPermissionsAction,
   setPathAction,
   navigateToPathAction,
 ];

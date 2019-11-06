@@ -29,8 +29,9 @@ const {
 const {
   sendPetitionToIRSHoldingQueueInteractor,
 } = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
-const { createCaseInteractor } = require('../useCases/createCaseInteractor');
+const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { User } = require('../entities/User');
 
 const DATE = '2019-03-01T22:54:06.000Z';
@@ -59,7 +60,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           address3: 'Aut magna expedita f',
           city: 'Magna sit nemo magna',
           countryType: 'domestic',
-          email: 'taxpayer@example.com',
+          email: 'petitioner@example.com',
           name: 'Adele Carver',
           phone: '+1 (349) 328-1083',
           postalCode: '28371',
@@ -101,7 +102,6 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
           documentType: 'Petition',
           filedBy: 'Petr. Adele Carver',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         isInitializeCase: true,
         messages: [
@@ -277,14 +277,13 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       {
         assigneeId: '63784910-c1af-4476-8988-a02f92da8e09',
         assigneeName: 'IRS Holding Queue',
-        caseStatus: 'Batched for IRS',
+        caseStatus: Case.STATUS_TYPES.batchedForIRS,
         docketNumber: '101-19',
         docketNumberSuffix: 'L',
         document: {
           documentType: 'Petition',
           filedBy: 'Petr. Adele Carver',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         isInitializeCase: true,
         messages: [
@@ -325,14 +324,13 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       {
         assigneeId: '63784910-c1af-4476-8988-a02f92da8e09',
         assigneeName: 'IRS Holding Queue',
-        caseStatus: 'Batched for IRS',
+        caseStatus: Case.STATUS_TYPES.batchedForIRS,
         docketNumber: '101-19',
         docketNumberSuffix: 'L',
         document: {
           documentType: 'Petition',
           filedBy: 'Petr. Adele Carver',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         isInitializeCase: true,
         messages: [
@@ -381,7 +379,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Docketclerk',
-        caseStatus: 'Batched for IRS',
+        caseStatus: Case.STATUS_TYPES.batchedForIRS,
         docketNumber: '101-19',
         docketNumberSuffix: 'L',
         document: {
@@ -414,7 +412,7 @@ describe('sendPetitionToIRSHoldingQueueInteractor integration test', () => {
       {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Docketclerk',
-        caseStatus: 'Batched for IRS',
+        caseStatus: Case.STATUS_TYPES.batchedForIRS,
         docketNumber: '101-19',
         docketNumberSuffix: 'L',
         document: {

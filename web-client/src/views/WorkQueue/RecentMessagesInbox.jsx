@@ -58,7 +58,9 @@ export const RecentMessagesInbox = connect(
                           shouldLinkToComplete:
                             item.document.isFileAttached === false,
                           shouldLinkToEdit:
-                            item.isQC && item.document.eventCode !== 'P',
+                            workQueueHelper.showEditDocketEntry &&
+                            item.isQC &&
+                            item.document.eventCode !== 'P',
                           workItemIdToMarkAsRead: !item.isRead
                             ? item.workItemId
                             : null,

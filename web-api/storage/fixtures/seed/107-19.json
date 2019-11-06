@@ -275,7 +275,7 @@
       "name": "Tatum Craig",
       "state": "NM",
       "countryType": "domestic",
-      "email": "taxpayer"
+      "email": "petitioner"
     },
     "createdAt": "2019-08-16T17:29:10.132Z",
     "receivedAt": "2019-08-16T17:29:10.132Z",
@@ -367,7 +367,8 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "58c1f7a3-8062-42f0-a73e-8bd69b419878",
     "docketNumber": "107-19",
-    "status": "General Docket - At Issue (Ready for Trial)"
+    "status": "General Docket - At Issue (Ready for Trial)",
+    "associatedJudge": "Chief Judge"
   },
   {
     "completedAt": "2019-08-16T17:30:10.526Z",

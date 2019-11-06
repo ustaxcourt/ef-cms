@@ -5,15 +5,15 @@ import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialS
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
+import petitionerLogin from './journey/petitionerLogIn';
+import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
 import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSetsCaseReadyForTrial from './journey/petitionsClerkSetsCaseReadyForTrial';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
-import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
-import userSignsOut from './journey/taxpayerSignsOut';
+import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
 
@@ -49,11 +49,11 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         receivedAtDay: '01',
         caseType: 'Deficiency',
       };
-      taxpayerLogin(test);
+      petitionerLogin(test);
       it('Create case #1', async () => {
         await uploadPetition(test, caseOverrides);
       });
-      taxpayerViewsDashboard(test);
+      petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases);
       userSignsOut(test);
       petitionsClerkLogIn(test);
@@ -73,11 +73,11 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         receivedAtDay: '02',
         caseType: 'Deficiency',
       };
-      taxpayerLogin(test);
+      petitionerLogin(test);
       it('Create case #2', async () => {
         await uploadPetition(test, caseOverrides);
       });
-      taxpayerViewsDashboard(test);
+      petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases);
       userSignsOut(test);
       petitionsClerkLogIn(test);
@@ -97,11 +97,11 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         receivedAtDay: '01',
         caseType: 'Deficiency',
       };
-      taxpayerLogin(test);
+      petitionerLogin(test);
       it('Create case #3', async () => {
         await uploadPetition(test, caseOverrides);
       });
-      taxpayerViewsDashboard(test);
+      petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases);
       userSignsOut(test);
       petitionsClerkLogIn(test);

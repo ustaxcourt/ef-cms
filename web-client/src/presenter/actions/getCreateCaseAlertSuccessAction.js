@@ -6,7 +6,8 @@
 export const getCreateCaseAlertSuccessAction = () => {
   return {
     alertSuccess: {
-      message: 'You can access your case at any time from the case list below.',
+      message:
+        'Your receipt will appear under the Case Information tab in your case once your petition is processed by the court.',
       title: 'Your petition has been successfully submitted.',
     },
   };

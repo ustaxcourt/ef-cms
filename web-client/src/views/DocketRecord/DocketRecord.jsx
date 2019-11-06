@@ -11,12 +11,14 @@ export const DocketRecord = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     clearDocumentSequence: sequences.clearDocumentSequence,
+    docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.showModal,
   },
   ({
     caseDetailHelper,
+    docketRecordHelper,
     formattedCaseDetail,
     refreshCaseSequence,
     showModal,
@@ -49,7 +51,6 @@ export const DocketRecord = connect(
               <th aria-hidden="true" className="icon-column" />
               <th>Filings and proceedings</th>
               <th>Filed by</th>
-              <th>Status</th>
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
@@ -89,7 +90,7 @@ export const DocketRecord = connect(
                       )}
 
                       {document &&
-                        caseDetailHelper.showDirectDownloadLink &&
+                        docketRecordHelper.showDirectDownloadLink &&
                         caseDetailHelper.showDocketRecordInProgressState &&
                         document.processingStatus !== 'complete' && (
                           <FontAwesomeIcon
@@ -107,9 +108,6 @@ export const DocketRecord = connect(
                     </td>
                     <td className="hide-on-mobile">
                       {document && document.filedBy}
-                    </td>
-                    <td className="hide-on-mobile">
-                      {document && document.processingStatus}
                     </td>
                     <td className="hide-on-mobile">{record.action}</td>
                     <td>

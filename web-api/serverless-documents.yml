@@ -8,11 +8,15 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-jetpack
   # - serverless-plugin-warmup
 
 custom:
   #warmup:
   #enabled: true
+
+  jetpack:
+    mode: yarn
 
   prune:
     automatic: true
@@ -82,13 +86,13 @@ provider:
   masterRegion: us-east-1
   userPoolId: us-east-1_7uRkF0Axn
   masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
-  clamavDefDir: /opt/var/lib/clamav
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
   apiGateway:
     binaryMediaTypes:
       - 'application/pdf'
+  clamavDefDir: /opt/var/lib/clamav
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
@@ -100,7 +104,6 @@ provider:
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
-    GS_LIB: /opt/share/ghostscript/9.06/Resource/Init
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
 
   iamRoleStatements:
@@ -198,36 +201,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  sanitizePdf:
-    handler: web-api/src/documentsHandlers.sanitizePdfLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-ghostscript:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: /{documentId}/sanitize
-          method: post
-          cors: true
-          # async: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  virusScan:
-    handler: web-api/src/documentsHandlers.virusScanPdfLambda
-    memorySize: 3008
-    timeout: 900
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
-    events:
-      - http:
-          path: /{documentId}/virus-scan
-          method: post
-          cors: true
-          async: true
-
   validate:
     handler: web-api/src/documentsHandlers.validatePdfLambda
     events:
@@ -259,7 +232,6 @@ functions:
           cors: true
 
   generatePrintableFilingReceiptLambda:
-    runtime: nodejs8.10
     handler: web-api/src/documentsHandlers.generatePrintableFilingReceiptLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
@@ -270,3 +242,16 @@ functions:
           path: /filing-receipt-pdf
           method: post
           cors: true
+
+  virusScan:
+    handler: web-api/src/documentsHandlers.virusScanPdfLambda
+    memorySize: 3008
+    timeout: 900
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-clamav:latest
+    events:
+      - http:
+          path: /{documentId}/virus-scan
+          method: post
+          cors: true
+          async: true

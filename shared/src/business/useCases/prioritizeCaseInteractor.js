@@ -1,9 +1,9 @@
-const { Case } = require('../entities/cases/Case');
-const { UnauthorizedError } = require('../../errors/errors');
 const {
   isAuthorized,
-  PRIORITIZE_CASE,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const { Case } = require('../entities/cases/Case');
+const { UnauthorizedError } = require('../../errors/errors');
 
 /**
  * used for setting a case as high priority
@@ -21,7 +21,7 @@ exports.prioritizeCaseInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, PRIORITIZE_CASE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PRIORITIZE_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

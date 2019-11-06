@@ -52,7 +52,7 @@ describe('setSecondaryDocumentScenarioAction', () => {
       },
     });
 
-    expect(result.state.form.secondaryDocument.secenario).toBeUndefined();
+    expect(result.state.form.secondaryDocument.scenario).toBeUndefined();
     expect(result.state.form.secondaryDocument.documentTitle).toBeUndefined();
     expect(result.state.form.secondaryDocument.eventCode).toBeUndefined();
   });

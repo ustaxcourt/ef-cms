@@ -1,22 +1,19 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
-import {
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} from '../../../../shared/src/business/utilities/DateHandler';
+import { applicationContext } from '../../applicationContext';
 import { documentDetailHelper as documentDetailHelperComputed } from './documentDetailHelper';
-import { formatDocument } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
+import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
-let role = User.ROLES.petitionsClerk;
-
 const getDateISO = () => new Date().toISOString();
+
+let globalUser;
 
 const documentDetailHelper = withAppContextDecorator(
   documentDetailHelperComputed,
   {
+    ...applicationContext,
     getConstants: () => ({
       ORDER_TYPES_MAP: [
         {
@@ -26,38 +23,32 @@ const documentDetailHelper = withAppContextDecorator(
         },
       ],
     }),
-    getCurrentUser: () => ({
-      role,
-      userId: 'abc',
-    }),
-    getUtilities: () => {
-      return {
-        createISODateString,
-        formatDateString,
-        formatDocument,
-        formatNow,
-        prepareDateFromString,
-      };
+    getCurrentUser: () => {
+      return globalUser;
     },
   },
 );
 
-const baseState = {
-  constants: { USER_ROLES: User.ROLES },
+const getBaseState = user => {
+  globalUser = user;
+  return {
+    constants: { USER_ROLES: User.ROLES },
+    permissions: getUserPermissions(user),
+  };
 };
 
-describe('formatted work queue computed', () => {
-  beforeEach(() => {
-    role = User.ROLES.petitionsClerk;
-  });
-
+describe('document detail helper', () => {
   it('formats the workitems', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [],
-          status: 'General Docket - Not at Issue',
+          status: Case.STATUS_TYPES.generalDocket,
         },
         documentId: 'abc',
         workItemActions: {
@@ -69,12 +60,16 @@ describe('formatted work queue computed', () => {
   });
 
   it('sets the showCaseDetailsEdit boolean false when case status is general docket', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [],
-          status: 'General Docket - Not at Issue',
+          status: Case.STATUS_TYPES.generalDocket,
         },
         documentId: 'abc',
         workItemActions: {
@@ -86,12 +81,16 @@ describe('formatted work queue computed', () => {
   });
 
   it('sets the showCaseDetailsEdit boolean true when case status new', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [],
-          status: 'New',
+          status: Case.STATUS_TYPES.new,
         },
         documentId: 'abc',
         workItemActions: {
@@ -103,12 +102,16 @@ describe('formatted work queue computed', () => {
   });
 
   it('sets the showCaseDetailsEdit boolean true when case status recalled', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [],
-          status: 'Recalled',
+          status: Case.STATUS_TYPES.recalled,
         },
         documentId: 'abc',
         workItemActions: {
@@ -119,11 +122,219 @@ describe('formatted work queue computed', () => {
     expect(result.showCaseDetailsEdit).toEqual(true);
   });
 
-  describe('showDocumentInfoTab', () => {
-    it('should be false if document is not a petition', () => {
+  it('should set showSignDocumentButton to true when user has COURT_ISSUED_DOCUMENT permission and there is a valid document to sign that is not already signed', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
+    const result = runCompute(documentDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          documents: [
+            {
+              documentId: 'abc',
+              documentType: 'Proposed Stipulated Decision',
+              workItems: [
+                {
+                  assigneeId: user.userId,
+                  caseStatus: Case.STATUS_TYPES.new,
+                  document: {
+                    documentId: 'abc',
+                    documentType: 'Proposed Stipulated Decision',
+                    receivedAt: '2018-11-21T20:49:28.192Z',
+                  },
+                  messages: [
+                    {
+                      createdAt: '2018-11-21T20:49:28.192Z',
+                      message: 'Test',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+          status: Case.STATUS_TYPES.new,
+        },
+        documentId: 'abc',
+      },
+    });
+    expect(result.showSignDocumentButton).toEqual(true);
+  });
+
+  describe('showServeToIrsButton and showRecallButton', () => {
+    it('should set showServeToIrsButton true and showRecallButton false when case status is new', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showServeToIrsButton).toEqual(true);
+      expect(result.showRecallButton).toEqual(false);
+    });
+
+    it('should set showServeToIrsButton true and showRecallButton false when case status is recalled', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+              },
+            ],
+            status: Case.STATUS_TYPES.recalled,
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showServeToIrsButton).toEqual(true);
+      expect(result.showRecallButton).toEqual(false);
+    });
+
+    it('should set showServeToIrsButton false and showRecallButton true when case status is Batched for IRS', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+              },
+            ],
+            status: Case.STATUS_TYPES.batchedForIRS,
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showServeToIrsButton).toEqual(false);
+      expect(result.showRecallButton).toEqual(true);
+    });
+
+    it('should set showServeToIrsButton false and showRecallButton true when case status is general docket', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+              },
+            ],
+            status: Case.STATUS_TYPES.generalDocket,
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showServeToIrsButton).toEqual(false);
+      expect(result.showRecallButton).toEqual(false);
+    });
+
+    it('should set showServeToIrsButton false and showRecallButton false if document type is not a petition', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Answer',
+              },
+            ],
+            status: Case.STATUS_TYPES.batchedForIRS,
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showServeToIrsButton).toEqual(false);
+      expect(result.showRecallButton).toEqual(false);
+    });
+
+    it('should not show the showServeToIrsButton for a docketclerk', () => {
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showServeToIrsButton).toEqual(false);
+      expect(result.showRecallButton).toEqual(false);
+    });
+  });
+
+  describe('showDocumentInfoTab', () => {
+    it('should be false if document is not a petition', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -131,7 +342,7 @@ describe('formatted work queue computed', () => {
                 documentType: 'NotAPetition',
               },
             ],
-            status: 'Recalled',
+            status: Case.STATUS_TYPES.recalled,
           },
           documentId: 'abc',
           workItemActions: {
@@ -143,9 +354,13 @@ describe('formatted work queue computed', () => {
     });
 
     it('should be true if document is a petition and status is New, Recalled, or Batched for IRS', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -153,7 +368,7 @@ describe('formatted work queue computed', () => {
                 documentType: 'Petition',
               },
             ],
-            status: 'Recalled',
+            status: Case.STATUS_TYPES.recalled,
           },
           documentId: 'abc',
           workItemActions: {
@@ -165,9 +380,13 @@ describe('formatted work queue computed', () => {
     });
 
     it('should be false if document is a petition and status is not New, Recalled, or Batched for IRS', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -175,7 +394,7 @@ describe('formatted work queue computed', () => {
                 documentType: 'Petition',
               },
             ],
-            status: 'General Docket - Not at Issue',
+            status: Case.STATUS_TYPES.generalDocket,
           },
           documentId: 'abc',
           workItemActions: {
@@ -187,10 +406,13 @@ describe('formatted work queue computed', () => {
     });
 
     it('should show the serve button when a docketclerk and the document is a Stipulated Decision and the document is not served already', () => {
-      role = User.ROLES.docketClerk;
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -206,11 +428,14 @@ describe('formatted work queue computed', () => {
       expect(result.showServeDocumentButton).toEqual(true);
     });
 
-    it('should NOT show the serve button when user is a NOT a docketclerk', () => {
-      role = User.ROLES.petitionsClerk;
+    it('should NOT show the serve button when user does not have serve document permission', () => {
+      const user = {
+        role: User.ROLES.admissionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -225,11 +450,14 @@ describe('formatted work queue computed', () => {
       expect(result.showServeDocumentButton).toEqual(false);
     });
 
-    it('should NOT show the serve button when the document is NOT a signed stipulated decisiion', () => {
-      role = User.ROLES.petitionsClerk;
+    it('should NOT show the serve button when the document is NOT a signed stipulated decision', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -246,10 +474,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('should NOT show the serve button when a docketclerk and the document is a Stipulated Decision and document has already been served', () => {
-    role = User.ROLES.docketClerk;
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [
             {
@@ -266,9 +497,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('should indicate QC completed by workItem "completedBy" if not indicated on Document', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [
             {
@@ -277,10 +512,10 @@ describe('formatted work queue computed', () => {
               documentType: 'Proposed Stipulated Decision',
               processingStatus: 'pending',
               reviewDate: '2018-11-21T20:49:28.192Z',
-              userId: 'taxpayer',
+              userId: 'petitioner',
               workItems: [
                 {
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   completedAt: '2018-11-21T20:49:28.192Z',
                   completedBy: 'William T. Riker',
                   document: {
@@ -300,7 +535,7 @@ describe('formatted work queue computed', () => {
                 },
                 {
                   assigneeId: 'abc',
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   document: {
                     documentType: 'Proposed Stipulated Decision',
                     receivedAt: '2018-11-21T20:49:28.192Z',
@@ -333,9 +568,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('should indicate QC completed by "qcByUser" on Document if present', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [
             {
@@ -349,10 +588,10 @@ describe('formatted work queue computed', () => {
                 userId: 'xyzzy',
               },
               reviewDate: '2018-11-21T20:49:28.192Z',
-              userId: 'taxpayer',
+              userId: 'petitioner',
               workItems: [
                 {
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   completedAt: '2018-11-21T20:49:28.192Z',
                   completedBy: 'William T. Riker',
                   document: {
@@ -372,7 +611,7 @@ describe('formatted work queue computed', () => {
                 },
                 {
                   assigneeId: 'abc',
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   document: {
                     documentType: 'Proposed Stipulated Decision',
                     receivedAt: '2018-11-21T20:49:28.192Z',
@@ -405,11 +644,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('should filter out completed work items with Served on IRS messages', () => {
-    role = User.ROLES.adc;
-
+    const user = {
+      role: User.ROLES.adc,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [
             {
@@ -418,10 +659,10 @@ describe('formatted work queue computed', () => {
               documentType: 'Proposed Stipulated Decision',
               processingStatus: 'pending',
               reviewDate: '2018-11-21T20:49:28.192Z',
-              userId: 'taxpayer',
+              userId: 'petitioner',
               workItems: [
                 {
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   completedAt: '2018-11-21T20:49:28.192Z',
                   document: {
                     receivedAt: '2018-11-21T20:49:28.192Z',
@@ -440,7 +681,7 @@ describe('formatted work queue computed', () => {
                 },
                 {
                   assigneeId: 'abc',
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   document: {
                     documentType: 'Proposed Stipulated Decision',
                     receivedAt: '2018-11-21T20:49:28.192Z',
@@ -470,9 +711,13 @@ describe('formatted work queue computed', () => {
   });
 
   it('default to empty array when caseDetail.documents is undefined', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: undefined,
         },
@@ -483,9 +728,13 @@ describe('formatted work queue computed', () => {
   });
 
   it("default to empty array when a document's workItems are non-existent", () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
     const result = runCompute(documentDetailHelper, {
       state: {
-        ...baseState,
+        ...getBaseState(user),
         caseDetail: {
           documents: [
             {
@@ -505,9 +754,13 @@ describe('formatted work queue computed', () => {
 
   describe('showViewOrdersNeededButton', () => {
     it("should show the 'view orders needed' link if a document has been served and user is petitionsclerk", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -528,9 +781,13 @@ describe('formatted work queue computed', () => {
     });
 
     it("should NOT show the 'view orders needed' link if a document has been served and user is NOT a petitionsclerk", () => {
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -551,9 +808,13 @@ describe('formatted work queue computed', () => {
     });
 
     it("should NOT show the 'view orders needed' link if a document has NOT been served and user is a petitionsclerk", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -574,9 +835,13 @@ describe('formatted work queue computed', () => {
     });
 
     it("should NOT show the 'view orders needed' link if a document has NOT been served and user is NOT a petitionsclerk", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -599,9 +864,13 @@ describe('formatted work queue computed', () => {
 
   describe('showConfirmEditOrder and showRemoveSignature', () => {
     it('should show confirm edit order and remove signature', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -623,9 +892,13 @@ describe('formatted work queue computed', () => {
     });
 
     it('should NOT show confirm edit order OR remove signature when the documentType is not an order', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -647,9 +920,13 @@ describe('formatted work queue computed', () => {
     });
 
     it('should NOT show confirm edit order OR remove signature when the document has not been signed', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
       const result = runCompute(documentDetailHelper, {
         state: {
-          ...baseState,
+          ...getBaseState(user),
           caseDetail: {
             documents: [
               {
@@ -668,6 +945,83 @@ describe('formatted work queue computed', () => {
 
       expect(result.showConfirmEditOrder).toEqual(false);
       expect(result.showRemoveSignature).toEqual(false);
+    });
+  });
+
+  describe('showPrintCaseConfirmationButton', () => {
+    it("should show the 'print confirmation' button if a document has been served and the document is a petition ", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+                status: 'served',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.showPrintCaseConfirmationButton).toEqual(true);
+    });
+
+    it("should not show the 'print confirmation' button if a document has not been served", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+                status: 'new',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.showPrintCaseConfirmationButton).toEqual(false);
+    });
+
+    it("should not show the 'print confirmation' button if the document is not a petition ", () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+                status: 'served',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.showPrintCaseConfirmationButton).toEqual(false);
     });
   });
 });
