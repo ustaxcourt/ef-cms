@@ -10,9 +10,9 @@ export default test => {
       'Test Person, Deceased, Test Person 2, Surviving Spouse, Petitioner v. Commissioner of Internal Revenue, Respondent',
     );
 
-    await test.runSequence('openCaseCaptionModalSequence');
+    await test.runSequence('openUpdateCaseModalSequence');
 
-    expect(test.getState('showModal')).toEqual('UpdateCaseCaptionModalDialog');
+    expect(test.getState('showModal')).toEqual('UpdateCaseModalDialog');
     expect(test.getState('caseCaption')).toEqual(
       'Test Person, Deceased, Test Person 2, Surviving Spouse, Petitioner',
     );
@@ -27,9 +27,9 @@ export default test => {
     expect(test.getState('showModal')).toEqual('');
     expect(test.getState('caseCaption')).toEqual('');
 
-    await test.runSequence('openCaseCaptionModalSequence');
+    await test.runSequence('openUpdateCaseModalSequence');
 
-    expect(test.getState('showModal')).toEqual('UpdateCaseCaptionModalDialog');
+    expect(test.getState('showModal')).toEqual('UpdateCaseModalDialog');
     expect(test.getState('caseCaption')).toEqual(
       'Test Person, Deceased, Test Person 2, Surviving Spouse, Petitioner',
     );

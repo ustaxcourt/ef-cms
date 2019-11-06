@@ -3,7 +3,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const UpdateCaseCaptionModalDialog = connect(
+export const UpdateCaseModalDialog = connect(
   {
     cancelSequence: sequences.dismissCaseCaptionModalSequence,
     caseCaption: state.caseCaption,

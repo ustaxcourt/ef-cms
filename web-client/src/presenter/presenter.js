@@ -113,7 +113,7 @@ import { openAddPractitionerModalSequence } from './sequences/openAddPractitione
 import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
-import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
+import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
 import { openChangeScannerSourceModalSequence } from './sequences/openChangeScannerSourceModalSequence';
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
@@ -418,7 +418,7 @@ export const presenter = {
     openAddRespondentModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
-    openCaseCaptionModalSequence,
+    openUpdateCaseModalSequence,
     openCaseDifferenceModalSequence,
     openChangeScannerSourceModalSequence,
     openCleanModalSequence,
