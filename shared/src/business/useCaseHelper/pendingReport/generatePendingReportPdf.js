@@ -95,7 +95,8 @@ exports.generatePendingReportPdf = async ({ applicationContext, cases }) => {
   const documentId = 'pending-report.pdf';
 
   await new Promise(resolve => {
-    const documentsBucket = applicationContext.environment.documentsBucketName;
+    const documentsBucket =
+      applicationContext.environment.tempDocumentsBucketName;
     const s3Client = applicationContext.getStorageClient();
 
     const params = {
