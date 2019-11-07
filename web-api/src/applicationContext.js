@@ -612,6 +612,7 @@ const {
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { exec } = require('child_process');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
+const { fetchPendingItemsInteractor } = require('../../shared/src/business/useCases/cases/fetchPendingItemsInteractor');
 const { User } = require('../../shared/src/business/entities/User');
 
 // increase the timeout for zip uploads to S3
@@ -925,6 +926,7 @@ module.exports = (appContextUser = {}) => {
         getDocumentQCServedForSectionInteractor,
         getDocumentQCServedForUserInteractor,
         getDownloadPolicyUrlInteractor,
+        fetchPendingItemsInteractor,
         getEligibleCasesForTrialSessionInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
