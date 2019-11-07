@@ -181,6 +181,9 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  fetchPendingItems,
+} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
+const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
@@ -877,6 +880,7 @@ module.exports = (appContextUser = {}) => {
     },
     getUseCaseHelpers: () => {
       return {
+        fetchPendingItems,
         generateCaseConfirmationPdf,
       };
     },
