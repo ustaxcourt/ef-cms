@@ -14,6 +14,7 @@ import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './CaseDetail/MessagesInProgress';
 import { PartyInformation } from './CaseDetail/PartyInformation';
+import { PendingReportList } from './CaseDetail/PendingReportList';
 import { PrioritizeCaseModal } from './CaseDetail/PrioritizeCaseModal';
 import { RemoveFromTrialSessionModal } from './CaseDetail/RemoveFromTrialSessionModal';
 import { SuccessNotification } from './SuccessNotification';
@@ -49,7 +50,25 @@ export const CaseDetailInternal = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <CaseDeadlinesInternal />
+          <Tabs
+            bind="caseDetailPage.deadlinesTab"
+            className="classic-horizontal-header3 tab-border"
+          >
+            <Tab
+              id="tab-case-deadlines"
+              tabName="caseDeadlines"
+              title="Deadlines"
+            >
+              <CaseDeadlinesInternal />
+            </Tab>
+            <Tab
+              id="tab-pending-report"
+              tabName="pendingReport"
+              title="Pending Report"
+            >
+              <PendingReportList />
+            </Tab>
+          </Tabs>
 
           <div>
             <div className="title">
