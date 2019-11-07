@@ -9,6 +9,14 @@
      - Create the `CircleCI` user and attach the policy.
      - Keep track of the access key and secret access key — it is needed for the CircleCI setup.
 - [Create a Route53 Hosted Zone](https://console.aws.amazon.com/route53/home) This will be used for setting up the domains for the UI and API.  Put the desired domain name (e.g. `ef-cms.example.gov.`) and make sure it is a `Public Hosted Zone`.  This is the value you will set for `EFCMS_DOMAIN` in CircleCI.  Make sure the domain name ends with a period.
+- Create the lambda roles & policies needed for the lambdas that run the backend:
+     - Create your lambda policy (replace YOUR_AWS_ACCOUNT_ID with your actual id): 
+          `./generate-lambda-policy.sh YOUR_AWS_ACCOUNT_ID`
+     - Create the following AWS Roles and attach the policy:
+          - `lambda_role_dev`
+          - `lambda_role_stg`
+          - `lambda_role_prod`
+     - Note, each environment has different policies that need to be updated individually before deploys
 - [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
 - [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
   - There are three sub-projects to the EF-CMS — the front-end (the UI), the back-end (the API), and shared code. Each is handled separately by Jenkins and SonarCloud.
