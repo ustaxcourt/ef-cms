@@ -20,6 +20,7 @@ import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
+import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
@@ -242,6 +243,7 @@ const allUseCases = {
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,
   downloadDocumentFileInteractor,
+  fetchPendingItemsInteractor,
   fileCourtIssuedOrderInteractor,
   fileDocketEntryInteractor,
   fileExternalDocumentInteractor,

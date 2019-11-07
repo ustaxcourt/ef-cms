@@ -1,4 +1,7 @@
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
+import { fetchPendingItemsAction } from '../../actions/PendingItems/fetchPendingItemsAction';
+import { setPendingItemsAction } from '../../actions/PendingItems/setPendingItemsAction';
 
-export const fetchPendingItemsSequence = [set(state.pendingItems, [])];
+export const fetchPendingItemsSequence = [
+  fetchPendingItemsAction,
+  setPendingItemsAction,
+];
