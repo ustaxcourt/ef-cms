@@ -51,4 +51,13 @@ describe('updateCaseModalHelper', () => {
     });
     expect(result.showCalendaredAlert).toBeTruthy();
   });
+
+  it('returns a filtered list of caseStatusOptions', () => {
+    const result = runCompute(updateCaseModalHelper, {
+      state: {
+        caseDetail: mockCase,
+      },
+    });
+    expect(result.caseStatusOptions).toEqual(Case.STATUS_TYPES_MANUAL_UPDATE);
+  });
 });
