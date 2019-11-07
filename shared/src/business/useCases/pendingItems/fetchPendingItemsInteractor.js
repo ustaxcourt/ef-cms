@@ -10,7 +10,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.judge the optional judge filter
- * @returns {object} the case data
+ * @returns {Array} the pending items found
  */
 exports.fetchPendingItemsInteractor = async ({ applicationContext, judge }) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -19,7 +19,7 @@ exports.fetchPendingItemsInteractor = async ({ applicationContext, judge }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return applicationContext
+  return await applicationContext
     .useCaseHelpers()
     .fetchPendingItems({ applicationContext, judge });
 };
