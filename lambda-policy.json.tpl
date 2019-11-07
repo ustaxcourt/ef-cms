@@ -52,7 +52,7 @@
         },
         {
             "Action": [
-                "dynamodb:*",
+                "dynamodb:*"
             ],
             "Resource": [
                 "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/*",
