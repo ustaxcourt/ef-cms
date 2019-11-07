@@ -1695,4 +1695,31 @@ describe('Case entity', () => {
       expect(caseToUpdate.trialTime).toBeFalsy();
     });
   });
+
+  describe('hasPendingItems', () => {
+    it('should not show the case as having pending items if no documents are pending', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToUpdate.hasPendingItems).toEqual(false);
+    });
+    it('should show the case as having pending items if some documents are pending', () => {
+      const mockCase = {
+        ...MOCK_CASE,
+      };
+      mockCase.documents[0].pending = true;
+
+      const caseToUpdate = new Case(mockCase, {
+        applicationContext,
+      });
+
+      expect(caseToUpdate.hasPendingItems).toEqual(true);
+    });
+  });
 });
