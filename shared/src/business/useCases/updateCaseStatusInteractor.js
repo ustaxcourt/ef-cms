@@ -69,7 +69,7 @@ exports.updateCaseStatusInteractor = async ({
         trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
       });
 
-      newCase.removeFromTrialWithCaseStatus(associatedJudge, caseStatus);
+      newCase.removeFromTrialWithAssociatedJudge(associatedJudge);
     } else if (
       oldCase.status === Case.STATUS_TYPES.generalDocketReadyForTrial
     ) {
