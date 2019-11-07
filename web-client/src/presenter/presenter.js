@@ -292,6 +292,7 @@ import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDo
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
 import { validateTrialSessionPlanningSequence } from './sequences/validateTrialSessionPlanningSequence';
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
+import { validateUpdateCaseModalSequence } from './sequences/validateUpdateCaseModalSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
 import { viewDocumentSequence } from './sequences/viewDocumentSequence';
 
@@ -596,6 +597,7 @@ export const presenter = {
     validateStartCaseWizardSequence,
     validateTrialSessionPlanningSequence,
     validateTrialSessionSequence,
+    validateUpdateCaseModalSequence,
     validateUserContactSequence,
     viewDocumentSequence,
   },
