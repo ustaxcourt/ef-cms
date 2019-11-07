@@ -20,6 +20,6 @@ exports.fetchPendingItemsInteractor = async ({ applicationContext, judge }) => {
   }
 
   return await applicationContext
-    .useCaseHelpers()
+    .getUseCaseHelpers()
     .fetchPendingItems({ applicationContext, judge });
 };
