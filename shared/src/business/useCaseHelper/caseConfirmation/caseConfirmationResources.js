@@ -7,18 +7,19 @@ const fs = require('fs');
  * or using `__dirname` or anything like that). The path must be relative to the
  * project root from where parcel is run.
  */
+const pathPrefix = process.env.NODE_ENV === 'production' ? '/var/task/' : '';
 
 const confirmSassContent = fs.readFileSync(
-  './shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.scss',
+  `${pathPrefix}shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.scss`,
   'utf8',
 );
 const confirmTemplateContent = fs.readFileSync(
-  './shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.handlebars',
+  `${pathPrefix}shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.handlebars`,
   'utf8',
 );
 const ustcLogoBufferBase64 =
   'data:image/png;base64,' +
-  fs.readFileSync('./shared/static/images/ustc_seal.png', {
+  fs.readFileSync(`${pathPrefix}shared/static/images/ustc_seal.png`, {
     encoding: 'base64',
   });
 
