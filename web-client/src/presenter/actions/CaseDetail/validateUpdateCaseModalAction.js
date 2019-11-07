@@ -15,18 +15,13 @@ export const validateUpdateCaseModalAction = ({
   path,
 }) => {
   const { associatedJudge, caseCaption, caseStatus } = get(state.modal);
-  const { STATUS_TYPES } = applicationContext.getConstants();
+  const {
+    STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
+  } = applicationContext.getConstants();
 
   let errors = {};
   if (
-    [
-      STATUS_TYPES.submitted,
-      STATUS_TYPES.cav,
-      STATUS_TYPES.rule155,
-      STATUS_TYPES.jurisdictionRetained,
-      STATUS_TYPES.assignedCase,
-      STATUS_TYPES.assignedMotion,
-    ].includes(caseStatus) &&
+    STATUS_TYPES_WITH_ASSOCIATED_JUDGE.includes(caseStatus) &&
     !associatedJudge
   ) {
     errors.associatedJudge = 'Select an associated judge';
