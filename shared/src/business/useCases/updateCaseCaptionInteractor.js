@@ -21,7 +21,7 @@ exports.updateCaseCaptionInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE_CONTEXT)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
