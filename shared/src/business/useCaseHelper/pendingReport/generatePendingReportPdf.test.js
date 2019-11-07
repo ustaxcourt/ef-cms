@@ -28,7 +28,7 @@ describe('generatePendingReportPdf', () => {
     const result = await generatePendingReportPdf({
       applicationContext: {
         environment: {
-          documentsBucketName: 'MockDocumentBucketName',
+          tempDocumentsBucketName: 'MockDocumentBucketName',
         },
         getChromium: () => chromiumMock,
 
