@@ -40,4 +40,15 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry&info=show-cos-inputs',
   },
+  {
+    actions: [
+      'wait for #caption-edit-button to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #caption-edit-button',
+      'wait for .modal-dialog to be visible',
+    ],
+    notes: 'checks a11y of case caption edit dialog',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19&info=case-caption-edit',
+  },
 ];
