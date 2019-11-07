@@ -1,6 +1,4 @@
 const DateHandler = require('../../utilities/DateHandler');
-const Handlebars = require('handlebars');
-const sass = require('node-sass');
 const {
   confirmSassContent,
   confirmTemplateContent,
@@ -46,7 +44,13 @@ const formattedCaseInfo = caseInfo => {
  * @param {object} caseInfo a raw object representing a petition
  * @returns {string} an html string resulting from rendering template with caseInfo
  */
-const generateCaseConfirmationPage = async caseInfo => {
+const generateCaseConfirmationPage = async ({
+  applicationContext,
+  caseInfo,
+}) => {
+  const Handlebars = applicationContext.getHandlebars();
+  const sass = applicationContext.getNodeSass();
+
   const { css } = await new Promise(resolve => {
     sass.render({ data: confirmSassContent }, (err, result) => {
       return resolve(result);
@@ -93,7 +97,10 @@ exports.generateCaseConfirmationPdf = async ({
 
     let page = await browser.newPage();
 
-    const contentResult = await generateCaseConfirmationPage(caseEntity);
+    const contentResult = await generateCaseConfirmationPage({
+      applicationContext,
+      caseEntity,
+    });
     await page.setContent(contentResult);
 
     result = await page.pdf({
