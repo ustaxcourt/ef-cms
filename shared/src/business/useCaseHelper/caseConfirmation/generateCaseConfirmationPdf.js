@@ -46,7 +46,7 @@ const formattedCaseInfo = caseInfo => {
  */
 const generateCaseConfirmationPage = async ({
   applicationContext,
-  caseInfo,
+  caseEntity,
 }) => {
   const Handlebars = applicationContext.getHandlebars();
   const sass = applicationContext.getNodeSass();
@@ -58,7 +58,7 @@ const generateCaseConfirmationPage = async ({
   });
   const compiledFunction = Handlebars.compile(confirmTemplateContent);
   const html = compiledFunction({
-    ...formattedCaseInfo(caseInfo),
+    ...formattedCaseInfo(caseEntity),
     styles: `<style>${css}</style>`,
     logo: ustcLogoBufferBase64,
   });
