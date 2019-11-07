@@ -181,6 +181,12 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  fetchPendingItems,
+} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
+const {
+  fetchPendingItemsInteractor,
+} = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
+const {
   fileCourtIssuedOrderInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor');
 const {
@@ -880,6 +886,7 @@ module.exports = (appContextUser = {}) => {
     },
     getUseCaseHelpers: () => {
       return {
+        fetchPendingItems,
         generateCaseConfirmationPdf,
       };
     },
@@ -908,6 +915,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
         deleteCounselFromCaseInteractor,
+        fetchPendingItemsInteractor,
         fileCourtIssuedOrderInteractor,
         fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
