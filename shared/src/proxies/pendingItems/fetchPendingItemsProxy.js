@@ -17,6 +17,6 @@ exports.fetchPendingItemsInteractor = ({ applicationContext, judge }) => {
 
   return get({
     applicationContext,
-    endpoint: `/pending-items${queryString}`,
+    endpoint: `/api/pending-items${queryString}`,
   });
 };
