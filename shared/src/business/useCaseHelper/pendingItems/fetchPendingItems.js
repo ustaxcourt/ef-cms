@@ -7,7 +7,7 @@ const { get } = require('lodash');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.judge the optional judge filter
- * @returns {object} the case data
+ * @returns {Array} the pending items found
  */
 exports.fetchPendingItems = async ({ applicationContext, judge }) => {
   const searchParameters = {
