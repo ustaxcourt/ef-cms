@@ -1,7 +1,7 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UpdateCaseCaptionModalDialog } from './CaseDetailEdit/UpdateCaseCaptionModalDialog';
+import { UpdateCaseModalDialog } from './CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -11,16 +11,16 @@ export const CaseDetailHeader = connect(
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     hideActionButtons: props.hideActionButtons,
-    openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
+    openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     showModal: state.showModal,
   },
   ({
     caseDetailHelper,
     formattedCaseDetail,
     hideActionButtons,
-    openCaseCaptionModalSequence,
+    openUpdateCaseModalSequence,
     showModal,
   }) => {
     return (
@@ -73,9 +73,6 @@ export const CaseDetailHeader = connect(
               <p className="margin-y-0" id="case-title">
                 <span>{formattedCaseDetail.caseTitle}</span>
               </p>
-              {showModal == 'UpdateCaseCaptionModalDialog' && (
-                <UpdateCaseCaptionModalDialog />
-              )}
             </div>
 
             {!hideActionButtons && (
@@ -111,16 +108,21 @@ export const CaseDetailHeader = connect(
                 )}
 
                 {caseDetailHelper.showEditCaseButton && (
-                  <Button
-                    className="tablet-full-width push-right margin-right-0"
-                    id="caption-edit-button"
-                    onClick={() => {
-                      openCaseCaptionModalSequence();
-                    }}
-                  >
-                    <FontAwesomeIcon icon="edit" size="sm" />
-                    Edit
-                  </Button>
+                  <>
+                    <Button
+                      className="tablet-full-width push-right margin-right-0"
+                      id="caption-edit-button"
+                      onClick={() => {
+                        openUpdateCaseModalSequence();
+                      }}
+                    >
+                      <FontAwesomeIcon icon="edit" size="sm" />
+                      Edit
+                    </Button>
+                    {showModal == 'UpdateCaseModalDialog' && (
+                      <UpdateCaseModalDialog />
+                    )}
+                  </>
                 )}
               </div>
             )}
