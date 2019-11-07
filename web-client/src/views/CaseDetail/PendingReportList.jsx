@@ -12,7 +12,17 @@ export const PendingReportList = connect(
   },
   ({ pendingItems }) => {
     return (
-      <React.Fragment>
+      <>
+        <div>
+          <Button
+            link
+            className="push-right margin-top-2"
+            icon="print"
+            onClick={() => true}
+          >
+            Print Report
+          </Button>
+        </div>
         <table
           aria-describedby="judgeFilter"
           aria-label="pending items"
@@ -21,17 +31,17 @@ export const PendingReportList = connect(
         >
           <thead>
             <tr>
-              <th>Docket</th>
+              <th>No.</th>
               <th>Date Filed</th>
               <th>Filings &amp; proceedings</th>
               <th>Filed By</th>
               <th>Remove</th>
             </tr>
           </thead>
-          {pendingItems.map(({ document, index, record }, arrayIndex) => (
+          {pendingItems.map(({ document, record }, arrayIndex) => (
             <tbody key={arrayIndex}>
               <tr className="pending-item-row">
-                <td>{index}</td>
+                <td>{arrayIndex + 1}</td>
                 <td>
                   <span className="no-wrap">{record.createdAtFormatted}</span>
                 </td>
@@ -54,7 +64,7 @@ export const PendingReportList = connect(
           ))}
         </table>
         {pendingItems.length === 0 && <p>There is nothing pending.</p>}
-      </React.Fragment>
+      </>
     );
   },
 );
