@@ -1,3 +1,4 @@
+import { Hint } from '../../ustc-ui/Hint/Hint';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -47,6 +48,12 @@ export const UpdateCaseModalDialog = connect(
             }
           />
         </div>
+        {updateCaseModalHelper.showCalendaredAlert && (
+          <Hint>
+            This case is Calendared for trial. Changing the case status will
+            remove this case from the current trial session.
+          </Hint>
+        )}
         <div className="margin-bottom-4">
           <label className="usa-label" htmlFor="caseStatus">
             Case Status

@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
 export const updateCaseModalHelper = (get, applicationContext) => {
+  const caseDetail = get(state.caseDetail);
   const { STATUS_TYPES } = applicationContext.getConstants();
   const associatedJudgeCaseStatus = [
     STATUS_TYPES.submitted,
@@ -17,5 +18,7 @@ export const updateCaseModalHelper = (get, applicationContext) => {
     selectedStatus,
   );
 
-  return { showAssociatedJudgeOptions };
+  const showCalendaredAlert = caseDetail.status === STATUS_TYPES.calendared;
+
+  return { showAssociatedJudgeOptions, showCalendaredAlert };
 };

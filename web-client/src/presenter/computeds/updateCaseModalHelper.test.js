@@ -9,10 +9,20 @@ const updateCaseModalHelper = withAppContextDecorator(
   applicationContext,
 );
 
+let mockCase;
+
 describe('updateCaseModalHelper', () => {
+  beforeEach(() => {
+    mockCase = {
+      caseId: '123',
+      status: Case.STATUS_TYPES.new,
+    };
+  });
+
   it('returns showAssociatedJudgeOptions true if the selected status in the modal is Submitted', () => {
     const result = runCompute(updateCaseModalHelper, {
       state: {
+        caseDetail: mockCase,
         modal: {
           caseStatus: Case.STATUS_TYPES.submitted,
         },
@@ -24,11 +34,21 @@ describe('updateCaseModalHelper', () => {
   it('returns showAssociatedJudgeOptions false if the selected status in the modal is New', () => {
     const result = runCompute(updateCaseModalHelper, {
       state: {
+        caseDetail: mockCase,
         modal: {
           caseStatus: Case.STATUS_TYPES.new,
         },
       },
     });
     expect(result.showAssociatedJudgeOptions).toBeFalsy();
+  });
+
+  it('returns showCalendaredAlert true if the case is currently calendared', () => {
+    const result = runCompute(updateCaseModalHelper, {
+      state: {
+        caseDetail: { ...mockCase, status: Case.STATUS_TYPES.calendared },
+      },
+    });
+    expect(result.showCalendaredAlert).toBeTruthy();
   });
 });
