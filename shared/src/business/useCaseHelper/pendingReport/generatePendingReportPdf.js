@@ -1,6 +1,4 @@
 const fs = require('fs');
-const pug = require('pug');
-const sass = require('node-sass');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -27,7 +25,10 @@ const ustcLogoBufferBase64 =
  * @param {Array} cases case entities
  * @returns {string} an html string resulting from rendering template with caseInfo
  */
-const generatePendingReportPage = async cases => {
+const generatePendingReportPage = async ({ applicationContext, cases }) => {
+  const pug = applicationContext.getPug();
+  const sass = applicationContext.getNodeSass();
+
   const { css } = await new Promise(resolve => {
     sass.render({ data: pendingReportSassContent }, (err, result) => {
       return resolve(result);
@@ -72,7 +73,10 @@ exports.generatePendingReportPdf = async ({ applicationContext, cases }) => {
 
     let page = await browser.newPage();
 
-    const contentResult = await generatePendingReportPage(cases);
+    const contentResult = await generatePendingReportPage({
+      applicationContext,
+      cases,
+    });
     await page.setContent(contentResult);
 
     result = await page.pdf({

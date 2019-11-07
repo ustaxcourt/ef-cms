@@ -7,3 +7,20 @@ html(lang="en")
     .page-container
     img.logo(src=logo)
     h1.text-center United States Tax Court
+    table
+      thead
+        tr Docket
+        tr Date Filed
+        tr Case Name
+        tr Filings and Proceedings
+        tr Case Status
+        tr Judge
+      tbody
+        each case in cases
+          tr
+            td= case.docketNumber
+            td= case.filedAt
+            td= case.name
+            td= case.filings
+            td= case.status
+            td= case.judge
