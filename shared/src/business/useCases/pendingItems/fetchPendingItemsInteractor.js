@@ -33,7 +33,7 @@ exports.fetchPendingItemsInteractor = async ({ applicationContext, judge }) => {
       ],
       query: {
         bool: {
-          must: [{ match: { 'blocked.BOOL': true } }],
+          must: [{ match: { 'hasPendingItems.BOOL': true } }],
         },
       },
       size: 5000,
@@ -42,7 +42,6 @@ exports.fetchPendingItemsInteractor = async ({ applicationContext, judge }) => {
   };
 
   if (judge) {
-    searchParameters.body['_source'].push(['associatedJudge']);
     searchParameters.body.query.bool.must.push({
       match: { 'associatedJudge.S': judge },
     });
@@ -66,9 +65,13 @@ exports.fetchPendingItemsInteractor = async ({ applicationContext, judge }) => {
   foundCases.forEach(foundCase => {
     const { documents, ...mappedProps } = foundCase;
 
-    foundDocuments.push({
-      ...mappedProps,
-      ...documents[0],
+    documents.forEach(document => {
+      if (document.pending) {
+        foundDocuments.push({
+          ...mappedProps,
+          ...document,
+        });
+      }
     });
   });
 
