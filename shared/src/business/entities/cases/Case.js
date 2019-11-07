@@ -1108,24 +1108,13 @@ Case.prototype.removeFromTrial = function() {
 };
 
 /**
- * remove case from trial via a case status update with optional associated judge
+ * remove case from trial with optional associated judge
  *
  * @param {string} associatedJudge (optional) the associated judge for the case
- * @param {string} caseStatus the status to update the case to
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrialWithCaseStatus = function(
-  associatedJudge,
-  caseStatus,
-) {
-  if (
-    [
-      Case.STATUS_TYPES.generalDocket,
-      Case.STATUS_TYPES.generalDocketReadyForTrial,
-    ].includes(caseStatus)
-  ) {
-    this.associatedJudge = Case.CHIEF_JUDGE;
-  } else if (associatedJudge) {
+Case.prototype.removeFromTrialWithAssociatedJudge = function(associatedJudge) {
+  if (associatedJudge) {
     this.associatedJudge = associatedJudge;
   }
 
@@ -1155,6 +1144,14 @@ Case.prototype.setAssociatedJudge = function(associatedJudge) {
  */
 Case.prototype.setCaseStatus = function(caseStatus) {
   this.status = caseStatus;
+  if (
+    [
+      Case.STATUS_TYPES.generalDocket,
+      Case.STATUS_TYPES.generalDocketReadyForTrial,
+    ].includes(caseStatus)
+  ) {
+    this.associatedJudge = Case.CHIEF_JUDGE;
+  }
   return this;
 };
 
