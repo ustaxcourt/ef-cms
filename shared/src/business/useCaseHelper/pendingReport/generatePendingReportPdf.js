@@ -92,7 +92,7 @@ exports.generatePendingReportPdf = async ({ applicationContext, cases }) => {
     }
   }
 
-  const documentId = 'pending-report.pdf';
+  const documentId = `pending-report-${applicationContext.getUniqueId()}.pdf`;
 
   await new Promise(resolve => {
     const documentsBucket =
