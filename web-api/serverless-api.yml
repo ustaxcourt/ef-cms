@@ -288,3 +288,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  fetchPendingItemsLambda:
+    handler: web-api/src/apiHandlers.fetchPendingItemsLambda
+    events:
+      - http:
+          path: pending-items
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
