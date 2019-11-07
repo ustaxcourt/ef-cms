@@ -1069,19 +1069,68 @@ Case.prototype.unsetAsHighPriority = function() {
 };
 
 /**
- * remove from trial, setting case status to the passed in status
- * or generalDocketReadyForTrial by default if a case status is not passed in
+ * remove case from trial, setting case status to generalDocketReadyForTrial
  *
- * @param {string} caseStatus the case status to update the case to
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrial = function(caseStatus) {
-  this.status = caseStatus || Case.STATUS_TYPES.generalDocketReadyForTrial;
+Case.prototype.removeFromTrial = function() {
+  this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
   this.associatedJudge = Case.CHIEF_JUDGE;
   this.trialDate = undefined;
   this.trialLocation = undefined;
   this.trialSessionId = undefined;
   this.trialTime = undefined;
+  return this;
+};
+
+/**
+ * remove case from trial via a case status update with optional associated judge
+ *
+ * @param {string} associatedJudge (optional) the associated judge for the case
+ * @param {string} caseStatus the status to update the case to
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.removeFromTrialWithCaseStatus = function(
+  associatedJudge,
+  caseStatus,
+) {
+  if (
+    [
+      Case.STATUS_TYPES.generalDocket,
+      Case.STATUS_TYPES.generalDocketReadyForTrial,
+    ].includes(caseStatus)
+  ) {
+    this.associatedJudge = Case.CHIEF_JUDGE;
+  } else if (associatedJudge) {
+    this.associatedJudge = associatedJudge;
+  }
+
+  this.trialDate = undefined;
+  this.trialLocation = undefined;
+  this.trialSessionId = undefined;
+  this.trialTime = undefined;
+  return this;
+};
+
+/**
+ * set associated judge
+ *
+ * @param {string} associatedJudge the judge to associate with the case
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setAssociatedJudge = function(associatedJudge) {
+  this.associatedJudge = associatedJudge;
+  return this;
+};
+
+/**
+ * set case status
+ *
+ * @param {string} caseStatus the case status to update
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setCaseStatus = function(caseStatus) {
+  this.status = caseStatus;
   return this;
 };
 

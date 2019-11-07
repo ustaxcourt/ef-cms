@@ -2,10 +2,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const {
-  removeCaseFromTrial,
-} = require('./trialSessions/removeCaseFromTrialInteractor');
 const { Case } = require('../entities/cases/Case');
+const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -19,6 +17,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  */
 exports.updateCaseStatusInteractor = async ({
   applicationContext,
+  associatedJudge,
   caseId,
   caseStatus,
 }) => {
@@ -32,19 +31,15 @@ exports.updateCaseStatusInteractor = async ({
     .getPersistenceGateway()
     .getCaseByCaseId({ applicationContext, caseId });
 
-  const newCase = new Case(
-    { ...oldCase, status: caseStatus },
-    { applicationContext },
-  )
-    .validate()
-    .toRawObject();
+  const newCase = new Case(oldCase, { applicationContext });
 
-  let updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
-      applicationContext,
-      caseToUpdate: newCase,
-    });
+  if (caseStatus) {
+    newCase.setCaseStatus(caseStatus);
+  }
+
+  if (associatedJudge) {
+    newCase.setAssociatedJudge(associatedJudge);
+  }
 
   // if this case status is changing FROM calendared
   // we need to remove it from the trial session
@@ -52,13 +47,35 @@ exports.updateCaseStatusInteractor = async ({
     oldCase.status === Case.STATUS_TYPES.calendared &&
     caseStatus !== oldCase.status
   ) {
-    updatedCase = await removeCaseFromTrial({
+    const disposition = `Status was changed to ${caseStatus}`;
+
+    const trialSession = await applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById({
+        applicationContext,
+        trialSessionId: oldCase.trialSessionId,
+      });
+
+    const trialSessionEntity = new TrialSession(trialSession, {
       applicationContext,
-      caseId,
-      caseStatus,
-      disposition: `Status was changed to ${caseStatus}`,
-      trialSessionId: oldCase.trialSessionId,
     });
+
+    if (trialSessionEntity.isCalendared) {
+      trialSessionEntity.removeCaseFromCalendar({ caseId, disposition });
+    } else {
+      trialSessionEntity.deleteCaseFromCalendar({ caseId });
+    }
+
+    await applicationContext.getPersistenceGateway().updateTrialSession({
+      applicationContext,
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
+
+    newCase.removeFromTrialWithCaseStatus(associatedJudge, caseStatus);
   }
-  return updatedCase;
+
+  return await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: newCase.validate().toRawObject(),
+  });
 };
