@@ -6,16 +6,18 @@ import React from 'react';
 export const UpdateCaseModalDialog = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    caseCaption: state.caseDetail.caseCaption,
     confirmSequence: sequences.submitUpdateCaseModalSequence,
     constants: state.constants,
+    modal: state.modal,
+    updateCaseModalHelper: state.updateCaseModalHelper,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   ({
     cancelSequence,
-    caseCaption,
     confirmSequence,
     constants,
+    modal,
+    updateCaseModalHelper,
     updateModalValueSequence,
   }) => {
     return (
@@ -34,9 +36,9 @@ export const UpdateCaseModalDialog = connect(
           <textarea
             aria-labelledby="caption-label"
             className="caption usa-textarea"
-            defaultValue={caseCaption}
             id="caption"
             name="caseCaption"
+            value={modal.caseCaption}
             onChange={e =>
               updateModalValueSequence({
                 key: e.target.name,
@@ -53,6 +55,7 @@ export const UpdateCaseModalDialog = connect(
             className="case-status usa-select"
             id="caseStatus"
             name="caseStatus"
+            value={modal.caseStatus}
             onChange={e => {
               updateModalValueSequence({
                 key: e.target.name,
@@ -68,6 +71,33 @@ export const UpdateCaseModalDialog = connect(
             ))}
           </select>
         </div>
+        {updateCaseModalHelper.showAssociatedJudgeOptions && (
+          <div className="margin-bottom-4">
+            <label className="usa-label" htmlFor="associated-judge">
+              Associated Judge
+            </label>
+            <select
+              className="case-status usa-select"
+              id="associated-judge"
+              name="associatedJudge"
+              value={modal.associatedJudge}
+              onChange={e => {
+                updateModalValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            >
+              <option value="">- Select -</option>
+              <option value="Chief Judge">Chief Judge</option>
+              {modal.judgeUsers.map(judgeUser => (
+                <option key={judgeUser.userId} value={judgeUser.name}>
+                  {judgeUser.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </ModalDialog>
     );
   },

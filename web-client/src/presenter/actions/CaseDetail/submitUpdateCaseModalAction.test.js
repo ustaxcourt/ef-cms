@@ -65,4 +65,25 @@ describe('submitUpdateCaseModalAction', () => {
     });
     expect(updateCaseCaptionInteractorMock).not.toHaveBeenCalled();
   });
+
+  it('Calls the update case status interactor if the associated judge has been updated', async () => {
+    await runAction(submitUpdateCaseModalAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: caseMock,
+        modal: {
+          caseStatus: 'General Docket - Not at Issue',
+        },
+      },
+    });
+
+    expect(updateCaseStatusInteractorMock).toHaveBeenCalled();
+    expect(updateCaseStatusInteractorMock.mock.calls[0][0]).toMatchObject({
+      caseId: '123',
+      caseStatus: 'General Docket - Not at Issue',
+    });
+    expect(updateCaseCaptionInteractorMock).not.toHaveBeenCalled();
+  });
 });
