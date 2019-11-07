@@ -1,78 +1,56 @@
-const DateHandler = require('../../utilities/DateHandler');
-const Handlebars = require('handlebars');
+const fs = require('fs');
+const pug = require('pug');
 const sass = require('node-sass');
-const {
-  confirmSassContent,
-  confirmTemplateContent,
-  ustcLogoBufferBase64,
-} = require('./caseConfirmationResources');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-/**
- *
- * @param {object} caseInfo a case entity
- * @returns {object} the formatted information needed by the PDF
- */
-const formattedCaseInfo = caseInfo => {
-  const { servedAt } = caseInfo.documents.find(doc => doc.servedAt);
-  const countryName =
-    caseInfo.contactPrimary.countryType != 'domestic' &&
-    caseInfo.contactPrimary.country;
-  const formattedInfo = Object.assign(
-    {
-      caseTitle: caseInfo.caseTitle,
-      countryName,
-      docketNumber: `${caseInfo.docketNumber}${caseInfo.docketNumberSuffix ||
-        ''}`,
-      preferredTrialCity: caseInfo.preferredTrialCity,
-      receivedAtFormatted: DateHandler.formatDateString(
-        caseInfo.receivedAt,
-        'MONTH_DAY_YEAR',
-      ),
-      servedDate: DateHandler.formatDateString(servedAt, 'MONTH_DAY_YEAR'),
-      todaysDate: DateHandler.formatNow('MONTH_DAY_YEAR'),
-    },
-    caseInfo.contactPrimary,
-  );
-  return formattedInfo;
-};
+const pendingReportSassContent = fs.readFileSync(
+  './shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.scss',
+  'utf8',
+);
+
+const pendingReportTemplateContent = fs.readFileSync(
+  './shared/src/business/useCaseHelper/pendingReport/pendingReport.pug',
+  'utf8',
+);
+
+const ustcLogoBufferBase64 =
+  'data:image/png;base64,' +
+  fs.readFileSync('./shared/static/images/ustc_seal.png', {
+    encoding: 'base64',
+  });
 
 /**
- *
- * @param {object} caseInfo a raw object representing a petition
+ * @param {Array} cases case entities
  * @returns {string} an html string resulting from rendering template with caseInfo
  */
-const generateCaseConfirmationPage = async caseInfo => {
+const generatePendingReportPage = async cases => {
   const { css } = await new Promise(resolve => {
-    sass.render({ data: confirmSassContent }, (err, result) => {
+    sass.render({ data: pendingReportSassContent }, (err, result) => {
       return resolve(result);
     });
   });
-  const compiledFunction = Handlebars.compile(confirmTemplateContent);
+  const compiledFunction = pug.compile(pendingReportTemplateContent);
   const html = compiledFunction({
-    ...formattedCaseInfo(caseInfo),
-    styles: `<style>${css}</style>`,
+    cases,
     logo: ustcLogoBufferBase64,
+    styles: `<style>${css}</style>`,
   });
   return html;
 };
 
 /**
- * generateCaseConfirmationPdfInteractor
+ * Generate Pending Report PDF
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseEntity a case entity with its documents
  * @returns {Promise<*>} the promise of the document having been uploaded
  */
-exports.generateCaseConfirmationPdf = async ({
-  applicationContext,
-  caseEntity,
-}) => {
+exports.generatePendingReportPdf = async ({ applicationContext, cases }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
@@ -94,7 +72,7 @@ exports.generateCaseConfirmationPdf = async ({
 
     let page = await browser.newPage();
 
-    const contentResult = await generateCaseConfirmationPage(caseEntity);
+    const contentResult = await generatePendingReportPage(cases);
     await page.setContent(contentResult);
 
     result = await page.pdf({
@@ -110,7 +88,7 @@ exports.generateCaseConfirmationPdf = async ({
     }
   }
 
-  const documentId = `case-${caseEntity.docketNumber}-confirmation.pdf`;
+  const documentId = 'pending-report.pdf';
 
   await new Promise(resolve => {
     const documentsBucket = applicationContext.environment.documentsBucketName;
