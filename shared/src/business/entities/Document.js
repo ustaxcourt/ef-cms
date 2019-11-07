@@ -55,6 +55,7 @@ function Document(rawDocument, { applicationContext }) {
   this.partyPrimary = rawDocument.partyPrimary;
   this.partyRespondent = rawDocument.partyRespondent;
   this.partySecondary = rawDocument.partySecondary;
+  this.pending = rawDocument.pending;
   this.practitioner = rawDocument.practitioner;
   this.previousDocument = rawDocument.previousDocument;
   this.processingStatus = rawDocument.processingStatus;
@@ -183,6 +184,7 @@ joiValidationDecorator(
     isPaper: joi.boolean().optional(),
     lodged: joi.boolean().optional(),
     ordinalValue: joi.string().optional(),
+    pending: joi.boolean().optional(),
     processingStatus: joi.string().optional(),
     qcAt: joi
       .date()
