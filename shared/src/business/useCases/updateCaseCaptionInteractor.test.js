@@ -12,8 +12,8 @@ describe('updateCaseCaptionInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: User.ROLES.petitioner,
-          userId: 'nope',
+          role: User.ROLES.petitionsClerk,
+          userId: 'petitionsClerk',
         };
       },
       getPersistenceGateway: () => {
@@ -48,8 +48,8 @@ describe('updateCaseCaptionInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
+          role: User.ROLES.docketClerk,
+          userId: 'docketClerk',
         };
       },
       getPersistenceGateway: () => {
