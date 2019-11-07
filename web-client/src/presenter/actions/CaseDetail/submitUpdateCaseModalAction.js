@@ -40,5 +40,10 @@ export const submitUpdateCaseModalAction = async ({
       });
   }
 
-  return { caseDetail: updatedCase };
+  return {
+    alertSuccess: {
+      message: 'Your changes have been saved',
+    },
+    caseDetail: updatedCase,
+  };
 };
