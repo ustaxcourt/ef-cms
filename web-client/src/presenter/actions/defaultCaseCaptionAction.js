@@ -11,5 +11,5 @@ import { state } from 'cerebral';
 export const defaultCaseCaptionAction = ({ get, store }) => {
   const caseDetail = { ...get(state.caseDetail) };
   let { caseCaption } = caseDetail;
-  store.set(state.caseCaption, caseCaption);
+  store.set(state.modal.caseCaption, caseCaption);
 };

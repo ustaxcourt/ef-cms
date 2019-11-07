@@ -1069,12 +1069,14 @@ Case.prototype.unsetAsHighPriority = function() {
 };
 
 /**
- * remove from trial, setting case status back to generalDocketReadyForTrial
+ * remove from trial, setting case status to the passed in status
+ * or generalDocketReadyForTrial by default if a case status is not passed in
  *
+ * @param {string} caseStatus the case status to update the case to
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrial = function() {
-  this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
+Case.prototype.removeFromTrial = function(caseStatus) {
+  this.status = caseStatus || Case.STATUS_TYPES.generalDocketReadyForTrial;
   this.associatedJudge = Case.CHIEF_JUDGE;
   this.trialDate = undefined;
   this.trialLocation = undefined;
