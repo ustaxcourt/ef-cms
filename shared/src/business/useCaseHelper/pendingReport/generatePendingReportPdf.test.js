@@ -1,6 +1,4 @@
-const {
-  generateCaseConfirmationPdf,
-} = require('./generateCaseConfirmationPdf');
+const { generatePendingReportPdf } = require('./generatePendingReportPdf');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 const PDF_MOCK_BUFFER = 'Hello World';
@@ -25,9 +23,9 @@ const chromiumMock = {
   },
 };
 
-describe('generateCaseConfirmationPdf', () => {
+describe('generatePendingReportPdf', () => {
   it('returns the pdf buffer produced by chromium', async () => {
-    const result = await generateCaseConfirmationPdf({
+    const result = await generatePendingReportPdf({
       applicationContext: {
         environment: {
           documentsBucketName: 'MockDocumentBucketName',
@@ -37,7 +35,6 @@ describe('generateCaseConfirmationPdf', () => {
         getCurrentUser: () => {
           return { role: User.ROLES.petitioner, userId: 'petitioner' };
         },
-        getHandlebars: () => ({ compile: () => () => '' }),
         getNodeSass: () => ({ render: (data, cb) => cb(data, { css: '' }) }),
         getPersistenceGateway: () => ({
           getCaseByCaseId: () => ({ docketNumber: '101-19' }),
@@ -45,12 +42,13 @@ describe('generateCaseConfirmationPdf', () => {
             url: 'https://www.example.com',
           }),
         }),
+        getPug: () => ({ compile: () => () => '' }),
         getStorageClient: () => ({
           upload: (params, callback) => callback(),
         }),
         logger: { error: () => {}, info: () => {} },
       },
-      caseEntity: { ...MOCK_CASE, documents: [{ servedAt: 'servedAt' }] },
+      cases: [MOCK_CASE],
     });
 
     expect(result).toEqual('https://www.example.com');
