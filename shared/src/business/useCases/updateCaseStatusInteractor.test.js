@@ -75,24 +75,62 @@ describe('updateCaseStatusInteractor', () => {
     expect(result.status).toEqual(Case.STATUS_TYPES.cav);
   });
 
-  it('should call updateCase with the updated case status and call removeCaseFromTrial if the old case status was calendared and return the updated case', async () => {
+  it('should call updateCase and remove the case from trial if the old case status was calendared and the new case status is CAV', async () => {
     const getTrialSessionByIdStub = jest.fn(async () => {
       return MOCK_TRIAL_SESSION;
     });
     const updateTrialSessionStub = jest.fn(async updatedTrialSession => {
       return updatedTrialSession;
     });
-    const getCaseByCaseIdStub = jest
-      .fn()
-      .mockReturnValueOnce({
-        ...MOCK_CASE,
-        status: Case.STATUS_TYPES.calendared,
-        trialSessionId: '83ed63e7-0583-4ecf-882d-d6d6069637ff',
-      })
-      .mockReturnValueOnce({
-        ...MOCK_CASE,
-        status: Case.STATUS_TYPES.cav,
-      });
+    const getCaseByCaseIdStub = jest.fn().mockReturnValue({
+      ...MOCK_CASE,
+      status: Case.STATUS_TYPES.calendared,
+      trialSessionId: '83ed63e7-0583-4ecf-882d-d6d6069637ff',
+      associatedJudge: 'Judge Bob',
+    });
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: User.ROLES.petitionsClerk,
+          userId: 'petitionsclerk',
+        };
+      },
+      getPersistenceGateway: () => {
+        return {
+          createCaseTrialSortMappingRecords: () => {},
+          getCaseByCaseId: getCaseByCaseIdStub,
+          getTrialSessionById: getTrialSessionByIdStub,
+          updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
+          updateTrialSession: updateTrialSessionStub,
+        };
+      },
+    };
+    const result = await updateCaseStatusInteractor({
+      applicationContext,
+      associatedJudge: 'Judge Rachael',
+      caseId: MOCK_CASE.caseId,
+      caseStatus: Case.STATUS_TYPES.cav,
+    });
+    expect(result.status).toEqual(Case.STATUS_TYPES.cav);
+    expect(result.associatedJudge).toEqual('Judge Rachael');
+    expect(result.trialSessionId).toBeUndefined();
+  });
+
+  it('should call updateCase and remove the case from trial if the old case status was calendared and the new case status is General Docket - Not At Issue', async () => {
+    const getTrialSessionByIdStub = jest.fn(async () => {
+      return MOCK_TRIAL_SESSION;
+    });
+    const updateTrialSessionStub = jest.fn(async updatedTrialSession => {
+      return updatedTrialSession;
+    });
+    const getCaseByCaseIdStub = jest.fn().mockReturnValue({
+      ...MOCK_CASE,
+      status: Case.STATUS_TYPES.calendared,
+      trialSessionId: '83ed63e7-0583-4ecf-882d-d6d6069637ff',
+      associatedJudge: 'Judge Rachael',
+    });
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -115,9 +153,10 @@ describe('updateCaseStatusInteractor', () => {
     const result = await updateCaseStatusInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
-      caseStatus: Case.STATUS_TYPES.cav,
+      caseStatus: Case.STATUS_TYPES.generalDocket,
     });
-    expect(result.status).toEqual(Case.STATUS_TYPES.cav);
+    expect(result.status).toEqual(Case.STATUS_TYPES.generalDocket);
+    expect(result.associatedJudge).toEqual(Case.CHIEF_JUDGE);
     expect(result.trialSessionId).toBeUndefined();
   });
 });
