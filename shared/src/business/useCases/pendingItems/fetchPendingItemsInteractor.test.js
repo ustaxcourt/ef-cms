@@ -27,11 +27,13 @@ describe('fetchPendingItemsInteractor', () => {
             {
               _source: {
                 caseId: { S: '1' },
+                documents: [{}],
               },
             },
             {
               _source: {
                 caseId: { S: '2' },
+                documents: [{}],
               },
             },
           ],

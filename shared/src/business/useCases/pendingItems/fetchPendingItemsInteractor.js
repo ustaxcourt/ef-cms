@@ -24,9 +24,8 @@ exports.fetchPendingItemsInteractor = async ({ applicationContext, judge }) => {
   const searchParameters = {
     body: {
       _source: [
-        'blocked',
-        'blockedDate',
-        'blockedReason',
+        'associatedJudge',
+        'documents',
         'caseCaption',
         'docketNumber',
         'docketNumberSuffix',
@@ -62,5 +61,16 @@ exports.fetchPendingItemsInteractor = async ({ applicationContext, judge }) => {
     });
   }
 
-  return foundCases;
+  const foundDocuments = [];
+
+  foundCases.forEach(foundCase => {
+    const { documents, ...mappedProps } = foundCase;
+
+    foundDocuments.push({
+      ...mappedProps,
+      ...documents[0],
+    });
+  });
+
+  return foundDocuments;
 };
