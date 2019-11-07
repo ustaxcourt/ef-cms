@@ -26,7 +26,7 @@ const getBaseState = user => {
 };
 
 describe('caseDetailHeaderHelper', () => {
-  it('should set showEditCaseButton to true if the user has UPDATE_CASE_CONTENT permission and the case status is not Batched for IRS', () => {
+  it('should set showEditCaseButton to true if the user has UPDATE_CASE_CONTENT permission', () => {
     const user = {
       role: User.ROLES.docketClerk,
       userId: 'docketClerk',
@@ -38,20 +38,6 @@ describe('caseDetailHeaderHelper', () => {
       },
     });
     expect(result.showEditCaseButton).toEqual(true);
-  });
-
-  it('should set showEditCaseButton to false if the has UPDATE_CASE_CONTENT permission and the case status is Batched for IRS', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: 'docketClerk',
-    };
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { status: Case.STATUS_TYPES.batchedForIRS },
-      },
-    });
-    expect(result.showEditCaseButton).toEqual(false);
   });
 
   it('should set showEditCaseButton to false if the user does not have UPDATE_CASE_CONTENT permission', () => {

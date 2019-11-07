@@ -2,7 +2,7 @@ import { state } from 'cerebral';
 
 export const caseDetailHeaderHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const { USER_ROLES } = applicationContext.getConstants();
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
@@ -33,9 +33,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   return {
     hidePublicCaseInformation: !isExternalUser,
-    showEditCaseButton:
-      permissions.UPDATE_CASE_CONTEXT &&
-      caseDetail.status !== STATUS_TYPES.batchedForIRS,
+    showEditCaseButton: permissions.UPDATE_CASE_CONTEXT,
     showFileFirstDocumentButton,
     showPendingAccessToCaseButton,
     showRequestAccessToCaseButton,
