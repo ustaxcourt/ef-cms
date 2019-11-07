@@ -31,7 +31,6 @@ describe('generatePendingReportPdf', () => {
           tempDocumentsBucketName: 'MockDocumentBucketName',
         },
         getChromium: () => chromiumMock,
-
         getCurrentUser: () => {
           return { role: User.ROLES.petitioner, userId: 'petitioner' };
         },
@@ -46,6 +45,7 @@ describe('generatePendingReportPdf', () => {
         getStorageClient: () => ({
           upload: (params, callback) => callback(),
         }),
+        getUniqueId: () => 'uniqueId',
         logger: { error: () => {}, info: () => {} },
       },
       cases: [MOCK_CASE],
