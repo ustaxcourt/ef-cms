@@ -4,10 +4,10 @@ import { state } from 'cerebral';
  * Updates the case caption and case status
  *
  * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the get function
- * @param {object} providers.store the cerebral store object
+ * @returns {object} the updated case as caseDetail
  */
-
 export const submitUpdateCaseModalAction = async ({
   applicationContext,
   get,
