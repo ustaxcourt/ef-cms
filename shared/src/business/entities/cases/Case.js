@@ -233,6 +233,8 @@ function Case(rawCase, { applicationContext }) {
     this.documents = [];
   }
 
+  this.hasPendingItems = this.documents.some(document => document.pending);
+
   if (Array.isArray(rawCase.practitioners)) {
     this.practitioners = rawCase.practitioners.map(
       practitioner => new Practitioner(practitioner),
