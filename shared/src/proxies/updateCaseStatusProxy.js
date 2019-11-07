@@ -11,12 +11,13 @@ const { put } = require('./requests');
  */
 exports.updateCaseStatusInteractor = ({
   applicationContext,
+  associatedJudge,
   caseId,
   caseStatus,
 }) => {
   return put({
     applicationContext,
-    body: { caseStatus },
+    body: { associatedJudge, caseStatus },
     endpoint: `/cases/${caseId}/case-status`,
   });
 };

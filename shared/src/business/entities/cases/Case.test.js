@@ -1696,8 +1696,8 @@ describe('Case entity', () => {
     });
   });
 
-  describe('hasPendingItems', () => {
-    it('should not show the case as having pending items if no documents are pending', () => {
+  describe('removeFromTrialWithCaseStatus', () => {
+    it('removes the case from trial, setting the associated judge to the chief judge if the new status is General Docket - Not At Issue', () => {
       const caseToUpdate = new Case(
         {
           ...MOCK_CASE,
@@ -1706,20 +1706,124 @@ describe('Case entity', () => {
           applicationContext,
         },
       );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, AL',
+        },
+        { applicationContext },
+      );
+      caseToUpdate.setAsCalendared(trialSession);
 
-      expect(caseToUpdate.hasPendingItems).toEqual(false);
+      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(caseToUpdate.trialDate).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialLocation).toBeTruthy();
+      expect(caseToUpdate.trialSessionId).toBeTruthy();
+      expect(caseToUpdate.trialTime).toBeTruthy();
+
+      caseToUpdate.removeFromTrialWithCaseStatus(
+        'Judge Armen',
+        Case.STATUS_TYPES.generalDocket,
+      );
+
+      expect(caseToUpdate.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+      expect(caseToUpdate.trialDate).toBeFalsy();
+      expect(caseToUpdate.trialLocation).toBeFalsy();
+      expect(caseToUpdate.trialSessionId).toBeFalsy();
+      expect(caseToUpdate.trialTime).toBeFalsy();
     });
-    it('should show the case as having pending items if some documents are pending', () => {
-      const mockCase = {
-        ...MOCK_CASE,
-      };
-      mockCase.documents[0].pending = true;
 
-      const caseToUpdate = new Case(mockCase, {
-        applicationContext,
-      });
+    it('removes the case from trial, setting the associated judge to the passed in judge if the new status is CAV', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, AL',
+        },
+        { applicationContext },
+      );
+      caseToUpdate.setAsCalendared(trialSession);
 
-      expect(caseToUpdate.hasPendingItems).toEqual(true);
+      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(caseToUpdate.trialDate).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialLocation).toBeTruthy();
+      expect(caseToUpdate.trialSessionId).toBeTruthy();
+      expect(caseToUpdate.trialTime).toBeTruthy();
+
+      caseToUpdate.removeFromTrialWithCaseStatus(
+        'Judge Armen',
+        Case.STATUS_TYPES.cav,
+      );
+
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Armen');
+      expect(caseToUpdate.trialDate).toBeFalsy();
+      expect(caseToUpdate.trialLocation).toBeFalsy();
+      expect(caseToUpdate.trialSessionId).toBeFalsy();
+      expect(caseToUpdate.trialTime).toBeFalsy();
+    });
+
+    it('removes the case from trial, leaving the associated judge as the old judge if the status passed in is Closed', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, AL',
+        },
+        { applicationContext },
+      );
+      caseToUpdate.setAsCalendared(trialSession);
+
+      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(caseToUpdate.trialDate).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialLocation).toBeTruthy();
+      expect(caseToUpdate.trialSessionId).toBeTruthy();
+      expect(caseToUpdate.trialTime).toBeTruthy();
+
+      caseToUpdate.removeFromTrialWithCaseStatus(
+        'Judge Buch',
+        Case.STATUS_TYPES.closed,
+      );
+
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialDate).toBeFalsy();
+      expect(caseToUpdate.trialLocation).toBeFalsy();
+      expect(caseToUpdate.trialSessionId).toBeFalsy();
+      expect(caseToUpdate.trialTime).toBeFalsy();
     });
   });
 });
