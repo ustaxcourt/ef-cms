@@ -20,5 +20,18 @@ export const updateCaseModalHelper = (get, applicationContext) => {
 
   const showCalendaredAlert = caseDetail.status === STATUS_TYPES.calendared;
 
-  return { showAssociatedJudgeOptions, showCalendaredAlert };
+  const caseStatusOptions = [
+    STATUS_TYPES.generalDocket,
+    STATUS_TYPES.generalDocketReadyForTrial,
+    STATUS_TYPES.submitted,
+    STATUS_TYPES.cav,
+    STATUS_TYPES.rule155,
+    STATUS_TYPES.jurisdictionRetained,
+    STATUS_TYPES.assignedCase,
+    STATUS_TYPES.assignedMotion,
+    STATUS_TYPES.closed,
+    STATUS_TYPES.onAppeal,
+  ];
+
+  return { caseStatusOptions, showAssociatedJudgeOptions, showCalendaredAlert };
 };
