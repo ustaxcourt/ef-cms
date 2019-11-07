@@ -1696,8 +1696,8 @@ describe('Case entity', () => {
     });
   });
 
-  describe('removeFromTrialWithCaseStatus', () => {
-    it('removes the case from trial, setting the associated judge to the chief judge if the new status is General Docket - Not At Issue', () => {
+  describe('removeFromTrialWithAssociatedJudge', () => {
+    it('removes the case from trial, updating the associated judge if one is passed in', () => {
       const caseToUpdate = new Case(
         {
           ...MOCK_CASE,
@@ -1728,53 +1728,7 @@ describe('Case entity', () => {
       expect(caseToUpdate.trialSessionId).toBeTruthy();
       expect(caseToUpdate.trialTime).toBeTruthy();
 
-      caseToUpdate.removeFromTrialWithCaseStatus(
-        'Judge Armen',
-        Case.STATUS_TYPES.generalDocket,
-      );
-
-      expect(caseToUpdate.associatedJudge).toEqual(Case.CHIEF_JUDGE);
-      expect(caseToUpdate.trialDate).toBeFalsy();
-      expect(caseToUpdate.trialLocation).toBeFalsy();
-      expect(caseToUpdate.trialSessionId).toBeFalsy();
-      expect(caseToUpdate.trialTime).toBeFalsy();
-    });
-
-    it('removes the case from trial, setting the associated judge to the passed in judge if the new status is CAV', () => {
-      const caseToUpdate = new Case(
-        {
-          ...MOCK_CASE,
-        },
-        {
-          applicationContext,
-        },
-      );
-      const trialSession = new TrialSession(
-        {
-          isCalendared: true,
-          judge: { name: 'Judge Buch' },
-          maxCases: 100,
-          sessionType: 'Regular',
-          startDate: '2025-03-01T00:00:00.000Z',
-          term: 'Fall',
-          termYear: '2025',
-          trialLocation: 'Birmingham, AL',
-        },
-        { applicationContext },
-      );
-      caseToUpdate.setAsCalendared(trialSession);
-
-      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
-      expect(caseToUpdate.trialDate).toBeTruthy();
-      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
-      expect(caseToUpdate.trialLocation).toBeTruthy();
-      expect(caseToUpdate.trialSessionId).toBeTruthy();
-      expect(caseToUpdate.trialTime).toBeTruthy();
-
-      caseToUpdate.removeFromTrialWithCaseStatus(
-        'Judge Armen',
-        Case.STATUS_TYPES.cav,
-      );
+      caseToUpdate.removeFromTrialWithAssociatedJudge('Judge Armen');
 
       expect(caseToUpdate.associatedJudge).toEqual('Judge Armen');
       expect(caseToUpdate.trialDate).toBeFalsy();
@@ -1783,7 +1737,7 @@ describe('Case entity', () => {
       expect(caseToUpdate.trialTime).toBeFalsy();
     });
 
-    it('removes the case from trial, leaving the associated judge as the old judge if the status passed in is Closed', () => {
+    it('removes the case from trial, leaving the associated judge unchanged if one is not passed in', () => {
       const caseToUpdate = new Case(
         {
           ...MOCK_CASE,
@@ -1814,10 +1768,7 @@ describe('Case entity', () => {
       expect(caseToUpdate.trialSessionId).toBeTruthy();
       expect(caseToUpdate.trialTime).toBeTruthy();
 
-      caseToUpdate.removeFromTrialWithCaseStatus(
-        'Judge Buch',
-        Case.STATUS_TYPES.closed,
-      );
+      caseToUpdate.removeFromTrialWithAssociatedJudge();
 
       expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
       expect(caseToUpdate.trialDate).toBeFalsy();
@@ -1851,6 +1802,42 @@ describe('Case entity', () => {
       });
 
       expect(caseToUpdate.hasPendingItems).toEqual(true);
+    });
+  });
+
+  describe('setCaseStatus', () => {
+    it('should update the case status and set the associated judge to the chief judge if the new status is General Docket - Not At Issue', () => {
+      const updatedCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: 'Judge Buch',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      updatedCase.setCaseStatus(Case.STATUS_TYPES.generalDocket);
+
+      expect(updatedCase.status).toEqual(Case.STATUS_TYPES.generalDocket);
+      expect(updatedCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+    });
+
+    it('should update the case status and leave the associated judge unchanged if the new status is Closed', () => {
+      const updatedCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: 'Judge Buch',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      updatedCase.setCaseStatus(Case.STATUS_TYPES.closed);
+
+      expect(updatedCase.status).toEqual(Case.STATUS_TYPES.closed);
+      expect(updatedCase.associatedJudge).toEqual('Judge Buch');
     });
   });
 });
