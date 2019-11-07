@@ -51,7 +51,6 @@ import { deleteCaseNoteFromCaseDetailSequence } from './sequences/deleteCaseNote
 import { deleteCaseNoteFromWorkingCopySequence } from './sequences/deleteCaseNoteFromWorkingCopySequence';
 import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingCopySessionNoteSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
-import { dismissCaseCaptionModalSequence } from './sequences/dismissCaseCaptionModalSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
@@ -115,7 +114,6 @@ import { openAddPractitionerModalSequence } from './sequences/openAddPractitione
 import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
-import { openCaseCaptionModalSequence } from './sequences/openCaseCaptionModalSequence';
 import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
 import { openChangeScannerSourceModalSequence } from './sequences/openChangeScannerSourceModalSequence';
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
@@ -144,6 +142,7 @@ import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSe
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
 import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
+import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
 import { printFromBrowserSequence } from './sequences/printFromBrowserSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
@@ -176,7 +175,6 @@ import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocu
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveDocumentSequence } from './sequences/serveDocumentSequence';
 import { setCanvasForPDFSigningSequence } from './sequences/setCanvasForPDFSigningSequence';
-import { setCaseCaptionSequence } from './sequences/setCaseCaptionSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseToReadyForTrialSequence } from './sequences/setCaseToReadyForTrialSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
@@ -224,6 +222,7 @@ import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromP
 import { submitPetitionToIRSHoldingQueueSequence } from './sequences/submitPetitionToIRSHoldingQueueSequence';
 import { submitRecallPetitionFromIRSHoldingQueueSequence } from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
+import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
 import { submitUpdateCaseSequence } from './sequences/submitUpdateCaseSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
@@ -244,7 +243,6 @@ import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsIn
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
-import { updateCaseDetailSequence } from './sequences/updateCaseDetailSequence';
 import { updateCaseNoteOnCaseDetailSequence } from './sequences/updateCaseNoteOnCaseDetailSequence';
 import { updateCaseNoteOnWorkingCopySequence } from './sequences/updateCaseNoteOnWorkingCopySequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
@@ -359,7 +357,6 @@ export const presenter = {
     deleteCaseNoteFromWorkingCopySequence,
     deleteWorkingCopySessionNoteSequence,
     dismissAlertSequence,
-    dismissCaseCaptionModalSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,
     editSelectedDocumentSequence,
@@ -423,7 +420,6 @@ export const presenter = {
     openAddRespondentModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
-    openCaseCaptionModalSequence,
     openCaseDifferenceModalSequence,
     openChangeScannerSourceModalSequence,
     openCleanModalSequence,
@@ -452,6 +448,7 @@ export const presenter = {
     openTrialSessionPlanningModalSequence,
     openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence,
+    openUpdateCaseModalSequence,
     printDocketRecordSequence,
     printFromBrowserSequence,
     printTrialCalendarSequence,
@@ -484,7 +481,6 @@ export const presenter = {
     selectWorkItemSequence,
     serveDocumentSequence,
     setCanvasForPDFSigningSequence,
-    setCaseCaptionSequence,
     setCaseDetailPageTabSequence,
     setCaseToReadyForTrialSequence,
     setCurrentPageIndexSequence,
@@ -530,6 +526,7 @@ export const presenter = {
     submitPetitionToIRSHoldingQueueSequence,
     submitRecallPetitionFromIRSHoldingQueueSequence,
     submitTrialSessionSequence,
+    submitUpdateCaseModalSequence,
     submitUpdateCaseSequence,
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
@@ -550,7 +547,6 @@ export const presenter = {
     updateAdvancedSearchFormValueSequence,
     updateCaseAssociationFormValueSequence,
     updateCaseDeadlineSequence,
-    updateCaseDetailSequence,
     updateCaseNoteOnCaseDetailSequence,
     updateCaseNoteOnWorkingCopySequence,
     updateCasePartyTypeSequence,
