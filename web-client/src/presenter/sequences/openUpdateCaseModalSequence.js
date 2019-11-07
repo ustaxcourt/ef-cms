@@ -1,7 +1,7 @@
 import { defaultCaseCaptionAction } from '../actions/defaultCaseCaptionAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
-export const openCaseCaptionModalSequence = [
+export const openUpdateCaseModalSequence = [
   defaultCaseCaptionAction,
-  setShowModalFactoryAction('UpdateCaseCaptionModalDialog'),
+  setShowModalFactoryAction('UpdateCaseModalDialog'),
 ];
