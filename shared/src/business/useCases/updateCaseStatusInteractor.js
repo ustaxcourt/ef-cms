@@ -43,35 +43,49 @@ exports.updateCaseStatusInteractor = async ({
 
   // if this case status is changing FROM calendared
   // we need to remove it from the trial session
-  if (
-    oldCase.status === Case.STATUS_TYPES.calendared &&
-    caseStatus !== oldCase.status
-  ) {
-    const disposition = `Status was changed to ${caseStatus}`;
+  if (caseStatus !== oldCase.status) {
+    if (oldCase.status === Case.STATUS_TYPES.calendared) {
+      const disposition = `Status was changed to ${caseStatus}`;
 
-    const trialSession = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById({
+      const trialSession = await applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionById({
+          applicationContext,
+          trialSessionId: oldCase.trialSessionId,
+        });
+
+      const trialSessionEntity = new TrialSession(trialSession, {
         applicationContext,
-        trialSessionId: oldCase.trialSessionId,
       });
 
-    const trialSessionEntity = new TrialSession(trialSession, {
-      applicationContext,
-    });
-
-    if (trialSessionEntity.isCalendared) {
       trialSessionEntity.removeCaseFromCalendar({ caseId, disposition });
-    } else {
-      trialSessionEntity.deleteCaseFromCalendar({ caseId });
+
+      await applicationContext.getPersistenceGateway().updateTrialSession({
+        applicationContext,
+        trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+      });
+
+      newCase.removeFromTrialWithAssociatedJudge(associatedJudge);
+    } else if (
+      oldCase.status === Case.STATUS_TYPES.generalDocketReadyForTrial
+    ) {
+      await applicationContext
+        .getPersistenceGateway()
+        .deleteCaseTrialSortMappingRecords({
+          applicationContext,
+          caseId,
+        });
     }
 
-    await applicationContext.getPersistenceGateway().updateTrialSession({
-      applicationContext,
-      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-    });
-
-    newCase.removeFromTrialWithCaseStatus(associatedJudge, caseStatus);
+    if (caseStatus === Case.STATUS_TYPES.generalDocketReadyForTrial) {
+      await applicationContext
+        .getPersistenceGateway()
+        .createCaseTrialSortMappingRecords({
+          applicationContext,
+          caseId: newCase.caseId,
+          caseSortTags: newCase.generateTrialSortTags(),
+        });
+    }
   }
 
   return await applicationContext.getPersistenceGateway().updateCase({
