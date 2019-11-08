@@ -111,7 +111,7 @@ export const CaseDetailHeader = connect(
                   <>
                     <Button
                       className="tablet-full-width push-right margin-right-0"
-                      id="caption-edit-button"
+                      id="edit-case-context-button"
                       onClick={() => {
                         openUpdateCaseModalSequence();
                       }}

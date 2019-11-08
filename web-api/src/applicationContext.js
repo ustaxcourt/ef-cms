@@ -496,9 +496,6 @@ const {
   serveSignedStipDecisionInteractor,
 } = require('../../shared/src/business/useCases/serveSignedStipDecisionInteractor');
 const {
-  setCaseToReadyForTrialInteractor,
-} = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
-const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
 const {
@@ -529,8 +526,8 @@ const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
-  updateCaseCaptionInteractor,
-} = require('../../shared/src/business/useCases/updateCaseCaptionInteractor');
+  updateCaseContextInteractor,
+} = require('../../shared/src/business/useCases/updateCaseContextInteractor');
 const {
   updateCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
@@ -546,9 +543,6 @@ const {
 const {
   updateCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/updateCaseNoteInteractor');
-const {
-  updateCaseStatusInteractor,
-} = require('../../shared/src/business/useCases/updateCaseStatusInteractor');
 const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
@@ -979,7 +973,6 @@ module.exports = (appContextUser = {}) => {
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
         serveSignedStipDecisionInteractor,
-        setCaseToReadyForTrialInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
         setWorkItemAsReadInteractor,
@@ -987,11 +980,10 @@ module.exports = (appContextUser = {}) => {
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseInteractor,
         unprioritizeCaseInteractor,
-        updateCaseCaptionInteractor,
+        updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseInteractor,
         updateCaseNoteInteractor,
-        updateCaseStatusInteractor,
         updateCaseTrialSortTagsInteractor,
         updateCounselOnCaseInteractor,
         updateCourtIssuedOrderInteractor,
