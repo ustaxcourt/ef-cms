@@ -1,3 +1,4 @@
+import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitUpdateCaseModalAction } from './submitUpdateCaseModalAction';
@@ -17,6 +18,7 @@ describe('submitUpdateCaseModalAction', () => {
     updateCaseStatusInteractorMock = jest.fn();
 
     presenter.providers.applicationContext = {
+      ...applicationContext,
       getUseCases: () => ({
         updateCaseCaptionInteractor: updateCaseCaptionInteractorMock,
         updateCaseStatusInteractor: updateCaseStatusInteractorMock,
@@ -74,6 +76,28 @@ describe('submitUpdateCaseModalAction', () => {
       state: {
         caseDetail: caseMock,
         modal: {
+          caseStatus: 'General Docket - Not at Issue',
+        },
+      },
+    });
+
+    expect(updateCaseStatusInteractorMock).toHaveBeenCalled();
+    expect(updateCaseStatusInteractorMock.mock.calls[0][0]).toMatchObject({
+      caseId: '123',
+      caseStatus: 'General Docket - Not at Issue',
+    });
+    expect(updateCaseCaptionInteractorMock).not.toHaveBeenCalled();
+  });
+
+  it('Calls the update case status interactor if the case status has been updated, setting the associated judge to undefined if the status is General Docket - Not At Issue', async () => {
+    await runAction(submitUpdateCaseModalAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: caseMock,
+        modal: {
+          associatedJudge: 'Judge Armen',
           caseStatus: 'General Docket - Not at Issue',
         },
       },

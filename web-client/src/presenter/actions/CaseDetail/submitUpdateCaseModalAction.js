@@ -13,7 +13,15 @@ export const submitUpdateCaseModalAction = async ({
   get,
 }) => {
   const { associatedJudge, caseCaption, caseStatus } = get(state.modal);
+  let selectedAssociatedJudge = associatedJudge;
   const caseToUpdate = get(state.caseDetail);
+  const {
+    STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
+  } = applicationContext.getConstants();
+
+  if (!STATUS_TYPES_WITH_ASSOCIATED_JUDGE.includes(caseStatus)) {
+    selectedAssociatedJudge = undefined;
+  }
 
   let updatedCase = caseToUpdate;
   if (caseCaption && caseToUpdate.caseCaption !== caseCaption) {
@@ -28,13 +36,14 @@ export const submitUpdateCaseModalAction = async ({
 
   if (
     (caseStatus && caseToUpdate.status !== caseStatus) ||
-    (associatedJudge && caseToUpdate.associatedJudge !== associatedJudge)
+    (selectedAssociatedJudge &&
+      caseToUpdate.associatedJudge !== selectedAssociatedJudge)
   ) {
     updatedCase = await applicationContext
       .getUseCases()
       .updateCaseStatusInteractor({
         applicationContext,
-        associatedJudge,
+        associatedJudge: selectedAssociatedJudge,
         caseId: caseToUpdate.caseId,
         caseStatus,
       });
