@@ -24,10 +24,9 @@ export const CaseDeadlinesInternal = connect(
   }) {
     return (
       <>
-        <div className="title">
-          <h1>Deadlines</h1>
+        <div>
           <Button
-            className="push-right margin-right-0"
+            className="push-right margin-right-0 margin-bottom-1"
             id="button-add-deadline"
             onClick={() => {
               openCreateCaseDeadlineModalSequence();
