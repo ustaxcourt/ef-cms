@@ -1,9 +1,5 @@
 const DateHandler = require('../../utilities/DateHandler');
-const {
-  confirmSassContent,
-  confirmTemplateContent,
-  ustcLogoBufferBase64,
-} = require('./caseConfirmationResources');
+
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -48,6 +44,12 @@ const generateCaseConfirmationPage = async ({
   applicationContext,
   caseEntity,
 }) => {
+  const {
+    confirmSassContent,
+    confirmTemplateContent,
+    ustcLogoBufferBase64,
+  } = require('./caseConfirmationResources');
+
   const Handlebars = applicationContext.getHandlebars();
   const sass = applicationContext.getNodeSass();
 

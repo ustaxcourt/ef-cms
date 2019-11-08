@@ -113,6 +113,10 @@ package:
     - ./**
   include:
     - web-api/src/apiHandlers.js
+    - shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.scss
+    - shared/src/business/useCaseHelper/pendingReport/pendingReport.pug
+    - shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.handlebars
+    - shared/static/images/ustc_seal.png
   excludeDevDependencies: true
 
 resources:
