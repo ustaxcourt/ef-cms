@@ -5,7 +5,7 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const PendingReportList = connect(
+export const CaseDetailPendingReportList = connect(
   {
     pendingItemsDocketEntries:
       state.formattedCaseDetail.pendingItemsDocketEntries,

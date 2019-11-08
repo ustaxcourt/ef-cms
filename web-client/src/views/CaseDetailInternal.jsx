@@ -3,6 +3,7 @@ import { BlockFromTrialModal } from './CaseDetail/BlockFromTrialModal';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDeadlinesInternal } from './CaseDetail/CaseDeadlinesInternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
+import { CaseDetailPendingReportList } from './CaseDetail/CaseDetailPendingReportList';
 import { CaseInformationInternal } from './CaseDetail/CaseInformationInternal';
 import { CaseNotes } from './CaseDetail/CaseNotes';
 import { CreateCaseDeadlineModalDialog } from './CaseDetail/CreateCaseDeadlineModalDialog';
@@ -14,7 +15,6 @@ import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './CaseDetail/MessagesInProgress';
 import { PartyInformation } from './CaseDetail/PartyInformation';
-import { PendingReportList } from './CaseDetail/PendingReportList';
 import { PrioritizeCaseModal } from './CaseDetail/PrioritizeCaseModal';
 import { RemoveFromTrialSessionModal } from './CaseDetail/RemoveFromTrialSessionModal';
 import { SuccessNotification } from './SuccessNotification';
@@ -66,7 +66,7 @@ export const CaseDetailInternal = connect(
               tabName="pendingReport"
               title="Pending Report"
             >
-              <PendingReportList />
+              <CaseDetailPendingReportList />
             </Tab>
           </Tabs>
 
