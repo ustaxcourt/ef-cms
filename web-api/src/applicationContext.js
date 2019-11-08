@@ -529,8 +529,8 @@ const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
-  updateCaseCaptionInteractor,
-} = require('../../shared/src/business/useCases/updateCaseCaptionInteractor');
+  updateCaseContextInteractor,
+} = require('../../shared/src/business/useCases/updateCaseContextInteractor');
 const {
   updateCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
@@ -546,9 +546,6 @@ const {
 const {
   updateCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/updateCaseNoteInteractor');
-const {
-  updateCaseStatusInteractor,
-} = require('../../shared/src/business/useCases/updateCaseStatusInteractor');
 const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
@@ -987,11 +984,10 @@ module.exports = (appContextUser = {}) => {
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseInteractor,
         unprioritizeCaseInteractor,
-        updateCaseCaptionInteractor,
+        updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseInteractor,
         updateCaseNoteInteractor,
-        updateCaseStatusInteractor,
         updateCaseTrialSortTagsInteractor,
         updateCounselOnCaseInteractor,
         updateCourtIssuedOrderInteractor,

@@ -1,6 +1,8 @@
+const {
+  updateCaseContextInteractor,
+} = require('./updateCaseContextInteractor');
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
-const { updateCaseStatusInteractor } = require('./updateCaseStatusInteractor');
 const { User } = require('../entities/User');
 
 const MOCK_TRIAL_SESSION = {
@@ -18,7 +20,7 @@ const MOCK_TRIAL_SESSION = {
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
-describe('updateCaseStatusInteractor', () => {
+describe('updateCaseContextInteractor', () => {
   let applicationContext;
 
   it('should throw an error if the user is unauthorized to update a case', async () => {
@@ -39,7 +41,7 @@ describe('updateCaseStatusInteractor', () => {
     };
     let error;
     try {
-      await updateCaseStatusInteractor({
+      await updateCaseContextInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
         caseStatus: Case.STATUS_TYPES.cav,
@@ -67,7 +69,7 @@ describe('updateCaseStatusInteractor', () => {
         };
       },
     };
-    const result = await updateCaseStatusInteractor({
+    const result = await updateCaseContextInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
       caseStatus: Case.STATUS_TYPES.cav,
@@ -107,7 +109,7 @@ describe('updateCaseStatusInteractor', () => {
         };
       },
     };
-    const result = await updateCaseStatusInteractor({
+    const result = await updateCaseContextInteractor({
       applicationContext,
       associatedJudge: 'Judge Rachael',
       caseId: MOCK_CASE.caseId,
@@ -150,7 +152,7 @@ describe('updateCaseStatusInteractor', () => {
         };
       },
     };
-    const result = await updateCaseStatusInteractor({
+    const result = await updateCaseContextInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
       caseStatus: Case.STATUS_TYPES.generalDocket,
@@ -183,7 +185,7 @@ describe('updateCaseStatusInteractor', () => {
         };
       },
     };
-    const result = await updateCaseStatusInteractor({
+    const result = await updateCaseContextInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
       caseStatus: Case.STATUS_TYPES.generalDocket,
@@ -215,7 +217,7 @@ describe('updateCaseStatusInteractor', () => {
         };
       },
     };
-    const result = await updateCaseStatusInteractor({
+    const result = await updateCaseContextInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
       caseStatus: Case.STATUS_TYPES.generalDocketReadyForTrial,
@@ -246,7 +248,7 @@ describe('updateCaseStatusInteractor', () => {
         };
       },
     };
-    const result = await updateCaseStatusInteractor({
+    const result = await updateCaseContextInteractor({
       applicationContext,
       associatedJudge: 'Judge Carluzzo',
       caseId: MOCK_CASE.caseId,
@@ -277,7 +279,7 @@ describe('updateCaseStatusInteractor', () => {
         };
       },
     };
-    const result = await updateCaseStatusInteractor({
+    const result = await updateCaseContextInteractor({
       applicationContext,
       associatedJudge: 'Judge Carluzzo',
       caseId: MOCK_CASE.caseId,
@@ -285,5 +287,29 @@ describe('updateCaseStatusInteractor', () => {
     });
     expect(result.status).toEqual(Case.STATUS_TYPES.submitted);
     expect(result.associatedJudge).toEqual('Judge Carluzzo');
+  });
+
+  it('should call updateCase with the updated case caption and return the updated case', async () => {
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: User.ROLES.docketClerk,
+          userId: 'docketClerk',
+        };
+      },
+      getPersistenceGateway: () => {
+        return {
+          getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
+          updateCase: ({ caseToUpdate }) => Promise.resolve(caseToUpdate),
+        };
+      },
+    };
+    const result = await updateCaseContextInteractor({
+      applicationContext,
+      caseCaption: 'The new case caption',
+      caseId: MOCK_CASE.caseId,
+    });
+    expect(result.caseCaption).toEqual('The new case caption');
   });
 });

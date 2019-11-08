@@ -1,7 +1,7 @@
 const { put } = require('./requests');
 
 /**
- * updateCaseStatusInteractor
+ * updateCaseContextInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -10,15 +10,16 @@ const { put } = require('./requests');
  * @param {object} providers.caseStatus the updated case status
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateCaseStatusInteractor = ({
+exports.updateCaseContextInteractor = ({
   applicationContext,
   associatedJudge,
+  caseCaption,
   caseId,
   caseStatus,
 }) => {
   return put({
     applicationContext,
-    body: { associatedJudge, caseStatus },
-    endpoint: `/cases/${caseId}/case-status`,
+    body: { associatedJudge, caseCaption, caseStatus },
+    endpoint: `/cases/${caseId}/case-context`,
   });
 };
