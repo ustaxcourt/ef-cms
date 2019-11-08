@@ -8,7 +8,7 @@ import React from 'react';
 
 export const CaseDetailHeader = connect(
   {
-    caseDetailHelper: state.caseDetailHelper,
+    caseDetailHeaderHelper: state.caseDetailHeaderHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     hideActionButtons: props.hideActionButtons,
     openCreateOrderChooseTypeModalSequence:
@@ -17,7 +17,7 @@ export const CaseDetailHeader = connect(
     showModal: state.showModal,
   },
   ({
-    caseDetailHelper,
+    caseDetailHeaderHelper,
     formattedCaseDetail,
     hideActionButtons,
     openUpdateCaseModalSequence,
@@ -34,7 +34,7 @@ export const CaseDetailHeader = connect(
                     Docket Number: {formattedCaseDetail.docketNumberWithSuffix}
                   </CaseLink>
                 </h1>
-                {caseDetailHelper.hidePublicCaseInformation && (
+                {caseDetailHeaderHelper.hidePublicCaseInformation && (
                   <span
                     aria-label={`status: ${formattedCaseDetail.status}`}
                     className="usa-tag"
@@ -43,7 +43,7 @@ export const CaseDetailHeader = connect(
                   </span>
                 )}
 
-                {caseDetailHelper.hidePublicCaseInformation &&
+                {caseDetailHeaderHelper.hidePublicCaseInformation &&
                   formattedCaseDetail.associatedJudge && (
                     <span
                       aria-label="associated judge"
@@ -58,7 +58,7 @@ export const CaseDetailHeader = connect(
                     </span>
                   )}
 
-                {caseDetailHelper.hidePublicCaseInformation &&
+                {caseDetailHeaderHelper.hidePublicCaseInformation &&
                   formattedCaseDetail.showBlockedTag && (
                     <span className="margin-left-1 usa-tag red-tag">
                       <FontAwesomeIcon
@@ -77,7 +77,7 @@ export const CaseDetailHeader = connect(
 
             {!hideActionButtons && (
               <div className="tablet:grid-col-4">
-                {caseDetailHelper.showRequestAccessToCaseButton && (
+                {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
                   <Button
                     className="tablet-full-width push-right margin-right-0"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
@@ -87,7 +87,7 @@ export const CaseDetailHeader = connect(
                   </Button>
                 )}
 
-                {caseDetailHelper.showPendingAccessToCaseButton && (
+                {caseDetailHeaderHelper.showPendingAccessToCaseButton && (
                   <span
                     aria-label="Request for Access Pending"
                     className="usa-tag push-right margin-right-0 padding-x-3"
@@ -96,7 +96,7 @@ export const CaseDetailHeader = connect(
                   </span>
                 )}
 
-                {caseDetailHelper.showFileFirstDocumentButton && (
+                {caseDetailHeaderHelper.showFileFirstDocumentButton && (
                   <Button
                     className="tablet-full-width push-right margin-right-0"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
@@ -107,7 +107,7 @@ export const CaseDetailHeader = connect(
                   </Button>
                 )}
 
-                {caseDetailHelper.showEditCaseButton && (
+                {caseDetailHeaderHelper.showEditCaseButton && (
                   <>
                     <Button
                       className="tablet-full-width push-right margin-right-0"

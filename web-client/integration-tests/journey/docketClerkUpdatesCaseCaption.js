@@ -1,5 +1,5 @@
 export default test => {
-  return it('Petitions clerk updates case caption', async () => {
+  return it('Docket clerk updates case caption', async () => {
     test.setState('caseDetail', {});
 
     await test.runSequence('gotoCaseDetailSequence', {
