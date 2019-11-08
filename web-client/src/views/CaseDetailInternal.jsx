@@ -1,6 +1,5 @@
 import { AddToTrialModal } from './CaseDetail/AddToTrialModal';
 import { BlockFromTrialModal } from './CaseDetail/BlockFromTrialModal';
-import { Button } from '../ustc-ui/Button/Button';
 import { CaseDeadlinesInternal } from './CaseDetail/CaseDeadlinesInternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailPendingReportList } from './CaseDetail/CaseDetailPendingReportList';
@@ -31,7 +30,6 @@ export const CaseDetailInternal = connect(
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
-    setCaseToReadyForTrialSequence: sequences.setCaseToReadyForTrialSequence,
     showModal: state.showModal,
     token: state.token,
   },
@@ -40,7 +38,6 @@ export const CaseDetailInternal = connect(
     caseDetailHelper,
     formattedCaseDetail,
     setCaseDetailPageTabSequence,
-    setCaseToReadyForTrialSequence,
     showModal,
     token,
   }) => {
@@ -151,12 +148,6 @@ export const CaseDetailInternal = connect(
                   Batch Zip Download
                 </a>
               )}
-              <Button
-                secondary
-                onClick={() => setCaseToReadyForTrialSequence()}
-              >
-                Set Case Status to Ready for Trial
-              </Button>
             </>
           )}
         </section>
