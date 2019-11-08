@@ -241,9 +241,7 @@ function Case(rawCase, { applicationContext }) {
     rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
   if (rawCase.caseCaption) {
-    this.caseTitle = `${rawCase.caseCaption.trim()} ${
-      Case.CASE_CAPTION_POSTFIX
-    }`;
+    this.setCaseTitle(rawCase.caseCaption);
     this.initialTitle = rawCase.initialTitle || this.caseTitle;
   }
 
@@ -1152,6 +1150,29 @@ Case.prototype.setCaseStatus = function(caseStatus) {
   ) {
     this.associatedJudge = Case.CHIEF_JUDGE;
   }
+  return this;
+};
+
+/**
+ * set case caption
+ *
+ * @param {string} caseCaption the case caption to update
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setCaseCaption = function(caseCaption) {
+  this.caseCaption = caseCaption;
+  this.setCaseTitle(caseCaption);
+  return this;
+};
+
+/**
+ * set case title
+ *
+ * @param {string} caseCaption the case caption to build the case title
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setCaseTitle = function(caseCaption) {
+  this.caseTitle = `${caseCaption.trim()} ${Case.CASE_CAPTION_POSTFIX}`;
   return this;
 };
 

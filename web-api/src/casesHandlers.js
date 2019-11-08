@@ -19,9 +19,8 @@ module.exports = {
     .handler,
   unblockCaseLambda: require('./cases/unblockCaseLambda').handler,
   unprioritizeCaseLambda: require('./cases/unprioritizeCaseLambda').handler,
-  updateCaseCaptionLambda: require('./cases/updateCaseCaptionLambda').handler,
+  updateCaseContextLambda: require('./cases/updateCaseContextLambda').handler,
   updateCaseLambda: require('./cases/updateCaseLambda').handler,
-  updateCaseStatusLambda: require('./cases/updateCaseStatusLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,
   updateCounselOnCaseLambda: require('./cases/updateCounselOnCaseLambda')
