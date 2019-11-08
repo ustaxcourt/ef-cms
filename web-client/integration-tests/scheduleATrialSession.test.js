@@ -2,6 +2,7 @@ import { setupTest } from './helpers';
 import { uploadPetition } from './helpers';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
+import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
 import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
 import petitionerLogin from './journey/petitionerLogIn';
@@ -12,7 +13,6 @@ import petitionsClerkManuallyRemovesCaseFromTrial from './journey/petitionsClerk
 import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
 import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
-import petitionsClerkSetsCaseReadyForTrial from './journey/petitionsClerkSetsCaseReadyForTrial';
 import petitionsClerkViewsACalendaredTrialSession from './journey/petitionsClerkViewsACalendaredTrialSession';
 import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 import userSignsOut from './journey/petitionerSignsOut';
@@ -43,7 +43,9 @@ describe('Schedule A Trial Session', () => {
     petitionsClerkLogIn(test);
     petitionsClerkSendsCaseToIRSHoldingQueue(test);
     petitionsClerkRunsBatchProcess(test);
-    petitionsClerkSetsCaseReadyForTrial(test);
+    userSignsOut(test);
+    docketClerkLogIn(test);
+    docketClerkSetsCaseReadyForTrial(test);
     userSignsOut(test);
   };
 
