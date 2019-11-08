@@ -5,7 +5,7 @@ const {
 } = require('../middleware/apiGatewayHelper');
 
 /**
- * used for updating a case caption
+ * used for updating a case status
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
@@ -17,7 +17,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .updateCaseCaptionInteractor({
+        .updateCaseContextInteractor({
           applicationContext,
           caseId: event.pathParameters.caseId,
           ...JSON.parse(event.body),

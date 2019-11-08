@@ -194,18 +194,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  setCaseToReadyForTrial:
-    handler: web-api/src/casesHandlers.setCaseToReadyForTrialLambda
-    events:
-      - http:
-          path: /{caseId}/set-to-ready-for-trial
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   createCase:
     handler: web-api/src/casesHandlers.createCaseLambda
     events:
@@ -390,23 +378,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateCaseCaption:
-    handler: web-api/src/casesHandlers.updateCaseCaptionLambda
+  updateCaseContext:
+    handler: web-api/src/casesHandlers.updateCaseContextLambda
     events:
       - http:
-          path: /{caseId}/case-caption
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updateCaseStatus:
-    handler: web-api/src/casesHandlers.updateCaseStatusLambda
-    events:
-      - http:
-          path: /{caseId}/case-status
+          path: /{caseId}/case-context
           method: put
           cors: true
           authorizer:
