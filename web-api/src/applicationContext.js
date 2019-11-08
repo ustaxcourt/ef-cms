@@ -496,9 +496,6 @@ const {
   serveSignedStipDecisionInteractor,
 } = require('../../shared/src/business/useCases/serveSignedStipDecisionInteractor');
 const {
-  setCaseToReadyForTrialInteractor,
-} = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
-const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
 const {
@@ -979,7 +976,6 @@ module.exports = (appContextUser = {}) => {
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
         serveSignedStipDecisionInteractor,
-        setCaseToReadyForTrialInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
         setWorkItemAsReadInteractor,
