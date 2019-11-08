@@ -7,17 +7,20 @@ const { TrialSession } = require('../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
- * updateCaseStatusInteractor
+ * updateCaseContextInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {string} providers.associatedJudge the associated judge to set on the case
+ * @param {string} providers.caseCaption the caption to set on the case
  * @param {string} providers.caseId the id of the case to update
  * @param {object} providers.caseStatus the status to set on the case
  * @returns {object} the updated case data
  */
-exports.updateCaseStatusInteractor = async ({
+exports.updateCaseContextInteractor = async ({
   applicationContext,
   associatedJudge,
+  caseCaption,
   caseId,
   caseStatus,
 }) => {
@@ -33,10 +36,12 @@ exports.updateCaseStatusInteractor = async ({
 
   const newCase = new Case(oldCase, { applicationContext });
 
+  if (caseCaption) {
+    newCase.setCaseCaption(caseCaption);
+  }
   if (caseStatus) {
     newCase.setCaseStatus(caseStatus);
   }
-
   if (associatedJudge) {
     newCase.setAssociatedJudge(associatedJudge);
   }

@@ -24,26 +24,19 @@ export const submitUpdateCaseModalAction = async ({
   }
 
   let updatedCase = caseToUpdate;
-  if (caseCaption && caseToUpdate.caseCaption !== caseCaption) {
-    updatedCase = await applicationContext
-      .getUseCases()
-      .updateCaseCaptionInteractor({
-        applicationContext,
-        caseCaption,
-        caseId: caseToUpdate.caseId,
-      });
-  }
 
   if (
     (caseStatus && caseToUpdate.status !== caseStatus) ||
     (selectedAssociatedJudge &&
-      caseToUpdate.associatedJudge !== selectedAssociatedJudge)
+      caseToUpdate.associatedJudge !== selectedAssociatedJudge) ||
+    (caseCaption && caseToUpdate.caseCaption !== caseCaption)
   ) {
     updatedCase = await applicationContext
       .getUseCases()
-      .updateCaseStatusInteractor({
+      .updateCaseContextInteractor({
         applicationContext,
         associatedJudge: selectedAssociatedJudge,
+        caseCaption,
         caseId: caseToUpdate.caseId,
         caseStatus,
       });
