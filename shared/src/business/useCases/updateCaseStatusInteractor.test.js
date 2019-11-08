@@ -26,8 +26,8 @@ describe('updateCaseStatusInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: User.ROLES.petitioner,
-          userId: 'nope',
+          role: User.ROLES.petitionsClerk,
+          userId: 'petitionsClerk',
         };
       },
       getPersistenceGateway: () => {
@@ -56,8 +56,8 @@ describe('updateCaseStatusInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
+          role: User.ROLES.docketClerk,
+          userId: 'docketClerk',
         };
       },
       getPersistenceGateway: () => {
@@ -93,8 +93,8 @@ describe('updateCaseStatusInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
+          role: User.ROLES.docketClerk,
+          userId: 'docketClerk',
         };
       },
       getPersistenceGateway: () => {
@@ -136,8 +136,8 @@ describe('updateCaseStatusInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: User.ROLES.petitionsClerk,
-          userId: 'petitionsclerk',
+          role: User.ROLES.docketClerk,
+          userId: 'docketClerk',
         };
       },
       getPersistenceGateway: () => {

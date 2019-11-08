@@ -11,6 +11,7 @@ import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
+import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
@@ -78,6 +79,7 @@ export const state = {
   caseDetailEditContactsHelper,
   caseDetailEditHelper,
   caseDetailErrors: {},
+  caseDetailHeaderHelper,
   caseDetailHelper,
   caseInformationHelper,
   caseTypeDescriptionHelper,
