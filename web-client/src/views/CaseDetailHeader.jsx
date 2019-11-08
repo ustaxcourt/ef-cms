@@ -1,26 +1,26 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UpdateCaseCaptionModalDialog } from './CaseDetailEdit/UpdateCaseCaptionModalDialog';
+import { UpdateCaseModalDialog } from './CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseDetailHeader = connect(
   {
-    caseDetailHelper: state.caseDetailHelper,
+    caseDetailHeaderHelper: state.caseDetailHeaderHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     hideActionButtons: props.hideActionButtons,
-    openCaseCaptionModalSequence: sequences.openCaseCaptionModalSequence,
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
+    openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     showModal: state.showModal,
   },
   ({
-    caseDetailHelper,
+    caseDetailHeaderHelper,
     formattedCaseDetail,
     hideActionButtons,
-    openCaseCaptionModalSequence,
+    openUpdateCaseModalSequence,
     showModal,
   }) => {
     return (
@@ -34,7 +34,7 @@ export const CaseDetailHeader = connect(
                     Docket Number: {formattedCaseDetail.docketNumberWithSuffix}
                   </CaseLink>
                 </h1>
-                {caseDetailHelper.hidePublicCaseInformation && (
+                {caseDetailHeaderHelper.hidePublicCaseInformation && (
                   <span
                     aria-label={`status: ${formattedCaseDetail.status}`}
                     className="usa-tag"
@@ -43,7 +43,7 @@ export const CaseDetailHeader = connect(
                   </span>
                 )}
 
-                {caseDetailHelper.hidePublicCaseInformation &&
+                {caseDetailHeaderHelper.hidePublicCaseInformation &&
                   formattedCaseDetail.associatedJudge && (
                     <span
                       aria-label="associated judge"
@@ -58,7 +58,7 @@ export const CaseDetailHeader = connect(
                     </span>
                   )}
 
-                {caseDetailHelper.hidePublicCaseInformation &&
+                {caseDetailHeaderHelper.hidePublicCaseInformation &&
                   formattedCaseDetail.showBlockedTag && (
                     <span className="margin-left-1 usa-tag red-tag">
                       <FontAwesomeIcon
@@ -73,14 +73,11 @@ export const CaseDetailHeader = connect(
               <p className="margin-y-0" id="case-title">
                 <span>{formattedCaseDetail.caseTitle}</span>
               </p>
-              {showModal == 'UpdateCaseCaptionModalDialog' && (
-                <UpdateCaseCaptionModalDialog />
-              )}
             </div>
 
             {!hideActionButtons && (
               <div className="tablet:grid-col-4">
-                {caseDetailHelper.showRequestAccessToCaseButton && (
+                {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
                   <Button
                     className="tablet-full-width push-right margin-right-0"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
@@ -90,7 +87,7 @@ export const CaseDetailHeader = connect(
                   </Button>
                 )}
 
-                {caseDetailHelper.showPendingAccessToCaseButton && (
+                {caseDetailHeaderHelper.showPendingAccessToCaseButton && (
                   <span
                     aria-label="Request for Access Pending"
                     className="usa-tag push-right margin-right-0 padding-x-3"
@@ -99,7 +96,7 @@ export const CaseDetailHeader = connect(
                   </span>
                 )}
 
-                {caseDetailHelper.showFileFirstDocumentButton && (
+                {caseDetailHeaderHelper.showFileFirstDocumentButton && (
                   <Button
                     className="tablet-full-width push-right margin-right-0"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
@@ -110,17 +107,22 @@ export const CaseDetailHeader = connect(
                   </Button>
                 )}
 
-                {caseDetailHelper.showEditCaseButton && (
-                  <Button
-                    className="tablet-full-width push-right margin-right-0"
-                    id="caption-edit-button"
-                    onClick={() => {
-                      openCaseCaptionModalSequence();
-                    }}
-                  >
-                    <FontAwesomeIcon icon="edit" size="sm" />
-                    Edit
-                  </Button>
+                {caseDetailHeaderHelper.showEditCaseButton && (
+                  <>
+                    <Button
+                      className="tablet-full-width push-right margin-right-0"
+                      id="caption-edit-button"
+                      onClick={() => {
+                        openUpdateCaseModalSequence();
+                      }}
+                    >
+                      <FontAwesomeIcon icon="edit" size="sm" />
+                      Edit
+                    </Button>
+                    {showModal == 'UpdateCaseModalDialog' && (
+                      <UpdateCaseModalDialog />
+                    )}
+                  </>
                 )}
               </div>
             )}

@@ -40,7 +40,7 @@ const router = {
       return function() {
         const gotoLoginPage = () => {
           const path = app.getState('cognitoLoginUrl');
-          window.location.replace(path);
+          externalRoute(path);
         };
         const goto404 = () => {
           app.getSequence('navigateToPathSequence')({
@@ -578,6 +578,14 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Blocked cases');
         app.getSequence('gotoBlockedCasesReportSequence')();
+      }),
+    );
+
+    route(
+      '/reports/pending-report',
+      ifHasAccess(() => {
+        setPageTitle('Pending report');
+        app.getSequence('gotoPendingReportSequence')();
       }),
     );
 

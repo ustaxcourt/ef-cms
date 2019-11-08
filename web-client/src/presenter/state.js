@@ -11,6 +11,7 @@ import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
+import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
@@ -49,6 +50,7 @@ import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
+import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
@@ -77,6 +79,7 @@ export const state = {
   caseDetailEditContactsHelper,
   caseDetailEditHelper,
   caseDetailErrors: {},
+  caseDetailHeaderHelper,
   caseDetailHelper,
   caseInformationHelper,
   caseTypeDescriptionHelper,
@@ -173,6 +176,7 @@ export const state = {
   trialCitiesHelper,
   trialSessionHeaderHelper,
   trialSessionWorkingCopyHelper,
+  updateCaseModalHelper,
   usaBanner: {
     showDetails: false,
   },

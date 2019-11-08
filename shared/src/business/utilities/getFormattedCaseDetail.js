@@ -167,6 +167,10 @@ const formatCase = (applicationContext, caseDetail) => {
     );
   }
 
+  result.pendingItemsDocketEntries = (
+    result.docketRecordWithDocument || []
+  ).filter(entry => entry.document && entry.document.pending);
+
   const { ORDER_TYPES_MAP } = applicationContext.getConstants();
 
   result.draftDocuments = (result.documents || [])

@@ -87,6 +87,7 @@ provider:
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
+  role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   elasticsearchEndpoint: ${opt:elasticsearch_endpoint}
@@ -116,63 +117,6 @@ provider:
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
-
-  iamRoleStatements:
-    - Effect: 'Allow'
-      Action:
-        - 'xray:PutTraceSegments'
-        - 'xray:PutTelemetryRecords'
-      Resource:
-        - '*'
-    - Effect: 'Allow'
-      Action:
-        - 'lambda:InvokeFunction'
-      Resource:
-        - arn:aws:lambda:${opt:region}:${opt:accountId}:function:${self:service}-${opt:stage, self:provider.stage}-*
-    - Effect: 'Allow'
-      Action:
-        - cognito-idp:AdminCreateUser
-        - cognito-idp:AdminGetUser
-      Resource:
-        - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
-    - Effect: 'Allow'
-      Action:
-        - 's3:*'
-      Resource:
-        Fn::Join:
-          - ''
-          - - 'arn:aws:s3:::'
-            - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
-            - '/*'
-    - Effect: 'Allow'
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:BatchGetItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-        - dynamodb:BatchWriteItem
-        - dynamodb:DescribeStream
-        - dynamodb:GetRecords
-        - dynamodb:GetShardIterator
-        - dynamodb:ListStreams
-      Resource:
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}
-        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-    - Effect: 'Allow'
-      Action:
-        - 'ses:*'
-      Resource:
-        - '*'
-    - Effect: 'Allow'
-      Action:
-        - 'es:*'
-      Resource:
-        - '*'
 
 package:
   exclude:

@@ -181,6 +181,12 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  fetchPendingItems,
+} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
+const {
+  fetchPendingItemsInteractor,
+} = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
+const {
   fileCourtIssuedOrderInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor');
 const {
@@ -523,6 +529,9 @@ const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
+  updateCaseCaptionInteractor,
+} = require('../../shared/src/business/useCases/updateCaseCaptionInteractor');
+const {
   updateCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
 const {
@@ -537,6 +546,9 @@ const {
 const {
   updateCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/updateCaseNoteInteractor');
+const {
+  updateCaseStatusInteractor,
+} = require('../../shared/src/business/useCases/updateCaseStatusInteractor');
 const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
@@ -821,6 +833,17 @@ module.exports = (appContextUser = {}) => {
         zipDocuments,
       };
     },
+    getPug: () => {
+      // Notice: this require is here to only have the lambdas that need it call it.
+      // This dependency is only available on lambdas with the 'puppeteer' layer,
+      // which means including it globally causes the other lambdas to fail.
+      // This also needs to have the string split to cause parcel to NOT bundle this dependency,
+      // which is wanted as bundling would have the dependency to not be searched for
+      // and found at the layer level and would cause issues.
+      // eslint-disable-next-line security/detect-non-literal-require
+      const pug = require('p' + 'ug');
+      return pug;
+    },
     getSearchClient: () => {
       if (!searchClientCache) {
         if (environment.stage === 'local') {
@@ -874,6 +897,7 @@ module.exports = (appContextUser = {}) => {
     },
     getUseCaseHelpers: () => {
       return {
+        fetchPendingItems,
         generateCaseConfirmationPdf,
       };
     },
@@ -902,6 +926,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
         deleteCounselFromCaseInteractor,
+        fetchPendingItemsInteractor,
         fileCourtIssuedOrderInteractor,
         fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
@@ -962,9 +987,11 @@ module.exports = (appContextUser = {}) => {
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseInteractor,
         unprioritizeCaseInteractor,
+        updateCaseCaptionInteractor,
         updateCaseDeadlineInteractor,
         updateCaseInteractor,
         updateCaseNoteInteractor,
+        updateCaseStatusInteractor,
         updateCaseTrialSortTagsInteractor,
         updateCounselOnCaseInteractor,
         updateCourtIssuedOrderInteractor,

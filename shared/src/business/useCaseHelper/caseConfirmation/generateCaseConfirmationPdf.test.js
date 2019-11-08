@@ -30,7 +30,7 @@ describe('generateCaseConfirmationPdf', () => {
     const result = await generateCaseConfirmationPdf({
       applicationContext: {
         environment: {
-          documentsBucketName: 'something',
+          documentsBucketName: 'MockDocumentBucketName',
         },
         getChromium: () => chromiumMock,
 
