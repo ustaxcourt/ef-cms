@@ -5,27 +5,29 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-const pendingReportSassContent = fs.readFileSync(
-  './shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.scss',
-  'utf8',
-);
-
-const pendingReportTemplateContent = fs.readFileSync(
-  './shared/src/business/useCaseHelper/pendingReport/pendingReport.pug',
-  'utf8',
-);
-
-const ustcLogoBufferBase64 =
-  'data:image/png;base64,' +
-  fs.readFileSync('./shared/static/images/ustc_seal.png', {
-    encoding: 'base64',
-  });
-
 /**
  * @param {Array} cases case entities
  * @returns {string} an html string resulting from rendering template with caseInfo
  */
 const generatePendingReportPage = async ({ applicationContext, cases }) => {
+  const pathPrefix = process.env.NODE_ENV === 'production' ? '/var/task/' : '';
+
+  const pendingReportSassContent = fs.readFileSync(
+    `${pathPrefix}shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.scss`,
+    'utf8',
+  );
+
+  const pendingReportTemplateContent = fs.readFileSync(
+    `${pathPrefix}shared/src/business/useCaseHelper/pendingReport/pendingReport.pug`,
+    'utf8',
+  );
+
+  const ustcLogoBufferBase64 =
+    'data:image/png;base64,' +
+    fs.readFileSync(`${pathPrefix}shared/static/images/ustc_seal.png`, {
+      encoding: 'base64',
+    });
+
   const pug = applicationContext.getPug();
   const sass = applicationContext.getNodeSass();
 
