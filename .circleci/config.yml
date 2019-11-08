@@ -394,13 +394,13 @@ workflows:
             - build-client
             - e2e-pa11y
             - e2e-cypress
-          filters:
-            branches:
-              only:
-                - develop
-                - staging
-                - master
-                - experimental
+          # filters:
+          #   branches:
+          #     only:
+          #       - develop
+          #       - staging
+          #       - master
+          #       - experimental
       - deploy-api-west:
           requires:
             - build-shared
