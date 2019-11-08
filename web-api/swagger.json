@@ -866,24 +866,6 @@
         "description": "Updates the caption, status, and judge on the given case.\n",
         "produces": ["application/json"],
         "consumes": ["application/json"],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "caseContext",
-            "description": "The case caption to be set",
-            "properties": {
-              "associatedJudge": {
-                "type": "string"
-              },
-              "caseCaption": {
-                "type": "string"
-              },
-              "caseStatus": {
-                "type": "string"
-              }
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "200 response",
