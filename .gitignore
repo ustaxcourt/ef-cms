@@ -15,6 +15,7 @@ graph-generators/node_modules/
 graph-generators/*png
 node_modules/
 parcel-debug-*
+**/*_.js
 /policy.json
 puppeteer_lambda_layer.tar.gz
 shared/coverage

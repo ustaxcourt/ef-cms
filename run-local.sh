@@ -14,6 +14,8 @@ ESEARCH_PID=$!
 node ./web-api/start-s3rver &
 S3RVER_PID=$!
 
+npm run build:assets
+
 echo "seeding s3"
 npm run seed:s3
 
