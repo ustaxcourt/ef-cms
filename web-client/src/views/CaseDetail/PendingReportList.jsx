@@ -7,10 +7,11 @@ import React from 'react';
 
 export const PendingReportList = connect(
   {
-    pendingItems: state.formattedCaseDetail.pendingItems,
+    pendingItemsDocketEntries:
+      state.formattedCaseDetail.pendingItemsDocketEntries,
     users: state.users,
   },
-  ({ pendingItems }) => {
+  ({ pendingItemsDocketEntries }) => {
     return (
       <>
         <div>
@@ -38,7 +39,7 @@ export const PendingReportList = connect(
               <th>Remove</th>
             </tr>
           </thead>
-          {pendingItems.map(({ document, record }, arrayIndex) => (
+          {pendingItemsDocketEntries.map(({ document, record }, arrayIndex) => (
             <tbody key={arrayIndex}>
               <tr className="pending-item-row">
                 <td>{arrayIndex + 1}</td>
@@ -63,7 +64,9 @@ export const PendingReportList = connect(
             </tbody>
           ))}
         </table>
-        {pendingItems.length === 0 && <p>There is nothing pending.</p>}
+        {pendingItemsDocketEntries.length === 0 && (
+          <p>There is nothing pending.</p>
+        )}
       </>
     );
   },
