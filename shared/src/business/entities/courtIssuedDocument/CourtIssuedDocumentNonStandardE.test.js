@@ -1,7 +1,7 @@
 const moment = require('moment');
 const {
   CourtIssuedDocumentNonStandardE,
-} = require('./CourtIssuedDocumentNonstandardE');
+} = require('./CourtIssuedDocumentNonStandardE');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
 
 const { VALIDATION_ERROR_MESSAGES } = CourtIssuedDocumentNonStandardE;
