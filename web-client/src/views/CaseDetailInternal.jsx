@@ -3,6 +3,7 @@ import { BlockFromTrialModal } from './CaseDetail/BlockFromTrialModal';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDeadlinesInternal } from './CaseDetail/CaseDeadlinesInternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
+import { CaseDetailPendingReportList } from './CaseDetail/CaseDetailPendingReportList';
 import { CaseInformationInternal } from './CaseDetail/CaseInformationInternal';
 import { CaseNotes } from './CaseDetail/CaseNotes';
 import { CreateCaseDeadlineModalDialog } from './CaseDetail/CreateCaseDeadlineModalDialog';
@@ -49,7 +50,25 @@ export const CaseDetailInternal = connect(
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          <CaseDeadlinesInternal />
+          <Tabs
+            bind="caseDetailPage.deadlinesTab"
+            className="classic-horizontal-header3 tab-border"
+          >
+            <Tab
+              id="tab-case-deadlines"
+              tabName="caseDeadlines"
+              title="Deadlines"
+            >
+              <CaseDeadlinesInternal />
+            </Tab>
+            <Tab
+              id="tab-pending-report"
+              tabName="pendingReport"
+              title="Pending Report"
+            >
+              <CaseDetailPendingReportList />
+            </Tab>
+          </Tabs>
 
           <div>
             <div className="title">

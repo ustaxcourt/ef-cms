@@ -20,6 +20,7 @@ import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
+import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
@@ -154,9 +155,11 @@ import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { unblockFromTrialInteractor } from '../../shared/src/proxies/unblockFromTrialProxy';
 import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritizeCaseProxy';
+import { updateCaseCaptionInteractor } from '../../shared/src/proxies/updateCaseCaptionProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
 import { updateCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateCaseNoteProxy';
+import { updateCaseStatusInteractor } from '../../shared/src/proxies/updateCaseStatusProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAssociation/updateCounselOnCaseProxy';
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
@@ -240,6 +243,7 @@ const allUseCases = {
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,
   downloadDocumentFileInteractor,
+  fetchPendingItemsInteractor,
   fileCourtIssuedOrderInteractor,
   fileDocketEntryInteractor,
   fileExternalDocumentInteractor,
@@ -307,9 +311,11 @@ const allUseCases = {
   submitPendingCaseAssociationRequestInteractor,
   unblockFromTrialInteractor,
   unprioritizeCaseInteractor,
+  updateCaseCaptionInteractor,
   updateCaseDeadlineInteractor,
   updateCaseInteractor,
   updateCaseNoteInteractor,
+  updateCaseStatusInteractor,
   updateCaseTrialSortTagsInteractor,
   updateCounselOnCaseInteractor,
   updateCourtIssuedOrderInteractor,
@@ -404,6 +410,8 @@ const applicationContext = {
       (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
       55 * MINUTES, // 55 minutes
     STATUS_TYPES: Case.STATUS_TYPES,
+    STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
+    STATUS_TYPES_WITH_ASSOCIATED_JUDGE: Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
     TRIAL_CITIES: TrialSession.TRIAL_CITIES,
     TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
     TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,

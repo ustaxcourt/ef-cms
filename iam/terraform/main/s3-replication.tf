@@ -1,3 +1,4 @@
+
 resource "aws_iam_role" "s3_replication_role" {
   name = "s3_replication_role_${var.environment}"
 
