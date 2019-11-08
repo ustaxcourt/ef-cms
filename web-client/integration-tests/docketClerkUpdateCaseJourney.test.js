@@ -38,7 +38,6 @@ describe('docket clerk update case journey', () => {
   docketClerkSetsCalendarForTrialSession(test);
   docketClerkUpdatesCaseStatusFromCalendaredToSubmitted(test);
   docketClerkViewsInactiveCasesForTrialSession(test);
-  // not yet passing - judge is not going back to Chief Judge
-  //docketClerkUpdatesCaseStatusToReadyForTrial(test);
+  docketClerkUpdatesCaseStatusToReadyForTrial(test);
   docketClerkSignsOut(test);
 });
