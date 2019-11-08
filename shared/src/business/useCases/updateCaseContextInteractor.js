@@ -11,6 +11,8 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {string} providers.associatedJudge the associated judge to set on the case
+ * @param {string} providers.caseCaption the caption to set on the case
  * @param {string} providers.caseId the id of the case to update
  * @param {object} providers.caseStatus the status to set on the case
  * @returns {object} the updated case data
