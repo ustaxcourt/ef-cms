@@ -42,13 +42,13 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #caption-edit-button to be visible',
+      'wait for #edit-case-context-button to be visible',
       'wait for .progress-indicator to be hidden',
-      'click element #caption-edit-button',
+      'click element #edit-case-context-button',
       'wait for .modal-dialog to be visible',
     ],
-    notes: 'checks a11y of case caption edit dialog',
+    notes: 'checks a11y of case context edit dialog',
     url:
-      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19&info=case-caption-edit',
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19&info=case-context-edit',
   },
 ];

@@ -3,7 +3,7 @@ exports.navigateTo = (username, caseId) => {
 };
 
 exports.getEditCaseCaptionButton = () => {
-  return cy.get('button#caption-edit-button');
+  return cy.get('button#edit-case-context-button');
 };
 
 exports.getCaptionTextArea = () => {
