@@ -1,6 +1,6 @@
 const {
   CourtIssuedDocumentNonStandardA,
-} = require('./CourtIssuedDocumentNonstandardA');
+} = require('./CourtIssuedDocumentNonStandardA');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
 
 const { VALIDATION_ERROR_MESSAGES } = CourtIssuedDocumentNonStandardA;
