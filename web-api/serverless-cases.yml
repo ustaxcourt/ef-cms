@@ -390,23 +390,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateCaseCaption:
-    handler: web-api/src/casesHandlers.updateCaseCaptionLambda
+  updateCaseContext:
+    handler: web-api/src/casesHandlers.updateCaseContextLambda
     events:
       - http:
-          path: /{caseId}/case-caption
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updateCaseStatus:
-    handler: web-api/src/casesHandlers.updateCaseStatusLambda
-    events:
-      - http:
-          path: /{caseId}/case-status
+          path: /{caseId}/case-context
           method: put
           cors: true
           authorizer:

@@ -3,8 +3,7 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { submitUpdateCaseModalAction } from './submitUpdateCaseModalAction';
 
-let updateCaseCaptionInteractorMock;
-let updateCaseStatusInteractorMock;
+let updateCaseContextInteractorMock;
 
 const caseMock = {
   caption: 'Test Caption',
@@ -14,19 +13,17 @@ const caseMock = {
 
 describe('submitUpdateCaseModalAction', () => {
   beforeEach(() => {
-    updateCaseCaptionInteractorMock = jest.fn();
-    updateCaseStatusInteractorMock = jest.fn();
+    updateCaseContextInteractorMock = jest.fn();
 
     presenter.providers.applicationContext = {
       ...applicationContext,
       getUseCases: () => ({
-        updateCaseCaptionInteractor: updateCaseCaptionInteractorMock,
-        updateCaseStatusInteractor: updateCaseStatusInteractorMock,
+        updateCaseContextInteractor: updateCaseContextInteractorMock,
       }),
     };
   });
 
-  it('Calls the update case caption interactor if the case caption has been updated', async () => {
+  it('Calls the update case context interactor if the case caption has been updated', async () => {
     await runAction(submitUpdateCaseModalAction, {
       modules: {
         presenter,
@@ -39,15 +36,14 @@ describe('submitUpdateCaseModalAction', () => {
       },
     });
 
-    expect(updateCaseCaptionInteractorMock).toHaveBeenCalled();
-    expect(updateCaseCaptionInteractorMock.mock.calls[0][0]).toMatchObject({
+    expect(updateCaseContextInteractorMock).toHaveBeenCalled();
+    expect(updateCaseContextInteractorMock.mock.calls[0][0]).toMatchObject({
       caseCaption: 'Updated Test Caption',
       caseId: '123',
     });
-    expect(updateCaseStatusInteractorMock).not.toHaveBeenCalled();
   });
 
-  it('Calls the update case status interactor if the case status has been updated', async () => {
+  it('Calls the update case context interactor if the case status has been updated', async () => {
     await runAction(submitUpdateCaseModalAction, {
       modules: {
         presenter,
@@ -60,15 +56,14 @@ describe('submitUpdateCaseModalAction', () => {
       },
     });
 
-    expect(updateCaseStatusInteractorMock).toHaveBeenCalled();
-    expect(updateCaseStatusInteractorMock.mock.calls[0][0]).toMatchObject({
+    expect(updateCaseContextInteractorMock).toHaveBeenCalled();
+    expect(updateCaseContextInteractorMock.mock.calls[0][0]).toMatchObject({
       caseId: '123',
       caseStatus: 'General Docket - Not at Issue',
     });
-    expect(updateCaseCaptionInteractorMock).not.toHaveBeenCalled();
   });
 
-  it('Calls the update case status interactor if the associated judge has been updated', async () => {
+  it('Calls the update case context interactor if the associated judge has been updated', async () => {
     await runAction(submitUpdateCaseModalAction, {
       modules: {
         presenter,
@@ -81,15 +76,14 @@ describe('submitUpdateCaseModalAction', () => {
       },
     });
 
-    expect(updateCaseStatusInteractorMock).toHaveBeenCalled();
-    expect(updateCaseStatusInteractorMock.mock.calls[0][0]).toMatchObject({
+    expect(updateCaseContextInteractorMock).toHaveBeenCalled();
+    expect(updateCaseContextInteractorMock.mock.calls[0][0]).toMatchObject({
       caseId: '123',
       caseStatus: 'General Docket - Not at Issue',
     });
-    expect(updateCaseCaptionInteractorMock).not.toHaveBeenCalled();
   });
 
-  it('Calls the update case status interactor if the case status has been updated, setting the associated judge to undefined if the status is General Docket - Not At Issue', async () => {
+  it('Calls the update case context interactor if the case status has been updated, setting the associated judge to undefined if the status is General Docket - Not At Issue', async () => {
     await runAction(submitUpdateCaseModalAction, {
       modules: {
         presenter,
@@ -103,11 +97,10 @@ describe('submitUpdateCaseModalAction', () => {
       },
     });
 
-    expect(updateCaseStatusInteractorMock).toHaveBeenCalled();
-    expect(updateCaseStatusInteractorMock.mock.calls[0][0]).toMatchObject({
+    expect(updateCaseContextInteractorMock).toHaveBeenCalled();
+    expect(updateCaseContextInteractorMock.mock.calls[0][0]).toMatchObject({
       caseId: '123',
       caseStatus: 'General Docket - Not at Issue',
     });
-    expect(updateCaseCaptionInteractorMock).not.toHaveBeenCalled();
   });
 });
