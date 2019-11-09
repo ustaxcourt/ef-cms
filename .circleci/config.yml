@@ -203,7 +203,7 @@ jobs:
           command: cd web-api/runtimes/puppeteer && ./build.sh && cd ../clamav && ./build.sh && cd ../../.. && docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Env
-          command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+          command: echo "export ENV=$(./get-env.sh develop)" >> $BASH_ENV
       - run:
           name: 'Deploy - Web API - Layers - Puppeteer - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-east-1"
@@ -389,11 +389,12 @@ workflows:
                 - experimental
       - deploy-api-east:
           requires:
-            - build-shared
-            - build-api
-            - build-client
-            - e2e-pa11y
-            - e2e-cypress
+              - bundle
+          #   - build-shared
+          #   - build-api
+          #   - build-client
+          #   - e2e-pa11y
+          #   - e2e-cypress
           # filters:
           #   branches:
           #     only:
