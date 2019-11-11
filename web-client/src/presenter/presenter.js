@@ -61,6 +61,7 @@ import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCanc
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
+import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
 import { gotoAddDocketEntrySequence } from './sequences/gotoAddDocketEntrySequence';
 import { gotoAddTrialSessionSequence } from './sequences/gotoAddTrialSessionSequence';
 import { gotoAdvancedSearchSequence } from './sequences/gotoAdvancedSearchSequence';
@@ -114,6 +115,7 @@ import { openAddPractitionerModalSequence } from './sequences/openAddPractitione
 import { openAddRespondentModalSequence } from './sequences/openAddRespondentModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
+import { openCancelDraftDocumentModalSequence } from './sequences/openCancelDraftDocumentModalSequence';
 import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
 import { openChangeScannerSourceModalSequence } from './sequences/openChangeScannerSourceModalSequence';
 import { openCleanModalSequence } from './sequences/openCleanModalSequence';
@@ -369,6 +371,7 @@ export const presenter = {
     generatePdfFromScanSessionSequence,
     getBlockedCasesByTrialLocationSequence,
     getUsersInSectionSequence,
+    gotoAddCourtIssuedDocketEntrySequence,
     gotoAddDocketEntrySequence,
     gotoAddTrialSessionSequence,
     gotoAdvancedSearchSequence,
@@ -422,6 +425,7 @@ export const presenter = {
     openAddRespondentModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
+    openCancelDraftDocumentModalSequence,
     openCaseDifferenceModalSequence,
     openChangeScannerSourceModalSequence,
     openCleanModalSequence,
