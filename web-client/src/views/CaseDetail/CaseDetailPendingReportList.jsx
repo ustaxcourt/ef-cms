@@ -65,9 +65,11 @@ export const CaseDetailPendingReportList = connect(
                   <Button
                     link
                     className="padding-0"
-                    onClick={openConfirmRemoveCaseDetailPendingItemModalSequence(
-                      { documentId: document.documentId },
-                    )}
+                    onClick={() =>
+                      openConfirmRemoveCaseDetailPendingItemModalSequence({
+                        documentId: document.documentId,
+                      })
+                    }
                   >
                     <FontAwesomeIcon icon={['fas', 'trash']} />
                     Remove
