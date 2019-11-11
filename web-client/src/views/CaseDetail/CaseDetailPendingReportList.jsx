@@ -1,17 +1,24 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmRemoveCaseDetailPendingItemModal } from './ConfirmRemoveCaseDetailPendingItemModal';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const CaseDetailPendingReportList = connect(
   {
+    openConfirmRemoveCaseDetailPendingItemModalSequence:
+      sequences.openConfirmRemoveCaseDetailPendingItemModalSequence,
     pendingItemsDocketEntries:
       state.formattedCaseDetail.pendingItemsDocketEntries,
-    users: state.users,
+    showModal: state.showModal,
   },
-  ({ pendingItemsDocketEntries }) => {
+  ({
+    openConfirmRemoveCaseDetailPendingItemModalSequence,
+    pendingItemsDocketEntries,
+    showModal,
+  }) => {
     return (
       <>
         <div>
@@ -55,7 +62,15 @@ export const CaseDetailPendingReportList = connect(
                 </td>
                 <td>{document.filedBy}</td>
                 <td>
-                  <Button link className="padding-0">
+                  <Button
+                    link
+                    className="padding-0"
+                    onClick={() =>
+                      openConfirmRemoveCaseDetailPendingItemModalSequence({
+                        documentId: document.documentId,
+                      })
+                    }
+                  >
                     <FontAwesomeIcon icon={['fas', 'trash']} />
                     Remove
                   </Button>
@@ -66,6 +81,9 @@ export const CaseDetailPendingReportList = connect(
         </table>
         {pendingItemsDocketEntries.length === 0 && (
           <p>There is nothing pending.</p>
+        )}
+        {showModal === 'ConfirmRemoveCaseDetailPendingItemModal' && (
+          <ConfirmRemoveCaseDetailPendingItemModal />
         )}
       </>
     );
