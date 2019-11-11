@@ -30,17 +30,16 @@ resource "aws_iam_role_policy" "lambda_policy" {
     "Version": "2012-10-17",
     "Statement": [
         {
+            "Effect": "Allow",
             "Action": [
+                "logs:CreateLogGroup",
                 "logs:CreateLogStream",
-                "logs:PutLogEvents"
+                "logs:PutLogEvents",
+                "logs:DescribeLogStreams"
             ],
             "Resource": [
-                "arn:aws:logs:us-east-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/ef-cms-*:*",
-                "arn:aws:logs:us-east-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/ef-cms-*:*:*",
-                "arn:aws:logs:us-west-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/ef-cms-*:*",
-                "arn:aws:logs:us-west-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/ef-cms-*:*:*"
-            ],
-            "Effect": "Allow"
+                "arn:aws:logs:*:*:*"
+            ]
         },
         {
             "Action": [
