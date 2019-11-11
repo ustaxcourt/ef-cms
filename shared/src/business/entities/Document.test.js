@@ -53,6 +53,12 @@ describe('Document entity', () => {
       expect(doc1.pending).toBe(false);
 
       expect(Document.isPendingOnCreation).toHaveBeenCalled();
+
+      const raw2 = { color: 'blue', sport: 'Ice Hockey' };
+      const doc2 = new Document(raw2, { applicationContext });
+      expect(doc2.pending).toBe(false);
+
+      expect(Document.isPendingOnCreation).toHaveBeenCalled();
     });
 
     it('sets pending to true for known list of matching events or categories', () => {
@@ -66,14 +72,14 @@ describe('Document entity', () => {
 
       const raw2 = {
         documentType: 'it is a proposed stipulated decision',
-        eventcode: 'PSDEC',
+        eventCode: 'PSDEC',
       };
       const doc2 = new Document(raw2, { applicationContext });
       expect(doc2.pending).toBeTruthy();
 
       const raw3 = {
         documentType: 'it is an order to show cause',
-        eventcode: 'OSC',
+        eventCode: 'OSC',
       };
       const doc3 = new Document(raw3, { applicationContext });
       expect(doc3.pending).toBeTruthy();
