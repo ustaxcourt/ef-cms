@@ -16,7 +16,7 @@ presenter.providers.router = {
 };
 
 describe('isLoggedInAction', () => {
-  it('should path.isLoggedIn if state.user is defined', async () => {
+  it('should call path.isLoggedIn if state.user is defined', async () => {
     await runAction(isLoggedInAction, {
       modules: {
         presenter,
@@ -31,7 +31,7 @@ describe('isLoggedInAction', () => {
     expect(isLoggedInStub.called).toEqual(true);
   });
 
-  it('should path.isLoggedIn if state.user is undefined', async () => {
+  it('should call the unauthorized path if state.user is undefined', async () => {
     await runAction(isLoggedInAction, {
       modules: {
         presenter,
