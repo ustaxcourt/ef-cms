@@ -246,7 +246,7 @@ describe('document detail helper', () => {
       expect(result.showRecallButton).toEqual(true);
     });
 
-    it('should set showServeToIrsButton false and showRecallButton true when case status is general docket', () => {
+    it('should set showServeToIrsButton false and showRecallButton false when case status is general docket', () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -300,7 +300,7 @@ describe('document detail helper', () => {
       expect(result.showRecallButton).toEqual(false);
     });
 
-    it('should not show the showServeToIrsButton for a docketclerk', () => {
+    it('should not show the showServeToIrsButton or the showRecallButton for a docketclerk', () => {
       const user = {
         role: User.ROLES.docketClerk,
         userId: '123',
