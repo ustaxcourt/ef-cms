@@ -17,12 +17,9 @@ import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const DocumentDetail = connect(
   {
-    archiveDraftDocumentModalSequence:
-      sequences.archiveDraftDocumentModalSequence,
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
@@ -33,7 +30,7 @@ export const DocumentDetail = connect(
     navigateToPathSequence: sequences.navigateToPathSequence,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
-    openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
+
     openServeConfirmModalDialogSequence:
       sequences.openServeConfirmModalDialogSequence,
     removeSignatureFromOrderSequence:
@@ -42,7 +39,6 @@ export const DocumentDetail = connect(
     showModal: state.showModal,
   },
   ({
-    archiveDraftDocumentModalSequence,
     caseDetail,
     caseDetailHelper,
     clickServeToIrsSequence,
@@ -52,7 +48,6 @@ export const DocumentDetail = connect(
     messageId,
     navigateToPathSequence,
     navigateToPrintableCaseConfirmationSequence,
-    openConfirmEditModalSequence,
     openServeConfirmModalDialogSequence,
     removeSignatureFromOrderSequence,
     setModalDialogNameSequence,
@@ -102,17 +97,6 @@ export const DocumentDetail = connect(
     };
 
     const renderButtons = () => {
-      const showingAnyButton = [
-        documentDetailHelper.showServeToIrsButton &&
-          documentDetailHelper.formattedDocument.isPetition,
-        documentDetailHelper.showServeDocumentButton,
-        documentDetailHelper.showRecallButton &&
-          documentDetailHelper.formattedDocument.isPetition,
-        documentDetailHelper.showSignDocumentButton,
-        documentDetailHelper.showEditDocketEntry,
-        documentDetailHelper.showPrintCaseConfirmationButton,
-      ].some(val => val);
-
       return (
         <div className="document-detail__action-buttons">
           <div className="float-left">
@@ -165,59 +149,15 @@ export const DocumentDetail = connect(
             )}
           </div>
           <div className="float-right">
-            {documentDetailHelper.isDraftDocument && (
-              <div
-                className={classNames(
-                  'display-inline-block margin-right-2',
-                  !showingAnyButton && 'margin-top-1',
-                )}
-              >
-                <>
-                  {documentDetailHelper.showConfirmEditOrder ? (
-                    <Button
-                      link
-                      icon="edit"
-                      onClick={() => {
-                        openConfirmEditModalSequence({
-                          caseId: formattedCaseDetail.caseId,
-                          docketNumber: formattedCaseDetail.docketNumber,
-                          documentIdToEdit:
-                            documentDetailHelper.formattedDocument.documentId,
-                          path: documentDetailHelper.formattedDocument.editUrl,
-                        });
-                      }}
-                    >
-                      Edit
-                    </Button>
-                  ) : (
-                    <Button
-                      link
-                      href={documentDetailHelper.formattedDocument.editUrl}
-                      icon="edit"
-                    >
-                      Edit
-                    </Button>
-                  )}
-
-                  <Button
-                    link
-                    className="red-warning margin-right-0"
-                    onClick={() => {
-                      archiveDraftDocumentModalSequence({
-                        caseId: caseDetail.caseId,
-                        documentId:
-                          documentDetailHelper.formattedDocument.documentId,
-                        documentTitle:
-                          documentDetailHelper.formattedDocument.documentType,
-                        redirectToCaseDetail: true,
-                      });
-                    }}
-                  >
-                    <FontAwesomeIcon icon="trash" size="sm" />
-                    Delete
-                  </Button>
-                </>
-              </div>
+            {documentDetailHelper.showAddDocketEntryButton && (
+              <Button className="margin-right-0" href="">
+                <FontAwesomeIcon
+                  className="margin-right-05"
+                  icon="print"
+                  size="1x"
+                />
+                Add Docket Entry
+              </Button>
             )}
 
             {documentDetailHelper.showPrintCaseConfirmationButton && (

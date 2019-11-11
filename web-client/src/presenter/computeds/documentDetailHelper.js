@@ -162,6 +162,8 @@ export const documentDetailHelper = (get, applicationContext) => {
     document.status === 'served' &&
     formattedDocument.isPetition === true;
 
+  const showAddDocketEntryButton = user.role === USER_ROLES.docketClerk;
+
   return {
     documentEditUrl,
     formattedDocument,
@@ -170,6 +172,7 @@ export const documentDetailHelper = (get, applicationContext) => {
       const actions = get(state.workItemActions);
       return actions[workItemId] === action;
     },
+    showAddDocketEntryButton,
     showCaseDetailsEdit,
     showCaseDetailsView,
     showConfirmEditOrder: isSigned && isOrder,
