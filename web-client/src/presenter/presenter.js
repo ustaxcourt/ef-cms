@@ -121,6 +121,7 @@ import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCom
 import { openConfirmDeleteBatchModalSequence } from './sequences/openConfirmDeleteBatchModalSequence';
 import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDeletePDFModalSequence';
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
+import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
 import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmRescanBatchModalSequence';
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
 import { openCreateMessageAlongsideDocketRecordQCModalSequence } from './sequences/openCreateMessageAlongsideDocketRecordQCModalSequence';
@@ -150,6 +151,7 @@ import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
 import { refreshCaseSequence } from './sequences/refreshCaseSequence';
 import { removeBatchSequence } from './sequences/removeBatchSequence';
+import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetailPendingItemSequence';
 import { removeFromTrialSessionSequence } from './sequences/removeFromTrialSessionSequence';
 import { removeScannedPdfSequence } from './sequences/removeScannedPdfSequence';
 import { removeSecondarySupportingDocumentSequence } from './sequences/removeSecondarySupportingDocumentSequence';
@@ -427,6 +429,7 @@ export const presenter = {
     openConfirmDeleteBatchModalSequence,
     openConfirmDeletePDFModalSequence,
     openConfirmEditModalSequence,
+    openConfirmRemoveCaseDetailPendingItemModalSequence,
     openConfirmRescanBatchModalSequence,
     openCreateCaseDeadlineModalSequence,
     openCreateMessageAlongsideDocketRecordQCModalSequence,
@@ -456,6 +459,7 @@ export const presenter = {
     redirectToLoginSequence,
     refreshCaseSequence,
     removeBatchSequence,
+    removeCaseDetailPendingItemSequence,
     removeFromTrialSessionSequence,
     removeScannedPdfSequence,
     removeSecondarySupportingDocumentSequence,
