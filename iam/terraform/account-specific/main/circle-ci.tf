@@ -1,3 +1,10 @@
+data "aws_caller_identity" "current" {}
+
+
+resource "aws_iam_policy" "circle_ci_policy" {
+  name = "circle_ci_policy"
+
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -141,9 +148,9 @@
         "dynamodb:ListStreams"
       ],
       "Resource": [
-        "arn:aws:dynamodb::ACCOUNT_ID:global-table/efcms-*",
-        "arn:aws:dynamodb:us-east-1:ACCOUNT_ID:table/efcms-*",
-        "arn:aws:dynamodb:us-west-1:ACCOUNT_ID:table/efcms-*"
+        "arn:aws:dynamodb::${data.aws_caller_identity.current.account_id}:global-table/efcms-*",
+        "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-*",
+        "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/efcms-*"
       ]
     },
     {
@@ -162,19 +169,22 @@
         "iam:ListAttachedRolePolicies"
       ],
       "Resource": [
-        "arn:aws:iam::ACCOUNT_ID:role/api_gateway_cloudwatch_global_*",
-        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-cases-*-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-case-documents-*-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-case-deadlines-*-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-case-notes-*-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-*-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:instance-profile/dynamsoft_role-*",
-        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-documents-*-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-users-*-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:role/ef-cms-work-items-*-lambdaRole",
-        "arn:aws:iam::ACCOUNT_ID:role/s3_replication_role_*",
-        "arn:aws:iam::ACCOUNT_ID:role/*"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_cloudwatch_global*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ef-cms-cases-*-lambdaRole",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ef-cms-case-documents-*-lambdaRole",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ef-cms-case-deadlines-*-lambdaRole",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ef-cms-case-notes-*-lambdaRole",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ef-cms-*-lambdaRole",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/dynamsoft_role-*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ef-cms-documents-*-lambdaRole",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ef-cms-users-*-lambdaRole",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ef-cms-work-items-*-lambdaRole",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_replication_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*"
       ]
     }
   ]
+}
+
+EOF
 }
