@@ -1,8 +1,11 @@
 const moment = require('moment');
+const {
+  MOCK_CASE,
+  MOCK_CASE_WITHOUT_PENDING,
+} = require('../../../test/mockCase');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
-const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
@@ -1782,7 +1785,7 @@ describe('Case entity', () => {
     it('should not show the case as having pending items if no documents are pending', () => {
       const caseToUpdate = new Case(
         {
-          ...MOCK_CASE,
+          ...MOCK_CASE_WITHOUT_PENDING,
         },
         {
           applicationContext,

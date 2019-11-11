@@ -142,12 +142,17 @@ Document.TRACKED_DOCUMENT_TYPES = {
 };
 
 Document.isPendingOnCreation = rawDocument => {
-  return Object.values(Document.TRACKED_DOCUMENT_TYPES).some(trackedType => {
-    return (
-      trackedType.category == rawDocument.category ||
-      trackedType.eventCode == rawDocument.eventCode
-    );
-  });
+  const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
+    trackedType => {
+      return (
+        (rawDocument.category &&
+          trackedType.category === rawDocument.category) ||
+        (rawDocument.eventCode &&
+          trackedType.eventCode === rawDocument.eventCode)
+      );
+    },
+  );
+  return isPending;
 };
 
 Document.getDocumentTypes = () => {
