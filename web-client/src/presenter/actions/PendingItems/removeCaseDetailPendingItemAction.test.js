@@ -3,15 +3,6 @@ import { removeCaseDetailPendingItemAction } from './removeCaseDetailPendingItem
 import { runAction } from 'cerebral/test';
 
 describe('removeCaseDetailPendingItemAction', () => {
-  let caseDetail;
-
-  beforeEach(() => {
-    caseDetail = {
-      caseId: '123',
-      docketNumber: '123-45',
-    };
-  });
-
   it('should update the props', async () => {
     const result = await runAction(removeCaseDetailPendingItemAction, {
       modules: {
