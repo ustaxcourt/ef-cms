@@ -1,14 +1,14 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
 export const PendingReportList = connect(
   {
-    pendingItemsFormatted: state.pendingItems,
-    users: state.users,
+    formattedPendingItems: state.formattedPendingItems,
   },
-  ({ pendingItemsFormatted, users }) => {
+  ({ formattedPendingItems }) => {
     return (
       <React.Fragment>
         <div className="ustc-table--filters">
@@ -20,7 +20,7 @@ export const PendingReportList = connect(
             name="judge"
           >
             <option value="">Filter by Judge</option>
-            {users.map((judge, idx) => (
+            {formattedPendingItems.judges.map((judge, idx) => (
               <option key={idx} value={judge.userId}>
                 {judge.name}
               </option>
@@ -43,22 +43,28 @@ export const PendingReportList = connect(
               <th>Judge (sortable)</th>
             </tr>
           </thead>
-          {pendingItemsFormatted.map((item, idx) => (
+          {formattedPendingItems.items.map((item, idx) => (
             <tbody key={idx}>
               <tr className="pending-item-row">
-                <td>{item.docketNumber}</td>
-                <td>{item.formattedDate}</td>
-                <td>{item.caseName}</td>
                 <td>
-                  <a href="/#">{item.filingsAndProceedings}</a>
+                  <CaseLink formattedCase={item} />
+                </td>
+                <td>{item.formattedFiledDate}</td>
+                <td>{item.caseCaptionNames}</td>
+                <td>
+                  {/* <FilingsAndProceedings
+                    arrayIndex={arrayIndex}
+                    document={document}
+                    record={record}
+                  /> */}
                 </td>
                 <td>{item.caseStatus}</td>
-                <td>{item.judge && item.judge.name}</td>
+                <td>{item.associatedJudge}</td>
               </tr>
             </tbody>
           ))}
         </table>
-        {pendingItemsFormatted.length === 0 && <p>There is nothing pending.</p>}
+        {formattedPendingItems.length === 0 && <p>There is nothing pending.</p>}
       </React.Fragment>
     );
   },
