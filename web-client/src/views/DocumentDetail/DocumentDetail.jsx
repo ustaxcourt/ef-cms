@@ -30,7 +30,6 @@ export const DocumentDetail = connect(
     navigateToPathSequence: sequences.navigateToPathSequence,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
-
     openServeConfirmModalDialogSequence:
       sequences.openServeConfirmModalDialogSequence,
     removeSignatureFromOrderSequence:
