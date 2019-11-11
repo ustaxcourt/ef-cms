@@ -9,7 +9,7 @@ presenter.providers.applicationContext = {
 };
 
 describe('setupTrialYearsAction', () => {
-  it('sets up confirmation with props', async () => {
+  it('sets the trial years array on state.modal based on the current year', async () => {
     const result = await runAction(setupTrialYearsAction, {
       modules: {
         presenter,
