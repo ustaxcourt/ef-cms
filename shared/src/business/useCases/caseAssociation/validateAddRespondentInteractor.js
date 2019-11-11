@@ -7,7 +7,7 @@
  * @returns {object} errors
  */
 exports.validateAddRespondent = ({ applicationContext, counsel }) => {
-  const errors = new (applicationContext.getEntityConstructors()).AddRespondent(
+  const errors = new (applicationContext.getEntityConstructors().AddRespondent)(
     counsel,
   ).getFormattedValidationErrors();
 
