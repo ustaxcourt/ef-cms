@@ -1,12 +1,25 @@
+import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const DocumentDetailHeader = connect(
   {
+    archiveDraftDocumentModalSequence:
+      sequences.archiveDraftDocumentModalSequence,
+    caseDetail: state.caseDetail,
     documentDetailHelper: state.documentDetailHelper,
+    formattedCaseDetail: state.formattedCaseDetail,
+    openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
   },
-  ({ documentDetailHelper }) => {
+  ({
+    archiveDraftDocumentModalSequence,
+    caseDetail,
+    documentDetailHelper,
+    formattedCaseDetail,
+    openConfirmEditModalSequence,
+  }) => {
     return (
       <>
         <h2 className="heading-1">
@@ -30,6 +43,57 @@ export const DocumentDetailHeader = connect(
           {documentDetailHelper.formattedDocument.showServedAt && (
             <div>
               Served {documentDetailHelper.formattedDocument.servedAtFormatted}
+            </div>
+          )}
+        </div>
+        <div>
+          {documentDetailHelper.isDraftDocument && (
+            <div>
+              <>
+                {documentDetailHelper.showConfirmEditOrder ? (
+                  <Button
+                    link
+                    icon="edit"
+                    onClick={() => {
+                      openConfirmEditModalSequence({
+                        caseId: formattedCaseDetail.caseId,
+                        docketNumber: formattedCaseDetail.docketNumber,
+                        documentIdToEdit:
+                          documentDetailHelper.formattedDocument.documentId,
+                        path: documentDetailHelper.formattedDocument.editUrl,
+                      });
+                    }}
+                  >
+                    Edit Order
+                  </Button>
+                ) : (
+                  <Button
+                    link
+                    href={documentDetailHelper.formattedDocument.editUrl}
+                    icon="edit"
+                  >
+                    Edit Order
+                  </Button>
+                )}
+
+                <Button
+                  link
+                  className="red-warning margin-right-0"
+                  onClick={() => {
+                    archiveDraftDocumentModalSequence({
+                      caseId: caseDetail.caseId,
+                      documentId:
+                        documentDetailHelper.formattedDocument.documentId,
+                      documentTitle:
+                        documentDetailHelper.formattedDocument.documentType,
+                      redirectToCaseDetail: true,
+                    });
+                  }}
+                >
+                  <FontAwesomeIcon icon="trash" size="sm" />
+                  Delete
+                </Button>
+              </>
             </div>
           )}
         </div>
