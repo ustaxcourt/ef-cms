@@ -55,7 +55,10 @@ function Document(rawDocument, { applicationContext }) {
   this.partyPrimary = rawDocument.partyPrimary;
   this.partyRespondent = rawDocument.partyRespondent;
   this.partySecondary = rawDocument.partySecondary;
-  this.pending = rawDocument.pending;
+  this.pending =
+    rawDocument.pending === undefined
+      ? Document.isPendingOnCreation(rawDocument)
+      : rawDocument.pending;
   this.practitioner = rawDocument.practitioner;
   this.previousDocument = rawDocument.previousDocument;
   this.processingStatus = rawDocument.processingStatus;
@@ -122,6 +125,29 @@ Document.SIGNED_DOCUMENT_TYPES = {
     documentType: 'Stipulated Decision',
     eventCode: 'SDEC',
   },
+};
+
+Document.TRACKED_DOCUMENT_TYPES = {
+  motions: {
+    category: 'Motion',
+  },
+  orderToShowCause: {
+    documentType: 'Order to Show Cause',
+    eventCode: 'OSC',
+  },
+  proposedStipulatedDecision: {
+    documentType: 'Proposed Stipulated Decision',
+    eventCode: 'PSDEC',
+  },
+};
+
+Document.isPendingOnCreation = rawDocument => {
+  return Object.values(Document.TRACKED_DOCUMENT_TYPES).some(trackedType => {
+    return (
+      trackedType.category == rawDocument.category ||
+      trackedType.eventCode == rawDocument.eventCode
+    );
+  });
 };
 
 Document.getDocumentTypes = () => {
