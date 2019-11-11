@@ -3,6 +3,7 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
@@ -56,6 +57,7 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 export const state = {
+  addCourtIssuedDocketEntryHelper,
   addDocketEntryHelper,
   addToTrialSessionModalHelper,
   advancedSearchForm: {},

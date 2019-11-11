@@ -1,3 +1,4 @@
+import { AddCourtIssuedDocketEntry } from './AddCourtIssuedDocketEntry/AddCourtIssuedDocketEntry';
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
@@ -48,6 +49,7 @@ import { state } from 'cerebral';
 import React, { useEffect } from 'react';
 
 const pages = {
+  AddCourtIssuedDocketEntry,
   AddDocketEntry,
   AddTrialSession,
   AdvancedSearch,

@@ -1,0 +1,190 @@
+[
+  {
+    "eventCode": "O",
+    "display": "O - Order"
+  },
+  {
+    "eventCode": "O5",
+    "display": "O5 - Order"
+  },
+  {
+    "eventCode": "OAJ",
+    "display": "OAJ - Order that case is assigned"
+  },
+  {
+    "eventCode": "OAL",
+    "display": "OAL - Order that the letter \"L\" is added to Docket Number"
+  },
+  {
+    "eventCode": "OAP",
+    "display": "OAP - Order for Amended Petition"
+  },
+  {
+    "eventCode": "OAPF",
+    "display": "OAPF - Order for Amended Petition and Filing Fee"
+  },
+  {
+    "eventCode": "OAPW",
+    "display": "OAPW - Order for Amended Petition and Filing Fee"
+  },
+  {
+    "eventCode": "OAR",
+    "display": "OAR - Order that the letter \"R\" is added to the Docket Number"
+  },
+  {
+    "eventCode": "OAS",
+    "display": "OAS - Order that the letter \"S\" is added to the Docket Number"
+  },
+  {
+    "eventCode": "OASL",
+    "display": "OASL - Order that the letters \"SL\" are added to the Docket Number"
+  },
+  {
+    "eventCode": "OAW",
+    "display": "OAW - Order that the letter \"W\" is added to the Docket Number"
+  },
+  {
+    "eventCode": "OAX",
+    "display": "OAX - Order that the letter \"X\" is added to the Docket Number"
+  },
+  {
+    "eventCode": "OCA",
+    "display": "OCA - Order that caption of case is amended"
+  },
+  {
+    "eventCode": "OCD",
+    "display": "OCD - Order"
+  },
+  {
+    "eventCode": "OD",
+    "display": "OD - Order of Dismissal Entered,"
+  },
+  {
+    "eventCode": "ODD",
+    "display": "ODD - Order of Dismissal and Decision Entered,"
+  },
+  {
+    "eventCode": "ODL",
+    "display": "ODL - Order that the letter \"L\" is deleted from the Docket Number"
+  },
+  {
+    "eventCode": "ODP",
+    "display": "ODP - Order that the letter \"P\" is deleted from the Docket Number"
+  },
+  {
+    "eventCode": "ODR",
+    "display": "ODR - Order that the letter \"R\" is deleted from the Docket Number"
+  },
+  {
+    "eventCode": "ODS",
+    "display": "ODS - Order that the letter \"S\" is deleted from the Docket Number"
+  },
+  {
+    "eventCode": "ODSL",
+    "display": "ODSL - Order that the letters \"SL\" are deleted from the Docket Number"
+  },
+  {
+    "eventCode": "ODW",
+    "display": "ODW - Order that the letter \"W\" is deleted from the Docket Number"
+  },
+  {
+    "eventCode": "ODX",
+    "display": "ODX - Order that the letter \"X\" is deleted from the Docket Number"
+  },
+  {
+    "eventCode": "OF",
+    "display": "OF - Order for Filing Fee"
+  },
+  {
+    "eventCode": "OFAB",
+    "display": "OFAB - Order fixing amount of bond"
+  },
+  {
+    "eventCode": "OFFX",
+    "display": "OFFX - Order time is extended for petr(s) to pay the filing fee"
+  },
+  {
+    "eventCode": "OFW",
+    "display": "OFW - Order for Filing Fee"
+  },
+  {
+    "eventCode": "OFWD",
+    "display": "OFWD - Order for Filing Fee. Application waiver of Filing Fee is denied."
+  },
+  {
+    "eventCode": "OFX",
+    "display": "OFX - Order time is extended for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee"
+  },
+  {
+    "eventCode": "OIP",
+    "display": "OIP - Order that the letter \"P\" is added to the Docket Number"
+  },
+  {
+    "eventCode": "OJR",
+    "display": "OJR - Order that jurisdiction is retained"
+  },
+  {
+    "eventCode": "OODS",
+    "display": "OODS - Order for Ownership Disclosure Statement"
+  },
+  {
+    "eventCode": "OPFX",
+    "display": "OPFX - Order time is extended for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee"
+  },
+  {
+    "eventCode": "OPX",
+    "display": "OPX - Order time is extended for petr(s) to file Amended Petition"
+  },
+  {
+    "eventCode": "ORAP",
+    "display": "ORAP - Order for Amendment to Petition"
+  },
+  {
+    "eventCode": "OROP",
+    "display": "OROP - Order for Ratification of Petition"
+  },
+  {
+    "eventCode": "OSC",
+    "display": "OSC - Order"
+  },
+  {
+    "eventCode": "OSCP",
+    "display": "OSCP - Order petr(s) to show cause why \"S\" should not be removed"
+  },
+  {
+    "eventCode": "OST",
+    "display": "OST - Order of Service of Transcript (Bench Opinion)"
+  },
+  {
+    "eventCode": "OST5",
+    "display": "OST5 - Order of Service of Transcript (Bench Opinion)"
+  },
+  {
+    "eventCode": "OSUB",
+    "display": "OSUB - Order that case is submitted"
+  },
+  {
+    "eventCode": "OVBA",
+    "display": "OVBA - Order"
+  },
+  {
+    "eventCode": "OVD",
+    "display": "OVD - Order"
+  },
+  {
+    "eventCode": "DEC",
+    "display": "DEC - Decision Entered,"
+  },
+  {
+    "eventCode": "OAD",
+    "display": "OAD - Order and Decision Entered,"
+  },
+  {
+    "eventCode": "ODJ",
+    "display": "ODJ - Order of Dismissal for Lack of Jurisdiction Entered,"
+  },
+  {
+    "eventCode": "SDEC",
+    "display": "SDEC - Stipulated Decision Entered,"
+  }
+]
