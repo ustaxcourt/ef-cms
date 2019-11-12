@@ -219,8 +219,14 @@ const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
 const {
+  generatePendingReportPdf,
+} = require('../../shared/src/business/useCaseHelper/pendingReport/generatePendingReportPdf');
+const {
   generatePrintableFilingReceiptInteractor,
 } = require('../../shared/src/business/useCases/generatePrintableFilingReceiptInteractor');
+const {
+  generatePrintablePendingReportInteractor,
+} = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
 const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
@@ -893,6 +899,7 @@ module.exports = (appContextUser = {}) => {
       return {
         fetchPendingItems,
         generateCaseConfirmationPdf,
+        generatePendingReportPdf,
       };
     },
     getUseCases: () => {
@@ -929,6 +936,7 @@ module.exports = (appContextUser = {}) => {
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
         generatePrintableFilingReceiptInteractor,
+        generatePrintablePendingReportInteractor,
         generateTrialCalendarPdfInteractor,
         getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,
