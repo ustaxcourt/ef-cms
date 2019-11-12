@@ -23,7 +23,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
   beforeEach(async () => {
     jest.setTimeout(30000);
 
-    await loginAs(test, 'taxpayer');
+    await loginAs(test, 'petitioner');
     caseDetail = await uploadPetition(test);
 
     const applicationContext = applicationContextFactory({

@@ -43,13 +43,6 @@ export const submitCourtIssuedOrderAction = async ({
     documentId,
   });
 
-  // TODO: ghostscript is causing problems with fonts on generated orders
-  // - this will be resolved in a cleanup issue later
-  /*await applicationContext.getUseCases().sanitizePdfInteractor({
-      applicationContext,
-      documentId,
-    });*/
-
   if (documentIdToEdit) {
     caseDetail = await applicationContext
       .getUseCases()

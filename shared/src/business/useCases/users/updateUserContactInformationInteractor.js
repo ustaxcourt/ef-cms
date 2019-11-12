@@ -1,8 +1,8 @@
-const { addCoverToPdf } = require('../addCoversheetInteractor');
 const {
   isAuthorized,
-  UPDATE_CONTACT_INFO,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { addCoverToPdf } = require('../addCoversheetInteractor');
 const { capitalize, clone } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
@@ -28,7 +28,7 @@ exports.updateUserContactInformationInteractor = async ({
 }) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authenticatedUser, UPDATE_CONTACT_INFO)) {
+  if (!isAuthorized(authenticatedUser, ROLE_PERMISSIONS.UPDATE_CONTACT_INFO)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

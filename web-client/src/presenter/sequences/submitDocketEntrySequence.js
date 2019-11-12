@@ -23,14 +23,17 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
 import { setIsUpdatingWithFileAction } from '../actions/DocketEntry/setIsUpdatingWithFileAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stashWizardDataAction } from '../actions/DocketEntry/stashWizardDataAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitDocketEntryWithFileAction } from '../actions/DocketEntry/submitDocketEntryWithFileAction';
 import { submitDocketEntryWithoutFileAction } from '../actions/DocketEntry/submitDocketEntryWithoutFileAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateDocketEntryWithFileAction } from '../actions/DocketEntry/updateDocketEntryWithFileAction';
 import { updateDocketEntryWithoutFileAction } from '../actions/DocketEntry/updateDocketEntryWithoutFileAction';
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
@@ -65,7 +68,7 @@ const afterEntryCreatedOrUpdated = [
 export const submitDocketEntrySequence = [
   checkForActiveBatchesAction,
   {
-    hasActiveBatches: [set(state.showModal, 'UnfinishedScansModal')],
+    hasActiveBatches: [setShowModalFactoryAction('UnfinishedScansModal')],
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
@@ -81,6 +84,7 @@ export const submitDocketEntrySequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
+          setWaitingForResponseAction,
           unset(state.isUpdatingWithFile),
           generateTitleAction,
           stopShowValidationAction,
@@ -94,7 +98,7 @@ export const submitDocketEntrySequence = [
                 no: [submitDocketEntryWithoutFileAction],
                 yes: [updateDocketEntryWithoutFileAction],
               },
-              ...afterEntryCreatedOrUpdated,
+              afterEntryCreatedOrUpdated,
             ],
             yes: [
               openFileUploadStatusModalAction,
@@ -108,11 +112,12 @@ export const submitDocketEntrySequence = [
                     no: [submitDocketEntryWithFileAction],
                     yes: [updateDocketEntryWithFileAction],
                   },
-                  ...afterEntryCreatedOrUpdated,
+                  afterEntryCreatedOrUpdated,
                 ],
               },
             ],
           },
+          unsetWaitingForResponseAction,
         ],
       },
     ],

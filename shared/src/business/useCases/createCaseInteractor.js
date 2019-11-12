@@ -1,14 +1,14 @@
 const {
   isAuthorized,
-  PETITION,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { User } = require('../entities/User');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
 const { PETITIONS_SECTION } = require('../entities/WorkQueue');
 const { UnauthorizedError } = require('../../errors/errors');
+const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
 
 const addPetitionDocumentToCase = ({
@@ -79,7 +79,7 @@ exports.createCaseInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, PETITION)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

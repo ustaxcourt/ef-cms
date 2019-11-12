@@ -8,14 +8,13 @@ import {
   UnfinishedScansModal,
 } from './ScanBatchPreviewer/ScanBatchModals';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
-import { ValidationText } from '../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import PropTypes from 'prop-types';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
@@ -173,12 +172,7 @@ export const ScanBatchPreviewer = connect(
       return (
         <div className="grid-row">
           <div className="grid-col-8">
-            <div
-              className={classNames(
-                'usa-form-group',
-                validationErrors[documentType] && 'usa-form-group--error',
-              )}
-            >
+            <FormGroup errorText={validationErrors[documentType]}>
               <fieldset
                 aria-label="scan mode selection"
                 className={classNames(
@@ -243,8 +237,7 @@ export const ScanBatchPreviewer = connect(
                   </label>
                 </div>
               </fieldset>
-              <ValidationText field={`${documentType}`} />
-            </div>
+            </FormGroup>
           </div>
 
           <div className="grid-col-4 margin-top-4 text-align-right">
@@ -373,12 +366,7 @@ export const ScanBatchPreviewer = connect(
     const renderUpload = () => {
       return (
         <div className="document-detail-one-third">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.stinFile && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.stinFile}>
             <label
               className="usa-label ustc-upload-stin with-hint"
               htmlFor={`${documentType}-file`}
@@ -410,7 +398,7 @@ export const ScanBatchPreviewer = connect(
                 });
               }}
             />
-          </div>
+          </FormGroup>
         </div>
       );
     };
@@ -512,13 +500,3 @@ export const ScanBatchPreviewer = connect(
     );
   },
 );
-
-ScanBatchPreviewer.propTypes = {
-  documentTabs: PropTypes.arrayOf(
-    PropTypes.shape({
-      documentType: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-    }),
-  ),
-  title: PropTypes.string.isRequired,
-};

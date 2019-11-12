@@ -1,3 +1,4 @@
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { setupTest } from './helpers';
 import { uploadPetition } from './helpers';
 import captureCreatedCase from './journey/captureCreatedCase';
@@ -5,15 +6,15 @@ import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialS
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
+import petitionerLogin from './journey/petitionerLogIn';
+import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
 import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkSetsCaseReadyForTrial from './journey/petitionsClerkSetsCaseReadyForTrial';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
-import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
-import userSignsOut from './journey/taxpayerSignsOut';
+import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
 
@@ -50,11 +51,11 @@ describe('Trial Session Eligible Cases Journey', () => {
         receivedAtDay: '01',
         caseType: 'Deficiency',
       };
-      taxpayerLogin(test);
+      petitionerLogin(test);
       it('Create case #1', async () => {
         await uploadPetition(test, caseOverrides);
       });
-      taxpayerViewsDashboard(test);
+      petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
       petitionsClerkLogIn(test);
@@ -74,11 +75,11 @@ describe('Trial Session Eligible Cases Journey', () => {
         receivedAtDay: '02',
         caseType: 'Deficiency',
       };
-      taxpayerLogin(test);
+      petitionerLogin(test);
       it('Create case #2', async () => {
         await uploadPetition(test, caseOverrides);
       });
-      taxpayerViewsDashboard(test);
+      petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
       petitionsClerkLogIn(test);
@@ -98,11 +99,11 @@ describe('Trial Session Eligible Cases Journey', () => {
         receivedAtDay: '01',
         caseType: 'Deficiency',
       };
-      taxpayerLogin(test);
+      petitionerLogin(test);
       it('Create case #3', async () => {
         await uploadPetition(test, caseOverrides);
       });
-      taxpayerViewsDashboard(test);
+      petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
       petitionsClerkLogIn(test);
@@ -122,11 +123,11 @@ describe('Trial Session Eligible Cases Journey', () => {
         receivedAtDay: '01',
         caseType: 'CDP (Lien/Levy)',
       };
-      taxpayerLogin(test);
+      petitionerLogin(test);
       it('Create case #4', async () => {
         await uploadPetition(test, caseOverrides);
       });
-      taxpayerViewsDashboard(test);
+      petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
       petitionsClerkLogIn(test);
@@ -146,11 +147,11 @@ describe('Trial Session Eligible Cases Journey', () => {
         receivedAtDay: '01',
         caseType: 'Passport',
       };
-      taxpayerLogin(test);
+      petitionerLogin(test);
       it('Create case #5', async () => {
         await uploadPetition(test, caseOverrides);
       });
-      taxpayerViewsDashboard(test);
+      petitionerViewsDashboard(test);
       captureCreatedCase(test, createdCases, createdDocketNumbers);
       userSignsOut(test);
       petitionsClerkLogIn(test);
@@ -310,7 +311,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('caseDetail.trialDate')).toEqual(
         '2025-12-12T05:00:00.000Z',
       );
-      expect(test.getState('caseDetail.trialJudge')).toEqual('Judge Cohen');
+      expect(test.getState('caseDetail.associatedJudge')).toEqual(
+        'Judge Cohen',
+      );
 
       //Case #2 - not assigned
       await test.runSequence('gotoCaseDetailSequence', {
@@ -319,7 +322,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
       expect(test.getState('caseDetail.trialLocation')).toBeUndefined();
       expect(test.getState('caseDetail.trialDate')).toBeUndefined();
-      expect(test.getState('caseDetail.trialJudge')).toBeUndefined();
+      expect(test.getState('caseDetail.associatedJudge')).toEqual(
+        Case.CHIEF_JUDGE,
+      );
 
       //Case #3 - not assigned
       await test.runSequence('gotoCaseDetailSequence', {

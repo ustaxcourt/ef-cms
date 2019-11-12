@@ -1,13 +1,13 @@
-const { omit } = require('lodash');
 const {
-  FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
 const { Case } = require('../../entities/cases/Case');
-const { Document } = require('../../entities/Document');
-const { DocketRecord } = require('../../entities/DocketRecord');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
+const { DocketRecord } = require('../../entities/DocketRecord');
+const { Document } = require('../../entities/Document');
+const { omit } = require('lodash');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * completeDocketEntryQCInteractor
@@ -23,7 +23,7 @@ exports.completeDocketEntryQCInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

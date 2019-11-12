@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { ProcedureType } from './ProcedureType';
 import { TrialCity } from './TrialCity';
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -149,7 +148,6 @@ export const StartCaseStep4 = connect(
                   validateStartCaseWizardSequence();
                 }}
               />
-              <ValidationText field="preferredTrialCity" />
             </div>
           </>
         )}

@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * takes a date from a docket entry and create seperate form inputs
+ * takes a date from a docket entry and create separate form inputs
  *
  * @param {object} providers the providers object
  * @param {Function} providers.props the cerebral props object

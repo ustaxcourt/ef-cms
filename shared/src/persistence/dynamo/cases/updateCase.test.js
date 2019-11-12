@@ -34,7 +34,7 @@ describe('updateCase', () => {
         docketNumber: '101-18',
         docketNumberSuffix: null,
         status: 'General Docket - Not at Issue',
-        userId: 'taxpayer',
+        userId: 'petitioner',
       },
     });
     expect(putStub.getCall(0).args[0].Item).toMatchObject({

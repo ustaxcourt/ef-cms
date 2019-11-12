@@ -48,6 +48,7 @@ import {
   faFileAlt as faFileAltSolid,
   faFilePdf,
   faFlag,
+  faGavel,
   faHandPaper,
   faHome,
   faLaptop,
@@ -105,6 +106,11 @@ const app = {
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
 
+    const userPermissions = applicationContext.getCurrentUserPermissions();
+    if (userPermissions) {
+      presenter.state.permissions = userPermissions;
+    }
+
     // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
     presenter.state = mapValues(presenter.state, value => {
       if (isFunction(value)) {
@@ -160,6 +166,7 @@ const app = {
       faPencilAlt,
       faFileAlt,
       faFileAltSolid,
+      faGavel,
       faHome,
       faFilePdf,
       faFilePdfRegular,

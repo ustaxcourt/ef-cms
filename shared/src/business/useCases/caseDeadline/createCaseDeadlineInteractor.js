@@ -1,6 +1,6 @@
 const {
-  CASE_DEADLINE,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -19,7 +19,7 @@ exports.createCaseDeadlineInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, CASE_DEADLINE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized for create case deadline');
   }
 

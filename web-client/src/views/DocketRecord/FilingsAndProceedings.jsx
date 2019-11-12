@@ -10,6 +10,7 @@ export const FilingsAndProceedings = connect(
     arrayIndex: props.arrayIndex,
     baseUrl: state.baseUrl,
     caseDetailHelper: state.caseDetailHelper,
+    docketRecordHelper: state.docketRecordHelper,
     document: props.document,
     documentHelper: state.documentHelper,
     formattedCaseDetail: state.formattedCaseDetail,
@@ -22,6 +23,7 @@ export const FilingsAndProceedings = connect(
     arrayIndex,
     baseUrl,
     caseDetailHelper,
+    docketRecordHelper,
     document,
     documentHelper,
     formattedCaseDetail,
@@ -79,7 +81,7 @@ export const FilingsAndProceedings = connect(
     return (
       <React.Fragment>
         {document &&
-          caseDetailHelper.showDirectDownloadLink &&
+          docketRecordHelper.showDirectDownloadLink &&
           document.processingStatus === 'complete' &&
           renderDocumentLink(
             document.documentId,
@@ -89,7 +91,7 @@ export const FilingsAndProceedings = connect(
           )}
 
         {document &&
-          caseDetailHelper.showDirectDownloadLink &&
+          docketRecordHelper.showDirectDownloadLink &&
           document.processingStatus !== 'complete' && (
             <React.Fragment>
               {caseDetailHelper.showDocketRecordInProgressState && (
@@ -104,14 +106,15 @@ export const FilingsAndProceedings = connect(
             </React.Fragment>
           )}
 
-        {document && caseDetailHelper.showDocumentDetailLink && (
+        {document && docketRecordHelper.showDocumentDetailLink && (
           <a
             aria-label="View PDF"
             href={documentHelper({
               docketNumber: formattedCaseDetail.docketNumber,
               documentId: document.documentId,
               shouldLinkToComplete: document.isFileAttached === false,
-              shouldLinkToEdit: document.canEdit,
+              shouldLinkToEdit:
+                docketRecordHelper.showEditDocketEntry && document.canEdit,
             })}
           >
             {document && document.isPaper && (

@@ -32,7 +32,7 @@ describe('setUserAction', () => {
 
   it('stores the user onto local storage when running local', async () => {
     const user = {
-      userId: 'taxpayer',
+      userId: 'petitioner',
     };
     await runAction(setUserAction, {
       modules: {

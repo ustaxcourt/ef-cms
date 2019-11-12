@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  START_PAPER_CASE,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
@@ -84,7 +84,7 @@ exports.createCaseFromPaperInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, START_PAPER_CASE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

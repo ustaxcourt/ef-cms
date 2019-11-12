@@ -78,23 +78,14 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 - Node v10.15.3
 - npm v6.4.1
-- Ghostscript v9.23 (see Setup below)
 - ClamAV v0.101.2 (see Setup below)
 
 ### Setup
 
-Follow [the installation prerequisites for Ghostscript4JS](https://www.npmjs.com/package/ghostscript4js#prerequisites). macOS users can do the following:
-- `brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/e61385fb91ced20245d063f728401e9727293ce0/Formula/ghostscript.rb`
-- `echo 'export GS4JS_HOME="/usr/local/lib"' >> ~/.bash_profile`
-- `source ~/.bash_profile`
-
-For ClamAV, macOS users can do the following:
-- `brew install clamav`
-- `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`
+For ClamAV, macOS users can do the following:	
+- `brew install clamav`	
+- `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`	
 - `sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)
-- `echo 'export CLAMAV_CLAMSCAN_PATH="/usr/local/bin/clamscan"' >> ~/.bash_profile`
-- `source ~/.bash_profile`
-- `freshclam` (installs virus definitions)
 
 Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the top-level directory.
 
@@ -121,21 +112,32 @@ There are two login mechanisms available — the legacy mock login system, and a
 You can log in using these usernames:
 
 ```
-taxpayer
-petitionsclerk
-petitionsclerk1
-docketclerk
-docketclerk1
-respondent
-respondent1 - respondent4
+External Users:
+petitioner
 practitioner
 practitioner1 - practitioner4
+respondent
+respondent1 - respondent4
+Internal Users:
 adc
+admissionsclerk
+calendarclerk
+clerkofcourt
+docketclerk
+docketclerk1
+petitionsclerk
+petitionsclerk1
+trialclerk
 judgeArmen
+armensChambers
 judgeAshford
+ashfordsChambers
 judgeBuch
+buchsChambers
 judgeCarluzzo
+carluzzosChambers
 judgeCohen
+cohensChambers
 ```
 
 No password is required.
@@ -145,18 +147,27 @@ No password is required.
 To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with:
 
 ```
+External Users:
 petitioner1@example.com – petitioner5@example.com
-petitionsclerk1@example.com – petitionsclerk5@example.com
-docketclerk1@example.com – docketclerk5@example.com
-respondent1@example.com – respondent10@example.com
 practitioner1@example.com – practitioner10@example.com
+respondent1@example.com – respondent10@example.com
+Internal Users:
 adc1@example.com – adc5@example.com
-judgeArmen@example.com
-judgeAshford@example.com
-judgeBuch@example.com
-judgeCarluzzo@example.com
-judgeCohen@example.com
+admissionsclerk1@example.com – admissionsclerk5@example.com
+calendarclerk1@example.com – calendarclerk5@example.com
+clerkofcourt1@example.com – clerkofcourt5@example.com
+docketclerk1@example.com – docketclerk5@example.com
+petitionsclerk1@example.com – petitionsclerk5@example.com
+trialclerk1@example.com – trialclerk5@example.com
+jashford@example.com
+ashfordsChambers1@example.com - ashfordsChambers5@example.com
+jbuch@example.com
+buchsChambers1@example.com - buchsChambers5@example.com
+jcohen@example.com
+cohensChambers1@example.com - cohensChambers5@example.com
 ```
+
+For a full list of available users, see [court_users.csv](web-api/court_users.csv).
 
 The password for all accounts is:
 

@@ -1,6 +1,3 @@
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { setFormValueAction } from '../actions/setFormValueAction';
 
-export const updateFormValueSequence = [
-  set(state.form[props.key], props.value),
-];
+export const updateFormValueSequence = [setFormValueAction];

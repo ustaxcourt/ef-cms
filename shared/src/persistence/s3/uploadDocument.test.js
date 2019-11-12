@@ -7,7 +7,7 @@ describe('uploadDocument', () => {
     let applicationContext = {
       getBaseUrl: () => 'http://localhost',
       getCurrentUser: () => {
-        return { role: User.ROLES.petitioner, userId: 'taxpayer' };
+        return { role: User.ROLES.petitioner, userId: 'petitioner' };
       },
       getCurrentUserToken: () => {
         return '';

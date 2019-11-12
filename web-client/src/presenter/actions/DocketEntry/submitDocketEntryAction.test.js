@@ -7,18 +7,16 @@ import sinon from 'sinon';
 describe('submitDocketEntryAction', () => {
   let addCoversheetStub;
   let fileDocketEntryStub;
-  let virusScanPdfStub;
   let validatePdfStub;
-  let sanitizePdfStub;
+  let virusScanPdfStub;
   let updateDocketEntryStub;
 
   beforeEach(() => {
     addCoversheetStub = sinon.stub();
     fileDocketEntryStub = sinon.stub();
-    sanitizePdfStub = sinon.stub();
     validatePdfStub = sinon.stub();
-    virusScanPdfStub = sinon.stub();
     updateDocketEntryStub = sinon.stub();
+    virusScanPdfStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       ...applicationContext,
@@ -26,7 +24,6 @@ describe('submitDocketEntryAction', () => {
       getUseCases: () => ({
         addCoversheetInteractor: addCoversheetStub,
         fileDocketEntryInteractor: fileDocketEntryStub,
-        sanitizePdfInteractor: sanitizePdfStub,
         updateDocketEntryInteractor: updateDocketEntryStub,
         validatePdfInteractor: validatePdfStub,
         virusScanPdfInteractor: virusScanPdfStub,
@@ -51,7 +48,7 @@ describe('submitDocketEntryAction', () => {
     expect(fileDocketEntryStub.calledOnce).toEqual(true);
   });
 
-  it('should call virusScan, validation, and sanitization if a file is attached', async () => {
+  it('should call virusScan and validation and if a file is attached', async () => {
     fileDocketEntryStub.returns({
       caseId: applicationContext.getUniqueId(),
     });
@@ -72,9 +69,8 @@ describe('submitDocketEntryAction', () => {
       },
     });
 
-    expect(virusScanPdfStub.calledOnce).toEqual(true);
     expect(validatePdfStub.calledOnce).toEqual(true);
-    expect(sanitizePdfStub.calledOnce).toEqual(true);
+    expect(virusScanPdfStub.calledOnce).toEqual(true);
   });
 
   it('should update docket entry with attached file', async () => {
@@ -99,9 +95,8 @@ describe('submitDocketEntryAction', () => {
       },
     });
 
-    expect(virusScanPdfStub.calledOnce).toEqual(true);
     expect(validatePdfStub.calledOnce).toEqual(true);
-    expect(sanitizePdfStub.calledOnce).toEqual(true);
+    expect(virusScanPdfStub.calledOnce).toEqual(true);
     expect(updateDocketEntryStub.calledOnce).toEqual(true);
   });
 });

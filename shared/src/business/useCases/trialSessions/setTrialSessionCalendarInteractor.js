@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  TRIAL_SESSIONS,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
@@ -20,7 +20,7 @@ exports.setTrialSessionCalendarInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, TRIAL_SESSIONS)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -37,38 +37,78 @@ exports.setTrialSessionCalendarInteractor = async ({
 
   trialSessionEntity.validate();
 
+  trialSessionEntity.setAsCalendared();
+
+  //get cases that have been manually added so we can set them as calendared
+  const manuallyAddedCases = await applicationContext
+    .getPersistenceGateway()
+    .getCalendaredCasesForTrialSession({
+      applicationContext,
+      trialSessionId,
+    });
+
+  let eligibleCasesLimit = trialSessionEntity.maxCases;
+
+  if (manuallyAddedCases && manuallyAddedCases.length > 0) {
+    eligibleCasesLimit -= manuallyAddedCases.length;
+  }
+
   const eligibleCases = await applicationContext
     .getPersistenceGateway()
     .getEligibleCasesForTrialSession({
       applicationContext,
-      limit: trialSessionEntity.maxCases,
+      limit: eligibleCasesLimit,
       skPrefix: trialSessionEntity.generateSortKeyPrefix(),
     });
 
-  const setTrialSessionCalendar = async caseRecord => {
+  /**
+   * sets a manually added case as calendared with the trial session details
+   *
+   * @param {object} caseRecord the providers object
+   * @returns {Promise} the promise of the updateCase call
+   */
+  const setManuallyAddedCaseAsCalendared = caseRecord => {
+    const caseEntity = new Case(caseRecord, { applicationContext });
+
+    caseEntity.setAsCalendared(trialSessionEntity);
+
+    return applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+  };
+
+  /**
+   * sets an eligible case as calendared and adds it to the trial session calendar
+   *
+   * @param {object} caseRecord the providers object
+   * @returns {Promise} the promises of the updateCase and deleteCaseTrialSortMappingRecords calls
+   */
+  const setTrialSessionCalendarForEligibleCase = caseRecord => {
     const { caseId } = caseRecord;
     const caseEntity = new Case(caseRecord, { applicationContext });
 
     caseEntity.setAsCalendared(trialSessionEntity);
     trialSessionEntity.addCaseToCalendar(caseEntity);
 
-    // must these occur sequentially, or can they be parallel?
-    await applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
-
-    await applicationContext
-      .getPersistenceGateway()
-      .deleteCaseTrialSortMappingRecords({
+    return Promise.all([
+      applicationContext.getPersistenceGateway().updateCase({
         applicationContext,
-        caseId,
-      });
+        caseToUpdate: caseEntity.validate().toRawObject(),
+      }),
+      applicationContext
+        .getPersistenceGateway()
+        .deleteCaseTrialSortMappingRecords({
+          applicationContext,
+          caseId,
+        }),
+    ]);
   };
 
-  await Promise.all(eligibleCases.map(setTrialSessionCalendar));
-
-  trialSessionEntity.setAsCalendared();
+  await Promise.all([
+    ...manuallyAddedCases.map(setManuallyAddedCaseAsCalendared),
+    ...eligibleCases.map(setTrialSessionCalendarForEligibleCase),
+  ]);
 
   return await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,

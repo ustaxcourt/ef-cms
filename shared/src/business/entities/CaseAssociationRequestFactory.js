@@ -2,10 +2,10 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { replaceBracketed } = require('../utilities/replaceBracketed');
 const {
   SupportingDocumentInformationFactory,
 } = require('./externalDocument/SupportingDocumentInformationFactory');
+const { replaceBracketed } = require('../utilities/replaceBracketed');
 
 const {
   VALIDATION_ERROR_MESSAGES,
