@@ -30,6 +30,7 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/complete',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry',
+  'http://localhost:1234/mock-login?token=docketclerk&path=/reports/pending-report',
   {
     actions: [
       'wait for element #certificate-of-service to be visible',
