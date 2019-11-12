@@ -91,17 +91,17 @@ export const AddCourtIssuedDocketEntry = connect(
                   />
                 </FormGroup>
 
-                <FormGroup errorText={validationErrors.reason}>
-                  <label className="usa-label" htmlFor="reason">
+                <FormGroup errorText={validationErrors.freeText}>
+                  <label className="usa-label" htmlFor="freeText">
                     What is this order for?
                   </label>
 
                   <input
-                    aria-describedby="reason for order"
+                    aria-describedby="freeText for order"
                     className="usa-input usa-input--inline"
-                    id="reason"
-                    name="reason"
-                    value={form.reason || ''}
+                    id="freeText"
+                    name="freeText"
+                    value={form.freeText || ''}
                     onBlur={() => {}}
                     onChange={e => {
                       updateFormValueSequence({

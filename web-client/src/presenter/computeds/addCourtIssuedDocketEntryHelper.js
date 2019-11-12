@@ -6,7 +6,7 @@ export const addCourtIssuedDocketEntryHelper = get => {
   const caseDetail = get(state.caseDetail);
   const documentTypes = COURT_ISSUED_EVENT_CODES.map(type => ({
     ...type,
-    label: type.display,
+    label: type.documentType,
     value: type.eventCode,
   }));
 

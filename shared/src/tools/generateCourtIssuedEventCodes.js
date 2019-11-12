@@ -11,8 +11,23 @@ const parse = require('csv-parse');
 let exportColumns;
 let csvColumns;
 
-exportColumns = ['eventCode', 'display'];
-csvColumns = ['eventCode', 'language', 'display'];
+exportColumns = [
+  'eventCode',
+  'documentType',
+  'concatenatedDocketEntry',
+  'scenario',
+];
+csvColumns = [
+  'eventCode',
+  'language',
+  'documentType',
+  'scenario',
+  'whatIsItFor',
+  'judgeName',
+  'date',
+  'docketNumbers',
+  'concatenatedDocketEntry',
+];
 
 const csvOptions = {
   columns: csvColumns,
