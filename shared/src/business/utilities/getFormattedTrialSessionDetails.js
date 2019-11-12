@@ -34,9 +34,9 @@ exports.formattedTrialSessionDetails = ({
   const { STATUS_TYPES } = applicationContext.getConstants();
   if (!trialSession) return undefined;
 
-  trialSession.formattedEligibleCases = (
-    trialSession.eligibleCases || []
-  ).map(caseItem => exports.formatCase({ applicationContext, caseItem }));
+  trialSession.formattedEligibleCases = (trialSession.eligibleCases || []).map(
+    caseItem => exports.formatCase({ applicationContext, caseItem }),
+  );
   trialSession.allCases = (trialSession.calendaredCases || [])
     .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
     .sort(exports.compareCasesByDocketNumber);

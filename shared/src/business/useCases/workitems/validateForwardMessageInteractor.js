@@ -10,7 +10,7 @@ exports.validateForwardMessageInteractor = ({
   applicationContext,
   message,
 }) => {
-  return new (applicationContext.getEntityConstructors().ForwardMessage)(
+  return new (applicationContext.getEntityConstructors()).ForwardMessage(
     message,
   ).getFormattedValidationErrors();
 };
