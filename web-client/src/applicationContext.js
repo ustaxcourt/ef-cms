@@ -24,6 +24,7 @@ import { ExternalDocumentFactory } from '../../shared/src/business/entities/exte
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
+import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
@@ -256,6 +257,7 @@ const allUseCases = {
   generateDocumentTitleInteractor,
   generatePDFFromJPGDataInteractor,
   generatePrintableFilingReceiptInteractor,
+  generatePrintablePendingReportInteractor,
   generateSignedDocumentInteractor,
   generateTrialCalendarPdfInteractor,
   getAllCaseDeadlinesInteractor,

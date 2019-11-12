@@ -264,3 +264,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  generatePrintablePendingReport:
+    handler: web-api/src/apiHandlers.generatePrintablePendingReportLambda
+    events:
+      - http:
+          path: pending-report
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
