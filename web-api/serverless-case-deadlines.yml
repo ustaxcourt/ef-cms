@@ -80,6 +80,7 @@ provider:
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -111,7 +112,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/caseDeadlinesHandlers.js
+    - web-api/${self:provider.dir}/caseDeadlinesHandlers.js
   excludeDevDependencies: true
 
 resources:
@@ -150,7 +151,7 @@ resources:
 
 functions:
   createCaseDeadline:
-    handler: web-api/src/caseDeadlinesHandlers.createCaseDeadlineLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.createCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}
@@ -162,7 +163,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCaseDeadlinesForCase:
-    handler: web-api/src/caseDeadlinesHandlers.getCaseDeadlinesForCaseLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.getCaseDeadlinesForCaseLambda
     events:
       - http:
           path: /{caseId}
@@ -174,7 +175,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCaseDeadline:
-    handler: web-api/src/caseDeadlinesHandlers.updateCaseDeadlineLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.updateCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}/{caseDeadlineId}
@@ -186,7 +187,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   deleteCaseDeadline:
-    handler: web-api/src/caseDeadlinesHandlers.deleteCaseDeadlineLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.deleteCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}/{caseDeadlineId}
@@ -198,7 +199,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getAllCaseDeadlines:
-    handler: web-api/src/caseDeadlinesHandlers.getAllCaseDeadlinesLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.getAllCaseDeadlinesLambda
     events:
       - http:
           path: /
