@@ -2,6 +2,7 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { formatDateString } = require('../../utilities/DateHandler');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**
@@ -9,18 +10,21 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  * @param {object} rawProps the raw document data
  * @constructor
  */
-function CourtIssuedDocumentNonStandardC(rawProps) {
+function CourtIssuedDocumentTypeE(rawProps) {
   this.attachments = rawProps.attachments;
+  this.date = rawProps.date;
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
-  this.docketNumbers = rawProps.docketNumbers;
 }
 
-CourtIssuedDocumentNonStandardC.prototype.getDocumentTitle = function() {
-  return replaceBracketed(this.documentTitle, this.docketNumbers);
+CourtIssuedDocumentTypeE.prototype.getDocumentTitle = function() {
+  return replaceBracketed(
+    this.documentTitle,
+    formatDateString(this.date, 'MM-DD-YYYY'),
+  );
 };
 
-CourtIssuedDocumentNonStandardC.VALIDATION_ERROR_MESSAGES = {
+CourtIssuedDocumentTypeE.VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments',
   date: [
     {
@@ -35,18 +39,22 @@ CourtIssuedDocumentNonStandardC.VALIDATION_ERROR_MESSAGES = {
   judge: 'Select a judge',
 };
 
-CourtIssuedDocumentNonStandardC.schema = {
+CourtIssuedDocumentTypeE.schema = {
   attachments: joi.boolean().required(),
-  docketNumbers: joi.string().required(),
+  date: joi
+    .date()
+    .iso()
+    .max('now')
+    .required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
 };
 
 joiValidationDecorator(
-  CourtIssuedDocumentNonStandardC,
-  CourtIssuedDocumentNonStandardC.schema,
+  CourtIssuedDocumentTypeE,
+  CourtIssuedDocumentTypeE.schema,
   undefined,
-  CourtIssuedDocumentNonStandardC.VALIDATION_ERROR_MESSAGES,
+  CourtIssuedDocumentTypeE.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { CourtIssuedDocumentNonStandardC };
+module.exports = { CourtIssuedDocumentTypeE };
