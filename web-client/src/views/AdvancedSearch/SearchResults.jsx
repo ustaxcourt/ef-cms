@@ -71,10 +71,10 @@ export const SearchResults = connect(
           </Button>
         )}
         {advancedSearchHelper.showNoMatches && (
-          <>
+          <div id="no-search-results">
             <h1 className="margin-top-4">No Matches Found</h1>
             <p>Check your search terms and try again.</p>
-          </>
+          </div>
         )}
       </>
     );
