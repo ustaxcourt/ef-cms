@@ -6,7 +6,7 @@ import React from 'react';
 export const CancelDraftDocumentModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.dismissModalSequence,
+    confirmSequence: sequences.gotoCaseDetailSequence,
   },
   ({ cancelSequence, confirmSequence }) => {
     return (
