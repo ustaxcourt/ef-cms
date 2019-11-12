@@ -503,7 +503,7 @@ Case.getCaseCaption = function(rawCase) {
 };
 
 Case.prototype.toRawObject = function() {
-  const result = Case.prototype.toRawObjectFromJoi();
+  const result = this.toRawObjectFromJoi();
   result.hasPendingItems = this.doesHavePendingItems();
   return result;
 };
