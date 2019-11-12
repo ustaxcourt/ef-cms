@@ -9,7 +9,7 @@ describe('updateTrialSession', () => {
     });
   });
 
-  it('invokes the peristence layer with pk of trial-session-{trialSessionId}, sk of trial-session-{trialSessionId} and other expected params', async () => {
+  it('invokes the persistence layer with pk of trial-session-{trialSessionId}, sk of trial-session-{trialSessionId} and other expected params', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',

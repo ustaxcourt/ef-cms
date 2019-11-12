@@ -1,6 +1,6 @@
 const {
-  ARCHIVE_DOCUMENT,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -21,7 +21,7 @@ exports.archiveDraftDocumentInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ARCHIVE_DOCUMENT)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.ARCHIVE_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

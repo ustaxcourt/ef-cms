@@ -31,6 +31,8 @@ export const DocumentDetail = connect(
     gotoOrdersNeededSequence: sequences.gotoOrdersNeededSequence,
     messageId: state.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
+    navigateToPrintableCaseConfirmationSequence:
+      sequences.navigateToPrintableCaseConfirmationSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
     openServeConfirmModalDialogSequence:
       sequences.openServeConfirmModalDialogSequence,
@@ -49,6 +51,7 @@ export const DocumentDetail = connect(
     gotoOrdersNeededSequence,
     messageId,
     navigateToPathSequence,
+    navigateToPrintableCaseConfirmationSequence,
     openConfirmEditModalSequence,
     openServeConfirmModalDialogSequence,
     removeSignatureFromOrderSequence,
@@ -100,12 +103,14 @@ export const DocumentDetail = connect(
 
     const renderButtons = () => {
       const showingAnyButton = [
-        caseDetailHelper.showServeToIrsButton &&
+        documentDetailHelper.showServeToIrsButton &&
           documentDetailHelper.formattedDocument.isPetition,
         documentDetailHelper.showServeDocumentButton,
-        caseDetailHelper.showRecallButton &&
+        documentDetailHelper.showRecallButton &&
           documentDetailHelper.formattedDocument.isPetition,
         documentDetailHelper.showSignDocumentButton,
+        documentDetailHelper.showEditDocketEntry,
+        documentDetailHelper.showPrintCaseConfirmationButton,
       ].some(val => val);
 
       return (
@@ -151,8 +156,8 @@ export const DocumentDetail = connect(
                         })
                       }
                     >
-                      <FontAwesomeIcon icon="trash" size="sm" /> Delete
-                      Signature
+                      <FontAwesomeIcon icon="trash" size="sm" />
+                      Delete Signature
                     </Button>
                   </>
                 )}
@@ -215,7 +220,25 @@ export const DocumentDetail = connect(
               </div>
             )}
 
-            {documentDetailHelper.formattedDocument.isPetition === false && (
+            {documentDetailHelper.showPrintCaseConfirmationButton && (
+              <Button
+                className="margin-right-0"
+                onClick={() => {
+                  navigateToPrintableCaseConfirmationSequence({
+                    docketNumber: formattedCaseDetail.docketNumber,
+                  });
+                }}
+              >
+                <FontAwesomeIcon
+                  className="margin-right-05"
+                  icon="print"
+                  size="1x"
+                />
+                Print Confirmation
+              </Button>
+            )}
+
+            {documentDetailHelper.showEditDocketEntry && (
               <Button
                 link
                 className="margin-right-0 padding-bottom-0"
@@ -226,16 +249,15 @@ export const DocumentDetail = connect(
               </Button>
             )}
 
-            {caseDetailHelper.showServeToIrsButton &&
-              documentDetailHelper.formattedDocument.isPetition && (
-                <Button
-                  className="serve-to-irs margin-right-0"
-                  onClick={() => clickServeToIrsSequence()}
-                >
-                  <FontAwesomeIcon icon={['fas', 'clock']} />
-                  Serve to IRS
-                </Button>
-              )}
+            {documentDetailHelper.showServeToIrsButton && (
+              <Button
+                className="serve-to-irs margin-right-0"
+                onClick={() => clickServeToIrsSequence()}
+              >
+                <FontAwesomeIcon icon={['fas', 'clock']} />
+                Serve to IRS
+              </Button>
+            )}
             {documentDetailHelper.showServeDocumentButton && (
               <Button
                 className="serve-to-irs margin-right-0"
@@ -245,23 +267,22 @@ export const DocumentDetail = connect(
                 Serve Document
               </Button>
             )}
-            {caseDetailHelper.showRecallButton &&
-              documentDetailHelper.formattedDocument.isPetition && (
-                <span className="recall-button-box">
-                  <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
-                  <span className="batched-message">Batched for IRS</span>
-                  <Button
-                    className="recall-petition"
-                    onClick={() =>
-                      setModalDialogNameSequence({
-                        showModal: 'RecallPetitionModalDialog',
-                      })
-                    }
-                  >
-                    Recall
-                  </Button>
-                </span>
-              )}
+            {documentDetailHelper.showRecallButton && (
+              <span className="recall-button-box">
+                <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
+                <span className="batched-message">Batched for IRS</span>
+                <Button
+                  className="recall-petition"
+                  onClick={() =>
+                    setModalDialogNameSequence({
+                      showModal: 'RecallPetitionModalDialog',
+                    })
+                  }
+                >
+                  Recall
+                </Button>
+              </span>
+            )}
             {documentDetailHelper.showSignDocumentButton && (
               <Button
                 className="serve-to-irs margin-right-0"

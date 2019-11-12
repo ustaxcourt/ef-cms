@@ -27,7 +27,7 @@
             "isQC": true,
             "isInitializeCase": true,
             "assigneeId": null,
-            "sentBy": "taxpayer",
+            "sentBy": "petitioner",
             "createdAt": "2019-03-01T21:40:46.415Z",
             "assigneeName": null,
             "caseId": "2fb2da8d-4328-4a20-a5d7-a76637e1dc01",
@@ -98,7 +98,7 @@
       "name": "Brett Osborne",
       "state": "AS",
       "countryType": "domestic",
-      "email": "taxpayer"
+      "email": "petitioner"
     },
     "preferredTrialCity": "Birmingham, Alabama",
     "createdAt": "2019-03-01T21:40:46.415Z",
@@ -134,12 +134,13 @@
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "custom:role": "petitioner",
         "iat": 1551476326,
-        "email": "taxpayer",
+        "email": "petitioner",
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
       }
     ],
     "docketNumber": "110-19",
-    "status": "New"
+    "status": "New",
+    "associatedJudge": "Chief Judge"
   },
   {
     "sk": "2fb2da8d-4328-4a20-a5d7-a76637e1dc01",

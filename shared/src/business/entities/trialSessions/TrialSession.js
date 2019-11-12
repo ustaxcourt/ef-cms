@@ -1,10 +1,10 @@
 const joi = require('joi-browser');
 const {
-  joiValidationDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
-const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
+const {
+  joiValidationDecorator,
+} = require('../../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../../utilities/DateHandler');
 
 const COMMON_CITIES = [
@@ -233,7 +233,7 @@ TrialSession.validationRules = {
       .valid(TrialSession.SESSION_TERMS)
       .required(),
     termYear: joi.string().required(),
-    trialClerk: joi.string().optional(),
+    trialClerk: joi.object().optional(),
     trialLocation: joi.string().required(),
     trialSessionId: joi
       .string()

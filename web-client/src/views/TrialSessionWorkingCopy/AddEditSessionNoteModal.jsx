@@ -1,10 +1,9 @@
 import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { Text } from '../../ustc-ui/Text/Text';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const AddEditSessionNoteModal = connect(
   {
@@ -24,11 +23,9 @@ export const AddEditSessionNoteModal = connect(
         onConfirmSequence="updateWorkingCopySessionNoteSequence"
       >
         <h5 className="margin-bottom-4">{modal.heading}</h5>
-        <div
-          className={classNames(
-            'usa-form-group',
-            validationErrors.notes && 'usa-form-group--error',
-          )}
+        <FormGroup
+          className="margin-bottom-2"
+          errorText={validationErrors.notes}
         >
           <label className="usa-label" htmlFor="case-notes">
             Judge’s notes
@@ -41,8 +38,7 @@ export const AddEditSessionNoteModal = connect(
               validateNoteSequence();
             }}
           />
-          <Text bind="validationErrors.notes" className="usa-error-message" />
-        </div>
+        </FormGroup>
       </ConfirmModal>
     );
   },

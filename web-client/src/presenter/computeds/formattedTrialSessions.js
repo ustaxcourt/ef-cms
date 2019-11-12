@@ -18,7 +18,7 @@ export const sessionSorter = sessionList => {
 };
 
 export const formattedTrialSessions = (get, applicationContext) => {
-  const user = get(state.user);
+  const judgeUser = get(state.judgeUser);
   const orderedSessions = orderBy(get(state.trialSessions), 'startDate');
 
   // filter trial sessions
@@ -40,9 +40,8 @@ export const formattedTrialSessions = (get, applicationContext) => {
   sessions.forEach(session => {
     if (
       session.judge &&
-      user &&
-      user.role === 'judge' &&
-      session.judge.userId === user.userId
+      judgeUser &&
+      session.judge.userId === judgeUser.userId
     ) {
       session.userIsAssignedToSession = true;
     } else {

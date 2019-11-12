@@ -7,7 +7,9 @@ import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatus
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { submitRespondentCaseAssociationRequestAction } from '../actions/FileDocument/submitRespondentCaseAssociationRequestAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 
 export const submitExternalDocumentSequence = [
@@ -19,10 +21,12 @@ export const submitExternalDocumentSequence = [
       submitRespondentCaseAssociationRequestAction,
       setCaseAction,
       closeFileUploadStatusModalAction,
-      ...getPrintableFilingReceiptSequence,
+      setWaitingForResponseAction,
+      getPrintableFilingReceiptSequence,
       getFileExternalDocumentAlertSuccessAction,
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
+      unsetWaitingForResponseAction,
       navigateToCaseDetailAction,
     ],
   },

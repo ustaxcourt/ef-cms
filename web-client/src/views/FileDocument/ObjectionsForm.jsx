@@ -1,8 +1,7 @@
-import { Text } from '../../ustc-ui/Text/Text';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const ObjectionsForm = connect(
   {
@@ -12,7 +11,6 @@ export const ObjectionsForm = connect(
       sequences.updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
-    validationBind: props.validationBind,
     validationData: state[props.validationBind],
   },
   ({
@@ -20,19 +18,11 @@ export const ObjectionsForm = connect(
     type,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
-    validationBind,
     validationData,
   }) => {
     return (
       <>
-        <div
-          className={classNames(
-            'usa-form-group margin-bottom-0',
-            validationData &&
-              validationData.objections &&
-              'usa-form-group--error',
-          )}
-        >
+        <FormGroup errorText={validationData && validationData.objections}>
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend id={`${type}-objections-legend`}>
               Are there any objections to this document?
@@ -68,11 +58,7 @@ export const ObjectionsForm = connect(
               </div>
             ))}
           </fieldset>
-          <Text
-            bind={`${validationBind}.objections`}
-            className="usa-error-message"
-          />
-        </div>
+        </FormGroup>
       </>
     );
   },

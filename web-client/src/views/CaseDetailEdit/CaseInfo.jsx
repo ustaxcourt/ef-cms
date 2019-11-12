@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ProcedureType } from '../StartCase/ProcedureType';
 import { connect } from '@cerebral/react';
 import { limitLength } from '../../ustc-ui/utils/limitLength';
@@ -33,12 +34,7 @@ export const CaseInfo = connect(
       <div className="blue-container">
         {caseDetail.isPaper && (
           <>
-            <div
-              className={classNames(
-                'usa-form-group',
-                caseDetailErrors.receivedAt && 'usa-form-group--error',
-              )}
-            >
+            <FormGroup errorText={caseDetailErrors.receivedAt}>
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="received-at-legend">
                   Date received
@@ -123,13 +119,8 @@ export const CaseInfo = connect(
                     />
                   </div>
                 </div>
-                {caseDetailErrors.receivedAt && (
-                  <div className="usa-error-message" role="alert">
-                    {caseDetailErrors.receivedAt}
-                  </div>
-                )}
               </fieldset>
-            </div>
+            </FormGroup>
           </>
         )}
 
@@ -245,12 +236,7 @@ export const CaseInfo = connect(
           </div>
         </div>
 
-        <div
-          className={classNames(
-            'usa-form-group margin-bottom-0',
-            caseDetailErrors.payGovDate && 'usa-form-group--error',
-          )}
-        >
+        <FormGroup errorText={caseDetailErrors.payGovDate}>
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="fee-payment-date-legend">
               Fee payment date <span className="usa-hint">(optional)</span>
@@ -335,13 +321,8 @@ export const CaseInfo = connect(
                 />
               </div>
             </div>
-            {caseDetailErrors.payGovDate && (
-              <div className="usa-error-message" role="alert">
-                {caseDetailErrors.payGovDate}
-              </div>
-            )}
           </fieldset>
-        </div>
+        </FormGroup>
 
         <div className="usa-form-group">
           <label className="usa-label" htmlFor="fee-payment-id">

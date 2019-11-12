@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { CaseSearch } = require('../entities/cases/CaseSearch');
 const { get } = require('lodash');
 
 /**
@@ -117,12 +118,16 @@ exports.caseSearchInteractor = async ({
     });
   }
   if (yearFiledMin || yearFiledMax) {
+    const yearMin = yearFiledMin || CaseSearch.CASE_SEARCH_MIN_YEAR;
+    const yearMax =
+      yearFiledMax || applicationContext.getUtilities().formatNow('YYYY');
+
     commonQuery.push({
       range: {
         'receivedAt.S': {
           format: 'yyyy',
-          gte: `${yearFiledMin}||/y`,
-          lte: `${yearFiledMax}||/y`,
+          gte: `${yearMin}||/y`,
+          lte: `${yearMax}||/y`,
         },
       },
     });

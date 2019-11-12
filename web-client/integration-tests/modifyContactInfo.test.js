@@ -1,17 +1,17 @@
 import { fakeFile, setupTest } from './helpers';
-import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
-import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
-import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
-import taxpayerEditsCasePrimaryContactAddress from './journey/taxpayerEditsCasePrimaryContactAddress';
-import taxpayerEditsCasePrimaryContactAddressAndPhone from './journey/taxpayerEditsCasePrimaryContactAddressAndPhone';
-import taxpayerEditsCasePrimaryContactPhone from './journey/taxpayerEditsCasePrimaryContactPhone';
-import taxpayerEditsCaseSecondaryContactInformation from './journey/taxpayerEditsCaseSecondaryContactInformation';
-import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxpayerNavigatesToEditPrimaryContact from './journey/taxpayerNavigatesToEditPrimaryContact';
-import taxpayerSignsOut from './journey/taxpayerSignsOut';
-import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
-import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
+import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
+import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
+import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
+import petitionerEditsCasePrimaryContactAddress from './journey/petitionerEditsCasePrimaryContactAddress';
+import petitionerEditsCasePrimaryContactAddressAndPhone from './journey/petitionerEditsCasePrimaryContactAddressAndPhone';
+import petitionerEditsCasePrimaryContactPhone from './journey/petitionerEditsCasePrimaryContactPhone';
+import petitionerEditsCaseSecondaryContactInformation from './journey/petitionerEditsCaseSecondaryContactInformation';
+import petitionerLogin from './journey/petitionerLogIn';
+import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
+import petitionerNavigatesToEditPrimaryContact from './journey/petitionerNavigatesToEditPrimaryContact';
+import petitionerSignsOut from './journey/petitionerSignsOut';
+import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
+import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 const test = setupTest();
 
@@ -21,23 +21,26 @@ describe('Modify Petitioner Contact Information', () => {
   });
 
   // valid primary contact modification
-  taxpayerLogin(test);
-  taxpayerNavigatesToCreateCase(test);
-  taxpayerChoosesProcedureType(test, { procedureType: 'Regular' });
-  taxpayerChoosesCaseType(test);
-  taxpayerCreatesNewCase(test, fakeFile, { caseType: 'CDP (Lien/Levy)' });
-  taxpayerViewsDashboard(test, { caseIndex: 2 });
-  taxpayerViewsCaseDetail(test, { docketNumberSuffix: 'L' });
-  taxpayerNavigatesToEditPrimaryContact(test);
-  taxpayerEditsCasePrimaryContactAddress(test);
-  taxpayerEditsCasePrimaryContactPhone(test);
-  taxpayerEditsCasePrimaryContactAddressAndPhone(test);
-  taxpayerSignsOut(test);
+  petitionerLogin(test);
+  petitionerNavigatesToCreateCase(test);
+  petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
+  petitionerChoosesCaseType(test);
+  petitionerCreatesNewCase(test, fakeFile, { caseType: 'CDP (Lien/Levy)' });
+  petitionerViewsDashboard(test, { caseIndex: 2 });
+  petitionerViewsCaseDetail(test, { docketNumberSuffix: 'L' });
+  petitionerNavigatesToEditPrimaryContact(test);
+  petitionerEditsCasePrimaryContactAddress(test);
+  petitionerEditsCasePrimaryContactPhone(test);
+  petitionerEditsCasePrimaryContactAddressAndPhone(test);
+  petitionerSignsOut(test);
 
   // attempt to modify secondary contact information
-  taxpayerLogin(test);
-  taxpayerViewsDashboard(test, { caseIndex: 2 });
-  taxpayerViewsCaseDetail(test, { docketNumberSuffix: 'L', documentCount: 5 });
-  taxpayerEditsCaseSecondaryContactInformation(test);
-  taxpayerSignsOut(test);
+  petitionerLogin(test);
+  petitionerViewsDashboard(test, { caseIndex: 2 });
+  petitionerViewsCaseDetail(test, {
+    docketNumberSuffix: 'L',
+    documentCount: 5,
+  });
+  petitionerEditsCaseSecondaryContactInformation(test);
+  petitionerSignsOut(test);
 });

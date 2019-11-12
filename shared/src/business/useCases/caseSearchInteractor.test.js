@@ -1,4 +1,6 @@
 const { caseSearchInteractor } = require('./caseSearchInteractor');
+import { CaseSearch } from '../entities/cases/CaseSearch';
+import { formatNow } from '../utilities/DateHandler';
 
 describe('caseSearchInteractor', () => {
   let searchSpy;
@@ -7,6 +9,9 @@ describe('caseSearchInteractor', () => {
     environment: { stage: 'local' },
     getSearchClient: () => ({
       search: searchSpy,
+    }),
+    getUtilities: () => ({
+      formatNow,
     }),
   };
 
@@ -200,5 +205,44 @@ describe('caseSearchInteractor', () => {
       ...commonExpectedQuery,
     ]);
     expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
+  });
+
+  it('uses a default minimum year when providing only a maximum year', async () => {
+    searchSpy = jest.fn();
+
+    await caseSearchInteractor({
+      applicationContext,
+      petitionerName: 'test person',
+      yearFiledMax: '2018',
+    });
+
+    expect(searchSpy).toHaveBeenCalled();
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must[1].range).toEqual({
+      'receivedAt.S': {
+        format: 'yyyy',
+        gte: `${CaseSearch.CASE_SEARCH_MIN_YEAR}||/y`,
+        lte: '2018||/y',
+      },
+    });
+  });
+
+  it('uses a default maximum year when providing only a minimum year', async () => {
+    searchSpy = jest.fn();
+    const currentYear = formatNow('YYYY');
+
+    await caseSearchInteractor({
+      applicationContext,
+      petitionerName: 'test person',
+      yearFiledMin: '2016',
+    });
+
+    expect(searchSpy).toHaveBeenCalled();
+    expect(searchSpy.mock.calls[0][0].body.query.bool.must[1].range).toEqual({
+      'receivedAt.S': {
+        format: 'yyyy',
+        gte: '2016||/y',
+        lte: `${currentYear}||/y`,
+      },
+    });
   });
 });

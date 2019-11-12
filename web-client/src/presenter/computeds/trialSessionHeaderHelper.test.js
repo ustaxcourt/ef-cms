@@ -15,6 +15,11 @@ const trialSessionHeaderHelper = withAppContextDecorator(
   },
 );
 
+const baseState = {
+  constants: { USER_ROLES: User.ROLES },
+  judgeUser: { role: User.ROLES.judge, userId: '777' },
+};
+
 describe('trial session helper computed', () => {
   it('computes defaults with no data', () => {
     const result = runCompute(trialSessionHeaderHelper, {});
@@ -24,6 +29,7 @@ describe('trial session helper computed', () => {
   it('does not show switch-links in header if not the assigned judge', () => {
     const result = runCompute(trialSessionHeaderHelper, {
       state: {
+        ...baseState,
         currentPage: 'TrialSessionDetail',
         trialSession: {
           judge: { userId: '98765' },
@@ -40,6 +46,7 @@ describe('trial session helper computed', () => {
   it('shows "Switch to Session Detail" in header if viewing Working Copy and user is assigned judge', () => {
     const result = runCompute(trialSessionHeaderHelper, {
       state: {
+        ...baseState,
         currentPage: 'TrialSessionWorkingCopy',
         trialSession: {
           judge: { userId: '777' },
@@ -56,6 +63,7 @@ describe('trial session helper computed', () => {
   it('shows "Switch to Session Working Copy" in header if viewing Session Detail and user is assigned judge', () => {
     const result = runCompute(trialSessionHeaderHelper, {
       state: {
+        ...baseState,
         currentPage: 'TrialSessionDetail',
         trialSession: {
           judge: { userId: '777' },

@@ -180,7 +180,7 @@ describe('updateUserContactInformationInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: User.ROLES.petitioner,
+          role: User.ROLES.petitionsClerk,
           userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
@@ -203,7 +203,7 @@ describe('updateUserContactInformationInteractor', () => {
     expect(result).toEqual('error');
   });
 
-  it('returns unauthorized error when the user attempts to update a different user not owned by themself', async () => {
+  it('returns unauthorized error when the user attempts to update a different user not owned by them', async () => {
     const applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {

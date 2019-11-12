@@ -10,10 +10,10 @@ import { state } from 'cerebral';
  */
 
 export const scannerStartupAction = async ({ applicationContext, store }) => {
-  const dynanScriptClass = await applicationContext.getScanner().loadDynamsoft({
+  const dynamScriptClass = await applicationContext.getScanner().loadDynamsoft({
     applicationContext,
   });
-  store.set(state.scanner.dynanScriptClass, dynanScriptClass);
+  store.set(state.scanner.dynamScriptClass, dynamScriptClass);
   store.set(state.scanner.initiateScriptLoaded, true);
   store.set(state.scanner.configScriptLoaded, true);
 };

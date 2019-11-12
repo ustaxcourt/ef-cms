@@ -9,7 +9,7 @@ describe('getUploadPolicyInteractor', () => {
       getCurrentUser: () => {
         return {
           role: 'admin',
-          userId: 'taxpayer',
+          userId: 'petitioner',
         };
       },
     };
@@ -30,7 +30,7 @@ describe('getUploadPolicyInteractor', () => {
         return {
           isExternalUser: () => true,
           role: User.ROLES.petitioner,
-          userId: 'taxpayer',
+          userId: 'petitioner',
         };
       },
       getPersistenceGateway: () => ({
@@ -50,7 +50,7 @@ describe('getUploadPolicyInteractor', () => {
         return {
           isExternalUser: () => true,
           role: User.ROLES.petitioner,
-          userId: 'taxpayer',
+          userId: 'petitioner',
         };
       },
       getPersistenceGateway: () => ({

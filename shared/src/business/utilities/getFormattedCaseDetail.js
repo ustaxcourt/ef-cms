@@ -262,10 +262,14 @@ const formatCase = (applicationContext, caseDetail) => {
   result.formattedPreferredTrialCity =
     result.preferredTrialCity || 'No location selected';
 
-  if (result.status === Case.STATUS_TYPES.calendared) {
-    result.showTrialCalendared = true;
+  if (result.trialSessionId) {
+    if (result.status === Case.STATUS_TYPES.calendared) {
+      result.showTrialCalendared = true;
+    } else {
+      result.showScheduled = true;
+    }
     result.formattedTrialCity = result.trialLocation || 'Not assigned';
-    result.formattedTrialJudge = result.trialJudge || 'Not assigned';
+    result.formattedAssociatedJudge = result.associatedJudge || 'Not assigned';
     if (result.trialDate) {
       if (result.trialTime) {
         result.formattedTrialDate = applicationContext
@@ -290,7 +294,7 @@ const formatCase = (applicationContext, caseDetail) => {
       .formatDateString(result.blockedDate, 'MMDDYY');
   } else if (result.highPriority) {
     result.formattedTrialDate = 'Not scheduled';
-    result.formattedTrialJudge = 'Not assigned';
+    result.formattedAssociatedJudge = 'Not assigned';
     result.showPrioritized = true;
   } else {
     result.showNotScheduled = true;
@@ -318,7 +322,7 @@ const dateStringsCompared = (a, b) => {
   const aDate = new Date(a);
   const bDate = new Date(b);
   if (Math.abs(aDate - bDate) < secondsDifference) {
-    // treat as equal timestamps
+    // treat as equal time stamps
     return 0;
   }
   return aDate - bDate;

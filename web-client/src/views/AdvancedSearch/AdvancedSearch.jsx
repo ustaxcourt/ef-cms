@@ -3,12 +3,11 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SearchResults } from './SearchResults';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const AdvancedSearch = connect(
   {
@@ -61,13 +60,7 @@ export const AdvancedSearch = connect(
             >
               <div className="grid-row grid-gap">
                 <div className="tablet:grid-col-4 right-gray-border">
-                  <div
-                    className={classNames(
-                      'usa-form-group margin-bottom-0',
-                      validationErrors.petitionerName &&
-                        'usa-form-group--error',
-                    )}
-                  >
+                  <FormGroup errorText={validationErrors.petitionerName}>
                     <label className="usa-label" htmlFor="petitioner-name">
                       Petitioner name{' '}
                       <span className="usa-hint">(required)</span>
@@ -85,11 +78,7 @@ export const AdvancedSearch = connect(
                         });
                       }}
                     />
-                    <Text
-                      bind="validationErrors.petitionerName"
-                      className="usa-error-message"
-                    />
-                  </div>
+                  </FormGroup>
                 </div>
 
                 <div className="tablet:grid-col-4 right-gray-border">
@@ -154,13 +143,11 @@ export const AdvancedSearch = connect(
                 <div className="tablet:grid-col-4">
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-7">
-                      <div
-                        className={classNames(
-                          'usa-form-group margin-bottom-0',
-                          (validationErrors.yearFiledMin ||
-                            validationErrors.yearFiledMax) &&
-                            'usa-form-group--error',
-                        )}
+                      <FormGroup
+                        errorText={[
+                          validationErrors.yearFiledMin,
+                          validationErrors.yearFiledMax,
+                        ]}
                       >
                         <fieldset className="usa-fieldset margin-bottom-0">
                           <legend
@@ -204,20 +191,16 @@ export const AdvancedSearch = connect(
                               }}
                             />
                           </div>
-                          <Text
-                            bind="validationErrors.yearFiledMin"
-                            className="usa-error-message"
-                          />{' '}
-                          <Text
-                            bind="validationErrors.yearFiledMax"
-                            className="usa-error-message"
-                          />
                         </fieldset>
-                      </div>
+                      </FormGroup>
                     </div>
 
                     <div className="tablet:grid-col-5">
-                      <Button className="advanced-search__button" type="submit">
+                      <Button
+                        className="advanced-search__button"
+                        id="advanced-search-button"
+                        type="submit"
+                      >
                         Search
                       </Button>
                     </div>

@@ -14,7 +14,7 @@ const MOCK_WORK_ITEMS = [
     assigneeId: null,
     assigneeName: 'IRSBatchSystem',
     caseId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    caseStatus: 'Batched for IRS',
+    caseStatus: Case.STATUS_TYPES.batchedForIRS,
     createdAt: '2018-12-27T18:06:02.971Z',
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
@@ -85,7 +85,7 @@ describe('Recall petition from IRS Holding Queue', () => {
   it('throws unauthorized error if user is unauthorized', async () => {
     let error;
     applicationContext.getCurrentUser = () => {
-      return new User({ role: User.ROLES.petitioner, userId: 'taxpayer' });
+      return new User({ role: User.ROLES.petitioner, userId: 'petitioner' });
     };
 
     try {

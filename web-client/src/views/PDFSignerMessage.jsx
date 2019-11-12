@@ -1,7 +1,7 @@
+import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const PDFSignerMessage = connect(
   {
@@ -33,12 +33,7 @@ export const PDFSignerMessage = connect(
             Select section
           </label>
 
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.section && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.section}>
             <select
               className="usa-select"
               id="section"
@@ -60,21 +55,10 @@ export const PDFSignerMessage = connect(
                 </option>
               ))}
             </select>
-          </div>
-
-          {validationErrors.section && (
-            <div className="usa-error-message beneath">
-              {validationErrors.section}
-            </div>
-          )}
+          </FormGroup>
         </div>
 
-        <div
-          className={classNames(
-            'usa-form-group',
-            validationErrors.assigneeId && 'usa-form-group--error',
-          )}
-        >
+        <FormGroup errorText={validationErrors.assigneeId}>
           <label className="usa-label" htmlFor="assigneeId">
             Select recipient
           </label>
@@ -99,19 +83,9 @@ export const PDFSignerMessage = connect(
               </option>
             ))}
           </select>
-          {validationErrors.assigneeId && (
-            <div className="usa-error-message beneath">
-              {validationErrors.assigneeId}
-            </div>
-          )}
-        </div>
+        </FormGroup>
 
-        <div
-          className={classNames(
-            'usa-form-group',
-            validationErrors.message && 'usa-form-group--error',
-          )}
-        >
+        <FormGroup errorText={validationErrors.message}>
           <label className="usa-label" htmlFor="message">
             Add message
           </label>
@@ -127,12 +101,7 @@ export const PDFSignerMessage = connect(
               validateInitialWorkItemMessageSequence();
             }}
           />
-          {validationErrors.message && (
-            <div className="usa-error-message beneath">
-              {validationErrors.message}
-            </div>
-          )}
-        </div>
+        </FormGroup>
       </div>
     );
   },

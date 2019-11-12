@@ -1,3 +1,4 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { StateSelect } from './StateSelect';
 import { ValidationText } from '../../ustc-ui/Text/ValidationText';
@@ -25,14 +26,12 @@ export const Address = connect(
   }) => {
     return (
       <React.Fragment>
-        <div
-          className={classNames(
-            'usa-form-group',
+        <FormGroup
+          errorText={
             validationErrors &&
-              validationErrors[type] &&
-              validationErrors[type].address1 &&
-              'usa-form-group--error',
-          )}
+            validationErrors[type] &&
+            validationErrors[type].address1
+          }
         >
           <label className="usa-label" htmlFor={`${type}.address1`}>
             Mailing address line 1
@@ -54,8 +53,7 @@ export const Address = connect(
               });
             }}
           />
-          <ValidationText field={`${type}.address1`} />
-        </div>
+        </FormGroup>
         <div className="usa-form-group">
           <label className="usa-label" htmlFor={`${type}.address2`}>
             Address line 2 <span className="usa-hint">(optional)</span>
@@ -101,6 +99,7 @@ export const Address = connect(
           />
         </div>
         <NonMobile>
+          {/* we do not use <FormGroup> here because of how custom the error text is displayed */}
           <div
             className={classNames(
               'usa-form-group',
@@ -157,14 +156,12 @@ export const Address = connect(
           </div>
         </NonMobile>
         <Mobile>
-          <div
-            className={classNames(
-              'usa-form-group',
+          <FormGroup
+            errorText={
               validationErrors &&
-                validationErrors[type] &&
-                validationErrors[type].city &&
-                'usa-form-group--error',
-            )}
+              validationErrors[type] &&
+              validationErrors[type].city
+            }
           >
             <label className="usa-label" htmlFor={`${type}.city`}>
               City
@@ -186,16 +183,14 @@ export const Address = connect(
                 });
               }}
             />
-            <ValidationText field={`${type}.city`} />
-          </div>
-          <div
-            className={classNames(
-              'usa-form-group',
+          </FormGroup>
+
+          <FormGroup
+            errorText={
               validationErrors &&
-                validationErrors[type] &&
-                validationErrors[type].state &&
-                'usa-form-group--error',
-            )}
+              validationErrors[type] &&
+              validationErrors[type].state
+            }
           >
             <label className="usa-label" htmlFor={`${type}.state`}>
               State
@@ -207,17 +202,15 @@ export const Address = connect(
               usStates={usStates}
               validateStartCaseSequence={validateStartCaseSequence}
             />
-            <ValidationText field={`${type}.state`} />
-          </div>
+          </FormGroup>
         </Mobile>
-        <div
-          className={classNames(
-            'usa-form-group',
+
+        <FormGroup
+          errorText={
             validationErrors &&
-              validationErrors[type] &&
-              validationErrors[type].postalCode &&
-              'usa-form-group--error',
-          )}
+            validationErrors[type] &&
+            validationErrors[type].postalCode
+          }
         >
           <label
             aria-label="zip code"
@@ -243,8 +236,7 @@ export const Address = connect(
               });
             }}
           />
-          <ValidationText field={`${type}.postalCode`} />
-        </div>
+        </FormGroup>
       </React.Fragment>
     );
   },

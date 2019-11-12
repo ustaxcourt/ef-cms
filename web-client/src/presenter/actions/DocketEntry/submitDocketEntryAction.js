@@ -43,13 +43,7 @@ export const submitDocketEntryAction = async ({
       applicationContext,
       documentId: primaryDocumentFileId,
     });
-
     await applicationContext.getUseCases().validatePdfInteractor({
-      applicationContext,
-      documentId: primaryDocumentFileId,
-    });
-
-    await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
       documentId: primaryDocumentFileId,
     });
