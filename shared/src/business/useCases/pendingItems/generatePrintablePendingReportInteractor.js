@@ -28,8 +28,6 @@ exports.generatePrintablePendingReportInteractor = async ({
     .getUseCaseHelpers()
     .fetchPendingItems({ applicationContext, caseId, judge });
 
-  console.log(pendingItems);
-
   return await applicationContext
     .getUseCaseHelpers()
     .generatePendingReportPdf({ applicationContext, cases: pendingItems });
