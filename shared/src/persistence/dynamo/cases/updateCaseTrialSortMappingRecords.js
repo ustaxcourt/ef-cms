@@ -34,7 +34,8 @@ exports.updateCaseTrialSortMappingRecords = async ({
 
   if (
     oldSortRecords.length &&
-    (oldSortRecords[0].sk !== hybrid && oldSortRecords[0].sk !== nonHybrid)
+    oldSortRecords[0].sk !== hybrid &&
+    oldSortRecords[0].sk !== nonHybrid
   ) {
     await deleteCaseTrialSortMappingRecords({
       applicationContext,
