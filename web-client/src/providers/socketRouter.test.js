@@ -13,10 +13,7 @@ const mockApp = {
 
 describe('socketRouter', () => {
   it('should call batchDownloadReadySequence and callback if present', () => {
-    socketRouter(
-      mockApp,
-      mockCallback,
-    )({
+    socketRouter(mockApp, mockCallback)({
       data: '{ "action": "batch_download_ready" }',
     });
     socketRouter(mockApp)({

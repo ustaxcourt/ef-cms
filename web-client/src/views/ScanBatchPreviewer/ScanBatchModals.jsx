@@ -3,19 +3,22 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-export const EmptyHopperModal = connect({}, () => {
-  return (
-    <ConfirmModal
-      cancelLabel="Cancel"
-      confirmLabel="Scan"
-      title="The hopper is empty"
-      onCancelSequence="clearModalSequence"
-      onConfirmSequence="startScanSequence"
-    >
-      Please load the hopper to scan your batch.
-    </ConfirmModal>
-  );
-});
+export const EmptyHopperModal = connect(
+  {},
+  () => {
+    return (
+      <ConfirmModal
+        cancelLabel="Cancel"
+        confirmLabel="Scan"
+        title="The hopper is empty"
+        onCancelSequence="clearModalSequence"
+        onConfirmSequence="startScanSequence"
+      >
+        Please load the hopper to scan your batch.
+      </ConfirmModal>
+    );
+  },
+);
 
 export const ConfirmRescanBatchModal = connect(
   { batchIndex: state.batchIndexToRescan },
@@ -51,41 +54,50 @@ export const DeleteBatchModal = connect(
     );
   },
 );
-export const DeletePDFModal = connect({}, () => {
-  return (
-    <ConfirmModal
-      cancelLabel="No, cancel"
-      confirmLabel="Yes, delete"
-      title="Are you sure you want to delete this PDF?"
-      onCancelSequence="clearModalSequence"
-      onConfirmSequence="removeScannedPdfSequence"
-    >
-      This action cannot be undone.
-    </ConfirmModal>
-  );
-});
-export const ScanErrorModal = connect({}, () => {
-  return (
+export const DeletePDFModal = connect(
+  {},
+  () => {
+    return (
+      <ConfirmModal
+        cancelLabel="No, cancel"
+        confirmLabel="Yes, delete"
+        title="Are you sure you want to delete this PDF?"
+        onCancelSequence="clearModalSequence"
+        onConfirmSequence="removeScannedPdfSequence"
+      >
+        This action cannot be undone.
+      </ConfirmModal>
+    );
+  },
+);
+export const ScanErrorModal = connect(
+  {},
+  () => {
+    return (
+      <ConfirmModal
+        noCancel
+        confirmLabel="OK"
+        title="An error occurred while scanning"
+        onCancelSequence="clearModalSequence"
+        onConfirmSequence="clearModalSequence"
+      >
+        Please try again or contact your IT Administrator.
+      </ConfirmModal>
+    );
+  },
+);
+export const UnfinishedScansModal = connect(
+  {},
+  () => (
     <ConfirmModal
       noCancel
       confirmLabel="OK"
-      title="An error occurred while scanning"
+      title="You have unfinished scans"
       onCancelSequence="clearModalSequence"
       onConfirmSequence="clearModalSequence"
     >
-      Please try again or contact your IT Administrator.
+      Please ensure your scans are completed and all PDFs have been created
+      before continuing.
     </ConfirmModal>
-  );
-});
-export const UnfinishedScansModal = connect({}, () => (
-  <ConfirmModal
-    noCancel
-    confirmLabel="OK"
-    title="You have unfinished scans"
-    onCancelSequence="clearModalSequence"
-    onConfirmSequence="clearModalSequence"
-  >
-    Please ensure your scans are completed and all PDFs have been created before
-    continuing.
-  </ConfirmModal>
-));
+  ),
+);
