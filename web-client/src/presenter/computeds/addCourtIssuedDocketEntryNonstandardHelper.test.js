@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 const state = {
   constants: {
-    COURT_ISSUED_EVENT_CODES: COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_EVENT_CODES,
   },
   form: {},
 };
