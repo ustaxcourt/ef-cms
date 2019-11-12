@@ -29,7 +29,8 @@ export const DocumentDetailHeader = connect(
         </h2>
         <div className="filed-by">
           <div className="padding-bottom-1">
-            Filed {documentDetailHelper.formattedDocument.createdAtFormatted}
+            {documentDetailHelper.createdFiledLabel}{' '}
+            {documentDetailHelper.formattedDocument.createdAtFormatted}
             {documentDetailHelper.formattedDocument.filedBy &&
               ` by ${documentDetailHelper.formattedDocument.filedBy}`}
           </div>

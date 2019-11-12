@@ -165,6 +165,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showAddDocketEntryButton = user.role === USER_ROLES.docketClerk;
 
   return {
+    createdFiledLabel: isOrder ? 'Created' : 'Filed', // Should actually be all court-issued documents
     documentEditUrl,
     formattedDocument,
     isDraftDocument,
