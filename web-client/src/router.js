@@ -356,6 +356,19 @@ const router = {
     );
 
     route(
+      '/case-detail/*/pending-report',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Case Confirmation`,
+        );
+        app.getSequence('gotoPrintablePendingReportSequence')({
+          caseIdFilter: true,
+          docketNumber,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/request-access',
       ifHasAccess(docketNumber => {
         setPageTitle(
