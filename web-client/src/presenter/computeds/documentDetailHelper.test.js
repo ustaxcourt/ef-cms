@@ -164,6 +164,120 @@ describe('document detail helper', () => {
     expect(result.showSignDocumentButton).toEqual(true);
   });
 
+  describe('createdFiledLabel', () => {
+    it('should set createFiledLabel to `Created` for a court-issued document', async () => {
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Order of Dismissal',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.createdFiledLabel).toEqual('Created');
+    });
+
+    it('should set createFiledLabel to `Filed` for a non court-issued document', async () => {
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.createdFiledLabel).toEqual('Filed');
+    });
+  });
+
+  describe('showAddDocketEntryButton', () => {
+    it('should set showAddDocketEntryButton true when the user has the DOCKET_ENTRY permission', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: true },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showAddDocketEntryButton).toEqual(true);
+    });
+
+    it('should set showAddDocketEntryButton false when the user does not have the DOCKET_ENTRY permission', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: false },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showAddDocketEntryButton).toEqual(false);
+    });
+  });
+
   describe('showServeToIrsButton and showRecallButton', () => {
     it('should set showServeToIrsButton true and showRecallButton false when case status is new', () => {
       const user = {
