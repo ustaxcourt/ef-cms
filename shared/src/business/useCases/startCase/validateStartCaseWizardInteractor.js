@@ -10,8 +10,8 @@ exports.validateStartCaseWizardInteractor = ({
   applicationContext,
   petition,
 }) => {
-  const errors = new (applicationContext.getEntityConstructors().CaseExternalInformationFactory)(
-    petition,
-  ).getFormattedValidationErrors();
+  const errors = new applicationContext.getEntityConstructors()
+    .CaseExternalInformationFactory(petition)
+    .getFormattedValidationErrors();
   return errors || null;
 };
