@@ -16,6 +16,7 @@ import { autoSaveTrialSessionWorkingCopySequence } from './sequences/autoSaveTri
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockFromTrialSequence } from './sequences/blockFromTrialSequence';
+import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
@@ -326,6 +327,7 @@ export const presenter = {
     batchDownloadReadySequence,
     batchDownloadTrialSessionSequence,
     blockFromTrialSequence,
+    cancelAddDraftDocumentSequence,
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
