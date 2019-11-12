@@ -4,12 +4,10 @@ import { runAction } from 'cerebral/test';
 
 describe('generatePrintablePendingReportAction', () => {
   let generatePrintablePendingReportInteractorMock;
-  const resultUrl = 'https://circleci.com/gh/flexion/ef-cms';
+  const resultUrl = 'https://example.com';
 
   beforeEach(() => {
-    generatePrintablePendingReportInteractorMock = jest.fn(
-      () => 'https://circleci.com/gh/flexion/ef-cms',
-    );
+    generatePrintablePendingReportInteractorMock = jest.fn(() => resultUrl);
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
