@@ -1,15 +1,25 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PendingReportList = connect(
   {
     formattedPendingItems: state.formattedPendingItems,
+    sort: state.screenMetadata.sort,
+    sortOrder: state.screenMetadata.sortOrder,
+    togglePendingReportSortSequence: sequences.togglePendingReportSortSequence,
   },
-  ({ formattedPendingItems }) => {
+  ({
+    formattedPendingItems,
+    sort,
+    sortOrder,
+    togglePendingReportSortSequence,
+  }) => {
     return (
       <React.Fragment>
         <div className="ustc-table--filters">
@@ -37,11 +47,63 @@ export const PendingReportList = connect(
           <thead>
             <tr>
               <th>Docket</th>
-              <th>Date Filed</th>
+              <th>
+                <Button
+                  link
+                  className="sortable-header-button"
+                  onClick={() => {
+                    togglePendingReportSortSequence({
+                      sort: 'date',
+                      sortOrder: 'asc',
+                    });
+                  }}
+                >
+                  <span
+                    className={classNames(
+                      'margin-right-105',
+                      sort === 'date' && 'sortActive',
+                    )}
+                  >
+                    Date Filed
+                  </span>
+                  {sort === 'date' &&
+                    (sortOrder === 'desc' ? (
+                      <FontAwesomeIcon icon="caret-up" />
+                    ) : (
+                      <FontAwesomeIcon icon="caret-down" />
+                    ))}
+                </Button>
+              </th>
               <th>Case Name</th>
               <th>Filings &amp; proceedings</th>
               <th>Case Status</th>
-              <th>Judge</th>
+              <th>
+                <Button
+                  link
+                  className="sortable-header-button"
+                  onClick={() => {
+                    togglePendingReportSortSequence({
+                      sort: 'judge',
+                      sortOrder: 'asc',
+                    });
+                  }}
+                >
+                  <span
+                    className={classNames(
+                      'margin-right-105',
+                      sort === 'judge' && 'sortActive',
+                    )}
+                  >
+                    Judge
+                  </span>
+                  {sort === 'judge' &&
+                    (sortOrder === 'desc' ? (
+                      <FontAwesomeIcon icon="caret-up" />
+                    ) : (
+                      <FontAwesomeIcon icon="caret-down" />
+                    ))}
+                </Button>
+              </th>
             </tr>
           </thead>
           {formattedPendingItems.items.map((item, idx) => (
@@ -53,11 +115,11 @@ export const PendingReportList = connect(
                 <td>{item.formattedFiledDate}</td>
                 <td>{item.caseCaptionNames}</td>
                 <td>
-                  {/* <FilingsAndProceedings
-                    arrayIndex={idx}
-                    document={document}
-                    record={item}
-                  /> */}
+                  <a
+                    href={`/case-detail/${item.docketNumber}/documents/${item.documentId}`}
+                  >
+                    {item.formattedName}
+                  </a>
                 </td>
                 <td>{item.status}</td>
                 <td>{item.associatedJudgeFormatted}</td>

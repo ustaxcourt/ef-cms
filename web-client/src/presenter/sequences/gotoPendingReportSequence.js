@@ -5,7 +5,9 @@ import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { fetchPendingItemsSequence } from './pending/fetchPendingItemsSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
+import { set } from 'cerebral/factories';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { state } from 'cerebral';
 
 const gotoPendingReport = [
   setCurrentPageAction('Interstitial'),
@@ -14,6 +16,8 @@ const gotoPendingReport = [
   closeMobileMenuAction,
   clearErrorAlertsAction,
   fetchPendingItemsSequence,
+  set(state.screenMetadata.sort, 'date'),
+  set(state.screenMetadata.sortOrder, 'asc'),
   setCurrentPageAction('PendingReport'),
 ];
 

@@ -234,6 +234,7 @@ import { toggleMenuSequence } from './sequences/toggleMenuSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleMobileMenuSequence } from './sequences/toggleMobileMenuSequence';
 import { togglePaymentDetailsSequence } from './sequences/togglePaymentDetailsSequence';
+import { togglePendingReportSortSequence } from './sequences/pending/togglePendingReportSortSequence';
 import { toggleReportsMenuSequence } from './sequences/toggleReportsMenuSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySortSequence';
@@ -543,6 +544,7 @@ export const presenter = {
     toggleMobileDocketSortSequence,
     toggleMobileMenuSequence,
     togglePaymentDetailsSequence,
+    togglePendingReportSortSequence,
     toggleReportsMenuSequence,
     toggleUsaBannerDetailsSequence,
     toggleWorkingCopySortSequence,
