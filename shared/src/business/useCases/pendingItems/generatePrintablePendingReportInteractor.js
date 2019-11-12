@@ -24,7 +24,13 @@ exports.generatePrintablePendingReportInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const pendingItems = await applicationContext
+    .getUseCaseHelpers()
+    .fetchPendingItems({ applicationContext, caseId, judge });
+
+  console.log(pendingItems);
+
   return await applicationContext
     .getUseCaseHelpers()
-    .generatePendingReportPdf({ applicationContext, caseId, judge });
+    .generatePendingReportPdf({ applicationContext, cases: pendingItems });
 };
