@@ -178,8 +178,6 @@ export const documentDetailHelper = (get, applicationContext) => {
     showConfirmEditOrder: isSigned && isOrder,
     showDocumentInfoTab,
     showDocumentViewerTopMargin,
-    showEditDocketEntry:
-      permissions.DOCKET_ENTRY && formattedDocument.isPetition === false,
     showPrintCaseConfirmationButton,
     showRecallButton,
     showRemoveSignature: isOrder && isSigned,

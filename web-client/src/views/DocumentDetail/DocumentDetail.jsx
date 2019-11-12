@@ -177,17 +177,6 @@ export const DocumentDetail = connect(
               </Button>
             )}
 
-            {documentDetailHelper.showEditDocketEntry && (
-              <Button
-                link
-                className="margin-right-0 padding-bottom-0"
-                href={`/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/edit`}
-              >
-                <FontAwesomeIcon icon={['fas', 'edit']} />
-                Edit
-              </Button>
-            )}
-
             {documentDetailHelper.showServeToIrsButton && (
               <Button
                 className="serve-to-irs margin-right-0"
