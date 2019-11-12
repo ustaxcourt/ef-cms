@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CancelDraftDocumentModal } from '../CancelDraftDocumentModal';
 import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { Inclusions } from '../AddDocketEntry/Inclusions';
@@ -94,6 +95,8 @@ export const AddCourtIssuedDocketEntry = connect(
                     }}
                   />
                 </FormGroup>
+
+                <CourtIssuedNonstandardForm />
 
                 <FormGroup errorText={validationErrors.freeText}>
                   <label
