@@ -15,7 +15,7 @@ export const PendingReportList = connect(
         <div className="ustc-table--filters">
           <BindedSelect
             ariaLabel="judge"
-            bind="screenMetadata.pendingItemsFilters.judge.userId"
+            bind="screenMetadata.pendingItemsFilters.judge"
             className="select-right"
             id="judgeFilter"
             name="judge"
