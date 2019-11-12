@@ -32,6 +32,7 @@ exports.MOCK_DOCUMENTS = [
     documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     documentTitle: 'Proposed Stipulated Decision',
     documentType: 'Proposed Stipulated Decision',
+    eventCode: 'PSDEC',
     processingStatus: 'pending',
     userId: 'petitioner',
     workItems: [],
