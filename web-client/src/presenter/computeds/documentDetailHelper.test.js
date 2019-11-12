@@ -130,6 +130,9 @@ describe('document detail helper', () => {
     const result = runCompute(documentDetailHelper, {
       state: {
         ...getBaseState(user),
+        permissions: {
+          COURT_ISSUED_DOCUMENT: true,
+        },
         caseDetail: {
           documents: [
             {
@@ -436,6 +439,9 @@ describe('document detail helper', () => {
       const result = runCompute(documentDetailHelper, {
         state: {
           ...getBaseState(user),
+          permissions: {
+            SERVE_DOCUMENT: false,
+          },
           caseDetail: {
             documents: [
               {
