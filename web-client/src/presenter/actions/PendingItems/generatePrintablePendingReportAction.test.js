@@ -29,7 +29,7 @@ describe('generatePrintablePendingReportAction', () => {
 
     expect(generatePrintablePendingReportInteractorMock).toHaveBeenCalled();
     expect(result.output).toEqual({
-      url: resultUrl,
+      pdfUrl: resultUrl,
     });
   });
 
@@ -44,7 +44,7 @@ describe('generatePrintablePendingReportAction', () => {
 
     expect(generatePrintablePendingReportInteractorMock).toHaveBeenCalled();
     expect(result.output).toEqual({
-      url: resultUrl,
+      pdfUrl: resultUrl,
     });
   });
 
@@ -59,7 +59,7 @@ describe('generatePrintablePendingReportAction', () => {
 
     expect(generatePrintablePendingReportInteractorMock).toHaveBeenCalled();
     expect(result.output).toEqual({
-      url: resultUrl,
+      pdfUrl: resultUrl,
     });
   });
 });
