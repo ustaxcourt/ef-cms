@@ -14,7 +14,7 @@ exports.generatePrintablePendingReportInteractor = ({
   caseId,
   judge,
 }) => {
-  var queryString = '';
+  let queryString = '';
 
   if (caseId) {
     queryString = '?caseId=' + encodeURIComponent(caseId);
