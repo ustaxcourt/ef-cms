@@ -62,12 +62,10 @@ export const addToTrialSessionModalHelper = (get, applicationContext) => {
       ).sort();
 
       trialSessionStatesSorted.forEach(stateName => {
-        trialSessionsFormattedByState[
-          stateName
-        ] = sortBy(trialSessionsFormattedByState[stateName], [
-          'trialLocation',
-          'startDate',
-        ]);
+        trialSessionsFormattedByState[stateName] = sortBy(
+          trialSessionsFormattedByState[stateName],
+          ['trialLocation', 'startDate'],
+        );
       });
       trialSessionsFormatted = null;
     } else {
