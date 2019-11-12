@@ -35,8 +35,6 @@ if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"
 fi
 
-echo "run dir is '$RUN_DIR'"
-
 # set common arguments used by sls below (appearing as "$@")
 set -- \
   --accountId noop \
