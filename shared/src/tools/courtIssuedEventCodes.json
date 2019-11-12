@@ -1,190 +1,284 @@
 [
   {
     "eventCode": "O",
-    "display": "O - Order"
+    "documentType": "O - Order",
+    "concatenatedDocketEntry": "Order [Anything]",
+    "scenario": "Type A"
   },
   {
     "eventCode": "O5",
-    "display": "O5 - Order"
+    "documentType": "O5 - Order",
+    "concatenatedDocketEntry": "Order [Anything]",
+    "scenario": "Type A"
   },
   {
     "eventCode": "OAJ",
-    "display": "OAJ - Order that case is assigned"
+    "documentType": "OAJ - Order that case is assigned",
+    "concatenatedDocketEntry": "Order [Judge Name] [Anything]",
+    "scenario": "Type B"
   },
   {
     "eventCode": "OAL",
-    "display": "OAL - Order that the letter \"L\" is added to Docket Number"
+    "documentType": "OAL - Order that the letter \"L\" is added to Docket Number",
+    "concatenatedDocketEntry": "Order that the letter \"L\" is added to Docket Number [Anything]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "OAP",
-    "display": "OAP - Order for Amended Petition"
+    "documentType": "OAP - Order for Amended Petition",
+    "concatenatedDocketEntry": "Order for Amended Petition on [Date] [Anything]",
+    "scenario": "Type D"
   },
   {
     "eventCode": "OAPF",
-    "display": "OAPF - Order for Amended Petition and Filing Fee"
+    "documentType": "OAPF - Order for Amended Petition and Filing Fee",
+    "concatenatedDocketEntry": "Order for Amended Petition and Filing Fee on [Date] [Anything]",
+    "scenario": "Type D"
   },
   {
     "eventCode": "OAPW",
-    "display": "OAPW - Order for Amended Petition and Filing Fee"
+    "documentType": "OAPW - Order for Amended Petition and Filing Fee",
+    "concatenatedDocketEntry": "Order for Amended Petition and Filing Fee on [Date] [Anything]",
+    "scenario": "Type D"
   },
   {
     "eventCode": "OAR",
-    "display": "OAR - Order that the letter \"R\" is added to the Docket Number"
+    "documentType": "OAR - Order that the letter \"R\" is added to the Docket Number",
+    "concatenatedDocketEntry": "Order that the letter \"R\" is added to the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "OAS",
-    "display": "OAS - Order that the letter \"S\" is added to the Docket Number"
+    "documentType": "OAS - Order that the letter \"S\" is added to the Docket Number",
+    "concatenatedDocketEntry": "Order that the letter \"S\" is added to the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "OASL",
-    "display": "OASL - Order that the letters \"SL\" are added to the Docket Number"
+    "documentType": "OASL - Order that the letters \"SL\" are added to the Docket Number",
+    "concatenatedDocketEntry": "Order that the letters \"SL\" are added to the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "OAW",
-    "display": "OAW - Order that the letter \"W\" is added to the Docket Number"
+    "documentType": "OAW - Order that the letter \"W\" is added to the Docket Number",
+    "concatenatedDocketEntry": "Order that the letter \"W\" is added to the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "OAX",
-    "display": "OAX - Order that the letter \"X\" is added to the Docket Number"
+    "documentType": "OAX - Order that the letter \"X\" is added to the Docket Number",
+    "concatenatedDocketEntry": "Order that the letter \"X\" is added to the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "OCA",
-    "display": "OCA - Order that caption of case is amended"
+    "documentType": "OCA - Order that caption of case is amended",
+    "concatenatedDocketEntry": "Order that caption of case is amended [Anything]",
+    "scenario": "Type A"
   },
   {
     "eventCode": "OCD",
-    "display": "OCD - Order"
+    "documentType": "OCD - Order",
+    "concatenatedDocketEntry": "Order [Anything]",
+    "scenario": "Type A"
   },
   {
     "eventCode": "OD",
-    "display": "OD - Order of Dismissal Entered,"
+    "documentType": "OD - Order of Dismissal Entered,",
+    "concatenatedDocketEntry": "Order of Dismissal Entered, [Judge Name] [Anything]",
+    "scenario": "Type B"
   },
   {
     "eventCode": "ODD",
-    "display": "ODD - Order of Dismissal and Decision Entered,"
+    "documentType": "ODD - Order of Dismissal and Decision Entered,",
+    "concatenatedDocketEntry": "Order of Dismissal and Decision Entered, [Judge Name] [Anything]",
+    "scenario": "Type B"
   },
   {
     "eventCode": "ODL",
-    "display": "ODL - Order that the letter \"L\" is deleted from the Docket Number"
+    "documentType": "ODL - Order that the letter \"L\" is deleted from the Docket Number",
+    "concatenatedDocketEntry": "Order that the letter \"L\" is deleted from the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "ODP",
-    "display": "ODP - Order that the letter \"P\" is deleted from the Docket Number"
+    "documentType": "ODP - Order that the letter \"P\" is deleted from the Docket Number",
+    "concatenatedDocketEntry": "Order that the letter \"P\" is deleted from the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "ODR",
-    "display": "ODR - Order that the letter \"R\" is deleted from the Docket Number"
+    "documentType": "ODR - Order that the letter \"R\" is deleted from the Docket Number",
+    "concatenatedDocketEntry": "Order that the letter \"R\" is deleted from the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "ODS",
-    "display": "ODS - Order that the letter \"S\" is deleted from the Docket Number"
+    "documentType": "ODS - Order that the letter \"S\" is deleted from the Docket Number",
+    "concatenatedDocketEntry": "Order that the letter \"S\" is deleted from the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "ODSL",
-    "display": "ODSL - Order that the letters \"SL\" are deleted from the Docket Number"
+    "documentType": "ODSL - Order that the letters \"SL\" are deleted from the Docket Number",
+    "concatenatedDocketEntry": "Order that the letters \"SL\" are deleted from the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "ODW",
-    "display": "ODW - Order that the letter \"W\" is deleted from the Docket Number"
+    "documentType": "ODW - Order that the letter \"W\" is deleted from the Docket Number",
+    "concatenatedDocketEntry": "Order that the letter \"W\" is deleted from the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "ODX",
-    "display": "ODX - Order that the letter \"X\" is deleted from the Docket Number"
+    "documentType": "ODX - Order that the letter \"X\" is deleted from the Docket Number",
+    "concatenatedDocketEntry": "Order that the letter \"X\" is deleted from the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "OF",
-    "display": "OF - Order for Filing Fee"
+    "documentType": "OF - Order for Filing Fee",
+    "concatenatedDocketEntry": "Order for Filing Fee on [Date] [Anything]",
+    "scenario": "Type D"
   },
   {
     "eventCode": "OFAB",
-    "display": "OFAB - Order fixing amount of bond"
+    "documentType": "OFAB - Order fixing amount of bond",
+    "concatenatedDocketEntry": "Order fixing amount of bond at [Anything]",
+    "scenario": "Type A"
   },
   {
     "eventCode": "OFFX",
-    "display": "OFFX - Order time is extended for petr(s) to pay the filing fee"
+    "documentType": "OFFX - Order time is extended for petr(s) to pay the filing fee",
+    "concatenatedDocketEntry": "Order time is extended to [Date] for petr(s) to pay the filing fee",
+    "scenario": "Type E"
   },
   {
     "eventCode": "OFW",
-    "display": "OFW - Order for Filing Fee"
+    "documentType": "OFW - Order for Filing Fee",
+    "concatenatedDocketEntry": "Order for Filing Fee on [Date] [Anything]",
+    "scenario": "Type D"
   },
   {
     "eventCode": "OFWD",
-    "display": "OFWD - Order for Filing Fee. Application waiver of Filing Fee is denied."
+    "documentType": "OFWD - Order for Filing Fee. Application waiver of Filing Fee is denied.",
+    "concatenatedDocketEntry": "Order for Filing Fee on [Date]. Application waiver of Filing Fee is denied.",
+    "scenario": "Type E"
   },
   {
     "eventCode": "OFX",
-    "display": "OFX - Order time is extended for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee"
+    "documentType": "OFX - Order time is extended for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee",
+    "concatenatedDocketEntry": "Order time is extended to [Date] for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee",
+    "scenario": "Type E"
   },
   {
     "eventCode": "OIP",
-    "display": "OIP - Order that the letter \"P\" is added to the Docket Number"
+    "documentType": "OIP - Order that the letter \"P\" is added to the Docket Number",
+    "concatenatedDocketEntry": "Order that the letter \"P\" is added to the Docket Number [Docket Number]",
+    "scenario": "Type C"
   },
   {
     "eventCode": "OJR",
-    "display": "OJR - Order that jurisdiction is retained"
+    "documentType": "OJR - Order that jurisdiction is retained",
+    "concatenatedDocketEntry": "Order that jurisdiction is retained by [Judge Name] [Anything]",
+    "scenario": "Type B"
   },
   {
     "eventCode": "OODS",
-    "display": "OODS - Order for Ownership Disclosure Statement"
+    "documentType": "OODS - Order for Ownership Disclosure Statement",
+    "concatenatedDocketEntry": "Order for Ownership Disclosure Statement by [Date]",
+    "scenario": "Type E"
   },
   {
     "eventCode": "OPFX",
-    "display": "OPFX - Order time is extended for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee"
+    "documentType": "OPFX - Order time is extended for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee",
+    "concatenatedDocketEntry": "Order time is extended to [Date] for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee",
+    "scenario": "Type E"
   },
   {
     "eventCode": "OPX",
-    "display": "OPX - Order time is extended for petr(s) to file Amended Petition"
+    "documentType": "OPX - Order time is extended for petr(s) to file Amended Petition",
+    "concatenatedDocketEntry": "Order time is extended to [Date] for petr(s) to file Amended Petition",
+    "scenario": "Type E"
   },
   {
     "eventCode": "ORAP",
-    "display": "ORAP - Order for Amendment to Petition"
+    "documentType": "ORAP - Order for Amendment to Petition",
+    "concatenatedDocketEntry": "Order for Amendment to Petition by [Date] [Anything]",
+    "scenario": "Type D"
   },
   {
     "eventCode": "OROP",
-    "display": "OROP - Order for Ratification of Petition"
+    "documentType": "OROP - Order for Ratification of Petition",
+    "concatenatedDocketEntry": "Order for Ratification of Petition by [Date] [Anything]",
+    "scenario": "Type D"
   },
   {
     "eventCode": "OSC",
-    "display": "OSC - Order"
+    "documentType": "OSC - Order",
+    "concatenatedDocketEntry": "Order [Anything]",
+    "scenario": "Type A"
   },
   {
     "eventCode": "OSCP",
-    "display": "OSCP - Order petr(s) to show cause why \"S\" should not be removed"
+    "documentType": "OSCP - Order petr(s) to show cause why \"S\" should not be removed",
+    "concatenatedDocketEntry": "OSCP - Order petr(s) by [Date] to show cause why \"S\" should not be removed [Anything]",
+    "scenario": "Type D"
   },
   {
     "eventCode": "OST",
-    "display": "OST - Order of Service of Transcript (Bench Opinion)"
+    "documentType": "OST - Order of Service of Transcript (Bench Opinion)",
+    "concatenatedDocketEntry": "Order of Service of Transcript (Bench Opinion) [Anything]",
+    "scenario": "Type A"
   },
   {
     "eventCode": "OST5",
-    "display": "OST5 - Order of Service of Transcript (Bench Opinion)"
+    "documentType": "OST5 - Order of Service of Transcript (Bench Opinion)",
+    "concatenatedDocketEntry": "Order of Service of Transcript (Bench Opinion) [Anything]",
+    "scenario": "Type A"
   },
   {
     "eventCode": "OSUB",
-    "display": "OSUB - Order that case is submitted"
+    "documentType": "OSUB - Order that case is submitted",
+    "concatenatedDocketEntry": "Order that case is submitted to [Judge Name] [Anything]",
+    "scenario": "Type B"
   },
   {
     "eventCode": "OVBA",
-    "display": "OVBA - Order"
+    "documentType": "OVBA - Order",
+    "concatenatedDocketEntry": "Order [Anything]",
+    "scenario": "Type A"
   },
   {
     "eventCode": "OVD",
-    "display": "OVD - Order"
+    "documentType": "OVD - Order",
+    "concatenatedDocketEntry": "Order [Anything]",
+    "scenario": "Type A"
   },
   {
     "eventCode": "DEC",
-    "display": "DEC - Decision Entered,"
+    "documentType": "DEC - Decision Entered,",
+    "concatenatedDocketEntry": "Decision Entered, [Judge Name] [Anything]",
+    "scenario": "Type B"
   },
   {
     "eventCode": "OAD",
-    "display": "OAD - Order and Decision Entered,"
+    "documentType": "OAD - Order and Decision Entered,",
+    "concatenatedDocketEntry": "Order and Decision Entered, [Judge Name] [Anything]",
+    "scenario": "Type B"
   },
   {
     "eventCode": "ODJ",
-    "display": "ODJ - Order of Dismissal for Lack of Jurisdiction Entered,"
+    "documentType": "ODJ - Order of Dismissal for Lack of Jurisdiction Entered,",
+    "concatenatedDocketEntry": "Order of Dismissal for Lack of Jurisdiction Entered, [Judge Name] [Anything]",
+    "scenario": "Type B"
   },
   {
     "eventCode": "SDEC",
-    "display": "SDEC - Stipulated Decision Entered,"
+    "documentType": "SDEC - Stipulated Decision Entered,",
+    "concatenatedDocketEntry": "Stipulated Decision Entered, [Judge Name] [Anything]",
+    "scenario": "Type B"
   }
 ]
