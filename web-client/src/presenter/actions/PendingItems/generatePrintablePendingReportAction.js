@@ -21,9 +21,9 @@ export const generatePrintablePendingReportAction = async ({
     params.judge = judgeFilter;
   }
 
-  const url = await applicationContext
+  const pdfUrl = await applicationContext
     .getUseCases()
     .generatePrintablePendingReportInteractor(params);
 
-  return { url };
+  return { pdfUrl };
 };
