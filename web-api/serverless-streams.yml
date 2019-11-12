@@ -88,6 +88,7 @@ provider:
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   elasticsearchEndpoint: ${opt:elasticsearch_endpoint}
@@ -122,13 +123,13 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/streamsHandlers.js
+    - web-api/${self:provider.dir}/streamsHandlers.js
 
   excludeDevDependencies: true
 
 functions:
   processStreamRecords:
-    handler: web-api/src/streamsHandlers.processStreamRecordsLambda
+    handler: web-api/${self:provider.dir}/streamsHandlers.processStreamRecordsLambda
     events:
       - stream:
           type: dynamodb

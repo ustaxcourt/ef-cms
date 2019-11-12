@@ -82,6 +82,7 @@ provider:
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -112,7 +113,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/trialSessionsHandlers.js
+    - web-api/${self:provider.dir}/trialSessionsHandlers.js
 
   excludeDevDependencies: true
 
@@ -152,7 +153,7 @@ resources:
 
 functions:
   getTrialSessions:
-    handler: web-api/src/trialSessionsHandlers.getTrialSessionsLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.getTrialSessionsLambda
     events:
       - http:
           path: /
@@ -163,7 +164,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
   createTrialSession:
-    handler: web-api/src/trialSessionsHandlers.createTrialSessionLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.createTrialSessionLambda
     events:
       - http:
           path: /
@@ -175,7 +176,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getTrialSessionDetails:
-    handler: web-api/src/trialSessionsHandlers.getTrialSessionDetailsLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.getTrialSessionDetailsLambda
     events:
       - http:
           path: /{trialSessionId}
@@ -187,7 +188,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   setTrialSessionAsSwingSession:
-    handler: web-api/src/trialSessionsHandlers.setTrialSessionAsSwingSessionLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.setTrialSessionAsSwingSessionLambda
     events:
       - http:
           path: /{trialSessionId}/set-swing-session
@@ -199,7 +200,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getEligibleCasesForTrialSession:
-    handler: web-api/src/trialSessionsHandlers.getEligibleCasesForTrialSessionLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.getEligibleCasesForTrialSessionLambda
     events:
       - http:
           path: /{trialSessionId}/eligible-cases
@@ -211,7 +212,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   setTrialSessionCalendar:
-    handler: web-api/src/trialSessionsHandlers.setTrialSessionCalendarLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.setTrialSessionCalendarLambda
     events:
       - http:
           path: /{trialSessionId}/set-calendar
@@ -222,7 +223,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
   getCalendaredCasesForTrialSession:
-    handler: web-api/src/trialSessionsHandlers.getCalendaredCasesForTrialSessionLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.getCalendaredCasesForTrialSessionLambda
     events:
       - http:
           path: /{trialSessionId}/get-calendared-cases
@@ -234,7 +235,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getTrialSessionWorkingCopy:
-    handler: web-api/src/trialSessionsHandlers.getTrialSessionWorkingCopyLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.getTrialSessionWorkingCopyLambda
     events:
       - http:
           path: /{trialSessionId}/working-copy
@@ -246,7 +247,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateTrialSessionWorkingCopy:
-    handler: web-api/src/trialSessionsHandlers.updateTrialSessionWorkingCopyLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.updateTrialSessionWorkingCopyLambda
     events:
       - http:
           path: /{trialSessionId}/working-copy
@@ -258,7 +259,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   batchDownloadTrialSession:
-    handler: web-api/src/trialSessionsHandlers.batchDownloadTrialSessionLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.batchDownloadTrialSessionLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -271,7 +272,7 @@ functions:
           cors: true
 
   removeCaseFromTrial:
-    handler: web-api/src/trialSessionsHandlers.removeCaseFromTrialLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.removeCaseFromTrialLambda
     events:
       - http:
           path: /{trialSessionId}/remove-case/{caseId}
@@ -283,7 +284,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   addCaseToTrialSession:
-    handler: web-api/src/trialSessionsHandlers.addCaseToTrialSessionLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.addCaseToTrialSessionLambda
     events:
       - http:
           path: /{trialSessionId}/cases/{caseId}
@@ -295,7 +296,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   runTrialSessionPlanningReport:
-    handler: web-api/src/trialSessionsHandlers.runTrialSessionPlanningReportLambda
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.runTrialSessionPlanningReportLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
