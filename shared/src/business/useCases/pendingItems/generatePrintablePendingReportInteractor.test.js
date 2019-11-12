@@ -5,6 +5,7 @@ const { User } = require('../../entities/User');
 
 describe('generatePrintablePendingReportInteractor', () => {
   let generatePendingReportPdfSpy;
+  let fetchPendingItemsSpy;
 
   const applicationContext = {
     environment: { stage: 'local' },
@@ -15,12 +16,14 @@ describe('generatePrintablePendingReportInteractor', () => {
       };
     },
     getUseCaseHelpers: () => ({
+      fetchPendingItems: fetchPendingItemsSpy,
       generatePendingReportPdf: generatePendingReportPdfSpy,
     }),
   };
 
   it('calls fetch function and return result', async () => {
     generatePendingReportPdfSpy = jest.fn(() => 'https://some.url');
+    fetchPendingItemsSpy = jest.fn(() => []);
 
     const results = await generatePrintablePendingReportInteractor({
       applicationContext,
