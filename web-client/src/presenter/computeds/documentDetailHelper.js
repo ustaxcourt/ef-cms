@@ -148,9 +148,9 @@ export const documentDetailHelper = (get, applicationContext) => {
 
   const showDocumentViewerTopMargin =
     !showServeDocumentButton &&
-    (!showSignDocumentButton &&
-      (!newOrRecalledStatus.includes(caseDetail.status) ||
-        !formattedDocument.isPetition));
+    !showSignDocumentButton &&
+    (!newOrRecalledStatus.includes(caseDetail.status) ||
+      !formattedDocument.isPetition);
 
   const showViewOrdersNeededButton =
     ((document && document.status === 'served') ||
