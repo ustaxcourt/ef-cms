@@ -8,6 +8,7 @@ import React from 'react';
 
 export const CaseDetailPendingReportList = connect(
   {
+    formattedCaseDetail: state.formattedCaseDetail,
     openConfirmRemoveCaseDetailPendingItemModalSequence:
       sequences.openConfirmRemoveCaseDetailPendingItemModalSequence,
     pendingItemsDocketEntries:
@@ -15,6 +16,7 @@ export const CaseDetailPendingReportList = connect(
     showModal: state.showModal,
   },
   ({
+    formattedCaseDetail,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     pendingItemsDocketEntries,
     showModal,
@@ -25,8 +27,8 @@ export const CaseDetailPendingReportList = connect(
           <Button
             link
             className="push-right margin-top-2"
+            href={`/case-detail/${formattedCaseDetail.docketNumber}/pending-report`}
             icon="print"
-            onClick={() => true}
           >
             Print Report
           </Button>

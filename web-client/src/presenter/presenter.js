@@ -86,6 +86,7 @@ import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence
 import { gotoPrimaryContactEditSequence } from './sequences/gotoPrimaryContactEditSequence';
 import { gotoPrintableCaseConfirmationSequence } from './sequences/gotoPrintableCaseConfirmationSequence';
 import { gotoPrintableDocketRecordSequence } from './sequences/gotoPrintableDocketRecordSequence';
+import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePendingReportSequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoSelectDocumentTypeSequence } from './sequences/gotoSelectDocumentTypeSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
@@ -396,6 +397,7 @@ export const presenter = {
     gotoPrimaryContactEditSequence,
     gotoPrintableCaseConfirmationSequence,
     gotoPrintableDocketRecordSequence,
+    gotoPrintablePendingReportSequence,
     gotoRequestAccessSequence,
     gotoSelectDocumentTypeSequence,
     gotoSignOrderSequence,

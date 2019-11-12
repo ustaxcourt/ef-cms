@@ -53,6 +53,10 @@ module.exports = {
     'jsdoc/require-returns': 1,
     'jsdoc/valid-types': 1,
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
+    'no-warning-comments': [
+      'error',
+      { terms: ['fixme', 'xxx'], location: 'anywhere' },
+    ],
     'prettier/prettier': 'error',
     quotes: ['error', 'single', { avoidEscape: true }],
     'jsx-a11y/anchor-is-valid': [
