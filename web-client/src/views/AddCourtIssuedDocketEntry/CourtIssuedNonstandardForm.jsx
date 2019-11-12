@@ -29,13 +29,6 @@ export const CourtIssuedNonstandardForm = connect(
               </legend>
               <div className="usa-memorable-date">
                 <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                  <label
-                    aria-hidden="true"
-                    className="usa-label"
-                    htmlFor="date-month"
-                  >
-                    MM
-                  </label>
                   <input
                     aria-describedby="date-legend"
                     aria-label="month, two digits"
@@ -44,6 +37,7 @@ export const CourtIssuedNonstandardForm = connect(
                     max="12"
                     min="1"
                     name="month"
+                    placeholder="MM"
                     type="number"
                     value={form.month || ''}
                     onBlur={() => {}}
@@ -56,13 +50,6 @@ export const CourtIssuedNonstandardForm = connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                  <label
-                    aria-hidden="true"
-                    className="usa-label"
-                    htmlFor="date-day"
-                  >
-                    DD
-                  </label>
                   <input
                     aria-describedby="date-legend"
                     aria-label="day, two digits"
@@ -71,6 +58,7 @@ export const CourtIssuedNonstandardForm = connect(
                     max="31"
                     min="1"
                     name="day"
+                    placeholder="DD"
                     type="number"
                     value={form.day || ''}
                     onBlur={() => {}}
@@ -83,13 +71,6 @@ export const CourtIssuedNonstandardForm = connect(
                   />
                 </div>
                 <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                  <label
-                    aria-hidden="true"
-                    className="usa-label"
-                    htmlFor="date-year"
-                  >
-                    YYYY
-                  </label>
                   <input
                     aria-describedby="date-legend"
                     aria-label="year, four digits"
@@ -98,6 +79,7 @@ export const CourtIssuedNonstandardForm = connect(
                     max="2100"
                     min="1900"
                     name="year"
+                    placeholder="YYYY"
                     type="number"
                     value={form.year || ''}
                     onBlur={() => {}}
