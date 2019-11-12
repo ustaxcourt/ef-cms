@@ -115,8 +115,7 @@ exports.fetchPendingItems = async ({ applicationContext, judge }) => {
       ],
       query: {
         bool: {
-          must: [{ match: { 'blocked.BOOL': false } }],
-          // must: [{ match: { 'hasPendingItems.BOOL': true } }],
+          must: [{ match: { 'hasPendingItems.BOOL': true } }],
         },
       },
       size: 5000,

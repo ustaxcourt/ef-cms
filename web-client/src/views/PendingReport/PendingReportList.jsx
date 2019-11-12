@@ -1,5 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -21,8 +22,8 @@ export const PendingReportList = connect(
           >
             <option value="">Filter by Judge</option>
             {formattedPendingItems.judges.map((judge, idx) => (
-              <option key={idx} value={judge.userId}>
-                {judge.name}
+              <option key={idx} value={judge}>
+                {judge}
               </option>
             ))}
           </BindedSelect>
@@ -40,7 +41,7 @@ export const PendingReportList = connect(
               <th>Case Name</th>
               <th>Filings &amp; proceedings</th>
               <th>Case Status</th>
-              <th>Judge (sortable)</th>
+              <th>Judge</th>
             </tr>
           </thead>
           {formattedPendingItems.items.map((item, idx) => (
@@ -53,13 +54,13 @@ export const PendingReportList = connect(
                 <td>{item.caseCaptionNames}</td>
                 <td>
                   {/* <FilingsAndProceedings
-                    arrayIndex={arrayIndex}
+                    arrayIndex={idx}
                     document={document}
-                    record={record}
+                    record={item}
                   /> */}
                 </td>
-                <td>{item.caseStatus}</td>
-                <td>{item.associatedJudge}</td>
+                <td>{item.status}</td>
+                <td>{item.associatedJudgeFormatted}</td>
               </tr>
             </tbody>
           ))}

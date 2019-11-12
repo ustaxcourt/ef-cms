@@ -1,14 +1,28 @@
+import { formatSearchResultRecord } from './advancedSearchHelper';
 import { sortedUniq } from 'lodash';
 import { state } from 'cerebral';
 
-export const formattedPendingItems = (get, applicationContext) => {
-  // const { formatCase } = applicationContext.getUtilities();
+export const formatPendingItem = (item, { applicationContext }) => {
+  console.log(item);
+  const result = formatSearchResultRecord(item, { applicationContext });
+  result.formattedFiledDate = applicationContext
+    .getUtilities()
+    .formatDateString(result.receivedAt || result.createdAt, 'MMDDYY');
+  result.associatedJudgeFormatted = result.associatedJudge.replace(
+    /^Judge\s+/,
+    '',
+  );
+  return result;
+};
 
-  const pendingItems = get(state.pendingItems);
-  const judges = sortedUniq(pendingItems.map(i => i.associatedJudge).sort());
+export const formattedPendingItems = (get, applicationContext) => {
+  const items = get(state.pendingItems).map(item =>
+    formatPendingItem(item, { applicationContext }),
+  );
+  const judges = sortedUniq(items.map(i => i.associatedJudgeFormatted).sort());
 
   const result = {
-    items: pendingItems, // formatCase(applicationContext, pendingItems),
+    items,
     judges,
   };
 
