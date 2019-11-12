@@ -54,7 +54,11 @@ export const AddCourtIssuedDocketEntry = connect(
             <div className="grid-col-5">
               <div className="blue-container">
                 <FormGroup errorText={validationErrors.documentType}>
-                  <label className="usa-label" htmlFor="document-type">
+                  <label
+                    className="usa-label"
+                    htmlFor="document-type"
+                    id="document-type-label"
+                  >
                     Document Type
                   </label>
                   <Select
@@ -92,12 +96,17 @@ export const AddCourtIssuedDocketEntry = connect(
                 </FormGroup>
 
                 <FormGroup errorText={validationErrors.freeText}>
-                  <label className="usa-label" htmlFor="freeText">
+                  <label
+                    className="usa-label"
+                    htmlFor="freeText"
+                    id="free-text"
+                  >
                     What is this order for?
                   </label>
 
                   <input
-                    aria-describedby="freeText for order"
+                    aria-describedby="free-text"
+                    aria-label="freeText for order"
                     className="usa-input usa-input--inline"
                     id="freeText"
                     name="freeText"
