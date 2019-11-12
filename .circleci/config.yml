@@ -172,9 +172,6 @@ jobs:
           name: Setup Env
           command: echo "export ENV=$(./get-env.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
-          name: Setup Cloudwatch Arn
-          command: echo "export CLOUDWATCH_ROLE_ARN=$(./get-cloud-watch-arn.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-      - run:
           name: Setup Post Confirmation Arn
           command: echo "export POST_CONFIRMATION_ROLE_ARN=$(./get-post-confirmation-role-arn.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
