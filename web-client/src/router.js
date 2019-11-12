@@ -348,7 +348,8 @@ const router = {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Case Confirmation`,
         );
-        app.getSequence('gotoPrintableCaseDetailPendingReportSequence')({
+        app.getSequence('gotoPrintablePendingReportSequence')({
+          caseIdFilter: true,
           docketNumber,
         });
       }),
