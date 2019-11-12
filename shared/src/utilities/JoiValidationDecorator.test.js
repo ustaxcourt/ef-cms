@@ -54,11 +54,12 @@ joiValidationDecorator(MockEntity2, MockEntity2Schema, undefined, {
 describe('Joi Validation Decorator', () => {
   describe('validation errors with arrays', () => {
     it('returns validation errors', () => {
-      const validNested = new MockEntity1({
+      const mock1Properties = {
         favoriteNumber: 7,
         hasNickname: false,
         name: 'name',
-      });
+      };
+      const validNested = new MockEntity1(mock1Properties);
       const obj = new MockEntity2({
         arry1: [{ baz: validNested, foo: 'bar' }, {}],
         name: 'Name',
@@ -67,6 +68,8 @@ describe('Joi Validation Decorator', () => {
       expect(obj.isValid()).toBe(false);
       const errors = obj.getFormattedValidationErrors();
       expect(Object.keys(errors).length).not.toBe(0);
+      const rawEntity = validNested.toRawObject();
+      expect(rawEntity).toEqual(mock1Properties);
     });
 
     it('returns default validation error for field without formatted string in errorToMessageMap', () => {
