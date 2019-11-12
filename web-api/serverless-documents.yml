@@ -82,6 +82,7 @@ provider:
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -111,7 +112,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/documentsHandlers.js
+    - web-api/${self:provider.dir}/documentsHandlers.js
 
   excludeDevDependencies: true
 
@@ -151,7 +152,7 @@ resources:
 
 functions:
   getDownloadPolicyUrl:
-    handler: web-api/src/documentsHandlers.downloadPolicyUrlLambda
+    handler: web-api/${self:provider.dir}/documentsHandlers.downloadPolicyUrlLambda
     events:
       - http:
           path: /{documentId}/download-policy-url
@@ -163,7 +164,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   validate:
-    handler: web-api/src/documentsHandlers.validatePdfLambda
+    handler: web-api/${self:provider.dir}/documentsHandlers.validatePdfLambda
     events:
       - http:
           path: /{documentId}/validate
@@ -173,7 +174,7 @@ functions:
       - errorExceptions
 
   getUploadPolicy:
-    handler: web-api/src/documentsHandlers.getUploadPolicyLambda
+    handler: web-api/${self:provider.dir}/documentsHandlers.getUploadPolicyLambda
     events:
       - http:
           path: /{documentId}/upload-policy
@@ -185,7 +186,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentDownloadUrl:
-    handler: web-api/src/documentsHandlers.getDocumentDownloadUrlLambda
+    handler: web-api/${self:provider.dir}/documentsHandlers.getDocumentDownloadUrlLambda
     events:
       - http:
           path: /{documentId}/document-download-url
@@ -193,7 +194,7 @@ functions:
           cors: true
 
   generatePrintableFilingReceiptLambda:
-    handler: web-api/src/documentsHandlers.generatePrintableFilingReceiptLambda
+    handler: web-api/${self:provider.dir}/documentsHandlers.generatePrintableFilingReceiptLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -205,7 +206,7 @@ functions:
           cors: true
 
   virusScan:
-    handler: web-api/src/documentsHandlers.virusScanPdfLambda
+    handler: web-api/${self:provider.dir}/documentsHandlers.virusScanPdfLambda
     memorySize: 3008
     timeout: 900
     layers:
