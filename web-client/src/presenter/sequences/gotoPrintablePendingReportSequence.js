@@ -5,6 +5,7 @@ import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { setupPropsForPrintablePendingReportAction } from '../actions/PendingItems/setupPropsForPrintablePendingReportAction';
 import { state } from 'cerebral';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
@@ -13,6 +14,7 @@ export const gotoPrintablePendingReportSequence = [
   getCaseAction,
   setCaseAction,
   setBaseUrlAction,
+  setupPropsForPrintablePendingReportAction,
   generatePrintablePendingReportAction,
   setPdfPreviewUrlSequence,
   set(state.currentPage, 'PrintableDocketRecord'),
