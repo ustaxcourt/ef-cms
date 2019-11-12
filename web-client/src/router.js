@@ -323,6 +323,19 @@ const router = {
     );
 
     route(
+      '/case-detail/*/documents/*/add-court-issued-docket-entry',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
+        );
+        app.getSequence('gotoAddCourtIssuedDocketEntrySequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/printable-docket-record',
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Docket record`);

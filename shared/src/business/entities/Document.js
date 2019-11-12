@@ -1,3 +1,4 @@
+const courtIssuedEventCodes = require('../../tools/courtIssuedEventCodes.json');
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
 const joi = require('joi-browser');
@@ -359,3 +360,5 @@ Document.prototype.setAsProcessingStatusAsCompleted = function() {
 };
 
 exports.Document = Document;
+
+exports.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
