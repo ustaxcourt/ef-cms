@@ -32,7 +32,7 @@ exports.generatePrintablePendingReportInteractor = async ({
     .getUseCaseHelpers()
     .fetchPendingItems({ applicationContext, caseId, judge });
 
-  let reportTitle = 'Pending Report Unfiltered';
+  let reportTitle = 'Pending Report All Judges';
 
   if (judge) {
     reportTitle = `Pending Report Judge ${judge}`;
