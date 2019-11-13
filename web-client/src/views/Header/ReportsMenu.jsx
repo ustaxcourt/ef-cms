@@ -84,7 +84,7 @@ export const ReportsMenu = connect(
                   toggleMobileMenuSequence();
                 }}
               >
-                Pending report
+                Pending Report
               </a>
             </li>
           </ul>
