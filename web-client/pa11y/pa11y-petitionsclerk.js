@@ -252,6 +252,6 @@ module.exports = [
     ],
     notes: 'checks the trial session planning modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/&info=trial-session-planning-modal',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=trial-session-planning-modal',
   },
 ];
