@@ -208,11 +208,11 @@ describe('formattedTrialSessionDetails', () => {
           {
             ...MOCK_CASE,
             caseCaption: 'Someone Else, Petitioner',
+            disposition: 'omg',
             docketNumber: '101-16',
             docketNumberSuffix: 'S',
             removedFromTrial: true,
             removedFromTrialDate: '2019-03-01T21:40:46.415Z',
-            disposition: 'omg',
           },
         ],
       },

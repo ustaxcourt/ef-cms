@@ -19,8 +19,8 @@ describe('updateCaseAction', () => {
   it('should call the updateCaseTrialSortTags use case if case status is ready for trial', async () => {
     const caseDetail = {
       ...MOCK_CASE,
-      status: Case.STATUS_TYPES.generalDocketReadyForTrial,
       createdAt: '2019-03-01T21:40:46.415Z',
+      status: Case.STATUS_TYPES.generalDocketReadyForTrial,
     };
     updateCaseStub = sinon.stub().returns(caseDetail);
 
