@@ -466,6 +466,9 @@ const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
+  saveCaseDetailInternalEditInteractor,
+} = require('../../shared/src/business/useCases/saveCaseDetailInternalEditInteractor');
+const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
@@ -540,9 +543,6 @@ const {
 const {
   updateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor');
-const {
-  updateCaseInteractor,
-} = require('../../shared/src/business/useCases/updateCaseInteractor');
 const {
   updateCaseNote,
 } = require('../../shared/src/persistence/dynamo/caseNotes/updateCaseNote');
@@ -977,6 +977,7 @@ module.exports = (appContextUser = {}) => {
         removeCaseFromTrialInteractor,
         runBatchProcessInteractor,
         runTrialSessionPlanningReportInteractor,
+        saveCaseDetailInternalEditInteractor,
         saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
@@ -990,7 +991,6 @@ module.exports = (appContextUser = {}) => {
         unprioritizeCaseInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
-        updateCaseInteractor,
         updateCaseNoteInteractor,
         updateCaseTrialSortTagsInteractor,
         updateCounselOnCaseInteractor,
