@@ -7,7 +7,7 @@ import { ErrorNotification } from '../ErrorNotification';
 import { Inclusions } from '../AddDocketEntry/Inclusions';
 
 import {
-  docketEntryOnChange,
+  courtIssuedDocketEntryOnChange,
   onInputChange,
   reactSelectValue,
 } from '../../ustc-ui/utils/documentTypeSelectHelper';
@@ -26,7 +26,8 @@ export const AddCourtIssuedDocketEntry = connect(
     openCancelDraftDocumentModalSequence:
       sequences.openCancelDraftDocumentModalSequence,
     showModal: state.showModal,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updateCourtIssuedDocketEntryFormValueSequence:
+      sequences.updateCourtIssuedDocketEntryFormValueSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -34,24 +35,33 @@ export const AddCourtIssuedDocketEntry = connect(
     form,
     openCancelDraftDocumentModalSequence,
     showModal,
-    updateFormValueSequence,
+    updateCourtIssuedDocketEntryFormValueSequence,
     validationErrors,
   }) => {
     return (
       <>
         <CaseDetailHeader />
 
-        <section className="usa-section grid-container">
+        <section className="usa-section grid-container margin-top-5">
           <SuccessNotification />
           <ErrorNotification />
           <div className="grid-row grid-gap">
-            <div className="grid-col-12">
-              <Button className="float-right" onClick={() => {}}>
-                Serve to Parties
-              </Button>
+            <div className="grid-col-5">
               <h1 className="margin-bottom-105">Add Docket Entry</h1>
             </div>
-
+            <div className="grid-col-7">
+              <div className="display-flex flex-row flex-justify flex-align-center">
+                <p className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
+                  <span className="text-bold">Docket Entry Preview: </span>
+                  {form.generatedDocumentTitle}
+                </p>
+                <Button className="margin-right-0" onClick={() => {}}>
+                  Serve to Parties
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div className="grid-row grid-gap">
             <div className="grid-col-5">
               <div className="blue-container">
                 <FormGroup errorText={validationErrors.documentType}>
@@ -77,11 +87,11 @@ export const AddCourtIssuedDocketEntry = connect(
                       selectedEventCode: form.eventCode,
                     })}
                     onChange={(inputValue, { action, name }) => {
-                      docketEntryOnChange({
+                      courtIssuedDocketEntryOnChange({
                         action,
                         inputValue,
                         name,
-                        updateSequence: updateFormValueSequence,
+                        updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
                         validateSequence: () => {},
                       });
                       return true;
@@ -90,7 +100,7 @@ export const AddCourtIssuedDocketEntry = connect(
                       onInputChange({
                         action,
                         inputText,
-                        updateSequence: updateFormValueSequence,
+                        updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
                       });
                     }}
                   />
