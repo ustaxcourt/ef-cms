@@ -1,18 +1,8 @@
-const {
-  CourtIssuedDocumentNonStandardA,
-} = require('./CourtIssuedDocumentNonStandardA');
-const {
-  CourtIssuedDocumentNonStandardB,
-} = require('./CourtIssuedDocumentNonStandardB');
-const {
-  CourtIssuedDocumentNonStandardC,
-} = require('./CourtIssuedDocumentNonStandardC');
-const {
-  CourtIssuedDocumentNonStandardD,
-} = require('./CourtIssuedDocumentNonStandardD');
-const {
-  CourtIssuedDocumentNonStandardE,
-} = require('./CourtIssuedDocumentNonStandardE');
+const { CourtIssuedDocumentTypeA } = require('./CourtIssuedDocumentTypeA');
+const { CourtIssuedDocumentTypeB } = require('./CourtIssuedDocumentTypeB');
+const { CourtIssuedDocumentTypeC } = require('./CourtIssuedDocumentTypeC');
+const { CourtIssuedDocumentTypeD } = require('./CourtIssuedDocumentTypeD');
+const { CourtIssuedDocumentTypeE } = require('./CourtIssuedDocumentTypeE');
 
 /**
  *
@@ -29,16 +19,16 @@ CourtIssuedDocumentFactory.get = documentMetadata => {
   if (documentMetadata && documentMetadata.scenario) {
     const scenario = documentMetadata.scenario.toLowerCase().trim();
     switch (scenario) {
-      case 'nonstandard a':
-        return new CourtIssuedDocumentNonStandardA(documentMetadata);
-      case 'nonstandard b':
-        return new CourtIssuedDocumentNonStandardB(documentMetadata);
-      case 'nonstandard c':
-        return new CourtIssuedDocumentNonStandardC(documentMetadata);
-      case 'nonstandard d':
-        return new CourtIssuedDocumentNonStandardD(documentMetadata);
-      case 'nonstandard e':
-        return new CourtIssuedDocumentNonStandardE(documentMetadata);
+      case 'type a':
+        return new CourtIssuedDocumentTypeA(documentMetadata);
+      case 'type b':
+        return new CourtIssuedDocumentTypeB(documentMetadata);
+      case 'type c':
+        return new CourtIssuedDocumentTypeC(documentMetadata);
+      case 'type d':
+        return new CourtIssuedDocumentTypeD(documentMetadata);
+      case 'type e':
+        return new CourtIssuedDocumentTypeE(documentMetadata);
     }
   }
 };

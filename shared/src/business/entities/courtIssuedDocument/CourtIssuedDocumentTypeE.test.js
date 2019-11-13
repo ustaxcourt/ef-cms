@@ -1,16 +1,14 @@
 const moment = require('moment');
-const {
-  CourtIssuedDocumentNonStandardE,
-} = require('./CourtIssuedDocumentNonStandardE');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
+const { CourtIssuedDocumentTypeE } = require('./CourtIssuedDocumentTypeE');
 
-const { VALIDATION_ERROR_MESSAGES } = CourtIssuedDocumentNonStandardE;
+const { VALIDATION_ERROR_MESSAGES } = CourtIssuedDocumentTypeE;
 
-describe('CourtIssuedDocumentNonStandardE', () => {
+describe('CourtIssuedDocumentTypeE', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const document = CourtIssuedDocumentFactory.get({
-        scenario: 'Nonstandard E',
+        scenario: 'Type E',
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
@@ -30,7 +28,7 @@ describe('CourtIssuedDocumentNonStandardE', () => {
           'Order time is extended to [Date] for petr(s) to pay the filing fee',
         documentType:
           'Order time is extended for petr(s) to pay the filing fee',
-        scenario: 'Nonstandard E',
+        scenario: 'Type E',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         date: VALIDATION_ERROR_MESSAGES.date[0].message,
@@ -45,7 +43,7 @@ describe('CourtIssuedDocumentNonStandardE', () => {
           'Order time is extended to [Date] for petr(s) to pay the filing fee',
         documentType:
           'Order time is extended for petr(s) to pay the filing fee',
-        scenario: 'Nonstandard E',
+        scenario: 'Type E',
       });
       expect(document.getFormattedValidationErrors()).toEqual(null);
     });
@@ -60,7 +58,7 @@ describe('CourtIssuedDocumentNonStandardE', () => {
           'Order time is extended to [Date] for petr(s) to pay the filing fee',
         documentType:
           'Order time is extended for petr(s) to pay the filing fee',
-        scenario: 'Nonstandard E',
+        scenario: 'Type E',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
         'Order time is extended to 04-10-2012 for petr(s) to pay the filing fee',
