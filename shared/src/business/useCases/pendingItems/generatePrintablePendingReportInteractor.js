@@ -30,5 +30,5 @@ exports.generatePrintablePendingReportInteractor = async ({
 
   return await applicationContext
     .getUseCaseHelpers()
-    .generatePendingReportPdf({ applicationContext, cases: pendingItems });
+    .generatePendingReportPdf({ applicationContext, pendingItems });
 };
