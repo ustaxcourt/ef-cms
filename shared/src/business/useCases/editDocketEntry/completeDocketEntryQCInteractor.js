@@ -40,7 +40,7 @@ exports.completeDocketEntryQCInteractor = async ({
       caseId,
     });
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const currentDocument = caseEntity.getDocumentById({
     documentId,
@@ -122,10 +122,6 @@ exports.completeDocketEntryQCInteractor = async ({
         workItem: workItemToUpdate.validate().toRawObject(),
       });
   }
-
-  caseEntity = new Case(caseEntity.validate().toRawObject(), {
-    applicationContext,
-  });
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
