@@ -54,10 +54,10 @@ export const AddCourtIssuedDocketEntry = connect(
             </div>
             <div className="grid-col-7">
               <div className="display-flex flex-row flex-justify flex-align-center">
-                <p className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
+                <div className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
                   <span className="text-bold">Docket Entry Preview: </span>
                   {form.generatedDocumentTitle}
-                </p>
+                </div>
                 <Button className="margin-right-0" onClick={() => {}}>
                   Serve to Parties
                 </Button>
