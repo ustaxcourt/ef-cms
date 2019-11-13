@@ -42,21 +42,6 @@ table,
   }
 }
 
-.ustc-table--filters {
-  position: relative;
-  height: 3.5em;
-  .select-right {
-    position: absolute;
-    right: 0;
-    max-width: 220px;
-  }
-  .select-left {
-    position: absolute;
-    left: 0;
-    max-width: 220px;
-  }
-}
-
 .ustc-table /* TODO - eliminate work-queue rule? */ {
   th {
     border: 0;
