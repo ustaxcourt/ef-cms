@@ -405,23 +405,23 @@ describe('trial session working copy computed', () => {
               MOCK_CASE,
               {
                 ...MOCK_CASE,
-                status: Case.STATUS_TYPES.closed,
                 docketNumber: '102-19',
+                status: Case.STATUS_TYPES.closed,
               },
               {
                 ...MOCK_CASE,
-                status: Case.STATUS_TYPES.closed,
                 docketNumber: '5000-17',
+                status: Case.STATUS_TYPES.closed,
               },
               {
                 ...MOCK_CASE,
-                status: Case.STATUS_TYPES.closed,
                 docketNumber: '500-17',
+                status: Case.STATUS_TYPES.closed,
               },
               {
                 ...MOCK_CASE,
-                status: Case.STATUS_TYPES.closed,
                 docketNumber: '90-07',
+                status: Case.STATUS_TYPES.closed,
               },
             ],
           },
