@@ -18,9 +18,9 @@ export const CaseListPractitioner = connect(
         <table className="usa-table responsive-table dashboard" id="case-list">
           <thead>
             <tr>
-              <th>Docket Number</th>
-              <th>Case Name</th>
-              <th>Date Filed</th>
+              <th>Docket number</th>
+              <th>Case name</th>
+              <th>Date filed</th>
             </tr>
           </thead>
           <tbody>

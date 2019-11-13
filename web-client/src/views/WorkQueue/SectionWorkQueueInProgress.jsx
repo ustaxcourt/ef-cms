@@ -74,7 +74,7 @@ export const SectionWorkQueueInProgress = connect(
               <th>Case name</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
-              <th>Case Status</th>
+              <th>Case status</th>
               {workQueueHelper.showAssignedToColumn && (
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
               )}
