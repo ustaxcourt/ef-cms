@@ -1,32 +1,43 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
 export const PendingReportList = connect(
   {
-    pendingItemsFormatted: state.pendingItems,
-    users: state.users,
+    formattedPendingItems: state.formattedPendingItems,
   },
-  ({ pendingItemsFormatted, users }) => {
+  ({ formattedPendingItems }) => {
     return (
       <React.Fragment>
-        <div className="ustc-table--filters">
-          <BindedSelect
-            ariaLabel="judge"
-            bind="screenMetadata.pendingItemsFilters.judge.userId"
-            className="select-right"
-            id="judgeFilter"
-            name="judge"
-          >
-            <option value="">Filter by Judge</option>
-            {users.map((judge, idx) => (
-              <option key={idx} value={judge.userId}>
-                {judge.name}
-              </option>
-            ))}
-          </BindedSelect>
+        <div className="grid-row margin-bottom-2">
+          <div className="tablet:grid-col-7">
+            <div className="grid-row grid-gap">
+              <div className="grid-col-3 tablet:grid-col-2 padding-top-05">
+                <h3 id="filterHeading">Filter by</h3>
+              </div>
+              <div className="grid-col-3">
+                <BindedSelect
+                  ariaLabel="judge"
+                  bind="screenMetadata.pendingItemsFilters.judge"
+                  className="select-left"
+                  id="judgeFilter"
+                  name="judge"
+                  placeHolder="xyz"
+                >
+                  <option value="">- judge -</option>
+                  {formattedPendingItems.judges.map((judge, idx) => (
+                    <option key={idx} value={judge}>
+                      {judge}
+                    </option>
+                  ))}
+                </BindedSelect>
+              </div>
+            </div>
+          </div>
         </div>
+
         <table
           aria-describedby="judgeFilter"
           aria-label="pending items"
@@ -36,29 +47,37 @@ export const PendingReportList = connect(
           <thead>
             <tr>
               <th>Docket</th>
-              <th>Date Filed</th>
-              <th>Case Name</th>
-              <th>Filings &amp; proceedings</th>
-              <th>Case Status</th>
-              <th>Judge (sortable)</th>
+              <th>Date filed</th>
+              <th>Case name</th>
+              <th>Filings and proceedings</th>
+              <th>Case status</th>
+              <th>Judge</th>
             </tr>
           </thead>
-          {pendingItemsFormatted.map((item, idx) => (
+          {formattedPendingItems.items.map((item, idx) => (
             <tbody key={idx}>
               <tr className="pending-item-row">
-                <td>{item.docketNumber}</td>
-                <td>{item.formattedDate}</td>
-                <td>{item.caseName}</td>
                 <td>
-                  <a href="/#">{item.filingsAndProceedings}</a>
+                  <CaseLink formattedCase={item} />
                 </td>
-                <td>{item.caseStatus}</td>
-                <td>{item.judge && item.judge.name}</td>
+                <td>{item.formattedFiledDate}</td>
+                <td>{item.caseCaptionNames}</td>
+                <td>
+                  <a
+                    href={`/case-detail/${item.docketNumber}/documents/${item.documentId}`}
+                  >
+                    {item.formattedName}
+                  </a>
+                </td>
+                <td>{item.status}</td>
+                <td>{item.associatedJudgeFormatted}</td>
               </tr>
             </tbody>
           ))}
         </table>
-        {pendingItemsFormatted.length === 0 && <p>There is nothing pending.</p>}
+        {formattedPendingItems.items.length === 0 && (
+          <p>There is nothing pending.</p>
+        )}
       </React.Fragment>
     );
   },

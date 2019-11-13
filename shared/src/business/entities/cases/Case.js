@@ -502,6 +502,16 @@ Case.getCaseCaption = function(rawCase) {
   return caseCaption;
 };
 
+Case.prototype.toRawObject = function() {
+  const result = this.toRawObjectFromJoi();
+  result.hasPendingItems = this.doesHavePendingItems();
+  return result;
+};
+
+Case.prototype.doesHavePendingItems = function() {
+  return this.documents.some(document => document.pending);
+};
+
 /**
  * get the case caption without the ", Petitioner/s/(s)" postfix
  *

@@ -30,6 +30,7 @@ import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendi
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
+import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
@@ -122,6 +123,7 @@ export const state = {
   formattedCaseDetail,
   formattedCases,
   formattedDashboardTrialSessions,
+  formattedPendingItems,
   formattedTrialSessionDetails,
   formattedTrialSessions,
   formattedWorkQueue,

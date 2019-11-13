@@ -24,11 +24,31 @@ exports.generatePrintablePendingReportInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  if (judge) {
+    judge = decodeURIComponent(judge);
+  }
+
   const pendingItems = await applicationContext
     .getUseCaseHelpers()
     .fetchPendingItems({ applicationContext, caseId, judge });
 
-  return await applicationContext
-    .getUseCaseHelpers()
-    .generatePendingReportPdf({ applicationContext, cases: pendingItems });
+  let reportTitle = 'Pending Report All Judges';
+
+  if (judge) {
+    reportTitle = `Pending Report Judge ${judge}`;
+  } else if (caseId) {
+    const caseResult = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId({
+        applicationContext,
+        caseId,
+      });
+    reportTitle = `Pending Report for Docket ${caseResult.docketNumber}`;
+  }
+
+  return await applicationContext.getUseCaseHelpers().generatePendingReportPdf({
+    applicationContext,
+    pendingItems,
+    reportTitle,
+  });
 };

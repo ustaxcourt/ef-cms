@@ -69,6 +69,7 @@ exports.fetchPendingItems = async ({ applicationContext, caseId, judge }) => {
 
   foundCases.forEach(foundCase => {
     const { documents, ...mappedProps } = foundCase;
+    mappedProps.caseStatus = mappedProps.status;
 
     documents.forEach(document => {
       if (document.pending) {
