@@ -1419,5 +1419,8 @@ button.change-scanner-button {
 }
 
 .docket-entry-preview-text {
+  overflow: hidden;
   width: 600px;
+  max-height: 41px;
+  margin: 0.5rem 0;
 }
