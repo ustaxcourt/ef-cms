@@ -167,9 +167,13 @@ const formatCase = (applicationContext, caseDetail) => {
     );
   }
 
-  result.pendingItemsDocketEntries = (
-    result.docketRecordWithDocument || []
-  ).filter(entry => entry.document && entry.document.pending);
+  const { Document } = applicationContext.getEntityConstructors();
+  result.pendingItemsDocketEntries = (result.docketRecordWithDocument || [])
+    .filter(entry => entry.document && entry.document.pending)
+    .map(entry => {
+      const showRemoveButton = !Document.isPendingOnCreation(entry.document);
+      return { ...entry, showRemoveButton };
+    });
 
   const { ORDER_TYPES_MAP } = applicationContext.getConstants();
 
