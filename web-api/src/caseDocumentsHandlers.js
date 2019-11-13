@@ -5,6 +5,8 @@ module.exports = {
   completeDocketEntryQCLambda: require('./documents/completeDocketEntryQCLambda')
     .handler,
   createWorkItemLambda: require('./workitems/createWorkItemLambda').handler,
+  fileCourtIssuedDocketEntryLambda: require('./documents/fileCourtIssuedDocketEntryLambda')
+    .handler,
   fileCourtIssuedOrderToCaseLambda: require('./documents/fileCourtIssuedOrderToCaseLambda')
     .handler,
   fileDocketEntryToCaseLambda: require('./documents/fileDocketEntryToCaseLambda')

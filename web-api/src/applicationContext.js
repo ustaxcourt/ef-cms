@@ -187,6 +187,9 @@ const {
   fetchPendingItemsInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
 const {
+  fileCourtIssuedDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/fileCourtIssuedDocketEntryInteractor');
+const {
   fileCourtIssuedOrderInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor');
 const {
@@ -928,6 +931,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseNoteInteractor,
         deleteCounselFromCaseInteractor,
         fetchPendingItemsInteractor,
+        fileCourtIssuedDocketEntryInteractor,
         fileCourtIssuedOrderInteractor,
         fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
