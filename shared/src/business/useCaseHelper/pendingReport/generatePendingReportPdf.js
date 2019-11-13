@@ -86,17 +86,17 @@ exports.generatePendingReportPdf = async ({
 
     pendingItems = pendingItems.map(pendingItem => ({
       ...pendingItem,
-      formattedFiledDate: applicationContext
-        .getUtilities()
-        .formatDateString(pendingItem.receivedAt, 'MMDDYY'),
-      caseCaptionNames: applicationContext.getCaseCaptionNames(
-        pendingItem.caseCaption || '',
-      ),
-      formattedName: pendingItem.documentTitle || pendingItem.documentType,
       associatedJudgeFormatted: pendingItem.associatedJudge.replace(
         /^Judge\s+/,
         '',
       ),
+      caseCaptionNames: applicationContext.getCaseCaptionNames(
+        pendingItem.caseCaption || '',
+      ),
+      formattedFiledDate: applicationContext
+        .getUtilities()
+        .formatDateString(pendingItem.receivedAt, 'MMDDYY'),
+      formattedName: pendingItem.documentTitle || pendingItem.documentType,
     }));
 
     const contentResult = await generatePendingReportPage({
