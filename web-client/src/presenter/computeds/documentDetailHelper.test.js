@@ -159,6 +159,9 @@ describe('document detail helper', () => {
           status: Case.STATUS_TYPES.new,
         },
         documentId: 'abc',
+        permissions: {
+          COURT_ISSUED_DOCUMENT: true,
+        },
       },
     });
     expect(result.showSignDocumentButton).toEqual(true);
@@ -675,6 +678,9 @@ describe('document detail helper', () => {
             ],
           },
           documentId: 'abc',
+          permissions: {
+            SERVE_DOCUMENT: false,
+          },
         },
       });
       expect(result.showServeDocumentButton).toEqual(false);
