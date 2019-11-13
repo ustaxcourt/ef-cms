@@ -41,6 +41,18 @@ describe('formatCase', () => {
   it('should format documents if the case documents array is set', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
+      docketRecord: [
+        {
+          documentId: 'd-1-2-3',
+          hi: 'there',
+          index: '1',
+        },
+        {
+          documentId: 'd-1-4-3',
+          hi: 'there',
+          index: '2',
+        },
+      ],
       documents: [
         {
           createdAt: getDateISO(),
@@ -67,18 +79,6 @@ describe('formatCase', () => {
               isQC: false,
             },
           ],
-        },
-      ],
-      docketRecord: [
-        {
-          documentId: 'd-1-2-3',
-          hi: 'there',
-          index: '1',
-        },
-        {
-          documentId: 'd-1-4-3',
-          hi: 'there',
-          index: '2',
         },
       ],
     });
@@ -141,11 +141,11 @@ describe('formatCase', () => {
   it('should format the general properties of case details', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      hasVerifiedIrsNotice: true,
-      trialTime: 11,
       caseCaption: 'Test Case Caption',
       caseTitle:
         'Test Case Caption, Petitioners v. Internal Revenue, Respondent',
+      hasVerifiedIrsNotice: true,
+      trialTime: 11,
     });
 
     expect(result).toHaveProperty('createdAtFormatted');
@@ -165,6 +165,14 @@ describe('formatCase', () => {
   it('should apply additional information', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
+      docketRecord: [
+        {
+          createdAt: getDateISO(),
+          description: 'desc',
+          documentId: 'd-1-2-3',
+          index: '1',
+        },
+      ],
       documents: [
         {
           additionalInfo: 'additional information',
@@ -172,14 +180,6 @@ describe('formatCase', () => {
           documentId: 'd-1-2-3',
           documentType: 'Petition',
           servedAt: getDateISO(),
-        },
-      ],
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          description: 'desc',
-          documentId: 'd-1-2-3',
-          index: '1',
         },
       ],
     });
@@ -192,6 +192,13 @@ describe('formatCase', () => {
   it('should format certificate of service date', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
+      docketRecord: [
+        {
+          createdAt: getDateISO(),
+          documentId: 'd-1-2-3',
+          index: '1',
+        },
+      ],
       documents: [
         {
           certificateOfServiceDate: getDateISO(),
@@ -199,13 +206,6 @@ describe('formatCase', () => {
           documentId: 'd-1-2-3',
           documentType: 'Petition',
           servedAt: getDateISO(),
-        },
-      ],
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          documentId: 'd-1-2-3',
-          index: '1',
         },
       ],
     });
@@ -256,10 +256,10 @@ describe('formatCase', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       status: Case.STATUS_TYPES.calendared,
-      trialLocation: 'Boise, Idaho',
       trialDate: '2011-11-11',
-      trialTime: '11',
+      trialLocation: 'Boise, Idaho',
       trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+      trialTime: '11',
     });
 
     expect(result).toMatchObject({
@@ -276,10 +276,10 @@ describe('formatCase', () => {
   it('should format trial details if case status is not calendared but the case has a trialSessionId', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      trialLocation: 'Boise, Idaho',
       trialDate: '2011-11-11',
-      trialTime: '11',
+      trialLocation: 'Boise, Idaho',
       trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+      trialTime: '11',
     });
 
     expect(result).toMatchObject({
@@ -297,8 +297,8 @@ describe('formatCase', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       status: Case.STATUS_TYPES.calendared,
-      trialLocation: 'Boise, Idaho',
       trialDate: undefined,
+      trialLocation: 'Boise, Idaho',
       trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
     });
 
