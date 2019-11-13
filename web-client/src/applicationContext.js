@@ -186,6 +186,7 @@ import { validateCaseAssociationRequestInteractor } from '../../shared/src/busin
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
 import { validateCaseSearchInteractor } from '../../shared/src/business/useCases/validateCaseSearchInteractor';
+import { validateCourtIssuedDocketEntryInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/validateCourtIssuedDocketEntryInteractor';
 import { validateDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
 import { validateEditPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateEditPractitionerInteractor';
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
@@ -340,6 +341,7 @@ const allUseCases = {
   validateCaseDeadlineInteractor,
   validateCaseDetailInteractor,
   validateCaseSearchInteractor,
+  validateCourtIssuedDocketEntryInteractor,
   validateDocketEntryInteractor,
   validateEditPractitionerInteractor,
   validateExternalDocumentInformationInteractor,
