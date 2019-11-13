@@ -58,16 +58,14 @@ describe('docket record helper', () => {
     expect(result.showDocumentDetailLink).toEqual(false);
   });
 
-  it('should show document detail link and not direct download link if the user does have UPDATE_CASE permission', () => {
-    const user = {
-      role: User.ROLES.petitionsClerk,
-      userId: '789',
-    };
+  it('should show document detail link and not direct download link if the user has UPDATE_CASE permission', () => {
     const result = runCompute(docketRecordHelper, {
       state: {
-        ...getBaseState(user),
         caseDetail: {},
         form: {},
+        permissions: {
+          UPDATE_CASE: true,
+        },
       },
     });
     expect(result.showDocumentDetailLink).toEqual(true);
@@ -75,46 +73,40 @@ describe('docket record helper', () => {
   });
 
   it('should show links for editing docket entries if user has DOCKET_ENTRY permission', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: '789',
-    };
     const result = runCompute(docketRecordHelper, {
       state: {
-        ...getBaseState(user),
         caseDetail: {},
         form: {},
+        permissions: {
+          DOCKET_ENTRY: true,
+        },
       },
     });
     expect(result.showEditDocketEntry).toEqual(true);
   });
 
   it('should not show links for editing docket entries if user does not have DOCKET_ENTRY permission', () => {
-    const user = {
-      role: User.ROLES.petitionsClerk,
-      userId: '789',
-    };
     const result = runCompute(docketRecordHelper, {
       state: {
-        ...getBaseState(user),
         caseDetail: {},
         form: {},
+        permissions: {
+          DOCKET_ENTRY: false,
+        },
       },
     });
     expect(result.showEditDocketEntry).toEqual(false);
   });
 
   it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case', () => {
-    const user = {
-      role: User.ROLES.respondent,
-      userId: '789',
-    };
     const result = runCompute(docketRecordHelper, {
       state: {
-        ...getBaseState(user),
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
+        permissions: {
+          FILE_EXTERNAL_DOCUMENT: true,
+        },
         screenMetadata: { isAssociated: true },
       },
     });
@@ -122,16 +114,14 @@ describe('docket record helper', () => {
   });
 
   it('should not show file document button if user does not have FILE_EXTERNAL_DOCUMENT permission', () => {
-    const user = {
-      role: User.ROLES.petitionsClerk,
-      userId: '789',
-    };
     const result = runCompute(docketRecordHelper, {
       state: {
-        ...getBaseState(user),
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
+        permissions: {
+          FILE_EXTERNAL_DOCUMENT: false,
+        },
         screenMetadata: { isAssociated: true },
       },
     });
@@ -139,16 +129,14 @@ describe('docket record helper', () => {
   });
 
   it('should not show file document button if user has FILE_EXTERNAL_DOCUMENT permission but the user is not associated with the case', () => {
-    const user = {
-      role: User.ROLES.petitioner,
-      userId: '789',
-    };
     const result = runCompute(docketRecordHelper, {
       state: {
-        ...getBaseState(user),
         caseDetail: {},
         currentPage: 'CaseDetail',
         form: {},
+        permissions: {
+          FILE_EXTERNAL_DOCUMENT: true,
+        },
         screenMetadata: { isAssociated: false },
       },
     });
