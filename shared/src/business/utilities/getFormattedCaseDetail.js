@@ -168,6 +168,7 @@ const formatCase = (applicationContext, caseDetail) => {
   }
 
   const { Document } = applicationContext.getEntityConstructors();
+
   result.pendingItemsDocketEntries = (result.docketRecordWithDocument || [])
     .filter(entry => entry.document && entry.document.pending)
     .map(entry => {
