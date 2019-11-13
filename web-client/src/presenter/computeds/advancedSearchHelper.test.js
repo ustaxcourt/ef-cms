@@ -119,7 +119,6 @@ describe('advancedSearchHelper', () => {
             docketNumber: '102-18',
             docketNumberSuffix: 'W',
             receivedAt: '2019-05-01T05:00:00.000Z',
-            receivedAt: '2018-05-01T05:00:00.000Z',
           },
         ],
       },
