@@ -17,6 +17,7 @@ export const CaseInfo = connect(
     token: state.token,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
   },
   ({
     baseUrl,
@@ -27,6 +28,7 @@ export const CaseInfo = connect(
     token,
     updateCaseValueSequence,
     updateFormValueSequence,
+    validateCaseDetailSequence,
   }) => {
     return (
       <div className="blue-container">
@@ -53,7 +55,7 @@ export const CaseInfo = connect(
                       name="receivedAtMonth"
                       type="number"
                       value={form.receivedAtMonth || ''}
-                      onBlur={() => {}}
+                      onBlur={() => validateCaseDetailSequence()}
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
@@ -77,7 +79,7 @@ export const CaseInfo = connect(
                       name="receivedAtDay"
                       type="number"
                       value={form.receivedAtDay || ''}
-                      onBlur={() => {}}
+                      onBlur={() => validateCaseDetailSequence()}
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
@@ -101,7 +103,7 @@ export const CaseInfo = connect(
                       name="receivedAtYear"
                       type="number"
                       value={form.receivedAtYear || ''}
-                      onBlur={() => {}}
+                      onBlur={() => validateCaseDetailSequence()}
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
@@ -245,7 +247,7 @@ export const CaseInfo = connect(
                   placeholder="MM"
                   type="number"
                   value={form.payGovMonth || ''}
-                  onBlur={() => {}}
+                  onBlur={() => validateCaseDetailSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -269,7 +271,7 @@ export const CaseInfo = connect(
                   placeholder="DD"
                   type="number"
                   value={form.payGovDay || ''}
-                  onBlur={() => {}}
+                  onBlur={() => validateCaseDetailSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -293,7 +295,7 @@ export const CaseInfo = connect(
                   placeholder="YYYY"
                   type="number"
                   value={form.payGovYear || ''}
-                  onBlur={() => {}}
+                  onBlur={() => validateCaseDetailSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -316,7 +318,6 @@ export const CaseInfo = connect(
             name="payGovId"
             type="number"
             value={caseDetail.payGovId || ''}
-            onBlur={() => {}}
             onChange={e => {
               updateCaseValueSequence({
                 key: e.target.name,

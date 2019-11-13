@@ -36,7 +36,6 @@ export const PartyInformation = connect(
               id="case-caption"
               name="caseCaption"
               value={caseDetail.caseCaption}
-              onBlur={() => {}}
               onChange={e => {
                 updateCaseValueSequence({
                   key: e.target.name,
@@ -128,7 +127,7 @@ export const PartyInformation = connect(
               parentView="CaseDetail"
               showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
               showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
-              onBlur=""
+              onBlur="validateCaseDetailSequence"
               onChange="updateCaseValueSequence"
             />
           </div>
