@@ -10,8 +10,8 @@ import { state } from 'cerebral';
  */
 export const toggleWorkingCopySortAction = ({ get, props, store }) => {
   const { sort } = props;
-  const fromSort = get(state.screenMetadata.sort);
-  const fromSortOrder = get(state.screenMetadata.sortOrder);
+  const fromSort = get(state.trialSessionWorkingCopy.sort);
+  const fromSortOrder = get(state.trialSessionWorkingCopy.sortOrder);
 
   const newSort = sort;
   let newSortOrder = 'asc';
@@ -20,6 +20,6 @@ export const toggleWorkingCopySortAction = ({ get, props, store }) => {
     newSortOrder = (fromSortOrder === 'desc' && 'asc') || 'desc';
   }
 
-  store.set(state.screenMetadata.sort, newSort);
-  store.set(state.screenMetadata.sortOrder, newSortOrder);
+  store.set(state.trialSessionWorkingCopy.sort, newSort);
+  store.set(state.trialSessionWorkingCopy.sortOrder, newSortOrder);
 };
