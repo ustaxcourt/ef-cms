@@ -24,6 +24,9 @@ export const generateCourtIssuedDocumentTitleAction = ({
       documentMetadata,
     });
   if (documentTitle) {
+    if (documentMetadata.attachments) {
+      documentTitle += ' (Attachment(s))';
+    }
     store.set(state.form.generatedDocumentTitle, documentTitle);
   } else {
     store.unset(state.form.generatedDocumentTitle, documentTitle);
