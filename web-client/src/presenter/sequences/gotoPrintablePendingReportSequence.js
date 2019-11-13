@@ -13,10 +13,16 @@ import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForRespons
 
 export const gotoPrintablePendingReportSequence = [
   setWaitingForResponseAction,
-  getCaseAction,
-  setCaseAction,
-  setBaseUrlAction,
-  setupPropsForPrintablePendingReportAction,
+  isGlobalReportAction,
+  {
+    no: [
+      getCaseAction,
+      setCaseAction,
+      setBaseUrlAction,
+      setupPropsForPrintablePendingReportAction,
+    ],
+    yes: [],
+  },
   generatePrintablePendingReportAction,
   setPdfPreviewUrlSequence,
   isGlobalReportAction,

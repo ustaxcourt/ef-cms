@@ -30,9 +30,16 @@ export const formattedPendingItems = (get, applicationContext) => {
     items = items.filter(i => i.associatedJudgeFormatted === judgeFilter);
   }
 
+  let printUrl = '/reports/pending-report/printable';
+
+  if (judgeFilter) {
+    printUrl += `?judgeFilter=${encodeURIComponent(judgeFilter)}`;
+  }
+
   const result = {
     items,
     judges,
+    printUrl,
   };
 
   return result;
