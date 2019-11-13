@@ -5,6 +5,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCourtIssuedDocumentInitialTypeAction } from '../actions/CourtIssuedDocketEntry/setCourtIssuedDocumentInitialTypeAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
@@ -23,6 +24,7 @@ export const gotoAddCourtIssuedDocketEntrySequence = [
       getCaseAction,
       setCaseAction,
       setDocumentIdAction,
+      setCourtIssuedDocumentInitialTypeAction,
       setCurrentPageAction('AddCourtIssuedDocketEntry'),
     ],
     unauthorized: [redirectToCognitoAction],

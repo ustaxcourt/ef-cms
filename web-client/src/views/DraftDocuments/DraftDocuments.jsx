@@ -51,7 +51,7 @@ export const DraftDocuments = connect(
                 <th>Date</th>
                 <th>Filings and proceedings</th>
                 <th>Created by</th>
-                <th>Signature Added</th>
+                <th>Signature added</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
               </tr>

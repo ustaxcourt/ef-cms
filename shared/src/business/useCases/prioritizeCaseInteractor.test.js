@@ -116,8 +116,8 @@ describe('prioritizeCaseInteractor', () => {
             Promise.resolve({
               ...MOCK_CASE,
               blocked: true,
-              blockedReason: 'something',
               blockedDate: '2019-08-16T17:29:10.132Z',
+              blockedReason: 'something',
             }),
           updateCase: ({ caseToUpdate }) => caseToUpdate,
           updateHighPriorityCaseTrialSortMappingRecords: updateHighPriorityCaseTrialSortMappingRecordsMock,

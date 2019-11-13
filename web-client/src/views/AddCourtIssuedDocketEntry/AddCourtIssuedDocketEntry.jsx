@@ -4,17 +4,14 @@ import { CaseDetailHeader } from '../CaseDetailHeader';
 import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
-import { Inclusions } from '../AddDocketEntry/Inclusions';
-
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { SuccessNotification } from '../SuccessNotification';
+import { connect } from '@cerebral/react';
 import {
   courtIssuedDocketEntryOnChange,
   onInputChange,
   reactSelectValue,
 } from '../../ustc-ui/utils/documentTypeSelectHelper';
-
-import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { SuccessNotification } from '../SuccessNotification';
-import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
@@ -26,8 +23,12 @@ export const AddCourtIssuedDocketEntry = connect(
     openCancelDraftDocumentModalSequence:
       sequences.openCancelDraftDocumentModalSequence,
     showModal: state.showModal,
+    submitCourtIssuedDocketEntrySequence:
+      sequences.submitCourtIssuedDocketEntrySequence,
     updateCourtIssuedDocketEntryFormValueSequence:
       sequences.updateCourtIssuedDocketEntryFormValueSequence,
+    validateCourtIssuedDocketEntrySequence:
+      sequences.validateCourtIssuedDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -35,7 +36,9 @@ export const AddCourtIssuedDocketEntry = connect(
     form,
     openCancelDraftDocumentModalSequence,
     showModal,
+    submitCourtIssuedDocketEntrySequence,
     updateCourtIssuedDocketEntryFormValueSequence,
+    validateCourtIssuedDocketEntrySequence,
     validationErrors,
   }) => {
     return (
@@ -92,7 +95,7 @@ export const AddCourtIssuedDocketEntry = connect(
                         inputValue,
                         name,
                         updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
-                        validateSequence: () => {},
+                        validateSequence: validateCourtIssuedDocketEntrySequence,
                       });
                       return true;
                     }}
@@ -108,7 +111,34 @@ export const AddCourtIssuedDocketEntry = connect(
 
                 {form.eventCode && <CourtIssuedNonstandardForm />}
 
-                <Inclusions />
+                <FormGroup errorText={validationErrors.attachments}>
+                  <fieldset className="usa-fieldset">
+                    <legend className="usa-legend">Inclusions</legend>
+                    <div className="usa-checkbox">
+                      <input
+                        checked={form.attachments}
+                        className="usa-checkbox__input"
+                        id="attachments"
+                        name="attachments"
+                        type="checkbox"
+                        onChange={e => {
+                          updateCourtIssuedDocketEntryFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.checked,
+                          });
+                          validateCourtIssuedDocketEntrySequence();
+                        }}
+                      />
+                      <label
+                        className="usa-checkbox__label"
+                        htmlFor="attachments"
+                      >
+                        Attachment(s)
+                      </label>
+                    </div>
+                  </fieldset>
+                </FormGroup>
+
                 <p>
                   <b>Service Parties</b>
                 </p>
@@ -129,7 +159,7 @@ export const AddCourtIssuedDocketEntry = connect(
                   <Button
                     secondary
                     id="save-and-add-supporting"
-                    onClick={() => {}}
+                    onClick={() => submitCourtIssuedDocketEntrySequence()}
                   >
                     Save Entry
                   </Button>
