@@ -3,24 +3,29 @@ html(lang="en")
   head
     meta(charset="utf-8")
     title Pending Report
+    style= styles
   body
     .page-container
-    img.logo(src=logo)
-    h1.text-center United States Tax Court
-    table
-      thead
-        tr Docket
-        tr Date Filed
-        tr Case Name
-        tr Filings and Proceedings
-        tr Case Status
-        tr Judge
-      tbody
-        each pendingItem in pendingItems
+      .page-header
+        img.logo(src=logo)
+        h1.text-center United States Tax Court
+        p.text-center Pending Report - (see story for details)
+        .clear
+      table
+        thead
           tr
-            td= pendingItem.docketNumber
-            td= pendingItem.filedAt
-            td= pendingItem.name
-            td= pendingItem.filings
-            td= pendingItem.status
-            td= pendingItem.judge
+            th Docket
+            th Date Filed
+            th Case Name
+            th Filings and Proceedings
+            th Case Status
+            th Judge
+        tbody
+          each pendingItem in pendingItems
+            tr
+              td= pendingItem.docketNumber
+              td= pendingItem.filedAt
+              td= pendingItem.name
+              td= pendingItem.filings
+              td= pendingItem.status
+              td= pendingItem.judge
