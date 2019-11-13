@@ -162,7 +162,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     document.status === 'served' &&
     formattedDocument.isPetition === true;
 
-  const showAddDocketEntryButton = permissions.DOCKET_ENTRY;
+  const showAddDocketEntryButton = permissions.DOCKET_ENTRY && isDraftDocument;
 
   return {
     createdFiledLabel: isOrder ? 'Created' : 'Filed', // Should actually be all court-issued documents
@@ -179,6 +179,10 @@ export const documentDetailHelper = (get, applicationContext) => {
     showConfirmEditOrder: isSigned && isOrder,
     showDocumentInfoTab,
     showDocumentViewerTopMargin,
+    showEditDocketEntry:
+      !isDraftDocument &&
+      permissions.DOCKET_ENTRY &&
+      formattedDocument.isPetition === false,
     showPrintCaseConfirmationButton,
     showRecallButton,
     showRemoveSignature: isOrder && isSigned,
