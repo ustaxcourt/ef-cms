@@ -11,22 +11,33 @@ export const PendingReportList = connect(
   ({ formattedPendingItems }) => {
     return (
       <React.Fragment>
-        <div className="ustc-table--filters">
-          <BindedSelect
-            ariaLabel="judge"
-            bind="screenMetadata.pendingItemsFilters.judge"
-            className="select-left"
-            id="judgeFilter"
-            name="judge"
-          >
-            <option value="">Filter by Judge</option>
-            {formattedPendingItems.judges.map((judge, idx) => (
-              <option key={idx} value={judge}>
-                {judge}
-              </option>
-            ))}
-          </BindedSelect>
+        <div className="grid-row margin-bottom-2">
+          <div className="tablet:grid-col-7">
+            <div className="grid-row grid-gap">
+              <div className="grid-col-3 tablet:grid-col-2 padding-top-05">
+                <h3 id="filterHeading">Filter by</h3>
+              </div>
+              <div className="grid-col-3">
+                <BindedSelect
+                  ariaLabel="judge"
+                  bind="screenMetadata.pendingItemsFilters.judge"
+                  className="select-left"
+                  id="judgeFilter"
+                  name="judge"
+                  placeHolder="xyz"
+                >
+                  <option value="">- judge -</option>
+                  {formattedPendingItems.judges.map((judge, idx) => (
+                    <option key={idx} value={judge}>
+                      {judge}
+                    </option>
+                  ))}
+                </BindedSelect>
+              </div>
+            </div>
+          </div>
         </div>
+
         <table
           aria-describedby="judgeFilter"
           aria-label="pending items"
