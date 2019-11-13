@@ -28,7 +28,23 @@ exports.generatePrintablePendingReportInteractor = async ({
     .getUseCaseHelpers()
     .fetchPendingItems({ applicationContext, caseId, judge });
 
-  return await applicationContext
-    .getUseCaseHelpers()
-    .generatePendingReportPdf({ applicationContext, pendingItems });
+  let reportTitle = 'Pending Report Unfiltered';
+
+  if (judge) {
+    reportTitle = `Pending Report Judge ${judge}`;
+  } else if (caseId) {
+    const caseResult = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByCaseId({
+        applicationContext,
+        caseId,
+      });
+    reportTitle = `Pending Report for Docket ${caseResult.docketNumber}`;
+  }
+
+  return await applicationContext.getUseCaseHelpers().generatePendingReportPdf({
+    applicationContext,
+    pendingItems,
+    reportTitle,
+  });
 };
