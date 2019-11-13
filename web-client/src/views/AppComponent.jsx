@@ -34,6 +34,7 @@ import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SignStipDecision } from './SignStipDecision';
+import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
@@ -83,6 +84,7 @@ const pages = {
   SelectDocumentType,
   SignOrder,
   SignStipDecision,
+  SimplePdfPreviewPage,
   StartCaseInternal,
   StartCaseWizard,
   StyleGuide,
