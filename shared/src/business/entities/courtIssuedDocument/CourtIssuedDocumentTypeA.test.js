@@ -1,7 +1,5 @@
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { CourtIssuedDocumentTypeA } = require('./CourtIssuedDocumentTypeA');
-
-const { VALIDATION_ERROR_MESSAGES } = CourtIssuedDocumentTypeA;
+const { VALIDATION_ERROR_MESSAGES } = require('./validationErrorMessages');
 
 describe('CourtIssuedDocumentTypeA', () => {
   describe('validation', () => {
