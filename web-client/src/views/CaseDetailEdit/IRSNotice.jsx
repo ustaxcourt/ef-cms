@@ -15,6 +15,7 @@ export const IRSNotice = connect(
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
   },
   ({
     caseDetail,
@@ -25,6 +26,7 @@ export const IRSNotice = connect(
     setIrsNoticeFalseSequence,
     updateCaseValueSequence,
     updateFormValueSequence,
+    validateCaseDetailSequence,
   }) => {
     const renderIrsNoticeRadios = () => {
       return (
@@ -104,7 +106,7 @@ export const IRSNotice = connect(
                   placeholder="MM"
                   type="number"
                   value={form.irsMonth || ''}
-                  onBlur={() => {}}
+                  onBlur={() => validateCaseDetailSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -128,7 +130,7 @@ export const IRSNotice = connect(
                   placeholder="DD"
                   type="number"
                   value={form.irsDay || ''}
-                  onBlur={() => {}}
+                  onBlur={() => validateCaseDetailSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -152,7 +154,7 @@ export const IRSNotice = connect(
                   placeholder="YYYY"
                   type="number"
                   value={form.irsYear || ''}
-                  onBlur={() => {}}
+                  onBlur={() => validateCaseDetailSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -175,7 +177,7 @@ export const IRSNotice = connect(
           allowDefaultOption={true}
           caseTypes={caseTypes}
           legend="Type of case"
-          validation=""
+          validation="validateCaseDetailSequence"
           value={caseDetail.caseType}
           onChange="updateCaseValueSequence"
         />
