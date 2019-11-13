@@ -55,7 +55,7 @@ createAccount() {
       --region "${REGION}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
       --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
-      --session "${session}"
+      --session="${session}"
   fi
 }
 
