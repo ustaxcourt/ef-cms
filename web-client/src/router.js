@@ -614,6 +614,16 @@ const router = {
         app.getSequence('gotoPendingReportSequence')();
       }),
     );
+    route(
+      '/reports/pending-report/printable',
+      ifHasAccess(() => {
+        const query = route.query();
+        setPageTitle('Pending report');
+        app.getSequence('gotoPrintablePendingReportSequence')({
+          query,
+        });
+      }),
+    );
 
     route(
       '/user/contact/edit',
