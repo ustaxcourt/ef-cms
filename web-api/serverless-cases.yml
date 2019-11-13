@@ -155,8 +155,8 @@ resources:
             MetricsEnabled: true
 
 functions:
-  updateCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.updateCaseLambda
+  saveCaseDetailInternalEdit:
+    handler: web-api/${self:provider.dir}/casesHandlers.saveCaseDetailInternalEditLambda
     events:
       - http:
           path: /{caseId}
