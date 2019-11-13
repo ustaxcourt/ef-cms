@@ -54,9 +54,9 @@ export const advancedSearchHelper = (get, applicationContext) => {
         currentPage * CASE_SEARCH_PAGE_SIZE,
       ),
       searchResultsCount: searchResults.length,
+      showLoadMore: searchResults.length > currentPage * CASE_SEARCH_PAGE_SIZE,
       showNoMatches: searchResults.length === 0,
       showSearchResults: searchResults.length > 0,
-      showLoadMore: searchResults.length > currentPage * CASE_SEARCH_PAGE_SIZE,
     };
   }
 

@@ -25,8 +25,8 @@ describe('remove case from trial session', () => {
   const updateTrialSessionStub = sinon.stub().returns();
   const getCaseByCaseIdStub = sinon.stub().returns({
     ...MOCK_CASE,
-    trialLocation: 'Boise, Idaho',
     associatedJudge: 'someone',
+    trialLocation: 'Boise, Idaho',
     trialSessionId: 'abcd',
   });
   const updateCaseStub = sinon.stub().returns();

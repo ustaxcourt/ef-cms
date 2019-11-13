@@ -50,9 +50,9 @@ exports.completeDocketEntryQCInteractor = async ({
     {
       ...currentDocument,
       ...entryMetadata,
-      relationship: 'primaryDocument',
       documentId,
       documentType,
+      relationship: 'primaryDocument',
       userId: user.userId,
     },
     { applicationContext },
