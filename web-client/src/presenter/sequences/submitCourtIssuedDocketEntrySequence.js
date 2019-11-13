@@ -4,6 +4,7 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { submitCourtIssuedDocketEntryAction } from '../actions/DocketEntry/submitCourtIssuedDocketEntryAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
 
@@ -20,6 +21,7 @@ export const submitCourtIssuedDocketEntrySequence = [
     success: [
       stopShowValidationAction,
       clearAlertsAction,
+      submitCourtIssuedDocketEntryAction,
       unsetWaitingForResponseAction,
     ],
   },
