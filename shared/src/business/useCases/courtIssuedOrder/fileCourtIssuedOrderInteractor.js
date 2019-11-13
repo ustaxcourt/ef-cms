@@ -42,11 +42,11 @@ exports.fileCourtIssuedOrderInteractor = async ({
   const documentEntity = new Document(
     {
       ...documentMetadata,
-      relationship: 'primaryDocument',
       documentId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
-      userId: user.userId,
       filedBy: user.name,
+      relationship: 'primaryDocument',
+      userId: user.userId,
     },
     { applicationContext },
   );

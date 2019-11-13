@@ -50,7 +50,10 @@ describe('generateCaseConfirmationPdf', () => {
         }),
         logger: { error: () => {}, info: () => {} },
       },
-      caseEntity: { ...MOCK_CASE, documents: [{ servedAt: 'servedAt' }] },
+      caseEntity: {
+        ...MOCK_CASE,
+        documents: [{ servedAt: '2009-09-17T08:06:07.530Z' }],
+      },
     });
 
     expect(result).toEqual('https://www.example.com');

@@ -220,10 +220,10 @@ describe('generateDocketRecordPdfInteractor', () => {
             ...caseDetail,
             contactPrimary: {
               ...caseDetail.contactPrimary,
-              inCareOf: 'Test C/O',
-              title: 'Test Title',
               address2: 'Address Two',
               address3: 'Address Three',
+              inCareOf: 'Test C/O',
+              title: 'Test Title',
             },
           }),
         }),

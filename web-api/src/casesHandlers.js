@@ -15,12 +15,13 @@ module.exports = {
   prioritizeCaseLambda: require('./cases/prioritizeCaseLambda').handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,
+  saveCaseDetailInternalEditLambda: require('./cases/saveCaseDetailInternalEditLambda')
+    .handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
   unblockCaseLambda: require('./cases/unblockCaseLambda').handler,
   unprioritizeCaseLambda: require('./cases/unprioritizeCaseLambda').handler,
   updateCaseContextLambda: require('./cases/updateCaseContextLambda').handler,
-  updateCaseLambda: require('./cases/updateCaseLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,
   updateCounselOnCaseLambda: require('./cases/updateCounselOnCaseLambda')

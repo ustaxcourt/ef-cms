@@ -17,7 +17,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .updateCaseInteractor({
+        .saveCaseDetailInternalEditInteractor({
           caseId: event.pathParameters.caseId,
           caseToUpdate: JSON.parse(event.body),
           ...JSON.parse(event.body),

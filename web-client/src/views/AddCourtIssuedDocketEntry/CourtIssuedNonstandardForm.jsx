@@ -11,6 +11,8 @@ export const CourtIssuedNonstandardForm = connect(
     judgeUsers: state.judgeUsers,
     updateCourtIssuedDocketEntryFormValueSequence:
       sequences.updateCourtIssuedDocketEntryFormValueSequence,
+    validateCourtIssuedDocketEntrySequence:
+      sequences.validateCourtIssuedDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -18,12 +20,13 @@ export const CourtIssuedNonstandardForm = connect(
     form,
     judgeUsers,
     updateCourtIssuedDocketEntryFormValueSequence,
+    validateCourtIssuedDocketEntrySequence,
     validationErrors,
   }) => {
     return (
       <>
         {addCourtIssuedDocketEntryNonstandardHelper.showDate && (
-          <FormGroup errorText={validationErrors.docketNumbers}>
+          <FormGroup errorText={validationErrors.date}>
             <fieldset className="usa-fieldset margin-bottom-0 margin-top-2">
               <legend className="usa-legend" id="date-legend">
                 Date
@@ -41,7 +44,7 @@ export const CourtIssuedNonstandardForm = connect(
                     placeholder="MM"
                     type="number"
                     value={form.month || ''}
-                    onBlur={() => {}}
+                    onBlur={() => validateCourtIssuedDocketEntrySequence()}
                     onChange={e => {
                       updateCourtIssuedDocketEntryFormValueSequence({
                         key: e.target.name,
@@ -62,7 +65,7 @@ export const CourtIssuedNonstandardForm = connect(
                     placeholder="DD"
                     type="number"
                     value={form.day || ''}
-                    onBlur={() => {}}
+                    onBlur={() => validateCourtIssuedDocketEntrySequence()}
                     onChange={e => {
                       updateCourtIssuedDocketEntryFormValueSequence({
                         key: e.target.name,
@@ -83,7 +86,7 @@ export const CourtIssuedNonstandardForm = connect(
                     placeholder="YYYY"
                     type="number"
                     value={form.year || ''}
-                    onBlur={() => {}}
+                    onBlur={() => validateCourtIssuedDocketEntrySequence()}
                     onChange={e => {
                       updateCourtIssuedDocketEntryFormValueSequence({
                         key: e.target.name,
@@ -112,6 +115,7 @@ export const CourtIssuedNonstandardForm = connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
+                validateCourtIssuedDocketEntrySequence();
               }}
             >
               <option value="">- Select -</option>
@@ -140,7 +144,7 @@ export const CourtIssuedNonstandardForm = connect(
               id="free-text"
               name="freeText"
               value={form.freeText || ''}
-              onBlur={() => {}}
+              onBlur={() => validateCourtIssuedDocketEntrySequence()}
               onChange={e => {
                 updateCourtIssuedDocketEntryFormValueSequence({
                   key: e.target.name,
@@ -167,7 +171,7 @@ export const CourtIssuedNonstandardForm = connect(
               id="docket-numbers"
               name="docketNumbers"
               value={form.docketNumbers || ''}
-              onBlur={() => {}}
+              onBlur={() => validateCourtIssuedDocketEntrySequence()}
               onChange={e => {
                 updateCourtIssuedDocketEntryFormValueSequence({
                   key: e.target.name,
