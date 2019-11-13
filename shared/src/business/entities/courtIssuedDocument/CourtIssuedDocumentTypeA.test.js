@@ -1,32 +1,28 @@
-const {
-  CourtIssuedDocumentNonStandardB,
-} = require('./CourtIssuedDocumentNonStandardB');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
+const { CourtIssuedDocumentTypeA } = require('./CourtIssuedDocumentTypeA');
 
-const { VALIDATION_ERROR_MESSAGES } = CourtIssuedDocumentNonStandardB;
+const { VALIDATION_ERROR_MESSAGES } = CourtIssuedDocumentTypeA;
 
-describe('CourtIssuedDocumentNonStandardB', () => {
+describe('CourtIssuedDocumentTypeA', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const document = CourtIssuedDocumentFactory.get({
-        scenario: 'Nonstandard B',
+        scenario: 'Type A',
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
         freeText: VALIDATION_ERROR_MESSAGES.freeText,
-        judge: VALIDATION_ERROR_MESSAGES.judge,
       });
     });
 
     it('should be valid when all fields are present', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
-        documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
-        documentType: 'Order that case is assigned',
+        documentTitle: 'Order [Anything]',
+        documentType: 'Order',
         freeText: 'Some free text',
-        judge: 'Judge Armen',
-        scenario: 'Nonstandard B',
+        scenario: 'Type A',
       });
       expect(document.getFormattedValidationErrors()).toEqual(null);
     });
@@ -36,15 +32,12 @@ describe('CourtIssuedDocumentNonStandardB', () => {
     it('should generate valid title', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
-        documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
-        documentType: 'Order that case is assigned',
+        documentTitle: 'Order [Anything]',
+        documentType: 'Order',
         freeText: 'Some free text',
-        judge: 'Judge Armen',
-        scenario: 'Nonstandard B',
+        scenario: 'Type A',
       });
-      expect(extDoc.getDocumentTitle()).toEqual(
-        'Order that case is assigned to Judge Armen Some free text',
-      );
+      expect(extDoc.getDocumentTitle()).toEqual('Order Some free text');
     });
   });
 });

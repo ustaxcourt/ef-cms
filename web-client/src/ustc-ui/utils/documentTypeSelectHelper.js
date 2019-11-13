@@ -88,6 +88,34 @@ export const docketEntryOnChange = ({
   return true;
 };
 
+export const courtIssuedDocketEntryOnChange = ({
+  action,
+  inputValue,
+  updateSequence,
+  validateSequence,
+}) => {
+  switch (action) {
+    case 'select-option':
+      ['documentType', 'documentTitle', 'eventCode', 'scenario'].forEach(key =>
+        updateSequence({
+          key,
+          value: inputValue[key],
+        }),
+      );
+      validateSequence();
+      break;
+    case 'clear':
+      ['documentType', 'documentTitle', 'eventCode', 'scenario'].forEach(key =>
+        updateSequence({
+          key,
+          value: '',
+        }),
+      );
+      validateSequence();
+      break;
+  }
+};
+
 export const onInputChange = ({ action, inputText, updateSequence }) => {
   if (action === 'input-change') {
     updateSequence({
