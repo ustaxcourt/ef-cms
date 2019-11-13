@@ -3,9 +3,9 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
+const { VALIDATION_ERROR_MESSAGES } = require('./validationErrorMessages');
 
 /**
- *
  * @param {object} rawProps the raw document data
  * @constructor
  */
@@ -20,21 +20,6 @@ CourtIssuedDocumentTypeA.prototype.getDocumentTitle = function() {
   return replaceBracketed(this.documentTitle, this.freeText);
 };
 
-CourtIssuedDocumentTypeA.VALIDATION_ERROR_MESSAGES = {
-  attachments: 'Enter selection for Attachments',
-  date: [
-    {
-      contains: 'must be less than or equal to',
-      message: 'Enter a valid date',
-    },
-    'Enter a date',
-  ],
-  docketNumbers: 'Enter docket number(s)',
-  documentType: 'Select a document type',
-  freeText: 'Enter a description',
-  judge: 'Select a judge',
-};
-
 CourtIssuedDocumentTypeA.schema = {
   attachments: joi.boolean().required(),
   documentTitle: joi.string().optional(),
@@ -46,7 +31,7 @@ joiValidationDecorator(
   CourtIssuedDocumentTypeA,
   CourtIssuedDocumentTypeA.schema,
   undefined,
-  CourtIssuedDocumentTypeA.VALIDATION_ERROR_MESSAGES,
+  VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { CourtIssuedDocumentTypeA };
