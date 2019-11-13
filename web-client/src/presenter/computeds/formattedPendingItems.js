@@ -6,7 +6,7 @@ export const formatPendingItem = (item, { applicationContext }) => {
   const result = formatSearchResultRecord(item, { applicationContext });
   result.formattedFiledDate = applicationContext
     .getUtilities()
-    .formatDateString(result.receivedAt || result.createdAt, 'MMDDYY');
+    .formatDateString(result.receivedAt, 'MMDDYY');
   result.associatedJudgeFormatted = result.associatedJudge.replace(
     /^Judge\s+/,
     '',

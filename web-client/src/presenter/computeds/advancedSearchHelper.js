@@ -10,7 +10,7 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 
   result.formattedFiledDate = applicationContext
     .getUtilities()
-    .formatDateString(result.receivedAt || result.createdAt, 'MMDDYY');
+    .formatDateString(result.receivedAt, 'MMDDYY');
 
   result.docketNumberWithSuffix = `${result.docketNumber}${
     result.docketNumberSuffix ? result.docketNumberSuffix : ''

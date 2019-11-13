@@ -25,7 +25,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   };
 
   it('calls fetch function and return result', async () => {
-    generatePendingReportPdfSpy = jest.fn(() => 'https://some.url');
+    generatePendingReportPdfSpy = jest.fn(() => 'https://example.com');
     fetchPendingItemsSpy = jest.fn(() => []);
 
     const results = await generatePrintablePendingReportInteractor({
@@ -34,11 +34,11 @@ describe('generatePrintablePendingReportInteractor', () => {
     });
 
     expect(generatePendingReportPdfSpy).toHaveBeenCalled();
-    expect(results).toEqual('https://some.url');
+    expect(results).toEqual('https://example.com');
   });
 
   it('should generate the title for the report', async () => {
-    generatePendingReportPdfSpy = jest.fn(() => 'https://some.url');
+    generatePendingReportPdfSpy = jest.fn(() => 'https://example.com');
     fetchPendingItemsSpy = jest.fn(() => []);
 
     await generatePrintablePendingReportInteractor({
