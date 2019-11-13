@@ -48,7 +48,6 @@ exports.completeDocketEntryQCInteractor = async ({
 
   const documentEntity = new Document(
     {
-      ...currentDocument,
       ...entryMetadata,
       documentId,
       documentType,
