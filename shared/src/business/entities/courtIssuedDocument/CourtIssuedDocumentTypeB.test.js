@@ -1,31 +1,30 @@
-const {
-  CourtIssuedDocumentNonStandardC,
-} = require('./CourtIssuedDocumentNonStandardC');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
+const { CourtIssuedDocumentTypeB } = require('./CourtIssuedDocumentTypeB');
 
-const { VALIDATION_ERROR_MESSAGES } = CourtIssuedDocumentNonStandardC;
+const { VALIDATION_ERROR_MESSAGES } = CourtIssuedDocumentTypeB;
 
-describe('CourtIssuedDocumentNonStandardC', () => {
+describe('CourtIssuedDocumentTypeB', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const document = CourtIssuedDocumentFactory.get({
-        scenario: 'Nonstandard C',
+        scenario: 'Type B',
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
-        docketNumbers: VALIDATION_ERROR_MESSAGES.docketNumbers,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        freeText: VALIDATION_ERROR_MESSAGES.freeText,
+        judge: VALIDATION_ERROR_MESSAGES.judge,
       });
     });
 
     it('should be valid when all fields are present', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
-        docketNumbers: '101-19',
-        documentTitle:
-          'Order that the letter "L" is added to Docket Number [Anything]',
-        documentType: 'Order that the letter "L" is added to Docket Number',
-        scenario: 'Nonstandard C',
+        documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
+        documentType: 'Order that case is assigned',
+        freeText: 'Some free text',
+        judge: 'Judge Armen',
+        scenario: 'Type B',
       });
       expect(document.getFormattedValidationErrors()).toEqual(null);
     });
@@ -35,14 +34,14 @@ describe('CourtIssuedDocumentNonStandardC', () => {
     it('should generate valid title', () => {
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,
-        docketNumbers: '101-19',
-        documentTitle:
-          'Order that the letter "L" is added to Docket Number [Anything]',
-        documentType: 'Order that the letter "L" is added to Docket Number',
-        scenario: 'Nonstandard C',
+        documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
+        documentType: 'Order that case is assigned',
+        freeText: 'Some free text',
+        judge: 'Judge Armen',
+        scenario: 'Type B',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        'Order that the letter "L" is added to Docket Number 101-19',
+        'Order that case is assigned to Judge Armen Some free text',
       );
     });
   });

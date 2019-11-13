@@ -9,18 +9,19 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  * @param {object} rawProps the raw document data
  * @constructor
  */
-function CourtIssuedDocumentNonStandardA(rawProps) {
+function CourtIssuedDocumentTypeB(rawProps) {
   this.attachments = rawProps.attachments;
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
   this.freeText = rawProps.freeText;
+  this.judge = rawProps.judge;
 }
 
-CourtIssuedDocumentNonStandardA.prototype.getDocumentTitle = function() {
-  return replaceBracketed(this.documentTitle, this.freeText);
+CourtIssuedDocumentTypeB.prototype.getDocumentTitle = function() {
+  return replaceBracketed(this.documentTitle, this.judge, this.freeText);
 };
 
-CourtIssuedDocumentNonStandardA.VALIDATION_ERROR_MESSAGES = {
+CourtIssuedDocumentTypeB.VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments',
   date: [
     {
@@ -35,18 +36,19 @@ CourtIssuedDocumentNonStandardA.VALIDATION_ERROR_MESSAGES = {
   judge: 'Select a judge',
 };
 
-CourtIssuedDocumentNonStandardA.schema = {
+CourtIssuedDocumentTypeB.schema = {
   attachments: joi.boolean().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
   freeText: joi.string().required(),
+  judge: joi.string().required(),
 };
 
 joiValidationDecorator(
-  CourtIssuedDocumentNonStandardA,
-  CourtIssuedDocumentNonStandardA.schema,
+  CourtIssuedDocumentTypeB,
+  CourtIssuedDocumentTypeB.schema,
   undefined,
-  CourtIssuedDocumentNonStandardA.VALIDATION_ERROR_MESSAGES,
+  CourtIssuedDocumentTypeB.VALIDATION_ERROR_MESSAGES,
 );
 
-module.exports = { CourtIssuedDocumentNonStandardA };
+module.exports = { CourtIssuedDocumentTypeB };

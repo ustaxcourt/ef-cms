@@ -256,6 +256,7 @@ import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByInd
 import { updateCaseValueSequence } from './sequences/updateCaseValueSequence';
 import { updateCaseWorkingCopyNoteSequence } from './sequences/updateCaseWorkingCopyNoteSequence';
 import { updateCompleteFormValueSequence } from './sequences/updateCompleteFormValueSequence';
+import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
@@ -567,6 +568,7 @@ export const presenter = {
     updateCaseValueSequence,
     updateCaseWorkingCopyNoteSequence,
     updateCompleteFormValueSequence,
+    updateCourtIssuedDocketEntryFormValueSequence,
     updateCreateOrderModalFormValueSequence,
     updateCurrentTabSequence,
     updateDocketEntryFormValueSequence,

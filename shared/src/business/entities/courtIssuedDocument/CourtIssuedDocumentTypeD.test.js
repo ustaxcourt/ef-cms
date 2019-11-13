@@ -1,16 +1,14 @@
 const moment = require('moment');
-const {
-  CourtIssuedDocumentNonStandardD,
-} = require('./CourtIssuedDocumentNonStandardD');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
+const { CourtIssuedDocumentTypeD } = require('./CourtIssuedDocumentTypeD');
 
-const { VALIDATION_ERROR_MESSAGES } = CourtIssuedDocumentNonStandardD;
+const { VALIDATION_ERROR_MESSAGES } = CourtIssuedDocumentTypeD;
 
-describe('CourtIssuedDocumentNonStandardD', () => {
+describe('CourtIssuedDocumentTypeD', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const document = CourtIssuedDocumentFactory.get({
-        scenario: 'Nonstandard D',
+        scenario: 'Type D',
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
@@ -31,7 +29,7 @@ describe('CourtIssuedDocumentNonStandardD', () => {
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
         documentType: 'Order for Amended Petition and Filing Fee',
         freeText: 'Some free text',
-        scenario: 'Nonstandard D',
+        scenario: 'Type D',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         date: VALIDATION_ERROR_MESSAGES.date[0].message,
@@ -46,7 +44,7 @@ describe('CourtIssuedDocumentNonStandardD', () => {
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
         documentType: 'Order for Amended Petition and Filing Fee',
         freeText: 'Some free text',
-        scenario: 'Nonstandard D',
+        scenario: 'Type D',
       });
       expect(document.getFormattedValidationErrors()).toEqual(null);
     });
@@ -61,7 +59,7 @@ describe('CourtIssuedDocumentNonStandardD', () => {
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
         documentType: 'Order for Amended Petition and Filing Fee',
         freeText: 'Some free text',
-        scenario: 'Nonstandard D',
+        scenario: 'Type D',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
         'Order for Amended Petition and Filing Fee on 04-10-2012 Some free text',
