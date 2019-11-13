@@ -24,6 +24,10 @@ exports.generatePrintablePendingReportInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
+  if (judge) {
+    judge = decodeURIComponent(judge);
+  }
+
   const pendingItems = await applicationContext
     .getUseCaseHelpers()
     .fetchPendingItems({ applicationContext, caseId, judge });
