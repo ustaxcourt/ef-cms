@@ -29,6 +29,7 @@ describe('setCourtIssuedDocumentInitialTypeAction', () => {
     });
 
     expect(result.state.form).toEqual({
+      attachments: false,
       documentTitle: 'Order for Filing Fee on [Date] [Anything]',
       documentType: 'OF - Order for Filing Fee',
       eventCode: 'OF',
