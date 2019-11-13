@@ -9,4 +9,4 @@ docker run -t -i \
   -p 8001:8001 \
   -p 9000:9000 \
   --rm efcms /bin/sh \
-  -c "(npm run start:api &) && (npm run dynamo:admin &) && (CI=true ./wait-until-services.sh && sleep 10 && npm run print:success &) && npm run start:client"
+  -c "(npm run start:api &) && (npm run dynamo:admin &) && (./wait-until-services.sh && sleep 10 && npm run print:success &) && npm run start:client"
