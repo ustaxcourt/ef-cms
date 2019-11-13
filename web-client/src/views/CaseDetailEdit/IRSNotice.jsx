@@ -7,7 +7,6 @@ import classNames from 'classnames';
 
 export const IRSNotice = connect(
   {
-    autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     caseDetail: state.caseDetail,
     caseDetailErrors: state.caseDetailErrors,
     caseTypes: state.caseTypes,
@@ -18,7 +17,6 @@ export const IRSNotice = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
-    autoSaveCaseSequence,
     caseDetail,
     caseDetailErrors,
     caseTypes,
@@ -48,7 +46,6 @@ export const IRSNotice = connect(
                   key: e.target.name,
                   value: true,
                 });
-                autoSaveCaseSequence();
               }}
             />
             <label
@@ -70,7 +67,6 @@ export const IRSNotice = connect(
               value="No"
               onChange={() => {
                 setIrsNoticeFalseSequence();
-                autoSaveCaseSequence();
               }}
             />
             <label
@@ -108,9 +104,7 @@ export const IRSNotice = connect(
                   placeholder="MM"
                   type="number"
                   value={form.irsMonth || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
+                  onBlur={() => {}}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -134,9 +128,7 @@ export const IRSNotice = connect(
                   placeholder="DD"
                   type="number"
                   value={form.irsDay || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
+                  onBlur={() => {}}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -160,9 +152,7 @@ export const IRSNotice = connect(
                   placeholder="YYYY"
                   type="number"
                   value={form.irsYear || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
+                  onBlur={() => {}}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -185,7 +175,7 @@ export const IRSNotice = connect(
           allowDefaultOption={true}
           caseTypes={caseTypes}
           legend="Type of case"
-          validation="autoSaveCaseSequence"
+          validation=""
           value={caseDetail.caseType}
           onChange="updateCaseValueSequence"
         />

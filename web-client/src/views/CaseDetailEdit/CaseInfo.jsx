@@ -9,7 +9,6 @@ import classNames from 'classnames';
 
 export const CaseInfo = connect(
   {
-    autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     caseDetailEditHelper: state.caseDetailEditHelper,
@@ -20,7 +19,6 @@ export const CaseInfo = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
-    autoSaveCaseSequence,
     baseUrl,
     caseDetail,
     caseDetailEditHelper,
@@ -55,9 +53,7 @@ export const CaseInfo = connect(
                       name="receivedAtMonth"
                       type="number"
                       value={form.receivedAtMonth || ''}
-                      onBlur={() => {
-                        autoSaveCaseSequence();
-                      }}
+                      onBlur={() => {}}
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
@@ -81,9 +77,7 @@ export const CaseInfo = connect(
                       name="receivedAtDay"
                       type="number"
                       value={form.receivedAtDay || ''}
-                      onBlur={() => {
-                        autoSaveCaseSequence();
-                      }}
+                      onBlur={() => {}}
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
@@ -107,9 +101,7 @@ export const CaseInfo = connect(
                       name="receivedAtYear"
                       type="number"
                       value={form.receivedAtYear || ''}
-                      onBlur={() => {
-                        autoSaveCaseSequence();
-                      }}
+                      onBlur={() => {}}
                       onChange={e => {
                         updateFormValueSequence({
                           key: e.target.name,
@@ -133,7 +125,6 @@ export const CaseInfo = connect(
                 key: 'procedureType',
                 value: e.target.value,
               });
-              autoSaveCaseSequence();
             }}
           />
 
@@ -149,7 +140,6 @@ export const CaseInfo = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                autoSaveCaseSequence();
               }}
             />
             <label
@@ -184,7 +174,6 @@ export const CaseInfo = connect(
                         key: e.target.name,
                         value: e.target.checked,
                       });
-                      autoSaveCaseSequence();
                     }}
                   />
                   <label
@@ -219,7 +208,6 @@ export const CaseInfo = connect(
                         key: e.target.name,
                         value: e.target.checked,
                       });
-                      autoSaveCaseSequence();
                     }}
                   />
                   <label
@@ -257,9 +245,7 @@ export const CaseInfo = connect(
                   placeholder="MM"
                   type="number"
                   value={form.payGovMonth || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
+                  onBlur={() => {}}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -283,9 +269,7 @@ export const CaseInfo = connect(
                   placeholder="DD"
                   type="number"
                   value={form.payGovDay || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
+                  onBlur={() => {}}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -309,9 +293,7 @@ export const CaseInfo = connect(
                   placeholder="YYYY"
                   type="number"
                   value={form.payGovYear || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
+                  onBlur={() => {}}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -334,9 +316,7 @@ export const CaseInfo = connect(
             name="payGovId"
             type="number"
             value={caseDetail.payGovId || ''}
-            onBlur={() => {
-              autoSaveCaseSequence();
-            }}
+            onBlur={() => {}}
             onChange={e => {
               updateCaseValueSequence({
                 key: e.target.name,
@@ -358,7 +338,6 @@ export const CaseInfo = connect(
                 key: e.target.name,
                 value: e.target.checked,
               });
-              autoSaveCaseSequence();
             }}
           />
           <label className="usa-checkbox__label" htmlFor="order-for-filing-fee">
@@ -387,7 +366,6 @@ export const CaseInfo = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                autoSaveCaseSequence();
               }}
             />
             <label
@@ -410,7 +388,6 @@ export const CaseInfo = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                autoSaveCaseSequence();
               }}
             />
             <label
@@ -433,7 +410,6 @@ export const CaseInfo = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                autoSaveCaseSequence();
               }}
             />
             <label
@@ -456,7 +432,6 @@ export const CaseInfo = connect(
                   key: e.target.name,
                   value: e.target.checked,
                 });
-                autoSaveCaseSequence();
               }}
             />
             <label
