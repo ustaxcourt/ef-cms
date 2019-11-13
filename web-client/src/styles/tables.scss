@@ -44,10 +44,15 @@ table,
 
 .ustc-table--filters {
   position: relative;
-  height: 3em;
+  height: 3.5em;
   .select-right {
     position: absolute;
     right: 0;
+    max-width: 220px;
+  }
+  .select-left {
+    position: absolute;
+    left: 0;
     max-width: 220px;
   }
 }
