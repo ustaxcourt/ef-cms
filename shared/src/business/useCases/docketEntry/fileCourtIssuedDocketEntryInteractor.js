@@ -4,22 +4,24 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { capitalize } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
+const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
+const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { Message } = require('../../entities/Message');
-const { UnauthorizedError } = require('../../../errors/errors');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.document the document being added to the docket record
+ * @param {object} providers.documentMeta document details to go on the record
  * @returns {object} the updated case after the documents are added
  */
 exports.fileCourtIssuedDocketEntryInteractor = async ({
   applicationContext,
-  document,
+  documentMeta,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -27,10 +29,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseId } = document;
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const { caseId, documentId } = documentMeta;
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -41,9 +40,26 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
+  const document = caseEntity.documents.find(
+    document => document.documentId === documentId,
+  );
+
+  if (!document) {
+    throw new NotFoundError('Document not found');
+  }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
   const documentEntity = new Document(
     {
       ...document,
+      attachments: documentMeta.attachments,
+      documentTitle: documentMeta.generatedDocumentTitle,
+      eventCode: documentMeta.eventCode,
+      freeText: documentMeta.freeText,
+      scenario: documentMeta.scenario,
       userId: user.userId,
     },
     { applicationContext },
@@ -84,7 +100,16 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
 
   workItem.addMessage(message);
   documentEntity.addWorkItem(workItem);
-  caseEntity.addDocument(documentEntity);
+  caseEntity.updateDocument(documentEntity);
+
+  caseEntity.addDocketRecord(
+    new DocketRecord({
+      description: documentMeta.documentTitle,
+      documentId: documentEntity.documentId,
+      editState: '{}',
+      filingDate: documentEntity.date || createISODateString(),
+    }),
+  );
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
