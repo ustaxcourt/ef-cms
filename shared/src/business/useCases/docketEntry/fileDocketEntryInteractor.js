@@ -99,9 +99,9 @@ exports.fileDocketEntryInteractor = async ({
         {
           ...baseMetadata,
           ...metadata,
-          relationship,
           documentId,
           documentType: metadata.documentType,
+          relationship,
           userId: user.userId,
         },
         { applicationContext },

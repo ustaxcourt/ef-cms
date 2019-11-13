@@ -69,11 +69,11 @@ describe('requestAccessHelper', () => {
     const result = runCompute(requestAccessHelper, {
       state: {
         ...state,
-        user: { role: User.ROLES.practitioner },
         form: {
           documentType: 'Motion to Substitute Parties and Change Caption',
           primaryDocumentFile: { some: 'file' },
         },
+        user: { role: User.ROLES.practitioner },
       },
     });
     expect(result.documentWithExhibits).toBeFalsy();

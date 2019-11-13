@@ -61,8 +61,8 @@ const generateCaseConfirmationPage = async ({
   const compiledFunction = Handlebars.compile(confirmTemplateContent);
   const html = compiledFunction({
     ...formattedCaseInfo(caseEntity),
-    styles: `<style>${css}</style>`,
     logo: ustcLogoBufferBase64,
+    styles: `<style>${css}</style>`,
   });
   return html;
 };

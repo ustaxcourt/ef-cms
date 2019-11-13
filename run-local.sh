@@ -31,6 +31,10 @@ export AWS_ACCESS_KEY_ID=noop
 export AWS_SECRET_ACCESS_KEY=noop
 export SLS_DEPLOYMENT_BUCKET=noop
 
+if [[ -z "${RUN_DIR}" ]]; then
+  RUN_DIR="src"
+fi
+
 # set common arguments used by sls below (appearing as "$@")
 set -- \
   --accountId noop \
@@ -39,6 +43,7 @@ set -- \
   --noAuth \
   --noTimeout \
   --region us-east-1 \
+  --run_dir "${RUN_DIR}" \
   --stage local \
   --dynamo_stream_arn "arn:aws:dynamodb:ddblocal:000000000000:table/efcms-local/stream/*" \
   --elasticsearch_endpoint "http://localhost:9200"

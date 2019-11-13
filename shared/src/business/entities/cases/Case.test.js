@@ -244,8 +244,8 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           blocked: true,
-          blockedReason: 'something',
           blockedDate: '2019-03-01T21:42:29.073Z',
+          blockedReason: 'something',
         },
         {
           applicationContext,
@@ -381,10 +381,10 @@ describe('Case entity', () => {
     it('party type Petitioner & Spouse', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         contactSecondary: {
           name: 'Test Petitioner 2',
         },
+        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
       });
       expect(caseTitle).toEqual(
         'Test Petitioner & Test Petitioner 2, Petitioners',
@@ -394,10 +394,10 @@ describe('Case entity', () => {
     it('party type Petitioner & Deceased Spouse', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
         contactSecondary: {
           name: 'Test Petitioner 2',
         },
+        partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
       });
       expect(caseTitle).toEqual(
         'Test Petitioner & Test Petitioner 2, Deceased, Test Petitioner, Surviving Spouse, Petitioners',
@@ -1236,8 +1236,8 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          receivedAt: '2018-12-12T05:00:00Z',
           procedureType: 'Small',
+          receivedAt: '2018-12-12T05:00:00Z',
         },
         {
           applicationContext,
@@ -1255,8 +1255,8 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          receivedAt: '2018-12-12T05:00:00Z',
           caseType: 'passport',
+          receivedAt: '2018-12-12T05:00:00Z',
         },
         {
           applicationContext,
@@ -1274,8 +1274,8 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          receivedAt: '2018-12-12T05:00:00Z',
           caseType: 'cdp (lien/levy)',
+          receivedAt: '2018-12-12T05:00:00Z',
         },
         {
           applicationContext,
@@ -1293,9 +1293,9 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          receivedAt: '2018-12-12T05:00:00Z',
-          procedureType: 'Small',
           highPriority: true,
+          procedureType: 'Small',
+          receivedAt: '2018-12-12T05:00:00Z',
         },
         {
           applicationContext,
