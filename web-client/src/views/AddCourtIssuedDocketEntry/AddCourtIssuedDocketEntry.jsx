@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CancelDraftDocumentModal } from '../CancelDraftDocumentModal';
 import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { Inclusions } from '../AddDocketEntry/Inclusions';
@@ -95,31 +96,7 @@ export const AddCourtIssuedDocketEntry = connect(
                   />
                 </FormGroup>
 
-                <FormGroup errorText={validationErrors.freeText}>
-                  <label
-                    className="usa-label"
-                    htmlFor="freeText"
-                    id="free-text"
-                  >
-                    What is this order for?
-                  </label>
-
-                  <input
-                    aria-describedby="free-text"
-                    aria-label="freeText for order"
-                    className="usa-input usa-input--inline"
-                    id="freeText"
-                    name="freeText"
-                    value={form.freeText || ''}
-                    onBlur={() => {}}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </FormGroup>
+                {form.eventCode && <CourtIssuedNonstandardForm />}
 
                 <Inclusions />
                 <p>

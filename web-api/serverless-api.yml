@@ -83,6 +83,7 @@ provider:
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   elasticsearchEndpoint: ${opt:elasticsearch_endpoint}
@@ -114,11 +115,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/apiHandlers.js
-    - shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.scss
-    - shared/src/business/useCaseHelper/pendingReport/pendingReport.pug
-    - shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.handlebars
-    - shared/static/images/ustc_seal.png
+    - web-api/${self:provider.dir}/apiHandlers.js
   excludeDevDependencies: true
 
 resources:
@@ -157,7 +154,7 @@ resources:
 
 functions:
   runBatchProcess:
-    handler: web-api/src/apiHandlers.runBatchProcessLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.runBatchProcessLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -173,7 +170,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getNotifications:
-    handler: web-api/src/apiHandlers.getNotificationsLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.getNotificationsLambda
     events:
       - http:
           path: notifications
@@ -185,12 +182,12 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   checkForReadyForTrialCases:
-    handler: web-api/src/apiHandlers.checkForReadyForTrialCases
+    handler: web-api/${self:provider.dir}/apiHandlers.checkForReadyForTrialCases
     events:
       - schedule: cron(0 7 * * ? *)
 
   swagger:
-    handler: web-api/src/apiHandlers.swaggerLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.swaggerLambda
     events:
       - http:
           path: swagger
@@ -198,7 +195,7 @@ functions:
           cors: true
 
   swaggerJson:
-    handler: web-api/src/apiHandlers.swaggerJsonLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.swaggerJsonLambda
     events:
       - http:
           path: swagger.json
@@ -206,7 +203,7 @@ functions:
           cors: true
 
   createCourtIssuedOrderPdfFromHtml:
-    handler: web-api/src/apiHandlers.createCourtIssuedOrderPdfFromHtmlLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.createCourtIssuedOrderPdfFromHtmlLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -222,7 +219,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   generateDocketRecordPdfLambda:
-    handler: web-api/src/apiHandlers.generateDocketRecordPdfLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.generateDocketRecordPdfLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -238,7 +235,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   generateTrialCalendarPdfLambda:
-    handler: web-api/src/apiHandlers.generateTrialCalendarPdfLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.generateTrialCalendarPdfLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -254,7 +251,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   fetchPendingItemsLambda:
-    handler: web-api/src/apiHandlers.fetchPendingItemsLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.fetchPendingItemsLambda
     events:
       - http:
           path: pending-items

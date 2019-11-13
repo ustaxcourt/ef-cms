@@ -9,6 +9,8 @@ aws.json
 coverage/
 cypress/screenshots
 cypress/videos
+cypress-smoketests/screenshots
+cypress-smoketests/videos
 dist/
 gen.conf
 graph-generators/node_modules/
