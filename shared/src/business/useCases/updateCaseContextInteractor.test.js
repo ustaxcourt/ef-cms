@@ -86,9 +86,9 @@ describe('updateCaseContextInteractor', () => {
     });
     const getCaseByCaseIdStub = jest.fn().mockReturnValue({
       ...MOCK_CASE,
+      associatedJudge: 'Judge Bob',
       status: Case.STATUS_TYPES.calendared,
       trialSessionId: '83ed63e7-0583-4ecf-882d-d6d6069637ff',
-      associatedJudge: 'Judge Bob',
     });
 
     applicationContext = {
@@ -129,9 +129,9 @@ describe('updateCaseContextInteractor', () => {
     });
     const getCaseByCaseIdStub = jest.fn().mockReturnValue({
       ...MOCK_CASE,
+      associatedJudge: 'Judge Rachael',
       status: Case.STATUS_TYPES.calendared,
       trialSessionId: '83ed63e7-0583-4ecf-882d-d6d6069637ff',
-      associatedJudge: 'Judge Rachael',
     });
 
     applicationContext = {
@@ -229,8 +229,8 @@ describe('updateCaseContextInteractor', () => {
   it('should only update the associated judge without changing the status if only the associated judge is passed in', async () => {
     const getCaseByCaseIdStub = jest.fn().mockReturnValue({
       ...MOCK_CASE,
-      status: Case.STATUS_TYPES.submitted,
       associatedJudge: 'Judge Buch',
+      status: Case.STATUS_TYPES.submitted,
     });
 
     applicationContext = {
@@ -260,8 +260,8 @@ describe('updateCaseContextInteractor', () => {
   it('should only update the associated judge without changing the status if the associated judge and the same case status are passed in', async () => {
     const getCaseByCaseIdStub = jest.fn().mockReturnValue({
       ...MOCK_CASE,
-      status: Case.STATUS_TYPES.submitted,
       associatedJudge: 'Judge Buch',
+      status: Case.STATUS_TYPES.submitted,
     });
 
     applicationContext = {
