@@ -11,8 +11,4 @@
 ./wait-until.sh http://localhost:3009/ 403
 ./wait-until.sh http://localhost:3010/ 404
 ./wait-until.sh http://localhost:3020/ 404 # notifications -- websocket port 3011
-
-if [ -z "$CI" ]; then 
-  ./wait-until.sh http://localhost:3012/ 403
-  ./wait-until.sh http://localhost:9200/ 200
-fi
+./wait-until.sh http://localhost:9200/ 200
