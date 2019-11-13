@@ -129,7 +129,7 @@ describe('advancedSearchHelper', () => {
         contactPrimaryName: 'Test Person',
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
-        formattedFiledDate: '05/01/18',
+        formattedFiledDate: '05/01/19',
         fullStateNamePrimary: 'Texas',
       },
       {
