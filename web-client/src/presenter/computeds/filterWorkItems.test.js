@@ -561,8 +561,8 @@ describe('filterWorkItems', () => {
   it('Returns sent messages for a Petitions Clerk in My Document QC Outbox', () => {
     const filtered = workQueueOutbox.filter(
       filterWorkItems({
-        applicationContext,
         USER_ROLES: User.ROLES,
+        applicationContext,
         ...MY_DOCUMENT_QC_OUTBOX,
         user: petitionsClerk1,
       }),
@@ -639,8 +639,8 @@ describe('filterWorkItems', () => {
     const user = petitionsClerk1;
     const filtered = workQueueOutbox.filter(
       filterWorkItems({
-        applicationContext,
         USER_ROLES: User.ROLES,
+        applicationContext,
         ...SECTION_DOCUMENT_QC_OUTBOX,
         user,
       }),

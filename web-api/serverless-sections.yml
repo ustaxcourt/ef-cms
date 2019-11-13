@@ -82,6 +82,7 @@ provider:
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -111,7 +112,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/sectionsHandlers.js
+    - web-api/${self:provider.dir}/sectionsHandlers.js
 
   excludeDevDependencies: true
 
@@ -151,7 +152,7 @@ resources:
 
 functions:
   getInboxMessagesForSection:
-    handler: web-api/src/sectionsHandlers.getInboxMessagesForSectionLambda
+    handler: web-api/${self:provider.dir}/sectionsHandlers.getInboxMessagesForSectionLambda
     events:
       - http:
           path: /{section}/messages/inbox
@@ -162,7 +163,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
   getSentMessagesForSection:
-    handler: web-api/src/sectionsHandlers.getSentMessagesForSectionLambda
+    handler: web-api/${self:provider.dir}/sectionsHandlers.getSentMessagesForSectionLambda
     events:
       - http:
           path: /{section}/messages/sent
@@ -173,7 +174,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
   getDocumentQCBatchedForSection:
-    handler: web-api/src/sectionsHandlers.getDocumentQCBatchedForSectionLambda
+    handler: web-api/${self:provider.dir}/sectionsHandlers.getDocumentQCBatchedForSectionLambda
     events:
       - http:
           path: /{section}/document-qc/batched
@@ -185,7 +186,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCServedForSection:
-    handler: web-api/src/sectionsHandlers.getDocumentQCServedForSectionLambda
+    handler: web-api/${self:provider.dir}/sectionsHandlers.getDocumentQCServedForSectionLambda
     events:
       - http:
           path: /{section}/document-qc/served
@@ -196,7 +197,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
   getUsersInSection:
-    handler: web-api/src/sectionsHandlers.getUsersInSectionLambda
+    handler: web-api/${self:provider.dir}/sectionsHandlers.getUsersInSectionLambda
     events:
       - http:
           path: /{section}/users
@@ -208,7 +209,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentQCInboxForSection:
-    handler: web-api/src/sectionsHandlers.getDocumentQCInboxForSectionLambda
+    handler: web-api/${self:provider.dir}/sectionsHandlers.getDocumentQCInboxForSectionLambda
     events:
       - http:
           path: /{section}/document-qc/inbox

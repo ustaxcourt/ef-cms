@@ -82,6 +82,7 @@ provider:
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   elasticsearchEndpoint: ${opt:elasticsearch_endpoint}
@@ -116,7 +117,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/casesHandlers.js
+    - web-api/${self:provider.dir}/casesHandlers.js
   excludeDevDependencies: true
 
 resources:
@@ -155,7 +156,7 @@ resources:
 
 functions:
   updateCase:
-    handler: web-api/src/casesHandlers.updateCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.updateCaseLambda
     events:
       - http:
           path: /{caseId}
@@ -167,7 +168,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCaseTrialSortTags:
-    handler: web-api/src/casesHandlers.updateCaseTrialSortTagsLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.updateCaseTrialSortTagsLambda
     events:
       - http:
           path: /{caseId}/update-case-trial-sort-tags
@@ -179,7 +180,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updatePrimaryContact:
-    handler: web-api/src/casesHandlers.updatePrimaryContactLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.updatePrimaryContactLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -195,7 +196,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCase:
-    handler: web-api/src/casesHandlers.createCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.createCaseLambda
     events:
       - http:
           path: /
@@ -207,7 +208,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCaseFromPaper:
-    handler: web-api/src/casesHandlers.createCaseFromPaperLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.createCaseFromPaperLambda
     events:
       - http:
           path: /paper
@@ -219,7 +220,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCase:
-    handler: web-api/src/casesHandlers.getCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.getCaseLambda
     events:
       - http:
           path: /{caseId}
@@ -235,7 +236,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   caseSearch:
-    handler: web-api/src/casesHandlers.caseSearchLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.caseSearchLambda
     events:
       - http:
           path: /search
@@ -247,7 +248,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   sendToIRS:
-    handler: web-api/src/casesHandlers.sendPetitionToIRSHoldingQueueLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.sendPetitionToIRSHoldingQueueLambda
     events:
       - http:
           path: /{caseId}/send-to-irs-holding-queue
@@ -259,7 +260,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   recallFromIRS:
-    handler: web-api/src/casesHandlers.recallPetitionFromIRSHoldingQueueLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.recallPetitionFromIRSHoldingQueueLambda
     events:
       - http:
           path: /{caseId}/recall-from-irs-holding-queue
@@ -271,7 +272,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   associatePractitionerWithCase:
-    handler: web-api/src/casesHandlers.associatePractitionerWithCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.associatePractitionerWithCaseLambda
     events:
       - http:
           path: /{caseId}/associate-practitioner
@@ -283,7 +284,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   associateRespondentWithCase:
-    handler: web-api/src/casesHandlers.associateRespondentWithCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.associateRespondentWithCaseLambda
     events:
       - http:
           path: /{caseId}/associate-respondent
@@ -295,7 +296,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCounselOnCase:
-    handler: web-api/src/casesHandlers.updateCounselOnCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.updateCounselOnCaseLambda
     events:
       - http:
           path: /{caseId}/counsel/{userId}
@@ -307,7 +308,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   deleteCounselFromCase:
-    handler: web-api/src/casesHandlers.deleteCounselFromCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.deleteCounselFromCaseLambda
     events:
       - http:
           path: /{caseId}/counsel/{userId}
@@ -319,7 +320,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   blockCase:
-    handler: web-api/src/casesHandlers.blockCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.blockCaseLambda
     events:
       - http:
           path: /{caseId}/block
@@ -331,7 +332,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   unblockCase:
-    handler: web-api/src/casesHandlers.unblockCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.unblockCaseLambda
     events:
       - http:
           path: /{caseId}/block
@@ -343,7 +344,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getBlockedCases:
-    handler: web-api/src/casesHandlers.getBlockedCasesLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.getBlockedCasesLambda
     events:
       - http:
           path: /blocked/{trialLocation}
@@ -355,7 +356,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   prioritizeCase:
-    handler: web-api/src/casesHandlers.prioritizeCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.prioritizeCaseLambda
     events:
       - http:
           path: /{caseId}/high-priority
@@ -367,7 +368,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   unprioritizeCase:
-    handler: web-api/src/casesHandlers.unprioritizeCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.unprioritizeCaseLambda
     events:
       - http:
           path: /{caseId}/high-priority
@@ -379,7 +380,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCaseContext:
-    handler: web-api/src/casesHandlers.updateCaseContextLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.updateCaseContextLambda
     events:
       - http:
           path: /{caseId}/case-context

@@ -1,19 +1,17 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CancelDraftDocumentModal } from '../CancelDraftDocumentModal';
 import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
-import { Inclusions } from '../AddDocketEntry/Inclusions';
-
-import {
-  docketEntryOnChange,
-  onInputChange,
-  reactSelectValue,
-} from '../../ustc-ui/utils/documentTypeSelectHelper';
-
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
+import {
+  courtIssuedDocketEntryOnChange,
+  onInputChange,
+  reactSelectValue,
+} from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
@@ -25,7 +23,12 @@ export const AddCourtIssuedDocketEntry = connect(
     openCancelDraftDocumentModalSequence:
       sequences.openCancelDraftDocumentModalSequence,
     showModal: state.showModal,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    submitCourtIssuedDocketEntrySequence:
+      sequences.submitCourtIssuedDocketEntrySequence,
+    updateCourtIssuedDocketEntryFormValueSequence:
+      sequences.updateCourtIssuedDocketEntryFormValueSequence,
+    validateCourtIssuedDocketEntrySequence:
+      sequences.validateCourtIssuedDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -33,24 +36,35 @@ export const AddCourtIssuedDocketEntry = connect(
     form,
     openCancelDraftDocumentModalSequence,
     showModal,
-    updateFormValueSequence,
+    submitCourtIssuedDocketEntrySequence,
+    updateCourtIssuedDocketEntryFormValueSequence,
+    validateCourtIssuedDocketEntrySequence,
     validationErrors,
   }) => {
     return (
       <>
         <CaseDetailHeader />
 
-        <section className="usa-section grid-container">
+        <section className="usa-section grid-container margin-top-5">
           <SuccessNotification />
           <ErrorNotification />
           <div className="grid-row grid-gap">
-            <div className="grid-col-12">
-              <Button className="float-right" onClick={() => {}}>
-                Serve to Parties
-              </Button>
+            <div className="grid-col-5">
               <h1 className="margin-bottom-105">Add Docket Entry</h1>
             </div>
-
+            <div className="grid-col-7">
+              <div className="display-flex flex-row flex-justify flex-align-center">
+                <p className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
+                  <span className="text-bold">Docket Entry Preview: </span>
+                  {form.generatedDocumentTitle}
+                </p>
+                <Button className="margin-right-0" onClick={() => {}}>
+                  Serve to Parties
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div className="grid-row grid-gap">
             <div className="grid-col-5">
               <div className="blue-container">
                 <FormGroup errorText={validationErrors.documentType}>
@@ -76,12 +90,12 @@ export const AddCourtIssuedDocketEntry = connect(
                       selectedEventCode: form.eventCode,
                     })}
                     onChange={(inputValue, { action, name }) => {
-                      docketEntryOnChange({
+                      courtIssuedDocketEntryOnChange({
                         action,
                         inputValue,
                         name,
-                        updateSequence: updateFormValueSequence,
-                        validateSequence: () => {},
+                        updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
+                        validateSequence: validateCourtIssuedDocketEntrySequence,
                       });
                       return true;
                     }}
@@ -89,39 +103,42 @@ export const AddCourtIssuedDocketEntry = connect(
                       onInputChange({
                         action,
                         inputText,
-                        updateSequence: updateFormValueSequence,
+                        updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
                       });
                     }}
                   />
                 </FormGroup>
 
-                <FormGroup errorText={validationErrors.freeText}>
-                  <label
-                    className="usa-label"
-                    htmlFor="freeText"
-                    id="free-text"
-                  >
-                    What is this order for?
-                  </label>
+                {form.eventCode && <CourtIssuedNonstandardForm />}
 
-                  <input
-                    aria-describedby="free-text"
-                    aria-label="freeText for order"
-                    className="usa-input usa-input--inline"
-                    id="freeText"
-                    name="freeText"
-                    value={form.freeText || ''}
-                    onBlur={() => {}}
-                    onChange={e => {
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
+                <FormGroup errorText={validationErrors.attachments}>
+                  <fieldset className="usa-fieldset">
+                    <legend className="usa-legend">Inclusions</legend>
+                    <div className="usa-checkbox">
+                      <input
+                        checked={form.attachments}
+                        className="usa-checkbox__input"
+                        id="attachments"
+                        name="attachments"
+                        type="checkbox"
+                        onChange={e => {
+                          updateCourtIssuedDocketEntryFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.checked,
+                          });
+                          validateCourtIssuedDocketEntrySequence();
+                        }}
+                      />
+                      <label
+                        className="usa-checkbox__label"
+                        htmlFor="attachments"
+                      >
+                        Attachment(s)
+                      </label>
+                    </div>
+                  </fieldset>
                 </FormGroup>
 
-                <Inclusions />
                 <p>
                   <b>Service Parties</b>
                 </p>
@@ -142,7 +159,7 @@ export const AddCourtIssuedDocketEntry = connect(
                   <Button
                     secondary
                     id="save-and-add-supporting"
-                    onClick={() => {}}
+                    onClick={() => submitCourtIssuedDocketEntrySequence()}
                   >
                     Save Entry
                   </Button>

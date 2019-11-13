@@ -80,6 +80,7 @@ provider:
   timeout: 30
   logRetentionInDays: 7
   role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -112,7 +113,7 @@ package:
   exclude:
     - ./**
   include:
-    - web-api/src/caseNotesHandlers.js
+    - web-api/${self:provider.dir}/caseNotesHandlers.js
 
   excludeDevDependencies: true
 
@@ -152,7 +153,7 @@ resources:
 
 functions:
   createCaseNote:
-    handler: web-api/src/caseNotesHandlers.createCaseNoteLambda
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.createCaseNoteLambda
     events:
       - http:
           path: /{caseId}
@@ -164,7 +165,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCaseNote:
-    handler: web-api/src/caseNotesHandlers.getCaseNoteLambda
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.getCaseNoteLambda
     events:
       - http:
           path: /{caseId}
@@ -176,7 +177,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCaseNote:
-    handler: web-api/src/caseNotesHandlers.updateCaseNoteLambda
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.updateCaseNoteLambda
     events:
       - http:
           path: /{caseId}
@@ -188,7 +189,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   deleteCaseNote:
-    handler: web-api/src/caseNotesHandlers.deleteCaseNoteLambda
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.deleteCaseNoteLambda
     events:
       - http:
           path: /{caseId}
