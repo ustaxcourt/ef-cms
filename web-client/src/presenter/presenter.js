@@ -211,6 +211,7 @@ import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAsso
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
+import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
@@ -281,6 +282,7 @@ import { validateCaseAssociationRequestSequence } from './sequences/validateCase
 import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
 import { validateContactPrimarySequence } from './sequences/validateContactPrimarySequence';
+import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateEditPractitionersSequence } from './sequences/caseAssociation/validateEditPractitionersSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
@@ -520,6 +522,7 @@ export const presenter = {
     submitCaseDetailEditSaveSequence,
     submitCaseSearchSequence,
     submitCompleteSequence,
+    submitCourtIssuedDocketEntrySequence,
     submitCourtIssuedOrderSequence,
     submitCreateOrderModalSequence,
     submitDocketEntrySequence,
@@ -590,6 +593,7 @@ export const presenter = {
     validateCaseDeadlineSequence,
     validateCaseDetailSequence,
     validateContactPrimarySequence,
+    validateCourtIssuedDocketEntrySequence,
     validateDocketEntrySequence,
     validateEditPractitionersSequence,
     validateExternalDocumentInformationSequence,

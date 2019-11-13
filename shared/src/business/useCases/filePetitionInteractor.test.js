@@ -18,6 +18,7 @@ describe('filePetitionInteractor', () => {
     virusScanPdfStub = sinon.stub().resolves(null);
 
     return {
+      environment: { stage: 'local' },
       getCurrentUser: () => ({
         role: User.ROLES.petitioner,
         userId: 'petitioner',
@@ -30,7 +31,6 @@ describe('filePetitionInteractor', () => {
         validatePdfInteractor: validatePdfStub,
         virusScanPdfInteractor: virusScanPdfStub,
       }),
-      environment: { stage: 'local' },
       ...options,
     };
   };
