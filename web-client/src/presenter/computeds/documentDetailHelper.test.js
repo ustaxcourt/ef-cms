@@ -221,7 +221,149 @@ describe('document detail helper', () => {
   });
 
   describe('showAddDocketEntryButton', () => {
-    it('should set showAddDocketEntryButton true when the user has the DOCKET_ENTRY permission', async () => {
+    it('should set showAddDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is an unsigned stipulated decision', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: true },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showAddDocketEntryButton).toEqual(true);
+    });
+
+    it('should set showAddDocketEntryButton false when the user has the DOCKET_ENTRY permission and the document is a signed stipulated decision', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+                signedAt: getDateISO(),
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: true },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showAddDocketEntryButton).toEqual(false);
+    });
+
+    it('should set showAddDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is an unsigned order', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Order of Dismissal',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: true },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showAddDocketEntryButton).toEqual(true);
+    });
+
+    it('should set showAddDocketEntryButton false when the user has the DOCKET_ENTRY permission and the document is a served order', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Order of Dismissal',
+                servedAt: getDateISO(),
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: true },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showAddDocketEntryButton).toEqual(false);
+    });
+
+    it('should set showAddDocketEntryButton false when the user does not have the DOCKET_ENTRY permission', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: false },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showAddDocketEntryButton).toEqual(false);
+    });
+
+    it('should set showAddDocketEntryButton false when the document type is not an order or stipulated decision', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -241,34 +383,6 @@ describe('document detail helper', () => {
           },
           documentId: 'abc',
           permissions: { DOCKET_ENTRY: true },
-          workItemActions: {
-            abc: 'complete',
-          },
-        },
-      });
-      expect(result.showAddDocketEntryButton).toEqual(true);
-    });
-
-    it('should set showAddDocketEntryButton false when the user does not have the DOCKET_ENTRY permission', async () => {
-      const user = {
-        role: User.ROLES.petitionsClerk,
-        userId: '123',
-      };
-
-      const result = runCompute(documentDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            documents: [
-              {
-                documentId: 'abc',
-                documentType: 'Petition',
-              },
-            ],
-            status: Case.STATUS_TYPES.new,
-          },
-          documentId: 'abc',
-          permissions: { DOCKET_ENTRY: false },
           workItemActions: {
             abc: 'complete',
           },
@@ -586,6 +700,150 @@ describe('document detail helper', () => {
         },
       });
       expect(result.showServeDocumentButton).toEqual(false);
+    });
+  });
+
+  describe('showEditDocketEntry', () => {
+    it('should set showEditDocketEntry true when the the document is a signed stipulated decision and the user has the DOCKET_ENTRY permission', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+                signedAt: getDateISO(),
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: true },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showEditDocketEntry).toEqual(true);
+    });
+
+    it('should set showEditDocketEntry false when the the document is an unsigned stipulated decision and the user has the DOCKET_ENTRY permission', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: true },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showEditDocketEntry).toEqual(false);
+    });
+
+    it('should set showEditDocketEntry true when the the document is a served order and the user has the DOCKET_ENTRY permission', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Order of Dismissal',
+                servedAt: getDateISO(),
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: true },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showEditDocketEntry).toEqual(true);
+    });
+
+    it('should set showEditDocketEntry false when the the document is an unserved order and the user has the DOCKET_ENTRY permission', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Order of Dismissal',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: true },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showEditDocketEntry).toEqual(false);
+    });
+
+    it('should set showEditDocketEntry false when the the document is petition and the user has the DOCKET_ENTRY permission', async () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Petition',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          permissions: { DOCKET_ENTRY: true },
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showEditDocketEntry).toEqual(false);
     });
   });
 
