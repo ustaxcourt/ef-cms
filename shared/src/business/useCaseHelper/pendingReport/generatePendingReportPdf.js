@@ -43,7 +43,7 @@ const generatePendingReportPage = async ({
   const html = compiledFunction({
     logo: ustcLogoBufferBase64,
     pendingItems,
-    styles: `<style>${css}</style>`,
+    styles: css,
   });
   return html;
 };
