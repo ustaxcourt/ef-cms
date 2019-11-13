@@ -17,7 +17,7 @@ export const uploadExternalDocumentsAction = async ({
   const { caseId, docketNumber } = get(state.caseDetail);
   const form = get(state.form);
 
-  const documentMetadata = { ...form, docketNumber, caseId };
+  const documentMetadata = { ...form, caseId, docketNumber };
 
   const documentFiles = {
     primary: form.primaryDocumentFile,

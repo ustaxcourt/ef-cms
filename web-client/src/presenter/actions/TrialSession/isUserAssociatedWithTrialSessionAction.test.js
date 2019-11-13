@@ -65,8 +65,8 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
         trialSession: {
           judge: { userId: '123' },
         },
-        users: [{ role: User.ROLES.judge, userId: '456' }],
         user: { role: User.ROLES.chambers, userId: '234' },
+        users: [{ role: User.ROLES.judge, userId: '456' }],
       },
     });
 
@@ -83,8 +83,8 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
         trialSession: {
           judge: { userId: '123' },
         },
-        users: [{ role: User.ROLES.judge, userId: '123' }],
         user: { role: User.ROLES.chambers, userId: '234' },
+        users: [{ role: User.ROLES.judge, userId: '123' }],
       },
     });
 

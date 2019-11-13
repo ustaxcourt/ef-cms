@@ -63,8 +63,8 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
       return {
         ...caseToBatch,
-        caseName,
         caseFolder,
+        caseName,
       };
     });
 

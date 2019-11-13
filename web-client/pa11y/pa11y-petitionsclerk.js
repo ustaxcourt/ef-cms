@@ -252,18 +252,6 @@ module.exports = [
     ],
     notes: 'checks the trial session planning modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/&info=trial-session-planning-modal',
-  },
-  {
-    actions: [
-      'wait for element #reports-btn to be visible',
-      'click #reports-btn',
-      'wait for element #trial-session-planning-btn to be visible',
-      'click #trial-session-planning-btn',
-      'wait for element .trial-session-planning-modal to be visible',
-    ],
-    notes: ['checks the planning modal'],
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/&info=planning-modals',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=trial-session-planning-modal',
   },
 ];

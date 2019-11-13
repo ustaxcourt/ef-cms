@@ -19,8 +19,8 @@ export const submitCaseAssociationRequestAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
-    docketNumber,
     caseId,
+    docketNumber,
     practitioner: [
       {
         ...user,

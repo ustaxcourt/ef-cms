@@ -19,9 +19,9 @@ exports.handler = event =>
         .getUseCases()
         .forwardWorkItemInteractor({
           ...JSON.parse(event.body),
+          applicationContext,
           workItemId: event.pathParameters.workItemId,
           workItemToUpdate: JSON.parse(event.body),
-          applicationContext,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);

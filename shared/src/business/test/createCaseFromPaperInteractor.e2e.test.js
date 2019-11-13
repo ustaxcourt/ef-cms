@@ -53,9 +53,9 @@ describe('createCaseFromPaperInteractor integration test', () => {
       petitionMetadata: {
         ...MOCK_CASE,
         caseCaption: 'Bob Jones2, Petitioner',
+        createdAt: RECEIVED_DATE,
         petitionFile: { name: 'something' },
         petitionFileSize: 1,
-        createdAt: RECEIVED_DATE,
         receivedAt: RECEIVED_DATE,
       },
     });
