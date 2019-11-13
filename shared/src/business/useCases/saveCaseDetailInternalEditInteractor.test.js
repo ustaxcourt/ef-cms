@@ -1,8 +1,10 @@
+const {
+  saveCaseDetailInternalEditInteractor,
+} = require('./saveCaseDetailInternalEditInteractor');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 const { omit } = require('lodash');
-const { updateCaseInteractor } = require('./updateCaseInteractor');
 const { User } = require('../entities/User');
 
 const MOCK_CASE = {
@@ -60,7 +62,7 @@ describe('updateCase', () => {
     };
     let error;
     try {
-      await updateCaseInteractor({
+      await saveCaseDetailInternalEditInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
         caseToUpdate: omit(MOCK_CASE, 'docketNumber'),
@@ -92,7 +94,7 @@ describe('updateCase', () => {
     };
     let error;
     try {
-      await updateCaseInteractor({
+      await saveCaseDetailInternalEditInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
         petitioners: [{ name: 'Test Petitioner' }],
@@ -123,7 +125,7 @@ describe('updateCase', () => {
     };
     let updatedCase;
 
-    updatedCase = await updateCaseInteractor({
+    updatedCase = await saveCaseDetailInternalEditInteractor({
       applicationContext,
       caseId: caseToUpdate.caseId,
       caseToUpdate: caseToUpdate,
@@ -157,7 +159,7 @@ describe('updateCase', () => {
       },
     };
 
-    const updatedCase = await updateCaseInteractor({
+    const updatedCase = await saveCaseDetailInternalEditInteractor({
       applicationContext,
       caseId: caseToUpdate.caseId,
       caseToUpdate: {
@@ -226,7 +228,7 @@ describe('updateCase', () => {
 
     let error = null;
     try {
-      await updateCaseInteractor({
+      await saveCaseDetailInternalEditInteractor({
         applicationContext,
         caseId: caseToUpdate.caseId,
         caseToUpdate: {
@@ -258,7 +260,7 @@ describe('updateCase', () => {
     };
     let error;
     try {
-      await updateCaseInteractor({
+      await saveCaseDetailInternalEditInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
         caseToUpdate: MOCK_CASE,
@@ -288,7 +290,7 @@ describe('updateCase', () => {
     };
     let error;
     try {
-      await updateCaseInteractor({
+      await saveCaseDetailInternalEditInteractor({
         applicationContext,
         caseId: '123',
         caseToUpdate: MOCK_CASE,

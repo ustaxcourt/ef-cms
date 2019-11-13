@@ -11,7 +11,6 @@ import { archiveDraftDocumentSequence } from './sequences/archiveDraftDocumentSe
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
 import { associatePractitionerWithCaseSequence } from './sequences/caseAssociation/associatePractitionerWithCaseSequence';
 import { associateRespondentWithCaseSequence } from './sequences/caseAssociation/associateRespondentWithCaseSequence';
-import { autoSaveCaseSequence } from './sequences/autoSaveCaseSequence';
 import { autoSaveTrialSessionWorkingCopySequence } from './sequences/autoSaveTrialSessionWorkingCopySequence';
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
@@ -229,7 +228,6 @@ import { submitPetitionToIRSHoldingQueueSequence } from './sequences/submitPetit
 import { submitRecallPetitionFromIRSHoldingQueueSequence } from './sequences/submitRecallPetitionFromIRSHoldingQueueSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
-import { submitUpdateCaseSequence } from './sequences/submitUpdateCaseSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
 import { toggleMenuSequence } from './sequences/toggleMenuSequence';
@@ -326,7 +324,6 @@ export const presenter = {
     assignSelectedWorkItemsSequence,
     associatePractitionerWithCaseSequence,
     associateRespondentWithCaseSequence,
-    autoSaveCaseSequence,
     autoSaveTrialSessionWorkingCopySequence,
     batchDownloadReadySequence,
     batchDownloadTrialSessionSequence,
@@ -542,7 +539,6 @@ export const presenter = {
     submitRecallPetitionFromIRSHoldingQueueSequence,
     submitTrialSessionSequence,
     submitUpdateCaseModalSequence,
-    submitUpdateCaseSequence,
     toggleBetaBarSequence,
     toggleCaseDifferenceSequence,
     toggleMenuSequence,
