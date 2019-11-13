@@ -1,7 +1,7 @@
 const { put } = require('./requests');
 
 /**
- * updateCaseInteractor
+ * saveCaseDetailInternalEditInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,7 +9,10 @@ const { put } = require('./requests');
  * @param {object} providers.caseToUpdate the updated case data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateCaseInteractor = ({ applicationContext, caseToUpdate }) => {
+exports.saveCaseDetailInternalEditInteractor = ({
+  applicationContext,
+  caseToUpdate,
+}) => {
   return put({
     applicationContext,
     body: caseToUpdate,
