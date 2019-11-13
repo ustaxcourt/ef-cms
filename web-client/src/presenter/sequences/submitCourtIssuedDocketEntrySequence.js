@@ -1,5 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -22,6 +26,10 @@ export const submitCourtIssuedDocketEntrySequence = [
       stopShowValidationAction,
       clearAlertsAction,
       submitCourtIssuedDocketEntryAction,
+      getDocketEntryAlertSuccessAction,
+      setAlertSuccessAction,
+      setSaveAlertsForNavigationAction,
+      navigateToCaseDetailAction,
       unsetWaitingForResponseAction,
     ],
   },
