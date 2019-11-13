@@ -45,7 +45,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
   );
 
   if (!document) {
-    throw new NotFoundError('Document not found.');
+    throw new NotFoundError('Document not found');
   }
 
   const user = await applicationContext
@@ -55,12 +55,12 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
   const documentEntity = new Document(
     {
       ...document,
-      userId: user.userId,
       attachments: documentMeta.attachments,
       documentTitle: documentMeta.generatedDocumentTitle,
       eventCode: documentMeta.eventCode,
       freeText: documentMeta.freeText,
       scenario: documentMeta.scenario,
+      userId: user.userId,
     },
     { applicationContext },
   );
