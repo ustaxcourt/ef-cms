@@ -9,14 +9,18 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral store used for getting props.combinedCaseDetailWithForm
  * @returns {object} the alertSuccess and the caseDetail
  */
-export const updateCaseAction = async ({ applicationContext, get, props }) => {
+export const saveCaseDetailInternalEditAction = async ({
+  applicationContext,
+  get,
+  props,
+}) => {
   const { STATUS_TYPES } = get(state.constants);
   const { combinedCaseDetailWithForm } = props;
   const caseToUpdate = combinedCaseDetailWithForm || get(state.caseDetail);
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .updateCaseInteractor({
+    .saveCaseDetailInternalEditInteractor({
       applicationContext,
       caseToUpdate,
     });

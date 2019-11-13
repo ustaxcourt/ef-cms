@@ -11,7 +11,7 @@ const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { isEmpty } = require('lodash');
 
 /**
- * updateCaseInteractor
+ * saveCaseDetailInternalEditInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -19,7 +19,7 @@ const { isEmpty } = require('lodash');
  * @param {object} providers.caseToUpdate the updated case data
  * @returns {object} the updated case data
  */
-exports.updateCaseInteractor = async ({
+exports.saveCaseDetailInternalEditInteractor = async ({
   applicationContext,
   caseId,
   caseToUpdate,

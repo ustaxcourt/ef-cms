@@ -149,6 +149,7 @@ import { removeItem } from '../../shared/src/persistence/localStorage/removeItem
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { runBatchProcessInteractor } from '../../shared/src/proxies/runBatchProcessProxy';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
+import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
 import { saveIntermediateDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/saveIntermediateDocketEntryProxy';
 import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { serveSignedStipDecisionInteractor } from '../../shared/src/proxies/serveSignedStipDecisionProxy';
@@ -166,7 +167,6 @@ import { unblockFromTrialInteractor } from '../../shared/src/proxies/unblockFrom
 import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritizeCaseProxy';
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
-import { updateCaseInteractor } from '../../shared/src/proxies/updateCaseProxy';
 import { updateCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateCaseNoteProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAssociation/updateCounselOnCaseProxy';
@@ -309,6 +309,7 @@ const allUseCases = {
   removeItemInteractor,
   runBatchProcessInteractor,
   runTrialSessionPlanningReportInteractor,
+  saveCaseDetailInternalEditInteractor,
   saveIntermediateDocketEntryInteractor,
   sendPetitionToIRSHoldingQueueInteractor,
   serveSignedStipDecisionInteractor,
@@ -323,7 +324,6 @@ const allUseCases = {
   unprioritizeCaseInteractor,
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
-  updateCaseInteractor,
   updateCaseNoteInteractor,
   updateCaseTrialSortTagsInteractor,
   updateCounselOnCaseInteractor,

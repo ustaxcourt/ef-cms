@@ -2,29 +2,29 @@ import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { updateCaseAction } from './updateCaseAction';
+import { saveCaseDetailInternalEditAction } from './saveCaseDetailInternalEditAction';
 import sinon from 'sinon';
 
-let updateCaseStub = sinon.stub().returns({});
+let saveCaseDetailInternalEditStub = sinon.stub().returns({});
 const updateCaseTrialSortTagsStub = sinon.stub().resolves();
 
 presenter.providers.applicationContext = {
   getUseCases: () => ({
-    updateCaseInteractor: updateCaseStub,
+    saveCaseDetailInternalEditInteractor: saveCaseDetailInternalEditStub,
     updateCaseTrialSortTagsInteractor: updateCaseTrialSortTagsStub,
   }),
 };
 
-describe('updateCaseAction', () => {
+describe('saveCaseDetailInternalEditAction', () => {
   it('should call the updateCaseTrialSortTags use case if case status is ready for trial', async () => {
     const caseDetail = {
       ...MOCK_CASE,
       createdAt: '2019-03-01T21:40:46.415Z',
       status: Case.STATUS_TYPES.generalDocketReadyForTrial,
     };
-    updateCaseStub = sinon.stub().returns(caseDetail);
+    saveCaseDetailInternalEditStub = sinon.stub().returns(caseDetail);
 
-    await runAction(updateCaseAction, {
+    await runAction(saveCaseDetailInternalEditAction, {
       modules: {
         presenter,
       },
@@ -44,9 +44,9 @@ describe('updateCaseAction', () => {
       ...MOCK_CASE,
       status: Case.STATUS_TYPES.new,
     };
-    updateCaseStub = sinon.stub().returns(caseDetail);
+    saveCaseDetailInternalEditStub = sinon.stub().returns(caseDetail);
 
-    await runAction(updateCaseAction, {
+    await runAction(saveCaseDetailInternalEditAction, {
       modules: {
         presenter,
       },
