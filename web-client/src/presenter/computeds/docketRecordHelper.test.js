@@ -114,8 +114,8 @@ describe('docket record helper', () => {
         ...getBaseState(user),
         caseDetail: {},
         currentPage: 'CaseDetail',
-        screenMetadata: { isAssociated: true },
         form: {},
+        screenMetadata: { isAssociated: true },
       },
     });
     expect(result.showFileDocumentButton).toEqual(true);
@@ -131,8 +131,8 @@ describe('docket record helper', () => {
         ...getBaseState(user),
         caseDetail: {},
         currentPage: 'CaseDetail',
-        screenMetadata: { isAssociated: true },
         form: {},
+        screenMetadata: { isAssociated: true },
       },
     });
     expect(result.showFileDocumentButton).toEqual(false);
@@ -148,8 +148,8 @@ describe('docket record helper', () => {
         ...getBaseState(user),
         caseDetail: {},
         currentPage: 'CaseDetail',
-        screenMetadata: { isAssociated: false },
         form: {},
+        screenMetadata: { isAssociated: false },
       },
     });
     expect(result.showFileDocumentButton).toEqual(false);

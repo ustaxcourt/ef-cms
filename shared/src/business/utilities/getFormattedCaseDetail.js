@@ -188,20 +188,20 @@ const formatCase = (applicationContext, caseDetail) => {
 
   result.draftDocuments = result.draftDocuments.map(document => ({
     ...document,
+    editUrl:
+      document.documentType === 'Stipulated Decision'
+        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
+    signUrl:
+      document.documentType === 'Stipulated Decision'
+        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
     signedAtFormatted: applicationContext
       .getUtilities()
       .formatDateString(document.signedAt, 'MMDDYY'),
     signedAtFormattedTZ: applicationContext
       .getUtilities()
       .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
-    signUrl:
-      document.documentType === 'Stipulated Decision'
-        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
-    editUrl:
-      document.documentType === 'Stipulated Decision'
-        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
   }));
 
   // establish an initial sort by ascending index
