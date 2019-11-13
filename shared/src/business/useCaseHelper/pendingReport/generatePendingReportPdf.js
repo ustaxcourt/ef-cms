@@ -88,10 +88,7 @@ exports.generatePendingReportPdf = async ({
       ...pendingItem,
       formattedFiledDate: applicationContext
         .getUtilities()
-        .formatDateString(
-          pendingItem.receivedAt || pendingItem.createdAt,
-          'MMDDYY',
-        ),
+        .formatDateString(pendingItem.receivedAt, 'MMDDYY'),
       caseCaptionNames: applicationContext.getCaseCaptionNames(
         pendingItem.caseCaption || '',
       ),
