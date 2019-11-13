@@ -2,13 +2,11 @@ const {
   CourtIssuedDocumentFactory,
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
 const {
-  CourtIssuedDocumentTypeA,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentTypeA');
-const {
   validateCourtIssuedDocketEntryInteractor,
 } = require('./validateCourtIssuedDocketEntryInteractor');
-
-const { VALIDATION_ERROR_MESSAGES } = CourtIssuedDocumentTypeA;
+const {
+  VALIDATION_ERROR_MESSAGES,
+} = require('../../entities/courtIssuedDocument/validationErrorMessages');
 
 describe('validateCourtIssuedDocketEntryInteractor', () => {
   it('returns null errors on empty entryMetadata', () => {
