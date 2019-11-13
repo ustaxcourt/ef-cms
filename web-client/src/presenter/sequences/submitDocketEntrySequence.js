@@ -43,6 +43,7 @@ const afterEntryCreatedOrUpdated = [
   stashWizardDataAction,
   setCaseAction,
   closeFileUploadStatusModalAction,
+  setWaitingForResponseAction,
   chooseNextStepAction,
   {
     addAnotherEntry: [
@@ -63,6 +64,7 @@ const afterEntryCreatedOrUpdated = [
       navigateToCaseDetailAction,
     ],
   },
+  unsetWaitingForResponseAction,
 ];
 
 export const submitDocketEntrySequence = [
@@ -84,7 +86,6 @@ export const submitDocketEntrySequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
-          setWaitingForResponseAction,
           unset(state.isUpdatingWithFile),
           generateTitleAction,
           stopShowValidationAction,
@@ -117,7 +118,6 @@ export const submitDocketEntrySequence = [
               },
             ],
           },
-          unsetWaitingForResponseAction,
         ],
       },
     ],
