@@ -30,11 +30,11 @@ export const submitDocketEntryAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
-    isFileAttached,
-    isPaper: true,
-    docketNumber,
     caseId,
     createdAt: applicationContext.getUtilities().createISODateString(),
+    docketNumber,
+    isFileAttached,
+    isPaper: true,
     receivedAt: documentMetadata.dateReceived,
   };
 
