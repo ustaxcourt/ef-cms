@@ -12,6 +12,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const generatePendingReportPage = async ({
   applicationContext,
   pendingItems,
+  reportTitle,
 }) => {
   const pathPrefix = process.env.NODE_ENV === 'production' ? '/var/task/' : '';
 
@@ -43,6 +44,7 @@ const generatePendingReportPage = async ({
   const html = compiledFunction({
     logo: ustcLogoBufferBase64,
     pendingItems,
+    reportTitle,
     styles: css,
   });
   return html;
@@ -59,6 +61,7 @@ const generatePendingReportPage = async ({
 exports.generatePendingReportPdf = async ({
   applicationContext,
   pendingItems,
+  reportTitle,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -102,6 +105,7 @@ exports.generatePendingReportPdf = async ({
     const contentResult = await generatePendingReportPage({
       applicationContext,
       pendingItems,
+      reportTitle,
     });
     await page.setContent(contentResult);
 
