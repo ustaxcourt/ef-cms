@@ -7,6 +7,7 @@ module.exports = {
     '!src/proxies/**/*.js',
     '!src/tools/**/*.js',
     '!src/test/**/*.js',
+    '!src/**/*_.js',
     'src/**/*.js',
   ],
   coverageDirectory: './coverage',
