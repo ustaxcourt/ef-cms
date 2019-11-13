@@ -24,6 +24,10 @@ import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
+import {
+  compareISODateStrings,
+  compareStrings,
+} from '../../shared/src/business/utilities/sortFunctions';
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 const {
@@ -494,6 +498,8 @@ const applicationContext = {
   getUtilities: () => {
     return {
       compareCasesByDocketNumber,
+      compareISODateStrings,
+      compareStrings,
       createISODateString,
       formatCase,
       formatCaseDeadlines,

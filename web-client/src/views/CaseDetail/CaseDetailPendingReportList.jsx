@@ -42,9 +42,9 @@ export const CaseDetailPendingReportList = connect(
           <thead>
             <tr>
               <th>No.</th>
-              <th>Date Filed</th>
-              <th>Filings &amp; proceedings</th>
-              <th>Filed By</th>
+              <th>Date filed</th>
+              <th>Filings and proceedings</th>
+              <th>Filed by</th>
               <th>Remove</th>
             </tr>
           </thead>

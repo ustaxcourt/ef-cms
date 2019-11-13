@@ -39,12 +39,17 @@ body {
       width: 50%;
     }
 
-    h1, h2 {
+    h1,
+    h2 {
       font-family: serif;
     }
 
     h2 {
       font-weight: normal;
+    }
+
+    .page-header {
+      min-height: 100px;
     }
 
     .logo {
@@ -64,11 +69,11 @@ body {
 
     .info-box {
       margin-bottom: 20px;
-      border: 1px solid #D6D7D9;
+      border: 1px solid #d6d7d9;
 
       h3 {
         background-color: #f1f1f1;
-        border-bottom: 1px solid #D6D7D9;
+        border-bottom: 1px solid #d6d7d9;
         padding: 10px;
         margin-bottom: 0;
         margin-top: 0;
@@ -79,12 +84,39 @@ body {
         margin: 0;
       }
     }
+
+    table {
+      width: 100%;
+      border: 1px solid #ccc;
+      -webkit-border-horizontal-spacing: 0px;
+
+      border-spacing: 0;
+      -webkit-border-vertical-spacing: 0px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #ccc;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    td {
+      padding: 12px 8px;
+      line-height: 13px;
+      vertical-align: top;
+    }
+
+    th {
+      padding: 8px 10px 10px 8px;
+      white-space: nowrap;
+      background-color: #f0f0f0;
+    }
   }
 
   .address {
     position: absolute;
     top: 9.5in;
-    left: 1.0in;
+    left: 1in;
   }
-
 }

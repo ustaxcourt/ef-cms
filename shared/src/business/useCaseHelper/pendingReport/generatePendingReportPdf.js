@@ -9,7 +9,11 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {Array} cases case entities
  * @returns {string} an html string resulting from rendering template with caseInfo
  */
-const generatePendingReportPage = async ({ applicationContext, cases }) => {
+const generatePendingReportPage = async ({
+  applicationContext,
+  pendingItems,
+  reportTitle,
+}) => {
   const pathPrefix = process.env.NODE_ENV === 'production' ? '/var/task/' : '';
 
   const pendingReportSassContent = fs.readFileSync(
@@ -38,9 +42,10 @@ const generatePendingReportPage = async ({ applicationContext, cases }) => {
   });
   const compiledFunction = pug.compile(pendingReportTemplateContent);
   const html = compiledFunction({
-    cases,
     logo: ustcLogoBufferBase64,
-    styles: `<style>${css}</style>`,
+    pendingItems,
+    reportTitle,
+    styles: css,
   });
   return html;
 };
@@ -53,7 +58,11 @@ const generatePendingReportPage = async ({ applicationContext, cases }) => {
  * @param {string} providers.caseEntity a case entity with its documents
  * @returns {Promise<*>} the promise of the document having been uploaded
  */
-exports.generatePendingReportPdf = async ({ applicationContext, cases }) => {
+exports.generatePendingReportPdf = async ({
+  applicationContext,
+  pendingItems,
+  reportTitle,
+}) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
@@ -75,9 +84,25 @@ exports.generatePendingReportPdf = async ({ applicationContext, cases }) => {
 
     let page = await browser.newPage();
 
+    pendingItems = pendingItems.map(pendingItem => ({
+      ...pendingItem,
+      associatedJudgeFormatted: pendingItem.associatedJudge.replace(
+        /^Judge\s+/,
+        '',
+      ),
+      caseCaptionNames: applicationContext.getCaseCaptionNames(
+        pendingItem.caseCaption || '',
+      ),
+      formattedFiledDate: applicationContext
+        .getUtilities()
+        .formatDateString(pendingItem.receivedAt, 'MMDDYY'),
+      formattedName: pendingItem.documentTitle || pendingItem.documentType,
+    }));
+
     const contentResult = await generatePendingReportPage({
       applicationContext,
-      cases,
+      pendingItems,
+      reportTitle,
     });
     await page.setContent(contentResult);
 
@@ -118,6 +143,7 @@ exports.generatePendingReportPdf = async ({ applicationContext, cases }) => {
   } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
     documentId,
+    useTempBucket: true,
   });
 
   return url;

@@ -107,6 +107,23 @@ describe('Case entity', () => {
     });
   });
 
+  describe('toRawObject', () => {
+    beforeEach(() => {
+      jest.spyOn(Case.prototype, 'doesHavePendingItems');
+    });
+
+    afterEach(() => {
+      Case.prototype.doesHavePendingItems.mockRestore();
+    });
+
+    it('calls own function to update values after decorated toRawObject', () => {
+      const myCase = new Case({}, { applicationContext });
+      const result = myCase.toRawObject();
+      expect(Case.prototype.doesHavePendingItems).toHaveBeenCalled();
+      expect(result.hasPendingItems).toBeFalsy();
+    });
+  });
+
   describe('isValid', () => {
     it('Creates a valid case', () => {
       const myCase = new Case(MOCK_CASE, {
@@ -1793,6 +1810,7 @@ describe('Case entity', () => {
       );
 
       expect(caseToUpdate.hasPendingItems).toEqual(false);
+      expect(caseToUpdate.doesHavePendingItems()).toEqual(false);
     });
     it('should show the case as having pending items if some documents are pending', () => {
       const mockCase = {
@@ -1805,6 +1823,7 @@ describe('Case entity', () => {
       });
 
       expect(caseToUpdate.hasPendingItems).toEqual(true);
+      expect(caseToUpdate.doesHavePendingItems()).toEqual(true);
     });
   });
 

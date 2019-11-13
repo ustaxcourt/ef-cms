@@ -616,6 +616,17 @@ const router = {
     );
 
     route(
+      '/reports/pending-report/printable..',
+      ifHasAccess(() => {
+        const { judgeFilter } = route.query();
+        setPageTitle('Pending report');
+        app.getSequence('gotoPrintablePendingReportSequence')({
+          judgeFilter,
+        });
+      }),
+    );
+
+    route(
       '/user/contact/edit',
       ifHasAccess(() => {
         setPageTitle('Edit user contact');
