@@ -9,8 +9,7 @@ html(lang="en")
       .page-header
         img.logo(src=logo)
         h1.text-center United States Tax Court
-        p.text-center Pending Report - (see story for details)
-        .clear
+        p.text-center= reportTitle
       table
         thead
           tr
@@ -24,8 +23,8 @@ html(lang="en")
           each pendingItem in pendingItems
             tr
               td= pendingItem.docketNumber
-              td= pendingItem.filedAt
-              td= pendingItem.name
-              td= pendingItem.filings
-              td= pendingItem.status
-              td= pendingItem.judge
+              td= pendingItem.formattedFiledDate
+              td= pendingItem.caseCaptionNames
+              td= pendingItem.formattedName
+              td= pendingItem.caseStatus
+              td= pendingItem.associatedJudgeFormatted

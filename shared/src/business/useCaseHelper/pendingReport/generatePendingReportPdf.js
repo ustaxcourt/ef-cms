@@ -81,6 +81,24 @@ exports.generatePendingReportPdf = async ({
 
     let page = await browser.newPage();
 
+    pendingItems = pendingItems.map(pendingItem => ({
+      ...pendingItem,
+      formattedFiledDate: applicationContext
+        .getUtilities()
+        .formatDateString(
+          pendingItem.receivedAt || pendingItem.createdAt,
+          'MMDDYY',
+        ),
+      caseCaptionNames: applicationContext.getCaseCaptionNames(
+        pendingItem.caseCaption || '',
+      ),
+      formattedName: pendingItem.documentTitle || pendingItem.documentType,
+      associatedJudgeFormatted: pendingItem.associatedJudge.replace(
+        /^Judge\s+/,
+        '',
+      ),
+    }));
+
     const contentResult = await generatePendingReportPage({
       applicationContext,
       pendingItems,
