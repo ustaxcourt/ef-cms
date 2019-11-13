@@ -614,13 +614,14 @@ const router = {
         app.getSequence('gotoPendingReportSequence')();
       }),
     );
+
     route(
-      '/reports/pending-report/printable',
+      '/reports/pending-report/printable..',
       ifHasAccess(() => {
-        const query = route.query();
+        const { judgeFilter } = route.query();
         setPageTitle('Pending report');
         app.getSequence('gotoPrintablePendingReportSequence')({
-          query,
+          judgeFilter,
         });
       }),
     );
