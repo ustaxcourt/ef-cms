@@ -154,11 +154,7 @@ export const DocumentDetail = connect(
             {documentDetailHelper.showAddDocketEntryButton && (
               <Button
                 className="margin-right-0"
-                onClick={() => {
-                  navigateToPathSequence({
-                    path: `/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/add-court-issued-docket-entry`,
-                  });
-                }}
+                href={`/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/add-court-issued-docket-entry`}
               >
                 <FontAwesomeIcon
                   className="margin-right-05"
