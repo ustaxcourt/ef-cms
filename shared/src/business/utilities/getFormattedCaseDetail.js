@@ -1,9 +1,13 @@
 const _ = require('lodash');
 const { Case } = require('../entities/cases/Case');
+const { COURT_ISSUED_EVENT_CODES } = require('../entities/Document');
 const { Order } = require('../entities/orders/Order');
 
 const orderDocumentTypes = Order.ORDER_TYPES.map(
   orderType => orderType.documentType,
+);
+const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
+  courtIssuedDoc => courtIssuedDoc.documentType,
 );
 
 const formatDocument = (applicationContext, document) => {
@@ -91,6 +95,9 @@ const formatDocketRecordWithDocument = (
       document = documentMap[record.documentId];
 
       const isOrder = !!orderDocumentTypes.includes(document.documentType);
+      //TODO fix this - why is the doc type not updating when an order docket entry is created?
+      document.isCourtIssuedDocument =
+        isOrder || !!courtIssuedDocumentTypes.includes(document.documentType);
 
       if (document.certificateOfServiceDate) {
         document.certificateOfServiceDateFormatted = applicationContext
@@ -182,20 +189,25 @@ const formatCase = (applicationContext, caseDetail) => {
     result.docketRecordWithDocument || []
   ).filter(entry => entry.document && entry.document.pending);
 
-  const { ORDER_TYPES_MAP } = applicationContext.getConstants();
-
-  result.draftDocuments = (result.documents || [])
-    .filter(
-      document =>
-        !document.archived &&
-        ((document.documentType === 'Stipulated Decision' &&
-          !document.documentType.signedAt) ||
-          (!document.servedAt &&
-            ORDER_TYPES_MAP.find(
-              order => order.documentType === document.documentType,
-            ))),
-    )
-    .filter(document => document.documentType !== 'Stipulated Decision'); // TODO: this will be removed when we revisit stipulated decisions
+  result.draftDocuments = (result.documents || []).filter(document => {
+    const isNotArchived = !document.archived;
+    const isNotServed = !document.servedAt;
+    const isDocumentOnDocketRecord = result.docketRecord.find(
+      docketEntry => docketEntry.documentId === document.documentId,
+    );
+    const isStipDecision = document.documentType === 'Stipulated Decision';
+    const isDraftOrder = orderDocumentTypes.includes(document.documentType);
+    const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+      document.documentType,
+    );
+    return (
+      isNotArchived &&
+      isNotServed &&
+      (isStipDecision ||
+        (isDraftOrder && !isDocumentOnDocketRecord) ||
+        (isCourtIssuedDocument && !isDocumentOnDocketRecord))
+    );
+  });
 
   result.draftDocuments = result.draftDocuments.map(document => ({
     ...document,

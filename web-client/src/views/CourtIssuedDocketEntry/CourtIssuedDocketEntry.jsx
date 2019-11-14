@@ -5,6 +5,7 @@ import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { Hint } from '../../ustc-ui/Hint/Hint';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import {
@@ -16,10 +17,11 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
 
-export const AddCourtIssuedDocketEntry = connect(
+export const CourtIssuedDocketEntry = connect(
   {
     addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
     form: state.form,
+    isEditingDocketEntry: state.isEditingDocketEntry,
     openCancelDraftDocumentModalSequence:
       sequences.openCancelDraftDocumentModalSequence,
     showModal: state.showModal,
@@ -34,6 +36,7 @@ export const AddCourtIssuedDocketEntry = connect(
   ({
     addCourtIssuedDocketEntryHelper,
     form,
+    isEditingDocketEntry,
     openCancelDraftDocumentModalSequence,
     showModal,
     submitCourtIssuedDocketEntrySequence,
@@ -48,9 +51,18 @@ export const AddCourtIssuedDocketEntry = connect(
         <section className="usa-section grid-container margin-top-5">
           <SuccessNotification />
           <ErrorNotification />
+
+          {isEditingDocketEntry && (
+            <Hint exclamation fullWidth>
+              This docket entry has not been served on the parties.
+            </Hint>
+          )}
+
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
-              <h1 className="margin-bottom-105">Add Docket Entry</h1>
+              <h1 className="margin-bottom-105">
+                {isEditingDocketEntry ? 'Edit' : 'Add'} Docket Entry
+              </h1>
             </div>
             <div className="grid-col-7">
               <div className="display-flex flex-row flex-justify flex-align-center">
