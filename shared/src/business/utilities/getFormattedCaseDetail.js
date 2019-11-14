@@ -99,6 +99,10 @@ const formatDocketRecordWithDocument = (
       document.isCourtIssuedDocument =
         isOrder || !!courtIssuedDocumentTypes.includes(document.documentType);
 
+      if ((isOrder || document.isCourtIssuedDocument) && !document.servedAt) {
+        record.createdAtFormatted = undefined;
+      }
+
       if (document.certificateOfServiceDate) {
         document.certificateOfServiceDateFormatted = applicationContext
           .getUtilities()
