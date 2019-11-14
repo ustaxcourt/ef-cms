@@ -34,9 +34,7 @@ const csvOptions = {
 };
 
 const whitespaceCleanup = str => {
-  str = str.replace(/[\r\n\t\s]+/g, ' ');
-  str = str.trim();
-  return str;
+  return str.replace(/\s+/g, ' ').trim();
 };
 
 /* eslint no-console: "off"*/
