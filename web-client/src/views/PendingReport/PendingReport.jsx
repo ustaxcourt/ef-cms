@@ -24,6 +24,7 @@ export const PendingReport = connect(
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               <Button
                 link
+                aria-describedby="pending-report-tab"
                 className="margin-top-2"
                 href={formattedPendingItems.printUrl}
                 icon="print"

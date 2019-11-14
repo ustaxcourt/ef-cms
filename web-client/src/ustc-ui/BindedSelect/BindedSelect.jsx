@@ -12,6 +12,7 @@ export const BindedSelect = connect(
     value: state[props.bind],
   },
   ({
+    ariaDescribedby,
     ariaLabel,
     bind,
     children,
@@ -35,6 +36,7 @@ export const BindedSelect = connect(
 
     return (
       <select
+        aria-describedby={ariaDescribedby}
         aria-label={ariaLabel || name}
         className={classNames('usa-select', className)}
         id={id}
