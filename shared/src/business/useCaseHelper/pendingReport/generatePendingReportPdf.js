@@ -101,7 +101,7 @@ exports.generatePendingReportPdf = async ({
 
     const contentResult = await generatePendingReportPage({
       applicationContext,
-      formattedPendingItems,
+      pendingItems: formattedPendingItems,
       reportTitle,
     });
     await page.setContent(contentResult);
