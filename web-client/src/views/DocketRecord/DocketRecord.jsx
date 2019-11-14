@@ -43,8 +43,11 @@ export const DocketRecord = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Number" className="center-column">
-                No.
+              <th className="center-column">
+                <span>
+                  <span className="usa-sr-only">Number</span>
+                  <span aria-hidden="true">No.</span>
+                </span>
               </th>
               <th>Date</th>
               <th className="center-column">Event</th>
