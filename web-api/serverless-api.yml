@@ -263,7 +263,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   generatePrintablePendingReport:
-    handler: web-api/src/apiHandlers.generatePrintablePendingReportLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.generatePrintablePendingReportLambda
     events:
       - http:
           path: pending-report
