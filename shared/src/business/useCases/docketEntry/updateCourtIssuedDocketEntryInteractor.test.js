@@ -1,8 +1,9 @@
-import { fileCourtIssuedDocketEntryInteractor } from './fileCourtIssuedDocketEntryInteractor';
+import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocketEntryInteractor';
+const { Case } = require('../../entities/cases/Case');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { User } = require('../../entities/User');
 
-describe('fileCourtIssuedDocketEntryInteractor', () => {
+describe('updateCourtIssuedDocketEntryInteractor', () => {
   let updateCaseMock;
   let saveWorkItemForNonPaperMock;
   let applicationContext;
@@ -60,6 +61,22 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           documentType: 'Order',
           userId: 'respondent',
+          workItems: [
+            {
+              assigneeId: 'bob',
+              assigneeName: 'bob',
+              caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+              caseStatus: Case.STATUS_TYPES.new,
+              caseTitle: 'testing',
+              docketNumber: '101-18',
+              docketNumberSuffix: 'S',
+              document: {},
+              isQC: true,
+              messages: [],
+              section: 'docket',
+              sentBy: 'bob',
+            },
+          ],
         },
       ],
       partyType: ContactFactory.PARTY_TYPES.petitioner,
@@ -71,7 +88,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   it('should throw an error if not authorized', async () => {
     let error;
     try {
-      await fileCourtIssuedDocketEntryInteractor({
+      await updateCourtIssuedDocketEntryInteractor({
         applicationContext,
         documentMeta: {
           caseId: caseRecord.caseId,
@@ -94,7 +111,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     });
 
     try {
-      await fileCourtIssuedDocketEntryInteractor({
+      await updateCourtIssuedDocketEntryInteractor({
         applicationContext,
         documentMeta: {
           caseId: caseRecord.caseId,
@@ -116,7 +133,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await fileCourtIssuedDocketEntryInteractor({
+    await updateCourtIssuedDocketEntryInteractor({
       applicationContext,
       documentMeta: {
         caseId: caseRecord.caseId,

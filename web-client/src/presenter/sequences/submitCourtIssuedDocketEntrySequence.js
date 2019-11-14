@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
+import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -10,6 +11,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitCourtIssuedDocketEntryAction } from '../actions/DocketEntry/submitCourtIssuedDocketEntryAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { updateCourtIssuedDocketEntryAction } from '../actions/DocketEntry/updateCourtIssuedDocketEntryAction';
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
 
 export const submitCourtIssuedDocketEntrySequence = [
@@ -25,7 +27,11 @@ export const submitCourtIssuedDocketEntrySequence = [
     success: [
       stopShowValidationAction,
       clearAlertsAction,
-      submitCourtIssuedDocketEntryAction,
+      isEditingDocketEntryAction,
+      {
+        no: [submitCourtIssuedDocketEntryAction],
+        yes: [updateCourtIssuedDocketEntryAction],
+      },
       getDocketEntryAlertSuccessAction,
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,

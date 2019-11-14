@@ -272,11 +272,23 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   fileCourtIssuedDocketEntry:
-    handler: web-api/src/caseDocumentsHandlers.fileCourtIssuedDocketEntryLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileCourtIssuedDocketEntryLambda
     events:
       - http:
           path: /{caseId}/court-issued-docket-entry
           method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCourtIssuedDocketEntry:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCourtIssuedDocketEntryLambda
+    events:
+      - http:
+          path: /{caseId}/court-issued-docket-entry
+          method: put
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
