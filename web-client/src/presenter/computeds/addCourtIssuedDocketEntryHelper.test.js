@@ -48,7 +48,6 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       { displayName: 'Zazu, Petitioner Counsel', name: 'Zazu' },
       { displayName: 'Rafiki, Respondent Counsel', name: 'Rafiki' },
       { displayName: 'Pumbaa, Respondent Counsel', name: 'Pumbaa' },
-      { displayName: 'Respondent', serviceType: 'Electronic' },
     ]);
   });
 
@@ -64,7 +63,6 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       { displayName: 'Zazu, Petitioner Counsel', name: 'Zazu' },
       { displayName: 'Rafiki, Respondent Counsel', name: 'Rafiki' },
       { displayName: 'Pumbaa, Respondent Counsel', name: 'Pumbaa' },
-      { displayName: 'Respondent', serviceType: 'Electronic' },
     ]);
   });
 });
