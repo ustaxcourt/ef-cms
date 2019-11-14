@@ -38,7 +38,7 @@ export const workQueueHelper = (get, applicationContext) => {
   const showStartCaseButton = permissions.START_PAPER_CASE && isDisplayingQC;
 
   return {
-    assigneeColumnTitle: isDisplayingQC ? 'Assigned To' : 'To',
+    assigneeColumnTitle: isDisplayingQC ? 'Assigned to' : 'To',
     currentBoxView: workQueueToDisplay.box,
     getQueuePath: ({ box, queue }) => {
       return `/${
