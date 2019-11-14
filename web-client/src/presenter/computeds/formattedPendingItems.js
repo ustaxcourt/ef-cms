@@ -20,7 +20,10 @@ export const formattedPendingItems = (get, applicationContext) => {
     formatPendingItem(item, { applicationContext }),
   );
   const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);
-  const judges = sortedUniq(items.map(i => i.associatedJudgeFormatted).sort());
+  const judges = (get(state.judges) || [])
+    .map(i => i.name.replace(/^Judge\s+/, ''))
+    .concat('Chief Judge')
+    .sort();
 
   items = items.sort((a, b) =>
     applicationContext
