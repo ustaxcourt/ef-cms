@@ -171,6 +171,7 @@ import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadl
 import { updateCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateCaseNoteProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAssociation/updateCounselOnCaseProxy';
+import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/updateCourtIssuedDocketEntryProxy';
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
 import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
@@ -329,6 +330,7 @@ const allUseCases = {
   updateCaseNoteInteractor,
   updateCaseTrialSortTagsInteractor,
   updateCounselOnCaseInteractor,
+  updateCourtIssuedDocketEntryInteractor,
   updateCourtIssuedOrderInteractor,
   updateDocketEntryInteractor,
   updatePrimaryContactInteractor,
