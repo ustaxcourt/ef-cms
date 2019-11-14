@@ -155,10 +155,8 @@ export const DocumentDetail = connect(
               <Button
                 className="margin-right-0"
                 onClick={() => {
-                  gotoAddCourtIssuedDocketEntrySequence({
-                    docketNumber: caseDetail.docketNumber,
-                    documentId:
-                      documentDetailHelper.formattedDocument.documentId,
+                  navigateToPathSequence({
+                    path: `/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/add-court-issued-docket-entry`,
                   });
                 }}
               >
