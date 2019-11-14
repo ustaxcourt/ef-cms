@@ -66,6 +66,8 @@ export const updateDocketEntryWizardDataAction = ({ get, props, store }) => {
       store.unset(state.form.ordinalValue);
       store.unset(state.form.freeText);
       store.unset(state.form.secondaryDocument);
+      store.unset(state.form.objections);
+      store.unset(state.form.pending);
       break;
     case 'secondaryDocument.eventCode':
       find(
