@@ -25,8 +25,6 @@ export const DocumentDetail = connect(
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     documentDetailHelper: state.documentDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    gotoAddCourtIssuedDocketEntrySequence:
-      sequences.gotoAddCourtIssuedDocketEntrySequence,
     gotoOrdersNeededSequence: sequences.gotoOrdersNeededSequence,
     messageId: state.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
@@ -45,7 +43,6 @@ export const DocumentDetail = connect(
     clickServeToIrsSequence,
     documentDetailHelper,
     formattedCaseDetail,
-    gotoAddCourtIssuedDocketEntrySequence,
     gotoOrdersNeededSequence,
     messageId,
     navigateToPathSequence,
@@ -154,13 +151,7 @@ export const DocumentDetail = connect(
             {documentDetailHelper.showAddDocketEntryButton && (
               <Button
                 className="margin-right-0"
-                onClick={() => {
-                  gotoAddCourtIssuedDocketEntrySequence({
-                    docketNumber: caseDetail.docketNumber,
-                    documentId:
-                      documentDetailHelper.formattedDocument.documentId,
-                  });
-                }}
+                href={`/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/add-court-issued-docket-entry`}
               >
                 <FontAwesomeIcon
                   className="margin-right-05"
