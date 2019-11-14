@@ -54,6 +54,11 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           documentType: 'Answer',
           userId: 'respondent',
         },
+        {
+          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+          documentType: 'Order',
+          userId: 'respondent',
+        },
       ],
       partyType: ContactFactory.PARTY_TYPES.petitioner,
       role: User.ROLES.petitioner,
@@ -66,16 +71,40 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     try {
       await fileCourtIssuedDocketEntryInteractor({
         applicationContext,
-        document: {
+        documentMeta: {
           caseId: caseRecord.caseId,
+          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Memorandum in Support',
         },
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (err) {
       error = err;
     }
     expect(error.message).toContain('Unauthorized');
+  });
+
+  it('should call throw an error if the document is not found on the case', async () => {
+    let error;
+    applicationContext.getCurrentUser = () => ({
+      name: 'Olivia Jade',
+      role: User.ROLES.docketClerk,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    try {
+      await fileCourtIssuedDocketEntryInteractor({
+        applicationContext,
+        documentMeta: {
+          caseId: caseRecord.caseId,
+          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          documentType: 'Order',
+        },
+      });
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error.message).toContain('Document not found');
   });
 
   it('should call updateCase', async () => {
@@ -87,12 +116,11 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     await fileCourtIssuedDocketEntryInteractor({
       applicationContext,
-      document: {
+      documentMeta: {
         caseId: caseRecord.caseId,
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
         documentType: 'Order',
       },
-      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
     expect(updateCaseMock).toHaveBeenCalled();

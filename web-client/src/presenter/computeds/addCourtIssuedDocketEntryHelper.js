@@ -18,7 +18,7 @@ export const addCourtIssuedDocketEntryHelper = get => {
 
   const serviceParties = [
     ...petitioners.map(petitioner => ({
-      ...petitioners,
+      ...petitioner,
       displayName: `${petitioner.name}, Petitioner`,
     })),
     ...caseDetail.practitioners.map(practitioner => ({
