@@ -1,5 +1,4 @@
 import { formatSearchResultRecord } from './advancedSearchHelper';
-import { sortedUniq } from 'lodash';
 import { state } from 'cerebral';
 
 export const formatPendingItem = (item, { applicationContext }) => {
