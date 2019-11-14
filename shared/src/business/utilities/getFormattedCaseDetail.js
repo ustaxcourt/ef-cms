@@ -1,5 +1,10 @@
 const _ = require('lodash');
 const { Case } = require('../entities/cases/Case');
+const { Order } = require('../entities/orders/Order');
+
+const orderDocumentTypes = Order.ORDER_TYPES.map(
+  orderType => orderType.documentType,
+);
 
 const formatDocument = (applicationContext, document) => {
   const result = _.cloneDeep(document);
@@ -85,6 +90,8 @@ const formatDocketRecordWithDocument = (
     if (record.documentId) {
       document = documentMap[record.documentId];
 
+      const isOrder = !!orderDocumentTypes.includes(document.documentType);
+
       if (document.certificateOfServiceDate) {
         document.certificateOfServiceDateFormatted = applicationContext
           .getUtilities()
@@ -103,6 +110,10 @@ const formatDocketRecordWithDocument = (
           return acc && !!wi.completedAt;
         }, true);
 
+      document.isInProgress = !!(
+        (isOrder && !document.servedAt) ||
+        (!isOrder && document.isFileAttached === false)
+      );
       document.isPetition = document.eventCode === 'P';
       document.canEdit = !document.isPetition && !document.qcWorkItemsCompleted;
     }
