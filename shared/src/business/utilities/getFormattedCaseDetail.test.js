@@ -417,6 +417,7 @@ describe('getFormattedCaseDetail', () => {
             documentType: 'Order',
           },
         ],
+        docketRecord: [],
       },
       docketRecordSort: 'byDate',
     });

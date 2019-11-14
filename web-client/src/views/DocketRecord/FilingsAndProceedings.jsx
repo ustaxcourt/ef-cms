@@ -115,6 +115,9 @@ export const FilingsAndProceedings = connect(
               shouldLinkToComplete: document.isFileAttached === false,
               shouldLinkToEdit:
                 docketRecordHelper.showEditDocketEntry && document.canEdit,
+              shouldLinkToEditCourtIssued:
+                docketRecordHelper.showEditDocketEntry &&
+                document.isCourtIssuedDocument,
             })}
           >
             {document && document.isPaper && (

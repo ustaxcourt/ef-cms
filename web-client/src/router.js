@@ -120,6 +120,19 @@ const router = {
     );
 
     route(
+      '/case-detail/*/documents/*/edit-court-issued',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
+        );
+        app.getSequence('gotoEditCourtIssuedDocketEntrySequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/documents/*/sign',
       ifHasAccess((docketNumber, documentId) => {
         app.getSequence('gotoSignPDFDocumentSequence')({
