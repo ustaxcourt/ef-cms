@@ -62,10 +62,15 @@ export const DocketRecord = connect(
                 const isInProgress =
                   caseDetailHelper.showDocketRecordInProgressState &&
                   document &&
-                  document.isFileAttached === false;
+                  document.isInProgress;
                 return (
                   <tr
-                    className={classNames(isInProgress && 'in-progress')}
+                    className={classNames(
+                      document &&
+                        document.isInProgress &&
+                        caseDetailHelper.showDocketRecordInProgressState &&
+                        'in-progress',
+                    )}
                     key={index}
                   >
                     <td className="center-column hide-on-mobile">{index}</td>
