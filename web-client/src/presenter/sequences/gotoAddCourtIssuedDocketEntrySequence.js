@@ -25,7 +25,7 @@ export const gotoAddCourtIssuedDocketEntrySequence = [
       setCaseAction,
       setDocumentIdAction,
       setCourtIssuedDocumentInitialTypeAction,
-      setCurrentPageAction('AddCourtIssuedDocketEntry'),
+      setCurrentPageAction('CourtIssuedDocketEntry'),
     ],
     unauthorized: [redirectToCognitoAction],
   },

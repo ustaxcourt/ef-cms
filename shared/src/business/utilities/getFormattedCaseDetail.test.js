@@ -409,6 +409,7 @@ describe('getFormattedCaseDetail', () => {
       applicationContext,
       caseDetail: {
         ...mockCaseDetailBase,
+        docketRecord: [],
         documents: [
           {
             archived: false,

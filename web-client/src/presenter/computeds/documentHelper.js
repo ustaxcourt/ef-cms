@@ -6,6 +6,7 @@ export const documentHelper = get => ({
   messageId,
   shouldLinkToComplete,
   shouldLinkToEdit,
+  shouldLinkToEditCourtIssued,
   workItemIdToMarkAsRead,
 }) => {
   const currentUser = get(state.user);
@@ -35,6 +36,8 @@ export const documentHelper = get => ({
 
   if (shouldLinkToComplete) {
     return `${baseUri}/complete`;
+  } else if (shouldLinkToEditCourtIssued) {
+    return `${baseUri}/edit-court-issued`;
   } else if (shouldLinkToEdit) {
     return `${baseUri}/edit`;
   } else if (shouldLinkToMessagesTab()) {

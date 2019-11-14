@@ -106,7 +106,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     new DocketRecord({
       description: documentMeta.documentTitle,
       documentId: documentEntity.documentId,
-      editState: '{}',
+      editState: JSON.stringify(documentMeta),
       filingDate: documentEntity.date || createISODateString(),
     }),
   );
