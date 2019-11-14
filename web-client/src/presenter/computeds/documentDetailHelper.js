@@ -6,8 +6,20 @@ export const documentDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   let showSignDocumentButton = false;
   const caseDetail = get(state.caseDetail);
-  const { STATUS_TYPES, USER_ROLES } = get(state.constants);
+  const {
+    COURT_ISSUED_EVENT_CODES,
+    ORDER_TYPES_MAP,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
   const permissions = get(state.permissions);
+
+  const orderDocumentTypes = ORDER_TYPES_MAP.map(
+    orderType => orderType.documentType,
+  );
+  const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
+    courtIssuedDoc => courtIssuedDoc.documentType,
+  );
 
   const STIPULATED_DECISION_DOCUMENT_TYPE = 'Stipulated Decision';
   const newOrRecalledStatus = [STATUS_TYPES.new, STATUS_TYPES.recalled];
@@ -22,8 +34,9 @@ export const documentDetailHelper = (get, applicationContext) => {
   let formattedDocument = {};
   let documentEditUrl;
   let isSigned = false;
-  let isStipDecision = false;
   let isOrder = false;
+  let isCourtIssuedDocument = false;
+  let isStipDecision = false;
 
   let showServeToIrsButton = false;
   let showRecallButton = false;
@@ -110,16 +123,23 @@ export const documentDetailHelper = (get, applicationContext) => {
       document.status !== 'served' &&
       document.documentType === STIPULATED_DECISION_DOCUMENT_TYPE;
 
-    const { ORDER_TYPES_MAP } = applicationContext.getConstants();
-
     isSigned = !!document.signedAt;
+
+    const isNotServed = !document.servedAt;
+    const isDocumentOnDocketRecord = caseDetail.docketRecord.find(
+      docketEntry => docketEntry.documentId === document.documentId,
+    );
     isStipDecision =
       document.documentType === STIPULATED_DECISION_DOCUMENT_TYPE;
-    isOrder = !!ORDER_TYPES_MAP.find(
-      order => order.documentType === document.documentType,
+    isOrder = orderDocumentTypes.includes(document.documentType);
+    isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+      document.documentType,
     );
     isDraftDocument =
-      (isStipDecision && !isSigned) || (!document.servedAt && isOrder);
+      isNotServed &&
+      (isStipDecision ||
+        (isOrder && !isDocumentOnDocketRecord) ||
+        (isCourtIssuedDocument && !isDocumentOnDocketRecord));
 
     if (isDraftDocument) {
       documentEditUrl =
@@ -162,7 +182,8 @@ export const documentDetailHelper = (get, applicationContext) => {
     document.status === 'served' &&
     formattedDocument.isPetition === true;
 
-  const showAddDocketEntryButton = permissions.DOCKET_ENTRY && isDraftDocument;
+  const showAddDocketEntryButton =
+    permissions.DOCKET_ENTRY && isDraftDocument && !isStipDecision;
 
   return {
     createdFiledLabel: isOrder ? 'Created' : 'Filed', // Should actually be all court-issued documents
@@ -177,6 +198,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     showCaseDetailsEdit,
     showCaseDetailsView,
     showConfirmEditOrder: isSigned && isOrder,
+    showCreatedFiled: (!isOrder && !isCourtIssuedDocument) || isDraftDocument,
     showDocumentInfoTab,
     showDocumentViewerTopMargin,
     showEditDocketEntry:
