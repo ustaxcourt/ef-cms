@@ -2,15 +2,11 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { capitalize } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
-const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
-const { Message } = require('../../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
+const { omit } = require('lodash');
 
 /**
  *
@@ -19,7 +15,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {object} providers.documentMeta document details to go on the record
  * @returns {object} the updated case after the documents are added
  */
-exports.fileCourtIssuedDocketEntryInteractor = async ({
+exports.updateCourtIssuedDocketEntryInteractor = async ({
   applicationContext,
   documentMeta,
 }) => {
@@ -40,11 +36,11 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const document = caseEntity.getDocumentById({
+  const currentDocument = caseEntity.getDocumentById({
     documentId,
   });
 
-  if (!document) {
+  if (!currentDocument) {
     throw new NotFoundError('Document not found');
   }
 
@@ -54,12 +50,11 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
 
   const documentEntity = new Document(
     {
-      ...document,
+      ...currentDocument,
       attachments: documentMeta.attachments,
       documentTitle: documentMeta.generatedDocumentTitle,
       eventCode: documentMeta.eventCode,
       freeText: documentMeta.freeText,
-      isFileAttached: true,
       scenario: documentMeta.scenario,
       userId: user.userId,
     },
@@ -68,50 +63,26 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
 
   documentEntity.generateFiledBy(caseToUpdate);
 
-  const workItem = new WorkItem(
-    {
-      assigneeId: null,
-      assigneeName: null,
-      caseId: caseId,
-      caseStatus: caseToUpdate.status,
-      caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-      document: {
-        ...documentEntity.toRawObject(),
-        createdAt: documentEntity.createdAt,
-      },
-      inProgress: true,
-      isQC: true,
-      section: DOCKET_SECTION,
-      sentBy: user.userId,
-    },
-    { applicationContext },
-  );
+  const docketRecordEntry = new DocketRecord({
+    description: documentMeta.documentTitle,
+    documentId: documentEntity.documentId,
+    editState: JSON.stringify(documentMeta),
+    filingDate: documentEntity.receivedAt,
+  });
 
-  const message = new Message(
-    {
-      from: user.name,
-      fromUserId: user.userId,
-      message: `${documentEntity.documentType} filed by ${capitalize(
-        user.role,
-      )} is ready for review.`,
-    },
-    { applicationContext },
-  );
-
-  workItem.addMessage(message);
-  documentEntity.addWorkItem(workItem);
+  caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
   caseEntity.updateDocument(documentEntity);
 
-  caseEntity.addDocketRecord(
-    new DocketRecord({
-      description: documentMeta.documentTitle,
-      documentId: documentEntity.documentId,
-      editState: JSON.stringify(documentMeta),
-      filingDate: documentEntity.date || createISODateString(),
-    }),
-  );
+  const workItem = currentDocument.workItems[0];
+
+  Object.assign(workItem, {
+    document: {
+      ...documentEntity.toRawObject(),
+      createdAt: documentEntity.createdAt,
+    },
+  });
+
+  documentEntity.addWorkItem(workItem);
 
   await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
     applicationContext,
