@@ -284,7 +284,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCourtIssuedDocketEntry:
-    handler: web-api/src/caseDocumentsHandlers.updateCourtIssuedDocketEntryLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCourtIssuedDocketEntryLambda
     events:
       - http:
           path: /{caseId}/court-issued-docket-entry
