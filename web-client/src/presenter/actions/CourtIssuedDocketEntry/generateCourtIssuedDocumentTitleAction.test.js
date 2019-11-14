@@ -79,7 +79,7 @@ describe('generateCourtIssuedDocumentTitleAction', () => {
         .date,
     ).toEqual('12-12-2019');
     expect(results.state.form.generatedDocumentTitle).toEqual(
-      'Order for something (Attachment(s))',
+      'Order for something',
     );
   });
 
