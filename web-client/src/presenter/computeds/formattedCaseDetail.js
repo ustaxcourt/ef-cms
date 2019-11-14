@@ -31,6 +31,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
     result.docketRecordWithDocument,
     docketRecordSort,
   );
+
+  result.pendingItemsDocketEntries = result.docketRecordWithDocument.filter(
+    entry => entry.document && entry.document.pending,
+  );
+
   result.showBlockedTag = caseDetail.blocked;
   result.docketRecordSort = docketRecordSort;
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
