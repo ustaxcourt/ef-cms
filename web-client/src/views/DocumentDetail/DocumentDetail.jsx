@@ -25,8 +25,6 @@ export const DocumentDetail = connect(
     clickServeToIrsSequence: sequences.clickServeToIrsSequence,
     documentDetailHelper: state.documentDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    gotoAddCourtIssuedDocketEntrySequence:
-      sequences.gotoAddCourtIssuedDocketEntrySequence,
     gotoOrdersNeededSequence: sequences.gotoOrdersNeededSequence,
     messageId: state.messageId,
     navigateToPathSequence: sequences.navigateToPathSequence,
@@ -45,7 +43,6 @@ export const DocumentDetail = connect(
     clickServeToIrsSequence,
     documentDetailHelper,
     formattedCaseDetail,
-    gotoAddCourtIssuedDocketEntrySequence,
     gotoOrdersNeededSequence,
     messageId,
     navigateToPathSequence,
