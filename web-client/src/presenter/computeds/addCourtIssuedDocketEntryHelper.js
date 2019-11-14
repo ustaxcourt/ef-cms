@@ -29,10 +29,6 @@ export const addCourtIssuedDocketEntryHelper = get => {
       ...practitioner,
       displayName: `${practitioner.name}, Respondent Counsel`,
     })),
-    {
-      displayName: 'Respondent',
-      serviceType: 'Electronic',
-    },
   ];
 
   return {
