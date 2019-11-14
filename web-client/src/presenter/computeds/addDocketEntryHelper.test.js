@@ -115,4 +115,15 @@ describe('addDocketEntryHelper', () => {
     const result = runCompute(addDocketEntryHelper, { state });
     expect(result.showSupportingInclusions).toBeTruthy();
   });
+
+  it('should show track option as default', () => {
+    const result = runCompute(addDocketEntryHelper, { state });
+    expect(result.showTrackOption).toBeTruthy();
+  });
+
+  it('should not show track option for auto-tracked items', () => {
+    state.form.eventCode = 'OSC';
+    const result = runCompute(addDocketEntryHelper, { state });
+    expect(result.showTrackOption).toBeFalsy();
+  });
 });

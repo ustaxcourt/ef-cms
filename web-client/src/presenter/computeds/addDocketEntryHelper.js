@@ -119,6 +119,9 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     optionsForCategory.showSecondaryDocumentForm = true;
   }
 
+  const { Document } = applicationContext.getEntityConstructors();
+  const showTrackOption = !Document.isPendingOnCreation(form);
+
   return {
     certificateOfServiceDateFormatted,
     internalDocumentTypes,
@@ -137,6 +140,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     showSupportingDocumentSelect: form.documentType && form.documentType !== '',
     showSupportingDocumentValid: !!form.supportingDocumentFile,
     showSupportingInclusions,
+    showTrackOption,
     supportingDocumentTypeList,
   };
 };
