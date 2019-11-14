@@ -1,4 +1,6 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+
 import {
   createMessage,
   fakeFile,
@@ -13,6 +15,12 @@ import {
   viewCaseDetail,
   viewDocumentDetailMessage,
 } from './helpers';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
+
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
 
 const test = setupTest({
   useCases: {
@@ -46,6 +54,18 @@ describe('a user signs and serves a stipulated decision', () => {
     ({ docketNumber } = caseDetail.docketNumber);
   });
 
+  it('login as a docket clerk and check pending items count is zero', async () => {
+    await loginAs(test, 'docketclerk');
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber,
+    });
+    const formatted = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
+    expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
+  });
+
   it('respondent uploads a proposed stipulated decision', async () => {
     await loginAs(test, 'respondent');
     await viewCaseDetail({
@@ -53,6 +73,19 @@ describe('a user signs and serves a stipulated decision', () => {
       test,
     });
     await uploadProposedStipulatedDecision(test);
+  });
+
+  it('login as a docket clerk and check pending items count has increased', async () => {
+    await loginAs(test, 'docketclerk');
+    await viewCaseDetail({
+      docketNumber: caseDetail.docketNumber,
+      test,
+    });
+    const formatted = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
+    expect(formatted.pendingItemsDocketEntries.length).toEqual(1);
   });
 
   it('docketclerk assigns the stipulated decision to the adc', async () => {
