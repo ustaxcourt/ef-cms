@@ -47,7 +47,7 @@ export const AdvancedSearch = connect(
                 clearAdvancedSearchFormSequence();
               }}
             >
-              <FontAwesomeIcon icon={['far', 'times-circle']} />
+              <FontAwesomeIcon icon={['fas', 'times-circle']} />
               Clear Search
             </Button>
           </div>
