@@ -3,6 +3,7 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { fetchPendingItemsSequence } from './pending/fetchPendingItemsSequence';
+import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -13,6 +14,7 @@ const gotoPendingReport = [
   clearFormAction,
   closeMobileMenuAction,
   clearErrorAlertsAction,
+  getSetJudgesSequence,
   fetchPendingItemsSequence,
   setCurrentPageAction('PendingReport'),
 ];
