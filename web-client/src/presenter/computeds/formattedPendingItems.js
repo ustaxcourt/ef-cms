@@ -1,5 +1,4 @@
 import { formatSearchResultRecord } from './advancedSearchHelper';
-import { sortedUniq } from 'lodash';
 import { state } from 'cerebral';
 
 export const formatPendingItem = (item, { applicationContext }) => {
@@ -20,10 +19,15 @@ export const formattedPendingItems = (get, applicationContext) => {
     formatPendingItem(item, { applicationContext }),
   );
   const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);
-  const judges = sortedUniq(items.map(i => i.associatedJudgeFormatted).sort());
+  const judges = (get(state.judges) || [])
+    .map(i => i.name.replace(/^Judge\s+/, ''))
+    .concat('Chief Judge')
+    .sort();
 
   items = items.sort((a, b) =>
-    applicationContext.getUtilities().compareStrings(a.judge, b.judge),
+    applicationContext
+      .getUtilities()
+      .compareISODateStrings(a.receivedAt, b.receivedAt),
   );
 
   if (judgeFilter) {
