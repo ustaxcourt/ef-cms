@@ -84,7 +84,7 @@ exports.generatePendingReportPdf = async ({
 
     let page = await browser.newPage();
 
-    pendingItems = pendingItems.map(pendingItem => ({
+    let formattedPendingItems = pendingItems.map(pendingItem => ({
       ...pendingItem,
       associatedJudgeFormatted: pendingItem.associatedJudge.replace(
         /^Judge\s+/,
@@ -101,7 +101,7 @@ exports.generatePendingReportPdf = async ({
 
     const contentResult = await generatePendingReportPage({
       applicationContext,
-      pendingItems,
+      formattedPendingItems,
       reportTitle,
     });
     await page.setContent(contentResult);
