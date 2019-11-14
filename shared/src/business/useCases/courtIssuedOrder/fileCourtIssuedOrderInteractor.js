@@ -39,6 +39,10 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
+  if (documentMetadata.eventCode === 'O') {
+    documentMetadata.freeText = documentMetadata.documentTitle;
+  }
+
   const documentEntity = new Document(
     {
       ...documentMetadata,
