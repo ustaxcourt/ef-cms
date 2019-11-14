@@ -5,7 +5,7 @@ const { post } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.document the document data
+ * @param {object} providers.documentMeta the document data
  * @returns {Promise<*>} the promise of the api call
  */
 exports.fileCourtIssuedDocketEntryInteractor = ({
