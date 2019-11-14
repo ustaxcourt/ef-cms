@@ -409,6 +409,7 @@ describe('getFormattedCaseDetail', () => {
       applicationContext,
       caseDetail: {
         ...mockCaseDetailBase,
+        docketRecord: [],
         documents: [
           {
             archived: false,
@@ -417,7 +418,6 @@ describe('getFormattedCaseDetail', () => {
             documentType: 'Order',
           },
         ],
-        docketRecord: [],
       },
       docketRecordSort: 'byDate',
     });
