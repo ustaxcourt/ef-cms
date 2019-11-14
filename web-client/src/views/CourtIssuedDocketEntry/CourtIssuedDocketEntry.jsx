@@ -69,6 +69,7 @@ export const CourtIssuedDocketEntry = connect(
                 <div className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
                   <span className="text-bold">Docket Entry Preview: </span>
                   {form.generatedDocumentTitle}
+                  {form.attachments && ' (Attachment(s))'}
                 </div>
                 <Button className="margin-right-0" onClick={() => {}}>
                   Serve to Parties
