@@ -23,7 +23,9 @@ export const formattedPendingItems = (get, applicationContext) => {
   const judges = sortedUniq(items.map(i => i.associatedJudgeFormatted).sort());
 
   items = items.sort((a, b) =>
-    applicationContext.getUtilities().compareStrings(a.judge, b.judge),
+    applicationContext
+      .getUtilities()
+      .compareISODateStrings(a.receivedAt, b.receivedAt),
   );
 
   if (judgeFilter) {
