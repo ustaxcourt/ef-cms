@@ -14,17 +14,6 @@ const documentDetailHelper = withAppContextDecorator(
   documentDetailHelperComputed,
   {
     ...applicationContext,
-    getConstants: () => ({
-      ORDER_TYPES_MAP: [
-        {
-          documentTitle: 'Order of Dismissal',
-          documentType: 'Order of Dismissal',
-          eventCode: 'OD',
-        },
-      ],
-      STATUS_TYPES: Case.STATUS_TYPES,
-      USER_ROLES: User.ROLES,
-    }),
     getCurrentUser: () => {
       return globalUser;
     },
@@ -49,6 +38,7 @@ describe('document detail helper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          docketRecord: [],
           documents: [],
           status: Case.STATUS_TYPES.generalDocket,
         },
@@ -70,6 +60,7 @@ describe('document detail helper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          docketRecord: [],
           documents: [],
           status: Case.STATUS_TYPES.generalDocket,
         },
@@ -91,6 +82,7 @@ describe('document detail helper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          docketRecord: [],
           documents: [],
           status: Case.STATUS_TYPES.new,
         },
@@ -112,6 +104,7 @@ describe('document detail helper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          docketRecord: [],
           documents: [],
           status: Case.STATUS_TYPES.recalled,
         },
@@ -133,6 +126,7 @@ describe('document detail helper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          docketRecord: [],
           documents: [
             {
               documentId: 'abc',
@@ -178,6 +172,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -205,6 +200,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -223,8 +219,94 @@ describe('document detail helper', () => {
     });
   });
 
+  describe('showCreatedFiled', () => {
+    it('should set showCreatedFiled to true if the document is not an order or court-issued document', async () => {
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Answer',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showCreatedFiled).toEqual(true);
+    });
+
+    it('should set showCreatedFiled to true if the document is an order and is in draft state (not on the docket record)', async () => {
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Order',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showCreatedFiled).toEqual(true);
+    });
+
+    it('should set showCreatedFiled to false if the document is an order and is in not draft state (on the docket record)', async () => {
+      const user = {
+        role: User.ROLES.docketClerk,
+        userId: '123',
+      };
+
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [{ documentId: 'abc' }],
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Order',
+              },
+            ],
+            status: Case.STATUS_TYPES.new,
+          },
+          documentId: 'abc',
+          workItemActions: {
+            abc: 'complete',
+          },
+        },
+      });
+      expect(result.showCreatedFiled).toEqual(false);
+    });
+  });
+
   describe('showAddDocketEntryButton', () => {
-    it('should set showAddDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is an unsigned stipulated decision', async () => {
+    it('should set showAddDocketEntryButton false when the user has the DOCKET_ENTRY permission and the document is an unsigned stipulated decision', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -234,6 +316,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -249,7 +332,7 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showAddDocketEntryButton).toEqual(true);
+      expect(result.showAddDocketEntryButton).toEqual(false);
     });
 
     it('should set showAddDocketEntryButton false when the user has the DOCKET_ENTRY permission and the document is a signed stipulated decision', async () => {
@@ -262,6 +345,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -291,6 +375,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -319,6 +404,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -348,6 +434,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -376,6 +463,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -405,6 +493,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -432,6 +521,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -459,6 +549,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -486,6 +577,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -513,6 +605,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -540,6 +633,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -569,6 +663,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -595,6 +690,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -621,6 +717,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -647,6 +744,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -670,6 +768,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -695,6 +794,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -710,7 +810,7 @@ describe('document detail helper', () => {
   });
 
   describe('showEditDocketEntry', () => {
-    it('should set showEditDocketEntry true when the the document is a signed stipulated decision and the user has the DOCKET_ENTRY permission', async () => {
+    it('should set showEditDocketEntry false when the the document is a signed stipulated decision and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -720,6 +820,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -736,7 +837,7 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showEditDocketEntry).toEqual(true);
+      expect(result.showEditDocketEntry).toEqual(false);
     });
 
     it('should set showEditDocketEntry false when the the document is an unsigned stipulated decision and the user has the DOCKET_ENTRY permission', async () => {
@@ -749,6 +850,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -777,6 +879,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -806,6 +909,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -834,6 +938,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -862,6 +967,7 @@ describe('document detail helper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          docketRecord: [],
           documents: [
             {
               documentId: 'abc',
@@ -885,6 +991,7 @@ describe('document detail helper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          docketRecord: [],
           documents: [
             {
               createdAt: '2018-11-21T20:49:28.192Z',
@@ -956,6 +1063,7 @@ describe('document detail helper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          docketRecord: [],
           documents: [
             {
               createdAt: '2018-11-21T20:49:28.192Z',
@@ -1032,6 +1140,7 @@ describe('document detail helper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          docketRecord: [],
           documents: [
             {
               createdAt: '2018-11-21T20:49:28.192Z',
@@ -1116,6 +1225,7 @@ describe('document detail helper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          docketRecord: [],
           documents: [
             {
               documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -1142,6 +1252,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -1169,6 +1280,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -1196,6 +1308,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -1223,6 +1336,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -1252,6 +1366,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: '123-abc',
@@ -1280,6 +1395,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: '123-abc',
@@ -1308,6 +1424,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: '123-abc',
@@ -1338,6 +1455,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -1363,6 +1481,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',
@@ -1388,6 +1507,7 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
+            docketRecord: [],
             documents: [
               {
                 documentId: 'abc',

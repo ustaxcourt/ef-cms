@@ -28,12 +28,14 @@ export const DocumentDetailHeader = connect(
           {documentDetailHelper.isDraftDocument && ' - DRAFT'}
         </h2>
         <div className="filed-by">
-          <div className="padding-bottom-1">
-            {documentDetailHelper.createdFiledLabel}{' '}
-            {documentDetailHelper.formattedDocument.createdAtFormatted}
-            {documentDetailHelper.formattedDocument.filedBy &&
-              ` by ${documentDetailHelper.formattedDocument.filedBy}`}
-          </div>
+          {documentDetailHelper.showCreatedFiled && (
+            <div className="padding-bottom-1">
+              {documentDetailHelper.createdFiledLabel}{' '}
+              {documentDetailHelper.formattedDocument.createdAtFormatted}
+              {documentDetailHelper.formattedDocument.filedBy &&
+                ` by ${documentDetailHelper.formattedDocument.filedBy}`}
+            </div>
+          )}
           {documentDetailHelper.formattedDocument.qcInfo && (
             <div>
               QC completed on{' '}
