@@ -103,6 +103,7 @@ const formatDocketRecordWithDocument = (
           return acc && !!wi.completedAt;
         }, true);
 
+      document.isInProgress = !!document.isFileAttached === false;
       document.isPetition = document.eventCode === 'P';
       document.canEdit = !document.isPetition && !document.qcWorkItemsCompleted;
     }
