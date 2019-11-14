@@ -1,19 +1,19 @@
-const { post } = require('../requests');
+const { put } = require('../requests');
 
 /**
- * fileCourtIssuedDocketEntryProxy
+ * updateCourtIssuedDocketEntryProxy
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMeta the document data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileCourtIssuedDocketEntryInteractor = ({
+exports.updateCourtIssuedDocketEntryInteractor = ({
   applicationContext,
   documentMeta,
 }) => {
   const { caseId } = documentMeta;
-  return post({
+  return put({
     applicationContext,
     body: {
       documentMeta,
