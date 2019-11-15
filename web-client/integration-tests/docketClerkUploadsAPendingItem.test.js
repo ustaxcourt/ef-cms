@@ -1,19 +1,12 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 
 import {
-  createMessage,
   fakeFile,
-  getFormattedDocumentQCSectionInbox,
-  getFormattedMyInbox,
   loginAs,
-  serveDocument,
   setupTest,
-  signProposedStipulatedDecision,
   uploadPetition,
   uploadProposedStipulatedDecision,
   viewCaseDetail,
-  viewDocumentDetailMessage,
 } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -22,15 +15,7 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-const test = setupTest({
-  useCases: {
-    loadPDFForSigningInteractor: () => {
-      return new Promise(resolve => {
-        resolve(null);
-      });
-    },
-  },
-});
+const test = setupTest();
 
 describe('a docket clerk uploads a pending item and sees that it is pending', () => {
   beforeAll(() => {
@@ -45,7 +30,6 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
   });
 
   let docketNumber = null;
-  let signedDocumentId = null;
   let caseDetail;
   let pendingItemsCount;
 
