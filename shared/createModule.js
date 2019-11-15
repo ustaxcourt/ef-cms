@@ -6,6 +6,7 @@ const targets = [
   'shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.handlebars',
   'shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.scss',
   'shared/static/images/ustc_seal.png',
+  'shared/src/business/useCaseHelper/pendingReport/pendingReport.pug',
 ];
 
 // const TEXT_FILES = ['txt', 'scss', 'html', 'hbars', 'handlebars'];
