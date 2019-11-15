@@ -54,8 +54,8 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
   });
 
-  it('docket clerk uploads a proposed stipulated decision', async () => {
-    await loginAs(test, 'docketclerk');
+  it('respondent uploads a proposed stipulated decision', async () => {
+    await loginAs(test, 'respondent');
     await viewCaseDetail({
       docketNumber: caseDetail.docketNumber,
       test,
