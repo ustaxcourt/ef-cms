@@ -5,11 +5,11 @@ import React from 'react';
 
 export const IndividualWorkQueueInProgress = connect(
   {
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({ documentEditLinkHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -49,7 +49,7 @@ export const IndividualWorkQueueInProgress = connect(
                     <div className="message-document-title">
                       <a
                         className="case-link"
-                        href={documentHelper({
+                        href={documentEditLinkHelper({
                           docketNumber: item.docketNumber,
                           documentId: item.document.documentId,
                           messageId: item.currentMessage.messageId,

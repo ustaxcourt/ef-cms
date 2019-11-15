@@ -6,12 +6,12 @@ import React from 'react';
 
 export const IndividualWorkQueueBatched = connect(
   {
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({ documentEditLinkHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -60,7 +60,7 @@ export const IndividualWorkQueueBatched = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentHelper({
+                      href={documentEditLinkHelper({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
                       })}
