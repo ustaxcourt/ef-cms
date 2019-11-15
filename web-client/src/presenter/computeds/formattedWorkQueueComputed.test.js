@@ -149,7 +149,7 @@ describe('formatted work queue computed', () => {
 
   it('should set isCourtIssuedDocument to true for a court-issued document in the selected work item', () => {
     const workItemCopy = cloneDeep(workItem);
-    workItemCopy.document.documentType = 'Order';
+    workItemCopy.document.documentType = 'O - Order';
     const result2 = runCompute(formattedWorkQueue, {
       state: {
         ...baseState,
