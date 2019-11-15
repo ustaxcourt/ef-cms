@@ -265,4 +265,23 @@ describe('formatted work queue computed', () => {
 
     expect(result).toEqual([]);
   });
+
+  it('should set isCourtIssuedDocument to true if the document is a court-issued document', () => {
+    workItem.document.documentType = 'Order';
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...baseState,
+        selectedWorkItems: [],
+        workQueue: [workItem],
+        workQueueToDisplay: {
+          box: 'outbox',
+          queue: 'section',
+          workQueueIsInternal: true,
+        },
+      },
+    });
+
+    expect(result.isCourtIssuedDocument).toEqual(true);
+  });
 });
