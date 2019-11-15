@@ -1,4 +1,3 @@
-const fs = require('fs');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
