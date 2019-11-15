@@ -94,24 +94,22 @@ export const courtIssuedDocketEntryOnChange = ({
   updateSequence,
   validateSequence,
 }) => {
+  const updateFieldsAndValidate = (clearFields = false) => {
+    ['documentType', 'documentTitle', 'eventCode', 'scenario'].forEach(key =>
+      updateSequence({
+        key,
+        value: clearFields ? '' : inputValue[key],
+      }),
+    );
+    validateSequence();
+  };
+
   switch (action) {
     case 'select-option':
-      ['documentType', 'documentTitle', 'eventCode', 'scenario'].forEach(key =>
-        updateSequence({
-          key,
-          value: inputValue[key],
-        }),
-      );
-      validateSequence();
+      updateFieldsAndValidate();
       break;
     case 'clear':
-      ['documentType', 'documentTitle', 'eventCode', 'scenario'].forEach(key =>
-        updateSequence({
-          key,
-          value: '',
-        }),
-      );
-      validateSequence();
+      updateFieldsAndValidate(true);
       break;
   }
 };
