@@ -149,6 +149,9 @@ export const SectionWorkQueueInProgress = connect(
                           workQueueHelper.showEditDocketEntry &&
                           item.isQC &&
                           item.document.eventCode !== 'P',
+                        shouldLinkToEditCourtIssued:
+                          workQueueHelper.showEditDocketEntry &&
+                          item.isCourtIssuedDocument,
                       })}
                       onClick={e => {
                         e.stopPropagation();

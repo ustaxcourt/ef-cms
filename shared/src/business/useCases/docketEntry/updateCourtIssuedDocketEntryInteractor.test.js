@@ -5,13 +5,15 @@ const { User } = require('../../entities/User');
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let updateCaseMock;
-  let saveWorkItemForNonPaperMock;
+  let createUserInboxRecordMock;
+  let createSectionInboxRecordMock;
   let applicationContext;
   let caseRecord;
 
   beforeEach(() => {
     updateCaseMock = jest.fn(() => caseRecord);
-    saveWorkItemForNonPaperMock = jest.fn();
+    createUserInboxRecordMock = jest.fn();
+    createSectionInboxRecordMock = jest.fn();
 
     applicationContext = {
       environment: { stage: 'local' },
@@ -22,13 +24,12 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
         };
       },
       getPersistenceGateway: () => ({
+        createSectionInboxRecord: createSectionInboxRecordMock,
+        createUserInboxRecord: createUserInboxRecordMock,
         getCaseByCaseId: async () => caseRecord,
-        getUserById: async () => ({
-          name: 'Olivia Jade',
-          role: User.ROLES.adc,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        }),
-        saveWorkItemForNonPaper: saveWorkItemForNonPaperMock,
+        getUserById: async () => {
+          return applicationContext.getCurrentUser();
+        },
         updateCase: updateCaseMock,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -126,7 +127,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     expect(error.message).toContain('Document not found');
   });
 
-  it('should call updateCase and saveWorkItemForNonPaper', async () => {
+  it('should call updateCase, createUserInboxRecord, and createSectionInboxRecord', async () => {
     applicationContext.getCurrentUser = () => ({
       name: 'Olivia Jade',
       role: User.ROLES.docketClerk,
@@ -143,6 +144,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     });
 
     expect(updateCaseMock).toHaveBeenCalled();
-    expect(saveWorkItemForNonPaperMock).toHaveBeenCalled();
+    expect(createUserInboxRecordMock).toHaveBeenCalled();
+    expect(createSectionInboxRecordMock).toHaveBeenCalled();
   });
 });

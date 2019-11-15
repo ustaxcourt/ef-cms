@@ -59,6 +59,9 @@ export const IndividualWorkQueueInProgress = connect(
                             workQueueHelper.showEditDocketEntry &&
                             item.isQC &&
                             item.document.eventCode !== 'P',
+                          shouldLinkToEditCourtIssued:
+                            workQueueHelper.showEditDocketEntry &&
+                            item.isCourtIssuedDocument,
                           workItemIdToMarkAsRead: !item.isRead
                             ? item.workItemId
                             : null,
