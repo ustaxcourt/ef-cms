@@ -5,7 +5,9 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
+ * @param {object} providers.store the cerebral store
  */
 export const generateCourtIssuedDocumentTitleAction = ({
   applicationContext,
