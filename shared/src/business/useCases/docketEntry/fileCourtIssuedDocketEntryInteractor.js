@@ -104,6 +104,15 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
   documentEntity.addWorkItem(workItem);
   caseEntity.updateDocument(documentEntity);
 
+  workItem.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
+
   caseEntity.addDocketRecord(
     new DocketRecord({
       description: documentMeta.generatedDocumentTitle,
@@ -113,15 +122,22 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     }),
   );
 
-  await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-    applicationContext,
-    workItem: workItem.validate().toRawObject(),
-  });
+  const saveItems = [
+    applicationContext.getPersistenceGateway().createUserInboxRecord({
+      applicationContext,
+      workItem: workItem.validate().toRawObject(),
+    }),
+    applicationContext.getPersistenceGateway().createSectionInboxRecord({
+      applicationContext,
+      workItem: workItem.validate().toRawObject(),
+    }),
+    applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    }),
+  ];
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  await Promise.all(saveItems);
 
   return caseEntity.toRawObject();
 };
