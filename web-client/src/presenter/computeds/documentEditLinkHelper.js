@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const documentHelper = get => ({
+export const documentEditLinkHelper = get => ({
   docketNumber,
   documentId,
   messageId,
@@ -16,12 +16,12 @@ export const documentHelper = get => ({
 
   const shouldLinkToMessagesTab = () => {
     let linkToMessagesTab = false;
-    if (userRole == USER_ROLES.docketClerk || workQueueIsInternal) {
+    if (userRole === USER_ROLES.docketClerk || workQueueIsInternal) {
       linkToMessagesTab = true;
     } else if (
-      userRole == USER_ROLES.petitionsClerk &&
+      userRole === USER_ROLES.petitionsClerk &&
       !workQueueIsInternal &&
-      box == 'outbox'
+      box === 'outbox'
     ) {
       linkToMessagesTab = true;
     }

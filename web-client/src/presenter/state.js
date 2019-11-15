@@ -23,7 +23,7 @@ import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
-import { documentHelper } from './computeds/documentHelper';
+import { documentEditLinkHelper } from './computeds/documentEditLinkHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
@@ -107,7 +107,7 @@ export const state = {
     tab: '',
   },
   documentDetailHelper,
-  documentHelper,
+  documentEditLinkHelper,
   documentId: null,
   documentSelectedForPreview: null,
   documentSelectedForScan: null,

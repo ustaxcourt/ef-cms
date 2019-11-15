@@ -7,7 +7,7 @@ import React from 'react';
 export const SectionWorkQueueInbox = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
@@ -18,7 +18,7 @@ export const SectionWorkQueueInbox = connect(
   },
   ({
     assignSelectedWorkItemsSequence,
-    documentHelper,
+    documentEditLinkHelper,
     formattedWorkQueue,
     selectAssigneeSequence,
     selectedWorkItems,
@@ -171,7 +171,7 @@ export const SectionWorkQueueInbox = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentHelper({
+                      href={documentEditLinkHelper({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
                         messageId: item.currentMessage.messageId,
