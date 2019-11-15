@@ -69,7 +69,7 @@ describe('fetchPendingItems', () => {
         match: { 'hasPendingItems.BOOL': true },
       },
       {
-        match: { 'associatedJudge.S': 'Judge Armen' },
+        match_phrase: { 'associatedJudge.S': 'Judge Armen' },
       },
     ]);
 
