@@ -49,14 +49,10 @@ export const formatWorkItem = ({
 }) => {
   const {
     COURT_ISSUED_EVENT_CODES,
-    ORDER_TYPES_MAP,
     STATUS_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
 
-  const orderDocumentTypes = ORDER_TYPES_MAP.map(
-    orderType => orderType.documentType,
-  );
   const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
     courtIssuedDoc => courtIssuedDoc.documentType,
   );
@@ -152,11 +148,9 @@ export const formatWorkItem = ({
     ).createdAtTimeFormattedTZ;
   }
 
-  const isOrder = !!orderDocumentTypes.includes(result.document.documentType);
-  //TODO fix this - why is the doc type not updating when an order docket entry is created?
-  result.isCourtIssuedDocument =
-    isOrder ||
-    !!courtIssuedDocumentTypes.includes(result.document.documentType);
+  result.isCourtIssuedDocument = !!courtIssuedDocumentTypes.includes(
+    result.document.documentType,
+  );
 
   return result;
 };
