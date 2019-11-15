@@ -1,12 +1,12 @@
 const _ = require('lodash');
 const { Case } = require('../entities/cases/Case');
-const { COURT_ISSUED_EVENT_CODES } = require('../entities/Document');
+const { Document } = require('../entities/Document');
 const { Order } = require('../entities/orders/Order');
 
 const orderDocumentTypes = Order.ORDER_TYPES.map(
   orderType => orderType.documentType,
 );
-const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
+const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
 
@@ -94,12 +94,11 @@ const formatDocketRecordWithDocument = (
     if (record.documentId) {
       document = documentMap[record.documentId];
 
-      const isOrder = !!orderDocumentTypes.includes(document.documentType);
-      //TODO fix this - why is the doc type not updating when an order docket entry is created?
-      document.isCourtIssuedDocument =
-        isOrder || !!courtIssuedDocumentTypes.includes(document.documentType);
+      document.isCourtIssuedDocument = !!courtIssuedDocumentTypes.includes(
+        document.documentType,
+      );
 
-      if ((isOrder || document.isCourtIssuedDocument) && !document.servedAt) {
+      if (document.isCourtIssuedDocument && !document.servedAt) {
         record.createdAtFormatted = undefined;
       }
 
@@ -122,8 +121,8 @@ const formatDocketRecordWithDocument = (
         }, true);
 
       document.isInProgress = !!(
-        (isOrder && !document.servedAt) ||
-        (!isOrder && document.isFileAttached === false)
+        (document.isCourtIssuedDocument && !document.servedAt) ||
+        (!document.isCourtIssuedDocument && document.isFileAttached === false)
       );
       document.isPetition = document.eventCode === 'P';
       document.canEdit = !document.isPetition && !document.qcWorkItemsCompleted;
