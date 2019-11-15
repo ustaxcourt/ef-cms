@@ -20,11 +20,12 @@ export const fileDocumentHelper = (get, applicationContext) => {
 
   const supportingDocumentTypeList = CATEGORY_MAP['Supporting Document'].map(
     entry => {
-      entry.documentTypeDisplay = entry.documentType.replace(
+      const entryCopy = { ...entry };
+      entryCopy.documentTypeDisplay = entryCopy.documentType.replace(
         /\sin\sSupport$/i,
         '',
       );
-      return entry;
+      return entryCopy;
     },
   );
 
