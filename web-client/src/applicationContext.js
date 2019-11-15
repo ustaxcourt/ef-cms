@@ -5,10 +5,6 @@ import {
   CHAMBERS_SECTIONS,
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
-import {
-  COURT_ISSUED_EVENT_CODES,
-  Document,
-} from '../../shared/src/business/entities/Document';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
@@ -19,6 +15,7 @@ import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch'
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { CourtIssuedDocumentFactory } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentFactory';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { Document } from '../../shared/src/business/entities/Document';
 import { EditPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/EditPractitionerFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
@@ -408,7 +405,7 @@ const applicationContext = {
     CHAMBERS_SECTION,
     CHAMBERS_SECTIONS,
     COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-    COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
     ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
     INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
     MAX_FILE_SIZE_BYTES,
