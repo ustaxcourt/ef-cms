@@ -47,7 +47,20 @@ export const formatWorkItem = ({
   selectedWorkItems = [],
   workQueueIsInternal,
 }) => {
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const {
+    COURT_ISSUED_EVENT_CODES,
+    ORDER_TYPES_MAP,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+
+  const orderDocumentTypes = ORDER_TYPES_MAP.map(
+    orderType => orderType.documentType,
+  );
+  const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
+    courtIssuedDoc => courtIssuedDoc.documentType,
+  );
+
   const result = _.cloneDeep(workItem);
 
   result.createdAtFormatted = applicationContext
@@ -138,6 +151,12 @@ export const formatWorkItem = ({
       message => message.message == 'Petition batched for IRS',
     ).createdAtTimeFormattedTZ;
   }
+
+  const isOrder = !!orderDocumentTypes.includes(result.document.documentType);
+  //TODO fix this - why is the doc type not updating when an order docket entry is created?
+  result.isCourtIssuedDocument =
+    isOrder ||
+    !!courtIssuedDocumentTypes.includes(result.document.documentType);
 
   return result;
 };
