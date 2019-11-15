@@ -39,7 +39,7 @@ export const FilingsAndProceedings = connect(
     ) => {
       return (
         <React.Fragment>
-          {caseDetailHelper.userHasAccessToCase && (
+          {caseDetailHelper.userHasAccessToCase && !document.isInProgress && (
             <React.Fragment>
               <NonMobile>
                 <a
@@ -73,7 +73,8 @@ export const FilingsAndProceedings = connect(
               </Mobile>
             </React.Fragment>
           )}
-          {!caseDetailHelper.userHasAccessToCase && description}
+          {(!caseDetailHelper.userHasAccessToCase || document.isInProgress) &&
+            description}
         </React.Fragment>
       );
     };

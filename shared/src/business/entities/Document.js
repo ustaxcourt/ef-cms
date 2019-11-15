@@ -129,7 +129,10 @@ Document.SIGNED_DOCUMENT_TYPES = {
 };
 
 Document.TRACKED_DOCUMENT_TYPES = {
-  motions: {
+  application: {
+    category: 'Application',
+  },
+  motion: {
     category: 'Motion',
   },
   orderToShowCause: {

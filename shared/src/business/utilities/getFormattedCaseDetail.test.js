@@ -109,6 +109,59 @@ describe('formatCase', () => {
     expect(result).toHaveProperty('docketRecordWithDocument');
   });
 
+  it('should format docket records and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketRecord: [
+        {
+          createdAt: getDateISO(),
+          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          filingDate: getDateISO(),
+          index: '1',
+        },
+      ],
+      documents: [
+        {
+          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          documentType: 'Petition',
+        },
+      ],
+    });
+
+    expect(result).toHaveProperty('docketRecordWithDocument');
+    expect(
+      result.docketRecordWithDocument[0].record.createdAtFormatted,
+    ).toBeDefined();
+  });
+
+  it('should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketRecord: [
+        {
+          createdAt: getDateISO(),
+          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          filingDate: getDateISO(),
+          index: '1',
+        },
+      ],
+      documents: [
+        {
+          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          documentTitle: 'Order [Judge Name] [Anything]',
+          documentType: 'OAJ - Order that case is assigned',
+          eventCode: 'OAJ',
+          scenario: 'Type B',
+        },
+      ],
+    });
+
+    expect(result).toHaveProperty('docketRecordWithDocument');
+    expect(
+      result.docketRecordWithDocument[0].record.createdAtFormatted,
+    ).toBeUndefined();
+  });
+
   it('should format respondents if the respondents array is set', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
