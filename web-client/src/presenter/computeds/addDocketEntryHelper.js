@@ -18,7 +18,7 @@ const getInternalDocumentTypes = typeMap => {
   return orderBy(filteredTypeList, ['label'], ['asc']);
 };
 
-const getSupportingDocumentTypeList = categoryMap => {
+export const getSupportingDocumentTypeList = categoryMap => {
   return categoryMap['Supporting Document'].map(entry => {
     const entryCopy = { ...entry }; //to prevent against modifying constants
     entryCopy.documentTypeDisplay = entryCopy.documentType.replace(
