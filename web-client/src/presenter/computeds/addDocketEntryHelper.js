@@ -18,6 +18,17 @@ const getInternalDocumentTypes = typeMap => {
   return orderBy(filteredTypeList, ['label'], ['asc']);
 };
 
+const getSupportingDocumentTypeList = categoryMap => {
+  return categoryMap['Supporting Document'].map(entry => {
+    const entryCopy = { ...entry }; //to prevent against modifying constants
+    entryCopy.documentTypeDisplay = entryCopy.documentType.replace(
+      /\sin\sSupport$/i,
+      '',
+    );
+    return entryCopy;
+  });
+};
+
 export const addDocketEntryHelper = (get, applicationContext) => {
   const { INTERNAL_CATEGORY_MAP, PARTY_TYPES } = get(state.constants);
   const caseDetail = get(state.caseDetail);
@@ -33,16 +44,9 @@ export const addDocketEntryHelper = (get, applicationContext) => {
 
   const internalDocumentTypes = getInternalDocumentTypes(INTERNAL_CATEGORY_MAP);
 
-  const supportingDocumentTypeList = INTERNAL_CATEGORY_MAP[
-    'Supporting Document'
-  ].map(entry => {
-    const entryCopy = { ...entry };
-    entryCopy.documentTypeDisplay = entryCopy.documentType.replace(
-      /\sin\sSupport$/i,
-      '',
-    );
-    return entryCopy;
-  });
+  const supportingDocumentTypeList = getSupportingDocumentTypeList(
+    INTERNAL_CATEGORY_MAP,
+  );
 
   const objectionDocumentTypes = [
     ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
