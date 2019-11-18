@@ -28,7 +28,7 @@ DYNAMSOFT_URL="https://dynamsoft-lib-${ENVIRONMENT}.${EFCMS_DOMAIN}"
 
 if [[ -z "${IS_DYNAMSOFT_ENABLED}" ]]
 then
-  IS_DYNAMSOFT_ENABLED = "1"
+  IS_DYNAMSOFT_ENABLED="1"
 fi
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
