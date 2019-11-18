@@ -1,10 +1,12 @@
 import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../applicationContext';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { headerHelper as headerHelperComputed } from './headerHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
 const headerHelper = withAppContextDecorator(headerHelperComputed, {
+  ...applicationContext,
   getUtilities: () => {
     return {
       isExternalUser: User.isExternalUser,
@@ -15,7 +17,6 @@ const headerHelper = withAppContextDecorator(headerHelperComputed, {
 
 const getBaseState = user => {
   return {
-    constants: { USER_ROLES: User.ROLES },
     notifications: {
       unreadCount: 0,
     },
