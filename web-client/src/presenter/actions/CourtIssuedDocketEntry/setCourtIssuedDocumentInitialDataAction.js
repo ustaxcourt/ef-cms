@@ -30,7 +30,7 @@ export const setCourtIssuedDocumentInitialDataAction = ({
     );
 
     if (selectedDocumentTypeValues) {
-      store.set(state.form, selectedDocumentTypeValues);
+      store.set(state.form, { ...selectedDocumentTypeValues }); //to prevent against modifying constants
       store.set(state.form.attachments, false);
     }
 

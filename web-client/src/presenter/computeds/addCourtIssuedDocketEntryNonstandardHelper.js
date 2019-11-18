@@ -1,7 +1,10 @@
 import { state } from 'cerebral';
 
-export const addCourtIssuedDocketEntryNonstandardHelper = get => {
-  const { COURT_ISSUED_EVENT_CODES } = get(state.constants);
+export const addCourtIssuedDocketEntryNonstandardHelper = (
+  get,
+  applicationContext,
+) => {
+  const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
 
   const selectedEventCode = get(state.form.eventCode);
 
