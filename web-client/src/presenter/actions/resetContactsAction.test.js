@@ -1,6 +1,6 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { applicationContext } from '../../applicationContext';
-import { presenter } from '../../presenter';
+import { presenter } from '../presenter';
 import { resetContactsAction } from './resetContactsAction';
 import { runAction } from 'cerebral/test';
 
