@@ -20,7 +20,7 @@ export default (test, draftOrderIndex) => {
     expect(draftOrderDocument).toBeTruthy();
 
     await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: draftOrderDocument.docketNumber,
+      docketNumber: test.docketNumber,
       documentId: draftOrderDocument.documentId,
     });
 

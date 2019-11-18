@@ -3,7 +3,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export default (test, draftOrderIndex) => {
-  return it('Docket Clerk views the docket entry for the given document', async () => {
+  return it('Calendar Clerk views the docket entry for the given document', async () => {
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
@@ -13,15 +13,15 @@ export default (test, draftOrderIndex) => {
 
     const { documentId } = test.draftOrders[draftOrderIndex];
 
-    const document = caseDetailFormatted.docketRecordWithDocument.find(
+    const docketRecordEntry = caseDetailFormatted.docketRecordWithDocument.find(
       entry => (entry.document.documentId = documentId),
     );
 
-    expect(document).toBeTruthy();
+    expect(docketRecordEntry.document).toBeTruthy();
 
     await test.runSequence('gotoDocumentDetailSequence', {
-      docketNumber: document.docketNumber,
-      documentId: document.documentId,
+      docketNumber: test.docketNumber,
+      documentId: docketRecordEntry.document.documentId,
     });
 
     expect(test.getState('currentPage')).toEqual('DocumentDetail');

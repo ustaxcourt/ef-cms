@@ -244,7 +244,7 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   // petitioner logs in
   petitionerLogin(test);
   // petitioner navigates to case
-  petitionerViewsCaseDetail(test, 3);
+  petitionerViewsCaseDetail(test, { documentCount: 3 });
   // petitioner views docket record
   // = saved order visible on docket record
   // = saved order link is NOT clickable

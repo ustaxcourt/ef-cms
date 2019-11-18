@@ -24,12 +24,15 @@ export default (test, draftOrderIndex) => {
     expect(draftOrderDocument).toBeTruthy();
 
     await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketNumber: draftOrderDocument.docketNumber,
+      docketNumber: test.docketNumber,
       documentId: draftOrderDocument.documentId,
     });
 
     helperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
+      {
+        state: test.getState(),
+      },
     );
 
     expect(test.getState('form.eventCode')).toEqual('OD');
