@@ -24,7 +24,7 @@ export default (test, draftOrderIndex) => {
     expect(draftOrderDocument).toBeTruthy();
 
     await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketNumber: draftOrderDocument.docketNumber,
+      docketNumber: test.docketNumber,
       documentId: draftOrderDocument.documentId,
     });
 
@@ -45,10 +45,13 @@ export default (test, draftOrderIndex) => {
 
     helperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
+      {
+        state: test.getState(),
+      },
     );
 
     expect(helperComputed.showFreeText).toBeTruthy();
-    expect(test.getState('form.freeText')).toEqual('');
+    expect(test.getState('form.freeText')).toBeFalsy();
 
     // eventCode: OCA
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
@@ -58,10 +61,13 @@ export default (test, draftOrderIndex) => {
 
     helperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
+      {
+        state: test.getState(),
+      },
     );
 
     expect(helperComputed.showFreeText).toBeTruthy();
-    expect(test.getState('form.freeText')).toEqual('');
+    expect(test.getState('form.freeText')).toBeFalsy();
 
     // eventCode: OAJ
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
@@ -71,12 +77,15 @@ export default (test, draftOrderIndex) => {
 
     helperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
+      {
+        state: test.getState(),
+      },
     );
 
     expect(helperComputed.showFreeText).toBeTruthy();
-    expect(test.getState('form.freeText')).toEqual('');
+    expect(test.getState('form.freeText')).toBeFalsy();
     expect(helperComputed.showJudge).toBeTruthy();
-    expect(test.getState('form.judge')).toEqual('');
+    expect(test.getState('form.judge')).toBeFalsy();
 
     // eventCode: OAL
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
@@ -86,11 +95,14 @@ export default (test, draftOrderIndex) => {
 
     helperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
+      {
+        state: test.getState(),
+      },
     );
 
     expect(helperComputed.showFreeText).toBeFalsy();
     expect(helperComputed.showDocketNumbers).toBeTruthy();
-    expect(test.getState('form.docketNumbers')).toEqual('');
+    expect(test.getState('form.docketNumbers')).toBeFalsy();
 
     // eventCode: OAP
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
@@ -100,14 +112,17 @@ export default (test, draftOrderIndex) => {
 
     helperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
+      {
+        state: test.getState(),
+      },
     );
 
     expect(helperComputed.showFreeText).toBeTruthy();
-    expect(test.getState('form.freeText')).toEqual('');
+    expect(test.getState('form.freeText')).toBeFalsy();
     expect(helperComputed.showDate).toBeTruthy();
-    expect(test.getState('form.month')).toEqual('');
-    expect(test.getState('form.day')).toEqual('');
-    expect(test.getState('form.year')).toEqual('');
+    expect(test.getState('form.month')).toBeFalsy();
+    expect(test.getState('form.day')).toBeFalsy();
+    expect(test.getState('form.year')).toBeFalsy();
 
     // eventCode: OODS
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
@@ -117,13 +132,16 @@ export default (test, draftOrderIndex) => {
 
     helperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
+      {
+        state: test.getState(),
+      },
     );
 
     expect(helperComputed.showFreeText).toBeFalsy();
     expect(helperComputed.showDate).toBeTruthy();
-    expect(test.getState('form.month')).toEqual('');
-    expect(test.getState('form.day')).toEqual('');
-    expect(test.getState('form.year')).toEqual('');
+    expect(test.getState('form.month')).toBeFalsy();
+    expect(test.getState('form.day')).toBeFalsy();
+    expect(test.getState('form.year')).toBeFalsy();
 
     // test defined
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
@@ -136,11 +154,19 @@ export default (test, draftOrderIndex) => {
       value: draftOrderDocument.freeText,
     });
 
+    helperComputed = runCompute(
+      withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
+      {
+        state: test.getState(),
+      },
+    );
+
     expect(test.getState('form.eventCode')).toEqual(
       draftOrderDocument.eventCode,
     );
+
     expect(test.getState('form.documentType')).toEqual(
-      draftOrderDocument.documentTitle,
+      `${draftOrderDocument.eventCode} - ${draftOrderDocument.documentType}`,
     );
 
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
@@ -152,7 +178,6 @@ export default (test, draftOrderIndex) => {
       },
     );
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(test.getState('alertSuccess').title).toEqual(
       'Your entry has been added to the docket record.',
     );

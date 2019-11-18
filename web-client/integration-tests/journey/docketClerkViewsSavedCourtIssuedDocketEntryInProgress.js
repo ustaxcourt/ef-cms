@@ -20,7 +20,7 @@ export default (test, draftOrderIndex) => {
     expect(orderDocument).toBeTruthy();
 
     await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-      docketNumber: orderDocument.docketNumber,
+      docketNumber: test.docketNumber,
       documentId: orderDocument.documentId,
     });
 
