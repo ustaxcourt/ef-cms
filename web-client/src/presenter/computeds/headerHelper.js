@@ -2,6 +2,7 @@ import { state } from 'cerebral';
 
 export const headerHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
+  const userRole = user && user.role;
   const isLoggedIn = !!user;
   const currentPage = get(state.currentPage) || '';
   const notifications = get(state.notifications);
@@ -25,13 +26,13 @@ export const headerHelper = (get, applicationContext) => {
       USER_ROLES.docketClerk,
       USER_ROLES.petitionsClerk,
       USER_ROLES.adc,
-    ].includes(user.role) &&
+    ].includes(userRole) &&
       isMessages);
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
   const isBlockedCasesReport = currentPage.includes('BlockedCasesReport');
 
   return {
-    defaultQCBoxPath: isOtherUser(user.role)
+    defaultQCBoxPath: isOtherUser(userRole)
       ? '/document-qc/section/inbox'
       : '/document-qc/my/inbox',
     pageIsDocumentQC: isMessages && !workQueueIsInternal,
@@ -39,24 +40,23 @@ export const headerHelper = (get, applicationContext) => {
     pageIsInterstitial,
     pageIsMessages: isMessages && workQueueIsInternal,
     pageIsMyCases:
-      isDashboard &&
-      applicationContext.getUtilities().isExternalUser(user.role),
+      isDashboard && applicationContext.getUtilities().isExternalUser(userRole),
     pageIsReports: isCaseDeadlines || isBlockedCasesReport,
     pageIsTrialSessions:
       isTrialSessions &&
-      applicationContext.getUtilities().isInternalUser(user.role),
+      applicationContext.getUtilities().isInternalUser(userRole),
     showAccountMenu: isLoggedIn,
-    showDocumentQC: applicationContext.getUtilities().isInternalUser(user.role),
-    showHomeIcon: user.role === USER_ROLES.judge,
-    showMessages: applicationContext.getUtilities().isInternalUser(user.role),
+    showDocumentQC: applicationContext.getUtilities().isInternalUser(userRole),
+    showHomeIcon: userRole === USER_ROLES.judge,
+    showMessages: applicationContext.getUtilities().isInternalUser(userRole),
     showMessagesIcon: notifications.myInboxUnreadCount > 0,
-    showMyCases: applicationContext.getUtilities().isExternalUser(user.role),
-    showReports: applicationContext.getUtilities().isInternalUser(user.role),
+    showMyCases: applicationContext.getUtilities().isExternalUser(userRole),
+    showReports: applicationContext.getUtilities().isInternalUser(userRole),
     showSearchInHeader:
       user &&
-      user.role &&
-      user.role !== USER_ROLES.practitioner &&
-      user.role !== USER_ROLES.respondent,
+      userRole &&
+      userRole !== USER_ROLES.practitioner &&
+      userRole !== USER_ROLES.respondent,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
   };
 };
