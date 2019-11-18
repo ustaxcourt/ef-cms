@@ -22,7 +22,7 @@ This will host a local service at http://localhost:3000.
 
 # Trouble Shooting
 
-Sometimes you may get errors when doing npm install.  To fix, removce the package-lock.json file and re-run npm install.
+Sometimes you may get errors when doing npm install.  To fix, remove the package-lock.json file and re-run npm install.
 
 ## Sandbox Deploys to AWS
 
