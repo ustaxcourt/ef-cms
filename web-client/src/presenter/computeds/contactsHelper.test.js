@@ -1,20 +1,19 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { User } from '../../../../shared/src/business/entities/User';
-import { contactsHelper } from './contactsHelper';
+import { applicationContext } from '../../applicationContext';
+import { contactsHelper as contactsHelperComputed } from './contactsHelper';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
-const baseState = {
-  constants: {
-    PARTY_TYPES: ContactFactory.PARTY_TYPES,
-    USER_ROLES: User.ROLES,
-  },
-};
+const contactsHelper = withAppContextDecorator(
+  contactsHelperComputed,
+  applicationContext,
+);
 
 describe('contactsHelper', () => {
   it('should validate form view information for party type Conservator and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: { partyType: ContactFactory.PARTY_TYPES.conservator },
         user: {
           role: User.ROLES.petitioner,
@@ -34,7 +33,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Corporation and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: { partyType: ContactFactory.PARTY_TYPES.corporation },
         user: {
           role: User.ROLES.petitioner,
@@ -53,7 +51,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Custodian and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: { partyType: ContactFactory.PARTY_TYPES.custodian },
         user: {
           role: User.ROLES.petitioner,
@@ -73,7 +70,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Donor and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: { partyType: ContactFactory.PARTY_TYPES.donor },
         user: {
           role: User.ROLES.petitioner,
@@ -91,7 +87,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc. and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.estate,
         },
@@ -115,7 +110,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc. and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
         },
@@ -136,7 +130,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Guardian and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.guardian,
         },
@@ -158,7 +151,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary) and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
         },
@@ -181,7 +173,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary) and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
         },
@@ -203,7 +194,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime) and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
         },
@@ -225,7 +215,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Partnership (as a partner other than Tax Matters Partner) and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
@@ -248,7 +237,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Partnership (as the Tax Matters Partner) and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
@@ -270,7 +258,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Petitioner and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
@@ -290,7 +277,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Petitioner & Spouse and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         },
@@ -316,7 +302,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Petitioner & Deceased Spouse and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
         },
@@ -340,7 +325,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Surviving Spouse and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
         },
@@ -362,7 +346,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Transferee and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.transferee,
         },
@@ -382,7 +365,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Trust and user role petitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.trust,
         },
@@ -404,7 +386,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Conservator and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: { partyType: ContactFactory.PARTY_TYPES.conservator },
         user: {
           role: User.ROLES.practitioner,
@@ -424,7 +405,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Corporation and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: { partyType: ContactFactory.PARTY_TYPES.corporation },
         user: {
           role: User.ROLES.practitioner,
@@ -443,7 +423,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Custodian and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: { partyType: ContactFactory.PARTY_TYPES.custodian },
         user: {
           role: User.ROLES.practitioner,
@@ -463,7 +442,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Donor and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: { partyType: ContactFactory.PARTY_TYPES.donor },
         user: {
           role: User.ROLES.practitioner,
@@ -481,7 +459,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc. and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.estate,
         },
@@ -505,7 +482,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc. and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
         },
@@ -526,7 +502,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Guardian and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.guardian,
         },
@@ -548,7 +523,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary) and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
         },
@@ -571,7 +545,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary) and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
         },
@@ -593,7 +566,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime) and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
         },
@@ -615,7 +587,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Partnership (as a partner other than Tax Matters Partner) and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
@@ -637,7 +608,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Partnership (as the Tax Matters Partner) and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
@@ -659,7 +629,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Petitioner and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
@@ -679,7 +648,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Petitioner & Spouse and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         },
@@ -705,7 +673,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Petitioner & Deceased Spouse and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
         },
@@ -729,7 +696,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Surviving Spouse and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
         },
@@ -751,7 +717,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Transferee and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.transferee,
         },
@@ -771,7 +736,6 @@ describe('contactsHelper', () => {
   it('should validate form view information for party type Trust and user role practitioner', () => {
     const result = runCompute(contactsHelper, {
       state: {
-        ...baseState,
         form: {
           partyType: ContactFactory.PARTY_TYPES.trust,
         },

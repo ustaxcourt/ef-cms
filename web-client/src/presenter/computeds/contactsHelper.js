@@ -5,13 +5,14 @@ import { state } from 'cerebral';
  *
  * @param {Function} get the cerebral get function used
  * for getting state.form.partyType and state.constants
+ * @param {object} applicationContext the application context
  * @returns {object} the contactPrimary and/or contactSecondary
  * view options
  */
-export const contactsHelper = get => {
+export const contactsHelper = (get, applicationContext) => {
   const form = get(state.form);
   const userRole = get(state.user.role);
-  const { PARTY_TYPES, USER_ROLES } = get(state.constants);
+  const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
 
   let contactPrimary, contactSecondary;
   let showEmail = true;
