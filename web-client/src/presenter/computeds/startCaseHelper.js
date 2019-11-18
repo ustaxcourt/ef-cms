@@ -2,7 +2,7 @@ import { showContactsHelper } from './showContactsHelper';
 import { state } from 'cerebral';
 
 export const startCaseHelper = (get, applicationContext) => {
-  const { PARTY_TYPES, USER_ROLES } = get(state.constants);
+  const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
   const form = get(state.form);
   const userRole = get(state.user.role);
 

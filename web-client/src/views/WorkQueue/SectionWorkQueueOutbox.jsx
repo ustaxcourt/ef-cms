@@ -40,7 +40,7 @@ export const SectionWorkQueueOutbox = connect(
               {workQueueHelper.showAssignedToColumn && (
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
               )}
-              {workQueueHelper.showProcessedByColumn && <th>Processed by</th>}
+              {workQueueHelper.showProcessedByColumn && <th>QC’d by</th>}
               {workQueueHelper.showBatchedByColumn && <th>Batched by</th>}
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
               {workQueueHelper.showServedColumn && <th>Served</th>}

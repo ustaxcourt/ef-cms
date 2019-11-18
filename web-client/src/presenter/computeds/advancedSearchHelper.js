@@ -36,7 +36,10 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 
 export const advancedSearchHelper = (get, applicationContext) => {
   const countryType = get(state.advancedSearchForm.countryType);
-  const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES } = get(state.constants);
+  const {
+    CASE_SEARCH_PAGE_SIZE,
+    COUNTRY_TYPES,
+  } = applicationContext.getConstants();
   const searchResults = get(state.searchResults);
   const currentPage = get(state.advancedSearchForm.currentPage);
 

@@ -17,7 +17,6 @@ const workQueueHelper = withAppContextDecorator(workQueueHelperComputed, {
 const getBaseState = user => {
   globalUser = user;
   return {
-    constants: { USER_ROLES: User.ROLES },
     permissions: getUserPermissions(user),
   };
 };
