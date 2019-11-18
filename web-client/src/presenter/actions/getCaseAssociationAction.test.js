@@ -1,12 +1,11 @@
 import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../../applicationContext';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
 
-const baseState = {
-  constants: { USER_ROLES: User.ROLES },
-};
+presenter.providers.applicationContext = applicationContext;
 
 describe('getCaseAssociation', () => {
   it('should return that practitioner is associated', async () => {
@@ -23,7 +22,6 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
-        ...baseState,
         caseDetail: {
           practitioners: [{ userId: '123' }],
         },
@@ -53,7 +51,6 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
-        ...baseState,
         caseDetail: {
           practitioners: [{ userId: '123' }],
         },
@@ -83,7 +80,6 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
-        ...baseState,
         caseDetail: {
           practitioners: [{ userId: '123' }],
         },
@@ -113,7 +109,6 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
-        ...baseState,
         caseDetail: {
           respondents: [{ userId: '789' }],
         },
@@ -143,7 +138,6 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
-        ...baseState,
         caseDetail: {
           respondent: { userId: '123' },
         },
@@ -173,7 +167,6 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
-        ...baseState,
         caseDetail: {
           userId: '123',
         },
@@ -203,7 +196,6 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
-        ...baseState,
         caseDetail: {
           userId: '123',
         },
@@ -233,7 +225,6 @@ describe('getCaseAssociation', () => {
       },
       props: {},
       state: {
-        ...baseState,
         caseDetail: {
           practitioners: [{ userId: '123' }],
         },
