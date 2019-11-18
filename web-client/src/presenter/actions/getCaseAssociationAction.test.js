@@ -10,11 +10,9 @@ presenter.providers.applicationContext = applicationContext;
 describe('getCaseAssociation', () => {
   it('should return that practitioner is associated', async () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(false);
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
-      }),
-    };
+    presenter.providers.applicationContext.getUseCases = () => ({
+      verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -39,11 +37,9 @@ describe('getCaseAssociation', () => {
 
   it('should return that practitioner has pending association', async () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(true);
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
-      }),
-    };
+    presenter.providers.applicationContext.getUseCases = () => ({
+      verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -68,11 +64,9 @@ describe('getCaseAssociation', () => {
 
   it('should return that practitioner not associated', async () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(false);
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
-      }),
-    };
+    presenter.providers.applicationContext.getUseCases = () => ({
+      verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -97,11 +91,9 @@ describe('getCaseAssociation', () => {
 
   it('should return that respondent is associated', async () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(false);
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
-      }),
-    };
+    presenter.providers.applicationContext.getUseCases = () => ({
+      verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -126,11 +118,9 @@ describe('getCaseAssociation', () => {
 
   it('should return that respondent is not associated', async () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(true);
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
-      }),
-    };
+    presenter.providers.applicationContext.getUseCases = () => ({
+      verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -155,11 +145,9 @@ describe('getCaseAssociation', () => {
 
   it('should return that petitioner is associated', async () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(false);
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
-      }),
-    };
+    presenter.providers.applicationContext.getUseCases = () => ({
+      verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -184,11 +172,9 @@ describe('getCaseAssociation', () => {
 
   it('should return that petitioner is not associated', async () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(true);
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
-      }),
-    };
+    presenter.providers.applicationContext.getUseCases = () => ({
+      verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -213,11 +199,9 @@ describe('getCaseAssociation', () => {
 
   it('should return false for isAssociated and pendingAssociation if the user is not an external user', async () => {
     let verifyPendingCaseForUserStub = sinon.stub().returns(false);
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
-      }),
-    };
+    presenter.providers.applicationContext.getUseCases = () => ({
+      verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
