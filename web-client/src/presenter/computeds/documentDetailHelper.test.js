@@ -1724,7 +1724,7 @@ describe('document detail helper', () => {
       expect(result.isDraftDocument).toEqual(true);
     });
 
-    it('should return isDraftDocument true if the document is a court-issued document that is on the docket record', () => {
+    it('should return isDraftDocument false if the document is a court-issued document that is on the docket record', () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
