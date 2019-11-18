@@ -1,9 +1,5 @@
 output "dns_name" {
-  value = "${aws_elb.dynamsoft_elb.dns_name}"
-}
-
-output "zone_id" {
-  value = "${aws_elb.dynamsoft_elb.zone_id}"
+  value = "${element(concat(aws_elb.dynamsoft_elb.*.dns_name, list("")), 0)}"
 }
 
 output "cert_arn" {

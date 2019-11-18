@@ -9,9 +9,9 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { submitCourtIssuedDocketEntryAction } from '../actions/DocketEntry/submitCourtIssuedDocketEntryAction';
+import { submitCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/submitCourtIssuedDocketEntryAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { updateCourtIssuedDocketEntryAction } from '../actions/DocketEntry/updateCourtIssuedDocketEntryAction';
+import { updateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/updateCourtIssuedDocketEntryAction';
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
 
 export const submitCourtIssuedDocketEntrySequence = [
