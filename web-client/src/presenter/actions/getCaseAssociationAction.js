@@ -12,7 +12,7 @@ import { state } from 'cerebral';
  */
 export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   const userRole = get(state.user.role);
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { USER_ROLES } = applicationContext.getConstants();
   let isAssociated = false;
   let pendingAssociation = false;
 

@@ -1,6 +1,23 @@
-import { addCourtIssuedDocketEntryHelper } from './addCourtIssuedDocketEntryHelper';
+import { addCourtIssuedDocketEntryHelper as addCourtIssuedDocketEntryHelperComputed } from './addCourtIssuedDocketEntryHelper';
+import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
+  addCourtIssuedDocketEntryHelperComputed,
+  {
+    ...applicationContext,
+    getConstants: () => {
+      return {
+        COURT_ISSUED_EVENT_CODES: [
+          { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
+          { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
+        ],
+      };
+    },
+  },
+);
 
 const state = {
   caseDetail: {
@@ -9,17 +26,11 @@ const state = {
     practitioners: [{ name: 'Scar' }, { name: 'Zazu' }],
     respondents: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
   },
-  constants: {
-    COURT_ISSUED_EVENT_CODES: [
-      { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
-      { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
-    ],
-  },
   form: {},
 };
 
 describe('addCourtIssuedDocketEntryHelper', () => {
-  it('should calculate document types based on constants in state', () => {
+  it('should calculate document types based on constants in applicationContext', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
     expect(result.documentTypes).toEqual([
       {

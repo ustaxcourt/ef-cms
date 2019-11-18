@@ -1,5 +1,6 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { saveCaseDetailInternalEditAction } from './saveCaseDetailInternalEditAction';
@@ -9,6 +10,7 @@ let saveCaseDetailInternalEditStub = sinon.stub().returns({});
 const updateCaseTrialSortTagsStub = sinon.stub().resolves();
 
 presenter.providers.applicationContext = {
+  ...applicationContext,
   getUseCases: () => ({
     saveCaseDetailInternalEditInteractor: saveCaseDetailInternalEditStub,
     updateCaseTrialSortTagsInteractor: updateCaseTrialSortTagsStub,
@@ -31,7 +33,6 @@ describe('saveCaseDetailInternalEditAction', () => {
       props: {},
       state: {
         caseDetail,
-        constants: { STATUS_TYPES: Case.STATUS_TYPES },
       },
     });
     expect(updateCaseTrialSortTagsStub.getCall(0).args[0].caseId).toEqual(
@@ -53,7 +54,6 @@ describe('saveCaseDetailInternalEditAction', () => {
       props: {},
       state: {
         caseDetail,
-        constants: { STATUS_TYPES: Case.STATUS_TYPES },
       },
     });
     expect(updateCaseTrialSortTagsStub.getCall(1)).toEqual(null);
