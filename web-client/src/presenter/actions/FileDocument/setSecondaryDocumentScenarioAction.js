@@ -4,16 +4,21 @@ import { state } from 'cerebral';
  * Set secondary document scenario.
  *
  * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
- * @param {object} providers.get the cerebral get function
  * @returns {undefined}
  */
-export const setSecondaryDocumentScenarioAction = ({ get, store }) => {
+export const setSecondaryDocumentScenarioAction = ({
+  applicationContext,
+  get,
+  store,
+}) => {
   const secondaryDocument = get(state.form.secondaryDocument);
 
   if (secondaryDocument && secondaryDocument.documentType) {
     const { category, documentType } = secondaryDocument;
-    const CATEGORY_MAP = get(state.constants.CATEGORY_MAP);
+    const { CATEGORY_MAP } = applicationContext.getConstants();
 
     const categoryInformation = CATEGORY_MAP[category].find(
       itemDocumentType => itemDocumentType.documentType === documentType,

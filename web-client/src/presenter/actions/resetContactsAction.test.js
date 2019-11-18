@@ -1,10 +1,15 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
+import { applicationContext } from '../../../applicationContext';
+import { presenter } from '../../presenter';
 import { resetContactsAction } from './resetContactsAction';
 import { runAction } from 'cerebral/test';
+
+presenter.providers.applicationContext = applicationContext;
 
 describe('resetContactsAction', () => {
   it('clears the contactPrimary except for countryType and email for a domestic address', async () => {
     const { state } = await runAction(resetContactsAction, {
+      modules: { presenter },
       state: {
         caseDetail: {
           contactPrimary: {
@@ -19,10 +24,6 @@ describe('resetContactsAction', () => {
           },
           partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
-        constants: {
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(state.caseDetail).toEqual({
@@ -36,6 +37,7 @@ describe('resetContactsAction', () => {
 
   it('clears the contactPrimary except for countryType (which should be set back to the domestic default) and email for an international address', async () => {
     const { state } = await runAction(resetContactsAction, {
+      modules: { presenter },
       state: {
         caseDetail: {
           contactPrimary: {
@@ -50,10 +52,6 @@ describe('resetContactsAction', () => {
           },
           partyType: ContactFactory.PARTY_TYPES.petitioner,
         },
-        constants: {
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(state.caseDetail).toEqual({
@@ -67,6 +65,7 @@ describe('resetContactsAction', () => {
 
   it('clears the contactPrimary except for countryType and email and clears the contactSecondary except for countryType', async () => {
     const { state } = await runAction(resetContactsAction, {
+      modules: { presenter },
       state: {
         caseDetail: {
           contactPrimary: {
@@ -88,10 +87,6 @@ describe('resetContactsAction', () => {
             zip: '12345',
           },
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-        },
-        constants: {
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });

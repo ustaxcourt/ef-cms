@@ -1,14 +1,15 @@
-import { Document } from '../../../../../shared/src/business/entities/Document';
+import { applicationContext } from '../../../applicationContext';
+import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setSupportingDocumentScenarioAction } from './setSupportingDocumentScenarioAction';
+
+presenter.providers.applicationContext = applicationContext;
 
 describe('setSupportingDocumentScenarioAction', () => {
   it('should set scenario and document title for supporting document', async () => {
     const result = await runAction(setSupportingDocumentScenarioAction, {
+      modules: { presenter },
       state: {
-        constants: {
-          CATEGORY_MAP: Document.CATEGORY_MAP,
-        },
         form: {
           supportingDocuments: [
             {
@@ -30,10 +31,8 @@ describe('setSupportingDocumentScenarioAction', () => {
 
   it('should set scenario and document type for secondary supporting document', async () => {
     const result = await runAction(setSupportingDocumentScenarioAction, {
+      modules: { presenter },
       state: {
-        constants: {
-          CATEGORY_MAP: Document.CATEGORY_MAP,
-        },
         form: {
           secondarySupportingDocuments: [
             {
