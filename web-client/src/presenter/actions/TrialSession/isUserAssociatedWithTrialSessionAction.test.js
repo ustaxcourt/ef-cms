@@ -1,11 +1,10 @@
 import { User } from '../../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../../applicationContext';
 import { isUserAssociatedWithTrialSessionAction } from './isUserAssociatedWithTrialSessionAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-const baseState = {
-  constants: { USER_ROLES: User.ROLES },
-};
+presenter.providers.applicationContext = applicationContext;
 
 describe('isUserAssociatedWithTrialSessionAction', () => {
   let pathYesStub;
@@ -27,7 +26,6 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
         presenter,
       },
       state: {
-        ...baseState,
         trialSession: {
           judge: { userId: '123' },
         },
@@ -44,7 +42,6 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
         presenter,
       },
       state: {
-        ...baseState,
         trialSession: {
           judge: { userId: '123' },
         },
@@ -61,7 +58,6 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
         presenter,
       },
       state: {
-        ...baseState,
         trialSession: {
           judge: { userId: '123' },
         },
@@ -79,7 +75,6 @@ describe('isUserAssociatedWithTrialSessionAction', () => {
         presenter,
       },
       state: {
-        ...baseState,
         trialSession: {
           judge: { userId: '123' },
         },
