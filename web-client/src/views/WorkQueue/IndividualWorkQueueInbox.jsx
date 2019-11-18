@@ -6,11 +6,11 @@ import React from 'react';
 
 export const IndividualWorkQueueInbox = connect(
   {
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({ documentEditLinkHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -86,7 +86,7 @@ export const IndividualWorkQueueInbox = connect(
                         className={
                           item.isRead ? 'case-link' : 'link case-link-bold'
                         }
-                        href={documentHelper({
+                        href={documentEditLinkHelper({
                           docketNumber: item.docketNumber,
                           documentId: item.document.documentId,
                           messageId: item.currentMessage.messageId,

@@ -1,4 +1,5 @@
 import { clearFormAction } from '../actions/clearFormAction';
+import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -6,7 +7,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCourtIssuedDocumentInitialTypeAction } from '../actions/CourtIssuedDocketEntry/setCourtIssuedDocumentInitialTypeAction';
+import { setCourtIssuedDocumentInitialDataAction } from '../actions/CourtIssuedDocketEntry/setCourtIssuedDocumentInitialDataAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
@@ -26,7 +27,8 @@ export const gotoAddCourtIssuedDocketEntrySequence = [
       getCaseAction,
       setCaseAction,
       setDocumentIdAction,
-      setCourtIssuedDocumentInitialTypeAction,
+      setCourtIssuedDocumentInitialDataAction,
+      generateCourtIssuedDocumentTitleAction,
       set(state.isEditingDocketEntry, false),
       setCurrentPageAction('CourtIssuedDocketEntry'),
     ],

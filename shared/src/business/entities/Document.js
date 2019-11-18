@@ -15,6 +15,7 @@ Document.CATEGORIES = Object.keys(documentMapExternal);
 Document.CATEGORY_MAP = documentMapExternal;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
+Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 
 Document.validationName = 'Document';
 
@@ -129,7 +130,10 @@ Document.SIGNED_DOCUMENT_TYPES = {
 };
 
 Document.TRACKED_DOCUMENT_TYPES = {
-  motions: {
+  application: {
+    category: 'Application',
+  },
+  motion: {
     category: 'Motion',
   },
   orderToShowCause: {
@@ -163,6 +167,9 @@ Document.getDocumentTypes = () => {
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
   const orderDocTypes = Order.ORDER_TYPES.map(t => t.documentType);
+  const courtIssuedDocTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+    t => t.documentType,
+  );
   const initialTypes = Object.keys(Document.INITIAL_DOCUMENT_TYPES).map(
     t => Document.INITIAL_DOCUMENT_TYPES[t].documentType,
   );
@@ -174,6 +181,7 @@ Document.getDocumentTypes = () => {
     ...practitionerAssociationDocumentTypes,
     ...filingEventTypes,
     ...orderDocTypes,
+    ...courtIssuedDocTypes,
     ...signedTypes,
   ];
 
@@ -360,5 +368,3 @@ Document.prototype.setAsProcessingStatusAsCompleted = function() {
 };
 
 exports.Document = Document;
-
-exports.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;

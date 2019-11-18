@@ -12,7 +12,7 @@ export const FilingsAndProceedings = connect(
     caseDetailHelper: state.caseDetailHelper,
     docketRecordHelper: state.docketRecordHelper,
     document: props.document,
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     record: props.record,
     showDocketRecordDetailModalSequence:
@@ -25,7 +25,7 @@ export const FilingsAndProceedings = connect(
     caseDetailHelper,
     docketRecordHelper,
     document,
-    documentHelper,
+    documentEditLinkHelper,
     formattedCaseDetail,
     record,
     showDocketRecordDetailModalSequence,
@@ -39,7 +39,7 @@ export const FilingsAndProceedings = connect(
     ) => {
       return (
         <React.Fragment>
-          {caseDetailHelper.userHasAccessToCase && (
+          {caseDetailHelper.userHasAccessToCase && !document.isInProgress && (
             <React.Fragment>
               <NonMobile>
                 <a
@@ -73,7 +73,8 @@ export const FilingsAndProceedings = connect(
               </Mobile>
             </React.Fragment>
           )}
-          {!caseDetailHelper.userHasAccessToCase && description}
+          {(!caseDetailHelper.userHasAccessToCase || document.isInProgress) &&
+            description}
         </React.Fragment>
       );
     };
@@ -109,7 +110,7 @@ export const FilingsAndProceedings = connect(
         {document && docketRecordHelper.showDocumentDetailLink && (
           <a
             aria-label="View PDF"
-            href={documentHelper({
+            href={documentEditLinkHelper({
               docketNumber: formattedCaseDetail.docketNumber,
               documentId: document.documentId,
               shouldLinkToComplete: document.isFileAttached === false,

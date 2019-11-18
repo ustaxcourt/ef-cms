@@ -89,7 +89,7 @@ export const CourtIssuedDocketEntry = connect(
                     Document Type
                   </label>
                   <Select
-                    aria-describedby="document-type-label"
+                    aria-labelledby="document-type-label"
                     className="select-react-element"
                     classNamePrefix="select-react-element"
                     id="document-type"
