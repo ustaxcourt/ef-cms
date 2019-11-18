@@ -3,7 +3,7 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (test, documentId) => {
+export default (test, draftOrderIndex) => {
   return it('Docket Clerk adds a docket entry from an Order of Dismissal', async () => {
     let caseDetailFormatted;
     let helperComputed;
@@ -14,6 +14,8 @@ export default (test, documentId) => {
         state: test.getState(),
       },
     );
+
+    const { documentId } = test.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => (doc.documentId = documentId),
@@ -37,22 +39,22 @@ export default (test, documentId) => {
     expect(helperComputed.showFreeText).toBeTruthy();
     expect(test.getState('form.freeText')).toEqual('');
 
-    await test.runSequnce('updateCourtIssuedDocketEntryFormValueSequence', {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'judge',
       value: 'Judge Buch',
     });
 
-    await test.runSequnce('updateCourtIssuedDocketEntryFormValueSequence', {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'freeText',
       value: 'for Something',
     });
 
-    await test.runSequnce('updateCourtIssuedDocketEntryFormValueSequence', {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'attachments',
       value: true,
     });
 
-    await test.runSequnce('submitCourtIssuedDocketEntrySequence');
+    await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),

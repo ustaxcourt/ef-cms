@@ -3,7 +3,7 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (test, documentId) => {
+export default (test, draftOrderIndex) => {
   return it('Docket Clerk adds a docket entry from the given order', async () => {
     let caseDetailFormatted;
     let helperComputed;
@@ -14,6 +14,8 @@ export default (test, documentId) => {
         state: test.getState(),
       },
     );
+
+    const { documentId } = test.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => (doc.documentId = documentId),
@@ -30,12 +32,13 @@ export default (test, documentId) => {
     expect(test.getState('form.eventCode')).toEqual(
       draftOrderDocument.eventCode,
     );
+
     expect(test.getState('form.documentType')).toEqual(
-      draftOrderDocument.documentTitle,
+      `${draftOrderDocument.eventCode} - ${draftOrderDocument.documentType}`,
     );
 
     // eventCode: O
-    await test.runSequnce('updateCourtIssuedDocketEntryFormValueSequence', {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'O',
     });
@@ -48,7 +51,7 @@ export default (test, documentId) => {
     expect(test.getState('form.freeText')).toEqual('');
 
     // eventCode: OCA
-    await test.runSequnce('updateCourtIssuedDocketEntryFormValueSequence', {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'OCA',
     });
@@ -61,7 +64,7 @@ export default (test, documentId) => {
     expect(test.getState('form.freeText')).toEqual('');
 
     // eventCode: OAJ
-    await test.runSequnce('updateCourtIssuedDocketEntryFormValueSequence', {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'OAJ',
     });
@@ -76,7 +79,7 @@ export default (test, documentId) => {
     expect(test.getState('form.judge')).toEqual('');
 
     // eventCode: OAL
-    await test.runSequnce('updateCourtIssuedDocketEntryFormValueSequence', {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'OAL',
     });
@@ -90,7 +93,7 @@ export default (test, documentId) => {
     expect(test.getState('form.docketNumbers')).toEqual('');
 
     // eventCode: OAP
-    await test.runSequnce('updateCourtIssuedDocketEntryFormValueSequence', {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'OAP',
     });
@@ -107,7 +110,7 @@ export default (test, documentId) => {
     expect(test.getState('form.year')).toEqual('');
 
     // eventCode: OODS
-    await test.runSequnce('updateCourtIssuedDocketEntryFormValueSequence', {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'OODS',
     });
@@ -123,12 +126,12 @@ export default (test, documentId) => {
     expect(test.getState('form.year')).toEqual('');
 
     // test defined
-    await test.runSequnce('updateCourtIssuedDocketEntryFormValueSequence', {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: draftOrderDocument.eventCode,
     });
 
-    await test.runSequnce('updateCourtIssuedDocketEntryFormValueSequence', {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'freeText',
       value: draftOrderDocument.freeText,
     });
@@ -140,7 +143,7 @@ export default (test, documentId) => {
       draftOrderDocument.documentTitle,
     );
 
-    await test.runSequnce('submitCourtIssuedDocketEntrySequence');
+    await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),

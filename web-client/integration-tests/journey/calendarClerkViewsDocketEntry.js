@@ -2,7 +2,7 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (test, documentId) => {
+export default (test, draftOrderIndex) => {
   return it('Docket Clerk views the docket entry for the given document', async () => {
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
@@ -11,13 +11,15 @@ export default (test, documentId) => {
       },
     );
 
+    const { documentId } = test.draftOrders[draftOrderIndex];
+
     const document = caseDetailFormatted.docketRecordWithDocument.find(
       entry => (entry.document.documentId = documentId),
     );
 
     expect(document).toBeTruthy();
 
-    await test.runSequnce('gotoDocumentDetailSequence', {
+    await test.runSequence('gotoDocumentDetailSequence', {
       docketNumber: document.docketNumber,
       documentId: document.documentId,
     });
