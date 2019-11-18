@@ -16,6 +16,8 @@ const requestAccessHelper = withAppContextDecorator(
   applicationContext,
 );
 
+applicationContext.getCurrentUser = () => ({ role: User.ROLES.practitioner });
+
 describe('requestAccessHelper', () => {
   beforeEach(() => {
     state.form = {};
@@ -68,7 +70,6 @@ describe('requestAccessHelper', () => {
           documentType: 'Motion to Substitute Parties and Change Caption',
           primaryDocumentFile: { some: 'file' },
         },
-        user: { role: User.ROLES.practitioner },
       },
     });
     expect(result.documentWithExhibits).toBeFalsy();
@@ -81,13 +82,12 @@ describe('requestAccessHelper', () => {
   });
 
   it('returns correct number of document options for user role practitioner', () => {
-    state.user = { role: User.ROLES.practitioner };
     const result = runCompute(requestAccessHelper, { state });
     expect(result.documents.length).toEqual(6);
   });
 
   it('returns correct number of document options for user role respondent', () => {
-    state.user = { role: User.ROLES.respondent };
+    applicationContext.getCurrentUser = () => ({ role: User.ROLES.respondent });
     const result = runCompute(requestAccessHelper, { state });
     expect(result.documents.length).toEqual(2);
   });

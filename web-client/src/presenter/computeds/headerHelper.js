@@ -1,9 +1,9 @@
 import { state } from 'cerebral';
 
 export const headerHelper = (get, applicationContext) => {
-  const user = get(state.user);
+  const user = applicationContext.getCurrentUser();
+  const userRole = user && user.role;
   const isLoggedIn = !!user;
-  const userRole = get(state.user.role);
   const currentPage = get(state.currentPage) || '';
   const notifications = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueToDisplay.workQueueIsInternal);
