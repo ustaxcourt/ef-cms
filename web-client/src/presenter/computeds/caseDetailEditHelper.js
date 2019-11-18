@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 
 /**
  * gets the case detail view options based on partyType
-and documents
+ * and documents
  *
  * @param {Function} get the cerebral get function used
  * for getting state.caseDetail.partyType and state.constants
