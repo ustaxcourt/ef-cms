@@ -79,6 +79,7 @@ resource "aws_route53_record" "record_east_www" {
   type    = "CNAME"
   zone_id = "${data.aws_route53_zone.zone.zone_id}"
   set_identifier = "us-east-1"
+  count = "${var.is_dynamsoft_enabled}"
   records = [
     "${module.dynamsoft_us_east.dns_name}",
   ]
@@ -93,6 +94,7 @@ resource "aws_route53_record" "record_west_www" {
   type    = "CNAME"
   zone_id = "${data.aws_route53_zone.zone.zone_id}"
   set_identifier = "us-west-1"
+  count = "${var.is_dynamsoft_enabled}"
   records = [
     "${module.dynamsoft_us_west.dns_name}"
   ]
