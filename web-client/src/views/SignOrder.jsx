@@ -154,8 +154,7 @@ export const SignOrder = connect(
             </div>
             <div className="grid-col-4 text-align-right">
               {pdfSignerHelper.isPlaced && (
-                <Button link onClick={() => restart()}>
-                  <FontAwesomeIcon icon={['fas', 'trash']} />
+                <Button link icon="trash" onClick={() => restart()}>
                   Delete Signature
                 </Button>
               )}

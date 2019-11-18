@@ -4,6 +4,7 @@ import { applicationContext } from '../../applicationContext';
 import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
+const { cloneDeep } = require('lodash');
 
 import {
   createISODateString,
@@ -63,6 +64,7 @@ const FORMATTED_WORK_ITEM = {
       to: 'Unassigned',
     },
   ],
+  isCourtIssuedDocument: false,
   messages: [
     {
       createdAtFormatted: '12/27/18',
@@ -143,6 +145,25 @@ describe('formatted work queue computed', () => {
 
   it('formats the workitems', () => {
     expect(result[0]).toMatchObject(FORMATTED_WORK_ITEM);
+  });
+
+  it('should set isCourtIssuedDocument to true for a court-issued document in the selected work item', () => {
+    const workItemCopy = cloneDeep(workItem);
+    workItemCopy.document.documentType = 'O - Order';
+    const result2 = runCompute(formattedWorkQueue, {
+      state: {
+        ...baseState,
+        selectedWorkItems: [workItemCopy],
+        workQueue: [workItemCopy],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+          workQueueIsInternal: true,
+        },
+      },
+    });
+
+    expect(result2[0].isCourtIssuedDocument).toEqual(true);
   });
 
   it('adds a currentMessage', () => {

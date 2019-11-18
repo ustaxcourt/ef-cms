@@ -83,6 +83,14 @@ describe('Document entity', () => {
       };
       const doc3 = new Document(raw3, { applicationContext });
       expect(doc3.pending).toBeTruthy();
+
+      const raw4 = {
+        category: 'Application',
+        documentType: 'Application for Waiver of Filing Fee',
+        eventCode: 'APW',
+      };
+      const doc4 = new Document(raw4, { applicationContext });
+      expect(doc4.pending).toBeTruthy();
     });
   });
 

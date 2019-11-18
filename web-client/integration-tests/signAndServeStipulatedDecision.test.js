@@ -1,4 +1,6 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+
 import {
   createMessage,
   fakeFile,
@@ -13,6 +15,12 @@ import {
   viewCaseDetail,
   viewDocumentDetailMessage,
 } from './helpers';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
+
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
 
 const test = setupTest({
   useCases: {

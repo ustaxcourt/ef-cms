@@ -1,7 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmRemoveCaseDetailPendingItemModal } from './ConfirmRemoveCaseDetailPendingItemModal';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -72,14 +71,14 @@ export const CaseDetailPendingReportList = connect(
                 <td>
                   <Button
                     link
-                    className="padding-0"
+                    className="padding-0 no-wrap"
+                    icon="trash"
                     onClick={() =>
                       openConfirmRemoveCaseDetailPendingItemModalSequence({
                         documentId: document.documentId,
                       })
                     }
                   >
-                    <FontAwesomeIcon icon={['fas', 'trash']} />
                     Remove
                   </Button>
                 </td>

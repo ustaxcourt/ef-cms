@@ -47,7 +47,16 @@ export const formatWorkItem = ({
   selectedWorkItems = [],
   workQueueIsInternal,
 }) => {
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const {
+    COURT_ISSUED_EVENT_CODES,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+
+  const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
+    courtIssuedDoc => courtIssuedDoc.documentType,
+  );
+
   const result = _.cloneDeep(workItem);
 
   result.createdAtFormatted = applicationContext
@@ -138,6 +147,10 @@ export const formatWorkItem = ({
       message => message.message == 'Petition batched for IRS',
     ).createdAtTimeFormattedTZ;
   }
+
+  result.isCourtIssuedDocument = !!courtIssuedDocumentTypes.includes(
+    result.document.documentType,
+  );
 
   return result;
 };

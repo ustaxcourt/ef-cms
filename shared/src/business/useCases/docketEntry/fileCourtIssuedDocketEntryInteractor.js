@@ -57,6 +57,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       ...document,
       attachments: documentMeta.attachments,
       documentTitle: documentMeta.generatedDocumentTitle,
+      documentType: documentMeta.documentType,
       eventCode: documentMeta.eventCode,
       freeText: documentMeta.freeText,
       isFileAttached: true,
@@ -104,24 +105,40 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
   documentEntity.addWorkItem(workItem);
   caseEntity.updateDocument(documentEntity);
 
+  workItem.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
+
   caseEntity.addDocketRecord(
     new DocketRecord({
-      description: documentMeta.documentTitle,
+      description: documentMeta.generatedDocumentTitle,
       documentId: documentEntity.documentId,
       editState: JSON.stringify(documentMeta),
       filingDate: documentEntity.date || createISODateString(),
     }),
   );
 
-  await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-    applicationContext,
-    workItem: workItem.validate().toRawObject(),
-  });
+  const saveItems = [
+    applicationContext.getPersistenceGateway().createUserInboxRecord({
+      applicationContext,
+      workItem: workItem.validate().toRawObject(),
+    }),
+    applicationContext.getPersistenceGateway().createSectionInboxRecord({
+      applicationContext,
+      workItem: workItem.validate().toRawObject(),
+    }),
+    applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    }),
+  ];
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  await Promise.all(saveItems);
 
   return caseEntity.toRawObject();
 };

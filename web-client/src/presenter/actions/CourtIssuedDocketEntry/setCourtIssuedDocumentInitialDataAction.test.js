@@ -2,25 +2,33 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { setCourtIssuedDocumentInitialTypeAction } from './setCourtIssuedDocumentInitialTypeAction';
+import { setCourtIssuedDocumentInitialDataAction } from './setCourtIssuedDocumentInitialDataAction';
 
 presenter.providers.applicationContext = applicationContext;
 
-const documentId = 'ddfd978d-6be6-4877-b004-2b5735a41fee';
+const documentIds = [
+  'ddfd978d-6be6-4877-b004-2b5735a41fee',
+  '11597d22-0874-4c5e-ac98-a843d1472baf',
+];
 
 MOCK_CASE.documents.push({
-  documentId,
+  documentId: documentIds[0],
   eventCode: 'OF',
 });
+MOCK_CASE.documents.push({
+  documentId: documentIds[1],
+  eventCode: 'O',
+  freeText: 'something',
+});
 
-describe('setCourtIssuedDocumentInitialTypeAction', () => {
+describe('setCourtIssuedDocumentInitialDataAction', () => {
   it('should set correct values on state.form for the documentId passed in via props', async () => {
-    const result = await runAction(setCourtIssuedDocumentInitialTypeAction, {
+    const result = await runAction(setCourtIssuedDocumentInitialDataAction, {
       modules: {
         presenter,
       },
       props: {
-        documentId,
+        documentId: documentIds[0],
       },
       state: {
         caseDetail: MOCK_CASE,
@@ -37,8 +45,32 @@ describe('setCourtIssuedDocumentInitialTypeAction', () => {
     });
   });
 
+  it('should set state.form.freeText if the selected document has a freeText property', async () => {
+    const result = await runAction(setCourtIssuedDocumentInitialDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        documentId: documentIds[1],
+      },
+      state: {
+        caseDetail: MOCK_CASE,
+        form: {},
+      },
+    });
+
+    expect(result.state.form).toEqual({
+      attachments: false,
+      documentTitle: 'Order [Anything]',
+      documentType: 'O - Order',
+      eventCode: 'O',
+      freeText: 'something',
+      scenario: 'Type A',
+    });
+  });
+
   it('should not set state.form if the documentId cannot be found in caseDetail', async () => {
-    const result = await runAction(setCourtIssuedDocumentInitialTypeAction, {
+    const result = await runAction(setCourtIssuedDocumentInitialDataAction, {
       modules: {
         presenter,
       },
@@ -55,7 +87,7 @@ describe('setCourtIssuedDocumentInitialTypeAction', () => {
   });
 
   it("should not set state.form if the selected document's eventCode is not found in the court-issued document list", async () => {
-    const result = await runAction(setCourtIssuedDocumentInitialTypeAction, {
+    const result = await runAction(setCourtIssuedDocumentInitialDataAction, {
       modules: {
         presenter,
       },

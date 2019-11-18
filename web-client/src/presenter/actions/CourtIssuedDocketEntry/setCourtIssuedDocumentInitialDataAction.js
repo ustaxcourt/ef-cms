@@ -11,7 +11,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const setCourtIssuedDocumentInitialTypeAction = ({
+export const setCourtIssuedDocumentInitialDataAction = ({
   applicationContext,
   get,
   props,
@@ -32,6 +32,10 @@ export const setCourtIssuedDocumentInitialTypeAction = ({
     if (selectedDocumentTypeValues) {
       store.set(state.form, selectedDocumentTypeValues);
       store.set(state.form.attachments, false);
+    }
+
+    if (document.freeText) {
+      store.set(state.form.freeText, document.freeText);
     }
   }
 };

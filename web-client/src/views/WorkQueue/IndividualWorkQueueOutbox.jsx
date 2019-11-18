@@ -6,13 +6,13 @@ import React from 'react';
 
 export const IndividualWorkQueueOutbox = connect(
   {
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
   ({
-    documentHelper,
+    documentEditLinkHelper,
     formattedWorkQueue,
     workQueueHelper,
     workQueueSectionHelper,
@@ -86,7 +86,7 @@ export const IndividualWorkQueueOutbox = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentHelper({
+                      href={documentEditLinkHelper({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
                         messageId: item.currentMessage.messageId,
