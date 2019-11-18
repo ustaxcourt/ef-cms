@@ -1,5 +1,5 @@
 import { User } from '../../../../shared/src/business/entities/User';
-import { applicationContext } from '../../../applicationContext';
+import { applicationContext } from '../../applicationContext';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
