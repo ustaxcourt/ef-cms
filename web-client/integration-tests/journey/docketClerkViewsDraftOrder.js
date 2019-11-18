@@ -3,7 +3,7 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export default (test, documentId) => {
+export default (test, draftOrderIndex) => {
   return it('Docket Clerk views draft order', async () => {
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
@@ -11,6 +11,8 @@ export default (test, documentId) => {
         state: test.getState(),
       },
     );
+
+    const { documentId } = test.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => (doc.documentId = documentId),

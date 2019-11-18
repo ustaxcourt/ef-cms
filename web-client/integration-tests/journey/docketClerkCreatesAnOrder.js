@@ -6,27 +6,34 @@ export default (test, data) => {
   return it('Docket Clerk creates an order', async () => {
     await test.runSequence('openCreateOrderChooseTypeModalSequence', {});
 
-    expect(test.getState('form.documentTitle')).toEqual('');
+    expect(test.getState('form.documentTitle')).toBeFalsy();
 
-    await test.runSequnce('updateFormValue', {
+    await test.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'eventCode',
       value: data.eventCode,
     });
 
     if (data.expectedDocumentType) {
-      expect(test.getState('form.documentType')).toEqua(
+      expect(test.getState('form.documentType')).toEqual(
         data.expectedDocumentType,
       );
     } else {
       expect(test.getState('form.documentType').length).toBeGreaterThan(0);
     }
 
-    await test.runSequnce('updateFormValue', {
+    await test.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'documentTitle',
       value: data.documentTitle,
     });
 
-    await test.runSequnce('submitCreateOrderModalSequence');
+    await test.runSequence('submitCreateOrderModalSequence');
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'richText',
+      value: 'Some order content',
+    });
+
+    await test.runSequence('submitCourtIssuedOrderSequence');
 
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
