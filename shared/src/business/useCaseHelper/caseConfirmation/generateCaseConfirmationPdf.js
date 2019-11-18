@@ -14,8 +14,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const formattedCaseInfo = caseInfo => {
   const { servedAt } = caseInfo.documents.find(doc => doc.servedAt);
   const countryName =
-    caseInfo.contactPrimary.countryType != 'domestic' &&
-    caseInfo.contactPrimary.country;
+    caseInfo.contactPrimary.countryType != 'domestic'
+      ? caseInfo.contactPrimary.country
+      : '';
   const formattedInfo = Object.assign(
     {
       caseTitle: caseInfo.caseTitle,
@@ -44,13 +45,11 @@ const generateCaseConfirmationPage = async ({
   applicationContext,
   caseEntity,
 }) => {
-  const {
-    confirmSassContent,
-    confirmTemplateContent,
-    ustcLogoBufferBase64,
-  } = require('./caseConfirmationResources');
+  const confirmSassContent = require('./../../assets/ustcPdf.scss_');
+  const confirmTemplateContent = require('./caseConfirmation.pug_');
+  const ustcLogoBufferBase64 = require('../../../../static/images/ustc_seal.png_');
 
-  const Handlebars = applicationContext.getHandlebars();
+  const pug = applicationContext.getPug();
   const sass = applicationContext.getNodeSass();
 
   const { css } = await new Promise(resolve => {
@@ -58,11 +57,11 @@ const generateCaseConfirmationPage = async ({
       return resolve(result);
     });
   });
-  const compiledFunction = Handlebars.compile(confirmTemplateContent);
+  const compiledFunction = pug.compile(confirmTemplateContent);
   const html = compiledFunction({
     ...formattedCaseInfo(caseEntity),
+    css,
     logo: ustcLogoBufferBase64,
-    styles: `<style>${css}</style>`,
   });
   return html;
 };

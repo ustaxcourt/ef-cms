@@ -37,7 +37,6 @@ describe('generateCaseConfirmationPdf', () => {
         getCurrentUser: () => {
           return { role: User.ROLES.petitioner, userId: 'petitioner' };
         },
-        getHandlebars: () => ({ compile: () => () => '' }),
         getNodeSass: () => ({ render: (data, cb) => cb(data, { css: '' }) }),
         getPersistenceGateway: () => ({
           getCaseByCaseId: () => ({ docketNumber: '101-19' }),
@@ -45,6 +44,7 @@ describe('generateCaseConfirmationPdf', () => {
             url: 'https://www.example.com',
           }),
         }),
+        getPug: () => ({ compile: () => () => '' }),
         getStorageClient: () => ({
           upload: (params, callback) => callback(),
         }),

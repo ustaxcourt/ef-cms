@@ -55,7 +55,6 @@
     "express": "^4.17.1",
     "faker": "^4.1.0",
     "form-data": "^3.0.0",
-    "handlebars": "^4.5.3",
     "http-aws-es": "^6.0.0",
     "http-proxy": "^1.18.0",
     "http-proxy-middleware": "^0.20.0",
