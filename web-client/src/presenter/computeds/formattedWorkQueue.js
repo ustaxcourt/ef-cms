@@ -296,7 +296,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const { workQueueIsInternal } = workQueueToDisplay;
   const selectedWorkItems = get(state.selectedWorkItems);
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { USER_ROLES } = applicationContext.getConstants();
 
   let workQueue = workItems
     .filter(

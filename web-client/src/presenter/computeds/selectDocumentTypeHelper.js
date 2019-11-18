@@ -124,7 +124,7 @@ export const getPreviouslyFiledDocuments = (
     });
 };
 
-export const selectDocumentTypeHelper = get => {
+export const selectDocumentTypeHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
@@ -133,7 +133,7 @@ export const selectDocumentTypeHelper = get => {
     return {};
   }
 
-  const CATEGORY_MAP = get(state.constants.CATEGORY_MAP);
+  const { CATEGORY_MAP } = applicationContext.getConstants();
 
   const selectedDocumentCategory = form.category;
   const selectedDocumentType = form.documentType;
