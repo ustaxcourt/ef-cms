@@ -4,12 +4,17 @@ import { state } from 'cerebral';
  * Set default values on file document form
  *
  * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function
+ * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
  */
-export const setDefaultFileDocumentFormValuesAction = ({ get, store }) => {
+export const setDefaultFileDocumentFormValuesAction = ({
+  applicationContext,
+  get,
+  store,
+}) => {
   const userRole = get(state.user.role);
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { USER_ROLES } = applicationContext.getConstants();
 
   if (userRole === USER_ROLES.petitioner) {
     store.set(state.form.partyPrimary, true);

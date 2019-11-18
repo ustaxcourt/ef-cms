@@ -1,5 +1,9 @@
+import { applicationContext } from '../../../applicationContext';
+import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setDocumentScenarioAction } from './setDocumentScenarioAction';
+
+presenter.providers.applicationContext = applicationContext;
 
 describe('setDocumentScenarioAction', () => {
   it('sets document scenario', async () => {
@@ -15,13 +19,8 @@ describe('setDocumentScenarioAction', () => {
     };
 
     const result = await runAction(setDocumentScenarioAction, {
+      modules: { presenter },
       state: {
-        constants: {
-          CATEGORY_MAP: {
-            Notice: [documentScenario],
-          },
-        },
-
         form: {
           category: 'Notice',
           documentType: 'Notice of Abatement of Jeopardy Assessment',

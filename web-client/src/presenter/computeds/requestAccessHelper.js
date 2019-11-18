@@ -2,7 +2,7 @@ import { getDocumentTypesForSelect } from './internalTypesHelper';
 import { state } from 'cerebral';
 
 export const requestAccessHelper = (get, applicationContext) => {
-  const { PARTY_TYPES, USER_ROLES } = get(state.constants);
+  const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const userRole = get(state.user.role);
   const form = get(state.form);

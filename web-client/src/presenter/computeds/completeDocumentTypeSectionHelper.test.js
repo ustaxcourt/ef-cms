@@ -1,6 +1,13 @@
 import { Document } from '../../../../shared/src/business/entities/Document';
-import { completeDocumentTypeSectionHelper } from './completeDocumentTypeSectionHelper';
+import { applicationContext } from '../../applicationContext';
+import { completeDocumentTypeSectionHelper as completeDocumentTypeSectionHelperComputed } from './completeDocumentTypeSectionHelper';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const completeDocumentTypeSectionHelper = withAppContextDecorator(
+  completeDocumentTypeSectionHelperComputed,
+  applicationContext,
+);
 
 describe('completeDocumentTypeSectionHelper', () => {
   it("should return an empty object given there's no caseDetail", () => {
@@ -27,9 +34,6 @@ describe('completeDocumentTypeSectionHelper', () => {
         caseDetail: {
           caseId: 'case-id-123',
         },
-        constants: {
-          CATEGORY_MAP: Document.CATEGORY_MAP,
-        },
         form: {
           category,
           documentType,
@@ -53,9 +57,6 @@ describe('completeDocumentTypeSectionHelper', () => {
       state: {
         caseDetail: {
           caseId: 'case-id-123',
-        },
-        constants: {
-          CATEGORY_MAP: Document.CATEGORY_MAP,
         },
         form: {
           category,
