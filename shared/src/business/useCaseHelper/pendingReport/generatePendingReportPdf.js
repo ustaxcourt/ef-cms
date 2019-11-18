@@ -13,7 +13,7 @@ const generatePendingReportPage = async ({
   pendingItems,
   reportTitle,
 }) => {
-  const pendingReportSassContent = require('../caseConfirmation/caseConfirmation.scss_');
+  const pendingReportSassContent = require('./../../assets/ustcPdf.scss_');
 
   const pendingReportTemplateContent = require('./pendingReport.pug_');
 

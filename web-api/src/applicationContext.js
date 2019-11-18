@@ -720,17 +720,6 @@ module.exports = (appContextUser = {}) => {
       CaseInternal: CaseInternal,
       CaseSearch,
     }),
-    getHandlebars: () => {
-      // Notice: this require is here to only have the lambdas that need it call it.
-      // This dependency is only available on lambdas with the 'puppeteer' layer,
-      // which means including it globally causes the other lambdas to fail.
-      // This also needs to have the string split to cause parcel to NOT bundle this dependency,
-      // which is wanted as bundling would have the dependency to not be searched for
-      // and found at the layer level and would cause issues.
-      // eslint-disable-next-line security/detect-non-literal-require
-      const handlebars = require('handle' + 'bars');
-      return handlebars;
-    },
     getNodeSass: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
       // This dependency is only available on lambdas with the 'puppeteer' layer,
