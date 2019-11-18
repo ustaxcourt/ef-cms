@@ -1,11 +1,11 @@
-import { COURT_ISSUED_EVENT_CODES } from '../../../../shared/src/business/entities/Document';
+import { Document } from '../../../../shared/src/business/entities/Document';
 import { addCourtIssuedDocketEntryNonstandardHelper as addCourtIssuedDocketEntryNonstandardHelperComputed } from './addCourtIssuedDocketEntryNonstandardHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const state = {
   constants: {
-    COURT_ISSUED_EVENT_CODES,
+    COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
   },
   form: {},
 };

@@ -1,6 +1,9 @@
+import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { validateFileSizeAction } from './validateFileSizeAction';
+
+presenter.providers.applicationContext = applicationContext;
 
 const fakeFile = {
   name: 'fakefile.pdf',
@@ -26,11 +29,7 @@ describe('validateFileSizeAction', () => {
       props: {
         file: { ...fakeFile, size: 1 },
       },
-      state: {
-        constants: {
-          MAX_FILE_SIZE_MB: 1,
-        },
-      },
+      state: {},
     });
     expect(mockValid).toHaveBeenCalled();
   });
@@ -43,28 +42,20 @@ describe('validateFileSizeAction', () => {
       props: {
         file: fakeFile,
       },
-      state: {
-        constants: {
-          MAX_FILE_SIZE_MB: 1,
-        },
-      },
+      state: {},
     });
     expect(mockValid).toHaveBeenCalled();
   });
 
-  it('should return the invalid() path if the file size is grater than the limit', async () => {
+  it('should return the invalid() path if the file size is greater than the limit', async () => {
     await runAction(validateFileSizeAction, {
       modules: {
         presenter,
       },
       props: {
-        file: { ...fakeFile, size: 100 },
+        file: { ...fakeFile, size: 1048576000 },
       },
-      state: {
-        constants: {
-          MAX_FILE_SIZE_MB: 1,
-        },
-      },
+      state: {},
     });
     expect(mockInvalid).toHaveBeenCalled();
   });

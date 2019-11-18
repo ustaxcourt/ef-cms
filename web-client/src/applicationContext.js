@@ -5,10 +5,6 @@ import {
   CHAMBERS_SECTIONS,
   SECTIONS,
 } from '../../shared/src/business/entities/WorkQueue';
-import {
-  COURT_ISSUED_EVENT_CODES,
-  Document,
-} from '../../shared/src/business/entities/Document';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseAssociationRequestFactory } from '../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
@@ -19,6 +15,7 @@ import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch'
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { CourtIssuedDocumentFactory } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentFactory';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { Document } from '../../shared/src/business/entities/Document';
 import { EditPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/EditPractitionerFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
@@ -208,6 +205,7 @@ import { verifyCaseForUserInteractor } from '../../shared/src/proxies/verifyCase
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virusScanPdfProxy';
 import axios from 'axios';
+import deepFreeze from 'deep-freeze';
 import pdfjsLib from 'pdfjs-dist';
 import uuidv4 from 'uuid/v4';
 
@@ -399,40 +397,43 @@ const applicationContext = {
       'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/oauth2/token'
     );
   },
-  getConstants: () => ({
-    BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
-    CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
-    CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-    CATEGORIES: Document.CATEGORIES,
-    CATEGORY_MAP: Document.CATEGORY_MAP,
-    CHAMBERS_SECTION,
-    CHAMBERS_SECTIONS,
-    COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-    COURT_ISSUED_EVENT_CODES,
-    ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
-    INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
-    MAX_FILE_SIZE_BYTES,
-    MAX_FILE_SIZE_MB,
-    ORDER_TYPES_MAP: Order.ORDER_TYPES,
-    OTHER_TYPES: ContactFactory.OTHER_TYPES,
-    PARTY_TYPES: ContactFactory.PARTY_TYPES,
-    REFRESH_INTERVAL: 20 * MINUTES,
-    ROLE_PERMISSIONS,
-    SECTIONS,
-    SESSION_DEBOUNCE: 250,
-    SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
-    SESSION_TIMEOUT:
-      (process.env.SESSION_TIMEOUT && parseInt(process.env.SESSION_TIMEOUT)) ||
-      55 * MINUTES, // 55 minutes
-    STATUS_TYPES: Case.STATUS_TYPES,
-    STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
-    STATUS_TYPES_WITH_ASSOCIATED_JUDGE: Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
-    TRIAL_CITIES: TrialSession.TRIAL_CITIES,
-    TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
-    TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-    US_STATES: ContactFactory.US_STATES,
-    USER_ROLES: User.ROLES,
-  }),
+  getConstants: () =>
+    deepFreeze({
+      BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
+      CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+      CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
+      CATEGORIES: Document.CATEGORIES,
+      CATEGORY_MAP: Document.CATEGORY_MAP,
+      CHAMBERS_SECTION,
+      CHAMBERS_SECTIONS,
+      COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+      COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
+      ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
+      INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
+      MAX_FILE_SIZE_BYTES,
+      MAX_FILE_SIZE_MB,
+      ORDER_TYPES_MAP: Order.ORDER_TYPES,
+      OTHER_TYPES: ContactFactory.OTHER_TYPES,
+      PARTY_TYPES: ContactFactory.PARTY_TYPES,
+      REFRESH_INTERVAL: 20 * MINUTES,
+      ROLE_PERMISSIONS,
+      SECTIONS,
+      SESSION_DEBOUNCE: 250,
+      SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
+      SESSION_TIMEOUT:
+        (process.env.SESSION_TIMEOUT &&
+          parseInt(process.env.SESSION_TIMEOUT)) ||
+        55 * MINUTES, // 55 minutes
+      STATUS_TYPES: Case.STATUS_TYPES,
+      STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
+      STATUS_TYPES_WITH_ASSOCIATED_JUDGE:
+        Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
+      TRIAL_CITIES: TrialSession.TRIAL_CITIES,
+      TRIAL_SESSION_TYPES: TrialSession.SESSION_TYPES,
+      TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
+      US_STATES: ContactFactory.US_STATES,
+      USER_ROLES: User.ROLES,
+    }),
   getCurrentUser,
   getCurrentUserPermissions: () => {
     const user = getCurrentUser();

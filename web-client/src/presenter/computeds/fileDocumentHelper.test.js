@@ -1,21 +1,20 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
-import { Document } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../applicationContext';
 import { fileDocumentHelper as fileDocumentHelperComputed } from './fileDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const state = {
   caseDetail: MOCK_CASE,
-  constants: {
-    CATEGORY_MAP: Document.CATEGORY_MAP,
-    PARTY_TYPES: ContactFactory.PARTY_TYPES,
-  },
   form: {},
   validationErrors: {},
 };
 
-const fileDocumentHelper = withAppContextDecorator(fileDocumentHelperComputed);
+const fileDocumentHelper = withAppContextDecorator(
+  fileDocumentHelperComputed,
+  applicationContext,
+);
 
 describe('fileDocumentHelper', () => {
   beforeEach(() => {
@@ -25,10 +24,6 @@ describe('fileDocumentHelper', () => {
   it('returns empty object when caseDetail is empty', () => {
     let testState = {
       caseDetail: {},
-      constants: {
-        CATEGORY_MAP: Document.CATEGORY_MAP,
-        PARTY_TYPES: ContactFactory.PARTY_TYPES,
-      },
     };
 
     const result = runCompute(fileDocumentHelper, {

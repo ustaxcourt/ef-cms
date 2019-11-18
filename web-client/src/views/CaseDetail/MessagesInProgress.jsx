@@ -5,12 +5,12 @@ import React from 'react';
 
 export const MessagesInProgress = connect(
   {
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     extractedPendingMessagesFromCaseDetail:
       state.extractedPendingMessagesFromCaseDetail,
   },
   function MessagesInProgress({
-    documentHelper,
+    documentEditLinkHelper,
     extractedPendingMessagesFromCaseDetail,
   }) {
     return (
@@ -45,7 +45,7 @@ export const MessagesInProgress = connect(
                     <p className="margin-y-0">
                       <a
                         className="case-link"
-                        href={documentHelper({
+                        href={documentEditLinkHelper({
                           docketNumber: workItem.docketNumber,
                           documentId: workItem.document.documentId,
                           messageId: workItem.currentMessage.messageId,

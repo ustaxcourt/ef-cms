@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -81,7 +80,8 @@ export const DocumentDetailHeader = connect(
 
                 <Button
                   link
-                  className="red-warning margin-right-0"
+                  className="red-warning margin-right-0 no-wrap"
+                  icon="trash"
                   onClick={() => {
                     archiveDraftDocumentModalSequence({
                       caseId: caseDetail.caseId,
@@ -93,7 +93,6 @@ export const DocumentDetailHeader = connect(
                     });
                   }}
                 >
-                  <FontAwesomeIcon icon="trash" size="sm" />
                   Delete
                 </Button>
               </>

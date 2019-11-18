@@ -6,13 +6,13 @@ import React from 'react';
 
 export const SectionWorkQueueOutbox = connect(
   {
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
   ({
-    documentHelper,
+    documentEditLinkHelper,
     formattedWorkQueue,
     workQueueHelper,
     workQueueSectionHelper,
@@ -40,7 +40,7 @@ export const SectionWorkQueueOutbox = connect(
               {workQueueHelper.showAssignedToColumn && (
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
               )}
-              {workQueueHelper.showProcessedByColumn && <th>Processed by</th>}
+              {workQueueHelper.showProcessedByColumn && <th>QC’d by</th>}
               {workQueueHelper.showBatchedByColumn && <th>Batched by</th>}
               {!workQueueHelper.hideSectionColumn && <th>Section</th>}
               {workQueueHelper.showServedColumn && <th>Served</th>}
@@ -81,7 +81,7 @@ export const SectionWorkQueueOutbox = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentHelper({
+                      href={documentEditLinkHelper({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
                         messageId: item.currentMessage.messageId,
