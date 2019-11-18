@@ -13,7 +13,7 @@ export const submitRespondentCaseAssociationRequestAction = async ({
   get,
 }) => {
   const { caseId } = get(state.caseDetail);
-  const user = get(state.user);
+  const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
 
   if (user.role === USER_ROLES.respondent) {
