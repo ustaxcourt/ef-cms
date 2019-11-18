@@ -1,14 +1,17 @@
 // calendarClerk
 import calendarClerkLogIn from './journey/calendarClerkLogIn';
 import calendarClerkSignsOut from './journey/calendarClerkSignsOut';
-
+import calendarClerkViewsDocketEntry from './journey/calendarClerkViewsDocketEntry';
 // docketClerk
 import docketClerkAddsDocketEntryFromOrder from './journey/docketClerkAddsDocketEntryFromOrder';
+import docketClerkAddsDocketEntryFromOrderOfDismissal from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
+import docketClerkCancelsAddDocketEntryFromOrder from './journey/docketClerkCancelsAddDocketEntryFromOrder';
 import docketClerkCreatesAnOrder from './journey/docketClerkCreatesAnOrder';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
 import docketClerkViewsCaseDetail from './journey/docketClerkViewsCaseDetail';
 import docketClerkViewsDraftOrder from './journey/docketClerkViewsDraftOrder';
+import docketClerkViewsSavedCourtIssuedDocketEntryInProgress from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
 // petitionsClerk
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSignsOut from './journey/petitionsClerkSignsOut';
@@ -24,6 +27,7 @@ import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 
 let test;
+test.draftOrders = [];
 
 const fakeData =
   'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
@@ -67,7 +71,7 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   // x.petitionsClerk clicks on draft documents tab
   // x.petitionsClerk clicks on first-created order
   // = NO "Add Docket Entry" button
-  petitionsClerkViewsDraftOrder(test, documentId);
+  petitionsClerkViewsDraftOrder(test, test.draftOrders[0].documentId);
   // petitionsClerk logs out
   petitionsClerkSignsOut(test);
 
@@ -79,12 +83,12 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   // x.docketClerk clicks on draft documents tab
   // x.docketClerk clicks on first-created order
   // = "Add Docket Entry" button visisble
-  docketClerkViewsDraftOrder(test, documentId);
+  docketClerkViewsDraftOrder(test, test.draftOrders[0].documentId);
 
   // Scenario 3
   // docketClerk clicks Add Docket Entry button
   // docketClerk sees Add Docket Entry screen with the expected Order document
-  docketClerkAddsDocketEntryFromOrder(test, documentId);
+  docketClerkAddsDocketEntryFromOrder(test, test.draftOrders[0].documentId);
 
   // x.Scenario 4a
   // Form defaults to "O" code documentType
@@ -127,11 +131,21 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   // "Date" field displays with empty state
   // freeText is hidden
 
-  // Scenario 10
+  // x.Scenario 10
   // docketClerk navigates to case detail
   docketClerkViewsCaseDetail(test);
   // docketClerk clicks on draft documents tab
   // docketClerk clicks on second-created order
+  docketClerkViewsDraftOrder(test, test.draftOrders[1].documentId);
+  docketClerkCancelsAddDocketEntryFromOrder(
+    test,
+    test.draftOrders[0].documentId,
+  );
+  docketClerkViewsDraftOrder(test, test.draftOrders[1].documentId);
+  docketClerkAddsDocketEntryFromOrderOfDismissal(
+    test,
+    test.draftOrders[1].documentId,
+  );
   // docketClerk selects Judge Buch as Judge
   // docketClerk sets freeText to "for something"
   // docketClerk checks "Attachments" checkbox
@@ -141,9 +155,8 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   // = docket entry is in incomplete status
   // = title is "Order of Dismissal Entered, Judge Buch for Something (Attachment(s))"
 
-  // Scenario 11
+  // x.Scenario 11 (handled above in Scenario 10)
   // docketClerk navigates to case detail
-  docketClerkViewsCaseDetail(test);
   // docketClerk clicks on draft documents tab
   // docketClerk clicks on first-created order
   // docketClerk clicks cancel
@@ -167,6 +180,10 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
 
   // Scenario 13
   // docketClerk clicks on "Order to do something"
+  docketClerkViewsSavedCourtIssuedDocketEntryInProgress(
+    test,
+    test.draftOrders[1].documentId,
+  );
   // = Edit Docket Entry view is displayed
   // = "incomplete" alert is displayed
   // = documentType is set to "O"
@@ -180,13 +197,14 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   // calendarClerk navigates to case
   // calendarClerk views docket record
   // calendarClerk clicks on "Order to do something"
+  calendarClerkViewsDocketEntry(test, test.draftOrders[1].documentId);
   // = Document Detail view is displayed
   // = concat'd document is displayed as page title
   // = current document is displayed in pdf viewer
   // calendarClerk logs out
   calendarClerkSignsOut(test);
 
-  // Scenario 15
+  // x.Scenario 15
   // petitioner logs in
   petitionerLogin(test);
   // petitioner navigates to case

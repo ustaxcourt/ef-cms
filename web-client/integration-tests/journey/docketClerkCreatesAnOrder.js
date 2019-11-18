@@ -1,3 +1,7 @@
+import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
 export default (test, data) => {
   return it('Docket Clerk creates an order', async () => {
     await test.runSequence('openCreateOrderChooseTypeModalSequence', {});
@@ -23,5 +27,17 @@ export default (test, data) => {
     });
 
     await test.runSequnce('submitCreateOrderModalSequence');
+
+    const caseDetailFormatted = runCompute(
+      withAppContextDecorator(formattedCaseDetail),
+      {
+        state: test.getState(),
+      },
+    );
+
+    const caseDraftDocuments = caseDetailFormatted.draftDocuments;
+    const newDraftOrder = caseDraftDocuments[caseDraftDocuments.length - 1];
+    expect(newDraftOrder).toBeTruthy();
+    test.draftOrders.push(newDraftOrder);
   });
 };
