@@ -1,7 +1,10 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
-import { documentDetailHelper as documentDetailHelperComputed } from './documentDetailHelper';
+import {
+  documentDetailHelper as documentDetailHelperComputed,
+  formatDocumentWorkItems,
+} from './documentDetailHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../src/withAppContext';
@@ -29,7 +32,89 @@ const getBaseState = user => {
 };
 
 describe('document detail helper', () => {
-  it('formats the workitems', () => {
+  describe('formatDocumentWorkItems', () => {
+    it('should return filtered and formatted completedWorkItems, incompleteWorkItems, and qcWorkItem', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const workItems = [
+        {
+          assigneeId: user.userId,
+          caseStatus: Case.STATUS_TYPES.new,
+          completedAt: '2018-12-21T20:49:28.192Z',
+          createdAt: '2018-11-21T20:49:28.192Z',
+          document: {
+            documentId: 'abc',
+            documentType: 'Proposed Stipulated Decision',
+            receivedAt: '2018-11-21T20:49:28.192Z',
+          },
+          messages: [
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              message: 'Test',
+            },
+          ],
+          workItemId: '1',
+        },
+        {
+          assigneeId: user.userId,
+          caseStatus: Case.STATUS_TYPES.new,
+          createdAt: '2018-11-22T20:49:28.192Z',
+          document: {
+            documentId: 'abc',
+            documentType: 'Proposed Stipulated Decision',
+            receivedAt: '2018-11-22T20:49:28.192Z',
+          },
+          messages: [
+            {
+              createdAt: '2018-11-22T20:49:28.192Z',
+              message: 'Test',
+            },
+          ],
+          workItemId: '2',
+        },
+        {
+          assigneeId: user.userId,
+          caseStatus: Case.STATUS_TYPES.new,
+          createdAt: '2018-11-23T20:49:28.192Z',
+          document: {
+            documentId: 'abc',
+            documentType: 'Proposed Stipulated Decision',
+            receivedAt: '2018-11-23T20:49:28.192Z',
+          },
+          isInternal: true,
+          messages: [
+            {
+              createdAt: '2018-11-23T20:49:28.192Z',
+              message: 'Test',
+            },
+          ],
+          workItemId: '3',
+        },
+      ];
+      applicationContext.getCurrentUser = () => {
+        return user;
+      };
+      const result = formatDocumentWorkItems({ applicationContext, workItems });
+      expect(result).toMatchObject({
+        completedWorkItems: [{ workItemId: '1' }],
+        incompleteWorkItems: [{ workItemId: '3' }, { workItemId: '2' }],
+        qcWorkItem: { workItemId: '2' },
+      });
+    });
+
+    it('should return empty arrays for completedWorkItems and incompleteWorkItems and undefined for qcWorkItem if the workItems param is undefined', () => {
+      const result = formatDocumentWorkItems({ applicationContext });
+      expect(result).toMatchObject({
+        completedWorkItems: [],
+        incompleteWorkItems: [],
+        qcWorkItem: undefined,
+      });
+    });
+  });
+
+  it('showAction function should return true for complete for document Id abc', () => {
     const user = {
       role: User.ROLES.petitionsClerk,
       userId: '123',
@@ -39,7 +124,7 @@ describe('document detail helper', () => {
         ...getBaseState(user),
         caseDetail: {
           docketRecord: [],
-          documents: [],
+          documents: [{ documentId: 'abc' }],
           status: Case.STATUS_TYPES.generalDocket,
         },
         documentId: 'abc',
@@ -61,7 +146,7 @@ describe('document detail helper', () => {
         ...getBaseState(user),
         caseDetail: {
           docketRecord: [],
-          documents: [],
+          documents: [{ documentId: 'abc' }],
           status: Case.STATUS_TYPES.generalDocket,
         },
         documentId: 'abc',
@@ -83,7 +168,7 @@ describe('document detail helper', () => {
         ...getBaseState(user),
         caseDetail: {
           docketRecord: [],
-          documents: [],
+          documents: [{ documentId: 'abc' }],
           status: Case.STATUS_TYPES.new,
         },
         documentId: 'abc',
@@ -105,7 +190,7 @@ describe('document detail helper', () => {
         ...getBaseState(user),
         caseDetail: {
           docketRecord: [],
-          documents: [],
+          documents: [{ documentId: 'abc' }],
           status: Case.STATUS_TYPES.recalled,
         },
         documentId: 'abc',
@@ -1199,23 +1284,6 @@ describe('document detail helper', () => {
     expect(result.formattedDocument.workItems).toHaveLength(1);
   });
 
-  it('default to empty array when caseDetail.documents is undefined', () => {
-    const user = {
-      role: User.ROLES.petitionsClerk,
-      userId: '123',
-    };
-    const result = runCompute(documentDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          documents: undefined,
-        },
-      },
-    });
-
-    expect(result.formattedDocument).toMatchObject({});
-  });
-
   it("default to empty array when a document's workItems are non-existent", () => {
     const user = {
       role: User.ROLES.petitionsClerk,
@@ -1229,7 +1297,6 @@ describe('document detail helper', () => {
           documents: [
             {
               documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              workItems: undefined,
             },
           ],
         },
@@ -1240,6 +1307,7 @@ describe('document detail helper', () => {
     expect(result.formattedDocument.documentId).toEqual(
       'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     );
+    expect(result.formattedDocument.workItems).toEqual([]);
   });
 
   describe('showViewOrdersNeededButton', () => {
@@ -1522,6 +1590,188 @@ describe('document detail helper', () => {
       });
 
       expect(result.showPrintCaseConfirmationButton).toEqual(false);
+    });
+  });
+
+  describe('isDraftDocument', () => {
+    it('should return isDraftDocument false if the document is served', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+                servedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.isDraftDocument).toEqual(false);
+    });
+
+    it('should return isDraftDocument true if the document is an unserved Stipulated Decision', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Stipulated Decision',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.isDraftDocument).toEqual(true);
+    });
+
+    it('should return isDraftDocument true if the document is an order that is NOT on the docket record', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Order',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.isDraftDocument).toEqual(true);
+    });
+
+    it('should return isDraftDocument false if the document is an order that is on the docket record', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [
+              {
+                documentId: 'abc',
+              },
+            ],
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Order',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.isDraftDocument).toEqual(false);
+    });
+
+    it('should return isDraftDocument true if the document is a court-issued document that is NOT on the docket record', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'OAP - Order for Amended Petition',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.isDraftDocument).toEqual(true);
+    });
+
+    it('should return isDraftDocument true if the document is a court-issued document that is on the docket record', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [{ documentId: 'abc' }],
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'OAP - Order for Amended Petition',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.isDraftDocument).toEqual(false);
+    });
+
+    it('should return isDraftDocument false if the document is unserved but is not an internal document type', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                documentId: 'abc',
+                documentType: 'Amendment to Answer',
+              },
+            ],
+          },
+          documentId: 'abc',
+          user,
+        },
+      });
+
+      expect(result.isDraftDocument).toEqual(false);
     });
   });
 });
