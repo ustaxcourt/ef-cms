@@ -4,8 +4,8 @@ import {
 } from './internalTypesHelper';
 import { state } from 'cerebral';
 
-export const selectDocumentSelectHelper = get => {
-  const { CATEGORY_MAP } = get(state.constants);
+export const selectDocumentSelectHelper = (get, applicationContext) => {
+  const { CATEGORY_MAP } = applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
 
   const documentTypesForSelect = getDocumentTypesForSelect(CATEGORY_MAP);

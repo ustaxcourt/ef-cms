@@ -1,5 +1,9 @@
+import { applicationContext } from '../../../applicationContext';
+import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setSecondaryDocumentScenarioAction } from './setSecondaryDocumentScenarioAction';
+
+presenter.providers.applicationContext = applicationContext;
 
 describe('setSecondaryDocumentScenarioAction', () => {
   it('sets secondaryDocument scenario', async () => {
@@ -15,12 +19,8 @@ describe('setSecondaryDocumentScenarioAction', () => {
     };
 
     const result = await runAction(setSecondaryDocumentScenarioAction, {
+      modules: { presenter },
       state: {
-        constants: {
-          CATEGORY_MAP: {
-            Notice: [documentScenario],
-          },
-        },
         form: {
           secondaryDocument: {
             category: 'Notice',
@@ -43,6 +43,7 @@ describe('setSecondaryDocumentScenarioAction', () => {
 
   it('does not set secondaryDocument scenario', async () => {
     const result = await runAction(setSecondaryDocumentScenarioAction, {
+      modules: { presenter },
       state: {
         form: {
           secondaryDocument: {
