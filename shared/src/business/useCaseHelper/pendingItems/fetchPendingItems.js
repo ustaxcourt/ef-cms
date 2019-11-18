@@ -48,7 +48,7 @@ exports.fetchPendingItems = async ({ applicationContext, caseId, judge }) => {
 
     if (judge) {
       searchParameters.body.query.bool.must.push({
-        match: { 'associatedJudge.S': judge },
+        match_phrase: { 'associatedJudge.S': judge },
       });
     }
 

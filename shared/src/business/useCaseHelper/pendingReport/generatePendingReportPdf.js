@@ -1,4 +1,3 @@
-const fs = require('fs');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -14,23 +13,11 @@ const generatePendingReportPage = async ({
   pendingItems,
   reportTitle,
 }) => {
-  const pathPrefix = process.env.NODE_ENV === 'production' ? '/var/task/' : '';
+  const pendingReportSassContent = require('./../../assets/ustcPdf.scss_');
 
-  const pendingReportSassContent = fs.readFileSync(
-    `${pathPrefix}shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.scss`,
-    'utf8',
-  );
+  const pendingReportTemplateContent = require('./pendingReport.pug_');
 
-  const pendingReportTemplateContent = fs.readFileSync(
-    `${pathPrefix}shared/src/business/useCaseHelper/pendingReport/pendingReport.pug`,
-    'utf8',
-  );
-
-  const ustcLogoBufferBase64 =
-    'data:image/png;base64,' +
-    fs.readFileSync(`${pathPrefix}shared/static/images/ustc_seal.png`, {
-      encoding: 'base64',
-    });
+  const ustcLogoBufferBase64 = require('../../../../static/images/ustc_seal.png_');
 
   const pug = applicationContext.getPug();
   const sass = applicationContext.getNodeSass();

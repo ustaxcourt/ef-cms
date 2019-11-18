@@ -3,37 +3,43 @@ const fs = require('fs');
 
 // USAGE EXAMPLE: node createModule.js path1/file1 path2/file2
 const targets = [
-  'shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.handlebars',
-  'shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.scss',
+  'shared/src/business/assets/ustcPdf.scss',
+  'shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.pug',
+  'shared/src/business/useCaseHelper/pendingReport/pendingReport.pug',
   'shared/static/images/ustc_seal.png',
 ];
 
-// const TEXT_FILES = ['txt', 'scss', 'html', 'hbars', 'handlebars'];
-const BINARY_BASE64 = ['png'];
+// specify mime-types for supported base64 encodings here.
+const BINARY_BASE64 = { png: 'image/png' };
+
+/**
+ * Generates a JS file based on name and path of original file.
+ * If you change this, you'll need to alter rules to .gitignore,
+ * test coverage exclusions, and linter exclusions
+ *
+ * @param {string} filePath path of original file
+ * @returns {string} name of file, but with a JS extension
+ */
+const asModulePath = filePath => `${filePath}_.js`;
 
 const createModule = filePath => {
   const contents = readFile(filePath);
-  if (contents.indexOf("'") !== -1) {
-    console.warn(
-      `Content of ${filePath} contains single-quotes. Output is probably broken.`,
-    );
-    // maybe should escape them before writing module?
-  }
-  const theCode = `// This is a generated file, do not edit\nmodule.exports =\n  \`${contents}\`;\n`;
-  const outputPath = `${filePath}_.js`;
+  const escapedContents = contents.replace(/`/gs, '\\`');
+  const theCode = `// This is a generated file, do not edit\nmodule.exports =\n  \`${escapedContents}\`;\n`;
+  const outputPath = asModulePath(filePath);
   console.info(outputPath);
   fs.writeFileSync(outputPath, theCode);
 };
 
 const readFile = filePath => {
-  // TODO: deal with mime-types other than image/png
-  const isBase64 = BINARY_BASE64.some(extension =>
-    filePath.endsWith(extension),
+  const base64Ext = Object.keys(BINARY_BASE64).find(extension =>
+    filePath.toLowerCase().endsWith(extension),
   );
   const contents = fs.readFileSync(filePath, {
-    encoding: isBase64 ? 'base64' : 'utf8',
+    encoding: base64Ext ? 'base64' : 'utf8',
   });
-  return isBase64 ? `data:image/png;base64,${contents}` : contents;
+  const mimeType = BINARY_BASE64[base64Ext];
+  return base64Ext ? `data:${mimeType};base64,${contents}` : contents;
 };
 
 const files = [...targets, ...process.argv.slice(2)];

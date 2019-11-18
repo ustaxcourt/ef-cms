@@ -130,7 +130,8 @@ export const DocumentDetail = connect(
                     {documentDetailHelper.formattedDocument.signedAtFormattedTZ}
                     <Button
                       link
-                      className="margin-left-2"
+                      className="margin-left-2 no-wrap"
+                      icon="trash"
                       onClick={() =>
                         removeSignatureFromOrderSequence({
                           caseDetail,
@@ -139,7 +140,6 @@ export const DocumentDetail = connect(
                         })
                       }
                     >
-                      <FontAwesomeIcon icon="trash" size="sm" />
                       Delete Signature
                     </Button>
                   </>

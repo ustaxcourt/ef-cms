@@ -57,6 +57,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       ...document,
       attachments: documentMeta.attachments,
       documentTitle: documentMeta.generatedDocumentTitle,
+      documentType: documentMeta.documentType,
       eventCode: documentMeta.eventCode,
       freeText: documentMeta.freeText,
       isFileAttached: true,
