@@ -1,9 +1,8 @@
 import { state } from 'cerebral';
 
 export const headerHelper = (get, applicationContext) => {
-  const user = get(state.user);
+  const user = applicationContext.getCurrentUser();
   const isLoggedIn = !!user;
-  const userRole = get(state.user.role);
   const currentPage = get(state.currentPage) || '';
   const notifications = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueToDisplay.workQueueIsInternal);
@@ -26,13 +25,13 @@ export const headerHelper = (get, applicationContext) => {
       USER_ROLES.docketClerk,
       USER_ROLES.petitionsClerk,
       USER_ROLES.adc,
-    ].includes(userRole) &&
+    ].includes(user.role) &&
       isMessages);
   const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
   const isBlockedCasesReport = currentPage.includes('BlockedCasesReport');
 
   return {
-    defaultQCBoxPath: isOtherUser(userRole)
+    defaultQCBoxPath: isOtherUser(user.role)
       ? '/document-qc/section/inbox'
       : '/document-qc/my/inbox',
     pageIsDocumentQC: isMessages && !workQueueIsInternal,
@@ -40,23 +39,24 @@ export const headerHelper = (get, applicationContext) => {
     pageIsInterstitial,
     pageIsMessages: isMessages && workQueueIsInternal,
     pageIsMyCases:
-      isDashboard && applicationContext.getUtilities().isExternalUser(userRole),
+      isDashboard &&
+      applicationContext.getUtilities().isExternalUser(user.role),
     pageIsReports: isCaseDeadlines || isBlockedCasesReport,
     pageIsTrialSessions:
       isTrialSessions &&
-      applicationContext.getUtilities().isInternalUser(userRole),
+      applicationContext.getUtilities().isInternalUser(user.role),
     showAccountMenu: isLoggedIn,
-    showDocumentQC: applicationContext.getUtilities().isInternalUser(userRole),
-    showHomeIcon: userRole === USER_ROLES.judge,
-    showMessages: applicationContext.getUtilities().isInternalUser(userRole),
+    showDocumentQC: applicationContext.getUtilities().isInternalUser(user.role),
+    showHomeIcon: user.role === USER_ROLES.judge,
+    showMessages: applicationContext.getUtilities().isInternalUser(user.role),
     showMessagesIcon: notifications.myInboxUnreadCount > 0,
-    showMyCases: applicationContext.getUtilities().isExternalUser(userRole),
-    showReports: applicationContext.getUtilities().isInternalUser(userRole),
+    showMyCases: applicationContext.getUtilities().isExternalUser(user.role),
+    showReports: applicationContext.getUtilities().isInternalUser(user.role),
     showSearchInHeader:
       user &&
-      userRole &&
-      userRole !== USER_ROLES.practitioner &&
-      userRole !== USER_ROLES.respondent,
+      user.role &&
+      user.role !== USER_ROLES.practitioner &&
+      user.role !== USER_ROLES.respondent,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
   };
 };
