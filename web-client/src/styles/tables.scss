@@ -419,6 +419,15 @@ table.docket-record {
       }
     }
 
+    tr.qc-untouched {
+      td {
+        font-weight: bold;
+      }
+      .fa-star {
+        color: color($theme-color-secondary-dark);
+      }
+    }
+
     tr.in-progress:hover {
       td {
         background: $color-primary-alt-lightest;
