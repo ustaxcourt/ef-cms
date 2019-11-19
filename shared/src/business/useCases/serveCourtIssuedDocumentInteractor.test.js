@@ -1,5 +1,8 @@
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
+const uuidv4 = require('uuid/v4');
+const { Case } = require('../entities/cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
+const { Document } = require('../entities/Document');
 const { User } = require('../entities/User');
 
 describe('serveCourtIssuedDocumentInteractor', () => {
@@ -11,6 +14,30 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     role: User.ROLES.docketClerk,
     userId: '123',
   };
+
+  const dynamicallyGeneratedDocketEntries = [];
+  const documentsWithCaseClosingEventCodes = Document.CASE_CLOSING_EVENT_CODES.map(
+    eventCode => {
+      const documentId = uuidv4();
+
+      dynamicallyGeneratedDocketEntries.push({
+        documentId,
+        filingDate: createISODateString(),
+      });
+
+      const eventCodeMap = Document.COURT_ISSUED_EVENT_CODES.find(
+        entry => entry.eventCode === eventCode,
+      );
+
+      return {
+        documentId,
+        documentType: eventCodeMap.documentType,
+        eventCode,
+        userId: '123',
+      };
+    },
+  );
+
   const mockCases = [
     {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -20,13 +47,20 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           filingDate: createISODateString(),
         },
+        {
+          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+          filingDate: createISODateString(),
+        },
+        ...dynamicallyGeneratedDocketEntries,
       ],
       documents: [
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Order',
+          eventCode: 'O',
           userId: '123',
         },
+        ...documentsWithCaseClosingEventCodes,
       ],
     },
   ];
@@ -128,5 +162,17 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+  });
+
+  documentsWithCaseClosingEventCodes.forEach(document => {
+    it(`should set the case status to closed for event code: ${document.eventCode}`, async () => {
+      const result = await serveCourtIssuedDocumentInteractor({
+        applicationContext,
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentId: document.documentId,
+      });
+
+      expect(result.status).toEqual(Case.STATUS_TYPES.closed);
+    });
   });
 });
