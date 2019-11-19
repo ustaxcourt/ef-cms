@@ -3,7 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
-const { VALIDATION_ERROR_MESSAGES } = require('./validationErrorMessages');
+const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 /**
  *

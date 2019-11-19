@@ -71,6 +71,7 @@ function Document(rawDocument, { applicationContext }) {
   this.servedAt = rawDocument.servedAt;
   this.servedParties = rawDocument.servedParties;
   this.serviceDate = rawDocument.serviceDate;
+  this.serviceStamp = rawDocument.serviceStamp;
   this.signedAt = rawDocument.signedAt;
   this.signedByUserId = rawDocument.signedByUserId;
   this.status = rawDocument.status;
@@ -250,6 +251,7 @@ joiValidationDecorator(
       .max('now')
       .optional()
       .allow(null),
+    serviceStamp: joi.string().optional(),
     signedAt: joi
       .date()
       .iso()
