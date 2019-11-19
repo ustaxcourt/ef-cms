@@ -53,38 +53,40 @@ export const CaseDetailPendingReportList = connect(
               <th>Remove</th>
             </tr>
           </thead>
-          {pendingItemsDocketEntries.map(({ document, record }, arrayIndex) => (
-            <tbody key={arrayIndex}>
-              <tr className="pending-item-row">
-                <td>{arrayIndex + 1}</td>
-                <td>
-                  <span className="no-wrap">{record.createdAtFormatted}</span>
-                </td>
-                <td>
-                  <FilingsAndProceedings
-                    arrayIndex={arrayIndex}
-                    document={document}
-                    record={record}
-                  />
-                </td>
-                <td>{document.filedBy}</td>
-                <td>
-                  <Button
-                    link
-                    className="padding-0 no-wrap"
-                    icon="trash"
-                    onClick={() =>
-                      openConfirmRemoveCaseDetailPendingItemModalSequence({
-                        documentId: document.documentId,
-                      })
-                    }
-                  >
-                    Remove
-                  </Button>
-                </td>
-              </tr>
-            </tbody>
-          ))}
+          {pendingItemsDocketEntries.map(
+            ({ document, index, record }, arrayIndex) => (
+              <tbody key={arrayIndex}>
+                <tr className="pending-item-row">
+                  <td>{index}</td>
+                  <td>
+                    <span className="no-wrap">{record.createdAtFormatted}</span>
+                  </td>
+                  <td>
+                    <FilingsAndProceedings
+                      arrayIndex={arrayIndex}
+                      document={document}
+                      record={record}
+                    />
+                  </td>
+                  <td>{document.filedBy}</td>
+                  <td>
+                    <Button
+                      link
+                      className="padding-0 no-wrap"
+                      icon="trash"
+                      onClick={() =>
+                        openConfirmRemoveCaseDetailPendingItemModalSequence({
+                          documentId: document.documentId,
+                        })
+                      }
+                    >
+                      Remove
+                    </Button>
+                  </td>
+                </tr>
+              </tbody>
+            ),
+          )}
         </table>
         {pendingItemsDocketEntries.length === 0 && (
           <p>There is nothing pending.</p>
