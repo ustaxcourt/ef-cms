@@ -12,7 +12,6 @@ describe('CourtIssuedDocumentTypeD', () => {
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
         date: VALIDATION_ERROR_MESSAGES.date[1],
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
-        freeText: VALIDATION_ERROR_MESSAGES.freeText,
       });
     });
 
@@ -61,6 +60,20 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
       expect(extDoc.getDocumentTitle()).toEqual(
         'Order for Amended Petition and Filing Fee on 04-10-2012 Some free text',
+      );
+    });
+
+    it('should generate valid title without optional freeText', () => {
+      const extDoc = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        date: '2012-04-10T00:00:00-05:00',
+        documentTitle:
+          'Order for Amended Petition and Filing Fee on [Date] [Anything]',
+        documentType: 'Order for Amended Petition and Filing Fee',
+        scenario: 'Type D',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Order for Amended Petition and Filing Fee on 04-10-2012',
       );
     });
   });

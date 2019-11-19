@@ -10,7 +10,6 @@ describe('CourtIssuedDocumentTypeB', () => {
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
-        freeText: VALIDATION_ERROR_MESSAGES.freeText,
         judge: VALIDATION_ERROR_MESSAGES.judge,
       });
     });
@@ -40,6 +39,19 @@ describe('CourtIssuedDocumentTypeB', () => {
       });
       expect(extDoc.getDocumentTitle()).toEqual(
         'Order that case is assigned to Judge Armen Some free text',
+      );
+    });
+
+    it('should generate valid title without optional freeText', () => {
+      const extDoc = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
+        documentType: 'Order that case is assigned',
+        judge: 'Judge Armen',
+        scenario: 'Type B',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Order that case is assigned to Judge Armen',
       );
     });
   });
