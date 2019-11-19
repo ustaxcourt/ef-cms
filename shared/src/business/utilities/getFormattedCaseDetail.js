@@ -114,16 +114,23 @@ const formatDocketRecordWithDocument = (
         record.description += ` ${document.additionalInfo}`;
       }
 
-      document.qcWorkItemsCompleted = (document.workItems || [])
-        .filter(wi => wi.isQC)
-        .reduce((acc, wi) => {
-          return acc && !!wi.completedAt;
-        }, true);
+      const qcWorkItems = (document.workItems || []).filter(wi => wi.isQC);
+
+      document.qcWorkItemsCompleted = qcWorkItems.reduce((acc, wi) => {
+        return acc && !!wi.completedAt;
+      }, true);
 
       document.isInProgress = !!(
         (document.isCourtIssuedDocument && !document.servedAt) ||
         (!document.isCourtIssuedDocument && document.isFileAttached === false)
       );
+
+      document.qcWorkItemsUntouched =
+        !document.isInProgress &&
+        qcWorkItems.reduce((acc, wi) => {
+          return acc && !wi.isRead;
+        }, true);
+
       document.isPetition = document.eventCode === 'P';
       document.canEdit = !document.isPetition && !document.qcWorkItemsCompleted;
     }
