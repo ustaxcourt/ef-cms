@@ -26,7 +26,7 @@ CourtIssuedDocumentTypeB.schema = {
   attachments: joi.boolean().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
-  freeText: joi.string().required(),
+  freeText: joi.string().optional(),
   judge: joi.string().required(),
 };
 
