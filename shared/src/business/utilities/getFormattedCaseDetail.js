@@ -125,11 +125,9 @@ const formatDocketRecordWithDocument = (
         (!document.isCourtIssuedDocument && document.isFileAttached === false)
       );
 
-      document.qcWorkItemsUntouched =
-        !document.isInProgress &&
-        qcWorkItems.reduce((acc, wi) => {
-          return acc && !wi.isRead;
-        }, true);
+      document.qcWorkItemsUntouched = qcWorkItems.reduce((acc, wi) => {
+        return acc && !wi.isRead && !wi.completedAt;
+      }, true);
 
       document.isPetition = document.eventCode === 'P';
       document.canEdit = !document.isPetition && !document.qcWorkItemsCompleted;

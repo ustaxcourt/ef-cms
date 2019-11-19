@@ -68,7 +68,7 @@ export const DocketRecord = connect(
                   document.isInProgress;
 
                 const qcWorkItemsUntouched =
-                  document && document.qcWorkItemsUntouched;
+                  !isInProgress && document && document.qcWorkItemsUntouched;
                 return (
                   <tr
                     className={classNames(
