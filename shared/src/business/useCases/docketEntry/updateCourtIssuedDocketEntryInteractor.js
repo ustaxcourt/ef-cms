@@ -63,8 +63,6 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     { applicationContext },
   );
 
-  documentEntity.generateFiledBy(caseToUpdate);
-
   const docketRecordEntry = new DocketRecord({
     description: documentMeta.documentTitle,
     documentId: documentEntity.documentId,
