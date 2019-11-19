@@ -51,19 +51,24 @@ const getUserToken = async (username, password) => {
     .promise();
 };
 
+let token = null;
+
 describe('petitionsclerk can login', () => {
-  it('views the section inbox', async () => {
+  before(async () => {
     const results = await getUserToken(
       'petitionsclerk1@example.com',
       'Testing1234$',
     );
-    const token = results.AuthenticationResult.IdToken;
+    token = results.AuthenticationResult.IdToken;
+  });
+
+  it('views the section inbox', async () => {
     cy.visit(`/log-in?token=${token}`);
     cy.get('.button-switch-box').should('exist');
   });
 
   it('should verify advanced search works', () => {
-    cy.get('a.advanced').click();
+    cy.visit(`/log-in?token=${token}&path=/search`);
     cy.get('#advanced-search-button').should('exist');
     cy.get('#petitioner-name').type('THISNAMESHOULDNEVEREXIST');
     cy.get('#advanced-search-button').click();
