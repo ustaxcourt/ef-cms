@@ -87,8 +87,7 @@ exports.generateNoticeOfDocketChangePdf = async ({
   const documentId = `notice-docket-change-${applicationContext.getUniqueId()}.pdf`;
 
   await new Promise(resolve => {
-    const documentsBucket =
-      applicationContext.environment.tempDocumentsBucketName;
+    const documentsBucket = applicationContext.getDocumentsBucketName();
     const s3Client = applicationContext.getStorageClient();
 
     const params = {
@@ -108,7 +107,6 @@ exports.generateNoticeOfDocketChangePdf = async ({
   } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
     documentId,
-    useTempBucket: true,
   });
 
   return url;
