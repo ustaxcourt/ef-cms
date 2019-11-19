@@ -36,7 +36,7 @@ CourtIssuedDocumentTypeD.schema = {
     .required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
-  freeText: joi.string().required(),
+  freeText: joi.string().optional(),
 };
 
 joiValidationDecorator(
