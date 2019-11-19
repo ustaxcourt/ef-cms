@@ -1,4 +1,7 @@
 const {
+  generateNoticeOfDocketChangePdf,
+} = require('../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -48,6 +51,10 @@ exports.completeDocketEntryQCInteractor = async ({
 
   const needsNewCoversheet =
     entryMetadata.additionalInfo != currentDocument.additionalInfo ||
+    entryMetadata.documentTitle != currentDocument.documentTitle;
+
+  const needsNoticeOfDocketChange =
+    entryMetadata.filedBy != currentDocument.filedBy ||
     entryMetadata.documentTitle != currentDocument.documentTitle;
 
   const documentEntity = new Document(
@@ -131,6 +138,10 @@ exports.completeDocketEntryQCInteractor = async ({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
+
+  if (needsNoticeOfDocketChange) {
+    generateNoticeOfDocketChangePdf({ applicationContext });
+  }
 
   if (needsNewCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
