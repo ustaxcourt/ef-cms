@@ -30,14 +30,12 @@ const chromiumMock = {
 };
 
 const applicationContext = {
-  environment: {
-    tempDocumentsBucketName: 'MockDocumentBucketName',
-  },
   getCaseCaptionNames: Case.getCaseCaptionNames,
   getChromium: () => chromiumMock,
   getCurrentUser: () => {
     return { role: User.ROLES.petitioner, userId: 'petitioner' };
   },
+  getDocumentsBucketName: () => 'DocumentBucketName',
   getNodeSass: () => sass,
   getPersistenceGateway: () => ({
     getCaseByCaseId: () => ({ docketNumber: '101-19' }),
