@@ -15,7 +15,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .unblockCaseInteractor({
+        .unblockCaseFromTrialInteractor({
           applicationContext,
           caseId: event.pathParameters.caseId,
         });
