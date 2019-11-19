@@ -99,7 +99,6 @@ import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessio
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
-import { initiateCourtIssuedServiceSequence } from './sequences/initiateCourtIssuedServiceSequence';
 import { loadOriginalProposedStipulatedDecisionSequence } from './sequences/loadOriginalProposedStipulatedDecisionSequence';
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
@@ -181,6 +180,7 @@ import { selectDocumentSequence } from './sequences/selectDocumentSequence';
 import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectSecondaryDocumentSequence } from './sequences/selectSecondaryDocumentSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
+import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDocumentSequence';
 import { serveDocumentSequence } from './sequences/serveDocumentSequence';
 import { setCanvasForPDFSigningSequence } from './sequences/setCanvasForPDFSigningSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
@@ -415,7 +415,6 @@ export const presenter = {
     gotoTrialSessionsSequence,
     gotoUserContactEditSequence,
     gotoViewAllDocumentsSequence,
-    initiateCourtIssuedServiceSequence,
     loadOriginalProposedStipulatedDecisionSequence,
     loadPdfSequence,
     loginWithCodeSequence,
@@ -497,6 +496,7 @@ export const presenter = {
     selectScannerSequence,
     selectSecondaryDocumentSequence,
     selectWorkItemSequence,
+    serveCourtIssuedDocumentSequence,
     serveDocumentSequence,
     setCanvasForPDFSigningSequence,
     setCaseDetailPageTabSequence,
