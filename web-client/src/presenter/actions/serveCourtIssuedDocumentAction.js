@@ -8,14 +8,14 @@ import { state } from 'cerebral';
  * @param {Function} providers.props the cerebral props object used for getting the props.user
  * @returns {object} the user
  */
-export const initiateCourtIssuedServiceAction = async ({
+export const serveCourtIssuedDocumentAction = async ({
   applicationContext,
   get,
 }) => {
   const documentId = get(state.documentId);
   const caseId = get(state.caseDetail.caseId);
 
-  await applicationContext.getUseCases().initiateCourtIssuedServiceInteractor({
+  await applicationContext.getUseCases().serveCourtIssuedDocumentInteractor({
     applicationContext,
     caseId,
     documentId,
