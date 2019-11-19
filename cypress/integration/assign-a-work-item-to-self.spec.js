@@ -1,5 +1,4 @@
 const {
-  getSectionUsersSelect,
   getWorkItemCheckboxLabel,
   getWorkItemMessage,
   getWorkItemMessages,

@@ -1,6 +1,23 @@
-import { addCourtIssuedDocketEntryHelper } from './addCourtIssuedDocketEntryHelper';
+import { addCourtIssuedDocketEntryHelper as addCourtIssuedDocketEntryHelperComputed } from './addCourtIssuedDocketEntryHelper';
+import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
+  addCourtIssuedDocketEntryHelperComputed,
+  {
+    ...applicationContext,
+    getConstants: () => {
+      return {
+        COURT_ISSUED_EVENT_CODES: [
+          { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
+          { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
+        ],
+      };
+    },
+  },
+);
 
 const state = {
   caseDetail: {
@@ -9,17 +26,13 @@ const state = {
     practitioners: [{ name: 'Scar' }, { name: 'Zazu' }],
     respondents: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
   },
-  constants: {
-    COURT_ISSUED_EVENT_CODES: [
-      { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
-      { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
-    ],
+  form: {
+    generatedDocumentTitle: 'Circle of Life',
   },
-  form: {},
 };
 
 describe('addCourtIssuedDocketEntryHelper', () => {
-  it('should calculate document types based on constants in state', () => {
+  it('should calculate document types based on constants in applicationContext', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
     expect(result.documentTypes).toEqual([
       {
@@ -64,5 +77,23 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       { displayName: 'Rafiki, Respondent Counsel', name: 'Rafiki' },
       { displayName: 'Pumbaa, Respondent Counsel', name: 'Pumbaa' },
     ]);
+  });
+
+  it('should return a formatted document title', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
+
+    expect(result.formattedDocumentTitle).toEqual('Circle of Life');
+  });
+
+  it('should return a formatted document title with `(Attachment(s))` when present', () => {
+    const withAttachments = cloneDeep(state);
+    withAttachments.form.attachments = true;
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: withAttachments,
+    });
+
+    expect(result.formattedDocumentTitle).toEqual(
+      'Circle of Life (Attachment(s))',
+    );
   });
 });

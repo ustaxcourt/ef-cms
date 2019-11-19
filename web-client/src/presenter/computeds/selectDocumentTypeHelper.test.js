@@ -1,7 +1,9 @@
 import { Document } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
-import { selectDocumentTypeHelper } from './selectDocumentTypeHelper';
+import { selectDocumentTypeHelper as selectDocumentTypeHelperComputed } from './selectDocumentTypeHelper';
+import { withAppContextDecorator } from '../../withAppContext';
 
 // external filing events don't currently contain Nonstandard I, Nonstandard J -- but if they did ...
 Document.CATEGORY_MAP['Miscellaneous'].push({
@@ -28,11 +30,21 @@ Document.CATEGORY_MAP['Decision'].push({
   scenario: 'Nonstandard J',
 });
 
+const selectDocumentTypeHelper = withAppContextDecorator(
+  selectDocumentTypeHelperComputed,
+  {
+    ...applicationContext,
+    getConstants: () => {
+      return {
+        ...applicationContext.getConstants(),
+        CATEGORY_MAP: Document.CATEGORY_MAP,
+      };
+    },
+  },
+);
+
 const state = {
   caseDetail: MOCK_CASE,
-  constants: {
-    CATEGORY_MAP: Document.CATEGORY_MAP,
-  },
 };
 
 describe('selectDocumentTypeHelper', () => {

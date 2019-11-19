@@ -30,7 +30,10 @@ export const getSupportingDocumentTypeList = categoryMap => {
 };
 
 export const addDocketEntryHelper = (get, applicationContext) => {
-  const { INTERNAL_CATEGORY_MAP, PARTY_TYPES } = get(state.constants);
+  const {
+    INTERNAL_CATEGORY_MAP,
+    PARTY_TYPES,
+  } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};

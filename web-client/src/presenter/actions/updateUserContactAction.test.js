@@ -34,6 +34,10 @@ presenter.providers.applicationContext = {
 
 describe('updateUserContactAction', () => {
   it('should gracefully handle other failures', async () => {
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      contact: {},
+      userId: '123',
+    });
     let result, error;
     try {
       result = await runAction(updateUserContactAction, {
@@ -50,6 +54,10 @@ describe('updateUserContactAction', () => {
     expect(noChangeMock).not.toHaveBeenCalled();
   });
   it('should gracefully handle "no change found" failures', async () => {
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      contact: {},
+      userId: '123',
+    });
     await runAction(updateUserContactAction, {
       modules: {
         presenter,
@@ -59,6 +67,10 @@ describe('updateUserContactAction', () => {
     expect(noChangeMock).toHaveBeenCalled();
   });
   it('should update the user and provide an alertSuccess message', async () => {
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      contact: {},
+      userId: '123',
+    });
     await runAction(updateUserContactAction, {
       modules: {
         presenter,

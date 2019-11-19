@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const documentEditLinkHelper = get => ({
+export const documentEditLinkHelper = (get, applicationContext) => ({
   docketNumber,
   documentId,
   messageId,
@@ -9,10 +9,10 @@ export const documentEditLinkHelper = get => ({
   shouldLinkToEditCourtIssued,
   workItemIdToMarkAsRead,
 }) => {
-  const currentUser = get(state.user);
+  const currentUser = applicationContext.getCurrentUser();
   const userRole = currentUser.role;
   const { box, workQueueIsInternal } = get(state.workQueueToDisplay);
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { USER_ROLES } = applicationContext.getConstants();
 
   const shouldLinkToMessagesTab = () => {
     let linkToMessagesTab = false;

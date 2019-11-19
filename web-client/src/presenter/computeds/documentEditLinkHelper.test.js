@@ -1,9 +1,19 @@
 import { User } from '../../../../shared/src/business/entities/User';
-import { documentEditLinkHelper } from './documentEditLinkHelper';
+import { applicationContext } from '../../applicationContext';
+import { documentEditLinkHelper as documentEditLinkHelperComputed } from './documentEditLinkHelper';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
-const baseState = {
-  constants: { USER_ROLES: User.ROLES },
+const documentEditLinkHelper = withAppContextDecorator(
+  documentEditLinkHelperComputed,
+  applicationContext,
+);
+
+const petitionsClerkUser = {
+  role: User.ROLES.petitionsClerk,
+};
+const docketClerkUser = {
+  role: User.ROLES.docketClerk,
 };
 
 const MY_INBOX = { box: 'inbox', queue: 'my', workQueueIsInternal: true };
@@ -27,12 +37,9 @@ const SECTION_OUTBOX = {
 
 describe('documentEditLinkHelper', () => {
   it('should return a correctly-assembled URI to document details based on docket number and document id', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -43,12 +50,9 @@ describe('documentEditLinkHelper', () => {
   });
 
   it('should return a correctly-assembled URI to document details based on docket number, document id, and messageId', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -60,12 +64,9 @@ describe('documentEditLinkHelper', () => {
   });
 
   it('should return a correctly-assembled URI to document details based on docket number, document id, and workItemIdToMarkAsRead', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -77,12 +78,9 @@ describe('documentEditLinkHelper', () => {
   });
 
   it('should return a correctly-assembled URI to document details based on docket number, document id, messageId, and workItemIdToMarkAsRead', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -98,12 +96,9 @@ describe('documentEditLinkHelper', () => {
 
   // Petition Clerk > Messages | My | Inbox > Message tab
   it('Petitions Clerk: Links from My Messages Inbox to individual Message tab', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -116,12 +111,9 @@ describe('documentEditLinkHelper', () => {
 
   // Petition Clerk > Messages | My | Sent > Message tab
   it('Petitions Clerk: Links from My Messages Sent to individual Message tab', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: MY_OUTBOX,
       },
     })({
@@ -134,12 +126,9 @@ describe('documentEditLinkHelper', () => {
 
   // Petition Clerk > Messages | Section | Inbox > Message tab
   it('Petitions Clerk: Links from Section Messages Inbox to individual Message tab', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: SECTION_INBOX,
       },
     })({
@@ -152,12 +141,9 @@ describe('documentEditLinkHelper', () => {
 
   // Petition Clerk > Messages | Section | Sent > Message tab
   it('Petitions Clerk: Links from Section Messages Sent to individual Message tab', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: SECTION_OUTBOX,
       },
     })({
@@ -170,12 +156,9 @@ describe('documentEditLinkHelper', () => {
 
   // Petition Clerk > Doc QC | My | Inbox > Doc Info tab (edit mode)
   it('Petitions Clerk: Links from My Document QC Inbox to Document Info tab', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: {
           ...MY_INBOX,
           workQueueIsInternal: false,
@@ -191,12 +174,9 @@ describe('documentEditLinkHelper', () => {
 
   // Petition Clerk > Doc QC | My | Batched > Doc Info tab (read only mode)
   it('Petitions Clerk: Links from My Document QC Batched to Document Info tab', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: {
           ...MY_BATCHED,
           workQueueIsInternal: false,
@@ -212,12 +192,9 @@ describe('documentEditLinkHelper', () => {
 
   // Petition Clerk > Doc QC | My | Served > Message tab (no doc info tab)
   it('Petitions Clerk: Links from My Document QC Served to individual Message Info tab', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: {
           ...MY_OUTBOX,
           workQueueIsInternal: false,
@@ -233,12 +210,9 @@ describe('documentEditLinkHelper', () => {
 
   // Petition Clerk > Doc QC | Section | Inbox > Doc Info tab (edit mode)
   it('Petitions Clerk: Links from Section Document QC Inbox to Document Info tab', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: {
           ...SECTION_INBOX,
           workQueueIsInternal: false,
@@ -254,12 +228,9 @@ describe('documentEditLinkHelper', () => {
 
   // Petition Clerk > Doc QC | Section | Batched > Doc Info tab (read only mode)
   it('Petitions Clerk: Links from Section Document QC Batched to Document Info tab', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: {
           ...SECTION_BATCHED,
           workQueueIsInternal: false,
@@ -275,12 +246,9 @@ describe('documentEditLinkHelper', () => {
 
   // Petition Clerk > Doc QC | Section | Served > Message tab (no doc info tab)
   it('Petitions Clerk: Links from Section Document QC Served to individual Message Info tab', () => {
+    applicationContext.getCurrentUser = () => petitionsClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
         workQueueToDisplay: {
           ...SECTION_OUTBOX,
           workQueueIsInternal: false,
@@ -296,12 +264,9 @@ describe('documentEditLinkHelper', () => {
 
   // Docket Clerk > Messages | My | Inbox > Message tab (no doc info tab)
   it('Docket Clerk: Links from My Messages Inbox to individual Message tab', () => {
+    applicationContext.getCurrentUser = () => docketClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.docketClerk,
-        },
         workQueueToDisplay: MY_INBOX,
       },
     })({
@@ -314,12 +279,9 @@ describe('documentEditLinkHelper', () => {
 
   // Docket Clerk > Messages | My | Sent > Message tab (no doc info tab)
   it('Docket Clerk: Links from My Messages Sent to individual Message tab', () => {
+    applicationContext.getCurrentUser = () => docketClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.docketClerk,
-        },
         workQueueToDisplay: MY_OUTBOX,
       },
     })({
@@ -332,12 +294,9 @@ describe('documentEditLinkHelper', () => {
 
   // Docket Clerk > Messages | Section | Inbox > Message tab (no doc info tab)
   it('Docket Clerk: Links from Section Messages Inbox to individual Message tab', () => {
+    applicationContext.getCurrentUser = () => docketClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.docketClerk,
-        },
         workQueueToDisplay: SECTION_INBOX,
       },
     })({
@@ -350,12 +309,9 @@ describe('documentEditLinkHelper', () => {
 
   // Docket Clerk > Messages | Section | Sent > Message tab (no doc info tab)
   it('Docket Clerk: Links from Section Messages Sent to individual Message tab', () => {
+    applicationContext.getCurrentUser = () => docketClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.docketClerk,
-        },
         workQueueToDisplay: SECTION_OUTBOX,
       },
     })({
@@ -368,12 +324,9 @@ describe('documentEditLinkHelper', () => {
 
   // Docket Clerk > Doc QC | My | Inbox > Message tab (no doc info tab)
   it('Docket Clerk: Links from MY Document QC Inbox to individual Message tab', () => {
+    applicationContext.getCurrentUser = () => docketClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.docketClerk,
-        },
         workQueueToDisplay: {
           ...MY_INBOX,
           workQueueIsInternal: false,
@@ -389,12 +342,9 @@ describe('documentEditLinkHelper', () => {
 
   // Docket Clerk > Doc QC | My | Processed > Message tab (no doc info tab)
   it('Docket Clerk: Links from MY Document QC Processed to individual Message tab', () => {
+    applicationContext.getCurrentUser = () => docketClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.docketClerk,
-        },
         workQueueToDisplay: { ...MY_OUTBOX, workQueueIsInternal: false },
       },
     })({
@@ -407,12 +357,9 @@ describe('documentEditLinkHelper', () => {
 
   // Docket Clerk > Doc QC | Section | Inbox > Message tab (no doc info tab)
   it('Docket Clerk: Links from Section Document QC Inbox to individual Message tab', () => {
+    applicationContext.getCurrentUser = () => docketClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.docketClerk,
-        },
         workQueueToDisplay: { ...SECTION_INBOX, workQueueIsInternal: false },
       },
     })({
@@ -425,12 +372,9 @@ describe('documentEditLinkHelper', () => {
 
   // Docket Clerk > Doc QC | Section | Processed > Message tab (no doc info tab) (edited)
   it('Docket Clerk: Links from Section Document QC Processed to individual Message tab', () => {
+    applicationContext.getCurrentUser = () => docketClerkUser;
     const result = runCompute(documentEditLinkHelper, {
       state: {
-        ...baseState,
-        user: {
-          role: User.ROLES.docketClerk,
-        },
         workQueueToDisplay: { ...SECTION_OUTBOX, workQueueIsInternal: false },
       },
     })({
