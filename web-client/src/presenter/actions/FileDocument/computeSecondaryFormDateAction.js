@@ -20,7 +20,7 @@ export const computeSecondaryFormDateAction = ({ get, store }) => {
 
       formDate = formDate
         .split('-')
-        .map(segment => (segment = segment.padStart(2, '0')))
+        .map(segment => segment.padStart(2, '0'))
         .join('-');
 
       store.set(state.form.secondaryDocument.serviceDate, formDate);
