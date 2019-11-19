@@ -1,5 +1,5 @@
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { VALIDATION_ERROR_MESSAGES } = require('./validationErrorMessages');
+const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeA', () => {
   describe('validation', () => {
@@ -21,6 +21,45 @@ describe('CourtIssuedDocumentTypeA', () => {
         documentType: 'Order',
         freeText: 'Some free text',
         scenario: 'Type A',
+      });
+      expect(document.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be invalid if the document type is a generic order and serviceStamp is not present', () => {
+      const document = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: 'Order [Anything]',
+        documentType: 'O - Order',
+        freeText: 'Some free text',
+        scenario: 'Type A',
+      });
+      expect(document.getFormattedValidationErrors()).toEqual({
+        serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
+      });
+    });
+
+    it('should be invalid if the document type is a generic order and serviceStamp is present and not a valid option', () => {
+      const document = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: 'Order [Anything]',
+        documentType: 'O - Order',
+        freeText: 'Some free text',
+        scenario: 'Type A',
+        serviceStamp: 'Something invalid',
+      });
+      expect(document.getFormattedValidationErrors()).toEqual({
+        serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
+      });
+    });
+
+    it('should be valid if the document type is a generic order and serviceStamp is present and a valid option', () => {
+      const document = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: 'Order [Anything]',
+        documentType: 'O - Order',
+        freeText: 'Some free text',
+        scenario: 'Type A',
+        serviceStamp: 'Served',
       });
       expect(document.getFormattedValidationErrors()).toEqual(null);
     });

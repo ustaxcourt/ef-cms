@@ -21,6 +21,7 @@ import Select from 'react-select';
 export const CourtIssuedDocketEntry = connect(
   {
     addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
+    constants: state.constants,
     form: state.form,
     isEditingDocketEntry: state.isEditingDocketEntry,
     openCancelDraftDocumentModalSequence:
@@ -38,6 +39,7 @@ export const CourtIssuedDocketEntry = connect(
   },
   ({
     addCourtIssuedDocketEntryHelper,
+    constants,
     form,
     isEditingDocketEntry,
     openCancelDraftDocumentModalSequence,
@@ -159,6 +161,38 @@ export const CourtIssuedDocketEntry = connect(
                     </div>
                   </fieldset>
                 </FormGroup>
+
+                {addCourtIssuedDocketEntryHelper.showServiceStamp && (
+                  <FormGroup errorText={validationErrors.serviceStamp}>
+                    <fieldset className="usa-fieldset">
+                      <legend className="usa-legend">Service Stamp</legend>
+                      {constants.SERVICE_STAMP_OPTIONS.map((option, idx) => (
+                        <div className="usa-radio usa-radio__inline" key={idx}>
+                          <input
+                            checked={form.serviceStamp === option}
+                            className="usa-radio__input"
+                            id={`service-stamp-${idx}`}
+                            name="serviceStamp"
+                            type="radio"
+                            onChange={e => {
+                              updateCourtIssuedDocketEntryFormValueSequence({
+                                key: e.target.name,
+                                value: option,
+                              });
+                              validateCourtIssuedDocketEntrySequence();
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor={`service-stamp-${idx}`}
+                          >
+                            {option}
+                          </label>
+                        </div>
+                      ))}
+                    </fieldset>
+                  </FormGroup>
+                )}
 
                 <p>
                   <b>Service Parties</b>
