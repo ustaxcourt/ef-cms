@@ -46,9 +46,6 @@ exports.completeDocketEntryQCInteractor = async ({
     documentId,
   });
 
-  console.log('==========================', entryMetadata);
-  console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~', currentDocument);
-
   const needsNewCoversheet =
     entryMetadata.additionalInfo != currentDocument.additionalInfo ||
     entryMetadata.documentTitle != currentDocument.documentTitle;
