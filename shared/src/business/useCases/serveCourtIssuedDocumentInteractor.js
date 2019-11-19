@@ -1,4 +1,7 @@
 const {
+  ENTERED_AND_SERVED_EVENT_CODES,
+} = require('../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
@@ -82,6 +85,10 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   // TODO: should the filing date be updated?
   caseEntity.updateDocketRecordEntry(updatedDocketRecordEntity);
+
+  if (ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
+    caseEntity.closeCase();
+  }
 
   const updatedCase = await applicationContext
     .getPersistenceGateway()
