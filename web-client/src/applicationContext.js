@@ -137,6 +137,7 @@ import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
 import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
+import { initiateServiceInteractor } from '../../shared/src/proxies/initiateServiceProxy';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { pdfStyles } from '../../shared/src/tools/pdfStyles.js';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
@@ -302,6 +303,7 @@ const allUseCases = {
   getUserInteractor,
   getUsersInSectionInteractor,
   getWorkItemInteractor,
+  initiateServiceInteractor,
   loadPDFForSigningInteractor,
   prioritizeCaseInteractor,
   recallPetitionFromIRSHoldingQueueInteractor,
