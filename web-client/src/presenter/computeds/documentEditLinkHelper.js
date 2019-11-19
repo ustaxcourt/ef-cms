@@ -15,16 +15,15 @@ export const documentEditLinkHelper = (get, applicationContext) => ({
   const { USER_ROLES } = applicationContext.getConstants();
 
   const shouldLinkToMessagesTab = () => {
-    let linkToMessagesTab = false;
-    if (userRole === USER_ROLES.docketClerk || workQueueIsInternal) {
-      linkToMessagesTab = true;
-    } else if (
-      userRole === USER_ROLES.petitionsClerk &&
-      !workQueueIsInternal &&
-      box === 'outbox'
-    ) {
-      linkToMessagesTab = true;
-    }
+    const userIsDocketClerk = userRole === USER_ROLES.docketClerk;
+    const userIsPetitionsClerk = userRole === USER_ROLES.petitionsClerk;
+    const boxIsOutbox = box === 'outbox';
+
+    let linkToMessagesTab = workQueueIsInternal || userIsDocketClerk;
+
+    linkToMessagesTab =
+      linkToMessagesTab ||
+      (!workQueueIsInternal && userIsPetitionsClerk && boxIsOutbox);
 
     return messageId && linkToMessagesTab;
   };
