@@ -48,7 +48,9 @@ export const advancedSearchHelper = (get, applicationContext) => {
   if (searchResults) {
     const formattedSearchResults = searchResults
       .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
-      .map(result => formatSearchResultRecord(result, { applicationContext }));
+      .map(searchResult =>
+        formatSearchResultRecord(searchResult, { applicationContext }),
+      );
 
     result = {
       ...result,
