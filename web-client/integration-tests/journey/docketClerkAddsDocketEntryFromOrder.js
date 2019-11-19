@@ -1,3 +1,4 @@
+import { addCourtIssuedDocketEntryHelper } from '../../src/presenter/computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from '../../src/presenter/computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
@@ -6,7 +7,8 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 export default (test, draftOrderIndex) => {
   return it('Docket Clerk adds a docket entry from the given order', async () => {
     let caseDetailFormatted;
-    let helperComputed;
+    let nonstandardHelperComputed;
+    let addCourtIssuedDocketEntryHelperComputed;
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
@@ -43,15 +45,26 @@ export default (test, draftOrderIndex) => {
       value: 'O',
     });
 
-    helperComputed = runCompute(
+    nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
         state: test.getState(),
       },
     );
 
-    expect(helperComputed.showFreeText).toBeTruthy();
+    addCourtIssuedDocketEntryHelperComputed = runCompute(
+      withAppContextDecorator(addCourtIssuedDocketEntryHelper),
+      {
+        state: test.getState(),
+      },
+    );
+
+    expect(
+      addCourtIssuedDocketEntryHelperComputed.showServiceStamp,
+    ).toBeTruthy();
+    expect(nonstandardHelperComputed.showFreeText).toBeTruthy();
     expect(test.getState('form.freeText')).toBeFalsy();
+    expect(test.getState('form.serviceStamp')).toBeFalsy();
 
     // eventCode: OCA
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
@@ -59,14 +72,14 @@ export default (test, draftOrderIndex) => {
       value: 'OCA',
     });
 
-    helperComputed = runCompute(
+    nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
         state: test.getState(),
       },
     );
 
-    expect(helperComputed.showFreeText).toBeTruthy();
+    expect(nonstandardHelperComputed.showFreeText).toBeTruthy();
     expect(test.getState('form.freeText')).toBeFalsy();
 
     // eventCode: OAJ
@@ -75,16 +88,16 @@ export default (test, draftOrderIndex) => {
       value: 'OAJ',
     });
 
-    helperComputed = runCompute(
+    nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
         state: test.getState(),
       },
     );
 
-    expect(helperComputed.showFreeText).toBeTruthy();
+    expect(nonstandardHelperComputed.showFreeText).toBeTruthy();
     expect(test.getState('form.freeText')).toBeFalsy();
-    expect(helperComputed.showJudge).toBeTruthy();
+    expect(nonstandardHelperComputed.showJudge).toBeTruthy();
     expect(test.getState('form.judge')).toBeFalsy();
 
     // eventCode: OAL
@@ -93,15 +106,15 @@ export default (test, draftOrderIndex) => {
       value: 'OAL',
     });
 
-    helperComputed = runCompute(
+    nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
         state: test.getState(),
       },
     );
 
-    expect(helperComputed.showFreeText).toBeFalsy();
-    expect(helperComputed.showDocketNumbers).toBeTruthy();
+    expect(nonstandardHelperComputed.showFreeText).toBeFalsy();
+    expect(nonstandardHelperComputed.showDocketNumbers).toBeTruthy();
     expect(test.getState('form.docketNumbers')).toBeFalsy();
 
     // eventCode: OAP
@@ -110,16 +123,16 @@ export default (test, draftOrderIndex) => {
       value: 'OAP',
     });
 
-    helperComputed = runCompute(
+    nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
         state: test.getState(),
       },
     );
 
-    expect(helperComputed.showFreeText).toBeTruthy();
+    expect(nonstandardHelperComputed.showFreeText).toBeTruthy();
     expect(test.getState('form.freeText')).toBeFalsy();
-    expect(helperComputed.showDate).toBeTruthy();
+    expect(nonstandardHelperComputed.showDate).toBeTruthy();
     expect(test.getState('form.month')).toBeFalsy();
     expect(test.getState('form.day')).toBeFalsy();
     expect(test.getState('form.year')).toBeFalsy();
@@ -130,15 +143,15 @@ export default (test, draftOrderIndex) => {
       value: 'OODS',
     });
 
-    helperComputed = runCompute(
+    nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
         state: test.getState(),
       },
     );
 
-    expect(helperComputed.showFreeText).toBeFalsy();
-    expect(helperComputed.showDate).toBeTruthy();
+    expect(nonstandardHelperComputed.showFreeText).toBeFalsy();
+    expect(nonstandardHelperComputed.showDate).toBeTruthy();
     expect(test.getState('form.month')).toBeFalsy();
     expect(test.getState('form.day')).toBeFalsy();
     expect(test.getState('form.year')).toBeFalsy();
@@ -154,7 +167,14 @@ export default (test, draftOrderIndex) => {
       value: draftOrderDocument.freeText,
     });
 
-    helperComputed = runCompute(
+    if (draftOrderDocument.eventCode === 'O') {
+      await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+        key: 'serviceStamp',
+        value: 'Served',
+      });
+    }
+
+    nonstandardHelperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
         state: test.getState(),
