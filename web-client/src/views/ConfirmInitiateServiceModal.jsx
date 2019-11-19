@@ -16,10 +16,15 @@ export const ConfirmInitiateServiceModal = connect(
         className=""
         confirmLabel="Yes, serve"
         confirmSequence={confirmSequence}
-        message="The following document will be served on all parties:"
+        message=""
         title="Are you ready to initiate service?"
       >
-        {documentTitle}
+        <p className="margin-bottom-1">
+          The following document will be served on all parties:
+        </p>
+        <p className="margin-top-0 margin-bottom-5">
+          <strong>{documentTitle}</strong>
+        </p>
       </ModalDialog>
     );
   },
