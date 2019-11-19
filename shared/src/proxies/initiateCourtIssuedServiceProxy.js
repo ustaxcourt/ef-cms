@@ -1,7 +1,7 @@
 const { post } = require('./requests');
 
 /**
- * initiateServiceInteractor
+ * initiateCourtIssuedService
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,16 +9,14 @@ const { post } = require('./requests');
  * @param {object} providers.documentId the id of the document
  * @returns {Promise<*>} the promise of the api call
  */
-exports.initiateServiceInteractor = ({
+exports.initiateCourtIssuedServiceInteractor = ({
   applicationContext,
   caseId,
   documentId,
 }) => {
   return post({
     applicationContext,
-    body: {
-      caseId,
-    },
-    endpoint: `/documents/${documentId}/serve-court-issued`,
+    body: {},
+    endpoint: `/case-documents/${caseId}/${documentId}/serve-court-issued`,
   });
 };

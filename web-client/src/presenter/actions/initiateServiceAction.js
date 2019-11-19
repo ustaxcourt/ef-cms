@@ -12,7 +12,9 @@ export const initiateServiceAction = async ({ applicationContext, get }) => {
   const documentId = get(state.documentId);
   const caseId = get(state.caseDetail.caseId);
 
-  await applicationContext
-    .getUseCases()
-    .initiateServiceInteractor({ applicationContext, caseId, documentId });
+  await applicationContext.getUseCases().initiateCourtIssuedServiceInteractor({
+    applicationContext,
+    caseId,
+    documentId,
+  });
 };
