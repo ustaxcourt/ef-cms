@@ -20,4 +20,12 @@ export const serveCourtIssuedDocumentAction = async ({
     caseId,
     documentId,
   });
+
+  return {
+    alertSuccess: {
+      message:
+        'Remember to print all documents for parties with paper service.',
+      title: 'This document has been served',
+    },
+  };
 };
