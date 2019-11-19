@@ -16,7 +16,6 @@ Document.CATEGORY_MAP = documentMapExternal;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
 Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
-Document.CASE_CLOSING_EVENT_CODES = ['ODJ', 'OD', 'ODD', 'OAD', 'DEC', 'SDEC'];
 
 Document.validationName = 'Document';
 

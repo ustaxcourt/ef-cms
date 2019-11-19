@@ -4,9 +4,9 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
-const { Document } = require('../entities/Document');
 const { formatDateString } = require('../utilities/DateHandler');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
 /**
  * serveCourtIssuedDocumentInteractor
@@ -84,9 +84,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   // TODO: should the filing date be updated?
   caseEntity.updateDocketRecordEntry(updatedDocketRecordEntity);
 
-  if (
-    Document.CASE_CLOSING_EVENT_CODES.includes(courtIssuedDocument.eventCode)
-  ) {
+  if (ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
     caseEntity.closeCase();
   }
 
