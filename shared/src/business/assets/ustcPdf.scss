@@ -89,9 +89,9 @@ body {
       margin-top: 0.75in;
       border: 1px solid #ccc;
       -webkit-border-horizontal-spacing: 0px;
-
       border-spacing: 0;
       -webkit-border-vertical-spacing: 0px;
+      border-collapse: collapse;
     }
 
     th,
@@ -112,6 +112,10 @@ body {
       white-space: nowrap;
       background-color: #f0f0f0;
     }
+  }
+
+  .no-wrap {
+    white-space: nowrap;
   }
 
   .address {
