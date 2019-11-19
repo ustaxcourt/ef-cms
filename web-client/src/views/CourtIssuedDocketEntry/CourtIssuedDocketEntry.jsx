@@ -72,8 +72,7 @@ export const CourtIssuedDocketEntry = connect(
               <div className="display-flex flex-row flex-justify flex-align-center">
                 <div className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
                   <span className="text-bold">Docket Entry Preview: </span>
-                  {form.generatedDocumentTitle}
-                  {form.attachments && ' (Attachment(s))'}
+                  {addCourtIssuedDocketEntryHelper.formattedDocumentTitle}
                 </div>
                 <Button
                   className="margin-right-0"
@@ -204,8 +203,9 @@ export const CourtIssuedDocketEntry = connect(
         </section>
         {showModal === 'ConfirmInitiateServiceModal' && (
           <ConfirmInitiateServiceModal
-            documentTitle={`${form.generatedDocumentTitle}
-        ${form.attachments ? ' (Attachment(s))' : ''}`}
+            documentTitle={
+              addCourtIssuedDocketEntryHelper.formattedDocumentTitle
+            }
           />
         )}
         {showModal === 'CancelDraftDocumentModal' && (
