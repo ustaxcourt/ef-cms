@@ -58,15 +58,15 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   petitionsClerkSignsOut(test);
 
   docketClerkLogIn(test);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test, 1);
+  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsDraftOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test, 2);
+  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsDraftOrder(test, 1);
   docketClerkCancelsAddDocketEntryFromOrder(test, 1);
   docketClerkViewsDraftOrder(test, 1);
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test, 3);
+  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
   docketClerkSignsOut(test);
 
