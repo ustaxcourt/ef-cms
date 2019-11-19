@@ -505,6 +505,9 @@ const {
   sendPetitionToIRSHoldingQueueInteractor,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  serveCourtIssuedDocumentInteractor,
+} = require('../../shared/src/business/useCases/serveCourtIssuedDocumentInteractor');
+const {
   serveSignedStipDecisionInteractor,
 } = require('../../shared/src/business/useCases/serveSignedStipDecisionInteractor');
 const {
@@ -977,6 +980,7 @@ module.exports = (appContextUser = {}) => {
         saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
+        serveCourtIssuedDocumentInteractor,
         serveSignedStipDecisionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
