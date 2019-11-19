@@ -1,5 +1,6 @@
-const DateHandler = require('../../utilities/DateHandler');
-
+const sassContent = require('../../assets/ustcPdf.scss_');
+const template = require('./noticeOfDocketChange.pug_');
+const ustcLogoBufferBase64 = require('../../../../static/images/ustc_seal.png_');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -7,76 +8,40 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- *
- * @param {object} caseInfo a case entity
- * @returns {object} the formatted information needed by the PDF
- */
-const formattedCaseInfo = caseInfo => {
-  const { servedAt } = caseInfo.documents.find(doc => doc.servedAt);
-  const countryName =
-    caseInfo.contactPrimary.countryType != 'domestic'
-      ? caseInfo.contactPrimary.country
-      : '';
-  const formattedInfo = Object.assign(
-    {
-      caseTitle: caseInfo.caseTitle,
-      countryName,
-      docketNumber: `${caseInfo.docketNumber}${caseInfo.docketNumberSuffix ||
-        ''}`,
-      preferredTrialCity: caseInfo.preferredTrialCity,
-      receivedAtFormatted: DateHandler.formatDateString(
-        caseInfo.receivedAt,
-        'MONTH_DAY_YEAR',
-      ),
-      servedDate: DateHandler.formatDateString(servedAt, 'MONTH_DAY_YEAR'),
-      todaysDate: DateHandler.formatNow('MONTH_DAY_YEAR'),
-    },
-    caseInfo.contactPrimary,
-  );
-  return formattedInfo;
-};
-
-/**
- *
- * @param {object} caseInfo a raw object representing a petition
+ * @param {Array} cases case entities
  * @returns {string} an html string resulting from rendering template with caseInfo
  */
-const generateCaseConfirmationPage = async ({
-  applicationContext,
-  caseEntity,
-}) => {
-  const confirmSassContent = require('./../../assets/ustcPdf.scss_');
-  const confirmTemplateContent = require('./caseConfirmation.pug_');
-  const ustcLogoBufferBase64 = require('../../../../static/images/ustc_seal.png_');
-
+const generatePage = async ({ applicationContext, docketChangeInfo }) => {
   const pug = applicationContext.getPug();
   const sass = applicationContext.getNodeSass();
 
   const { css } = await new Promise(resolve => {
-    sass.render({ data: confirmSassContent }, (err, result) => {
+    sass.render({ data: sassContent }, (err, result) => {
       return resolve(result);
     });
   });
-  const compiledFunction = pug.compile(confirmTemplateContent);
+  const compiledFunction = pug.compile(template);
   const html = compiledFunction({
-    ...formattedCaseInfo(caseEntity),
-    css,
     logo: ustcLogoBufferBase64,
+    ...docketChangeInfo,
+    styles: css,
   });
   return html;
 };
 
+exports.generatePage = generatePage;
+
 /**
- * generateCaseConfirmationPdfInteractor
+ * Generate Notice of Docket Change PDF
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseEntity a case entity with its documents
  * @returns {Promise<*>} the promise of the document having been uploaded
  */
-exports.generateCaseConfirmationPdf = async ({
+exports.generateNoticeOfDocketChangePdf = async ({
   applicationContext,
-  caseEntity,
+  reportTitle,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -99,10 +64,11 @@ exports.generateCaseConfirmationPdf = async ({
 
     let page = await browser.newPage();
 
-    const contentResult = await generateCaseConfirmationPage({
+    const contentResult = await generatePage({
       applicationContext,
-      caseEntity,
+      reportTitle,
     });
+
     await page.setContent(contentResult);
 
     result = await page.pdf({
@@ -118,7 +84,7 @@ exports.generateCaseConfirmationPdf = async ({
     }
   }
 
-  const documentId = `case-${caseEntity.docketNumber}-confirmation.pdf`;
+  const documentId = `notice-docket-change-${applicationContext.getUniqueId()}.pdf`;
 
   await new Promise(resolve => {
     const documentsBucket = applicationContext.getDocumentsBucketName();

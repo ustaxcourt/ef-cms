@@ -29,14 +29,11 @@ describe('generateCaseConfirmationPdf', () => {
   it('returns the pdf buffer produced by chromium', async () => {
     const result = await generateCaseConfirmationPdf({
       applicationContext: {
-        environment: {
-          documentsBucketName: 'MockDocumentBucketName',
-        },
         getChromium: () => chromiumMock,
-
         getCurrentUser: () => {
           return { role: User.ROLES.petitioner, userId: 'petitioner' };
         },
+        getDocumentsBucketName: () => 'DocumentBucketName',
         getNodeSass: () => ({ render: (data, cb) => cb(data, { css: '' }) }),
         getPersistenceGateway: () => ({
           getCaseByCaseId: () => ({ docketNumber: '101-19' }),
