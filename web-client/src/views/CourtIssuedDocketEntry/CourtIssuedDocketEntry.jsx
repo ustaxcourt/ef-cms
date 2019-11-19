@@ -167,7 +167,7 @@ export const CourtIssuedDocketEntry = connect(
                             onChange={e => {
                               updateCourtIssuedDocketEntryFormValueSequence({
                                 key: e.target.name,
-                                value: false,
+                                value: option,
                               });
                               validateCourtIssuedDocketEntrySequence();
                             }}
