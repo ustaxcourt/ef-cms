@@ -99,6 +99,7 @@ import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessio
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
+import { initiateCourtIssuedServiceSequence } from './sequences/initiateCourtIssuedServiceSequence';
 import { loadOriginalProposedStipulatedDecisionSequence } from './sequences/loadOriginalProposedStipulatedDecisionSequence';
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
@@ -125,6 +126,7 @@ import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCom
 import { openConfirmDeleteBatchModalSequence } from './sequences/openConfirmDeleteBatchModalSequence';
 import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDeletePDFModalSequence';
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
+import { openConfirmInitiateServiceModalSequence } from './sequences/openConfirmInitiateServiceModalSequence';
 import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
 import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmRescanBatchModalSequence';
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
@@ -413,6 +415,7 @@ export const presenter = {
     gotoTrialSessionsSequence,
     gotoUserContactEditSequence,
     gotoViewAllDocumentsSequence,
+    initiateCourtIssuedServiceSequence,
     loadOriginalProposedStipulatedDecisionSequence,
     loadPdfSequence,
     loginWithCodeSequence,
@@ -439,6 +442,7 @@ export const presenter = {
     openConfirmDeleteBatchModalSequence,
     openConfirmDeletePDFModalSequence,
     openConfirmEditModalSequence,
+    openConfirmInitiateServiceModalSequence,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     openConfirmRescanBatchModalSequence,
     openCreateCaseDeadlineModalSequence,
