@@ -1,11 +1,11 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { initiateServiceAction } from '../actions/initiateServiceAction';
+import { initiateCourtIssuedServiceAction } from '../actions/initiateCourtIssuedServiceAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const initiateServiceSequence = [
+export const initiateCourtIssuedServiceSequence = [
   clearAlertsAction,
   setWaitingForResponseAction,
-  initiateServiceAction,
+  initiateCourtIssuedServiceAction,
   unsetWaitingForResponseAction,
 ];
