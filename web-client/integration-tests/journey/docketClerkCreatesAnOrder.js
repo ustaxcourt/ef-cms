@@ -4,6 +4,10 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export default (test, data) => {
   return it('Docket Clerk creates an order', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
     await test.runSequence('openCreateOrderChooseTypeModalSequence', {});
 
     expect(test.getState('form.documentTitle')).toBeFalsy();

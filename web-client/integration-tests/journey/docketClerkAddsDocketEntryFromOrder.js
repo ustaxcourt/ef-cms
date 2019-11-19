@@ -171,19 +171,23 @@ export default (test, draftOrderIndex) => {
 
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    caseDetailFormatted = runCompute(
+    expect(test.getState('alertSuccess').title).toEqual(
+      'Your entry has been added to the docket record.',
+    );
+
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    caseDetailFormatted = await runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
         state: test.getState(),
       },
     );
 
-    expect(test.getState('alertSuccess').title).toEqual(
-      'Your entry has been added to the docket record.',
-    );
-
-    const newDocketEntry = caseDetailFormatted.docketRecordWithDocument.find(
-      entry => entry.document.documentId === documentId,
+    const newDocketEntry = caseDetailFormatted.docketRecord.find(
+      entry => entry.documentId === documentId,
     );
 
     expect(newDocketEntry).toBeTruthy();
