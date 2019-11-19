@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CancelDraftDocumentModal } from '../CancelDraftDocumentModal';
 import { CaseDetailHeader } from '../CaseDetailHeader';
+import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
@@ -24,6 +25,8 @@ export const CourtIssuedDocketEntry = connect(
     isEditingDocketEntry: state.isEditingDocketEntry,
     openCancelDraftDocumentModalSequence:
       sequences.openCancelDraftDocumentModalSequence,
+    openConfirmInitiateServiceModalSequence:
+      sequences.openConfirmInitiateServiceModalSequence,
     showModal: state.showModal,
     submitCourtIssuedDocketEntrySequence:
       sequences.submitCourtIssuedDocketEntrySequence,
@@ -38,6 +41,7 @@ export const CourtIssuedDocketEntry = connect(
     form,
     isEditingDocketEntry,
     openCancelDraftDocumentModalSequence,
+    openConfirmInitiateServiceModalSequence,
     showModal,
     submitCourtIssuedDocketEntrySequence,
     updateCourtIssuedDocketEntryFormValueSequence,
@@ -71,7 +75,12 @@ export const CourtIssuedDocketEntry = connect(
                   {form.generatedDocumentTitle}
                   {form.attachments && ' (Attachment(s))'}
                 </div>
-                <Button className="margin-right-0" onClick={() => {}}>
+                <Button
+                  className="margin-right-0"
+                  onClick={() => {
+                    openConfirmInitiateServiceModalSequence();
+                  }}
+                >
                   Serve to Parties
                 </Button>
               </div>
@@ -193,7 +202,12 @@ export const CourtIssuedDocketEntry = connect(
             </div>
           </div>
         </section>
-
+        {showModal === 'ConfirmInitiateServiceModal' && (
+          <ConfirmInitiateServiceModal
+            documentTitle={`${form.generatedDocumentTitle}
+        ${form.attachments ? ' (Attachment(s))' : ''}`}
+          />
+        )}
         {showModal === 'CancelDraftDocumentModal' && (
           <CancelDraftDocumentModal />
         )}
