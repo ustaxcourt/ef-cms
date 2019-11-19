@@ -99,6 +99,7 @@ import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessio
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
+import { initiateServiceSequence } from './sequences/initiateServiceSequence';
 import { loadOriginalProposedStipulatedDecisionSequence } from './sequences/loadOriginalProposedStipulatedDecisionSequence';
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
@@ -414,6 +415,7 @@ export const presenter = {
     gotoTrialSessionsSequence,
     gotoUserContactEditSequence,
     gotoViewAllDocumentsSequence,
+    initiateServiceSequence,
     loadOriginalProposedStipulatedDecisionSequence,
     loadPdfSequence,
     loginWithCodeSequence,
