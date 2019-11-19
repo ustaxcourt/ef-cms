@@ -33,8 +33,9 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     })),
   ];
 
-  const formattedDocumentTitle = `${form.generatedDocumentTitle}
-${form.attachments ? ' (Attachment(s))' : ''}`;
+  const formattedDocumentTitle = `${form.generatedDocumentTitle}${
+    form.attachments ? ' (Attachment(s))' : ''
+  }`;
 
   return {
     documentTypes,
