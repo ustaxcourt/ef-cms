@@ -13,6 +13,10 @@ describe('getCaseAssociation', () => {
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.practitioner,
+      userId: '123',
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -22,10 +26,6 @@ describe('getCaseAssociation', () => {
       state: {
         caseDetail: {
           practitioners: [{ userId: '123' }],
-        },
-        user: {
-          role: User.ROLES.practitioner,
-          userId: '123',
         },
       },
     });
@@ -40,6 +40,10 @@ describe('getCaseAssociation', () => {
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.practitioner,
+      userId: '1234',
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -49,10 +53,6 @@ describe('getCaseAssociation', () => {
       state: {
         caseDetail: {
           practitioners: [{ userId: '123' }],
-        },
-        user: {
-          role: User.ROLES.practitioner,
-          userId: '1234',
         },
       },
     });
@@ -67,6 +67,10 @@ describe('getCaseAssociation', () => {
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.practitioner,
+      userId: '1234',
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -76,10 +80,6 @@ describe('getCaseAssociation', () => {
       state: {
         caseDetail: {
           practitioners: [{ userId: '123' }],
-        },
-        user: {
-          role: User.ROLES.practitioner,
-          userId: '1234',
         },
       },
     });
@@ -94,6 +94,10 @@ describe('getCaseAssociation', () => {
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.respondent,
+      userId: '789',
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -103,10 +107,6 @@ describe('getCaseAssociation', () => {
       state: {
         caseDetail: {
           respondents: [{ userId: '789' }],
-        },
-        user: {
-          role: User.ROLES.respondent,
-          userId: '789',
         },
       },
     });
@@ -121,6 +121,10 @@ describe('getCaseAssociation', () => {
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.respondent,
+      userId: '789',
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -130,10 +134,6 @@ describe('getCaseAssociation', () => {
       state: {
         caseDetail: {
           respondent: { userId: '123' },
-        },
-        user: {
-          role: User.ROLES.respondent,
-          userId: '789',
         },
       },
     });
@@ -148,6 +148,10 @@ describe('getCaseAssociation', () => {
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.petitioner,
+      userId: '123',
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -156,10 +160,6 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          userId: '123',
-        },
-        user: {
-          role: User.ROLES.petitioner,
           userId: '123',
         },
       },
@@ -175,6 +175,10 @@ describe('getCaseAssociation', () => {
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.petitioner,
+      userId: '789',
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -184,10 +188,6 @@ describe('getCaseAssociation', () => {
       state: {
         caseDetail: {
           userId: '123',
-        },
-        user: {
-          role: User.ROLES.petitioner,
-          userId: '789',
         },
       },
     });
@@ -202,6 +202,10 @@ describe('getCaseAssociation', () => {
     presenter.providers.applicationContext.getUseCases = () => ({
       verifyPendingCaseForUserInteractor: verifyPendingCaseForUserStub,
     });
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    });
 
     const results = await runAction(getCaseAssociationAction, {
       modules: {
@@ -211,10 +215,6 @@ describe('getCaseAssociation', () => {
       state: {
         caseDetail: {
           practitioners: [{ userId: '123' }],
-        },
-        user: {
-          role: User.ROLES.petitionsClerk,
-          userId: '123',
         },
       },
     });

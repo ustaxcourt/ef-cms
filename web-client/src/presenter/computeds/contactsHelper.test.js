@@ -10,14 +10,19 @@ const contactsHelper = withAppContextDecorator(
   applicationContext,
 );
 
+const petitionerUser = {
+  role: User.ROLES.petitioner,
+};
+const practitionerUser = {
+  role: User.ROLES.practitioner,
+};
+
 describe('contactsHelper', () => {
   it('should validate form view information for party type Conservator and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: { partyType: ContactFactory.PARTY_TYPES.conservator },
-        user: {
-          role: User.ROLES.petitioner,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -31,12 +36,10 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Corporation and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: { partyType: ContactFactory.PARTY_TYPES.corporation },
-        user: {
-          role: User.ROLES.petitioner,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -49,12 +52,10 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Custodian and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: { partyType: ContactFactory.PARTY_TYPES.custodian },
-        user: {
-          role: User.ROLES.petitioner,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -68,12 +69,10 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Donor and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: { partyType: ContactFactory.PARTY_TYPES.donor },
-        user: {
-          role: User.ROLES.petitioner,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -85,13 +84,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc. and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.estate,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -108,13 +105,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc. and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -128,13 +123,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Guardian and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.guardian,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -149,13 +142,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary) and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -171,13 +162,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary) and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -192,13 +181,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime) and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -213,13 +200,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Partnership (as a partner other than Tax Matters Partner) and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -235,13 +220,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Partnership (as the Tax Matters Partner) and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -256,13 +239,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Petitioner and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -275,13 +256,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Petitioner & Spouse and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -300,13 +279,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Petitioner & Deceased Spouse and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -323,13 +300,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Surviving Spouse and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -344,13 +319,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Transferee and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.transferee,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -363,13 +336,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Trust and user role petitioner', () => {
+    applicationContext.getCurrentUser = () => petitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.trust,
-        },
-        user: {
-          role: User.ROLES.petitioner,
         },
       },
     });
@@ -384,12 +355,10 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Conservator and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: { partyType: ContactFactory.PARTY_TYPES.conservator },
-        user: {
-          role: User.ROLES.practitioner,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -403,12 +372,10 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Corporation and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: { partyType: ContactFactory.PARTY_TYPES.corporation },
-        user: {
-          role: User.ROLES.practitioner,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -421,12 +388,10 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Custodian and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: { partyType: ContactFactory.PARTY_TYPES.custodian },
-        user: {
-          role: User.ROLES.practitioner,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -440,12 +405,10 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Donor and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: { partyType: ContactFactory.PARTY_TYPES.donor },
-        user: {
-          role: User.ROLES.practitioner,
-        },
       },
     });
     expect(result).toMatchObject({
@@ -457,13 +420,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Estate with an Executor/Personal Representative/Fiduciary/etc. and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.estate,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -480,13 +441,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Estate without an Executor/Personal Representative/Fiduciary/etc. and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -500,13 +459,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Guardian and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.guardian,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -521,13 +478,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Next Friend for a Legally Incompetent Person (Without a Guardian, Conservator, or other like Fiduciary) and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -543,13 +498,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Next Friend for a Minor (Without a Guardian, Conservator, or other like Fiduciary) and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -564,13 +517,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Partnership (as a partnership representative under the BBA regime) and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -585,13 +536,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Partnership (as a partner other than Tax Matters Partner) and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -606,13 +555,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Partnership (as the Tax Matters Partner) and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -627,13 +574,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Petitioner and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -646,13 +591,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Petitioner & Spouse and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -671,13 +614,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Petitioner & Deceased Spouse and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -694,13 +635,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Surviving Spouse and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -715,13 +654,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Transferee and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.transferee,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });
@@ -734,13 +671,11 @@ describe('contactsHelper', () => {
   });
 
   it('should validate form view information for party type Trust and user role practitioner', () => {
+    applicationContext.getCurrentUser = () => practitionerUser;
     const result = runCompute(contactsHelper, {
       state: {
         form: {
           partyType: ContactFactory.PARTY_TYPES.trust,
-        },
-        user: {
-          role: User.ROLES.practitioner,
         },
       },
     });

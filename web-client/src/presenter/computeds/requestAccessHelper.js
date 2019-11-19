@@ -3,8 +3,8 @@ import { state } from 'cerebral';
 
 export const requestAccessHelper = (get, applicationContext) => {
   const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const user = applicationContext.getCurrentUser();
   const caseDetail = get(state.caseDetail);
-  const userRole = get(state.user.role);
   const form = get(state.form);
   const documentType = get(state.form.documentType);
   const validationErrors = get(state.validationErrors);
@@ -35,7 +35,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     },
   ];
 
-  if (userRole === USER_ROLES.practitioner) {
+  if (user.role === USER_ROLES.practitioner) {
     documents.push(
       {
         documentTitleTemplate:
@@ -67,7 +67,10 @@ export const requestAccessHelper = (get, applicationContext) => {
 
   const documentsForSelect = getDocumentTypesForSelect(documents);
 
-  const shouldShowExhibits = !['practitioner', 'respondent'].includes(userRole);
+  const shouldShowExhibits = ![
+    USER_ROLES.practitioner,
+    USER_ROLES.respondent,
+  ].includes(user.role);
 
   const documentWithExhibits =
     [
@@ -108,7 +111,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     (documentWithAttachments && !form.attachments) ||
     (documentWithSupportingDocuments && !form.hasSupportingDocuments);
 
-  const showPartiesRepresenting = userRole === USER_ROLES.practitioner;
+  const showPartiesRepresenting = user.role === USER_ROLES.practitioner;
 
   let exported = {
     certificateOfServiceDateFormatted,

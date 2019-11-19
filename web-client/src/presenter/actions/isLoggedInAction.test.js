@@ -15,23 +15,27 @@ presenter.providers.router = {
   route: () => {},
 };
 
+presenter.providers.applicationContext = {};
+
 describe('isLoggedInAction', () => {
-  it('should call path.isLoggedIn if state.user is defined', async () => {
+  it('should call path.isLoggedIn if currentUser is defined', async () => {
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      email: 'petitioner1@example.com',
+    });
+
     await runAction(isLoggedInAction, {
       modules: {
         presenter,
       },
-      state: {
-        user: {
-          email: 'petitioner1@example.com',
-        },
-      },
+      state: {},
     });
 
     expect(isLoggedInStub.called).toEqual(true);
   });
 
-  it('should call the unauthorized path if state.user is undefined', async () => {
+  it('should call the unauthorized path if currentUser is undefined', async () => {
+    presenter.providers.applicationContext.getCurrentUser = () => {};
+
     await runAction(isLoggedInAction, {
       modules: {
         presenter,

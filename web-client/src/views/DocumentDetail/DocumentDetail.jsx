@@ -155,7 +155,7 @@ export const DocumentDetail = connect(
               >
                 <FontAwesomeIcon
                   className="margin-right-05"
-                  icon="print"
+                  icon="plus-circle"
                   size="1x"
                 />
                 Add Docket Entry

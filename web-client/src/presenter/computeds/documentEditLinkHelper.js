@@ -9,7 +9,7 @@ export const documentEditLinkHelper = (get, applicationContext) => ({
   shouldLinkToEditCourtIssued,
   workItemIdToMarkAsRead,
 }) => {
-  const currentUser = get(state.user);
+  const currentUser = applicationContext.getCurrentUser();
   const userRole = currentUser.role;
   const { box, workQueueIsInternal } = get(state.workQueueToDisplay);
   const { USER_ROLES } = applicationContext.getConstants();
