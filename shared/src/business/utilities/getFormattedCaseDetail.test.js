@@ -93,6 +93,8 @@ describe('formatCase', () => {
     expect(result.documents[0]).toHaveProperty('isStatusServed');
     expect(result.documents[0]).toHaveProperty('isPetition');
     expect(result.documents[0]).toHaveProperty('servedPartiesCode');
+
+    expect(result.documents[1].qcWorkItemsUntouched).toBeFalsy();
   });
 
   it('should format docket records if the case docket record array is set', () => {
