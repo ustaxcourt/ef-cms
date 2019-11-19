@@ -152,6 +152,38 @@ export const CourtIssuedDocketEntry = connect(
                   </fieldset>
                 </FormGroup>
 
+                {addCourtIssuedDocketEntryHelper.showServiceStamp && (
+                  <FormGroup errorText={validationErrors.serviceStamp}>
+                    <fieldset className="usa-fieldset">
+                      <legend className="usa-legend">Service Stamp</legend>
+                      {['Served', 'Entered and Served'].map((option, idx) => (
+                        <div className="usa-radio usa-radio__inline" key={idx}>
+                          <input
+                            checked={form.serviceStamp === option}
+                            className="usa-radio__input"
+                            id={`service-stamp-${idx}`}
+                            name="serviceStamp"
+                            type="radio"
+                            onChange={e => {
+                              updateCourtIssuedDocketEntryFormValueSequence({
+                                key: e.target.name,
+                                value: false,
+                              });
+                              validateCourtIssuedDocketEntrySequence();
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor={`service-stamp-${idx}`}
+                          >
+                            {option}
+                          </label>
+                        </div>
+                      ))}
+                    </fieldset>
+                  </FormGroup>
+                )}
+
                 <p>
                   <b>Service Parties</b>
                 </p>
