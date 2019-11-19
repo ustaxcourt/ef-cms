@@ -1,8 +1,10 @@
-const { caseSearchInteractor } = require('./caseSearchInteractor');
+const {
+  caseAdvancedSearchInteractor,
+} = require('./caseAdvancedSearchInteractor');
 import { CaseSearch } from '../entities/cases/CaseSearch';
 import { formatNow } from '../utilities/DateHandler';
 
-describe('caseSearchInteractor', () => {
+describe('caseAdvancedSearchInteractor', () => {
   let searchSpy;
 
   const applicationContext = {
@@ -20,7 +22,7 @@ describe('caseSearchInteractor', () => {
       return {};
     });
 
-    const results = await caseSearchInteractor({
+    const results = await caseAdvancedSearchInteractor({
       applicationContext,
     });
 
@@ -47,7 +49,7 @@ describe('caseSearchInteractor', () => {
       };
     });
 
-    const results = await caseSearchInteractor({
+    const results = await caseAdvancedSearchInteractor({
       applicationContext,
       petitionerName: 'test person',
     });
@@ -146,7 +148,7 @@ describe('caseSearchInteractor', () => {
       }
     });
 
-    const results = await caseSearchInteractor({
+    const results = await caseAdvancedSearchInteractor({
       applicationContext,
       countryType: 'domestic',
       petitionerName: 'test person',
@@ -210,7 +212,7 @@ describe('caseSearchInteractor', () => {
   it('uses a default minimum year when providing only a maximum year', async () => {
     searchSpy = jest.fn();
 
-    await caseSearchInteractor({
+    await caseAdvancedSearchInteractor({
       applicationContext,
       petitionerName: 'test person',
       yearFiledMax: '2018',
@@ -230,7 +232,7 @@ describe('caseSearchInteractor', () => {
     searchSpy = jest.fn();
     const currentYear = formatNow('YYYY');
 
-    await caseSearchInteractor({
+    await caseAdvancedSearchInteractor({
       applicationContext,
       petitionerName: 'test person',
       yearFiledMin: '2016',

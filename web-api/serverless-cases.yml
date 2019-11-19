@@ -235,8 +235,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  caseSearch:
-    handler: web-api/${self:provider.dir}/casesHandlers.caseSearchLambda
+  caseAdvancedSearch:
+    handler: web-api/${self:provider.dir}/casesHandlers.caseAdvancedSearchLambda
     events:
       - http:
           path: /search
