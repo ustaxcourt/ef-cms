@@ -57,6 +57,7 @@ function DocketEntryFactory(rawProps) {
     this.objections = rawPropsParam.objections;
     this.ordinalValue = rawPropsParam.ordinalValue;
     this.partyPrimary = rawPropsParam.partyPrimary;
+    this.trialLocation = rawPropsParam.trialLocation;
     this.partyRespondent = rawPropsParam.partyRespondent;
     this.partySecondary = rawPropsParam.partySecondary;
     this.previousDocument = rawPropsParam.previousDocument;

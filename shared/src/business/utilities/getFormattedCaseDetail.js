@@ -125,9 +125,11 @@ const formatDocketRecordWithDocument = (
         (!document.isCourtIssuedDocument && document.isFileAttached === false)
       );
 
-      document.qcWorkItemsUntouched = qcWorkItems.reduce((acc, wi) => {
-        return acc && !wi.isRead && !wi.completedAt;
-      }, true);
+      document.qcWorkItemsUntouched =
+        !!qcWorkItems.length &&
+        qcWorkItems.reduce((acc, wi) => {
+          return acc && !wi.isRead && !wi.completedAt;
+        }, true);
 
       document.isPetition = document.eventCode === 'P';
       document.canEdit = !document.isPetition && !document.qcWorkItemsCompleted;
