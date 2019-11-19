@@ -1,9 +1,11 @@
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
-export const addCourtIssuedDocketEntryHelper = get => {
-  const { COURT_ISSUED_EVENT_CODES } = get(state.constants);
+export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
+  const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
+  const form = get(state.form);
+
   const documentTypes = COURT_ISSUED_EVENT_CODES.map(type => ({
     ...type,
     label: type.documentType,
@@ -31,8 +33,13 @@ export const addCourtIssuedDocketEntryHelper = get => {
     })),
   ];
 
+  const formattedDocumentTitle = `${form.generatedDocumentTitle}${
+    form.attachments ? ' (Attachment(s))' : ''
+  }`;
+
   return {
     documentTypes,
+    formattedDocumentTitle,
     serviceParties,
   };
 };

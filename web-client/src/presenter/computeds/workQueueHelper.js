@@ -4,7 +4,7 @@ export const workQueueHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const selectedWorkItems = get(state.selectedWorkItems);
   const workQueueToDisplay = get(state.workQueueToDisplay);
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { USER_ROLES } = applicationContext.getConstants();
   const isJudge = user.role === USER_ROLES.judge;
   const { myInboxUnreadCount, qcUnreadCount } = get(state.notifications);
   const { workQueueIsInternal } = workQueueToDisplay;

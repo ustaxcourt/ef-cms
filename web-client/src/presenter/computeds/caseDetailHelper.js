@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 export const caseDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const { Case } = applicationContext.getEntityConstructors();
-  const { STATUS_TYPES, USER_ROLES } = get(state.constants);
+  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const showActionRequired =

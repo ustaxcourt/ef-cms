@@ -41,79 +41,79 @@ describe('runPathForUserRoleAction', () => {
   });
 
   it('should return the petitioner path for user role petitioner', async () => {
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.petitioner,
+    });
     await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
-      state: {
-        constants: { USER_ROLES: User.ROLES },
-        user: { role: User.ROLES.petitioner },
-      },
+      state: {},
     });
     expect(petitionerStub.calledOnce).toEqual(true);
   });
 
   it('should return the practitioner path for user role practitioner', async () => {
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.practitioner,
+    });
     await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
-      state: {
-        constants: { USER_ROLES: User.ROLES },
-        user: { role: User.ROLES.practitioner },
-      },
+      state: {},
     });
     expect(practitionerStub.calledOnce).toEqual(true);
   });
 
   it('should return the respondent path for user role respondent', async () => {
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.respondent,
+    });
     await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
-      state: {
-        constants: { USER_ROLES: User.ROLES },
-        user: { role: User.ROLES.respondent },
-      },
+      state: {},
     });
     expect(respondentStub.calledOnce).toEqual(true);
   });
 
   it('should return the petitionsclerk path for user role petitionsclerk', async () => {
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.petitionsClerk,
+    });
     await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
-      state: {
-        constants: { USER_ROLES: User.ROLES },
-        user: { role: User.ROLES.petitionsClerk },
-      },
+      state: {},
     });
     expect(petitionsclerkStub.calledOnce).toEqual(true);
   });
 
   it('should return the docketclerk path for user role docketclerk', async () => {
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.docketClerk,
+    });
     await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
-      state: {
-        constants: { USER_ROLES: User.ROLES },
-        user: { role: User.ROLES.docketClerk },
-      },
+      state: {},
     });
     expect(docketclerkStub.calledOnce).toEqual(true);
   });
 
   it('should return the judge path for user role judge', async () => {
+    presenter.providers.applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.judge,
+    });
     await runAction(runPathForUserRoleAction, {
       modules: {
         presenter,
       },
-      state: {
-        constants: { USER_ROLES: User.ROLES },
-        user: { role: User.ROLES.judge },
-      },
+      state: {},
     });
     expect(judgeStub.calledOnce).toEqual(true);
   });
