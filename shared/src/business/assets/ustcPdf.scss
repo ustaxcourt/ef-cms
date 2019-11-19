@@ -9,7 +9,6 @@ body {
 
   .page-container {
     position: relative;
-    margin: 0.5in;
 
     .margin-top-80 {
       margin-top: 80px;
@@ -87,6 +86,7 @@ body {
 
     table {
       width: 100%;
+      margin-top: 0.75in;
       border: 1px solid #ccc;
       -webkit-border-horizontal-spacing: 0px;
 
@@ -119,4 +119,8 @@ body {
     top: 9.5in;
     left: 1in;
   }
+}
+
+@page {
+  margin: 0.5in;
 }
