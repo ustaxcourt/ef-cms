@@ -164,6 +164,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  serveSignedStipDecision:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.serveCourtIssuedDocumentLambda
+    events:
+      - http:
+          path: /{caseId}/{documentId}/serve-court-issued
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   createWorkItem:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.createWorkItemLambda
     events:
