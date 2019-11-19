@@ -4,7 +4,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
-const { VALIDATION_ERROR_MESSAGES } = require('./validationErrorMessages');
+const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 /**
  *

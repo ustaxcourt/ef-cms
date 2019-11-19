@@ -6,7 +6,7 @@ const {
 } = require('./validateCourtIssuedDocketEntryInteractor');
 const {
   VALIDATION_ERROR_MESSAGES,
-} = require('../../entities/courtIssuedDocument/validationErrorMessages');
+} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 
 describe('validateCourtIssuedDocketEntryInteractor', () => {
   it('returns null errors on empty entryMetadata', () => {
