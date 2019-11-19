@@ -3,7 +3,7 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
-const { VALIDATION_ERROR_MESSAGES } = require('./validationErrorMessages');
+const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 /**
  *
@@ -26,7 +26,7 @@ CourtIssuedDocumentTypeB.schema = {
   attachments: joi.boolean().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
-  freeText: joi.string().required(),
+  freeText: joi.string().optional(),
   judge: joi.string().required(),
 };
 
