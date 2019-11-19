@@ -13,14 +13,14 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.updatedDocumentMetadata the document metadata
+ * @param {object} providers.documentMetadata the document metadata
  * @param {string} providers.primaryDocumentFileId the id of the primary document file
  * @returns {object} the updated case after the documents are added
  */
 exports.updateDocketEntryInteractor = async ({
   applicationContext,
+  documentMetadata,
   primaryDocumentFileId,
-  updatedDocumentMetadata,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -28,7 +28,7 @@ exports.updateDocketEntryInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseId } = updatedDocumentMetadata;
+  const { caseId } = documentMetadata;
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
@@ -49,9 +49,9 @@ exports.updateDocketEntryInteractor = async ({
   const documentEntity = new Document(
     {
       ...currentDocument,
-      ...updatedDocumentMetadata,
+      ...documentMetadata,
       documentId: primaryDocumentFileId,
-      documentType: updatedDocumentMetadata.documentType,
+      documentType: documentMetadata.documentType,
       relationship: 'primaryDocument',
       userId: user.userId,
     },
@@ -60,16 +60,16 @@ exports.updateDocketEntryInteractor = async ({
   documentEntity.generateFiledBy(caseToUpdate);
 
   const docketRecordEntry = new DocketRecord({
-    description: updatedDocumentMetadata.documentTitle,
+    description: documentMetadata.documentTitle,
     documentId: documentEntity.documentId,
-    editState: JSON.stringify(updatedDocumentMetadata),
+    editState: JSON.stringify(documentMetadata),
     filingDate: documentEntity.receivedAt,
   });
 
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
   caseEntity.updateDocument(documentEntity);
 
-  if (updatedDocumentMetadata.isFileAttached) {
+  if (documentMetadata.isFileAttached) {
     const workItemToDelete = currentDocument.workItems.find(
       workItem => !workItem.document.isFileAttached,
     );
