@@ -1,6 +1,6 @@
 const moment = require('moment');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { VALIDATION_ERROR_MESSAGES } = require('./validationErrorMessages');
+const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeE', () => {
   describe('validation', () => {
