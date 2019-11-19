@@ -4,6 +4,7 @@ const { Case } = require('../entities/cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
 const { Document } = require('../entities/Document');
 const { User } = require('../entities/User');
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   let applicationContext;
@@ -16,7 +17,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   };
 
   const dynamicallyGeneratedDocketEntries = [];
-  const documentsWithCaseClosingEventCodes = Document.CASE_CLOSING_EVENT_CODES.map(
+  const documentsWithCaseClosingEventCodes = ENTERED_AND_SERVED_EVENT_CODES.map(
     eventCode => {
       const documentId = uuidv4();
 
