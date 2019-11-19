@@ -1,4 +1,7 @@
 const {
+  ENTERED_AND_SERVED_EVENT_CODES,
+} = require('../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
@@ -6,7 +9,6 @@ const { Case } = require('../entities/cases/Case');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { formatDateString } = require('../utilities/DateHandler');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
 /**
  * serveCourtIssuedDocumentInteractor
