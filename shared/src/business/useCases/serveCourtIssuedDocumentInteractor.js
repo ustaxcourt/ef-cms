@@ -49,6 +49,10 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     throw new NotFoundError(`Document ${documentId} was not found.`);
   }
 
+  const docketEntry = caseEntity.docketRecord.find(
+    entry => entry.documentId === documentId,
+  );
+
   // TODO: mopve this to a helper
   const aggregateServedParties = parties => {
     const aggregated = [];
@@ -73,11 +77,11 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   courtIssuedDocument.setAsServed(servedParties);
 
-  // TODO: Update the current docket record
-  const updatedDocketRecordEntity = new DocketRecord({});
+  const updatedDocketRecordEntity = new DocketRecord(docketEntry);
   updatedDocketRecordEntity.validate();
 
-  caseEntity.updateDocketRecord(updatedDocketRecordEntity);
+  // TODO: should the filing date be updated?
+  caseEntity.updateDocketRecordEntry(updatedDocketRecordEntity);
 
   const updatedCase = await applicationContext
     .getPersistenceGateway()
