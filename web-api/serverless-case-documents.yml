@@ -164,7 +164,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  serveSignedStipDecision:
+  serveCourtIssuedDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.serveCourtIssuedDocumentLambda
     events:
       - http:

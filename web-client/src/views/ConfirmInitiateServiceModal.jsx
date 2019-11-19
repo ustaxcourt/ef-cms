@@ -6,7 +6,7 @@ import React from 'react';
 export const ConfirmInitiateServiceModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.initiateCourtIssuedServiceSequence,
+    confirmSequence: sequences.serveCourtIssuedDocumentSequence,
   },
   ({ cancelSequence, confirmSequence, documentTitle }) => {
     return (

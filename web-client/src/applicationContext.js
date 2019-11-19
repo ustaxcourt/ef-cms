@@ -137,7 +137,6 @@ import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
 import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
-import { initiateCourtIssuedServiceInteractor } from '../../shared/src/proxies/initiateCourtIssuedServiceProxy';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { pdfStyles } from '../../shared/src/tools/pdfStyles.js';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
@@ -151,6 +150,7 @@ import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxie
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
 import { saveIntermediateDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/saveIntermediateDocketEntryProxy';
 import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
+import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { serveSignedStipDecisionInteractor } from '../../shared/src/proxies/serveSignedStipDecisionProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
@@ -303,7 +303,6 @@ const allUseCases = {
   getUserInteractor,
   getUsersInSectionInteractor,
   getWorkItemInteractor,
-  initiateCourtIssuedServiceInteractor,
   loadPDFForSigningInteractor,
   prioritizeCaseInteractor,
   recallPetitionFromIRSHoldingQueueInteractor,
@@ -315,6 +314,7 @@ const allUseCases = {
   saveCaseDetailInternalEditInteractor,
   saveIntermediateDocketEntryInteractor,
   sendPetitionToIRSHoldingQueueInteractor,
+  serveCourtIssuedDocumentInteractor,
   serveSignedStipDecisionInteractor,
   setItemInteractor,
   setTrialSessionAsSwingSessionInteractor,
