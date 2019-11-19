@@ -66,6 +66,12 @@ export const DocketRecord = connect(
                   caseDetailHelper.showDocketRecordInProgressState &&
                   document &&
                   document.isInProgress;
+
+                const qcWorkItemsUntouched =
+                  !isInProgress &&
+                  caseDetailHelper.showQcWorkItemsUntouchedState &&
+                  document &&
+                  document.qcWorkItemsUntouched;
                 return (
                   <tr
                     className={classNames(
@@ -73,6 +79,7 @@ export const DocketRecord = connect(
                         document.isInProgress &&
                         caseDetailHelper.showDocketRecordInProgressState &&
                         'in-progress',
+                      qcWorkItemsUntouched && 'qc-untouched',
                     )}
                     key={index}
                   >
@@ -95,6 +102,10 @@ export const DocketRecord = connect(
 
                       {isInProgress && (
                         <FontAwesomeIcon icon={['fas', 'thumbtack']} />
+                      )}
+
+                      {qcWorkItemsUntouched && (
+                        <FontAwesomeIcon icon={['fa', 'star']} />
                       )}
 
                       {document &&
