@@ -20,7 +20,7 @@ export const forwardWorkItemAction = async ({
   const { workItemId } = props;
 
   const form = get(state.form)[props.workItemId];
-  const userId = get(state.user.userId);
+  const { userId } = applicationContext.getCurrentUser();
 
   const updatedWorkItem = await applicationContext
     .getUseCases()

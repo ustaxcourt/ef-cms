@@ -1,3 +1,4 @@
+import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { getTrialCityName } from '../computeds/formattedTrialCity';
 import { runCompute } from 'cerebral/test';
@@ -8,6 +9,10 @@ const startCaseHelper = withAppContextDecorator(
   startCaseHelperComputed,
   applicationContext,
 );
+
+applicationContext.getCurrentUser = () => ({
+  role: User.ROLES.petitioner,
+});
 
 describe('start a case computed', () => {
   it('sets showPetitionFileValid false when the petition file is not added to the petition', () => {

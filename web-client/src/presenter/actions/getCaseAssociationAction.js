@@ -11,17 +11,16 @@ import { state } from 'cerebral';
  * @returns {object} contains the association returned from the use case
  */
 export const getCaseAssociationAction = async ({ applicationContext, get }) => {
-  const userRole = get(state.user.role);
+  const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   let isAssociated = false;
   let pendingAssociation = false;
 
-  if (userRole === USER_ROLES.practitioner) {
+  if (user.role === USER_ROLES.practitioner) {
     const caseDetailPractitioners = get(state.caseDetail.practitioners);
-    const userId = get(state.user.userId);
     const caseId = get(state.caseDetail.caseId);
 
-    isAssociated = some(caseDetailPractitioners, { userId });
+    isAssociated = some(caseDetailPractitioners, { userId: user.userId });
 
     if (!isAssociated) {
       pendingAssociation = await applicationContext
@@ -29,17 +28,15 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
         .verifyPendingCaseForUserInteractor({
           applicationContext,
           caseId,
-          userId,
+          userId: user.userId,
         });
     }
-  } else if (userRole === USER_ROLES.respondent) {
+  } else if (user.role === USER_ROLES.respondent) {
     const caseDetailRespondents = get(state.caseDetail.respondents);
-    const userId = get(state.user.userId);
-    isAssociated = some(caseDetailRespondents, { userId });
-  } else if (userRole === USER_ROLES.petitioner) {
+    isAssociated = some(caseDetailRespondents, { userId: user.userId });
+  } else if (user.role === USER_ROLES.petitioner) {
     const caseUserId = get(state.caseDetail.userId);
-    const userId = get(state.user.userId);
-    isAssociated = caseUserId === userId;
+    isAssociated = caseUserId === user.userId;
   }
 
   return { isAssociated, pendingAssociation };
