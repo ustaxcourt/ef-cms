@@ -53,7 +53,7 @@ import { associateRespondentWithCaseInteractor } from '../../shared/src/proxies/
 import { authorizeCodeInteractor } from '../../shared/src/business/useCases/authorizeCodeInteractor';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
-import { caseSearchInteractor } from '../../shared/src/proxies/caseSearchProxy';
+import { caseAdvancedSearchInteractor } from '../../shared/src/proxies/caseAdvancedSearchProxy';
 import {
   compareCasesByDocketNumber,
   formatCase as formatCaseForTrialSession,
@@ -240,7 +240,7 @@ const allUseCases = {
   authorizeCodeInteractor,
   batchDownloadTrialSessionInteractor,
   blockCaseFromTrialInteractor,
-  caseSearchInteractor,
+  caseAdvancedSearchInteractor,
   completeDocketEntryQCInteractor,
   completeWorkItemInteractor,
   createCaseDeadlineInteractor,

@@ -49,6 +49,9 @@ const {
   blockCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/blockCaseFromTrialInteractor');
 const {
+  caseAdvancedSearchInteractor,
+} = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
+const {
   CaseExternalIncomplete,
 } = require('../../shared/src/business/entities/cases/CaseExternalIncomplete');
 const {
@@ -57,9 +60,6 @@ const {
 const {
   CaseSearch,
 } = require('../../shared/src/business/entities/cases/CaseSearch');
-const {
-  caseSearchInteractor,
-} = require('../../shared/src/business/useCases/caseSearchInteractor');
 const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
@@ -907,7 +907,7 @@ module.exports = (appContextUser = {}) => {
         associateRespondentWithCaseInteractor,
         batchDownloadTrialSessionInteractor,
         blockCaseFromTrialInteractor,
-        caseSearchInteractor,
+        caseAdvancedSearchInteractor,
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
