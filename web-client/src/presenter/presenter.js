@@ -125,6 +125,7 @@ import { openCompleteSelectDocumentTypeModalSequence } from './sequences/openCom
 import { openConfirmDeleteBatchModalSequence } from './sequences/openConfirmDeleteBatchModalSequence';
 import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDeletePDFModalSequence';
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
+import { openConfirmInitiateServiceModalSequence } from './sequences/openConfirmInitiateServiceModalSequence';
 import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
 import { openConfirmRescanBatchModalSequence } from './sequences/openConfirmRescanBatchModalSequence';
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
@@ -439,6 +440,7 @@ export const presenter = {
     openConfirmDeleteBatchModalSequence,
     openConfirmDeletePDFModalSequence,
     openConfirmEditModalSequence,
+    openConfirmInitiateServiceModalSequence,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     openConfirmRescanBatchModalSequence,
     openCreateCaseDeadlineModalSequence,
