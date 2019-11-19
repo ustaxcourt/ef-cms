@@ -2,7 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { capitalize } = require('lodash');
+const { capitalize, omit } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
@@ -54,11 +54,12 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
 
   const documentEntity = new Document(
     {
-      ...document,
+      ...omit(document, 'filedBy'),
       attachments: documentMeta.attachments,
       documentTitle: documentMeta.generatedDocumentTitle,
       documentType: documentMeta.documentType,
       eventCode: documentMeta.eventCode,
+      filedBy: undefined,
       freeText: documentMeta.freeText,
       isFileAttached: true,
       scenario: documentMeta.scenario,
@@ -67,8 +68,6 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
     },
     { applicationContext },
   );
-
-  documentEntity.generateFiledBy(caseToUpdate);
 
   const workItem = new WorkItem(
     {
