@@ -21,6 +21,7 @@ import Select from 'react-select';
 export const CourtIssuedDocketEntry = connect(
   {
     addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
+    constants: state.constants,
     form: state.form,
     isEditingDocketEntry: state.isEditingDocketEntry,
     openCancelDraftDocumentModalSequence:
@@ -38,6 +39,7 @@ export const CourtIssuedDocketEntry = connect(
   },
   ({
     addCourtIssuedDocketEntryHelper,
+    constants,
     form,
     isEditingDocketEntry,
     openCancelDraftDocumentModalSequence,
@@ -164,7 +166,7 @@ export const CourtIssuedDocketEntry = connect(
                   <FormGroup errorText={validationErrors.serviceStamp}>
                     <fieldset className="usa-fieldset">
                       <legend className="usa-legend">Service Stamp</legend>
-                      {['Served', 'Entered and Served'].map((option, idx) => (
+                      {constants.SERVICE_STAMP_OPTIONS.map((option, idx) => (
                         <div className="usa-radio usa-radio__inline" key={idx}>
                           <input
                             checked={form.serviceStamp === option}
