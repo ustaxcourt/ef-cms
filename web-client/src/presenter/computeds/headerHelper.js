@@ -58,5 +58,6 @@ export const headerHelper = (get, applicationContext) => {
       userRole !== USER_ROLES.practitioner &&
       userRole !== USER_ROLES.respondent,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
+    userName: user && user.name,
   };
 };

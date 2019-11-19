@@ -26,7 +26,9 @@ const state = {
     practitioners: [{ name: 'Scar' }, { name: 'Zazu' }],
     respondents: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
   },
-  form: {},
+  form: {
+    generatedDocumentTitle: 'Circle of Life',
+  },
 };
 
 describe('addCourtIssuedDocketEntryHelper', () => {
@@ -109,5 +111,23 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       },
     });
     expect(result.showServiceStamp).toEqual(false);
+  });
+
+  it('should return a formatted document title', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
+
+    expect(result.formattedDocumentTitle).toEqual('Circle of Life');
+  });
+
+  it('should return a formatted document title with `(Attachment(s))` when present', () => {
+    const withAttachments = cloneDeep(state);
+    withAttachments.form.attachments = true;
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: withAttachments,
+    });
+
+    expect(result.formattedDocumentTitle).toEqual(
+      'Circle of Life (Attachment(s))',
+    );
   });
 });
