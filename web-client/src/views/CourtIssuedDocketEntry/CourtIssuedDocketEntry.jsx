@@ -194,19 +194,21 @@ export const CourtIssuedDocketEntry = connect(
                   </FormGroup>
                 )}
 
-                <p>
-                  <b>Service Parties</b>
-                </p>
+                <div className="usa-label" htmlFor="service-parties">
+                  Service Parties
+                </div>
 
-                {addCourtIssuedDocketEntryHelper.serviceParties.map(party => (
-                  <div className="margin-bottom-2" key={party.displayName}>
-                    {party.displayName}
-                    <div className="float-right">
-                      <b>Service: </b>
-                      {party.serviceType || 'Electronic'}
+                <div id="service-parties">
+                  {addCourtIssuedDocketEntryHelper.serviceParties.map(party => (
+                    <div className="margin-bottom-2" key={party.displayName}>
+                      {party.displayName}
+                      <div className="float-right">
+                        <b>Service: </b>
+                        {party.serviceType || 'Electronic'}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
               <section className="usa-section DocumentDetail">
