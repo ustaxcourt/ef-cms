@@ -8,7 +8,10 @@ import { state } from 'cerebral';
  * @param {Function} providers.props the cerebral props object used for getting the props.user
  * @returns {object} the user
  */
-export const initiateServiceAction = async ({ applicationContext, get }) => {
+export const initiateCourtIssuedServiceAction = async ({
+  applicationContext,
+  get,
+}) => {
   const documentId = get(state.documentId);
   const caseId = get(state.caseDetail.caseId);
 
