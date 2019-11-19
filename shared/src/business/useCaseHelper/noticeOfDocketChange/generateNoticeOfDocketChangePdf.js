@@ -41,7 +41,7 @@ exports.generatePage = generatePage;
  */
 exports.generateNoticeOfDocketChangePdf = async ({
   applicationContext,
-  reportTitle,
+  docketChangeInfo,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -66,7 +66,7 @@ exports.generateNoticeOfDocketChangePdf = async ({
 
     const contentResult = await generatePage({
       applicationContext,
-      reportTitle,
+      docketChangeInfo,
     });
 
     await page.setContent(contentResult);

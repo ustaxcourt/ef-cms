@@ -140,7 +140,16 @@ exports.completeDocketEntryQCInteractor = async ({
   });
 
   if (needsNoticeOfDocketChange) {
-    generateNoticeOfDocketChangePdf({ applicationContext });
+    generateNoticeOfDocketChangePdf({
+      applicationContext,
+      docketChangeInfo: {
+        caseTitle: 'This is a Case Title',
+        docketEntryIndex: '3',
+        docketNumber: '123-19X',
+        filingParties: { after: 'Cody', before: 'Joe' },
+        filingsAndProceedings: { after: 'Sausage', before: 'Pepperoni' },
+      },
+    });
   }
 
   if (needsNewCoversheet) {
