@@ -18,7 +18,7 @@ export const formattedDashboardTrialSessions = (get, applicationContext) => {
       .prepareDateFromString(session.startDate)
       .isBefore();
 
-  const userId = get(state.user.userId);
+  const { userId } = applicationContext.getCurrentUser();
   const trialSessions = get(state.trialSessions);
 
   //partition

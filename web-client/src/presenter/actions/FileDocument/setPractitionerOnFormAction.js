@@ -10,10 +10,9 @@ import { state } from 'cerebral';
  */
 export const setPractitionerOnFormAction = async ({
   applicationContext,
-  get,
   store,
 }) => {
-  const user = get(state.user);
+  const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
 
   if (user.role === USER_ROLES.practitioner) {
