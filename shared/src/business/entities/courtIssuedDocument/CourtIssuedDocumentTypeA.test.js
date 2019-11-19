@@ -38,7 +38,7 @@ describe('CourtIssuedDocumentTypeA', () => {
       });
     });
 
-    it('should be invalid if the document type is a generic order and serviceStamp is not present and not a valid option', () => {
+    it('should be invalid if the document type is a generic order and serviceStamp is present and not a valid option', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: 'Order [Anything]',

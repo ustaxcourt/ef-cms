@@ -62,6 +62,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       freeText: documentMeta.freeText,
       isFileAttached: true,
       scenario: documentMeta.scenario,
+      serviceStamp: documentMeta.serviceStamp,
       userId: user.userId,
     },
     { applicationContext },
