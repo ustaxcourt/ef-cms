@@ -22,7 +22,7 @@ html(lang="en")
         tbody
           each pendingItem in pendingItems
             tr
-              td= pendingItem.docketNumber
+              td.no-wrap #{pendingItem.docketNumber}#{pendingItem.docketNumberSuffix}
               td= pendingItem.formattedFiledDate
               td= pendingItem.caseCaptionNames
               td= pendingItem.formattedName
