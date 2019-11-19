@@ -57,6 +57,22 @@ exports.completeDocketEntryQCInteractor = async ({
     entryMetadata.filedBy != currentDocument.filedBy ||
     entryMetadata.documentTitle != currentDocument.documentTitle;
 
+  const docketChangeInfo = {
+    caseTitle: caseToUpdate.caseTitle,
+    docketEntryIndex: entryMetadata.index,
+    docketNumber: `${
+      caseToUpdate.docketNumber
+    }${caseToUpdate.docketNumberSuffix || ''}`,
+    filingParties: {
+      after: entryMetadata.filedBy,
+      before: currentDocument.filedBy,
+    },
+    filingsAndProceedings: {
+      after: entryMetadata.documentTitle,
+      before: currentDocument.documentTitle,
+    },
+  };
+
   const documentEntity = new Document(
     {
       workItems: currentDocument.workItems,
@@ -142,13 +158,7 @@ exports.completeDocketEntryQCInteractor = async ({
   if (needsNoticeOfDocketChange) {
     generateNoticeOfDocketChangePdf({
       applicationContext,
-      docketChangeInfo: {
-        caseTitle: 'This is a Case Title',
-        docketEntryIndex: '3',
-        docketNumber: '123-19X',
-        filingParties: { after: 'Cody', before: 'Joe' },
-        filingsAndProceedings: { after: 'Sausage', before: 'Pepperoni' },
-      },
+      docketChangeInfo,
     });
   }
 
