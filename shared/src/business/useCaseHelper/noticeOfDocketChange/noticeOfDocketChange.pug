@@ -19,6 +19,14 @@ html(lang="en")
       h3 Docket Entry No. #{docketEntryIndex} has been changed
       p
         if filingsAndProceedings
-          | “#{filingsAndProceedings.before}” has been changed to “#{filingsAndProceedings.after}”.  
+          | 
+          b “#{filingsAndProceedings.before}”
+          | has been changed to 
+          b “#{filingsAndProceedings.after}”
+          | .
         if filingParties
-          | “#{filingParties.before}” has been changed to “#{filingParties.after}”.
+          | The filing party/parties has been changed from 
+          b “#{filingParties.before}”
+          | to 
+          b “#{filingParties.after}”
+          | .
