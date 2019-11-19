@@ -79,6 +79,40 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     ]);
   });
 
+  it('should return showServiceStamp true if the selected event code is O', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        ...state,
+        form: {
+          eventCode: 'O',
+        },
+      },
+    });
+    expect(result.showServiceStamp).toEqual(true);
+  });
+
+  it('should return showServiceStamp false if an event code is not selected on the form', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        ...state,
+        form: {},
+      },
+    });
+    expect(result.showServiceStamp).toEqual(false);
+  });
+
+  it('should return showServiceStamp false if the selected event code is anything other than O', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        ...state,
+        form: {
+          eventCode: 'OLA',
+        },
+      },
+    });
+    expect(result.showServiceStamp).toEqual(false);
+  });
+
   it('should return a formatted document title', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
 

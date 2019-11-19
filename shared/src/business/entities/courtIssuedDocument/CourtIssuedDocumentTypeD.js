@@ -1,10 +1,21 @@
 const joi = require('joi-browser');
+const moment = require('moment');
+const {
+  createISODateString,
+  formatDateString,
+  FORMATS,
+} = require('../../utilities/DateHandler');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { formatDateString } = require('../../utilities/DateHandler');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
-const { VALIDATION_ERROR_MESSAGES } = require('./validationErrorMessages');
+const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
+
+const yesterdayMoment = moment().subtract(1, 'd');
+const yesterdayFormatted = formatDateString(
+  createISODateString(yesterdayMoment),
+  FORMATS.MMDDYYYY,
+);
 
 /**
  *
@@ -32,11 +43,11 @@ CourtIssuedDocumentTypeD.schema = {
   date: joi
     .date()
     .iso()
-    .max('now')
+    .min(yesterdayFormatted)
     .required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
-  freeText: joi.string().required(),
+  freeText: joi.string().optional(),
 };
 
 joiValidationDecorator(

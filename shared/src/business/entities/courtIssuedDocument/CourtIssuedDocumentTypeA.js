@@ -1,9 +1,13 @@
 const joi = require('joi-browser');
 const {
+  GENERIC_ORDER_DOCUMENT_TYPE,
+  SERVICE_STAMP_OPTIONS,
+  VALIDATION_ERROR_MESSAGES,
+} = require('./CourtIssuedDocumentConstants');
+const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
-const { VALIDATION_ERROR_MESSAGES } = require('./validationErrorMessages');
 
 /**
  * @param {object} rawProps the raw document data
@@ -14,6 +18,7 @@ function CourtIssuedDocumentTypeA(rawProps) {
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
   this.freeText = rawProps.freeText;
+  this.serviceStamp = rawProps.serviceStamp;
 }
 
 CourtIssuedDocumentTypeA.prototype.getDocumentTitle = function() {
@@ -24,7 +29,19 @@ CourtIssuedDocumentTypeA.schema = {
   attachments: joi.boolean().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
-  freeText: joi.string().required(),
+  freeText: joi.when('documentType', {
+    is: GENERIC_ORDER_DOCUMENT_TYPE,
+    otherwise: joi.optional().allow(null),
+    then: joi.string().required(),
+  }),
+  serviceStamp: joi.when('documentType', {
+    is: GENERIC_ORDER_DOCUMENT_TYPE,
+    otherwise: joi.optional().allow(null),
+    then: joi
+      .string()
+      .valid(SERVICE_STAMP_OPTIONS)
+      .required(),
+  }),
 };
 
 joiValidationDecorator(
