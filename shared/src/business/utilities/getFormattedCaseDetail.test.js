@@ -85,7 +85,7 @@ describe('formatCase', () => {
     expect(result.documents[0].isPetition).toBeTruthy();
     expect(result.documents[0].canEdit).toBeFalsy();
     expect(result.documents[0].qcWorkItemsCompleted).toBeTruthy();
-    expect(result.documents[0].qcWorkItemsUntouched).toBeFalsy();
+    expect(result.documents[0].qcWorkItemsUntouched).toEqual(false);
 
     expect(result.documents[0]).toHaveProperty('createdAtFormatted');
     expect(result.documents[0]).toHaveProperty('servedAtFormatted');
@@ -94,7 +94,7 @@ describe('formatCase', () => {
     expect(result.documents[0]).toHaveProperty('isPetition');
     expect(result.documents[0]).toHaveProperty('servedPartiesCode');
 
-    expect(result.documents[1].qcWorkItemsUntouched).toBeFalsy();
+    expect(result.documents[1].qcWorkItemsUntouched).toEqual(false);
   });
 
   it('should format docket records if the case docket record array is set', () => {

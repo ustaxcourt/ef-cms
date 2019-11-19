@@ -126,7 +126,7 @@ const formatDocketRecordWithDocument = (
       );
 
       document.qcWorkItemsUntouched =
-        qcWorkItems.length &&
+        !!qcWorkItems.length &&
         qcWorkItems.reduce((acc, wi) => {
           return acc && !wi.isRead && !wi.completedAt;
         }, true);
