@@ -21,6 +21,7 @@ import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
+import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import {
   compareISODateStrings,
   compareStrings,
@@ -418,6 +419,7 @@ const applicationContext = {
       REFRESH_INTERVAL: 20 * MINUTES,
       ROLE_PERMISSIONS,
       SECTIONS,
+      SERVICE_STAMP_OPTIONS,
       SESSION_DEBOUNCE: 250,
       SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
       SESSION_TIMEOUT:
