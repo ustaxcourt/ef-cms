@@ -36,11 +36,13 @@ export default (test, draftOrderIndex) => {
     );
 
     expect(test.getState('form.eventCode')).toEqual('OD');
-    expect(test.getState('form.documentType')).toEqual('Order of Dismissal');
+    expect(test.getState('form.documentType')).toEqual(
+      'OD - Order of Dismissal Entered,',
+    );
     expect(helperComputed.showJudge).toBeTruthy();
-    expect(test.getState('form.judge')).toEqual('');
+    expect(test.getState('form.judge')).toBeFalsy();
     expect(helperComputed.showFreeText).toBeTruthy();
-    expect(test.getState('form.freeText')).toEqual('');
+    expect(test.getState('form.freeText')).toBeFalsy();
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'judge',
@@ -59,6 +61,14 @@ export default (test, draftOrderIndex) => {
 
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
+    expect(test.getState('alertSuccess').title).toEqual(
+      'Your entry has been added to the docket record.',
+    );
+
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
@@ -66,18 +76,13 @@ export default (test, draftOrderIndex) => {
       },
     );
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(test.getState('alertSuccess').title).toEqual(
-      'Your entry has been added to the docket record.',
-    );
-
     const newDocketEntry = caseDetailFormatted.docketRecordWithDocument.find(
-      entry => entry.document.documentId === documentId,
+      entry => entry.document && entry.document.documentId === documentId,
     );
 
     expect(newDocketEntry).toBeTruthy();
     expect(
-      `${newDocketEntry.documentTitle} ${newDocketEntry.filingsAndProceedings}`,
+      `${newDocketEntry.document.documentTitle} ${newDocketEntry.record.filingsAndProceedings}`,
     ).toEqual(
       'Order of Dismissal Entered, Judge Buch for Something (Attachment(s))',
     );
