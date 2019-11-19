@@ -44,6 +44,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   let showCaseDeadlinesInternal = false;
   let showCaseDeadlinesInternalEmpty = false;
   let userHasAccessToCase = false;
+  let showQcWorkItemsUntouchedState = false;
 
   if (isExternalUser) {
     if (userAssociatedWithCase) {
@@ -58,6 +59,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     }
   } else {
     userHasAccessToCase = true;
+    showQcWorkItemsUntouchedState = true;
 
     if (caseDeadlines && caseDeadlines.length > 0) {
       showCaseDeadlinesInternal = true;
@@ -157,6 +159,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       !isExternalUser ||
       (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
+    showQcWorkItemsUntouchedState,
     showRecallButton,
     showRespondentSection:
       !isExternalUser ||
