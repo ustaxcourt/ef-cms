@@ -46,6 +46,7 @@ exports.generateNoticeOfDocketChangePdf = async ({
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
+    console.log('OH NO MR BILL');
     throw new UnauthorizedError('Unauthorized');
   }
 
