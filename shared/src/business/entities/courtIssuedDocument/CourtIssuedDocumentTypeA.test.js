@@ -10,7 +10,6 @@ describe('CourtIssuedDocumentTypeA', () => {
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
-        freeText: VALIDATION_ERROR_MESSAGES.freeText,
       });
     });
 
@@ -25,15 +24,15 @@ describe('CourtIssuedDocumentTypeA', () => {
       expect(document.getFormattedValidationErrors()).toEqual(null);
     });
 
-    it('should be invalid if the document type is a generic order and serviceStamp is not present', () => {
+    it('should be invalid if the document type is a generic order and serviceStamp and freeText are not present', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: 'Order [Anything]',
         documentType: 'O - Order',
-        freeText: 'Some free text',
         scenario: 'Type A',
       });
       expect(document.getFormattedValidationErrors()).toEqual({
+        freeText: VALIDATION_ERROR_MESSAGES.freeText,
         serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
       });
     });
@@ -52,7 +51,7 @@ describe('CourtIssuedDocumentTypeA', () => {
       });
     });
 
-    it('should be valid if the document type is a generic order and serviceStamp is present and a valid option', () => {
+    it('should be valid if the document type is a generic order and serviceStamp is present and a valid option and freeText is present', () => {
       const document = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: 'Order [Anything]',
@@ -75,6 +74,18 @@ describe('CourtIssuedDocumentTypeA', () => {
         scenario: 'Type A',
       });
       expect(extDoc.getDocumentTitle()).toEqual('Order Some free text');
+    });
+
+    it('should generate valid title without optional freeText for non-generic order type', () => {
+      const extDoc = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: 'Order that caption of case is amended [Anything]',
+        documentType: 'OCA - Order that caption of case is amended',
+        scenario: 'Type A',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Order that caption of case is amended',
+      );
     });
   });
 });

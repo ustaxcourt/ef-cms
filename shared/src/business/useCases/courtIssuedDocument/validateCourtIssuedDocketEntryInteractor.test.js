@@ -37,7 +37,6 @@ describe('validateCourtIssuedDocketEntryInteractor', () => {
     expect(errors).toEqual({
       attachments: VALIDATION_ERROR_MESSAGES.attachments,
       documentType: VALIDATION_ERROR_MESSAGES.documentType,
-      freeText: VALIDATION_ERROR_MESSAGES.freeText,
     });
   });
 

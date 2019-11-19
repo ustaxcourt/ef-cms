@@ -6,7 +6,7 @@ exports.VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments',
   date: [
     {
-      contains: 'must be less than or equal to',
+      contains: 'must be larger than or equal to',
       message: 'Enter a valid date',
     },
     'Enter a date',

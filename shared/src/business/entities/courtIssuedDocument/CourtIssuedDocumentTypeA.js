@@ -29,7 +29,11 @@ CourtIssuedDocumentTypeA.schema = {
   attachments: joi.boolean().required(),
   documentTitle: joi.string().optional(),
   documentType: joi.string().required(),
-  freeText: joi.string().required(),
+  freeText: joi.when('documentType', {
+    is: GENERIC_ORDER_DOCUMENT_TYPE,
+    otherwise: joi.optional().allow(null),
+    then: joi.string().required(),
+  }),
   serviceStamp: joi.when('documentType', {
     is: GENERIC_ORDER_DOCUMENT_TYPE,
     otherwise: joi.optional().allow(null),
