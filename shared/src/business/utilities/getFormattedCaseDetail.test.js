@@ -85,6 +85,7 @@ describe('formatCase', () => {
     expect(result.documents[0].isPetition).toBeTruthy();
     expect(result.documents[0].canEdit).toBeFalsy();
     expect(result.documents[0].qcWorkItemsCompleted).toBeTruthy();
+    expect(result.documents[0].qcWorkItemsUntouched).toBeFalsy();
 
     expect(result.documents[0]).toHaveProperty('createdAtFormatted');
     expect(result.documents[0]).toHaveProperty('servedAtFormatted');
