@@ -72,6 +72,13 @@ export const DocketRecord = connect(
                   caseDetailHelper.showQcWorkItemsUntouchedState &&
                   document &&
                   document.qcWorkItemsUntouched;
+
+                const isPaper =
+                  !isInProgress &&
+                  !qcWorkItemsUntouched &&
+                  document &&
+                  document.isPaper;
+
                 return (
                   <tr
                     className={classNames(
@@ -96,7 +103,7 @@ export const DocketRecord = connect(
                       aria-hidden="true"
                       className="filing-type-icon hide-on-mobile"
                     >
-                      {document && document.isPaper && !isInProgress && (
+                      {isPaper && (
                         <FontAwesomeIcon icon={['fas', 'file-alt']} />
                       )}
 
