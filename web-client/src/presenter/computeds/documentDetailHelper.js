@@ -3,7 +3,9 @@ import { orderBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const formatDocumentWorkItems = ({ applicationContext, workItems }) => {
-  const allWorkItems = orderBy(workItems, 'createdAt', 'desc');
+  const allWorkItems = orderBy(workItems, 'createdAt', 'desc').filter(
+    workItem => !workItem.hideFromPendingMessages,
+  );
   const incompleteWorkItems = allWorkItems
     .filter(items => !items.completedAt)
     .map(items =>

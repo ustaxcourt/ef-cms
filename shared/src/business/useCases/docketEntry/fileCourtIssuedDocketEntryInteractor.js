@@ -82,6 +82,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
         ...documentEntity.toRawObject(),
         createdAt: documentEntity.createdAt,
       },
+      hideFromPendingMessages: true,
       inProgress: true,
       isQC: true,
       section: DOCKET_SECTION,
