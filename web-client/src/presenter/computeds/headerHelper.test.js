@@ -5,23 +5,18 @@ import { headerHelper as headerHelperComputed } from './headerHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
-const headerHelper = withAppContextDecorator(headerHelperComputed, {
-  ...applicationContext,
-  getUtilities: () => {
-    return {
-      isExternalUser: User.isExternalUser,
-      isInternalUser: User.isInternalUser,
-    };
-  },
-});
+const headerHelper = withAppContextDecorator(
+  headerHelperComputed,
+  applicationContext,
+);
 
 const getBaseState = user => {
+  applicationContext.getCurrentUser = () => user;
   return {
     notifications: {
       unreadCount: 0,
     },
     permissions: getUserPermissions(user),
-    user,
   };
 };
 
