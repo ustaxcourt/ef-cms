@@ -46,8 +46,8 @@ const {
   batchDownloadTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor');
 const {
-  blockCaseInteractor,
-} = require('../../shared/src/business/useCases/blockCaseInteractor');
+  blockCaseFromTrialInteractor,
+} = require('../../shared/src/business/useCases/blockCaseFromTrialInteractor');
 const {
   CaseExternalIncomplete,
 } = require('../../shared/src/business/entities/cases/CaseExternalIncomplete');
@@ -529,8 +529,8 @@ const {
   submitPendingCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
 const {
-  unblockCaseInteractor,
-} = require('../../shared/src/business/useCases/unblockCaseInteractor');
+  unblockCaseFromTrialInteractor,
+} = require('../../shared/src/business/useCases/unblockCaseFromTrialInteractor');
 const {
   unprioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/unprioritizeCaseInteractor');
@@ -906,7 +906,7 @@ module.exports = (appContextUser = {}) => {
         associatePractitionerWithCaseInteractor,
         associateRespondentWithCaseInteractor,
         batchDownloadTrialSessionInteractor,
-        blockCaseInteractor,
+        blockCaseFromTrialInteractor,
         caseSearchInteractor,
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
@@ -983,7 +983,7 @@ module.exports = (appContextUser = {}) => {
         setWorkItemAsReadInteractor,
         submitCaseAssociationRequestInteractor,
         submitPendingCaseAssociationRequestInteractor,
-        unblockCaseInteractor,
+        unblockCaseFromTrialInteractor,
         unprioritizeCaseInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,

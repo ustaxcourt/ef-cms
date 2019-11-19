@@ -1,4 +1,4 @@
-import { blockFromTrialAction } from '../actions/CaseDetail/blockFromTrialAction';
+import { addCaseToTrialSessionAction } from '../actions/CaseDetail/addCaseToTrialSessionAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -7,20 +7,20 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { validateBlockFromTrialAction } from '../actions/CaseDetail/validateBlockFromTrialAction';
+import { validateAddToTrialSessionAction } from '../actions/CaseDetail/validateAddToTrialSessionAction';
 
-export const blockFromTrialSequence = [
+export const addCaseToTrialSessionSequence = [
   startShowValidationAction,
-  validateBlockFromTrialAction,
+  validateAddToTrialSessionAction,
   {
     error: [setValidationErrorsAction],
     success: [
       setWaitingForResponseAction,
-      blockFromTrialAction,
+      clearModalAction,
+      addCaseToTrialSessionAction,
+      clearModalStateAction,
       unsetWaitingForResponseAction,
       setAlertSuccessAction,
-      clearModalAction,
-      clearModalStateAction,
       setCaseAction,
     ],
   },

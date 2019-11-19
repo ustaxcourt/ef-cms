@@ -2,12 +2,12 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unblockFromTrialAction } from '../actions/CaseDetail/unblockFromTrialAction';
+import { unblockCaseFromTrialAction } from '../actions/CaseDetail/unblockCaseFromTrialAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const unblockFromTrialSequence = [
+export const unblockCaseFromTrialSequence = [
   setWaitingForResponseAction,
-  unblockFromTrialAction,
+  unblockCaseFromTrialAction,
   unsetWaitingForResponseAction,
   setAlertSuccessAction,
   clearModalAction,
