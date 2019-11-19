@@ -31,8 +31,12 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     })),
   ];
 
+  const selectedEventCode = get(state.form.eventCode);
+  const showServiceStamp = selectedEventCode === 'O';
+
   return {
     documentTypes,
     serviceParties,
+    showServiceStamp,
   };
 };
