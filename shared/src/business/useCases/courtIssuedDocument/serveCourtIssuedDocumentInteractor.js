@@ -157,6 +157,13 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
     caseEntity.closeCase();
+
+    await applicationContext
+      .getPersistenceGateway()
+      .deleteCaseTrialSortMappingRecords({
+        applicationContext,
+        caseId,
+      });
   }
 
   const updatedCase = await applicationContext

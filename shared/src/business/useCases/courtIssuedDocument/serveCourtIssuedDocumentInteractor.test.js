@@ -30,6 +30,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   let deleteWorkItemFromInboxMock;
   let putWorkItemInOutboxMock;
   let testPdfDoc;
+  let deleteCaseTrialSortMappingRecordsMock;
 
   const mockUser = {
     role: User.ROLES.docketClerk,
@@ -101,6 +102,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     testPdfDoc = testPdfDocBytes();
 
     updateCaseMock = jest.fn(({ caseToUpdate }) => caseToUpdate);
+    deleteCaseTrialSortMappingRecordsMock = jest.fn();
     sendBulkTemplatedEmailMock = jest.fn();
     getObjectMock = jest.fn().mockReturnValue({
       promise: async () => ({
@@ -117,6 +119,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
       }),
       getPersistenceGateway: () => ({
+        deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
         deleteWorkItemFromInbox: deleteWorkItemFromInboxMock,
         getCaseByCaseId: ({ caseId }) => {
           return mockCases.find(mockCase => mockCase.caseId === caseId);
@@ -248,6 +251,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       });
 
       expect(result.status).toEqual(Case.STATUS_TYPES.closed);
+      expect(deleteCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
     });
   });
 });
