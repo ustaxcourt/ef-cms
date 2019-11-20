@@ -3,7 +3,7 @@ const { CaseSearch } = require('../entities/cases/CaseSearch');
 const { get } = require('lodash');
 
 /**
- * caseSearchInteractor
+ * caseAdvancedSearchInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -14,7 +14,7 @@ const { get } = require('lodash');
  * @param {string} providers.yearFiledMin the min year filed to search cases by
  * @returns {object} the case data
  */
-exports.caseSearchInteractor = async ({
+exports.caseAdvancedSearchInteractor = async ({
   applicationContext,
   countryType,
   petitionerName,

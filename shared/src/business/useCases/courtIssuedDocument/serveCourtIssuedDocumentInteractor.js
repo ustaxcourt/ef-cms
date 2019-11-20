@@ -1,14 +1,41 @@
 const {
   ENTERED_AND_SERVED_EVENT_CODES,
-} = require('../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
+  GENERIC_ORDER_DOCUMENT_TYPE,
+} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { DocketRecord } = require('../entities/DocketRecord');
-const { formatDateString } = require('../utilities/DateHandler');
-const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
+} = require('../../../authorization/authorizationClientService');
+const { addServedStampToDocument } = require('./addServedStampToDocument');
+const { Case } = require('../../entities/cases/Case');
+const { DocketRecord } = require('../../entities/DocketRecord');
+const { formatDateString } = require('../../utilities/DateHandler');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+
+const completeWorkItem = async ({
+  applicationContext,
+  courtIssuedDocument,
+  user,
+  workItemToUpdate,
+}) => {
+  Object.assign(workItemToUpdate, {
+    document: {
+      ...courtIssuedDocument.toRawObject(),
+    },
+  });
+
+  workItemToUpdate.setAsCompleted({ message: 'completed', user });
+
+  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+    applicationContext,
+    workItem: workItemToUpdate,
+  });
+
+  await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+    applicationContext,
+    workItem: workItemToUpdate.validate().toRawObject(),
+  });
+};
 
 /**
  * serveCourtIssuedDocumentInteractor
@@ -56,7 +83,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     entry => entry.documentId === documentId,
   );
 
-  // TODO: mopve this to a helper
+  // TODO: move this to a helper
   const aggregateServedParties = parties => {
     const aggregated = [];
     parties.map(party => {
@@ -80,6 +107,48 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   courtIssuedDocument.setAsServed(servedParties);
 
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: documentId,
+    })
+    .promise();
+
+  let serviceStampType = 'Served';
+
+  if (courtIssuedDocument.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
+    serviceStampType = courtIssuedDocument.serviceStamp;
+  } else if (
+    ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)
+  ) {
+    serviceStampType = 'Entered and Served';
+  }
+
+  const serviceStampDate = formatDateString(
+    courtIssuedDocument.servedAt,
+    'MMDDYY',
+  );
+
+  const newPdfData = await addServedStampToDocument({
+    pdfData,
+    serviceStampText: `${serviceStampType} ${serviceStampDate}`,
+  });
+
+  applicationContext.logger.time('Saving S3 Document');
+  await applicationContext
+    .getPersistenceGateway()
+    .saveDocument({ applicationContext, document: newPdfData, documentId });
+  applicationContext.logger.timeEnd('Saving S3 Document');
+
+  const workItemToUpdate = courtIssuedDocument.workItems[0];
+  await completeWorkItem({
+    applicationContext,
+    courtIssuedDocument,
+    user,
+    workItemToUpdate,
+  });
+
   const updatedDocketRecordEntity = new DocketRecord(docketEntry);
   updatedDocketRecordEntity.validate();
 
@@ -88,6 +157,13 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
     caseEntity.closeCase();
+
+    await applicationContext
+      .getPersistenceGateway()
+      .deleteCaseTrialSortMappingRecords({
+        applicationContext,
+        caseId,
+      });
   }
 
   const updatedCase = await applicationContext
