@@ -506,7 +506,7 @@ const {
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
   serveCourtIssuedDocumentInteractor,
-} = require('../../shared/src/business/useCases/serveCourtIssuedDocumentInteractor');
+} = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
 const {
   serveSignedStipDecisionInteractor,
 } = require('../../shared/src/business/useCases/serveSignedStipDecisionInteractor');
