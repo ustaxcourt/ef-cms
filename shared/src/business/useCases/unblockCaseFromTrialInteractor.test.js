@@ -1,12 +1,14 @@
-const { blockCaseInteractor } = require('./blockCaseInteractor');
+const {
+  unblockCaseFromTrialInteractor,
+} = require('./unblockCaseFromTrialInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
-describe('blockCaseInteractor', () => {
+describe('unblockCaseFromTrialInteractor', () => {
   let applicationContext;
-  let deleteCaseTrialSortMappingRecordsMock = jest.fn();
+  let createCaseTrialSortMappingRecordsMock = jest.fn();
 
-  it('should update the case with the blocked flag set as true and attach a reason', async () => {
+  it('should set the blocked flag to false and remove the blockedReason', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
@@ -17,28 +19,28 @@ describe('blockCaseInteractor', () => {
       },
       getPersistenceGateway: () => {
         return {
-          deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
+          createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsMock,
           getCaseByCaseId: () => Promise.resolve(MOCK_CASE),
           updateCase: ({ caseToUpdate }) => caseToUpdate,
         };
       },
     };
-    const result = await blockCaseInteractor({
+    const result = await unblockCaseFromTrialInteractor({
       applicationContext,
       caseId: MOCK_CASE.caseId,
       reason: 'just because',
     });
     expect(result).toMatchObject({
-      blocked: true,
-      blockedReason: 'just because',
+      blocked: false,
+      blockedReason: undefined,
     });
-    expect(deleteCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
+    expect(createCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
     expect(
-      deleteCaseTrialSortMappingRecordsMock.mock.calls[0][0].caseId,
+      createCaseTrialSortMappingRecordsMock.mock.calls[0][0].caseId,
     ).toEqual(MOCK_CASE.caseId);
   });
 
-  it('should throw an unauthorized error if the user has no access to block cases', async () => {
+  it('should throw an unauthorized error if the user has no access to unblock the case', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () => {
@@ -50,7 +52,7 @@ describe('blockCaseInteractor', () => {
     };
     let error;
     try {
-      await blockCaseInteractor({
+      await unblockCaseFromTrialInteractor({
         applicationContext,
         caseId: '123',
       });

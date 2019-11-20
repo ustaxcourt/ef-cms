@@ -45,11 +45,11 @@ describe('Trial Session Eligible Cases Journey', () => {
     describe(`Case #1 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        procedureType: 'Small',
-        receivedAtYear: '2019',
-        receivedAtMonth: '01',
-        receivedAtDay: '01',
         caseType: 'Deficiency',
+        procedureType: 'Small',
+        receivedAtDay: '01',
+        receivedAtMonth: '01',
+        receivedAtYear: '2019',
       };
       petitionerLogin(test);
       it('Create case #1', async () => {
@@ -71,11 +71,11 @@ describe('Trial Session Eligible Cases Journey', () => {
     describe(`Case #2 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 1/2/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        procedureType: 'Small',
-        receivedAtYear: '2019',
-        receivedAtMonth: '01',
-        receivedAtDay: '02',
         caseType: 'Deficiency',
+        procedureType: 'Small',
+        receivedAtDay: '02',
+        receivedAtMonth: '01',
+        receivedAtYear: '2019',
       };
       petitionerLogin(test);
       it('Create case #2', async () => {
@@ -97,11 +97,11 @@ describe('Trial Session Eligible Cases Journey', () => {
     describe(`Case #3 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular procedure type with filed date 1/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        procedureType: 'Regular',
-        receivedAtYear: '2019',
-        receivedAtMonth: '01',
-        receivedAtDay: '01',
         caseType: 'Deficiency',
+        procedureType: 'Regular',
+        receivedAtDay: '01',
+        receivedAtMonth: '01',
+        receivedAtYear: '2019',
       };
       petitionerLogin(test);
       it('Create case #3', async () => {
@@ -123,11 +123,11 @@ describe('Trial Session Eligible Cases Journey', () => {
     describe(`Case #4 'L' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 5/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        procedureType: 'Small',
-        receivedAtYear: '2019',
-        receivedAtMonth: '02',
-        receivedAtDay: '01',
         caseType: 'CDP (Lien/Levy)',
+        procedureType: 'Small',
+        receivedAtDay: '01',
+        receivedAtMonth: '02',
+        receivedAtYear: '2019',
       };
       petitionerLogin(test);
       it('Create case #4', async () => {
@@ -149,11 +149,11 @@ describe('Trial Session Eligible Cases Journey', () => {
     describe(`Case #5 'P' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 3/1/2019`, () => {
       const caseOverrides = {
         ...overrides,
-        procedureType: 'Small',
-        receivedAtYear: '2019',
-        receivedAtMonth: '03',
-        receivedAtDay: '01',
         caseType: 'Passport',
+        procedureType: 'Small',
+        receivedAtDay: '01',
+        receivedAtMonth: '03',
+        receivedAtYear: '2019',
       };
       petitionerLogin(test);
       it('Create case #5', async () => {
@@ -393,7 +393,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       });
       expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
 
-      await test.runSequence('addToTrialSessionSequence');
+      await test.runSequence('addCaseToTrialSessionSequence');
 
       expect(test.getState('validationErrors')).toEqual({
         trialSessionId: 'Select a Trial Session',
@@ -401,7 +401,7 @@ describe('Trial Session Eligible Cases Journey', () => {
 
       test.setState('modal.trialSessionId', test.trialSessionId);
 
-      await test.runSequence('addToTrialSessionSequence');
+      await test.runSequence('addCaseToTrialSessionSequence');
 
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],

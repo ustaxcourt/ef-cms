@@ -43,6 +43,6 @@ export default test => {
 
     expect(modalHelper.showSessionNotSetAlert).toEqual(true);
 
-    await test.runSequence('addToTrialSessionSequence');
+    await test.runSequence('addCaseToTrialSessionSequence');
   });
 };
