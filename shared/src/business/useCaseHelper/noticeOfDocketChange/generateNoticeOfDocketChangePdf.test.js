@@ -71,6 +71,20 @@ describe('generatePage', () => {
     expect(result.indexOf('Cody')).not.toEqual(-1);
     expect(result.indexOf('123-19X')).not.toEqual(-1);
   });
+  it('returns a correctly-generated HTML output based on information provided', async () => {
+    const docketChangeArg = {
+      ...docketChangeInfo,
+      filingsAndProceedings: {
+        after: 'Unchanged string',
+        before: 'Unchanged string',
+      },
+    };
+    const result = await generatePage({
+      applicationContext,
+      docketChangeInfo: docketChangeArg,
+    });
+    expect(result.indexOf('Unchanged string')).toEqual(-1);
+  });
 });
 
 describe('generateNoticeOfDocketChangePdf', () => {

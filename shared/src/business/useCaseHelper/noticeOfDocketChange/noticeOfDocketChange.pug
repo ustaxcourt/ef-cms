@@ -18,15 +18,15 @@ html(lang="en")
     .info-box
       h3 Docket Entry No. #{docketEntryIndex} has been changed
       p
-        if filingsAndProceedings
+        if filingsAndProceedings.before != filingsAndProceedings.after
           | 
           b “#{filingsAndProceedings.before}”
-          | has been changed to 
+          |  has been changed to 
           b “#{filingsAndProceedings.after}”
           | .
-        if filingParties
+        if filingParties.before != filingParties.after
           | The filing party/parties has been changed from 
           b “#{filingParties.before}”
-          | to 
+          |  to 
           b “#{filingParties.after}”
           | .
