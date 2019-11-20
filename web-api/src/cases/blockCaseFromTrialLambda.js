@@ -15,7 +15,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .blockCaseInteractor({
+        .blockCaseFromTrialInteractor({
           applicationContext,
           caseId: event.pathParameters.caseId,
           reason: JSON.parse(event.body).reason,

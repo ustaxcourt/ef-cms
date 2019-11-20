@@ -1,9 +1,9 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { addToTrialSessionAction } from './addToTrialSessionAction';
+import { addCaseToTrialSessionAction } from './addCaseToTrialSessionAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-describe('addToTrialSessionAction', () => {
+describe('addCaseToTrialSessionAction', () => {
   const addCaseToTrialSessionInteractorSpy = jest
     .fn()
     .mockReturnValue(MOCK_CASE);
@@ -17,7 +17,7 @@ describe('addToTrialSessionAction', () => {
   });
 
   it('should call the addCaseToTrialSessionInteractor with the state.caseDetail.caseId and state.modal.trialSessionId and return alertSuccess and the caseDetail returned from the use case', async () => {
-    const result = await runAction(addToTrialSessionAction, {
+    const result = await runAction(addCaseToTrialSessionAction, {
       modules: {
         presenter,
       },
