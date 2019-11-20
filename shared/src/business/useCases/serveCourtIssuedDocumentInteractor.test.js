@@ -87,7 +87,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should throw an Unathorized error if the user role does not have the SERVE_DOCUMENT permission', async () => {
     let error;
 
-    // peitioner role does NOT have the SERVE_DOCUMENT permission
+    // petitioner role does NOT have the SERVE_DOCUMENT permission
     const user = { ...mockUser, role: User.ROLES.petitioner };
     applicationContext.getCurrentUser = () => user;
 

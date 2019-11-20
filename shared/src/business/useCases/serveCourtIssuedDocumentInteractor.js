@@ -56,7 +56,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     entry => entry.documentId === documentId,
   );
 
-  // TODO: mopve this to a helper
+  // TODO: move this to a helper
   const aggregateServedParties = parties => {
     const aggregated = [];
     parties.map(party => {
