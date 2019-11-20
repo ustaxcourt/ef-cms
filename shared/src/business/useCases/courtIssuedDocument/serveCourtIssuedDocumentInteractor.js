@@ -1,4 +1,11 @@
 const {
+  aggregateElectronicallyServedParties,
+} = require('../../utilities/aggregateElectronicallyServedParties');
+const {
+  createISODateString,
+  formatDateString,
+} = require('../../utilities/DateHandler');
+const {
   ENTERED_AND_SERVED_EVENT_CODES,
   GENERIC_ORDER_DOCUMENT_TYPE,
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
@@ -9,7 +16,6 @@ const {
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
-const { formatDateString } = require('../../utilities/DateHandler');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 const completeWorkItem = async ({
@@ -83,27 +89,8 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     entry => entry.documentId === documentId,
   );
 
-  // TODO: move this to a helper
-  const aggregateServedParties = parties => {
-    const aggregated = [];
-    parties.map(party => {
-      if (party && party.email) {
-        aggregated.push({
-          email: party.email,
-          name: party.name,
-        });
-      }
-    });
-    return aggregated;
-  };
-
   // Serve on all parties
-  const servedParties = aggregateServedParties([
-    caseEntity.contactPrimary,
-    caseEntity.contactSecondary,
-    ...caseEntity.practitioners,
-    ...caseEntity.respondents,
-  ]);
+  const servedParties = aggregateElectronicallyServedParties(caseEntity);
 
   courtIssuedDocument.setAsServed(servedParties);
 
@@ -149,10 +136,12 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     workItemToUpdate,
   });
 
-  const updatedDocketRecordEntity = new DocketRecord(docketEntry);
+  const updatedDocketRecordEntity = new DocketRecord({
+    ...docketEntry,
+    filingDate: createISODateString(),
+  });
   updatedDocketRecordEntity.validate();
 
-  // TODO: should the filing date be updated?
   caseEntity.updateDocketRecordEntry(updatedDocketRecordEntity);
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
@@ -173,7 +162,6 @@ exports.serveCourtIssuedDocumentInteractor = async ({
       caseToUpdate: caseEntity.validate().toRawObject(),
     });
 
-  // TODO: Could also be moved to a helper
   const destinations = servedParties.map(party => ({
     email: party.email,
     templateData: {
