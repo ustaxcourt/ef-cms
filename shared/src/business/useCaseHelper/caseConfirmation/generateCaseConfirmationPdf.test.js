@@ -18,7 +18,7 @@ const pageMock = {
 };
 
 const browserMock = {
-  close: () => {},
+  close: jest.fn(),
   newPage: () => pageMock,
 };
 
@@ -47,12 +47,15 @@ let applicationContext = {
   getStorageClient: () => ({
     upload: (params, callback) => callback(),
   }),
-  logger: { error: () => {}, info: () => {} },
+  logger: { error: jest.fn(), info: () => {} },
 };
 
 describe('generateCaseConfirmationPdf', () => {
   beforeEach(() => {
     isAuthorized.mockReturnValue(true);
+  });
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('requires permissions', async () => {
@@ -71,6 +74,27 @@ describe('generateCaseConfirmationPdf', () => {
     }
     expect(result).not.toBeDefined();
     expect(error.message).toEqual('Unauthorized');
+  });
+
+  it('handles exceptions gracefully', async () => {
+    jest.spyOn(browserMock, 'newPage').mockImplementation(() => {
+      throw new Error('page problem');
+    });
+    let error;
+    try {
+      await generateCaseConfirmationPdf({
+        applicationContext,
+        caseEntity: {
+          ...MOCK_CASE,
+          documents: [{ servedAt: '2009-09-17T08:06:07.530Z' }],
+        },
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeDefined();
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(browserMock.close).toHaveBeenCalled();
   });
 
   it('returns the pdf buffer produced by chromium', async () => {
