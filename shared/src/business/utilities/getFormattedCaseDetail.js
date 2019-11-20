@@ -120,10 +120,11 @@ const formatDocketRecordWithDocument = (
         return acc && !!wi.completedAt;
       }, true);
 
-      document.isInProgress = !!(
-        (document.isCourtIssuedDocument && !document.servedAt) ||
-        (!document.isCourtIssuedDocument && document.isFileAttached === false)
-      );
+      document.isInProgress =
+        !document.isCourtIssuedDocument && document.isFileAttached === false;
+
+      document.isNotServedCourtIssuedDocument =
+        document.isCourtIssuedDocument && !document.servedAt;
 
       document.qcWorkItemsUntouched =
         !!qcWorkItems.length &&
