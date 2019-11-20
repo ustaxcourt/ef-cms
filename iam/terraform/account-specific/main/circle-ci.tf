@@ -37,6 +37,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Effect": "Allow",
       "Action": [
         "cognito-idp:UpdateUserPoolClient",
+        "cognito-idp:UpdateUserPool",
         "cognito-idp:CreateUserPool",
         "cognito-idp:AdminRespondToAuthChallenge",
         "cognito-idp:AdminConfirmSignUp",
