@@ -142,4 +142,32 @@ describe('docket record helper', () => {
     });
     expect(result.showFileDocumentButton).toEqual(false);
   });
+
+  it('should allow the actionable docket entry link to be displayed for user roles that have the DOCKET_ENTRY permissions', async () => {
+    let result = runCompute(docketRecordHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        permissions: {
+          DOCKET_ENTRY: false,
+        },
+        screenMetadata: { isAssociated: false },
+      },
+    });
+    expect(result.canShowEditDocketEntryLink).toEqual(false);
+
+    result = runCompute(docketRecordHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        permissions: {
+          DOCKET_ENTRY: true,
+        },
+        screenMetadata: { isAssociated: false },
+      },
+    });
+    expect(result.canShowEditDocketEntryLink).toEqual(true);
+  });
 });
