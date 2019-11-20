@@ -172,14 +172,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the document as served and update the case', async () => {
-    saveDocumentMock = jest
-      .fn()
-      .mockImplementation(({ document: newPdfData }) => {
-        fs.writeFileSync(
-          testOutputPath + 'serveCourtIssuedDocumentInteractor_1.pdf',
-          newPdfData,
-        );
-      });
+    saveDocumentMock = jest.fn(({ document: newPdfData }) => {
+      fs.writeFileSync(
+        testOutputPath + 'serveCourtIssuedDocumentInteractor_1.pdf',
+        newPdfData,
+      );
+    });
 
     const result = await serveCourtIssuedDocumentInteractor({
       applicationContext,
