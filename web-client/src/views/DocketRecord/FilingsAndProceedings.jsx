@@ -107,29 +107,38 @@ export const FilingsAndProceedings = connect(
             </React.Fragment>
           )}
 
-        {document && docketRecordHelper.showDocumentDetailLink && (
-          <a
-            aria-label="View PDF"
-            href={documentEditLinkHelper({
-              docketNumber: formattedCaseDetail.docketNumber,
-              documentId: document.documentId,
-              shouldLinkToComplete: document.isFileAttached === false,
-              shouldLinkToEdit:
-                docketRecordHelper.showEditDocketEntry && document.canEdit,
-              shouldLinkToEditCourtIssued:
-                docketRecordHelper.showEditDocketEntry &&
-                document.isCourtIssuedDocument,
-              shouldLinkedToDetails: !!document.servedAt,
-            })}
-          >
-            {document && document.isPaper && (
-              <span className="filing-type-icon-mobile">
-                <FontAwesomeIcon icon={['fas', 'file-alt']} />
-              </span>
-            )}
-            {document.documentTitle || record.description}
-          </a>
-        )}
+        {document &&
+          docketRecordHelper.showDocumentDetailLink &&
+          (!document.isNotServedCourtIssuedDocument ||
+            (document.isNotServedCourtIssuedDocument &&
+              docketRecordHelper.canShowEditDocketEntryLink)) && (
+            <a
+              aria-label="View PDF"
+              href={documentEditLinkHelper({
+                docketNumber: formattedCaseDetail.docketNumber,
+                documentId: document.documentId,
+                shouldLinkToComplete: document.isFileAttached === false,
+                shouldLinkToEdit:
+                  docketRecordHelper.showEditDocketEntry && document.canEdit,
+                shouldLinkToEditCourtIssued:
+                  docketRecordHelper.showEditDocketEntry &&
+                  document.isCourtIssuedDocument,
+                shouldLinkedToDetails: !!document.servedAt,
+              })}
+            >
+              {document && document.isPaper && (
+                <span className="filing-type-icon-mobile">
+                  <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                </span>
+              )}
+              {document.documentTitle || record.description}
+            </a>
+          )}
+
+        {document &&
+          document.isNotServedCourtIssuedDocument &&
+          !docketRecordHelper.canShowEditDocketEntryLink &&
+          (document.documentTitle || record.description)}
 
         <span> {record.signatory}</span>
 
