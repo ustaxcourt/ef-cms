@@ -21,7 +21,7 @@ const aggregateElectronicallyServedParties = caseEntity => {
   ];
 
   const aggregated = [];
-  parties.map(party => {
+  parties.forEach(party => {
     if (
       party &&
       party.email &&
