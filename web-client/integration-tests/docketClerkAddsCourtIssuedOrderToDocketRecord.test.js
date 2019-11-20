@@ -10,7 +10,6 @@ import docketClerkAddsDocketEntryFromOrderOfDismissal from './journey/docketCler
 import docketClerkCancelsAddDocketEntryFromOrder from './journey/docketClerkCancelsAddDocketEntryFromOrder';
 import docketClerkCreatesAnOrder from './journey/docketClerkCreatesAnOrder';
 import docketClerkLogIn from './journey/docketClerkLogIn';
-import docketClerkServesOrder from './journey/docketClerkServesOrder';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
 import docketClerkViewsCaseDetailForCourtIssuedDocketEntry from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
 import docketClerkViewsDraftOrder from './journey/docketClerkViewsDraftOrder';
@@ -78,10 +77,4 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   petitionerLogin(test);
   petitionerViewsCaseDetail(test, { documentCount: 4 });
   petitionerSignsOut(test);
-
-  docketClerkLogIn(test);
-  docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
-  docketClerkServesOrder(test, 0);
-  docketClerkServesOrder(test, 1);
-  docketClerkSignsOut(test);
 });
