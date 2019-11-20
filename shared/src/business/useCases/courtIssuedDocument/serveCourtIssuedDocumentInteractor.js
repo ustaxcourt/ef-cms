@@ -12,6 +12,31 @@ const { DocketRecord } = require('../../entities/DocketRecord');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
+const completeWorkItem = async ({
+  applicationContext,
+  courtIssuedDocument,
+  user,
+  workItemToUpdate,
+}) => {
+  Object.assign(workItemToUpdate, {
+    document: {
+      ...courtIssuedDocument.toRawObject(),
+    },
+  });
+
+  workItemToUpdate.setAsCompleted({ message: 'completed', user });
+
+  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+    applicationContext,
+    workItem: workItemToUpdate,
+  });
+
+  await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+    applicationContext,
+    workItem: workItemToUpdate.validate().toRawObject(),
+  });
+};
+
 /**
  * serveCourtIssuedDocumentInteractor
  *
@@ -115,6 +140,14 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     .getPersistenceGateway()
     .saveDocument({ applicationContext, document: newPdfData, documentId });
   applicationContext.logger.timeEnd('Saving S3 Document');
+
+  const workItemToUpdate = courtIssuedDocument.workItems[0];
+  await completeWorkItem({
+    applicationContext,
+    courtIssuedDocument,
+    user,
+    workItemToUpdate,
+  });
 
   const updatedDocketRecordEntity = new DocketRecord(docketEntry);
   updatedDocketRecordEntity.validate();
