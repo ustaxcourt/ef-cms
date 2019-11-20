@@ -1,9 +1,5 @@
 import { fakeFile, setupTest } from './helpers';
 
-// calendarClerk
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-import calendarClerkSignsOut from './journey/calendarClerkSignsOut';
-import calendarClerkViewsDocketEntry from './journey/calendarClerkViewsDocketEntry';
 // docketClerk
 import docketClerkAddsDocketEntryFromOrder from './journey/docketClerkAddsDocketEntryFromOrder';
 import docketClerkAddsDocketEntryFromOrderOfDismissal from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
@@ -12,6 +8,7 @@ import docketClerkCreatesAnOrder from './journey/docketClerkCreatesAnOrder';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkServesOrder from './journey/docketClerkServesOrder';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
+import docketClerkViewsCaseDetailAfterServingCourtIssuedDocument from './journey/docketClerkViewsCaseDetailAfterServingCourtIssuedDocument';
 import docketClerkViewsCaseDetailForCourtIssuedDocketEntry from './journey/docketClerkViewsCaseDetailForCourtIssuedDocketEntry';
 import docketClerkViewsDraftOrder from './journey/docketClerkViewsDraftOrder';
 import docketClerkViewsSavedCourtIssuedDocketEntryInProgress from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
@@ -27,7 +24,6 @@ import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionerSignsOut from './journey/petitionerSignsOut';
-import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
 
 const test = setupTest();
 test.draftOrders = [];
@@ -69,19 +65,10 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
   docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
-  docketClerkSignsOut(test);
-
-  calendarClerkLogIn(test);
-  calendarClerkViewsDocketEntry(test, 1);
-  calendarClerkSignsOut(test);
-
-  petitionerLogin(test);
-  petitionerViewsCaseDetail(test, { documentCount: 4 });
-  petitionerSignsOut(test);
-
-  docketClerkLogIn(test);
   docketClerkViewsCaseDetailForCourtIssuedDocketEntry(test);
   docketClerkServesOrder(test, 0);
+  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 0);
   docketClerkServesOrder(test, 1);
+  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 1);
   docketClerkSignsOut(test);
 });
