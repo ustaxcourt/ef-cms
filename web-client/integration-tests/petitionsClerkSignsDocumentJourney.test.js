@@ -21,11 +21,7 @@ import petitionsClerkViewsSignDraftDocument from './journey/petitionsClerkViewsS
 
 const test = setupTest({
   useCases: {
-    loadPDFForSigningInteractor: () => {
-      return new Promise(resolve => {
-        resolve(null);
-      });
-    },
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
   },
 });
 
@@ -33,11 +29,7 @@ describe('Petitions Clerk Create Order Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
     global.window.pdfjsObj = {
-      getData: () => {
-        return new Promise(resolve => {
-          resolve(new Uint8Array(fakeFile));
-        });
-      },
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
     };
   });
 

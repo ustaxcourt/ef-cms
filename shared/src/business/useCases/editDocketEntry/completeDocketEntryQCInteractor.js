@@ -46,13 +46,17 @@ exports.completeDocketEntryQCInteractor = async ({
     documentId,
   });
 
+  const needsNewCoversheet =
+    entryMetadata.additionalInfo != currentDocument.additionalInfo ||
+    entryMetadata.documentTitle != currentDocument.documentTitle;
+
   const documentEntity = new Document(
     {
-      ...currentDocument,
+      workItems: currentDocument.workItems,
       ...entryMetadata,
-      relationship: 'primaryDocument',
       documentId,
       documentType,
+      relationship: 'primaryDocument',
       userId: user.userId,
     },
     { applicationContext },
@@ -127,6 +131,14 @@ exports.completeDocketEntryQCInteractor = async ({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
+
+  if (needsNewCoversheet) {
+    await applicationContext.getUseCases().addCoversheetInteractor({
+      applicationContext,
+      caseId,
+      documentId,
+    });
+  }
 
   return caseEntity.toRawObject();
 };

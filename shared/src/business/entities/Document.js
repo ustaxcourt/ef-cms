@@ -1,3 +1,4 @@
+const courtIssuedEventCodes = require('../../tools/courtIssuedEventCodes.json');
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
 const joi = require('joi-browser');
@@ -14,6 +15,7 @@ Document.CATEGORIES = Object.keys(documentMapExternal);
 Document.CATEGORY_MAP = documentMapExternal;
 Document.INTERNAL_CATEGORIES = Object.keys(documentMapInternal);
 Document.INTERNAL_CATEGORY_MAP = documentMapInternal;
+Document.COURT_ISSUED_EVENT_CODES = courtIssuedEventCodes;
 
 Document.validationName = 'Document';
 
@@ -55,6 +57,10 @@ function Document(rawDocument, { applicationContext }) {
   this.partyPrimary = rawDocument.partyPrimary;
   this.partyRespondent = rawDocument.partyRespondent;
   this.partySecondary = rawDocument.partySecondary;
+  this.pending =
+    rawDocument.pending === undefined
+      ? Document.isPendingOnCreation(rawDocument)
+      : rawDocument.pending;
   this.practitioner = rawDocument.practitioner;
   this.previousDocument = rawDocument.previousDocument;
   this.processingStatus = rawDocument.processingStatus;
@@ -65,6 +71,7 @@ function Document(rawDocument, { applicationContext }) {
   this.servedAt = rawDocument.servedAt;
   this.servedParties = rawDocument.servedParties;
   this.serviceDate = rawDocument.serviceDate;
+  this.serviceStamp = rawDocument.serviceStamp;
   this.signedAt = rawDocument.signedAt;
   this.signedByUserId = rawDocument.signedByUserId;
   this.status = rawDocument.status;
@@ -123,6 +130,37 @@ Document.SIGNED_DOCUMENT_TYPES = {
   },
 };
 
+Document.TRACKED_DOCUMENT_TYPES = {
+  application: {
+    category: 'Application',
+  },
+  motion: {
+    category: 'Motion',
+  },
+  orderToShowCause: {
+    documentType: 'Order to Show Cause',
+    eventCode: 'OSC',
+  },
+  proposedStipulatedDecision: {
+    documentType: 'Proposed Stipulated Decision',
+    eventCode: 'PSDEC',
+  },
+};
+
+Document.isPendingOnCreation = rawDocument => {
+  const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
+    trackedType => {
+      return (
+        (rawDocument.category &&
+          trackedType.category === rawDocument.category) ||
+        (rawDocument.eventCode &&
+          trackedType.eventCode === rawDocument.eventCode)
+      );
+    },
+  );
+  return isPending;
+};
+
 Document.getDocumentTypes = () => {
   const allFilingEvents = flatten([
     ...Object.values(documentMapExternal),
@@ -130,6 +168,9 @@ Document.getDocumentTypes = () => {
   ]);
   const filingEventTypes = allFilingEvents.map(t => t.documentType);
   const orderDocTypes = Order.ORDER_TYPES.map(t => t.documentType);
+  const courtIssuedDocTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+    t => t.documentType,
+  );
   const initialTypes = Object.keys(Document.INITIAL_DOCUMENT_TYPES).map(
     t => Document.INITIAL_DOCUMENT_TYPES[t].documentType,
   );
@@ -141,6 +182,7 @@ Document.getDocumentTypes = () => {
     ...practitionerAssociationDocumentTypes,
     ...filingEventTypes,
     ...orderDocTypes,
+    ...courtIssuedDocTypes,
     ...signedTypes,
   ];
 
@@ -183,6 +225,7 @@ joiValidationDecorator(
     isPaper: joi.boolean().optional(),
     lodged: joi.boolean().optional(),
     ordinalValue: joi.string().optional(),
+    pending: joi.boolean().optional(),
     processingStatus: joi.string().optional(),
     qcAt: joi
       .date()
@@ -208,6 +251,7 @@ joiValidationDecorator(
       .max('now')
       .optional()
       .allow(null),
+    serviceStamp: joi.string().optional(),
     signedAt: joi
       .date()
       .iso()

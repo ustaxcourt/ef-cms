@@ -5,6 +5,7 @@ const {
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
+const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
@@ -89,7 +90,7 @@ describe('createCase integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseStatus: 'New',
+              caseStatus: Case.STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
@@ -128,7 +129,7 @@ describe('createCase integration test', () => {
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
-      status: 'New',
+      status: Case.STATUS_TYPES.new,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -148,7 +149,7 @@ describe('createCase integration test', () => {
     expect(docketsSectionInbox).toMatchObject([
       {
         assigneeName: null,
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {

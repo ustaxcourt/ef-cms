@@ -1,5 +1,14 @@
 const _ = require('lodash');
 const { Case } = require('../entities/cases/Case');
+const { Document } = require('../entities/Document');
+const { Order } = require('../entities/orders/Order');
+
+const orderDocumentTypes = Order.ORDER_TYPES.map(
+  orderType => orderType.documentType,
+);
+const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+  courtIssuedDoc => courtIssuedDoc.documentType,
+);
 
 const formatDocument = (applicationContext, document) => {
   const result = _.cloneDeep(document);
@@ -85,6 +94,14 @@ const formatDocketRecordWithDocument = (
     if (record.documentId) {
       document = documentMap[record.documentId];
 
+      document.isCourtIssuedDocument = !!courtIssuedDocumentTypes.includes(
+        document.documentType,
+      );
+
+      if (document.isCourtIssuedDocument && !document.servedAt) {
+        record.createdAtFormatted = undefined;
+      }
+
       if (document.certificateOfServiceDate) {
         document.certificateOfServiceDateFormatted = applicationContext
           .getUtilities()
@@ -97,10 +114,21 @@ const formatDocketRecordWithDocument = (
         record.description += ` ${document.additionalInfo}`;
       }
 
-      document.qcWorkItemsCompleted = (document.workItems || [])
-        .filter(wi => wi.isQC)
-        .reduce((acc, wi) => {
-          return acc && !!wi.completedAt;
+      const qcWorkItems = (document.workItems || []).filter(wi => wi.isQC);
+
+      document.qcWorkItemsCompleted = qcWorkItems.reduce((acc, wi) => {
+        return acc && !!wi.completedAt;
+      }, true);
+
+      document.isInProgress = !!(
+        (document.isCourtIssuedDocument && !document.servedAt) ||
+        (!document.isCourtIssuedDocument && document.isFileAttached === false)
+      );
+
+      document.qcWorkItemsUntouched =
+        !!qcWorkItems.length &&
+        qcWorkItems.reduce((acc, wi) => {
+          return acc && !wi.isRead && !wi.completedAt;
         }, true);
 
       document.isPetition = document.eventCode === 'P';
@@ -167,37 +195,46 @@ const formatCase = (applicationContext, caseDetail) => {
     );
   }
 
-  const { ORDER_TYPES_MAP } = applicationContext.getConstants();
+  result.pendingItemsDocketEntries = (
+    result.docketRecordWithDocument || []
+  ).filter(entry => entry.document && entry.document.pending);
 
-  result.draftDocuments = (result.documents || [])
-    .filter(
-      document =>
-        !document.archived &&
-        ((document.documentType === 'Stipulated Decision' &&
-          !document.documentType.signedAt) ||
-          (!document.servedAt &&
-            ORDER_TYPES_MAP.find(
-              order => order.documentType === document.documentType,
-            ))),
-    )
-    .filter(document => document.documentType !== 'Stipulated Decision'); // TODO: this will be removed when we revisit stipulated decisions
+  result.draftDocuments = (result.documents || []).filter(document => {
+    const isNotArchived = !document.archived;
+    const isNotServed = !document.servedAt;
+    const isDocumentOnDocketRecord = result.docketRecord.find(
+      docketEntry => docketEntry.documentId === document.documentId,
+    );
+    const isStipDecision = document.documentType === 'Stipulated Decision';
+    const isDraftOrder = orderDocumentTypes.includes(document.documentType);
+    const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+      document.documentType,
+    );
+    return (
+      isNotArchived &&
+      isNotServed &&
+      (isStipDecision ||
+        (isDraftOrder && !isDocumentOnDocketRecord) ||
+        (isCourtIssuedDocument && !isDocumentOnDocketRecord))
+    );
+  });
 
   result.draftDocuments = result.draftDocuments.map(document => ({
     ...document,
+    editUrl:
+      document.documentType === 'Stipulated Decision'
+        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
+    signUrl:
+      document.documentType === 'Stipulated Decision'
+        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
     signedAtFormatted: applicationContext
       .getUtilities()
       .formatDateString(document.signedAt, 'MMDDYY'),
     signedAtFormattedTZ: applicationContext
       .getUtilities()
       .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
-    signUrl:
-      document.documentType === 'Stipulated Decision'
-        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
-    editUrl:
-      document.documentType === 'Stipulated Decision'
-        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
   }));
 
   // establish an initial sort by ascending index
@@ -256,8 +293,6 @@ const formatCase = (applicationContext, caseDetail) => {
   result.caseName = applicationContext.getCaseCaptionNames(
     caseDetail.caseCaption || '',
   );
-  result.caseTitleWithoutRespondent =
-    caseDetail.caseTitle && caseDetail.caseTitle.replace('Respondent', '');
 
   result.formattedPreferredTrialCity =
     result.preferredTrialCity || 'No location selected';

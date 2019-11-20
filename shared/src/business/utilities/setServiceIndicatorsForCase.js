@@ -3,6 +3,7 @@ const constants = {
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
 };
+const { isEmpty } = require('lodash');
 
 /**
  * sets the service indicators for parties on the given case
@@ -53,7 +54,7 @@ const setServiceIndicatorsForCase = caseDetail => {
   }
 
   // contactSecondary
-  if (contactSecondary) {
+  if (!isEmpty(contactSecondary)) {
     contactSecondary.serviceIndicator = hasSecondaryPractitioner
       ? constants.SI_NONE
       : constants.SI_PAPER;

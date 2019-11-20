@@ -1,22 +1,19 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
-import { Document } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../applicationContext';
 import { primaryContactEditHelper as primaryContactEditHelperComputed } from './primaryContactEditHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const state = {
   caseDetail: MOCK_CASE,
-  constants: {
-    CATEGORY_MAP: Document.CATEGORY_MAP,
-    PARTY_TYPES: ContactFactory.PARTY_TYPES,
-  },
   form: {},
   validationErrors: {},
 };
 
 const primaryContactEditHelper = withAppContextDecorator(
   primaryContactEditHelperComputed,
+  applicationContext,
 );
 
 describe('primaryContactEditHelper', () => {

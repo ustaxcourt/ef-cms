@@ -9,12 +9,15 @@ aws.json
 coverage/
 cypress/screenshots
 cypress/videos
+cypress-smoketests/screenshots
+cypress-smoketests/videos
 dist/
 gen.conf
 graph-generators/node_modules/
 graph-generators/*png
 node_modules/
 parcel-debug-*
+**/*_.js
 /policy.json
 puppeteer_lambda_layer.tar.gz
 shared/coverage
@@ -30,3 +33,5 @@ web-client/tests_output/
 web-client/coverage-e2e
 web-client/pa11y/pa11y-screenshots
 web-api/terraform/template/cognito-triggers/index.js.zip
+lambda-policy.json
+.vscode

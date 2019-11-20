@@ -1417,3 +1417,14 @@ button.change-scanner-button {
   color: white;
   font-size: 14px;
 }
+
+.docket-entry-preview-text {
+  overflow: hidden;
+  width: 600px;
+  max-height: 41px;
+  margin: 0.5rem 0;
+}
+
+#service-parties {
+  font-size: 17px;
+}

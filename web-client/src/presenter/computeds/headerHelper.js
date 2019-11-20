@@ -1,13 +1,13 @@
 import { state } from 'cerebral';
 
 export const headerHelper = (get, applicationContext) => {
-  const user = get(state.user);
+  const user = applicationContext.getCurrentUser();
+  const userRole = user && user.role;
   const isLoggedIn = !!user;
-  const userRole = get(state.user.role);
   const currentPage = get(state.currentPage) || '';
   const notifications = get(state.notifications);
   const workQueueIsInternal = get(state.workQueueToDisplay.workQueueIsInternal);
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { USER_ROLES } = applicationContext.getConstants();
   const permissions = get(state.permissions);
 
   const isOtherUser = role => {
@@ -58,5 +58,6 @@ export const headerHelper = (get, applicationContext) => {
       userRole !== USER_ROLES.practitioner &&
       userRole !== USER_ROLES.respondent,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
+    userName: user && user.name,
   };
 };

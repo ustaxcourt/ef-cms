@@ -25,11 +25,11 @@ export const updateDocketEntryWithFileAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
-    isFileAttached: true,
-    isPaper: true,
-    docketNumber,
     caseId,
     createdAt: documentMetadata.dateReceived,
+    docketNumber,
+    isFileAttached: true,
+    isPaper: true,
     receivedAt: documentMetadata.dateReceived,
   };
 

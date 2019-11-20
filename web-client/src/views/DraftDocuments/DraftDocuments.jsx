@@ -1,7 +1,9 @@
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmEditModal } from './ConfirmEditModal';
+import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -10,18 +12,32 @@ export const DraftDocuments = connect(
   {
     archiveDraftDocumentModalSequence:
       sequences.archiveDraftDocumentModalSequence,
+    caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
+    openCreateOrderChooseTypeModalSequence:
+      sequences.openCreateOrderChooseTypeModalSequence,
     showModal: state.showModal,
   },
   ({
     archiveDraftDocumentModalSequence,
+    caseDetailHelper,
     formattedCaseDetail,
     openConfirmEditModalSequence,
+    openCreateOrderChooseTypeModalSequence,
     showModal,
   }) => {
     return (
       <>
+        {caseDetailHelper.showCreateOrderButton && (
+          <Button
+            className="margin-bottom-3"
+            id="button-create-order"
+            onClick={() => openCreateOrderChooseTypeModalSequence()}
+          >
+            <FontAwesomeIcon icon="clipboard-list" size="1x" /> Create Order
+          </Button>
+        )}
         {formattedCaseDetail.draftDocuments.length === 0 && (
           <p>There are no draft documents.</p>
         )}
@@ -35,7 +51,7 @@ export const DraftDocuments = connect(
                 <th>Date</th>
                 <th>Filings and proceedings</th>
                 <th>Created by</th>
-                <th>Signature Added</th>
+                <th>Signature added</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
               </tr>
@@ -116,6 +132,9 @@ export const DraftDocuments = connect(
           <ArchiveDraftDocumentModal />
         )}
         {showModal === 'ConfirmEditModal' && <ConfirmEditModal />}
+        {showModal === 'CreateOrderChooseTypeModal' && (
+          <CreateOrderChooseTypeModal />
+        )}
       </>
     );
   },

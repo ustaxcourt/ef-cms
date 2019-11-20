@@ -31,19 +31,22 @@ exports.formattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
 }) => {
+  const { STATUS_TYPES } = applicationContext.getConstants();
   if (!trialSession) return undefined;
 
-  trialSession.formattedEligibleCases = (trialSession.eligibleCases || []).map(
-    caseItem => exports.formatCase({ applicationContext, caseItem }),
-  );
+  trialSession.formattedEligibleCases = (
+    trialSession.eligibleCases || []
+  ).map(caseItem => exports.formatCase({ applicationContext, caseItem }));
   trialSession.allCases = (trialSession.calendaredCases || [])
     .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
     .sort(exports.compareCasesByDocketNumber);
   trialSession.openCases = trialSession.allCases.filter(
-    item => item.status !== 'Closed' && item.removedFromTrial !== true,
+    item =>
+      item.status !== STATUS_TYPES.closed && item.removedFromTrial !== true,
   );
   trialSession.inactiveCases = trialSession.allCases.filter(
-    item => item.status === 'Closed' || item.removedFromTrial === true,
+    item =>
+      item.status === STATUS_TYPES.closed || item.removedFromTrial === true,
   );
 
   trialSession.formattedTerm = `${
