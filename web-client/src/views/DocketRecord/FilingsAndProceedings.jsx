@@ -119,6 +119,7 @@ export const FilingsAndProceedings = connect(
               shouldLinkToEditCourtIssued:
                 docketRecordHelper.showEditDocketEntry &&
                 document.isCourtIssuedDocument,
+              shouldLinkedToDetails: !!document.servedAt,
             })}
           >
             {document && document.isPaper && (
