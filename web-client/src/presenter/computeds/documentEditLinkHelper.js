@@ -4,6 +4,7 @@ export const documentEditLinkHelper = (get, applicationContext) => ({
   docketNumber,
   documentId,
   messageId,
+  shouldLinkedToDetails,
   shouldLinkToComplete,
   shouldLinkToEdit,
   shouldLinkToEditCourtIssued,
@@ -33,7 +34,9 @@ export const documentEditLinkHelper = (get, applicationContext) => ({
     ? `/mark/${workItemIdToMarkAsRead}`
     : '';
 
-  if (shouldLinkToComplete) {
+  if (shouldLinkedToDetails) {
+    return `${baseUri}`;
+  } else if (shouldLinkToComplete) {
     return `${baseUri}/complete`;
   } else if (shouldLinkToEditCourtIssued) {
     return `${baseUri}/edit-court-issued`;
