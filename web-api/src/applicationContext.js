@@ -46,8 +46,11 @@ const {
   batchDownloadTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor');
 const {
-  blockCaseInteractor,
-} = require('../../shared/src/business/useCases/blockCaseInteractor');
+  blockCaseFromTrialInteractor,
+} = require('../../shared/src/business/useCases/blockCaseFromTrialInteractor');
+const {
+  caseAdvancedSearchInteractor,
+} = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
   CaseExternalIncomplete,
 } = require('../../shared/src/business/entities/cases/CaseExternalIncomplete');
@@ -57,9 +60,6 @@ const {
 const {
   CaseSearch,
 } = require('../../shared/src/business/entities/cases/CaseSearch');
-const {
-  caseSearchInteractor,
-} = require('../../shared/src/business/useCases/caseSearchInteractor');
 const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
@@ -532,8 +532,8 @@ const {
   submitPendingCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
 const {
-  unblockCaseInteractor,
-} = require('../../shared/src/business/useCases/unblockCaseInteractor');
+  unblockCaseFromTrialInteractor,
+} = require('../../shared/src/business/useCases/unblockCaseFromTrialInteractor');
 const {
   unprioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/unprioritizeCaseInteractor');
@@ -909,8 +909,8 @@ module.exports = (appContextUser = {}) => {
         associatePractitionerWithCaseInteractor,
         associateRespondentWithCaseInteractor,
         batchDownloadTrialSessionInteractor,
-        blockCaseInteractor,
-        caseSearchInteractor,
+        blockCaseFromTrialInteractor,
+        caseAdvancedSearchInteractor,
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
@@ -987,7 +987,7 @@ module.exports = (appContextUser = {}) => {
         setWorkItemAsReadInteractor,
         submitCaseAssociationRequestInteractor,
         submitPendingCaseAssociationRequestInteractor,
-        unblockCaseInteractor,
+        unblockCaseFromTrialInteractor,
         unprioritizeCaseInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,

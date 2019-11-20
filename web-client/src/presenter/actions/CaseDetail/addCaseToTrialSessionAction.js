@@ -8,7 +8,10 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {object} the alertSuccess and updated caseDetail object
  */
-export const addToTrialSessionAction = async ({ applicationContext, get }) => {
+export const addCaseToTrialSessionAction = async ({
+  applicationContext,
+  get,
+}) => {
   const { caseId } = get(state.caseDetail);
   const { trialSessionId } = get(state.modal);
   const trialSessions = get(state.trialSessions);

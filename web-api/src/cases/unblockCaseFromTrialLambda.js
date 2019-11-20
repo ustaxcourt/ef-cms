@@ -3,7 +3,7 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
- * used for fetching cases matching the given name, country, state, and/or year filed range
+ * used for unblocking a case
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
@@ -15,9 +15,9 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .caseSearchInteractor({
+        .unblockCaseFromTrialInteractor({
           applicationContext,
-          ...event.queryStringParameters,
+          caseId: event.pathParameters.caseId,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
