@@ -87,12 +87,12 @@ We wouldn’t want anyone being mean to us because of an oversight, mistake, or 
 
 We use this list when performing a code review to ensure that all tasks have been completed.
 
-- [ ] begin by deleting any existing copy of the Git repository and cloning a fresh copy, running `docker system prune` to remove any cached artifacts from any prior code review, and running `./reset-dependencies.sh` to update Node packages
+- [ ] begin by deleting any existing copy of the Git repository and cloning a fresh copy, running `docker system prune` to remove any cached artifacts from any prior code review
 - [ ] review the pull request itself, to get oriented
 	- [ ] read the description of the pull request, which should summarize the changes made
 	- [ ] read through every task on the Scrum board that's encompassed by this pull request
 	- [ ] read the description of the commits that comprise the pull request
-- [ ] stand up the site locally
+- [ ] stand up the site locally, with `./docker-run.sh`
 	- [ ] test all functionality in all major browsers, emphasizing the functionality that this pull request addresses
 		- [ ] for internal Court functionality, perform the most thorough testing in Chrome, though also test in Edge and Firefox
 		- [ ] for public-facing functionality, test in browsers consistent with [public browser use data](https://analytics.usa.gov/), including Internet Explorer 11
@@ -105,7 +105,6 @@ We use this list when performing a code review to ensure that all tasks have bee
 		- [ ] use VoiceOver or Narrator to navigate the site with audio only, with the display turned off
 		- [ ] manually test anything that pa11y cannot test automatically (e.g., contrast of text over images)
 - [ ] review static code analysis results in SonarCloud
-- [ ] run a security audit of dependencies (`npm audit`) in the top-level directory to ensure that there are no vulnerabilities that will be deployed to production (as opposed to vulnerabilities that only have an impact on the development environment)
 - [ ] examine OWASP ZAP output in `docs/`, to ensure that any errors are known to be false positives or have been previously declared to be acceptable
 - [ ] skim all new code, in the context of existing code, [looking for problems](#what-we-look-for) (knowing that the vast majority of new code will be covered by tests)
 - [ ] review all tests

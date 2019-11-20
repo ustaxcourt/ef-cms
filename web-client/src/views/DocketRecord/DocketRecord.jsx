@@ -71,7 +71,8 @@ export const DocketRecord = connect(
                   !isInProgress &&
                   caseDetailHelper.showQcWorkItemsUntouchedState &&
                   document &&
-                  document.qcWorkItemsUntouched;
+                  document.qcWorkItemsUntouched &&
+                  !document.isCourtIssuedDocument;
 
                 const isPaper =
                   !isInProgress &&
@@ -137,6 +138,11 @@ export const DocketRecord = connect(
                     </td>
                     <td className="hide-on-mobile">{record.action}</td>
                     <td>
+                      {document && document.isNotServedCourtIssuedDocument && (
+                        <span className="text-secondary text-semibold">
+                          Not served
+                        </span>
+                      )}
                       {document && document.isStatusServed && (
                         <span>{document.servedAtFormatted}</span>
                       )}
