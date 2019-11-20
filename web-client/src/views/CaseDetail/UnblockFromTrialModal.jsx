@@ -6,7 +6,7 @@ import React from 'react';
 export const UnblockFromTrialModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.unblockFromTrialSequence,
+    confirmSequence: sequences.unblockCaseFromTrialSequence,
   },
   ({ cancelSequence, confirmSequence }) => {
     return (

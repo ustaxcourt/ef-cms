@@ -1,25 +1,25 @@
 import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { submitAdvancedSearchAction } from './submitAdvancedSearchAction';
+import { submitCaseAdvancedSearchAction } from './submitCaseAdvancedSearchAction';
 import sinon from 'sinon';
 
-describe('submitAdvancedSearchAction', () => {
-  let caseSearchInteractorStub;
+describe('submitCaseAdvancedSearchAction', () => {
+  let caseAdvancedSearchInteractorStub;
 
   beforeEach(() => {
-    caseSearchInteractorStub = sinon.stub();
+    caseAdvancedSearchInteractorStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       ...applicationContext,
       getUseCases: () => ({
-        caseSearchInteractor: caseSearchInteractorStub,
+        caseAdvancedSearchInteractor: caseAdvancedSearchInteractorStub,
       }),
     };
   });
 
-  it('should call caseSearchInteractor with the state.advancedSearchForm as searchParams', async () => {
-    await runAction(submitAdvancedSearchAction, {
+  it('should call caseAdvancedSearchInteractor with the state.advancedSearchForm as searchParams', async () => {
+    await runAction(submitCaseAdvancedSearchAction, {
       modules: {
         presenter,
       },
@@ -34,8 +34,10 @@ describe('submitAdvancedSearchAction', () => {
       },
     });
 
-    expect(caseSearchInteractorStub.calledOnce).toEqual(true);
-    expect(caseSearchInteractorStub.getCall(0).args[0].searchParams).toEqual({
+    expect(caseAdvancedSearchInteractorStub.calledOnce).toEqual(true);
+    expect(
+      caseAdvancedSearchInteractorStub.getCall(0).args[0].searchParams,
+    ).toEqual({
       countryType: 'c',
       petitionerName: 'a',
       petitionerState: 'b',
