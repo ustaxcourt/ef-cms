@@ -15,7 +15,8 @@ export const AdvancedSearch = connect(
     advancedSearchHelper: state.advancedSearchHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     constants: state.constants,
-    submitAdvancedSearchSequence: sequences.submitAdvancedSearchSequence,
+    submitCaseAdvancedSearchSequence:
+      sequences.submitCaseAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     usStates: state.constants.US_STATES,
@@ -26,7 +27,7 @@ export const AdvancedSearch = connect(
     advancedSearchHelper,
     clearAdvancedSearchFormSequence,
     constants,
-    submitAdvancedSearchSequence,
+    submitCaseAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
     usStates,
     validationErrors,
@@ -47,7 +48,7 @@ export const AdvancedSearch = connect(
                 clearAdvancedSearchFormSequence();
               }}
             >
-              <FontAwesomeIcon icon={['far', 'times-circle']} />
+              <FontAwesomeIcon icon={['fas', 'times-circle']} />
               Clear Search
             </Button>
           </div>
@@ -55,7 +56,7 @@ export const AdvancedSearch = connect(
             <form
               onSubmit={e => {
                 e.preventDefault();
-                submitAdvancedSearchSequence();
+                submitCaseAdvancedSearchSequence();
               }}
             >
               <div className="grid-row grid-gap">

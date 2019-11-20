@@ -81,6 +81,8 @@ provider:
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
+  role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
@@ -106,54 +108,11 @@ provider:
     NODE_ENV: ${self:custom.vars.nodeEnv}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
 
-  iamRoleStatements:
-    - Effect: 'Allow'
-      Action:
-        - 'xray:PutTraceSegments'
-        - 'xray:PutTelemetryRecords'
-      Resource:
-        - '*'
-    - Effect: 'Allow'
-      Action:
-        - 'lambda:InvokeFunction'
-      Resource:
-        - arn:aws:lambda:${opt:region}:${opt:accountId}:function:${self:service}-${opt:stage, self:provider.stage}-*
-    - Effect: 'Allow'
-      Action:
-        - cognito-idp:AdminCreateUser
-        - cognito-idp:AdminGetUser
-      Resource:
-        - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
-    - Effect: 'Allow'
-      Action:
-        - 's3:*'
-      Resource:
-        Fn::Join:
-          - ''
-          - - 'arn:aws:s3:::'
-            - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
-            - '/*'
-    - Effect: 'Allow'
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:BatchGetItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-        - dynamodb:BatchWriteItem
-      Resource:
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}
-        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-
 package:
   exclude:
     - ./**
   include:
-    - web-api/src/workItemsHandlers.js
+    - web-api/${self:provider.dir}/workItemsHandlers.js
 
   excludeDevDependencies: true
 
@@ -193,7 +152,7 @@ resources:
 
 functions:
   assignWorkItems:
-    handler: web-api/src/workItemsHandlers.assignWorkItemsLambda
+    handler: web-api/${self:provider.dir}/workItemsHandlers.assignWorkItemsLambda
     events:
       - http:
           path: /
@@ -205,7 +164,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getWorkItem:
-    handler: web-api/src/workItemsHandlers.getWorkItemLambda
+    handler: web-api/${self:provider.dir}/workItemsHandlers.getWorkItemLambda
     events:
       - http:
           path: /{workItemId}
@@ -217,7 +176,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   forwardWorkItem:
-    handler: web-api/src/workItemsHandlers.forwardWorkItemLambda
+    handler: web-api/${self:provider.dir}/workItemsHandlers.forwardWorkItemLambda
     events:
       - http:
           path: /{workItemId}/assignee
@@ -229,7 +188,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   completeWorkItem:
-    handler: web-api/src/workItemsHandlers.completeWorkItemLambda
+    handler: web-api/${self:provider.dir}/workItemsHandlers.completeWorkItemLambda
     events:
       - http:
           path: /{workItemId}/complete
@@ -241,7 +200,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   setWorkItemAsRead:
-    handler: web-api/src/workItemsHandlers.setWorkItemAsReadLambda
+    handler: web-api/${self:provider.dir}/workItemsHandlers.setWorkItemAsReadLambda
     events:
       - http:
           path: /{workItemId}/read

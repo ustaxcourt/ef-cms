@@ -96,7 +96,7 @@ createAccount() {
       --region "${REGION}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
       --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
-      --session "${session}"
+      --session="${session}"
   fi
 }
 
@@ -104,7 +104,7 @@ createManyAccounts() {
   emailPrefix=$1
   role=$1
   section=$2
-  for i in $(seq 1 5);
+  for i in $(seq 1 30);
   do
     createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}" "" "${section}"
   done

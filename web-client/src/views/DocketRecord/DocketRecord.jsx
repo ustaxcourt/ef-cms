@@ -43,8 +43,11 @@ export const DocketRecord = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Number" className="center-column">
-                No.
+              <th className="center-column">
+                <span>
+                  <span className="usa-sr-only">Number</span>
+                  <span aria-hidden="true">No.</span>
+                </span>
               </th>
               <th>Date</th>
               <th className="center-column">Event</th>
@@ -62,10 +65,29 @@ export const DocketRecord = connect(
                 const isInProgress =
                   caseDetailHelper.showDocketRecordInProgressState &&
                   document &&
-                  document.isFileAttached === false;
+                  document.isInProgress;
+
+                const qcWorkItemsUntouched =
+                  !isInProgress &&
+                  caseDetailHelper.showQcWorkItemsUntouchedState &&
+                  document &&
+                  document.qcWorkItemsUntouched;
+
+                const isPaper =
+                  !isInProgress &&
+                  !qcWorkItemsUntouched &&
+                  document &&
+                  document.isPaper;
+
                 return (
                   <tr
-                    className={classNames(isInProgress && 'in-progress')}
+                    className={classNames(
+                      document &&
+                        document.isInProgress &&
+                        caseDetailHelper.showDocketRecordInProgressState &&
+                        'in-progress',
+                      qcWorkItemsUntouched && 'qc-untouched',
+                    )}
                     key={index}
                   >
                     <td className="center-column hide-on-mobile">{index}</td>
@@ -81,12 +103,16 @@ export const DocketRecord = connect(
                       aria-hidden="true"
                       className="filing-type-icon hide-on-mobile"
                     >
-                      {document && document.isPaper && !isInProgress && (
+                      {isPaper && (
                         <FontAwesomeIcon icon={['fas', 'file-alt']} />
                       )}
 
                       {isInProgress && (
                         <FontAwesomeIcon icon={['fas', 'thumbtack']} />
+                      )}
+
+                      {qcWorkItemsUntouched && (
+                        <FontAwesomeIcon icon={['fa', 'star']} />
                       )}
 
                       {document &&

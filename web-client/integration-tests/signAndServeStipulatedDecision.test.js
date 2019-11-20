@@ -1,3 +1,6 @@
+import { Case } from '../../shared/src/business/entities/cases/Case';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+
 import {
   createMessage,
   fakeFile,
@@ -12,6 +15,12 @@ import {
   viewCaseDetail,
   viewDocumentDetailMessage,
 } from './helpers';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
+
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
+);
 
 const test = setupTest({
   useCases: {
@@ -118,6 +127,6 @@ describe('a user signs and serves a stipulated decision', () => {
       d => d.documentId === signedDocumentId,
     );
     expect(signedDocument.status).toEqual('served');
-    expect(caseDetail.status).toEqual('Closed');
+    expect(caseDetail.status).toEqual(Case.STATUS_TYPES.closed);
   });
 });

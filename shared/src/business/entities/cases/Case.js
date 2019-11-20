@@ -20,14 +20,43 @@ const { Respondent } = require('../Respondent');
 const { User } = require('../User');
 
 Case.STATUS_TYPES = {
+  assignedCase: 'Assigned - Case',
+  assignedMotion: 'Assigned - Motion',
   batchedForIRS: 'Batched for IRS',
   calendared: 'Calendared',
+  cav: 'CAV',
   closed: 'Closed',
   generalDocket: 'General Docket - Not at Issue',
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
+  jurisdictionRetained: 'Jurisdiction Retained',
   new: 'New',
+  onAppeal: 'On Appeal',
   recalled: 'Recalled',
+  rule155: 'Rule 155',
+  submitted: 'Submitted',
 };
+
+Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
+  Case.STATUS_TYPES.submitted,
+  Case.STATUS_TYPES.cav,
+  Case.STATUS_TYPES.rule155,
+  Case.STATUS_TYPES.jurisdictionRetained,
+  Case.STATUS_TYPES.assignedCase,
+  Case.STATUS_TYPES.assignedMotion,
+];
+
+Case.STATUS_TYPES_MANUAL_UPDATE = [
+  Case.STATUS_TYPES.generalDocket,
+  Case.STATUS_TYPES.generalDocketReadyForTrial,
+  Case.STATUS_TYPES.submitted,
+  Case.STATUS_TYPES.cav,
+  Case.STATUS_TYPES.rule155,
+  Case.STATUS_TYPES.jurisdictionRetained,
+  Case.STATUS_TYPES.assignedCase,
+  Case.STATUS_TYPES.assignedMotion,
+  Case.STATUS_TYPES.closed,
+  Case.STATUS_TYPES.onAppeal,
+];
 
 Case.ANSWER_CUTOFF_AMOUNT = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
@@ -212,9 +241,7 @@ function Case(rawCase, { applicationContext }) {
     rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
   if (rawCase.caseCaption) {
-    this.caseTitle = `${rawCase.caseCaption.trim()} ${
-      Case.CASE_CAPTION_POSTFIX
-    }`;
+    this.setCaseTitle(rawCase.caseCaption);
     this.initialTitle = rawCase.initialTitle || this.caseTitle;
   }
 
@@ -225,6 +252,8 @@ function Case(rawCase, { applicationContext }) {
   } else {
     this.documents = [];
   }
+
+  this.hasPendingItems = this.documents.some(document => document.pending);
 
   if (Array.isArray(rawCase.practitioners)) {
     this.practitioners = rawCase.practitioners.map(
@@ -471,6 +500,16 @@ Case.getCaseCaption = function(rawCase) {
       break;
   }
   return caseCaption;
+};
+
+Case.prototype.toRawObject = function() {
+  const result = this.toRawObjectFromJoi();
+  result.hasPendingItems = this.doesHavePendingItems();
+  return result;
+};
+
+Case.prototype.doesHavePendingItems = function() {
+  return this.documents.some(document => document.pending);
 };
 
 /**
@@ -1062,7 +1101,7 @@ Case.prototype.unsetAsHighPriority = function() {
 };
 
 /**
- * remove from trial, setting case status back to generalDocketReadyForTrial
+ * remove case from trial, setting case status to generalDocketReadyForTrial
  *
  * @returns {Case} the updated case entity
  */
@@ -1073,6 +1112,77 @@ Case.prototype.removeFromTrial = function() {
   this.trialLocation = undefined;
   this.trialSessionId = undefined;
   this.trialTime = undefined;
+  return this;
+};
+
+/**
+ * remove case from trial with optional associated judge
+ *
+ * @param {string} associatedJudge (optional) the associated judge for the case
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.removeFromTrialWithAssociatedJudge = function(associatedJudge) {
+  if (associatedJudge) {
+    this.associatedJudge = associatedJudge;
+  }
+
+  this.trialDate = undefined;
+  this.trialLocation = undefined;
+  this.trialSessionId = undefined;
+  this.trialTime = undefined;
+  return this;
+};
+
+/**
+ * set associated judge
+ *
+ * @param {string} associatedJudge the judge to associate with the case
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setAssociatedJudge = function(associatedJudge) {
+  this.associatedJudge = associatedJudge;
+  return this;
+};
+
+/**
+ * set case status
+ *
+ * @param {string} caseStatus the case status to update
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setCaseStatus = function(caseStatus) {
+  this.status = caseStatus;
+  if (
+    [
+      Case.STATUS_TYPES.generalDocket,
+      Case.STATUS_TYPES.generalDocketReadyForTrial,
+    ].includes(caseStatus)
+  ) {
+    this.associatedJudge = Case.CHIEF_JUDGE;
+  }
+  return this;
+};
+
+/**
+ * set case caption
+ *
+ * @param {string} caseCaption the case caption to update
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setCaseCaption = function(caseCaption) {
+  this.caseCaption = caseCaption;
+  this.setCaseTitle(caseCaption);
+  return this;
+};
+
+/**
+ * set case title
+ *
+ * @param {string} caseCaption the case caption to build the case title
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setCaseTitle = function(caseCaption) {
+  this.caseTitle = `${caseCaption.trim()} ${Case.CASE_CAPTION_POSTFIX}`;
   return this;
 };
 

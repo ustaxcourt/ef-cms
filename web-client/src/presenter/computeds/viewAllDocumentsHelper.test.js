@@ -1,16 +1,17 @@
-import { Document } from '../../../../shared/src/business/entities/Document';
+import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
-import { viewAllDocumentsHelper } from './viewAllDocumentsHelper';
+import { viewAllDocumentsHelper as viewAllDocumentsHelperComputed } from './viewAllDocumentsHelper';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const viewAllDocumentsHelper = withAppContextDecorator(
+  viewAllDocumentsHelperComputed,
+  applicationContext,
+);
 
 describe('viewAllDocumentsHelper', () => {
   it('returns all document categories, document types, reasons, and sections', () => {
     const result = runCompute(viewAllDocumentsHelper, {
-      state: {
-        constants: {
-          CATEGORIES: Document.CATEGORIES,
-          CATEGORY_MAP: Document.CATEGORY_MAP,
-        },
-      },
+      state: {},
     });
 
     expect(result.categoryMap).toBeTruthy();
@@ -23,10 +24,6 @@ describe('viewAllDocumentsHelper', () => {
   it("doesn't return any categories when looking for a secondary document", () => {
     const result = runCompute(viewAllDocumentsHelper, {
       state: {
-        constants: {
-          CATEGORIES: Document.CATEGORIES,
-          CATEGORY_MAP: Document.CATEGORY_MAP,
-        },
         modal: {
           forSecondary: false,
         },

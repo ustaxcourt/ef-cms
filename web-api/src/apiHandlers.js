@@ -3,9 +3,13 @@ module.exports = {
     .handler,
   createCourtIssuedOrderPdfFromHtmlLambda: require('./courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlLambda')
     .handler,
+  fetchPendingItemsLambda: require('./pendingItems/fetchPendingItemsLambda')
+    .handler,
   generateDocketRecordPdfLambda: require('./cases/generateDocketRecordPdfLambda')
     .handler,
   generatePdfFromHtmlLambda: require('./cases/generatePdfFromHtmlLambda')
+    .handler,
+  generatePrintablePendingReportLambda: require('./pendingItems/generatePrintablePendingReportLambda')
     .handler,
   generateTrialCalendarPdfLambda: require('./trialSessions/generateTrialCalendarPdfLambda')
     .handler,

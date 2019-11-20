@@ -6,7 +6,7 @@ import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
-export const completeDocumentTypeSectionHelper = get => {
+export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
@@ -15,7 +15,7 @@ export const completeDocumentTypeSectionHelper = get => {
   if (isEmpty(caseDetail)) {
     return {};
   }
-  const CATEGORY_MAP = get(state.constants.CATEGORY_MAP);
+  const { CATEGORY_MAP } = applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
   const documentTypesForSelect = getDocumentTypesForSelect(CATEGORY_MAP);
 

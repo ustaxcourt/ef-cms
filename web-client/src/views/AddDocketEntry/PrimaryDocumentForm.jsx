@@ -464,6 +464,36 @@ export const PrimaryDocumentForm = connect(
               </fieldset>
             </FormGroup>
           )}
+
+          {addDocketEntryHelper.showTrackOption && (
+            <>
+              <hr />
+              <div className="usa-form-group">
+                <fieldset className="usa-fieldset">
+                  <legend className="usa-legend">Track document?</legend>
+                  <div className="usa-checkbox">
+                    <input
+                      checked={form.pending || false}
+                      className="usa-checkbox__input"
+                      id="pending"
+                      name="pending"
+                      type="checkbox"
+                      onChange={e => {
+                        updateDocketEntryFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateDocketEntrySequence();
+                      }}
+                    />
+                    <label className="usa-checkbox__label" htmlFor="pending">
+                      Add to pending report
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+            </>
+          )}
         </div>
       </>
     );

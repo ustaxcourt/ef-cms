@@ -6,6 +6,11 @@ describe('replaceBracketed', () => {
     expect(results).toEqual('abc');
   });
 
+  it('puts in the correct values without an optional value and trims whitespace', () => {
+    const results = replaceBracketed('[][][] ', 'a', 'b');
+    expect(results).toEqual('ab');
+  });
+
   it('does nothing on empty input', () => {
     const results = replaceBracketed('[]', false);
     expect(results).toEqual('');

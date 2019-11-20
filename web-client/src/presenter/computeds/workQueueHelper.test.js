@@ -17,7 +17,6 @@ const workQueueHelper = withAppContextDecorator(workQueueHelperComputed, {
 const getBaseState = user => {
   globalUser = user;
   return {
-    constants: { USER_ROLES: User.ROLES },
     permissions: getUserPermissions(user),
   };
 };
@@ -222,5 +221,28 @@ describe('workQueueHelper', () => {
       },
     });
     expect(result.showBatchedByColumn).toBeFalsy();
+  });
+
+  it('shows "Received" as filed label on messages inbox', () => {
+    const user = {
+      role: User.ROLES.petitionsClerk,
+      userId: '123',
+    };
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        notifications: {
+          myInboxUnreadCount: 0,
+          qcUnreadCount: 0,
+        },
+        selectedWorkItems: [],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+          workQueueIsInternal: true,
+        },
+      },
+    });
+    expect(result.inboxFiledColumnLabel).toEqual('Received');
   });
 });

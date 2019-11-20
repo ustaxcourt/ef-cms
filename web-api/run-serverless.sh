@@ -18,11 +18,13 @@ ACCOUNT_ID="${ACCOUNT_ID#\"}"
 export NODE_PRESERVE_SYMLINKS=1
 find ./web-api/src -type f -exec chmod -R ugo+r {} ";"
 
+npm run build:assets
 npm run "${build}"
 cp "./web-api/src/${handler}" /tmp
 cp "./dist/${handler}" web-api/src
 
 export SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
+export SLS_DEBUG=*
 
 ./node_modules/.bin/sls create_domain \
   --accountId "${ACCOUNT_ID}" \

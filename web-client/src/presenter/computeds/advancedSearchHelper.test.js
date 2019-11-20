@@ -1,11 +1,22 @@
-import { CaseSearch } from '../../../../shared/src/business/entities/cases/CaseSearch';
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { advancedSearchHelper as advancedSearchHelperComputed } from './advancedSearchHelper';
+import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+let pageSizeOverride = 5;
+
 const advancedSearchHelper = withAppContextDecorator(
   advancedSearchHelperComputed,
+  {
+    ...applicationContext,
+    getConstants: () => {
+      return {
+        ...applicationContext.getConstants(),
+        CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
+      };
+    },
+  },
 );
 
 describe('advancedSearchHelper', () => {
@@ -13,10 +24,6 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: {},
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-        },
       },
     });
     expect(result).toEqual({ showStateSelect: false });
@@ -27,10 +34,6 @@ describe('advancedSearchHelper', () => {
       state: {
         advancedSearchForm: {
           countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
-        },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
         },
       },
     });
@@ -43,10 +46,6 @@ describe('advancedSearchHelper', () => {
         advancedSearchForm: {
           countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
         },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-        },
       },
     });
     expect(result).toEqual({ showStateSelect: false });
@@ -56,11 +55,6 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          US_STATES: ContactFactory.US_STATES,
-        },
         searchResults: [],
       },
     });
@@ -75,11 +69,6 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          US_STATES: ContactFactory.US_STATES,
-        },
         searchResults: [
           {
             contactPrimary: { name: 'Test Person', state: 'TN' },
@@ -100,26 +89,20 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          US_STATES: ContactFactory.US_STATES,
-        },
         searchResults: [
           {
             caseCaption: 'Test Petitioner, Petitioner',
             contactPrimary: { name: 'Test Person', state: 'TN' },
-            createdAt: '2019-03-01T05:00:00.000Z',
             docketNumber: '101-19',
+            receivedAt: '2019-03-01T05:00:00.000Z',
           },
           {
             caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: { name: 'Test Person', state: 'TX' },
             contactSecondary: { name: 'Another Person', state: 'TX' },
-            createdAt: '2019-05-01T05:00:00.000Z',
             docketNumber: '102-18',
             docketNumberSuffix: 'W',
-            receivedAt: '2018-05-01T05:00:00.000Z',
+            receivedAt: '2019-05-01T05:00:00.000Z',
           },
         ],
       },
@@ -130,7 +113,7 @@ describe('advancedSearchHelper', () => {
         contactPrimaryName: 'Test Person',
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
-        formattedFiledDate: '05/01/18',
+        formattedFiledDate: '05/01/19',
         fullStateNamePrimary: 'Texas',
       },
       {
@@ -145,28 +128,24 @@ describe('advancedSearchHelper', () => {
   });
 
   it('only returns formatted results that should be currently shown based on form.currentPage', () => {
+    pageSizeOverride = 1;
     let result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: 1,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          US_STATES: ContactFactory.US_STATES,
-        },
         searchResults: [
           {
             caseCaption: 'Test Petitioner, Petitioner',
             contactPrimary: { name: 'Test Person', state: 'TN' },
-            createdAt: '2019-03-01T05:00:00.000Z',
             docketNumber: '101-19',
+            receivedAt: '2019-03-01T05:00:00.000Z',
           },
           {
             caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: { name: 'Test Person', state: 'TX' },
             contactSecondary: { name: 'Another Person', state: 'TX' },
-            createdAt: '2018-05-01T05:00:00.000Z',
             docketNumber: '102-18',
             docketNumberSuffix: 'W',
+            receivedAt: '2018-05-01T05:00:00.000Z',
           },
         ],
       },
@@ -187,33 +166,28 @@ describe('advancedSearchHelper', () => {
     result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 3 },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: 1,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          US_STATES: ContactFactory.US_STATES,
-        },
         searchResults: [
           {
             caseCaption: 'Test Petitioner, Petitioner',
             contactPrimary: { name: 'Test Person', state: 'TN' },
-            createdAt: '2019-03-01T05:00:00.000Z',
             docketNumber: '101-19',
+            receivedAt: '2019-03-01T05:00:00.000Z',
           },
           {
             caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: { name: 'Test Person', state: 'TX' },
             contactSecondary: { name: 'Another Person', state: 'TX' },
-            createdAt: '2018-05-01T05:00:00.000Z',
             docketNumber: '102-18',
             docketNumberSuffix: 'W',
+            receivedAt: '2018-05-01T05:00:00.000Z',
           },
           {
             caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: { name: 'Test Petitioner', state: 'CA' },
             contactSecondary: { name: 'Another Petitioner', state: 'TN' },
-            createdAt: '2018-04-01T05:00:00.000Z',
             docketNumber: '101-18',
             docketNumberSuffix: 'W',
+            receivedAt: '2018-04-01T05:00:00.000Z',
           },
         ],
       },

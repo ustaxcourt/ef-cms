@@ -27,6 +27,7 @@ import docketClerkSelectsAssignee from './journey/docketClerkSelectsAssignee';
 import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
 import docketClerkStartsNewMessageThreadOnAnswer from './journey/docketClerkStartsNewMessageThreadOnAnswer';
 import docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC from './journey/docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC';
+import docketClerkUpdatesCaseCaption from './journey/docketClerkUpdatesCaseCaption';
 import docketClerkViewsCaseDetail from './journey/docketClerkViewsCaseDetail';
 import docketClerkViewsDecisionDocument from './journey/docketClerkViewsDecisionDocument';
 import docketClerkViewsDocument from './journey/docketClerkViewsDocument';
@@ -49,7 +50,6 @@ import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
 import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkUpdatesCaseCaption from './journey/petitionsClerkUpdatesCaseCaption';
 import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkViewsMessages from './journey/petitionsClerkViewsMessages';
@@ -139,7 +139,6 @@ describe('Case journey', () => {
   petitionsClerkViewsMessagesAfterReassign(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
-  petitionsClerkUpdatesCaseCaption(test);
   petitionsClerkSubmitsCaseToIrs(test);
   petitionsClerkIrsHoldingQueue(test);
 
@@ -153,6 +152,7 @@ describe('Case journey', () => {
   docketClerkLogIn(test);
   docketClerkViewsMessagesWithoutWorkItem(test);
   docketClerkViewsCaseDetail(test);
+  docketClerkUpdatesCaseCaption(test);
   docketClerkViewsDecisionDocument(test);
   docketClerkStartsNewMessageThreadOnAnswer(test);
   docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC(test);

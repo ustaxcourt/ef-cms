@@ -5,7 +5,6 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting state.users
- * @param showModal
  * @param {object} providers.props the cerebral props object used for getting the props.users
  */
 export const setShowModalAction = ({ props, store }) => {

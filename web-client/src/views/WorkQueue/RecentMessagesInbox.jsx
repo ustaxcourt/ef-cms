@@ -5,11 +5,11 @@ import React from 'react';
 
 export const RecentMessagesInbox = connect(
   {
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({ documentEditLinkHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -22,7 +22,7 @@ export const RecentMessagesInbox = connect(
               <th aria-label="Docket Number" className="small" colSpan="2">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              <th className="small">Filed</th>
+              <th className="small">Received</th>
               <th>Case name</th>
               <th>Document</th>
               {workQueueHelper.showCaseStatusColumn && (
@@ -51,7 +51,7 @@ export const RecentMessagesInbox = connect(
                         className={
                           item.isRead ? 'case-link' : 'link case-link-bold'
                         }
-                        href={documentHelper({
+                        href={documentEditLinkHelper({
                           docketNumber: item.docketNumber,
                           documentId: item.document.documentId,
                           messageId: item.currentMessage.messageId,

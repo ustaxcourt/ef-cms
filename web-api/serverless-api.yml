@@ -82,8 +82,11 @@ provider:
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
+  role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
+  elasticsearchEndpoint: ${opt:elasticsearch_endpoint}
   masterRegion: us-east-1
   userPoolId: us-east-1_7uRkF0Axn
   masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
@@ -101,60 +104,18 @@ provider:
     TEMP_DOCUMENTS_BUCKET_NAME: ${opt:domain}-temp-documents-${opt:stage}-us-east-1
     DYNAMODB_ENDPOINT: ${self:custom.vars.dynamodbEndpoint, self:provider.dynamodbEndpoint}
     MASTER_DYNAMODB_ENDPOINT: ${self:custom.vars.masterDynamodbEndpoint, self:provider.masterDynamodbEndpoint}
+    ELASTICSEARCH_ENDPOINT: ${self:custom.vars.elasticsearchEndpoint, self:provider.elasticsearchEndpoint}
     MASTER_REGION: ${self:provider.masterRegion}
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
 
-  iamRoleStatements:
-    - Effect: 'Allow'
-      Action:
-        - 'xray:PutTraceSegments'
-        - 'xray:PutTelemetryRecords'
-      Resource:
-        - '*'
-    - Effect: 'Allow'
-      Action:
-        - 'lambda:InvokeFunction'
-      Resource:
-        - arn:aws:lambda:${opt:region}:${opt:accountId}:function:${self:service}-${opt:stage, self:provider.stage}-*
-    - Effect: 'Allow'
-      Action:
-        - cognito-idp:AdminCreateUser
-        - cognito-idp:AdminGetUser
-      Resource:
-        - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
-    - Effect: 'Allow'
-      Action:
-        - 's3:*'
-      Resource:
-        Fn::Join:
-          - ''
-          - - 'arn:aws:s3:::'
-            - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
-            - '/*'
-    - Effect: 'Allow'
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:BatchGetItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-        - dynamodb:BatchWriteItem
-      Resource:
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}
-        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-
 package:
   exclude:
     - ./**
   include:
-    - web-api/src/apiHandlers.js
+    - web-api/${self:provider.dir}/apiHandlers.js
   excludeDevDependencies: true
 
 resources:
@@ -193,7 +154,7 @@ resources:
 
 functions:
   runBatchProcess:
-    handler: web-api/src/apiHandlers.runBatchProcessLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.runBatchProcessLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -209,7 +170,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getNotifications:
-    handler: web-api/src/apiHandlers.getNotificationsLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.getNotificationsLambda
     events:
       - http:
           path: notifications
@@ -221,12 +182,12 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   checkForReadyForTrialCases:
-    handler: web-api/src/apiHandlers.checkForReadyForTrialCases
+    handler: web-api/${self:provider.dir}/apiHandlers.checkForReadyForTrialCases
     events:
       - schedule: cron(0 7 * * ? *)
 
   swagger:
-    handler: web-api/src/apiHandlers.swaggerLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.swaggerLambda
     events:
       - http:
           path: swagger
@@ -234,7 +195,7 @@ functions:
           cors: true
 
   swaggerJson:
-    handler: web-api/src/apiHandlers.swaggerJsonLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.swaggerJsonLambda
     events:
       - http:
           path: swagger.json
@@ -242,7 +203,7 @@ functions:
           cors: true
 
   createCourtIssuedOrderPdfFromHtml:
-    handler: web-api/src/apiHandlers.createCourtIssuedOrderPdfFromHtmlLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.createCourtIssuedOrderPdfFromHtmlLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -258,7 +219,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   generateDocketRecordPdfLambda:
-    handler: web-api/src/apiHandlers.generateDocketRecordPdfLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.generateDocketRecordPdfLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -274,7 +235,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   generateTrialCalendarPdfLambda:
-    handler: web-api/src/apiHandlers.generateTrialCalendarPdfLambda
+    handler: web-api/${self:provider.dir}/apiHandlers.generateTrialCalendarPdfLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -283,6 +244,34 @@ functions:
       - http:
           path: trial-calendar-pdf
           method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  fetchPendingItemsLambda:
+    handler: web-api/${self:provider.dir}/apiHandlers.fetchPendingItemsLambda
+    events:
+      - http:
+          path: pending-items
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  generatePrintablePendingReport:
+    handler: web-api/${self:provider.dir}/apiHandlers.generatePrintablePendingReportLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: pending-report
+          method: get
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

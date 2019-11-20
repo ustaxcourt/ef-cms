@@ -17,7 +17,6 @@ let globalUser;
 const getBaseState = user => {
   globalUser = user;
   return {
-    constants: { USER_ROLES: User.ROLES },
     permissions: getUserPermissions(user),
   };
 };
@@ -77,83 +76,6 @@ describe('case detail computed', () => {
       },
     });
     expect(result.showFileDocumentButton).toEqual(true);
-  });
-
-  it('should set showPendingAccessToCaseButton to true if user role is practitioner and case is not owned by user but has pending request', () => {
-    const user = {
-      role: User.ROLES.practitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-        screenMetadata: {
-          isAssociated: false,
-          pendingAssociation: true,
-        },
-      },
-    });
-    expect(result.showPendingAccessToCaseButton).toEqual(true);
-  });
-
-  it('should set showRequestAccessToCaseButton to true if user role is practitioner and case is not owned by user', () => {
-    const user = {
-      role: User.ROLES.practitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-        screenMetadata: {
-          isAssociated: false,
-        },
-      },
-    });
-    expect(result.showRequestAccessToCaseButton).toEqual(true);
-  });
-
-  it('should set showRequestAccessToCaseButton to false if user role is practitioner and case is owned by user', () => {
-    const user = {
-      role: User.ROLES.practitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { practitioners: [{ userId: '123' }] },
-        currentPage: 'CaseDetail',
-        form: {},
-        screenMetadata: {
-          isAssociated: true,
-        },
-      },
-    });
-    expect(result.showRequestAccessToCaseButton).toEqual(false);
-  });
-
-  it('should set showRequestAccessToCaseButton to false if user role is petitioner and user is not associated with the case', () => {
-    const user = {
-      role: User.ROLES.petitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-        screenMetadata: {
-          isAssociated: false,
-        },
-      },
-    });
-    expect(result.showRequestAccessToCaseButton).toEqual(false);
   });
 
   it('should set userHasAccessToCase to true if user role is petitioner and user is associated with case', () => {
@@ -227,11 +149,9 @@ describe('case detail computed', () => {
     });
     expect(result.userHasAccessToCase).toEqual(true);
     expect(result.showFileDocumentButton).toEqual(true);
-    expect(result.showFileFirstDocumentButton).toEqual(false);
-    expect(result.showRequestAccessToCaseButton).toEqual(false);
   });
 
-  it('should set showRequestAccessToCaseButton to true if user role is respondent and the respondent is not associated with the case', () => {
+  it('should set userHasAccessToCase and showFileDocumentButton to false if user role is respondent and the respondent is not associated with the case', () => {
     const user = {
       role: User.ROLES.respondent,
       userId: '789',
@@ -249,11 +169,9 @@ describe('case detail computed', () => {
     });
     expect(result.userHasAccessToCase).toEqual(false);
     expect(result.showFileDocumentButton).toEqual(false);
-    expect(result.showFileFirstDocumentButton).toEqual(false);
-    expect(result.showRequestAccessToCaseButton).toEqual(true);
   });
 
-  it('should set showFileFirstDocumentButton to true if user role is respondent and there is no respondent associated with the case', () => {
+  it('should set userHasAccessToCase and showFileDocumentButton to false if user role is respondent and there is no respondent associated with the case', () => {
     const user = {
       role: User.ROLES.respondent,
       userId: '789',
@@ -271,8 +189,6 @@ describe('case detail computed', () => {
     });
     expect(result.userHasAccessToCase).toEqual(false);
     expect(result.showFileDocumentButton).toEqual(false);
-    expect(result.showFileFirstDocumentButton).toEqual(true);
-    expect(result.showRequestAccessToCaseButton).toEqual(false);
   });
 
   it('should show add docket entry button if current page is CaseDetailInternal and user role is docketclerk', () => {

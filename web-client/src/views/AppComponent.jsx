@@ -8,6 +8,7 @@ import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
+import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
@@ -25,6 +26,7 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
 import { OrdersNeededSummary } from './CaseDetailEdit/OrdersNeededSummary';
+import { PendingReport } from './PendingReport/PendingReport';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
@@ -32,6 +34,7 @@ import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SignStipDecision } from './SignStipDecision';
+import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
@@ -57,6 +60,7 @@ const pages = {
   CaseDetail,
   CaseDetailInternal,
   CaseSearchNoMatches,
+  CourtIssuedDocketEntry,
   CreateOrder,
   DashboardJudge,
   DashboardPetitioner,
@@ -72,6 +76,7 @@ const pages = {
   LogIn,
   Messages,
   OrdersNeededSummary,
+  PendingReport,
   PrimaryContactEdit,
   PrintableDocketRecord,
   PrintableTrialCalendar,
@@ -79,6 +84,7 @@ const pages = {
   SelectDocumentType,
   SignOrder,
   SignStipDecision,
+  SimplePdfPreviewPage,
   StartCaseInternal,
   StartCaseWizard,
   StyleGuide,
