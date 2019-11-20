@@ -1,14 +1,16 @@
 const {
   ENTERED_AND_SERVED_EVENT_CODES,
-} = require('../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
+  GENERIC_ORDER_DOCUMENT_TYPE,
+} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { DocketRecord } = require('../entities/DocketRecord');
-const { formatDateString } = require('../utilities/DateHandler');
-const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
+} = require('../../../authorization/authorizationClientService');
+const { addServedStampToDocument } = require('./addServedStampToDocument');
+const { Case } = require('../../entities/cases/Case');
+const { DocketRecord } = require('../../entities/DocketRecord');
+const { formatDateString } = require('../../utilities/DateHandler');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * serveCourtIssuedDocumentInteractor
@@ -79,6 +81,40 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   ]);
 
   courtIssuedDocument.setAsServed(servedParties);
+
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: documentId,
+    })
+    .promise();
+
+  let serviceStampType = 'Served';
+
+  if (courtIssuedDocument.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
+    serviceStampType = courtIssuedDocument.serviceStamp;
+  } else if (
+    ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)
+  ) {
+    serviceStampType = 'Entered and Served';
+  }
+
+  const serviceStampDate = formatDateString(
+    courtIssuedDocument.servedAt,
+    'MMDDYY',
+  );
+
+  const newPdfData = await addServedStampToDocument({
+    pdfData,
+    serviceStampText: `${serviceStampType} ${serviceStampDate}`,
+  });
+
+  applicationContext.logger.time('Saving S3 Document');
+  await applicationContext
+    .getPersistenceGateway()
+    .saveDocument({ applicationContext, document: newPdfData, documentId });
+  applicationContext.logger.timeEnd('Saving S3 Document');
 
   const updatedDocketRecordEntity = new DocketRecord(docketEntry);
   updatedDocketRecordEntity.validate();

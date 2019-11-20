@@ -13,7 +13,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.caseId the caseId to block
  * @returns {object} the case data
  */
-exports.blockCaseInteractor = async ({
+exports.blockCaseFromTrialInteractor = async ({
   applicationContext,
   caseId,
   reason,
