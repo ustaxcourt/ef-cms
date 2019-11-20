@@ -18,7 +18,7 @@ export default (test, draftOrderIndex) => {
     const { documentId } = test.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => (doc.documentId = documentId),
+      doc => doc.documentId === documentId,
     );
 
     expect(draftOrderDocument).toBeTruthy();
