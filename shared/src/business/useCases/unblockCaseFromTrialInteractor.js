@@ -13,7 +13,10 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.caseId the caseId to unblock
  * @returns {object} the case data
  */
-exports.unblockCaseInteractor = async ({ applicationContext, caseId }) => {
+exports.unblockCaseFromTrialInteractor = async ({
+  applicationContext,
+  caseId,
+}) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.BLOCK_CASE)) {
