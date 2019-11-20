@@ -53,4 +53,14 @@ module.exports = [
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19&info=case-context-edit',
   },
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/110-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
+  {
+    actions: [
+      'wait for #serve-to-parties-btn to be visible',
+      'click element #serve-to-parties-btn',
+      'wait for .confirm-initiate-service-modal to be visible',
+    ],
+    notes: 'checks a11y of confirm-initiate-service-modal dialog',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
+  },
 ];
