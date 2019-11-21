@@ -181,8 +181,8 @@ import { uploadDocumentInteractor } from '../../shared/src/business/useCases/ext
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
 import { uploadPdf } from '../../shared/src/persistence/s3/uploadPdf';
-import { validateAddPractitioner } from '../../shared/src/business/useCases/caseAssociation/validateAddPractitionerInteractor';
-import { validateAddRespondent } from '../../shared/src/business/useCases/caseAssociation/validateAddRespondentInteractor';
+import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPractitionerInteractor';
+import { validateAddRespondentInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddRespondentInteractor';
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
@@ -246,7 +246,7 @@ const allUseCases = {
   createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,
   createCaseInteractor,
-  createCaseNoteInteractor,
+  createCaseNoteInteractor, //not used?
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createTrialSessionInteractor,
   createWorkItemInteractor,
@@ -316,7 +316,7 @@ const allUseCases = {
   saveIntermediateDocketEntryInteractor,
   sendPetitionToIRSHoldingQueueInteractor,
   serveCourtIssuedDocumentInteractor,
-  serveSignedStipDecisionInteractor,
+  serveSignedStipDecisionInteractor, //serveDocumentAction
   setItemInteractor,
   setTrialSessionAsSwingSessionInteractor,
   setTrialSessionCalendarInteractor,
@@ -340,12 +340,12 @@ const allUseCases = {
   uploadDocumentInteractor,
   uploadExternalDocumentsInteractor,
   uploadOrderDocumentInteractor,
-  validateAddPractitioner,
-  validateAddRespondent,
+  validateAddPractitionerInteractor,
+  validateAddRespondentInteractor,
   validateCaseAssociationRequestInteractor,
   validateCaseDeadlineInteractor,
   validateCaseDetailInteractor,
-  validateCaseSearchInteractor,
+  validateCaseSearchInteractor, //validateAdvancedSearchAction
   validateCourtIssuedDocketEntryInteractor,
   validateDocketEntryInteractor,
   validateEditPractitionerInteractor,
@@ -358,11 +358,11 @@ const allUseCases = {
   validatePdfInteractor,
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
-  validatePrimaryContactInteractor,
+  validatePrimaryContactInteractor, //validateContactPrimaryAction
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
-  validateUserInteractor,
-  verifyCaseForUserInteractor,
+  validateUserInteractor, //validateUserContactAction
+  verifyCaseForUserInteractor, //not used?
   verifyPendingCaseForUserInteractor,
   virusScanPdfInteractor: args =>
     process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
