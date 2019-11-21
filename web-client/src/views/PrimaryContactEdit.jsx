@@ -20,7 +20,7 @@ export const PrimaryContactEdit = connect(
     submitEditPrimaryContactSequence:
       sequences.submitEditPrimaryContactSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
-    validateContactPrimarySequence: sequences.validateContactPrimarySequence,
+    validatePrimaryContactSequence: sequences.validatePrimaryContactSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -31,12 +31,12 @@ export const PrimaryContactEdit = connect(
     primaryContactEditHelper,
     submitEditPrimaryContactSequence,
     updateCaseValueSequence,
-    validateContactPrimarySequence,
+    validatePrimaryContactSequence,
     validationErrors,
   }) => {
     const type = 'contactPrimary';
     const bind = 'caseDetail';
-    const onBlur = 'validateContactPrimarySequence';
+    const onBlur = 'validatePrimaryContactSequence';
 
     return (
       <>
@@ -89,7 +89,7 @@ export const PrimaryContactEdit = connect(
                   type="text"
                   value={caseDetail.contactPrimary.inCareOf || ''}
                   onBlur={() => {
-                    validateContactPrimarySequence();
+                    validatePrimaryContactSequence();
                   }}
                   onChange={e => {
                     updateCaseValueSequence({
@@ -140,7 +140,7 @@ export const PrimaryContactEdit = connect(
                 type="tel"
                 value={caseDetail.contactPrimary.phone || ''}
                 onBlur={() => {
-                  validateContactPrimarySequence();
+                  validatePrimaryContactSequence();
                 }}
                 onChange={e => {
                   updateCaseValueSequence({

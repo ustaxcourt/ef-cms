@@ -1,11 +1,13 @@
 const {
   AddRespondent,
 } = require('../../entities/caseAssociation/AddRespondent');
-const { validateAddRespondent } = require('./validateAddRespondentInteractor');
+const {
+  validateAddRespondentInteractor,
+} = require('./validateAddRespondentInteractor');
 
-describe('validateAddRespondent', () => {
+describe('validateAddRespondentInteractor', () => {
   it('returns the expected errors object on an empty add respondent', () => {
-    const errors = validateAddRespondent({
+    const errors = validateAddRespondentInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           AddRespondent,
@@ -20,7 +22,7 @@ describe('validateAddRespondent', () => {
   });
 
   it('returns null when no errors occur', () => {
-    const errors = validateAddRespondent({
+    const errors = validateAddRespondentInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           AddRespondent,
