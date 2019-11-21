@@ -33,8 +33,13 @@ const setServiceIndicatorsForCase = caseDetail => {
   // practitioners
   if (practitioners && practitioners.length) {
     practitioners.forEach(practitioner => {
-      hasPrimaryPractitioner = !!practitioner.representingPrimary;
-      hasSecondaryPractitioner = !!practitioner.representingSecondary;
+      if (practitioner.representingPrimary) {
+        hasPrimaryPractitioner = true;
+      }
+
+      if (practitioner.representingSecondary) {
+        hasSecondaryPractitioner = true;
+      }
 
       practitioner.serviceIndicator = practitioner.userId
         ? constants.SI_ELECTRONIC
