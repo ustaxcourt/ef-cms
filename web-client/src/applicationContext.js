@@ -183,10 +183,10 @@ import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCase
 import { uploadPdf } from '../../shared/src/persistence/s3/uploadPdf';
 import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPractitionerInteractor';
 import { validateAddRespondentInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddRespondentInteractor';
+import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
-import { validateCaseSearchInteractor } from '../../shared/src/business/useCases/validateCaseSearchInteractor';
 import { validateCourtIssuedDocketEntryInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/validateCourtIssuedDocketEntryInteractor';
 import { validateDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
 import { validateEditPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateEditPractitionerInteractor';
@@ -342,10 +342,10 @@ const allUseCases = {
   uploadOrderDocumentInteractor,
   validateAddPractitionerInteractor,
   validateAddRespondentInteractor,
+  validateCaseAdvancedSearchInteractor,
   validateCaseAssociationRequestInteractor,
   validateCaseDeadlineInteractor,
   validateCaseDetailInteractor,
-  validateCaseSearchInteractor, //validateAdvancedSearchAction
   validateCourtIssuedDocketEntryInteractor,
   validateDocketEntryInteractor,
   validateEditPractitionerInteractor,
