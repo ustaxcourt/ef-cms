@@ -19,7 +19,7 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async ({
   let result = null;
 
   try {
-    browser = applicationContext.getChromiumBrowser();
+    browser = await applicationContext.getChromiumBrowser();
     let page = await browser.newPage();
 
     await page.setContent(htmlString);

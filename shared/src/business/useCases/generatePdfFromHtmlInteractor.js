@@ -20,7 +20,7 @@ exports.generatePdfFromHtmlInteractor = async ({
 
   try {
     applicationContext.logger.time('Generating PDF From HTML');
-    browser = applicationContext.getChromiumBrowser();
+    browser = await applicationContext.getChromiumBrowser();
     let page = await browser.newPage();
 
     await page.setContent(contentHtml);
