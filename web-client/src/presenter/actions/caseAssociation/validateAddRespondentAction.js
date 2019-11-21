@@ -19,10 +19,12 @@ export const validateAddRespondentAction = ({
     ...get(state.modal),
   };
 
-  const errors = applicationContext.getUseCases().validateAddRespondent({
-    applicationContext,
-    counsel,
-  });
+  const errors = applicationContext
+    .getUseCases()
+    .validateAddRespondentInteractor({
+      applicationContext,
+      counsel,
+    });
 
   if (!errors) {
     return path.success();
