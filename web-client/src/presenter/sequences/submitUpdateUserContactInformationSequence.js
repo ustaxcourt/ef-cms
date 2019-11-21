@@ -8,10 +8,10 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { updateUserContactAction } from '../actions/updateUserContactAction';
+import { updateUserContactInformationAction } from '../actions/updateUserContactInformationAction';
 import { validateUserContactAction } from '../actions/validateUserContactAction';
 
-export const submitEditUserContactSequence = [
+export const submitUpdateUserContactInformationSequence = [
   clearAlertsAction,
   startShowValidationAction,
   validateUserContactAction,
@@ -19,7 +19,7 @@ export const submitEditUserContactSequence = [
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
       setWaitingForResponseAction,
-      updateUserContactAction,
+      updateUserContactInformationAction,
       {
         noChange: [navigateToDashboardAction],
         success: [
