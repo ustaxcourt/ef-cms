@@ -92,7 +92,7 @@ exports.completeDocketEntryQCInteractor = async ({
     },
   };
 
-  console.log(JSON.stringify(docketChangeInfo, null, 2));
+  console.log('Docket change info', JSON.stringify(docketChangeInfo, null, 2));
 
   const docketRecordEntry = new DocketRecord({
     description: entryMetadata.documentTitle,
@@ -162,7 +162,7 @@ exports.completeDocketEntryQCInteractor = async ({
       docketChangeInfo,
     });
 
-    const documentEntity = new Document(
+    const noticeDocumentEntity = new Document(
       {
         ...Document.NOTICE_OF_DOCKET_CHANGE,
         documentId: noticeDocumentId,
@@ -170,14 +170,12 @@ exports.completeDocketEntryQCInteractor = async ({
       },
       { applicationContext },
     );
-    documentEntity.documentTitle = replaceBracketed(
+    noticeDocumentEntity.documentTitle = replaceBracketed(
       Document.NOTICE_OF_DOCKET_CHANGE.documentTitle,
       docketChangeInfo.docketEntryIndex,
     );
 
-    const caseEntity = new Case(caseToUpdate, { applicationContext });
-
-    caseEntity.addDocument(documentEntity);
+    caseEntity.addDocument(noticeDocumentEntity);
   }
 
   await applicationContext.getPersistenceGateway().updateCase({
