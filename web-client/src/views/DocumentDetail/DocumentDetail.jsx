@@ -200,15 +200,6 @@ export const DocumentDetail = connect(
                 Serve to IRS
               </Button>
             )}
-            {documentDetailHelper.showServeDocumentButton && (
-              <Button
-                className="serve-to-irs margin-right-0"
-                onClick={() => openServeConfirmModalDialogSequence()}
-              >
-                <FontAwesomeIcon icon={['fas', 'paper-plane']} />
-                Serve Document
-              </Button>
-            )}
             {documentDetailHelper.showRecallButton && (
               <span className="recall-button-box">
                 <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
