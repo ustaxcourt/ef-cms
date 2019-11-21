@@ -13,7 +13,7 @@ export const ConfirmInitiateServiceModal = connect(
       <ModalDialog
         cancelLabel="No, take me back"
         cancelSequence={cancelSequence}
-        className=""
+        className="confirm-initiate-service-modal"
         confirmLabel="Yes, serve"
         confirmSequence={confirmSequence}
         message=""

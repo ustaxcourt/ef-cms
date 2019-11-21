@@ -39,40 +39,42 @@ export const FilingsAndProceedings = connect(
     ) => {
       return (
         <React.Fragment>
-          {caseDetailHelper.userHasAccessToCase && !document.isInProgress && (
-            <React.Fragment>
-              <NonMobile>
-                <a
-                  aria-label={`View PDF: ${description}`}
-                  href={`${baseUrl}/documents/${documentId}/document-download-url?token=${token}`}
-                  rel="noreferrer noopener"
-                  target="_blank"
-                >
-                  {isPaper && (
-                    <span className="filing-type-icon-mobile">
-                      <FontAwesomeIcon icon={['fas', 'file-alt']} />
-                    </span>
-                  )}
-                  {description}
-                </a>
-              </NonMobile>
-              <Mobile>
-                <Button
-                  link
-                  aria-roledescription="button to view document details"
-                  className="padding-0 border-0"
-                  onClick={() => {
-                    showDocketRecordDetailModalSequence({
-                      docketRecordIndex,
-                      showModal: 'DocketRecordOverlay',
-                    });
-                  }}
-                >
-                  {description}
-                </Button>
-              </Mobile>
-            </React.Fragment>
-          )}
+          {caseDetailHelper.userHasAccessToCase &&
+            !document.isInProgress &&
+            !document.isNotServedCourtIssuedDocument && (
+              <React.Fragment>
+                <NonMobile>
+                  <a
+                    aria-label={`View PDF: ${description}`}
+                    href={`${baseUrl}/documents/${documentId}/document-download-url?token=${token}`}
+                    rel="noreferrer noopener"
+                    target="_blank"
+                  >
+                    {isPaper && (
+                      <span className="filing-type-icon-mobile">
+                        <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                      </span>
+                    )}
+                    {description}
+                  </a>
+                </NonMobile>
+                <Mobile>
+                  <Button
+                    link
+                    aria-roledescription="button to view document details"
+                    className="padding-0 border-0"
+                    onClick={() => {
+                      showDocketRecordDetailModalSequence({
+                        docketRecordIndex,
+                        showModal: 'DocketRecordOverlay',
+                      });
+                    }}
+                  >
+                    {description}
+                  </Button>
+                </Mobile>
+              </React.Fragment>
+            )}
           {(!caseDetailHelper.userHasAccessToCase || document.isInProgress) &&
             description}
         </React.Fragment>
@@ -107,29 +109,38 @@ export const FilingsAndProceedings = connect(
             </React.Fragment>
           )}
 
-        {document && docketRecordHelper.showDocumentDetailLink && (
-          <a
-            aria-label="View PDF"
-            href={documentEditLinkHelper({
-              docketNumber: formattedCaseDetail.docketNumber,
-              documentId: document.documentId,
-              shouldLinkToComplete: document.isFileAttached === false,
-              shouldLinkToEdit:
-                docketRecordHelper.showEditDocketEntry && document.canEdit,
-              shouldLinkToEditCourtIssued:
-                docketRecordHelper.showEditDocketEntry &&
-                document.isCourtIssuedDocument,
-              shouldLinkedToDetails: !!document.servedAt,
-            })}
-          >
-            {document && document.isPaper && (
-              <span className="filing-type-icon-mobile">
-                <FontAwesomeIcon icon={['fas', 'file-alt']} />
-              </span>
-            )}
-            {document.documentTitle || record.description}
-          </a>
-        )}
+        {document &&
+          docketRecordHelper.showDocumentDetailLink &&
+          (!document.isNotServedCourtIssuedDocument ||
+            (document.isNotServedCourtIssuedDocument &&
+              docketRecordHelper.canShowEditDocketEntryLink)) && (
+            <a
+              aria-label="View PDF"
+              href={documentEditLinkHelper({
+                docketNumber: formattedCaseDetail.docketNumber,
+                documentId: document.documentId,
+                shouldLinkToComplete: document.isFileAttached === false,
+                shouldLinkToEdit:
+                  docketRecordHelper.showEditDocketEntry && document.canEdit,
+                shouldLinkToEditCourtIssued:
+                  docketRecordHelper.showEditDocketEntry &&
+                  document.isCourtIssuedDocument,
+                shouldLinkedToDetails: !!document.servedAt,
+              })}
+            >
+              {document && document.isPaper && (
+                <span className="filing-type-icon-mobile">
+                  <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                </span>
+              )}
+              {document.documentTitle || record.description}
+            </a>
+          )}
+
+        {document &&
+          document.isNotServedCourtIssuedDocument &&
+          !docketRecordHelper.canShowEditDocketEntryLink &&
+          (document.documentTitle || record.description)}
 
         <span> {record.signatory}</span>
 

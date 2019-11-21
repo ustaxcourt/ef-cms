@@ -1,6 +1,6 @@
 # Electronic Filing / Case Management System
 
-An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS, which began in October 2018. **All work can be seen [in the staging branch](https://github.com/ustaxcourt/ef-cms/tree/staging).** For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
+An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), creating an open-source EF-CMS, which began in October 2018. Work is not yet in production, so `master` does not deploy. For background, see [the RFQ to procure agile software development services](https://github.com/ustaxcourt/case-management-rfq).
 
 #### develop
 
@@ -16,11 +16,13 @@ API | Front-End | Shared Code
     
 [![Known Vulnerabilities](https://snyk.io//test/github/flexion/ef-cms/badge.svg?targetFile=package.json)](https://snyk.io//test/github/flexion/ef-cms?targetFile=package.json)
 
-<a href="docs/images/screenshot-new-petition.png"><img src="docs/images/screenshot-new-petition.png" width="49%" style="float: left; border: 2px solid #000; margin: 0 4px;" /></a>
-<a href="docs/images/screenshot-cases.png"><img src="docs/images/screenshot-cases.png" width="49%" style="float: left;" /></a>
+<a href="docs/images/screenshot-petitioner.png"><img src="docs/images/screenshot-petitioner.png" width="47%" style="float: left; margin: 0 4px;" /></a>
+<a href="docs/images/screenshot-case.png"><img src="docs/images/screenshot-case.png" width="47%" style="float: left; margin: 0 4px;" /></a>
 
-<a href="docs/images/screenshot-docket-record.png"><img src="docs/images/screenshot-docket-record.png" width="49%" style="float: left;" /></a>
-<a href="docs/images/screenshot-answer.png"><img src="docs/images/screenshot-answer.png" width="49%" style="float: left;" /></a>
+<a href="docs/images/screenshot-judge.png"><img src="docs/images/screenshot-judge.png" width="47%" style="float: left; margin: 4px 4px 0 0;" /></a>
+<a href="docs/images/screenshot-sessions.png"><img src="docs/images/screenshot-sessions.png" width="47%" style="float: left; margin: 4px 0 0 4px;" /></a>
+
+<br clear="both">
 
 The fork of this project in which the bulk of development is occurring is [Flexion’s fork](https://github.com/flexion/ef-cms).
 
@@ -36,15 +38,12 @@ For documentation about the CI/CD setup, API, style guide, UX, code review, etc.
 
 ## AWS diagram
 
-<a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000; " /></a>
+<a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000;" /></a>
 
 ## Dependency diagrams
 
-Client:
-<a href="docs/images/client-dependencies.png"><img src="docs/images/client-dependencies.png" style="border: 2px solid #000; " /></a>
-
-Server:
-<a href="docs/images/server-dependencies.png"><img src="docs/images/server-dependencies.png" style="border: 2px solid #000; " /></a>
+- <a href="docs/images/client-dependencies.png">Client</a>
+- <a href="docs/images/server-dependencies.png">Server</a>
 
 ## Backlog
 
@@ -191,12 +190,10 @@ If using Internet Explorer 11 with Windows 7, [download and install Adobe Reader
 
 ## Forked dependencies
 
-The software has several dependencies that required minor modifications to suit our needs. Rather than attempt to persuade their creators to adopt our modifications, those repositories have been forked within the U.S. Tax Court's GitHub organization, and the modifications made there. Those repositories are:
+The software has several dependencies that required minor modifications to suit our needs. In some cases, those are urgent security-related modifications that we needed to make immediately, rather than waiting for those dependencies to be patched. In other cases, they're customizations that package maintainers are not interested in making. In both scenarios, those repositories have been forked within the U.S. Tax Court's GitHub organization, and the modifications made there. Those repositories are:
 
 - [serverless-s3-local](https://github.com/ustaxcourt/serverless-s3-local)
 - [s3rver](https://github.com/ustaxcourt/s3rver)
-- [serverless-plugin-bind-deployment-id](https://github.com/ustaxcourt/serverless-plugin-bind-deployment-id)
-- [serverless-dynamodb-local](https://github.com/ustaxcourt/serverless-dynamodb-local)
 
 _If these repositories are deleted, the build will fail._ To verify that these repositories are still required, see each of the `package.json` files in the repo (e.g., `find . -name package.json -exec grep "github:ustaxcourt" {} \; |awk 'BEGIN {FS=": ";}{print$2}' |uniq`). Note that `s3rver` is a dependency of `serverless-s3-local`, and so it will not be found in our `package.json` files.
 
