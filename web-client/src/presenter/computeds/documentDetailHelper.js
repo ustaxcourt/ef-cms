@@ -119,11 +119,6 @@ export const documentDetailHelper = (get, applicationContext) => {
     !!stipulatedWorkItem &&
     !signedDocument;
 
-  const showServeDocumentButton =
-    permissions.SERVE_DOCUMENT &&
-    document.status !== 'served' &&
-    isStipDecision;
-
   const isSigned = !!document.signedAt;
   const isNotServed = !document.servedAt;
   const isDocumentOnDocketRecord = caseDetail.docketRecord.find(
@@ -163,8 +158,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showPrintCaseConfirmationButton =
     document.status === 'served' && formattedDocument.isPetition === true;
 
-  const showAddDocketEntryButton =
-    permissions.DOCKET_ENTRY && isDraftDocument && !isStipDecision;
+  const showAddDocketEntryButton = permissions.DOCKET_ENTRY && isDraftDocument;
 
   return {
     createdFiledLabel: isOrder ? 'Created' : 'Filed', // Should actually be all court-issued documents
@@ -187,7 +181,6 @@ export const documentDetailHelper = (get, applicationContext) => {
     showPrintCaseConfirmationButton,
     showRecallButton,
     showRemoveSignature: isOrder && isSigned,
-    showServeDocumentButton,
     showServeToIrsButton,
     showSignDocumentButton,
     showViewOrdersNeededButton,
