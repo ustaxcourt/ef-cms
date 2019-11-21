@@ -1410,11 +1410,28 @@ describe('Case entity', () => {
 
   describe('closeCase', () => {
     it('should update the status of the case to closed', () => {
-      const myCase = new Case(MOCK_CASE, {
-        applicationContext,
-      });
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: true,
+          blockedDate: '2019-03-01T21:40:46.415Z',
+          blockedReason: 'something else',
+          highPriority: true,
+          highPriorityReason: 'something',
+        },
+        {
+          applicationContext,
+        },
+      );
       myCase.closeCase();
-      expect(myCase.status).toEqual(Case.STATUS_TYPES.closed);
+      expect(myCase).toMatchObject({
+        blocked: false,
+        blockedDate: undefined,
+        blockedReason: undefined,
+        highPriority: false,
+        highPriorityReason: undefined,
+        status: Case.STATUS_TYPES.closed,
+      });
     });
   });
 

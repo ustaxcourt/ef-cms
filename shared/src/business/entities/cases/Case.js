@@ -611,6 +611,9 @@ Case.prototype.addDocumentWithoutDocketRecord = function(document) {
 
 Case.prototype.closeCase = function() {
   this.status = Case.STATUS_TYPES.closed;
+  this.unsetAsBlocked();
+  this.unsetAsHighPriority();
+  return this;
 };
 
 /**
