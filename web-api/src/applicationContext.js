@@ -508,9 +508,6 @@ const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
 const {
-  serveSignedStipDecisionInteractor,
-} = require('../../shared/src/business/useCases/serveSignedStipDecisionInteractor');
-const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
 const {
@@ -615,9 +612,6 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
-const {
-  verifyCaseForUserInteractor,
-} = require('../../shared/src/business/useCases/caseAssociationRequest/verifyCaseForUserInteractor');
 const {
   verifyPendingCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser');
@@ -981,7 +975,6 @@ module.exports = (appContextUser = {}) => {
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
         serveCourtIssuedDocumentInteractor,
-        serveSignedStipDecisionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
         setWorkItemAsReadInteractor,
@@ -1002,7 +995,6 @@ module.exports = (appContextUser = {}) => {
         updateUserContactInformationInteractor,
         userIsAssociated,
         validatePdfInteractor,
-        verifyCaseForUserInteractor,
         verifyPendingCaseForUserInteractor,
         virusScanPdfInteractor: args =>
           process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),

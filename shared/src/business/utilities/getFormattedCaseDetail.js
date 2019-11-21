@@ -94,9 +94,9 @@ const formatDocketRecordWithDocument = (
     if (record.documentId) {
       document = documentMap[record.documentId];
 
-      document.isCourtIssuedDocument = !!courtIssuedDocumentTypes.includes(
-        document.documentType,
-      );
+      document.isCourtIssuedDocument =
+        !!courtIssuedDocumentTypes.includes(document.documentType) ||
+        document.documentType === 'Stipulated Decision';
 
       if (document.isCourtIssuedDocument && !document.servedAt) {
         record.createdAtFormatted = undefined;
@@ -120,10 +120,11 @@ const formatDocketRecordWithDocument = (
         return acc && !!wi.completedAt;
       }, true);
 
-      document.isInProgress = !!(
-        (document.isCourtIssuedDocument && !document.servedAt) ||
-        (!document.isCourtIssuedDocument && document.isFileAttached === false)
-      );
+      document.isInProgress =
+        !document.isCourtIssuedDocument && document.isFileAttached === false;
+
+      document.isNotServedCourtIssuedDocument =
+        document.isCourtIssuedDocument && !document.servedAt;
 
       document.qcWorkItemsUntouched =
         !!qcWorkItems.length &&

@@ -78,6 +78,7 @@ export const CourtIssuedDocketEntry = connect(
                 </div>
                 <Button
                   className="margin-right-0"
+                  id="serve-to-parties-btn"
                   onClick={() => {
                     openConfirmInitiateServiceModalSequence();
                   }}

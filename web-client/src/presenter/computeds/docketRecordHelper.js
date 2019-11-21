@@ -11,7 +11,10 @@ export const docketRecordHelper = get => {
     ['CaseDetail'].includes(currentPage) &&
     userAssociatedWithCase;
 
+  const canShowEditDocketEntryLink = permissions.DOCKET_ENTRY;
+
   return {
+    canShowEditDocketEntryLink,
     showDirectDownloadLink,
     showDocumentDetailLink: !showDirectDownloadLink,
     showEditDocketEntry: permissions.DOCKET_ENTRY,

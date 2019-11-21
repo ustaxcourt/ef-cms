@@ -9,6 +9,7 @@ const {
 } = require('./serveCourtIssuedDocumentInteractor');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
+const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { Document } = require('../../entities/Document');
 const { User } = require('../../entities/User');
 
@@ -26,11 +27,23 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   let sendBulkTemplatedEmailMock;
   let getObjectMock;
   let saveDocumentMock;
+  let deleteWorkItemFromInboxMock;
+  let putWorkItemInOutboxMock;
   let testPdfDoc;
+  let deleteCaseTrialSortMappingRecordsMock;
 
   const mockUser = {
     role: User.ROLES.docketClerk,
-    userId: '123',
+    userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
+  };
+
+  const mockWorkItem = {
+    caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    docketNumber: '123-45',
+    isQC: true,
+    section: DOCKET_SECTION,
+    sentBy: mockUser.userId,
+    workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
   };
 
   const dynamicallyGeneratedDocketEntries = [];
@@ -51,7 +64,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         documentId,
         documentType: eventCodeMap.documentType,
         eventCode,
-        userId: '123',
+        userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
+        workItems: [mockWorkItem],
       };
     },
   );
@@ -76,7 +90,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
           documentType: 'Order',
           eventCode: 'O',
-          userId: '123',
+          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
+          workItems: [mockWorkItem],
         },
         ...documentsWithCaseClosingEventCodes,
       ],
@@ -87,12 +102,15 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     testPdfDoc = testPdfDocBytes();
 
     updateCaseMock = jest.fn(({ caseToUpdate }) => caseToUpdate);
+    deleteCaseTrialSortMappingRecordsMock = jest.fn();
     sendBulkTemplatedEmailMock = jest.fn();
     getObjectMock = jest.fn().mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,
       }),
     });
+    deleteWorkItemFromInboxMock = jest.fn();
+    putWorkItemInOutboxMock = jest.fn();
 
     applicationContext = {
       environment: { documentsBucketName: 'documents' },
@@ -101,9 +119,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
       }),
       getPersistenceGateway: () => ({
+        deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
+        deleteWorkItemFromInbox: deleteWorkItemFromInboxMock,
         getCaseByCaseId: ({ caseId }) => {
           return mockCases.find(mockCase => mockCase.caseId === caseId);
         },
+        putWorkItemInOutbox: putWorkItemInOutboxMock,
         saveDocument: saveDocumentMock,
         updateCase: updateCaseMock,
       }),
@@ -171,7 +192,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     expect(error.message).toContain('Document 000 was not found');
   });
 
-  it('should set the document as served and update the case', async () => {
+  it('should set the document as served and update the case and work items', async () => {
     saveDocumentMock = jest.fn(({ document: newPdfData }) => {
       fs.writeFileSync(
         testOutputPath + 'serveCourtIssuedDocumentInteractor_1.pdf',
@@ -193,6 +214,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     expect(updatedDocument.status).toEqual('served');
     expect(updatedDocument.servedAt).toBeTruthy();
     expect(updateCaseMock).toHaveBeenCalled();
+    expect(deleteWorkItemFromInboxMock).toHaveBeenCalled();
+    expect(putWorkItemInOutboxMock).toHaveBeenCalled();
   });
 
   it('should call sendBulkTemplatedEmail sending an email to all parties', async () => {
@@ -228,6 +251,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       });
 
       expect(result.status).toEqual(Case.STATUS_TYPES.closed);
+      expect(deleteCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
     });
   });
 });
