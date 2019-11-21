@@ -19,6 +19,7 @@ export default (test, draftOrderIndex) => {
       expect(test.getState('caseDetail.status')).toEqual(
         Case.STATUS_TYPES.closed,
       );
+      expect(test.getState('caseDetail.highPriority')).toEqual(false);
     }
   });
 };
