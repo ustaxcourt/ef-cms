@@ -1186,4 +1186,32 @@ Case.prototype.setCaseTitle = function(caseCaption) {
   return this;
 };
 
+/**
+ * get case contacts
+ *
+ * @returns {object} object containing case contacts
+ * @param shape
+ */
+Case.prototype.getCaseContacts = function(shape = {}) {
+  const caseContacts = {};
+
+  if (this.contactPrimary && shape.contactPrimary) {
+    caseContacts.contactPrimary = this.contactPrimary;
+  }
+
+  if (this.contactSecondary && shape.contactSecondary) {
+    caseContacts.contactPrimary = this.contactSecondary;
+  }
+
+  if (this.practitioners && shape.practitioners) {
+    caseContacts.practitioners = this.practitioners;
+  }
+
+  if (this.respondents && shape.respondents) {
+    caseContacts.respondents = this.respondents;
+  }
+
+  return caseContacts;
+};
+
 module.exports = { Case };
