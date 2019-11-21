@@ -103,7 +103,7 @@ exports.fileDocketEntryInteractor = async ({
           documentType: metadata.documentType,
           relationship,
           userId: user.userId,
-          ...caseToAdd.getCaseContacts({
+          ...caseEntity.getCaseContacts({
             contactPrimary: true,
             contactSecondary: true,
           }),
