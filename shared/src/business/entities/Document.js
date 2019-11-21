@@ -8,6 +8,7 @@ const {
 const { createISODateString } = require('../utilities/DateHandler');
 const { flatten } = require('lodash');
 const { Order } = require('./orders/Order');
+const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { WorkItem } = require('./WorkItem');
 
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
@@ -123,6 +124,12 @@ Document.INITIAL_DOCUMENT_TYPES = {
   },
 };
 
+Document.NOTICE_OF_DOCKET_CHANGE = {
+  documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
+  documentType: 'Notice of Docket Change',
+  eventCode: 'NODC',
+};
+
 Document.SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
@@ -184,6 +191,7 @@ Document.getDocumentTypes = () => {
     ...orderDocTypes,
     ...courtIssuedDocTypes,
     ...signedTypes,
+    Document.NOTICE_OF_DOCKET_CHANGE.documentType,
   ];
 
   return documentTypes;

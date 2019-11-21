@@ -24,7 +24,7 @@ const generatePage = async ({ applicationContext, docketChangeInfo }) => {
   const html = compiledFunction({
     logo: ustcLogoBufferBase64,
     ...docketChangeInfo,
-    styles: css,
+    css,
   });
   return html;
 };
@@ -84,7 +84,7 @@ exports.generateNoticeOfDocketChangePdf = async ({
     }
   }
 
-  const documentId = `notice-docket-change-${applicationContext.getUniqueId()}.pdf`;
+  const documentId = applicationContext.getUniqueId();
 
   await new Promise(resolve => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
