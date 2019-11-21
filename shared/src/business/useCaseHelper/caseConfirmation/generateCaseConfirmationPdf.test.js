@@ -13,23 +13,16 @@ const pageMock = {
   setContent: () => {},
 };
 
-const browserMock = {
+const chromiumBrowserMock = {
   close: () => {},
   newPage: () => pageMock,
-};
-
-const chromiumMock = {
-  font: () => {},
-  puppeteer: {
-    launch: () => browserMock,
-  },
 };
 
 describe('generateCaseConfirmationPdf', () => {
   it('returns the pdf buffer produced by chromium', async () => {
     const result = await generateCaseConfirmationPdf({
       applicationContext: {
-        getChromium: () => chromiumMock,
+        getChromiumBrowser: () => chromiumBrowserMock,
         getCurrentUser: () => {
           return { role: User.ROLES.petitioner, userId: 'petitioner' };
         },
