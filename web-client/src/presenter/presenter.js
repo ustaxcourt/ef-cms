@@ -284,7 +284,6 @@ import { validateBlockFromTrialSequence } from './sequences/validateBlockFromTri
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
-import { validateContactPrimarySequence } from './sequences/validateContactPrimarySequence';
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateEditPractitionersSequence } from './sequences/caseAssociation/validateEditPractitionersSequence';
@@ -295,6 +294,7 @@ import { validateInitialWorkItemMessageSequence } from './sequences/validateInit
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
+import { validatePrimaryContactSequence } from './sequences/validatePrimaryContactSequence';
 import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
@@ -598,7 +598,6 @@ export const presenter = {
     validateCaseAssociationRequestSequence,
     validateCaseDeadlineSequence,
     validateCaseDetailSequence,
-    validateContactPrimarySequence,
     validateCourtIssuedDocketEntrySequence,
     validateDocketEntrySequence,
     validateEditPractitionersSequence,
@@ -609,6 +608,7 @@ export const presenter = {
     validateNoteSequence,
     validateOrderWithoutBodySequence,
     validatePetitionFromPaperSequence,
+    validatePrimaryContactSequence,
     validatePrioritizeCaseSequence,
     validateRemoveFromTrialSessionSequence,
     validateSelectDocumentTypeSequence,

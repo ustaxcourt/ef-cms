@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.path the cerebral path helper function
  * @returns {object} path.success or path.error
  */
-export const validateContactPrimaryAction = ({
+export const validatePrimaryContactAction = ({
   applicationContext,
   get,
   path,
