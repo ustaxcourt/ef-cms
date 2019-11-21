@@ -17,8 +17,6 @@ module.exports = {
     .handler,
   serveCourtIssuedDocumentLambda: require('./cases/serveCourtIssuedDocumentLambda')
     .handler,
-  serveSignedStipDecisionLambda: require('./cases/serveSignedStipDecisionLambda')
-    .handler,
   signDocumentLambda: require('./documents/signDocumentLambda').handler,
   updateCourtIssuedDocketEntryLambda: require('./documents/updateCourtIssuedDocketEntryLambda')
     .handler,
