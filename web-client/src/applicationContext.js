@@ -315,7 +315,7 @@ const allUseCases = {
   saveIntermediateDocketEntryInteractor,
   sendPetitionToIRSHoldingQueueInteractor,
   serveCourtIssuedDocumentInteractor,
-  serveSignedStipDecisionInteractor, //serveDocumentAction
+  serveSignedStipDecisionInteractor,
   setItemInteractor,
   setTrialSessionAsSwingSessionInteractor,
   setTrialSessionCalendarInteractor,
