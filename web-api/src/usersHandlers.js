@@ -23,7 +23,6 @@ module.exports = {
     .handler,
   updateUserContactInformationLambda: require('./users/updateUserContactInformationLambda')
     .handler,
-  verifyCaseForUserLambda: require('./cases/verifyCaseForUserLambda').handler,
   verifyPendingCaseForUserLambda: require('./cases/verifyPendingCaseForUserLambda')
     .handler,
 };

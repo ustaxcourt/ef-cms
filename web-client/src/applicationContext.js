@@ -203,7 +203,6 @@ import { validatePrimaryContactInteractor } from '../../shared/src/business/useC
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
-import { verifyCaseForUserInteractor } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virusScanPdfProxy';
 import axios from 'axios';
@@ -362,7 +361,6 @@ const allUseCases = {
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
   validateUserContactInteractor,
-  verifyCaseForUserInteractor, //not used?
   verifyPendingCaseForUserInteractor,
   virusScanPdfInteractor: args =>
     process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
