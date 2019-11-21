@@ -1882,4 +1882,72 @@ describe('Case entity', () => {
       );
     });
   });
+
+  describe('getCaseContacts', () => {
+    const contactPrimary = {
+      name: 'Test Petitioner',
+      title: 'Executor',
+    };
+
+    const contactSecondary = { name: 'Contact Secondary' };
+
+    const practitioners = [
+      {
+        name: 'Petitioner One',
+      },
+    ];
+
+    const respondents = [
+      {
+        name: 'Respondent One',
+      },
+    ];
+
+    it('should return an object containing all contact types', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary,
+          contactSecondary,
+          practitioners,
+          respondents,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const caseContacts = testCase.getCaseContacts();
+      expect(caseContacts).toMatchObject({
+        contactPrimary,
+        contactSecondary,
+        practitioners,
+        respondents,
+      });
+    });
+
+    fit('should return an object contacts matching the `shape` if provided', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary,
+          contactSecondary,
+          practitioners,
+          respondents,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const caseContacts = testCase.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      });
+      expect(caseContacts).toMatchObject({
+        contactPrimary,
+        contactSecondary,
+      });
+    });
+  });
 });
