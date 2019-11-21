@@ -12,16 +12,9 @@ const pageMock = {
   setContent: () => {},
 };
 
-const browserMock = {
+const chromiumBrowserMock = {
   close: () => {},
   newPage: () => pageMock,
-};
-
-const chromiumMock = {
-  font: () => {},
-  puppeteer: {
-    launch: () => browserMock,
-  },
 };
 
 const mockPendingItems = [
@@ -207,7 +200,7 @@ describe('generatePendingReportPdf', () => {
           tempDocumentsBucketName: 'MockDocumentBucketName',
         },
         getCaseCaptionNames: Case.getCaseCaptionNames,
-        getChromium: () => chromiumMock,
+        getChromiumBrowser: () => chromiumBrowserMock,
         getCurrentUser: () => {
           return { role: User.ROLES.petitioner, userId: 'petitioner' };
         },
