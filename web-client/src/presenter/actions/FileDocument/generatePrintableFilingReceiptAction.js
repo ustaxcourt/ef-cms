@@ -21,16 +21,8 @@ export const generatePrintableFilingReceiptAction = async ({
   const caseDetail = get(state.caseDetail);
 
   const getDocumentInfo = documentData => {
-    const document = new Document(
-      {
-        ...documentData,
-        ...caseDetail.getCaseContacts({
-          contactPrimary: true,
-          contactSecondary: true,
-        }),
-      },
-      { applicationContext },
-    );
+    const document = new Document(documentData, { applicationContext });
+    document.generateFiledBy(caseDetail);
     return {
       attachments: document.attachments,
       certificateOfService: document.certificateOfService,
