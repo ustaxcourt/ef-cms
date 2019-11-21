@@ -369,4 +369,8 @@ Document.prototype.setAsProcessingStatusAsCompleted = function() {
   this.processingStatus = 'complete';
 };
 
+Document.prototype.getWorkItemById = function({ workItemId }) {
+  return this.workItems.find(workItem => workItem.workItemId === workItemId);
+};
+
 exports.Document = Document;
