@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const gatherRecords = function gatherRecords(exportColumns, output) {
-  () => {
+  return () => {
     let record;
     while ((record = this.read())) {
       record = _.pick(record, exportColumns);
