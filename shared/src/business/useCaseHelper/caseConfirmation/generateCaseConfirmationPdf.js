@@ -88,7 +88,7 @@ exports.generateCaseConfirmationPdf = async ({
   let result = null;
 
   try {
-    browser = applicationContext.getChromiumBrowser();
+    browser = await applicationContext.getChromiumBrowser();
     let page = await browser.newPage();
 
     const contentResult = await generateCaseConfirmationPage({
