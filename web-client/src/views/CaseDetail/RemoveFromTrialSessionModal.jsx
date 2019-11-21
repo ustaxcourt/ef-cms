@@ -7,7 +7,7 @@ import React from 'react';
 export const RemoveFromTrialSessionModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.removeFromTrialSessionSequence,
+    confirmSequence: sequences.removeCaseFromTrialSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateRemoveFromTrialSessionSequence:
