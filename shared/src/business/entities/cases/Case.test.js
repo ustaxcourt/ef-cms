@@ -1926,7 +1926,7 @@ describe('Case entity', () => {
       });
     });
 
-    fit('should return an object contacts matching the `shape` if provided', () => {
+    it('should return an object contacts matching the `shape` if provided', () => {
       const testCase = new Case(
         {
           ...MOCK_CASE,
