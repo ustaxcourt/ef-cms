@@ -10,6 +10,7 @@ const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { omit } = require('lodash');
+const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -44,6 +45,9 @@ exports.completeDocketEntryQCInteractor = async ({
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const { index: docketRecordIndexUpdated } = caseEntity.docketRecord.find(
+    record => record.documentId === documentId,
+  );
 
   const currentDocument = caseEntity.getDocumentById({
     documentId,
@@ -56,22 +60,6 @@ exports.completeDocketEntryQCInteractor = async ({
   const needsNoticeOfDocketChange =
     entryMetadata.filedBy != currentDocument.filedBy ||
     entryMetadata.documentTitle != currentDocument.documentTitle;
-
-  const docketChangeInfo = {
-    caseTitle: caseToUpdate.caseTitle,
-    docketEntryIndex: entryMetadata.index,
-    docketNumber: `${
-      caseToUpdate.docketNumber
-    }${caseToUpdate.docketNumberSuffix || ''}`,
-    filingParties: {
-      after: entryMetadata.filedBy,
-      before: currentDocument.filedBy,
-    },
-    filingsAndProceedings: {
-      after: entryMetadata.documentTitle,
-      before: currentDocument.documentTitle,
-    },
-  };
 
   const documentEntity = new Document(
     {
@@ -87,6 +75,24 @@ exports.completeDocketEntryQCInteractor = async ({
 
   documentEntity.generateFiledBy(caseToUpdate);
   documentEntity.setQCed(user);
+
+  const docketChangeInfo = {
+    caseTitle: caseToUpdate.caseTitle,
+    docketEntryIndex: docketRecordIndexUpdated,
+    docketNumber: `${
+      caseToUpdate.docketNumber
+    }${caseToUpdate.docketNumberSuffix || ''}`,
+    filingParties: {
+      after: entryMetadata.filedBy,
+      before: currentDocument.filedBy,
+    },
+    filingsAndProceedings: {
+      after: entryMetadata.documentTitle,
+      before: currentDocument.documentTitle,
+    },
+  };
+
+  console.log(JSON.stringify(docketChangeInfo, null, 2));
 
   const docketRecordEntry = new DocketRecord({
     description: entryMetadata.documentTitle,
@@ -150,11 +156,6 @@ exports.completeDocketEntryQCInteractor = async ({
       });
   }
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
-
   if (needsNoticeOfDocketChange) {
     const noticeDocumentId = await generateNoticeOfDocketChangePdf({
       applicationContext,
@@ -163,23 +164,26 @@ exports.completeDocketEntryQCInteractor = async ({
 
     const documentEntity = new Document(
       {
+        ...Document.NOTICE_OF_DOCKET_CHANGE,
         documentId: noticeDocumentId,
-        documentTitle: `Notice of Docket Change for Docket Entry No. ${docketChangeInfo.docketEntryIndex}`,
-        documentType: 'Notice of Docket Change', // will not validate
         userId: user.userId,
       },
       { applicationContext },
     );
-    documentEntity.generateFiledBy(caseToUpdate);
+    documentEntity.documentTitle = replaceBracketed(
+      Document.NOTICE_OF_DOCKET_CHANGE.documentTitle,
+      docketChangeInfo.docketEntryIndex,
+    );
 
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
     caseEntity.addDocument(documentEntity);
-    await applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
   }
+
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
 
   if (needsNewCoversheet) {
     await applicationContext.getUseCases().addCoversheetInteractor({
