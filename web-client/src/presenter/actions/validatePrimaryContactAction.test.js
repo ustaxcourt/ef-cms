@@ -1,13 +1,13 @@
 import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { validateContactPrimaryAction } from './validateContactPrimaryAction';
+import { validatePrimaryContactAction } from './validatePrimaryContactAction';
 import sinon from 'sinon';
 const {
   ContactFactory,
 } = require('../../../../shared/src/business/entities/contacts/ContactFactory');
 
-describe('validateContactPrimaryAction', () => {
+describe('validatePrimaryContactAction', () => {
   let successStub;
   let errorStub;
 
@@ -28,7 +28,7 @@ describe('validateContactPrimaryAction', () => {
       }),
     };
 
-    const result = await runAction(validateContactPrimaryAction, {
+    const result = await runAction(validatePrimaryContactAction, {
       modules: {
         presenter,
       },
@@ -47,7 +47,7 @@ describe('validateContactPrimaryAction', () => {
   it('runs validation on the primary contact with an invalid result', async () => {
     presenter.providers.applicationContext = applicationContext;
 
-    const result = await runAction(validateContactPrimaryAction, {
+    const result = await runAction(validatePrimaryContactAction, {
       modules: {
         presenter,
       },

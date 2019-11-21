@@ -202,7 +202,7 @@ import { validatePetitionInteractor } from '../../shared/src/business/useCases/v
 import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
-import { validateUserInteractor } from '../../shared/src/business/useCases/users/validateUserInteractor';
+import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
 import { verifyCaseForUserInteractor } from '../../shared/src/proxies/verifyCaseForUserProxy';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virusScanPdfProxy';
@@ -358,10 +358,10 @@ const allUseCases = {
   validatePdfInteractor,
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
-  validatePrimaryContactInteractor, //validateContactPrimaryAction
+  validatePrimaryContactInteractor,
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
-  validateUserInteractor, //validateUserContactAction
+  validateUserContactInteractor,
   verifyCaseForUserInteractor, //not used?
   verifyPendingCaseForUserInteractor,
   virusScanPdfInteractor: args =>
