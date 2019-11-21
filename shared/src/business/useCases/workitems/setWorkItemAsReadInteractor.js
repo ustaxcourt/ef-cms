@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -22,9 +23,41 @@ exports.setWorkItemAsReadInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return applicationContext.getPersistenceGateway().setWorkItemAsRead({
+  const workItem = await applicationContext
+    .getPersistenceGateway()
+    .getWorkItemById({
+      applicationContext,
+      workItemId,
+    });
+
+  const { caseId } = workItem;
+  const { documentId } = workItem.document;
+
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByCaseId({
+      applicationContext,
+      caseId,
+    });
+
+  const caseEntity = new Case(caseRecord, {
     applicationContext,
-    userId: user.userId,
-    workItemId,
   });
+
+  caseEntity
+    .getDocumentById({ documentId })
+    .getWorkItemById({ workItemId })
+    .setAsRead();
+
+  return await Promise.all([
+    applicationContext.getPersistenceGateway().setWorkItemAsRead({
+      applicationContext,
+      userId: user.userId,
+      workItemId,
+    }),
+    applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    }),
+  ]);
 };
