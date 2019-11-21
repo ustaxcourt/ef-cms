@@ -10,6 +10,6 @@ export default test => {
       value: 'Test disposition',
     });
 
-    await test.runSequence('removeFromTrialSessionSequence');
+    await test.runSequence('removeCaseFromTrialSequence');
   });
 };

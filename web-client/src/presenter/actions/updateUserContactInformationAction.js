@@ -5,7 +5,10 @@
  * @param {object} providers.applicationContext the application context used for getting the getUser use case
  * @returns {object} alertSuccess, caseId, tab
  */
-export const updateUserContactAction = async ({ applicationContext, path }) => {
+export const updateUserContactInformationAction = async ({
+  applicationContext,
+  path,
+}) => {
   const { contact, userId } = applicationContext.getCurrentUser();
 
   try {

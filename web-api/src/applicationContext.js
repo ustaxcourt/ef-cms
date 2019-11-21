@@ -613,9 +613,6 @@ const {
   verifyCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
 const {
-  verifyCaseForUserInteractor,
-} = require('../../shared/src/business/useCases/caseAssociationRequest/verifyCaseForUserInteractor');
-const {
   verifyPendingCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser');
 const {
@@ -998,7 +995,6 @@ module.exports = (appContextUser = {}) => {
         updateUserContactInformationInteractor,
         userIsAssociated,
         validatePdfInteractor,
-        verifyCaseForUserInteractor,
         verifyPendingCaseForUserInteractor,
         virusScanPdfInteractor: args =>
           process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
