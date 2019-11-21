@@ -508,9 +508,6 @@ const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
 const {
-  serveSignedStipDecisionInteractor,
-} = require('../../shared/src/business/useCases/serveSignedStipDecisionInteractor');
-const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
 const {
@@ -981,7 +978,6 @@ module.exports = (appContextUser = {}) => {
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
         serveCourtIssuedDocumentInteractor,
-        serveSignedStipDecisionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
         setWorkItemAsReadInteractor,

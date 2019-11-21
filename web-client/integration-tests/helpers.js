@@ -109,21 +109,37 @@ exports.signProposedStipulatedDecision = async (test, stipDecision) => {
   await test.runSequence('completeDocumentSigningSequence');
 };
 
-exports.serveDocument = async ({
+exports.serveDocument = async ({ docketNumber, documentId, test }) => {
+  await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+    docketNumber,
+    documentId,
+  });
+
+  await test.runSequence('openConfirmInitiateServiceModalSequence');
+  await test.runSequence('serveCourtIssuedDocumentSequence');
+};
+
+exports.createCourtIssuedDocketEntry = async ({
   docketNumber,
   documentId,
-  messageId,
   test,
-  workItemIdToMarkAsRead,
 }) => {
   await test.runSequence('gotoDocumentDetailSequence', {
     docketNumber,
     documentId,
-    messageId,
-    workItemIdToMarkAsRead,
   });
 
-  await test.runSequence('serveDocumentSequence');
+  await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    docketNumber,
+    documentId,
+  });
+
+  await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+    key: 'judge',
+    value: 'Judge Buch',
+  });
+
+  await test.runSequence('submitCourtIssuedDocketEntrySequence');
 };
 
 exports.getFormattedMyInbox = async test => {

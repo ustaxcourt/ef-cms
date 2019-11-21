@@ -152,18 +152,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-  serveSignedStipDecision:
-    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.serveSignedStipDecisionLambda
-    events:
-      - http:
-          path: /{caseId}/{documentId}/serve
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   serveCourtIssuedDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.serveCourtIssuedDocumentLambda
     events:
