@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {object} the alertSuccess and updated caseDetail object
  */
-export const removeFromTrialSessionAction = async ({
+export const removeCaseFromTrialAction = async ({
   applicationContext,
   get,
 }) => {
