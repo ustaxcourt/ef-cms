@@ -156,9 +156,28 @@ exports.completeDocketEntryQCInteractor = async ({
   });
 
   if (needsNoticeOfDocketChange) {
-    generateNoticeOfDocketChangePdf({
+    const noticeDocumentId = await generateNoticeOfDocketChangePdf({
       applicationContext,
       docketChangeInfo,
+    });
+
+    const documentEntity = new Document(
+      {
+        documentId: noticeDocumentId,
+        documentTitle: `Notice of Docket Change for Docket Entry No. ${docketChangeInfo.docketEntryIndex}`,
+        documentType: 'Notice of Docket Change', // will not validate
+        userId: user.userId,
+      },
+      { applicationContext },
+    );
+    documentEntity.generateFiledBy(caseToUpdate);
+
+    const caseEntity = new Case(caseToUpdate, { applicationContext });
+
+    caseEntity.addDocument(documentEntity);
+    await applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
     });
   }
 

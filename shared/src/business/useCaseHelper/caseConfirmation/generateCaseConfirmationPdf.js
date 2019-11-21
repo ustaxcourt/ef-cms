@@ -135,13 +135,4 @@ exports.generateCaseConfirmationPdf = async ({
       resolve();
     });
   });
-
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    documentId,
-  });
-
-  return url;
 };

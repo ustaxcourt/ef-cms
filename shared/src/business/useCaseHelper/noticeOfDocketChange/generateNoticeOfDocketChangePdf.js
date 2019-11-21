@@ -36,7 +36,7 @@ exports.generatePage = generatePage;
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseEntity a case entity with its documents
+ * @param {string} providers.docketChangeInfo contains information about what has changed
  * @returns {Promise<*>} the promise of the document having been uploaded
  */
 exports.generateNoticeOfDocketChangePdf = async ({
@@ -97,17 +97,8 @@ exports.generateNoticeOfDocketChangePdf = async ({
       Key: documentId,
     };
 
-    s3Client.upload(params, function() {
-      resolve();
-    });
+    s3Client.upload(params, resolve);
   });
 
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    documentId,
-  });
-
-  return url;
+  return documentId;
 };
