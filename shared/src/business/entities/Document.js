@@ -87,6 +87,8 @@ function Document(rawDocument, { applicationContext }) {
   this.workItems = (this.workItems || []).map(
     workItem => new WorkItem(workItem, { applicationContext }),
   );
+
+  this.generateFiledBy(rawDocument);
 }
 
 const practitionerAssociationDocumentTypes = [
@@ -301,42 +303,36 @@ Document.prototype.setAsServed = function(servedParties = null) {
  * @param {object} caseDetail the case detail
  */
 Document.prototype.generateFiledBy = function(caseDetail) {
-  if (!this.filedBy) {
-    let filedByArray = [];
-    this.partyRespondent && filedByArray.push('Resp.');
+  let filedByArray = [];
+  this.partyRespondent && filedByArray.push('Resp.');
 
-    Array.isArray(this.practitioner) &&
-      this.practitioner.forEach(practitioner => {
-        practitioner.partyPractitioner &&
-          filedByArray.push(`Counsel ${practitioner.name}`);
-      });
+  Array.isArray(this.practitioner) &&
+    this.practitioner.forEach(practitioner => {
+      practitioner.partyPractitioner &&
+        filedByArray.push(`Counsel ${practitioner.name}`);
+    });
 
-    if (
-      this.partyPrimary &&
-      !this.partySecondary &&
-      caseDetail.contactPrimary
-    ) {
-      filedByArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
-    } else if (
-      this.partySecondary &&
-      !this.partyPrimary &&
-      caseDetail.contactSecondary
-    ) {
-      filedByArray.push(`Petr. ${caseDetail.contactSecondary.name}`);
-    } else if (
-      this.partyPrimary &&
-      this.partySecondary &&
-      caseDetail.contactPrimary &&
-      caseDetail.contactSecondary
-    ) {
-      filedByArray.push(
-        `Petrs. ${caseDetail.contactPrimary.name} & ${caseDetail.contactSecondary.name}`,
-      );
-    }
+  if (this.partyPrimary && !this.partySecondary && caseDetail.contactPrimary) {
+    filedByArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
+  } else if (
+    this.partySecondary &&
+    !this.partyPrimary &&
+    caseDetail.contactSecondary
+  ) {
+    filedByArray.push(`Petr. ${caseDetail.contactSecondary.name}`);
+  } else if (
+    this.partyPrimary &&
+    this.partySecondary &&
+    caseDetail.contactPrimary &&
+    caseDetail.contactSecondary
+  ) {
+    filedByArray.push(
+      `Petrs. ${caseDetail.contactPrimary.name} & ${caseDetail.contactSecondary.name}`,
+    );
+  }
 
-    if (filedByArray.length) {
-      this.filedBy = filedByArray.join(' & ');
-    }
+  if (filedByArray.length) {
+    this.filedBy = filedByArray.join(' & ');
   }
 };
 /**
