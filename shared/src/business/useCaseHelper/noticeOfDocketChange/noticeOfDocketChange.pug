@@ -20,17 +20,9 @@ html(lang="en")
         h3 Docket Entry No. #{docketEntryIndex} has been changed
         p
           if filingsAndProceedings.before != filingsAndProceedings.after
-            | 
-            b “#{filingsAndProceedings.before}”
-            |  has been changed to 
-            b “#{filingsAndProceedings.after}”
-            | .
+            | “#{filingsAndProceedings.before}” has been changed to “#{filingsAndProceedings.after}”. 
           if filingParties.before != filingParties.after
-            | The filing party/parties has been changed from 
-            b “#{filingParties.before}”
-            |  to 
-            b “#{filingParties.after}”
-            | .
+            | The filing party/parties has been changed from "#{filingParties.before}” to “#{filingParties.after}”.
 
       p.float-right.width-third 
         | Stephanie A. Servoss

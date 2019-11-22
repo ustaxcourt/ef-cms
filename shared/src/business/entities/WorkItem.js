@@ -277,15 +277,6 @@ WorkItem.prototype.setAsCompleted = function({ message, user }) {
 };
 
 /**
- *
- * @returns {WorkItem} the updated work item
- */
-WorkItem.prototype.setAsRead = function() {
-  this.isRead = true;
-  return this;
-};
-
-/**
  * complete the work item as the IRS user with the message 'Served on IRS'
  *
  * @param {object} props the props object

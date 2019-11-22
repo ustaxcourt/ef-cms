@@ -716,6 +716,7 @@ module.exports = (appContextUser = {}) => {
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
       CaseSearch,
+      ExternalDocumentFactory,
     }),
     getNodeSass: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
