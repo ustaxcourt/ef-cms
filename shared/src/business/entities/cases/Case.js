@@ -1189,4 +1189,26 @@ Case.prototype.setCaseTitle = function(caseCaption) {
   return this;
 };
 
+/**
+ * get case contacts
+ *
+ * @returns {object} object containing case contacts
+ * @param shape specific contact params to be returned
+ */
+Case.prototype.getCaseContacts = function(shape) {
+  const caseContacts = {};
+  [
+    'contactPrimary',
+    'contactSecondary',
+    'practitioners',
+    'respondents',
+  ].forEach(contact => {
+    if (!shape || (shape && shape[contact] === true)) {
+      caseContacts[contact] = this[contact];
+    }
+  });
+
+  return caseContacts;
+};
+
 module.exports = { Case };
