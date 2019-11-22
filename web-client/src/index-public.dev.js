@@ -1,5 +1,5 @@
 import { appPublic } from './appPublic';
-import { applicationContext } from './applicationContextPublic';
+import { applicationContextPublic } from './applicationContextPublic';
 import Devtools from 'cerebral/devtools';
 
 /**
@@ -14,4 +14,4 @@ if (process.env.USTC_DEBUG) {
   };
 }
 
-appPublic.initialize(applicationContext, debugTools);
+appPublic.initialize(applicationContextPublic, debugTools);

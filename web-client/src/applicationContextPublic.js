@@ -1,3 +1,5 @@
-const applicationContext = {};
+const applicationContextPublic = {};
 
-export { applicationContext };
+module.exports = {
+  applicationContextPublic,
+};

@@ -2,6 +2,7 @@ import { Error } from './Error';
 import { Footer } from './Footer';
 import { Interstitial } from './Interstitial';
 import { PublicSearch } from './PublicSearch';
+import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React, { useEffect } from 'react';
@@ -44,6 +45,7 @@ export const AppComponentPublic = connect(
         >
           Skip to main content
         </a>
+        <UsaBanner />
         <main id="main-content" role="main">
           <CurrentPage />
         </main>
