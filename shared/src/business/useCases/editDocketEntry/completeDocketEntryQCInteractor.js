@@ -173,8 +173,6 @@ exports.completeDocketEntryQCInteractor = async ({
       Document.NOTICE_OF_DOCKET_CHANGE.documentTitle,
       docketChangeInfo.docketEntryIndex,
     );
-
-    caseEntity.addDocument(noticeDocumentEntity);
   }
 
   await applicationContext.getPersistenceGateway().updateCase({
