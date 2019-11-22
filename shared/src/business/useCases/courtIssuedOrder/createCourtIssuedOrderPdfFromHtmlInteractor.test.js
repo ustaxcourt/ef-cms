@@ -11,22 +11,15 @@ const pageMock = {
   setContent: () => {},
 };
 
-const browserMock = {
+const chromiumBrowserMock = {
   close: () => {},
   newPage: () => pageMock,
-};
-
-const chromiumMock = {
-  font: () => {},
-  puppeteer: {
-    launch: () => browserMock,
-  },
 };
 describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   it('returns the pdf buffer produced by chromium', async () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor({
       applicationContext: {
-        getChromium: () => chromiumMock,
+        getChromiumBrowser: () => chromiumBrowserMock,
         logger: { error: () => {}, info: () => {} },
       },
       htmlString: 'Hello World from the use case',

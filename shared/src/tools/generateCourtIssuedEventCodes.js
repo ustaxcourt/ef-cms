@@ -4,9 +4,10 @@
  * again, but we've kept it in the project just in case.
  */
 
-const _ = require('lodash');
 const fs = require('fs');
 const parse = require('csv-parse');
+
+const { gatherRecords, getCsvOptions } = require('./helpers');
 
 let exportColumns;
 let csvColumns;
@@ -24,18 +25,7 @@ csvColumns = [
   'documentTitle',
 ];
 
-const csvOptions = {
-  columns: csvColumns,
-  delimiter: ',',
-  from_line: 2, // assumes first entry is header column containing labels
-  relax_column_count: true,
-  skip_empty_lines: true,
-  trim: true,
-};
-
-const whitespaceCleanup = str => {
-  return str.replace(/\s+/g, ' ').trim();
-};
+const csvOptions = getCsvOptions(csvColumns);
 
 /* eslint no-console: "off"*/
 const main = () => {
@@ -45,17 +35,7 @@ const main = () => {
 
   const stream = parse(data, csvOptions);
 
-  const gatherRecords = function gatherRecords() {
-    let record;
-    while ((record = this.read())) {
-      record = _.pick(record, exportColumns);
-      Object.keys(record).forEach(key => {
-        record[key] = whitespaceCleanup(record[key]);
-      });
-      output.push(record);
-    }
-  };
-  stream.on('readable', gatherRecords);
+  stream.on('readable', gatherRecords(exportColumns, output));
   stream.on('end', () => {
     console.log(JSON.stringify(output, null, 2));
   });
