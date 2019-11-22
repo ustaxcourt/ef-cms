@@ -288,7 +288,7 @@ module.exports = {
   },
   settings: {
     react: {
-      version: '16.8.3',
+      version: '16.12.0',
     },
   },
   env: {
@@ -303,4 +303,5 @@ module.exports = {
     jsx: true,
     sourceType: 'module',
   },
+  parser: "babel-eslint",
 };

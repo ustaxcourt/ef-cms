@@ -52,12 +52,12 @@ exports.completeDocketEntryQCInteractor = async ({
 
   const documentEntity = new Document(
     {
-      workItems: currentDocument.workItems,
-      ...entryMetadata,
       documentId,
+      ...entryMetadata,
       documentType,
       relationship: 'primaryDocument',
       userId: user.userId,
+      workItems: currentDocument.workItems,
     },
     { applicationContext },
   ).validate();
