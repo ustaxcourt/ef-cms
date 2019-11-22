@@ -139,7 +139,6 @@ import { getUserPermissions } from '../../shared/src/authorization/getUserPermis
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
-import { pdfStyles } from '../../shared/src/tools/pdfStyles.js';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
 import { recallPetitionFromIRSHoldingQueueInteractor } from '../../shared/src/proxies/recallPetitionFromIRSHoldingQueueProxy';
 import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
@@ -468,11 +467,12 @@ const applicationContext = {
   },
   getFileReader: () => FileReader,
   getHttpClient: () => axios,
-  getPdfJs: () => {
+  getPdfJs: async () => {
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
     return pdfjsLib;
   },
-  getPdfStyles: () => {
+  getPdfStyles: async () => {
+    const pdfStyles = await import('../../shared/src/tools/pdfStyles.js');
     return pdfStyles;
   },
   getPersistenceGateway: () => {
