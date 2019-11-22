@@ -69,6 +69,7 @@ exports.completeDocketEntryQCInteractor = async ({
       documentType,
       relationship: 'primaryDocument',
       userId: user.userId,
+      createdAt: currentDocument.createdAt,
     },
     { applicationContext },
   ).validate();
@@ -91,8 +92,6 @@ exports.completeDocketEntryQCInteractor = async ({
       before: currentDocument.documentTitle,
     },
   };
-
-  console.log('Docket change info', JSON.stringify(docketChangeInfo, null, 2));
 
   const docketRecordEntry = new DocketRecord({
     description: entryMetadata.documentTitle,

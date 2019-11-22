@@ -8,7 +8,6 @@ const {
 const { createISODateString } = require('../utilities/DateHandler');
 const { flatten } = require('lodash');
 const { Order } = require('./orders/Order');
-const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { WorkItem } = require('./WorkItem');
 
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
