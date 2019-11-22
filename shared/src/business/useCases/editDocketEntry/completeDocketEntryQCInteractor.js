@@ -58,11 +58,14 @@ exports.completeDocketEntryQCInteractor = async ({
       documentType,
       relationship: 'primaryDocument',
       userId: user.userId,
+      ...caseEntity.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   ).validate();
 
-  documentEntity.generateFiledBy(caseToUpdate);
   documentEntity.setQCed(user);
 
   const docketRecordEntry = new DocketRecord({

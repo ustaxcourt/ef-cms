@@ -54,10 +54,13 @@ exports.updateDocketEntryInteractor = async ({
       documentType: documentMetadata.documentType,
       relationship: 'primaryDocument',
       userId: user.userId,
+      ...caseEntity.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   );
-  documentEntity.generateFiledBy(caseToUpdate);
 
   const docketRecordEntry = new DocketRecord({
     description: documentMetadata.documentTitle,
