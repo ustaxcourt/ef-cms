@@ -303,12 +303,13 @@ Document.prototype.setAsServed = function(servedParties = null) {
 
 /**
  * generates the filedBy string from parties selected for the document
- * and contact info from the case detail
+and contact info from the case detail
  *
  * @param {object} caseDetail the case detail
+ * @param {boolean} force flag to force filedBy's generation
  */
-Document.prototype.generateFiledBy = function(caseDetail) {
-  if (!this.filedBy) {
+Document.prototype.generateFiledBy = function(caseDetail, force = false) {
+  if (force || !this.filedBy) {
     let filedByArray = [];
     this.partyRespondent && filedByArray.push('Resp.');
 
@@ -374,15 +375,6 @@ Document.prototype.unsignDocument = function() {
 
 Document.prototype.setAsProcessingStatusAsCompleted = function() {
   this.processingStatus = 'complete';
-};
-
-/**
- *
- * @param {string} workItemId the work item to find
- * @returns {WorkItem} workItem the work item found
- */
-Document.prototype.getWorkItemById = function({ workItemId }) {
-  return this.workItems.find(workItem => workItem.workItemId === workItemId);
 };
 
 exports.Document = Document;
