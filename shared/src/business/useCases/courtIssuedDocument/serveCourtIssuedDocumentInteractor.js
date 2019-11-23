@@ -17,6 +17,7 @@ const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 const completeWorkItem = async ({
   applicationContext,
@@ -153,6 +154,29 @@ exports.serveCourtIssuedDocumentInteractor = async ({
         applicationContext,
         caseId,
       });
+
+    if (caseEntity.trialSessionId) {
+      const trialSession = await applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionById({
+          applicationContext,
+          trialSessionId: caseEntity.trialSessionId,
+        });
+
+      const trialSessionEntity = new TrialSession(trialSession, {
+        applicationContext,
+      });
+
+      trialSessionEntity.removeCaseFromCalendar({
+        caseId: caseEntity.caseId,
+        disposition: '',
+      });
+
+      await applicationContext.getPersistenceGateway().updateTrialSession({
+        applicationContext,
+        trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+      });
+    }
   }
 
   const updatedCase = await applicationContext
