@@ -372,6 +372,17 @@ describe('formatCase', () => {
       showNotScheduled: true,
     });
   });
+
+  it('should show not scheduled section if case status is closed', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      status: Case.STATUS_TYPES.closed,
+    });
+
+    expect(result).toMatchObject({
+      showNotScheduled: true,
+    });
+  });
 });
 
 describe('formatCaseDeadlines', () => {
