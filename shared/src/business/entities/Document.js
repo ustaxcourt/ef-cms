@@ -125,6 +125,12 @@ Document.INITIAL_DOCUMENT_TYPES = {
   },
 };
 
+Document.NOTICE_OF_DOCKET_CHANGE = {
+  documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
+  documentType: 'Notice of Docket Change',
+  eventCode: 'NODC',
+};
+
 Document.SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
@@ -186,6 +192,7 @@ Document.getDocumentTypes = () => {
     ...orderDocTypes,
     ...courtIssuedDocTypes,
     ...signedTypes,
+    Document.NOTICE_OF_DOCKET_CHANGE.documentType,
   ];
 
   return documentTypes;
@@ -298,41 +305,48 @@ Document.prototype.setAsServed = function(servedParties = null) {
 
 /**
  * generates the filedBy string from parties selected for the document
- * and contact info from the case detail
+and contact info from the case detail
  *
  * @param {object} caseDetail the case detail
+ * @param {boolean} force flag to force filedBy's generation
  */
-Document.prototype.generateFiledBy = function(caseDetail) {
-  let filedByArray = [];
-  this.partyRespondent && filedByArray.push('Resp.');
+Document.prototype.generateFiledBy = function(caseDetail, force = false) {
+  if (force || !this.filedBy) {
+    let filedByArray = [];
+    this.partyRespondent && filedByArray.push('Resp.');
 
-  Array.isArray(this.practitioner) &&
-    this.practitioner.forEach(practitioner => {
-      practitioner.partyPractitioner &&
-        filedByArray.push(`Counsel ${practitioner.name}`);
-    });
+    Array.isArray(this.practitioner) &&
+      this.practitioner.forEach(practitioner => {
+        practitioner.partyPractitioner &&
+          filedByArray.push(`Counsel ${practitioner.name}`);
+      });
 
-  if (this.partyPrimary && !this.partySecondary && caseDetail.contactPrimary) {
-    filedByArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
-  } else if (
-    this.partySecondary &&
-    !this.partyPrimary &&
-    caseDetail.contactSecondary
-  ) {
-    filedByArray.push(`Petr. ${caseDetail.contactSecondary.name}`);
-  } else if (
-    this.partyPrimary &&
-    this.partySecondary &&
-    caseDetail.contactPrimary &&
-    caseDetail.contactSecondary
-  ) {
-    filedByArray.push(
-      `Petrs. ${caseDetail.contactPrimary.name} & ${caseDetail.contactSecondary.name}`,
-    );
-  }
+    if (
+      this.partyPrimary &&
+      !this.partySecondary &&
+      caseDetail.contactPrimary
+    ) {
+      filedByArray.push(`Petr. ${caseDetail.contactPrimary.name}`);
+    } else if (
+      this.partySecondary &&
+      !this.partyPrimary &&
+      caseDetail.contactSecondary
+    ) {
+      filedByArray.push(`Petr. ${caseDetail.contactSecondary.name}`);
+    } else if (
+      this.partyPrimary &&
+      this.partySecondary &&
+      caseDetail.contactPrimary &&
+      caseDetail.contactSecondary
+    ) {
+      filedByArray.push(
+        `Petrs. ${caseDetail.contactPrimary.name} & ${caseDetail.contactSecondary.name}`,
+      );
+    }
 
-  if (filedByArray.length) {
-    this.filedBy = filedByArray.join(' & ');
+    if (filedByArray.length) {
+      this.filedBy = filedByArray.join(' & ');
+    }
   }
 };
 /**
@@ -363,15 +377,6 @@ Document.prototype.unsignDocument = function() {
 
 Document.prototype.setAsProcessingStatusAsCompleted = function() {
   this.processingStatus = 'complete';
-};
-
-/**
- *
- * @param {string} workItemId the work item to find
- * @returns {WorkItem} workItem the work item found
- */
-Document.prototype.getWorkItemById = function({ workItemId }) {
-  return this.workItems.find(workItem => workItem.workItemId === workItemId);
 };
 
 exports.Document = Document;

@@ -181,6 +181,9 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  ExternalDocumentFactory,
+} = require('../../shared/src/business/entities/externalDocument/ExternalDocumentFactory');
+const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
@@ -713,7 +716,9 @@ module.exports = (appContextUser = {}) => {
     },
     getEmailClient: () => {
       if (!sesCache) {
-        sesCache = new SES();
+        sesCache = new SES({
+          region: 'us-east-1',
+        });
       }
       return sesCache;
     },
@@ -722,6 +727,7 @@ module.exports = (appContextUser = {}) => {
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
       CaseSearch,
+      ExternalDocumentFactory,
     }),
     getNodeSass: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
