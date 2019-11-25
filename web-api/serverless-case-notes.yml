@@ -152,18 +152,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-  createCaseNote:
-    handler: web-api/${self:provider.dir}/caseNotesHandlers.createCaseNoteLambda
-    events:
-      - http:
-          path: /{caseId}
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   getCaseNote:
     handler: web-api/${self:provider.dir}/caseNotesHandlers.getCaseNoteLambda
     events:
