@@ -533,10 +533,10 @@ Case.prototype.attachRespondent = function(respondent) {
  * @returns {void} modifies the respondents array on the case
  */
 Case.prototype.updateRespondent = function(respondentToUpdate) {
-  const respondent = this.respondents.find(
+  const foundRespondent = this.respondents.find(
     respondent => respondent.userId === respondentToUpdate.userId,
   );
-  if (respondent) Object.assign(respondent, respondentToUpdate);
+  if (foundRespondent) Object.assign(foundRespondent, respondentToUpdate);
 };
 
 /**
@@ -563,10 +563,10 @@ Case.prototype.attachPractitioner = function(practitioner) {
  * @param {string} practitionerToUpdate the practitioner user object with updated info
  */
 Case.prototype.updatePractitioner = function(practitionerToUpdate) {
-  const practitioner = this.practitioners.find(
+  const foundPractitioner = this.practitioners.find(
     practitioner => practitioner.userId === practitionerToUpdate.userId,
   );
-  if (practitioner) Object.assign(practitioner, practitionerToUpdate);
+  if (foundPractitioner) Object.assign(foundPractitioner, practitionerToUpdate);
 };
 
 /**
@@ -814,10 +814,10 @@ Case.prototype.addDocketRecord = function(docketRecordEntity) {
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocketRecordEntry = function(updatedDocketEntry) {
-  const entry = this.docketRecord.find(
+  const foundEntry = this.docketRecord.find(
     entry => entry.documentId === updatedDocketEntry.documentId,
   );
-  if (entry) Object.assign(entry, updatedDocketEntry);
+  if (foundEntry) Object.assign(foundEntry, updatedDocketEntry);
   return this;
 };
 
@@ -841,10 +841,10 @@ Case.prototype.updateDocketRecord = function(
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocument = function(updatedDocument) {
-  const document = this.documents.find(
+  const foundDocument = this.documents.find(
     document => document.documentId === updatedDocument.documentId,
   );
-  if (document) Object.assign(document, updatedDocument);
+  if (foundDocument) Object.assign(foundDocument, updatedDocument);
   return this;
 };
 
