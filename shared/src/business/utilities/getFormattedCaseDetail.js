@@ -37,7 +37,7 @@ const formatDocument = (applicationContext, document) => {
   result.showServedAt = !!result.servedAt;
   result.isStatusServed = result.status === 'served';
   result.isPetition =
-    result.documentType === 'Petition' && result.eventCode === 'P';
+    result.documentType === 'Petition' || result.eventCode === 'P';
 
   result.isCourtIssuedDocument =
     !!courtIssuedDocumentTypes.includes(result.documentType) ||
