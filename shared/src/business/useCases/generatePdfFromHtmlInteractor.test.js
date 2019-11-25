@@ -23,14 +23,8 @@ const errorMock = jest.fn();
 describe('generatePdfFromHtmlInteractor', () => {
   it('should call the error logger if an error is thrown', async () => {
     const applicationContext = {
-      getChromium: () => {
-        return {
-          puppeteer: {
-            launch: () => {
-              return launchErrorMock();
-            },
-          },
-        };
+      getChromiumBrowser: () => {
+        return launchErrorMock();
       },
       logger: {
         error: errorMock,
@@ -59,22 +53,16 @@ describe('generatePdfFromHtmlInteractor', () => {
 
   it('should launch puppeteer to generate a new pdf', async () => {
     const applicationContext = {
-      getChromium: () => {
+      getChromiumBrowser: () => {
+        launchMock();
         return {
-          puppeteer: {
-            launch: () => {
-              launchMock();
-              return {
-                close: closeMock,
-                newPage: () => {
-                  newPageMock();
-                  return {
-                    pdf: pdfMock,
-                    setContent: setContentMock,
-                  };
-                },
-              };
-            },
+          close: closeMock,
+          newPage: () => {
+            newPageMock();
+            return {
+              pdf: pdfMock,
+              setContent: setContentMock,
+            };
           },
         };
       },
@@ -103,22 +91,16 @@ describe('generatePdfFromHtmlInteractor', () => {
 
   it('should show header and footer by default', async () => {
     const applicationContext = {
-      getChromium: () => {
+      getChromiumBrowser: () => {
+        launchMock();
         return {
-          puppeteer: {
-            launch: () => {
-              launchMock();
-              return {
-                close: closeMock,
-                newPage: () => {
-                  newPageMock();
-                  return {
-                    pdf: pdfMock,
-                    setContent: setContentMock,
-                  };
-                },
-              };
-            },
+          close: closeMock,
+          newPage: () => {
+            newPageMock();
+            return {
+              pdf: pdfMock,
+              setContent: setContentMock,
+            };
           },
         };
       },

@@ -20,15 +20,7 @@ exports.generatePdfFromHtmlInteractor = async ({
 
   try {
     applicationContext.logger.time('Generating PDF From HTML');
-    const chromium = applicationContext.getChromium();
-
-    browser = await chromium.puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
-      headless: true,
-    });
-
+    browser = await applicationContext.getChromiumBrowser();
     let page = await browser.newPage();
 
     await page.setContent(contentHtml);
