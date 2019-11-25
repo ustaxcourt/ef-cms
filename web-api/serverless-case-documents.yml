@@ -261,6 +261,8 @@ functions:
 
   completeDocketEntryQC:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.completeDocketEntryQCLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     events:
       - http:
           path: /{caseId}/docket-entry-complete
