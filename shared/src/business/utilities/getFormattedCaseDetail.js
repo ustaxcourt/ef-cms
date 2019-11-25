@@ -27,9 +27,39 @@ const formatDocument = (applicationContext, document) => {
   result.signedAtFormattedTZ = applicationContext
     .getUtilities()
     .formatDateString(result.signedAt, 'DATE_TIME_TZ');
+
+  if (result.certificateOfServiceDate) {
+    result.certificateOfServiceDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(result.certificateOfServiceDate, 'MMDDYY');
+  }
+
   result.showServedAt = !!result.servedAt;
   result.isStatusServed = result.status === 'served';
-  result.isPetition = result.documentType === 'Petition';
+  result.isPetition =
+    result.documentType === 'Petition' || result.eventCode === 'P';
+
+  result.isCourtIssuedDocument =
+    !!courtIssuedDocumentTypes.includes(result.documentType) ||
+    result.documentType === 'Stipulated Decision';
+
+  const qcWorkItems = (result.workItems || []).filter(wi => wi.isQC);
+
+  result.qcWorkItemsCompleted = qcWorkItems.reduce((acc, wi) => {
+    return acc && !!wi.completedAt;
+  }, true);
+
+  result.isInProgress =
+    !result.isCourtIssuedDocument && result.isFileAttached === false;
+
+  result.isNotServedCourtIssuedDocument =
+    result.isCourtIssuedDocument && !result.servedAt;
+
+  result.qcWorkItemsUntouched =
+    !!qcWorkItems.length &&
+    qcWorkItems.reduce((acc, wi) => {
+      return acc && !wi.isRead && !wi.completedAt;
+    }, true);
 
   // Served parties code - R = Respondent, P = Petitioner, B = Both
   if (
@@ -87,78 +117,59 @@ const formatDocketRecordWithDocument = (
   }, {});
 
   return docketRecords.map(record => {
-    let document;
+    let formattedDocument;
 
     const { index } = record;
 
     if (record.documentId) {
-      document = documentMap[record.documentId];
+      formattedDocument = formatDocument(
+        applicationContext,
+        documentMap[record.documentId],
+      );
 
-      document.isCourtIssuedDocument =
-        !!courtIssuedDocumentTypes.includes(document.documentType) ||
-        document.documentType === 'Stipulated Decision';
-
-      if (document.isCourtIssuedDocument && !document.servedAt) {
+      if (
+        formattedDocument.isCourtIssuedDocument &&
+        !formattedDocument.servedAt
+      ) {
         record.createdAtFormatted = undefined;
       }
 
-      if (document.certificateOfServiceDate) {
-        document.certificateOfServiceDateFormatted = applicationContext
-          .getUtilities()
-          .formatDateString(document.certificateOfServiceDate, 'MMDDYY');
+      record.filingsAndProceedings = getFilingsAndProceedings(
+        formattedDocument,
+      );
+
+      if (formattedDocument.additionalInfo) {
+        record.description += ` ${formattedDocument.additionalInfo}`;
       }
 
-      record.filingsAndProceedings = getFilingsAndProceedings(document);
-
-      if (document.additionalInfo) {
-        record.description += ` ${document.additionalInfo}`;
-      }
-
-      const qcWorkItems = (document.workItems || []).filter(wi => wi.isQC);
-
-      document.qcWorkItemsCompleted = qcWorkItems.reduce((acc, wi) => {
-        return acc && !!wi.completedAt;
-      }, true);
-
-      document.isInProgress =
-        !document.isCourtIssuedDocument && document.isFileAttached === false;
-
-      document.isNotServedCourtIssuedDocument =
-        document.isCourtIssuedDocument && !document.servedAt;
-
-      document.qcWorkItemsUntouched =
-        !!qcWorkItems.length &&
-        qcWorkItems.reduce((acc, wi) => {
-          return acc && !wi.isRead && !wi.completedAt;
-        }, true);
-
-      document.isPetition = document.eventCode === 'P';
-      document.canEdit = !document.isPetition && !document.qcWorkItemsCompleted;
+      formattedDocument.canEdit =
+        !formattedDocument.isPetition &&
+        !formattedDocument.qcWorkItemsCompleted;
     }
 
-    return { document, index, record };
+    return { document: formattedDocument, index, record };
   });
 };
 
-const getFilingsAndProceedings = document => {
+const getFilingsAndProceedings = formattedDocument => {
   //filings and proceedings string
   //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
   const filingsAndProceedingsArray = [
     `${
-      document.certificateOfService
-        ? `(C/S ${document.certificateOfServiceDateFormatted})`
+      formattedDocument.certificateOfService
+        ? `(C/S ${formattedDocument.certificateOfServiceDateFormatted})`
         : ''
     }`,
-    `${document.exhibits ? '(Exhibit(s))' : ''}`,
-    `${document.attachments ? '(Attachment(s))' : ''}`,
+    `${formattedDocument.exhibits ? '(Exhibit(s))' : ''}`,
+    `${formattedDocument.attachments ? '(Attachment(s))' : ''}`,
     `${
-      document.objections === 'Yes'
+      formattedDocument.objections === 'Yes'
         ? '(Objection)'
-        : document.objections === 'No'
+        : formattedDocument.objections === 'No'
         ? '(No Objection)'
         : ''
     }`,
-    `${document.lodged ? '(Lodged)' : ''}`,
+    `${formattedDocument.lodged ? '(Lodged)' : ''}`,
   ];
 
   return filingsAndProceedingsArray.filter(item => item !== '').join(' ');
