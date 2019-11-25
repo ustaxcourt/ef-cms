@@ -298,7 +298,7 @@ const formatCase = (applicationContext, caseDetail) => {
   result.formattedPreferredTrialCity =
     result.preferredTrialCity || 'No location selected';
 
-  if (result.trialSessionId) {
+  if (result.trialSessionId && result.status !== Case.STATUS_TYPES.closed) {
     if (result.status === Case.STATUS_TYPES.calendared) {
       result.showTrialCalendared = true;
     } else {
