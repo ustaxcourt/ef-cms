@@ -6,10 +6,10 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { submitCaseAdvancedSearchAction } from '../actions/AdvancedSearch/submitCaseAdvancedSearchAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { validateAdvancedSearchAction } from '../actions/AdvancedSearch/validateAdvancedSearchAction';
+import { validateCaseAdvancedSearchAction } from '../actions/AdvancedSearch/validateCaseAdvancedSearchAction';
 
 export const submitCaseAdvancedSearchSequence = [
-  validateAdvancedSearchAction,
+  validateCaseAdvancedSearchAction,
   {
     error: [
       setAlertErrorAction,

@@ -141,10 +141,13 @@ exports.createCaseFromPaperInteractor = async ({
       partySecondary,
       receivedAt: caseToAdd.receivedAt,
       userId: user.userId,
+      ...caseToAdd.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   );
-  petitionDocumentEntity.generateFiledBy(caseToAdd);
 
   const {
     message: newMessage,
@@ -177,11 +180,14 @@ exports.createCaseFromPaperInteractor = async ({
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
+        ...caseToAdd.getCaseContacts({
+          contactPrimary: true,
+          contactSecondary: true,
+        }),
       },
       { applicationContext },
     );
 
-    applicationForWaiverOfFilingFeeDocumentEntity.generateFiledBy(caseToAdd);
     caseToAdd.addDocument(applicationForWaiverOfFilingFeeDocumentEntity);
   }
 
@@ -210,10 +216,14 @@ exports.createCaseFromPaperInteractor = async ({
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
+        ...caseToAdd.getCaseContacts({
+          contactPrimary: true,
+          contactSecondary: true,
+        }),
       },
       { applicationContext },
     );
-    requestForPlaceOfTrialDocumentEntity.generateFiledBy(caseToAdd);
+
     caseToAdd.addDocument(requestForPlaceOfTrialDocumentEntity);
   }
 
@@ -229,10 +239,14 @@ exports.createCaseFromPaperInteractor = async ({
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
+        ...caseToAdd.getCaseContacts({
+          contactPrimary: true,
+          contactSecondary: true,
+        }),
       },
       { applicationContext },
     );
-    stinDocumentEntity.generateFiledBy(caseToAdd);
+
     caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
   }
 
@@ -250,10 +264,14 @@ exports.createCaseFromPaperInteractor = async ({
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
+        ...caseToAdd.getCaseContacts({
+          contactPrimary: true,
+          contactSecondary: true,
+        }),
       },
       { applicationContext },
     );
-    odsDocumentEntity.generateFiledBy(caseToAdd);
+
     caseToAdd.addDocument(odsDocumentEntity);
   }
 
