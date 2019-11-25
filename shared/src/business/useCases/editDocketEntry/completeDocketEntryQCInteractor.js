@@ -60,11 +60,15 @@ exports.completeDocketEntryQCInteractor = async ({
     {
       workItems: currentDocument.workItems,
       ...entryMetadata,
+      createdAt: currentDocument.createdAt,
       documentId,
       documentType,
       relationship: 'primaryDocument',
       userId: user.userId,
-      createdAt: currentDocument.createdAt,
+      ...caseEntity.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   ).validate();
@@ -116,8 +120,6 @@ exports.completeDocketEntryQCInteractor = async ({
       before: currentDocumentTitle,
     },
   };
-
-  console.log('docketChangeInfo', docketChangeInfo);
 
   const docketRecordEntry = new DocketRecord({
     description: updatedDocumentTitle,

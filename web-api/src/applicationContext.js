@@ -181,6 +181,9 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  ExternalDocumentFactory,
+} = require('../../shared/src/business/entities/externalDocument/ExternalDocumentFactory');
+const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
 const {
@@ -670,7 +673,7 @@ module.exports = (appContextUser = {}) => {
     docketNumberGenerator,
     environment,
     getCaseCaptionNames: Case.getCaseCaptionNames,
-    getChromium: () => {
+    getChromiumBrowser: async () => {
       // Notice: this require is here to only have the lambdas that need it call it.
       // This dependency is only available on lambdas with the 'puppeteer' layer,
       // which means including it globally causes the other lambdas to fail.
@@ -679,7 +682,13 @@ module.exports = (appContextUser = {}) => {
       // and found at the layer level and would cause issues.
       // eslint-disable-next-line security/detect-non-literal-require
       const chromium = require('chrome-' + 'aws-lambda');
-      return chromium;
+
+      return await chromium.puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: true,
+      });
     },
     getConstants: () => ({
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
