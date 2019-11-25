@@ -2,6 +2,10 @@ const {
   completeDocketEntryQCInteractor,
 } = require('./completeDocketEntryQCInteractor');
 const { User } = require('../../entities/User');
+import {
+  createISODateString,
+  formatDateString,
+} from '../../../../../shared/src/business/utilities/DateHandler';
 
 describe('completeDocketEntryQCInteractor', () => {
   let applicationContext;
@@ -105,6 +109,12 @@ describe('completeDocketEntryQCInteractor', () => {
           saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
           updateCase: updateCaseSpy,
         }),
+        getUtilities: () => {
+          return {
+            createISODateString,
+            formatDateString,
+          };
+        },
       };
       await completeDocketEntryQCInteractor({
         applicationContext,
