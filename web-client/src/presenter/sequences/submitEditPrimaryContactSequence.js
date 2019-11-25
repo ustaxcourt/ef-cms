@@ -10,12 +10,12 @@ import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAct
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updatePrimaryContactAction } from '../actions/updatePrimaryContactAction';
-import { validateContactPrimaryAction } from '../actions/validateContactPrimaryAction';
+import { validatePrimaryContactAction } from '../actions/validatePrimaryContactAction';
 
 export const submitEditPrimaryContactSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  validateContactPrimaryAction,
+  validatePrimaryContactAction,
   {
     error: [setValidationAlertErrorsAction],
     success: [

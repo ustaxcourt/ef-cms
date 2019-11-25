@@ -1,6 +1,6 @@
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { updateUserContactAction } from './updateUserContactAction';
+import { updateUserContactInformationAction } from './updateUserContactInformationAction';
 
 const noChangeMock = jest.fn();
 const successMock = jest.fn();
@@ -32,7 +32,7 @@ presenter.providers.applicationContext = {
   }),
 };
 
-describe('updateUserContactAction', () => {
+describe('updateUserContactInformationAction', () => {
   it('should gracefully handle other failures', async () => {
     presenter.providers.applicationContext.getCurrentUser = () => ({
       contact: {},
@@ -40,7 +40,7 @@ describe('updateUserContactAction', () => {
     });
     let result, error;
     try {
-      result = await runAction(updateUserContactAction, {
+      result = await runAction(updateUserContactInformationAction, {
         modules: {
           presenter,
         },
@@ -58,7 +58,7 @@ describe('updateUserContactAction', () => {
       contact: {},
       userId: '123',
     });
-    await runAction(updateUserContactAction, {
+    await runAction(updateUserContactInformationAction, {
       modules: {
         presenter,
       },
@@ -71,7 +71,7 @@ describe('updateUserContactAction', () => {
       contact: {},
       userId: '123',
     });
-    await runAction(updateUserContactAction, {
+    await runAction(updateUserContactInformationAction, {
       modules: {
         presenter,
       },

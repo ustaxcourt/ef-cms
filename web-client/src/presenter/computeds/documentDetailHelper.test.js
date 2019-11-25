@@ -391,7 +391,7 @@ describe('document detail helper', () => {
   });
 
   describe('showAddDocketEntryButton', () => {
-    it('should set showAddDocketEntryButton false when the user has the DOCKET_ENTRY permission and the document is an unsigned stipulated decision', async () => {
+    it('should set showAddDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is an unsigned stipulated decision', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -417,10 +417,10 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showAddDocketEntryButton).toEqual(false);
+      expect(result.showAddDocketEntryButton).toEqual(true);
     });
 
-    it('should set showAddDocketEntryButton false when the user has the DOCKET_ENTRY permission and the document is a signed stipulated decision', async () => {
+    it('should set showAddDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is a signed stipulated decision', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -447,7 +447,7 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showAddDocketEntryButton).toEqual(false);
+      expect(result.showAddDocketEntryButton).toEqual(true);
     });
 
     it('should set showAddDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is an unsigned order', async () => {
@@ -819,79 +819,6 @@ describe('document detail helper', () => {
       });
       expect(result.showDocumentInfoTab).toEqual(false);
     });
-
-    it('should show the serve button when a docketclerk and the document is a Stipulated Decision and the document is not served already', () => {
-      const user = {
-        role: User.ROLES.docketClerk,
-        userId: '123',
-      };
-      const result = runCompute(documentDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketRecord: [],
-            documents: [
-              {
-                documentId: 'abc',
-                documentType: 'Stipulated Decision',
-                status: 'new',
-              },
-            ],
-          },
-          documentId: 'abc',
-        },
-      });
-      expect(result.showServeDocumentButton).toEqual(true);
-    });
-
-    it('should NOT show the serve button when user does not have serve document permission', () => {
-      const user = {
-        role: User.ROLES.admissionsClerk,
-        userId: '123',
-      };
-      const result = runCompute(documentDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketRecord: [],
-            documents: [
-              {
-                documentId: 'abc',
-                documentType: 'Stipulated Decision',
-              },
-            ],
-          },
-          documentId: 'abc',
-          permissions: {
-            SERVE_DOCUMENT: false,
-          },
-        },
-      });
-      expect(result.showServeDocumentButton).toEqual(false);
-    });
-
-    it('should NOT show the serve button when the document is NOT a signed stipulated decision', () => {
-      const user = {
-        role: User.ROLES.petitionsClerk,
-        userId: '123',
-      };
-      const result = runCompute(documentDetailHelper, {
-        state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketRecord: [],
-            documents: [
-              {
-                documentId: 'abc',
-                documentType: 'Proposed Stipulated Decision',
-              },
-            ],
-          },
-          documentId: 'abc',
-        },
-      });
-      expect(result.showServeDocumentButton).toEqual(false);
-    });
   });
 
   describe('showEditDocketEntry', () => {
@@ -1041,30 +968,6 @@ describe('document detail helper', () => {
       });
       expect(result.showEditDocketEntry).toEqual(false);
     });
-  });
-
-  it('should NOT show the serve button when a docketclerk and the document is a Stipulated Decision and document has already been served', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: '123',
-    };
-    const result = runCompute(documentDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          docketRecord: [],
-          documents: [
-            {
-              documentId: 'abc',
-              documentType: 'Stipulated Decision',
-              status: 'served',
-            },
-          ],
-        },
-        documentId: 'abc',
-      },
-    });
-    expect(result.showServeDocumentButton).toEqual(false);
   });
 
   it('should indicate QC completed by workItem "completedBy" if not indicated on Document', () => {

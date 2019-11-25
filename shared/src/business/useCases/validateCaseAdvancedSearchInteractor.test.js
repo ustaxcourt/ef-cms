@@ -1,10 +1,10 @@
 const {
-  validateCaseSearchInteractor,
-} = require('./validateCaseSearchInteractor');
+  validateCaseAdvancedSearchInteractor,
+} = require('./validateCaseAdvancedSearchInteractor');
 
 const { CaseSearch } = require('../entities/cases/CaseSearch');
 
-describe('validateCaseSearchInteractor', () => {
+describe('validateCaseAdvancedSearchInteractor', () => {
   const applicationContext = {};
   let validatorSpy;
 
@@ -19,7 +19,7 @@ describe('validateCaseSearchInteractor', () => {
   });
 
   it('should be able to set an item', async () => {
-    await validateCaseSearchInteractor({
+    await validateCaseAdvancedSearchInteractor({
       applicationContext,
       caseSearch: {},
     });

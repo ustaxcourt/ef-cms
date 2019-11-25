@@ -2,6 +2,10 @@ const {
   generateNoticeOfDocketChangePdf,
   generatePage,
 } = require('./generateNoticeOfDocketChangePdf');
+jest.mock('../../../authorization/authorizationClientService');
+const {
+  isAuthorized,
+} = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { User } = require('../../entities/User');
 const PDF_MOCK_BUFFER = 'Hello World';
@@ -17,21 +21,14 @@ const pageMock = {
   setContent: () => {},
 };
 
-const browserMock = {
+const chromiumBrowserMock = {
   close: () => {},
   newPage: () => pageMock,
 };
 
-const chromiumMock = {
-  font: () => {},
-  puppeteer: {
-    launch: () => browserMock,
-  },
-};
-
 const applicationContext = {
   getCaseCaptionNames: Case.getCaseCaptionNames,
-  getChromium: () => chromiumMock,
+  getChromiumBrowser: () => chromiumBrowserMock,
   getCurrentUser: () => {
     return { role: User.ROLES.petitioner, userId: 'petitioner' };
   },
@@ -67,15 +64,46 @@ describe('generatePage', () => {
     expect(result.indexOf('Cody')).not.toEqual(-1);
     expect(result.indexOf('123-19X')).not.toEqual(-1);
   });
+  it('returns a correctly-generated HTML output based on information provided', async () => {
+    const docketChangeArg = {
+      ...docketChangeInfo,
+      filingsAndProceedings: {
+        after: 'Unchanged string',
+        before: 'Unchanged string',
+      },
+    };
+    const result = await generatePage({
+      applicationContext,
+      docketChangeInfo: docketChangeArg,
+    });
+    expect(result.indexOf('Unchanged string')).toEqual(-1);
+  });
 });
 
 describe('generateNoticeOfDocketChangePdf', () => {
+  beforeEach(() => {
+    isAuthorized.mockReturnValue(true);
+  });
+  it('requires permissions', async () => {
+    isAuthorized.mockReturnValue(false);
+    let result, error;
+    try {
+      result = await generateNoticeOfDocketChangePdf({
+        applicationContext,
+        docketChangeInfo,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(result).not.toBeDefined();
+    expect(error.message).toEqual('Unauthorized');
+  });
   it('returns the pdf buffer produced by chromium', async () => {
     const result = await generateNoticeOfDocketChangePdf({
       applicationContext,
       docketChangeInfo,
     });
 
-    expect(result).toEqual('https://www.example.com');
+    expect(result).toEqual('uniqueId');
   });
 });

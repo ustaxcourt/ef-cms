@@ -198,18 +198,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  verifyCaseForUser:
-    handler: web-api/${self:provider.dir}/usersHandlers.verifyCaseForUserLambda
-    events:
-      - http:
-          path: /{userId}/case/{caseId}
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   verifyPendingCaseForUser:
     handler: web-api/${self:provider.dir}/usersHandlers.verifyPendingCaseForUserLambda
     events:

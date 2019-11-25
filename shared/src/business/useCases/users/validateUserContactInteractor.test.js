@@ -1,9 +1,11 @@
+const {
+  validateUserContactInteractor,
+} = require('./validateUserContactInteractor');
 const { User } = require('../../entities/User');
-const { validateUserInteractor } = require('./validateUserInteractor');
 
-describe('validateUserInteractor', () => {
+describe('validateUserContactInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
-    const errors = validateUserInteractor({
+    const errors = validateUserContactInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           User,
@@ -16,7 +18,7 @@ describe('validateUserInteractor', () => {
   });
 
   it('returns no errors when all fields are defined', () => {
-    const errors = validateUserInteractor({
+    const errors = validateUserContactInteractor({
       applicationContext: {
         getEntityConstructors: () => ({
           User,

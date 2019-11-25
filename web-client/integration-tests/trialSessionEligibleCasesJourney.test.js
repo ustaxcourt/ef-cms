@@ -360,7 +360,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         docketNumber: createdDocketNumbers[0],
       });
 
-      await test.runSequence('removeFromTrialSessionSequence');
+      await test.runSequence('removeCaseFromTrialSequence');
 
       expect(test.getState('validationErrors')).toEqual({
         disposition: 'Enter a disposition',
@@ -371,7 +371,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         value: 'testing',
       });
 
-      await test.runSequence('removeFromTrialSessionSequence');
+      await test.runSequence('removeCaseFromTrialSequence');
 
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],

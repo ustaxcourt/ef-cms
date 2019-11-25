@@ -24,7 +24,7 @@ const generatePage = async ({ applicationContext, docketChangeInfo }) => {
   const html = compiledFunction({
     logo: ustcLogoBufferBase64,
     ...docketChangeInfo,
-    styles: css,
+    css,
   });
   return html;
 };
@@ -36,12 +36,12 @@ exports.generatePage = generatePage;
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseEntity a case entity with its documents
+ * @param {string} providers.docketChangeInfo contains information about what has changed
  * @returns {Promise<*>} the promise of the document having been uploaded
  */
 exports.generateNoticeOfDocketChangePdf = async ({
   applicationContext,
-  reportTitle,
+  docketChangeInfo,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -53,20 +53,12 @@ exports.generateNoticeOfDocketChangePdf = async ({
   let result = null;
 
   try {
-    const chromium = applicationContext.getChromium();
-
-    browser = await chromium.puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
-      headless: true,
-    });
-
+    browser = await applicationContext.getChromiumBrowser();
     let page = await browser.newPage();
 
     const contentResult = await generatePage({
       applicationContext,
-      reportTitle,
+      docketChangeInfo,
     });
 
     await page.setContent(contentResult);
@@ -84,7 +76,7 @@ exports.generateNoticeOfDocketChangePdf = async ({
     }
   }
 
-  const documentId = `notice-docket-change-${applicationContext.getUniqueId()}.pdf`;
+  const documentId = applicationContext.getUniqueId();
 
   await new Promise(resolve => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
@@ -97,17 +89,8 @@ exports.generateNoticeOfDocketChangePdf = async ({
       Key: documentId,
     };
 
-    s3Client.upload(params, function() {
-      resolve();
-    });
+    s3Client.upload(params, resolve);
   });
 
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    documentId,
-  });
-
-  return url;
+  return documentId;
 };
