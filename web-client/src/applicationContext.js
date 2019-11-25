@@ -64,7 +64,6 @@ import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/c
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
-import { createCaseNoteInteractor } from '../../shared/src/proxies/caseNote/createCaseNoteProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import {
   createISODateString,
@@ -243,7 +242,6 @@ const allUseCases = {
   createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,
   createCaseInteractor,
-  createCaseNoteInteractor, //not used?
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createTrialSessionInteractor,
   createWorkItemInteractor,
