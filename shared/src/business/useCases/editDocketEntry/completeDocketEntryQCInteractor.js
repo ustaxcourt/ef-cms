@@ -73,6 +73,9 @@ exports.completeDocketEntryQCInteractor = async ({
     { applicationContext },
   ).validate();
 
+  updatedDocument.generateFiledBy(caseToUpdate, true);
+  updatedDocument.setQCed(user);
+
   let updatedDocumentTitle = updatedDocument.documentTitle;
   if (updatedDocument.additionalInfo) {
     updatedDocumentTitle += ` ${updatedDocument.additionalInfo}`;
@@ -98,9 +101,6 @@ exports.completeDocketEntryQCInteractor = async ({
   const needsNoticeOfDocketChange =
     updatedDocument.filedBy != currentDocument.filedBy ||
     updatedDocumentTitle != currentDocumentTitle;
-
-  updatedDocument.generateFiledBy(caseToUpdate, true);
-  updatedDocument.setQCed(user);
 
   const docketChangeInfo = {
     caseTitle: caseToUpdate.caseTitle,
