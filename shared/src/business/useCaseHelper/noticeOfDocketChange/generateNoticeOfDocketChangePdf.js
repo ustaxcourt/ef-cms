@@ -22,9 +22,9 @@ const generatePage = async ({ applicationContext, docketChangeInfo }) => {
   });
   const compiledFunction = pug.compile(template);
   const html = compiledFunction({
-    logo: ustcLogoBufferBase64,
-    ...docketChangeInfo,
     css,
+    ...docketChangeInfo,
+    logo: ustcLogoBufferBase64,
   });
   return html;
 };

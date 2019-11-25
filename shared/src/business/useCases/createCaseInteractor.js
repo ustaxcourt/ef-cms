@@ -127,11 +127,11 @@ exports.createCaseInteractor = async ({
 
   const caseToAdd = new Case(
     {
-      practitioners,
-      userId: user.userId,
-      ...petitionEntity.toRawObject(),
       docketNumber,
       isPaper: false,
+      ...petitionEntity.toRawObject(),
+      practitioners,
+      userId: user.userId,
     },
     {
       applicationContext,

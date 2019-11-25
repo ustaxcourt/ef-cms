@@ -58,13 +58,13 @@ exports.completeDocketEntryQCInteractor = async ({
 
   const updatedDocument = new Document(
     {
-      workItems: currentDocument.workItems,
-      ...entryMetadata,
       createdAt: currentDocument.createdAt,
       documentId,
       documentType,
+      ...entryMetadata,
       relationship: 'primaryDocument',
       userId: user.userId,
+      workItems: currentDocument.workItems,
       ...caseEntity.getCaseContacts({
         contactPrimary: true,
         contactSecondary: true,

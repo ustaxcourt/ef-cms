@@ -110,10 +110,10 @@ exports.createCaseFromPaperInteractor = async ({
 
   const caseToAdd = new Case(
     {
-      userId: user.userId,
-      ...petitionEntity.toRawObject(),
       docketNumber,
+      ...petitionEntity.toRawObject(),
       isPaper: true,
+      userId: user.userId,
     },
     {
       applicationContext,
