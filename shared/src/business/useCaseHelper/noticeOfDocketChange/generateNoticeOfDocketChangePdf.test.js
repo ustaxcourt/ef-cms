@@ -104,6 +104,6 @@ describe('generateNoticeOfDocketChangePdf', () => {
       docketChangeInfo,
     });
 
-    expect(result).toEqual('https://www.example.com');
+    expect(result).toEqual('uniqueId');
   });
 });

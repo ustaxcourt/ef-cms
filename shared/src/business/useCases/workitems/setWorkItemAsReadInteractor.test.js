@@ -32,6 +32,9 @@ describe('setWorkItemAsReadInteractor', () => {
         role: User.ROLES.petitionsClerk,
         userId: 'petitionsclerk',
       }),
+      getPersistenceGateway: () => ({
+        setWorkItemAsRead: async () => [],
+      }),
     };
 
     const res = await setWorkItemAsReadInteractor({

@@ -91,9 +91,6 @@ exports.completeDocketEntryQCInteractor = async ({
     currentDocumentTitle += ` ${currentDocument.additionalInfo2}`;
   }
 
-  console.log('updated document title', updatedDocumentTitle);
-  console.log('current document title', currentDocumentTitle);
-
   const needsNewCoversheet =
     updatedDocument.additionalInfo != currentDocument.additionalInfo ||
     updatedDocumentTitle != currentDocumentTitle;
@@ -182,8 +179,6 @@ exports.completeDocketEntryQCInteractor = async ({
         workItem: workItemToUpdate.validate().toRawObject(),
       });
   }
-
-  console.log('needsNoticeOfDocketChange', needsNoticeOfDocketChange);
 
   if (needsNoticeOfDocketChange) {
     const noticeDocumentId = await generateNoticeOfDocketChangePdf({
