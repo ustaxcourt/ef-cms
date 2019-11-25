@@ -17,20 +17,15 @@ const pageMock = {
   setContent: () => {},
 };
 
-const browserMock = {
+const chromiumBrowserMock = {
   close: jest.fn(),
   newPage: () => pageMock,
 };
 
-const chromiumMock = {
-  font: () => {},
-  puppeteer: {
-    launch: () => browserMock,
-  },
-};
+const s3Upload = jest.fn().mockImplementation((params, resolve) => resolve());
 
 let applicationContext = {
-  getChromium: () => chromiumMock,
+  getChromiumBrowser: () => chromiumBrowserMock,
   getCurrentUser: () => ({
     role: User.ROLES.petitioner,
     userId: 'petitioner',
@@ -39,13 +34,10 @@ let applicationContext = {
   getNodeSass: () => ({ render: (data, cb) => cb(data, { css: '' }) }),
   getPersistenceGateway: () => ({
     getCaseByCaseId: () => ({ docketNumber: '101-19' }),
-    getDownloadPolicyUrl: () => ({
-      url: 'https://www.example.com',
-    }),
   }),
   getPug: () => ({ compile: () => () => '' }),
   getStorageClient: () => ({
-    upload: (params, callback) => callback(),
+    upload: s3Upload,
   }),
   logger: { error: jest.fn(), info: () => {} },
 };
@@ -77,7 +69,7 @@ describe('generateCaseConfirmationPdf', () => {
   });
 
   it('handles exceptions gracefully', async () => {
-    jest.spyOn(browserMock, 'newPage').mockImplementation(() => {
+    jest.spyOn(chromiumBrowserMock, 'newPage').mockImplementation(() => {
       throw new Error('page problem');
     });
     let error;
@@ -94,11 +86,11 @@ describe('generateCaseConfirmationPdf', () => {
     }
     expect(error).toBeDefined();
     expect(applicationContext.logger.error).toHaveBeenCalled();
-    expect(browserMock.close).toHaveBeenCalled();
+    expect(chromiumBrowserMock.close).toHaveBeenCalled();
   });
 
   it('returns the pdf buffer produced by chromium', async () => {
-    const result = await generateCaseConfirmationPdf({
+    await generateCaseConfirmationPdf({
       applicationContext,
       caseEntity: {
         ...MOCK_CASE,
@@ -106,6 +98,6 @@ describe('generateCaseConfirmationPdf', () => {
       },
     });
 
-    expect(result).toEqual('https://www.example.com');
+    expect(s3Upload).toHaveBeenCalled();
   });
 });
