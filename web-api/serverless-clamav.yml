@@ -10,6 +10,7 @@ custom:
   prune:
     automatic: true
     number: 3
+    includeLayers: true
   jetpack:
     mode: yarn
 
@@ -31,4 +32,3 @@ layers:
     package:
       exclude:
         - clamav_lambda_layer.tar.gz
-    retain: true
