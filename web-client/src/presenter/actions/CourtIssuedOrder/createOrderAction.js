@@ -14,7 +14,7 @@ const replaceWithID = (replacements, domString) => {
   return doc;
 };
 
-export const createOrderAction = ({ applicationContext, get }) => {
+export const createOrderAction = async ({ applicationContext, get }) => {
   let richText = get(state.form.richText) || '';
   let documentTitle = (get(state.form.documentTitle) || '').toUpperCase();
   richText = richText.replace(
@@ -47,7 +47,7 @@ export const createOrderAction = ({ applicationContext, get }) => {
 
   result = result.replace(
     '/* STYLES_PLACEHOLDER */',
-    applicationContext.getPdfStyles(),
+    await applicationContext.getPdfStyles(),
   );
 
   return { htmlString: result };
