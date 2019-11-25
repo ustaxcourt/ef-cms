@@ -1,9 +1,10 @@
 const {
-  generateNoticeOfDocketChangePdf,
-} = require('../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf');
-const {
+  formatDocument,
   getFilingsAndProceedings,
 } = require('../../utilities/getFormattedCaseDetail');
+const {
+  generateNoticeOfDocketChangePdf,
+} = require('../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -80,7 +81,9 @@ exports.completeDocketEntryQCInteractor = async ({
   if (updatedDocument.additionalInfo) {
     updatedDocumentTitle += ` ${updatedDocument.additionalInfo}`;
   }
-  updatedDocumentTitle += ` ${getFilingsAndProceedings(updatedDocument)}`;
+  updatedDocumentTitle += ` ${getFilingsAndProceedings(
+    formatDocument(applicationContext, updatedDocument),
+  )}`;
   if (updatedDocument.additionalInfo2) {
     updatedDocumentTitle += ` ${updatedDocument.additionalInfo2}`;
   }
@@ -89,7 +92,9 @@ exports.completeDocketEntryQCInteractor = async ({
   if (currentDocument.additionalInfo) {
     currentDocumentTitle += ` ${currentDocument.additionalInfo}`;
   }
-  currentDocumentTitle += ` ${getFilingsAndProceedings(currentDocument)}`;
+  currentDocumentTitle += ` ${getFilingsAndProceedings(
+    formatDocument(applicationContext, currentDocument),
+  )}`;
   if (currentDocument.additionalInfo2) {
     currentDocumentTitle += ` ${currentDocument.additionalInfo2}`;
   }
