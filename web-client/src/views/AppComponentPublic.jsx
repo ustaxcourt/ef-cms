@@ -1,5 +1,6 @@
 import { Error } from './Error';
 import { Footer } from './Footer';
+import { HeaderPublic } from './Header/HeaderPublic';
 import { Interstitial } from './Interstitial';
 import { PublicSearch } from './PublicSearch';
 import { UsaBanner } from './UsaBanner';
@@ -46,6 +47,7 @@ export const AppComponentPublic = connect(
           Skip to main content
         </a>
         <UsaBanner />
+        <HeaderPublic />
         <main id="main-content" role="main">
           <CurrentPage />
         </main>

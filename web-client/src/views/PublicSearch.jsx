@@ -14,7 +14,6 @@ const SearchInformation = () => (
 export const PublicSearch = () => {
   return (
     <>
-      <h1>Header Placeholder</h1>
       <NonMobile>
         <BigHeader text="Search for a Case" />
 

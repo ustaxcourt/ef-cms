@@ -151,7 +151,7 @@
     "build:_api": "parcel build --no-source-maps --bundle-node-modules --target node",
     "build:assets": "node shared/createModule.js",
     "build:client": "USTC_ENV=prod parcel build --no-source-maps web-client/src/index.pug; npm run build:jsdoc",
-    "build:public": "USTC_ENV=prod parcel build --no-source-maps -d dist-public web-client/src/index-public.pug; npm run build:jsdoc",
+    "build:public": "USTC_ENV=prod parcel build --no-source-maps -d dist-public web-client/src/index-public.pug -o index.html; npm run build:jsdoc",
     "build:jsdoc": "jsdoc -c web-client/jsdoc.conf.json",
     "clean": "rm -rf dist/ web-client/.cache/",
     "cypress:open": "cypress open --config watchForFileChanges=true",
