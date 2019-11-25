@@ -272,7 +272,7 @@ describe('Document entity', () => {
         },
         { applicationContext },
       );
-      document.generateFiledBy(caseDetail);
+      document.generateFiledBy(caseDetail, true);
       expect(document.filedBy).toEqual('Resp. & Petr. Bob');
     });
 
