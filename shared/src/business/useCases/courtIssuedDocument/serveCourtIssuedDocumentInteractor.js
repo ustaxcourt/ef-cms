@@ -167,10 +167,14 @@ exports.serveCourtIssuedDocumentInteractor = async ({
         applicationContext,
       });
 
-      trialSessionEntity.removeCaseFromCalendar({
-        caseId: caseEntity.caseId,
-        disposition: '',
-      });
+      if (trialSessionEntity.isCalendared) {
+        trialSessionEntity.removeCaseFromCalendar({
+          caseId,
+          disposition: 'Status was changed to Closed',
+        });
+      } else {
+        trialSessionEntity.deleteCaseFromCalendar({ caseId });
+      }
 
       await applicationContext.getPersistenceGateway().updateTrialSession({
         applicationContext,
