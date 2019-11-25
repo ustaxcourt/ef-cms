@@ -87,6 +87,8 @@ function Document(rawDocument, { applicationContext }) {
   this.workItems = (this.workItems || []).map(
     workItem => new WorkItem(workItem, { applicationContext }),
   );
+
+  this.generateFiledBy(rawDocument);
 }
 
 const practitionerAssociationDocumentTypes = [
