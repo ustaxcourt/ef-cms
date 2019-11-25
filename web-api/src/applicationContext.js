@@ -713,7 +713,9 @@ module.exports = (appContextUser = {}) => {
     },
     getEmailClient: () => {
       if (!sesCache) {
-        sesCache = new SES();
+        sesCache = new SES({
+          region: 'us-east-1',
+        });
       }
       return sesCache;
     },
