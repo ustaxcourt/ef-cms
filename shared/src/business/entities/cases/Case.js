@@ -1193,7 +1193,7 @@ Case.prototype.setCaseTitle = function(caseCaption) {
  * get case contacts
  *
  * @returns {object} object containing case contacts
- * @param shape specific contact params to be returned
+ * @param {object} shape specific contact params to be returned
  */
 Case.prototype.getCaseContacts = function(shape) {
   const caseContacts = {};
