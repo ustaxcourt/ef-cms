@@ -5,7 +5,8 @@ import { SearchResults } from './SearchResults';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
-export const PublicSearch = connect(
+
+export const AdvancedSearch = connect(
   {
     submitCaseAdvancedSearchSequence:
       sequences.submitCaseAdvancedSearchSequence,
