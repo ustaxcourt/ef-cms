@@ -59,10 +59,10 @@ exports.completeDocketEntryQCInteractor = async ({
 
   const updatedDocument = new Document(
     {
-      createdAt: currentDocument.createdAt,
+      ...entryMetadata,
+      createdAt: currentDocument.createdAt, // eslint-disable-line
       documentId,
       documentType,
-      ...entryMetadata,
       relationship: 'primaryDocument',
       userId: user.userId,
       workItems: currentDocument.workItems,
@@ -199,6 +199,7 @@ exports.completeDocketEntryQCInteractor = async ({
       },
       { applicationContext },
     );
+
     noticeUpdatedDocument.documentTitle = replaceBracketed(
       Document.NOTICE_OF_DOCKET_CHANGE.documentTitle,
       docketChangeInfo.docketEntryIndex,
