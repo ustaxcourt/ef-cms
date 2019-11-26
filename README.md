@@ -64,6 +64,7 @@ Assuming you have Docker installed, the following command will spin up a Docker 
 `./docker-run.sh`
 
 - You can access the UI at http://localhost:1234
+- You can access the public UI at http://localhost:5678
 - You can access the API at http://localhost:3000
 - You can access the DynamoDB shell at http://localhost:8000/shell
 - You can access the DynamoDB admin UI at http://localhost:8001
@@ -98,6 +99,7 @@ Both the front-end (`/web-client`) and API (`/web-api`) share code that exists i
 ##### Other Start Commands
 
 - Run `cd web-client && npm start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
+- Run `npm run start:public` to start the UI for the public access portion of the site
 
 #### Terminal B
 
