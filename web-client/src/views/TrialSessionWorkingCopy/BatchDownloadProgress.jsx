@@ -19,7 +19,7 @@ export const BatchDownloadProgress = connect(
               aria-hidden="true"
               className="progress-bar margin-right-2"
               style={{
-                background: `linear-gradient(to right, green 0%, green ${batchDownloadHelper.percentComplete}%, #ffffff ${batchDownloadHelper.percentComplete}%, #ffffff 100%)`,
+                background: `linear-gradient(to right, #2e8540 0%, #2e8540 ${batchDownloadHelper.percentComplete}%, #ffffff ${batchDownloadHelper.percentComplete}%, #ffffff 100%)`,
               }}
             ></div>
             <span className="progress-text">
