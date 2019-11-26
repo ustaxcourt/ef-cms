@@ -1,6 +1,10 @@
 import { menuHelper } from './computeds/menuHelper';
 
+import { advancedSearchHelper } from './computeds/advancedSearchHelper';
+
 export const state = {
+  advancedSearchForm: {},
+  advancedSearchHelper,
   betaBar: {
     isVisible: true,
   },
@@ -13,4 +17,5 @@ export const state = {
     showDetails: false,
   },
   user: {},
+  validationErrors: {},
 };

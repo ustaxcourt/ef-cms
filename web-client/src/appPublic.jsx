@@ -33,6 +33,9 @@ const appPublic = {
 
     presenter.providers.applicationContext = applicationContext;
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
+
+    presenter.state.constants = applicationContext.getConstants();
+
     presenter.providers.router = {
       externalRoute,
     };
