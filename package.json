@@ -147,6 +147,7 @@
     "build:api:trialSessions": "npm run build:_api -- web-api/src/trialSessionsHandlers.js",
     "build:api:users": "npm run build:_api -- web-api/src/usersHandlers.js",
     "build:api:workItems": "npm run build:_api -- web-api/src/workItemsHandlers.js",
+    "build:api:public": "npm run build:_api -- web-api/src/publicApiHandlers.js",
     "build:api": "npm run build:_api -- web-api/src/apiHandlers.js",
     "build:_api": "parcel build --no-source-maps --bundle-node-modules --target node",
     "build:assets": "node shared/createModule.js",
