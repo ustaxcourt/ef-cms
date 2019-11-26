@@ -1,8 +1,6 @@
 import {
   getCognitoLoginUrl,
-  getCurrentUserFactory,
   getUniqueId,
-  setCurrentUserFactory,
 } from '../../shared/src/sharedAppContext.js';
 
 import { AddPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/AddPractitionerFactory';
@@ -217,8 +215,12 @@ const MINUTES = 60 * 1000;
 
 let user;
 
-const getCurrentUser = getCurrentUserFactory(user);
-const setCurrentUser = setCurrentUserFactory(user);
+const getCurrentUser = () => {
+  return user;
+};
+const setCurrentUser = newUser => {
+  user = newUser;
+};
 
 let token;
 const getCurrentUserToken = () => {
