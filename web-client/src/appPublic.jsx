@@ -1,6 +1,6 @@
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { externalRoute } from './router';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
@@ -8,6 +8,13 @@ import { withAppContextDecorator } from './withAppContext';
 import App from 'cerebral';
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import { faUser } from '@fortawesome/free-regular-svg-icons';
+
+import {
+  faSearch,
+  faTimesCircle as faTimesCircleRegular,
+} from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Instantiates the Cerebral app with React
@@ -22,8 +29,13 @@ const appPublic = {
       return value;
     });
 
-    library.add(faSearch);
+    library.add(faSearch, faTimesCircleRegular, faUser);
+
     presenter.providers.applicationContext = applicationContext;
+    presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
+    presenter.providers.router = {
+      externalRoute,
+    };
 
     const cerebralApp = App(presenter, debugTools);
 
