@@ -1,6 +1,11 @@
 const AWS = require('aws-sdk');
+const {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../authorization/authorizationClientService');
 const { CaseSearch } = require('../entities/cases/CaseSearch');
 const { get } = require('lodash');
+const { UnauthorizedError } = require('../../errors/errors');
 
 /**
  * caseAdvancedSearchInteractor
@@ -25,6 +30,12 @@ exports.caseAdvancedSearchInteractor = async ({
   const exactMatchesQuery = [];
   const nonExactMatchesQuery = [];
   const commonQuery = [];
+
+  const authorizedUser = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   if (petitionerName) {
     const petitionerNameArray = petitionerName.toLowerCase().split(' ');
