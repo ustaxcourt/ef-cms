@@ -30,6 +30,7 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberSuffix = rawWorkItem.docketNumberSuffix;
   this.document = omit(rawWorkItem.document, 'workItems');
+  this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
   this.inProgress = rawWorkItem.inProgress;
   this.isInitializeCase = rawWorkItem.isInitializeCase;
   this.isQC = rawWorkItem.isQC;
@@ -97,6 +98,7 @@ joiValidationDecorator(
       .allow(null)
       .optional(),
     document: joi.object().required(),
+    hideFromPendingMessages: joi.boolean().optional(),
     inProgress: joi.boolean().optional(),
     isInitializeCase: joi.boolean().optional(),
     isQC: joi.boolean().required(),

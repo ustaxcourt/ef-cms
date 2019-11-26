@@ -24,6 +24,7 @@ export const Button = props => {
   const classes = classNames(
     className,
     `usa-button margin-${marginDirection}-205`,
+    icon && 'no-wrap',
     secondary && 'usa-button--outline',
     link && 'usa-button--unstyled ustc-button--unstyled',
   );

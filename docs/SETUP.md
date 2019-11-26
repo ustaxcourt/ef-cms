@@ -3,12 +3,15 @@
 ## Prerequisites
 - [Create an AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/).
 - Create a `CircleCI` user in [AWS Identity and Access Management](https://console.aws.amazon.com/iam/):
-     - Determine your organization’s AWS ID, a 12-digit number. While logged into the AWS Console, you can find this in the account menu in the top right, where it may appear with hyphens, e.g. `3503-6506-1526`.
-     - In your local copy of the repository, generate an IAM policy with `./generate-policy.sh [YOUR_ACCOUNT_ID]`, e.g. `generate-policy.sh 350365061526`.
-     - Create a IAM policy called `CircleCIPolicy`, populating it with the contents of the generated `policy.json`.
-     - Create the `CircleCI` user and attach the policy.
+     - Create the `circle_ci_policy` via the project terraform scripts
+          `cd iam/account-specific/terraform/main && ../bin/deploy-app.sh`
+     - Attach this policy to your `CircleCI` user.
      - Keep track of the access key and secret access key — it is needed for the CircleCI setup.
 - [Create a Route53 Hosted Zone](https://console.aws.amazon.com/route53/home) This will be used for setting up the domains for the UI and API.  Put the desired domain name (e.g. `ef-cms.example.gov.`) and make sure it is a `Public Hosted Zone`.  This is the value you will set for `EFCMS_DOMAIN` in CircleCI.  Make sure the domain name ends with a period.
+- Create the lambda roles & policies needed for the lambdas that run the backend:
+     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app dev`
+     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app stg`
+     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app prod`
 - [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
 - [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
   - There are three sub-projects to the EF-CMS — the front-end (the UI), the back-end (the API), and shared code. Each is handled separately by Jenkins and SonarCloud.
@@ -45,5 +48,9 @@
      - `DYNAMSOFT_PRODUCT_KEYS_STG`  (the product key provided after purchasing dynamsoft)
      - `DYNAMSOFT_PRODUCT_KEYS_PROD`  (the product key provided after purchasing dynamsoft)
      - `DYNAMSOFT_S3_ZIP_PATH` (the full s3 path to the dynamsoft .tar.zip, e.g. `s3://ef-cms.ustaxcourt.gov-software/Dynamsoft/dynamic-web-twain-sdk-14.3.1.tar.gz`)
+     - `CLOUDWATCH_ROLE_ARN` (the arn output after running terraform in the iam/account-specific/terraform/main dir)
+     - `POST_CONFIRMATION_ROLE_ARN_DEV` (the arn output after running terraform in the iam/environment-specific/terraform/main dir)
+     - `POST_CONFIRMATION_ROLE_ARN_STG` (the arn output after running terraform in the iam/environment-specific/terraform/main dir)
+     - `POST_CONFIRMATION_ROLE_ARN_PROD` (the arn output after running terraform in the iam/environment-specific/terraform/main dir)
      - `SES_DMARC_EMAIL` (email address used with SES to which aggregate DMARC validations are sent)
 8. Run a build.

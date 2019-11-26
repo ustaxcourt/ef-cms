@@ -24,7 +24,8 @@ export const createCaseAction = async ({
     'trialCities',
   );
 
-  form.contactPrimary.email = get(state.user.email);
+  const user = applicationContext.getCurrentUser();
+  form.contactPrimary.email = user.email;
 
   const progressFunctions = setupPercentDone(
     {

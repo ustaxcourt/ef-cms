@@ -41,6 +41,18 @@ describe('formatCase', () => {
   it('should format documents if the case documents array is set', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
+      docketRecord: [
+        {
+          documentId: 'd-1-2-3',
+          hi: 'there',
+          index: '1',
+        },
+        {
+          documentId: 'd-1-4-3',
+          hi: 'there',
+          index: '2',
+        },
+      ],
       documents: [
         {
           createdAt: getDateISO(),
@@ -69,22 +81,11 @@ describe('formatCase', () => {
           ],
         },
       ],
-      docketRecord: [
-        {
-          documentId: 'd-1-2-3',
-          hi: 'there',
-          index: '1',
-        },
-        {
-          documentId: 'd-1-4-3',
-          hi: 'there',
-          index: '2',
-        },
-      ],
     });
     expect(result.documents[0].isPetition).toBeTruthy();
     expect(result.documents[0].canEdit).toBeFalsy();
     expect(result.documents[0].qcWorkItemsCompleted).toBeTruthy();
+    expect(result.documents[0].qcWorkItemsUntouched).toEqual(false);
 
     expect(result.documents[0]).toHaveProperty('createdAtFormatted');
     expect(result.documents[0]).toHaveProperty('servedAtFormatted');
@@ -92,6 +93,8 @@ describe('formatCase', () => {
     expect(result.documents[0]).toHaveProperty('isStatusServed');
     expect(result.documents[0]).toHaveProperty('isPetition');
     expect(result.documents[0]).toHaveProperty('servedPartiesCode');
+
+    expect(result.documents[1].qcWorkItemsUntouched).toEqual(false);
   });
 
   it('should format docket records if the case docket record array is set', () => {
@@ -107,6 +110,59 @@ describe('formatCase', () => {
 
     expect(result.docketRecord[0]).toHaveProperty('createdAtFormatted');
     expect(result).toHaveProperty('docketRecordWithDocument');
+  });
+
+  it('should format docket records and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketRecord: [
+        {
+          createdAt: getDateISO(),
+          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          filingDate: getDateISO(),
+          index: '1',
+        },
+      ],
+      documents: [
+        {
+          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          documentType: 'Petition',
+        },
+      ],
+    });
+
+    expect(result).toHaveProperty('docketRecordWithDocument');
+    expect(
+      result.docketRecordWithDocument[0].record.createdAtFormatted,
+    ).toBeDefined();
+  });
+
+  it('should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketRecord: [
+        {
+          createdAt: getDateISO(),
+          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          filingDate: getDateISO(),
+          index: '1',
+        },
+      ],
+      documents: [
+        {
+          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          documentTitle: 'Order [Judge Name] [Anything]',
+          documentType: 'OAJ - Order that case is assigned',
+          eventCode: 'OAJ',
+          scenario: 'Type B',
+        },
+      ],
+    });
+
+    expect(result).toHaveProperty('docketRecordWithDocument');
+    expect(
+      result.docketRecordWithDocument[0].record.createdAtFormatted,
+    ).toBeUndefined();
   });
 
   it('should format respondents if the respondents array is set', () => {
@@ -141,11 +197,11 @@ describe('formatCase', () => {
   it('should format the general properties of case details', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      hasVerifiedIrsNotice: true,
-      trialTime: 11,
       caseCaption: 'Test Case Caption',
       caseTitle:
         'Test Case Caption, Petitioners v. Internal Revenue, Respondent',
+      hasVerifiedIrsNotice: true,
+      trialTime: 11,
     });
 
     expect(result).toHaveProperty('createdAtFormatted');
@@ -159,15 +215,20 @@ describe('formatCase', () => {
     );
     expect(result.shouldShowIrsNoticeDate).toBeTruthy();
     expect(result.caseName).toEqual('Test Case Caption');
-    expect(result.caseTitleWithoutRespondent).toEqual(
-      'Test Case Caption, Petitioners v. Internal Revenue, ',
-    );
     expect(result.formattedPreferredTrialCity).toEqual('No location selected');
   });
 
   it('should apply additional information', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
+      docketRecord: [
+        {
+          createdAt: getDateISO(),
+          description: 'desc',
+          documentId: 'd-1-2-3',
+          index: '1',
+        },
+      ],
       documents: [
         {
           additionalInfo: 'additional information',
@@ -175,14 +236,6 @@ describe('formatCase', () => {
           documentId: 'd-1-2-3',
           documentType: 'Petition',
           servedAt: getDateISO(),
-        },
-      ],
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          description: 'desc',
-          documentId: 'd-1-2-3',
-          index: '1',
         },
       ],
     });
@@ -195,6 +248,13 @@ describe('formatCase', () => {
   it('should format certificate of service date', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
+      docketRecord: [
+        {
+          createdAt: getDateISO(),
+          documentId: 'd-1-2-3',
+          index: '1',
+        },
+      ],
       documents: [
         {
           certificateOfServiceDate: getDateISO(),
@@ -202,13 +262,6 @@ describe('formatCase', () => {
           documentId: 'd-1-2-3',
           documentType: 'Petition',
           servedAt: getDateISO(),
-        },
-      ],
-      docketRecord: [
-        {
-          createdAt: getDateISO(),
-          documentId: 'd-1-2-3',
-          index: '1',
         },
       ],
     });
@@ -259,10 +312,10 @@ describe('formatCase', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       status: Case.STATUS_TYPES.calendared,
-      trialLocation: 'Boise, Idaho',
       trialDate: '2011-11-11',
-      trialTime: '11',
+      trialLocation: 'Boise, Idaho',
       trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+      trialTime: '11',
     });
 
     expect(result).toMatchObject({
@@ -279,10 +332,10 @@ describe('formatCase', () => {
   it('should format trial details if case status is not calendared but the case has a trialSessionId', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
-      trialLocation: 'Boise, Idaho',
       trialDate: '2011-11-11',
-      trialTime: '11',
+      trialLocation: 'Boise, Idaho',
       trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+      trialTime: '11',
     });
 
     expect(result).toMatchObject({
@@ -300,8 +353,8 @@ describe('formatCase', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       status: Case.STATUS_TYPES.calendared,
-      trialLocation: 'Boise, Idaho',
       trialDate: undefined,
+      trialLocation: 'Boise, Idaho',
       trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
     });
 
@@ -412,6 +465,7 @@ describe('getFormattedCaseDetail', () => {
       applicationContext,
       caseDetail: {
         ...mockCaseDetailBase,
+        docketRecord: [],
         documents: [
           {
             archived: false,

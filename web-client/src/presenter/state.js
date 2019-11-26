@@ -3,6 +3,8 @@ import {
   formattedCases,
 } from './computeds/formattedCaseDetail';
 
+import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
+import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
@@ -11,6 +13,7 @@ import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
+import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
@@ -20,13 +23,14 @@ import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
-import { documentHelper } from './computeds/documentHelper';
+import { documentEditLinkHelper } from './computeds/documentEditLinkHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
+import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
@@ -49,11 +53,14 @@ import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
+import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
 export const state = {
+  addCourtIssuedDocketEntryHelper,
+  addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
   addToTrialSessionModalHelper,
   advancedSearchForm: {},
@@ -77,6 +84,7 @@ export const state = {
   caseDetailEditContactsHelper,
   caseDetailEditHelper,
   caseDetailErrors: {},
+  caseDetailHeaderHelper,
   caseDetailHelper,
   caseInformationHelper,
   caseTypeDescriptionHelper,
@@ -99,7 +107,7 @@ export const state = {
     tab: '',
   },
   documentDetailHelper,
-  documentHelper,
+  documentEditLinkHelper,
   documentId: null,
   documentSelectedForPreview: null,
   documentSelectedForScan: null,
@@ -115,6 +123,7 @@ export const state = {
   formattedCaseDetail,
   formattedCases,
   formattedDashboardTrialSessions,
+  formattedPendingItems,
   formattedTrialSessionDetails,
   formattedTrialSessions,
   formattedWorkQueue,
@@ -173,6 +182,7 @@ export const state = {
   trialCitiesHelper,
   trialSessionHeaderHelper,
   trialSessionWorkingCopyHelper,
+  updateCaseModalHelper,
   usaBanner: {
     showDetails: false,
   },

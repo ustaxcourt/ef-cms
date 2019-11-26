@@ -1,5 +1,4 @@
 const DateHandler = require('../../utilities/DateHandler');
-const staticResources = require('./caseConfirmationResources');
 
 const {
   isAuthorized,
@@ -15,8 +14,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const formattedCaseInfo = caseInfo => {
   const { servedAt } = caseInfo.documents.find(doc => doc.servedAt);
   const countryName =
-    caseInfo.contactPrimary.countryType != 'domestic' &&
-    caseInfo.contactPrimary.country;
+    caseInfo.contactPrimary.countryType != 'domestic'
+      ? caseInfo.contactPrimary.country
+      : '';
   const formattedInfo = Object.assign(
     {
       caseTitle: caseInfo.caseTitle,
@@ -34,6 +34,36 @@ const formattedCaseInfo = caseInfo => {
     caseInfo.contactPrimary,
   );
   return formattedInfo;
+};
+
+/**
+ *
+ * @param {object} caseInfo a raw object representing a petition
+ * @returns {string} an html string resulting from rendering template with caseInfo
+ */
+const generateCaseConfirmationPage = async ({
+  applicationContext,
+  caseEntity,
+}) => {
+  const confirmSassContent = require('./../../assets/ustcPdf.scss_');
+  const confirmTemplateContent = require('./caseConfirmation.pug_');
+  const ustcLogoBufferBase64 = require('../../../../static/images/ustc_seal.png_');
+
+  const pug = applicationContext.getPug();
+  const sass = applicationContext.getNodeSass();
+
+  const { css } = await new Promise(resolve => {
+    sass.render({ data: confirmSassContent }, (err, result) => {
+      return resolve(result);
+    });
+  });
+  const compiledFunction = pug.compile(confirmTemplateContent);
+  const html = compiledFunction({
+    ...formattedCaseInfo(caseEntity),
+    css,
+    logo: ustcLogoBufferBase64,
+  });
+  return html;
 };
 
 /**
@@ -58,47 +88,13 @@ exports.generateCaseConfirmationPdf = async ({
   let result = null;
 
   try {
-    const Handlebars = applicationContext.getHandlebars();
-    const sass = applicationContext.getNodeSass();
-
-    /**
-     *
-     * @param {object} caseInfo a raw object representing a petition
-     * @returns {string} an html string resulting from rendering template with caseInfo
-     */
-    const generateCaseConfirmationPage = async caseInfo => {
-      const { css } = await new Promise(resolve => {
-        sass.render(
-          { data: staticResources.confirmSassContent },
-          (err, renderResult) => {
-            return resolve(renderResult);
-          },
-        );
-      });
-      const compiledFunction = Handlebars.compile(
-        staticResources.confirmTemplateContent,
-      );
-      const contenthtml = compiledFunction({
-        ...formattedCaseInfo(caseInfo),
-        styles: `<style>${css}</style>`,
-        logo: staticResources.ustcLogoBufferBase64,
-      });
-      formattedCaseInfo(caseInfo); // putting this here for lint
-      return contenthtml;
-    };
-
-    const chromium = applicationContext.getChromium();
-
-    browser = await chromium.puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath,
-      headless: true,
-    });
-
+    browser = await applicationContext.getChromiumBrowser();
     let page = await browser.newPage();
 
-    const contentResult = await generateCaseConfirmationPage(caseEntity);
+    const contentResult = await generateCaseConfirmationPage({
+      applicationContext,
+      caseEntity,
+    });
     await page.setContent(contentResult);
 
     result = await page.pdf({
@@ -117,7 +113,7 @@ exports.generateCaseConfirmationPdf = async ({
   const documentId = `case-${caseEntity.docketNumber}-confirmation.pdf`;
 
   await new Promise(resolve => {
-    const documentsBucket = applicationContext.environment.documentsBucketName;
+    const documentsBucket = applicationContext.getDocumentsBucketName();
     const s3Client = applicationContext.getStorageClient();
 
     const params = {

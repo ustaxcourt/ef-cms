@@ -888,7 +888,7 @@ header.usa-header {
     background: $color-white;
     color: color($theme-color-primary-darker);
     font-weight: $font-bold;
-
+    white-space: nowrap;
     &.ustc-tag--yellow {
       background: color($theme-color-warning);
     }
@@ -1416,4 +1416,15 @@ button.change-scanner-button {
   background: color($theme-color-secondary-dark);
   color: white;
   font-size: 14px;
+}
+
+.docket-entry-preview-text {
+  overflow: hidden;
+  width: 600px;
+  max-height: 41px;
+  margin: 0.5rem 0;
+}
+
+#service-parties {
+  font-size: 17px;
 }

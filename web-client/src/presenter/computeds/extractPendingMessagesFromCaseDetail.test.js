@@ -1,18 +1,20 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
-import { extractedPendingMessagesFromCaseDetail as extractPendingMessagesFromCaseDetailComputed } from './extractPendingMessagesFromCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../withAppContext';
-
+import { applicationContext } from '../../applicationContext';
 import {
   createISODateString,
   formatDateString,
   formatNow,
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
+import { extractedPendingMessagesFromCaseDetail as extractPendingMessagesFromCaseDetailComputed } from './extractPendingMessagesFromCaseDetail';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
 const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractPendingMessagesFromCaseDetailComputed,
   {
+    ...applicationContext,
     getCurrentUser: () => ({
       role: User.ROLES.petitionsClerk,
     }),
@@ -28,7 +30,7 @@ const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
 );
 
 const baseState = {
-  constants: { USER_ROLES: User.ROLES },
+  constants: { STATUS_TYPES: Case.STATUS_TYPES, USER_ROLES: User.ROLES },
 };
 
 describe('extractPendingMessagesFromCaseDetail', () => {

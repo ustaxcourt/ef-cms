@@ -2,9 +2,9 @@ import { showContactsHelper } from './showContactsHelper';
 import { state } from 'cerebral';
 
 export const startCaseHelper = (get, applicationContext) => {
-  const { PARTY_TYPES, USER_ROLES } = get(state.constants);
+  const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
   const form = get(state.form);
-  const userRole = get(state.user.role);
+  const user = applicationContext.getCurrentUser();
 
   const showContacts = showContactsHelper(form.partyType, PARTY_TYPES);
 
@@ -42,16 +42,16 @@ export const startCaseHelper = (get, applicationContext) => {
     contactPrimaryLabel,
     contactSecondaryLabel,
     deceasedSpouseLegend:
-      userRole === USER_ROLES.petitioner
+      user.role === USER_ROLES.petitioner
         ? 'Is your spouse deceased?'
         : 'Is the spouse deceased?',
     hasContactSecondary,
     minorIncompetentLegend:
-      userRole === USER_ROLES.petitioner
+      user.role === USER_ROLES.petitioner
         ? 'What is your role in filing for this minor or legally incompetent person?'
         : "What is the petitioner's role in filing for this minor or incompetent person?",
     noticeLegend:
-      userRole === USER_ROLES.petitioner
+      user.role === USER_ROLES.petitioner
         ? 'Did you receive a notice from the IRS?'
         : 'Do you have a notice from the IRS?',
     showBusinessFilingTypeOptions: form.filingType === 'A business',

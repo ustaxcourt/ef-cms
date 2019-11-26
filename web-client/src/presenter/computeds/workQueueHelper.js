@@ -4,7 +4,7 @@ export const workQueueHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const selectedWorkItems = get(state.selectedWorkItems);
   const workQueueToDisplay = get(state.workQueueToDisplay);
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { USER_ROLES } = applicationContext.getConstants();
   const isJudge = user.role === USER_ROLES.judge;
   const { myInboxUnreadCount, qcUnreadCount } = get(state.notifications);
   const { workQueueIsInternal } = workQueueToDisplay;
@@ -33,10 +33,12 @@ export const workQueueHelper = (get, applicationContext) => {
   } ${workQueueType}`;
   const permissions = get(state.permissions);
 
+  const inboxFiledColumnLabel = workQueueIsInternal ? 'Received' : 'Filed';
+
   const showStartCaseButton = permissions.START_PAPER_CASE && isDisplayingQC;
 
   return {
-    assigneeColumnTitle: isDisplayingQC ? 'Assigned To' : 'To',
+    assigneeColumnTitle: isDisplayingQC ? 'Assigned to' : 'To',
     currentBoxView: workQueueToDisplay.box,
     getQueuePath: ({ box, queue }) => {
       return `/${
@@ -49,6 +51,7 @@ export const workQueueHelper = (get, applicationContext) => {
     hideIconColumn: !workQueueIsInternal && userIsOther,
     hideSectionColumn: isDisplayingQC,
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
+    inboxFiledColumnLabel,
     isDisplayingQC,
     linkToDocumentMessages: !isDisplayingQC,
     queueEmptyMessage: workQueueIsInternal

@@ -50,9 +50,9 @@ exports.updateDocketEntryInteractor = async ({
     {
       ...currentDocument,
       ...documentMetadata,
-      relationship: 'primaryDocument',
       documentId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
+      relationship: 'primaryDocument',
       userId: user.userId,
     },
     { applicationContext },

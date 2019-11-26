@@ -9,4 +9,5 @@ import { state } from 'cerebral';
  */
 export const setDefaultCaseDetailTabAction = ({ store }) => {
   store.set(state.caseDetailPage.informationTab, 'docketRecord');
+  store.set(state.caseDetailPage.deadlinesTab, 'caseDeadlines');
 };
