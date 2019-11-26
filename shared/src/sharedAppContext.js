@@ -1,4 +1,3 @@
-import { User } from './business/entities/User';
 const uuidv4 = require('uuid/v4');
 
 const getCognitoLoginUrl = () => {
@@ -24,20 +23,8 @@ const getUniqueId = () => {
   return uuidv4();
 };
 
-const getCurrentUserFactory = scopedUserRef => () => {
-  return scopedUserRef;
-};
-const setCurrentUserFactory = (
-  scopedUserRef,
-  setAsEntity = false,
-) => newUser => {
-  scopedUserRef = setAsEntity ? new User(setAsEntity) : newUser;
-};
-
 module.exports = {
   getCognitoLoginUrl,
-  getCurrentUserFactory,
   getPublicSiteUrl,
   getUniqueId,
-  setCurrentUserFactory,
 };

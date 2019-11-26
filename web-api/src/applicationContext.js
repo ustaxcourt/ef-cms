@@ -10,11 +10,7 @@ const AWS = require('aws-sdk');
 
 // ^ must come first --------------------
 
-import {
-  getCurrentUserFactory,
-  getUniqueId,
-  setCurrentUserFactory,
-} from '../../shared/src/sharedAppContext.js';
+const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
 
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
@@ -629,6 +625,7 @@ const {
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { exec } = require('child_process');
 const { Order } = require('../../shared/src/business/entities/orders/Order');
+const { User } = require('../../shared/src/business/entities/User');
 
 // increase the timeout for zip uploads to S3
 AWS.config.httpOptions.timeout = 300000;
@@ -653,8 +650,12 @@ const environment = {
 
 let user;
 
-const getCurrentUser = getCurrentUserFactory(user);
-const setCurrentUser = setCurrentUserFactory(user, true);
+const getCurrentUser = () => {
+  return user;
+};
+const setCurrentUser = newUser => {
+  user = new User(newUser);
+};
 
 let dynamoClientCache = {};
 let s3Cache;
