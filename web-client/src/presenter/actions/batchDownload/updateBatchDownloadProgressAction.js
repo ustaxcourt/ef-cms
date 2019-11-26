@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * set the state form props
+ * set the batch download progress state
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
