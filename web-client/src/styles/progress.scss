@@ -29,11 +29,11 @@
   font-weight: bold;
 
   .progress-bar {
+    display: inline-block;
+    width: 400px;
     height: 40px;
     border: 1px solid color($theme-color-base);
     border-radius: 5px;
-    display: inline-block;
-    width: 400px;
   }
 
   .progress-text {
