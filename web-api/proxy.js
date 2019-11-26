@@ -19,6 +19,7 @@ const PROXY_DESTINATIONS = {
   '/cases': `http://${PROXY_HOST}:3002`,
   '/documents': `http://${PROXY_HOST}:3004`,
   '/notifications': `http://${PROXY_HOST}:3011`,
+  '/public-api': `http://${PROXY_HOST}:3013`,
   '/sections': `http://${PROXY_HOST}:3006`,
   '/streams': `http://${PROXY_HOST}:3012`,
   '/trial-sessions': `http://${PROXY_HOST}:3007`,
