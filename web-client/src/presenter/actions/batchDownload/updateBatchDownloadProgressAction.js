@@ -35,7 +35,6 @@ export const updateBatchDownloadProgressAction = ({ get, props, store }) => {
 
   done = Math.max(done, lastDone);
   store.set(state.zipInProgress, true);
-  store.set(state.batchDownloads.batchStep, 'adding');
   store.set(state.batchDownloads.totalFiles, total);
   store.set(state.batchDownloads.fileCount, done);
 };
