@@ -3,7 +3,7 @@ import { runAction } from 'cerebral/test';
 import { updateBatchDownloadProgressAction } from './updateBatchDownloadProgressAction';
 
 describe('updateBatchDownloadProgressAction', () => {
-  it('should set the state as docect records are generated', async () => {
+  it('should set the state as docket records are generated', async () => {
     const result = await runAction(updateBatchDownloadProgressAction, {
       modules: {
         presenter,

@@ -13,17 +13,7 @@ export const socketRouter = (app, onMessageCallbackFn) => {
         });
         break;
       case 'batch_download_docket_generated':
-        app.getSequence('updateBatchDownloadProgressSequence')({
-          action,
-          ...message,
-        });
-        break;
       case 'batch_download_upload_start':
-        app.getSequence('updateBatchDownloadProgressSequence')({
-          action,
-          ...message,
-        });
-        break;
       case 'batch_download_progress':
         app.getSequence('updateBatchDownloadProgressSequence')({
           action,
