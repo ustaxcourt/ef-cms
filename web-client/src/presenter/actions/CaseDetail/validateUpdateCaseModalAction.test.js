@@ -89,7 +89,7 @@ describe('validateUpdateCaseModalAction', () => {
     expect(successStub).not.toHaveBeenCalled();
   });
 
-  it('should call path.error and not path.sucess if caseStatus requires a judge and a judge is not defined', async () => {
+  it('should call path.error and not path.success if caseStatus requires a judge and a judge is not defined', async () => {
     await runAction(validateUpdateCaseModalAction, {
       modules: {
         presenter,
