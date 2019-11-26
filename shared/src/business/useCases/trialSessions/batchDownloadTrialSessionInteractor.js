@@ -97,6 +97,8 @@ exports.batchDownloadTrialSessionInteractor = async ({
 
   let numberOfDocketRecordsGenerated = 0;
   const numberOfDocketRecordsToGenerate = sessionCases.length;
+  const numberOfFilesToBatch = numberOfDocketRecordsToGenerate + s3Ids.length;
+
   const onDocketRecordCreation = async caseId => {
     console.log('onDocketRecordCreation', caseId);
     if (caseId) {
@@ -107,8 +109,9 @@ exports.batchDownloadTrialSessionInteractor = async ({
       message: {
         action: 'batch_download_docket_generated',
         caseId,
-        numberOfDocketRecordsToGenerate,
         numberOfDocketRecordsGenerated,
+        numberOfDocketRecordsToGenerate,
+        numberOfFilesToBatch,
       },
       userId: user.userId,
     });
@@ -135,8 +138,6 @@ exports.batchDownloadTrialSessionInteractor = async ({
     );
   }
 
-  const numberOfFilesToBatch = extraFiles.length + s3Ids.length;
-
   const onEntry = entryData => {
     console.log('entryData', JSON.stringify(entryData, null, 2));
     applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -144,6 +145,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
       message: {
         action: 'batch_download_entry',
         ...entryData,
+        numberOfDocketRecordsToGenerate,
         numberOfFilesToBatch,
       },
       userId: user.userId,
@@ -157,6 +159,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
       message: {
         action: 'batch_download_progress',
         ...progressData,
+        numberOfDocketRecordsToGenerate,
         numberOfFilesToBatch,
       },
       userId: user.userId,
@@ -169,6 +172,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
       applicationContext,
       message: {
         action: 'batch_download_upload_start',
+        numberOfDocketRecordsToGenerate,
         numberOfFilesToBatch,
       },
       userId: user.userId,
