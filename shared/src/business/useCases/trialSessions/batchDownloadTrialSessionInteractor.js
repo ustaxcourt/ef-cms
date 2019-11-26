@@ -100,8 +100,8 @@ exports.batchDownloadTrialSessionInteractor = async ({
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
-        caseId,
         action: 'batch_download_docket_generated',
+        caseId,
       },
       userId: user.userId,
     });
@@ -116,7 +116,10 @@ exports.batchDownloadTrialSessionInteractor = async ({
           applicationContext,
           caseId,
         })
-        .then(() => onDocketRecordCreation(caseId)),
+        .then(async result => {
+          await onDocketRecordCreation(caseId);
+          return result;
+        }),
     );
     extraFileNames.push(
       `${sessionCases[index].caseFolder}/0_Docket Record.pdf`,
@@ -130,6 +133,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
     applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
+        numberOfFilesToBatch,
         ...entryData,
         action: 'batch_download_entry',
       },
@@ -142,6 +146,7 @@ exports.batchDownloadTrialSessionInteractor = async ({
     applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
+        numberOfFilesToBatch,
         ...progressData,
         action: 'batch_download_progress',
       },
@@ -149,12 +154,13 @@ exports.batchDownloadTrialSessionInteractor = async ({
     });
   };
 
-  const onUploadStart = entryData => {
+  const onUploadStart = () => {
     console.log('onUploadStart');
     applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'batch_download_upload_start',
+        numberOfFilesToBatch,
       },
       userId: user.userId,
     });
