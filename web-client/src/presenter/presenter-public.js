@@ -1,7 +1,7 @@
 import { state } from './state-public';
 
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
-import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
+import { navigateToPublicSiteSequence } from './sequences/navigateToPublicSiteSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 
@@ -9,7 +9,7 @@ export const presenter = {
   providers: {},
   sequences: {
     navigateToCognitoSequence,
-    resetHeaderAccordionsSequence,
+    navigateToPublicSiteSequence,
     toggleBetaBarSequence,
     toggleUsaBannerDetailsSequence,
   },

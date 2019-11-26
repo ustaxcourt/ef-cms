@@ -29,4 +29,5 @@ variable "dynamsoft_product_keys" {
 variable "is_dynamsoft_enabled" {
   default = "1"
   type = "string"
-}
+ }
+ 
