@@ -1,6 +1,7 @@
 module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
+    '!src/sharedAppContext.js',
     '!src/**/ContactFactory.js',
     '!src/**/getScannerMockInterface.js',
     '!src/business/test/**/*.js',
