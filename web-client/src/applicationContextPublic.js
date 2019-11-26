@@ -9,6 +9,14 @@ const applicationContextPublic = {
       );
     }
   },
+  getPublicSiteUrl: () => {
+    if (process.env.USTC_ENV === 'prod') {
+      return 'https://https://ui-public-dev.ustc-case-mgmt.flexion.us/';
+    } else {
+      return process.env.PUBLIC_SITE_URL || 'http://localhost:5678/';
+    }
+  },
+  getUseCases: () => ({}),
 };
 
 module.exports = {
