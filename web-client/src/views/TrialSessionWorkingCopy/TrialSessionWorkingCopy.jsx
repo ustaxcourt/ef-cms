@@ -1,5 +1,6 @@
 import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
 import { AddEditSessionNoteModal } from './AddEditSessionNoteModal';
+import { BatchDownloadProgress } from './BatchDownloadProgress';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
 import { DeleteSessionNoteConfirmModal } from './DeleteSessionNoteConfirmModal';
@@ -20,12 +21,14 @@ export const TrialSessionWorkingCopy = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     showModal: state.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
+    zipInProgress: state.zipInProgress,
   },
   ({
     batchDownloadTrialSessionSequence,
     formattedTrialSessionDetails,
     showModal,
     trialSessionHeaderHelper,
+    zipInProgress,
   }) => {
     return (
       <>
@@ -62,11 +65,11 @@ export const TrialSessionWorkingCopy = connect(
               </Button>
             </div>
           </div>
-
           <SuccessNotification />
           <ErrorNotification />
           <SessionNotes />
           <WorkingCopySessionList />
+          {zipInProgress && <BatchDownloadProgress />}
           {showModal === 'DeleteCaseNoteConfirmModal' && (
             <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteFromWorkingCopySequence" />
           )}
