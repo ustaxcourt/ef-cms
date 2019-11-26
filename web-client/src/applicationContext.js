@@ -1,7 +1,6 @@
 import {
   getCognitoLoginUrl,
   getCurrentUserFactory,
-  getPublicSiteUrl,
   getUniqueId,
   setCurrentUserFactory,
 } from '../../shared/sharedAppContext.js';
@@ -477,7 +476,6 @@ const applicationContext = {
       uploadPdf,
     };
   },
-  getPublicSiteUrl,
   getScanner: process.env.NO_SCANNER
     ? getScannerMockInterfaceInteractor
     : getScannerInterface,
