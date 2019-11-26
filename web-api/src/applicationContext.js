@@ -10,11 +10,12 @@ const AWS = require('aws-sdk');
 
 // ^ must come first --------------------
 
+const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
+
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
 const util = require('util');
-const uuidv4 = require('uuid/v4');
 const {
   addCaseToTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor');
@@ -648,6 +649,7 @@ const environment = {
 };
 
 let user;
+
 const getCurrentUser = () => {
   return user;
 };
@@ -889,9 +891,7 @@ module.exports = (appContextUser = {}) => {
         generateTrialSessionPlanningReportTemplate,
       };
     },
-    getUniqueId: () => {
-      return uuidv4();
-    },
+    getUniqueId,
     getUseCaseHelpers: () => {
       return {
         fetchPendingItems,
