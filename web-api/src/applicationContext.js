@@ -14,7 +14,7 @@ import {
   getCurrentUserFactory,
   getUniqueId,
   setCurrentUserFactory,
-} from '../../shared/sharedAppContext.js';
+} from '../../shared/src/sharedAppContext.js';
 
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');

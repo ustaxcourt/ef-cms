@@ -1,7 +1,7 @@
 import {
   getCognitoLoginUrl,
   getPublicSiteUrl,
-} from '../../shared/sharedAppContext.js';
+} from '../../shared/src/sharedAppContext.js';
 
 const applicationContextPublic = {
   getCognitoLoginUrl,

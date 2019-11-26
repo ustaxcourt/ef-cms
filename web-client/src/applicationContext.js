@@ -3,7 +3,7 @@ import {
   getCurrentUserFactory,
   getUniqueId,
   setCurrentUserFactory,
-} from '../../shared/sharedAppContext.js';
+} from '../../shared/src/sharedAppContext.js';
 
 import { AddPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/AddPractitionerFactory';
 import { AddRespondent } from '../../shared/src/business/entities/caseAssociation/AddRespondent';
