@@ -20,10 +20,6 @@ export const SearchForm = connect(
     advancedSearchHelper: state.advancedSearchHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     constants: state.constants,
-    submitCaseAdvancedSearchSequence:
-      sequences.submitCaseAdvancedSearchSequence,
-    submitCaseDocketNumberSearchSequence:
-      sequences.submitCaseDocketNumberSearchSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     usStates: state.constants.US_STATES,
