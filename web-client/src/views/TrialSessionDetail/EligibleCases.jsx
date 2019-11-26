@@ -22,9 +22,9 @@ export const EligibleCases = connect(
               <th>Docket</th>
               <th aria-label="manually added indicator"></th>
               <th>Case name</th>
-              <th>Petitioner Counsel</th>
-              <th>Respondent Counsel</th>
-              <th>Case Type</th>
+              <th>Petitioner counsel</th>
+              <th>Respondent counsel</th>
+              <th>Case type</th>
             </tr>
           </thead>
           {formattedEligibleCases.map((item, idx) => (

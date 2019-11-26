@@ -1,3 +1,4 @@
+import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
 import { state } from 'cerebral';
 
 export const supportingDocumentFreeTextTypes = [
@@ -7,7 +8,7 @@ export const supportingDocumentFreeTextTypes = [
 ];
 
 export const fileDocumentHelper = (get, applicationContext) => {
-  const { CATEGORY_MAP, PARTY_TYPES } = get(state.constants);
+  const { CATEGORY_MAP, PARTY_TYPES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
@@ -18,14 +19,8 @@ export const fileDocumentHelper = (get, applicationContext) => {
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
 
-  const supportingDocumentTypeList = CATEGORY_MAP['Supporting Document'].map(
-    entry => {
-      entry.documentTypeDisplay = entry.documentType.replace(
-        /\sin\sSupport$/i,
-        '',
-      );
-      return entry;
-    },
+  const supportingDocumentTypeList = getSupportingDocumentTypeList(
+    CATEGORY_MAP,
   );
 
   const objectionDocumentTypes = [

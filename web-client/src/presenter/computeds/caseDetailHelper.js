@@ -3,11 +3,9 @@ import { state } from 'cerebral';
 export const caseDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const { Case } = applicationContext.getEntityConstructors();
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
-  const caseHasRespondent =
-    !!caseDetail && !!caseDetail.respondents && !!caseDetail.respondents.length;
   const showActionRequired =
     !caseDetail.payGovId && user.role === USER_ROLES.petitioner;
   const documentDetailTab =
@@ -18,9 +16,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
-  const isRequestAccessForm = currentPage === 'RequestAccessWizard';
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-  const pendingAssociation = get(state.screenMetadata.pendingAssociation);
   const modalState = get(state.modal);
   const {
     noticeOfAttachments,
@@ -44,40 +40,26 @@ export const caseDetailHelper = (get, applicationContext) => {
   let showFileDocumentButton =
     permissions.FILE_EXTERNAL_DOCUMENT && ['CaseDetail'].includes(currentPage);
 
-  let showRequestAccessToCaseButton = false;
-  let showPendingAccessToCaseButton = false;
-  let showFileFirstDocumentButton = false;
   let showCaseDeadlinesExternal = false;
   let showCaseDeadlinesInternal = false;
   let showCaseDeadlinesInternalEmpty = false;
   let userHasAccessToCase = false;
+  let showQcWorkItemsUntouchedState = false;
 
   if (isExternalUser) {
     if (userAssociatedWithCase) {
       userHasAccessToCase = true;
       showFileDocumentButton = true;
-      showRequestAccessToCaseButton = false;
-      showPendingAccessToCaseButton = false;
-      showFileFirstDocumentButton = false;
 
       if (caseDeadlines && caseDeadlines.length > 0) {
         showCaseDeadlinesExternal = true;
       }
     } else {
       showFileDocumentButton = false;
-      if (user.role === USER_ROLES.practitioner) {
-        showRequestAccessToCaseButton =
-          !pendingAssociation && !isRequestAccessForm;
-        showPendingAccessToCaseButton = pendingAssociation;
-      }
-      if (user.role === USER_ROLES.respondent) {
-        showFileFirstDocumentButton = !caseHasRespondent;
-        showRequestAccessToCaseButton =
-          caseHasRespondent && !isRequestAccessForm;
-      }
     }
   } else {
     userHasAccessToCase = true;
+    showQcWorkItemsUntouchedState = true;
 
     if (caseDeadlines && caseDeadlines.length > 0) {
       showCaseDeadlinesInternal = true;
@@ -98,7 +80,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditContacts = userAssociatedWithCase;
   }
 
-  const showRecallButton = caseDetail.status === 'Batched for IRS';
+  const showRecallButton = caseDetail.status === STATUS_TYPES.batchedForIRS;
 
   const practitionerMatchesFormatted =
     modalState && modalState.practitionerMatches;
@@ -144,7 +126,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     caseDeadlines,
     documentDetailTab,
     hasOrders,
-    hidePublicCaseInformation: !isExternalUser,
     practitionerMatchesFormatted,
     practitionerSearchResultsCount:
       modalState &&
@@ -157,8 +138,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState.respondentMatches.length,
     showActionRequired,
     showAddDocketEntryButton,
-    showCaptionEditButton:
-      caseDetail.status !== 'Batched for IRS' && !isExternalUser,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
@@ -172,18 +151,16 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
-    showFileFirstDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !caseIsPaid,
     showPaymentRecord: caseIsPaid,
-    showPendingAccessToCaseButton,
     showPractitionerSection:
       !isExternalUser ||
       (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
+    showQcWorkItemsUntouchedState,
     showRecallButton,
-    showRequestAccessToCaseButton,
     showRespondentSection:
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),

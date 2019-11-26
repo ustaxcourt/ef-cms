@@ -40,6 +40,18 @@ export const ReportsMenu = connect(
           <ul className="usa-nav__submenu">
             <li className="usa-nav__submenu-item">
               <a
+                href="/reports/blocked-cases"
+                id="all-blocked-cases"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                }}
+              >
+                Blocked Cases
+              </a>
+            </li>
+            <li className="usa-nav__submenu-item">
+              <a
                 href="/reports/case-deadlines"
                 id="all-deadlines"
                 onClick={() => {
@@ -52,14 +64,14 @@ export const ReportsMenu = connect(
             </li>
             <li className="usa-nav__submenu-item">
               <a
-                href="/reports/blocked-cases"
-                id="all-blocked-cases"
+                href="/reports/pending-report"
+                id="pending-report"
                 onClick={() => {
                   resetHeaderAccordionsSequence();
                   toggleMobileMenuSequence();
                 }}
               >
-                Blocked Cases
+                Pending Report
               </a>
             </li>
             <li className="usa-nav__submenu-item" id="reports-nav">

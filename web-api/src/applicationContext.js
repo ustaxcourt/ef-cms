@@ -46,8 +46,11 @@ const {
   batchDownloadTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor');
 const {
-  blockCaseInteractor,
-} = require('../../shared/src/business/useCases/blockCaseInteractor');
+  blockCaseFromTrialInteractor,
+} = require('../../shared/src/business/useCases/blockCaseFromTrialInteractor');
+const {
+  caseAdvancedSearchInteractor,
+} = require('../../shared/src/business/useCases/caseAdvancedSearchInteractor');
 const {
   CaseExternalIncomplete,
 } = require('../../shared/src/business/entities/cases/CaseExternalIncomplete');
@@ -57,9 +60,6 @@ const {
 const {
   CaseSearch,
 } = require('../../shared/src/business/entities/cases/CaseSearch');
-const {
-  caseSearchInteractor,
-} = require('../../shared/src/business/useCases/caseSearchInteractor');
 const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
@@ -181,6 +181,15 @@ const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
 const {
+  fetchPendingItems,
+} = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
+const {
+  fetchPendingItemsInteractor,
+} = require('../../shared/src/business/useCases/pendingItems/fetchPendingItemsInteractor');
+const {
+  fileCourtIssuedDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/fileCourtIssuedDocketEntryInteractor');
+const {
   fileCourtIssuedOrderInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor');
 const {
@@ -213,8 +222,14 @@ const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
 const {
+  generatePendingReportPdf,
+} = require('../../shared/src/business/useCaseHelper/pendingReport/generatePendingReportPdf');
+const {
   generatePrintableFilingReceiptInteractor,
 } = require('../../shared/src/business/useCases/generatePrintableFilingReceiptInteractor');
+const {
+  generatePrintablePendingReportInteractor,
+} = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
 const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
@@ -454,6 +469,9 @@ const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
+  saveCaseDetailInternalEditInteractor,
+} = require('../../shared/src/business/useCases/saveCaseDetailInternalEditInteractor');
+const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
@@ -487,11 +505,11 @@ const {
   sendPetitionToIRSHoldingQueueInteractor,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  serveCourtIssuedDocumentInteractor,
+} = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
+const {
   serveSignedStipDecisionInteractor,
 } = require('../../shared/src/business/useCases/serveSignedStipDecisionInteractor');
-const {
-  setCaseToReadyForTrialInteractor,
-} = require('../../shared/src/business/useCases/setCaseToReadyForTrialInteractor');
 const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
@@ -514,8 +532,8 @@ const {
   submitPendingCaseAssociationRequestInteractor,
 } = require('../../shared/src/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor');
 const {
-  unblockCaseInteractor,
-} = require('../../shared/src/business/useCases/unblockCaseInteractor');
+  unblockCaseFromTrialInteractor,
+} = require('../../shared/src/business/useCases/unblockCaseFromTrialInteractor');
 const {
   unprioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/unprioritizeCaseInteractor');
@@ -523,14 +541,14 @@ const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
+  updateCaseContextInteractor,
+} = require('../../shared/src/business/useCases/updateCaseContextInteractor');
+const {
   updateCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/updateCaseDeadline');
 const {
   updateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor');
-const {
-  updateCaseInteractor,
-} = require('../../shared/src/business/useCases/updateCaseInteractor');
 const {
   updateCaseNote,
 } = require('../../shared/src/persistence/dynamo/caseNotes/updateCaseNote');
@@ -546,6 +564,9 @@ const {
 const {
   updateCounselOnCaseInteractor,
 } = require('../../shared/src/business/useCases/caseAssociation/updateCounselOnCaseInteractor');
+const {
+  updateCourtIssuedDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/updateCourtIssuedDocketEntryInteractor');
 const {
   updateCourtIssuedOrderInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/updateCourtIssuedOrderInteractor');
@@ -655,7 +676,7 @@ module.exports = (appContextUser = {}) => {
     docketNumberGenerator,
     environment,
     getCaseCaptionNames: Case.getCaseCaptionNames,
-    getChromium: () => {
+    getChromiumBrowser: async () => {
       // Notice: this require is here to only have the lambdas that need it call it.
       // This dependency is only available on lambdas with the 'puppeteer' layer,
       // which means including it globally causes the other lambdas to fail.
@@ -664,7 +685,13 @@ module.exports = (appContextUser = {}) => {
       // and found at the layer level and would cause issues.
       // eslint-disable-next-line security/detect-non-literal-require
       const chromium = require('chrome-' + 'aws-lambda');
-      return chromium;
+
+      return await chromium.puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: true,
+      });
     },
     getConstants: () => ({
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
@@ -702,17 +729,6 @@ module.exports = (appContextUser = {}) => {
       CaseInternal: CaseInternal,
       CaseSearch,
     }),
-    getHandlebars: () => {
-      // Notice: this require is here to only have the lambdas that need it call it.
-      // This dependency is only available on lambdas with the 'puppeteer' layer,
-      // which means including it globally causes the other lambdas to fail.
-      // This also needs to have the string split to cause parcel to NOT bundle this dependency,
-      // which is wanted as bundling would have the dependency to not be searched for
-      // and found at the layer level and would cause issues.
-      // eslint-disable-next-line security/detect-non-literal-require
-      const handlebars = require('handle' + 'bars');
-      return handlebars;
-    },
     getNodeSass: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
       // This dependency is only available on lambdas with the 'puppeteer' layer,
@@ -821,6 +837,17 @@ module.exports = (appContextUser = {}) => {
         zipDocuments,
       };
     },
+    getPug: () => {
+      // Notice: this require is here to only have the lambdas that need it call it.
+      // This dependency is only available on lambdas with the 'puppeteer' layer,
+      // which means including it globally causes the other lambdas to fail.
+      // This also needs to have the string split to cause parcel to NOT bundle this dependency,
+      // which is wanted as bundling would have the dependency to not be searched for
+      // and found at the layer level and would cause issues.
+      // eslint-disable-next-line security/detect-non-literal-require
+      const pug = require('p' + 'ug');
+      return pug;
+    },
     getSearchClient: () => {
       if (!searchClientCache) {
         if (environment.stage === 'local') {
@@ -874,7 +901,9 @@ module.exports = (appContextUser = {}) => {
     },
     getUseCaseHelpers: () => {
       return {
+        fetchPendingItems,
         generateCaseConfirmationPdf,
+        generatePendingReportPdf,
       };
     },
     getUseCases: () => {
@@ -886,8 +915,8 @@ module.exports = (appContextUser = {}) => {
         associatePractitionerWithCaseInteractor,
         associateRespondentWithCaseInteractor,
         batchDownloadTrialSessionInteractor,
-        blockCaseInteractor,
-        caseSearchInteractor,
+        blockCaseFromTrialInteractor,
+        caseAdvancedSearchInteractor,
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
@@ -902,6 +931,8 @@ module.exports = (appContextUser = {}) => {
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
         deleteCounselFromCaseInteractor,
+        fetchPendingItemsInteractor,
+        fileCourtIssuedDocketEntryInteractor,
         fileCourtIssuedOrderInteractor,
         fileDocketEntryInteractor,
         fileExternalDocumentInteractor,
@@ -910,6 +941,7 @@ module.exports = (appContextUser = {}) => {
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
         generatePrintableFilingReceiptInteractor,
+        generatePrintablePendingReportInteractor,
         generateTrialCalendarPdfInteractor,
         getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,
@@ -950,23 +982,25 @@ module.exports = (appContextUser = {}) => {
         removeCaseFromTrialInteractor,
         runBatchProcessInteractor,
         runTrialSessionPlanningReportInteractor,
+        saveCaseDetailInternalEditInteractor,
         saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
+        serveCourtIssuedDocumentInteractor,
         serveSignedStipDecisionInteractor,
-        setCaseToReadyForTrialInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
         setWorkItemAsReadInteractor,
         submitCaseAssociationRequestInteractor,
         submitPendingCaseAssociationRequestInteractor,
-        unblockCaseInteractor,
+        unblockCaseFromTrialInteractor,
         unprioritizeCaseInteractor,
+        updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
-        updateCaseInteractor,
         updateCaseNoteInteractor,
         updateCaseTrialSortTagsInteractor,
         updateCounselOnCaseInteractor,
+        updateCourtIssuedDocketEntryInteractor,
         updateCourtIssuedOrderInteractor,
         updateDocketEntryInteractor,
         updatePrimaryContactInteractor,

@@ -26,6 +26,74 @@ describe('Document entity', () => {
     };
   });
 
+  describe('isPendingOnCreation', () => {
+    beforeAll(() => {
+      jest.spyOn(Document, 'isPendingOnCreation');
+    });
+
+    afterAll(() => {
+      Document.isPendingOnCreation.mockRestore();
+    });
+
+    it('respects any defined "pending" value', () => {
+      const raw1 = { eventCode: 'FOO', pending: true };
+      const doc1 = new Document(raw1, { applicationContext });
+      expect(doc1.pending).toBeTruthy();
+
+      const raw2 = { eventCode: 'FOO', pending: false };
+      const doc2 = new Document(raw2, { applicationContext });
+      expect(doc2.pending).toBeFalsy();
+
+      expect(Document.isPendingOnCreation).not.toHaveBeenCalled();
+    });
+
+    it('sets pending to false for non-matching event code and category', () => {
+      const raw1 = { category: 'Ice Hockey', eventCode: 'ABC' };
+      const doc1 = new Document(raw1, { applicationContext });
+      expect(doc1.pending).toBe(false);
+
+      expect(Document.isPendingOnCreation).toHaveBeenCalled();
+
+      const raw2 = { color: 'blue', sport: 'Ice Hockey' };
+      const doc2 = new Document(raw2, { applicationContext });
+      expect(doc2.pending).toBe(false);
+
+      expect(Document.isPendingOnCreation).toHaveBeenCalled();
+    });
+
+    it('sets pending to true for known list of matching events or categories', () => {
+      const raw1 = {
+        category: 'Motion',
+        documentType: 'some kind of motion',
+        eventCode: 'FOO',
+      };
+      const doc1 = new Document(raw1, { applicationContext });
+      expect(doc1.pending).toBeTruthy();
+
+      const raw2 = {
+        documentType: 'it is a proposed stipulated decision',
+        eventCode: 'PSDEC',
+      };
+      const doc2 = new Document(raw2, { applicationContext });
+      expect(doc2.pending).toBeTruthy();
+
+      const raw3 = {
+        documentType: 'it is an order to show cause',
+        eventCode: 'OSC',
+      };
+      const doc3 = new Document(raw3, { applicationContext });
+      expect(doc3.pending).toBeTruthy();
+
+      const raw4 = {
+        category: 'Application',
+        documentType: 'Application for Waiver of Filing Fee',
+        eventCode: 'APW',
+      };
+      const doc4 = new Document(raw4, { applicationContext });
+      expect(doc4.pending).toBeTruthy();
+    });
+  });
+
   describe('isValid', () => {
     it('should throw an error if app context is not passed in', () => {
       expect(() => new Document({}, {})).toThrow();

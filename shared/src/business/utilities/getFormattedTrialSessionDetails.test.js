@@ -1,3 +1,4 @@
+import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { formattedTrialSessionDetails } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
@@ -21,7 +22,7 @@ describe('formattedTrialSessionDetails', () => {
   };
 
   it('returns undefined if state.trialSession is undefined', () => {
-    const result = formattedTrialSessionDetails({});
+    const result = formattedTrialSessionDetails({ applicationContext });
     expect(result).toBeUndefined();
   });
 
@@ -202,16 +203,16 @@ describe('formattedTrialSessionDetails', () => {
             caseCaption: 'Test Person & Someone Else, Petitioners',
             docketNumber: '102-17',
             docketNumberSuffix: 'W',
-            status: 'Closed',
+            status: Case.STATUS_TYPES.closed,
           },
           {
             ...MOCK_CASE,
             caseCaption: 'Someone Else, Petitioner',
+            disposition: 'omg',
             docketNumber: '101-16',
             docketNumberSuffix: 'S',
             removedFromTrial: true,
             removedFromTrialDate: '2019-03-01T21:40:46.415Z',
-            disposition: 'omg',
           },
         ],
       },

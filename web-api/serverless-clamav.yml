@@ -2,14 +2,16 @@ service: ef-cms-clamav
 
 plugins:
   - serverless-prune-plugin
+  - serverless-jetpack
 
 custom:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   prune:
     automatic: true
-    includeLayers: true
     number: 3
+  jetpack:
+    mode: yarn
 
 provider:
   name: aws

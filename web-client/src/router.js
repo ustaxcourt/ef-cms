@@ -40,7 +40,7 @@ const router = {
       return function() {
         const gotoLoginPage = () => {
           const path = app.getState('cognitoLoginUrl');
-          window.location.replace(path);
+          externalRoute(path);
         };
         const goto404 = () => {
           app.getSequence('navigateToPathSequence')({
@@ -113,6 +113,19 @@ const router = {
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
         );
         app.getSequence('gotoEditDocketEntrySequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    route(
+      '/case-detail/*/documents/*/edit-court-issued',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
+        );
+        app.getSequence('gotoEditCourtIssuedDocketEntrySequence')({
           docketNumber,
           documentId,
         });
@@ -323,6 +336,19 @@ const router = {
     );
 
     route(
+      '/case-detail/*/documents/*/add-court-issued-docket-entry',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
+        );
+        app.getSequence('gotoAddCourtIssuedDocketEntrySequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/printable-docket-record',
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Docket record`);
@@ -337,6 +363,19 @@ const router = {
           `${getPageTitleDocketPrefix(docketNumber)} Case Confirmation`,
         );
         app.getSequence('gotoPrintableCaseConfirmationSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    route(
+      '/case-detail/*/pending-report',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Case Confirmation`,
+        );
+        app.getSequence('gotoPrintablePendingReportSequence')({
+          caseIdFilter: true,
           docketNumber,
         });
       }),
@@ -578,6 +617,25 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Blocked cases');
         app.getSequence('gotoBlockedCasesReportSequence')();
+      }),
+    );
+
+    route(
+      '/reports/pending-report',
+      ifHasAccess(() => {
+        setPageTitle('Pending report');
+        app.getSequence('gotoPendingReportSequence')();
+      }),
+    );
+
+    route(
+      '/reports/pending-report/printable..',
+      ifHasAccess(() => {
+        const { judgeFilter } = route.query();
+        setPageTitle('Pending report');
+        app.getSequence('gotoPrintablePendingReportSequence')({
+          judgeFilter,
+        });
       }),
     );
 

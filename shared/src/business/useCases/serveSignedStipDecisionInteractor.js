@@ -1,4 +1,7 @@
 const {
+  aggregateElectronicallyServedParties,
+} = require('../utilities/aggregateElectronicallyServedParties');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
@@ -51,26 +54,8 @@ exports.serveSignedStipDecisionInteractor = async ({
     documentId,
   });
 
-  const aggregateServedParties = parties => {
-    const aggregated = [];
-    parties.map(party => {
-      if (party && party.email) {
-        aggregated.push({
-          email: party.email,
-          name: party.name,
-        });
-      }
-    });
-    return aggregated;
-  };
-
   // since this is a stip decision, we will serve all parties
-  const servedParties = aggregateServedParties([
-    caseEntity.contactPrimary,
-    caseEntity.contactSecondary,
-    ...caseEntity.practitioners,
-    ...caseEntity.respondents,
-  ]);
+  const servedParties = aggregateElectronicallyServedParties(caseEntity);
 
   stipulatedDecisionDocument.setAsServed(servedParties);
 

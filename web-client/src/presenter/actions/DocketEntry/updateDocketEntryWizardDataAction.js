@@ -5,13 +5,19 @@ import { state } from 'cerebral';
  * clears data in the state.form based on which field is being updated
  *
  * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function
- * @param {object} providers.store the cerebral store object
+ * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
+ * @param {object} providers.store the cerebral store object
  * @returns {void}
  */
-export const updateDocketEntryWizardDataAction = ({ get, props, store }) => {
-  const { INTERNAL_CATEGORY_MAP } = get(state.constants);
+export const updateDocketEntryWizardDataAction = ({
+  applicationContext,
+  get,
+  props,
+  store,
+}) => {
+  const { INTERNAL_CATEGORY_MAP } = applicationContext.getConstants();
   let entry, form;
   let supporting = get(state.screenMetadata.supporting);
   const ENTRY_PROPS = ['category', 'documentTitle', 'documentType', 'scenario'];
@@ -66,6 +72,8 @@ export const updateDocketEntryWizardDataAction = ({ get, props, store }) => {
       store.unset(state.form.ordinalValue);
       store.unset(state.form.freeText);
       store.unset(state.form.secondaryDocument);
+      store.unset(state.form.objections);
+      store.unset(state.form.pending);
       break;
     case 'secondaryDocument.eventCode':
       find(

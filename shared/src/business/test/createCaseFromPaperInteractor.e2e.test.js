@@ -11,6 +11,7 @@ const {
 const {
   getDocumentQCInboxForUserInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForUserInteractor');
+const { Case } = require('../entities/cases/Case');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
@@ -52,9 +53,9 @@ describe('createCaseFromPaperInteractor integration test', () => {
       petitionMetadata: {
         ...MOCK_CASE,
         caseCaption: 'Bob Jones2, Petitioner',
+        createdAt: RECEIVED_DATE,
         petitionFile: { name: 'something' },
         petitionFileSize: 1,
-        createdAt: RECEIVED_DATE,
         receivedAt: RECEIVED_DATE,
       },
     });
@@ -90,7 +91,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
             {
               assigneeId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
               assigneeName: 'Alex Petitionsclerk',
-              caseStatus: 'New',
+              caseStatus: Case.STATUS_TYPES.new,
               createdAt: RECEIVED_DATE,
               docketNumber: '101-19',
               docketNumberSuffix: null,
@@ -127,7 +128,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
       orderForRatification: false,
       orderToShowCause: false,
       receivedAt: RECEIVED_DATE,
-      status: 'New',
+      status: Case.STATUS_TYPES.new,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -139,7 +140,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
     expect(petitionsclerkInbox).toMatchObject([
       {
         assigneeName: 'Alex Petitionsclerk',
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: null,
         document: {
@@ -168,7 +169,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
     expect(petitionsSectionInbox).toMatchObject([
       {
         assigneeName: 'Alex Petitionsclerk',
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: null,
         document: {
