@@ -32,11 +32,11 @@ const external = [
 ];
 
 describe('headerHelper', () => {
-  it('should show search in header for users other than practitioners and respondents', () => {
+  it('should show search in header for users other than petitioner, practitioners and respondents', () => {
     let result = runCompute(headerHelper, {
       state: getBaseState({ role: User.ROLES.petitioner }),
     });
-    expect(result.showSearchInHeader).toBeTruthy();
+    expect(result.showSearchInHeader).toBeFalsy();
 
     result = runCompute(headerHelper, {
       state: getBaseState({ role: User.ROLES.petitionsClerk }),
