@@ -1,6 +1,7 @@
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
+import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { BlockedCasesReport } from './BlockedCasesReport/BlockedCasesReport';
@@ -131,6 +132,7 @@ export const AppComponent = connect(
         <Header />
         <main id="main-content" role="main">
           <CurrentPage />
+          <BatchDownloadProgress />
         </main>
         <Footer />
         <Loading />
