@@ -5,9 +5,9 @@ import { unset } from 'cerebral/factories';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const batchDownloadReadySequence = [
-  unset(state.batchDownloads),
-  unset(state.zipInProgress),
   unsetWaitingForResponseAction,
   displayDownloadLinkAction,
   stopWebSocketConnectionAction,
+  unset(state.batchDownloads),
+  unset(state.zipInProgress),
 ];

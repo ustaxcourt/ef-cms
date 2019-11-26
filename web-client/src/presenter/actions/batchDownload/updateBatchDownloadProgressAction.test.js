@@ -1,0 +1,50 @@
+import { presenter } from '../../presenter';
+import { runAction } from 'cerebral/test';
+import { updateBatchDownloadProgressAction } from './updateBatchDownloadProgressAction';
+
+describe('updateBatchDownloadProgressAction', () => {
+  it('should set the state as docect records are generated', async () => {
+    const result = await runAction(updateBatchDownloadProgressAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        action: 'batch_download_docket_generated',
+        entries: { processed: 2 },
+        numberOfDocketRecordsGenerated: 2,
+        numberOfDocketRecordsToGenerate: 2,
+      },
+    });
+    expect(result.batchDownloads.fileCount).toEqual(10);
+  });
+
+  it('should set the state when the zip streaming begins', async () => {
+    const result = await runAction(updateBatchDownloadProgressAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        action: 'batch_download_upload_start',
+        numberOfDocketRecordsToGenerate: 4,
+      },
+    });
+    expect(result.batchDownloads.fileCount).toEqual(4);
+  });
+
+  it('should set use the max done with the files', async () => {
+    const result = await runAction(updateBatchDownloadProgressAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        action: 'batch_download_progress',
+        entries: { processed: 2 },
+        numberOfDocketRecordsToGenerate: 2,
+      },
+      state: {
+        batchDownloads: { fileCount: 10 },
+      },
+    });
+    expect(result.batchDownloads.fileCount).toEqual(10);
+  });
+});
