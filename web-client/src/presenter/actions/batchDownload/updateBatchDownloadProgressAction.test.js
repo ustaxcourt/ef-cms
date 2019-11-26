@@ -15,7 +15,7 @@ describe('updateBatchDownloadProgressAction', () => {
         numberOfDocketRecordsToGenerate: 2,
       },
     });
-    expect(result.batchDownloads.fileCount).toEqual(10);
+    expect(result.state.batchDownloads.fileCount).toEqual(10);
   });
 
   it('should set the state when the zip streaming begins', async () => {
@@ -28,7 +28,7 @@ describe('updateBatchDownloadProgressAction', () => {
         numberOfDocketRecordsToGenerate: 4,
       },
     });
-    expect(result.batchDownloads.fileCount).toEqual(4);
+    expect(result.state.batchDownloads.fileCount).toEqual(4);
   });
 
   it('should set use the max done with the files', async () => {
@@ -45,6 +45,6 @@ describe('updateBatchDownloadProgressAction', () => {
         batchDownloads: { fileCount: 10 },
       },
     });
-    expect(result.batchDownloads.fileCount).toEqual(10);
+    expect(result.state.batchDownloads.fileCount).toEqual(10);
   });
 });
