@@ -58,6 +58,9 @@ const {
   CaseInternal,
 } = require('../../shared/src/business/entities/cases/CaseInternal');
 const {
+  casePublicSearchInteractor,
+} = require('../../shared/src/business/useCases/casePublicSearchInteractor');
+const {
   CaseSearch,
 } = require('../../shared/src/business/entities/cases/CaseSearch');
 const {
@@ -910,6 +913,7 @@ module.exports = (appContextUser = {}) => {
         batchDownloadTrialSessionInteractor,
         blockCaseFromTrialInteractor,
         caseAdvancedSearchInteractor,
+        casePublicSearchInteractor,
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,

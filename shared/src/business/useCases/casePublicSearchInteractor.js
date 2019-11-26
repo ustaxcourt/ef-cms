@@ -5,7 +5,7 @@ const {
 const { get } = require('lodash');
 
 /**
- * caseAdvancedSearchInteractor
+ * casePublicSearchInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -16,7 +16,7 @@ const { get } = require('lodash');
  * @param {string} providers.yearFiledMin the min year filed to search cases by
  * @returns {object} the case data
  */
-exports.caseAdvancedSearchInteractor = async providers => {
+exports.casePublicSearchInteractor = async providers => {
   const { applicationContext } = providers;
   const {
     commonQuery,
@@ -82,5 +82,6 @@ exports.caseAdvancedSearchInteractor = async providers => {
     }
   }
 
+  // TODO - Make response public-safe?
   return foundCases;
 };
