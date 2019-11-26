@@ -6,10 +6,30 @@ export const socketRouter = (app, onMessageCallbackFn) => {
     const { action } = message;
 
     // NOTE: convert from if block to switch once three+ actions are present
-    if (action === 'batch_download_ready') {
-      app.getSequence('batchDownloadReadySequence')({
-        ...message,
-      });
+    switch (action) {
+      case 'batch_download_ready':
+        app.getSequence('batchDownloadReadySequence')({
+          ...message,
+        });
+        break;
+      case 'batch_download_docket_generated':
+        app.getSequence('updateBatchDownloadProgressSequence')({
+          action,
+          ...message,
+        });
+        break;
+      case 'batch_download_upload_start':
+        app.getSequence('updateBatchDownloadProgressSequence')({
+          action,
+          ...message,
+        });
+        break;
+      case 'batch_download_progress':
+        app.getSequence('updateBatchDownloadProgressSequence')({
+          action,
+          ...message,
+        });
+        break;
     }
 
     (onMessageCallbackFn || noop)(message);

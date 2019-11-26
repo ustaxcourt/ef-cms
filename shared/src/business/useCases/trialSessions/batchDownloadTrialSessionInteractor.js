@@ -95,17 +95,26 @@ exports.batchDownloadTrialSessionInteractor = async ({
     });
   });
 
+  let numberOfDocketRecordsGenerated = 0;
+  const numberOfDocketRecordsToGenerate = sessionCases.length;
   const onDocketRecordCreation = async caseId => {
     console.log('onDocketRecordCreation', caseId);
+    if (caseId) {
+      numberOfDocketRecordsGenerated += 1;
+    }
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'batch_download_docket_generated',
         caseId,
+        numberOfDocketRecordsToGenerate,
+        numberOfDocketRecordsGenerated,
       },
       userId: user.userId,
     });
   };
+
+  await onDocketRecordCreation();
 
   for (let index = 0; index < sessionCases.length; index++) {
     let { caseId } = sessionCases[index];
@@ -133,9 +142,9 @@ exports.batchDownloadTrialSessionInteractor = async ({
     applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
-        numberOfFilesToBatch,
-        ...entryData,
         action: 'batch_download_entry',
+        ...entryData,
+        numberOfFilesToBatch,
       },
       userId: user.userId,
     });
@@ -146,9 +155,9 @@ exports.batchDownloadTrialSessionInteractor = async ({
     applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
-        numberOfFilesToBatch,
-        ...progressData,
         action: 'batch_download_progress',
+        ...progressData,
+        numberOfFilesToBatch,
       },
       userId: user.userId,
     });
