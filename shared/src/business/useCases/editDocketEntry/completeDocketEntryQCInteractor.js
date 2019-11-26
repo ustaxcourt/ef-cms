@@ -191,7 +191,7 @@ exports.completeDocketEntryQCInteractor = async ({
       docketChangeInfo,
     });
 
-    const noticeupdatedDocument = new Document(
+    const noticeUpdatedDocument = new Document(
       {
         ...Document.NOTICE_OF_DOCKET_CHANGE,
         documentId: noticeDocumentId,
@@ -199,12 +199,12 @@ exports.completeDocketEntryQCInteractor = async ({
       },
       { applicationContext },
     );
-    noticeupdatedDocument.documentTitle = replaceBracketed(
+    noticeUpdatedDocument.documentTitle = replaceBracketed(
       Document.NOTICE_OF_DOCKET_CHANGE.documentTitle,
       docketChangeInfo.docketEntryIndex,
     );
 
-    caseEntity.addDocument(noticeupdatedDocument);
+    caseEntity.addDocument(noticeUpdatedDocument);
   }
 
   await applicationContext.getPersistenceGateway().updateCase({
