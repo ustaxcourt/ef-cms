@@ -7,13 +7,7 @@ const { get } = require('lodash');
 /**
  * casePublicSearchInteractor
  *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.countryType the country type to search cases by (domestic/international)
- * @param {string} providers.petitionerName the name of the petitioner to search cases by
- * @param {string} providers.petitionerState the state of the petitioner to search cases by
- * @param {string} providers.yearFiledMax the max year filed to search cases by
- * @param {string} providers.yearFiledMin the min year filed to search cases by
+ * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
 exports.casePublicSearchInteractor = async providers => {
