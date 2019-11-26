@@ -64,17 +64,12 @@ Assuming you have Docker installed, the following command will spin up a Docker 
 `./docker-run.sh`
 
 - You can access the UI at http://localhost:1234
+- You can access the public UI at http://localhost:5678
 - You can access the API at http://localhost:3000
 - You can access the DynamoDB shell at http://localhost:8000/shell
 - You can access the DynamoDB admin UI at http://localhost:8001
 - You can access S3 local at http://localhost:9000
 - You can access the style guide at http://localhost:1234/style-guide
-
-The public access portion of the site can be run in the same way:
-
-`./docker-run-public.sh`
-
-- You can access the UI for the public site at http://localhost:5678
 
 ## Running this project locally without Docker
 
