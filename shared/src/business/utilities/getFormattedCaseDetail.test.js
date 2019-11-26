@@ -165,6 +165,61 @@ describe('formatCase', () => {
     ).toBeUndefined();
   });
 
+  it('should return docket entries with pending documents for pendingItemsDocketEntries', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      docketRecord: [
+        {
+          createdAt: getDateISO(),
+          document: {
+            documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+            documentType: 'Administrative Record',
+            pending: true,
+          },
+          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          filingDate: getDateISO(),
+          index: '1',
+        },
+        {
+          createdAt: getDateISO(),
+          document: {
+            documentId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
+            documentType: 'Administrative Record',
+          },
+          documentId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
+          filingDate: getDateISO(),
+          index: '1',
+        },
+      ],
+      documents: [
+        {
+          documentId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          documentType: 'Administrative Record',
+          pending: true,
+        },
+        {
+          documentId: '6936570f-04ad-40bf-b8a2-a7ac648c30c4',
+          documentType: 'Administrative Record',
+        },
+      ],
+    });
+
+    expect(result.pendingItemsDocketEntries).toMatchObject([
+      {
+        index: '1',
+      },
+    ]);
+  });
+
+  it('should return an empty array for docketRecordWithDocument and pendingItemsDocketEntries if docketRecord does not exist', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+    });
+
+    expect(result.docketRecordWithDocument).toEqual([]);
+    expect(result.pendingItemsDocketEntries).toEqual([]);
+  });
+
   it('should format respondents if the respondents array is set', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
@@ -200,6 +255,7 @@ describe('formatCase', () => {
       caseCaption: 'Test Case Caption',
       caseTitle:
         'Test Case Caption, Petitioners v. Internal Revenue, Respondent',
+      docketNumberSuffix: undefined,
       hasVerifiedIrsNotice: true,
       trialTime: 11,
     });
@@ -208,7 +264,7 @@ describe('formatCase', () => {
     expect(result).toHaveProperty('receivedAtFormatted');
     expect(result).toHaveProperty('irsDateFormatted');
     expect(result).toHaveProperty('payGovDateFormatted');
-    expect(result.docketNumberWithSuffix).toEqual('123-45S');
+    expect(result.docketNumberWithSuffix).toEqual('123-45');
     expect(result.irsNoticeDateFormatted).toEqual('No notice provided');
     expect(result.datePetitionSentToIrsMessage).toEqual(
       result.irsDateFormatted,
@@ -315,13 +371,12 @@ describe('formatCase', () => {
       trialDate: '2011-11-11',
       trialLocation: 'Boise, Idaho',
       trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-      trialTime: '11',
     });
 
     expect(result).toMatchObject({
       formattedAssociatedJudge: 'Not assigned',
       formattedTrialCity: 'Boise, Idaho',
-      formattedTrialDate: '11/11/11 11:00 am',
+      formattedTrialDate: '11/11/11',
       showTrialCalendared: true,
     });
     expect(result).not.toHaveProperty('showBlockedFromTrial');
@@ -349,16 +404,17 @@ describe('formatCase', () => {
     expect(result).not.toHaveProperty('showNotScheduled');
   });
 
-  it('should format trial details with incomplete trialDate information', () => {
+  it('should format trial details with incomplete trial information', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       status: Case.STATUS_TYPES.calendared,
       trialDate: undefined,
-      trialLocation: 'Boise, Idaho',
+      trialLocation: undefined,
       trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
     });
 
     expect(result).toMatchObject({
+      formattedTrialCity: 'Not assigned',
       formattedTrialDate: 'Not scheduled',
     });
   });
@@ -383,9 +439,27 @@ describe('formatCase', () => {
       showNotScheduled: true,
     });
   });
+
+  it('should set defaults for formattedTrialDate and formattedAssociatedJudge and show the prioritized section if case is high priority', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      highPriority: true,
+    });
+
+    expect(result).toMatchObject({
+      formattedAssociatedJudge: 'Not assigned',
+      formattedTrialDate: 'Not scheduled',
+      showPrioritized: true,
+    });
+  });
 });
 
 describe('formatCaseDeadlines', () => {
+  it('should return empty array if there are no deadlines', () => {
+    const result = formatCaseDeadlines(applicationContext);
+    expect(result).toMatchObject([]);
+  });
+
   it('should call formatCaseDeadline on the given array', () => {
     const result = formatCaseDeadlines(applicationContext, [
       {
@@ -450,6 +524,18 @@ describe('getFilingsAndProceedings', () => {
       '(C/S 11/12/1999) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)',
     );
   });
+
+  it('returns a value based on document properties with no objections', () => {
+    const result = getFilingsAndProceedings({
+      attachments: false,
+      certificateOfService: false,
+      exhibits: false,
+      lodged: false,
+      objections: 'No',
+    });
+
+    expect(result).toEqual('(No Objection)');
+  });
 });
 
 describe('getFormattedCaseDetail', () => {
@@ -484,14 +570,29 @@ describe('getFormattedCaseDetail', () => {
             documentId: 'd-1-2-3',
             documentType: 'Order',
           },
+          {
+            archived: false,
+            createdAt: getDateISO(),
+            documentId: 'd-2-3-4',
+            documentType: 'Stipulated Decision',
+          },
         ],
       },
       docketRecordSort: 'byDate',
     });
 
-    expect(result.draftDocuments[0]).toHaveProperty('signUrl');
-    expect(result.draftDocuments[0]).toHaveProperty('editUrl');
-    expect(result.draftDocuments[0]).toHaveProperty('signedAtFormatted');
+    expect(result.draftDocuments).toMatchObject([
+      {
+        editUrl: '/case-detail/123-45/edit-order/d-1-2-3',
+        signUrl: '/case-detail/123-45/edit-order/d-1-2-3/sign',
+        signedAtFormatted: undefined,
+      },
+      {
+        editUrl: '/case-detail/123-45/documents/d-2-3-4/sign',
+        signUrl: '/case-detail/123-45/documents/d-2-3-4/sign',
+        signedAtFormatted: undefined,
+      },
+    ]);
   });
 });
 
@@ -591,5 +692,12 @@ describe('sortDocketRecords', () => {
     );
 
     expect(result[0].index).toEqual('3');
+  });
+
+  it('should return empty array if nothing is passed in', () => {
+    // following dates selected to ensure test coverage of 'dateStringsCompared'
+    const result = sortDocketRecords();
+
+    expect(result).toEqual([]);
   });
 });
