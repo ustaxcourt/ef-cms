@@ -1,6 +1,5 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -51,11 +50,11 @@ export const SearchForm = connect(
               <Button
                 link
                 className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                icon={['fas', 'times-circle']}
                 onClick={() => {
                   clearAdvancedSearchFormSequence();
                 }}
               >
-                <FontAwesomeIcon icon={['fas', 'times-circle']} />
                 Clear search
               </Button>
             </div>
@@ -105,7 +104,7 @@ export const SearchForm = connect(
                         </legend>
                         <div className="usa-form-group--year display-inline-block">
                           <input
-                            aria-describedby="year-filed-label"
+                            aria-describedby="year-filed-legend"
                             aria-label="starting year, four digits"
                             className="usa-input"
                             id="year-filed-min"
@@ -123,7 +122,7 @@ export const SearchForm = connect(
                         <span className="margin-right-2">to</span>
                         <div className="usa-form-group--year display-inline-block">
                           <input
-                            aria-describedby="year-filed-label"
+                            aria-describedby="year-filed-legend"
                             aria-label="ending year, four digits"
                             className="usa-input"
                             id="year-filed-max"
@@ -228,11 +227,11 @@ export const SearchForm = connect(
               <Button
                 link
                 className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                icon={['fas', 'times-circle']}
                 onClick={() => {
                   clearAdvancedSearchFormSequence();
                 }}
               >
-                <FontAwesomeIcon icon={['fas', 'times-circle']} />
                 Clear search
               </Button>
             </div>
