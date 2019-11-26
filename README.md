@@ -70,6 +70,12 @@ Assuming you have Docker installed, the following command will spin up a Docker 
 - You can access S3 local at http://localhost:9000
 - You can access the style guide at http://localhost:1234/style-guide
 
+The public access portion of the site can be run in the same way:
+
+`./docker-run-public.sh`
+
+- You can access the UI for the public site at http://localhost:5678
+
 ## Running this project locally without Docker
 
 The EF-CMS is comprised of two components: the API and the UI. Both must be run in order to function.
@@ -98,6 +104,7 @@ Both the front-end (`/web-client`) and API (`/web-api`) share code that exists i
 ##### Other Start Commands
 
 - Run `cd web-client && npm start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
+- Run `npm run start:public` to start the UI for the public access portion of the site
 
 #### Terminal B
 
