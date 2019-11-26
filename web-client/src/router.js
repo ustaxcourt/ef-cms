@@ -652,7 +652,7 @@ const router = {
       ifHasAccess(() => {
         setPageTitle('Search results');
         app.getSequence('gotoCaseSearchNoMatchesSequence')();
-      }),
+      }, ROLE_PERMISSIONS.ADVANCED_SEARCH),
     );
 
     route(
@@ -661,7 +661,7 @@ const router = {
         const query = route.query();
         setPageTitle('Advanced search');
         app.getSequence('gotoAdvancedSearchSequence')(query);
-      }),
+      }, ROLE_PERMISSIONS.ADVANCED_SEARCH),
     );
 
     route('/mock-login...', () => {

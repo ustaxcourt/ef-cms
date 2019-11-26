@@ -6,9 +6,11 @@ import { formatNow } from '../utilities/DateHandler';
 
 describe('caseAdvancedSearchInteractor', () => {
   let searchSpy;
+  let mockUser;
 
   const applicationContext = {
     environment: { stage: 'local' },
+    getCurrentUser: () => mockUser,
     getSearchClient: () => ({
       search: searchSpy,
     }),
@@ -16,6 +18,26 @@ describe('caseAdvancedSearchInteractor', () => {
       formatNow,
     }),
   };
+
+  beforeEach(() => {
+    mockUser = {
+      role: 'petitionsclerk',
+    };
+  });
+
+  it('returns an unauthorized error on petitioner user role', async () => {
+    mockUser.role = 'petitioner';
+
+    let error;
+    try {
+      await caseAdvancedSearchInteractor({
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toContain('Unauthorized');
+  });
 
   it('returns empty array if no search params are passed in', async () => {
     searchSpy = jest.fn(async () => {
