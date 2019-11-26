@@ -95,24 +95,79 @@ exports.batchDownloadTrialSessionInteractor = async ({
     });
   });
 
+  const onDocketRecordCreation = async caseId => {
+    console.log('onDocketRecordCreation', caseId);
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        caseId,
+        action: 'batch_download_docket_generated',
+      },
+      userId: user.userId,
+    });
+  };
+
   for (let index = 0; index < sessionCases.length; index++) {
     let { caseId } = sessionCases[index];
     extraFiles.push(
-      await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
-        applicationContext,
-        caseId,
-      }),
+      await applicationContext
+        .getUseCases()
+        .generateDocketRecordPdfInteractor({
+          applicationContext,
+          caseId,
+        })
+        .then(() => onDocketRecordCreation(caseId)),
     );
     extraFileNames.push(
       `${sessionCases[index].caseFolder}/0_Docket Record.pdf`,
     );
   }
 
+  const numberOfFilesToBatch = extraFiles.length + s3Ids.length;
+
+  const onEntry = entryData => {
+    console.log('entryData', JSON.stringify(entryData, null, 2));
+    applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        ...entryData,
+        action: 'batch_download_entry',
+      },
+      userId: user.userId,
+    });
+  };
+
+  const onProgress = progressData => {
+    console.log('progressData', JSON.stringify(progressData, null, 2));
+    applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        ...progressData,
+        action: 'batch_download_progress',
+      },
+      userId: user.userId,
+    });
+  };
+
+  const onUploadStart = entryData => {
+    console.log('onUploadStart');
+    applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'batch_download_upload_start',
+      },
+      userId: user.userId,
+    });
+  };
+
   await applicationContext.getPersistenceGateway().zipDocuments({
     applicationContext,
     extraFileNames,
     extraFiles,
     fileNames,
+    onEntry,
+    onProgress,
+    onUploadStart,
     s3Ids,
     uploadToTempBucket: true,
     zipName,
