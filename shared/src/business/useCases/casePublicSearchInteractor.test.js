@@ -34,12 +34,16 @@ describe('casePublicSearchInteractor', () => {
           hits: [
             {
               _source: {
+                caseCaption: { S: 'Test Case Caption One' },
                 caseId: { S: '1' },
+                docketNumber: { S: '123-19' },
               },
             },
             {
               _source: {
+                caseCaption: { S: 'Test Case Caption Two' },
                 caseId: { S: '2' },
+                docketNumber: { S: '456-19' },
               },
             },
           ],
@@ -88,7 +92,10 @@ describe('casePublicSearchInteractor', () => {
         },
       },
     ]);
-    expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
+    expect(results).toEqual([
+      { docketNumber: '123-19' },
+      { docketNumber: '456-19' },
+    ]);
   });
 
   it('calls search function with correct params and returns records for a nonexact match result', async () => {
@@ -132,12 +139,16 @@ describe('casePublicSearchInteractor', () => {
             hits: [
               {
                 _source: {
+                  caseCaption: { S: 'Test Case Caption One' },
                   caseId: { S: '1' },
+                  docketNumber: { S: '123-19' },
                 },
               },
               {
                 _source: {
+                  caseCaption: { S: 'Test Case Caption Two' },
                   caseId: { S: '2' },
+                  docketNumber: { S: '456-19' },
                 },
               },
             ],
@@ -204,7 +215,10 @@ describe('casePublicSearchInteractor', () => {
       },
       ...commonExpectedQuery,
     ]);
-    expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
+    expect(results).toEqual([
+      { docketNumber: '123-19' },
+      { docketNumber: '456-19' },
+    ]);
   });
 
   it('uses a default minimum year when providing only a maximum year', async () => {
