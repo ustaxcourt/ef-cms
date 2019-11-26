@@ -1,3 +1,3 @@
 module.exports = {
-  casePublicSearchLambda: require('./cases/publicSearchLambda').handler,
+  casePublicSearchLambda: require('./cases/casePublicSearchLambda').handler,
 };
