@@ -1,3 +1,11 @@
+import {
+  getCognitoLoginUrl,
+  getCurrentUserFactory,
+  getPublicSiteUrl,
+  getUniqueId,
+  setCurrentUserFactory,
+} from '../../shared/sharedAppContext.js';
+
 import { AddPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/AddPractitionerFactory';
 import { AddRespondent } from '../../shared/src/business/entities/caseAssociation/AddRespondent';
 import {
@@ -205,18 +213,13 @@ import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virus
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 import pdfjsLib from 'pdfjs-dist';
-import uuidv4 from 'uuid/v4';
 
 const MINUTES = 60 * 1000;
 
 let user;
 
-const getCurrentUser = () => {
-  return user;
-};
-const setCurrentUser = newUser => {
-  user = newUser;
-};
+const getCurrentUser = getCurrentUserFactory(user);
+const setCurrentUser = setCurrentUserFactory(user);
 
 let token;
 const getCurrentUserToken = () => {
@@ -374,16 +377,7 @@ const applicationContext = {
   getCognitoClientId: () => {
     return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
   },
-  getCognitoLoginUrl: () => {
-    if (process.env.COGNITO) {
-      return 'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=6tu6j1stv5ugcut7dqsqdurn8q&redirect_uri=http%3A//localhost:1234/log-in';
-    } else {
-      return (
-        process.env.COGNITO_LOGIN_URL ||
-        'http://localhost:1234/mock-login?redirect_uri=http%3A//localhost%3A1234/log-in'
-      );
-    }
-  },
+  getCognitoLoginUrl,
   getCognitoRedirectUrl: () => {
     return process.env.COGNITO_REDIRECT_URI || 'http://localhost:1234/log-in';
   },
@@ -483,6 +477,7 @@ const applicationContext = {
       uploadPdf,
     };
   },
+  getPublicSiteUrl,
   getScanner: process.env.NO_SCANNER
     ? getScannerMockInterfaceInteractor
     : getScannerInterface,
@@ -491,9 +486,7 @@ const applicationContext = {
       process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
     );
   },
-  getUniqueId: () => {
-    return uuidv4();
-  },
+  getUniqueId,
   getUseCases: () => allUseCases,
   getUserPermissions,
   getUtilities: () => {
