@@ -9,6 +9,7 @@ import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
+import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
@@ -72,6 +73,7 @@ export const state = {
     documentTitle: null,
   },
   assigneeId: null,
+  batchDownloadHelper,
   batchIndexToRescan: null,
   batches: [],
   betaBar: {
@@ -198,4 +200,5 @@ export const state = {
   workQueueHelper,
   workQueueSectionHelper,
   workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
+  zipInProgress: false,
 };
