@@ -30,8 +30,8 @@ export const SearchForm = connect(
     advancedSearchHelper,
     clearAdvancedSearchFormSequence,
     constants,
-    submitCaseAdvancedSearchSequence,
-    submitCaseDocketNumberSearchSequence,
+    submitAdvancedSearchSequence,
+    submitDocketNumberSearchSequence,
     updateAdvancedSearchFormValueSequence,
     usStates,
     validationErrors,
@@ -58,7 +58,7 @@ export const SearchForm = connect(
               <form
                 onSubmit={e => {
                   e.preventDefault();
-                  submitCaseAdvancedSearchSequence();
+                  submitAdvancedSearchSequence();
                 }}
               >
                 <div className="grid-row grid-gap">
@@ -235,7 +235,7 @@ export const SearchForm = connect(
               <form
                 onSubmit={e => {
                   e.preventDefault();
-                  submitCaseDocketNumberSearchSequence();
+                  submitDocketNumberSearchSequence();
                 }}
               >
                 <div className="grid-row">
@@ -272,7 +272,7 @@ export const SearchForm = connect(
                   <div className="tablet:grid-col-5">
                     <Button
                       className="advanced-search__button"
-                      id="advanced-search-button"
+                      id="docket-search-button"
                       type="submit"
                     >
                       Search
