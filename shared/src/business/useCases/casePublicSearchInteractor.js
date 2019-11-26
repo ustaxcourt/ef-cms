@@ -82,6 +82,15 @@ exports.casePublicSearchInteractor = async providers => {
     }
   }
 
+  // TODO - Filter items, so we only return cases
+  const filteredCases = foundCases.filter(item => {
+    return item.docketNumber && item.caseCaption; // TODO - This is not accurate
+  });
+
   // TODO - Make response public-safe?
-  return foundCases;
+  const makeSafe = item => ({
+    docketNumber: item.docketNumber,
+  });
+
+  return filteredCases.map(makeSafe);
 };
