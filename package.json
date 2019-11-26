@@ -188,6 +188,7 @@
     "test:client:integration": "npm run test:_client -- \"web-client/integration-tests/.*\\.test\\.js\"",
     "test:client:unit": "npm run test:_client -- \"web-client/src/.*\\.test\\.js\"",
     "test:pa11y": "pa11y-ci --config web-client/pa11y-ci.config.js",
+    "test:pa11y:public": "pa11y-ci --config web-client/pa11y-ci-public.config.js",
     "test:pa11y:screenshots": "cp -R web-client/pa11y/pa11y-screenshots/new/ web-client/pa11y/pa11y-screenshots/old/ && pa11y-ci --config web-client/pa11y-ci-screenshots.config.js && rm -rf web-client/pa11y/pa11y-screenshots/diffs/* && node web-client/pa11y/compare-screenshots.js",
     "test:shared": "npm run build:assets && jest --maxWorkers=4 --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
     "test:watch": "jest --watch .*test\\.js$",

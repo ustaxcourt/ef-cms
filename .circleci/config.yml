@@ -135,6 +135,12 @@ jobs:
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
             npm run test:pa11y
+      - run:
+          name: Pa11y - Public Site
+          command: |
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /dev/null &
+            sleep 5
+            npm run test:pa11y:public
 
   e2e-cypress:
     docker:
