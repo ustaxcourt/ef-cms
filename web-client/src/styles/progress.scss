@@ -24,6 +24,30 @@
   }
 }
 
+.progress-batch-download {
+  width: 100%;
+  font-weight: bold;
+
+  .progress-bar {
+    width: 400px;
+    height: 40px;
+    border: 1px solid color($theme-color-base);
+    border-radius: 5px;
+  }
+
+  .progress-text {
+    margin-left: 0.5em;
+    line-height: 2em;
+  }
+
+  .status-message {
+    color: color($theme-color-primary);
+    font-size: 24px;
+    font-weight: bold;
+    text-align: left;
+  }
+}
+
 * {
   animation: fadein 0.2s;
 }

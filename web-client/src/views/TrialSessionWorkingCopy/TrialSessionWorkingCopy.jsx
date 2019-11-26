@@ -20,6 +20,7 @@ export const TrialSessionWorkingCopy = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     showModal: state.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
+    zipInProgress: state.zipInProgress,
   },
   ({
     batchDownloadTrialSessionSequence,
@@ -62,7 +63,6 @@ export const TrialSessionWorkingCopy = connect(
               </Button>
             </div>
           </div>
-
           <SuccessNotification />
           <ErrorNotification />
           <SessionNotes />
