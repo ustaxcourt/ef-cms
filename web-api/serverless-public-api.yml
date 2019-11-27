@@ -1,4 +1,4 @@
-service: ef-cms
+service: ef-cms-public
 
 plugins:
   - serverless-domain-manager
