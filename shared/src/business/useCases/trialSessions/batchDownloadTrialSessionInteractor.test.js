@@ -35,7 +35,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
         zipDocuments: zipDocumentsMock,
       }),
       getUseCases: () => ({
-        generateDocketRecordPdfInteractor: () => {},
+        generateDocketRecordPdfInteractor: async () => {},
       }),
     };
   });
@@ -89,6 +89,9 @@ describe('batchDownloadTrialSessionInteractor', () => {
       extraFileNames: [],
       extraFiles: [],
       fileNames: [],
+      onEntry: expect.anything(),
+      onProgress: expect.anything(),
+      onUploadStart: expect.anything(),
       s3Ids: [],
       uploadToTempBucket: true,
       zipName: 'September_26_2019-Birmingham.zip',
