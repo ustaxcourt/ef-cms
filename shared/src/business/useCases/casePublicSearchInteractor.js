@@ -24,6 +24,8 @@ exports.casePublicSearchInteractor = async providers => {
         'caseCaption',
         'contactPrimary',
         'contactSecondary',
+        'docketNumber',
+        'docketNumberSuffix',
         'receivedAt',
       ],
       query: {
@@ -52,6 +54,8 @@ exports.casePublicSearchInteractor = async providers => {
             'caseCaption',
             'contactPrimary',
             'contactSecondary',
+            'docketNumber',
+            'docketNumberSuffix',
             'receivedAt',
           ],
           query: {
