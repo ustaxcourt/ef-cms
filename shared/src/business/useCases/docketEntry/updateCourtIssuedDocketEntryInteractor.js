@@ -64,7 +64,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
   );
 
   const docketRecordEntry = new DocketRecord({
-    description: documentMeta.documentTitle,
+    description: documentMeta.generatedDocumentTitle,
     documentId: documentEntity.documentId,
     editState: JSON.stringify(documentMeta),
     filingDate: documentEntity.receivedAt,
