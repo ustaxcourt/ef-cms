@@ -1,5 +1,4 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearSearchTermAction } from '../actions/clearSearchTermAction';
 import { isOneResultFoundAction } from '../actions/AdvancedSearch/isOneResultFoundAction';
 import { navigateToFirstResultCaseDetailAction } from '../actions/navigateToFirstResultCaseDetailAction';
 import { props, state } from 'cerebral';
@@ -28,7 +27,6 @@ export const submitPublicAdvancedSearchSequence = [
         no: [
           set(state.searchResults, props.searchResults),
           unsetWaitingForResponseAction,
-          clearSearchTermAction,
         ],
         yes: [
           navigateToFirstResultCaseDetailAction,
