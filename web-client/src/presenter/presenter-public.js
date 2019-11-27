@@ -11,6 +11,7 @@ import { submitPublicAdvancedSearchSequence } from './sequences/submitPublicAdva
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
+import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 
 export const presenter = {
   providers: {},
@@ -26,6 +27,7 @@ export const presenter = {
     toggleBetaBarSequence,
     toggleUsaBannerDetailsSequence,
     updateAdvancedSearchFormValueSequence,
+    updateDocketNumberSearchFormSequence,
   },
   state,
 };

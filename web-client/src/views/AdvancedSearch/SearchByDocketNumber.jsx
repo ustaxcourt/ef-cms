@@ -9,15 +9,15 @@ export const SearchByDocketNumber = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
-    updateAdvancedSearchFormValueSequence:
-      sequences.updateAdvancedSearchFormValueSequence,
+    updateDocketNumberSearchFormSequence:
+      sequences.updateDocketNumberSearchFormSequence,
     validationErrors: state.validationErrors,
   },
   ({
     advancedSearchForm,
     clearAdvancedSearchFormSequence,
     submitDocketNumberSearchSequence,
-    updateAdvancedSearchFormValueSequence,
+    updateDocketNumberSearchFormSequence,
     validationErrors,
   }) => {
     return (
@@ -63,7 +63,7 @@ export const SearchByDocketNumber = connect(
                     type="text"
                     value={advancedSearchForm.docketNumber || ''}
                     onChange={e => {
-                      updateAdvancedSearchFormValueSequence({
+                      updateDocketNumberSearchFormSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
