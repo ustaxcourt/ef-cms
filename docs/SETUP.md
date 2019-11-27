@@ -6,10 +6,13 @@
 - [Install Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) on your local system.
 - (e.g. `ef-cms.example.gov.`).
 - Create a `CircleCI` user in [AWS Identity and Access Management](https://console.aws.amazon.com/iam/):
-     - Create the `circle_ci_policy` via the project Terraform scripts:
+     - Create the IAM policy for Circle CI via the project Terraform scripts:
           - Make the intended domain name available on your local system, e.g. `export EFCMS_DOMAIN="ef-cms.example.gov"`
           - Create the policies on your local system: `cd iam/terraform/account-specific/main && ../bin/deploy-app.sh`
-     - Attach this policy to your `CircleCI` user.
+               - Make a note of the `cloudwatch_role_arn` that is output, to use shortly for the CirleCI setup.
+          - cd `../../environment-specific/main` && ../bin/deploy-app stg`
+               - Make a note of the ARNs that are output, to use shortly for the CirleCI setup.
+     - In IAM, attach the `circle_ci_policy` to your `CircleCI` user.
      - Note the AWS-generated access key and secret access key — it will needed shortly for the CircleCI setup.
 - [Create a Route53 Hosted Zone](https://console.aws.amazon.com/route53/home) This will be used for setting up the domains for the UI and API.  Create the desired domain name (e.g. `ef-cms.example.gov.`) and make sure it is a `Public Hosted Zone`. This is the value you will set for `EFCMS_DOMAIN` in CircleCI.  Make sure the domain name ends with a period.
 - Create the Lambda roles & policies needed for the Lambdas that run the backend:
@@ -52,9 +55,9 @@
      - `DYNAMSOFT_PRODUCT_KEYS_STG`  (the product key provided after purchasing Dynamic Web TWAIN)
      - `DYNAMSOFT_PRODUCT_KEYS_PROD`  (the product key provided after purchasing Dynamic Web TWAIN)
      - `DYNAMSOFT_S3_ZIP_PATH` (the full S3 path to the Dynamic Web TWAIN ZIP, e.g. `s3://ef-cms.ustaxcourt.gov-software/Dynamsoft/dynamic-web-twain-sdk-14.3.1.tar.gz`)
-     - `CLOUDWATCH_ROLE_ARN` (the ARN output after running Terraform in the `iam/account-specific/terraform/main` dir)
-     - `POST_CONFIRMATION_ROLE_ARN_DEV` (the ARN output after running Terraform in the `iam/environment-specific/terraform/main` dir)
-     - `POST_CONFIRMATION_ROLE_ARN_STG` (the ARN output after running Terraform in the `iam/environment-specific/terraform/main` dir)
-     - `POST_CONFIRMATION_ROLE_ARN_PROD` (the ARN output after running Terraform in the `iam/environment-specific/terraform/main` dir)
+     - `CLOUDWATCH_ROLE_ARN` (the ARN output after running Terraform in the `iam/terraform/account-specific/main` dir)
+     - `POST_CONFIRMATION_ROLE_ARN_DEV` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
+     - `POST_CONFIRMATION_ROLE_ARN_STG` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
+     - `POST_CONFIRMATION_ROLE_ARN_PROD` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
      - `SES_DMARC_EMAIL` (email address used with SES to which aggregate DMARC validations are sent)
 8. Run a build in CircleCI.
