@@ -102,6 +102,7 @@ export const state = {
   currentPageIndex: 0,
   currentTab: '',
   dashboardExternalHelper,
+  docketNumberSearchForm: {},
   docketRecordHelper,
   docketRecordIndex: 0,
   document: {},
