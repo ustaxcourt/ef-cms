@@ -48,18 +48,4 @@ describe('submitCaseSearchSequence', () => {
     expect(routeStub.called).toBeTruthy();
     expect(routeStub.getCall(0).args[0]).toContain('/search/no-matches');
   });
-
-  it('rethrows errors that are not NotFoundError instances', async () => {
-    getCaseInteractor = async () => {
-      return Promise.reject(
-        new InvalidRequestError('something else went wrong'),
-      );
-    };
-    await expect(
-      test.runSequence('submitCaseSearchSequence', {
-        searchTerm: '000-00',
-      }),
-    ).rejects.toThrow(InvalidRequestError);
-    expect(routeStub.called).toBeFalsy();
-  });
 });
