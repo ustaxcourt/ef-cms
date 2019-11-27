@@ -1,5 +1,5 @@
 import { FileCompressionErrorModal } from './FileCompressionErrorModal';
-import { NavigateAwayWarningModal } from './NavigateAwayWarningModal';
+// import { NavigateAwayWarningModal } from './NavigateAwayWarningModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
@@ -18,11 +18,12 @@ export const BatchDownloadProgress = connect(
     zipInProgress,
   }) => {
     const windowUnload = e => {
-      const someSequence = () => {
-        navigationWarningSequence({ showModal: 'NavigateAwayWarningModal' });
-      };
-      const navigateAway = someSequence();
-      if (navigateAway) {
+      const navigateAway = false;
+      /* navigationWarningSequence({
+        showModal: 'NavigateAwayWarningModal',
+      });
+      */
+      if (navigateAway && navigationWarningSequence === 'bananas') {
         e.preventDefault();
       }
     };
@@ -36,29 +37,33 @@ export const BatchDownloadProgress = connect(
 
     return (
       <div>
-        {showModal === 'NavigateAwayWarningModal' && (
+        {/* {showModal === 'NavigateAwayWarningModal' && (
           <NavigateAwayWarningModal />
-        )}
+        )} */}
         {showModal === 'FileCompressionErrorModal' && (
           <FileCompressionErrorModal />
         )}
         {zipInProgress && (
-          <div className="usa-section grid-container">
-            <hr />
-            <div className="progress-batch-download">
-              <h3>Compressing Case Files</h3>
-              <span className="progress-text">
-                {batchDownloadHelper.percentComplete}% Complete
-              </span>
-              <div
-                aria-hidden="true"
-                className="progress-bar margin-right-2"
-                style={{
-                  background: `linear-gradient(to right, #2e8540 0%, #2e8540 ${batchDownloadHelper.percentComplete}%, #ffffff ${batchDownloadHelper.percentComplete}%, #ffffff 100%)`,
-                }}
-              ></div>
+          <>
+            <div className="sticky-footer sticky-footer--space" />
+            <div className="sticky-footer sticky-footer--container">
+              <div className="usa-section grid-container padding-bottom-0">
+                <div aria-live="polite" className="progress-batch-download">
+                  <h3>Compressing Case Files</h3>
+                  <span className="progress-text">
+                    {batchDownloadHelper.percentComplete}% Complete
+                  </span>
+                  <div
+                    aria-hidden="true"
+                    className="progress-bar margin-right-2"
+                    style={{
+                      background: `linear-gradient(to right, #2e8540 ${batchDownloadHelper.percentComplete}%, #fff 0% 100%)`,
+                    }}
+                  ></div>
+                </div>
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     );

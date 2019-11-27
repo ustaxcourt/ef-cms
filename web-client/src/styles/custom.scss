@@ -71,6 +71,22 @@ hr {
   clear: both;
 }
 
+.sticky-footer {
+  background-color: color($theme-color-base-lightest);
+
+  &.sticky-footer--space {
+    height: 135px;
+  }
+  &.sticky-footer--container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-bottom: 1em;
+    border-top: 3px ridge;
+    margin-bottom: 0;
+  }
+}
+
 .label {
   display: block;
   margin-bottom: 5px;
