@@ -1,12 +1,10 @@
-import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearSearchTermAction } from '../actions/clearSearchTermAction';
-import { props, state } from 'cerebral';
+import { caseExistsAction } from '../actions/caseExistsAction';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { set, unset } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setDocketNumberFromAdvancedSearchAction } from '../actions/AdvancedSearch/setDocketNumberFromAdvancedSearchAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { submitPublicAdvancedSearchAction } from '../actions/AdvancedSearch/submitPublicAdvancedSearchAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { state } from 'cerebral';
 import { validateCaseDocketNumberSearchAction } from '../actions/AdvancedSearch/validateCaseDocketNumberSearchAction';
 
 export const submitCaseDocketNumberSearchSequence = [
@@ -18,12 +16,12 @@ export const submitCaseDocketNumberSearchSequence = [
       unset(state.searchResults),
     ],
     success: [
-      clearAlertsAction,
-      setWaitingForResponseAction,
-      submitPublicAdvancedSearchAction,
-      set(state.searchResults, props.searchResults),
-      unsetWaitingForResponseAction,
-      clearSearchTermAction,
+      setDocketNumberFromAdvancedSearchAction,
+      caseExistsAction,
+      {
+        error: [set(state.searchResults, [])],
+        success: [navigateToCaseDetailAction],
+      },
     ],
   },
 ];
