@@ -1,16 +1,47 @@
-import { BatchDownloadStartModal } from './BatchDownloadStartModal';
+import { FileCompressionErrorModal } from './FileCompressionErrorModal';
+import { NavigateAwayWarningModal } from './NavigateAwayWarningModal';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
-import React from 'react';
+import { sequences, state } from 'cerebral';
+import React, { useEffect } from 'react';
 
 export const BatchDownloadProgress = connect(
   {
     batchDownloadHelper: state.batchDownloadHelper,
+    navigationWarningSequence: sequences.navigationWarningSequence,
+    showModal: state.showModal,
     zipInProgress: state.zipInProgress,
   },
-  ({ batchDownloadHelper, zipInProgress }) => {
+  ({
+    batchDownloadHelper,
+    navigationWarningSequence,
+    showModal,
+    zipInProgress,
+  }) => {
+    const windowUnload = e => {
+      const someSequence = () => {
+        navigationWarningSequence({ showModal: 'NavigateAwayWarningModal' });
+      };
+      const navigateAway = someSequence();
+      if (navigateAway) {
+        e.preventDefault();
+      }
+    };
+
+    useEffect(() => {
+      window.addEventListener('beforeunload', windowUnload, false);
+      return () => {
+        window.removeEventListener('beforeunload', windowUnload, false);
+      };
+    });
+
     return (
       <div>
+        {showModal === 'NavigateAwayWarningModal' && (
+          <NavigateAwayWarningModal />
+        )}
+        {showModal === 'FileCompressionErrorModal' && (
+          <FileCompressionErrorModal />
+        )}
         {zipInProgress && (
           <div className="usa-section grid-container">
             <hr />
