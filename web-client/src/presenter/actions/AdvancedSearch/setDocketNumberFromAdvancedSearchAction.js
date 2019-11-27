@@ -12,7 +12,6 @@ import { trimDocketNumberSearch } from '../setCaseIdFromSearchAction';
 export const setDocketNumberFromAdvancedSearchAction = ({ get, store }) => {
   const searchTerm = get(state.advancedSearchForm.docketNumber);
   const docketNumber = trimDocketNumberSearch(searchTerm);
-
   //TODO - refactor this. why are we setting state.caseId to docketNumber?
   //also see setCaseIdFromSearchAction and navigateToCaseDetailAction
   store.set(state.caseId, docketNumber);

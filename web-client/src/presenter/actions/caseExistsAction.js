@@ -9,7 +9,7 @@
  */
 export const caseExistsAction = async ({ applicationContext, path, props }) => {
   try {
-    await applicationContext.getUseCases().getPublicCaseInteractor({
+    await applicationContext.getUseCases().getCaseInteractor({
       applicationContext,
       docketNumber: props.caseId,
     });

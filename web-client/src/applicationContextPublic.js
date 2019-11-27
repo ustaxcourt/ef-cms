@@ -33,7 +33,7 @@ const applicationContextPublic = {
   getPublicSiteUrl,
   getUseCases: () => ({
     casePublicSearchInteractor,
-    getPublicCaseInteractor,
+    getCaseInteractor: getPublicCaseInteractor,
     validateCaseAdvancedSearchInteractor,
   }),
   getUtilities: () => {
