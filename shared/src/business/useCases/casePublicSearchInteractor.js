@@ -2,28 +2,16 @@ const AWS = require('aws-sdk');
 const {
   aggregateCommonQueryParams,
 } = require('../utilities/aggregateCommonQueryParams');
-const {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
 const { get } = require('lodash');
-const { UnauthorizedError } = require('../../errors/errors');
 
 /**
- * caseAdvancedSearchInteractor
+ * casePublicSearchInteractor
  *
  * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.caseAdvancedSearchInteractor = async providers => {
+exports.casePublicSearchInteractor = async providers => {
   const { applicationContext } = providers;
-
-  const authorizedUser = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
   const {
     commonQuery,
     exactMatchesQuery,
@@ -88,5 +76,15 @@ exports.caseAdvancedSearchInteractor = async providers => {
     }
   }
 
-  return foundCases;
+  // TODO - Filter items, so we only return cases
+  const filteredCases = foundCases.filter(item => {
+    return item.docketNumber && item.caseCaption; // TODO - This is not accurate
+  });
+
+  // TODO - Make response public-safe?
+  const makeSafe = item => ({
+    docketNumber: item.docketNumber,
+  });
+
+  return filteredCases.map(makeSafe);
 };
