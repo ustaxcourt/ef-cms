@@ -12,6 +12,7 @@ import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForRespons
 import { validateCaseAdvancedSearchAction } from '../actions/AdvancedSearch/validateCaseAdvancedSearchAction';
 
 export const submitCaseAdvancedSearchSequence = [
+  clearSearchTermAction,
   validateCaseAdvancedSearchAction,
   {
     error: [
@@ -28,7 +29,6 @@ export const submitCaseAdvancedSearchSequence = [
         no: [
           set(state.searchResults, props.searchResults),
           unsetWaitingForResponseAction,
-          clearSearchTermAction,
         ],
         yes: [
           navigateToFirstResultCaseDetailAction,
