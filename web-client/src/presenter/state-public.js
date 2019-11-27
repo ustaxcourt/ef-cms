@@ -12,6 +12,7 @@ export const state = {
     isVisible: true,
   },
   currentPage: 'PublicSearch',
+  docketNumberSearchForm: {},
   menuHelper,
   mobileMenu: {
     isVisible: false,

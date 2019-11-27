@@ -2,6 +2,7 @@ import { state } from './state-public';
 
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
+import { clearDocketNumberSearchFormSequence } from './sequences/clearDocketNumberSearchFormSequence';
 import { gotoPublicCaseDetailSequence } from './sequences/gotoPublicCaseDetailSequence';
 import { gotoPublicSearchSequence } from './sequences/gotoPublicSearchSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
@@ -18,6 +19,7 @@ export const presenter = {
   sequences: {
     cerebralBindSimpleSetStateSequence,
     clearAdvancedSearchFormSequence,
+    clearDocketNumberSearchFormSequence,
     gotoPublicCaseDetailSequence,
     gotoPublicSearchSequence,
     navigateToCognitoSequence,

@@ -7,15 +7,16 @@ import React from 'react';
 
 export const SearchByDocketNumber = connect(
   {
-    advancedSearchForm: state.advancedSearchForm,
-    clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    clearDocketNumberSearchFormSequence:
+      sequences.clearDocketNumberSearchFormSequence,
+    docketNumberSearchForm: state.docketNumberSearchForm,
     updateDocketNumberSearchFormSequence:
       sequences.updateDocketNumberSearchFormSequence,
     validationErrors: state.validationErrors,
   },
   ({
-    advancedSearchForm,
-    clearAdvancedSearchFormSequence,
+    clearDocketNumberSearchFormSequence,
+    docketNumberSearchForm,
     submitDocketNumberSearchSequence,
     updateDocketNumberSearchFormSequence,
     validationErrors,
@@ -30,7 +31,7 @@ export const SearchByDocketNumber = connect(
               className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
               icon={['fas', 'times-circle']}
               onClick={() => {
-                clearAdvancedSearchFormSequence();
+                clearDocketNumberSearchFormSequence();
               }}
             >
               Clear search
@@ -61,7 +62,7 @@ export const SearchByDocketNumber = connect(
                     id="docket-number"
                     name="docketNumber"
                     type="text"
-                    value={advancedSearchForm.docketNumber || ''}
+                    value={docketNumberSearchForm.docketNumber || ''}
                     onChange={e => {
                       updateDocketNumberSearchFormSequence({
                         key: e.target.name,
@@ -93,7 +94,7 @@ export const SearchByDocketNumber = connect(
                     className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
                     icon={['fas', 'times-circle']}
                     onClick={() => {
-                      clearAdvancedSearchFormSequence();
+                      clearDocketNumberSearchFormSequence();
                     }}
                   >
                     Clear search
