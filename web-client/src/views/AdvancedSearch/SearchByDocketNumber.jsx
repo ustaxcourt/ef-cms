@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -85,20 +85,22 @@ export const SearchByDocketNumber = connect(
               </div>
             </div>
 
-            <div className="grid-row">
-              <div className="tablet:grid-col-5 text-center">
-                <Button
-                  link
-                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                  icon={['fas', 'times-circle']}
-                  onClick={() => {
-                    clearAdvancedSearchFormSequence();
-                  }}
-                >
-                  Clear search
-                </Button>
+            <Mobile>
+              <div className="grid-row">
+                <div className="tablet:grid-col-5 text-center">
+                  <Button
+                    link
+                    className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                    icon={['fas', 'times-circle']}
+                    onClick={() => {
+                      clearAdvancedSearchFormSequence();
+                    }}
+                  >
+                    Clear search
+                  </Button>
+                </div>
               </div>
-            </div>
+            </Mobile>
           </form>
         </div>
       </>
