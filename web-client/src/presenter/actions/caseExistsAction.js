@@ -11,7 +11,7 @@ import { NotFoundError } from '../errors/NotFoundError';
  */
 export const caseExistsAction = async ({ applicationContext, path, props }) => {
   try {
-    await applicationContext.getUseCases().getCaseInteractor({
+    await applicationContext.getUseCases().getPublicCaseInteractor({
       applicationContext,
       docketNumber: props.caseId,
     });

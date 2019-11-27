@@ -6,6 +6,7 @@ import {
   getCognitoLoginUrl,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext.js';
+import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
@@ -32,6 +33,7 @@ const applicationContextPublic = {
   getPublicSiteUrl,
   getUseCases: () => ({
     casePublicSearchInteractor,
+    getPublicCaseInteractor,
     validateCaseAdvancedSearchInteractor,
   }),
   getUtilities: () => {
