@@ -2,12 +2,16 @@
 
 ## Prerequisites
 - [Create an AWS account](https://portal.aws.amazon.com/gp/aws/developer/registration/).
+- [Install the AWS CLI on your local system](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) and [configure it to use your IAM credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
+- [Install Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) on your local system.
+- (e.g. `ef-cms.example.gov.`).
 - Create a `CircleCI` user in [AWS Identity and Access Management](https://console.aws.amazon.com/iam/):
-     - Create the `circle_ci_policy` via the project terraform scripts
-          `cd iam/account-specific/terraform/main && ../bin/deploy-app.sh`
+     - Create the `circle_ci_policy` via the project Terraform scripts:
+          - Make the intended domain name available on your local system, e.g. `export EFCMS_DOMAIN="ef-cms.example.gov"`
+          - Create the policies on your local system: `cd iam/terraform/account-specific/main && ../bin/deploy-app.sh`
      - Attach this policy to your `CircleCI` user.
-     - Keep track of the access key and secret access key — it is needed for the CircleCI setup.
-- [Create a Route53 Hosted Zone](https://console.aws.amazon.com/route53/home) This will be used for setting up the domains for the UI and API.  Put the desired domain name (e.g. `ef-cms.example.gov.`) and make sure it is a `Public Hosted Zone`.  This is the value you will set for `EFCMS_DOMAIN` in CircleCI.  Make sure the domain name ends with a period.
+     - Note the AWS-generated access key and secret access key — it will needed shortly for the CircleCI setup.
+- [Create a Route53 Hosted Zone](https://console.aws.amazon.com/route53/home) This will be used for setting up the domains for the UI and API.  Create the desired domain name (e.g. `ef-cms.example.gov.`) and make sure it is a `Public Hosted Zone`. This is the value you will set for `EFCMS_DOMAIN` in CircleCI.  Make sure the domain name ends with a period.
 - Create the lambda roles & policies needed for the lambdas that run the backend:
      - `cd iam/environment-specific/terraform/main && ../bin/deploy-app dev`
      - `cd iam/environment-specific/terraform/main && ../bin/deploy-app stg`
