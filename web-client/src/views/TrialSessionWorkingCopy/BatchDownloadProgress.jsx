@@ -1,5 +1,5 @@
 import { FileCompressionErrorModal } from './FileCompressionErrorModal';
-import { NavigateAwayWarningModal } from './NavigateAwayWarningModal';
+import { NavigateAwayWarningModal } from './NavigationWarningModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
@@ -19,7 +19,7 @@ export const BatchDownloadProgress = connect(
   }) => {
     const windowUnload = e => {
       const someSequence = () => {
-        navigationWarningSequence({ showModal: 'NavigateAwayWarningModal' });
+        navigationWarningSequence({ showModal: 'NavigationWarningModal' });
       };
       const navigateAway = someSequence();
       if (navigateAway) {
