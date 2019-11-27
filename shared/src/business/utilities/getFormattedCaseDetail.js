@@ -207,9 +207,9 @@ const formatCase = (applicationContext, caseDetail) => {
     );
   }
 
-  result.pendingItemsDocketEntries = (
-    result.docketRecordWithDocument || []
-  ).filter(entry => entry.document && entry.document.pending);
+  result.pendingItemsDocketEntries = result.docketRecordWithDocument.filter(
+    entry => entry.document && entry.document.pending,
+  );
 
   result.draftDocuments = (result.documents || []).filter(document => {
     const isNotArchived = !document.archived;

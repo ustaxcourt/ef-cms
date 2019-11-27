@@ -1,16 +1,12 @@
-const {
-  caseAdvancedSearchInteractor,
-} = require('./caseAdvancedSearchInteractor');
+const { casePublicSearchInteractor } = require('./casePublicSearchInteractor');
 import { CaseSearch } from '../entities/cases/CaseSearch';
 import { formatNow } from '../utilities/DateHandler';
 
-describe('caseAdvancedSearchInteractor', () => {
+describe('casePublicSearchInteractor', () => {
   let searchSpy;
-  let mockUser;
 
   const applicationContext = {
     environment: { stage: 'local' },
-    getCurrentUser: () => mockUser,
     getSearchClient: () => ({
       search: searchSpy,
     }),
@@ -19,32 +15,12 @@ describe('caseAdvancedSearchInteractor', () => {
     }),
   };
 
-  beforeEach(() => {
-    mockUser = {
-      role: 'petitionsclerk',
-    };
-  });
-
-  it('returns an unauthorized error on petitioner user role', async () => {
-    mockUser.role = 'petitioner';
-
-    let error;
-    try {
-      await caseAdvancedSearchInteractor({
-        applicationContext,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('Unauthorized');
-  });
-
   it('returns empty array if no search params are passed in', async () => {
     searchSpy = jest.fn(async () => {
       return {};
     });
 
-    const results = await caseAdvancedSearchInteractor({
+    const results = await casePublicSearchInteractor({
       applicationContext,
     });
 
@@ -58,12 +34,16 @@ describe('caseAdvancedSearchInteractor', () => {
           hits: [
             {
               _source: {
+                caseCaption: { S: 'Test Case Caption One' },
                 caseId: { S: '1' },
+                docketNumber: { S: '123-19' },
               },
             },
             {
               _source: {
+                caseCaption: { S: 'Test Case Caption Two' },
                 caseId: { S: '2' },
+                docketNumber: { S: '456-19' },
               },
             },
           ],
@@ -71,7 +51,7 @@ describe('caseAdvancedSearchInteractor', () => {
       };
     });
 
-    const results = await caseAdvancedSearchInteractor({
+    const results = await casePublicSearchInteractor({
       applicationContext,
       petitionerName: 'test person',
     });
@@ -112,7 +92,10 @@ describe('caseAdvancedSearchInteractor', () => {
         },
       },
     ]);
-    expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
+    expect(results).toEqual([
+      { docketNumber: '123-19' },
+      { docketNumber: '456-19' },
+    ]);
   });
 
   it('calls search function with correct params and returns records for a nonexact match result', async () => {
@@ -156,12 +139,16 @@ describe('caseAdvancedSearchInteractor', () => {
             hits: [
               {
                 _source: {
+                  caseCaption: { S: 'Test Case Caption One' },
                   caseId: { S: '1' },
+                  docketNumber: { S: '123-19' },
                 },
               },
               {
                 _source: {
+                  caseCaption: { S: 'Test Case Caption Two' },
                   caseId: { S: '2' },
+                  docketNumber: { S: '456-19' },
                 },
               },
             ],
@@ -170,7 +157,7 @@ describe('caseAdvancedSearchInteractor', () => {
       }
     });
 
-    const results = await caseAdvancedSearchInteractor({
+    const results = await casePublicSearchInteractor({
       applicationContext,
       countryType: 'domestic',
       petitionerName: 'test person',
@@ -228,13 +215,16 @@ describe('caseAdvancedSearchInteractor', () => {
       },
       ...commonExpectedQuery,
     ]);
-    expect(results).toEqual([{ caseId: '1' }, { caseId: '2' }]);
+    expect(results).toEqual([
+      { docketNumber: '123-19' },
+      { docketNumber: '456-19' },
+    ]);
   });
 
   it('uses a default minimum year when providing only a maximum year', async () => {
     searchSpy = jest.fn();
 
-    await caseAdvancedSearchInteractor({
+    await casePublicSearchInteractor({
       applicationContext,
       petitionerName: 'test person',
       yearFiledMax: '2018',
@@ -254,7 +244,7 @@ describe('caseAdvancedSearchInteractor', () => {
     searchSpy = jest.fn();
     const currentYear = formatNow('YYYY');
 
-    await caseAdvancedSearchInteractor({
+    await casePublicSearchInteractor({
       applicationContext,
       petitionerName: 'test person',
       yearFiledMin: '2016',

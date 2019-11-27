@@ -12,7 +12,10 @@ s3Zip.archive = function(opts, folder, filesS3, filesZip, extra, extraZip) {
 
   this.folder = folder;
 
+  const noop = () => {};
   self.debug = opts.debug || false;
+  self.onEntry = opts.onEntry || noop;
+  self.onProgress = opts.onProgress || noop;
 
   if ('s3' in opts) {
     connectionConfig = {
@@ -69,6 +72,10 @@ s3Zip.archiveStream = function(stream, filesS3, filesZip, extras, extrasZip) {
   archive.on('error', function(err) {
     self.debug && console.log('archive error', err);
   });
+
+  archive.on('progress', self.onProgress);
+  archive.on('entry', self.onEntry);
+
   stream
     .on('data', function(file) {
       if (file.path[file.path.length - 1] === '/') {

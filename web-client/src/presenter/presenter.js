@@ -210,6 +210,7 @@ import { state } from './state';
 import { submitCaseAdvancedSearchSequence } from './sequences/submitCaseAdvancedSearchSequence';
 import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAssociationRequestSequence';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
+import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDocketNumberSearchSequence';
 import { submitCaseSearchSequence } from './sequences/submitCaseSearchSequence';
 import { submitCompleteSequence } from './sequences/submitCompleteSequence';
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
@@ -246,6 +247,7 @@ import { unsetFormSaveSuccessSequence } from './sequences/unsetFormSaveSuccessSe
 import { unsetFormSubmittingSequence } from './sequences/unsetFormSubmittingSequence';
 import { unsetWorkQueueIsInternalSequence } from './sequences/unsetWorkQueueIsInternalSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
+import { updateBatchDownloadProgressSequence } from './sequences/updateBatchDownloadProgressSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
 import { updateCaseNoteOnCaseDetailSequence } from './sequences/updateCaseNoteOnCaseDetailSequence';
@@ -522,6 +524,7 @@ export const presenter = {
     submitCaseAdvancedSearchSequence,
     submitCaseAssociationRequestSequence,
     submitCaseDetailEditSaveSequence,
+    submitCaseDocketNumberSearchSequence,
     submitCaseSearchSequence,
     submitCompleteSequence,
     submitCourtIssuedDocketEntrySequence,
@@ -558,6 +561,7 @@ export const presenter = {
     unsetFormSubmittingSequence,
     unsetWorkQueueIsInternalSequence,
     updateAdvancedSearchFormValueSequence,
+    updateBatchDownloadProgressSequence,
     updateCaseAssociationFormValueSequence,
     updateCaseDeadlineSequence,
     updateCaseNoteOnCaseDetailSequence,
