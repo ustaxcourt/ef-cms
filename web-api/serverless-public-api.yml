@@ -141,3 +141,12 @@ functions:
           path: /search
           method: get
           cors: true
+
+
+  getPublicCase:
+    handler: web-api/${self:provider.dir}/publicApiHandlers.getPublicCaseLambda
+    events:
+      - http:
+          path: /cases/{caseId}
+          method: get
+          cors: true
