@@ -1,10 +1,15 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const FileCompressionErrorModal = connect(
-  {},
-  ({ filename, onConfirmSequence, trialSessionCity, trialSessionState }) => {
+  {
+    trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
+  },
+  ({ onConfirmSequence, trialSessionWorkingCopyHelper }) => {
+    const trialSessionTitle = trialSessionWorkingCopyHelper;
+
     return (
       <ConfirmModal
         cancelLabel="Cancel"
@@ -15,9 +20,8 @@ export const FileCompressionErrorModal = connect(
         onConfirmSequence={onConfirmSequence}
       >
         <p>
-          An error occurred during the file compression of “{trialSessionCity},{' '}
-          {trialSessionState}” trial session. {filename} {trialSessionState}. Do
-          you want to try again?
+          An error occurred during the file compression of “{trialSessionTitle},{' '}
+          {trialSessionTitle}” trial session. Do you want to try again?
         </p>
       </ConfirmModal>
     );
