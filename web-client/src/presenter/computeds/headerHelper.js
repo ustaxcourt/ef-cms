@@ -55,6 +55,7 @@ export const headerHelper = (get, applicationContext) => {
     showSearchInHeader:
       user &&
       userRole &&
+      userRole !== USER_ROLES.petitioner &&
       userRole !== USER_ROLES.practitioner &&
       userRole !== USER_ROLES.respondent,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
