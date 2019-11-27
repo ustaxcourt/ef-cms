@@ -30,7 +30,10 @@ export const submitPublicAdvancedSearchSequence = [
           unsetWaitingForResponseAction,
           clearSearchTermAction,
         ],
-        yes: [navigateToFirstResultCaseDetailAction],
+        yes: [
+          navigateToFirstResultCaseDetailAction,
+          unsetWaitingForResponseAction,
+        ],
       },
     ],
   },
