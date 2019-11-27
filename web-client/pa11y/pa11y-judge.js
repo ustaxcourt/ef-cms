@@ -6,7 +6,7 @@ module.exports = [
     actions: [
       'wait for #advanced-search-button to be visible',
       'click element #advanced-search-button',
-      'wait for .search-result to be visible',
+      'wait for #case-detail-internal to be visible',
     ],
     notes: 'checks a11y of advanced search results table',
     url:
