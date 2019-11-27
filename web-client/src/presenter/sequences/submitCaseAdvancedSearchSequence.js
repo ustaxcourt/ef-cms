@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearSearchTermAction } from '../actions/clearSearchTermAction';
 import { props, state } from 'cerebral';
 import { set, unset } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -22,6 +23,7 @@ export const submitCaseAdvancedSearchSequence = [
       submitCaseAdvancedSearchAction,
       set(state.searchResults, props.searchResults),
       unsetWaitingForResponseAction,
+      clearSearchTermAction,
     ],
   },
 ];
