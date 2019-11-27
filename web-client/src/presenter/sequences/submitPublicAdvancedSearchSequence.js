@@ -7,10 +7,10 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { submitPublicAdvancedSearchAction } from '../actions/AdvancedSearch/submitPublicAdvancedSearchAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { validateCaseDocketNumberSearchAction } from '../actions/AdvancedSearch/validateCaseDocketNumberSearchAction';
+import { validateCaseAdvancedSearchAction } from '../actions/AdvancedSearch/validateCaseAdvancedSearchAction';
 
-export const submitCaseDocketNumberSearchSequence = [
-  validateCaseDocketNumberSearchAction,
+export const submitPublicAdvancedSearchSequence = [
+  validateCaseAdvancedSearchAction,
   {
     error: [
       setAlertErrorAction,

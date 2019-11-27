@@ -166,6 +166,7 @@ export const state = {
   scanHelper,
   scanner: {},
   screenMetadata: {},
+  searchMode: 'byName',
   searchTerm: '',
   sectionInboxCount: 0,
   sectionUsers: [],
