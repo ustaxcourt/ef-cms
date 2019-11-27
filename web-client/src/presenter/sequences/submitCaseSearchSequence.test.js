@@ -1,5 +1,4 @@
 import { CerebralTest } from 'cerebral/test';
-import { InvalidRequestError } from '../errors/InvalidRequestError';
 import { NotFoundError } from '../errors/NotFoundError';
 import { presenter } from '../presenter';
 import sinon from 'sinon';
