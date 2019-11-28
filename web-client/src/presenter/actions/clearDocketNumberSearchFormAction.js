@@ -8,4 +8,5 @@ import { state } from 'cerebral';
  */
 export const clearDocketNumberSearchFormAction = ({ store }) => {
   store.set(state.docketNumberSearchForm, {});
+  store.unset(state.searchResults);
 };
