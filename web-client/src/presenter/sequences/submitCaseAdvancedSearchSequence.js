@@ -1,7 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
-import { isOneResultFoundAction } from '../actions/AdvancedSearch/isOneResultFoundAction';
-import { navigateToFirstResultCaseDetailAction } from '../actions/navigateToFirstResultCaseDetailAction';
 import { props, state } from 'cerebral';
 import { set, unset } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -24,17 +22,8 @@ export const submitCaseAdvancedSearchSequence = [
       clearAlertsAction,
       setWaitingForResponseAction,
       submitCaseAdvancedSearchAction,
-      isOneResultFoundAction,
-      {
-        no: [
-          set(state.searchResults, props.searchResults),
-          unsetWaitingForResponseAction,
-        ],
-        yes: [
-          navigateToFirstResultCaseDetailAction,
-          unsetWaitingForResponseAction,
-        ],
-      },
+      set(state.searchResults, props.searchResults),
+      unsetWaitingForResponseAction,
     ],
   },
 ];
