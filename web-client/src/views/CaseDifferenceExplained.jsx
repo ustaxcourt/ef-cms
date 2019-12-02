@@ -5,7 +5,7 @@ export const CaseDifferenceExplained = () => (
   <div className="subsection case-difference">
     <h2>Which Case Procedure Should I Choose?</h2>
     <h3 className="margin-bottom-4">
-      Do I qualify for a small tax case procedure?
+      Do I Qualify for a Small Tax Case Procedure?
     </h3>
     <table
       aria-labelledby="small-case-qualifications"
