@@ -104,8 +104,9 @@ export const AppComponent = connect(
     currentPage: state.currentPage,
     currentPageHeader: state.currentPageHeader,
     showModal: state.showModal,
+    zipInProgress: state.zipInProgress,
   },
-  ({ currentPage, showModal }) => {
+  ({ currentPage, showModal, zipInProgress }) => {
     const focusMain = e => {
       e && e.preventDefault();
       const header = document.querySelector('#main-content h1');
@@ -132,7 +133,7 @@ export const AppComponent = connect(
         <Header />
         <main id="main-content" role="main">
           <CurrentPage />
-          <BatchDownloadProgress />
+          {zipInProgress && <BatchDownloadProgress />}
         </main>
         <Footer />
         <Loading />
