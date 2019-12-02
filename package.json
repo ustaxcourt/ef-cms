@@ -28,6 +28,7 @@
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.9.0",
     "babel-plugin-cerebral": "^1.0.1",
+    "babel-plugin-transform-html-import-require-to-string": "^0.0.3",
     "bluebird": "^3.7.2",
     "cerebral": "^5.2.0",
     "chrome-aws-lambda": "^2.0.1",
