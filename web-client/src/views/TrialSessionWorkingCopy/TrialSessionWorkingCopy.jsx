@@ -54,7 +54,6 @@ export const TrialSessionWorkingCopy = connect(
                 onClick={() =>
                   batchDownloadTrialSessionSequence({
                     trialSessionId: formattedTrialSessionDetails.trialSessionId,
-                    zipName: formattedTrialSessionDetails.zipName,
                   })
                 }
               >
