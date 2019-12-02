@@ -195,7 +195,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     templateData: {
       caseCaption: caseToUpdate.caseCaption,
       docketNumber: caseToUpdate.docketNumber,
-      documentName: courtIssuedDocument.documentType,
+      documentName: courtIssuedDocument.documentTitle,
       loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
       name: party.name,
       serviceDate: formatDateString(courtIssuedDocument.servedAt, 'MMDDYYYY'),
