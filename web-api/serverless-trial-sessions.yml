@@ -266,7 +266,7 @@ functions:
     timeout: 900
     events:
       - http:
-          path: /{trialSessionId}/batch-download/{zipName}
+          path: /{trialSessionId}/batch-download
           method: get
           async: true
           cors: true
