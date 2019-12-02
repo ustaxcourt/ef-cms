@@ -104,7 +104,7 @@ export const AppComponent = connect(
     currentPage: state.currentPage,
     currentPageHeader: state.currentPageHeader,
     showModal: state.showModal,
-    zipInProgress: state.zipInProgress,
+    zipInProgress: state.batchDownloads.zipInProgress,
   },
   ({ currentPage, showModal, zipInProgress }) => {
     const focusMain = e => {

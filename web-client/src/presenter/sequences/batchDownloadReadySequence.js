@@ -7,5 +7,4 @@ export const batchDownloadReadySequence = [
   displayDownloadLinkAction,
   stopWebSocketConnectionAction,
   unset(state.batchDownloads),
-  unset(state.zipInProgress),
 ];
