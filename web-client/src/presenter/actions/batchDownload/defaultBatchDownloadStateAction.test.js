@@ -19,4 +19,13 @@ describe('defaultBatchDownloadStateAction', () => {
     });
     expect(result.state.batchDownloads.allowRetry).toEqual(true);
   });
+
+  it('should set the prop for trialSessionId based off of the current trial session', async () => {
+    const result = await runAction(defaultBatchDownloadStateAction, {
+      modules: {},
+      props: { allowRetry: true },
+      state: { trialSession: { trialSessionId: 'abc' } },
+    });
+    expect(result.output.trialSessionId).toEqual('abc');
+  });
 });
