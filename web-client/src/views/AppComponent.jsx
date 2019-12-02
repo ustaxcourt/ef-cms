@@ -18,6 +18,7 @@ import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocumentDetail } from './DocumentDetail/DocumentDetail';
 import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { Error } from './Error';
+import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { Footer } from './Footer';
 import { Header } from './Header/Header';
@@ -139,6 +140,9 @@ export const AppComponent = connect(
         <Loading />
         {showModal === 'TrialSessionPlanningModal' && (
           <TrialSessionPlanningModal />
+        )}
+        {showModal === 'FileCompressionErrorModal' && (
+          <FileCompressionErrorModal />
         )}
       </React.Fragment>
     );
