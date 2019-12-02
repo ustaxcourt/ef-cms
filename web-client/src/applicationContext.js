@@ -207,7 +207,6 @@ import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/ver
 import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virusScanPdfProxy';
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
-import pdfjsLib from 'pdfjs-dist';
 
 const MINUTES = 60 * 1000;
 
@@ -459,6 +458,7 @@ const applicationContext = {
   getFileReader: () => FileReader,
   getHttpClient: () => axios,
   getPdfJs: async () => {
+    const pdfjsLib = await import('pdfjs-dist');
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
     return pdfjsLib;
   },
