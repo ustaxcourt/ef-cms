@@ -6,6 +6,6 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 
 export const batchDownloadErrorSequence = [
   stopWebSocketConnectionAction,
-  unset(state.batchDownload.zipInProgress),
+  unset(state.batchDownloads.zipInProgress),
   setShowModalFactoryAction('FileCompressionErrorModal'),
 ];
