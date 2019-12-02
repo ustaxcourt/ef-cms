@@ -4,9 +4,13 @@ import { runAction } from 'cerebral/test';
 
 describe('batchDownloadTrialSessionAction', () => {
   let batchDownloadTrialSessionInteractorStub;
+  let pathSuccessStub;
+  let pathErrorStub;
 
   beforeEach(() => {
     batchDownloadTrialSessionInteractorStub = jest.fn();
+    pathSuccessStub = jest.fn();
+    pathErrorStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -23,5 +27,8 @@ describe('batchDownloadTrialSessionAction', () => {
     });
 
     expect(batchDownloadTrialSessionInteractorStub).toHaveBeenCalled();
+    expect(pathSuccessStub).toHaveBeenCalled();
   });
+
+  it('fails', async () => {});
 });
