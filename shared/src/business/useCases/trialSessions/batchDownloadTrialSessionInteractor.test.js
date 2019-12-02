@@ -67,6 +67,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
         action: 'batch_download_error',
         error: expect.anything(),
       },
+      userId: 'abc-123',
     });
   });
 
