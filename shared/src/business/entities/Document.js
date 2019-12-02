@@ -379,4 +379,8 @@ Document.prototype.setAsProcessingStatusAsCompleted = function() {
   this.processingStatus = 'complete';
 };
 
+Document.prototype.getQCWorkItem = function() {
+  return this.workItems.find(workItem => workItem.isQC === true);
+};
+
 exports.Document = Document;
