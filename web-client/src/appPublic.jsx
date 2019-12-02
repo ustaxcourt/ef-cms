@@ -1,6 +1,6 @@
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
-import { externalRoute } from './router';
+import { back, externalRoute, route, router } from './routerPublic';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
@@ -37,10 +37,14 @@ const appPublic = {
     presenter.state.constants = applicationContext.getConstants();
 
     presenter.providers.router = {
+      back,
       externalRoute,
+      route,
     };
 
     const cerebralApp = App(presenter, debugTools);
+
+    router.initialize(cerebralApp);
 
     ReactDOM.render(
       <Container app={cerebralApp}>

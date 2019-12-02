@@ -22,6 +22,7 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 
   result.fullStateNamePrimary =
     US_STATES[result.contactPrimary.state] || result.contactPrimary.state;
+
   if (
     result.contactSecondary &&
     result.contactSecondary.state &&
@@ -42,16 +43,13 @@ export const advancedSearchHelper = (get, applicationContext) => {
   } = applicationContext.getConstants();
   const searchResults = get(state.searchResults);
   const currentPage = get(state.advancedSearchForm.currentPage);
-
   let result = { showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC };
-
   if (searchResults) {
     const formattedSearchResults = searchResults
       .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
       .map(searchResult =>
         formatSearchResultRecord(searchResult, { applicationContext }),
       );
-
     result = {
       ...result,
       formattedSearchResults: formattedSearchResults.slice(

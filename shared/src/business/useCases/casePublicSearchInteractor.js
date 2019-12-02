@@ -83,7 +83,12 @@ exports.casePublicSearchInteractor = async providers => {
 
   // TODO - Make response public-safe?
   const makeSafe = item => ({
+    caseCaption: item.caseCaption,
+    contactPrimary: item.contactPrimary,
+    contactSecondary: item.contactSecondary,
     docketNumber: item.docketNumber,
+    docketNumberSuffix: item.docketNumberSuffix,
+    receivedAt: item.receivedAt,
   });
 
   return filteredCases.map(makeSafe);
