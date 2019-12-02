@@ -75,6 +75,7 @@ export const state = {
   },
   assigneeId: null,
   batchDownloadHelper,
+  batchDownloads: {},
   batchIndexToRescan: null,
   batches: [],
   betaBar: {
@@ -204,5 +205,4 @@ export const state = {
   workQueueHelper,
   workQueueSectionHelper,
   workQueueToDisplay: { box: 'inbox', queue: 'my', workQueueIsInternal: true },
-  zipInProgress: false,
 };
