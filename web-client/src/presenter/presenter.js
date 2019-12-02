@@ -25,6 +25,7 @@ import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
+import { clearDocketNumberSearchFormSequence } from './sequences/clearDocketNumberSearchFormSequence';
 import { clearDocumentSequence } from './sequences/clearDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
@@ -262,6 +263,7 @@ import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updat
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateCurrentTabSequence } from './sequences/updateCurrentTabSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
+import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
@@ -342,6 +344,7 @@ export const presenter = {
     chooseWorkQueueSequence,
     clearAdvancedSearchFormSequence,
     clearAlertSequence,
+    clearDocketNumberSearchFormSequence,
     clearDocumentSequence,
     clearModalFormSequence,
     clearModalSequence,
@@ -567,6 +570,7 @@ export const presenter = {
     updateCaseAssociationFormValueSequence,
     updateCaseDeadlineSequence,
     updateCaseNoteOnCaseDetailSequence,
+
     updateCaseNoteOnWorkingCopySequence,
     updateCasePartyTypeSequence,
     updateCaseValueByIndexSequence,
@@ -577,6 +581,7 @@ export const presenter = {
     updateCreateOrderModalFormValueSequence,
     updateCurrentTabSequence,
     updateDocketEntryFormValueSequence,
+    updateDocketNumberSearchFormSequence,
     updateDocumentValueSequence,
     updateFileDocumentWizardFormValueSequence,
     updateFormValueSequence,

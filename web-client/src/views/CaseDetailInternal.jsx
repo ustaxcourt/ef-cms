@@ -44,7 +44,10 @@ export const CaseDetailInternal = connect(
     return (
       <>
         <CaseDetailHeader />
-        <section className="usa-section grid-container">
+        <section
+          className="usa-section grid-container"
+          id="case-detail-internal"
+        >
           <SuccessNotification />
           <ErrorNotification />
           <Tabs
