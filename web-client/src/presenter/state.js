@@ -38,6 +38,7 @@ import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
+import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
@@ -134,6 +135,7 @@ export const state = {
   headerHelper,
   internalTypesHelper,
   isAccountMenuOpen: false,
+  loadingHelper,
   menuHelper,
   mobileMenu: {
     isVisible: false,

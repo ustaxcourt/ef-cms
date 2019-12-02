@@ -3,8 +3,8 @@ import {
   IRS_BATCH_SYSTEM_SECTION,
   PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/WorkQueue';
+import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { state } from 'cerebral';
-import _ from 'lodash';
 
 const isDateToday = (date, applicationContext) => {
   const now = applicationContext.getUtilities().formatNow('MMDDYY');
@@ -57,13 +57,13 @@ export const formatWorkItem = ({
     courtIssuedDoc => courtIssuedDoc.documentType,
   );
 
-  const result = _.cloneDeep(workItem);
+  const result = cloneDeep(workItem);
 
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
 
-  result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
+  result.messages = orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
     message.createdAtFormatted = formatDateIfToday(
       message.createdAt,
@@ -74,7 +74,7 @@ export const formatWorkItem = ({
       .getUtilities()
       .formatDateString(message.createdAt, 'DATE_TIME_TZ');
   });
-  result.sentBySection = _.capitalize(result.sentBySection);
+  result.sentBySection = capitalize(result.sentBySection);
   result.completedAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.completedAt, 'DATE_TIME');
@@ -385,7 +385,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
       workQueueToDisplay.queue
     ][workQueueToDisplay.box];
 
-  workQueue = _.orderBy(workQueue, [sortField, 'docketNumber'], sortDirection);
+  workQueue = orderBy(workQueue, [sortField, 'docketNumber'], sortDirection);
 
   return workQueue;
 };
