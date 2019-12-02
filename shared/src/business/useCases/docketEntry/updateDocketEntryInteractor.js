@@ -82,7 +82,7 @@ exports.updateDocketEntryInteractor = async ({
       workItem: workItemToDelete,
     });
 
-    const workItem = currentDocument.workItems[0];
+    const workItem = documentEntity.getQCWorkItem();
     Object.assign(workItem, {
       assigneeId: null,
       assigneeName: null,

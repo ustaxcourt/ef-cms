@@ -44,7 +44,7 @@ export const StartCaseStep2 = connect(
             2. Tell Us About Your Petition
           </h2>
         </Focus>
-        <p className="margin-bottom-4 margin-top-0 required-statement ">
+        <p className="margin-bottom-3 margin-top-0 required-statement ">
           *All fields required unless otherwise noted
         </p>
         <h3>Upload Your Petition</h3>
@@ -90,7 +90,7 @@ export const StartCaseStep2 = connect(
           </div>
         </div>
 
-        <h3 className="margin-top-4">Why are you filing this petition?</h3>
+        <h3 className="margin-top-4">Why Are You Filing This Petition?</h3>
         <div className="blue-container margin-bottom-5">
           <div className="usa-form-group">
             <FormGroup errorText={validationErrors.hasIrsNotice}>

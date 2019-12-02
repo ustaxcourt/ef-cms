@@ -1,5 +1,5 @@
+import { orderBy } from 'lodash';
 import { state } from 'cerebral';
-import _ from 'lodash';
 
 /**
  * sets the state.workQueue based on the props.workItems passed in.
@@ -11,7 +11,7 @@ import _ from 'lodash';
  * @returns {undefined}
  */
 export const setWorkItemsAction = ({ applicationContext, props, store }) => {
-  const orderedWorkItems = _.orderBy(props.workItems, 'updatedAt', 'desc').map(
+  const orderedWorkItems = orderBy(props.workItems, 'updatedAt', 'desc').map(
     workItem => ({
       ...workItem,
       uiKey: applicationContext.getUniqueId(),
