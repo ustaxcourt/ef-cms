@@ -131,8 +131,6 @@ import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNo
 import { getPractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPractitionersBySearchKeyProxy';
 import { getProcedureTypesInteractor } from '../../shared/src/business/useCases/getProcedureTypesInteractor';
 import { getRespondentsBySearchKeyInteractor } from '../../shared/src/proxies/users/getRespondentsBySearchKeyProxy';
-import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerInterface';
-import { getScannerInterface as getScannerMockInterfaceInteractor } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { getSentMessagesForSectionInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForSectionProxy';
 import { getSentMessagesForUserInteractor } from '../../shared/src/proxies/workitems/getSentMessagesForUserProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
@@ -478,9 +476,19 @@ const applicationContext = {
       uploadPdf,
     };
   },
-  getScanner: process.env.NO_SCANNER
-    ? getScannerMockInterfaceInteractor
-    : getScannerInterface,
+  getScanner: async () => {
+    if (process.env.NO_SCANNER) {
+      const scanner = await import(
+        '../../shared/src/persistence/dynamsoft/getScannerMockInterface'
+      );
+      return scanner.getScannerInterface;
+    } else {
+      const scanner = await import(
+        '../../shared/src/persistence/dynamsoft/getScannerInterface'
+      );
+      return scanner.getScannerInterface;
+    }
+  },
   getScannerResourceUri: () => {
     return (
       process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
