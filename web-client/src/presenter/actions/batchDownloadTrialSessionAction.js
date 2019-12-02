@@ -16,7 +16,6 @@ export const batchDownloadTrialSessionAction = async ({
     await applicationContext.getUseCases().batchDownloadTrialSessionInteractor({
       applicationContext,
       trialSessionId: props.trialSessionId,
-      zipName: props.zipName,
     });
     return path.success();
   } catch (e) {
