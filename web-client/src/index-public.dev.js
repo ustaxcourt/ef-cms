@@ -1,3 +1,5 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import { appPublic } from './appPublic';
 import { applicationContextPublic } from './applicationContextPublic';
 import Devtools from 'cerebral/devtools';
