@@ -48,7 +48,10 @@ export const BatchDownloadProgress = connect(
             <div className="sticky-footer sticky-footer--space" />
             <div className="sticky-footer sticky-footer--container">
               <div className="usa-section grid-container padding-bottom-0">
-                <div aria-live="polite" className="progress-batch-download">
+                <div
+                  aria-live="polite"
+                  className="progress-batch-download padding-top-105 padding-bottom-105"
+                >
                   <h3>Compressing Case Files</h3>
                   <span className="progress-text">
                     {batchDownloadHelper.percentComplete}% Complete

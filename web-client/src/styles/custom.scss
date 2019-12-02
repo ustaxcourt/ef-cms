@@ -72,7 +72,7 @@ hr {
 }
 
 .sticky-footer {
-  background-color: color($theme-color-base-lightest);
+  background-color: $color-white;
 
   &.sticky-footer--space {
     height: 135px;
