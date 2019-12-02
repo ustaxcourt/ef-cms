@@ -33,9 +33,9 @@ describe('validateTrialSessionInteractor', () => {
     const MOCK_TRIAL = {
       maxCases: 100,
       sessionType: 'Regular',
-      startDate: '2019-12-01T00:00:00.000Z',
+      startDate: '2020-12-01T00:00:00.000Z',
       term: 'Fall',
-      termYear: '2019',
+      termYear: '2020',
       trialLocation: 'Birmingham, AL',
     };
 
