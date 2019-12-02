@@ -2,21 +2,24 @@ import { batchDownloadTrialSessionAction } from './batchDownloadTrialSessionActi
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 
+const batchDownloadTrialSessionInteractorStub = jest.fn();
+const pathSuccessStub = jest.fn();
+const pathErrorStub = jest.fn();
+
+presenter.providers.path = {
+  error: pathErrorStub,
+  success: pathSuccessStub,
+};
+
+presenter.providers.applicationContext = {
+  getUseCases: () => ({
+    batchDownloadTrialSessionInteractor: batchDownloadTrialSessionInteractorStub,
+  }),
+};
+
 describe('batchDownloadTrialSessionAction', () => {
-  let batchDownloadTrialSessionInteractorStub;
-  let pathSuccessStub;
-  let pathErrorStub;
-
-  beforeEach(() => {
-    batchDownloadTrialSessionInteractorStub = jest.fn();
-    pathSuccessStub = jest.fn();
-    pathErrorStub = jest.fn();
-
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        batchDownloadTrialSessionInteractor: batchDownloadTrialSessionInteractorStub,
-      }),
-    };
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('initializes the batch download for a trial session', async () => {
