@@ -10,7 +10,7 @@ exports.validateOrderWithoutBodyInteractor = ({
   applicationContext,
   orderMetadata,
 }) => {
-  const orderWithoutBody = new (applicationContext.getEntityConstructors()).OrderWithoutBody(
+  const orderWithoutBody = new (applicationContext.getEntityConstructors().OrderWithoutBody)(
     orderMetadata,
   );
 

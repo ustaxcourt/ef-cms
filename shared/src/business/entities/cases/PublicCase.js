@@ -1,8 +1,5 @@
 const joi = require('joi-browser');
 const {
-  getDocketNumberSuffix,
-} = require('../../utilities/getDocketNumberSuffix');
-const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
@@ -20,7 +17,7 @@ function PublicCase(rawCase) {
   this.contactSecondary = rawCase.contactSecondary;
   this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
-  this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
+  this.docketNumberSuffix = rawCase.docketNumberSuffix;
   this.receivedAt = rawCase.receivedAt;
 }
 
