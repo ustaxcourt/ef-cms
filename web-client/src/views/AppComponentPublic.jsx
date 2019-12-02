@@ -2,6 +2,7 @@ import { Error } from './Error';
 import { Footer } from './Footer';
 import { HeaderPublic } from './Header/HeaderPublic';
 import { Interstitial } from './Interstitial';
+import { PublicCaseDetail } from './PublicCaseDetail';
 import { PublicSearch } from './PublicSearch';
 import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
@@ -11,6 +12,7 @@ import React, { useEffect } from 'react';
 const pages = {
   Error,
   Interstitial,
+  PublicCaseDetail,
   PublicSearch,
 };
 

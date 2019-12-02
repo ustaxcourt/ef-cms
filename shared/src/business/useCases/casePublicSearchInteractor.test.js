@@ -37,6 +37,8 @@ describe('casePublicSearchInteractor', () => {
                 caseCaption: { S: 'Test Case Caption One' },
                 caseId: { S: '1' },
                 docketNumber: { S: '123-19' },
+                docketNumberSuffix: { S: 'S' },
+                receivedAt: { S: '2019-03-01T21:40:46.415Z' },
               },
             },
             {
@@ -44,6 +46,8 @@ describe('casePublicSearchInteractor', () => {
                 caseCaption: { S: 'Test Case Caption Two' },
                 caseId: { S: '2' },
                 docketNumber: { S: '456-19' },
+                docketNumberSuffix: { S: 'S' },
+                receivedAt: { S: '2019-03-01T21:40:46.415Z' },
               },
             },
           ],
@@ -93,8 +97,22 @@ describe('casePublicSearchInteractor', () => {
       },
     ]);
     expect(results).toEqual([
-      { docketNumber: '123-19' },
-      { docketNumber: '456-19' },
+      {
+        caseCaption: 'Test Case Caption One',
+        contactPrimary: undefined,
+        contactSecondary: undefined,
+        docketNumber: '123-19',
+        docketNumberSuffix: 'S',
+        receivedAt: '2019-03-01T21:40:46.415Z',
+      },
+      {
+        caseCaption: 'Test Case Caption Two',
+        contactPrimary: undefined,
+        contactSecondary: undefined,
+        docketNumber: '456-19',
+        docketNumberSuffix: 'S',
+        receivedAt: '2019-03-01T21:40:46.415Z',
+      },
     ]);
   });
 
@@ -141,14 +159,22 @@ describe('casePublicSearchInteractor', () => {
                 _source: {
                   caseCaption: { S: 'Test Case Caption One' },
                   caseId: { S: '1' },
+                  contactPrimary: { O: {} },
+                  contactSecondary: { O: {} },
                   docketNumber: { S: '123-19' },
+                  docketNumberSuffix: { S: 'S' },
+                  receivedAt: { S: '2019-03-01T21:40:46.415Z' },
                 },
               },
               {
                 _source: {
                   caseCaption: { S: 'Test Case Caption Two' },
                   caseId: { S: '2' },
+                  contactPrimary: { O: {} },
+                  contactSecondary: { O: {} },
                   docketNumber: { S: '456-19' },
+                  docketNumberSuffix: { S: 'S' },
+                  receivedAt: { S: '2019-03-01T21:40:46.415Z' },
                 },
               },
             ],
@@ -216,8 +242,22 @@ describe('casePublicSearchInteractor', () => {
       ...commonExpectedQuery,
     ]);
     expect(results).toEqual([
-      { docketNumber: '123-19' },
-      { docketNumber: '456-19' },
+      {
+        caseCaption: 'Test Case Caption One',
+        contactPrimary: undefined,
+        contactSecondary: undefined,
+        docketNumber: '123-19',
+        docketNumberSuffix: 'S',
+        receivedAt: '2019-03-01T21:40:46.415Z',
+      },
+      {
+        caseCaption: 'Test Case Caption Two',
+        contactPrimary: undefined,
+        contactSecondary: undefined,
+        docketNumber: '456-19',
+        docketNumberSuffix: 'S',
+        receivedAt: '2019-03-01T21:40:46.415Z',
+      },
     ]);
   });
 

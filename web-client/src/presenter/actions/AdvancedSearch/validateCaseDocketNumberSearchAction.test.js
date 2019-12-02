@@ -16,13 +16,13 @@ describe('validateCaseDocketNumberSearchAction', () => {
     };
   });
 
-  it('should call path.success and not path.error if docketNumber is on state.advancedSearchForm', async () => {
+  it('should call path.success and not path.error if docketNumber is on state.docketNumberSearchForm', async () => {
     await runAction(validateCaseDocketNumberSearchAction, {
       modules: {
         presenter,
       },
       state: {
-        advancedSearchForm: { docketNumber: '123' },
+        docketNumberSearchForm: { docketNumber: '123' },
       },
     });
 
@@ -30,13 +30,13 @@ describe('validateCaseDocketNumberSearchAction', () => {
     expect(errorStub).not.toHaveBeenCalled();
   });
 
-  it('should call path.error with an error message and not call path.success if docketNumber is not on state.advancedSearchForm', async () => {
+  it('should call path.error with an error message and not call path.success if docketNumber is not on state.docketNumberSearchForm', async () => {
     await runAction(validateCaseDocketNumberSearchAction, {
       modules: {
         presenter,
       },
       state: {
-        advancedSearchForm: {},
+        docketNumberSearchForm: {},
       },
     });
 
