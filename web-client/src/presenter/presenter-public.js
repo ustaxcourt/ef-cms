@@ -7,6 +7,7 @@ import { gotoPublicCaseDetailSequence } from './sequences/gotoPublicCaseDetailSe
 import { gotoPublicSearchSequence } from './sequences/gotoPublicSearchSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
 import { navigateToPublicSiteSequence } from './sequences/navigateToPublicSiteSequence';
+import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { submitCaseDocketNumberSearchSequence } from './sequences/submitCaseDocketNumberSearchSequence';
 import { submitPublicAdvancedSearchSequence } from './sequences/submitPublicAdvancedSearchSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
@@ -24,6 +25,7 @@ export const presenter = {
     gotoPublicSearchSequence,
     navigateToCognitoSequence,
     navigateToPublicSiteSequence,
+    showMoreResultsSequence,
     submitCaseDocketNumberSearchSequence,
     submitPublicAdvancedSearchSequence,
     toggleBetaBarSequence,
