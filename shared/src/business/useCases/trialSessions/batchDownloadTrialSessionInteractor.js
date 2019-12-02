@@ -16,7 +16,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.trialSessionId the id of the trial session
  * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
  */
-exports.batchDownloadTrialSessionInteractor = async ({
+const batchDownloadTrialSessionInteractor = async ({
   applicationContext,
   trialSessionId,
 }) => {
@@ -204,4 +204,33 @@ exports.batchDownloadTrialSessionInteractor = async ({
     },
     userId: user.userId,
   });
+};
+
+/**
+ * batchDownloadTrialSessionInteractor
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.trialSessionId the id of the trial session
+ * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
+ */
+exports.batchDownloadTrialSessionInteractor = async ({
+  applicationContext,
+  trialSessionId,
+}) => {
+  try {
+    await batchDownloadTrialSessionInteractor({
+      applicationContext,
+      trialSessionId,
+    });
+  } catch (error) {
+    applicationContext.logger.info('Error', error);
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'batch_download_error',
+        error,
+      },
+    });
+  }
 };
