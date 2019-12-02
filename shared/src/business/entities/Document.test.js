@@ -753,4 +753,94 @@ describe('Document entity', () => {
       expect(document.qcAt).toBeDefined();
     });
   });
+
+  describe('getQCWorkItem', () => {
+    it('returns the first workItem with isQC = true', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          workItems: [
+            {
+              assigneeId: 'bill',
+              assigneeName: 'bill',
+              caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              caseStatus: 'new',
+              caseTitle: 'testing',
+              docketNumber: '101-18',
+              document: {},
+              isQC: false,
+              messages: [
+                {
+                  from: 'Test User',
+                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+                  message: 'hello world',
+                  messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                },
+              ],
+              sentBy: 'bill',
+              workItemId: 'dda4acce-7b0f-40e2-b5a7-261b5c0dee28',
+            },
+            {
+              assigneeId: 'bob',
+              assigneeName: 'bob',
+              caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              caseStatus: 'new',
+              caseTitle: 'testing',
+              docketNumber: '101-18',
+              document: {},
+              isQC: true,
+              messages: [
+                {
+                  from: 'Test User',
+                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+                  message: 'hello world',
+                  messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                },
+              ],
+              sentBy: 'bob',
+              workItemId: '062d334b-7589-4b28-9dcf-72989574b7a7',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      expect(document.getQCWorkItem()).toMatchObject({
+        workItemId: '062d334b-7589-4b28-9dcf-72989574b7a7',
+      });
+    });
+
+    it('returns undefined if there is no QC work item', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          workItems: [
+            {
+              assigneeId: 'bill',
+              assigneeName: 'bill',
+              caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              caseStatus: 'new',
+              caseTitle: 'testing',
+              docketNumber: '101-18',
+              document: {},
+              isQC: false,
+              messages: [
+                {
+                  from: 'Test User',
+                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+                  message: 'hello world',
+                  messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                },
+              ],
+              sentBy: 'bill',
+              workItemId: 'dda4acce-7b0f-40e2-b5a7-261b5c0dee28',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      expect(document.getQCWorkItem()).toBeUndefined();
+    });
+  });
 });
