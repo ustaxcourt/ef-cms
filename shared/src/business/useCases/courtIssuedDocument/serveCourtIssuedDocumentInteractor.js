@@ -129,7 +129,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     .saveDocument({ applicationContext, document: newPdfData, documentId });
   applicationContext.logger.timeEnd('Saving S3 Document');
 
-  const workItemToUpdate = courtIssuedDocument.workItems[0];
+  const workItemToUpdate = courtIssuedDocument.getQCWorkItem();
   await completeWorkItem({
     applicationContext,
     courtIssuedDocument,
