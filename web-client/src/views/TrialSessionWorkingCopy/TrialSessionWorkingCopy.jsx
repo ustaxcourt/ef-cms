@@ -20,7 +20,6 @@ export const TrialSessionWorkingCopy = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     showModal: state.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
-    zipInProgress: state.zipInProgress,
   },
   ({
     batchDownloadTrialSessionSequence,
