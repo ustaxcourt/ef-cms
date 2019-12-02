@@ -1,6 +1,6 @@
 import { formatWorkItem } from './formattedWorkQueue';
+import { orderBy } from 'lodash';
 import { state } from 'cerebral';
-import _ from 'lodash';
 
 export const extractedPendingMessagesFromCaseDetail = (
   get,
@@ -15,6 +15,6 @@ export const extractedPendingMessagesFromCaseDetail = (
       workItem => !workItem.currentMessage.message.includes('batched for IRS'),
     )
     .filter(workItem => !workItem.hideFromPendingMessages);
-  workQueue = _.orderBy(workQueue, 'currentMessage.createdAt', 'desc');
+  workQueue = orderBy(workQueue, 'currentMessage.createdAt', 'desc');
   return workQueue;
 };
