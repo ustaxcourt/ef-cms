@@ -72,7 +72,7 @@ hr {
 }
 
 .sticky-footer {
-  background-color: color($theme-color-base-lightest);
+  background-color: $color-white;
 
   &.sticky-footer--space {
     height: 135px;
@@ -1398,6 +1398,10 @@ button.change-scanner-button {
     .right-gray-border {
       border-right: 1px solid color($theme-color-base-light);
     }
+
+    .advanced-search__form-container {
+      height: 326px;
+    }
   }
   /* little screens */
   @media only screen and (max-width: $medium-screen - 1) {
@@ -1407,9 +1411,6 @@ button.change-scanner-button {
     }
   }
 
-  .advanced-search__form-container {
-    height: 326px;
-  }
 
   .advanced-search__button {
     margin-top: 39px;
