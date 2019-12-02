@@ -38,19 +38,18 @@ describe('batchDownloadTrialSessionAction', () => {
       getUseCases: () => ({
         batchDownloadTrialSessionInteractor: batchDownloadTrialSessionInteractorStub.mockImplementation(
           () => {
-            throw 'Guy Fieri has connected to the server.';
+            throw new Error('Guy Fieri has connected to the server.');
           },
         ),
       }),
     };
-
-    const result = await runAction(batchDownloadTrialSessionAction, {
+    await runAction(batchDownloadTrialSessionAction, {
       modules: {
         presenter,
       },
     });
 
-    expect(result).rejects.toThrow();
+    expect(batchDownloadTrialSessionInteractorStub).toThrow();
     expect(pathErrorStub).toHaveBeenCalled();
   });
 });
