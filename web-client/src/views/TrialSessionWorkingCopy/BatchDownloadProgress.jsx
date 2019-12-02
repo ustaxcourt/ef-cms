@@ -10,15 +10,8 @@ export const BatchDownloadProgress = connect(
   },
   ({ batchDownloadHelper, showModal }) => {
     const windowUnload = e => {
-      const performanceNavigation = window.performance.navigation;
-
-      let navigationAction = 'navigate away';
-
-      if (performanceNavigation.type === performanceNavigation.TYPE_RELOAD) {
-        e.returnValue = 'reload';
-      }
-
-      e.returnValue = `Are you sure you want to ${navigationAction}? Changes made will not be saved.`;
+      e.returnValue =
+        'Are you sure you want to navigate away? Changes made will not be saved.';
       e.preventDefault();
 
       return e.returnValue;
