@@ -10,16 +10,23 @@ export const BatchDownloadProgress = connect(
   },
   ({ batchDownloadHelper, showModal }) => {
     const windowUnload = e => {
+      const performanceNavigation = window.performance.navigation;
+
+      let navigationAction = 'navigate away';
+
+      if (performanceNavigation.type === performanceNavigation.TYPE_RELOAD) {
+        e.returnValue = 'reload';
+      }
+
+      e.returnValue = `Are you sure you want to ${navigationAction}? Changes made will not be saved.`;
       e.preventDefault();
 
-      return 'test';
+      return e.returnValue;
     };
 
     useEffect(() => {
-      console.log('added listener');
       window.addEventListener('beforeunload', windowUnload, false);
       return () => {
-        console.log('removed listener');
         window.removeEventListener('beforeunload', windowUnload, false);
       };
     }, []);
