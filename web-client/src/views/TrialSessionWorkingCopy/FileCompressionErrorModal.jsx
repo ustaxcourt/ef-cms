@@ -5,10 +5,10 @@ import React from 'react';
 
 export const FileCompressionErrorModal = connect(
   {
-    trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
+    trialSession: state.trialSession,
   },
-  ({ onConfirmSequence, trialSessionWorkingCopyHelper }) => {
-    const trialSessionTitle = trialSessionWorkingCopyHelper;
+  ({ trialSession }) => {
+    const trialSessionTitle = trialSession.trialLocation;
 
     return (
       <ConfirmModal
@@ -17,11 +17,11 @@ export const FileCompressionErrorModal = connect(
         preventCancelOnBlur={true}
         title="File Compression Error"
         onCancelSequence="clearModalSequence"
-        onConfirmSequence={onConfirmSequence}
+        onConfirmSequence="batchDownloadTrialSessionSequence"
       >
         <p>
-          An error occurred during the file compression of “{trialSessionTitle},{' '}
-          {trialSessionTitle}” trial session. Do you want to try again?
+          An error occurred during the file compression of “{trialSessionTitle}”
+          trial session. Do you want to try again?
         </p>
       </ConfirmModal>
     );

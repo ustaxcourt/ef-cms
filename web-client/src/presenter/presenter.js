@@ -109,7 +109,6 @@ import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequ
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { navigateToPrintableDocketRecordSequence } from './sequences/navigateToPrintableDocketRecordSequence';
-import { navigationWarningSequence } from './sequences/navigationWarningSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAddEditCaseNoteModalFromDetailSequence } from './sequences/openAddEditCaseNoteModalFromDetailSequence';
 import { openAddEditCaseNoteModalFromListSequence } from './sequences/openAddEditCaseNoteModalFromListSequence';
@@ -426,7 +425,6 @@ export const presenter = {
     navigateToPathSequence,
     navigateToPrintableCaseConfirmationSequence,
     navigateToPrintableDocketRecordSequence,
-    navigationWarningSequence,
     notFoundErrorSequence,
     openAddEditCaseNoteModalFromDetailSequence,
     openAddEditCaseNoteModalFromListSequence,
