@@ -30,5 +30,24 @@ describe('batchDownloadTrialSessionAction', () => {
     expect(pathSuccessStub).toHaveBeenCalled();
   });
 
-  it('fails', async () => {});
+  it('calls the error path if an exception is thrown', async () => {
+    presenter.providers.applicationContext = {
+      getUseCases: () => ({
+        batchDownloadTrialSessionInteractor: batchDownloadTrialSessionInteractorStub.mockImplementation(
+          () => {
+            throw 'Guy Fieri has connected to the server.';
+          },
+        ),
+      }),
+    };
+
+    const result = await runAction(batchDownloadTrialSessionAction, {
+      modules: {
+        presenter,
+      },
+    });
+
+    expect(result).rejects.toThrow();
+    expect(pathErrorStub).toHaveBeenCalled();
+  });
 });

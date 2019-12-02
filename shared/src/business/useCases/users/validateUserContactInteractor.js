@@ -7,7 +7,7 @@
  * @returns {object} errors (null if no errors)
  */
 exports.validateUserContactInteractor = ({ applicationContext, user }) => {
-  const errors = new (applicationContext.getEntityConstructors().User)(
+  const errors = new (applicationContext.getEntityConstructors()).User(
     user,
   ).getFormattedValidationErrors();
   return errors || null;

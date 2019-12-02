@@ -10,7 +10,7 @@ exports.validateInitialWorkItemMessageInteractor = ({
   applicationContext,
   message,
 }) => {
-  return new (applicationContext.getEntityConstructors().InitialWorkItemMessage)(
+  return new (applicationContext.getEntityConstructors()).InitialWorkItemMessage(
     message,
   ).getFormattedValidationErrors();
 };

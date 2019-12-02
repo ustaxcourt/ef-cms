@@ -7,7 +7,7 @@
  * @returns {object} the errors or null
  */
 exports.validateNoteInteractor = ({ applicationContext, note }) => {
-  const errors = new (applicationContext.getEntityConstructors().Note)(
+  const errors = new (applicationContext.getEntityConstructors()).Note(
     note,
   ).getFormattedValidationErrors();
   if (!errors) return null;
