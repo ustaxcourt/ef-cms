@@ -1,26 +1,26 @@
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
 import { back, externalRoute, route, router } from './routerPublic';
+import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
+import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
+
+import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
-import { withAppContextDecorator } from './withAppContext';
 import App from 'cerebral';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import { faUser } from '@fortawesome/free-regular-svg-icons';
-
-import {
-  faSearch,
-  faTimesCircle as faTimesCircleRegular,
-} from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Instantiates the Cerebral app with React
  */
 const appPublic = {
   initialize: async (applicationContext, debugTools) => {
+    const withAppContextDecorator = (f, context) => {
+      return get => f(get, context || applicationContext);
+    };
+
     // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
     presenter.state = mapValues(presenter.state, value => {
       if (isFunction(value)) {
