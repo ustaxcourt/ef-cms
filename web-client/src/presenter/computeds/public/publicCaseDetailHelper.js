@@ -4,7 +4,7 @@ export const publicCaseDetailHelper = get => {
   const publicCase = get(state.caseDetail);
 
   const formatDocketRecord = docketRecord =>
-    (docketRecord || []).map(entry => {
+    docketRecord.map(entry => {
       entry.showPaperIcon = !!(entry.document && entry.document.isPaper);
       return entry;
     });
