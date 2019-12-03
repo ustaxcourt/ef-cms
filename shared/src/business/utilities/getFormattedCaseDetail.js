@@ -426,6 +426,8 @@ const getFormattedCaseDetail = ({
 module.exports = {
   formatCase,
   formatCaseDeadlines,
+  formatDocketRecord,
+  formatDocketRecordWithDocument,
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,

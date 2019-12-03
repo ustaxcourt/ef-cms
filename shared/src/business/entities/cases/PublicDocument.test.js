@@ -9,8 +9,11 @@ describe('PublicDocument', () => {
       documentType: 'testing',
       eventCode: 'testing',
       filedBy: 'testing',
+      isPaper: true,
       processingStatus: 'testing',
       receivedAt: 'testing',
+      servedAt: '2019-03-01T21:40:46.415Z',
+      status: 'served',
     });
 
     expect(entity.toRawObject()).toEqual({
@@ -20,8 +23,11 @@ describe('PublicDocument', () => {
       documentType: 'testing',
       eventCode: 'testing',
       filedBy: 'testing',
+      isPaper: true,
       processingStatus: 'testing',
       receivedAt: 'testing',
+      servedAt: '2019-03-01T21:40:46.415Z',
+      status: 'served',
     });
   });
 });
