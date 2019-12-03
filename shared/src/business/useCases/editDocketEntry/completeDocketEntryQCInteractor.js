@@ -133,11 +133,9 @@ exports.completeDocketEntryQCInteractor = async ({
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
   caseEntity.updateDocument(updatedDocument);
 
-  const workItemsToUpdate = currentDocument.workItems.filter(
-    workItem => workItem.isQC === true,
-  );
+  const workItemToUpdate = updatedDocument.getQCWorkItem();
 
-  for (const workItemToUpdate of workItemsToUpdate) {
+  if (workItemToUpdate) {
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,
       workItem: workItemToUpdate,
