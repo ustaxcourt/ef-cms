@@ -19,7 +19,7 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   handler       = "index.handler"
   source_code_hash = "${data.archive_file.zip_triggers.output_base64sha256}"
   
-  runtime = "nodejs10.x"
+  runtime = "nodejs12.x"
 
   environment {
     variables = {
