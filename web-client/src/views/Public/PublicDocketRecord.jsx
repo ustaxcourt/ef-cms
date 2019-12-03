@@ -40,9 +40,7 @@ export const PublicDocketRecord = connect(
           </thead>
           <tbody>
             {publicCaseDetailHelper.formattedDocketRecord.map(
-              ({ document, index, record }, arrayIndex) => {
-                const isPaper = document && document.isPaper;
-
+              ({ document, index, record, showPaperIcon }, arrayIndex) => {
                 return (
                   <tr key={index}>
                     <td className="center-column hide-on-mobile">{index}</td>
@@ -58,7 +56,7 @@ export const PublicDocketRecord = connect(
                       aria-hidden="true"
                       className="filing-type-icon hide-on-mobile"
                     >
-                      {isPaper && (
+                      {showPaperIcon && (
                         <FontAwesomeIcon icon={['fas', 'file-alt']} />
                       )}
                     </td>
