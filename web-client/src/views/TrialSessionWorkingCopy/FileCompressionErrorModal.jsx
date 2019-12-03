@@ -15,6 +15,9 @@ export const FileCompressionErrorModal = connect(
       <ConfirmModal
         cancelLabel="Cancel"
         confirmLabel="Try Again"
+        hasErrorState={true}
+        headerIcon="info-circle"
+        headerIconClassName="text-secondary-dark"
         noCancel={!allowRetry}
         noConfirm={!allowRetry}
         preventCancelOnBlur={true}
