@@ -19,6 +19,7 @@ module.exports = {
     },
   },
   globals: {
+    atob: x => x,
     window: { document: {} },
   },
   testEnvironment: 'node',
