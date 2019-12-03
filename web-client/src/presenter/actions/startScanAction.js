@@ -17,7 +17,7 @@ export const startScanAction = async ({
   store,
 }) => {
   store.set(state.isScanning, true);
-  const scanner = applicationContext.getScanner();
+  const scanner = await applicationContext.getScanner();
   scanner.setSourceByIndex(props.scannerSourceIndex);
   try {
     const { scannedBuffer: pages } = await scanner.startScanSession({

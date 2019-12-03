@@ -1,10 +1,9 @@
 const pdfjsLib = require('pdfjs-dist');
-const { PDFDocument } = require('pdf-lib');
-
 const sinon = require('sinon');
 const {
   loadPDFForSigningInteractor,
 } = require('./loadPDFForSigningInteractor');
+const { PDFDocument } = require('pdf-lib');
 
 const removePageMock = jest.fn();
 const saveMock = jest.fn();
@@ -31,6 +30,7 @@ describe('loadPDFForSigningInteractor', () => {
   it('loadPDFForSigning', async () => {
     const result = await loadPDFForSigningInteractor({
       applicationContext: {
+        getPdfJs: async () => pdfjsLib,
         getPersistenceGateway: () => ({
           getDocument: () => null,
         }),
@@ -43,6 +43,7 @@ describe('loadPDFForSigningInteractor', () => {
   it('should remove the first page of the PDF if `removeCover` is set to true', async () => {
     await loadPDFForSigningInteractor({
       applicationContext: {
+        getPdfJs: async () => pdfjsLib,
         getPersistenceGateway: () => ({
           getDocument: () => null,
         }),
@@ -59,6 +60,7 @@ describe('loadPDFForSigningInteractor', () => {
     try {
       await loadPDFForSigningInteractor({
         applicationContext: {
+          getPdfJs: async () => pdfjsLib,
           getPersistenceGateway: () => ({
             getDocument: () => {
               throw new Error('something');
