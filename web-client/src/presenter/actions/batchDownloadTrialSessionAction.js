@@ -17,7 +17,7 @@ export const batchDownloadTrialSessionAction = async ({
       applicationContext,
       trialSessionId: props.trialSessionId,
     });
-    return path.error({ showModal: 'FileCompressionErrorModal' });
+    return path.success();
   } catch (e) {
     return path.error({ showModal: 'FileCompressionErrorModal' });
   }
