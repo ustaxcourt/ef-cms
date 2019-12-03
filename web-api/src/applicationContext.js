@@ -60,7 +60,7 @@ const {
 } = require('../../shared/src/business/entities/cases/CaseInternal');
 const {
   casePublicSearchInteractor,
-} = require('../../shared/src/business/useCases/casePublicSearchInteractor');
+} = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
 const {
   CaseSearch,
 } = require('../../shared/src/business/entities/cases/CaseSearch');
@@ -365,7 +365,7 @@ const {
 } = require('../../shared/src/business/useCases/users/getPractitionersBySearchKeyInteractor');
 const {
   getPublicCaseInteractor,
-} = require('../../shared/src/business/useCases/getPublicCaseInteractor');
+} = require('../../shared/src/business/useCases/public/getPublicCaseInteractor');
 const {
   getRespondentsBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getRespondentsBySearchKeyInteractor');
