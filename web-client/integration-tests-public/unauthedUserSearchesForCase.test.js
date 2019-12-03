@@ -1,5 +1,7 @@
 import { fakeFile, setupTest } from './helpers';
 
+import { setupTest as setupTestClient } from '../integration-tests/helpers';
+
 // Petitioner
 import petitionerChoosesCaseType from '../integration-tests/journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from '../integration-tests/journey/petitionerChoosesProcedureType';
@@ -10,20 +12,23 @@ import userSignsOut from '../integration-tests/journey/petitionerSignsOut';
 
 // Public User
 import unauthedUserNavigatesToPublicSite from './journey/unauthedUserNavigatesToPublicSite';
+import unauthedUserSearchesByDocketNumber from './journey/unauthedUserSearchesByDocketNumber';
 import unauthedUserSearchesByMeta from './journey/unauthedUserSearchesByMeta';
 
 const test = setupTest();
+const testClient = setupTestClient();
 
 describe('Petitioner creates cases to search for', () => {
-  petitionerLogin(test);
-  petitionerNavigatesToCreateCase(test);
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
-  userSignsOut(test);
+  petitionerLogin(testClient);
+  petitionerNavigatesToCreateCase(testClient);
+  petitionerChoosesProcedureType(testClient);
+  petitionerChoosesCaseType(testClient);
+  petitionerCreatesNewCase(testClient, fakeFile);
+  userSignsOut(testClient);
 });
 
 describe('Unauthed user searches for a case', () => {
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserSearchesByMeta(test);
+  unauthedUserSearchesByDocketNumber(test, testClient);
 });
