@@ -31,6 +31,7 @@ import petitionerSignsOut from './journey/petitionerSignsOut';
 
 let test;
 global.FormData = FormData;
+presenter.providers.applicationContext = applicationContext;
 presenter.providers.router = {
   createObjectURL: () => {},
   externalRoute: () => {},
