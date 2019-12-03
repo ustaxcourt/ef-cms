@@ -127,9 +127,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     ];
 
     if (caseEntity.isPaper) {
-      const qcWorkItem = petitionDocument.workItems.find(
-        wi => wi.isQC === true,
-      );
+      const qcWorkItem = petitionDocument.getQCWorkItem();
 
       const qcWorkItemUser = await applicationContext
         .getPersistenceGateway()
