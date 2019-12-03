@@ -1,4 +1,3 @@
-import { FileCompressionErrorModal } from './FileCompressionErrorModal';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React, { useEffect } from 'react';
@@ -24,11 +23,10 @@ export const BatchDownloadProgress = connect(
       };
     }, []);
 
+    console.log('showModal', showModal);
+
     return (
       <div>
-        {showModal === 'FileCompressionErrorModal' && (
-          <FileCompressionErrorModal />
-        )}
         <div className="sticky-footer sticky-footer--space" />
         <div className="sticky-footer sticky-footer--container">
           <div className="usa-section grid-container padding-bottom-0">

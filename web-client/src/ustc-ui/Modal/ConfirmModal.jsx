@@ -16,6 +16,9 @@ export const ConfirmModal = connect(
     children,
     className,
     confirmLabel,
+    hasErrorState,
+    headerIcon,
+    headerIconColor,
     noCancel,
     noCloseBtn,
     noConfirm,
@@ -25,6 +28,9 @@ export const ConfirmModal = connect(
     preventCancelOnBlur,
     title,
   }) => {
+    hasErrorState = hasErrorState || true;
+    headerIcon = headerIcon || null;
+    headerIconColor = headerIconColor || '';
     confirmLabel = confirmLabel || 'Ok';
     cancelLabel = cancelLabel || 'Cancel';
 
@@ -55,11 +61,11 @@ export const ConfirmModal = connect(
 
     return (
       <BaseModal
-        className={className}
+        className={classNames(className, hasErrorState && 'modal-error')}
         preventCancelOnBlur={preventCancelOnBlur}
         onBlurSequence={onCancelSequence}
       >
-        <div className="modal-header grid-container padding-x-0">
+        <div className={classNames('modal-header grid-container padding-x-0')}>
           <div className="grid-row">
             <div
               className={classNames(
@@ -67,6 +73,13 @@ export const ConfirmModal = connect(
               )}
             >
               <h3 className="modal-header__title" tabIndex="-1">
+                {headerIcon && (
+                  <FontAwesomeIcon
+                    className={headerIconColor}
+                    icon={headerIcon}
+                    size="lg"
+                  />
+                )}{' '}
                 {title}
               </h3>
             </div>

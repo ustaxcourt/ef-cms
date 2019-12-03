@@ -14,6 +14,9 @@ export const FileCompressionErrorModal = connect(
       <ConfirmModal
         cancelLabel="Cancel"
         confirmLabel="Try Again"
+        hasErrorState={true}
+        headerIcon="info-circle"
+        headerIconColor="text-secondary-dark"
         preventCancelOnBlur={true}
         title="File Compression Error"
         onCancelSequence="clearModalSequence"
