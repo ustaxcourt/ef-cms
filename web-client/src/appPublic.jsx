@@ -37,13 +37,13 @@ const appPublic = {
     });
 
     library.add(
+      faFileAltSolid,
+      faPrint,
       faSearch,
       faSync,
-      faTimesCircleRegular,
       faTimesCircle,
+      faTimesCircleRegular,
       faUser,
-      faPrint,
-      faFileAltSolid,
     );
 
     presenter.providers.applicationContext = applicationContext;
