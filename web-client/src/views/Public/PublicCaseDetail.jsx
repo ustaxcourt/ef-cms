@@ -1,5 +1,5 @@
 import { PublicCaseDetailHeader } from './PublicCaseDetailHeader';
-import { PublicDocketRecord } from './DocketRecord/PublicDocketRecord';
+import { PublicDocketRecord } from './PublicDocketRecord';
 import { connect } from '@cerebral/react';
 import React from 'react';
 
