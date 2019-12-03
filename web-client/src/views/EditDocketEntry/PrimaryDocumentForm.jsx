@@ -73,86 +73,88 @@ export const PrimaryDocumentForm = connect(
             </fieldset>
           </FormGroup>
 
-          <FormGroup errorText={validationErrors.dateReceived}>
-            <fieldset className="usa-fieldset date-received">
-              <legend id="usa-legend date-received-legend">
-                Date received
-              </legend>
-              <div className="usa-memorable-date">
-                <div className="usa-form-group usa-form-group--month">
-                  <input
-                    aria-describedby="date-received-legend"
-                    aria-label="month, two digits"
-                    className="usa-input usa-input--inline"
-                    id="date-received-month"
-                    max="12"
-                    min="1"
-                    name="dateReceivedMonth"
-                    placeholder="MM"
-                    type="number"
-                    value={form.dateReceivedMonth || ''}
-                    onBlur={() => {
-                      saveIntermediateDocketEntrySequence();
-                    }}
-                    onChange={e => {
-                      updateDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: limitLength(e.target.value, 2),
-                      });
-                    }}
-                  />
+          {addDocketEntryHelper.showDateReceivedEdit && (
+            <FormGroup errorText={validationErrors.dateReceived}>
+              <fieldset className="usa-fieldset date-received">
+                <legend id="usa-legend date-received-legend">
+                  Date received
+                </legend>
+                <div className="usa-memorable-date">
+                  <div className="usa-form-group usa-form-group--month">
+                    <input
+                      aria-describedby="date-received-legend"
+                      aria-label="month, two digits"
+                      className="usa-input usa-input--inline"
+                      id="date-received-month"
+                      max="12"
+                      min="1"
+                      name="dateReceivedMonth"
+                      placeholder="MM"
+                      type="number"
+                      value={form.dateReceivedMonth || ''}
+                      onBlur={() => {
+                        saveIntermediateDocketEntrySequence();
+                      }}
+                      onChange={e => {
+                        updateDocketEntryFormValueSequence({
+                          key: e.target.name,
+                          value: limitLength(e.target.value, 2),
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="usa-form-group usa-form-group--day">
+                    <input
+                      aria-describedby="date-received-legend"
+                      aria-label="day, two digits"
+                      className="usa-input usa-input--inline"
+                      id="date-received-day"
+                      max="31"
+                      maxLength="2"
+                      min="1"
+                      name="dateReceivedDay"
+                      placeholder="DD"
+                      type="number"
+                      value={form.dateReceivedDay || ''}
+                      onBlur={() => {
+                        saveIntermediateDocketEntrySequence();
+                      }}
+                      onChange={e => {
+                        updateDocketEntryFormValueSequence({
+                          key: e.target.name,
+                          value: limitLength(e.target.value, 2),
+                        });
+                      }}
+                    />
+                  </div>
+                  <div className="usa-form-group usa-form-group--year">
+                    <input
+                      aria-describedby="date-received-legend"
+                      aria-label="year, four digits"
+                      className="usa-input usa-input--inline"
+                      id="date-received-year"
+                      max="2100"
+                      maxLength="4"
+                      min="1900"
+                      name="dateReceivedYear"
+                      placeholder="YYYY"
+                      type="number"
+                      value={form.dateReceivedYear || ''}
+                      onBlur={() => {
+                        saveIntermediateDocketEntrySequence();
+                      }}
+                      onChange={e => {
+                        updateDocketEntryFormValueSequence({
+                          key: e.target.name,
+                          value: limitLength(e.target.value, 4),
+                        });
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="usa-form-group usa-form-group--day">
-                  <input
-                    aria-describedby="date-received-legend"
-                    aria-label="day, two digits"
-                    className="usa-input usa-input--inline"
-                    id="date-received-day"
-                    max="31"
-                    maxLength="2"
-                    min="1"
-                    name="dateReceivedDay"
-                    placeholder="DD"
-                    type="number"
-                    value={form.dateReceivedDay || ''}
-                    onBlur={() => {
-                      saveIntermediateDocketEntrySequence();
-                    }}
-                    onChange={e => {
-                      updateDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: limitLength(e.target.value, 2),
-                      });
-                    }}
-                  />
-                </div>
-                <div className="usa-form-group usa-form-group--year">
-                  <input
-                    aria-describedby="date-received-legend"
-                    aria-label="year, four digits"
-                    className="usa-input usa-input--inline"
-                    id="date-received-year"
-                    max="2100"
-                    maxLength="4"
-                    min="1900"
-                    name="dateReceivedYear"
-                    placeholder="YYYY"
-                    type="number"
-                    value={form.dateReceivedYear || ''}
-                    onBlur={() => {
-                      saveIntermediateDocketEntrySequence();
-                    }}
-                    onChange={e => {
-                      updateDocketEntryFormValueSequence({
-                        key: e.target.name,
-                        value: limitLength(e.target.value, 4),
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </fieldset>
-          </FormGroup>
+              </fieldset>
+            </FormGroup>
+          )}
 
           <FormGroup errorText={validationErrors.eventCode}>
             <label

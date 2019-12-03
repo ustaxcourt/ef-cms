@@ -117,4 +117,16 @@ describe('addDocketEntryHelper', () => {
     const result = runCompute(addDocketEntryHelper, { state });
     expect(result.showTrackOption).toBeFalsy();
   });
+
+  it('should not show date received edit if filed electronically', () => {
+    state.caseDetail.isPaper = false;
+    const result = runCompute(addDocketEntryHelper, { state });
+    expect(result.showDateReceivedEdit).toBeFalsy();
+  });
+
+  it('should show date received edit if filed with paper', () => {
+    state.caseDetail.isPaper = true;
+    const result = runCompute(addDocketEntryHelper, { state });
+    expect(result.showDateReceivedEdit).toBeTruthy();
+  });
 });
