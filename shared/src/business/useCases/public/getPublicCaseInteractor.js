@@ -1,6 +1,6 @@
-const { Case } = require('../entities/cases/Case');
-const { NotFoundError } = require('../../errors/errors');
-const { PublicCase } = require('../entities/cases/PublicCase');
+const { Case } = require('../../entities/cases/Case');
+const { NotFoundError } = require('../../../errors/errors');
+const { PublicCase } = require('../../entities/cases/PublicCase');
 
 /**
  * getPublicCaseInteractor

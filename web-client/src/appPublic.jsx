@@ -1,17 +1,17 @@
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
 import { back, externalRoute, route, router } from './routerPublic';
-import {
-  faFileAlt as faFileAltSolid,
-  faPrint,
-  faSearch,
-  faSync,
-  faTimesCircle,
-} from '@fortawesome/free-solid-svg-icons';
-import {
-  faTimesCircle as faTimesCircleRegular,
-  faUser,
-} from '@fortawesome/free-regular-svg-icons';
+
+// Icons - Solid
+import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
+import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
+import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
+import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
+// Icons - Regular
+import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
+import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
+
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
@@ -37,13 +37,13 @@ const appPublic = {
     });
 
     library.add(
+      faFileAltSolid,
+      faPrint,
       faSearch,
       faSync,
-      faTimesCircleRegular,
       faTimesCircle,
+      faTimesCircleRegular,
       faUser,
-      faPrint,
-      faFileAltSolid,
     );
 
     presenter.providers.applicationContext = applicationContext;

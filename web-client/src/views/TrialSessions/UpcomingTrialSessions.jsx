@@ -77,7 +77,7 @@ export const UpcomingTrialSessions = connect(
               <th>Location</th>
               <th>Type</th>
               <th>Judge</th>
-              <th aria-label="Number of cases">No. of Cases</th>
+              <th aria-label="Number of cases">No. of cases</th>
             </tr>
           </thead>
           {formattedTrialSessions.map((trialDate, idxDate) => (
