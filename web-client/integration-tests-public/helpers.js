@@ -30,6 +30,18 @@ exports.setupTest = ({ useCases = {} } = {}) => {
     externalRoute: url => {
       test.currentRouteUrl = url;
     },
+    route: async url => {
+      test.currentRouteUrl = url;
+      switch (url) {
+        case `/case-detail/${test.docketNumber}`:
+          await test.runSequence('gotoPublicCaseDetailSequence', {
+            docketNumber: test.docketNumber,
+          });
+          break;
+        default:
+          break;
+      }
+    },
   };
 
   presenter.state = mapValues(presenter.state, value => {
