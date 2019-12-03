@@ -511,12 +511,6 @@ const applicationContext = {
       sortDocketRecords,
     };
   },
-  getWebSocketClient: token => {
-    const notificationsUrl = process.env.WS_URL || 'ws://localhost:3011';
-    const connectionUrl = `${notificationsUrl}?token=${token}`;
-    const socket = new WebSocket(connectionUrl);
-    return socket;
-  },
   setCurrentUser,
   setCurrentUserToken,
 };
