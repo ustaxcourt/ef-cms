@@ -1,7 +1,7 @@
-import { BigHeader } from './BigHeader';
-import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
-import { SearchForm } from './AdvancedSearch/SearchForm';
-import { SearchResults } from './AdvancedSearch/SearchResults';
+import { BigHeader } from '../BigHeader';
+import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { SearchForm } from '../AdvancedSearch/SearchForm';
+import { SearchResults } from '../AdvancedSearch/SearchResults';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
