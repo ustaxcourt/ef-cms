@@ -2,8 +2,10 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { PublicContact } = require('./PublicContact');
 const { PublicDocketRecordEntry } = require('./PublicDocketRecordEntry');
 const { PublicDocument } = require('./PublicDocument');
+
 /**
  * Public Case Entity
  * Represents the view of the public case.
@@ -14,8 +16,6 @@ const { PublicDocument } = require('./PublicDocument');
 function PublicCase(rawCase, { applicationContext }) {
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId;
-  this.contactPrimary = rawCase.contactPrimary;
-  this.contactSecondary = rawCase.contactSecondary;
   this.createdAt = rawCase.createdAt;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
@@ -23,11 +23,16 @@ function PublicCase(rawCase, { applicationContext }) {
   this.caseCaption = rawCase.caseCaption;
   this.caseTitle = rawCase.caseTitle;
 
-  this.documents = rawCase.documents.map(
+  this.contactPrimary = new PublicContact(rawCase.contactPrimary);
+  this.contactSecondary = new PublicContact(rawCase.contactSecondary);
+
+  // rawCase.documents is not returned in elasticsearch queries due to _source definition
+  this.documents = (rawCase.documents || []).map(
     document => new PublicDocument(document, { applicationContext }),
   );
 
-  this.docketRecord = rawCase.docketRecord.map(
+  // rawCase.docketRecord is not returned in elasticsearch queries due to _source definition
+  this.docketRecord = (rawCase.docketRecord || []).map(
     entry => new PublicDocketRecordEntry(entry, { applicationContext }),
   );
 }
