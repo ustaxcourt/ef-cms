@@ -23,8 +23,6 @@ export const BatchDownloadProgress = connect(
       };
     }, []);
 
-    console.log('showModal', showModal);
-
     return (
       <div>
         <div className="sticky-footer sticky-footer--space" />

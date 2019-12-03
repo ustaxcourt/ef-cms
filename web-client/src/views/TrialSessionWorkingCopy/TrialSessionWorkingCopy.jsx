@@ -67,9 +67,6 @@ export const TrialSessionWorkingCopy = connect(
           <ErrorNotification />
           <SessionNotes />
           <WorkingCopySessionList />
-          {showModal === 'FileCompressionErrorModal' && (
-            <FileCompressionErrorModal />
-          )}
           {showModal === 'DeleteCaseNoteConfirmModal' && (
             <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteFromWorkingCopySequence" />
           )}
