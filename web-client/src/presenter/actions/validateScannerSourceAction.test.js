@@ -11,14 +11,19 @@ presenter.providers.path = {
 };
 
 presenter.providers.applicationContext = {
-  getScanner: () => ({
+  getScanner: async () => ({
     getSourceNameByIndex: index => `Scanner-${index}`,
   }),
 };
 
 describe('validateScannerSourceAction', () => {
+  afterEach(() => {
+    invalidMock.mockReset();
+    validMock.mockReset();
+  });
+
   it('should return the invalid path if props.scannerSourceIndex is null', async () => {
-    runAction(validateScannerSourceAction, {
+    await runAction(validateScannerSourceAction, {
       modules: {
         presenter,
       },
@@ -31,7 +36,7 @@ describe('validateScannerSourceAction', () => {
   });
 
   it('should return the invalid path if props.scannerSourceName DOES NOT match an available source', async () => {
-    runAction(validateScannerSourceAction, {
+    await runAction(validateScannerSourceAction, {
       modules: {
         presenter,
       },
@@ -44,7 +49,7 @@ describe('validateScannerSourceAction', () => {
   });
 
   it('should return the valid path if props.scannerSourceName matches an available source', async () => {
-    runAction(validateScannerSourceAction, {
+    await runAction(validateScannerSourceAction, {
       modules: {
         presenter,
       },
