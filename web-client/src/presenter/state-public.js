@@ -1,6 +1,7 @@
 import { menuHelper } from './computeds/menuHelper';
 
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
+import { loadingHelper } from './computeds/loadingHelper';
 
 export const state = {
   advancedSearchForm: {
@@ -13,6 +14,7 @@ export const state = {
   },
   currentPage: 'PublicSearch',
   docketNumberSearchForm: {},
+  loadingHelper,
   menuHelper,
   mobileMenu: {
     isVisible: false,
@@ -23,4 +25,5 @@ export const state = {
   },
   user: {},
   validationErrors: {},
+  waitingForResponse: false,
 };

@@ -7,7 +7,7 @@ export const BatchDownloadProgress = connect(
     batchDownloadHelper: state.batchDownloadHelper,
     showModal: state.showModal,
   },
-  ({ batchDownloadHelper, showModal }) => {
+  ({ batchDownloadHelper }) => {
     const windowUnload = e => {
       e.returnValue =
         'Are you sure you want to navigate away? Changes made will not be saved.';

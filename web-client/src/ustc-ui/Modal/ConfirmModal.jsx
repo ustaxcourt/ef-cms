@@ -18,7 +18,7 @@ export const ConfirmModal = connect(
     confirmLabel,
     hasErrorState,
     headerIcon,
-    headerIconColor,
+    headerIconClassName,
     noCancel,
     noCloseBtn,
     noConfirm,
@@ -30,7 +30,7 @@ export const ConfirmModal = connect(
   }) => {
     hasErrorState = hasErrorState || true;
     headerIcon = headerIcon || null;
-    headerIconColor = headerIconColor || '';
+    headerIconClassName = headerIconClassName || '';
     confirmLabel = confirmLabel || 'Ok';
     cancelLabel = cancelLabel || 'Cancel';
 
@@ -75,7 +75,7 @@ export const ConfirmModal = connect(
               <h3 className="modal-header__title" tabIndex="-1">
                 {headerIcon && (
                   <FontAwesomeIcon
-                    className={headerIconColor}
+                    className={headerIconClassName}
                     icon={headerIcon}
                     size="lg"
                   />
