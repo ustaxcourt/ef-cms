@@ -1,5 +1,5 @@
 import { navigateToPublicSiteAction } from './navigateToPublicSiteAction';
-import { presenter } from '../presenter-public';
+import { presenter } from '../../presenter-public';
 import { runAction } from 'cerebral/test';
 
 let externalRouteMock;

@@ -1,4 +1,5 @@
 module.exports = {
-  casePublicSearchLambda: require('./cases/casePublicSearchLambda').handler,
-  getPublicCaseLambda: require('./cases/getPublicCaseLambda').handler,
+  casePublicSearchLambda: require('./public-api/casePublicSearchLambda')
+    .handler,
+  getPublicCaseLambda: require('./public-api/getPublicCaseLambda').handler,
 };

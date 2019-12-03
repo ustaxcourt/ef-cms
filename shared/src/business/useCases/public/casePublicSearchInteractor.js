@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const {
   aggregateCommonQueryParams,
-} = require('../utilities/aggregateCommonQueryParams');
+} = require('../../utilities/aggregateCommonQueryParams');
 const { get } = require('lodash');
 
 /**
