@@ -15,7 +15,7 @@ export const setScannerSourceAction = async ({
   store,
 }) => {
   if (props.scannerSourceName) {
-    const scanner = applicationContext.getScanner();
+    const scanner = await applicationContext.getScanner();
     scanner.setSourceByName(props.scannerSourceName);
 
     await applicationContext.getUseCases().setItemInteractor({
