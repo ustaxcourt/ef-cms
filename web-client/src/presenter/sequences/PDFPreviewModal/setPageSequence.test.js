@@ -3,6 +3,7 @@ import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 
 presenter.providers.applicationContext = applicationContext;
+
 presenter.providers.applicationContext.getFileReader = () =>
   function() {
     this.onload = null;
@@ -13,7 +14,7 @@ presenter.providers.applicationContext.getFileReader = () =>
     };
   };
 
-presenter.providers.applicationContext.getPdfJs = () => ({
+presenter.providers.applicationContext.getPdfJs = async () => ({
   getDocument: () => {
     return {
       promise: Promise.resolve({
