@@ -9,6 +9,6 @@ export const batchDownloadTrialSessionSequence = [
   batchDownloadTrialSessionAction,
   {
     error: [setShowModalAction],
-    success: [],
+    // success: [],
   },
 ];
