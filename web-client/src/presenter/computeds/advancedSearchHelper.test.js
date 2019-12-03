@@ -85,7 +85,7 @@ describe('advancedSearchHelper', () => {
     });
   });
 
-  it('formats search results and sorts by docket number', () => {
+  it('formats search results', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
@@ -109,20 +109,20 @@ describe('advancedSearchHelper', () => {
     });
     expect(result.formattedSearchResults).toMatchObject([
       {
-        caseCaptionNames: 'Test Petitioner & Another Petitioner',
-        contactPrimaryName: 'Test Person',
-        contactSecondaryName: 'Another Person',
-        docketNumberWithSuffix: '102-18W',
-        formattedFiledDate: '05/01/19',
-        fullStateNamePrimary: 'Texas',
-      },
-      {
         caseCaptionNames: 'Test Petitioner',
         contactPrimaryName: 'Test Person',
         contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
         fullStateNamePrimary: 'Tennessee',
+      },
+      {
+        caseCaptionNames: 'Test Petitioner & Another Petitioner',
+        contactPrimaryName: 'Test Person',
+        contactSecondaryName: 'Another Person',
+        docketNumberWithSuffix: '102-18W',
+        formattedFiledDate: '05/01/19',
+        fullStateNamePrimary: 'Texas',
       },
     ]);
   });
@@ -154,12 +154,10 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults.length).toEqual(1);
     expect(result.formattedSearchResults).toMatchObject([
       {
-        caseCaptionNames: 'Test Petitioner & Another Petitioner',
+        caseCaptionNames: 'Test Petitioner',
         contactPrimaryName: 'Test Person',
-        contactSecondaryName: 'Another Person',
-        docketNumberWithSuffix: '102-18W',
-        formattedFiledDate: '05/01/18',
-        fullStateNamePrimary: 'Texas',
+        docketNumberWithSuffix: '101-19',
+        receivedAt: '2019-03-01T05:00:00.000Z',
       },
     ]);
 
@@ -196,13 +194,12 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults.length).toEqual(3);
     expect(result.formattedSearchResults).toMatchObject([
       {
-        caseCaptionNames: 'Test Petitioner & Another Petitioner',
-        contactPrimaryName: 'Test Petitioner',
-        contactSecondaryName: 'Another Petitioner',
-        docketNumberWithSuffix: '101-18W',
-        formattedFiledDate: '04/01/18',
-        fullStateNamePrimary: 'California',
-        fullStateNameSecondary: 'Tennessee',
+        caseCaptionNames: 'Test Petitioner',
+        contactPrimaryName: 'Test Person',
+        contactSecondaryName: undefined,
+        docketNumberWithSuffix: '101-19',
+        formattedFiledDate: '03/01/19',
+        fullStateNamePrimary: 'Tennessee',
       },
       {
         caseCaptionNames: 'Test Petitioner & Another Petitioner',
@@ -213,12 +210,13 @@ describe('advancedSearchHelper', () => {
         fullStateNamePrimary: 'Texas',
       },
       {
-        caseCaptionNames: 'Test Petitioner',
-        contactPrimaryName: 'Test Person',
-        contactSecondaryName: undefined,
-        docketNumberWithSuffix: '101-19',
-        formattedFiledDate: '03/01/19',
-        fullStateNamePrimary: 'Tennessee',
+        caseCaptionNames: 'Test Petitioner & Another Petitioner',
+        contactPrimaryName: 'Test Petitioner',
+        contactSecondaryName: 'Another Petitioner',
+        docketNumberWithSuffix: '101-18W',
+        formattedFiledDate: '04/01/18',
+        fullStateNamePrimary: 'California',
+        fullStateNameSecondary: 'Tennessee',
       },
     ]);
   });

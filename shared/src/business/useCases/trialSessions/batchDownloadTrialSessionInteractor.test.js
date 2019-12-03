@@ -13,10 +13,16 @@ describe('batchDownloadTrialSessionInteractor', () => {
     };
   });
 
+  let loggerMock;
+  let sendNotificationToUserMock;
+
   const zipDocumentsMock = jest.fn();
   const getDownloadPolicyUrlMock = jest.fn(() => ({ url: 'something' }));
 
   beforeEach(() => {
+    loggerMock = jest.fn();
+    sendNotificationToUserMock = jest.fn();
+
     getCalendaredCasesForTrialSessionMock = jest.fn(() => [
       {
         ...MOCK_CASE,
@@ -27,7 +33,9 @@ describe('batchDownloadTrialSessionInteractor', () => {
         role: User.ROLES.judge,
         userId: 'abc-123',
       }),
-      getNotificationGateway: () => ({ sendNotificationToUser: () => {} }),
+      getNotificationGateway: () => ({
+        sendNotificationToUser: sendNotificationToUserMock,
+      }),
       getPersistenceGateway: () => ({
         getCalendaredCasesForTrialSession: getCalendaredCasesForTrialSessionMock,
         getDownloadPolicyUrl: getDownloadPolicyUrlMock,
@@ -37,25 +45,30 @@ describe('batchDownloadTrialSessionInteractor', () => {
       getUseCases: () => ({
         generateDocketRecordPdfInteractor: async () => {},
       }),
+      logger: { info: loggerMock },
     };
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
-    let error;
     applicationContext.getCurrentUser = () => ({
       role: User.ROLES.petitioner,
       userId: 'abc-123',
     });
-    try {
-      await batchDownloadTrialSessionInteractor({
-        applicationContext,
-        trialSessionId: '123',
-      });
-    } catch (e) {
-      error = e;
-    }
 
-    expect(error.message).toEqual('Unauthorized');
+    await batchDownloadTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '123',
+    });
+
+    expect(loggerMock).toHaveBeenCalledWith('Error', expect.anything());
+    expect(sendNotificationToUserMock).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      message: {
+        action: 'batch_download_error',
+        error: expect.anything(),
+      },
+      userId: 'abc-123',
+    });
   });
 
   it('calls persistence functions to fetch trial sessions and associated cases and then zips their associated documents', async () => {

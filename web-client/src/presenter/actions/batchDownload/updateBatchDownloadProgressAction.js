@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
- * @param {object} providers.get the cerebral get function used for getting state.form
+ * @param {object} providers.get the cerebral get function used for getting state
  * @param {object} providers.props the cerebral props object
  */
 export const updateBatchDownloadProgressAction = ({ get, props, store }) => {
@@ -34,7 +34,7 @@ export const updateBatchDownloadProgressAction = ({ get, props, store }) => {
   }
 
   done = Math.max(done, lastDone);
-  store.set(state.zipInProgress, true);
+  store.set(state.batchDownloads.zipInProgress, true);
   store.set(state.batchDownloads.totalFiles, total);
   store.set(state.batchDownloads.fileCount, done);
 };
