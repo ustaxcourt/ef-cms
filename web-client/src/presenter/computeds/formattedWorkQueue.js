@@ -120,7 +120,7 @@ export const formatWorkItem = ({
   }${result.docketNumberSuffix || ''}`;
 
   result.selected = !!selectedWorkItems.find(
-    workItem => workItem.workItemId == result.workItemId,
+    selectedWorkItem => selectedWorkItem.workItemId == result.workItemId,
   );
 
   result.currentMessage = result.messages[0];
