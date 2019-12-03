@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const publicCaseDetailHelper = (get, applicationContext) => {
+export const publicCaseDetailHelper = get => {
   const publicCase = get(state.caseDetail);
 
   const formatDocketRecord = docketRecord => docketRecord || [];
