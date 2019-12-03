@@ -23,8 +23,12 @@ function PublicCase(rawCase, { applicationContext }) {
   this.caseCaption = rawCase.caseCaption;
   this.caseTitle = rawCase.caseTitle;
 
-  this.contactPrimary = new PublicContact(rawCase.contactPrimary);
-  this.contactSecondary = new PublicContact(rawCase.contactSecondary);
+  this.contactPrimary = rawCase.contactPrimary
+    ? new PublicContact(rawCase.contactPrimary)
+    : undefined;
+  this.contactSecondary = rawCase.contactSecondary
+    ? new PublicContact(rawCase.contactSecondary)
+    : undefined;
 
   // rawCase.documents is not returned in elasticsearch queries due to _source definition
   this.documents = (rawCase.documents || []).map(
