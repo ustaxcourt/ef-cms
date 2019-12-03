@@ -2,7 +2,7 @@ import { menuHelper } from './computeds/menuHelper';
 
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { loadingHelper } from './computeds/loadingHelper';
-import { publicCaseDetailHeaderHelper } from './computeds/publicCaseDetailHeaderHelper';
+import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetailHeaderHelper';
 
 export const state = {
   advancedSearchForm: {
