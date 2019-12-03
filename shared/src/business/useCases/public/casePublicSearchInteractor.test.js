@@ -99,16 +99,20 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
+        caseId: '1',
         contactPrimary: undefined,
         contactSecondary: undefined,
+        createdAt: undefined,
         docketNumber: '123-19',
         docketNumberSuffix: 'S',
         receivedAt: '2019-03-01T21:40:46.415Z',
       },
       {
         caseCaption: 'Test Case Caption Two',
+        caseId: '2',
         contactPrimary: undefined,
         contactSecondary: undefined,
+        createdAt: undefined,
         docketNumber: '456-19',
         docketNumberSuffix: 'S',
         receivedAt: '2019-03-01T21:40:46.415Z',
@@ -244,16 +248,20 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
+        caseId: '1',
         contactPrimary: undefined,
         contactSecondary: undefined,
+        createdAt: undefined,
         docketNumber: '123-19',
         docketNumberSuffix: 'S',
         receivedAt: '2019-03-01T21:40:46.415Z',
       },
       {
         caseCaption: 'Test Case Caption Two',
+        caseId: '2',
         contactPrimary: undefined,
         contactSecondary: undefined,
+        createdAt: undefined,
         docketNumber: '456-19',
         docketNumberSuffix: 'S',
         receivedAt: '2019-03-01T21:40:46.415Z',

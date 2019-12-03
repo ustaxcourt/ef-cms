@@ -45,11 +45,9 @@ export const advancedSearchHelper = (get, applicationContext) => {
   const currentPage = get(state.advancedSearchForm.currentPage);
   let result = { showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC };
   if (searchResults) {
-    const formattedSearchResults = searchResults
-      .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
-      .map(searchResult =>
-        formatSearchResultRecord(searchResult, { applicationContext }),
-      );
+    const formattedSearchResults = searchResults.map(searchResult =>
+      formatSearchResultRecord(searchResult, { applicationContext }),
+    );
     result = {
       ...result,
       formattedSearchResults: formattedSearchResults.slice(

@@ -56,7 +56,7 @@ export const setValidationAlertErrorsAction = ({ get, props, store }) => {
         if (Array.isArray(error)) {
           return error.map(subError => {
             const subErrorKeys = Object.keys(subError).filter(
-              key => key !== 'index',
+              k => k !== 'index',
             );
             return subErrorKeys.map(subErrorKey => {
               return `${key} #${subError.index + 1} - ${subErrorKey} field - ${
