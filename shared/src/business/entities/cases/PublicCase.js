@@ -19,6 +19,8 @@ function PublicCase(rawCase) {
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
   this.receivedAt = rawCase.receivedAt;
+  this.caseCaption = rawCase.caseCaption;
+  this.caseTitle = rawCase.caseTitle;
 }
 
 joiValidationDecorator(PublicCase, joi.object(), undefined, {});

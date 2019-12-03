@@ -2,6 +2,7 @@ import { menuHelper } from './computeds/menuHelper';
 
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { loadingHelper } from './computeds/loadingHelper';
+import { publicCaseDetailHeaderHelper } from './computeds/publicCaseDetailHeaderHelper';
 
 export const state = {
   advancedSearchForm: {
@@ -19,6 +20,7 @@ export const state = {
   mobileMenu: {
     isVisible: false,
   },
+  publicCaseDetailHeaderHelper,
   searchMode: 'byName',
   usaBanner: {
     showDetails: false,
