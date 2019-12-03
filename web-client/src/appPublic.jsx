@@ -1,10 +1,17 @@
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
 import { back, externalRoute, route, router } from './routerPublic';
-import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
-import { faSync } from '@fortawesome/free-solid-svg-icons';
-import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
-import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
+import {
+  faFileAlt as faFileAltSolid,
+  faPrint,
+  faSearch,
+  faSync,
+  faTimesCircle,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  faTimesCircle as faTimesCircleRegular,
+  faUser,
+} from '@fortawesome/free-regular-svg-icons';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
@@ -29,7 +36,15 @@ const appPublic = {
       return value;
     });
 
-    library.add(faSearch, faSync, faTimesCircleRegular, faUser);
+    library.add(
+      faSearch,
+      faSync,
+      faTimesCircleRegular,
+      faTimesCircle,
+      faUser,
+      faPrint,
+      faFileAltSolid,
+    );
 
     presenter.providers.applicationContext = applicationContext;
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
