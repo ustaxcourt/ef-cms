@@ -2,6 +2,7 @@ import { Error } from './Error';
 import { Footer } from './Footer';
 import { HeaderPublic } from './Header/HeaderPublic';
 import { Interstitial } from './Interstitial';
+import { Loading } from './Loading';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { PublicSearch } from './Public/PublicSearch';
 import { UsaBanner } from './UsaBanner';
@@ -54,6 +55,7 @@ export const AppComponentPublic = connect(
           <CurrentPage />
         </main>
         <Footer />
+        <Loading />
       </React.Fragment>
     );
   },

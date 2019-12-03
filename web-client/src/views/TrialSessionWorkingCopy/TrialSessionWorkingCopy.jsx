@@ -20,7 +20,6 @@ export const TrialSessionWorkingCopy = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     showModal: state.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
-    zipInProgress: state.zipInProgress,
   },
   ({
     batchDownloadTrialSessionSequence,
@@ -53,8 +52,8 @@ export const TrialSessionWorkingCopy = connect(
                 aria-label="Download batch of documents in a trial session"
                 onClick={() =>
                   batchDownloadTrialSessionSequence({
+                    allowRetry: true,
                     trialSessionId: formattedTrialSessionDetails.trialSessionId,
-                    zipName: formattedTrialSessionDetails.zipName,
                   })
                 }
               >

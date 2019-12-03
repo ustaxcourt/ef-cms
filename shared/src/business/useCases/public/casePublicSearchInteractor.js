@@ -3,6 +3,7 @@ const {
   aggregateCommonQueryParams,
 } = require('../../utilities/aggregateCommonQueryParams');
 const { get } = require('lodash');
+const { PublicCase } = require('../entities/cases/PublicCase');
 
 /**
  * casePublicSearchInteractor
@@ -81,15 +82,7 @@ exports.casePublicSearchInteractor = async providers => {
     return item.docketNumber && item.caseCaption; // TODO - This is not accurate
   });
 
-  // TODO - Make response public-safe?
-  const makeSafe = item => ({
-    caseCaption: item.caseCaption,
-    contactPrimary: item.contactPrimary,
-    contactSecondary: item.contactSecondary,
-    docketNumber: item.docketNumber,
-    docketNumberSuffix: item.docketNumberSuffix,
-    receivedAt: item.receivedAt,
-  });
+  const makeSafe = item => new PublicCase(item).toRawObject();
 
   return filteredCases.map(makeSafe);
 };
