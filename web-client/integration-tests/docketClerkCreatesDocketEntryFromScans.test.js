@@ -11,6 +11,7 @@ import {
   selectScannerSource,
 } from './scanHelpers.js';
 import { applicationContext } from '../src/applicationContext';
+import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -31,7 +32,9 @@ import petitionerSignsOut from './journey/petitionerSignsOut';
 
 let test;
 global.FormData = FormData;
-presenter.providers.applicationContext = applicationContext;
+presenter.providers.applicationContext = Object.assign(applicationContext, {
+  getScanner: getScannerInterface,
+});
 presenter.providers.router = {
   createObjectURL: () => {},
   externalRoute: () => {},
