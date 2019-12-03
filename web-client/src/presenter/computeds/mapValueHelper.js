@@ -28,8 +28,8 @@ export const mapValueHelper = value => {
   }
 
   if (isPlainObject(value)) {
-    map(value, (value, key) => {
-      object[key] = mapValueHelper(value);
+    map(value, (thisValue, key) => {
+      object[key] = mapValueHelper(thisValue);
     });
   }
 

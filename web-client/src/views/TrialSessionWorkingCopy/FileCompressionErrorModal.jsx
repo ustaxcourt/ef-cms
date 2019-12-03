@@ -5,24 +5,37 @@ import React from 'react';
 
 export const FileCompressionErrorModal = connect(
   {
+    allowRetry: state.batchDownloads.allowRetry,
     trialSession: state.trialSession,
   },
-  ({ trialSession }) => {
+  ({ allowRetry, trialSession }) => {
     const trialSessionTitle = trialSession.trialLocation;
 
     return (
       <ConfirmModal
         cancelLabel="Cancel"
         confirmLabel="Try Again"
+        noCancel={!allowRetry}
+        noConfirm={!allowRetry}
         preventCancelOnBlur={true}
         title="File Compression Error"
         onCancelSequence="clearModalSequence"
         onConfirmSequence="batchDownloadTrialSessionSequence"
       >
-        <p>
-          An error occurred during the file compression of “{trialSessionTitle}”
-          trial session. Do you want to try again?
-        </p>
+        {(allowRetry && (
+          <>
+            <p>
+              An error occurred during the file compression of “
+              {trialSessionTitle}” trial session. Do you want to try again?
+            </p>
+            <p> If you cancel, it will stop the entire download process.</p>
+          </>
+        )) || (
+          <p>
+            An error occurred during the file compression of “
+            {trialSessionTitle}” trial session. Please contact OIS.
+          </p>
+        )}
       </ConfirmModal>
     );
   },
