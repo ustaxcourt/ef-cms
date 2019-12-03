@@ -1,4 +1,4 @@
-import { FilingsAndProceedings } from './FilingsAndProceedings';
+import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
 import { connect } from '@cerebral/react';
