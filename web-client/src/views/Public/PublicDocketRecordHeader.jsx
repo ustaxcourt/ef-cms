@@ -13,18 +13,18 @@ export const PublicDocketRecordHeader = connect({}, () => {
               link
               aria-hidden="true"
               className="show-on-mobile margin-top-1"
+              icon="print"
               onClick={() => {}}
             >
-              <FontAwesomeIcon icon="print" size="sm" />
               Printable Docket Record
             </Button>
             <Button
               link
               aria-label="printable docket record"
               className="hide-on-mobile margin-top-1"
+              icon="print"
               onClick={() => {}}
             >
-              <FontAwesomeIcon icon="print" size="sm" />
               Printable Docket Record
             </Button>
           </div>

@@ -7,9 +7,9 @@ import React from 'react';
 
 export const PublicDocketRecord = connect(
   {
-    helper: state.publicCaseDetailHelper,
+    publicCaseDetailHelper: state.publicCaseDetailHelper,
   },
-  ({ helper }) => {
+  ({ publicCaseDetailHelper }) => {
     return (
       <React.Fragment>
         <div className="title">
@@ -39,7 +39,7 @@ export const PublicDocketRecord = connect(
             </tr>
           </thead>
           <tbody>
-            {helper.formattedDocketRecord.map(
+            {publicCaseDetailHelper.formattedDocketRecord.map(
               ({ document, index, record }, arrayIndex) => {
                 const isPaper = document && document.isPaper;
 
