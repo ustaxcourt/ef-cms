@@ -3,7 +3,7 @@ const {
   aggregateCommonQueryParams,
 } = require('../../utilities/aggregateCommonQueryParams');
 const { get } = require('lodash');
-const { PublicCase } = require('../entities/cases/PublicCase');
+const { PublicCase } = require('../../entities/cases/PublicCase');
 
 /**
  * casePublicSearchInteractor
