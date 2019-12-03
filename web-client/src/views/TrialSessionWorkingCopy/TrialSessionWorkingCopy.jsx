@@ -4,7 +4,6 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
 import { DeleteSessionNoteConfirmModal } from './DeleteSessionNoteConfirmModal';
 import { ErrorNotification } from '../ErrorNotification';
-import { FileCompressionErrorModal } from './FileCompressionErrorModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SessionNotes } from './SessionNotes';
 import { SuccessNotification } from '../SuccessNotification';
