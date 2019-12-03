@@ -1,6 +1,6 @@
 const { casePublicSearchInteractor } = require('./casePublicSearchInteractor');
-import { CaseSearch } from '../entities/cases/CaseSearch';
-import { formatNow } from '../utilities/DateHandler';
+import { CaseSearch } from '../../entities/cases/CaseSearch';
+import { formatNow } from '../../utilities/DateHandler';
 
 describe('casePublicSearchInteractor', () => {
   let searchSpy;
