@@ -2074,6 +2074,34 @@ describe('Case entity', () => {
         expect(result.reason).toEqual('Place of trial is not the same.');
       });
 
+      it('should fail when case statuses are both ineligible', () => {
+        const leadCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Closed',
+          },
+          { applicationContext },
+        );
+        const pendingCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Closed',
+          },
+          { applicationContext },
+        );
+
+        const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual(
+          'Case status is Closed and cannot be consolidated.',
+        );
+      });
+
       it('should pass when both cases are eligible for consolidation', () => {
         const leadCaseEntity = new Case(
           {

@@ -5,10 +5,6 @@ const {
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
 const {
-  getCaseConsolidationStatus,
-  isCaseStatusEligible,
-} = require('../../utilities/caseConsolidation');
-const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
 const {
