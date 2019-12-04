@@ -443,6 +443,10 @@ table.docket-record {
       display: none;
     }
 
+    &.responsive-table tr {
+      display: table-row;
+    }
+
     td {
       display: table-cell;
     }
