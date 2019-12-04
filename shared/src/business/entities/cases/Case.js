@@ -1225,10 +1225,7 @@ Case.prototype.getCaseContacts = function(shape) {
  * @returns {object} object with canConsolidate flag and reason string
  */
 Case.prototype.getConsolidationStatus = function(caseEntity) {
-  const pendingCaseStatus = caseEntity.status;
-  const leadCaseStatus = this.status;
-
-  if (leadCaseStatus !== pendingCaseStatus) {
+  if (this.status !== caseEntity.status) {
     return { canConsolidate: false, reason: 'Case status is not the same.' };
   }
 
@@ -1240,10 +1237,10 @@ Case.prototype.getConsolidationStatus = function(caseEntity) {
     return { canConsolidate: false, reason: 'Place of trial is not the same.' };
   }
 
-  if (!this.canConsolidate(pendingCaseStatus)) {
+  if (!this.canConsolidate(caseEntity.status)) {
     return {
       canConsolidate: false,
-      reason: `Case status is ${pendingCaseStatus} and cannot be consolidated.`,
+      reason: `Case status is ${caseEntity.status} and cannot be consolidated.`,
     };
   }
 
