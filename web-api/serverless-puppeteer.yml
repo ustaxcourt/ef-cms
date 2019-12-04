@@ -15,7 +15,7 @@ provider:
   name: aws
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
@@ -25,7 +25,7 @@ layers:
     name: ${self:provider.stage}-puppeteer
     description: Chrome headless binary provided via chrome-aws-lambda and puppeteer-core for interaction.
     compatibleRuntimes:
-      - nodejs10.x
+      - nodejs12.x
     path: web-api/runtimes/puppeteer
     package:
       exclude:
