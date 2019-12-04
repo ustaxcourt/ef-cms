@@ -3,6 +3,9 @@ const { PublicDocument } = require('./PublicDocument');
 describe('PublicDocument', () => {
   it('should only have expected fields', () => {
     const entity = new PublicDocument({
+      additionalInfo: 'something',
+      additionalInfo2: 'something else',
+      anotherThing: false,
       caseId: 'testing',
       createdAt: 'testing',
       documentId: 'testing',
@@ -17,6 +20,8 @@ describe('PublicDocument', () => {
     });
 
     expect(entity.toRawObject()).toEqual({
+      additionalInfo: 'something',
+      additionalInfo2: 'something else',
       caseId: 'testing',
       createdAt: 'testing',
       documentId: 'testing',
