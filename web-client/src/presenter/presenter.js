@@ -1,3 +1,4 @@
+import { submitCaseSearchForConsolidationSequence } from './sequences/submitCaseSearchForConsolidationSequence';
 import { ActionError } from './errors/ActionError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { NotFoundError } from './errors/NotFoundError';
@@ -209,6 +210,7 @@ import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
+import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
 import { submitCaseAdvancedSearchSequence } from './sequences/submitCaseAdvancedSearchSequence';
 import { submitCaseAssociationRequestSequence } from './sequences/submitCaseAssociationRequestSequence';
 import { submitCaseDetailEditSaveSequence } from './sequences/submitCaseDetailEditSaveSequence';
@@ -323,6 +325,7 @@ export const presenter = {
   ],
   providers: {},
   sequences: {
+    submitCaseSearchForConsolidationSequence,
     addCaseToTrialSessionSequence,
     addSupportingDocumentToFormSequence,
     archiveDraftDocumentModalSequence,
@@ -526,6 +529,7 @@ export const presenter = {
     showMoreResultsSequence,
     signOutSequence,
     startScanSequence,
+    submitAddConsolidatedCaseSequence,
     submitCaseAdvancedSearchSequence,
     submitCaseAssociationRequestSequence,
     submitCaseDetailEditSaveSequence,
