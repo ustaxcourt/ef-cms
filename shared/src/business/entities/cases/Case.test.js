@@ -1969,23 +1969,136 @@ describe('Case entity', () => {
   });
 
   describe('Case Consolidation Eligibility', () => {
-    it('getConsolidationStatus', () => {
-      let leadCaseEntity = new Case(
-        { ...MOCK_CASE },
-        {
-          applicationContext,
-        },
-      );
-      let pendingCaseEntity = new Case(
-        { ...MOCK_CASE },
-        {
-          applicationContext,
-        },
-      );
+    describe('canConsolidate', () => {
+      let caseEntity;
 
-      const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+      beforeEach(() => {
+        caseEntity = new Case(
+          { ...MOCK_CASE, status: 'Submitted' },
+          {
+            applicationContext,
+          },
+        );
+      });
 
-      console.log('result');
+      it('should fail when the pending case status is ineligible', () => {
+        caseEntity.status = 'New';
+        const result = caseEntity.canConsolidate();
+
+        expect(result).toEqual(false);
+      });
+
+      it('should pass when a case has an eligible case status', () => {
+        const result = caseEntity.canConsolidate();
+
+        expect(result).toEqual(true);
+      });
+    });
+
+    describe('getConsolidationStatus', () => {
+      it('should fail when case statuses are not the same', () => {
+        const leadCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+        const pendingCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'New',
+          },
+          { applicationContext },
+        );
+
+        const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual('Case status is not the same.');
+      });
+
+      it('should fail when case procedures are not the same', () => {
+        const leadCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+        const pendingCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'small',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+
+        const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual('Case procedure is not the same.');
+      });
+
+      it('should fail when case trial locations are not the same', () => {
+        const leadCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+        const pendingCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Miami, FL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+
+        const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual('Place of trial is not the same.');
+      });
+
+      it('should pass when both cases are eligible for consolidation', () => {
+        const leadCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+        const pendingCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+
+        const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+
+        expect(result.canConsolidate).toEqual(true);
+        expect(result.reason).toEqual('');
+      });
     });
   });
 });

@@ -1217,20 +1217,52 @@ Case.prototype.getCaseContacts = function(shape) {
 
 /**
  * get consolidation status between current case entity and another case entity
- * (this assumes that _this_ case is the leadCaseEntity)
  *
  * @param {object} caseEntity the pending case entity to check
  * @returns {object} object with canConsolidate flag and reason string
  */
 Case.prototype.getConsolidationStatus = function(caseEntity) {
-  return getCaseConsolidationStatus({
-    leadCaseEntity: this,
-    pendingCaseEntity: caseEntity,
-  });
+  const pendingCaseStatus = caseEntity.status;
+  const leadCaseStatus = this.status;
+
+  if (leadCaseStatus !== pendingCaseStatus) {
+    return { canConsolidate: false, reason: 'Case status is not the same.' };
+  }
+
+  if (this.procedureType !== caseEntity.procedureType) {
+    return { canConsolidate: false, reason: 'Case procedure is not the same.' };
+  }
+
+  if (this.preferredTrialCity !== caseEntity.preferredTrialCity) {
+    return { canConsolidate: false, reason: 'Place of trial is not the same.' };
+  }
+
+  if (!this.canConsolidate(pendingCaseStatus)) {
+    return {
+      canConsolidate: false,
+      reason: `Case status is ${pendingCaseStatus} and cannot be consolidated.`,
+    };
+  }
+
+  return { canConsolidate: true, reason: '' };
 };
 
+/**
+ * checks case eligibility for consolidation by the current case's status
+ *
+ * @returns {boolean} true if eligible for consolidation, false otherwise
+ */
 Case.prototype.canConsolidate = function() {
-  return isCaseStatusEligible(this.status);
+  const ineligibleStatusTypes = [
+    Case.STATUS_TYPES.batchedForIRS,
+    Case.STATUS_TYPES.new,
+    Case.STATUS_TYPES.recalled,
+    Case.STATUS_TYPES.generalDocket,
+    Case.STATUS_TYPES.closed,
+    Case.STATUS_TYPES.onAppeal,
+  ];
+
+  return !ineligibleStatusTypes.includes(this.status);
 };
 
 module.exports = { Case };
