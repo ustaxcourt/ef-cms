@@ -12,9 +12,6 @@ export const PublicDocketRecord = connect(
   ({ publicCaseDetailHelper }) => {
     return (
       <React.Fragment>
-        <div className="title">
-          <h1>Docket Record</h1>
-        </div>
         <PublicDocketRecordHeader />
         <table
           aria-label="docket record"
