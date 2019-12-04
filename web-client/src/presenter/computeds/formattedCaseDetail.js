@@ -32,10 +32,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
     docketRecordSort,
   );
 
-  result.pendingItemsDocketEntries = result.docketRecordWithDocument.filter(
-    entry => entry.document && entry.document.pending,
-  );
-
   result.formattedDocketEntries = result.docketRecordWithDocument.map(
     ({ document, index, record }) => {
       const userHasAccessToCase = !isExternalUser || userAssociatedWithCase;
@@ -79,6 +75,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         isCourtIssuedDocument: document && document.isCourtIssuedDocument,
         isFileAttached: document && document.isFileAttached,
         isPaper,
+        isPending: document && document.pending,
         isServed: document && !!document.servedAt,
         servedAtFormatted: document && document.servedAtFormatted,
         servedPartiesCode: document && document.servedPartiesCode,
@@ -117,6 +114,20 @@ export const formattedCaseDetail = (get, applicationContext) => {
         signatory: record.signatory,
       };
     },
+  );
+
+  result.formattedDraftDocuments = (result.draftDocuments || []).map(
+    draftDocument => {
+      return {
+        ...draftDocument,
+        descriptionDisplay: draftDocument.documentTitle,
+        showDocumentEditLink: draftDocument && permissions.UPDATE_CASE,
+      };
+    },
+  );
+
+  result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
+    entry => entry.hasDocument && entry.isPending,
   );
 
   // TODO these are just defaults

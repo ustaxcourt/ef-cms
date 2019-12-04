@@ -758,4 +758,81 @@ describe('formattedCaseDetail', () => {
       expect(result.caseDeadlines.length).toEqual(0);
     });
   });
+
+  it('formats draft documents', () => {
+    const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      docketRecord: [
+        {
+          description: 'Petition',
+          documentId: 'Petition',
+          filedBy: 'Jessica Frase Marine',
+          filingDate: '2019-02-28T21:14:39.488Z',
+        },
+      ],
+      documents: [
+        {
+          createdAt: '2019-02-28T21:14:39.488Z',
+          documentId: 'Petition',
+          documentType: 'Petition',
+          showValidationInput: '2019-02-28T21:14:39.488Z',
+          status: 'served',
+        },
+        {
+          archived: false,
+          createdAt: '2019-02-28T21:14:39.488Z',
+          documentId: 'd-1-2-3',
+          documentTitle: 'Order to do something',
+          documentType: 'Order',
+        },
+        {
+          archived: false,
+          createdAt: '2019-02-28T21:14:39.488Z',
+          documentId: 'd-2-3-4',
+          documentTitle: 'Stipulated Decision',
+          documentType: 'Stipulated Decision',
+        },
+      ],
+      hasIrsNotice: false,
+      hasVerifiedIrsNotice: false,
+      petitioners: [{ name: 'bob' }],
+    };
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail,
+        caseDetailErrors: {},
+      },
+    });
+    expect(result.formattedDraftDocuments).toMatchObject([
+      {
+        createdAtFormatted: '02/28/19',
+        descriptionDisplay: 'Order to do something',
+        documentId: 'd-1-2-3',
+        documentType: 'Order',
+        isCourtIssuedDocument: false,
+        isInProgress: false,
+        isNotServedCourtIssuedDocument: false,
+        isPetition: false,
+        isStatusServed: false,
+        showDocumentEditLink: true,
+        signedAtFormatted: undefined,
+        signedAtFormattedTZ: undefined,
+      },
+      {
+        createdAtFormatted: '02/28/19',
+        descriptionDisplay: 'Stipulated Decision',
+        documentId: 'd-2-3-4',
+        documentType: 'Stipulated Decision',
+        isCourtIssuedDocument: true,
+        isInProgress: false,
+        isNotServedCourtIssuedDocument: true,
+        isPetition: false,
+        isStatusServed: false,
+        showDocumentEditLink: true,
+        signedAtFormatted: undefined,
+        signedAtFormattedTZ: undefined,
+      },
+    ]);
+  });
 });
