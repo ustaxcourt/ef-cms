@@ -5,6 +5,7 @@ import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicS
 import {
   formatDocketRecord,
   formatDocketRecordWithDocument,
+  sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import {
   getCognitoLoginUrl,
@@ -45,6 +46,7 @@ const applicationContextPublic = {
       formatDateString,
       formatDocketRecord,
       formatDocketRecordWithDocument,
+      sortDocketRecords,
     };
   },
 };

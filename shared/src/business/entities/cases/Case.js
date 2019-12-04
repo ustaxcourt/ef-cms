@@ -224,6 +224,7 @@ function Case(rawCase, { applicationContext }) {
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
+  this.leadCaseId = rawCase.leadCaseId;
   this.partyType = rawCase.partyType;
   this.payGovDate = rawCase.payGovDate;
   this.payGovId = rawCase.payGovId;
@@ -375,6 +376,12 @@ joiValidationDecorator(
       .iso()
       .optional(),
     isPaper: joi.boolean().optional(),
+    leadCaseId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional(),
     noticeOfAttachments: joi.boolean().optional(),
     orderForAmendedPetition: joi.boolean().optional(),
     orderForAmendedPetitionAndFilingFee: joi.boolean().optional(),
