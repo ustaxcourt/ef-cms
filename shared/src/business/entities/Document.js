@@ -383,4 +383,25 @@ Document.prototype.getQCWorkItem = function() {
   return this.workItems.find(workItem => workItem.isQC === true);
 };
 
+Document.prototype.isPublicAccessible = function() {
+  const orderDocumentTypes = Order.ORDER_TYPES.map(
+    orderType => orderType.documentType,
+  );
+  const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+    courtIssuedDoc => courtIssuedDoc.documentType,
+  );
+
+  let isCourtIssuedAndServed = false;
+  const isServed = !!this.servedAt;
+  const isStipDecision = this.documentType === 'Stipulated Decision';
+  const isOrder = orderDocumentTypes.includes(this.documentType);
+  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+    this.documentType,
+  );
+
+  isCourtIssuedAndServed =
+    isServed && (isStipDecision || isOrder || isCourtIssuedDocument);
+  return isCourtIssuedAndServed;
+};
+
 exports.Document = Document;
