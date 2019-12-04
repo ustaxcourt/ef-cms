@@ -44,6 +44,32 @@ describe('formattedCaseDetail', () => {
     });
   });
 
+  it('formats the irs date', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail: {
+          caseCaption: 'Brett Osborne, Petitioner',
+          docketRecord: [],
+          documents: [
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              documentType: 'Petition',
+              status: 'served',
+            },
+          ],
+          irsSendDate: '2018-11-21T20:49:28.192Z',
+          petitioners: [{ name: 'bob' }],
+        },
+        constants: {
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+        },
+        form: {},
+      },
+    });
+    expect(result.irsDateFormatted).toContain('11/21/18');
+    expect(result.documents[0].isPetition).toEqual(true);
+  });
+
   it('maps docket record dates', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
