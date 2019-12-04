@@ -731,4 +731,13 @@ describe('case detail computed', () => {
       expect(result.hasOrders).toEqual(true);
     });
   });
+
+  it('should show empty state for consolidated cases', () => {
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        caseDetail: { consolidatedCases: [] },
+      },
+    });
+    expect(result.hasNoConsolidatedCases).toEqual(true);
+  });
 });
