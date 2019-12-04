@@ -347,6 +347,10 @@ const formatCase = (applicationContext, caseDetail) => {
     result.showNotScheduled = true;
   }
 
+  result.isLeadCase = !!(
+    result.leadCaseId && result.leadCaseId === result.caseId
+  );
+
   return result;
 };
 
