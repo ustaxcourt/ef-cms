@@ -6,7 +6,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-const { flatten } = require('lodash');
+const { flatten, map } = require('lodash');
 const { Order } = require('./orders/Order');
 const { WorkItem } = require('./WorkItem');
 
@@ -384,14 +384,12 @@ Document.prototype.getQCWorkItem = function() {
 };
 
 Document.prototype.isPublicAccessible = function() {
-  const orderDocumentTypes = Order.ORDER_TYPES.map(
-    orderType => orderType.documentType,
-  );
-  const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
-    courtIssuedDoc => courtIssuedDoc.documentType,
+  const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
+  const courtIssuedDocumentTypes = map(
+    Document.COURT_ISSUED_EVENT_CODES,
+    'documentType',
   );
 
-  let isCourtIssuedAndServed = false;
   const isServed = !!this.servedAt;
   const isStipDecision = this.documentType === 'Stipulated Decision';
   const isOrder = orderDocumentTypes.includes(this.documentType);
@@ -399,9 +397,7 @@ Document.prototype.isPublicAccessible = function() {
     this.documentType,
   );
 
-  isCourtIssuedAndServed =
-    isServed && (isStipDecision || isOrder || isCourtIssuedDocument);
-  return isCourtIssuedAndServed;
+  return (isStipDecision || isOrder || isCourtIssuedDocument) && isServed;
 };
 
 exports.Document = Document;

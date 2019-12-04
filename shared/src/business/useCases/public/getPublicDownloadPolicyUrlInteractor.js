@@ -2,10 +2,13 @@ const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
+ * getPublicDownloadPolicyUrlInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @returns {Array<string>} the filing type options based on user role
+ * @param {string} providers.caseId the id of the case containing the document
+ * @param {string} providers.documentId the document id
+ * @returns {string} the document download url
  */
 exports.getPublicDownloadPolicyUrlInteractor = async ({
   applicationContext,
