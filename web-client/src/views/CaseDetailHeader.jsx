@@ -30,6 +30,13 @@ export const CaseDetailHeader = connect(
             <div className="tablet:grid-col-8">
               <div className="margin-bottom-1">
                 <h1 className="heading-2 captioned" tabIndex="-1">
+                  {caseDetailHeaderHelper.showConsolidatedCaseIcon && (
+                    <FontAwesomeIcon
+                      className="margin-right-1 icon-consolidated"
+                      icon="copy"
+                      size="1x"
+                    />
+                  )}
                   <CaseLink formattedCase={formattedCaseDetail}>
                     Docket Number: {formattedCaseDetail.docketNumberWithSuffix}
                   </CaseLink>
