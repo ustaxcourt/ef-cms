@@ -342,7 +342,7 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Consolidated Cases
-                    {formattedCaseDetail.isConsolidatable && (
+                    {formattedCaseDetail.canConsolidate && (
                       <Button
                         link
                         className="margin-right-0 margin-top-1 padding-0 float-right"
@@ -362,9 +362,17 @@ export const CaseInformationInternal = connect(
                     )}
                   </h3>
                   <AddConsolidatedCaseModal />
-                  {(formattedCaseDetail.isConsolidatable && (
-                    <ConsolidatedCases caseDetail={formattedCaseDetail} />
-                  )) || <p>This case is not eligible for consolidation</p>}
+                  {formattedCaseDetail.canConsolidate &&
+                    formattedCaseDetail.consolidatedCases.length > 0 && (
+                      <ConsolidatedCases caseDetail={formattedCaseDetail} />
+                    )}
+                  {formattedCaseDetail.canConsolidate &&
+                    formattedCaseDetail.consolidatedCases.length === 0 && (
+                      <p>Not consolidated</p>
+                    )}
+                  {!formattedCaseDetail.canConsolidate && (
+                    <p>This case is not eligible for consolidation.</p>
+                  )}
                 </div>
               </div>
             </div>
