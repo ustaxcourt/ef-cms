@@ -756,6 +756,6 @@ describe('case detail computed', () => {
         modal: {},
       },
     });
-    expect(result.hasNoConsolidatedCases).toEqual(true);
+    expect(result.hasConsolidatedCases).toEqual(false);
   });
 });
