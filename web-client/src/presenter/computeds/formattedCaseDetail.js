@@ -36,6 +36,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
     entry => entry.document && entry.document.pending,
   );
 
+  // TODO this is just a default
+  result.consolidatedCases = [];
+
   result.showBlockedTag = caseDetail.blocked;
   result.docketRecordSort = docketRecordSort;
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
