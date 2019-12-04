@@ -19,7 +19,9 @@ export const CaseListPractitioner = connect(
         <table className="usa-table responsive-table dashboard" id="case-list">
           <thead>
             <tr>
-              <th></th>
+              <th>
+                <span className="usa-sr-only">Lead Case Indicator</span>
+              </th>
               <th>Docket number</th>
               <th>Case name</th>
               <th>Date filed</th>
@@ -30,11 +32,14 @@ export const CaseListPractitioner = connect(
               <tr key={item.docketNumber}>
                 <td>
                   {item.isLeadCase && (
-                    <FontAwesomeIcon
-                      className="margin-right-1 icon-consolidated"
-                      icon="copy"
-                      size="1x"
-                    />
+                    <>
+                      <span className="usa-sr-only">Lead Case</span>
+                      <FontAwesomeIcon
+                        className="margin-right-1 icon-consolidated"
+                        icon="copy"
+                        size="1x"
+                      />
+                    </>
                   )}
                 </td>
                 <td className="hide-on-mobile">

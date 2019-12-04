@@ -39,7 +39,9 @@ export const CaseListPetitioner = connect(
           >
             <thead>
               <tr>
-                <th></th>
+                <th>
+                  <span className="usa-sr-only">Lead Case Indicator</span>
+                </th>
                 <th>Docket number</th>
                 <th>Case name</th>
                 <th>Date filed</th>
@@ -50,11 +52,14 @@ export const CaseListPetitioner = connect(
                 <tr key={item.docketNumber}>
                   <td>
                     {item.isLeadCase && (
-                      <FontAwesomeIcon
-                        className="margin-right-1 icon-consolidated"
-                        icon="copy"
-                        size="1x"
-                      />
+                      <>
+                        <span className="usa-sr-only">Lead Case</span>
+                        <FontAwesomeIcon
+                          className="margin-right-1 icon-consolidated"
+                          icon="copy"
+                          size="1x"
+                        />
+                      </>
                     )}
                   </td>
                   <td className="hide-on-mobile">
