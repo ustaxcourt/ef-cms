@@ -19,16 +19,15 @@ describe('publicCaseDetailHelper', () => {
     };
   });
 
-  it('should return the formattedDocketRecordWithDocument as an array', () => {
+  it('should return the formattedDocketEntries as an array', () => {
     const result = runCompute(publicCaseDetailHelper, { state });
-    expect(
-      Array.isArray(result.formattedDocketRecordWithDocument),
-    ).toBeTruthy();
+    expect(Array.isArray(result.formattedDocketEntries)).toBeTruthy();
   });
 
-  it('should format docket record with document and sort chronologically', () => {
+  it('should format docket entries with documents and sort chronologically', () => {
     state.caseDetail.docketRecord = [
       {
+        action: 'something',
         description: 'first record',
         documentId: '8675309b-18d0-43ec-bafb-654e83405411',
         filingDate: '2018-11-21T20:49:28.192Z',
@@ -51,6 +50,13 @@ describe('publicCaseDetailHelper', () => {
         documentId: '8675309b-28d0-43ec-bafb-654e83405414',
         filingDate: '2018-10-25T20:49:28.192Z',
         index: 2,
+        signatory: 'abc',
+      },
+      {
+        description: 'fifth record',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405415',
+        filingDate: '2018-12-25T20:49:28.192Z',
+        index: 5,
       },
     ];
     state.caseDetail.documents = [
@@ -59,6 +65,7 @@ describe('publicCaseDetailHelper', () => {
         documentId: '8675309b-18d0-43ec-bafb-654e83405411',
         documentTitle: 'Petition',
         documentType: 'Petition',
+        eventCode: 'P',
         processingStatus: 'pending',
       },
       {
@@ -69,11 +76,15 @@ describe('publicCaseDetailHelper', () => {
         processingStatus: 'pending',
       },
       {
+        additionalInfo: 'additionalInfo!',
+        additionalInfo2: 'additional info 2!',
+        attachments: true,
         createdAt: '2018-10-21T20:49:28.192Z',
         documentId: '8675309b-28d0-43ec-bafb-654e83405412',
         documentTitle: 'Answer',
         documentType: 'Answer',
         eventCode: 'A',
+        filedBy: 'Petrs. Dylan Fowler & Jaquelyn Estes',
         processingStatus: 'pending',
       },
       {
@@ -82,7 +93,7 @@ describe('publicCaseDetailHelper', () => {
         documentTitle: 'Order to do something',
         documentType: 'O - Order',
         eventCode: 'O',
-        processingStatus: 'pending',
+        processingStatus: 'complete',
         servedAt: '2018-11-27T20:49:28.192Z',
         status: 'served',
       },
@@ -94,69 +105,113 @@ describe('publicCaseDetailHelper', () => {
         eventCode: 'O',
         processingStatus: 'pending',
       },
+      {
+        createdAt: '2018-12-25T20:49:28.192Z',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405415',
+        documentType: 'Request for Place of Trial',
+        eventCode: 'RQT',
+        processingStatus: 'complete',
+      },
     ];
     const result = runCompute(publicCaseDetailHelper, { state });
-    expect(result.formattedDocketRecordWithDocument).toMatchObject([
+    expect(result.formattedDocketEntries).toMatchObject([
       {
-        document: {
-          createdAtFormatted: '10/21/18',
-          isCourtIssuedDocument: false,
-          isInProgress: false,
-          isNotServedCourtIssuedDocument: false,
-          isStatusServed: false,
-          showServedAt: false,
-        },
-        record: {
-          createdAtFormatted: '10/21/18',
-          description: 'second record',
-          filingsAndProceedings: '',
-        },
+        createdAtFormatted: '10/21/18',
+        description: 'second record additionalInfo!',
+        descriptionDisplay: 'Answer',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405412',
+        eventCode: 'A',
+        filedBy: 'Petrs. Dylan Fowler & Jaquelyn Estes',
+        filingsAndProceedingsWithAdditionalInfo:
+          ' additionalInfo! (Attachment(s)) additional info 2!',
+        hasDocument: true,
+        index: 1,
+        isPaper: undefined,
+        servedAtFormatted: undefined,
+        servedPartiesCode: '',
+        showDocumentDescriptionWithoutLink: true,
+        showLinkToDocument: false,
+        showNotServed: false,
+        showServed: false,
+        signatory: undefined,
       },
       {
-        document: {
-          createdAtFormatted: '10/25/18',
-          isCourtIssuedDocument: true,
-          isInProgress: false,
-          isNotServedCourtIssuedDocument: true,
-          isStatusServed: false,
-          showServedAt: false,
-        },
-        record: {
-          createdAtFormatted: undefined,
-          description: 'fourth record',
-          filingsAndProceedings: '',
-        },
+        createdAtFormatted: undefined,
+        description: 'fourth record',
+        descriptionDisplay: 'Order to do something else',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405414',
+        eventCode: 'O',
+        filedBy: undefined,
+        filingsAndProceedingsWithAdditionalInfo: '',
+        hasDocument: true,
+        index: 2,
+        isPaper: undefined,
+        servedAtFormatted: undefined,
+        servedPartiesCode: '',
+        showDocumentDescriptionWithoutLink: true,
+        showLinkToDocument: false,
+        showNotServed: true,
+        showServed: false,
+        signatory: 'abc',
       },
       {
-        document: {
-          createdAtFormatted: '10/25/18',
-          isCourtIssuedDocument: true,
-          isInProgress: false,
-          isNotServedCourtIssuedDocument: false,
-          isStatusServed: true,
-          servedAtFormatted: '11/27/18 03:49 pm',
-          showServedAt: true,
-        },
-        record: {
-          createdAtFormatted: '10/25/18',
-          description: 'third record',
-          filingsAndProceedings: '',
-        },
+        createdAtFormatted: '10/25/18',
+        description: 'third record',
+        descriptionDisplay: 'Order to do something',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405413',
+        eventCode: 'O',
+        filedBy: undefined,
+        filingsAndProceedingsWithAdditionalInfo: '',
+        hasDocument: true,
+        index: 3,
+        isPaper: undefined,
+        servedAtFormatted: '11/27/18 03:49 pm',
+        servedPartiesCode: '',
+        showDocumentDescriptionWithoutLink: false,
+        showLinkToDocument: true,
+        showNotServed: false,
+        showServed: true,
+        signatory: undefined,
       },
       {
-        document: {
-          createdAtFormatted: '11/21/18',
-          isCourtIssuedDocument: false,
-          isInProgress: false,
-          isNotServedCourtIssuedDocument: false,
-          isStatusServed: false,
-          showServedAt: false,
-        },
-        record: {
-          createdAtFormatted: '11/21/18',
-          description: 'first record',
-          filingsAndProceedings: '',
-        },
+        action: 'something',
+        createdAtFormatted: '11/21/18',
+        description: 'first record',
+        descriptionDisplay: 'Petition',
+        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+        eventCode: 'P',
+        filedBy: undefined,
+        filingsAndProceedingsWithAdditionalInfo: '',
+        hasDocument: true,
+        index: 4,
+        isPaper: undefined,
+        servedAtFormatted: undefined,
+        servedPartiesCode: '',
+        showDocumentDescriptionWithoutLink: true,
+        showLinkToDocument: false,
+        showNotServed: false,
+        showServed: false,
+        signatory: undefined,
+      },
+      {
+        action: undefined,
+        createdAtFormatted: '12/25/18',
+        description: 'fifth record',
+        descriptionDisplay: 'fifth record',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405415',
+        eventCode: 'RQT',
+        filedBy: undefined,
+        filingsAndProceedingsWithAdditionalInfo: '',
+        hasDocument: true,
+        index: 5,
+        isPaper: undefined,
+        servedAtFormatted: undefined,
+        servedPartiesCode: '',
+        showDocumentDescriptionWithoutLink: true,
+        showLinkToDocument: false,
+        showNotServed: false,
+        showServed: false,
+        signatory: undefined,
       },
     ]);
   });
