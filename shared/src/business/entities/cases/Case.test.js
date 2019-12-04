@@ -1967,4 +1967,25 @@ describe('Case entity', () => {
       });
     });
   });
+
+  describe('Case Consolidation Eligibility', () => {
+    it('getConsolidationStatus', () => {
+      let leadCaseEntity = new Case(
+        { ...MOCK_CASE },
+        {
+          applicationContext,
+        },
+      );
+      let pendingCaseEntity = new Case(
+        { ...MOCK_CASE },
+        {
+          applicationContext,
+        },
+      );
+
+      const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+
+      console.log('result');
+    });
+  });
 });
