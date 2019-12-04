@@ -1,10 +1,10 @@
-const _ = require('lodash');
+const { pick } = require('lodash');
 
 const gatherRecords = function gatherRecords(exportColumns, output) {
   return () => {
     let record;
     while ((record = this.read())) {
-      record = _.pick(record, exportColumns);
+      record = pick(record, exportColumns);
       Object.keys(record).forEach(key => {
         record[key] = whitespaceCleanup(record[key]);
       });
