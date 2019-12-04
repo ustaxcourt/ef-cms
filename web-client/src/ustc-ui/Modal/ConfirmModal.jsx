@@ -2,7 +2,7 @@ import { BaseModal } from './BaseModal';
 import { Button } from '../Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { props, sequences } from 'cerebral';
+import { props, state, sequences } from 'cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
@@ -10,8 +10,11 @@ export const ConfirmModal = connect(
   {
     onCancel: sequences[props.onCancelSequence],
     onConfirm: sequences[props.onConfirmSequence],
+    showModal: state.showModal,
   },
   ({
+    showModalWhen,
+    showModal,
     cancelLabel,
     children,
     className,
@@ -58,6 +61,10 @@ export const ConfirmModal = connect(
 
       focusModal();
     }, []);
+
+    if (showModalWhen && showModal !== showModalWhen) {
+      return null;
+    }
 
     return (
       <BaseModal
