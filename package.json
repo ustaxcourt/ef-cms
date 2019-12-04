@@ -163,6 +163,7 @@
     "cypress:smoketests:open": "cypress open -C cypress-smoketests.json --env AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY,ENV=$ENV",
     "dynamo:admin": "DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
     "dynamo:export": "AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop SLS_DEPLOYMENT_BUCKET=noop node web-api/dynamo-export.js > ./web-api/storage/fixtures/efcms.json",
+    "dynamo:import": "pushd ./web-api && node ./create-dynamo-tables.js && node ./seed-dynamo.js ./storage/fixtures/efcms.json && popd",
     "lint:swagger": "swagger-cli validate web-api/swagger.json",
     "lint:css:fix": "npm run lint:css -- --fix",
     "lint:css": "stylelint web-client/src/**/*.scss",
