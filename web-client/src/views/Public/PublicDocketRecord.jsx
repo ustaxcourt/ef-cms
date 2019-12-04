@@ -39,55 +39,46 @@ export const PublicDocketRecord = connect(
             </tr>
           </thead>
           <tbody>
-            {publicCaseDetailHelper.formattedDocketRecordWithDocument.map(
-              ({ document, index, record }) => {
-                return (
-                  <tr key={index}>
-                    <td className="center-column hide-on-mobile">{index}</td>
-                    <td>
-                      <span className="no-wrap">
-                        {record.createdAtFormatted}
+            {publicCaseDetailHelper.formattedDocketEntries.map(entry => {
+              return (
+                <tr key={entry.index}>
+                  <td className="center-column hide-on-mobile">
+                    {entry.index}
+                  </td>
+                  <td>
+                    <span className="no-wrap">{entry.createdAtFormatted}</span>
+                  </td>
+                  <td className="center-column hide-on-mobile">
+                    {entry.eventCode}
+                  </td>
+                  <td
+                    aria-hidden="true"
+                    className="filing-type-icon hide-on-mobile"
+                  >
+                    {entry.isPaper && (
+                      <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                    )}
+                  </td>
+                  <td>
+                    <PublicFilingsAndProceedings entry={entry} />
+                  </td>
+                  <td className="hide-on-mobile">{entry.filedBy}</td>
+                  <td className="hide-on-mobile">{entry.action}</td>
+                  <td>
+                    {entry.showNotServed && (
+                      <span className="text-secondary text-semibold">
+                        Not served
                       </span>
-                    </td>
-                    <td className="center-column hide-on-mobile">
-                      {record.eventCode || (document && document.eventCode)}
-                    </td>
-                    <td
-                      aria-hidden="true"
-                      className="filing-type-icon hide-on-mobile"
-                    >
-                      {document && document.isPaper && (
-                        <FontAwesomeIcon icon={['fas', 'file-alt']} />
-                      )}
-                    </td>
-                    <td>
-                      <PublicFilingsAndProceedings
-                        document={document}
-                        record={record}
-                      />
-                    </td>
-                    <td className="hide-on-mobile">
-                      {document && document.filedBy}
-                    </td>
-                    <td className="hide-on-mobile">{record.action}</td>
-                    <td>
-                      {document && document.isNotServedCourtIssuedDocument && (
-                        <span className="text-secondary text-semibold">
-                          Not served
-                        </span>
-                      )}
-                      {document && document.isStatusServed && (
-                        <span>{document.servedAtFormatted}</span>
-                      )}
-                    </td>
-                    <td className="center-column hide-on-mobile">
-                      <span className="responsive-label">Parties</span>
-                      {document && document.servedPartiesCode}
-                    </td>
-                  </tr>
-                );
-              },
-            )}
+                    )}
+                    {entry.showServed && <span>{entry.servedAtFormatted}</span>}
+                  </td>
+                  <td className="center-column hide-on-mobile">
+                    <span className="responsive-label">Parties</span>
+                    {entry.servedPartiesCode}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </React.Fragment>
