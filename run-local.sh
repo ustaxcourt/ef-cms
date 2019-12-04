@@ -16,11 +16,15 @@ S3RVER_PID=$!
 
 npm run build:assets
 
-echo "seeding s3"
-npm run seed:s3
+if [ ! -z "$RESUME" ]; then
+  echo "Resuming operation with previous s3 and dynamo data"
+else
+  echo "seeding s3"
+  npm run seed:s3
 
-echo "creating & seeding dynamo tables"
-npm run seed:db
+  echo "creating & seeding dynamo tables"
+  npm run seed:db
+fi
 
 echo "creating elasticsearch index"
 npm run seed:elasticsearch
