@@ -18,7 +18,7 @@ export const ModalCaseSearchBox = connect(
     return (
       <form
         noValidate
-        className="usa-search usa-search--small ustc-search"
+        className="usa-search usa-search--small ustc-search margin-bottom-4"
         id="search-input"
         onSubmit={e => {
           e.preventDefault();
@@ -38,7 +38,8 @@ export const ModalCaseSearchBox = connect(
             value={searchTerm}
             onChange={e => {
               updateModalValueSequence({
-                searchTerm: e.target.value.toUpperCase(),
+                key: 'searchTerm',
+                value: e.target.value.toUpperCase(),
               });
             }}
           />
