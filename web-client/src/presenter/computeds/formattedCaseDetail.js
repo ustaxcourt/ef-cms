@@ -36,7 +36,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
     entry => entry.document && entry.document.pending,
   );
 
-  // TODO this is just a default
+  // TODO these are just defaults
+  result.isConsolidatable = true;
   result.consolidatedCases = [];
 
   result.showBlockedTag = caseDetail.blocked;
