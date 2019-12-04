@@ -54,7 +54,5 @@ echo "done running sls deploy"
 
 echo "slsStage: ${slsStage}"
 echo "region: ${region}"
-./web-api/configure-custom-api-access-logging.sh "${slsStage}" ./web-api/config-custom-access-logs.json "${region}"
-echo "done configuring logging"
 
 cp "/tmp/${handler}" src
