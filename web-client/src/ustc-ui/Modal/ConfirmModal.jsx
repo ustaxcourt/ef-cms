@@ -31,7 +31,7 @@ export const ConfirmModal = connect(
     showModalWhen,
     title,
   }) => {
-    hasErrorState = hasErrorState || true;
+    hasErrorState = hasErrorState || false;
     headerIcon = headerIcon || null;
     headerIconClassName = headerIconClassName || '';
     confirmLabel = confirmLabel || 'Ok';
