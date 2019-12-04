@@ -39,7 +39,7 @@ export const SearchBox = connect(
             value={searchTerm}
             onChange={e => {
               updateSearchTermSequence({
-                searchTerm: e.target.value,
+                searchTerm: e.target.value.toUpperCase(),
               });
             }}
           />

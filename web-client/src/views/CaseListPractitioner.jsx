@@ -1,6 +1,7 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { CaseSearchBox } from './CaseSearchBox';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MyContactInformation } from './MyContactInformation';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -18,6 +19,9 @@ export const CaseListPractitioner = connect(
         <table className="usa-table responsive-table dashboard" id="case-list">
           <thead>
             <tr>
+              <th>
+                <span className="usa-sr-only">Lead Case Indicator</span>
+              </th>
               <th>Docket number</th>
               <th>Case name</th>
               <th>Date filed</th>
@@ -26,6 +30,18 @@ export const CaseListPractitioner = connect(
           <tbody>
             {formattedCases.map(item => (
               <tr key={item.docketNumber}>
+                <td>
+                  {item.isLeadCase && (
+                    <>
+                      <span className="usa-sr-only">Lead Case</span>
+                      <FontAwesomeIcon
+                        className="margin-right-1 icon-consolidated"
+                        icon="copy"
+                        size="1x"
+                      />
+                    </>
+                  )}
+                </td>
                 <td className="hide-on-mobile">
                   <CaseLink formattedCase={item} />
                 </td>

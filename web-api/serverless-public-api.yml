@@ -10,7 +10,6 @@ plugins:
   - serverless-jetpack
 
 custom:
-
   jetpack:
     mode: yarn
 
@@ -142,11 +141,18 @@ functions:
           method: get
           cors: true
 
-
   getPublicCase:
     handler: web-api/${self:provider.dir}/publicApiHandlers.getPublicCaseLambda
     events:
       - http:
           path: /cases/{caseId}
+          method: get
+          cors: true
+
+  getPublicDocumentDownloadUrl:
+    handler: web-api/${self:provider.dir}/publicApiHandlers.getPublicDocumentDownloadUrlLambda
+    events:
+      - http:
+          path: /{caseId}/{documentId}/public-document-download-url
           method: get
           cors: true
