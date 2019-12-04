@@ -121,10 +121,14 @@ export const caseDetailHelper = (get, applicationContext) => {
     orderDesignatingPlaceOfTrial,
   ].some(hasOrder => !!hasOrder);
 
+  const hasNoConsolidatedCases =
+    !caseDetail.consolidatedCases || caseDetail.consolidatedCases.length === 0;
+
   return {
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
     documentDetailTab,
+    hasNoConsolidatedCases,
     hasOrders,
     practitionerMatchesFormatted,
     practitionerSearchResultsCount:

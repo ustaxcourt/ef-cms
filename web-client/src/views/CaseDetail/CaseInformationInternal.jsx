@@ -41,8 +41,9 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
   </React.Fragment>
 );
 
-const ConsolidatedCases = ({ caseDetail }) => (
+const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
   <React.Fragment>
+    {caseDetailHelper.hasNoConsolidatedCases && <p>Not consolidated</p>}
     <table>
       {caseDetail.consolidatedCases.map((consolidatedCase, index) => (
         <tr key={index}>
@@ -363,7 +364,10 @@ export const CaseInformationInternal = connect(
                   </h3>
                   <AddConsolidatedCaseModal />
                   {(formattedCaseDetail.isConsolidatable && (
-                    <ConsolidatedCases caseDetail={formattedCaseDetail} />
+                    <ConsolidatedCases
+                      caseDetail={formattedCaseDetail}
+                      caseDetailHelper={caseDetailHelper}
+                    />
                   )) || <p>This case is not eligible for consolidation</p>}
                 </div>
               </div>
