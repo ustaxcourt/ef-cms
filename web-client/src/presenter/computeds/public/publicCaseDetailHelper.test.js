@@ -26,25 +26,31 @@ describe('publicCaseDetailHelper', () => {
     ).toBeTruthy();
   });
 
-  it('should format docket record with document', () => {
+  it('should format docket record with document and sort chronologically', () => {
     state.caseDetail.docketRecord = [
       {
         description: 'first record',
         documentId: '8675309b-18d0-43ec-bafb-654e83405411',
-        filingDate: '2018-03-01T00:01:00.000Z',
+        filingDate: '2018-11-21T20:49:28.192Z',
         index: 4,
       },
       {
         description: 'second record',
         documentId: '8675309b-28d0-43ec-bafb-654e83405412',
-        filingDate: '2018-03-01T00:02:00.000Z',
-        index: 2,
+        filingDate: '2018-10-21T20:49:28.192Z',
+        index: 1,
       },
       {
         description: 'third record',
         documentId: '8675309b-28d0-43ec-bafb-654e83405413',
-        filingDate: '2018-03-01T00:03:00.000Z',
+        filingDate: '2018-10-25T20:49:28.192Z',
         index: 3,
+      },
+      {
+        description: 'fourth record',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405414',
+        filingDate: '2018-10-25T20:49:28.192Z',
+        index: 2,
       },
     ];
     state.caseDetail.documents = [
@@ -63,7 +69,7 @@ describe('publicCaseDetailHelper', () => {
         processingStatus: 'pending',
       },
       {
-        createdAt: '2018-11-21T20:49:28.192Z',
+        createdAt: '2018-10-21T20:49:28.192Z',
         documentId: '8675309b-28d0-43ec-bafb-654e83405412',
         documentTitle: 'Answer',
         documentType: 'Answer',
@@ -71,7 +77,7 @@ describe('publicCaseDetailHelper', () => {
         processingStatus: 'pending',
       },
       {
-        createdAt: '2018-11-25T20:49:28.192Z',
+        createdAt: '2018-10-25T20:49:28.192Z',
         documentId: '8675309b-28d0-43ec-bafb-654e83405413',
         documentTitle: 'Order to do something',
         documentType: 'O - Order',
@@ -80,12 +86,20 @@ describe('publicCaseDetailHelper', () => {
         servedAt: '2018-11-27T20:49:28.192Z',
         status: 'served',
       },
+      {
+        createdAt: '2018-10-25T20:49:28.192Z',
+        documentId: '8675309b-28d0-43ec-bafb-654e83405414',
+        documentTitle: 'Order to do something else',
+        documentType: 'O - Order',
+        eventCode: 'O',
+        processingStatus: 'pending',
+      },
     ];
     const result = runCompute(publicCaseDetailHelper, { state });
     expect(result.formattedDocketRecordWithDocument).toMatchObject([
       {
         document: {
-          createdAtFormatted: '11/21/18',
+          createdAtFormatted: '10/21/18',
           isCourtIssuedDocument: false,
           isInProgress: false,
           isNotServedCourtIssuedDocument: false,
@@ -93,29 +107,29 @@ describe('publicCaseDetailHelper', () => {
           showServedAt: false,
         },
         record: {
-          createdAtFormatted: '02/28/18',
-          description: 'first record',
-          filingsAndProceedings: '',
-        },
-      },
-      {
-        document: {
-          createdAtFormatted: '11/21/18',
-          isCourtIssuedDocument: false,
-          isInProgress: false,
-          isNotServedCourtIssuedDocument: false,
-          isStatusServed: false,
-          showServedAt: false,
-        },
-        record: {
-          createdAtFormatted: '02/28/18',
+          createdAtFormatted: '10/21/18',
           description: 'second record',
           filingsAndProceedings: '',
         },
       },
       {
         document: {
-          createdAtFormatted: '11/25/18',
+          createdAtFormatted: '10/25/18',
+          isCourtIssuedDocument: true,
+          isInProgress: false,
+          isNotServedCourtIssuedDocument: true,
+          isStatusServed: false,
+          showServedAt: false,
+        },
+        record: {
+          createdAtFormatted: undefined,
+          description: 'fourth record',
+          filingsAndProceedings: '',
+        },
+      },
+      {
+        document: {
+          createdAtFormatted: '10/25/18',
           isCourtIssuedDocument: true,
           isInProgress: false,
           isNotServedCourtIssuedDocument: false,
@@ -124,8 +138,23 @@ describe('publicCaseDetailHelper', () => {
           showServedAt: true,
         },
         record: {
-          createdAtFormatted: '02/28/18',
+          createdAtFormatted: '10/25/18',
           description: 'third record',
+          filingsAndProceedings: '',
+        },
+      },
+      {
+        document: {
+          createdAtFormatted: '11/21/18',
+          isCourtIssuedDocument: false,
+          isInProgress: false,
+          isNotServedCourtIssuedDocument: false,
+          isStatusServed: false,
+          showServedAt: false,
+        },
+        record: {
+          createdAtFormatted: '11/21/18',
+          description: 'first record',
           filingsAndProceedings: '',
         },
       },
