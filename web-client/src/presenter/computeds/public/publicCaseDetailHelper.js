@@ -9,13 +9,21 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     applicationContext.getUtilities().formatDocketRecord(applicationContext, d),
   );
 
-  const formattedDocketRecordWithDocument = applicationContext
+  let formattedDocketRecordWithDocument = applicationContext
     .getUtilities()
     .formatDocketRecordWithDocument(
       applicationContext,
       formattedDocketRecord,
       publicCase.documents,
     );
+
+  formattedDocketRecordWithDocument = applicationContext
+    .getUtilities()
+    .sortDocketRecords(formattedDocketRecordWithDocument, 'byIndex');
+
+  formattedDocketRecordWithDocument = applicationContext
+    .getUtilities()
+    .sortDocketRecords(formattedDocketRecordWithDocument, 'byDate');
 
   const formattedCaseDetail = formatCaseDetail(publicCase);
 
