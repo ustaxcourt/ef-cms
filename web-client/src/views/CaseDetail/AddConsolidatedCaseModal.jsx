@@ -3,15 +3,14 @@ import React from 'react';
 
 export const AddConsolidatedCaseModal = () => (
   <ConfirmModal
-    noCloseBtn
-    cancelLabel="No, cancel"
-    confirmLabel="Yes, delete"
+    cancelLabel="Cancel"
+    confirmLabel="Consolidate cases"
     preventCancelOnBlur={true}
     showModalWhen="AddConsolidatedCaseModal"
-    title="Are you sure you want to delete this note?"
+    title="Consolidate Cases"
     onCancelSequence="clearModalSequence"
-    onConfirmSequence="deleteWorkingCopySessionNoteSequence"
+    onConfirmSequence="clearModalSequence"
   >
-    <p>This action cannot be undone.</p>
+    <p>Please Enter A Case Number.</p>
   </ConfirmModal>
 );
