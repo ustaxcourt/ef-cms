@@ -1279,9 +1279,10 @@ hr.lighter {
   }
 }
 
-.pdf-preview-btn {
+button.usa-button.pdf-preview-btn {
   line-height: 1.4rem;
   word-break: break-all;
+  text-align: left;
 }
 
 button.change-scanner-button {
