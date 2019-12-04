@@ -7,10 +7,11 @@ export const PublicFilingsAndProceedings = connect(
   {
     arrayIndex: props.arrayIndex,
     baseUrl: state.baseUrl,
+    caseDetail: state.caseDetail,
     document: props.document,
     record: props.record,
   },
-  ({ baseUrl, document, record }) => {
+  ({ baseUrl, caseDetail, document, record }) => {
     const renderDocumentLink = (documentId, description, isPaper) => {
       return (
         <React.Fragment>
@@ -18,7 +19,7 @@ export const PublicFilingsAndProceedings = connect(
             <React.Fragment>
               <a
                 aria-label={`View PDF: ${description}`}
-                href={`${baseUrl}/documents/${documentId}/document-download-url`}
+                href={`${baseUrl}/public-api/${caseDetail.caseId}/${documentId}/public-document-download-url`}
                 rel="noreferrer noopener"
                 target="_blank"
               >
