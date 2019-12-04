@@ -76,7 +76,7 @@ provider:
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   websocketApiRouteSelectionExpression: $request.body.action
   memorySize: 768
   timeout: 30

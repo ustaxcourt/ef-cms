@@ -452,6 +452,28 @@ describe('formatCase', () => {
       showPrioritized: true,
     });
   });
+
+  it('should set isLeadCase true on the case if it has a leadCaseId that matches its caseId', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      leadCaseId: mockCaseDetail.caseId,
+    });
+
+    expect(result).toMatchObject({
+      isLeadCase: true,
+    });
+  });
+
+  it('should set isLeadCase false property on the case if it has a leadCaseId that matches its caseId', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      leadCaseId: 'notthecaseid',
+    });
+
+    expect(result).toMatchObject({
+      isLeadCase: false,
+    });
+  });
 });
 
 describe('formatCaseDeadlines', () => {
