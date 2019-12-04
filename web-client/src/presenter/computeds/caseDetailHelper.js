@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
@@ -121,10 +122,13 @@ export const caseDetailHelper = (get, applicationContext) => {
     orderDesignatingPlaceOfTrial,
   ].some(hasOrder => !!hasOrder);
 
+  const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
+
   return {
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
     documentDetailTab,
+    hasConsolidatedCases,
     hasOrders,
     practitionerMatchesFormatted,
     practitionerSearchResultsCount:
