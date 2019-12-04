@@ -733,9 +733,27 @@ describe('case detail computed', () => {
   });
 
   it('should show empty state for consolidated cases', () => {
+    const user = {
+      role: User.ROLES.practitioner,
+      userId: '123',
+    };
     const result = runCompute(caseDetailHelper, {
       state: {
-        caseDetail: { consolidatedCases: [] },
+        ...getBaseState(user),
+        caseDetail: {
+          consolidatedCases: [],
+          noticeOfAttachments: false,
+          orderDesignatingPlaceOfTrial: false,
+          orderForAmendedPetition: false,
+          orderForAmendedPetitionAndFilingFee: false,
+          orderForFilingFee: false,
+          orderForOds: false,
+          orderForRatification: false,
+          orderToChangeDesignatedPlaceOfTrial: false,
+          orderToShowCause: true,
+        },
+        form: {},
+        modal: {},
       },
     });
     expect(result.hasNoConsolidatedCases).toEqual(true);
