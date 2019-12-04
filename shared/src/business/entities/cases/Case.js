@@ -5,6 +5,10 @@ const {
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
 const {
+  getCaseConsolidationStatus,
+  isCaseStatusEligible,
+} = require('../../utilities/caseConsolidation');
+const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
 const {
@@ -1192,8 +1196,8 @@ Case.prototype.setCaseTitle = function(caseCaption) {
 /**
  * get case contacts
  *
- * @returns {object} object containing case contacts
  * @param {object} shape specific contact params to be returned
+ * @returns {object} object containing case contacts
  */
 Case.prototype.getCaseContacts = function(shape) {
   const caseContacts = {};
@@ -1209,6 +1213,24 @@ Case.prototype.getCaseContacts = function(shape) {
   });
 
   return caseContacts;
+};
+
+/**
+ * get consolidation status between current case entity and another case entity
+ * (this assumes that _this_ case is the leadCaseEntity)
+ *
+ * @param {object} caseEntity the pending case entity to check
+ * @returns {object} object with canConsolidate flag and reason string
+ */
+Case.prototype.getConsolidationStatus = function(caseEntity) {
+  return getCaseConsolidationStatus({
+    leadCaseEntity: this,
+    pendingCaseEntity: caseEntity,
+  });
+};
+
+Case.prototype.canConsolidate = function() {
+  return isCaseStatusEligible(this.status);
 };
 
 module.exports = { Case };
