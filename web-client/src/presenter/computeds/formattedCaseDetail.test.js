@@ -1,16 +1,40 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../applicationContext';
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
+import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+let globalUser;
+
 const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
+  {
+    ...applicationContext,
+    getCurrentUser: () => {
+      return globalUser;
+    },
+  },
 );
+
+const getBaseState = user => {
+  globalUser = user;
+  return {
+    permissions: getUserPermissions(user),
+  };
+};
+
+const petitionsClerkUser = {
+  role: User.ROLES.petitionsClerk,
+  userId: '123',
+};
 
 describe('formattedCaseDetail', () => {
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
+        ...getBaseState(petitionsClerkUser),
         caseDetail: {},
       },
     });
@@ -36,6 +60,7 @@ describe('formattedCaseDetail', () => {
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
+        ...getBaseState(petitionsClerkUser),
         caseDetail,
         caseDetailErrors: {},
       },
@@ -69,6 +94,7 @@ describe('formattedCaseDetail', () => {
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
+        ...getBaseState(petitionsClerkUser),
         caseDetail,
         caseDetailErrors: {},
       },
@@ -78,7 +104,7 @@ describe('formattedCaseDetail', () => {
     );
   });
 
-  it('formats docket record document data strings and descriptions correctly', () => {
+  it('formats docket record document data strings and descriptions and docket entry fields correctly', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       contactPrimary: {
@@ -183,6 +209,7 @@ describe('formattedCaseDetail', () => {
         },
         {
           additionalInfo: 'Additional Info',
+          additionalInfo2: 'Additional Info2',
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -207,6 +234,7 @@ describe('formattedCaseDetail', () => {
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
+        ...getBaseState(petitionsClerkUser),
         caseDetail,
         caseDetailErrors: {},
       },
@@ -239,6 +267,49 @@ describe('formattedCaseDetail', () => {
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition Additional Info',
           filingsAndProceedings: '(Lodged)',
         },
+      },
+    ]);
+    expect(result.formattedDocketEntries).toMatchObject([
+      {
+        description: 'Amended Petition',
+        filingsAndProceedingsWithAdditionalInfo: ' (No Objection)',
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentEditLink: true,
+        showDocumentProcessing: false,
+        showInProgress: false,
+        showLinkToDocument: false,
+      },
+      {
+        description:
+          'First Amended Unsworn Declaration under Penalty of Perjury in Support',
+        filingsAndProceedingsWithAdditionalInfo: ' (Exhibit(s))',
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentEditLink: true,
+        showDocumentProcessing: false,
+        showInProgress: false,
+        showLinkToDocument: false,
+      },
+      {
+        description:
+          'Motion for Leave to File Computation for Entry of Decision',
+        filingsAndProceedingsWithAdditionalInfo:
+          ' (C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentEditLink: true,
+        showDocumentProcessing: false,
+        showInProgress: false,
+        showLinkToDocument: false,
+      },
+      {
+        description:
+          'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition Additional Info',
+        filingsAndProceedingsWithAdditionalInfo:
+          ' Additional Info (Lodged) Additional Info2',
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentEditLink: true,
+        showDocumentProcessing: false,
+        showInProgress: false,
+        showLinkToDocument: false,
       },
     ]);
   });
@@ -311,6 +382,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = sortedCaseDetail;
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -340,6 +412,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = sortedCaseDetail;
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
           sessionMetadata: {
@@ -373,6 +446,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = sortedCaseDetail;
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
           sessionMetadata: {
@@ -405,6 +479,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = sortedCaseDetail;
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
           sessionMetadata: {
@@ -442,6 +517,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -456,6 +532,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -470,6 +547,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -484,6 +562,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -501,6 +580,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -517,6 +597,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -538,6 +619,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -558,6 +640,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -587,6 +670,7 @@ describe('formattedCaseDetail', () => {
 
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDeadlines,
           caseDetail,
           caseDetailErrors: {},
@@ -623,6 +707,7 @@ describe('formattedCaseDetail', () => {
 
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDeadlines,
           caseDetail,
           caseDetailErrors: {},
@@ -639,6 +724,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },

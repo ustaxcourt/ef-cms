@@ -9,20 +9,11 @@ import classNames from 'classnames';
 
 export const DocketRecord = connect(
   {
-    caseDetailHelper: state.caseDetailHelper,
-    clearDocumentSequence: sequences.clearDocumentSequence,
-    docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.showModal,
   },
-  ({
-    caseDetailHelper,
-    docketRecordHelper,
-    formattedCaseDetail,
-    refreshCaseSequence,
-    showModal,
-  }) => {
+  ({ formattedCaseDetail, refreshCaseSequence, showModal }) => {
     useEffect(() => {
       const interval = setInterval(() => {
         refreshCaseSequence();
@@ -34,7 +25,7 @@ export const DocketRecord = connect(
     }, []);
 
     return (
-      <React.Fragment>
+      <>
         <DocketRecordHeader />
 
         <table
@@ -60,96 +51,71 @@ export const DocketRecord = connect(
             </tr>
           </thead>
           <tbody>
-            {formattedCaseDetail.docketRecordWithDocument.map(
-              ({ document, index, record }, arrayIndex) => {
-                const isInProgress =
-                  caseDetailHelper.showDocketRecordInProgressState &&
-                  document &&
-                  document.isInProgress;
-
-                const qcWorkItemsUntouched =
-                  !isInProgress &&
-                  caseDetailHelper.showQcWorkItemsUntouchedState &&
-                  document &&
-                  document.qcWorkItemsUntouched &&
-                  !document.isCourtIssuedDocument;
-
-                const isPaper =
-                  !isInProgress &&
-                  !qcWorkItemsUntouched &&
-                  document &&
-                  document.isPaper;
-
+            {formattedCaseDetail.formattedDocketEntries.map(
+              (entry, arrayIndex) => {
                 return (
                   <tr
                     className={classNames(
-                      document &&
-                        document.isInProgress &&
-                        caseDetailHelper.showDocketRecordInProgressState &&
-                        'in-progress',
-                      qcWorkItemsUntouched && 'qc-untouched',
+                      entry.showInProgress && 'in-progress',
+                      entry.showQcUntouched && 'qc-untouched',
                     )}
-                    key={index}
+                    key={entry.index}
                   >
-                    <td className="center-column hide-on-mobile">{index}</td>
+                    <td className="center-column hide-on-mobile">
+                      {entry.index}
+                    </td>
                     <td>
                       <span className="no-wrap">
-                        {record.createdAtFormatted}
+                        {entry.createdAtFormatted}
                       </span>
                     </td>
                     <td className="center-column hide-on-mobile">
-                      {record.eventCode || (document && document.eventCode)}
+                      {entry.eventCode}
                     </td>
                     <td
                       aria-hidden="true"
                       className="filing-type-icon hide-on-mobile"
                     >
-                      {isPaper && (
+                      {entry.isPaper && (
                         <FontAwesomeIcon icon={['fas', 'file-alt']} />
                       )}
 
-                      {isInProgress && (
+                      {entry.showInProgress && (
                         <FontAwesomeIcon icon={['fas', 'thumbtack']} />
                       )}
 
-                      {qcWorkItemsUntouched && (
+                      {entry.showQcUntouched && (
                         <FontAwesomeIcon icon={['fa', 'star']} />
                       )}
 
-                      {document &&
-                        docketRecordHelper.showDirectDownloadLink &&
-                        caseDetailHelper.showDocketRecordInProgressState &&
-                        document.processingStatus !== 'complete' && (
-                          <FontAwesomeIcon
-                            className="fa-spin spinner"
-                            icon="spinner"
-                          />
-                        )}
+                      {entry.showLoadingIcon && (
+                        <FontAwesomeIcon
+                          className="fa-spin spinner"
+                          icon="spinner"
+                        />
+                      )}
                     </td>
                     <td>
                       <FilingsAndProceedings
                         arrayIndex={arrayIndex}
-                        document={document}
-                        record={record}
+                        entry={entry}
                       />
                     </td>
-                    <td className="hide-on-mobile">
-                      {document && document.filedBy}
-                    </td>
-                    <td className="hide-on-mobile">{record.action}</td>
+                    <td className="hide-on-mobile">{entry.filedBy}</td>
+                    <td className="hide-on-mobile">{entry.action}</td>
                     <td>
-                      {document && document.isNotServedCourtIssuedDocument && (
+                      {entry.showNotServed && (
                         <span className="text-secondary text-semibold">
                           Not served
                         </span>
                       )}
-                      {document && document.isStatusServed && (
-                        <span>{document.servedAtFormatted}</span>
+                      {entry.showServed && (
+                        <span>{entry.servedAtFormatted}</span>
                       )}
                     </td>
                     <td className="center-column hide-on-mobile">
                       <span className="responsive-label">Parties</span>
-                      {document && document.servedPartiesCode}
+                      {entry.servedPartiesCode}
                     </td>
                   </tr>
                 );
@@ -158,7 +124,7 @@ export const DocketRecord = connect(
           </tbody>
         </table>
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
-      </React.Fragment>
+      </>
     );
   },
 );
