@@ -43,7 +43,7 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
 
 const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
   <React.Fragment>
-    {caseDetailHelper.hasNoConsolidatedCases && <p>Not consolidated</p>}
+    {!caseDetailHelper.hasConsolidatedCases && <p>Not consolidated</p>}
     <table>
       {caseDetail.consolidatedCases.map((consolidatedCase, index) => (
         <tr key={index}>
