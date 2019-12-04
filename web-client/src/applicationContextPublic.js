@@ -3,6 +3,10 @@ import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch'
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
 import {
+  formatDocketRecord,
+  formatDocketRecordWithDocument,
+} from '../../shared/src/business/utilities/getFormattedCaseDetail';
+import {
   getCognitoLoginUrl,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext.js';
@@ -27,7 +31,6 @@ const applicationContextPublic = {
       COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
       US_STATES: ContactFactory.US_STATES,
     }),
-
   getCurrentUserToken: () => null,
   getHttpClient: () => axios,
   getPublicSiteUrl,
@@ -40,6 +43,8 @@ const applicationContextPublic = {
     return {
       compareCasesByDocketNumber,
       formatDateString,
+      formatDocketRecord,
+      formatDocketRecordWithDocument,
     };
   },
 };

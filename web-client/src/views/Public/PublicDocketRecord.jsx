@@ -1,6 +1,6 @@
-import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
+import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -39,8 +39,8 @@ export const PublicDocketRecord = connect(
             </tr>
           </thead>
           <tbody>
-            {publicCaseDetailHelper.formattedDocketRecord.map(
-              ({ document, index, record, showPaperIcon }, arrayIndex) => {
+            {publicCaseDetailHelper.formattedDocketRecordWithDocument.map(
+              ({ document, index, record }) => {
                 return (
                   <tr key={index}>
                     <td className="center-column hide-on-mobile">{index}</td>
@@ -56,13 +56,12 @@ export const PublicDocketRecord = connect(
                       aria-hidden="true"
                       className="filing-type-icon hide-on-mobile"
                     >
-                      {showPaperIcon && (
+                      {document && document.isPaper && (
                         <FontAwesomeIcon icon={['fas', 'file-alt']} />
                       )}
                     </td>
                     <td>
-                      <FilingsAndProceedings
-                        arrayIndex={arrayIndex}
+                      <PublicFilingsAndProceedings
                         document={document}
                         record={record}
                       />
