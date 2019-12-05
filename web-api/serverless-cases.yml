@@ -391,7 +391,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateCaseContext:
+  setConsolidatedCase:
     handler: web-api/${self:provider.dir}/casesHandlers.setConsolidatedCaseLambda
     events:
       - http:
