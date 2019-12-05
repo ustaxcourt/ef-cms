@@ -3,7 +3,7 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 describe('addConsolidatedCaseAction', () => {
-  let addConsolidatedCaseInteractorMock;
+  let setConsolidatedCaseInteractorMock;
   let caseDetail;
 
   beforeEach(() => {
@@ -12,11 +12,11 @@ describe('addConsolidatedCaseAction', () => {
       docketNumber: '123-45',
     };
 
-    addConsolidatedCaseInteractorMock = jest.fn(() => caseDetail);
+    setConsolidatedCaseInteractorMock = jest.fn(() => caseDetail);
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        addConsolidatedCaseInteractor: addConsolidatedCaseInteractorMock,
+        setConsolidatedCaseInteractor: setConsolidatedCaseInteractorMock,
       }),
     };
   });
@@ -32,7 +32,7 @@ describe('addConsolidatedCaseAction', () => {
       },
     });
 
-    //expect(addConsolidatedCaseInteractorMock).toHaveBeenCalled();
+    expect(setConsolidatedCaseInteractorMock).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseId: '123',
       caseToConsolidateId: '456',
