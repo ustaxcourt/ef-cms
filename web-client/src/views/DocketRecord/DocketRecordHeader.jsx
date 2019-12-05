@@ -106,11 +106,11 @@ export const DocketRecordHeader = connect(
                       value: 'byDateDesc',
                     },
                     {
-                      label: 'Index (Ascending)',
+                      label: 'No. (Ascending)',
                       value: 'byIndex',
                     },
                     {
-                      label: 'Index (Descending)',
+                      label: 'No. (Descending)',
                       value: 'byIndexDesc',
                     },
                   ].map(item => (

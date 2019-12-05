@@ -11,10 +11,9 @@ export const FilingsAndProceedings = connect(
     baseUrl: state.baseUrl,
     caseDetailHelper: state.caseDetailHelper,
     docketRecordHelper: state.docketRecordHelper,
-    document: props.document,
     documentEditLinkHelper: state.documentEditLinkHelper,
+    entry: props.entry,
     formattedCaseDetail: state.formattedCaseDetail,
-    record: props.record,
     showDocketRecordDetailModalSequence:
       sequences.showDocketRecordDetailModalSequence,
     token: state.token,
@@ -24,139 +23,98 @@ export const FilingsAndProceedings = connect(
     baseUrl,
     caseDetailHelper,
     docketRecordHelper,
-    document,
     documentEditLinkHelper,
+    entry,
     formattedCaseDetail,
-    record,
     showDocketRecordDetailModalSequence,
     token,
   }) => {
-    const renderDocumentLink = (
-      documentId,
-      description,
-      isPaper,
-      docketRecordIndex = 0,
-    ) => {
+    const renderDocumentLink = () => {
       return (
-        <React.Fragment>
-          {caseDetailHelper.userHasAccessToCase &&
-            !document.isInProgress &&
-            !document.isNotServedCourtIssuedDocument && (
-              <React.Fragment>
-                <NonMobile>
-                  <a
-                    aria-label={`View PDF: ${description}`}
-                    href={`${baseUrl}/documents/${documentId}/document-download-url?token=${token}`}
-                    rel="noreferrer noopener"
-                    target="_blank"
-                  >
-                    {isPaper && (
-                      <span className="filing-type-icon-mobile">
-                        <FontAwesomeIcon icon={['fas', 'file-alt']} />
-                      </span>
-                    )}
-                    {description}
-                  </a>
-                </NonMobile>
-                <Mobile>
-                  <Button
-                    link
-                    aria-roledescription="button to view document details"
-                    className="padding-0 border-0"
-                    onClick={() => {
-                      showDocketRecordDetailModalSequence({
-                        docketRecordIndex,
-                        showModal: 'DocketRecordOverlay',
-                      });
-                    }}
-                  >
-                    {description}
-                  </Button>
-                </Mobile>
-              </React.Fragment>
-            )}
-          {(!caseDetailHelper.userHasAccessToCase || document.isInProgress) &&
-            description}
-        </React.Fragment>
-      );
-    };
-
-    return (
-      <React.Fragment>
-        {document &&
-          docketRecordHelper.showDirectDownloadLink &&
-          document.processingStatus === 'complete' &&
-          renderDocumentLink(
-            document.documentId,
-            record.description,
-            document.isPaper,
-            arrayIndex,
-          )}
-
-        {document &&
-          docketRecordHelper.showDirectDownloadLink &&
-          document.processingStatus !== 'complete' && (
-            <React.Fragment>
-              {caseDetailHelper.showDocketRecordInProgressState && (
-                <span
-                  aria-label="document uploading marker"
-                  className="usa-tag"
-                >
-                  <span aria-hidden="true">Processing</span>
-                </span>
-              )}
-              {record.description}
-            </React.Fragment>
-          )}
-
-        {document &&
-          docketRecordHelper.showDocumentDetailLink &&
-          (!document.isNotServedCourtIssuedDocument ||
-            (document.isNotServedCourtIssuedDocument &&
-              docketRecordHelper.canShowEditDocketEntryLink)) && (
+        <>
+          <NonMobile>
             <a
-              aria-label="View PDF"
-              href={documentEditLinkHelper({
-                docketNumber: formattedCaseDetail.docketNumber,
-                documentId: document.documentId,
-                shouldLinkToComplete: document.isFileAttached === false,
-                shouldLinkToEdit:
-                  docketRecordHelper.showEditDocketEntry && document.canEdit,
-                shouldLinkToEditCourtIssued:
-                  docketRecordHelper.showEditDocketEntry &&
-                  document.isCourtIssuedDocument,
-                shouldLinkedToDetails: !!document.servedAt,
-              })}
+              aria-label={`View PDF: ${entry.description}`}
+              href={`${baseUrl}/documents/${entry.documentId}/document-download-url?token=${token}`}
+              rel="noreferrer noopener"
+              target="_blank"
             >
-              {document && document.isPaper && (
+              {entry.isPaper && (
                 <span className="filing-type-icon-mobile">
                   <FontAwesomeIcon icon={['fas', 'file-alt']} />
                 </span>
               )}
-              {document.documentTitle || record.description}
+              {entry.description}
             </a>
-          )}
+          </NonMobile>
+          <Mobile>
+            <Button
+              link
+              aria-roledescription="button to view document details"
+              className="padding-0 border-0"
+              onClick={() => {
+                showDocketRecordDetailModalSequence({
+                  arrayIndex,
+                  showModal: 'DocketRecordOverlay',
+                });
+              }}
+            >
+              {entry.description}
+            </Button>
+          </Mobile>
+        </>
+      );
+    };
 
-        {document &&
-          document.isNotServedCourtIssuedDocument &&
-          !docketRecordHelper.canShowEditDocketEntryLink &&
-          (document.documentTitle || record.description)}
+    return (
+      <>
+        {entry.showLinkToDocument && renderDocumentLink()}
 
-        <span> {record.signatory}</span>
+        {entry.showDocumentProcessing && (
+          <>
+            {caseDetailHelper.showDocketRecordInProgressState && (
+              <span aria-label="document uploading marker" className="usa-tag">
+                <span aria-hidden="true">Processing</span>
+              </span>
+            )}
+            {entry.description}
+          </>
+        )}
 
-        {!document && record.description}
+        {entry.showDocumentEditLink && (
+          <a
+            aria-label="View PDF"
+            href={documentEditLinkHelper({
+              docketNumber: formattedCaseDetail.docketNumber,
+              documentId: entry.documentId,
+              shouldLinkToComplete: entry.isFileAttached === false,
+              shouldLinkToEdit:
+                docketRecordHelper.showEditDocketEntry && entry.canEdit,
+              shouldLinkToEditCourtIssued:
+                docketRecordHelper.showEditDocketEntry &&
+                entry.isCourtIssuedDocument,
+              shouldLinkedToDetails: entry.isServed,
+            })}
+          >
+            {entry.isPaper && (
+              <span className="filing-type-icon-mobile">
+                <FontAwesomeIcon icon={['fas', 'file-alt']} />
+              </span>
+            )}
+            {entry.descriptionDisplay}
+          </a>
+        )}
+
+        {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
+
+        <span> {entry.signatory}</span>
+
+        {!entry.hasDocument && entry.description}
 
         <span className="filings-and-proceedings">
-          {document &&
-            document.documentTitle &&
-            document.additionalInfo &&
-            ` ${document.additionalInfo}`}
-          {record.filingsAndProceedings && ` ${record.filingsAndProceedings}`}
-          {document &&
-            document.additionalInfo2 &&
-            ` ${document.additionalInfo2}`}
+          {entry.filingsAndProceedingsWithAdditionalInfo}
         </span>
-      </React.Fragment>
+      </>
     );
   },
 );

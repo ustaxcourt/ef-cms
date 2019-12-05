@@ -367,6 +367,12 @@ const {
   getPublicCaseInteractor,
 } = require('../../shared/src/business/useCases/public/getPublicCaseInteractor');
 const {
+  getPublicDownloadPolicyUrl,
+} = require('../../shared/src/persistence/s3/getPublicDownloadPolicyUrl');
+const {
+  getPublicDownloadPolicyUrlInteractor,
+} = require('../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor');
+const {
   getRespondentsBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getRespondentsBySearchKeyInteractor');
 const {
@@ -798,6 +804,7 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForSection,
         getInboxMessagesForUser,
         getInternalUsers,
+        getPublicDownloadPolicyUrl,
         getSentMessagesForSection,
         getSentMessagesForUser,
         getTrialSessionById,
@@ -964,6 +971,7 @@ module.exports = (appContextUser = {}) => {
         getNotificationsInteractor,
         getPractitionersBySearchKeyInteractor,
         getPublicCaseInteractor,
+        getPublicDownloadPolicyUrlInteractor,
         getRespondentsBySearchKeyInteractor,
         getSentMessagesForSectionInteractor,
         getSentMessagesForUserInteractor,
