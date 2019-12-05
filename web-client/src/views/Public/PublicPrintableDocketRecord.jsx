@@ -18,11 +18,11 @@ export const PublicPrintableDocketRecord = connect(
           <Button
             link
             className="margin-bottom-3"
+            icon={['fa', 'arrow-alt-circle-left']}
             onClick={() => {
               navigateBackSequence();
             }}
           >
-            <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
             Back
           </Button>
           <PdfPreview />

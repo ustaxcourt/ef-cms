@@ -4,17 +4,16 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const PublicDocketRecordHeader = connect(
-  { caseDetail: state.caseDetail },
-  ({ caseDetail }) => {
+  { docketNumber: state.caseDetail.docketNumber },
+  ({ docketNumber }) => {
     return (
       <React.Fragment>
         <div className="title">
           <h1>Docket Record</h1>
           <Button
             link
-            aria-label="printable docket record"
             className="hide-on-mobile float-right margin-right-0 margin-top-1"
-            href={`/case-detail/${caseDetail.docketNumber}/printable-docket-record`}
+            href={`/case-detail/${docketNumber}/printable-docket-record`}
             icon="print"
           >
             Printable Docket Record
@@ -27,7 +26,7 @@ export const PublicDocketRecordHeader = connect(
                 link
                 aria-hidden="true"
                 className="show-on-mobile margin-top-1 text-left"
-                href={`/case-detail/${caseDetail.docketNumber}/printable-docket-record`}
+                href={`/case-detail/${docketNumber}/printable-docket-record`}
                 icon="print"
               >
                 Printable Docket Record
