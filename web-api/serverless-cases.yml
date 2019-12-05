@@ -390,3 +390,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  updateCaseContext:
+    handler: web-api/${self:provider.dir}/casesHandlers.setConsolidatedCaseLambda
+    events:
+      - http:
+          path: /{caseId}/consolidate-case
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
