@@ -276,6 +276,78 @@ describe('Document entity', () => {
       expect(document.filedBy).toEqual('Resp. & Petr. Bob');
     });
 
+    it('should generate correct filedBy string for partyPrimary and partyRespondent only once', () => {
+      const document = new Document(
+        {
+          attachments: false,
+          category: 'Miscellaneous',
+          certificateOfService: false,
+          createdAt: '2019-04-19T18:24:09.515Z',
+          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          documentTitle:
+            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
+          documentType: 'Amended',
+          eventCode: 'ADED',
+          exhibits: true,
+          hasSupportingDocuments: true,
+          ordinalValue: 'First',
+          partyPrimary: false,
+          partyRespondent: true,
+          previousDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          relationship: 'primaryDocument',
+          scenario: 'Nonstandard F',
+          supportingDocument: 'Brief in Support',
+          supportingDocumentFreeText: null,
+        },
+        { applicationContext },
+      );
+      document.generateFiledBy(caseDetail);
+
+      expect(document.filedBy).toEqual('Resp.');
+
+      document.partyPrimary = true;
+      document.generateFiledBy(caseDetail);
+
+      expect(document.filedBy).toEqual('Resp.');
+    });
+
+    it('should generate correct filedBy string for partyPrimary and partyRespondent more than once with force = true', () => {
+      const document = new Document(
+        {
+          attachments: false,
+          category: 'Miscellaneous',
+          certificateOfService: false,
+          createdAt: '2019-04-19T18:24:09.515Z',
+          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          documentTitle:
+            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
+          documentType: 'Amended',
+          eventCode: 'ADED',
+          exhibits: true,
+          hasSupportingDocuments: true,
+          ordinalValue: 'First',
+          partyPrimary: false,
+          partyRespondent: true,
+          previousDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          relationship: 'primaryDocument',
+          scenario: 'Nonstandard F',
+          supportingDocument: 'Brief in Support',
+          supportingDocumentFreeText: null,
+        },
+        { applicationContext },
+      );
+      document.generateFiledBy(caseDetail);
+
+      expect(document.filedBy).toEqual('Resp.');
+
+      document.partyPrimary = true;
+      document.generateFiledBy(caseDetail, true);
+
+      expect(document.filedBy).toEqual('Resp. & Petr. Bob');
+    });
+
     it('should generate correct filedBy string for partyPrimary and partySecondary', () => {
       const document = new Document(
         {
