@@ -156,3 +156,15 @@ functions:
           path: /{caseId}/{documentId}/public-document-download-url
           method: get
           cors: true
+
+  generatePublicDocketRecordPdfLambda:
+    handler: web-api/${self:provider.dir}/publicApiHandlers.generatePublicDocketRecordPdfLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: /cases/{caseId}/generate-docket-record
+          method: post
+          cors: true
