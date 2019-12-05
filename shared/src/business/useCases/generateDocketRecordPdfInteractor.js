@@ -225,12 +225,14 @@ exports.generateDocketRecordPdfInteractor = async ({
         documentDateServed = `${
           arrDateServed[0]
         } <span class="no-wrap">${arrDateServed.slice(1).join(' ')}</span>`;
+      } else if (document && document.isNotServedCourtIssuedDocument) {
+        documentDateServed = 'Not served';
       }
 
       docketRecordContent += `
         <tr>
           <td>${index}</td>
-          <td>${recordCreatedAtFormatted}</td>
+          <td>${recordCreatedAtFormatted ? recordCreatedAtFormatted : ''}</td>
           <td>${documentEventCode}</td>
           <td>${recordDescription}</td>
           <td>${documentFiledBy}</td>
