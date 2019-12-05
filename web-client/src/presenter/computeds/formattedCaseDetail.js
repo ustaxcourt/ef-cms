@@ -1,5 +1,12 @@
 import { state } from 'cerebral';
 
+export const formattedCases = (get, applicationContext) => {
+  const { formatCase } = applicationContext.getUtilities();
+
+  const cases = get(state.cases);
+  return cases.map(myCase => formatCase(applicationContext, myCase));
+};
+
 export const formattedCaseDetail = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const isExternalUser = applicationContext
