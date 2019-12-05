@@ -31,8 +31,11 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     }
   }
 
+  const showConsolidatedCaseIcon = !!caseDetail.leadCaseId;
+
   return {
     hidePublicCaseInformation: !isExternalUser,
+    showConsolidatedCaseIcon,
     showEditCaseButton: permissions.UPDATE_CASE_CONTEXT,
     showFileFirstDocumentButton,
     showPendingAccessToCaseButton,

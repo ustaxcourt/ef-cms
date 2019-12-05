@@ -1,4 +1,6 @@
+import { AddConsolidatedCaseModal } from './AddConsolidatedCaseModal';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
 import { connect } from '@cerebral/react';
@@ -36,6 +38,22 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
         )}
       </div>
     </div>
+  </React.Fragment>
+);
+
+const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
+  <React.Fragment>
+    {!caseDetailHelper.hasConsolidatedCases && <p>Not consolidated</p>}
+    <table>
+      {caseDetail.consolidatedCases.map((consolidatedCase, index) => (
+        <tr key={index}>
+          <td>
+            <CaseLink formattedCase={consolidatedCase} />
+          </td>
+          <td>{consolidatedCase.caseName}</td>
+        </tr>
+      ))}
+    </table>
   </React.Fragment>
 );
 
@@ -236,6 +254,7 @@ export const CaseInformationInternal = connect(
       sequences.navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
+    openCleanModalSequence: sequences.openCleanModalSequence,
     openPrioritizeCaseModalSequence: sequences.openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
@@ -250,6 +269,7 @@ export const CaseInformationInternal = connect(
     navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
+    openCleanModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
@@ -313,6 +333,47 @@ export const CaseInformationInternal = connect(
                       openUnprioritizeCaseModalSequence
                     }
                   />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid-row grid-gap margin-top-4">
+            <div className="tablet:grid-col-6">
+              <div className="card height-full">
+                <div className="content-wrapper">
+                  <h3 className="underlined">
+                    Consolidated Cases
+                    {formattedCaseDetail.canConsolidate && (
+                      <Button
+                        link
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        onClick={() => {
+                          openCleanModalSequence({
+                            showModal: 'AddConsolidatedCaseModal',
+                          });
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          className="margin-right-05"
+                          icon="plus-circle"
+                          size="1x"
+                        />
+                        Add Cases
+                      </Button>
+                    )}
+                  </h3>
+                  <AddConsolidatedCaseModal />
+                  {formattedCaseDetail.canConsolidate &&
+                    formattedCaseDetail.consolidatedCases.length > 0 && (
+                      <ConsolidatedCases caseDetail={formattedCaseDetail} />
+                    )}
+                  {formattedCaseDetail.canConsolidate &&
+                    formattedCaseDetail.consolidatedCases.length === 0 && (
+                      <p>Not consolidated</p>
+                    )}
+                  {!formattedCaseDetail.canConsolidate && (
+                    <p>This case is not eligible for consolidation.</p>
+                  )}
                 </div>
               </div>
             </div>

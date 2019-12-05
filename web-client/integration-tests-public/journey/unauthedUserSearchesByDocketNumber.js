@@ -4,6 +4,7 @@ export default (test, params) => {
     const queryParams = {
       docketNumber: params.docketNumber,
     };
+    test.docketNumber = params.docketNumber;
 
     test.setState('docketNumberSearchForm', { docketNumber: '123-xx' });
     await test.runSequence('submitCaseDocketNumberSearchSequence', {});
