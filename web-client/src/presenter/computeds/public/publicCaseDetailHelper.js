@@ -42,15 +42,16 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
         action: record.action,
         createdAtFormatted: record.createdAtFormatted,
         description: record.description,
-        descriptionDisplay: document.documentTitle || record.description,
-        documentId: document.documentId,
+        descriptionDisplay:
+          (document && document.documentTitle) || record.description,
+        documentId: document && document.documentId,
         eventCode: record.eventCode || (document && document.eventCode),
         filedBy: document && document.filedBy,
         filingsAndProceedingsWithAdditionalInfo,
         hasDocument: !!document,
         index,
         isPaper: document && document.isPaper,
-        servedAtFormatted: document.servedAtFormatted,
+        servedAtFormatted: document && document.servedAtFormatted,
         servedPartiesCode: document && document.servedPartiesCode,
         showDocumentDescriptionWithoutLink:
           document &&
