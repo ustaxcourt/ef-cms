@@ -52,7 +52,7 @@ describe('canConsolidateAction', () => {
     expect(noStub).toHaveBeenCalled();
   });
 
-  it('should return false when no case is confirmed', async () => {
+  it('should return yes when case is consolidatable', async () => {
     consolidationStub.mockReturnValue({
       canConsolidate: true,
       reason: '',
