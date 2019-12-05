@@ -38,10 +38,10 @@ export const DraftDocuments = connect(
             <FontAwesomeIcon icon="clipboard-list" size="1x" /> Create Order
           </Button>
         )}
-        {formattedCaseDetail.draftDocuments.length === 0 && (
+        {formattedCaseDetail.formattedDraftDocuments.length === 0 && (
           <p>There are no draft documents.</p>
         )}
-        {formattedCaseDetail.draftDocuments.length > 0 && (
+        {formattedCaseDetail.formattedDraftDocuments.length > 0 && (
           <table
             aria-label="draft documents"
             className="usa-table case-detail draft-documents responsive-table row-border-only"
@@ -57,7 +57,7 @@ export const DraftDocuments = connect(
               </tr>
             </thead>
             <tbody>
-              {formattedCaseDetail.draftDocuments.map(
+              {formattedCaseDetail.formattedDraftDocuments.map(
                 (draftDocument, index) => {
                   return (
                     <tr key={index}>
@@ -66,8 +66,7 @@ export const DraftDocuments = connect(
                       <td>
                         <FilingsAndProceedings
                           arrayIndex={index}
-                          document={draftDocument}
-                          record={{}} // TODO: we are not yet sure where this comes from since we don't have a docket record for proposed / signed stipulated decisions
+                          entry={draftDocument}
                         />
                       </td>
 

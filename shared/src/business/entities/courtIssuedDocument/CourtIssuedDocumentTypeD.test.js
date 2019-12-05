@@ -15,9 +15,9 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
     });
 
-    it('should have error message for future date', () => {
+    it('should have error message for past date', () => {
       const date = moment()
-        .subtract(2, 'days')
+        .subtract(5, 'days')
         .format();
       const extDoc = CourtIssuedDocumentFactory.get({
         attachments: false,

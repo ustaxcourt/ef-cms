@@ -17,6 +17,7 @@ import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForRespons
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
 
 const onFileUploadedSuccess = [
+  setWaitingForResponseAction,
   submitCourtIssuedOrderAction,
   setCaseAction,
   getFileExternalDocumentAlertSuccessAction,
@@ -28,6 +29,7 @@ const onFileUploadedSuccess = [
     CaseDetail: navigateToCaseDetailAction,
     DocumentDetail: navigateToDocumentDetailAction,
   },
+  unsetWaitingForResponseAction,
 ];
 
 export const submitCourtIssuedOrderSequence = [

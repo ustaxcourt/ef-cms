@@ -1,5 +1,5 @@
-const _ = require('lodash');
 const { Case } = require('../entities/cases/Case');
+const { cloneDeep, isEmpty } = require('lodash');
 const { Document } = require('../entities/Document');
 const { Order } = require('../entities/orders/Order');
 
@@ -11,7 +11,7 @@ const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
 );
 
 const formatDocument = (applicationContext, document) => {
-  const result = _.cloneDeep(document);
+  const result = cloneDeep(document);
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
@@ -78,7 +78,7 @@ const formatDocument = (applicationContext, document) => {
 };
 
 const formatDocketRecord = (applicationContext, docketRecord) => {
-  const result = _.cloneDeep(docketRecord);
+  const result = cloneDeep(docketRecord);
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.filingDate, 'MMDDYY');
@@ -87,7 +87,7 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
 };
 
 const formatCaseDeadline = (applicationContext, caseDeadline) => {
-  const result = _.cloneDeep(caseDeadline);
+  const result = cloneDeep(caseDeadline);
   result.deadlineDateFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.deadlineDate, 'MMDDYY');
@@ -186,10 +186,10 @@ const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {
 };
 
 const formatCase = (applicationContext, caseDetail) => {
-  if (_.isEmpty(caseDetail)) {
+  if (isEmpty(caseDetail)) {
     return {};
   }
-  const result = _.cloneDeep(caseDetail);
+  const result = cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
   if (result.documents)
@@ -347,6 +347,13 @@ const formatCase = (applicationContext, caseDetail) => {
     result.showNotScheduled = true;
   }
 
+  result.isLeadCase = !!(
+    result.leadCaseId && result.leadCaseId === result.caseId
+  );
+
+  const caseEntity = new Case(caseDetail, { applicationContext });
+  result.canConsolidate = caseEntity.canConsolidate();
+
   return result;
 };
 
@@ -426,6 +433,8 @@ const getFormattedCaseDetail = ({
 module.exports = {
   formatCase,
   formatCaseDeadlines,
+  formatDocketRecord,
+  formatDocketRecordWithDocument,
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,

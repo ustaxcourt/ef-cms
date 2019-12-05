@@ -318,3 +318,13 @@ button {
     margin-bottom: 20px;
   }
 }
+
+.add-consolidated-case-search-modal {
+  .usa-button {
+    &.ustc-search-button {
+      min-width: 90px;
+      height: 34px;
+      background-image: none;
+    }
+  }
+}
