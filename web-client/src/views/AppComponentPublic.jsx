@@ -4,6 +4,7 @@ import { HeaderPublic } from './Header/HeaderPublic';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
+import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
 import { PublicSearch } from './Public/PublicSearch';
 import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
@@ -14,6 +15,7 @@ const pages = {
   Error,
   Interstitial,
   PublicCaseDetail,
+  PublicPrintableDocketRecord,
   PublicSearch,
 };
 
