@@ -1,4 +1,4 @@
-import { generatePublicDocketRecordPdfUrlAction } from '../../actions/public/generatePublicDocketRecordPdfUrlAction';
+import { generatePublicDocketRecordPdfUrlAction } from '../../actions/Public/generatePublicDocketRecordPdfUrlAction';
 import { getPublicCaseAction } from '../../actions/Public/getPublicCaseAction';
 import { setBaseUrlAction } from '../../actions/setBaseUrlAction';
 import { setCaseAction } from '../../actions/setCaseAction';
