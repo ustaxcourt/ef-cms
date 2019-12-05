@@ -2074,6 +2074,33 @@ describe('Case entity', () => {
         expect(result.reason).toEqual('Place of trial is not the same.');
       });
 
+      it('should fail when case judges are not the same', () => {
+        const leadCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            associatedJudge: 'Guy Fieri',
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+        const pendingCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+
+        const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual('Judge is not the same.');
+      });
+
       it('should fail when case statuses are both ineligible', () => {
         const leadCaseEntity = new Case(
           {
