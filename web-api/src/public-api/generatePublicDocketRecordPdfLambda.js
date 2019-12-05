@@ -1,6 +1,5 @@
 const createApplicationContext = require('../applicationContext');
 const { customHandle } = require('../customHandle');
-const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 
 /**
  * used for generating a printable PDF of a docket record
@@ -11,8 +10,7 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 
 exports.handler = event =>
   customHandle(event, async () => {
-    const user = getUserFromAuthHeader(event);
-    const applicationContext = createApplicationContext(user);
+    const applicationContext = createApplicationContext({});
     const { caseId, docketRecordSort } = JSON.parse(event.body);
 
     try {
@@ -22,9 +20,8 @@ exports.handler = event =>
           applicationContext,
           caseId,
           docketRecordSort,
-          includePartyDetail: true,
+          includePartyDetail: false,
         });
-      applicationContext.logger.info('User', user);
       applicationContext.logger.info('Case ID', caseId);
       return result;
     } catch (e) {

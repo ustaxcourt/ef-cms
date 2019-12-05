@@ -11,6 +11,7 @@ exports.generateDocketRecordPdfInteractor = async ({
   applicationContext,
   caseId,
   docketRecordSort,
+  includePartyDetail = false,
 }) => {
   const { Case } = applicationContext.getEntityConstructors();
   const caseCaptionPostfix = Case.CASE_CAPTION_POSTFIX;
@@ -175,7 +176,7 @@ exports.generateDocketRecordPdfInteractor = async ({
 
   const getDocketRecordContent = detail => {
     let docketRecordContent = `
-      <table>
+      <table class="docket-record-table">
         <thead>
           <tr>
             <th>No.</th>
@@ -257,7 +258,9 @@ exports.generateDocketRecordPdfInteractor = async ({
       captionPostfix: caseCaptionPostfix,
       docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
       docketRecord: getDocketRecordContent(formattedCaseDetail),
-      partyInfo: getPartyInfoContent(formattedCaseDetail),
+      partyInfo: includePartyDetail
+        ? getPartyInfoContent(formattedCaseDetail)
+        : '',
     });
 
   return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
