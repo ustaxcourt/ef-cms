@@ -1269,4 +1269,15 @@ Case.prototype.canConsolidate = function() {
   return !ineligibleStatusTypes.includes(this.status);
 };
 
+/**
+ * sets lead case id on the current case
+ *
+ * @returns {boolean} true if eligible for consolidation, false otherwise
+ * @param {string} leadCaseId the caseId of the lead case for consolidation
+ */
+Case.prototype.setLeadCase = function(leadCaseId) {
+  this.leadCaseId = leadCaseId;
+  return this;
+};
+
 module.exports = { Case };
