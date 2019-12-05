@@ -13,6 +13,6 @@ export const gotoPrintableDocketRecordSequence = [
   setCaseAction,
   generateDocketRecordPdfUrlAction,
   setPdfPreviewUrlSequence,
-  set(state.currentPage, 'PublicPrintableDocketRecord'),
+  set(state.currentPage, 'PrintableDocketRecord'),
   unsetWaitingForResponseAction,
 ];
