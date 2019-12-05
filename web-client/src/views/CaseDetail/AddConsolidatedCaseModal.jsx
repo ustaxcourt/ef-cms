@@ -4,19 +4,16 @@ import { ModalCaseSearchBox } from './ModalCaseSearchBox';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 const NoCaseFound = () => (
-  <>
-    <div
-      className={classNames('usa-form-group', true && 'usa-form-group--error')}
-    >
-      <label className="usa-label margin-bottom-0" htmlFor="case-notes">
-        Case # not found
-      </label>
-      <p className="margin-top-0">Please try your search again.</p>
-    </div>
-  </>
+  <div className="usa-form-group usa-form-group--error">
+    <label className="usa-label margin-bottom-0" htmlFor="validation-message">
+      Case # not found
+    </label>
+    <p className="margin-top-0" id="validation-message">
+      Please try your search again.
+    </p>
+  </div>
 );
 
 export const AddConsolidatedCaseModal = connect(
@@ -41,7 +38,7 @@ export const AddConsolidatedCaseModal = connect(
         <ModalCaseSearchBox />
 
         {(caseDetail && (
-          <FormGroup>
+          <FormGroup errorText={error}>
             <label className="usa-label" htmlFor="confirm-legend">
               Confirm this is the case you want to consolidate
             </label>
