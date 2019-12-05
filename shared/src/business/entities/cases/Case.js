@@ -1233,7 +1233,10 @@ Case.prototype.getConsolidationStatus = function(caseEntity) {
     return { canConsolidate: false, reason: 'Case procedure is not the same.' };
   }
 
-  if (this.preferredTrialCity !== caseEntity.preferredTrialCity) {
+  if (
+    this.preferredTrialCity !== caseEntity.preferredTrialCity &&
+    this.trialLocation !== caseEntity.trialLocation
+  ) {
     return { canConsolidate: false, reason: 'Place of trial is not the same.' };
   }
 

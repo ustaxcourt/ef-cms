@@ -2168,7 +2168,7 @@ describe('Case entity', () => {
           },
           { applicationContext },
         );
-        const result = await caseEntity.setLeadCase(leadCaseId);
+        const result = caseEntity.setLeadCase(leadCaseId);
 
         expect(result.leadCaseId).toEqual(leadCaseId);
       });
