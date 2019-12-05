@@ -4,7 +4,7 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
- * @param {object} provider.router the router objected needed to create an object url
+ * @param {object} providers.router the router objected needed to create an object url
  * @returns {object} the pdfUrl
  */
 export const generatePublicDocketRecordPdfUrlAction = async ({
