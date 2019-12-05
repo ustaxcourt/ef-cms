@@ -7,6 +7,7 @@ import {
   formatDocketRecordWithDocument,
   sortDocketRecords,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
+import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import {
   getCognitoLoginUrl,
   getPublicSiteUrl,
@@ -37,6 +38,7 @@ const applicationContextPublic = {
   getPublicSiteUrl,
   getUseCases: () => ({
     casePublicSearchInteractor,
+    generatePublicDocketRecordPdfInteractor,
     getCaseInteractor: getPublicCaseInteractor,
     validateCaseAdvancedSearchInteractor,
   }),

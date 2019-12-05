@@ -1,28 +1,24 @@
 import { state } from 'cerebral';
 /**
- * get the pdf file and pdf blob url from the passed in htmlString
+ * invokes the generate public docket record endpoint to get back the pdf
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
+ * @param {object} provider.router the router objected needed to create an object url
  * @returns {object} the pdfUrl
  */
-export const generateDocketRecordPdfUrlAction = async ({
+export const generatePublicDocketRecordPdfUrlAction = async ({
   applicationContext,
   get,
   router,
 }) => {
   const caseDetail = get(state.caseDetail);
-  const docketRecordSort = get(
-    state.sessionMetadata.docketRecordSort[caseDetail.caseId],
-  );
 
   const docketRecordPdf = await applicationContext
     .getUseCases()
-    .generateDocketRecordPdfInteractor({
+    .generatePublicDocketRecordPdfInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
-      docketRecordSort,
-      includePartyDetail: true,
     });
 
   const pdfFile = new Blob([docketRecordPdf], { type: 'application/pdf' });

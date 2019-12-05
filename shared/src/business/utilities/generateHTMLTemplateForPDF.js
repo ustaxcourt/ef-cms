@@ -332,6 +332,10 @@ const generatePrintableDocketRecordTemplate = content => {
     .party-details {
       width: 25%;
     }
+
+    .docket-record-table {
+      margin-top: 30px;
+    }
   `;
 
   const templateContent = {
