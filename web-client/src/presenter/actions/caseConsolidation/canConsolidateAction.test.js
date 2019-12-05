@@ -6,11 +6,13 @@ describe('canConsolidateAction', () => {
   let yesStub;
   let noStub;
   let consolidationStub;
+  let getTrialSessionDetailsInteractorStub;
 
   beforeEach(() => {
     yesStub = jest.fn();
     noStub = jest.fn();
     consolidationStub = jest.fn();
+    getTrialSessionDetailsInteractorStub = jest.fn();
 
     presenter.providers.path = { error: noStub, success: yesStub };
 
@@ -21,6 +23,9 @@ describe('canConsolidateAction', () => {
             getConsolidationStatus: consolidationStub,
           };
         },
+      }),
+      getUseCases: () => ({
+        getTrialSessionDetailsInteractor: getTrialSessionDetailsInteractorStub,
       }),
     };
   });
@@ -46,10 +51,15 @@ describe('canConsolidateAction', () => {
       modules: {
         presenter,
       },
-      props: { confirmSelection: true },
+      props: {
+        caseDetail: {},
+        caseToConsolidate: {},
+        confirmSelection: true,
+      },
     });
 
     expect(noStub).toHaveBeenCalled();
+    expect(getTrialSessionDetailsInteractorStub).toHaveBeenCalled();
   });
 
   it('should return yes when case is consolidatable', async () => {
@@ -61,9 +71,14 @@ describe('canConsolidateAction', () => {
       modules: {
         presenter,
       },
-      props: { confirmSelection: true },
+      props: {
+        caseDetail: {},
+        caseToConsolidate: {},
+        confirmSelection: true,
+      },
     });
 
     expect(yesStub).toHaveBeenCalled();
+    expect(getTrialSessionDetailsInteractorStub).toHaveBeenCalled();
   });
 });
