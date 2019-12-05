@@ -351,6 +351,9 @@ const formatCase = (applicationContext, caseDetail) => {
     result.leadCaseId && result.leadCaseId === result.caseId
   );
 
+  const caseEntity = new Case(caseDetail, { applicationContext });
+  result.canConsolidate = caseEntity.canConsolidate();
+
   return result;
 };
 
