@@ -1237,6 +1237,10 @@ Case.prototype.getConsolidationStatus = function(caseEntity) {
     return { canConsolidate: false, reason: 'Place of trial is not the same.' };
   }
 
+  if (this.associatedJudge !== caseEntity.associatedJudge) {
+    return { canConsolidate: false, reason: 'Judge is not the same.' };
+  }
+
   if (!this.canConsolidate(caseEntity.status)) {
     return {
       canConsolidate: false,
