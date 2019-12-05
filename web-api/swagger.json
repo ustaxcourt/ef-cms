@@ -1449,6 +1449,59 @@
         }
       }
     },
+    "/public-api/{caseId}/{documentId}/public-document-download-url": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["documents"],
+        "summary": "redirects to the s3 url for downloading a public document",
+        "description": "Create and redirects the user to a pre-signed url for document downloads from S3.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "302": {
+            "description": "302 response",
+            "schema": {
+              "$ref": "#/definitions/policyUrl"
+            }
+          }
+        }
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/documents/{documentId}/download-policy-url": {
       "parameters": [
         {
