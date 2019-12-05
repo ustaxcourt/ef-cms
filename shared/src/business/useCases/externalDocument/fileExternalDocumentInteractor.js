@@ -113,7 +113,9 @@ exports.fileExternalDocumentInteractor = async ({
   // Serve on all parties
   const servedParties = aggregateElectronicallyServedParties(caseEntity);
 
-  documentsToAdd.forEach(async ([documentId, metadata, relationship]) => {
+  const sendEmails = [];
+
+  documentsToAdd.forEach(([documentId, metadata, relationship]) => {
     if (documentId && metadata) {
       const documentEntity = new Document(
         {
@@ -206,22 +208,26 @@ exports.fileExternalDocumentInteractor = async ({
         },
       }));
 
-      await applicationContext.getDispatchers().sendBulkTemplatedEmail({
-        applicationContext,
-        defaultTemplateData: {
-          caseCaption: 'undefined',
-          docketNumber: 'undefined',
-          documentName: 'undefined',
-          loginUrl: 'undefined',
-          name: 'undefined',
-          serviceDate: 'undefined',
-          serviceTime: 'undefined',
-        },
-        destinations,
-        templateName: process.env.EMAIL_SERVED_TEMPLATE,
-      });
+      sendEmails.push(
+        applicationContext.getDispatchers().sendBulkTemplatedEmail({
+          applicationContext,
+          defaultTemplateData: {
+            caseCaption: 'undefined',
+            docketNumber: 'undefined',
+            documentName: 'undefined',
+            loginUrl: 'undefined',
+            name: 'undefined',
+            serviceDate: 'undefined',
+            serviceTime: 'undefined',
+          },
+          destinations,
+          templateName: process.env.EMAIL_SERVED_TEMPLATE,
+        }),
+      );
     }
   });
+
+  await Promise.all(sendEmails);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
