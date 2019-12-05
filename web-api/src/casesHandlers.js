@@ -19,6 +19,8 @@ module.exports = {
     .handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
+  setConsolidatedCaseLambda: require('./cases/setConsolidatedCaseLambda')
+    .handler,
   unblockCaseFromTrialLambda: require('./cases/unblockCaseFromTrialLambda')
     .handler,
   unprioritizeCaseLambda: require('./cases/unprioritizeCaseLambda').handler,
