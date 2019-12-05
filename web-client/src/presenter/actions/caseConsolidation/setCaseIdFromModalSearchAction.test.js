@@ -1,9 +1,9 @@
 import { runAction } from 'cerebral/test';
-import { setCaseIdFromSearchAction } from './setCaseIdFromSearchAction';
+import { setCaseIdFromModalSearchAction } from './setCaseIdFromModalSearchAction';
 
-describe('setCaseIdFromSearchAction', () => {
+describe('setCaseIdFromModalSearchAction', () => {
   it('matches a docket number', async () => {
-    const { output } = await runAction(setCaseIdFromSearchAction, {
+    const { output } = await runAction(setCaseIdFromModalSearchAction, {
       state: {
         modal: {
           searchTerm: '101-18',
@@ -13,7 +13,7 @@ describe('setCaseIdFromSearchAction', () => {
     expect(output.caseId).toEqual('101-18');
   });
   it('matches a docket number with S suffix', async () => {
-    const { output } = await runAction(setCaseIdFromSearchAction, {
+    const { output } = await runAction(setCaseIdFromModalSearchAction, {
       state: {
         modal: {
           searchTerm: '101-18S',
@@ -23,7 +23,7 @@ describe('setCaseIdFromSearchAction', () => {
     expect(output.caseId).toEqual('101-18');
   });
   it('matches a docket number with S suffix', async () => {
-    const { output } = await runAction(setCaseIdFromSearchAction, {
+    const { output } = await runAction(setCaseIdFromModalSearchAction, {
       state: {
         modal: {
           searchTerm: '101-18S',
@@ -33,7 +33,7 @@ describe('setCaseIdFromSearchAction', () => {
     expect(output.caseId).toEqual('101-18');
   });
   it('matches a docket number with R suffix', async () => {
-    const { output } = await runAction(setCaseIdFromSearchAction, {
+    const { output } = await runAction(setCaseIdFromModalSearchAction, {
       state: {
         modal: {
           searchTerm: '101-18R',
@@ -43,7 +43,7 @@ describe('setCaseIdFromSearchAction', () => {
     expect(output.caseId).toEqual('101-18');
   });
   it('matches a docket number with P suffix', async () => {
-    const { output } = await runAction(setCaseIdFromSearchAction, {
+    const { output } = await runAction(setCaseIdFromModalSearchAction, {
       state: {
         modal: {
           searchTerm: '101-18P',
@@ -53,7 +53,7 @@ describe('setCaseIdFromSearchAction', () => {
     expect(output.caseId).toEqual('101-18');
   });
   it('matches a docket number with W suffix', async () => {
-    const { output } = await runAction(setCaseIdFromSearchAction, {
+    const { output } = await runAction(setCaseIdFromModalSearchAction, {
       state: {
         modal: {
           searchTerm: '101-18W',
@@ -63,7 +63,7 @@ describe('setCaseIdFromSearchAction', () => {
     expect(output.caseId).toEqual('101-18');
   });
   it('matches a docket number with X suffix', async () => {
-    const { output } = await runAction(setCaseIdFromSearchAction, {
+    const { output } = await runAction(setCaseIdFromModalSearchAction, {
       state: {
         modal: {
           searchTerm: '101-18X',
@@ -73,7 +73,7 @@ describe('setCaseIdFromSearchAction', () => {
     expect(output.caseId).toEqual('101-18');
   });
   it('matches a docket number with L suffix', async () => {
-    const { output } = await runAction(setCaseIdFromSearchAction, {
+    const { output } = await runAction(setCaseIdFromModalSearchAction, {
       state: {
         modal: {
           searchTerm: '101-18L',
@@ -83,7 +83,7 @@ describe('setCaseIdFromSearchAction', () => {
     expect(output.caseId).toEqual('101-18');
   });
   it('matches a docket number with SL suffix', async () => {
-    const { output } = await runAction(setCaseIdFromSearchAction, {
+    const { output } = await runAction(setCaseIdFromModalSearchAction, {
       state: {
         modal: {
           searchTerm: '101-18SL',
@@ -93,7 +93,7 @@ describe('setCaseIdFromSearchAction', () => {
     expect(output.caseId).toEqual('101-18');
   });
   it('does not match a docket number in invalid format', async () => {
-    const { output } = await runAction(setCaseIdFromSearchAction, {
+    const { output } = await runAction(setCaseIdFromModalSearchAction, {
       state: {
         modal: {
           searchTerm: '101-18SX',
@@ -103,7 +103,7 @@ describe('setCaseIdFromSearchAction', () => {
     expect(output.caseId).toEqual('101-18SX');
   });
   it('does not match a non-docket number', async () => {
-    const { output } = await runAction(setCaseIdFromSearchAction, {
+    const { output } = await runAction(setCaseIdFromModalSearchAction, {
       state: {
         modal: {
           searchTerm: 'XY101-18',
@@ -113,7 +113,7 @@ describe('setCaseIdFromSearchAction', () => {
     expect(output.caseId).toEqual('XY101-18');
   });
   it('trims the search term', async () => {
-    const { output } = await runAction(setCaseIdFromSearchAction, {
+    const { output } = await runAction(setCaseIdFromModalSearchAction, {
       state: {
         modal: {
           searchTerm: '  101-18SL  ',
