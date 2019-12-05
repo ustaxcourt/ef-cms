@@ -2,7 +2,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
+const { Case } = require('../entities/cases/Case');
+const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
  * setConsolidatedCaseInteractor
@@ -28,10 +29,18 @@ exports.setConsolidatedCaseInteractor = async ({
     .getPersistenceGateway()
     .getCaseByCaseId({ applicationContext, caseId });
 
-  caseToUpdate.setLeadCase(leadCaseId);
+  if (!caseToUpdate) {
+    throw new NotFoundError(`Case ${caseId} was not found.`);
+  }
+
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
+
+  caseEntity.setLeadCase(leadCaseId);
+
+  // TODO: Need to create a mapping record
 
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: caseToUpdate.validate().toRawObject(),
+    caseToUpdate: caseEntity.validate().toRawObject(),
   });
 };
