@@ -131,7 +131,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
   );
 
   // TODO these are just defaults
-  result.isConsolidatable = true;
   result.consolidatedCases = [];
 
   result.showBlockedTag = caseDetail.blocked;
