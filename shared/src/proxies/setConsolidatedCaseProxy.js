@@ -16,7 +16,7 @@ exports.setConsolidatedCaseInteractor = ({
 }) => {
   return put({
     applicationContext,
-    body: leadCaseId,
+    body: { leadCaseId },
     endpoint: `/cases/${caseId}/consolidate-case`,
   });
 };

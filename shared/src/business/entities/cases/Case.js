@@ -1272,8 +1272,8 @@ Case.prototype.canConsolidate = function() {
 /**
  * sets lead case id on the current case
  *
- * @returns {boolean} true if eligible for consolidation, false otherwise
  * @param {string} leadCaseId the caseId of the lead case for consolidation
+ * @returns {Case} the updated Case entity
  */
 Case.prototype.setLeadCase = function(leadCaseId) {
   this.leadCaseId = leadCaseId;

@@ -32,7 +32,7 @@ describe('setConsolidatedCaseInteractor', () => {
     };
   });
 
-  it('Should return an Unauthrized error if the user does not have the CONSOLIDATE_CASES permission', async () => {
+  it('Should return an Unauthorized error if the user does not have the CONSOLIDATE_CASES permission', async () => {
     let error;
     applicationContext.getCurrentUser = () => ({
       role: User.ROLES.petitioner,
