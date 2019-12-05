@@ -6,9 +6,9 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 const NoCaseFound = () => (
-  <div className="usa-form-group usa-form-group--error">
+  <div className="usa-form-group">
     <label className="usa-label margin-bottom-0" htmlFor="validation-message">
-      Case # not found
+      No results found
     </label>
     <p className="margin-top-0" id="validation-message">
       Please try your search again.
