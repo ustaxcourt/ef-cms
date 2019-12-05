@@ -13,4 +13,14 @@ describe('setFieldOrderAction', () => {
     });
     expect(result.state.fieldOrder).toEqual(['name']);
   });
+
+  it('defaults state.fieldOrder to an empty array if it does not exist', async () => {
+    const result = await runAction(setFieldOrderAction, {
+      props: {
+        field: 'name',
+      },
+      state: {},
+    });
+    expect(result.state.fieldOrder).toEqual(['name']);
+  });
 });
