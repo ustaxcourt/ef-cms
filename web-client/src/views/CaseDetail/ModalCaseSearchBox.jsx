@@ -45,7 +45,6 @@ export const ModalCaseSearchBox = connect(
           />
           <Button className="ustc-search-button" type="submit">
             <span className="usa-search-submit-text">Search</span>
-            <span className="usa-sr-only">Search</span>
           </Button>
         </div>
       </form>
