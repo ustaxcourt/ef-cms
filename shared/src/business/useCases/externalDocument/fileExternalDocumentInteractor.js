@@ -1,7 +1,4 @@
 const {
-  addServedStampToDocument,
-} = require('../courtIssuedDocument/addServedStampToDocument');
-const {
   aggregateElectronicallyServedParties,
 } = require('../../utilities/aggregateElectronicallyServedParties');
 const {
