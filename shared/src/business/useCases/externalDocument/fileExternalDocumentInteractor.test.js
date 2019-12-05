@@ -37,6 +37,7 @@ describe('fileExternalDocumentInteractor', () => {
     role: User.ROLES.petitioner,
     userId: 'petitioner',
   };
+
   it('should throw an error if not authorized', async () => {
     let error;
     try {
@@ -71,11 +72,14 @@ describe('fileExternalDocumentInteractor', () => {
     expect(error.message).toContain('Unauthorized');
   });
 
-  it('add documents and workitems', async () => {
+  it('add documents and workitems and serve the documents on the parties', async () => {
     let error;
-    let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
-    let saveWorkItemForNonPaperSpy = sinon.spy();
-    let updateCaseSpy = sinon.spy();
+    const getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
+    const saveWorkItemForNonPaperSpy = sinon.spy();
+    const updateCaseSpy = sinon.spy();
+    const sendBulkTemplatedEmailMock = jest.fn();
+
+    let updatedCase;
     try {
       applicationContext = {
         environment: { stage: 'local' },
@@ -86,6 +90,9 @@ describe('fileExternalDocumentInteractor', () => {
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           });
         },
+        getDispatchers: () => ({
+          sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
+        }),
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdSpy,
           getUserById: ({ userId }) => MOCK_USERS[userId],
@@ -94,7 +101,7 @@ describe('fileExternalDocumentInteractor', () => {
         }),
         getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       };
-      await fileExternalDocumentInteractor({
+      updatedCase = await fileExternalDocumentInteractor({
         applicationContext,
         documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
@@ -109,5 +116,8 @@ describe('fileExternalDocumentInteractor', () => {
     expect(getCaseByCaseIdSpy.called).toEqual(true);
     expect(saveWorkItemForNonPaperSpy.called).toEqual(true);
     expect(updateCaseSpy.called).toEqual(true);
+    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(updatedCase.documents[3].status).toEqual('served');
+    expect(updatedCase.documents[3].servedAt).toBeDefined();
   });
 });
