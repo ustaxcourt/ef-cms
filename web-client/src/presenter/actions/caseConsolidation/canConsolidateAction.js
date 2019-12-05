@@ -1,16 +1,13 @@
 /**
+ * check to see if we can consolidate cases
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.path the next object in the path
  * @param {object} providers.props the cerebral props object
- * @returns {Promise} async action
+ * @returns {object} the path to take next
  */
-export const canConsolidateAction = async ({
-  applicationContext,
-  path,
-  props,
-}) => {
+export const canConsolidateAction = ({ applicationContext, path, props }) => {
   const { caseDetail, caseToConsolidate, confirmSelection } = props;
 
   if (!confirmSelection) {

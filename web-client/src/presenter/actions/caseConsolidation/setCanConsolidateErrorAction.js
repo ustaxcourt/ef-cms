@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * set the state from props
+ * set the modal state error from props
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
