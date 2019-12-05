@@ -39,12 +39,12 @@ export const AddConsolidatedCaseModal = connect(
 
         {(caseDetail && (
           <FormGroup errorText={error}>
-            <label className="usa-label" htmlFor="confirm-legend">
+            <legend className="usa-legend" id="confirm-selection-legend">
               Confirm this is the case you want to consolidate
-            </label>
-            <div className="usa-checkbox">
+            </legend>
+            <div className="usa-checkbox" id="confirm-legend">
               <input
-                aria-describedby="confirm-legend"
+                aria-describedby="confirm-selection-legend"
                 checked={confirmSelection || false}
                 className="usa-checkbox__input"
                 id="confirm-selection"
