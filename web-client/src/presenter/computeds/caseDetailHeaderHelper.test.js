@@ -190,4 +190,48 @@ describe('caseDetailHeaderHelper', () => {
     });
     expect(result.showRequestAccessToCaseButton).toEqual(false);
   });
+
+  it('should show the consolidated case icon if the case is associated with a lead case', async () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          leadCaseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+
+    expect(result.showConsolidatedCaseIcon).toEqual(true);
+  });
+
+  it('should NOT show the consolidated case icon if the case is NOT associated with a lead case', async () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          leadCaseId: '',
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+
+    expect(result.showConsolidatedCaseIcon).toEqual(false);
+  });
 });
