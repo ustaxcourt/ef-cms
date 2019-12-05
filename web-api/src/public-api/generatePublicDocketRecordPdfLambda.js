@@ -20,6 +20,7 @@ exports.handler = event =>
           applicationContext,
           caseId,
           docketRecordSort,
+          includePartyDetail: false,
         });
       applicationContext.logger.info('Case ID', caseId);
       return result;
