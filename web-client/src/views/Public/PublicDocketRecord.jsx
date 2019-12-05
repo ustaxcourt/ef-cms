@@ -11,7 +11,7 @@ export const PublicDocketRecord = connect(
   },
   ({ publicCaseDetailHelper }) => {
     return (
-      <React.Fragment>
+      <>
         <PublicDocketRecordHeader />
         <table
           aria-label="docket record"
@@ -78,7 +78,7 @@ export const PublicDocketRecord = connect(
             })}
           </tbody>
         </table>
-      </React.Fragment>
+      </>
     );
   },
 );
