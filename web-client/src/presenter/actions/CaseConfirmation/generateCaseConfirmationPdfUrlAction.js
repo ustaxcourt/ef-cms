@@ -10,9 +10,9 @@ import { state } from 'cerebral';
 export const generateCaseConfirmationPdfUrlAction = async ({ get, store }) => {
   const baseUrl = get(state.baseUrl);
   const token = get(state.token);
-  const { docketNumber } = get(state.caseDetail);
+  const { caseId, docketNumber } = get(state.caseDetail);
 
-  const pdfPreviewUrl = `${baseUrl}/documents/case-${docketNumber}-confirmation.pdf/document-download-url?token=${token}`;
+  const pdfPreviewUrl = `${baseUrl}/documents/${caseId}/case-${docketNumber}-confirmation.pdf/document-download-url?token=${token}`;
 
   store.set(state.pdfPreviewUrl, pdfPreviewUrl);
 };

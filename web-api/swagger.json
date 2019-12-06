@@ -1450,8 +1450,14 @@
         }
       }
     },
-    "/documents/{documentId}/document-download-url": {
+    "/documents/{caseId}/{documentId}/document-download-url": {
       "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
         {
           "name": "documentId",
           "in": "path",

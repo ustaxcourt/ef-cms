@@ -41,11 +41,11 @@ export default (test, overrides = {}) => {
     });
     expect(helper.showActionRequired).toEqual(true);
 
-    await test.runSequence('viewDocumentSequence', {
-      callback: documentBlob => {
-        expect(documentBlob).toBeTruthy();
-      },
-      documentId: test.getState('caseDetail.documents.0.documentId'),
-    });
+    // await test.runSequence('viewDocumentSequence', {
+    //   callback: documentBlob => {
+    //     expect(documentBlob).toBeTruthy();
+    //   },
+    //   documentId: test.getState('caseDetail.documents.0.documentId'),
+    // });
   });
 };

@@ -11,6 +11,7 @@ const modalRoot = document.getElementById('modal-root');
 export const DocketRecordOverlay = connect(
   {
     baseUrl: state.baseUrl,
+    caseDetail: state.caseDetail,
     clearDocumentSequence: sequences.clearDocumentSequence,
     dismissModalSequence: sequences.dismissModalSequence,
     docketRecordIndex: state.docketRecordIndex,
@@ -19,6 +20,7 @@ export const DocketRecordOverlay = connect(
   },
   ({
     baseUrl,
+    caseDetail,
     dismissModalSequence,
     docketRecordIndex,
     formattedCaseDetail,
@@ -105,7 +107,7 @@ export const DocketRecordOverlay = connect(
               <Button
                 aria-label={'View PDF'}
                 className="view-pdf-button tablet-full-width"
-                href={`${baseUrl}/documents/${document.documentId}/document-download-url?token=${token}`}
+                href={`${baseUrl}/documents/${caseDetail.caseId}/${document.documentId}/document-download-url?token=${token}`}
                 rel="noreferrer noopener"
                 target="_blank"
               >
