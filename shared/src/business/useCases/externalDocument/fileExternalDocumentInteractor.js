@@ -1,6 +1,6 @@
 const {
-  aggregateElectronicallyServedParties,
-} = require('../../utilities/aggregateElectronicallyServedParties');
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -107,8 +107,7 @@ exports.fileExternalDocumentInteractor = async ({
     }
   }
 
-  // Serve on all parties
-  const servedParties = aggregateElectronicallyServedParties(caseEntity);
+  const servedParties = aggregatePartiesForService(caseEntity);
 
   const sendEmails = [];
 
@@ -190,37 +189,41 @@ exports.fileExternalDocumentInteractor = async ({
       });
       caseEntity.addDocketRecord(docketRecordEntity);
 
-      documentEntity.setAsServed(servedParties);
+      if (documentEntity.isAutoServed()) {
+        documentEntity.setAsServed(servedParties.all);
 
-      const destinations = servedParties.map(party => ({
-        email: party.email,
-        templateData: {
-          caseCaption: caseToUpdate.caseCaption,
-          docketNumber: caseToUpdate.docketNumber,
-          documentName: documentEntity.documentTitle,
-          loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-          name: party.name,
-          serviceDate: formatDateString(documentEntity.servedAt, 'MMDDYYYY'),
-          serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
-        },
-      }));
-
-      sendEmails.push(
-        applicationContext.getDispatchers().sendBulkTemplatedEmail({
-          applicationContext,
-          defaultTemplateData: {
-            caseCaption: 'undefined',
-            docketNumber: 'undefined',
-            documentName: 'undefined',
-            loginUrl: 'undefined',
-            name: 'undefined',
-            serviceDate: 'undefined',
-            serviceTime: 'undefined',
+        const destinations = servedParties.electronic.map(party => ({
+          email: party.email,
+          templateData: {
+            caseCaption: caseToUpdate.caseCaption,
+            docketNumber: caseToUpdate.docketNumber,
+            documentName: documentEntity.documentTitle,
+            loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
+            name: party.name,
+            serviceDate: formatDateString(documentEntity.servedAt, 'MMDDYYYY'),
+            serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
           },
-          destinations,
-          templateName: process.env.EMAIL_SERVED_TEMPLATE,
-        }),
-      );
+        }));
+
+        if (destinations.length > 0) {
+          sendEmails.push(
+            applicationContext.getDispatchers().sendBulkTemplatedEmail({
+              applicationContext,
+              defaultTemplateData: {
+                caseCaption: 'undefined',
+                docketNumber: 'undefined',
+                documentName: 'undefined',
+                loginUrl: 'undefined',
+                name: 'undefined',
+                serviceDate: 'undefined',
+                serviceTime: 'undefined',
+              },
+              destinations,
+              templateName: process.env.EMAIL_SERVED_TEMPLATE,
+            }),
+          );
+        }
+      }
     }
   });
 

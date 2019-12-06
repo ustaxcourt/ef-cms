@@ -50,6 +50,7 @@ import { TrialSession } from '../../shared/src/business/entities/trialSessions/T
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
+import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
@@ -229,6 +230,7 @@ const setCurrentUserToken = newToken => {
 
 const allUseCases = {
   addCaseToTrialSessionInteractor,
+  addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
@@ -386,7 +388,7 @@ const applicationContext = {
     );
   },
   getConstants: () =>
-    deepFreeze({
+    (process.env.USTC_DEBUG ? i => i : deepFreeze)({
       BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,

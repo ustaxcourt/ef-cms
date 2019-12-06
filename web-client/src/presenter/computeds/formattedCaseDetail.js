@@ -88,6 +88,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         servedPartiesCode: document && document.servedPartiesCode,
         showDocumentDescriptionWithoutLink:
           !userHasAccessToCase ||
+          !document ||
           (document &&
             (document.isNotServedCourtIssuedDocument ||
               document.isInProgress) &&

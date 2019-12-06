@@ -2047,7 +2047,7 @@ describe('Case entity', () => {
         });
 
         expect(result.canConsolidate).toEqual(false);
-        expect(result.reason).toEqual('Case status is not the same.');
+        expect(result.reason).toEqual('Case status is not the same');
       });
 
       it('should fail when case procedures are not the same', () => {
@@ -2060,7 +2060,7 @@ describe('Case entity', () => {
         });
 
         expect(result.canConsolidate).toEqual(false);
-        expect(result.reason).toEqual('Case procedure is not the same.');
+        expect(result.reason).toEqual('Case procedure is not the same');
       });
 
       it('should fail when case trial locations are not the same', () => {
@@ -2073,7 +2073,7 @@ describe('Case entity', () => {
         });
 
         expect(result.canConsolidate).toEqual(false);
-        expect(result.reason).toEqual('Place of trial is not the same.');
+        expect(result.reason).toEqual('Place of trial is not the same');
       });
 
       it('should fail when case judges are not the same', () => {
@@ -2086,7 +2086,7 @@ describe('Case entity', () => {
         });
 
         expect(result.canConsolidate).toEqual(false);
-        expect(result.reason).toEqual('Judge is not the same.');
+        expect(result.reason).toEqual('Judge is not the same');
       });
 
       it('should fail when case statuses are both ineligible', () => {
@@ -2101,7 +2101,7 @@ describe('Case entity', () => {
 
         expect(result.canConsolidate).toEqual(false);
         expect(result.reason).toEqual(
-          'Case status is Closed and cannot be consolidated.',
+          'Case status is Closed and cannot be consolidated',
         );
       });
 
@@ -2114,6 +2114,43 @@ describe('Case entity', () => {
 
         expect(result.canConsolidate).toEqual(true);
         expect(result.reason).toEqual('');
+      });
+    });
+
+    describe('setLeadCase', () => {
+      it('Should set the leadCaseId on the given case', async () => {
+        const leadCaseId = 'd64ba5a9-b37b-479d-9201-067ec6e335cc';
+        const caseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+        const result = caseEntity.setLeadCase(leadCaseId);
+
+        expect(result.leadCaseId).toEqual(leadCaseId);
+      });
+    });
+
+    describe('findLeadCaseForCases', () => {
+      it('Should return the case with the lowest filing date', () => {
+        const result = Case.findLeadCaseForCases([
+          {
+            caseId: '123',
+            createdAt: moment().toISOString(),
+          },
+          {
+            caseId: '234',
+            createdAt: moment()
+              .subtract(1, 'year')
+              .toISOString(),
+          },
+        ]);
+
+        expect(result.caseId).toEqual('234');
       });
     });
   });
