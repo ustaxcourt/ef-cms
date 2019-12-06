@@ -409,7 +409,9 @@ Document.prototype.isAutoServed = function() {
     this.documentType,
   );
   //if fully concatenated document title includes the word Simultaneous, do not auto-serve
-  const isSimultaneous = this.documentTitle.includes('Simultaneous');
+  const isSimultaneous = (this.documentTitle || this.documentType).includes(
+    'Simultaneous',
+  );
 
   return isExternalDocumentType && !isSimultaneous;
 };
