@@ -20,6 +20,9 @@ const {
   addCaseToTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor');
 const {
+  addConsolidatedCaseInteractor,
+} = require('../../shared/src/business/useCases/addConsolidatedCaseInteractor');
+const {
   addCoversheetInteractor,
 } = require('../../shared/src/business/useCases/addCoversheetInteractor');
 const {
@@ -272,6 +275,9 @@ const {
 const {
   getCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getCaseNoteInteractor');
+const {
+  getCasesByLeadCaseId,
+} = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadCaseId');
 const {
   getCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByUser');
@@ -790,6 +796,7 @@ module.exports = (appContextUser = {}) => {
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
         getCaseNote,
+        getCasesByLeadCaseId,
         getCasesByUser,
         getDocumentQCBatchedForSection,
         getDocumentQCBatchedForUser,
@@ -913,6 +920,7 @@ module.exports = (appContextUser = {}) => {
     getUseCases: () => {
       return {
         addCaseToTrialSessionInteractor,
+        addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,

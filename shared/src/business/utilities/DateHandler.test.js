@@ -82,4 +82,18 @@ describe('DateHandler', () => {
       expect(result).toEqual('96');
     });
   });
+
+  describe('dateStringsCompared', () => {
+    it('should correctly compare two date strings', () => {
+      let result;
+      const date1 = '2001-01-01';
+      const date2 = '2001-01-02';
+
+      result = DateHandler.dateStringsCompared(date1, date2);
+      expect(result).toEqual(-86400000); // 1 day in milliseconds
+
+      result = DateHandler.dateStringsCompared(date2, date1);
+      expect(result).toEqual(86400000); // 1 day in milliseconds
+    });
+  });
 });
