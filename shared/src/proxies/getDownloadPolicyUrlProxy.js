@@ -6,9 +6,9 @@ const { get } = require('./requests');
  * @param {string} providers.documentId the document id to get
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getDownloadPolicyUrl = ({ applicationContext, documentId }) => {
+exports.getDownloadPolicyUrl = ({ applicationContext, caseId, documentId }) => {
   return get({
     applicationContext,
-    endpoint: `/documents/${documentId}/download-policy-url`,
+    endpoint: `/documents/${caseId}/${documentId}/download-policy-url`,
   });
 };

@@ -155,7 +155,7 @@ functions:
     handler: web-api/${self:provider.dir}/documentsHandlers.downloadPolicyUrlLambda
     events:
       - http:
-          path: /{documentId}/download-policy-url
+          path: /{caseId}/{documentId}/download-policy-url
           method: get
           cors: true
           authorizer:
@@ -189,7 +189,7 @@ functions:
     handler: web-api/${self:provider.dir}/documentsHandlers.getDocumentDownloadUrlLambda
     events:
       - http:
-          path: /{documentId}/document-download-url
+          path: /{caseId}/{documentId}/document-download-url
           method: get
           cors: true
 
