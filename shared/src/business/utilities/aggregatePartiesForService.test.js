@@ -45,24 +45,41 @@ describe('aggregatePartiesForService', () => {
     };
   });
 
-  it('should not serve an unrepresented primary contact if filed by paper', async () => {
+  it('should serve an unrepresented primary and secondary contact by paper if filed by paper', async () => {
     mockCase.isPaper = true;
     const result = aggregatePartiesForService(mockCase);
 
     expect(result).toMatchObject({
+      all: [
+        { email: 'practitionerone@example.com', name: 'Practitioner One' },
+        { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
+        { email: 'respondentone@example.com', name: 'Respondent One' },
+        { email: 'respondenttwo@example.com', name: 'Respondent Two' },
+        { name: 'Contact Primary' },
+        { name: 'Contact Secondary' },
+      ],
       electronic: [
         { email: 'practitionerone@example.com', name: 'Practitioner One' },
         { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
         { email: 'respondentone@example.com', name: 'Respondent One' },
         { email: 'respondenttwo@example.com', name: 'Respondent Two' },
       ],
+      paper: [{ name: 'Contact Primary' }, { name: 'Contact Secondary' }],
     });
   });
 
-  it('should serve an unrepresented primary contact if filed electronically', async () => {
+  it('should serve an unrepresented primary contact electronically and an unrepresented secondary contact by paper if filed electronically', async () => {
     const result = aggregatePartiesForService(mockCase);
 
     expect(result).toMatchObject({
+      all: [
+        { email: 'contactprimary@example.com', name: 'Contact Primary' },
+        { email: 'practitionerone@example.com', name: 'Practitioner One' },
+        { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
+        { email: 'respondentone@example.com', name: 'Respondent One' },
+        { email: 'respondenttwo@example.com', name: 'Respondent Two' },
+        { name: 'Contact Secondary' },
+      ],
       electronic: [
         { email: 'contactprimary@example.com', name: 'Contact Primary' },
         { email: 'practitionerone@example.com', name: 'Practitioner One' },
@@ -70,20 +87,29 @@ describe('aggregatePartiesForService', () => {
         { email: 'respondentone@example.com', name: 'Respondent One' },
         { email: 'respondenttwo@example.com', name: 'Respondent Two' },
       ],
+      paper: [{ name: 'Contact Secondary' }],
     });
   });
 
-  it('should not serve the primary contact if represented by counsel', async () => {
+  it('should not serve the primary contact electronically or by paper if represented by counsel, but should serve the secondary contact by paper', async () => {
     mockCase.practitioners[0].representingPrimary = true;
     const result = aggregatePartiesForService(mockCase);
 
     expect(result).toMatchObject({
+      all: [
+        { email: 'practitionerone@example.com', name: 'Practitioner One' },
+        { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
+        { email: 'respondentone@example.com', name: 'Respondent One' },
+        { email: 'respondenttwo@example.com', name: 'Respondent Two' },
+        { name: 'Contact Secondary' },
+      ],
       electronic: [
         { email: 'practitionerone@example.com', name: 'Practitioner One' },
         { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
         { email: 'respondentone@example.com', name: 'Respondent One' },
         { email: 'respondenttwo@example.com', name: 'Respondent Two' },
       ],
+      paper: [{ name: 'Contact Secondary' }],
     });
   });
 
