@@ -1,6 +1,6 @@
 const {
-  aggregateElectronicallyServedParties,
-} = require('../../utilities/aggregateElectronicallyServedParties');
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
 const {
   createISODateString,
   formatDateString,
@@ -91,9 +91,9 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   );
 
   // Serve on all parties
-  const servedParties = aggregateElectronicallyServedParties(caseEntity);
+  const servedParties = aggregatePartiesForService(caseEntity);
 
-  courtIssuedDocument.setAsServed(servedParties);
+  courtIssuedDocument.setAsServed(servedParties.all);
 
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
@@ -190,7 +190,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
       caseToUpdate: caseEntity.validate().toRawObject(),
     });
 
-  const destinations = servedParties.map(party => ({
+  const destinations = (servedParties.electronic || []).map(party => ({
     email: party.email,
     templateData: {
       caseCaption: caseToUpdate.caseCaption,
@@ -203,20 +203,22 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     },
   }));
 
-  await applicationContext.getDispatchers().sendBulkTemplatedEmail({
-    applicationContext,
-    defaultTemplateData: {
-      caseCaption: 'undefined',
-      docketNumber: 'undefined',
-      documentName: 'undefined',
-      loginUrl: 'undefined',
-      name: 'undefined',
-      serviceDate: 'undefined',
-      serviceTime: 'undefined',
-    },
-    destinations,
-    templateName: process.env.EMAIL_SERVED_TEMPLATE,
-  });
+  if (destinations) {
+    await applicationContext.getDispatchers().sendBulkTemplatedEmail({
+      applicationContext,
+      defaultTemplateData: {
+        caseCaption: 'undefined',
+        docketNumber: 'undefined',
+        documentName: 'undefined',
+        loginUrl: 'undefined',
+        name: 'undefined',
+        serviceDate: 'undefined',
+        serviceTime: 'undefined',
+      },
+      destinations,
+      templateName: process.env.EMAIL_SERVED_TEMPLATE,
+    });
+  }
 
   return updatedCase;
 };
