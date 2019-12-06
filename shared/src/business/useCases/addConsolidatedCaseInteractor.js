@@ -11,13 +11,13 @@ const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.caseId the id of the case to consolidate
- * @param {object} providers.leadCaseId the id of the lead case for consolidation
+ * @param {object} providers.caseIdToConsolidateWith the id of the case with which to consolidate
  * @returns {object} the updated case data
  */
 exports.addConsolidatedCaseInteractor = async ({
   applicationContext,
   caseId,
-  leadCaseId,
+  caseIdToConsolidateWith,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -33,32 +33,53 @@ exports.addConsolidatedCaseInteractor = async ({
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  const leadCase = await applicationContext
+  const caseToConsolidateWith = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({ applicationContext, caseId: leadCaseId });
+    .getCaseByCaseId({ applicationContext, caseId: caseIdToConsolidateWith });
 
-  if (!leadCase) {
-    throw new NotFoundError(`Lead Case ${leadCaseId} was not found.`);
+  if (!caseToConsolidateWith) {
+    throw new NotFoundError(
+      `Case to consolidte with (${caseIdToConsolidateWith}) was not found.`,
+    );
   }
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
-  const leadCaseEntity = new Case(leadCase, { applicationContext });
+  let newLeadCase;
+  let casesToUpdate = [caseToUpdate];
 
-  // if this is a new consolidation we need to
-  // set the leadCaseId on the lead case
-  if (!leadCaseEntity.leadCaseId) {
-    leadCaseEntity.setLeadCase(leadCaseId);
+  if (caseToConsolidateWith.leadCaseId) {
+    let allConsolidatedCases = [];
+    allConsolidatedCases = applicationContext
+      .getPersistenceGateway()
+      .getCasesByLeadCaseId(caseToConsolidateWith.leadCaseId);
+    newLeadCase = Case.findLeadCaseForCases([
+      ...allConsolidatedCases,
+      caseToUpdate,
+    ]);
 
-    applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: leadCaseEntity.validate().toRawObject(),
-    });
+    if (newLeadCase.caseId !== caseToConsolidateWith.caseId) {
+      casesToUpdate = casesToUpdate.concat(allConsolidatedCases);
+    }
+  } else {
+    newLeadCase = Case.findLeadCaseForCases([
+      caseToConsolidateWith,
+      caseToUpdate,
+    ]);
+
+    casesToUpdate.push(caseToConsolidateWith);
   }
 
-  caseEntity.setLeadCase(leadCaseId);
+  const updateCasePromises = [];
+  casesToUpdate.forEach(caseToUpdate => {
+    const caseEntity = new Case(caseToUpdate, { applicationContext });
+    caseEntity.setLeadCase(newLeadCase.caseId);
 
-  return await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    updateCasePromises.push(
+      applicationContext.getPersistenceGateway().updateCase({
+        applicationContext,
+        caseToUpdate: caseEntity.validate().toRawObject(),
+      }),
+    );
   });
+
+  return await Promise.all(updateCasePromises);
 };
