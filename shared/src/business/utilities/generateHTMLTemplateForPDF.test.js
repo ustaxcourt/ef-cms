@@ -413,7 +413,10 @@ describe('generatePrintableFilingReceiptTemplate', async () => {
   };
 
   it('Returns HTML with the given content', async () => {
-    const result = await generatePrintableFilingReceiptTemplate(content);
+    const result = await generatePrintableFilingReceiptTemplate({
+      applicationContext,
+      content,
+    });
 
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
     expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
