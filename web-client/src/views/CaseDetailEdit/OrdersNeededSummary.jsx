@@ -37,11 +37,11 @@ export const OrdersNeededSummary = connect(
               <div className="display-inline-block margin-left-2 margin-top-neg-1">
                 <Button
                   link
+                  icon="print"
                   onClick={() => {
                     printFromBrowserSequence();
                   }}
                 >
-                  <FontAwesomeIcon icon="print" size="sm" />
                   Print
                 </Button>
               </div>
@@ -78,10 +78,11 @@ export const OrdersNeededSummary = connect(
 
           <div className="margin-top-3">
             <Button
+              icon="clipboard-list"
               id="button-create-order"
               onClick={() => openCreateOrderChooseTypeModalSequence()}
             >
-              <FontAwesomeIcon icon="clipboard-list" size="1x" /> Create Order
+              Create Order
             </Button>
           </div>
         </section>
