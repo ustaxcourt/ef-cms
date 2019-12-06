@@ -27,9 +27,13 @@ exports.setupTest = ({ useCases = {} } = {}) => {
   };
 
   presenter.providers.router = {
+    createObjectURL: () => {
+      return 'abc';
+    },
     externalRoute: url => {
       test.currentRouteUrl = url;
     },
+    revokeObjectURL: () => {},
     route: async url => {
       test.currentRouteUrl = url;
       switch (url) {

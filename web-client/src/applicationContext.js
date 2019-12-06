@@ -50,6 +50,7 @@ import { TrialSession } from '../../shared/src/business/entities/trialSessions/T
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
+import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
@@ -229,6 +230,7 @@ const setCurrentUserToken = newToken => {
 
 const allUseCases = {
   addCaseToTrialSessionInteractor,
+  addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
@@ -481,12 +483,12 @@ const applicationContext = {
       const scanner = await import(
         '../../shared/src/persistence/dynamsoft/getScannerMockInterface'
       );
-      return scanner.getScannerInterface;
+      return scanner.getScannerInterface();
     } else {
       const scanner = await import(
         '../../shared/src/persistence/dynamsoft/getScannerInterface'
       );
-      return scanner.getScannerInterface;
+      return scanner.getScannerInterface();
     }
   },
   getScannerResourceUri: () => {

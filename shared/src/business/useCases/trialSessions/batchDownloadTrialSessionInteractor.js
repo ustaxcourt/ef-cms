@@ -126,6 +126,7 @@ const batchDownloadTrialSessionInteractor = async ({
         .generateDocketRecordPdfInteractor({
           applicationContext,
           caseId,
+          includePartyDetail: true,
         })
         .then(async result => {
           await onDocketRecordCreation(caseId);

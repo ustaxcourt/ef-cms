@@ -1,4 +1,6 @@
 module.exports = {
+  addConsolidatedCaseLambda: require('./cases/addConsolidatedCaseLambda')
+    .handler,
   associatePractitionerWithCaseLambda: require('./manualAssociation/associatePractitionerWithCaseLambda')
     .handler,
   associateRespondentWithCaseLambda: require('./manualAssociation/associateRespondentWithCaseLambda')

@@ -1,6 +1,7 @@
 const joi = require('joi-browser');
 const {
   createISODateString,
+  dateStringsCompared,
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
@@ -1222,9 +1223,15 @@ Case.prototype.getCaseContacts = function(shape) {
  * get consolidation status between current case entity and another case entity
  *
  * @param {object} caseEntity the pending case entity to check
+ * @param {object} trialSessionEntity this case's trial session entity
+ * @param {object} pendingTrialSessionEntity the pending case's trial session entity
  * @returns {object} object with canConsolidate flag and reason string
  */
-Case.prototype.getConsolidationStatus = function(caseEntity) {
+Case.prototype.getConsolidationStatus = function({
+  caseEntity,
+  pendingTrialSessionEntity,
+  trialSessionEntity,
+}) {
   if (this.status !== caseEntity.status) {
     return { canConsolidate: false, reason: 'Case status is not the same.' };
   }
@@ -1233,8 +1240,16 @@ Case.prototype.getConsolidationStatus = function(caseEntity) {
     return { canConsolidate: false, reason: 'Case procedure is not the same.' };
   }
 
-  if (this.preferredTrialCity !== caseEntity.preferredTrialCity) {
+  if (
+    trialSessionEntity.trialLocation !== pendingTrialSessionEntity.trialLocation
+  ) {
     return { canConsolidate: false, reason: 'Place of trial is not the same.' };
+  }
+
+  if (
+    trialSessionEntity.judge.userId !== pendingTrialSessionEntity.judge.userId
+  ) {
+    return { canConsolidate: false, reason: 'Judge is not the same.' };
   }
 
   if (!this.canConsolidate(caseEntity.status)) {
@@ -1263,6 +1278,31 @@ Case.prototype.canConsolidate = function() {
   ];
 
   return !ineligibleStatusTypes.includes(this.status);
+};
+
+/**
+ * sets lead case id on the current case
+ *
+ * @param {string} leadCaseId the caseId of the lead case for consolidation
+ * @returns {Case} the updated Case entity
+ */
+Case.prototype.setLeadCase = function(leadCaseId) {
+  this.leadCaseId = leadCaseId;
+  return this;
+};
+
+/**
+ * return the lead case for the given set of cases based on createdAt
+ * (does NOT evaluate leadCaseId)
+ *
+ * @param {Array} cases the cases to check for lead case computation
+ * @returns {Case} the lead Case entity
+ */
+Case.findLeadCaseForCases = function(cases) {
+  const casesOrdered = cases.sort((a, b) => {
+    return dateStringsCompared(a.createdAt, b.createdAt);
+  });
+  return casesOrdered.shift();
 };
 
 module.exports = { Case };
