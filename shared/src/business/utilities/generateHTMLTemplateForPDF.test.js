@@ -385,7 +385,10 @@ describe('generatePrintableDocketRecordTemplate', async () => {
   };
 
   it('Returns HTML with the given content', async () => {
-    const result = await generatePrintableDocketRecordTemplate(content);
+    const result = await generatePrintableDocketRecordTemplate({
+      applicationContext,
+      content,
+    });
 
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
     expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
