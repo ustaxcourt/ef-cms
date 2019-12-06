@@ -19,7 +19,7 @@ export const setValidationAlertErrorsAction = ({ get, props, store }) => {
     const filteredErrorKeys = [];
     keys.forEach(key => {
       let topLevelKey = key;
-      if (key.indexOf('.')) {
+      if (key.includes('.')) {
         topLevelKey = key.split('.')[0];
       }
       if (props.errors[topLevelKey] !== undefined) {
