@@ -12,11 +12,11 @@ const { put } = require('./requests');
 exports.addConsolidatedCaseInteractor = ({
   applicationContext,
   caseId,
-  leadCaseId,
+  caseIdToConsolidateWith,
 }) => {
   return put({
     applicationContext,
-    body: { leadCaseId },
+    body: { caseIdToConsolidateWith },
     endpoint: `/cases/${caseId}/consolidate-case`,
   });
 };

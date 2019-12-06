@@ -12,17 +12,20 @@ export const addConsolidatedCaseAction = async ({
 }) => {
   const { caseDetail, caseToConsolidate } = props;
 
-  const leadCaseId = caseDetail.caseId;
+  const caseIdToConsolidateWith = caseDetail.caseId;
   const caseToConsolidateId = caseToConsolidate.caseId;
+
+  console.log('case', caseToConsolidateId);
+  console.log('with', caseIdToConsolidateWith);
 
   await applicationContext.getUseCases().addConsolidatedCaseInteractor({
     applicationContext,
     caseId: caseToConsolidateId,
-    leadCaseId,
+    caseIdToConsolidateWith,
   });
 
   return {
-    caseId: leadCaseId,
+    caseId: caseIdToConsolidateWith,
     caseToConsolidateId,
   };
 };
