@@ -12,6 +12,7 @@ describe('fileExternalDocumentInteractor', () => {
   let caseRecord = {
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     contactPrimary: {
+      email: 'fieri@example.com',
       name: 'Guy Fieri',
     },
     createdAt: '',
@@ -72,7 +73,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(error.message).toContain('Unauthorized');
   });
 
-  it('should add documents and workitems and auto-serve the documents on the parties', async () => {
+  it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
     let error;
     const getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
     const saveWorkItemForNonPaperSpy = sinon.spy();
