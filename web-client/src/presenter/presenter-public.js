@@ -3,8 +3,11 @@ import { state } from './state-public';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearDocketNumberSearchFormSequence } from './sequences/clearDocketNumberSearchFormSequence';
+import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { gotoPublicCaseDetailSequence } from './sequences/public/gotoPublicCaseDetailSequence';
+import { gotoPublicPrintableDocketRecordSequence } from './sequences/public/gotoPublicPrintableDocketRecordSequence';
 import { gotoPublicSearchSequence } from './sequences/public/gotoPublicSearchSequence';
+import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
 import { navigateToPublicSiteSequence } from './sequences/public/navigateToPublicSiteSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
@@ -21,8 +24,11 @@ export const presenter = {
     cerebralBindSimpleSetStateSequence,
     clearAdvancedSearchFormSequence,
     clearDocketNumberSearchFormSequence,
+    clearPdfPreviewUrlSequence,
     gotoPublicCaseDetailSequence,
+    gotoPublicPrintableDocketRecordSequence,
     gotoPublicSearchSequence,
+    navigateBackSequence,
     navigateToCognitoSequence,
     navigateToPublicSiteSequence,
     showMoreResultsSequence,
