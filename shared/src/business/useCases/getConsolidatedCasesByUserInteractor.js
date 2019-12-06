@@ -12,39 +12,54 @@ exports.getConsolidatedCasesByUserInteractor = async ({
 }) => {
   let foundCases = [];
 
-  const cases = await applicationContext
+  const userCases = await applicationContext
     .getPersistenceGateway()
-    .getConsolidatedCasesByUser({
-      applicationContext,
-      userId,
-    });
+    .getCasesByUser({ applicationContext, userId });
 
-  if (cases && cases.length > 0) {
+  if (userCases.length) {
     const caseMapping = {};
-    const caseConsolidationMapping = {};
+    const leadCaseIdsToGet = [];
 
-    cases.forEach(caseRecord => {
+    userCases.forEach(caseRecord => {
       const { caseId, leadCaseId } = caseRecord;
 
+      if (!leadCaseId || leadCaseId === caseId) {
+        caseMapping[caseId] = caseRecord;
+      }
+
       if (leadCaseId) {
-        if (leadCaseId === caseId) {
-          caseMapping[caseId] = caseRecord;
-        } else {
-          if (!caseConsolidationMapping.hasOwnProperty(leadCaseId)) {
-            caseConsolidationMapping[leadCaseId] = [];
-          }
-          caseConsolidationMapping[leadCaseId].push(caseRecord);
+        if (leadCaseIdsToGet.indexOf(leadCaseId) === -1) {
+          leadCaseIdsToGet.push(leadCaseId);
         }
       }
     });
 
-    Object.keys(caseConsolidationMapping).forEach(leadCaseId => {
-      caseMapping[leadCaseId].consolidatedCases =
-        caseConsolidationMapping[leadCaseId];
-    });
+    for (let i = 0; i < leadCaseIdsToGet.length; i++) {
+      const leadCaseId = leadCaseIdsToGet[i];
+      const consolidatedCases = await applicationContext
+        .getPersistenceGateway()
+        .getCasesByLeadCaseId({
+          applicationContext,
+          leadCaseId,
+        });
+
+      if (caseMapping[leadCaseId]) {
+        caseMapping[leadCaseId].consolidatedCases = consolidatedCases.filter(
+          consolidatedCase => consolidatedCase.caseId !== leadCaseId,
+        );
+      } else {
+        caseMapping[leadCaseId] = {
+          ...consolidatedCases.find(
+            consolidatedCase => consolidatedCase.caseId === leadCaseId,
+          ),
+          consolidatedCases: consolidatedCases.filter(
+            consolidatedCase => consolidatedCase.caseId !== leadCaseId,
+          ),
+        };
+      }
+    }
 
     foundCases = Object.keys(caseMapping).map(caseId => caseMapping[caseId]);
-    // TODO: Do we want to re-sort these?
   }
 
   return foundCases;
