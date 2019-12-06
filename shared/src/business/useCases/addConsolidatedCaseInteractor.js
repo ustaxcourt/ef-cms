@@ -6,7 +6,7 @@ const { Case } = require('../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
- * setConsolidatedCaseInteractor
+ * addConsolidatedCaseInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -14,7 +14,7 @@ const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers.leadCaseId the id of the lead case for consolidation
  * @returns {object} the updated case data
  */
-exports.setConsolidatedCaseInteractor = async ({
+exports.addConsolidatedCaseInteractor = async ({
   applicationContext,
   caseId,
   leadCaseId,

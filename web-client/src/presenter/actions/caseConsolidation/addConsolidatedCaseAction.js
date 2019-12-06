@@ -15,7 +15,7 @@ export const addConsolidatedCaseAction = async ({
   const leadCaseId = caseDetail.caseId;
   const caseToConsolidateId = caseToConsolidate.caseId;
 
-  await applicationContext.getUseCases().setConsolidatedCaseInteractor({
+  await applicationContext.getUseCases().addConsolidatedCaseInteractor({
     applicationContext,
     caseId: caseToConsolidateId,
     leadCaseId,
