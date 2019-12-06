@@ -192,7 +192,7 @@ exports.fileExternalDocumentInteractor = async ({
       if (documentEntity.isAutoServed()) {
         documentEntity.setAsServed(servedParties.all);
 
-        const destinations = (servedParties.electronic || []).map(party => ({
+        const destinations = servedParties.electronic.map(party => ({
           email: party.email,
           templateData: {
             caseCaption: caseToUpdate.caseCaption,
@@ -205,7 +205,7 @@ exports.fileExternalDocumentInteractor = async ({
           },
         }));
 
-        if (destinations) {
+        if (destinations.length > 0) {
           sendEmails.push(
             applicationContext.getDispatchers().sendBulkTemplatedEmail({
               applicationContext,
