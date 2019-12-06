@@ -18,7 +18,8 @@ exports.handler = event =>
         .addConsolidatedCaseInteractor({
           applicationContext,
           caseId: event.pathParameters.caseId,
-          leadCaseId: JSON.parse(event.body).leadCaseId,
+          caseIdToConsolidateWith: JSON.parse(event.body)
+            .caseIdToConsolidateWith,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
