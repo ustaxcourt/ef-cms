@@ -32,7 +32,7 @@ describe('addConsolidatedCaseAction', () => {
       },
     });
 
-    //expect(addConsolidatedCaseInteractorMock).toHaveBeenCalled();
+    expect(addConsolidatedCaseInteractorMock).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseId: '123',
       caseToConsolidateId: '456',
