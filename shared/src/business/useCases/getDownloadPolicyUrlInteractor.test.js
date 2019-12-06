@@ -27,11 +27,11 @@ describe('getDownloadPolicyUrlInteractor', () => {
   it('throw unauthorized error if user is not associated with case', async () => {
     const applicationContext = {
       getCurrentUser: () => ({
-        role: 'admin',
+        role: User.ROLES.petitioner,
         userId: 'petitioner',
       }),
       getPersistenceGateway: () => ({
-        verifyCaseForUser: () => jest.fn(true),
+        verifyCaseForUser: jest.fn(false),
       }),
     };
     let error;
@@ -53,7 +53,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       }),
       getPersistenceGateway: () => ({
         getDownloadPolicyUrl: () => 'localhost',
-        verifyCaseForUser: () => jest.fn(false),
+        verifyCaseForUser: jest.fn(true),
       }),
     };
     const url = await getDownloadPolicyUrlInteractor({
