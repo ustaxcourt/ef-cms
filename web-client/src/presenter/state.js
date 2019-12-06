@@ -90,6 +90,7 @@ export const state = {
   caseDetailErrors: {},
   caseDetailHeaderHelper,
   caseDetailHelper,
+  caseDetailPage: {},
   caseInformationHelper,
   caseTypeDescriptionHelper,
   caseTypes: [],
@@ -178,7 +179,9 @@ export const state = {
   selectDocumentTypeHelper,
   selectedBatchIndex: 0,
   selectedWorkItems: [],
-  sessionMetadata: {},
+  sessionMetadata: {
+    docketRecordSort: [],
+  },
   showAppTimeoutModalHelper,
   showModal: '',
   showValidation: false,
@@ -189,6 +192,9 @@ export const state = {
   trialCitiesHelper,
   trialSessionHeaderHelper,
   trialSessionWorkingCopyHelper,
+  trialSessionsTab: {
+    group: null,
+  },
   updateCaseModalHelper,
   usaBanner: {
     showDetails: false,
