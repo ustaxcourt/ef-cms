@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
@@ -13,11 +14,13 @@ export const OrdersNeededSummary = connect(
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
     printFromBrowserSequence: sequences.printFromBrowserSequence,
+    showModal: state.showModal,
   },
   ({
     formattedCaseDetail,
     openCreateOrderChooseTypeModalSequence,
     printFromBrowserSequence,
+    showModal,
   }) => {
     return (
       <>
@@ -25,6 +28,9 @@ export const OrdersNeededSummary = connect(
         <section className="grid-container">
           <SuccessNotification />
           <ErrorNotification />
+          {showModal == 'CreateOrderChooseTypeModal' && (
+            <CreateOrderChooseTypeModal />
+          )}
           <div>
             <h1>
               Orders Needed{' '}
