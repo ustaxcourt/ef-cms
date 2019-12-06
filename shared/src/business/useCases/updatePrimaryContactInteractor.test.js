@@ -51,7 +51,7 @@ const applicationContext = {
   },
   getTemplateGenerators: () => {
     return {
-      generateChangeOfAddressTemplate: () => {
+      generateChangeOfAddressTemplate: async () => {
         generateChangeOfAddressTemplateStub();
         return '<html></html>';
       },

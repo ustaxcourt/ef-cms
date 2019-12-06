@@ -69,18 +69,21 @@ exports.updatePrimaryContactInteractor = async ({
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
   };
 
-  const pdfContentHtml = applicationContext
+  const pdfContentHtml = await applicationContext
     .getTemplateGenerators()
     .generateChangeOfAddressTemplate({
-      caption: caseDetail.caseCaption,
-      captionPostfix: caseDetail.caseCaptionPostfix,
-      docketNumberWithSuffix: `${
-        caseDetail.docketNumber
-      }${caseDetail.docketNumberSuffix || ''}`,
-      documentTitle: documentType.title,
-      name: caseNameToUse,
-      newData: contactInfo,
-      oldData: caseEntity.contactPrimary,
+      applicationContext,
+      content: {
+        caption: caseDetail.caseCaption,
+        captionPostfix: caseDetail.caseCaptionPostfix,
+        docketNumberWithSuffix: `${
+          caseDetail.docketNumber
+        }${caseDetail.docketNumberSuffix || ''}`,
+        documentTitle: documentType.title,
+        name: caseNameToUse,
+        newData: contactInfo,
+        oldData: caseEntity.contactPrimary,
+      },
     });
 
   caseEntity.contactPrimary = ContactFactory.createContacts({
