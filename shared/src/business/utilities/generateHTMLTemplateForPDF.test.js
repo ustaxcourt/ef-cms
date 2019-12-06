@@ -477,7 +477,10 @@ describe('generateTrialSessionPlanningReportTemplate', () => {
   };
 
   it('generates a trial session planning report', async () => {
-    const result = await generateTrialSessionPlanningReportTemplate(content);
+    const result = await generateTrialSessionPlanningReportTemplate({
+      applicationContext,
+      content,
+    });
 
     expect(result.indexOf('<td>(S) Buch<br />(R) Armen</td>')).toBeGreaterThan(
       -1,
