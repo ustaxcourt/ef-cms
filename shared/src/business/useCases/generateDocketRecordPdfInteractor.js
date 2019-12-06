@@ -256,13 +256,16 @@ exports.generateDocketRecordPdfInteractor = async ({
   const contentHtml = await applicationContext
     .getTemplateGenerators()
     .generatePrintableDocketRecordTemplate({
-      caption: caseCaption,
-      captionPostfix: caseCaptionPostfix,
-      docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
-      docketRecord: getDocketRecordContent(formattedCaseDetail),
-      partyInfo: includePartyDetail
-        ? getPartyInfoContent(formattedCaseDetail)
-        : '',
+      applicationContext,
+      content: {
+        caption: caseCaption,
+        captionPostfix: caseCaptionPostfix,
+        docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
+        docketRecord: getDocketRecordContent(formattedCaseDetail),
+        partyInfo: includePartyDetail
+          ? getPartyInfoContent(formattedCaseDetail)
+          : '',
+      },
     });
 
   return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
