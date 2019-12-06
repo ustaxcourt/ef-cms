@@ -50,7 +50,7 @@ describe('addConsolidatedCaseInteractor', () => {
       }),
       getPersistenceGateway: () => ({
         getCaseByCaseId: getCaseByCaseIdMock,
-        getCasesByLeadCaseId: leadCaseId => {
+        getCasesByLeadCaseId: ({ leadCaseId }) => {
           return Object.keys(mockCases)
             .map(key => mockCases[key])
             .filter(mockCase => mockCase.leadCaseId === leadCaseId);

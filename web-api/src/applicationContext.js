@@ -277,6 +277,9 @@ const {
   getCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getCaseNoteInteractor');
 const {
+  getCasesByLeadCaseId,
+} = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadCaseId');
+const {
   getCasesByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByUser');
 const {
@@ -794,6 +797,7 @@ module.exports = (appContextUser = {}) => {
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
         getCaseNote,
+        getCasesByLeadCaseId,
         getCasesByUser,
         getDocumentQCBatchedForSection,
         getDocumentQCBatchedForUser,
