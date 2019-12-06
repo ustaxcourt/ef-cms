@@ -19,8 +19,6 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
       ...get(state.caseDetail),
     });
 
-  console.log('get(state.caseDetail)', JSON.stringify(get(state.caseDetail)));
-
   const parties = {
     petitioner: [formattedCase.contactPrimary, formattedCase.contactSecondary],
     practitioner: formattedCase.practitioners,
@@ -43,6 +41,10 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   });
 
   return {
+    confirmLabel:
+      contactsNeedingPaperService.length > 0
+        ? 'Yes, Serve and Print'
+        : 'Yes, serve',
     contactsNeedingPaperService,
     showPaperAlert: contactsNeedingPaperService.length > 0,
   };
