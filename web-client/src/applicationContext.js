@@ -483,12 +483,12 @@ const applicationContext = {
       const scanner = await import(
         '../../shared/src/persistence/dynamsoft/getScannerMockInterface'
       );
-      return scanner.getScannerInterface;
+      return scanner.getScannerInterface();
     } else {
       const scanner = await import(
         '../../shared/src/persistence/dynamsoft/getScannerInterface'
       );
-      return scanner.getScannerInterface;
+      return scanner.getScannerInterface();
     }
   },
   getScannerResourceUri: () => {
