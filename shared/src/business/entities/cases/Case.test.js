@@ -1996,105 +1996,108 @@ describe('Case entity', () => {
     });
 
     describe('getConsolidationStatus', () => {
-      it('should fail when case statuses are not the same', () => {
-        const leadCaseEntity = new Case(
+      let trialSessionEntity;
+      let pendingTrialSessionEntity;
+      let leadCaseEntity;
+      let pendingCaseEntity;
+
+      beforeEach(() => {
+        trialSessionEntity = new TrialSession(
+          {
+            judge: { name: 'Guy Fieri', userId: 'abc-123' },
+            trialLocation: 'Flavortown, TN',
+          },
+          { applicationContext },
+        );
+
+        pendingTrialSessionEntity = new TrialSession(
+          {
+            judge: { name: 'Guy Fieri', userId: 'abc-123' },
+            trialLocation: 'Flavortown, TN',
+          },
+          { applicationContext },
+        );
+
+        leadCaseEntity = new Case(
           {
             ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, AL',
             procedureType: 'regular',
             status: 'Submitted',
           },
           { applicationContext },
         );
-        const pendingCaseEntity = new Case(
+
+        pendingCaseEntity = new Case(
           {
             ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, AL',
             procedureType: 'regular',
-            status: 'New',
+            status: 'Submitted',
           },
           { applicationContext },
         );
+      });
 
-        const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+      it('should fail when case statuses are not the same', () => {
+        pendingCaseEntity.status = 'New';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+          pendingTrialSessionEntity,
+          trialSessionEntity,
+        });
 
         expect(result.canConsolidate).toEqual(false);
         expect(result.reason).toEqual('Case status is not the same.');
       });
 
       it('should fail when case procedures are not the same', () => {
-        const leadCaseEntity = new Case(
-          {
-            ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, AL',
-            procedureType: 'regular',
-            status: 'Submitted',
-          },
-          { applicationContext },
-        );
-        const pendingCaseEntity = new Case(
-          {
-            ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, AL',
-            procedureType: 'small',
-            status: 'Submitted',
-          },
-          { applicationContext },
-        );
+        pendingCaseEntity.procedureType = 'small';
 
-        const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+          pendingTrialSessionEntity,
+          trialSessionEntity,
+        });
 
         expect(result.canConsolidate).toEqual(false);
         expect(result.reason).toEqual('Case procedure is not the same.');
       });
 
       it('should fail when case trial locations are not the same', () => {
-        const leadCaseEntity = new Case(
-          {
-            ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, AL',
-            procedureType: 'regular',
-            status: 'Submitted',
-          },
-          { applicationContext },
-        );
-        const pendingCaseEntity = new Case(
-          {
-            ...MOCK_CASE,
-            preferredTrialCity: 'Miami, FL',
-            procedureType: 'regular',
-            status: 'Submitted',
-          },
-          { applicationContext },
-        );
+        pendingTrialSessionEntity.trialLocation = 'Flavortown, AR';
 
-        const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+          pendingTrialSessionEntity,
+          trialSessionEntity,
+        });
 
         expect(result.canConsolidate).toEqual(false);
         expect(result.reason).toEqual('Place of trial is not the same.');
       });
 
-      it('should fail when case statuses are both ineligible', () => {
-        const leadCaseEntity = new Case(
-          {
-            ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, AL',
-            procedureType: 'regular',
-            status: 'Closed',
-          },
-          { applicationContext },
-        );
-        const pendingCaseEntity = new Case(
-          {
-            ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, AL',
-            procedureType: 'regular',
-            status: 'Closed',
-          },
-          { applicationContext },
-        );
+      it('should fail when case judges are not the same', () => {
+        pendingTrialSessionEntity.judge = 'Smashmouth';
 
-        const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+          pendingTrialSessionEntity,
+          trialSessionEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual('Judge is not the same.');
+      });
+
+      it('should fail when case statuses are both ineligible', () => {
+        leadCaseEntity.status = 'Closed';
+        pendingCaseEntity.status = 'Closed';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+          pendingTrialSessionEntity,
+          trialSessionEntity,
+        });
 
         expect(result.canConsolidate).toEqual(false);
         expect(result.reason).toEqual(
@@ -2103,29 +2106,51 @@ describe('Case entity', () => {
       });
 
       it('should pass when both cases are eligible for consolidation', () => {
-        const leadCaseEntity = new Case(
-          {
-            ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, AL',
-            procedureType: 'regular',
-            status: 'Submitted',
-          },
-          { applicationContext },
-        );
-        const pendingCaseEntity = new Case(
-          {
-            ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, AL',
-            procedureType: 'regular',
-            status: 'Submitted',
-          },
-          { applicationContext },
-        );
-
-        const result = leadCaseEntity.getConsolidationStatus(pendingCaseEntity);
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+          pendingTrialSessionEntity,
+          trialSessionEntity,
+        });
 
         expect(result.canConsolidate).toEqual(true);
         expect(result.reason).toEqual('');
+      });
+    });
+
+    describe('setLeadCase', () => {
+      it('Should set the leadCaseId on the given case', async () => {
+        const leadCaseId = 'd64ba5a9-b37b-479d-9201-067ec6e335cc';
+        const caseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+        const result = caseEntity.setLeadCase(leadCaseId);
+
+        expect(result.leadCaseId).toEqual(leadCaseId);
+      });
+    });
+
+    describe('findLeadCaseForCases', () => {
+      it('Should return the case with the lowest filing date', () => {
+        const result = Case.findLeadCaseForCases([
+          {
+            caseId: '123',
+            createdAt: moment().toISOString(),
+          },
+          {
+            caseId: '234',
+            createdAt: moment()
+              .subtract(1, 'year')
+              .toISOString(),
+          },
+        ]);
+
+        expect(result.caseId).toEqual('234');
       });
     });
   });

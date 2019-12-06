@@ -16,6 +16,20 @@ describe('loadOriginalProposedStipulatedDecisionAction', () => {
     };
   });
 
+  it('does nothing if state.caseDetail does not exist', async () => {
+    const result = await runAction(
+      loadOriginalProposedStipulatedDecisionAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {},
+      },
+    );
+
+    expect(result.state.pdfForSigning).toBeUndefined();
+  });
+
   it('loads original proposed stipulated decision', async () => {
     loadPDFForSigningStub.returns({ foo: 'bar' });
 

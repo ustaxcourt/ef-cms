@@ -1,5 +1,6 @@
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
+const { dateStringsCompared } = require('./DateHandler');
 const { Document } = require('../entities/Document');
 const { Order } = require('../entities/orders/Order');
 
@@ -355,31 +356,6 @@ const formatCase = (applicationContext, caseDetail) => {
   result.canConsolidate = caseEntity.canConsolidate();
 
   return result;
-};
-
-const dateStringsCompared = (a, b) => {
-  const simpleDatePattern = /^(\d{4}-\d{2}-\d{2})/;
-  const simpleDateLength = 10; // e.g. YYYY-MM-DD
-
-  if (a.length == simpleDateLength || b.length == simpleDateLength) {
-    // at least one date has a simple format, compare only year, month, and day
-    const [aSimple, bSimple] = [
-      a.match(simpleDatePattern)[0],
-      b.match(simpleDatePattern)[0],
-    ];
-    if (aSimple.localeCompare(bSimple) == 0) {
-      return 0;
-    }
-  }
-
-  const secondsDifference = 30 * 1000;
-  const aDate = new Date(a);
-  const bDate = new Date(b);
-  if (Math.abs(aDate - bDate) < secondsDifference) {
-    // treat as equal time stamps
-    return 0;
-  }
-  return aDate - bDate;
 };
 
 const getDocketRecordSortFunc = sortBy => {
