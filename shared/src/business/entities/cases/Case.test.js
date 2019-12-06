@@ -2047,7 +2047,7 @@ describe('Case entity', () => {
         });
 
         expect(result.canConsolidate).toEqual(false);
-        expect(result.reason).toEqual('Case status is not the same.');
+        expect(result.reason).toEqual('Case status is not the same');
       });
 
       it('should fail when case procedures are not the same', () => {
@@ -2060,7 +2060,7 @@ describe('Case entity', () => {
         });
 
         expect(result.canConsolidate).toEqual(false);
-        expect(result.reason).toEqual('Case procedure is not the same.');
+        expect(result.reason).toEqual('Case procedure is not the same');
       });
 
       it('should fail when case trial locations are not the same', () => {
@@ -2073,7 +2073,7 @@ describe('Case entity', () => {
         });
 
         expect(result.canConsolidate).toEqual(false);
-        expect(result.reason).toEqual('Place of trial is not the same.');
+        expect(result.reason).toEqual('Place of trial is not the same');
       });
 
       it('should fail when case judges are not the same', () => {
@@ -2086,7 +2086,7 @@ describe('Case entity', () => {
         });
 
         expect(result.canConsolidate).toEqual(false);
-        expect(result.reason).toEqual('Judge is not the same.');
+        expect(result.reason).toEqual('Judge is not the same');
       });
 
       it('should fail when case statuses are both ineligible', () => {
@@ -2101,7 +2101,7 @@ describe('Case entity', () => {
 
         expect(result.canConsolidate).toEqual(false);
         expect(result.reason).toEqual(
-          'Case status is Closed and cannot be consolidated.',
+          'Case status is Closed and cannot be consolidated',
         );
       });
 
