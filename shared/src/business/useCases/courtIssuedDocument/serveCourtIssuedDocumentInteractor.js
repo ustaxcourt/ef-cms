@@ -190,7 +190,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
       caseToUpdate: caseEntity.validate().toRawObject(),
     });
 
-  const destinations = (servedParties.electronic || []).map(party => ({
+  const destinations = servedParties.electronic.map(party => ({
     email: party.email,
     templateData: {
       caseCaption: caseToUpdate.caseCaption,
@@ -203,7 +203,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     },
   }));
 
-  if (destinations) {
+  if (destinations.length > 0) {
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
       defaultTemplateData: {
