@@ -107,7 +107,6 @@ exports.fileExternalDocumentInteractor = async ({
     }
   }
 
-  // Serve on all parties
   const servedParties = aggregatePartiesForService(caseEntity);
 
   const sendEmails = [];
@@ -190,38 +189,40 @@ exports.fileExternalDocumentInteractor = async ({
       });
       caseEntity.addDocketRecord(docketRecordEntity);
 
-      documentEntity.setAsServed(servedParties.all);
+      if (documentEntity.isAutoServed()) {
+        documentEntity.setAsServed(servedParties.all);
 
-      const destinations = (servedParties.electronic || []).map(party => ({
-        email: party.email,
-        templateData: {
-          caseCaption: caseToUpdate.caseCaption,
-          docketNumber: caseToUpdate.docketNumber,
-          documentName: documentEntity.documentTitle,
-          loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-          name: party.name,
-          serviceDate: formatDateString(documentEntity.servedAt, 'MMDDYYYY'),
-          serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
-        },
-      }));
+        const destinations = (servedParties.electronic || []).map(party => ({
+          email: party.email,
+          templateData: {
+            caseCaption: caseToUpdate.caseCaption,
+            docketNumber: caseToUpdate.docketNumber,
+            documentName: documentEntity.documentTitle,
+            loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
+            name: party.name,
+            serviceDate: formatDateString(documentEntity.servedAt, 'MMDDYYYY'),
+            serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
+          },
+        }));
 
-      if (destinations) {
-        sendEmails.push(
-          applicationContext.getDispatchers().sendBulkTemplatedEmail({
-            applicationContext,
-            defaultTemplateData: {
-              caseCaption: 'undefined',
-              docketNumber: 'undefined',
-              documentName: 'undefined',
-              loginUrl: 'undefined',
-              name: 'undefined',
-              serviceDate: 'undefined',
-              serviceTime: 'undefined',
-            },
-            destinations,
-            templateName: process.env.EMAIL_SERVED_TEMPLATE,
-          }),
-        );
+        if (destinations) {
+          sendEmails.push(
+            applicationContext.getDispatchers().sendBulkTemplatedEmail({
+              applicationContext,
+              defaultTemplateData: {
+                caseCaption: 'undefined',
+                docketNumber: 'undefined',
+                documentName: 'undefined',
+                loginUrl: 'undefined',
+                name: 'undefined',
+                serviceDate: 'undefined',
+                serviceTime: 'undefined',
+              },
+              destinations,
+              templateName: process.env.EMAIL_SERVED_TEMPLATE,
+            }),
+          );
+        }
       }
     }
   });
