@@ -98,18 +98,21 @@ exports.updateUserContactInformationInteractor = async ({
           oldData,
         });
 
-      const pdfContentHtml = applicationContext
+      const pdfContentHtml = await applicationContext
         .getTemplateGenerators()
         .generateChangeOfAddressTemplate({
-          caption: caseDetail.caseCaption,
-          captionPostfix: caseDetail.caseCaptionPostfix,
-          docketNumberWithSuffix: `${
-            caseDetail.docketNumber
-          }${caseDetail.docketNumberSuffix || ''}`,
-          documentTitle: documentType.title,
-          name: `${user.name} (${user.barNumber})`,
-          newData,
-          oldData,
+          applicationContext,
+          content: {
+            caption: caseDetail.caseCaption,
+            captionPostfix: caseDetail.caseCaptionPostfix,
+            docketNumberWithSuffix: `${
+              caseDetail.docketNumber
+            }${caseDetail.docketNumberSuffix || ''}`,
+            documentTitle: documentType.title,
+            name: `${user.name} (${user.barNumber})`,
+            newData,
+            oldData,
+          },
         });
 
       const docketRecordPdf = await applicationContext
