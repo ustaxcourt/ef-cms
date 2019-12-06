@@ -1232,29 +1232,29 @@ Case.prototype.getConsolidationStatus = function({
   trialSessionEntity,
 }) {
   if (this.status !== caseEntity.status) {
-    return { canConsolidate: false, reason: 'Case status is not the same.' };
+    return { canConsolidate: false, reason: 'Case status is not the same' };
   }
 
   if (this.procedureType !== caseEntity.procedureType) {
-    return { canConsolidate: false, reason: 'Case procedure is not the same.' };
+    return { canConsolidate: false, reason: 'Case procedure is not the same' };
   }
 
   if (
     trialSessionEntity.trialLocation !== pendingTrialSessionEntity.trialLocation
   ) {
-    return { canConsolidate: false, reason: 'Place of trial is not the same.' };
+    return { canConsolidate: false, reason: 'Place of trial is not the same' };
   }
 
   if (
     trialSessionEntity.judge.userId !== pendingTrialSessionEntity.judge.userId
   ) {
-    return { canConsolidate: false, reason: 'Judge is not the same.' };
+    return { canConsolidate: false, reason: 'Judge is not the same' };
   }
 
   if (!this.canConsolidate(caseEntity.status)) {
     return {
       canConsolidate: false,
-      reason: `Case status is ${caseEntity.status} and cannot be consolidated.`,
+      reason: `Case status is ${caseEntity.status} and cannot be consolidated`,
     };
   }
 

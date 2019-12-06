@@ -28,7 +28,7 @@ export const AddConsolidatedCaseModal = connect(
       <ConfirmModal
         cancelLabel="Cancel"
         className="add-consolidated-case-search-modal"
-        confirmLabel="Consolidate cases"
+        confirmLabel="Consolidate Cases"
         preventCancelOnBlur={true}
         showModalWhen="AddConsolidatedCaseModal"
         title="Consolidate Cases"
