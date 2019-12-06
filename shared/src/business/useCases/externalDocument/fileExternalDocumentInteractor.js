@@ -1,4 +1,7 @@
 const {
+  aggregateElectronicallyServedParties,
+} = require('../../utilities/aggregateElectronicallyServedParties');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -7,6 +10,7 @@ const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
+const { formatDateString } = require('../../utilities/DateHandler');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -103,6 +107,11 @@ exports.fileExternalDocumentInteractor = async ({
     }
   }
 
+  // Serve on all parties
+  const servedParties = aggregateElectronicallyServedParties(caseEntity);
+
+  const sendEmails = [];
+
   documentsToAdd.forEach(([documentId, metadata, relationship]) => {
     if (documentId && metadata) {
       const documentEntity = new Document(
@@ -180,8 +189,42 @@ exports.fileExternalDocumentInteractor = async ({
         filingDate: documentEntity.receivedAt,
       });
       caseEntity.addDocketRecord(docketRecordEntity);
+
+      documentEntity.setAsServed(servedParties);
+
+      const destinations = servedParties.map(party => ({
+        email: party.email,
+        templateData: {
+          caseCaption: caseToUpdate.caseCaption,
+          docketNumber: caseToUpdate.docketNumber,
+          documentName: documentEntity.documentTitle,
+          loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
+          name: party.name,
+          serviceDate: formatDateString(documentEntity.servedAt, 'MMDDYYYY'),
+          serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
+        },
+      }));
+
+      sendEmails.push(
+        applicationContext.getDispatchers().sendBulkTemplatedEmail({
+          applicationContext,
+          defaultTemplateData: {
+            caseCaption: 'undefined',
+            docketNumber: 'undefined',
+            documentName: 'undefined',
+            loginUrl: 'undefined',
+            name: 'undefined',
+            serviceDate: 'undefined',
+            serviceTime: 'undefined',
+          },
+          destinations,
+          templateName: process.env.EMAIL_SERVED_TEMPLATE,
+        }),
+      );
     }
   });
+
+  await Promise.all(sendEmails);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

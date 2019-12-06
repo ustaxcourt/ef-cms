@@ -29,7 +29,7 @@ const csvOptions = getCsvOptions(csvColumns);
 
 /* eslint no-console: "off"*/
 const main = () => {
-  const data = fs.readFileSync(process.argv[2], 'utf8');
+  const data = fs.readFileSync(process.argv[2], 'utf8'); // NOSONAR this file is only used as a utility for development
 
   let output = [];
 

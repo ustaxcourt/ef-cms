@@ -13,7 +13,7 @@ An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), crea
 API | Front-End | Shared Code
 --- | --------- | -----------
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br> | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)| [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)
-    
+
 [![Known Vulnerabilities](https://snyk.io//test/github/flexion/ef-cms/badge.svg?targetFile=package.json)](https://snyk.io//test/github/flexion/ef-cms?targetFile=package.json)
 
 <a href="docs/images/screenshot-petitioner.png"><img src="docs/images/screenshot-petitioner.png" width="47%" style="float: left; margin: 0 4px;" /></a>
@@ -77,15 +77,15 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 ### Prerequisites
 
-- Node v10.15.3
-- npm v6.4.1
+- Node v12.13.1
+- npm v6.12.1
 - ClamAV v0.101.2 (see Setup below)
 
 ### Setup
 
-For ClamAV, macOS users can do the following:	
-- `brew install clamav`	
-- `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`	
+For ClamAV, macOS users can do the following:
+- `brew install clamav`
+- `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`
 - `sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)
 
 Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the top-level directory.
@@ -185,10 +185,6 @@ Install the following for best results:
 - https://atom.io/packages/language-groovy
 - https://atom.io/packages/linter-eslint
 - https://atom.io/packages/prettier-atom (enable ESLint and StyleLint integrations in settings)
-
-## Using the application with Internet Explorer 11
-
-If using Internet Explorer 11 with Windows 7, [download and install Adobe Reader](https://get.adobe.com/reader/). This will permit PDFs to be viewed in-browser.
 
 ## Forked dependencies
 

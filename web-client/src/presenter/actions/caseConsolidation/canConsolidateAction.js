@@ -7,7 +7,11 @@
  * @param {object} providers.props the cerebral props object
  * @returns {object} the path to take next
  */
-export const canConsolidateAction = ({ applicationContext, path, props }) => {
+export const canConsolidateAction = async ({
+  applicationContext,
+  path,
+  props,
+}) => {
   const { caseDetail, caseToConsolidate, confirmSelection } = props;
 
   if (!confirmSelection) {
@@ -20,7 +24,25 @@ export const canConsolidateAction = ({ applicationContext, path, props }) => {
 
   const caseEntity = new Case(caseDetail, { applicationContext });
 
-  const results = caseEntity.getConsolidationStatus(caseToConsolidate);
+  const trialSession = await applicationContext
+    .getUseCases()
+    .getTrialSessionDetailsInteractor({
+      applicationContext,
+      trialSessionId: caseDetail.trialSessionId,
+    });
+
+  const pendingTrialSession = await applicationContext
+    .getUseCases()
+    .getTrialSessionDetailsInteractor({
+      applicationContext,
+      trialSessionId: caseToConsolidate.trialSessionId,
+    });
+
+  const results = caseEntity.getConsolidationStatus({
+    caseEntity: caseToConsolidate,
+    pendingTrialSessionEntity: pendingTrialSession,
+    trialSessionEntity: trialSession,
+  });
 
   if (results.canConsolidate) {
     return path.success();

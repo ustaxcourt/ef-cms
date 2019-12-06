@@ -22,6 +22,7 @@ import unauthedUserNavigatesToPublicSite from './journey/unauthedUserNavigatesTo
 import unauthedUserSearchesByDocketNumber from './journey/unauthedUserSearchesByDocketNumber';
 import unauthedUserSearchesByMeta from './journey/unauthedUserSearchesByMeta';
 import unauthedUserViewsCaseDetail from './journey/unauthedUserViewsCaseDetail';
+import unauthedUserViewsPrintableDocketRecord from './journey/unauthedUserViewsPrintableDocketRecord';
 
 const test = setupTest();
 const testClient = setupTestClient();
@@ -63,4 +64,5 @@ describe('Unauthed user searches for a case and views a case detail page', () =>
   unauthedUserSearchesByMeta(test);
   unauthedUserSearchesByDocketNumber(test, testClient);
   unauthedUserViewsCaseDetail(test);
+  unauthedUserViewsPrintableDocketRecord(test);
 });
