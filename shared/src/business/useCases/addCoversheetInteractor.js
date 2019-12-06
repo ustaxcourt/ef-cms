@@ -23,9 +23,10 @@ exports.addCoverToPdf = async ({
 
   const dateServedFormatted =
     (documentEntity.servedAt &&
-      applicationContext
-        .getUtilities()
-        .formatDateString(documentEntity.servedAt, 'MMDDYYYY')) ||
+      'Served ' +
+        applicationContext
+          .getUtilities()
+          .formatDateString(documentEntity.servedAt, 'MMDDYYYY')) ||
     '';
 
   let dateReceivedFormatted;
@@ -401,7 +402,7 @@ exports.addCoverToPdf = async ({
     },
     content: getContentByKey('dateServed'),
     fontName: helveticaBoldFont,
-    fontSize: fontSizeTitle,
+    fontSize: fontSizeCaption,
     xPos: 531,
     yPos: 231,
   };

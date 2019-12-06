@@ -74,11 +74,9 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       }),
       getTemplateGenerators: () => {
         return {
-          generatePrintableFilingReceiptTemplate: ({
-            documentsFiledContent,
-          }) => {
+          generatePrintableFilingReceiptTemplate: async ({ content }) => {
             generatePrintableFilingReceiptTemplateMock();
-            return `<!DOCTYPE html>${documentsFiledContent}</html>`;
+            return `<!DOCTYPE html>${content.documentsFiledContent}</html>`;
           },
         };
       },
