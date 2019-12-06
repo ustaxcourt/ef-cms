@@ -121,7 +121,7 @@ describe('addConsolidatedCaseInteractor', () => {
     }
 
     expect(error.message).toContain(
-      'Case to consolidte with (xxxba5a9-b37b-479d-9201-067ec6e33xxx) was not found.',
+      'Case to consolidate with (xxxba5a9-b37b-479d-9201-067ec6e33xxx) was not found.',
     );
   });
 
