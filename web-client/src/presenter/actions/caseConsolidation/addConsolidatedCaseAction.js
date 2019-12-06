@@ -7,23 +7,22 @@
  * @returns {Promise} async action
  */
 export const addConsolidatedCaseAction = async ({
-  // applicationContext,
+  applicationContext,
   props,
 }) => {
   const { caseDetail, caseToConsolidate } = props;
 
-  const { caseId } = caseDetail;
+  const leadCaseId = caseDetail.caseId;
   const caseToConsolidateId = caseToConsolidate.caseId;
 
-  // TODO: can addConsolidatedCaseInteractor call
-  // await applicationContext.getUseCases().addConsolidatedCaseInteractor({
-  //   applicationContext,
-  //   caseId,
-  //   caseToConsolidateId,
-  // });
+  await applicationContext.getUseCases().addConsolidatedCaseInteractor({
+    applicationContext,
+    caseId: caseToConsolidateId,
+    leadCaseId,
+  });
 
   return {
-    caseId,
+    caseId: leadCaseId,
     caseToConsolidateId,
   };
 };
