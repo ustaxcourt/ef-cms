@@ -1,6 +1,6 @@
 const {
-  setConsolidatedCaseInteractor,
-} = require('./setConsolidatedCaseInteractor');
+  addConsolidatedCaseInteractor,
+} = require('./addConsolidatedCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
@@ -8,7 +8,7 @@ let getCaseByCaseIdMock;
 let updateCaseMock;
 let applicationContext;
 
-describe('setConsolidatedCaseInteractor', () => {
+describe('addConsolidatedCaseInteractor', () => {
   beforeEach(() => {
     getCaseByCaseIdMock = jest.fn(({ caseId }) => {
       const mockCases = {
@@ -49,7 +49,7 @@ describe('setConsolidatedCaseInteractor', () => {
     });
 
     try {
-      await setConsolidatedCaseInteractor({
+      await addConsolidatedCaseInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         leadCaseId: 'd44ba5a9-b37b-479d-9201-067ec6e335aa',
@@ -65,7 +65,7 @@ describe('setConsolidatedCaseInteractor', () => {
     let error;
 
     try {
-      await setConsolidatedCaseInteractor({
+      await addConsolidatedCaseInteractor({
         applicationContext,
         caseId: 'xxxba5a9-b37b-479d-9201-067ec6e33xxx',
         leadCaseId: 'd44ba5a9-b37b-479d-9201-067ec6e335aa',
@@ -83,7 +83,7 @@ describe('setConsolidatedCaseInteractor', () => {
     let error;
 
     try {
-      await setConsolidatedCaseInteractor({
+      await addConsolidatedCaseInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         leadCaseId: 'xxxba5a9-b37b-479d-9201-067ec6e33xxx',
@@ -98,7 +98,7 @@ describe('setConsolidatedCaseInteractor', () => {
   });
 
   it('Should try to get the case by its caseId', async () => {
-    await setConsolidatedCaseInteractor({
+    await addConsolidatedCaseInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       leadCaseId: 'd44ba5a9-b37b-479d-9201-067ec6e335aa',
@@ -108,7 +108,7 @@ describe('setConsolidatedCaseInteractor', () => {
   });
 
   it('Should update the lead case if it does not already have the leadCaseId', async () => {
-    await setConsolidatedCaseInteractor({
+    await addConsolidatedCaseInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       leadCaseId: 'd44ba5a9-b37b-479d-9201-067ec6e335aa',
@@ -118,7 +118,7 @@ describe('setConsolidatedCaseInteractor', () => {
   });
 
   it('Should NOT update the lead case if it already has the leadCaseId', async () => {
-    await setConsolidatedCaseInteractor({
+    await addConsolidatedCaseInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       leadCaseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa',
@@ -128,7 +128,7 @@ describe('setConsolidatedCaseInteractor', () => {
   });
 
   it('Should update the case, adding the leadCaseId', async () => {
-    const result = await setConsolidatedCaseInteractor({
+    const result = await addConsolidatedCaseInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       leadCaseId: 'd44ba5a9-b37b-479d-9201-067ec6e335aa',

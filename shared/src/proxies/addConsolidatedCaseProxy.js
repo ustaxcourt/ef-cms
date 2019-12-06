@@ -1,7 +1,7 @@
 const { put } = require('./requests');
 
 /**
- * setConsolidatedCaseInteractor
+ * addConsolidatedCaseInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,7 +9,7 @@ const { put } = require('./requests');
  * @param {object} providers.leadCaseId the id of the lead case for consolidation
  * @returns {Promise<*>} the promise of the api call
  */
-exports.setConsolidatedCaseInteractor = ({
+exports.addConsolidatedCaseInteractor = ({
   applicationContext,
   caseId,
   leadCaseId,

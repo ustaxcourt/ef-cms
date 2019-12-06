@@ -1,4 +1,6 @@
 module.exports = {
+  addConsolidatedCaseLambda: require('./cases/addConsolidatedCaseLambda')
+    .handler,
   associatePractitionerWithCaseLambda: require('./manualAssociation/associatePractitionerWithCaseLambda')
     .handler,
   associateRespondentWithCaseLambda: require('./manualAssociation/associateRespondentWithCaseLambda')
@@ -18,8 +20,6 @@ module.exports = {
   saveCaseDetailInternalEditLambda: require('./cases/saveCaseDetailInternalEditLambda')
     .handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
-    .handler,
-  setConsolidatedCaseLambda: require('./cases/setConsolidatedCaseLambda')
     .handler,
   unblockCaseFromTrialLambda: require('./cases/unblockCaseFromTrialLambda')
     .handler,

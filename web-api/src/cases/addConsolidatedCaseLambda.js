@@ -15,7 +15,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .setConsolidatedCaseInteractor({
+        .addConsolidatedCaseInteractor({
           applicationContext,
           caseId: event.pathParameters.caseId,
           leadCaseId: JSON.parse(event.body).leadCaseId,
