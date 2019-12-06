@@ -72,7 +72,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(error.message).toContain('Unauthorized');
   });
 
-  it('add documents and workitems and serve the documents on the parties', async () => {
+  it('should add documents and workitems and auto-serve the documents on the parties', async () => {
     let error;
     const getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
     const saveWorkItemForNonPaperSpy = sinon.spy();
@@ -122,7 +122,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(updatedCase.documents[3].servedAt).toBeDefined();
   });
 
-  it('add documents and workitems but do not auto-serve Simultaneous documents on the parties', async () => {
+  it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
     let error;
     const getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
     const saveWorkItemForNonPaperSpy = sinon.spy();
