@@ -6,6 +6,8 @@ import {
   generateTrialCalendarTemplate,
   generateTrialSessionPlanningReportTemplate,
 } from './generateHTMLTemplateForPDF';
+import createApplicationContext from '../../../../web-api/src/applicationContext';
+const applicationContext = createApplicationContext({});
 
 describe('generateHTMLTemplateForPDF', () => {
   const content = {
@@ -22,8 +24,11 @@ describe('generateHTMLTemplateForPDF', () => {
     title: 'Test Title',
   };
 
-  it('Returns HTML with the given content', () => {
-    const result = generateHTMLTemplateForPDF(content, {});
+  it('Returns HTML with the given content', async () => {
+    const result = await generateHTMLTemplateForPDF({
+      applicationContext,
+      content,
+    });
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(result.indexOf('U.S. Tax Court')).toBeGreaterThan(-1);
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
@@ -32,8 +37,12 @@ describe('generateHTMLTemplateForPDF', () => {
     expect(result.indexOf('<div>Test Main Content</div>')).toBeGreaterThan(-1);
   });
 
-  it('Returns HTML with the given optional content', () => {
-    const result = generateHTMLTemplateForPDF(content, options);
+  it('Returns HTML with the given optional content', async () => {
+    const result = await generateHTMLTemplateForPDF({
+      applicationContext,
+      content,
+      options,
+    });
     expect(result.indexOf('U.S. Tax Court')).toBe(-1);
     expect(result.indexOf('Test Title')).toBeGreaterThan(-1);
     expect(result.indexOf('#test-style { display: none; }')).toBeGreaterThan(
@@ -60,8 +69,8 @@ describe('generateChangeOfAddressTemplate', () => {
     docketNumberSuffix: 'S',
   };
 
-  it('Returns HTML with the given case and contact data', () => {
-    const result = generateChangeOfAddressTemplate({
+  it('Returns HTML with the given case and contact data', async () => {
+    const result = await generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
       docketNumberWithSuffix:
@@ -86,8 +95,8 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('Address One')).toBeGreaterThan(-1);
   });
 
-  it('Does not compute the document type / title if one is given', () => {
-    const result = generateChangeOfAddressTemplate({
+  it('Does not compute the document type / title if one is given', async () => {
+    const result = await generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
       docketNumberWithSuffix:
@@ -103,8 +112,8 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('Test Document Title')).toBeGreaterThan(-1);
   });
 
-  it('Returns a Notice of Change of Address when updating address fields only', () => {
-    const result = generateChangeOfAddressTemplate({
+  it('Returns a Notice of Change of Address when updating address fields only', async () => {
+    const result = await generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
       docketNumberWithSuffix:
@@ -126,8 +135,8 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('123-123-1234')).toEqual(-1);
   });
 
-  it('Returns a Notice of Change of Telephone Number when updating the phone field only', () => {
-    const result = generateChangeOfAddressTemplate({
+  it('Returns a Notice of Change of Telephone Number when updating the phone field only', async () => {
+    const result = await generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
       docketNumberWithSuffix:
@@ -151,8 +160,8 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('123-123-1234')).toBeGreaterThan(-1);
   });
 
-  it('Returns a Notice of Change of Address and Telephone Number when updating both the phone and address fields', () => {
-    const result = generateChangeOfAddressTemplate({
+  it('Returns a Notice of Change of Address and Telephone Number when updating both the phone and address fields', async () => {
+    const result = await generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
       docketNumberWithSuffix:
@@ -177,8 +186,8 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('321-321-4321')).toBeGreaterThan(-1);
   });
 
-  it('Does NOT show address2 or address3 if they are not in the old data or new data', () => {
-    const result = generateChangeOfAddressTemplate({
+  it('Does NOT show address2 or address3 if they are not in the old data or new data', async () => {
+    const result = await generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
       docketNumberWithSuffix:
@@ -196,8 +205,8 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('address 3')).toEqual(-1);
   });
 
-  it('Shows address2 if it is in the old data', () => {
-    const result = generateChangeOfAddressTemplate({
+  it('Shows address2 if it is in the old data', async () => {
+    const result = await generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
       docketNumberWithSuffix:
@@ -218,8 +227,8 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('address 3')).toEqual(-1);
   });
 
-  it('Shows address3 if it is in the old data', () => {
-    const result = generateChangeOfAddressTemplate({
+  it('Shows address3 if it is in the old data', async () => {
+    const result = await generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
       docketNumberWithSuffix:
@@ -241,8 +250,8 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('address 3')).toBeGreaterThan(-1);
   });
 
-  it('Shows address2 if it is in the new data', () => {
-    const result = generateChangeOfAddressTemplate({
+  it('Shows address2 if it is in the new data', async () => {
+    const result = await generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
       docketNumberWithSuffix:
@@ -261,8 +270,8 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('Address Three')).toEqual(-1);
   });
 
-  it('Shows address3 if it is in the new data', () => {
-    const result = generateChangeOfAddressTemplate({
+  it('Shows address3 if it is in the new data', async () => {
+    const result = await generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
       docketNumberWithSuffix:
@@ -282,8 +291,8 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('Address Three')).toBeGreaterThan(-1);
   });
 
-  it('Shows country if countryType has been changed to/from international', () => {
-    const result = generateChangeOfAddressTemplate({
+  it('Shows country if countryType has been changed to/from international', async () => {
+    const result = await generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
       docketNumberWithSuffix:
@@ -305,8 +314,8 @@ describe('generateChangeOfAddressTemplate', () => {
     expect(result.indexOf('Old Country')).toBeGreaterThan(-1);
   });
 
-  it('Shows inCareOf if inCareOf has been changed', () => {
-    const result = generateChangeOfAddressTemplate({
+  it('Shows inCareOf if inCareOf has been changed', async () => {
+    const result = await generateChangeOfAddressTemplate({
       caption: caseDetail.caseCaption,
       captionPostfix: caseDetail.caseCaptionPostfix,
       docketNumberWithSuffix:
@@ -330,7 +339,7 @@ describe('generateChangeOfAddressTemplate', () => {
   });
 });
 
-describe('generatePrintableDocketRecordTemplate', () => {
+describe('generatePrintableDocketRecordTemplate', async () => {
   const content = {
     caption: 'Test Case Caption',
     captionPostfix: 'Test Caption Postfix',
@@ -339,8 +348,8 @@ describe('generatePrintableDocketRecordTemplate', () => {
     partyInfo: '<table id="test-party-info"></table>',
   };
 
-  it('Returns HTML with the given content', () => {
-    const result = generatePrintableDocketRecordTemplate(content);
+  it('Returns HTML with the given content', async () => {
+    const result = await generatePrintableDocketRecordTemplate(content);
 
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
     expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
@@ -354,7 +363,7 @@ describe('generatePrintableDocketRecordTemplate', () => {
   });
 });
 
-describe('generatePrintableFilingReceiptTemplate', () => {
+describe('generatePrintableFilingReceiptTemplate', async () => {
   const content = {
     caption: 'Test Case Caption',
     captionPostfix: 'Test Caption Postfix',
@@ -364,8 +373,8 @@ describe('generatePrintableFilingReceiptTemplate', () => {
     filedBy: 'Resp. & Petr. Garrett Carpenter',
   };
 
-  it('Returns HTML with the given content', () => {
-    const result = generatePrintableFilingReceiptTemplate(content);
+  it('Returns HTML with the given content', async () => {
+    const result = await generatePrintableFilingReceiptTemplate(content);
 
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
     expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
@@ -395,8 +404,8 @@ describe('generateTrialCalendarTemplate', () => {
     openCases: [],
   };
 
-  it('generates a trial calendar', () => {
-    const result = generateTrialCalendarTemplate(content);
+  it('generates a trial calendar', async () => {
+    const result = await generateTrialCalendarTemplate(content);
     expect(result.indexOf('10/11/12 11:00 PM')).toBeGreaterThan(-1);
   });
 });
@@ -422,8 +431,8 @@ describe('generateTrialSessionPlanningReportTemplate', () => {
     selectedYear: '2020',
   };
 
-  it('generates a trial session planning report', () => {
-    const result = generateTrialSessionPlanningReportTemplate(content);
+  it('generates a trial session planning report', async () => {
+    const result = await generateTrialSessionPlanningReportTemplate(content);
 
     expect(result.indexOf('<td>(S) Buch<br />(R) Armen</td>')).toBeGreaterThan(
       -1,

@@ -207,7 +207,6 @@ const {
 } = require('../../shared/src/business/useCaseHelper/caseConfirmation/generateCaseConfirmationPdf');
 const {
   generateChangeOfAddressTemplate,
-  generateHTMLTemplateForPDF,
   generatePrintableDocketRecordTemplate,
   generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
@@ -897,7 +896,6 @@ module.exports = (appContextUser = {}) => {
     getTemplateGenerators: () => {
       return {
         generateChangeOfAddressTemplate,
-        generateHTMLTemplateForPDF,
         generatePrintableDocketRecordTemplate,
         generatePrintableFilingReceiptTemplate,
         generateTrialCalendarTemplate,
