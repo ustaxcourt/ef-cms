@@ -990,6 +990,18 @@ describe('Document entity', () => {
       expect(document.isAutoServed()).toBeTruthy();
     });
 
+    it('should return true if the documentType is a practitioner association document and the documentTitle does not contain Simultaneous', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentTitle: 'Entry of Appearance',
+          documentType: 'Entry of Appearance',
+        },
+        { applicationContext },
+      );
+      expect(document.isAutoServed()).toBeTruthy();
+    });
+
     it('should return false if the documentType is an external document and the documentTitle contains Simultaneous', () => {
       const document = new Document(
         {

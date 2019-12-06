@@ -408,12 +408,18 @@ Document.prototype.isAutoServed = function() {
   const isExternalDocumentType = externalDocumentTypes.includes(
     this.documentType,
   );
+  const isPractitionerAssociationDocumentType = practitionerAssociationDocumentTypes.includes(
+    this.documentType,
+  );
   //if fully concatenated document title includes the word Simultaneous, do not auto-serve
   const isSimultaneous = (this.documentTitle || this.documentType).includes(
     'Simultaneous',
   );
 
-  return isExternalDocumentType && !isSimultaneous;
+  return (
+    (isExternalDocumentType || isPractitionerAssociationDocumentType) &&
+    !isSimultaneous
+  );
 };
 
 exports.Document = Document;
