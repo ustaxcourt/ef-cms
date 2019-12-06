@@ -1,6 +1,6 @@
 const {
-  aggregateElectronicallyServedParties,
-} = require('../../utilities/aggregateElectronicallyServedParties');
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -108,7 +108,7 @@ exports.fileExternalDocumentInteractor = async ({
   }
 
   // Serve on all parties
-  const servedParties = aggregateElectronicallyServedParties(caseEntity);
+  const servedParties = aggregatePartiesForService(caseEntity);
 
   const sendEmails = [];
 
@@ -190,9 +190,9 @@ exports.fileExternalDocumentInteractor = async ({
       });
       caseEntity.addDocketRecord(docketRecordEntity);
 
-      documentEntity.setAsServed(servedParties);
+      documentEntity.setAsServed(servedParties.all);
 
-      const destinations = servedParties.map(party => ({
+      const destinations = (servedParties.electronic || []).map(party => ({
         email: party.email,
         templateData: {
           caseCaption: caseToUpdate.caseCaption,
@@ -205,22 +205,24 @@ exports.fileExternalDocumentInteractor = async ({
         },
       }));
 
-      sendEmails.push(
-        applicationContext.getDispatchers().sendBulkTemplatedEmail({
-          applicationContext,
-          defaultTemplateData: {
-            caseCaption: 'undefined',
-            docketNumber: 'undefined',
-            documentName: 'undefined',
-            loginUrl: 'undefined',
-            name: 'undefined',
-            serviceDate: 'undefined',
-            serviceTime: 'undefined',
-          },
-          destinations,
-          templateName: process.env.EMAIL_SERVED_TEMPLATE,
-        }),
-      );
+      if (destinations) {
+        sendEmails.push(
+          applicationContext.getDispatchers().sendBulkTemplatedEmail({
+            applicationContext,
+            defaultTemplateData: {
+              caseCaption: 'undefined',
+              docketNumber: 'undefined',
+              documentName: 'undefined',
+              loginUrl: 'undefined',
+              name: 'undefined',
+              serviceDate: 'undefined',
+              serviceTime: 'undefined',
+            },
+            destinations,
+            templateName: process.env.EMAIL_SERVED_TEMPLATE,
+          }),
+        );
+      }
     }
   });
 
