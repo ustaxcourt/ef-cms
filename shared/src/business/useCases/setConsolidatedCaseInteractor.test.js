@@ -9,18 +9,28 @@ let updateCaseMock;
 let applicationContext;
 
 describe('setConsolidatedCaseInteractor', () => {
-  getCaseByCaseIdMock = jest.fn(({ caseId }) => {
-    const mockCases = {
-      'c54ba5a9-b37b-479d-9201-067ec6e335bb': {
-        ...MOCK_CASE,
-      },
-    };
-    return mockCases[caseId];
-  });
-
-  updateCaseMock = jest.fn(({ caseToUpdate }) => caseToUpdate);
-
   beforeEach(() => {
+    getCaseByCaseIdMock = jest.fn(({ caseId }) => {
+      const mockCases = {
+        'aaaba5a9-b37b-479d-9201-067ec6e33aaa': {
+          ...MOCK_CASE,
+          caseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa',
+          leadCaseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa',
+        },
+        'c54ba5a9-b37b-479d-9201-067ec6e335bb': {
+          ...MOCK_CASE,
+          caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        'd44ba5a9-b37b-479d-9201-067ec6e335aa': {
+          ...MOCK_CASE,
+          caseId: 'd44ba5a9-b37b-479d-9201-067ec6e335aa',
+        },
+      };
+      return mockCases[caseId];
+    });
+
+    updateCaseMock = jest.fn(({ caseToUpdate }) => caseToUpdate);
+
     applicationContext = {
       getCurrentUser: () => ({
         role: User.ROLES.docketClerk,
@@ -51,13 +61,13 @@ describe('setConsolidatedCaseInteractor', () => {
     expect(error.message).toContain('Unauthorized for case consolidation');
   });
 
-  it('Should return a Not Found error if the case can not be found', async () => {
+  it('Should return a Not Found error if the case to update can not be found', async () => {
     let error;
 
     try {
       await setConsolidatedCaseInteractor({
         applicationContext,
-        caseId: 'a54ba5a9-b37b-479d-9201-067ec6e335b5',
+        caseId: 'xxxba5a9-b37b-479d-9201-067ec6e33xxx',
         leadCaseId: 'd44ba5a9-b37b-479d-9201-067ec6e335aa',
       });
     } catch (err) {
@@ -65,7 +75,25 @@ describe('setConsolidatedCaseInteractor', () => {
     }
 
     expect(error.message).toContain(
-      'Case a54ba5a9-b37b-479d-9201-067ec6e335b5 was not found.',
+      'Case xxxba5a9-b37b-479d-9201-067ec6e33xxx was not found.',
+    );
+  });
+
+  it('Should return a Not Found error if the lead case can not be found', async () => {
+    let error;
+
+    try {
+      await setConsolidatedCaseInteractor({
+        applicationContext,
+        caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        leadCaseId: 'xxxba5a9-b37b-479d-9201-067ec6e33xxx',
+      });
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error.message).toContain(
+      'Case xxxba5a9-b37b-479d-9201-067ec6e33xxx was not found.',
     );
   });
 
@@ -77,6 +105,26 @@ describe('setConsolidatedCaseInteractor', () => {
     });
 
     expect(getCaseByCaseIdMock).toHaveBeenCalled();
+  });
+
+  it('Should update the lead case if it does not already have the leadCaseId', async () => {
+    await setConsolidatedCaseInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      leadCaseId: 'd44ba5a9-b37b-479d-9201-067ec6e335aa',
+    });
+
+    expect(updateCaseMock).toHaveBeenCalledTimes(2);
+  });
+
+  it('Should NOT update the lead case if it already has the leadCaseId', async () => {
+    await setConsolidatedCaseInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      leadCaseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa',
+    });
+
+    expect(updateCaseMock).toHaveBeenCalledTimes(1);
   });
 
   it('Should update the case, adding the leadCaseId', async () => {
