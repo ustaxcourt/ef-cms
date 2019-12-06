@@ -35,20 +35,27 @@ exports.setConsolidatedCaseInteractor = async ({
 
   const leadCase = await applicationContext
     .getPersistenceGateway()
-    .getCaseByCaseId({ applicationContext, leadCaseId });
+    .getCaseByCaseId({ applicationContext, caseId: leadCaseId });
 
-  if (!caseToUpdate) {
+  if (!leadCase) {
     throw new NotFoundError(`Lead Case ${leadCaseId} was not found.`);
   }
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const leadCaseEntity = new Case(leadCase, { applicationContext });
+
+  // if this is a new consolidation we need to
+  // set the leadCaseId on the lead case
+  if (!leadCaseEntity.leadCaseId) {
+    leadCaseEntity.setLeadCase(leadCaseId);
+
+    applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: leadCaseEntity.validate().toRawObject(),
+    });
+  }
 
   caseEntity.setLeadCase(leadCaseId);
-
-  // TODO: Need to create a mapping record
-
-  // TODO: Do we need to check, and possibly set leadCaseId on the lead case?
-  // TODO: Do we need to create a mapping record for the lead case?
 
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
