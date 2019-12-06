@@ -66,7 +66,10 @@ import {
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
-import { constants, setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
+import {
+  constants,
+  setServiceIndicatorsForCase,
+} from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
