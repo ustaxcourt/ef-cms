@@ -77,6 +77,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   const mockCases = [
     {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      contactPrimary: { email: 'contact@example.com', name: 'Contact Primary' },
+      contactSecondary: { name: 'Contact Secondary' },
       docketNumber: '123-45',
       docketRecord: [
         {
@@ -262,7 +264,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     expect(putWorkItemInOutboxMock).toHaveBeenCalled();
   });
 
-  it('should call sendBulkTemplatedEmail sending an email to all parties', async () => {
+  it('should call sendBulkTemplatedEmail, sending an email to all electronically-served parties', async () => {
     saveDocumentMock = jest.fn(({ document: newPdfData }) => {
       fs.writeFileSync(
         testOutputPath + 'serveCourtIssuedDocumentInteractor_2.pdf',

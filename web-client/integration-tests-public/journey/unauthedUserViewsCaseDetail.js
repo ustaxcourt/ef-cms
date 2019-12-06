@@ -48,7 +48,7 @@ export default test => {
       {
         description: 'Request for Place of Trial at Seattle, Washington',
         hasDocument: false,
-        showDocumentDescriptionWithoutLink: undefined,
+        showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: undefined,
       },
       {
