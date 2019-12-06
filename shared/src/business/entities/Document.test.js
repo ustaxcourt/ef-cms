@@ -976,4 +976,42 @@ describe('Document entity', () => {
       expect(document.isPublicAccessible()).toBeFalsy();
     });
   });
+
+  describe('isAutoServed', () => {
+    it('should return true if the documentType is an external document and the documentTitle does not contain Simultaneous', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentTitle: 'Answer to Second Amendment to Petition',
+          documentType: 'Answer to Second Amendment to Petition',
+        },
+        { applicationContext },
+      );
+      expect(document.isAutoServed()).toBeTruthy();
+    });
+
+    it('should return false if the documentType is an external document and the documentTitle contains Simultaneous', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentTitle: 'Amended Simultaneous Memoranda of Law',
+          documentType: 'Amended Simultaneous Memoranda of Law',
+        },
+        { applicationContext },
+      );
+      expect(document.isAutoServed()).toBeFalsy();
+    });
+
+    it('should return false if the documentType is an internally-filed document', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentTitle: 'Application for Examination Pursuant to Rule 73',
+          documentType: 'Application for Examination Pursuant to Rule 73',
+        },
+        { applicationContext },
+      );
+      expect(document.isAutoServed()).toBeFalsy();
+    });
+  });
 });
