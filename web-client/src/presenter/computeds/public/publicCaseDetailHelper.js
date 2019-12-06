@@ -54,9 +54,10 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
         servedAtFormatted: document && document.servedAtFormatted,
         servedPartiesCode: document && document.servedPartiesCode,
         showDocumentDescriptionWithoutLink:
-          document &&
-          (!document.isCourtIssuedDocument ||
-            document.isNotServedCourtIssuedDocument),
+          !document ||
+          (document &&
+            (!document.isCourtIssuedDocument ||
+              document.isNotServedCourtIssuedDocument)),
         showLinkToDocument:
           document &&
           document.processingStatus === 'complete' &&

@@ -80,12 +80,9 @@ describe('generateDocketRecordPdfInteractor', () => {
     }),
     getTemplateGenerators: () => {
       return {
-        generatePrintableDocketRecordTemplate: ({
-          docketRecord,
-          partyInfo,
-        }) => {
+        generatePrintableDocketRecordTemplate: async ({ content }) => {
           generatePrintableDocketRecordTemplateMock();
-          return `<!DOCTYPE html>${docketRecord} ${partyInfo}</html>`;
+          return `<!DOCTYPE html>${content.docketRecord} ${content.partyInfo}</html>`;
         },
       };
     },
