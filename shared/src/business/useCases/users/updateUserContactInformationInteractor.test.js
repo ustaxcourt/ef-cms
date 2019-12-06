@@ -59,7 +59,7 @@ describe('updateUserContactInformationInteractor', () => {
       },
       getTemplateGenerators: () => {
         return {
-          generateChangeOfAddressTemplate: () => '<div></div>',
+          generateChangeOfAddressTemplate: async () => '<div></div>',
           generateHTMLTemplateForPDF: () => '<div></div>',
           generatePrintableDocketRecordTemplate: () => '<div></div>',
         };
@@ -133,7 +133,7 @@ describe('updateUserContactInformationInteractor', () => {
       },
       getTemplateGenerators: () => {
         return {
-          generateChangeOfAddressTemplate: () => '<div></div>',
+          generateChangeOfAddressTemplate: async () => '<div></div>',
           generateHTMLTemplateForPDF: () => '<div></div>',
           generatePrintableDocketRecordTemplate: () => '<div></div>',
         };
