@@ -78,9 +78,6 @@ export const CaseDetailHeader = connect(
               <p className="margin-y-0" id="case-title">
                 <span>{formattedCaseDetail.caseTitle}</span>
               </p>
-              {showModal == 'UpdateCaseModalDialog' && (
-                <UpdateCaseModalDialog />
-              )}
             </div>
 
             {!hideActionButtons && (
