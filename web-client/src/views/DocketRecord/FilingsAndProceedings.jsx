@@ -109,8 +109,6 @@ export const FilingsAndProceedings = connect(
 
         <span> {entry.signatory}</span>
 
-        {!entry.hasDocument && entry.description}
-
         <span className="filings-and-proceedings">
           {entry.filingsAndProceedingsWithAdditionalInfo}
         </span>
