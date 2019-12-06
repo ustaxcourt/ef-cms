@@ -447,7 +447,10 @@ describe('generateTrialCalendarTemplate', () => {
   };
 
   it('generates a trial calendar', async () => {
-    const result = await generateTrialCalendarTemplate(content);
+    const result = await generateTrialCalendarTemplate({
+      applicationContext,
+      content,
+    });
     expect(result.indexOf('10/11/12 11:00 PM')).toBeGreaterThan(-1);
   });
 });
