@@ -1,6 +1,7 @@
 const joi = require('joi-browser');
 const {
   createISODateString,
+  dateStringsCompared,
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
@@ -1288,6 +1289,20 @@ Case.prototype.canConsolidate = function() {
 Case.prototype.setLeadCase = function(leadCaseId) {
   this.leadCaseId = leadCaseId;
   return this;
+};
+
+/**
+ * return the lead case for the given set of cases based on createdAt
+ * (does NOT evaluate leadCaseId)
+ *
+ * @param {Array} cases the cases to check for lead case computation
+ * @returns {Case} the lead Case entity
+ */
+Case.findLeadCaseForCases = function(cases) {
+  const casesOrdered = cases.sort((a, b) => {
+    return dateStringsCompared(a.createdAt, b.createdAt);
+  });
+  return casesOrdered.shift();
 };
 
 module.exports = { Case };

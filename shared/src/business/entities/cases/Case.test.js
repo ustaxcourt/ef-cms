@@ -2134,5 +2134,24 @@ describe('Case entity', () => {
         expect(result.leadCaseId).toEqual(leadCaseId);
       });
     });
+
+    describe('findLeadCaseForCases', () => {
+      it('Should return the case with the lowest filing date', () => {
+        const result = Case.findLeadCaseForCases([
+          {
+            caseId: '123',
+            createdAt: moment().toISOString(),
+          },
+          {
+            caseId: '234',
+            createdAt: moment()
+              .subtract(1, 'year')
+              .toISOString(),
+          },
+        ]);
+
+        expect(result.caseId).toEqual('234');
+      });
+    });
   });
 });
