@@ -284,7 +284,9 @@ const {
 const {
   getCasesByUserInteractor,
 } = require('../../shared/src/business/useCases/getCasesByUserInteractor');
-
+const {
+  getConsolidatedCasesByCaseInteractor,
+} = require('../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor');
 const {
   getConsolidatedCasesByUserInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByUserInteractor');
@@ -966,6 +968,7 @@ module.exports = (appContextUser = {}) => {
         getCaseInteractor,
         getCaseNoteInteractor,
         getCasesByUserInteractor,
+        getConsolidatedCasesByCaseInteractor,
         getConsolidatedCasesByUserInteractor,
         getDocumentQCBatchedForSectionInteractor,
         getDocumentQCBatchedForUserInteractor,
