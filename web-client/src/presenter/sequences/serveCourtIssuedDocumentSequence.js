@@ -5,6 +5,7 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { serveCourtIssuedDocumentAction } from '../actions/serveCourtIssuedDocumentAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -37,6 +38,7 @@ export const serveCourtIssuedDocumentSequence = [
         yes: [updateCourtIssuedDocketEntryAction],
       },
       serveCourtIssuedDocumentAction,
+      setPdfPreviewUrlAction,
       setAlertSuccessAction,
       clearModalAction,
       setSaveAlertsForNavigationAction,
