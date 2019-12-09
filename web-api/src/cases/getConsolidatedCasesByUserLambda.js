@@ -3,23 +3,22 @@ const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
- * used for consolidating cases
+ * used for fetching all cases (including consolidated) of a particular status, user role, etc
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
   handle(event, async () => {
+    const { userId } = event.pathParameters || {};
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
       const results = await applicationContext
         .getUseCases()
-        .addConsolidatedCaseInteractor({
+        .getConsolidatedCasesByUserInteractor({
           applicationContext,
-          caseId: event.pathParameters.caseId,
-          caseIdToConsolidateWith: JSON.parse(event.body)
-            .caseIdToConsolidateWith,
+          userId,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);

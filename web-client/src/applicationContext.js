@@ -67,6 +67,10 @@ import {
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
+import {
+  constants,
+  setServiceIndicatorsForCase,
+} from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
@@ -113,6 +117,7 @@ import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseNoteInteractor } from '../../shared/src/proxies/caseNote/getCaseNoteProxy';
 import { getCaseTypesInteractor } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
+import { getConsolidatedCasesByUserInteractor } from '../../shared/src/proxies/getConsolidatedCasesByUserProxy';
 import { getDocumentQCBatchedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForSectionProxy';
 import { getDocumentQCBatchedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
@@ -154,7 +159,6 @@ import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxie
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
-import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setTrialSessionAsSwingSessionInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
@@ -274,6 +278,7 @@ const allUseCases = {
   getCaseNoteInteractor,
   getCaseTypesInteractor,
   getCasesByUserInteractor,
+  getConsolidatedCasesByUserInteractor,
   getDocumentQCBatchedForSectionInteractor,
   getDocumentQCBatchedForUserInteractor,
   getDocumentQCInboxForSectionInteractor,
@@ -405,6 +410,7 @@ const applicationContext = {
       REFRESH_INTERVAL: 20 * MINUTES,
       ROLE_PERMISSIONS,
       SECTIONS,
+      SERVICE_INDICATOR_TYPES: constants,
       SERVICE_STAMP_OPTIONS,
       SESSION_DEBOUNCE: 250,
       SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes

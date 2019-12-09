@@ -242,3 +242,7 @@ p {
   max-width: 700px;
   line-height: 24px;
 }
+
+.usa-alert__text:only-child {
+  padding-top: 0;
+}
