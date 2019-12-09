@@ -11,8 +11,6 @@ export const CaseDetailHeader = connect(
     caseDetailHeaderHelper: state.caseDetailHeaderHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     hideActionButtons: props.hideActionButtons,
-    openCreateOrderChooseTypeModalSequence:
-      sequences.openCreateOrderChooseTypeModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     showModal: state.showModal,
   },
@@ -107,10 +105,10 @@ export const CaseDetailHeader = connect(
                   <Button
                     className="tablet-full-width push-right margin-right-0"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
+                    icon="file"
                     id="button-first-irs-document"
                   >
-                    <FontAwesomeIcon icon="file" size="1x" /> File First IRS
-                    Document
+                    File First IRS Document
                   </Button>
                 )}
 
@@ -118,12 +116,12 @@ export const CaseDetailHeader = connect(
                   <>
                     <Button
                       className="tablet-full-width push-right margin-right-0"
+                      icon="edit"
                       id="edit-case-context-button"
                       onClick={() => {
                         openUpdateCaseModalSequence();
                       }}
                     >
-                      <FontAwesomeIcon icon="edit" size="sm" />
                       Edit
                     </Button>
                     {showModal == 'UpdateCaseModalDialog' && (
