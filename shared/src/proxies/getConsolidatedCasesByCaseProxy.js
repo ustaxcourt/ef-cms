@@ -12,6 +12,6 @@ exports.getConsolidatedCasesByUserInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: `/case/${caseId}/consolidated`,
+    endpoint: `/case/${caseId}/consolidated-cases`,
   });
 };

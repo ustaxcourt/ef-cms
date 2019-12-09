@@ -4,7 +4,7 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { getCaseNoteForCaseAction } from '../actions/TrialSession/getCaseNoteForCaseAction';
-import { getConsolidatedCasesByUserAction } from '../actions/caseConsolidation/getConsolidatedCasesByUserAction';
+import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/getConsolidatedCasesByCaseAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
@@ -36,7 +36,7 @@ export const gotoCaseDetailSequence = [
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
   getCaseAction,
-  getConsolidatedCasesByUserAction,
+  getConsolidatedCasesByCaseAction,
   setCaseAction,
   getCaseDeadlinesForCaseAction,
   setDefaultDocketRecordSortAction,

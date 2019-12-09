@@ -19,6 +19,7 @@ export const getConsolidatedCasesByCaseAction = async ({
       applicationContext,
       caseId,
     });
-  caseList = orderBy(caseList, 'createdAt', 'desc');
+  console.log('caseList', caseList);
+  // caseList = orderBy(caseList, 'createdAt', 'desc');
   return { caseList };
 };
