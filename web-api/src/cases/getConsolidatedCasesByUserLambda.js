@@ -1,26 +1,24 @@
 const createApplicationContext = require('../applicationContext');
-const {
-  getUserFromAuthHeader,
-  handle,
-} = require('../middleware/apiGatewayHelper');
+const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
+const { handle } = require('../middleware/apiGatewayHelper');
 
 /**
- * used for getting the download policy which is needed for users to download files directly from S3 via the UI
+ * used for fetching all cases (including consolidated) of a particular status, user role, etc
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
   handle(event, async () => {
+    const { userId } = event.pathParameters || {};
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
       const results = await applicationContext
         .getUseCases()
-        .getDownloadPolicyUrlInteractor({
+        .getConsolidatedCasesByUserInteractor({
           applicationContext,
-          caseId: event.pathParameters.caseId,
-          documentId: event.pathParameters.documentId,
+          userId,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);

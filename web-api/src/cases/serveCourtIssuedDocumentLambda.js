@@ -26,7 +26,7 @@ exports.handler = event =>
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Case ID', caseId);
       applicationContext.logger.info('Document ID', documentId);
-      applicationContext.logger.info('Results', results);
+      applicationContext.logger.info('Results', results.updatedCase);
       return results;
     } catch (e) {
       applicationContext.logger.error(e);

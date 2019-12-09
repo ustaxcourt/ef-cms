@@ -375,7 +375,7 @@ describe('generateChangeOfAddressTemplate', () => {
   });
 });
 
-describe('generatePrintableDocketRecordTemplate', async () => {
+describe('generatePrintableDocketRecordTemplate', () => {
   const content = {
     caption: 'Test Case Caption',
     captionPostfix: 'Test Caption Postfix',
@@ -402,7 +402,7 @@ describe('generatePrintableDocketRecordTemplate', async () => {
   });
 });
 
-describe('generatePrintableFilingReceiptTemplate', async () => {
+describe('generatePrintableFilingReceiptTemplate', () => {
   const content = {
     caption: 'Test Case Caption',
     captionPostfix: 'Test Caption Postfix',
