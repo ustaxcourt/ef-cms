@@ -1291,13 +1291,12 @@ Case.prototype.setLeadCase = function(leadCaseId) {
 };
 
 /**
- * return the lead case for the given set of cases based on createdAt
- * (does NOT evaluate leadCaseId)
+ * sorts the given array of cases by docket number
  *
  * @param {Array} cases the cases to check for lead case computation
  * @returns {Case} the lead Case entity
  */
-Case.findLeadCaseForCases = function(cases) {
+Case.sortByDocketNumber = function(cases) {
   const casesOrdered = cases.sort((a, b) => {
     const aSplit = a.docketNumber.split('-');
     const bSplit = b.docketNumber.split('-');
@@ -1310,6 +1309,19 @@ Case.findLeadCaseForCases = function(cases) {
       return aSplit[0].localeCompare(bSplit[0]);
     }
   });
+
+  return casesOrdered;
+};
+
+/**
+ * return the lead case for the given set of cases based on createdAt
+ * (does NOT evaluate leadCaseId)
+ *
+ * @param {Array} cases the cases to check for lead case computation
+ * @returns {Case} the lead Case entity
+ */
+Case.findLeadCaseForCases = function(cases) {
+  const casesOrdered = Case.sortByDocketNumber(cases);
   return casesOrdered.shift();
 };
 
