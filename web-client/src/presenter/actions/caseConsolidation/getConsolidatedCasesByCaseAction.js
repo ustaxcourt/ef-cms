@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getCasesByUser use case
- * @param {object} providers.props the cerebral props object
+ * @param {object} providers.get the cerebral props object
  * @param {object} providers.store the cerebral store used for setting the state.cases
  * @returns {object} contains the caseList returned from the getCasesByUser use case
  */
