@@ -9,8 +9,6 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
       ...get(state.caseDetail),
     });
 
-  console.log('caseDetail', caseDetail);
-
   const form = get(state.form);
 
   const documentTypes = COURT_ISSUED_EVENT_CODES.map(type => ({
