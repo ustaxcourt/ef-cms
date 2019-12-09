@@ -52,14 +52,13 @@ describe('canConsolidateAction', () => {
         presenter,
       },
       props: {
-        caseDetail: { trialSessionId: '123' },
-        caseToConsolidate: { trialSessionId: '123' },
+        caseDetail: {},
+        caseToConsolidate: {},
         confirmSelection: true,
       },
     });
 
     expect(noStub).toHaveBeenCalled();
-    expect(getTrialSessionDetailsInteractorStub).toHaveBeenCalled();
   });
 
   it('should return yes when case is consolidatable', async () => {
@@ -72,14 +71,13 @@ describe('canConsolidateAction', () => {
         presenter,
       },
       props: {
-        caseDetail: { trialSessionId: '123' },
-        caseToConsolidate: { trialSessionId: '123' },
+        caseDetail: {},
+        caseToConsolidate: {},
         confirmSelection: true,
       },
     });
 
     expect(yesStub).toHaveBeenCalled();
-    expect(getTrialSessionDetailsInteractorStub).toHaveBeenCalled();
   });
 
   it('should return yes when case is consolidatable but no trial sessions are available', async () => {
