@@ -308,7 +308,6 @@ import { validateTrialSessionPlanningSequence } from './sequences/validateTrialS
 import { validateTrialSessionSequence } from './sequences/validateTrialSessionSequence';
 import { validateUpdateCaseModalSequence } from './sequences/validateUpdateCaseModalSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
-import { viewDocumentSequence } from './sequences/viewDocumentSequence';
 
 /**
  * Main Cerebral module
@@ -628,7 +627,6 @@ export const presenter = {
     validateTrialSessionSequence,
     validateUpdateCaseModalSequence,
     validateUserContactSequence,
-    viewDocumentSequence,
   },
   state,
 };
