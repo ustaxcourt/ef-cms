@@ -198,6 +198,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  getConsolidatedCasesByUser:
+    handler: web-api/${self:provider.dir}/usersHandlers.getConsolidatedCasesByUserLambda
+    events:
+      - http:
+          path: /{userId}/cases-with-consolidation
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   verifyPendingCaseForUser:
     handler: web-api/${self:provider.dir}/usersHandlers.verifyPendingCaseForUserLambda
     events:

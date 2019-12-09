@@ -348,12 +348,24 @@ const formatCase = (applicationContext, caseDetail) => {
     result.showNotScheduled = true;
   }
 
+  result.isConsolidatedSubCase = !!(
+    result.leadCaseId && result.leadCaseId !== result.caseId
+  );
+
   result.isLeadCase = !!(
     result.leadCaseId && result.leadCaseId === result.caseId
   );
 
   const caseEntity = new Case(caseDetail, { applicationContext });
   result.canConsolidate = caseEntity.canConsolidate();
+
+  if (result.consolidatedCases) {
+    result.consolidatedCases = result.consolidatedCases.map(
+      consolidatedCase => {
+        return formatCase(applicationContext, consolidatedCase);
+      },
+    );
+  }
 
   return result;
 };
