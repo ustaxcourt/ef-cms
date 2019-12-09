@@ -2,7 +2,7 @@ import { orderBy } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * Fetches the cases (including consolidated) associated with the petitioner who created them or the respondent who is associated with them.
+ * Fetches the cases with the given lead case id.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getCasesByUser use case
