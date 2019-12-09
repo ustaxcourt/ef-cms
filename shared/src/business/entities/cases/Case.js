@@ -1,7 +1,6 @@
 const joi = require('joi-browser');
 const {
   createISODateString,
-  dateStringsCompared,
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
