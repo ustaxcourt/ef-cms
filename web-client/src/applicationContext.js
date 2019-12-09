@@ -114,6 +114,7 @@ import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseNoteInteractor } from '../../shared/src/proxies/caseNote/getCaseNoteProxy';
 import { getCaseTypesInteractor } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
+import { getConsolidatedCasesByUserInteractor } from '../../shared/src/proxies/getConsolidatedCasesByUserProxy';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentQCBatchedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForSectionProxy';
 import { getDocumentQCBatchedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
@@ -277,6 +278,7 @@ const allUseCases = {
   getCaseNoteInteractor,
   getCaseTypesInteractor,
   getCasesByUserInteractor,
+  getConsolidatedCasesByUserInteractor,
   getDocumentQCBatchedForSectionInteractor,
   getDocumentQCBatchedForUserInteractor,
   getDocumentQCInboxForSectionInteractor,
