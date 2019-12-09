@@ -65,9 +65,7 @@ describe('getConsolidatedCasesByCaseAction', () => {
     await runAction(getConsolidatedCasesByCaseAction, {
       modules: { presenter },
       state: {
-        caseDetail: {
-          leadCaseId: 'case-id-123',
-        },
+        caseDetail: {},
       },
     });
 
