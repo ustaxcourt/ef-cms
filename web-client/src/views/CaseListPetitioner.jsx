@@ -1,6 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CaseListRowExternal } from './CaseListRowExternal';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -49,31 +48,7 @@ export const CaseListPetitioner = connect(
             </thead>
             <tbody>
               {formattedCases.map(item => (
-                <tr key={item.docketNumber}>
-                  <td>
-                    {item.isLeadCase && (
-                      <>
-                        <span className="usa-sr-only">Lead Case</span>
-                        <FontAwesomeIcon
-                          className="margin-right-1 icon-consolidated"
-                          icon="copy"
-                          size="1x"
-                        />
-                      </>
-                    )}
-                  </td>
-                  <td className="hide-on-mobile">
-                    <CaseLink formattedCase={item} />
-                  </td>
-                  <td className="hide-on-mobile">{item.caseName}</td>
-                  <td>{item.createdAtFormatted}</td>
-                  <td className="show-on-mobile">
-                    <div>
-                      <CaseLink formattedCase={item} />
-                    </div>
-                    {item.caseName}
-                  </td>
-                </tr>
+                <CaseListRowExternal formattedCase={item} key={item.caseId} />
               ))}
             </tbody>
           </table>

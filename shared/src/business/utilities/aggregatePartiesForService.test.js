@@ -9,7 +9,10 @@ describe('aggregatePartiesForService', () => {
   };
 
   const contactSecondary = {
+    address1: 'Test Address',
+    city: 'Testville',
     name: 'Contact Secondary',
+    state: 'CA',
   };
 
   const respondents = [
@@ -56,7 +59,12 @@ describe('aggregatePartiesForService', () => {
         { email: 'respondentone@example.com', name: 'Respondent One' },
         { email: 'respondenttwo@example.com', name: 'Respondent Two' },
         { name: 'Contact Primary' },
-        { name: 'Contact Secondary' },
+        {
+          address1: 'Test Address',
+          city: 'Testville',
+          name: 'Contact Secondary',
+          state: 'CA',
+        },
       ],
       electronic: [
         { email: 'practitionerone@example.com', name: 'Practitioner One' },
@@ -64,7 +72,15 @@ describe('aggregatePartiesForService', () => {
         { email: 'respondentone@example.com', name: 'Respondent One' },
         { email: 'respondenttwo@example.com', name: 'Respondent Two' },
       ],
-      paper: [{ name: 'Contact Primary' }, { name: 'Contact Secondary' }],
+      paper: [
+        { name: 'Contact Primary' },
+        {
+          address1: 'Test Address',
+          city: 'Testville',
+          name: 'Contact Secondary',
+          state: 'CA',
+        },
+      ],
     });
   });
 
@@ -78,7 +94,12 @@ describe('aggregatePartiesForService', () => {
         { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
         { email: 'respondentone@example.com', name: 'Respondent One' },
         { email: 'respondenttwo@example.com', name: 'Respondent Two' },
-        { name: 'Contact Secondary' },
+        {
+          address1: 'Test Address',
+          city: 'Testville',
+          name: 'Contact Secondary',
+          state: 'CA',
+        },
       ],
       electronic: [
         { email: 'contactprimary@example.com', name: 'Contact Primary' },
@@ -87,7 +108,14 @@ describe('aggregatePartiesForService', () => {
         { email: 'respondentone@example.com', name: 'Respondent One' },
         { email: 'respondenttwo@example.com', name: 'Respondent Two' },
       ],
-      paper: [{ name: 'Contact Secondary' }],
+      paper: [
+        {
+          address1: 'Test Address',
+          city: 'Testville',
+          name: 'Contact Secondary',
+          state: 'CA',
+        },
+      ],
     });
   });
 
@@ -101,7 +129,12 @@ describe('aggregatePartiesForService', () => {
         { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
         { email: 'respondentone@example.com', name: 'Respondent One' },
         { email: 'respondenttwo@example.com', name: 'Respondent Two' },
-        { name: 'Contact Secondary' },
+        {
+          address1: 'Test Address',
+          city: 'Testville',
+          name: 'Contact Secondary',
+          state: 'CA',
+        },
       ],
       electronic: [
         { email: 'practitionerone@example.com', name: 'Practitioner One' },
@@ -109,7 +142,14 @@ describe('aggregatePartiesForService', () => {
         { email: 'respondentone@example.com', name: 'Respondent One' },
         { email: 'respondenttwo@example.com', name: 'Respondent Two' },
       ],
-      paper: [{ name: 'Contact Secondary' }],
+      paper: [
+        {
+          address1: 'Test Address',
+          city: 'Testville',
+          name: 'Contact Secondary',
+          state: 'CA',
+        },
+      ],
     });
   });
 

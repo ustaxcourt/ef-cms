@@ -39,7 +39,7 @@ exports.addConsolidatedCaseInteractor = async ({
 
   if (!caseToConsolidateWith) {
     throw new NotFoundError(
-      `Case to consolidte with (${caseIdToConsolidateWith}) was not found.`,
+      `Case to consolidate with (${caseIdToConsolidateWith}) was not found.`,
     );
   }
 
