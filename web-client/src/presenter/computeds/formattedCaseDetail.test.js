@@ -835,4 +835,60 @@ describe('formattedCaseDetail', () => {
       },
     ]);
   });
+
+  describe('consolidatedCases', () => {
+    it('should format consolidated cases if they exist', () => {
+      const caseDetail = {
+        associatedJudge: 'Judge Judy',
+        consolidatedCases: [
+          {
+            associatedJudge: 'Guy Fieri',
+            petitioners: [{ name: 'Bobby Flay' }],
+            status: Case.STATUS_TYPES.calendared,
+            trialDate: '2018-12-11T05:00:00Z',
+            trialLocation: 'Flavortown',
+            trialSessionId: '123',
+          },
+        ],
+        petitioners: [{ name: 'bob' }],
+        status: Case.STATUS_TYPES.calendared,
+        trialDate: '2018-12-11T05:00:00Z',
+        trialLocation: 'England is my City',
+        trialSessionId: '123',
+      };
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+
+      expect(result.consolidatedCases).toBeDefined();
+      expect(result.consolidatedCases.length).toEqual(1);
+    });
+
+    it('should default consolidatedCases to an empty array if they do not exist', () => {
+      const caseDetail = {
+        associatedJudge: 'Judge Judy',
+        petitioners: [{ name: 'bob' }],
+        status: Case.STATUS_TYPES.calendared,
+        trialDate: '2018-12-11T05:00:00Z',
+        trialLocation: 'England is my City',
+        trialSessionId: '123',
+      };
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+
+      expect(result.consolidatedCases).toBeDefined();
+      expect(result.consolidatedCases).toEqual([]);
+    });
+  });
 });
