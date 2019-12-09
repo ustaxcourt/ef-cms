@@ -19,6 +19,7 @@ import { caseDetailHelper } from './computeds/caseDetailHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
+import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
@@ -98,6 +99,7 @@ export const state = {
   cognitoLoginUrl: null,
   completeDocumentTypeSectionHelper,
   completeForm: {},
+  confirmInitiateServiceModalHelper,
   contactsHelper,
   createOrderHelper,
   currentPage: 'Interstitial',

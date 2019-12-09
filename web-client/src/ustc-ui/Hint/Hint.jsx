@@ -4,7 +4,7 @@ import React from 'react';
 import classNames from 'classnames';
 
 export const Hint = connect(props => {
-  const { children, exclamation, fullWidth, wider } = props;
+  const { children, className, exclamation, fullWidth, wider } = props;
 
   return (
     <div
@@ -12,6 +12,7 @@ export const Hint = connect(props => {
         'alert-gold add-bottom-margin',
         fullWidth && 'full-width',
         wider && 'wider',
+        className,
       )}
     >
       <span className="usa-hint ustc-form-hint-with-svg">
