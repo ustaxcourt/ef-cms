@@ -1,6 +1,8 @@
 module.exports = {
   createUserLambda: require('./users/createUserLambda').handler,
   getCasesByUserLambda: require('./cases/getCasesByUserLambda').handler,
+  getConsolidatedCasesByUserLambda: require('./cases/getConsolidatedCasesByUserLambda')
+    .handler,
   getDocumentQCBatchedForUserLambda: require('./workitems/getDocumentQCBatchedForUserLambda')
     .handler,
   getDocumentQCInboxForUserLambda: require('./workitems/getDocumentQCInboxForUserLambda')

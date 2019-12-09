@@ -1,6 +1,5 @@
-import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
+import { CaseListRowExternal } from './CaseListRowExternal';
 import { CaseSearchBox } from './CaseSearchBox';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MyContactInformation } from './MyContactInformation';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -27,31 +26,7 @@ export const CaseListRespondent = connect(
           </thead>
           <tbody>
             {formattedCases.map(item => (
-              <tr key={item.docketNumber}>
-                <td>
-                  {item.isLeadCase && (
-                    <>
-                      <span className="usa-sr-only">Lead Case</span>
-                      <FontAwesomeIcon
-                        className="margin-right-1 icon-consolidated"
-                        icon="copy"
-                        size="1x"
-                      />
-                    </>
-                  )}
-                </td>
-                <td className="hide-on-mobile">
-                  <CaseLink formattedCase={item} />
-                </td>
-                <td className="hide-on-mobile">{item.caseName}</td>
-                <td>{item.createdAtFormatted}</td>
-                <td className="show-on-mobile">
-                  <div>
-                    <CaseLink formattedCase={item} />
-                  </div>
-                  {item.caseName}
-                </td>
-              </tr>
+              <CaseListRowExternal formattedCase={item} key={item.caseId} />
             ))}
           </tbody>
         </table>

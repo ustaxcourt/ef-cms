@@ -15,9 +15,6 @@ export const addConsolidatedCaseAction = async ({
   const caseIdToConsolidateWith = caseDetail.caseId;
   const caseToConsolidateId = caseToConsolidate.caseId;
 
-  console.log('case', caseToConsolidateId);
-  console.log('with', caseIdToConsolidateWith);
-
   await applicationContext.getUseCases().addConsolidatedCaseInteractor({
     applicationContext,
     caseId: caseToConsolidateId,
