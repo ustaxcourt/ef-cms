@@ -184,12 +184,10 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     }
   }
 
-  const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
 
   const destinations = servedParties.electronic.map(party => ({
     email: party.email,
@@ -264,5 +262,5 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     paperServicePdfData = await newPdfDoc.save();
   }
 
-  return { paperServicePdfData, updatedCase };
+  return paperServicePdfData;
 };
