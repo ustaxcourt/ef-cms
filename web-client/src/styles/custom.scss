@@ -124,10 +124,11 @@ iframe {
   &#pdf-preview-iframe {
     height: 683px;
 
-    // &.hide-from-page {
-    //   position: absolute;
-    //   left: -999px;
-    // }
+    &.hide-from-page {
+      position: absolute;
+      top: 0;
+      left: -9999px;
+    }
   }
 }
 

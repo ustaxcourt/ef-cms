@@ -7,13 +7,26 @@ export const PdfPreview = connect(
   {
     clearPdfPreviewUrlSequence: sequences.clearPdfPreviewUrlSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
+    printPdfFromIframeSequence: sequences.printPdfFromIframeSequence,
   },
-  ({ clearPdfPreviewUrlSequence, hidden, pdfPreviewUrl }) => {
-    useEffect(() => () => clearPdfPreviewUrlSequence(), []);
-
-    if (!pdfPreviewUrl) {
+  ({
+    clearPdfPreviewUrlSequence,
+    hidden,
+    pdfPreviewUrl,
+    printable,
+    printPdfFromIframeSequence,
+  }) => {
+    if (!pdfPreviewUrl || process.env.CI) {
       return '';
     }
+
+    useEffect(() => {
+      if (printable) {
+        printPdfFromIframeSequence();
+      }
+      return () => clearPdfPreviewUrlSequence();
+    }, []);
+
     return (
       !process.env.CI &&
       pdfPreviewUrl && (
