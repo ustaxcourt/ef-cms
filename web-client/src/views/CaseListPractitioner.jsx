@@ -8,6 +8,44 @@ import { state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
+const getCaseRow = (formattedCase, isNestedCase) => {
+  return (
+    <React.Fragment key={formattedCase.caseId}>
+      <tr>
+        <td>
+          {formattedCase.isLeadCase && (
+            <>
+              <span className="usa-sr-only">Lead Case</span>
+              <FontAwesomeIcon
+                className="margin-right-1 icon-consolidated"
+                icon="copy"
+                size="1x"
+              />
+            </>
+          )}
+        </td>
+        <td className="hide-on-mobile">
+          <div className={isNestedCase ? 'margin-left-2' : ''}>
+            <CaseLink formattedCase={formattedCase} />
+          </div>
+        </td>
+        <td className="hide-on-mobile">{formattedCase.caseName}</td>
+        <td>{formattedCase.createdAtFormatted}</td>
+        <td className="show-on-mobile">
+          <div className={isNestedCase ? 'margin-left-2' : ''}>
+            <CaseLink formattedCase={formattedCase} />
+          </div>
+          {formattedCase.caseName}
+        </td>
+      </tr>
+      {formattedCase.consolidatedCases &&
+        formattedCase.consolidatedCases.map(consolidatedCase =>
+          getCaseRow(consolidatedCase, true),
+        )}
+    </React.Fragment>
+  );
+};
+
 export const CaseListPractitioner = connect(
   {
     dashboardExternalHelper: state.dashboardExternalHelper,
@@ -27,35 +65,7 @@ export const CaseListPractitioner = connect(
               <th>Date filed</th>
             </tr>
           </thead>
-          <tbody>
-            {formattedCases.map(item => (
-              <tr key={item.docketNumber}>
-                <td>
-                  {item.isLeadCase && (
-                    <>
-                      <span className="usa-sr-only">Lead Case</span>
-                      <FontAwesomeIcon
-                        className="margin-right-1 icon-consolidated"
-                        icon="copy"
-                        size="1x"
-                      />
-                    </>
-                  )}
-                </td>
-                <td className="hide-on-mobile">
-                  <CaseLink formattedCase={item} />
-                </td>
-                <td className="hide-on-mobile">{item.caseName}</td>
-                <td>{item.createdAtFormatted}</td>
-                <td className="show-on-mobile">
-                  <div>
-                    <CaseLink formattedCase={item} />
-                  </div>
-                  {item.caseName}
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          <tbody>{formattedCases.map(item => getCaseRow(item))}</tbody>
         </table>
       </div>
     );
