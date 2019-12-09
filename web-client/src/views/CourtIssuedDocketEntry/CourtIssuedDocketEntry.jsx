@@ -205,7 +205,7 @@ export const CourtIssuedDocketEntry = connect(
                       {party.displayName}
                       <div className="float-right">
                         <b>Service: </b>
-                        {party.serviceType || 'Electronic'}
+                        {party.serviceIndicator}
                       </div>
                     </div>
                   ))}
