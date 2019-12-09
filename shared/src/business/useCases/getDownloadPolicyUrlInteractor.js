@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
+const { User } = require('../entities/User');
 
 /**
  *
@@ -12,12 +13,26 @@ const { UnauthorizedError } = require('../../errors/errors');
  */
 exports.getDownloadPolicyUrlInteractor = async ({
   applicationContext,
+  caseId,
   documentId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_DOCUMENTS)) {
     throw new UnauthorizedError('Unauthorized');
+  }
+
+  const isInternalUser = User.isInternalUser(user && user.role);
+
+  if (!isInternalUser) {
+    //verify that the user has access to this document
+    const userAssociatedWithCase = await applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser({ applicationContext, caseId, userId: user.userId });
+
+    if (!userAssociatedWithCase) {
+      throw new UnauthorizedError('Unauthorized');
+    }
   }
 
   return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
