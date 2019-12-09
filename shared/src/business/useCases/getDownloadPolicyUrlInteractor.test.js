@@ -31,7 +31,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         userId: 'petitioner',
       }),
       getPersistenceGateway: () => ({
-        verifyCaseForUser: jest.fn(false),
+        verifyCaseForUser: jest.fn().mockReturnValue(false),
       }),
     };
     let error;
@@ -53,7 +53,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       }),
       getPersistenceGateway: () => ({
         getDownloadPolicyUrl: () => 'localhost',
-        verifyCaseForUser: jest.fn(true),
+        verifyCaseForUser: jest.fn().mockReturnValue(true),
       }),
     };
     const url = await getDownloadPolicyUrlInteractor({
