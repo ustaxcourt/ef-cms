@@ -17,14 +17,16 @@ export const getConsolidatedCasesByCaseAction = async ({
 }) => {
   const { leadCaseId } = get(state.caseDetail);
 
-  let consolidatedCases = await applicationContext
-    .getUseCases()
-    .getConsolidatedCasesByCaseInteractor({
-      applicationContext,
-      caseId: leadCaseId,
-    });
+  if (leadCaseId) {
+    let consolidatedCases = await applicationContext
+      .getUseCases()
+      .getConsolidatedCasesByCaseInteractor({
+        applicationContext,
+        caseId: leadCaseId,
+      });
 
-  consolidatedCases = orderBy(consolidatedCases, 'createdAt', 'asc');
+    consolidatedCases = orderBy(consolidatedCases, 'createdAt', 'asc');
 
-  store.set(state.caseDetail.consolidatedCases, consolidatedCases);
+    store.set(state.caseDetail.consolidatedCases, consolidatedCases);
+  }
 };
