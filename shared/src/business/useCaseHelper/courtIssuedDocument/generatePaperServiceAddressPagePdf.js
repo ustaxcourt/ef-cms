@@ -5,9 +5,12 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
+ * generatePaperServiceAddressPage
  *
- * @param {object} caseInfo a raw object representing a petition
- * @returns {string} an html string resulting from rendering template with caseInfo
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.contactData the contact data
+ * @returns {string} an html string resulting from rendering template with contactData
  */
 const generatePaperServiceAddressPage = async ({
   applicationContext,
@@ -37,8 +40,8 @@ const generatePaperServiceAddressPage = async ({
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseEntity a case entity with its documents
- * @returns {Promise<*>} the promise of the document having been uploaded
+ * @param {object} providers.contactData the contact data
+ * @returns {Uint8Array} the generated pdf data
  */
 exports.generatePaperServiceAddressPagePdf = async ({
   applicationContext,
