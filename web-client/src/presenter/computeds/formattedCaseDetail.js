@@ -138,7 +138,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
     entry => entry.hasDocument && entry.isPending,
   );
 
-  // TODO: add unit test case for this being populated and empty
   result.consolidatedCases = (
     caseDetail.consolidatedCases || []
   ).map(consolidatedCase => formatCase(applicationContext, consolidatedCase));
