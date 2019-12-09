@@ -42,6 +42,7 @@ describe('confirmInitiateServiceModalHelper', () => {
     });
 
     expect(result).toEqual({
+      confirmLabel: 'Yes, Serve and Print',
       contactsNeedingPaperService: [
         { name: 'Callie Bullock, Petitioner' },
         { name: 'Chelsea Hogan, Petitioner' },
