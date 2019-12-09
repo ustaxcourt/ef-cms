@@ -1,7 +1,6 @@
 const joi = require('joi-browser');
 const {
   createISODateString,
-  dateStringsCompared,
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
@@ -1287,6 +1286,29 @@ Case.prototype.setLeadCase = function(leadCaseId) {
 };
 
 /**
+ * sorts the given array of cases by docket number
+ *
+ * @param {Array} cases the cases to check for lead case computation
+ * @returns {Case} the lead Case entity
+ */
+Case.sortByDocketNumber = function(cases) {
+  const casesOrdered = cases.sort((a, b) => {
+    const aSplit = a.docketNumber.split('-');
+    const bSplit = b.docketNumber.split('-');
+
+    if (aSplit[1] !== bSplit[1]) {
+      // compare years if they aren't the same
+      return aSplit[1].localeCompare(bSplit[1]);
+    } else {
+      // compare index if years are the same
+      return aSplit[0].localeCompare(bSplit[0]);
+    }
+  });
+
+  return casesOrdered;
+};
+
+/**
  * return the lead case for the given set of cases based on createdAt
  * (does NOT evaluate leadCaseId)
  *
@@ -1294,9 +1316,7 @@ Case.prototype.setLeadCase = function(leadCaseId) {
  * @returns {Case} the lead Case entity
  */
 Case.findLeadCaseForCases = function(cases) {
-  const casesOrdered = cases.sort((a, b) => {
-    return dateStringsCompared(a.createdAt, b.createdAt);
-  });
+  const casesOrdered = Case.sortByDocketNumber(cases);
   return casesOrdered.shift();
 };
 
