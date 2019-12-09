@@ -175,7 +175,7 @@ export const CaseDetailInternal = connect(
         {showModal === 'RemoveFromTrialSessionModal' && (
           <RemoveFromTrialSessionModal />
         )}
-        <PdfPreview hidden printable />
+        <PdfPreview printable />
       </>
     );
   },
