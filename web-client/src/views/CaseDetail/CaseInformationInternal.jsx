@@ -44,16 +44,16 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
 const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
   <React.Fragment>
     {!caseDetailHelper.hasConsolidatedCases && <p>Not consolidated</p>}
-    <table>
+    <div className="grid-container padding-left-0">
       {caseDetail.consolidatedCases.map((consolidatedCase, index) => (
-        <tr key={index}>
-          <td>
+        <div className="grid-row margin-top-3" key={index}>
+          <div className="grid-col-2">
             <CaseLink formattedCase={consolidatedCase} />
-          </td>
-          <td>{consolidatedCase.caseName}</td>
-        </tr>
+          </div>
+          <div className="grid-col-10">{consolidatedCase.caseCaption}</div>
+        </div>
       ))}
-    </table>
+    </div>
   </React.Fragment>
 );
 
@@ -275,6 +275,7 @@ export const CaseInformationInternal = connect(
     openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence,
   }) => {
+    console.log('caseDetail', formattedCaseDetail);
     return (
       <div className="internal-information">
         <div className="grid-container padding-x-0">
@@ -365,7 +366,10 @@ export const CaseInformationInternal = connect(
                   <AddConsolidatedCaseModal />
                   {formattedCaseDetail.canConsolidate &&
                     formattedCaseDetail.consolidatedCases.length > 0 && (
-                      <ConsolidatedCases caseDetail={formattedCaseDetail} />
+                      <ConsolidatedCases
+                        caseDetail={formattedCaseDetail}
+                        caseDetailHelper={caseDetailHelper}
+                      />
                     )}
                   {formattedCaseDetail.canConsolidate &&
                     formattedCaseDetail.consolidatedCases.length === 0 && (
