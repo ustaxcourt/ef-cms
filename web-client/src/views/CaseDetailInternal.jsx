@@ -27,6 +27,7 @@ import React from 'react';
 export const CaseDetailInternal = connect(
   {
     baseUrl: state.baseUrl,
+    caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
@@ -35,6 +36,7 @@ export const CaseDetailInternal = connect(
   },
   ({
     baseUrl,
+    caseDetail,
     caseDetailHelper,
     formattedCaseDetail,
     setCaseDetailPageTabSequence,
@@ -140,7 +142,7 @@ export const CaseDetailInternal = connect(
                 <a
                   aria-label="View PDF"
                   className="usa-button usa-button--unstyled margin-right-1"
-                  href={`${baseUrl}/documents/${
+                  href={`${baseUrl}/case-documents/${caseDetail.caseId}/${
                     formattedCaseDetail.docketNumber
                   }_${formattedCaseDetail.contactPrimary.name.replace(
                     /\s/g,

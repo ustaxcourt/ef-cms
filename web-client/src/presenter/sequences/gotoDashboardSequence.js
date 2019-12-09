@@ -1,7 +1,6 @@
 import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
-import { getCasesByUserAction } from '../actions/getCasesByUserAction';
 import { getConsolidatedCasesByUserAction } from '../actions/caseConsolidation/getConsolidatedCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
@@ -55,12 +54,12 @@ const goToDashboard = [
       setCurrentPageAction('DashboardPetitioner'),
     ],
     practitioner: [
-      getCasesByUserAction,
+      getConsolidatedCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPractitioner'),
     ],
     respondent: [
-      getCasesByUserAction,
+      getConsolidatedCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardRespondent'),
     ],
