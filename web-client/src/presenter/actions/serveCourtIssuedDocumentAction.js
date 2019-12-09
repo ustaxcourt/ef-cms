@@ -15,11 +15,15 @@ export const serveCourtIssuedDocumentAction = async ({
   const documentId = get(state.documentId);
   const caseId = get(state.caseDetail.caseId);
 
-  await applicationContext.getUseCases().serveCourtIssuedDocumentInteractor({
-    applicationContext,
-    caseId,
-    documentId,
-  });
+  const {
+    paperServicePdfData,
+  } = await applicationContext
+    .getUseCases()
+    .serveCourtIssuedDocumentInteractor({
+      applicationContext,
+      caseId,
+      documentId,
+    });
 
   return {
     alertSuccess: {
@@ -27,5 +31,6 @@ export const serveCourtIssuedDocumentAction = async ({
         'Remember to print all documents for parties with paper service.',
       title: 'This document has been served',
     },
+    paperServicePdfData,
   };
 };
