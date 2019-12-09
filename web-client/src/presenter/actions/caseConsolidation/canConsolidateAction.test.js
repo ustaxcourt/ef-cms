@@ -81,4 +81,23 @@ describe('canConsolidateAction', () => {
     expect(yesStub).toHaveBeenCalled();
     expect(getTrialSessionDetailsInteractorStub).toHaveBeenCalled();
   });
+
+  it('should return yes when case is consolidatable but no trial sessions are available', async () => {
+    consolidationStub.mockReturnValue({
+      canConsolidate: true,
+      reason: '',
+    });
+    await runAction(canConsolidateAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        caseDetail: {},
+        caseToConsolidate: {},
+        confirmSelection: true,
+      },
+    });
+
+    expect(yesStub).toHaveBeenCalled();
+  });
 });
