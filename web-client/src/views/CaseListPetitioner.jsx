@@ -1,47 +1,8 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CaseListRowExternal } from './CaseListRowExternal';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
-
-const getCaseRow = (formattedCase, isNestedCase) => {
-  return (
-    <React.Fragment key={formattedCase.caseId}>
-      <tr>
-        <td>
-          {formattedCase.isLeadCase && (
-            <>
-              <span className="usa-sr-only">Lead Case</span>
-              <FontAwesomeIcon
-                className="margin-right-1 icon-consolidated"
-                icon="copy"
-                size="1x"
-              />
-            </>
-          )}
-        </td>
-        <td className="hide-on-mobile">
-          <div className={isNestedCase ? 'margin-left-2' : ''}>
-            <CaseLink formattedCase={formattedCase} />
-          </div>
-        </td>
-        <td className="hide-on-mobile">{formattedCase.caseName}</td>
-        <td>{formattedCase.createdAtFormatted}</td>
-        <td className="show-on-mobile">
-          <div className={isNestedCase ? 'margin-left-2' : ''}>
-            <CaseLink formattedCase={formattedCase} />
-          </div>
-          {formattedCase.caseName}
-        </td>
-      </tr>
-      {formattedCase.consolidatedCases &&
-        formattedCase.consolidatedCases.map(consolidatedCase =>
-          getCaseRow(consolidatedCase, true),
-        )}
-    </React.Fragment>
-  );
-};
 
 export const CaseListPetitioner = connect(
   {
@@ -85,7 +46,11 @@ export const CaseListPetitioner = connect(
                 <th>Date filed</th>
               </tr>
             </thead>
-            <tbody>{formattedCases.map(item => getCaseRow(item))}</tbody>
+            <tbody>
+              {formattedCases.map(item => (
+                <CaseListRowExternal formattedCase={item} key={item.caseId} />
+              ))}
+            </tbody>
           </table>
         </div>
       </>

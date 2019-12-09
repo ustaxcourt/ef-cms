@@ -17,6 +17,7 @@ const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { PDFDocument } = require('pdf-lib');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 const completeWorkItem = async ({
@@ -220,5 +221,48 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     });
   }
 
-  return updatedCase;
+  let paperServicePdfData;
+  if (servedParties.paper.length > 0) {
+    paperServicePdfData = pdfData;
+    const courtIssuedOrderDoc = await PDFDocument.load(pdfData);
+    const addressPages = [];
+    let newPdfDoc = await PDFDocument.create();
+
+    for (let party of servedParties.paper) {
+      addressPages.push(
+        await applicationContext
+          .getUseCaseHelpers()
+          .generatePaperServiceAddressPagePdf({
+            applicationContext,
+            contactData: party,
+            docketNumberWithSuffix: `${
+              caseToUpdate.docketNumber
+            }${caseToUpdate.docketNumberSuffix || ''}`,
+          }),
+      );
+    }
+
+    for (let addressPage of addressPages) {
+      const addressPageDoc = await PDFDocument.load(addressPage);
+      let copiedPages = await newPdfDoc.copyPages(
+        addressPageDoc,
+        addressPageDoc.getPageIndices(),
+      );
+      copiedPages.forEach(page => {
+        newPdfDoc.addPage(page);
+      });
+
+      copiedPages = await newPdfDoc.copyPages(
+        courtIssuedOrderDoc,
+        courtIssuedOrderDoc.getPageIndices(),
+      );
+      copiedPages.forEach(page => {
+        newPdfDoc.addPage(page);
+      });
+    }
+
+    paperServicePdfData = await newPdfDoc.save();
+  }
+
+  return { paperServicePdfData, updatedCase };
 };

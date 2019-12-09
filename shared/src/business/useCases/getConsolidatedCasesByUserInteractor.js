@@ -55,7 +55,6 @@ exports.getConsolidatedCasesByUserInteractor = async ({
         leadCase.consolidatedCases = consolidatedCases.filter(
           consolidatedCase => consolidatedCase.caseId !== leadCaseId,
         );
-        console.log('lead case', leadCase);
         caseMapping[leadCaseId] = leadCase;
       }
     }

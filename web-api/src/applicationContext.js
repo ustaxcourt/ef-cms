@@ -219,6 +219,9 @@ const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
+  generatePaperServiceAddressPagePdf,
+} = require('../../shared/src/business/useCaseHelper/courtIssuedDocument/generatePaperServiceAddressPagePdf');
+const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
 const {
@@ -920,6 +923,7 @@ module.exports = (appContextUser = {}) => {
       return {
         fetchPendingItems,
         generateCaseConfirmationPdf,
+        generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
       };
     },
