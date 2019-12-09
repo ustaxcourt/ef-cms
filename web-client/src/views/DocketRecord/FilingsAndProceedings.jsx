@@ -9,6 +9,7 @@ export const FilingsAndProceedings = connect(
   {
     arrayIndex: props.arrayIndex,
     baseUrl: state.baseUrl,
+    caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
     docketRecordHelper: state.docketRecordHelper,
     documentEditLinkHelper: state.documentEditLinkHelper,
@@ -21,6 +22,7 @@ export const FilingsAndProceedings = connect(
   ({
     arrayIndex,
     baseUrl,
+    caseDetail,
     caseDetailHelper,
     docketRecordHelper,
     documentEditLinkHelper,
@@ -35,7 +37,7 @@ export const FilingsAndProceedings = connect(
           <NonMobile>
             <a
               aria-label={`View PDF: ${entry.description}`}
-              href={`${baseUrl}/documents/${entry.documentId}/document-download-url?token=${token}`}
+              href={`${baseUrl}/case-documents/${caseDetail.caseId}/${entry.documentId}/document-download-url?token=${token}`}
               rel="noreferrer noopener"
               target="_blank"
             >
