@@ -14,7 +14,6 @@ import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './CaseDetail/MessagesInProgress';
 import { PartyInformation } from './CaseDetail/PartyInformation';
-import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PrioritizeCaseModal } from './CaseDetail/PrioritizeCaseModal';
 import { RemoveFromTrialSessionModal } from './CaseDetail/RemoveFromTrialSessionModal';
 import { SuccessNotification } from './SuccessNotification';
@@ -31,6 +30,7 @@ export const CaseDetailInternal = connect(
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    pdfPreviewUrl: state.anotherPdfPreviewUrl,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
     showModal: state.showModal,
     token: state.token,
@@ -40,6 +40,7 @@ export const CaseDetailInternal = connect(
     caseDetail,
     caseDetailHelper,
     formattedCaseDetail,
+    pdfPreviewUrl,
     setCaseDetailPageTabSequence,
     showModal,
     token,
@@ -175,7 +176,11 @@ export const CaseDetailInternal = connect(
         {showModal === 'RemoveFromTrialSessionModal' && (
           <RemoveFromTrialSessionModal />
         )}
-        <PdfPreview hidden />
+        <iframe
+          id="pdf-preview-iframe"
+          src={pdfPreviewUrl}
+          title="PDF Preview"
+        />
       </>
     );
   },
