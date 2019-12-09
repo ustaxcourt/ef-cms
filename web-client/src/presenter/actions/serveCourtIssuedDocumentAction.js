@@ -24,14 +24,14 @@ export const serveCourtIssuedDocumentAction = async ({
       documentId,
     });
 
-  // let pdfUrl;
-  // if (paperServicePdfData) {
-  //   const pdfFile = new Blob([paperServicePdfData], {
-  //     type: 'application/pdf',
-  //   });
+  let pdfUrl;
+  if (paperServicePdfData) {
+    const pdfFile = new Blob([paperServicePdfData], {
+      type: 'application/pdf',
+    });
 
-  const pdfUrl = router.createObjectURL(paperServicePdfData);
-  // }
+    pdfUrl = router.createObjectURL(pdfFile);
+  }
 
   return {
     alertSuccess: {
