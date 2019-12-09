@@ -41,6 +41,7 @@ describe('getConsolidatedCasesByCaseAction', () => {
       },
     });
 
+    expect(getConsolidatedCasesByCaseInteractorStub).toHaveBeenCalled();
     expect(state.caseDetail.consolidatedCases).toEqual([
       {
         caseId: 'case-id-123',
@@ -58,5 +59,18 @@ describe('getConsolidatedCasesByCaseAction', () => {
         leadCaseId: 'case-id-123',
       },
     ]);
+  });
+
+  it('does not try to retrieve consolidated cases if it has no lead case', async () => {
+    await runAction(getConsolidatedCasesByCaseAction, {
+      modules: { presenter },
+      state: {
+        caseDetail: {
+          leadCaseId: 'case-id-123',
+        },
+      },
+    });
+
+    expect(getConsolidatedCasesByCaseInteractorStub).not.toHaveBeenCalled();
   });
 });
