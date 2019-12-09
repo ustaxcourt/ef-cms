@@ -151,18 +151,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getDownloadPolicyUrl:
-    handler: web-api/${self:provider.dir}/documentsHandlers.downloadPolicyUrlLambda
-    events:
-      - http:
-          path: /{documentId}/download-policy-url
-          method: get
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   validate:
     handler: web-api/${self:provider.dir}/documentsHandlers.validatePdfLambda
     events:
@@ -184,14 +172,6 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
-
-  getDocumentDownloadUrl:
-    handler: web-api/${self:provider.dir}/documentsHandlers.getDocumentDownloadUrlLambda
-    events:
-      - http:
-          path: /{documentId}/document-download-url
-          method: get
-          cors: true
 
   generatePrintableFilingReceiptLambda:
     handler: web-api/${self:provider.dir}/documentsHandlers.generatePrintableFilingReceiptLambda

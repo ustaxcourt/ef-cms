@@ -219,6 +219,9 @@ const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
+  generatePaperServiceAddressPagePdf,
+} = require('../../shared/src/business/useCaseHelper/courtIssuedDocument/generatePaperServiceAddressPagePdf');
+const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
 const {
@@ -284,6 +287,10 @@ const {
 const {
   getCasesByUserInteractor,
 } = require('../../shared/src/business/useCases/getCasesByUserInteractor');
+
+const {
+  getConsolidatedCasesByUserInteractor,
+} = require('../../shared/src/business/useCases/getConsolidatedCasesByUserInteractor');
 const {
   getDocumentQCBatchedForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForSection');
@@ -914,6 +921,7 @@ module.exports = (appContextUser = {}) => {
       return {
         fetchPendingItems,
         generateCaseConfirmationPdf,
+        generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
       };
     },
@@ -962,6 +970,7 @@ module.exports = (appContextUser = {}) => {
         getCaseInteractor,
         getCaseNoteInteractor,
         getCasesByUserInteractor,
+        getConsolidatedCasesByUserInteractor,
         getDocumentQCBatchedForSectionInteractor,
         getDocumentQCBatchedForUserInteractor,
         getDocumentQCInboxForSectionInteractor,

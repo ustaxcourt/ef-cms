@@ -23,7 +23,6 @@ export const ConfirmInitiateServiceModal = connect(
         className="confirm-initiate-service-modal"
         confirmLabel={confirmInitiateServiceModalHelper.confirmLabel}
         confirmSequence={confirmSequence}
-        message=""
         title="Are you ready to initiate service?"
       >
         <p className="margin-bottom-1">

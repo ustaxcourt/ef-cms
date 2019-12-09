@@ -8,12 +8,31 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   it('throw unauthorized error on invalid role', async () => {
     const applicationContext = {
-      getCurrentUser: () => {
-        return {
-          role: 'admin',
-          userId: 'petitioner',
-        };
-      },
+      getCurrentUser: () => ({
+        role: 'admin',
+        userId: 'petitioner',
+      }),
+    };
+    let error;
+    try {
+      await getDownloadPolicyUrlInteractor({
+        applicationContext,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toContain('Unauthorized');
+  });
+
+  it('throw unauthorized error if user is not associated with case', async () => {
+    const applicationContext = {
+      getCurrentUser: () => ({
+        role: User.ROLES.petitioner,
+        userId: 'petitioner',
+      }),
+      getPersistenceGateway: () => ({
+        verifyCaseForUser: jest.fn().mockReturnValue(false),
+      }),
     };
     let error;
     try {
@@ -28,14 +47,30 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   it('returns the expected policy url', async () => {
     const applicationContext = {
-      getCurrentUser: () => {
-        return {
-          role: User.ROLES.petitioner,
-          userId: 'petitioner',
-        };
-      },
+      getCurrentUser: () => ({
+        role: User.ROLES.petitioner,
+        userId: 'petitioner',
+      }),
       getPersistenceGateway: () => ({
         getDownloadPolicyUrl: () => 'localhost',
+        verifyCaseForUser: jest.fn().mockReturnValue(true),
+      }),
+    };
+    const url = await getDownloadPolicyUrlInteractor({
+      applicationContext,
+    });
+    expect(url).toEqual('localhost');
+  });
+
+  it('returns the url for an internal user role even if verifyCaseForUser returns false', async () => {
+    const applicationContext = {
+      getCurrentUser: () => ({
+        role: User.ROLES.petitionsClerk,
+        userId: 'petitionsClerk',
+      }),
+      getPersistenceGateway: () => ({
+        getDownloadPolicyUrl: () => 'localhost',
+        verifyCaseForUser: jest.fn().mockReturnValue(false),
       }),
     };
     const url = await getDownloadPolicyUrlInteractor({
