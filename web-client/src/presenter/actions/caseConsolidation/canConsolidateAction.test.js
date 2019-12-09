@@ -59,7 +59,6 @@ describe('canConsolidateAction', () => {
     });
 
     expect(noStub).toHaveBeenCalled();
-    expect(getTrialSessionDetailsInteractorStub).toHaveBeenCalled();
   });
 
   it('should return yes when case is consolidatable', async () => {
@@ -79,6 +78,5 @@ describe('canConsolidateAction', () => {
     });
 
     expect(yesStub).toHaveBeenCalled();
-    expect(getTrialSessionDetailsInteractorStub).toHaveBeenCalled();
   });
 });
