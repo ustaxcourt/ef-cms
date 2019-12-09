@@ -3,7 +3,14 @@ import { state } from 'cerebral';
 
 export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
-  const caseDetail = get(state.caseDetail);
+  const caseDetail = applicationContext
+    .getUtilities()
+    .setServiceIndicatorsForCase({
+      ...get(state.caseDetail),
+    });
+
+  console.log('caseDetail', caseDetail);
+
   const form = get(state.form);
 
   const documentTypes = COURT_ISSUED_EVENT_CODES.map(type => ({

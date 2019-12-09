@@ -15,6 +15,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const generatePaperServiceAddressPage = async ({
   applicationContext,
   contactData,
+  docketNumberWithSuffix,
 }) => {
   const baseSassContent = require('../../assets/ustcPdf.scss_');
   const paperServiceAddressPageTemplate = require('./paperServiceAddressPage.pug_');
@@ -31,6 +32,7 @@ const generatePaperServiceAddressPage = async ({
   const html = compiledFunction({
     ...contactData,
     css,
+    docketNumberWithSuffix,
   });
   return html;
 };
@@ -64,27 +66,13 @@ exports.generatePaperServiceAddressPagePdf = async ({
     const contentResult = await generatePaperServiceAddressPage({
       applicationContext,
       contactData,
+      docketNumberWithSuffix,
     });
     await page.setContent(contentResult);
 
-    const headerTemplate = `
-      <!doctype html>
-      <html>
-        <head>
-        </head>
-        <body>
-          <div style="font-size: 10px; font-family: 'nimbus_roman', serif; width: 100%; margin: 20px 62px 20px 62px;">
-            Docket ${docketNumberWithSuffix}
-          </div>
-        </body>
-      </html>
-    `;
-
     result = await page.pdf({
-      displayHeaderFooter: true,
-      footerTemplate: '',
+      displayHeaderFooter: false,
       format: 'letter',
-      headerTemplate,
     });
   } catch (error) {
     applicationContext.logger.error(error);
