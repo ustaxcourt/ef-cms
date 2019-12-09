@@ -1450,7 +1450,7 @@
         }
       }
     },
-    "/documents/{caseId}/{documentId}/document-download-url": {
+    "/case-documents/{caseId}/{documentId}/document-download-url": {
       "parameters": [
         {
           "name": "caseId",
@@ -1556,10 +1556,16 @@
         }
       }
     },
-    "/documents/{documentId}/download-policy-url": {
+    "/case-documents/{caseId}/{documentId}/download-policy-url": {
       "parameters": [
         {
           "name": "documentId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "caseId",
           "in": "path",
           "required": true,
           "type": "string"
