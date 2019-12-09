@@ -2076,6 +2076,19 @@ describe('Case entity', () => {
         expect(result.reason).toEqual('Place of trial is not the same');
       });
 
+      it('should fail when case trial locations are not set', () => {
+        pendingTrialSessionEntity.trialLocation = 'Flavortown, AR';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+          pendingTrialSessionEntity: undefined,
+          trialSessionEntity: undefined,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual('Place of trial is not the same');
+      });
+
       it('should fail when case judges are not the same', () => {
         pendingTrialSessionEntity.judge = 'Smashmouth';
 
