@@ -1232,6 +1232,13 @@ Case.prototype.getConsolidationStatus = function({
   pendingTrialSessionEntity,
   trialSessionEntity,
 }) {
+  if (!this.canConsolidate(caseEntity.status)) {
+    return {
+      canConsolidate: false,
+      reason: `Case status is ${caseEntity.status} and cannot be consolidated`,
+    };
+  }
+
   if (this.status !== caseEntity.status) {
     return { canConsolidate: false, reason: 'Case status is not the same' };
   }
@@ -1240,27 +1247,21 @@ Case.prototype.getConsolidationStatus = function({
     return { canConsolidate: false, reason: 'Case procedure is not the same' };
   }
 
-  if (!trialSessionEntity || !pendingTrialSessionEntity) {
-    return { canConsolidate: false, reason: 'Place of trial is not the same' };
-  }
-
   if (
-    trialSessionEntity.trialLocation !== pendingTrialSessionEntity.trialLocation
+    (trialSessionEntity && trialSessionEntity.trialLocation) !==
+    (pendingTrialSessionEntity && pendingTrialSessionEntity.trialLocation)
   ) {
-    return { canConsolidate: false, reason: 'Place of trial is not the same' };
-  }
-
-  if (
-    trialSessionEntity.judge.userId !== pendingTrialSessionEntity.judge.userId
-  ) {
-    return { canConsolidate: false, reason: 'Judge is not the same' };
-  }
-
-  if (!this.canConsolidate(caseEntity.status)) {
     return {
       canConsolidate: false,
-      reason: `Case status is ${caseEntity.status} and cannot be consolidated`,
+      reason: 'Place of trial is not the same',
     };
+  }
+
+  if (
+    (trialSessionEntity && trialSessionEntity.judge.userId) !==
+    (pendingTrialSessionEntity && pendingTrialSessionEntity.judge.userId)
+  ) {
+    return { canConsolidate: false, reason: 'Judge is not the same' };
   }
 
   return { canConsolidate: true, reason: '' };
