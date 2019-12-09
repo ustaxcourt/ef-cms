@@ -16,7 +16,7 @@ export const DocumentDisplayIframe = connect(
         {!process.env.CI && (
           <iframe
             key={documentDetailHelper.formattedDocument.signedAt}
-            src={`${baseUrl}/documents/${caseDetail.caseId}/${documentDetailHelper.formattedDocument.documentId}/document-download-url?token=${token}`}
+            src={`${baseUrl}/case-documents/${caseDetail.caseId}/${documentDetailHelper.formattedDocument.documentId}/document-download-url?token=${token}`}
             title={`Document type: ${documentDetailHelper.formattedDocument.documentType}`}
           />
         )}

@@ -37,7 +37,7 @@ export const FilingsAndProceedings = connect(
           <NonMobile>
             <a
               aria-label={`View PDF: ${entry.description}`}
-              href={`${baseUrl}/documents/${caseDetail.caseId}/${entry.documentId}/document-download-url?token=${token}`}
+              href={`${baseUrl}/case-documents/${caseDetail.caseId}/${entry.documentId}/document-download-url?token=${token}`}
               rel="noreferrer noopener"
               target="_blank"
             >

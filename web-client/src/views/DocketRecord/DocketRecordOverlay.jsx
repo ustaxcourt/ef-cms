@@ -107,7 +107,7 @@ export const DocketRecordOverlay = connect(
               <Button
                 aria-label={'View PDF'}
                 className="view-pdf-button tablet-full-width"
-                href={`${baseUrl}/documents/${caseDetail.caseId}/${document.documentId}/document-download-url?token=${token}`}
+                href={`${baseUrl}/case-documents/${caseDetail.caseId}/${document.documentId}/document-download-url?token=${token}`}
                 rel="noreferrer noopener"
                 target="_blank"
               >
