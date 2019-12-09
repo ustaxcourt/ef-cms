@@ -9,10 +9,10 @@ export const Hint = connect(props => {
   return (
     <div
       className={classNames(
-        className || '',
         'alert-gold add-bottom-margin',
         fullWidth && 'full-width',
         wider && 'wider',
+        className,
       )}
     >
       <span className="usa-hint ustc-form-hint-with-svg">

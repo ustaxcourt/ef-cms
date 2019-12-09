@@ -1,27 +1,27 @@
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const ConfirmInitiateServiceModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
+    confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
     confirmSequence: sequences.serveCourtIssuedDocumentSequence,
   },
   ({
     cancelSequence,
+    confirmInitiateServiceModalHelper,
     confirmSequence,
     documentTitle,
-    paperServiceParties = [],
   }) => {
-    const hasPaper = paperServiceParties.length > 0;
     return (
       <ModalDialog
         cancelLabel="No, take me back"
         cancelSequence={cancelSequence}
         className="confirm-initiate-service-modal"
-        confirmLabel={hasPaper ? 'Yes, Serve and Print' : 'Yes, serve'}
+        confirmLabel={confirmInitiateServiceModalHelper.confirmLabel}
         confirmSequence={confirmSequence}
         title="Are you ready to initiate service?"
       >
@@ -31,17 +31,18 @@ export const ConfirmInitiateServiceModal = connect(
         <p className="margin-top-0 margin-bottom-5">
           <strong>{documentTitle}</strong>
         </p>
-        {hasPaper && (
-          <Hint exclamation fullWidth className="width-100-percent">
-            <p className="margin-top-0">
+        {confirmInitiateServiceModalHelper.showPaperAlert && (
+          <Hint exclamation fullWidth className="block">
+            <div className="margin-bottom-1">
               This case has parties receiving paper service:
-            </p>
-            {paperServiceParties.map(party => (
-              <>
-                {party}
-                <br />
-              </>
-            ))}
+            </div>
+            {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
+              contact => (
+                <div className="margin-bottom-1" key={contact.name}>
+                  {contact.name}
+                </div>
+              ),
+            )}
           </Hint>
         )}
       </ModalDialog>
