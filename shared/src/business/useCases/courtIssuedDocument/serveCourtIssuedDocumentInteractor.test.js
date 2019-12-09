@@ -32,6 +32,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   let testPdfDoc;
   let deleteCaseTrialSortMappingRecordsMock;
   let extendCase;
+  let generatePaperServiceAddressPagePdfMock;
 
   let getTrialSessionByIdMock;
   let updateTrialSessionMock;
@@ -118,6 +119,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
     deleteWorkItemFromInboxMock = jest.fn();
     putWorkItemInOutboxMock = jest.fn();
+    generatePaperServiceAddressPagePdfMock = jest
+      .fn()
+      .mockReturnValue(testPdfDoc);
 
     getTrialSessionByIdMock = jest.fn().mockReturnValue({
       caseOrder: [
@@ -176,6 +180,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       }),
       getStorageClient: () => ({
         getObject: getObjectMock,
+      }),
+      getUseCaseHelpers: () => ({
+        generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
       }),
       logger: {
         time: () => null,
@@ -252,7 +259,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
-    const updatedDocument = result.documents.find(
+    const updatedDocument = result.updatedCase.documents.find(
       document =>
         document.documentId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     );
@@ -264,7 +271,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     expect(putWorkItemInOutboxMock).toHaveBeenCalled();
   });
 
-  it('should call sendBulkTemplatedEmail, sending an email to all electronically-served parties', async () => {
+  it('should call sendBulkTemplatedEmail, sending an email to all electronically-served parties, and return paperServicePdfData for paper-served parties', async () => {
     saveDocumentMock = jest.fn(({ document: newPdfData }) => {
       fs.writeFileSync(
         testOutputPath + 'serveCourtIssuedDocumentInteractor_2.pdf',
@@ -272,13 +279,14 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       );
     });
 
-    await serveCourtIssuedDocumentInteractor({
+    const result = await serveCourtIssuedDocumentInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
     expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(result.paperServicePdfData).toBeDefined();
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId', async () => {
@@ -310,7 +318,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         documentId: document.documentId,
       });
 
-      expect(result.status).toEqual(Case.STATUS_TYPES.closed);
+      expect(result.updatedCase.status).toEqual(Case.STATUS_TYPES.closed);
       expect(deleteCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
     });
   });
