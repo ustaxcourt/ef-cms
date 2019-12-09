@@ -61,4 +61,21 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
     expect(url).toEqual('localhost');
   });
+
+  it('returns the url for an internal user role even if verifyCaseForUser returns false', async () => {
+    const applicationContext = {
+      getCurrentUser: () => ({
+        role: User.ROLES.petitionsClerk,
+        userId: 'petitionsClerk',
+      }),
+      getPersistenceGateway: () => ({
+        getDownloadPolicyUrl: () => 'localhost',
+        verifyCaseForUser: jest.fn().mockReturnValue(false),
+      }),
+    };
+    const url = await getDownloadPolicyUrlInteractor({
+      applicationContext,
+    });
+    expect(url).toEqual('localhost');
+  });
 });
