@@ -1,4 +1,3 @@
-import { orderBy } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -25,7 +24,8 @@ export const getConsolidatedCasesByCaseAction = async ({
         caseId: leadCaseId,
       });
 
-    consolidatedCases = orderBy(consolidatedCases, 'createdAt', 'asc');
+    const { Case } = applicationContext.getEntityConstructors();
+    consolidatedCases = Case.sortByDocketNumber(consolidatedCases);
 
     store.set(state.caseDetail.consolidatedCases, consolidatedCases);
   }
