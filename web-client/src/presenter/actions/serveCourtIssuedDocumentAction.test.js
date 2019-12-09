@@ -8,7 +8,7 @@ describe('serveCourtIssuedDocumentAction', () => {
   beforeEach(() => {
     serveCourtIssuedDocumentInteractorMock = jest
       .fn()
-      .mockReturnValue({ paperServicePdfData: '123' });
+      .mockResolvedValue({ paperServicePdfData: '123' });
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
