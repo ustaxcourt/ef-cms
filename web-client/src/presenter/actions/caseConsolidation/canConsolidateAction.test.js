@@ -52,8 +52,8 @@ describe('canConsolidateAction', () => {
         presenter,
       },
       props: {
-        caseDetail: {},
-        caseToConsolidate: {},
+        caseDetail: { trialSessionId: '123' },
+        caseToConsolidate: { trialSessionId: '123' },
         confirmSelection: true,
       },
     });
@@ -72,8 +72,8 @@ describe('canConsolidateAction', () => {
         presenter,
       },
       props: {
-        caseDetail: {},
-        caseToConsolidate: {},
+        caseDetail: { trialSessionId: '123' },
+        caseToConsolidate: { trialSessionId: '123' },
         confirmSelection: true,
       },
     });

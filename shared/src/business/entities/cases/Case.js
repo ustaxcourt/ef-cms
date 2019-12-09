@@ -1240,6 +1240,10 @@ Case.prototype.getConsolidationStatus = function({
     return { canConsolidate: false, reason: 'Case procedure is not the same' };
   }
 
+  if (!trialSessionEntity || !pendingTrialSessionEntity) {
+    return { canConsolidate: false, reason: 'Place of trial is not the same' };
+  }
+
   if (
     trialSessionEntity.trialLocation !== pendingTrialSessionEntity.trialLocation
   ) {

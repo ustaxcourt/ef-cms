@@ -12,6 +12,7 @@ export const canConsolidateAction = async ({
   path,
   props,
 }) => {
+  let trialSession, pendingTrialSession;
   const { caseDetail, caseToConsolidate, confirmSelection } = props;
 
   if (!confirmSelection) {
@@ -24,19 +25,23 @@ export const canConsolidateAction = async ({
 
   const caseEntity = new Case(caseDetail, { applicationContext });
 
-  const trialSession = await applicationContext
-    .getUseCases()
-    .getTrialSessionDetailsInteractor({
-      applicationContext,
-      trialSessionId: caseDetail.trialSessionId,
-    });
+  if (caseDetail.trialSessionId) {
+    trialSession = await applicationContext
+      .getUseCases()
+      .getTrialSessionDetailsInteractor({
+        applicationContext,
+        trialSessionId: caseDetail.trialSessionId,
+      });
+  }
 
-  const pendingTrialSession = await applicationContext
-    .getUseCases()
-    .getTrialSessionDetailsInteractor({
-      applicationContext,
-      trialSessionId: caseToConsolidate.trialSessionId,
-    });
+  if (caseToConsolidate.trialSessionId) {
+    pendingTrialSession = await applicationContext
+      .getUseCases()
+      .getTrialSessionDetailsInteractor({
+        applicationContext,
+        trialSessionId: caseToConsolidate.trialSessionId,
+      });
+  }
 
   const results = caseEntity.getConsolidationStatus({
     caseEntity: caseToConsolidate,
