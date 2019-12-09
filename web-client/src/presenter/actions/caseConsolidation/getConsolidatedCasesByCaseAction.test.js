@@ -1,3 +1,4 @@
+import { applicationContext } from '../../../applicationContext';
 import { getConsolidatedCasesByCaseAction } from './getConsolidatedCasesByCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
@@ -8,23 +9,24 @@ describe('getConsolidatedCasesByCaseAction', () => {
   beforeEach(() => {
     getConsolidatedCasesByCaseInteractorStub = jest.fn().mockReturnValue([
       {
-        caseId: 'case-id-234',
-        createdAt: '2019-07-20T20:20:15.680Z',
+        caseId: 'case-id-123',
+        docketNumber: '100-19',
         leadCaseId: 'case-id-123',
       },
       {
-        caseId: 'case-id-123',
-        createdAt: '2019-07-19T20:20:15.680Z',
+        caseId: 'case-id-234',
+        docketNumber: '102-19',
         leadCaseId: 'case-id-123',
       },
       {
         caseId: 'case-id-345',
-        createdAt: '2019-07-21T20:20:15.680Z',
+        docketNumber: '111-19',
         leadCaseId: 'case-id-123',
       },
     ]);
 
     presenter.providers.applicationContext = {
+      getEntityConstructors: applicationContext.getEntityConstructors,
       getUseCases: () => ({
         getConsolidatedCasesByCaseInteractor: getConsolidatedCasesByCaseInteractorStub,
       }),
@@ -41,21 +43,22 @@ describe('getConsolidatedCasesByCaseAction', () => {
       },
     });
 
+    expect();
     expect(getConsolidatedCasesByCaseInteractorStub).toHaveBeenCalled();
     expect(state.caseDetail.consolidatedCases).toEqual([
       {
         caseId: 'case-id-123',
-        createdAt: '2019-07-19T20:20:15.680Z',
+        docketNumber: '100-19',
         leadCaseId: 'case-id-123',
       },
       {
         caseId: 'case-id-234',
-        createdAt: '2019-07-20T20:20:15.680Z',
+        docketNumber: '102-19',
         leadCaseId: 'case-id-123',
       },
       {
         caseId: 'case-id-345',
-        createdAt: '2019-07-21T20:20:15.680Z',
+        docketNumber: '111-19',
         leadCaseId: 'case-id-123',
       },
     ]);
