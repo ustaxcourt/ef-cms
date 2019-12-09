@@ -460,6 +460,10 @@ select[disabled] {
     margin: 0;
   }
 
+  &.block {
+    display: block;
+  }
+
   svg {
     margin-right: 5px;
   }
