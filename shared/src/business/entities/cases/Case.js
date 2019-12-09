@@ -1227,11 +1227,7 @@ Case.prototype.getCaseContacts = function(shape) {
  * @param {object} pendingTrialSessionEntity the pending case's trial session entity
  * @returns {object} object with canConsolidate flag and reason string
  */
-Case.prototype.getConsolidationStatus = function({
-  caseEntity,
-  pendingTrialSessionEntity,
-  trialSessionEntity,
-}) {
+Case.prototype.getConsolidationStatus = function({ caseEntity }) {
   if (!this.canConsolidate(caseEntity.status)) {
     return {
       canConsolidate: false,
@@ -1247,20 +1243,14 @@ Case.prototype.getConsolidationStatus = function({
     return { canConsolidate: false, reason: 'Case procedure is not the same' };
   }
 
-  if (
-    (trialSessionEntity && trialSessionEntity.trialLocation) !==
-    (pendingTrialSessionEntity && pendingTrialSessionEntity.trialLocation)
-  ) {
+  if (this.trialLocation !== caseEntity.trialLocation) {
     return {
       canConsolidate: false,
       reason: 'Place of trial is not the same',
     };
   }
 
-  if (
-    (trialSessionEntity && trialSessionEntity.judge.userId) !==
-    (pendingTrialSessionEntity && pendingTrialSessionEntity.judge.userId)
-  ) {
+  if (this.associatedJudge !== caseEntity.associatedJudge) {
     return { canConsolidate: false, reason: 'Judge is not the same' };
   }
 
