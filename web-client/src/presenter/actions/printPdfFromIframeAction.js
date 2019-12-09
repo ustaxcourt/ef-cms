@@ -1,9 +1,8 @@
 /**
- * sets the state.pdfPreviewUrl which is used for displaying PDF rendering previews
+ * calls router.printIframeWithId for the pdf-preview-iframe
  *
  * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object containing the props.pdfUrl
- * @param {object} providers.store the cerebral store used for setting the state.pdfPreviewUrl
+ * @param {object} providers.router the riot.router object containing the printIframeWithId function
  */
 export const printPdfFromIframeAction = ({ router }) => {
   router.printIframeWithId('pdf-preview-iframe');
