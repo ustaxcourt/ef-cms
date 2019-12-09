@@ -33,6 +33,7 @@ function Document(rawDocument, { applicationContext }) {
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.addToCoversheet = rawDocument.addToCoversheet;
   this.attachments = rawDocument.attachments;
+  this.archived = rawDocument.archived;
   this.caseId = rawDocument.caseId;
   this.category = rawDocument.category;
   this.certificateOfService = rawDocument.certificateOfService;
@@ -43,13 +44,13 @@ function Document(rawDocument, { applicationContext }) {
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
   this.draftState = rawDocument.draftState;
-  this.isFileAttached = rawDocument.isFileAttached;
   this.eventCode = rawDocument.eventCode;
   this.exhibits = rawDocument.exhibits;
   this.filedBy = rawDocument.filedBy;
   this.freeText = rawDocument.freeText;
   this.freeText2 = rawDocument.freeText2;
   this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
+  this.isFileAttached = rawDocument.isFileAttached;
   this.isPaper = rawDocument.isPaper;
   this.lodged = rawDocument.lodged;
   this.objections = rawDocument.objections;
@@ -63,7 +64,10 @@ function Document(rawDocument, { applicationContext }) {
       : rawDocument.pending;
   this.practitioner = rawDocument.practitioner;
   this.previousDocument = rawDocument.previousDocument;
-  this.processingStatus = rawDocument.processingStatus;
+  this.processingStatus = rawDocument.processingStatus || 'pending';
+  this.qcAt = rawDocument.qcAt;
+  this.qcByUser = rawDocument.qcByUser;
+  this.qcByUserId = rawDocument.qcByUserId;
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
@@ -79,11 +83,6 @@ function Document(rawDocument, { applicationContext }) {
   this.trialLocation = rawDocument.trialLocation;
   this.userId = rawDocument.userId;
   this.workItems = rawDocument.workItems;
-  this.archived = rawDocument.archived;
-  this.qcAt = rawDocument.qcAt;
-  this.qcByUserId = rawDocument.qcByUserId;
-  this.qcByUser = rawDocument.qcByUser;
-  this.processingStatus = this.processingStatus || 'pending';
   this.workItems = (this.workItems || []).map(
     workItem => new WorkItem(workItem, { applicationContext }),
   );
@@ -209,37 +208,65 @@ Document.prototype.isPetitionDocument = function() {
 joiValidationDecorator(
   Document,
   joi.object().keys({
+    addToCoversheet: joi.boolean().optional(),
+    additionalInfo: joi.string().optional(),
+    additionalInfo2: joi.string().optional(),
     archived: joi.boolean().optional(),
+    caseId: joi.string().optional(),
+    category: joi.string().optional(),
+    certificateOfService: joi.boolean().optional(),
+    certificateOfServiceDate: joi.when('certificateOfService', {
+      is: true,
+      otherwise: joi.optional(),
+      then: joi
+        .date()
+        .iso()
+        .optional()
+        .required(),
+    }),
     createdAt: joi
       .date()
       .iso()
       .optional(),
+    docketNumber: joi.string().optional(),
     documentId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
       .required(),
+    documentTitle: joi.string().optional(),
     documentType: joi
       .string()
       .valid(Document.getDocumentTypes())
       .required(),
+    draftState: joi.object().optional(),
     eventCode: joi.string().optional(),
+    exhibits: joi.boolean().optional(),
     filedBy: joi
       .string()
       .allow('')
       .optional(),
     freeText: joi.string().optional(),
     freeText2: joi.string().optional(),
+    hasSupportingDocuments: joi.boolean().optional(),
+    isFileAttached: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
     lodged: joi.boolean().optional(),
+    objections: joi.string().optional(),
     ordinalValue: joi.string().optional(),
+    partyPrimary: joi.boolean().optional(),
+    partyRespondent: joi.boolean().optional(),
+    partySecondary: joi.boolean().optional(),
     pending: joi.boolean().optional(),
+    practitioner: joi.array().optional(),
+    previousDocument: joi.string().optional(),
     processingStatus: joi.string().optional(),
     qcAt: joi
       .date()
       .iso()
       .optional(),
+    qcByUser: joi.object().optional(),
     qcByUserId: joi
       .string()
       .optional()
@@ -248,6 +275,8 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    relationship: joi.string().optional(),
+    scenario: joi.string().optional(),
     secondaryDocument: joi.object().optional(),
     servedAt: joi
       .date()
@@ -271,8 +300,10 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     status: joi.string().optional(),
+    supportingDocument: joi.string().optional(),
     trialLocation: joi.string().optional(),
     userId: joi.string().required(),
+    workItems: joi.array().optional(),
   }),
   function() {
     return WorkItem.validateCollection(this.workItems);
