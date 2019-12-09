@@ -1300,7 +1300,16 @@ Case.prototype.setLeadCase = function(leadCaseId) {
  */
 Case.findLeadCaseForCases = function(cases) {
   const casesOrdered = cases.sort((a, b) => {
-    return dateStringsCompared(a.createdAt, b.createdAt);
+    const aSplit = a.docketNumber.split('-');
+    const bSplit = b.docketNumber.split('-');
+
+    if (aSplit[1] !== bSplit[1]) {
+      // compare years if they aren't the same
+      return aSplit[1].localeCompare(bSplit[1]);
+    } else {
+      // compare index if years are the same
+      return aSplit[0].localeCompare(bSplit[0]);
+    }
   });
   return casesOrdered.shift();
 };
