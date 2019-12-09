@@ -34,7 +34,7 @@ const aggregatePartiesForService = caseEntity => {
       });
     } else if (party && party.serviceIndicator === constants.SI_PAPER) {
       aggregated.paper.push({
-        name: party.name,
+        ...party,
       });
     }
   });

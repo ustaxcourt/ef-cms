@@ -6,7 +6,9 @@ describe('serveCourtIssuedDocumentAction', () => {
   let serveCourtIssuedDocumentInteractorMock;
 
   beforeEach(() => {
-    serveCourtIssuedDocumentInteractorMock = jest.fn();
+    serveCourtIssuedDocumentInteractorMock = jest
+      .fn()
+      .mockReturnValue({ paperServicePdfData: '123' });
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -15,7 +17,7 @@ describe('serveCourtIssuedDocumentAction', () => {
     };
   });
   it('should call the interactor that serves court issued documents', async () => {
-    await runAction(serveCourtIssuedDocumentAction, {
+    const result = await runAction(serveCourtIssuedDocumentAction, {
       modules: {
         presenter,
       },
@@ -33,5 +35,6 @@ describe('serveCourtIssuedDocumentAction', () => {
     });
 
     expect(serveCourtIssuedDocumentInteractorMock).toHaveBeenCalled();
+    expect(result.output.paperServicePdfData).toBeDefined();
   });
 });
