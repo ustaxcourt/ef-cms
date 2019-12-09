@@ -55,12 +55,12 @@ const goToDashboard = [
       setCurrentPageAction('DashboardPetitioner'),
     ],
     practitioner: [
-      getCasesByUserAction,
+      getConsolidatedCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPractitioner'),
     ],
     respondent: [
-      getCasesByUserAction,
+      getConsolidatedCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardRespondent'),
     ],
