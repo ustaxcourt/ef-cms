@@ -6,12 +6,12 @@ const { get } = require('./requests');
  * @param {object} providers.applicationContext the application context
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getConsolidatedCasesByUserInteractor = ({
+exports.getConsolidatedCasesByCaseInteractor = ({
   applicationContext,
   caseId,
 }) => {
   return get({
     applicationContext,
-    endpoint: `/case/${caseId}/consolidated-cases`,
+    endpoint: `/cases/${caseId}/consolidated-cases`,
   });
 };
