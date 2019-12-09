@@ -284,6 +284,10 @@ const {
 const {
   getCasesByUserInteractor,
 } = require('../../shared/src/business/useCases/getCasesByUserInteractor');
+
+const {
+  getConsolidatedCasesByUserInteractor,
+} = require('../../shared/src/business/useCases/getConsolidatedCasesByUserInteractor');
 const {
   getDocumentQCBatchedForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCBatchedForSection');
@@ -962,6 +966,7 @@ module.exports = (appContextUser = {}) => {
         getCaseInteractor,
         getCaseNoteInteractor,
         getCasesByUserInteractor,
+        getConsolidatedCasesByUserInteractor,
         getDocumentQCBatchedForSectionInteractor,
         getDocumentQCBatchedForUserInteractor,
         getDocumentQCInboxForSectionInteractor,

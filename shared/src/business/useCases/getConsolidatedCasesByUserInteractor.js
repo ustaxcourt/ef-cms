@@ -48,14 +48,14 @@ exports.getConsolidatedCasesByUserInteractor = async ({
           consolidatedCase => consolidatedCase.caseId !== leadCaseId,
         );
       } else {
-        caseMapping[leadCaseId] = {
-          ...consolidatedCases.find(
-            consolidatedCase => consolidatedCase.caseId === leadCaseId,
-          ),
-          consolidatedCases: consolidatedCases.filter(
-            consolidatedCase => consolidatedCase.caseId !== leadCaseId,
-          ),
-        };
+        const leadCase = consolidatedCases.find(
+          consolidatedCase => consolidatedCase.caseId === leadCaseId,
+        );
+
+        leadCase.consolidatedCases = consolidatedCases.filter(
+          consolidatedCase => consolidatedCase.caseId !== leadCaseId,
+        );
+        caseMapping[leadCaseId] = leadCase;
       }
     }
 
