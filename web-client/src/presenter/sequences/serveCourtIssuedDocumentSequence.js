@@ -1,11 +1,12 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
+import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { serveCourtIssuedDocumentAction } from '../actions/serveCourtIssuedDocumentAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setAnotherPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setAnotherPdfPreviewUrlAction';
+import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -19,6 +20,7 @@ import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDock
 
 export const serveCourtIssuedDocumentSequence = [
   clearAlertsAction,
+  clearPdfPreviewUrlAction,
   startShowValidationAction,
   validateCourtIssuedDocketEntryAction,
   {
@@ -38,7 +40,7 @@ export const serveCourtIssuedDocumentSequence = [
         yes: [updateCourtIssuedDocketEntryAction],
       },
       serveCourtIssuedDocumentAction,
-      setAnotherPdfPreviewUrlAction,
+      setPdfPreviewUrlAction,
       setAlertSuccessAction,
       clearModalAction,
       setSaveAlertsForNavigationAction,

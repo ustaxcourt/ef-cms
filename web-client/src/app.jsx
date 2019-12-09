@@ -6,6 +6,7 @@ import {
   createObjectURL,
   externalRoute,
   openInNewTab,
+  printIframeWithId,
   revokeObjectURL,
   route,
   router,
@@ -205,6 +206,7 @@ const app = {
       createObjectURL,
       externalRoute,
       openInNewTab,
+      printIframeWithId,
       revokeObjectURL,
       route,
     };
