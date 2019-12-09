@@ -2136,17 +2136,38 @@ describe('Case entity', () => {
     });
 
     describe('findLeadCaseForCases', () => {
-      it('Should return the case with the lowest filing date', () => {
+      it('Should return the case with the lowest docket number for cases filed in the same year', () => {
         const result = Case.findLeadCaseForCases([
           {
             caseId: '123',
-            createdAt: moment().toISOString(),
+            docketNumber: '110-19',
           },
           {
             caseId: '234',
-            createdAt: moment()
-              .subtract(1, 'year')
-              .toISOString(),
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+
+        expect(result.caseId).toEqual('234');
+      });
+
+      it('Should return the case with the lowest docket number for cases filed in different years', () => {
+        const result = Case.findLeadCaseForCases([
+          {
+            caseId: '123',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '234',
+            docketNumber: '110-18',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
           },
         ]);
 
