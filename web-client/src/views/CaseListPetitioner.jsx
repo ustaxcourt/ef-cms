@@ -49,31 +49,67 @@ export const CaseListPetitioner = connect(
             </thead>
             <tbody>
               {formattedCases.map(item => (
-                <tr key={item.docketNumber}>
-                  <td>
-                    {item.isLeadCase && (
-                      <>
-                        <span className="usa-sr-only">Lead Case</span>
-                        <FontAwesomeIcon
-                          className="margin-right-1 icon-consolidated"
-                          icon="copy"
-                          size="1x"
-                        />
-                      </>
-                    )}
-                  </td>
-                  <td className="hide-on-mobile">
-                    <CaseLink formattedCase={item} />
-                  </td>
-                  <td className="hide-on-mobile">{item.caseName}</td>
-                  <td>{item.createdAtFormatted}</td>
-                  <td className="show-on-mobile">
-                    <div>
-                      <CaseLink formattedCase={item} />
-                    </div>
-                    {item.caseName}
-                  </td>
-                </tr>
+                <>
+                  <tr>
+                    <td>
+                      {item.isLeadCase && (
+                        <>
+                          <span className="usa-sr-only">Lead Case</span>
+                          <FontAwesomeIcon
+                            className="margin-right-1 icon-consolidated"
+                            icon="copy"
+                            size="1x"
+                          />
+                        </>
+                      )}
+                    </td>
+                    <td className="hide-on-mobile">
+                      <div>
+                        <CaseLink formattedCase={item} />
+                      </div>
+                    </td>
+                    <td className="hide-on-mobile">{item.caseName}</td>
+                    <td>{item.createdAtFormatted}</td>
+                    <td className="show-on-mobile">
+                      <div>
+                        <CaseLink formattedCase={item} />
+                      </div>
+                      {item.caseName}
+                    </td>
+                  </tr>
+                  {item.consolidatedCases &&
+                    item.consolidatedCases.map(consolidatedItem => (
+                      <tr key={`consolidated-${consolidatedItem.docketNumber}`}>
+                        <td>
+                          {consolidatedItem.isLeadCase && (
+                            <>
+                              <span className="usa-sr-only">Lead Case</span>
+                              <FontAwesomeIcon
+                                className="margin-right-1 icon-consolidated"
+                                icon="copy"
+                                size="1x"
+                              />
+                            </>
+                          )}
+                        </td>
+                        <td className="hide-on-mobile">
+                          <div className="margin-left-2">
+                            <CaseLink formattedCase={consolidatedItem} />
+                          </div>
+                        </td>
+                        <td className="hide-on-mobile">
+                          {consolidatedItem.caseName}
+                        </td>
+                        <td>{consolidatedItem.createdAtFormatted}</td>
+                        <td className="show-on-mobile">
+                          <div className="margin-left-2">
+                            <CaseLink formattedCase={consolidatedItem} />
+                          </div>
+                          {consolidatedItem.caseName}
+                        </td>
+                      </tr>
+                    ))}
+                </>
               ))}
             </tbody>
           </table>

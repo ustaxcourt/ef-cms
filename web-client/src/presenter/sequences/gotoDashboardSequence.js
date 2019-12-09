@@ -2,6 +2,7 @@ import { chooseWorkQueueSequence } from './chooseWorkQueueSequence';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getCasesByUserAction } from '../actions/getCasesByUserAction';
+import { getConsolidatedCasesByUserAction } from '../actions/getConsolidatedCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -49,7 +50,7 @@ const goToDashboard = [
       setCurrentPageAction('DashboardJudge'),
     ],
     petitioner: [
-      getCasesByUserAction,
+      getConsolidatedCasesByUserAction,
       setCasesAction,
       setCurrentPageAction('DashboardPetitioner'),
     ],
