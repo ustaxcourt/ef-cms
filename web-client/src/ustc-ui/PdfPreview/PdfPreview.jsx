@@ -3,7 +3,7 @@ import { sequences, state } from 'cerebral';
 
 import React, { useEffect } from 'react';
 
-export const PdfPreview = connect(
+const PdfPreviewComponent = connect(
   {
     clearPdfPreviewUrlSequence: sequences.clearPdfPreviewUrlSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
@@ -16,27 +16,44 @@ export const PdfPreview = connect(
     printable,
     printPdfFromIframeSequence,
   }) => {
+    // always renders. use life-cycle hooks here.
+
+    const onRender = () => {
+      if (printable) {
+        printPdfFromIframeSequence();
+      }
+    };
+
+    const onRemove = () => {
+      clearPdfPreviewUrlSequence();
+    };
+
+    useEffect(() => {
+      onRender();
+      return onRemove;
+    }, []);
+
+    return (
+      <iframe
+        className={hidden ? 'hide-from-page' : ''}
+        id="pdf-preview-iframe"
+        src={pdfPreviewUrl}
+        title="PDF Preview"
+      />
+    );
+  },
+);
+
+export const PdfPreview = connect(
+  {
+    pdfPreviewUrl: state.pdfPreviewUrl,
+  },
+  ({ hidden, pdfPreviewUrl, printable }) => {
+    // conditional rendering, no life-cycle hooks.
     if (!pdfPreviewUrl || process.env.CI) {
       return '';
     }
 
-    useEffect(() => {
-      if (printable) {
-        printPdfFromIframeSequence();
-      }
-      return () => clearPdfPreviewUrlSequence();
-    }, []);
-
-    return (
-      !process.env.CI &&
-      pdfPreviewUrl && (
-        <iframe
-          className={hidden ? 'hide-from-page' : ''}
-          id="pdf-preview-iframe"
-          src={pdfPreviewUrl}
-          title="PDF Preview"
-        />
-      )
-    );
+    return <PdfPreviewComponent hidden={!!hidden} printable={!!printable} />;
   },
 );
