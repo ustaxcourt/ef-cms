@@ -23,7 +23,6 @@ function PublicCase(rawCase, { applicationContext }) {
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
   this.receivedAt = rawCase.receivedAt;
-  this.caseCaption = rawCase.caseCaption;
   this.caseTitle = rawCase.caseTitle;
 
   this.contactPrimary = rawCase.contactPrimary
@@ -44,7 +43,31 @@ function PublicCase(rawCase, { applicationContext }) {
     .filter(document => !isPrivateDocument(document, this.docketRecord));
 }
 
-joiValidationDecorator(PublicCase, joi.object(), undefined, {});
+joiValidationDecorator(
+  PublicCase,
+  joi.object().keys({
+    caseCaption: joi.string().optional(),
+    caseId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional(),
+    caseTitle: joi.string().optional(),
+    createdAt: joi
+      .date()
+      .iso()
+      .optional(),
+    docketNumber: joi.string().optional(),
+    docketNumberSuffix: joi.string().optional(),
+    receivedAt: joi
+      .date()
+      .iso()
+      .optional(),
+  }),
+  undefined,
+  {},
+);
 
 const isPrivateDocument = function(document, docketRecord) {
   const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');

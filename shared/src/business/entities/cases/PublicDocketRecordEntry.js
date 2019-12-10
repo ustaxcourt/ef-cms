@@ -17,6 +17,27 @@ function PublicDocketRecordEntry(rawDocketEntry) {
   this.filingDate = rawDocketEntry.filingDate;
 }
 
-joiValidationDecorator(PublicDocketRecordEntry, joi.object(), undefined, {});
+joiValidationDecorator(
+  PublicDocketRecordEntry,
+  joi.object().keys({
+    description: joi.string().optional(),
+    documentId: joi.string().optional(),
+    filedBy: joi
+      .date()
+      .iso()
+      .optional(),
+    filingDate: joi
+      .date()
+      .max('now')
+      .iso()
+      .optional(), // Required on DocketRecord so probably should be required here.
+    index: joi
+      .number()
+      .integer()
+      .optional(),
+  }),
+  undefined,
+  {},
+);
 
 module.exports = { PublicDocketRecordEntry };
