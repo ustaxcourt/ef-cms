@@ -41,8 +41,8 @@ export const PrintPreview = connect(
             </Button>
           </div>
 
-          <div className="grid-container print-docket-record">
-            <PdfPreview />
+          <div className="print-docket-record">
+            <PdfPreview printable />
           </div>
         </section>
       </>

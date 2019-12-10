@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @returns {object} the next path based on if validation was successful or error
  */
-export const isPrintPreviewPrepared = ({ get, path }) => {
+export const isPrintPreviewPreparedAction = ({ get, path }) => {
   return get(state.pdfPreviewUrl) ? path.yes() : path.no();
 };
