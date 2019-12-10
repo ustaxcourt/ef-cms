@@ -43,33 +43,39 @@ exports.addConsolidatedCaseInteractor = async ({
     );
   }
 
-  let newLeadCase;
-  let casesToUpdate = [caseToUpdate];
+  let allCasesToConsolidate = [];
+
+  if (
+    caseToUpdate.leadCaseId &&
+    caseToUpdate.leadCaseId !== caseToConsolidateWith.leadCaseId
+  ) {
+    allCasesToConsolidate = await applicationContext
+      .getPersistenceGateway()
+      .getCasesByLeadCaseId({
+        applicationContext,
+        leadCaseId: caseToUpdate.leadCaseId,
+      });
+  } else {
+    allCasesToConsolidate = [caseToUpdate];
+  }
 
   if (caseToConsolidateWith.leadCaseId) {
-    let allConsolidatedCases = [];
-    allConsolidatedCases = await applicationContext
+    const casesConsolidatedWithLeadCase = await applicationContext
       .getPersistenceGateway()
       .getCasesByLeadCaseId({
         applicationContext,
         leadCaseId: caseToConsolidateWith.leadCaseId,
       });
-    newLeadCase = Case.findLeadCaseForCases([
-      ...allConsolidatedCases,
-      caseToUpdate,
-    ]);
-
-    if (newLeadCase.caseId !== caseToConsolidateWith.caseId) {
-      casesToUpdate = casesToUpdate.concat(allConsolidatedCases);
-    }
+    allCasesToConsolidate.push(...casesConsolidatedWithLeadCase);
   } else {
-    newLeadCase = Case.findLeadCaseForCases([
-      caseToConsolidateWith,
-      caseToUpdate,
-    ]);
-
-    casesToUpdate.push(caseToConsolidateWith);
+    allCasesToConsolidate.push(caseToConsolidateWith);
   }
+
+  const newLeadCase = Case.findLeadCaseForCases(allCasesToConsolidate);
+
+  const casesToUpdate = allCasesToConsolidate.filter(filterCaseToUpdate => {
+    return filterCaseToUpdate.leadCaseId !== newLeadCase.caseId;
+  });
 
   const updateCasePromises = [];
   casesToUpdate.forEach(caseToUpdate => {
