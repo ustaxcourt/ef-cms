@@ -48,7 +48,7 @@ exports.addConsolidatedCaseInteractor = async ({
 
   if (caseToConsolidateWith.leadCaseId) {
     let allConsolidatedCases = [];
-    allConsolidatedCases = applicationContext
+    allConsolidatedCases = await applicationContext
       .getPersistenceGateway()
       .getCasesByLeadCaseId({
         applicationContext,
