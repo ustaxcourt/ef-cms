@@ -326,7 +326,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDownloadPolicyUrl:
-    handler: web-api/${self:provider.dir}/documentsHandlers.downloadPolicyUrlLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.downloadPolicyUrlLambda
     events:
       - http:
           path: /{caseId}/{documentId}/download-policy-url
@@ -338,7 +338,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getDocumentDownloadUrl:
-    handler: web-api/${self:provider.dir}/documentsHandlers.getDocumentDownloadUrlLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.getDocumentDownloadUrlLambda
     events:
       - http:
           path: /{caseId}/{documentId}/document-download-url
