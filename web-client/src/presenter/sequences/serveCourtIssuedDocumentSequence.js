@@ -4,7 +4,7 @@ import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPr
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { navigateToPrintPreview } from '../actions/CourtIssuedOrder/navigateToPrintPreview';
+import { navigateToPrintPreviewAction } from '../actions/CourtIssuedOrder/navigateToPrintPreviewAction';
 import { serveCourtIssuedDocumentAction } from '../actions/serveCourtIssuedDocumentAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -49,7 +49,7 @@ export const serveCourtIssuedDocumentSequence = [
       isPrintPreviewPreparedAction,
       {
         no: [navigateToCaseDetailAction],
-        yes: [navigateToPrintPreview],
+        yes: [navigateToPrintPreviewAction],
       },
       unsetWaitingForResponseAction,
     ],
