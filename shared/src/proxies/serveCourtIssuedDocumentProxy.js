@@ -1,4 +1,4 @@
-const { put } = require('./requests');
+const { post } = require('./requests');
 
 /**
  * serveCourtIssuedDocumentInteractor
@@ -14,9 +14,13 @@ exports.serveCourtIssuedDocumentInteractor = ({
   caseId,
   documentId,
 }) => {
-  return put({
+  return post({
     applicationContext,
     body: {},
     endpoint: `/case-documents/${caseId}/${documentId}/serve-court-issued`,
+    headers: {
+      Accept: 'application/pdf',
+    },
+    options: { responseType: 'blob' },
   });
 };

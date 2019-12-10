@@ -1,8 +1,6 @@
 const createApplicationContext = require('../applicationContext');
-const {
-  getUserFromAuthHeader,
-  handle,
-} = require('../middleware/apiGatewayHelper');
+const { customHandle } = require('../customHandle');
+const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 
 /**
  * used for serving a court-issued document on all parties and closing the case for some document types
@@ -11,7 +9,7 @@ const {
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.handler = event =>
-  handle(event, async () => {
+  customHandle(event, async () => {
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
@@ -26,7 +24,6 @@ exports.handler = event =>
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Case ID', caseId);
       applicationContext.logger.info('Document ID', documentId);
-      applicationContext.logger.info('Results', results.updatedCase);
       return results;
     } catch (e) {
       applicationContext.logger.error(e);
