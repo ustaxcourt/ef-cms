@@ -470,7 +470,7 @@ const router = {
     );
 
     route(
-      '/print-preview/*/*',
+      '/print-preview/*',
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
         app.getSequence('gotoPrintPreviewSequence')({ docketNumber });
