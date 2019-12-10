@@ -5,7 +5,10 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
   let getCasesByLeadCaseIdStub;
 
   beforeEach(() => {
-    getCasesByLeadCaseIdStub = jest.fn();
+    getCasesByLeadCaseIdStub = jest.fn().mockResolvedValue([
+      { caseCaption: 'Guy Fieri vs. Bobby Flay', caseId: 'abc-123' },
+      { caseCaption: 'Guy Fieri vs. Gordon Ramsay', caseId: 'def-321' },
+    ]);
 
     applicationContext = {
       getPersistenceGateway: () => ({
@@ -15,11 +18,15 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
   });
 
   it('returns cases by the leadCaseId', async () => {
-    await getConsolidatedCasesByCaseInteractor({
+    const cases = await getConsolidatedCasesByCaseInteractor({
       applicationContext,
       leadCaseId: 'leadCaseId-123',
     });
 
     expect(getCasesByLeadCaseIdStub).toHaveBeenCalled();
+    expect(cases).toEqual([
+      { caseCaption: 'Guy Fieri vs. Bobby Flay', caseId: 'abc-123' },
+      { caseCaption: 'Guy Fieri vs. Gordon Ramsay', caseId: 'def-321' },
+    ]);
   });
 });
