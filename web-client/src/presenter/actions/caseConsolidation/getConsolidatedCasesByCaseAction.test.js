@@ -34,7 +34,7 @@ describe('getConsolidatedCasesByCaseAction', () => {
   });
 
   it("gets the consolidated cases by the case's lead case", async () => {
-    const { state } = await runAction(getConsolidatedCasesByCaseAction, {
+    const { props } = await runAction(getConsolidatedCasesByCaseAction, {
       modules: { presenter },
       state: {
         caseDetail: {
@@ -43,9 +43,8 @@ describe('getConsolidatedCasesByCaseAction', () => {
       },
     });
 
-    expect();
     expect(getConsolidatedCasesByCaseInteractorStub).toHaveBeenCalled();
-    expect(state.caseDetail.consolidatedCases).toEqual([
+    expect(props.consolidatedCases).toEqual([
       {
         caseId: 'case-id-123',
         docketNumber: '100-19',
