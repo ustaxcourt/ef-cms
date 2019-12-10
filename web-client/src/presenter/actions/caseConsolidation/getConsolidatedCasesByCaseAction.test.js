@@ -7,7 +7,7 @@ describe('getConsolidatedCasesByCaseAction', () => {
   let getConsolidatedCasesByCaseInteractorStub;
 
   beforeEach(() => {
-    getConsolidatedCasesByCaseInteractorStub = jest.fn().mockReturnValue([
+    getConsolidatedCasesByCaseInteractorStub = jest.fn().mockResolvedValue([
       {
         caseId: 'case-id-123',
         docketNumber: '100-19',
@@ -34,7 +34,7 @@ describe('getConsolidatedCasesByCaseAction', () => {
   });
 
   it("gets the consolidated cases by the case's lead case", async () => {
-    const { props } = await runAction(getConsolidatedCasesByCaseAction, {
+    const { output } = await runAction(getConsolidatedCasesByCaseAction, {
       modules: { presenter },
       state: {
         caseDetail: {
@@ -44,7 +44,7 @@ describe('getConsolidatedCasesByCaseAction', () => {
     });
 
     expect(getConsolidatedCasesByCaseInteractorStub).toHaveBeenCalled();
-    expect(props.consolidatedCases).toEqual([
+    expect(output.consolidatedCases).toEqual([
       {
         caseId: 'case-id-123',
         docketNumber: '100-19',
