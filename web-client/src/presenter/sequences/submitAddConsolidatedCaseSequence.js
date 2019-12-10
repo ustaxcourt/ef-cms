@@ -2,11 +2,13 @@ import { addConsolidatedCaseAction } from '../actions/caseConsolidation/addConso
 import { canConsolidateAction } from '../actions/caseConsolidation/canConsolidateAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/getConsolidatedCasesByCaseAction';
 import { primePropsForCanConsolidateAction } from '../actions/caseConsolidation/primePropsForCanConsolidateAction';
-import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setAddConsolidatedCaseSuccessMessageAction } from '../actions/caseConsolidation/setAddConsolidatedCaseSuccessMessageAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCanConsolidateErrorAction } from '../actions/caseConsolidation/setCanConsolidateErrorAction';
+import { setCaseAction } from '../actions/setCaseAction';
+import { setConsolidatedCasesForCaseAction } from '../actions/caseConsolidation/setConsolidatedCasesForCaseAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
@@ -18,7 +20,9 @@ export const submitAddConsolidatedCaseSequence = [
     success: [
       setWaitingForResponseAction,
       addConsolidatedCaseAction,
-      refreshCaseAction,
+      setCaseAction,
+      getConsolidatedCasesByCaseAction,
+      setConsolidatedCasesForCaseAction,
       clearModalAction,
       clearModalStateAction,
       setAddConsolidatedCaseSuccessMessageAction,
