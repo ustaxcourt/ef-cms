@@ -61,14 +61,17 @@ export const StartCaseStep5 = connect(
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-05">
                       <div className="margin-bottom-2">
-                        <label className="usa-label" htmlFor="filing-type">
+                        <label
+                          className="usa-label usa-label-display"
+                          htmlFor="filing-type"
+                        >
                           Type of notice/case
                         </label>
                         {form.caseType}
                         <div className="grid-row margin-top-3">
                           <div className="grid-col">
                             <label
-                              className="usa-label"
+                              className="usa-label usa-label-display"
                               htmlFor="filing-petition"
                             >
                               Petition
@@ -94,14 +97,20 @@ export const StartCaseStep5 = connect(
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
-                      <label className="usa-label" htmlFor="filing-procedure">
+                      <label
+                        className="usa-label usa-label-display"
+                        htmlFor="filing-procedure"
+                      >
                         Case procedure
                       </label>
                       {form.procedureType}
 
                       <div className="margin-top-3">
-                        <label className="usa-label" htmlFor="filing-location">
-                          Trial location
+                        <label
+                          className="usa-label usa-label-display"
+                          htmlFor="filing-location"
+                        >
+                          Requested trial location
                         </label>
                         {form.preferredTrialCity}
                       </div>
@@ -118,13 +127,19 @@ export const StartCaseStep5 = connect(
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-4 margin-bottom-1">
                       <>
-                        <label className="usa-label" htmlFor="filing-parties">
+                        <label
+                          className="usa-label usa-label-display"
+                          htmlFor="filing-parties"
+                        >
                           Party type
                         </label>
                         {form.partyType}
 
                         <div className="margin-top-3 margin-bottom-2">
-                          <label className="usa-label" htmlFor="filing-parties">
+                          <label
+                            className="usa-label usa-label-display"
+                            htmlFor="filing-parties"
+                          >
                             Statement of Taxpayer Identification
                           </label>
                           <div>
@@ -149,7 +164,7 @@ export const StartCaseStep5 = connect(
                         {form.ownershipDisclosureFile && (
                           <div className="margin-top-3 margin-bottom-3">
                             <label
-                              className="usa-label margin-top-3"
+                              className="usa-label usa-label-display margin-top-3"
                               htmlFor="filing-parties"
                             >
                               Ownership Disclosure Statement
@@ -176,7 +191,7 @@ export const StartCaseStep5 = connect(
                     </div>
                     <div className="tablet:grid-col-4 margin-bottom-1">
                       <label
-                        className="usa-label"
+                        className="usa-label usa-label-display"
                         htmlFor="filing-contact-primary"
                       >
                         {startCaseHelper.contactPrimaryLabel}
@@ -195,7 +210,7 @@ export const StartCaseStep5 = connect(
                       {startCaseHelper.hasContactSecondary && (
                         <>
                           <label
-                            className="usa-label"
+                            className="usa-label usa-label-display"
                             htmlFor="filing-contact-secondary"
                           >
                             {startCaseHelper.contactSecondaryLabel}
@@ -217,7 +232,10 @@ export const StartCaseStep5 = connect(
               <h3 className="underlined">Service Information</h3>
               <div className="grid-row grid-gap">
                 <div className="tablet:grid-col-12 margin-bottom-1">
-                  <label className="usa-label" htmlFor="filing-service-email">
+                  <label
+                    className="usa-label usa-label-display"
+                    htmlFor="filing-service-email"
+                  >
                     Service email
                   </label>
                   {user.email}
