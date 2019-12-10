@@ -15,13 +15,16 @@ export const addConsolidatedCaseAction = async ({
   const caseIdToConsolidateWith = caseDetail.caseId;
   const caseToConsolidateId = caseToConsolidate.caseId;
 
-  await applicationContext.getUseCases().addConsolidatedCaseInteractor({
-    applicationContext,
-    caseId: caseToConsolidateId,
-    caseIdToConsolidateWith,
-  });
+  const result = await applicationContext
+    .getUseCases()
+    .addConsolidatedCaseInteractor({
+      applicationContext,
+      caseId: caseToConsolidateId,
+      caseIdToConsolidateWith,
+    });
 
   return {
+    caseDetail: result,
     caseId: caseIdToConsolidateWith,
     caseToConsolidateId,
   };
