@@ -69,27 +69,19 @@ export const formattedCaseDetail = (get, applicationContext) => {
       const showDocumentEditLink =
         document &&
         permissions.UPDATE_CASE &&
-        (!document.isNotServedCourtIssuedDocument ||
-          (document.isNotServedCourtIssuedDocument &&
-            permissions.DOCKET_ENTRY));
+        (!document.isInProgress ||
+          (permissions.DOCKET_ENTRY && document.isInProgress));
 
       let editLink = ''; //defaults to doc detail
-      if (showDocumentEditLink) {
-        if (
-          document &&
-          document.isCourtIssuedDocument &&
-          !document.servedAt &&
-          permissions.DOCKET_ENTRY
-        ) {
+      if (showDocumentEditLink && permissions.DOCKET_ENTRY && document) {
+        if (document.isCourtIssuedDocument && !document.servedAt) {
           editLink = '/edit-court-issued';
-        } else if (isInProgress && permissions.DOCKET_ENTRY) {
+        } else if (isInProgress) {
           editLink = '/complete';
         } else if (
-          document &&
           !document.isCourtIssuedDocument &&
           !document.isPetition &&
-          qcWorkItemsUntouched &&
-          permissions.DOCKET_ENTRY
+          qcWorkItemsUntouched
         ) {
           editLink = '/edit';
         }
@@ -154,6 +146,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       return {
         ...draftDocument,
         descriptionDisplay: draftDocument.documentTitle,
+        editLink: '',
         showDocumentEditLink: draftDocument && permissions.UPDATE_CASE,
       };
     },
