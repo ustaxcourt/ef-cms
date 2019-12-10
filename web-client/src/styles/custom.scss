@@ -123,6 +123,12 @@ iframe {
 
   &#pdf-preview-iframe {
     height: 683px;
+
+    &.hide-from-page {
+      position: absolute;
+      top: 0;
+      left: -9999px;
+    }
   }
 }
 
@@ -343,10 +349,6 @@ select[disabled] {
 }
 
 .create-case-review {
-  label {
-    margin-bottom: 8px;
-  }
-
   p.address-name {
     margin-bottom: 0px;
   }

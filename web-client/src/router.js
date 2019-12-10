@@ -27,6 +27,11 @@ const revokeObjectURL = url => {
   return window.URL.revokeObjectURL(url);
 };
 
+const printIframeWithId = objectId => {
+  const element = window.document.getElementById(objectId);
+  element && element.contentWindow.print();
+};
+
 const back = () => {
   window.history.back();
 };
@@ -702,6 +707,7 @@ export {
   createObjectURL,
   externalRoute,
   openInNewTab,
+  printIframeWithId,
   revokeObjectURL,
   route,
   router,
