@@ -11,8 +11,6 @@ export const FilingsAndProceedings = connect(
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
-    docketRecordHelper: state.docketRecordHelper,
-    documentEditLinkHelper: state.documentEditLinkHelper,
     entry: props.entry,
     formattedCaseDetail: state.formattedCaseDetail,
     showDocketRecordDetailModalSequence:
@@ -24,8 +22,6 @@ export const FilingsAndProceedings = connect(
     baseUrl,
     caseDetail,
     caseDetailHelper,
-    docketRecordHelper,
-    documentEditLinkHelper,
     entry,
     formattedCaseDetail,
     showDocketRecordDetailModalSequence,
@@ -86,17 +82,7 @@ export const FilingsAndProceedings = connect(
         {entry.showDocumentEditLink && (
           <a
             aria-label="View PDF"
-            href={documentEditLinkHelper({
-              docketNumber: formattedCaseDetail.docketNumber,
-              documentId: entry.documentId,
-              shouldLinkToComplete: entry.isFileAttached === false,
-              shouldLinkToEdit:
-                docketRecordHelper.showEditDocketEntry && entry.canEdit,
-              shouldLinkToEditCourtIssued:
-                docketRecordHelper.showEditDocketEntry &&
-                entry.isCourtIssuedDocument,
-              shouldLinkedToDetails: entry.isServed,
-            })}
+            href={`/case-detail/${formattedCaseDetail.docketNumber}/documents/${entry.documentId}${entry.editLink}`}
           >
             {entry.isPaper && (
               <span className="filing-type-icon-mobile">

@@ -66,6 +66,35 @@ export const formattedCaseDetail = (get, applicationContext) => {
         filingsAndProceedingsWithAdditionalInfo += ` ${document.additionalInfo2}`;
       }
 
+      const showDocumentEditLink =
+        document &&
+        permissions.UPDATE_CASE &&
+        (!document.isNotServedCourtIssuedDocument ||
+          (document.isNotServedCourtIssuedDocument &&
+            permissions.DOCKET_ENTRY));
+
+      let editLink = ''; //defaults to doc detail
+      if (showDocumentEditLink) {
+        if (
+          document &&
+          document.isCourtIssuedDocument &&
+          !document.servedAt &&
+          permissions.DOCKET_ENTRY
+        ) {
+          editLink = '/edit-court-issued';
+        } else if (isInProgress && permissions.DOCKET_ENTRY) {
+          editLink = '/complete';
+        } else if (
+          document &&
+          !document.isCourtIssuedDocument &&
+          !document.isPetition &&
+          qcWorkItemsUntouched &&
+          permissions.DOCKET_ENTRY
+        ) {
+          editLink = '/edit';
+        }
+      }
+
       return {
         action: record.action,
         canEdit: document && document.canEdit,
@@ -74,6 +103,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         descriptionDisplay:
           (document && document.documentTitle) || record.description,
         documentId: document && document.documentId,
+        editLink,
         eventCode: record.eventCode || (document && document.eventCode),
         filedBy: document && document.filedBy,
         filingsAndProceedingsWithAdditionalInfo,
@@ -93,12 +123,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
             (document.isNotServedCourtIssuedDocument ||
               document.isInProgress) &&
             !permissions.DOCKET_ENTRY),
-        showDocumentEditLink:
-          document &&
-          permissions.UPDATE_CASE &&
-          (!document.isNotServedCourtIssuedDocument ||
-            (document.isNotServedCourtIssuedDocument &&
-              permissions.DOCKET_ENTRY)),
+        showDocumentEditLink,
         showDocumentProcessing:
           document &&
           !permissions.UPDATE_CASE &&
