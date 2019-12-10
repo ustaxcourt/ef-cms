@@ -2012,6 +2012,7 @@ describe('Case entity', () => {
         pendingCaseEntity = new Case(
           {
             ...MOCK_CASE,
+            docketNumber: '102-19',
             procedureType: 'regular',
             status: 'Submitted',
           },
@@ -2028,6 +2029,15 @@ describe('Case entity', () => {
 
         expect(result.canConsolidate).toEqual(false);
         expect(result.reason).toEqual('Case status is not the same');
+      });
+
+      it('should fail when cases are the same', () => {
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: leadCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual('Cases are the same');
       });
 
       it('should fail when case procedures are not the same', () => {
