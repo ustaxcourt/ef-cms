@@ -1318,7 +1318,7 @@ Case.sortByDocketNumber = function(cases) {
  * @returns {Case} the lead Case entity
  */
 Case.findLeadCaseForCases = function(cases) {
-  const casesOrdered = Case.sortByDocketNumber(cases);
+  const casesOrdered = Case.sortByDocketNumber([...cases]);
   return casesOrdered.shift();
 };
 
