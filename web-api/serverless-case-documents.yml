@@ -154,10 +154,14 @@ resources:
 functions:
   serveCourtIssuedDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.serveCourtIssuedDocumentLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
           path: /{caseId}/{documentId}/serve-court-issued
-          method: put
+          method: post
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
