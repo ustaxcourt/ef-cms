@@ -6,18 +6,17 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getCasesByUser use case
  * @param {object} providers.get the cerebral props object
- * @param {object} providers.store the cerebral store used for setting the state.cases
  * @returns {object} contains the caseList returned from the getCasesByUser use case
  */
 export const getConsolidatedCasesByCaseAction = async ({
   applicationContext,
   get,
-  store,
 }) => {
   const { leadCaseId } = get(state.caseDetail);
+  let consolidatedCases = [];
 
   if (leadCaseId) {
-    let consolidatedCases = await applicationContext
+    consolidatedCases = await applicationContext
       .getUseCases()
       .getConsolidatedCasesByCaseInteractor({
         applicationContext,
@@ -26,7 +25,7 @@ export const getConsolidatedCasesByCaseAction = async ({
 
     const { Case } = applicationContext.getEntityConstructors();
     consolidatedCases = Case.sortByDocketNumber(consolidatedCases);
-
-    store.set(state.caseDetail.consolidatedCases, consolidatedCases);
   }
+
+  return { consolidatedCases };
 };
