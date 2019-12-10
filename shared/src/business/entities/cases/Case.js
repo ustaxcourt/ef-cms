@@ -1,7 +1,6 @@
 const joi = require('joi-browser');
 const {
   createISODateString,
-  dateStringsCompared,
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
@@ -1223,15 +1222,16 @@ Case.prototype.getCaseContacts = function(shape) {
  * get consolidation status between current case entity and another case entity
  *
  * @param {object} caseEntity the pending case entity to check
- * @param {object} trialSessionEntity this case's trial session entity
- * @param {object} pendingTrialSessionEntity the pending case's trial session entity
  * @returns {object} object with canConsolidate flag and reason string
  */
-Case.prototype.getConsolidationStatus = function({
-  caseEntity,
-  pendingTrialSessionEntity,
-  trialSessionEntity,
-}) {
+Case.prototype.getConsolidationStatus = function({ caseEntity }) {
+  if (!this.canConsolidate(caseEntity.status)) {
+    return {
+      canConsolidate: false,
+      reason: `Case status is ${caseEntity.status} and cannot be consolidated`,
+    };
+  }
+
   if (this.status !== caseEntity.status) {
     return { canConsolidate: false, reason: 'Case status is not the same' };
   }
@@ -1240,23 +1240,15 @@ Case.prototype.getConsolidationStatus = function({
     return { canConsolidate: false, reason: 'Case procedure is not the same' };
   }
 
-  if (
-    trialSessionEntity.trialLocation !== pendingTrialSessionEntity.trialLocation
-  ) {
-    return { canConsolidate: false, reason: 'Place of trial is not the same' };
-  }
-
-  if (
-    trialSessionEntity.judge.userId !== pendingTrialSessionEntity.judge.userId
-  ) {
-    return { canConsolidate: false, reason: 'Judge is not the same' };
-  }
-
-  if (!this.canConsolidate(caseEntity.status)) {
+  if (this.trialLocation !== caseEntity.trialLocation) {
     return {
       canConsolidate: false,
-      reason: `Case status is ${caseEntity.status} and cannot be consolidated`,
+      reason: 'Place of trial is not the same',
     };
+  }
+
+  if (this.associatedJudge !== caseEntity.associatedJudge) {
+    return { canConsolidate: false, reason: 'Judge is not the same' };
   }
 
   return { canConsolidate: true, reason: '' };
@@ -1292,6 +1284,29 @@ Case.prototype.setLeadCase = function(leadCaseId) {
 };
 
 /**
+ * sorts the given array of cases by docket number
+ *
+ * @param {Array} cases the cases to check for lead case computation
+ * @returns {Case} the lead Case entity
+ */
+Case.sortByDocketNumber = function(cases) {
+  const casesOrdered = cases.sort((a, b) => {
+    const aSplit = a.docketNumber.split('-');
+    const bSplit = b.docketNumber.split('-');
+
+    if (aSplit[1] !== bSplit[1]) {
+      // compare years if they aren't the same
+      return aSplit[1].localeCompare(bSplit[1]);
+    } else {
+      // compare index if years are the same
+      return aSplit[0].localeCompare(bSplit[0]);
+    }
+  });
+
+  return casesOrdered;
+};
+
+/**
  * return the lead case for the given set of cases based on createdAt
  * (does NOT evaluate leadCaseId)
  *
@@ -1299,9 +1314,7 @@ Case.prototype.setLeadCase = function(leadCaseId) {
  * @returns {Case} the lead Case entity
  */
 Case.findLeadCaseForCases = function(cases) {
-  const casesOrdered = cases.sort((a, b) => {
-    return dateStringsCompared(a.createdAt, b.createdAt);
-  });
+  const casesOrdered = Case.sortByDocketNumber(cases);
   return casesOrdered.shift();
 };
 

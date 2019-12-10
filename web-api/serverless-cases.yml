@@ -402,3 +402,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getConsolidatedCasesByCase:
+    handler: web-api/${self:provider.dir}/casesHandlers.getConsolidatedCasesByCaseLambda
+    events:
+      - http:
+          path: /{caseId}/consolidated-cases
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
