@@ -14,6 +14,7 @@ import { ErrorNotification } from './ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './CaseDetail/MessagesInProgress';
 import { PartyInformation } from './CaseDetail/PartyInformation';
+import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { PrioritizeCaseModal } from './CaseDetail/PrioritizeCaseModal';
 import { RemoveFromTrialSessionModal } from './CaseDetail/RemoveFromTrialSessionModal';
 import { SuccessNotification } from './SuccessNotification';
@@ -174,6 +175,7 @@ export const CaseDetailInternal = connect(
         {showModal === 'RemoveFromTrialSessionModal' && (
           <RemoveFromTrialSessionModal />
         )}
+        <PdfPreview printable />
       </>
     );
   },

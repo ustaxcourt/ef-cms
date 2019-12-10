@@ -1996,28 +1996,10 @@ describe('Case entity', () => {
     });
 
     describe('getConsolidationStatus', () => {
-      let trialSessionEntity;
-      let pendingTrialSessionEntity;
       let leadCaseEntity;
       let pendingCaseEntity;
 
       beforeEach(() => {
-        trialSessionEntity = new TrialSession(
-          {
-            judge: { name: 'Guy Fieri', userId: 'abc-123' },
-            trialLocation: 'Flavortown, TN',
-          },
-          { applicationContext },
-        );
-
-        pendingTrialSessionEntity = new TrialSession(
-          {
-            judge: { name: 'Guy Fieri', userId: 'abc-123' },
-            trialLocation: 'Flavortown, TN',
-          },
-          { applicationContext },
-        );
-
         leadCaseEntity = new Case(
           {
             ...MOCK_CASE,
@@ -2042,8 +2024,6 @@ describe('Case entity', () => {
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
-          pendingTrialSessionEntity,
-          trialSessionEntity,
         });
 
         expect(result.canConsolidate).toEqual(false);
@@ -2055,8 +2035,6 @@ describe('Case entity', () => {
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
-          pendingTrialSessionEntity,
-          trialSessionEntity,
         });
 
         expect(result.canConsolidate).toEqual(false);
@@ -2064,12 +2042,10 @@ describe('Case entity', () => {
       });
 
       it('should fail when case trial locations are not the same', () => {
-        pendingTrialSessionEntity.trialLocation = 'Flavortown, AR';
+        pendingCaseEntity.trialLocation = 'Flavortown, AR';
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
-          pendingTrialSessionEntity,
-          trialSessionEntity,
         });
 
         expect(result.canConsolidate).toEqual(false);
@@ -2077,12 +2053,10 @@ describe('Case entity', () => {
       });
 
       it('should fail when case judges are not the same', () => {
-        pendingTrialSessionEntity.judge = 'Smashmouth';
+        pendingCaseEntity.associatedJudge = 'Smashmouth';
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
-          pendingTrialSessionEntity,
-          trialSessionEntity,
         });
 
         expect(result.canConsolidate).toEqual(false);
@@ -2095,8 +2069,6 @@ describe('Case entity', () => {
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
-          pendingTrialSessionEntity,
-          trialSessionEntity,
         });
 
         expect(result.canConsolidate).toEqual(false);
@@ -2108,8 +2080,6 @@ describe('Case entity', () => {
       it('should pass when both cases are eligible for consolidation', () => {
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
-          pendingTrialSessionEntity,
-          trialSessionEntity,
         });
 
         expect(result.canConsolidate).toEqual(true);
@@ -2135,18 +2105,113 @@ describe('Case entity', () => {
       });
     });
 
-    describe('findLeadCaseForCases', () => {
-      it('Should return the case with the lowest filing date', () => {
-        const result = Case.findLeadCaseForCases([
+    describe('sortByDocketNumber', () => {
+      it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {
+        const result = Case.sortByDocketNumber([
           {
             caseId: '123',
-            createdAt: moment().toISOString(),
+            docketNumber: '110-19',
           },
           {
             caseId: '234',
-            createdAt: moment()
-              .subtract(1, 'year')
-              .toISOString(),
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+
+        expect(result).toEqual([
+          {
+            caseId: '234',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '123',
+            docketNumber: '110-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+      });
+
+      it('Should return the cases as an array sorted by docket number for cases filed in different years', () => {
+        const result = Case.sortByDocketNumber([
+          {
+            caseId: '123',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '234',
+            docketNumber: '110-18',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+          {
+            caseId: '456',
+            docketNumber: '120-18',
+          },
+        ]);
+
+        expect(result).toEqual([
+          {
+            caseId: '234',
+            docketNumber: '110-18',
+          },
+          {
+            caseId: '456',
+            docketNumber: '120-18',
+          },
+          {
+            caseId: '123',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+      });
+    });
+
+    describe('findLeadCaseForCases', () => {
+      it('Should return the case with the lowest docket number for cases filed in the same year', () => {
+        const result = Case.findLeadCaseForCases([
+          {
+            caseId: '123',
+            docketNumber: '110-19',
+          },
+          {
+            caseId: '234',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+
+        expect(result.caseId).toEqual('234');
+      });
+
+      it('Should return the case with the lowest docket number for cases filed in different years', () => {
+        const result = Case.findLeadCaseForCases([
+          {
+            caseId: '123',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '234',
+            docketNumber: '110-18',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
           },
         ]);
 
