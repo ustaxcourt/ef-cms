@@ -26,7 +26,7 @@ export const serveCourtIssuedDocumentAction = async ({
     });
 
   let pdfUrl = null;
-  if (paperServicePdfData.size > 0) {
+  if (paperServicePdfData && paperServicePdfData.size > 0) {
     const pdfFile = new Blob([paperServicePdfData], {
       type: 'application/pdf',
     });
