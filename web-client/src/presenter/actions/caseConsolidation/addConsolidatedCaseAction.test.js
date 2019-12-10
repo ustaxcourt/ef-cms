@@ -21,7 +21,7 @@ describe('addConsolidatedCaseAction', () => {
     };
   });
 
-  it('should call addConsolidatedCaseInteractor and return caseDetail, caseId amd caseToConsolidateId', async () => {
+  it('should call addConsolidatedCaseInteractor and return caseId amd caseToConsolidateId', async () => {
     const result = await runAction(addConsolidatedCaseAction, {
       modules: {
         presenter,
