@@ -184,12 +184,10 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     }
   }
 
-  const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
 
   const destinations = servedParties.electronic.map(party => ({
     email: party.email,
@@ -221,9 +219,9 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     });
   }
 
-  let paperServicePdfData;
+  let paperServicePdfBuffer;
   if (servedParties.paper.length > 0) {
-    paperServicePdfData = pdfData;
+    let paperServicePdfData = pdfData;
     const courtIssuedOrderDoc = await PDFDocument.load(pdfData);
     const addressPages = [];
     let newPdfDoc = await PDFDocument.create();
@@ -262,7 +260,8 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     }
 
     paperServicePdfData = await newPdfDoc.save();
+    paperServicePdfBuffer = Buffer.from(paperServicePdfData);
   }
 
-  return { paperServicePdfData, updatedCase };
+  return paperServicePdfBuffer;
 };

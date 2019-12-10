@@ -11,13 +11,12 @@ import { state } from 'cerebral';
 export const serveCourtIssuedDocumentAction = async ({
   applicationContext,
   get,
+  router,
 }) => {
   const documentId = get(state.documentId);
   const caseId = get(state.caseDetail.caseId);
 
-  const {
-    paperServicePdfData,
-  } = await applicationContext
+  const paperServicePdfData = await applicationContext
     .getUseCases()
     .serveCourtIssuedDocumentInteractor({
       applicationContext,
@@ -25,12 +24,21 @@ export const serveCourtIssuedDocumentAction = async ({
       documentId,
     });
 
+  let pdfUrl;
+  if (paperServicePdfData) {
+    const pdfFile = new Blob([paperServicePdfData], {
+      type: 'application/pdf',
+    });
+
+    pdfUrl = router.createObjectURL(pdfFile);
+  }
+
   return {
     alertSuccess: {
       message:
         'Remember to print all documents for parties with paper service.',
       title: 'This document has been served',
     },
-    paperServicePdfData,
+    pdfUrl,
   };
 };

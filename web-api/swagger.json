@@ -2045,7 +2045,7 @@
           "type": "string"
         }
       ],
-      "put": {
+      "post": {
         "tags": ["cases"],
         "summary": "serves a court issued document",
         "description": "serves a court issued document\n",
