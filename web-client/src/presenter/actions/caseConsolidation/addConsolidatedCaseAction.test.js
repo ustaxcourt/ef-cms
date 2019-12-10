@@ -34,7 +34,6 @@ describe('addConsolidatedCaseAction', () => {
 
     expect(addConsolidatedCaseInteractorMock).toHaveBeenCalled();
     expect(result.output).toEqual({
-      caseDetail: expect.anything(),
       caseId: '123',
       caseToConsolidateId: '456',
     });
