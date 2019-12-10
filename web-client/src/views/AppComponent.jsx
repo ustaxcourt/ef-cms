@@ -30,6 +30,7 @@ import { Messages } from './Messages/Messages';
 import { OrdersNeededSummary } from './CaseDetailEdit/OrdersNeededSummary';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
+import { PrintPreview } from './CreateOrder/PrintPreview';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
@@ -80,6 +81,7 @@ const pages = {
   OrdersNeededSummary,
   PendingReport,
   PrimaryContactEdit,
+  PrintPreview,
   PrintableDocketRecord,
   PrintableTrialCalendar,
   RequestAccessWizard,
