@@ -50,7 +50,7 @@ const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
           <div className="grid-col-2">
             <CaseLink formattedCase={consolidatedCase} />
           </div>
-          <div className="grid-col-10">{consolidatedCase.caseCaption}</div>
+          <div className="grid-col-10">{consolidatedCase.caseName}</div>
         </div>
       ))}
     </div>
