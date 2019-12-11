@@ -346,6 +346,7 @@ export const CaseInformationInternal = connect(
                     {formattedCaseDetail.canConsolidate && (
                       <Button
                         link
+                        aria-label="add cases to consolidate with this case"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         onClick={() => {
                           openCleanModalSequence({
