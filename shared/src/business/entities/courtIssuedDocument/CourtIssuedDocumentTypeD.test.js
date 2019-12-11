@@ -11,7 +11,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
         date: VALIDATION_ERROR_MESSAGES.date[1],
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       });
     });
 
