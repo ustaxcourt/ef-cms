@@ -1,7 +1,7 @@
-import { Button } from '../ustc-ui/Button/Button';
-import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
+import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UpdateCaseModalDialog } from './CaseDetailEdit/UpdateCaseModalDialog';
+import { UpdateCaseModalDialog } from '../CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
