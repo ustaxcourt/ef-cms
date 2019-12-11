@@ -69,6 +69,6 @@ describe('serveCourtIssuedDocumentAction', () => {
     });
 
     expect(serveCourtIssuedDocumentInteractorMock).toHaveBeenCalled();
-    expect(result.output.pdfUrl).toBeUndefined();
+    expect(result.output.pdfUrl).toBe(null);
   });
 });
