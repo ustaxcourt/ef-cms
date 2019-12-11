@@ -15,12 +15,14 @@ export const SelectDocumentType = connect(
     reasons: state.viewAllDocumentsHelper.reasons,
     screenMetadata: state.screenMetadata,
     selectDocumentSequence: sequences.selectDocumentSequence,
+    showModal: state.showModal,
   },
   ({
     completeDocumentSelectSequence,
     formCancelToggleCancelSequence,
     gotoViewAllDocumentsSequence,
     reasons,
+    showModal,
   }) => {
     return (
       <React.Fragment>
@@ -100,7 +102,9 @@ export const SelectDocumentType = connect(
             </NonMobile>
           </div>
         </div>
-        <CheckConsolidatedCasesModal />
+        {showModal === 'CheckConsolidatedCasesModal' && (
+          <CheckConsolidatedCasesModal />
+        )}
       </React.Fragment>
     );
   },
