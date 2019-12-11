@@ -71,7 +71,7 @@ export const SectionWorkQueueInbox = connect(
               {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>{workQueueHelper.inboxFiledColumnLabel}</th>
-              <th>Case name</th>
+              <th>Case title</th>
               {!workQueueHelper.hideIconColumn && (
                 <th aria-label="Status Icon" className="padding-right-0" />
               )}

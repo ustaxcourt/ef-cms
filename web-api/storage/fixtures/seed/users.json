@@ -25,7 +25,6 @@
     "sk": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "docket|user"
   },
-
   {
     "role": "judge",
     "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -80,7 +79,7 @@
   {
     "role": "judge",
     "sk": "dabbad03-18d0-43ec-bafb-654e83405416",
-    "name": "Judge Carluzzo",
+    "name": "Special Trial Judge Carluzzo",
     "section": "carluzzosChambers",
     "pk": "dabbad03-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416",

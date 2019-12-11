@@ -14,7 +14,7 @@ export default (test, fakeFile) => {
 
     expect(test.getState('validationErrors')).toEqual({
       category: VALIDATION_ERROR_MESSAGES.category,
-      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -24,7 +24,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('validateSelectDocumentTypeSequence');
     expect(test.getState('validationErrors')).toEqual({
-      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -66,7 +66,7 @@ export default (test, fakeFile) => {
     await test.runSequence('selectDocumentSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
@@ -91,7 +91,7 @@ export default (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       secondaryDocument: {
         category: VALIDATION_ERROR_MESSAGES.category,
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       },
     });
 

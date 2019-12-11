@@ -6,7 +6,7 @@ import React from 'react';
 
 export const ConfirmInitiateServiceModal = connect(
   {
-    cancelSequence: sequences.clearModalSequence,
+    cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
     confirmSequence: sequences.serveCourtIssuedDocumentSequence,
   },
@@ -18,17 +18,17 @@ export const ConfirmInitiateServiceModal = connect(
   }) => {
     return (
       <ModalDialog
-        cancelLabel="No, take me back"
+        cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
         className="confirm-initiate-service-modal"
-        confirmLabel={confirmInitiateServiceModalHelper.confirmLabel}
+        confirmLabel="Yes, Serve"
         confirmSequence={confirmSequence}
         title="Are you ready to initiate service?"
       >
         <p className="margin-bottom-1">
           The following document will be served on all parties:
         </p>
-        <p className="margin-top-0 margin-bottom-5">
+        <p className="margin-top-0 margin-bottom-2">
           <strong>{documentTitle}</strong>
         </p>
         {confirmInitiateServiceModalHelper.showPaperAlert && (
