@@ -1,8 +1,8 @@
 import { gotoFileDocumentSequence } from './gotoFileDocumentSequence';
 import { setModalErrorAction } from '../actions/setModalErrorAction';
-import { validateFileDocumentAction } from '../actions/caseConsolidation/validateFileDocumentAction';
+import { validateFileDocumentAction } from '../actions/FileDocument/validateFileExternalDocumentAction';
 
-export const fileDocumentToConsolidateCasesSequence = [
+export const fileExternalDocumentToConsolidatedCasesSequence = [
   validateFileDocumentAction,
   {
     error: [setModalErrorAction],
