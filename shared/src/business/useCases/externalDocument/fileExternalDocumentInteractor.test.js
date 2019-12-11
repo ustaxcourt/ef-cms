@@ -123,7 +123,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(updatedCase.documents[3].servedAt).toBeDefined();
   });
 
-  it('should add documents and workitems and auto-serve the documents on the parties with a paper service indicator', async () => {
+  it('should assign and complete work items if the document is paper', async () => {
     let error;
     const getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
     const saveWorkItemForNonPaperSpy = sinon.spy();
@@ -170,9 +170,11 @@ describe('fileExternalDocumentInteractor', () => {
     expect(error).toBeUndefined();
     expect(getCaseByCaseIdSpy.called).toEqual(true);
     expect(saveWorkItemForNonPaperSpy.called).toEqual(false);
-    expect(
-      saveWorkItemForDocketClerkFilingExternalDocumentStub,
-    ).toHaveBeenCalled();
+    const firstCallArg =
+      saveWorkItemForDocketClerkFilingExternalDocumentStub.mock.calls[0][0];
+    expect(firstCallArg).toMatchObject({
+      workItem: { completedBy: 'Respondent' },
+    });
     expect(updateCaseSpy.called).toEqual(true);
     expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
     expect(updatedCase.documents[3].status).toEqual('served');
