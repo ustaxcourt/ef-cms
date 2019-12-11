@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { CreateMessageModalDialog } from '../DocumentDetail/CreateMessageModalDialog';
 import { DocumentDetailHeader } from '../DocumentDetail/DocumentDetailHeader';
 import { DocumentDisplayIframe } from '../DocumentDetail/DocumentDisplayIframe';
