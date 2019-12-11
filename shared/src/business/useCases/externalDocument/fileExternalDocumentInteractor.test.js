@@ -123,6 +123,62 @@ describe('fileExternalDocumentInteractor', () => {
     expect(updatedCase.documents[3].servedAt).toBeDefined();
   });
 
+  it('should add documents and workitems and auto-serve the documents on the parties with a paper service indicator', async () => {
+    let error;
+    const getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
+    const saveWorkItemForNonPaperSpy = sinon.spy();
+    const updateCaseSpy = sinon.spy();
+    const sendBulkTemplatedEmailMock = jest.fn();
+    const saveWorkItemForDocketClerkFilingExternalDocumentStub = jest.fn();
+
+    let updatedCase;
+    try {
+      applicationContext = {
+        environment: { stage: 'local' },
+        getCurrentUser: () => {
+          return new User({
+            name: 'Respondent',
+            role: User.ROLES.respondent,
+            userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+          });
+        },
+        getDispatchers: () => ({
+          sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
+        }),
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: getCaseByCaseIdSpy,
+          getUserById: ({ userId }) => MOCK_USERS[userId],
+          saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentStub,
+          saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
+          updateCase: updateCaseSpy,
+        }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      };
+      updatedCase = await fileExternalDocumentInteractor({
+        applicationContext,
+        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          isPaper: true,
+        },
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeUndefined();
+    expect(getCaseByCaseIdSpy.called).toEqual(true);
+    expect(saveWorkItemForNonPaperSpy.called).toEqual(false);
+    expect(
+      saveWorkItemForDocketClerkFilingExternalDocumentStub,
+    ).toHaveBeenCalled();
+    expect(updateCaseSpy.called).toEqual(true);
+    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(updatedCase.documents[3].status).toEqual('served');
+    expect(updatedCase.documents[3].servedAt).toBeDefined();
+  });
+
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
     let error;
     const getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
