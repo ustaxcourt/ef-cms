@@ -182,7 +182,7 @@ export const SignOrder = connect(
                 >
                   (Signed) {pdfForSigning.nameForSigning}
                   <br />
-                  Chief Judge
+                  {pdfForSigning.nameForSigningLine2}
                 </span>
                 {!process.env.CI && (
                   <canvas
