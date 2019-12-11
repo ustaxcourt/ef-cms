@@ -51,7 +51,6 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
           workItemId: mapping.sk,
         }),
       );
-
       requests.push(
         updateWorkItemCaseTitle({
           applicationContext,

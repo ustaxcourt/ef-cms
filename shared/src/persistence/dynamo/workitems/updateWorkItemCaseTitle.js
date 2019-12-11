@@ -5,7 +5,6 @@ exports.updateWorkItemCaseTitle = async ({
   caseTitle,
   workItemId,
 }) => {
-  console.log('++++++++++++++++++ UPDATE CASE TITLE', caseTitle);
   const workItems = await client.query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
