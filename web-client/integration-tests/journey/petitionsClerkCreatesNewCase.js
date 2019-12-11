@@ -160,5 +160,6 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
     expect(test.getState('currentPage')).toEqual('DocumentDetail');
 
     test.docketNumber = test.getState('caseDetail.docketNumber');
+    test.caseId = test.getState('caseDetail.caseId');
   });
 };
