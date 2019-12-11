@@ -110,7 +110,7 @@ exports.userMap = {
   judgeCarluzzo: {
     'custom:role': 'judge',
     email: 'judgeCarluzzo',
-    name: 'Judge Carluzzo',
+    name: 'Special Trial Judge Carluzzo',
     role: 'judge',
     userId: 'dabbad03-18d0-43ec-bafb-654e83405416',
   },
