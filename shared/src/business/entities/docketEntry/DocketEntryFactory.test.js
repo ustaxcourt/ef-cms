@@ -165,7 +165,7 @@ describe('DocketEntryFactory', () => {
           it('should validate secondary document', () => {
             expect(errors().secondaryDocument).toEqual({
               category: VALIDATION_ERROR_MESSAGES.category,
-              documentType: VALIDATION_ERROR_MESSAGES.documentType,
+              documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
             });
           });
         });

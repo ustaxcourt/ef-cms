@@ -23,7 +23,7 @@ export const OpenCases = connect(
             <tr>
               <th>Docket</th>
               <th aria-label="manually added indicator"></th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th>Petitioner counsel</th>
               <th>Respondent counsel</th>
             </tr>

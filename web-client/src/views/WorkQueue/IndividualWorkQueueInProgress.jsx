@@ -23,7 +23,7 @@ export const IndividualWorkQueueInProgress = connect(
                 <span className="padding-left-2px">Docket</span>
               </th>
               <th>Filed</th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               <th>Case status</th>
