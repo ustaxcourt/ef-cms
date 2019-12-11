@@ -9,7 +9,7 @@ describe('CourtIssuedDocumentTypeB', () => {
       });
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
         judge: VALIDATION_ERROR_MESSAGES.judge,
       });
     });

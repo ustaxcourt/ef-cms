@@ -10,7 +10,7 @@ describe('CourtIssuedDocumentTypeC', () => {
       expect(document.getFormattedValidationErrors()).toEqual({
         attachments: VALIDATION_ERROR_MESSAGES.attachments,
         docketNumbers: VALIDATION_ERROR_MESSAGES.docketNumbers,
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       });
     });
 
