@@ -54,7 +54,7 @@ export const CaseDetail = connect(
               </select>
             </div>
           </div>
-          <div className="mobile-document-detail-tabs">
+          <div className="case-detail-primary-tabs__tabs">
             <Tabs
               bind="caseDetailPage.informationTab"
               className="classic-horizontal-header3 tab-border"
