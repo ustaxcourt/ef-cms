@@ -153,7 +153,6 @@ import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeC
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { printDocketRecordSequence } from './sequences/printDocketRecordSequence';
 import { printFromBrowserSequence } from './sequences/printFromBrowserSequence';
-import { printPdfFromIframeSequence } from './sequences/printPdfFromIframeSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
@@ -475,7 +474,6 @@ export const presenter = {
     openUpdateCaseModalSequence,
     printDocketRecordSequence,
     printFromBrowserSequence,
-    printPdfFromIframeSequence,
     printTrialCalendarSequence,
     prioritizeCaseSequence,
     redirectToLoginSequence,
