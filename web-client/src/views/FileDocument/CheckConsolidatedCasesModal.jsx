@@ -22,10 +22,10 @@ export const CheckConsolidatedCasesModal = connect(
         onConfirmSequence="gotoFileDocumentSequence"
       >
         <FormGroup errorText={error}>
-          <legend className="usa-legend" id="case-consolidated-info">
+          <p className="margin-top-0">
             This case is part of a consolidated group. Please select which cases
             to file this document in.
-          </legend>
+          </p>
           {caseDetail.consolidatedCases.map((consolidatedCase, index) => (
             <div className="padding-bottom-2" key={index}>
               <input
@@ -53,7 +53,6 @@ export const CheckConsolidatedCasesModal = connect(
               </label>
             </div>
           ))}
-          <div className="usa-checkbox" id="confirm-legend"></div>
         </FormGroup>
       </ConfirmModal>
     );
