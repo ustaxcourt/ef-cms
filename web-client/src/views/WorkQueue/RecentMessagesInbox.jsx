@@ -23,7 +23,7 @@ export const RecentMessagesInbox = connect(
                 <span className="padding-left-2px">Docket</span>
               </th>
               <th className="small">Received</th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th>Document</th>
               {workQueueHelper.showCaseStatusColumn && (
                 <th className="no-wrap">Case status</th>
