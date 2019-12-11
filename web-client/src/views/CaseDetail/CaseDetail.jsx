@@ -1,7 +1,6 @@
-import { ActionRequired } from './ActionRequired';
-import { CaseDeadlinesExternal } from './CaseDeadlinesExternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
-import { CaseInformationPublic } from './CaseInformationPublic';
+import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
+import { CaseInformationExternal } from './CaseInformationExternal';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { ErrorNotification } from '../ErrorNotification';
 import { PartyInformation } from './PartyInformation';
@@ -16,25 +15,22 @@ export const CaseDetail = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    primaryTab: state.caseDetailPage.primaryTab,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
   },
-  function CaseDetail({ caseDetailHelper, setCaseDetailPageTabSequence }) {
+  function CaseDetail({
+    caseDetailHelper,
+    primaryTab,
+    setCaseDetailPageTabSequence,
+  }) {
     return (
       <React.Fragment>
-        <CaseDetailHeader />
+        <CaseDetailHeader className="margin-bottom-0" />
+        <CaseDetailSubnavTabs />
 
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          {caseDetailHelper.showActionRequired && (
-            <div className="margin-bottom-6">
-              <div className="title">
-                <h1>Action Required</h1>
-              </div>
-              <ActionRequired />
-            </div>
-          )}
-          <CaseDeadlinesExternal />
           <div className="only-small-screens">
             <div className="margin-bottom-3">
               <select
@@ -50,36 +46,34 @@ export const CaseDetail = connect(
                 }}
               >
                 <option value="docketRecord">Docket Record</option>
-                <option value="caseInfo">Case Information</option>
+                <option value="caseInformation">Case Information</option>
               </select>
             </div>
           </div>
-          <div className="case-detail-primary-tabs__tabs">
+          {primaryTab === 'docketRecord' && (
+            <>
+              <div className="title">
+                <h1>Docket Record</h1>
+              </div>
+              <DocketRecord />
+            </>
+          )}
+          {primaryTab === 'caseInformation' && (
             <Tabs
-              bind="caseDetailPage.informationTab"
+              bind="caseDetailPage.caseInformationTab"
               className="classic-horizontal-header3 tab-border"
             >
-              <Tab
-                id="tab-docket-record"
-                tabName="docketRecord"
-                title="Docket Record"
-              >
-                <DocketRecord />
+              <Tab id="tab-overview" tabName="overview" title="Overview">
+                <CaseInformationExternal />
               </Tab>
-              <Tab
-                id="tab-case-info"
-                tabName="caseInfo"
-                title="Case Information"
-              >
-                {caseDetailHelper.showCaseInformationPublic && (
-                  <CaseInformationPublic />
-                )}
-                <div className="case-detail-party-info">
-                  <PartyInformation />
-                </div>
+              <Tab id="tab-petitioner" tabName="petitioner" title="Petitioner">
+                <PartyInformation />
+              </Tab>
+              <Tab id="tab-respondent" tabName="respondent" title="Respondent">
+                <PartyInformation />
               </Tab>
             </Tabs>
-          </div>
+          )}
         </section>
       </React.Fragment>
     );

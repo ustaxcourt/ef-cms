@@ -145,7 +145,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
-    showCaseInformationPublic: isExternalUser,
+    showCaseInformationExternal: isExternalUser,
     showCaseNameForPrimary,
     showCaseNotes,
     showCreateOrderButton,

@@ -38,7 +38,7 @@ const TrialInformation = ({ caseDetail }) => (
   </React.Fragment>
 );
 
-export const CaseInformationPublic = connect(
+export const CaseInformationExternal = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence:
