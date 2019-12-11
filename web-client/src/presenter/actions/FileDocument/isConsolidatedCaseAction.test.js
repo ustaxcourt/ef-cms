@@ -1,6 +1,6 @@
+import { isConsolidatedCaseAction } from './isConsolidatedCaseAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { isConsolidatedCaseAction } from './isConsolidatedCaseAction';
 
 describe('isConsolidatedCaseAction', () => {
   let yesStub;
