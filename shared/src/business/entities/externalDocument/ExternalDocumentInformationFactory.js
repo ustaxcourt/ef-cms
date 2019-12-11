@@ -31,7 +31,14 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Enter date of service',
   ],
-  documentType: 'Select a document type',
+  documentType: [
+    {
+      contains: 'contains an invalid value',
+      message:
+        'Proposed Stipulated Decision must be filed seperatly in each case',
+    },
+    'Select a document type',
+  ],
   freeText: 'Provide an answer',
   freeText2: 'Provide an answer',
   hasSecondarySupportingDocuments:
