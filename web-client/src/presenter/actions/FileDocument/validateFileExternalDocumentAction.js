@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * check to see if we can consolidate cases
+ * validate that we have cases for which to file an external document
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get object
