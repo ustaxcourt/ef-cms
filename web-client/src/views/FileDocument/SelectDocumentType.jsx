@@ -5,6 +5,7 @@ import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import { CheckConsolidatedCasesModal } from './CheckConsolidatedCasesModal';
 
 export const SelectDocumentType = connect(
   {
@@ -99,6 +100,7 @@ export const SelectDocumentType = connect(
             </NonMobile>
           </div>
         </div>
+        <CheckConsolidatedCasesModal />
       </React.Fragment>
     );
   },

@@ -19,6 +19,7 @@ export const CheckConsolidatedCasesModal = connect(
         className="add-consolidated-case-search-modal"
         confirmLabel="Add to Case(s)"
         title="Would You Like To File Your Document In Multiple Cases?"
+        showModalWhen="CheckConsolidatedCasesModal"
         onCancelSequence="clearModalSequence"
         onConfirmSequence="fileDocumentToConsolidateCasesSequence"
       >
