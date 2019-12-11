@@ -1,6 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetailHeader';
-import { CheckConsolidatedCasesModal } from './CheckConsolidatedCasesModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
@@ -118,17 +117,7 @@ export const BeforeYouFileADocument = connect(
             </div>
           </div>
           <Button
-            onClick={() => {
-              if (caseDetail.leadCaseId) {
-                openCleanModalSequence({
-                  showModal: 'CheckConsolidatedCasesModal',
-                });
-              } else {
-                navigateToPathSequence({
-                  path: `/case-detail/${caseDetail.docketNumber}/file-a-document`,
-                });
-              }
-            }}
+            href={`/case-detail/${caseDetail.docketNumber}/file-a-document`}
           >
             OK, Iʼm Ready to File
           </Button>
@@ -140,9 +129,6 @@ export const BeforeYouFileADocument = connect(
           >
             Cancel
           </Button>
-          {showModal === 'CheckConsolidatedCasesModal' && (
-            <CheckConsolidatedCasesModal />
-          )}
           {showModal === 'FormCancelModalDialog' && (
             <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
           )}
