@@ -1,0 +1,140 @@
+[
+  {
+    "associatedJudge": "Chief Judge",
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "isPaper": false,
+    "initialTitle": "Guy Fieri, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "documentType": "Petition",
+        "partyPrimary": true,
+        "workItems": [
+          {
+            "docketNumberSuffix": "L",
+            "caseStatus": "New",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-12-11T15:25:09.285Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Petr. Guy Fieri",
+              "partyPrimary": true,
+              "pending": false,
+              "partySecondary": false,
+              "documentId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
+              "receivedAt": "2019-12-11T15:25:09.285Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "caseTitle": "Guy Fieri",
+            "section": "petitions",
+            "workItemId": "9fc70206-15c6-4c68-87bb-295dee8f002d",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "isQC": true,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "createdAt": "2019-12-11T15:25:09.285Z",
+            "assigneeName": null,
+            "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+            "messages": [
+              {
+                "createdAt": "2019-12-11T15:25:09.286Z",
+                "messageId": "f0073d7f-e07a-4e56-af40-b4270c604908",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Guy Fieri is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "111-19",
+            "updatedAt": "2019-12-11T15:25:09.286Z"
+          }
+        ],
+        "pending": false,
+        "receivedAt": "2019-12-11T15:25:09.285Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "P",
+        "createdAt": "2019-12-11T15:25:09.285Z",
+        "processingStatus": "complete",
+        "filedBy": "Petr. Guy Fieri",
+        "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+        "partySecondary": false,
+        "documentId": "9de27a7d-7c6b-434b-803b-7655f82d5e07"
+      },
+      {
+        "documentType": "Statement of Taxpayer Identification",
+        "partyPrimary": true,
+        "workItems": [],
+        "pending": false,
+        "receivedAt": "2019-12-11T15:25:09.286Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "STIN",
+        "createdAt": "2019-12-11T15:25:09.286Z",
+        "processingStatus": "complete",
+        "filedBy": "Petr. Guy Fieri",
+        "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+        "partySecondary": false,
+        "documentId": "59ccf18f-5bac-48b0-a8e0-9c9e1d995b62"
+      }
+    ],
+    "gsi1pk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "orderForFilingFee": false,
+    "partyType": "Petitioner",
+    "receivedAt": "2019-12-11T15:25:09.284Z",
+    "caseType": "CDP (Lien/Levy)",
+    "orderDesignatingPlaceOfTrial": false,
+    "contactPrimary": {
+      "city": "Flavortown",
+      "phone": "1234567890",
+      "address1": "123 Leet Street",
+      "postalCode": "72364",
+      "name": "Guy Fieri",
+      "state": "AR",
+      "countryType": "domestic",
+      "email": "petitioner"
+    },
+    "createdAt": "2019-12-11T15:25:09.284Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Guy Fieri, Petitioner",
+    "caseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "sk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "filingType": "Myself",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "L",
+    "docketNumberSuffix": "L",
+    "orderToChangeDesignatedPlaceOfTrial": false,
+    "caseTitle": "Guy Fieri, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Birmingham, Alabama",
+    "respondents": [],
+    "practitioners": [],
+    "hasPendingItems": false,
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
+        "filingDate": "2019-12-11T15:25:09.285Z",
+        "filedBy": "Petr. Guy Fieri"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Birmingham, Alabama",
+        "index": 2,
+        "filingDate": "2019-12-11T15:25:09.284Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "pk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "docketNumber": "111-19",
+    "status": "Submitted"
+  },
+  {
+    "sk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "pk": "111-19|case"
+  }
+]
