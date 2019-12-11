@@ -7,7 +7,6 @@ export const validateFileDocumentAction = ({ get, path }) => {
   if (!isEmpty(casesToFileDocument)) {
     return path.success();
   } else {
-    console.log('ayyy');
     return path.error({ error: 'Select a case' });
   }
 };
