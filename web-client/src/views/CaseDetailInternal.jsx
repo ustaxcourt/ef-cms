@@ -3,6 +3,7 @@ import { BlockFromTrialModal } from './CaseDetail/BlockFromTrialModal';
 import { CaseDeadlinesInternal } from './CaseDetail/CaseDeadlinesInternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailPendingReportList } from './CaseDetail/CaseDetailPendingReportList';
+import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
 import { CaseInformationInternal } from './CaseDetail/CaseInformationInternal';
 import { CaseNotes } from './CaseDetail/CaseNotes';
 import { CreateCaseDeadlineModalDialog } from './CaseDetail/CreateCaseDeadlineModalDialog';
@@ -21,7 +22,7 @@ import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { UnblockFromTrialModal } from './CaseDetail/UnblockFromTrialModal';
 import { UnprioritizeCaseModal } from './CaseDetail/UnprioritizeCaseModal';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const CaseDetailInternal = connect(
@@ -30,7 +31,7 @@ export const CaseDetailInternal = connect(
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
+    primaryTab: state.caseDetailPage.primaryTab,
     showModal: state.showModal,
     token: state.token,
   },
@@ -39,76 +40,42 @@ export const CaseDetailInternal = connect(
     caseDetail,
     caseDetailHelper,
     formattedCaseDetail,
-    setCaseDetailPageTabSequence,
+    primaryTab,
     showModal,
     token,
   }) => {
     return (
       <>
-        <CaseDetailHeader />
+        <CaseDetailHeader className="margin-bottom-0" />
+        <CaseDetailSubnavTabs />
+
         <section
           className="usa-section grid-container"
           id="case-detail-internal"
         >
           <SuccessNotification />
           <ErrorNotification />
-          <Tabs
-            bind="caseDetailPage.deadlinesTab"
-            className="classic-horizontal-header3 tab-border"
-          >
-            <Tab
-              id="tab-case-deadlines"
-              tabName="caseDeadlines"
-              title="Deadlines"
-            >
+          {primaryTab === 'docketRecord' && (
+            <>
+              <div className="title">
+                <h1>Docket Record</h1>
+              </div>
+              <DocketRecord />
+            </>
+          )}
+          {primaryTab === 'deadlines' && (
+            <>
+              <div className="title">
+                <h1>Deadlines</h1>
+              </div>
               <CaseDeadlinesInternal />
-            </Tab>
-            <Tab
-              id="tab-pending-report"
-              tabName="pendingReport"
-              title="Pending Report"
-            >
-              <CaseDetailPendingReportList />
-            </Tab>
-          </Tabs>
-
-          <div>
-            <div className="title">
-              <h1>Messages in Progress</h1>
-            </div>
-            <MessagesInProgress />
-          </div>
-          <div className="only-small-screens">
-            <div className="margin-bottom-3">
-              <select
-                aria-label="additional case info"
-                className="usa-select"
-                id="mobile-document-detail-tab-selector"
-                name="partyType"
-                value={caseDetailHelper.documentDetailTab}
-                onChange={e => {
-                  setCaseDetailPageTabSequence({
-                    tab: e.target.value,
-                  });
-                }}
-              >
-                <option value="docketRecord">Docket Record</option>
-                <option value="caseInfo">Case Information</option>
-              </select>
-            </div>
-          </div>
-          <div className="mobile-document-detail-tabs">
+            </>
+          )}
+          {primaryTab === 'inProgress' && (
             <Tabs
-              bind="caseDetailPage.informationTab"
+              bind="caseDetailPage.inProgressTab"
               className="classic-horizontal-header3 tab-border"
             >
-              <Tab
-                id="tab-docket-record"
-                tabName="docketRecord"
-                title="Docket Record"
-              >
-                <DocketRecord />
-              </Tab>
               <Tab
                 id="tab-draft-documents"
                 tabName="draftDocuments"
@@ -116,24 +83,44 @@ export const CaseDetailInternal = connect(
               >
                 <DraftDocuments />
               </Tab>
-              <Tab
-                id="tab-case-info"
-                tabName="caseInfo"
-                title="Case Information"
-              >
-                <CaseInformationInternal />
-                <div className="case-detail-party-info">
-                  <PartyInformation />
-                </div>
+              <Tab id="tab-messages" tabName="messages" title="Messages">
+                <MessagesInProgress />
               </Tab>
-              {caseDetailHelper.showCaseNotes && (
-                <Tab id="tab-case-notes" tabName="caseNotes" title="Notes">
-                  <CaseNotes />
-                </Tab>
-              )}
+              <Tab
+                id="tab-pending-report"
+                tabName="pendingReport"
+                title="Pending Report"
+              >
+                <CaseDetailPendingReportList />
+              </Tab>
             </Tabs>
-          </div>
+          )}
+          {primaryTab === 'caseInformation' && (
+            <Tabs
+              bind="caseDetailPage.caseInformationTab"
+              className="classic-horizontal-header3 tab-border"
+            >
+              <Tab id="tab-overview" tabName="overview" title="Overview">
+                <CaseInformationInternal />
+              </Tab>
+              <Tab id="tab-petitioner" tabName="petitioner" title="Petitioner">
+                <PartyInformation />
+              </Tab>
+              <Tab id="tab-respondent" tabName="respondent" title="Respondent">
+                <PartyInformation />
+              </Tab>
+            </Tabs>
+          )}
+          {primaryTab === 'notes' && (
+            <>
+              <div className="title">
+                <h1>Notes</h1>
+              </div>
+              {caseDetailHelper.showCaseNotes && <CaseNotes />}
+            </>
+          )}
         </section>
+
         {/* This section below will be removed in a future story */}
         <section className="usa-section grid-container">
           {formattedCaseDetail.status === 'General Docket - Not at Issue' && (
