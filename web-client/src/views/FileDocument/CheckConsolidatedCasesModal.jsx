@@ -1,7 +1,6 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
-import { ifError } from 'assert';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -18,8 +17,8 @@ export const CheckConsolidatedCasesModal = connect(
         cancelLabel="Cancel"
         className="add-consolidated-case-search-modal"
         confirmLabel="Add to Case(s)"
-        title="Would You Like To File Your Document In Multiple Cases?"
         showModalWhen="CheckConsolidatedCasesModal"
+        title="Would You Like To File Your Document In Multiple Cases?"
         onCancelSequence="clearModalSequence"
         onConfirmSequence="fileDocumentToConsolidateCasesSequence"
       >

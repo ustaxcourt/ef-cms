@@ -1,11 +1,11 @@
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CheckConsolidatedCasesModal } from './CheckConsolidatedCasesModal';
 import { CompleteDocumentTypeSection } from './CompleteDocumentTypeSection';
 import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import { CheckConsolidatedCasesModal } from './CheckConsolidatedCasesModal';
 
 export const SelectDocumentType = connect(
   {
