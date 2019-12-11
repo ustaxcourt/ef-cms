@@ -59,6 +59,7 @@ import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSe
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
 import { fetchPendingItemsSequence } from './sequences/pending/fetchPendingItemsSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
+import { fileDocumentToConsolidateCasesSequence } from './sequences/fileDocumentToConsolidateCasesSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
@@ -380,6 +381,7 @@ export const presenter = {
     editSelectedSecondaryDocumentSequence,
     fetchPendingItemsSequence,
     fetchUserNotificationsSequence,
+    fileDocumentToConsolidateCasesSequence,
     formCancelToggleCancelSequence,
     generatePdfFromScanSessionSequence,
     getBlockedCasesByTrialLocationSequence,
