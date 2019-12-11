@@ -71,7 +71,7 @@ export const SectionWorkQueueInProgress = connect(
               {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>Filed</th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               <th>Case status</th>

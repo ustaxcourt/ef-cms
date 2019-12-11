@@ -31,7 +31,7 @@ export const SectionWorkQueueOutbox = connect(
               </th>
               {workQueueHelper.showReceivedColumn && <th>Filed</th>}
               {workQueueHelper.showSentColumn && <th>Sent</th>}
-              <th>Case name</th>
+              <th>Case title</th>
               <th aria-label="Status Icon" className="padding-right-0" />
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}

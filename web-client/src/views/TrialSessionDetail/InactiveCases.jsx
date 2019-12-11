@@ -21,7 +21,7 @@ export const InactiveCases = connect(
           <thead>
             <tr>
               <th>Docket</th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th>Disposition</th>
               <th>Disposition date</th>
             </tr>
