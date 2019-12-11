@@ -1,12 +1,12 @@
-import { ActionRequired } from './CaseDetail/ActionRequired';
-import { CaseDeadlinesExternal } from './CaseDetail/CaseDeadlinesExternal';
+import { ActionRequired } from './ActionRequired';
+import { CaseDeadlinesExternal } from './CaseDeadlinesExternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
-import { CaseInformationPublic } from './CaseDetail/CaseInformationPublic';
-import { DocketRecord } from './DocketRecord/DocketRecord';
-import { ErrorNotification } from './ErrorNotification';
-import { PartyInformation } from './CaseDetail/PartyInformation';
-import { SuccessNotification } from './SuccessNotification';
-import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { CaseInformationPublic } from './CaseInformationPublic';
+import { DocketRecord } from '../DocketRecord/DocketRecord';
+import { ErrorNotification } from '../ErrorNotification';
+import { PartyInformation } from './PartyInformation';
+import { SuccessNotification } from '../SuccessNotification';
+import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 

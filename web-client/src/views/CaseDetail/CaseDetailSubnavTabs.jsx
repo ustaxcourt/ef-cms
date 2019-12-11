@@ -1,4 +1,4 @@
-import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
+import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import React from 'react';
 
