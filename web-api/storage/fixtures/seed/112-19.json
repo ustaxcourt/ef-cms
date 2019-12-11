@@ -1,0 +1,140 @@
+[
+  {
+    "associatedJudge": "Chief Judge",
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "isPaper": false,
+    "initialTitle": "Brian Earl Spilner, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "documentType": "Petition",
+        "partyPrimary": true,
+        "workItems": [
+          {
+            "docketNumberSuffix": "L",
+            "caseStatus": "New",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-12-11T15:25:55.007Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Petr. Brian Earl Spilner",
+              "partyPrimary": true,
+              "pending": false,
+              "partySecondary": false,
+              "documentId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
+              "receivedAt": "2019-12-11T15:25:55.007Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "caseTitle": "Brian Earl Spilner",
+            "section": "petitions",
+            "workItemId": "dfded65f-8aba-4af2-8e1e-b17a901e1753",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "isQC": true,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "createdAt": "2019-12-11T15:25:55.008Z",
+            "assigneeName": null,
+            "caseId": "459925e4-db20-46e0-8348-47a98537edeb",
+            "messages": [
+              {
+                "createdAt": "2019-12-11T15:25:55.008Z",
+                "messageId": "23277794-7935-4740-a9a8-f1e1da95171c",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Brian Earl Spilner is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "112-19",
+            "updatedAt": "2019-12-11T15:25:55.008Z"
+          }
+        ],
+        "pending": false,
+        "receivedAt": "2019-12-11T15:25:55.007Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "P",
+        "createdAt": "2019-12-11T15:25:55.007Z",
+        "processingStatus": "complete",
+        "filedBy": "Petr. Brian Earl Spilner",
+        "caseId": "459925e4-db20-46e0-8348-47a98537edeb",
+        "partySecondary": false,
+        "documentId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8"
+      },
+      {
+        "documentType": "Statement of Taxpayer Identification",
+        "partyPrimary": true,
+        "workItems": [],
+        "pending": false,
+        "receivedAt": "2019-12-11T15:25:55.008Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "STIN",
+        "createdAt": "2019-12-11T15:25:55.008Z",
+        "processingStatus": "complete",
+        "filedBy": "Petr. Brian Earl Spilner",
+        "caseId": "459925e4-db20-46e0-8348-47a98537edeb",
+        "partySecondary": false,
+        "documentId": "1c56d0fc-b01b-4bc7-830f-0c25b4e6b803"
+      }
+    ],
+    "gsi1pk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "orderForFilingFee": false,
+    "partyType": "Petitioner",
+    "receivedAt": "2019-12-11T15:25:55.006Z",
+    "caseType": "CDP (Lien/Levy)",
+    "orderDesignatingPlaceOfTrial": false,
+    "contactPrimary": {
+      "city": "Los Angeles",
+      "phone": "3235556429",
+      "address1": "111 Fast Ln",
+      "postalCode": "12355",
+      "name": "Brian Earl Spilner",
+      "state": "CA",
+      "countryType": "domestic",
+      "email": "petitioner"
+    },
+    "createdAt": "2019-12-11T15:25:55.006Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Brian Earl Spilner, Petitioner",
+    "caseId": "459925e4-db20-46e0-8348-47a98537edeb",
+    "sk": "459925e4-db20-46e0-8348-47a98537edeb",
+    "filingType": "Myself",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "L",
+    "docketNumberSuffix": "L",
+    "orderToChangeDesignatedPlaceOfTrial": false,
+    "caseTitle": "Brian Earl Spilner, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Birmingham, Alabama",
+    "respondents": [],
+    "practitioners": [],
+    "hasPendingItems": false,
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
+        "filingDate": "2019-12-11T15:25:55.007Z",
+        "filedBy": "Petr. Brian Earl Spilner"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Birmingham, Alabama",
+        "index": 2,
+        "filingDate": "2019-12-11T15:25:55.006Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "pk": "459925e4-db20-46e0-8348-47a98537edeb",
+    "docketNumber": "112-19",
+    "status": "Submitted"
+  },
+  {
+    "sk": "459925e4-db20-46e0-8348-47a98537edeb",
+    "pk": "112-19|case"
+  }
+]
