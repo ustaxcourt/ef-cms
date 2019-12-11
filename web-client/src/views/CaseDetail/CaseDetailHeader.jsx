@@ -1,10 +1,11 @@
-import { Button } from '../ustc-ui/Button/Button';
-import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
+import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UpdateCaseModalDialog } from './CaseDetailEdit/UpdateCaseModalDialog';
+import { UpdateCaseModalDialog } from '../CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const CaseDetailHeader = connect(
   {
@@ -16,13 +17,14 @@ export const CaseDetailHeader = connect(
   },
   ({
     caseDetailHeaderHelper,
+    className,
     formattedCaseDetail,
     hideActionButtons,
     openUpdateCaseModalSequence,
     showModal,
   }) => {
     return (
-      <div className="big-blue-header">
+      <div className={classNames(className, 'big-blue-header')}>
         <div className="grid-container">
           <div className="grid-row">
             <div className="tablet:grid-col-8">

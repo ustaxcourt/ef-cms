@@ -10,7 +10,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   const showActionRequired =
     !caseDetail.payGovId && user.role === USER_ROLES.petitioner;
   const documentDetailTab =
-    get(state.caseDetailPage.informationTab) || 'docketRecord';
+    get(state.caseDetailPage.primaryTab) || 'docketRecord';
   const form = get(state.form);
   const currentPage = get(state.currentPage);
   const caseIsPaid = caseDetail.payGovId && !form.paymentType;
@@ -145,7 +145,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
-    showCaseInformationPublic: isExternalUser,
+    showCaseInformationExternal: isExternalUser,
     showCaseNameForPrimary,
     showCaseNotes,
     showCreateOrderButton,

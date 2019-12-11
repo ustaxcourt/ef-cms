@@ -221,8 +221,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   let paperServicePdfBuffer;
   if (servedParties.paper.length > 0) {
-    let paperServicePdfData = pdfData;
-    const courtIssuedOrderDoc = await PDFDocument.load(pdfData);
+    const courtIssuedOrderDoc = await PDFDocument.load(newPdfData);
     const addressPages = [];
     let newPdfDoc = await PDFDocument.create();
 
@@ -259,7 +258,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
       });
     }
 
-    paperServicePdfData = await newPdfDoc.save();
+    const paperServicePdfData = await newPdfDoc.save();
     paperServicePdfBuffer = Buffer.from(paperServicePdfData);
   }
 
