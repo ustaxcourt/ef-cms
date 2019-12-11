@@ -1232,6 +1232,10 @@ Case.prototype.getConsolidationStatus = function({ caseEntity }) {
     };
   }
 
+  if (this.docketNumber === caseEntity.docketNumber) {
+    return { canConsolidate: false, reason: 'Cases are the same' };
+  }
+
   if (this.status !== caseEntity.status) {
     return { canConsolidate: false, reason: 'Case status is not the same' };
   }
@@ -1314,7 +1318,7 @@ Case.sortByDocketNumber = function(cases) {
  * @returns {Case} the lead Case entity
  */
 Case.findLeadCaseForCases = function(cases) {
-  const casesOrdered = Case.sortByDocketNumber(cases);
+  const casesOrdered = Case.sortByDocketNumber([...cases]);
   return casesOrdered.shift();
 };
 
