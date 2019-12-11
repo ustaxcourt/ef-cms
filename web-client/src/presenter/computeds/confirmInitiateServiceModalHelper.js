@@ -41,7 +41,6 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   });
 
   return {
-    confirmLabel: 'Yes, serve',
     contactsNeedingPaperService,
     showPaperAlert: contactsNeedingPaperService.length > 0,
   };

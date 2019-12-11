@@ -398,6 +398,11 @@ exports.setupTest = ({ useCases = {} } = {}) => {
         case '/search/no-matches':
           await test.runSequence('gotoCaseSearchNoMatchesSequence');
           break;
+        case `/print-preview/${test.caseId}`:
+          await test.runSequence('gotoPrintPreviewSequence', {
+            docketNumber: test.caseId,
+          });
+          break;
         case '/':
           await test.runSequence('gotoDashboardSequence');
           break;
