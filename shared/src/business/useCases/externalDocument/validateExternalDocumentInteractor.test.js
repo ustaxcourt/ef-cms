@@ -21,7 +21,7 @@ describe('validateExternalDocumentInteractor', () => {
 
     expect(errors).toEqual({
       category: VALIDATION_ERROR_MESSAGES.category,
-      documentType: VALIDATION_ERROR_MESSAGES.documentType,
+      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
     });
   });
 
