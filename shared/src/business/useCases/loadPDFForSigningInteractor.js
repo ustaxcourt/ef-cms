@@ -9,6 +9,7 @@ const { PDFDocument } = require('pdf-lib');
 
 exports.loadPDFForSigningInteractor = async ({
   applicationContext,
+  caseId,
   documentId,
   removeCover = false,
 }) => {
@@ -16,6 +17,7 @@ exports.loadPDFForSigningInteractor = async ({
     const pdfjsLib = await applicationContext.getPdfJs();
     let pdfData = await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
+      caseId,
       documentId,
     });
 
@@ -31,7 +33,6 @@ exports.loadPDFForSigningInteractor = async ({
     } else {
       formattedArrayBuffer = arrayBuffer;
     }
-
     return await pdfjsLib.getDocument(formattedArrayBuffer).promise;
   } catch (err) {
     throw new Error('error loading PDF');
