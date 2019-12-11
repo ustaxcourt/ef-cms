@@ -19,6 +19,7 @@ describe('serveCourtIssuedDocumentAction', () => {
   let serveCourtIssuedDocumentInteractorMock;
 
   beforeEach(() => {
+    jest.resetAllMocks();
     presenter.providers.applicationContext = {
       getUseCases: () => ({
         serveCourtIssuedDocumentInteractor: serveCourtIssuedDocumentInteractorMock,
@@ -27,7 +28,9 @@ describe('serveCourtIssuedDocumentAction', () => {
   });
 
   it('should call the interactor that serves court issued documents and generate a pdf url if a result is returned', async () => {
-    serveCourtIssuedDocumentInteractorMock = jest.fn().mockResolvedValue('123');
+    serveCourtIssuedDocumentInteractorMock = jest
+      .fn()
+      .mockResolvedValue({ size: 123, type: 'FakeBlob' });
     const result = await runAction(serveCourtIssuedDocumentAction, {
       modules: {
         presenter,
@@ -45,8 +48,9 @@ describe('serveCourtIssuedDocumentAction', () => {
       },
     });
 
+    expect(mockCreateObjectUrl).toHaveBeenCalled();
     expect(serveCourtIssuedDocumentInteractorMock).toHaveBeenCalled();
-    expect(result.output.pdfUrl).toBeDefined();
+    expect(result.output.pdfUrl).not.toBe(null);
   });
 
   it('should call the interactor that serves court issued documents and not generate a pdf url if a result is not returned', async () => {
