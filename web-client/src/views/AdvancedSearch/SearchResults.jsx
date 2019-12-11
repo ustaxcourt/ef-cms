@@ -30,11 +30,11 @@ export const SearchResults = connect(
                   <th>Docket</th>
                   <NonMobile>
                     <th>Date filed</th>
-                    <th>Case name</th>
+                    <th>Case title</th>
                     <th>State</th>
                   </NonMobile>
                   <Mobile>
-                    <th>Case name</th>
+                    <th>Case title</th>
                   </Mobile>
                 </tr>
               </thead>
