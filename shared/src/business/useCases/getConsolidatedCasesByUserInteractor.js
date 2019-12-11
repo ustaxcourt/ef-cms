@@ -1,3 +1,5 @@
+const { Case } = require('../entities/cases/Case');
+
 /**
  * getConsolidatedCasesByUserInteractor
  *
@@ -44,16 +46,23 @@ exports.getConsolidatedCasesByUserInteractor = async ({
         });
 
       if (caseMapping[leadCaseId]) {
-        caseMapping[leadCaseId].consolidatedCases = consolidatedCases.filter(
+        const caseConsolidatedCases = consolidatedCases.filter(
           consolidatedCase => consolidatedCase.caseId !== leadCaseId,
+        );
+        caseMapping[leadCaseId].consolidatedCases = Case.sortByDocketNumber(
+          caseConsolidatedCases,
         );
       } else {
         const leadCase = consolidatedCases.find(
           consolidatedCase => consolidatedCase.caseId === leadCaseId,
         );
 
-        leadCase.consolidatedCases = consolidatedCases.filter(
+        const caseConsolidatedCases = consolidatedCases.filter(
           consolidatedCase => consolidatedCase.caseId !== leadCaseId,
+        );
+
+        leadCase.consolidatedCases = Case.sortByDocketNumber(
+          caseConsolidatedCases,
         );
         caseMapping[leadCaseId] = leadCase;
       }

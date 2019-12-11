@@ -32,11 +32,25 @@ describe('addConsolidatedCaseInteractor', () => {
         docketNumber: '319-19',
         leadCaseId: 'aaaba5a9-b37b-479d-9201-067ec6e33aaa',
       },
+      'bbbba5a9-b37b-479d-9201-067ec6e33bbb': {
+        ...MOCK_CASE,
+        caseId: 'bbbba5a9-b37b-479d-9201-067ec6e33bbb',
+        createdAt: '2019-03-19T17:29:13.120Z',
+        docketNumber: '119-19',
+        leadCaseId: 'bbbba5a9-b37b-479d-9201-067ec6e33bbb',
+      },
       'c54ba5a9-b37b-479d-9201-067ec6e335bb': {
         ...MOCK_CASE,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         createdAt: '2019-05-19T17:29:13.120Z',
         docketNumber: '519-19',
+      },
+      'cccca5a9-b37b-479d-9201-067ec6e33ccc': {
+        ...MOCK_CASE,
+        caseId: 'cccca5a9-b37b-479d-9201-067ec6e33ccc',
+        createdAt: '2019-03-19T17:29:13.120Z',
+        docketNumber: '619-19',
+        leadCaseId: 'bbbba5a9-b37b-479d-9201-067ec6e33bbb',
       },
       'd44ba5a9-b37b-479d-9201-067ec6e335aa': {
         ...MOCK_CASE,
@@ -173,6 +187,19 @@ describe('addConsolidatedCaseInteractor', () => {
     expect(updateCaseMock).toHaveBeenCalledTimes(3);
     expect(result[0].leadCaseId).toEqual(
       '000ba5a9-b37b-479d-9201-067ec6e33000',
+    );
+  });
+
+  it('Should combine all cases when both the case and case to consolidate with are in separate consolidated sets', async () => {
+    const result = await addConsolidatedCaseInteractor({
+      applicationContext,
+      caseId: 'bbbba5a9-b37b-479d-9201-067ec6e33bbb',
+      caseIdToConsolidateWith: '111ba5a9-b37b-479d-9201-067ec6e33111',
+    });
+
+    expect(updateCaseMock).toHaveBeenCalledTimes(2);
+    expect(result[0].leadCaseId).toEqual(
+      'bbbba5a9-b37b-479d-9201-067ec6e33bbb',
     );
   });
 });
