@@ -935,7 +935,16 @@ hr.lighter {
   border-top: 1px solid color($theme-color-base-lighter);
 }
 
-.mobile-document-detail-tabs {
+.case-detail-primary-tabs__container {
+  background-color: color($theme-color-primary);
+}
+
+.case-detail-primary-tabs__tabs {
+  max-width: 1440px;
+  padding-right: 2rem;
+  padding-left: 2rem;
+  margin: 0 auto;
+
   @media only screen and (max-width: $medium-screen) {
     nav {
       display: none;
