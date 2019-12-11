@@ -16,7 +16,7 @@ const {
 const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
-const { includes } = require('lodash');
+const { includes, isEqual, reduce, some, values } = require('lodash');
 
 const VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments.',
@@ -31,7 +31,14 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Enter date of service',
   ],
-  documentType: 'Select a document type',
+  documentType: [
+    {
+      contains: 'contains an invalid value',
+      message:
+        'Proposed Stipulated Decision must be filed seperatly in each case',
+    },
+    'Select a document type',
+  ],
   freeText: 'Provide an answer',
   freeText2: 'Provide an answer',
   hasSecondarySupportingDocuments:
@@ -94,6 +101,7 @@ function ExternalDocumentInformationFactory() {}
 ExternalDocumentInformationFactory.get = documentMetadata => {
   let entityConstructor = function(rawProps) {
     this.attachments = rawProps.attachments;
+    this.casesParties = rawProps.casesParties;
     this.certificateOfService = rawProps.certificateOfService;
     this.certificateOfServiceDate = rawProps.certificateOfServiceDate;
     this.documentType = rawProps.documentType;
@@ -113,6 +121,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     this.secondaryDocument = rawProps.secondaryDocument;
     this.secondaryDocumentFile = rawProps.secondaryDocumentFile;
     this.secondarySupportingDocuments = rawProps.secondarySupportingDocuments;
+    this.selectedCases = rawProps.selectedCases;
     this.supportingDocuments = rawProps.supportingDocuments;
 
     if (this.secondaryDocument) {
@@ -148,6 +157,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
   let schema = {
     attachments: joi.boolean().required(),
+    casesParties: joi.object().optional(),
     certificateOfService: joi.boolean().required(),
     hasSupportingDocuments: joi.boolean().required(),
     primaryDocumentFile: joi.object().required(),
@@ -177,6 +187,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       .max(MAX_FILE_SIZE_BYTES)
       .integer(),
     secondarySupportingDocuments: joi.array().optional(),
+    selectedCases: joi
+      .array()
+      .items(joi.string())
+      .optional(),
     supportingDocuments: joi.array().optional(),
   };
 
@@ -234,17 +248,44 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   }
 
   if (
-    documentMetadata.partyPrimary !== true &&
-    documentMetadata.partySecondary !== true &&
-    documentMetadata.partyRespondent !== true
+    documentMetadata.selectedCases &&
+    documentMetadata.selectedCases.length > 1
   ) {
-    addProperty(
-      'partyPrimary',
-      joi
-        .boolean()
-        .invalid(false)
-        .required(),
-    );
+    if (documentMetadata.partyRespondent !== true) {
+      const casesWithAPartySelected = reduce(
+        documentMetadata.casesParties,
+        (accArray, parties, docketNumber) => {
+          if (some(values(parties))) {
+            accArray.push(docketNumber);
+          }
+          return accArray;
+        },
+        [],
+      );
+      if (!isEqual(documentMetadata.selectedCases, casesWithAPartySelected)) {
+        addProperty(
+          'partyPrimary',
+          joi
+            .boolean()
+            .invalid(false)
+            .required(),
+        );
+      }
+    }
+  } else {
+    if (
+      documentMetadata.partyPrimary !== true &&
+      documentMetadata.partySecondary !== true &&
+      documentMetadata.partyRespondent !== true
+    ) {
+      addProperty(
+        'partyPrimary',
+        joi
+          .boolean()
+          .invalid(false)
+          .required(),
+      );
+    }
   }
 
   joiValidationDecorator(
