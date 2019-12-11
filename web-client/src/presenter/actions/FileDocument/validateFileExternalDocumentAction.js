@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the next object in the path
  * @returns {object} the path to take next
  */
-export const validateFileDocumentAction = ({ get, path }) => {
+export const validateFileExternalDocumentAction = ({ get, path }) => {
   const casesToFileDocument = get(state.modal.casesToFileDocument);
 
   if (!isEmpty(casesToFileDocument)) {

@@ -1,8 +1,8 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { validateFileDocumentAction } from './validateFileDocumentAction';
+import { validateFileExternalDocumentAction } from './validateFileExternalDocumentAction';
 
-describe('validateFileDocumentAction', () => {
+describe('validateFileExternalDocumentAction', () => {
   let pathSuccessStub;
   let pathErrorStub;
 
@@ -17,7 +17,7 @@ describe('validateFileDocumentAction', () => {
   });
 
   it('should validate with success if there are selected cases with which to file a document', async () => {
-    await runAction(validateFileDocumentAction, {
+    await runAction(validateFileExternalDocumentAction, {
       modules: {
         presenter,
       },
@@ -34,7 +34,7 @@ describe('validateFileDocumentAction', () => {
   });
 
   it('should validate with an error if there are NO selected cases with which to file a document', async () => {
-    await runAction(validateFileDocumentAction, {
+    await runAction(validateFileExternalDocumentAction, {
       modules: {
         presenter,
       },
