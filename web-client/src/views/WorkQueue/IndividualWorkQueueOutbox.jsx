@@ -33,7 +33,7 @@ export const IndividualWorkQueueOutbox = connect(
               {workQueueHelper.showSentColumn && (
                 <th className="small">Sent</th>
               )}
-              <th>Case name</th>
+              <th>Case title</th>
               <th aria-label="Status Icon" className="padding-right-0">
                 &nbsp;
               </th>

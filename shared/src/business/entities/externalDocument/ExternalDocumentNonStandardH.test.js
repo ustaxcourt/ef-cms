@@ -11,10 +11,10 @@ describe('ExternalDocumentNonStandardH', () => {
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         category: VALIDATION_ERROR_MESSAGES.category,
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
         secondaryDocument: {
           category: VALIDATION_ERROR_MESSAGES.category,
-          documentType: VALIDATION_ERROR_MESSAGES.documentType,
+          documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
         },
       });
     });
@@ -48,7 +48,7 @@ describe('ExternalDocumentNonStandardH', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         secondaryDocument: {
           category: VALIDATION_ERROR_MESSAGES.category,
-          documentType: VALIDATION_ERROR_MESSAGES.documentType,
+          documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
           previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
         },
       });

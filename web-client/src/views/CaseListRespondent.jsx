@@ -20,7 +20,7 @@ export const CaseListRespondent = connect(
                 <span className="usa-sr-only">Lead Case Indicator</span>
               </th>
               <th>Docket number</th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th>Date filed</th>
             </tr>
           </thead>

@@ -1,4 +1,4 @@
-import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileDocument } from './FileDocument';
 import { FileDocumentReview } from './FileDocumentReview';
