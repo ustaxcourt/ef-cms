@@ -9,6 +9,6 @@ describe('setModalErrorAction', () => {
       },
     });
 
-    expect(result.state.modal.state).toEqual('Error message');
+    expect(result.state.modal.error).toEqual('Error message');
   });
 });
