@@ -44,7 +44,7 @@ ashfordsChambers;judge;Judge;Ashford;Judge Ashford;jashford;jashford@ustaxcourt.
 ashfordsChambers;chambers;Lisa;Allen;Lisa Allen;lallen;lallen@ustaxcourt.gov;lallen@example.com;;
 ashfordsChambers;chambers;Maria;Castillo-Valle;Maria Castillo-Valle;mcastillo-valle;mcastillo-valle@ustaxcourt.gov;mcastillo-valle@example.com;;
 ashfordsChambers;chambers;Nicole;Stenchever;Nicole Stenchever;nstenchever;nstenchever@ustaxcourt.gov;nstenchever@example.com;;
-buchsChambers;judge;Judge;Buch;Judge Buch;jbuch;jbuch@ustaxcourt.gov;jbuch@example.com;;
+buchsChambers;judge;Judge;Buch;Judge Buch;jbuch;jbuch@ustaxcourt.gov;jbuch@example.com;Ronald L. Buch;Judge
 buchsChambers;chambers;Ann;Murray;Ann Murray;amurray;amurray@ustaxcourt.gov;amurray@example.com;;
 buchsChambers;chambers;Chelsea;Bissell;Chelsea Bissell;cbissell;cbissell@ustaxcourt.gov;cbissell@example.com;;
 buchsChambers;chambers;Katherine;Waibler;Katherine Waibler;kwaibler;kwaibler@ustaxcourt.gov;kwaibler@example.com;;
@@ -88,7 +88,7 @@ holmesChambers;chambers;Michelle;Alvarez;Michelle Alvarez;malverez;malverez@usta
 holmesChambers;chambers;Ryan;Daily;Ryan Daily;rdaily;rdaily@ustaxcourt.gov;rdaily@example.com;;
 holmesChambers;chambers;Christina;Strasser;Christina Strasser;cstrasser;cstrasser@ustaxcourt.gov;cstrasser@example.com;;
 jonesChambers;judge;Judge;Jones;Judge Jones;jjones;jjones@ustaxcourt.gov;jjones@example.com;Courtney D. Jones;Judge
-jonesChambers;chambers;Tina;Roebuck;Tina Roebuck;troebuck;troebuck@ustaxcourt.gov;troebuck@example.com;Ronald L. Buch;Judge
+jonesChambers;chambers;Tina;Roebuck;Tina Roebuck;troebuck;troebuck@ustaxcourt.gov;troebuck@example.com;;
 kerrigansChambers;judge;Judge;Kerrigan;Judge Kerrigan;jkerrigan;jkerrigan@ustaxcourt.gov;jkerrigan@example.com;Kathleen Kerrigan;Judge
 kerrigansChambers;chambers;Daizia;McGhee;Daizia McGhee;dmcghee;dmcghee@ustaxcourt.gov;dmcghee@example.com;;
 kerrigansChambers;chambers;Lanette;Hushon;Lanette Hushon;lhushon;lhushon@ustaxcourt.gov;lhushon@example.com;;
