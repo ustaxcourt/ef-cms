@@ -111,8 +111,6 @@ exports.userMap = {
     'custom:role': 'judge',
     email: 'judgeCarluzzo',
     judgeFullName: 'Lewis R. Carluzzo',
-    judgeTitle: 'Special Trial Judge',
-    name: 'Special Trial Judge Carluzzo',
     role: 'judge',
     userId: 'dabbad03-18d0-43ec-bafb-654e83405416',
   },
