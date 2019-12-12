@@ -16,7 +16,7 @@ const {
 const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
-const { includes, isEqual, reduce, some, values } = require('lodash');
+const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
 
 const VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments.',
@@ -262,7 +262,12 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
         },
         [],
       );
-      if (!isEqual(documentMetadata.selectedCases, casesWithAPartySelected)) {
+      if (
+        !isEqual(
+          sortBy(documentMetadata.selectedCases),
+          sortBy(casesWithAPartySelected),
+        )
+      ) {
         addProperty(
           'partyPrimary',
           joi
