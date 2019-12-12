@@ -86,16 +86,21 @@ export const fileDocumentHelper = (get, applicationContext) => {
     secondarySupportingDocumentCount && secondarySupportingDocumentCount >= 5
   );
 
-  const consolidatedCaseMap = (caseDetail.consolidatedCases || []).reduce(
-    (acc, consolidatedCase) => {
-      acc[consolidatedCase.docketNumber] = consolidatedCase;
+  const selectedCasesMap = (form.selectedCases || []).reduce(
+    (acc, docketNumber) => {
+      acc[docketNumber] = true;
       return acc;
     },
     {},
   );
 
-  const selectedCasesAsCase = (form.selectedCases || [])
-    .map(docketNumber => consolidatedCaseMap[docketNumber])
+  const selectedCasesAsCase = (caseDetail.consolidatedCases || [])
+    .reduce((acc, consolidatedCase) => {
+      if (selectedCasesMap[consolidatedCase.docketNumber]) {
+        acc.push({ ...consolidatedCase });
+      }
+      return acc;
+    }, [])
     .map(consolidatedCase => {
       consolidatedCase.showSecondaryParty =
         consolidatedCase.partyType === PARTY_TYPES.petitionerSpouse ||
