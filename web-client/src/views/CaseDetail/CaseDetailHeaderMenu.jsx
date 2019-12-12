@@ -64,6 +64,7 @@ export const CaseDetailHeaderMenu = connect(
                     <li className="usa-nav__submenu-item">
                       <Button
                         icon="calendar-alt"
+                        id="button-add-deadline"
                         onClick={() => {
                           toggleMenuSequence({
                             caseDetailMenu: 'CaseDetailMenu',
@@ -78,6 +79,7 @@ export const CaseDetailHeaderMenu = connect(
                       <li className="usa-nav__submenu-item">
                         <Button
                           icon="clipboard-list"
+                          id="button-create-order"
                           onClick={() => {
                             toggleMenuSequence({
                               caseDetailMenu: 'CaseDetailMenu',
