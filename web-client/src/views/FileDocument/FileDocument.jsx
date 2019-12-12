@@ -27,7 +27,7 @@ export const FileDocument = connect(
     showModal,
   }) => {
     return (
-      <React.Fragment>
+      <div className="grid-container">
         <Focus>
           <h1
             className="margin-bottom-105"
@@ -81,7 +81,7 @@ export const FileDocument = connect(
         {showModal === 'WhatCanIIncludeModalOverlay' && (
           <WhatCanIIncludeModalOverlay />
         )}
-      </React.Fragment>
+      </div>
     );
   },
 );
