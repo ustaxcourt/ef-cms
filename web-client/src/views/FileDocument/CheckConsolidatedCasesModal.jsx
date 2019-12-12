@@ -19,7 +19,7 @@ export const CheckConsolidatedCasesModal = connect(
         confirmLabel="Add to Case(s)"
         title="Would You Like To File Your Document In Multiple Cases?"
         onCancelSequence="clearModalSequence"
-        onConfirmSequence="fileDocumentToConsolidateCasesSequence"
+        onConfirmSequence="setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence"
       >
         <p className="margin-top-0">
           This case is part of a consolidated group. Please select which cases
