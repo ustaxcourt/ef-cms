@@ -72,7 +72,7 @@ export const CaseDetailHeaderMenu = connect(
                           openCreateCaseDeadlineModalSequence();
                         }}
                       >
-                        Add deadline
+                        Add Deadline
                       </Button>
                     </li>
                     {caseDetailHeaderHelper.showCreateOrderButton && (
@@ -87,7 +87,7 @@ export const CaseDetailHeaderMenu = connect(
                             openCreateOrderChooseTypeModalSequence();
                           }}
                         >
-                          Create order
+                          Create Order
                         </Button>
                       </li>
                     )}
@@ -98,7 +98,7 @@ export const CaseDetailHeaderMenu = connect(
                           href={`/case-detail/${caseDetail.docketNumber}/add-docket-entry`}
                           icon="plus-circle"
                         >
-                          Add Docket entry
+                          Add Docket Entry
                         </Button>
                       </li>
                     )}
@@ -114,7 +114,7 @@ export const CaseDetailHeaderMenu = connect(
                             openUpdateCaseModalSequence();
                           }}
                         >
-                          Edit case status/ caption
+                          Edit Case Status/Caption
                         </Button>
                       </li>
                     )}
