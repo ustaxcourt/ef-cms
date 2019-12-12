@@ -9,6 +9,7 @@ export const supportingDocumentFreeTextTypes = [
 
 export const fileDocumentHelper = (get, applicationContext) => {
   const { CATEGORY_MAP, PARTY_TYPES } = applicationContext.getConstants();
+  const { formatCase } = applicationContext.getUtilities();
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
@@ -105,7 +106,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
       consolidatedCase.showSecondaryParty =
         consolidatedCase.partyType === PARTY_TYPES.petitionerSpouse ||
         consolidatedCase.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
-      return consolidatedCase;
+      return formatCase(applicationContext, consolidatedCase);
     });
 
   // filing document for consolidated cases
