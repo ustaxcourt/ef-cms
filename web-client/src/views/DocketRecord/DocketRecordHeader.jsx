@@ -6,7 +6,6 @@ import React from 'react';
 
 export const DocketRecordHeader = connect(
   {
-    caseDetailHelper: state.caseDetailHelper,
     docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableDocketRecordSequence:
@@ -17,7 +16,6 @@ export const DocketRecordHeader = connect(
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   ({
-    caseDetailHelper,
     docketRecordHelper,
     formattedCaseDetail,
     navigateToPrintableDocketRecordSequence,
@@ -37,15 +35,6 @@ export const DocketRecordHeader = connect(
         <div className="grid-container padding-0 docket-record-header">
           <div className="grid-row">
             <div className="tablet:grid-col-10">
-              {caseDetailHelper.showAddDocketEntryButton && (
-                <Button
-                  href={`/case-detail/${formattedCaseDetail.docketNumber}/add-docket-entry`}
-                  id="button-add-record"
-                >
-                  <FontAwesomeIcon icon="plus-circle" size="1x" /> Add Docket
-                  Entry
-                </Button>
-              )}
               {docketRecordHelper.showFileDocumentButton && (
                 <Button
                   href={`/case-detail/${formattedCaseDetail.docketNumber}/before-you-file-a-document`}
