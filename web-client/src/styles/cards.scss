@@ -94,6 +94,13 @@
   &.less {
     margin-top: 1.5rem;
   }
+  p {
+    margin-top: 0;
+    margin-bottom: 25px;
+    &.label {
+      margin-bottom: 4px;
+    }
+  }
 }
 
 .party-information,
