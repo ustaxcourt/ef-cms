@@ -87,15 +87,14 @@ export const fileDocumentHelper = (get, applicationContext) => {
   );
 
   // filing document for consolidated cases
-  const selectedConsolidatedCases = get(state.modal.casesToFileDocument);
+  const selectedCases = get(state.form.selectedCases);
   let formattedSelectedConsolidatedCases = '';
 
-  if (selectedConsolidatedCases) {
-    const selectedDocketNumbers = Object.keys(selectedConsolidatedCases);
+  if (selectedCases) {
     formattedSelectedConsolidatedCases = [
-      selectedDocketNumbers.slice(0, -1).join(', '),
-      selectedDocketNumbers.slice(-1)[0],
-    ].join(selectedDocketNumbers.length < 2 ? '' : ', & ');
+      selectedCases.slice(0, -1).join(', '),
+      selectedCases.slice(-1)[0],
+    ].join(selectedCases.length < 2 ? '' : ', & ');
   }
 
   let exported = {
