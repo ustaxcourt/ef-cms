@@ -234,4 +234,84 @@ describe('caseDetailHeaderHelper', () => {
 
     expect(result.showConsolidatedCaseIcon).toEqual(false);
   });
+
+  it('should show the case detail header menu and add docket entry and create order buttons if current page is CaseDetailInternal and user role is docketclerk', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailInternal',
+        form: {},
+      },
+    });
+    expect(result.showCaseDetailHeaderMenu).toEqual(true);
+    expect(result.showAddDocketEntryButton).toEqual(true);
+    expect(result.showCreateOrderButton).toEqual(true);
+  });
+
+  it('should not show add docket entry button if current page is not CaseDetailInternal or user role is not docketclerk', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '789',
+    };
+    let result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+      },
+    });
+    expect(result.showAddDocketEntryButton).toEqual(false);
+
+    result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: User.ROLES.petitioner,
+          userId: '789',
+        },
+      },
+    });
+    expect(result.showAddDocketEntryButton).toEqual(false);
+  });
+
+  it('should not show case detail header menu or create order button if current page is not CaseDetailInternal or user role is petitioner', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '789',
+    };
+    let result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+      },
+    });
+    expect(result.showCaseDetailHeaderMenu).toEqual(false);
+    expect(result.showCreateOrderButton).toEqual(false);
+
+    result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        user: {
+          role: User.ROLES.petitioner,
+          userId: '789',
+        },
+      },
+    });
+    expect(result.showCaseDetailHeaderMenu).toEqual(false);
+    expect(result.showCreateOrderButton).toEqual(false);
+  });
 });
