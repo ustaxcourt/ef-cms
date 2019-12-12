@@ -80,6 +80,17 @@ export const CaseDetailHeader = connect(
 
             {!hideActionButtons && caseDetailHeaderHelper.showExternalButtons && (
               <div className="tablet:grid-col-4">
+                {caseDetailHeaderHelper.showFileDocumentButton && (
+                  <Button
+                    className="tablet-full-width push-right margin-right-0"
+                    href={`/case-detail/${formattedCaseDetail.docketNumber}/before-you-file-a-document`}
+                    icon="file"
+                    id="button-file-document"
+                  >
+                    File a Document
+                  </Button>
+                )}
+
                 {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
                   <Button
                     className="tablet-full-width push-right margin-right-0"

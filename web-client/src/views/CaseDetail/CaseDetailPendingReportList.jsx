@@ -26,7 +26,7 @@ export const CaseDetailPendingReportList = connect(
           <Button
             link
             aria-describedby="tab-pending-report"
-            className="push-right margin-top-2"
+            className="margin-top-neg-1 margin-bottom-1"
             href={`/case-detail/${formattedCaseDetail.docketNumber}/pending-report`}
             icon="print"
           >

@@ -27,11 +27,20 @@ export const CaseDeadlinesInternal = connect(
           </p>
         )}
         {caseDetailHelper.showCaseDeadlinesInternal && (
-          <table className="usa-table row-border-only subsection deadlines">
+          <table className="usa-table docket-record row-border-only subsection deadlines">
+            <thead>
+              <tr>
+                <th>Due Date</th>
+                <th></th>
+                <th>Description</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
             <tbody>
               {caseDeadlines.map((item, idx) => (
                 <tr key={idx}>
-                  <td className="smaller-column center-column semi-bold">
+                  <td className="smaller-column semi-bold">
                     {item.deadlineDateFormatted}
                   </td>
                   <td className="overdue smaller-column center-column semi-bold">
