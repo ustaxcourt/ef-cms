@@ -15,6 +15,8 @@ module.exports = {
     .handler,
   fileExternalDocumentToCaseLambda: require('./documents/fileExternalDocumentToCaseLambda')
     .handler,
+  fileExternalDocumentToConsolidatedCasesLambda: require('./documents/fileExternalDocumentToConsolidatedCasesLambda')
+    .handler,
   getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrlLambda')
     .handler,
   saveIntermediateDocketEntryLambda: require('./documents/saveIntermediateDocketEntryLambda')
