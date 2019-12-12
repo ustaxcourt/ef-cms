@@ -82,8 +82,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for .case-detail-menu to be visible',
-      'click element .case-detail-menu',
+      'wait for .case-detail-menu__button to be visible',
+      'click element .case-detail-menu__button',
       'wait for #button-create-order to be visible',
       'click element #button-create-order',
       'wait for #eventCode to be visible',
