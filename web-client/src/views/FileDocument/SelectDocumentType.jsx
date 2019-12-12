@@ -27,7 +27,6 @@ export const SelectDocumentType = connect(
     reasons,
     showModal,
   }) => {
-    console.log('fileDocumentHelper', fileDocumentHelper);
     return (
       <React.Fragment>
         <div className="grid-container">
