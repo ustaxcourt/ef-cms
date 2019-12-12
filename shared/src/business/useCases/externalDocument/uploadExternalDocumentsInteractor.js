@@ -8,6 +8,7 @@ exports.uploadExternalDocumentsInteractor = async ({
   applicationContext,
   documentFiles,
   documentMetadata,
+  leadCaseId,
   progressFunctions,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -73,9 +74,22 @@ exports.uploadExternalDocumentsInteractor = async ({
 
   const documentIds = await Promise.all(uploadedDocumentPromises);
 
-  return await applicationContext.getUseCases().fileExternalDocumentInteractor({
-    applicationContext,
-    documentIds,
-    documentMetadata,
-  });
+  if (leadCaseId) {
+    return await applicationContext
+      .getUseCases()
+      .fileExternalDocumentForConsolidatedInteractor({
+        applicationContext,
+        documentIds,
+        documentMetadata,
+        leadCaseId,
+      });
+  } else {
+    return await applicationContext
+      .getUseCases()
+      .fileExternalDocumentInteractor({
+        applicationContext,
+        documentIds,
+        documentMetadata,
+      });
+  }
 };
