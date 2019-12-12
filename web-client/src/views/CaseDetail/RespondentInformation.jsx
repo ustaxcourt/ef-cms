@@ -1,7 +1,6 @@
 import { AddRespondentModal } from './AddRespondentModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { EditRespondentsModal } from './EditRespondentsModal';
-import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { RespondentExistsModal } from './RespondentExistsModal';
@@ -198,9 +197,6 @@ const RespondentInformation = connect(
               </div>
             </div>
           </div>
-        )}
-        {caseDetailHelper.showEditSecondaryContactModal && (
-          <EditSecondaryContactModal />
         )}
         {showModal === 'AddRespondentModal' && <AddRespondentModal />}
         {showModal === 'EditRespondentsModal' && <EditRespondentsModal />}
