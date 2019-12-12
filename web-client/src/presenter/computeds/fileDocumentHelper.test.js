@@ -310,6 +310,28 @@ describe('fileDocumentHelper', () => {
       ).toEqual('01/01/19');
     });
 
+    describe('selected cases (consolidated cases)', () => {
+      it('formats one selected case', () => {
+        state.form.selectedCases = ['101-19'];
+        const result = runCompute(fileDocumentHelper, { state });
+        expect(result.formattedSelectedCases).toEqual('101-19');
+      });
+
+      it('formats two selected cases', () => {
+        state.form.selectedCases = ['100-19', '101-19'];
+        const result = runCompute(fileDocumentHelper, { state });
+        expect(result.formattedSelectedCases).toEqual('100-19 & 101-19');
+      });
+
+      it('formats three selected cases', () => {
+        state.form.selectedCases = ['100-19', '101-19', '102-19'];
+        const result = runCompute(fileDocumentHelper, { state });
+        expect(result.formattedSelectedCases).toEqual(
+          '100-19, 101-19 & 102-19',
+        );
+      });
+    });
+
     describe('for secondary supporting document', () => {
       it('shows Add Secondary Supporting Document button and not limit reached message when secondarySupportingDocuments is undefined', () => {
         const result = runCompute(fileDocumentHelper, { state });

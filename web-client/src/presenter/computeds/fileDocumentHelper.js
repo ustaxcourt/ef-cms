@@ -88,18 +88,18 @@ export const fileDocumentHelper = (get, applicationContext) => {
 
   // filing document for consolidated cases
   const selectedCases = get(state.form.selectedCases);
-  let formattedSelectedConsolidatedCases = '';
+  let formattedSelectedCases = '';
 
   if (selectedCases) {
-    formattedSelectedConsolidatedCases = [
+    formattedSelectedCases = [
       selectedCases.slice(0, -1).join(', '),
       selectedCases.slice(-1)[0],
-    ].join(selectedCases.length < 2 ? '' : ', & ');
+    ].join(selectedCases.length < 2 ? '' : ' & ');
   }
 
   let exported = {
     certificateOfServiceDateFormatted,
-    formattedSelectedConsolidatedCases,
+    formattedSelectedCases,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
