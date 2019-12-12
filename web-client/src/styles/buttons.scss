@@ -32,7 +32,7 @@
   }
 
   &.mobile-sort-docket-button.usa-button--unstyled {
-    margin-bottom: 12px;
+    padding-left: 16px;
     color: color($theme-color-base-darkest);
     text-decoration: none;
 
@@ -40,6 +40,10 @@
       margin-left: 5px;
       color: color($theme-color-primary);
     }
+  }
+
+  &.usa-button--outline {
+    background-color: $color-white;
   }
 
   &.usa-button--unstyled {
