@@ -44,10 +44,10 @@ export const uploadExternalDocumentsAction = async ({
 
   const progressFunctions = setupPercentDone(documentFiles, store);
 
-  let caseDetail;
+  let cases;
 
   try {
-    caseDetail = await applicationContext
+    cases = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor({
         applicationContext,
@@ -60,20 +60,41 @@ export const uploadExternalDocumentsAction = async ({
     return path.error();
   }
 
-  const pendingDocuments = caseDetail.documents.filter(
-    document => document.processingStatus === 'pending',
-  );
+  const getPendingDocumentsForCase = caseDetail =>
+    caseDetail.documents.filter(
+      document => document.processingStatus === 'pending',
+    );
+
+  let pendingDocuments = [];
+  let caseToReturn;
+
+  if (Array.isArray(cases)) {
+    cases.forEach(caseDetail => {
+      pendingDocuments.push(...getPendingDocumentsForCase(caseDetail));
+      if (
+        caseDetail.leadCaseId &&
+        caseDetail.leadCaseId === caseDetail.caseId
+      ) {
+        caseToReturn = caseDetail; // TODO: Unsure if this is the best approach
+      }
+    });
+  } else {
+    pendingDocuments = getPendingDocumentsForCase(cases);
+    caseToReturn = cases;
+  }
+
   const addCoversheet = document => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      caseId: caseDetail.caseId,
+      caseId: document.caseId,
       documentId: document.documentId,
     });
   };
+
   await Promise.all(pendingDocuments.map(addCoversheet));
 
   return path.success({
-    caseDetail,
+    caseDetail: caseToReturn,
     caseId: docketNumber,
     documentsFiled: documentMetadata,
   });
