@@ -86,8 +86,52 @@ export const fileDocumentHelper = (get, applicationContext) => {
     secondarySupportingDocumentCount && secondarySupportingDocumentCount >= 5
   );
 
+  const selectedCasesMap = (form.selectedCases || []).reduce(
+    (acc, docketNumber) => {
+      acc[docketNumber] = true;
+      return acc;
+    },
+    {},
+  );
+
+  const selectedCasesAsCase = (caseDetail.consolidatedCases || [])
+    .reduce((acc, consolidatedCase) => {
+      if (selectedCasesMap[consolidatedCase.docketNumber]) {
+        acc.push({ ...consolidatedCase });
+      }
+      return acc;
+    }, [])
+    .map(consolidatedCase => {
+      consolidatedCase.showSecondaryParty =
+        consolidatedCase.partyType === PARTY_TYPES.petitionerSpouse ||
+        consolidatedCase.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
+      return consolidatedCase;
+    });
+
+  // filing document for consolidated cases
+  let selectedDocketNumbers = get(state.form.selectedCases);
+  let formattedDocketNumbers = null;
+
+  if (selectedDocketNumbers) {
+    // convert to Case entity-like object to use entity method
+    selectedDocketNumbers = selectedDocketNumbers.map(docketNumber => ({
+      docketNumber,
+    }));
+
+    const sortedDocketNumbers = applicationContext
+      .getEntityConstructors()
+      .Case.sortByDocketNumber(selectedDocketNumbers)
+      .map(({ docketNumber }) => docketNumber);
+
+    formattedDocketNumbers = [
+      sortedDocketNumbers.slice(0, -1).join(', '),
+      sortedDocketNumbers.slice(-1)[0],
+    ].join(sortedDocketNumbers.length < 2 ? '' : ' & ');
+  }
+
   let exported = {
     certificateOfServiceDateFormatted,
+    formattedDocketNumbers,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
@@ -101,11 +145,13 @@ export const fileDocumentHelper = (get, applicationContext) => {
         form.secondaryDocumentFile &&
         objectionDocumentTypes.includes(form.secondaryDocument.documentType),
     },
+    selectedCasesAsCase,
     showAddSecondarySupportingDocuments,
     showAddSecondarySupportingDocumentsLimitReached,
     showAddSupportingDocuments,
     showAddSupportingDocumentsLimitReached,
     showFilingIncludes,
+    showMultiDocumentFilingPartyForm: !!form.selectedCases,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentInclusionsForm,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
