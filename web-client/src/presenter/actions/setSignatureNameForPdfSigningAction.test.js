@@ -33,25 +33,34 @@ describe('setSignatureNameForPdfSigningAction', () => {
   });
 
   it('sets the chamber judge for chamber users', async () => {
+    judgeUser.judgeFullName = 'Robert N. Armen, Jr.';
+    judgeUser.judgeTitle = 'Special Trial Judge';
     user.section = 'armenChambers';
     const result = await runAction(setSignatureNameForPdfSigningAction, {
       modules: {
         presenter,
       },
     });
-    expect(result.state.pdfForSigning.nameForSigning).toEqual('Judge Armen');
-    expect(result.state.pdfForSigning.nameForSigningLine2).toEqual('');
+    expect(result.state.pdfForSigning.nameForSigning).toEqual(
+      'Robert N. Armen, Jr.',
+    );
+    expect(result.state.pdfForSigning.nameForSigningLine2).toEqual(
+      'Special Trial Judge',
+    );
   });
 
   it('sets special trial for special trial judge', async () => {
-    judgeUser.name = 'Special Trial Judge Armen';
+    judgeUser.judgeFullName = 'Robert N. Armen, Jr.';
+    judgeUser.judgeTitle = 'Special Trial Judge';
     user.section = 'armenChambers';
     const result = await runAction(setSignatureNameForPdfSigningAction, {
       modules: {
         presenter,
       },
     });
-    expect(result.state.pdfForSigning.nameForSigning).toEqual('Judge Armen');
+    expect(result.state.pdfForSigning.nameForSigning).toEqual(
+      'Robert N. Armen, Jr.',
+    );
     expect(result.state.pdfForSigning.nameForSigningLine2).toEqual(
       'Special Trial Judge',
     );

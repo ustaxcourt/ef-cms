@@ -32,7 +32,9 @@
     "section": "armensChambers",
     "pk": "dabbad00-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "email": "judgeArmen"
+    "email": "judgeArmen",
+    "judgeFullName": "Robert N. Armen, Jr.",
+    "judgeTitle": "Special Trial Judge"
   },
   {
     "pk": "armensChambers|user",
@@ -49,7 +51,9 @@
     "section": "ashfordsChambers",
     "pk": "dabbad01-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad01-18d0-43ec-bafb-654e83405416",
-    "email": "judgeAshford"
+    "email": "judgeAshford",
+    "judgeFullName": "Tamara W. Ashford",
+    "judgeTitle": "Judge"
   },
   {
     "pk": "ashfordsChambers|user",
@@ -66,7 +70,9 @@
     "section": "buchsChambers",
     "pk": "dabbad02-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
-    "email": "judgeBuch"
+    "email": "judgeBuch",
+    "judgeFullName": "Ronald L. Buch",
+    "judgeTitle": "Judge"
   },
   {
     "pk": "buchsChambers|user",
@@ -83,7 +89,9 @@
     "section": "carluzzosChambers",
     "pk": "dabbad03-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
-    "email": "judgeCarluzzo"
+    "email": "judgeCarluzzo",
+    "judgeFullName": "Lewis R. Carluzzo",
+    "judgeTitle": "Chief Special Trial Judge"
   },
   {
     "pk": "carluzzosChambers|user",
@@ -100,7 +108,9 @@
     "section": "cohensChambers",
     "pk": "dabbad04-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
-    "email": "judgeCohen"
+    "email": "judgeCohen",
+    "judgeFullName": "Mary Ann Cohen",
+    "judgeTitle": "Judge"
   },
   {
     "pk": "cohensChambers|user",
@@ -117,7 +127,9 @@
     "section": "gustafsonsChambers",
     "pk": "dabbad05-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad05-18d0-43ec-bafb-654e83405416",
-    "email": "judgeGustafson"
+    "email": "judgeGustafson",
+    "judgeFullName": "David Gustafson",
+    "judgeTitle": "Judge"
   },
   {
     "pk": "gustafsonsChambers|user",
@@ -134,7 +146,9 @@
     "section": "pughsChambers",
     "pk": "dabbad06-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad06-18d0-43ec-bafb-654e83405416",
-    "email": "judgePugh"
+    "email": "judgePugh",
+    "judgeFullName": "Cary Douglas Pugh",
+    "judgeTitle": "Judge"
   },
   {
     "pk": "pughsChambers|user",
@@ -151,7 +165,9 @@
     "section": "urdasChambers",
     "pk": "dabbad0a-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad0a-18d0-43ec-bafb-654e83405416",
-    "email": "judgeUrda"
+    "email": "judgeUrda",
+    "judgeFullName": "Patrick J. Urda",
+    "judgeTitle": "Judge"
   },
   {
     "pk": "urdasChambers|user",
