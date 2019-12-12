@@ -15,12 +15,12 @@ module.exports = [
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19',
   {
     actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
     ],
     notes: 'checks a11y of case information tab panel',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=tab-case-info',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=tab-case-information',
   },
   {
     actions: [
@@ -82,11 +82,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-draft-documents to be visible',
-      'click element #tab-draft-documents',
-      'wait for #button-create-order to be visible',
+      'click element #case-detail-menu-button',
       'click element #button-create-order',
-      'wait for #eventCode to be visible',
       'set field #eventCode to ODD',
       'check field #eventCode',
     ],
@@ -96,8 +93,10 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-petitioner to be visible',
+      'click element #tab-petitioner',
       'wait for #practitioner-search-field to be visible',
       'set field #practitioner-search-field to GL1111',
       'check field #practitioner-search-field',
@@ -110,8 +109,10 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-petitioner to be visible',
+      'click element #tab-petitioner',
       'wait for button#edit-practitioners-button to be visible',
       'click element button#edit-practitioners-button',
       'wait for #practitioner-representing-0 to be visible',
@@ -122,8 +123,10 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-respondent to be visible',
+      'click element #tab-respondent',
       'wait for #respondent-search-field to be visible',
       'set field #respondent-search-field to WN7777',
       'check field #respondent-search-field',
@@ -136,8 +139,10 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-respondent to be visible',
+      'click element #tab-respondent',
       'wait for button#edit-respondents-button to be visible',
       'click element button#edit-respondents-button',
       'wait for #respondent-0 to be visible',
@@ -148,8 +153,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-draft-documents to be visible',
-      'click element #tab-draft-documents',
+      'wait for #tab-in-progress to be visible',
+      'click element #tab-in-progress',
       'wait for button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"] to be visible',
       'click element button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"]',
     ],
@@ -161,6 +166,8 @@ module.exports = [
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-order/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/sign',
   {
     actions: [
+      'wait for .case-detail-menu to be visible',
+      'click element .case-detail-menu',
       'wait for #button-add-deadline to be visible',
       'click element #button-add-deadline',
       'wait for #deadline-date-legend to be visible',
@@ -192,8 +199,8 @@ module.exports = [
 
   {
     actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
       'wait for #remove-from-trial-session-btn to be visible',
       'click element #remove-from-trial-session-btn',
       'wait for #remove-from-trial-session-modal to be visible',
@@ -204,8 +211,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
       'wait for .high-priority-btn to be visible',
       'click element .high-priority-btn',
       'wait for #prioritize-case-modal to be visible',
@@ -216,8 +223,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
       'wait for #remove-high-priority-btn to be visible',
       'click element #remove-high-priority-btn',
       'wait for #unprioritize-modal to be visible',
@@ -228,8 +235,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
       'wait for #add-to-trial-session-btn to be visible',
       'click element #add-to-trial-session-btn',
       'wait for #add-to-trial-session-modal to be visible',

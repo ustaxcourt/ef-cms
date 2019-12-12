@@ -24,7 +24,7 @@ export const IndividualWorkQueueInbox = connect(
                 <span className="padding-left-2px">Docket</span>
               </th>
               <th className="small">Received</th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th aria-label="Status Icon" className="padding-right-0">
                 &nbsp;
               </th>

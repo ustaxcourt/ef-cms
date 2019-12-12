@@ -25,7 +25,7 @@ export const IndividualWorkQueueBatched = connect(
                 <span className="padding-left-2px">Docket</span>
               </th>
               <th>Filed</th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th aria-label="Status Icon padding-right-0">&nbsp;</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}

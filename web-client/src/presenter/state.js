@@ -16,6 +16,7 @@ import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContacts
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
+import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
@@ -92,6 +93,7 @@ export const state = {
   caseDetailHeaderHelper,
   caseDetailHelper,
   caseDetailPage: {},
+  caseDetailSubnavHelper,
   caseInformationHelper,
   caseTypeDescriptionHelper,
   caseTypes: [],

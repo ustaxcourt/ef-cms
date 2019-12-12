@@ -1,30 +1,28 @@
-import { Button } from '../ustc-ui/Button/Button';
-import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
+import { Button } from '../../ustc-ui/Button/Button';
+import { CaseDetailHeaderMenu } from './CaseDetailHeaderMenu';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UpdateCaseModalDialog } from './CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { props, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const CaseDetailHeader = connect(
   {
     caseDetailHeaderHelper: state.caseDetailHeaderHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     hideActionButtons: props.hideActionButtons,
-    openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
-    showModal: state.showModal,
   },
   ({
     caseDetailHeaderHelper,
+    className,
     formattedCaseDetail,
     hideActionButtons,
-    openUpdateCaseModalSequence,
-    showModal,
   }) => {
     return (
-      <div className="big-blue-header">
+      <div className={classNames(className, 'big-blue-header')}>
         <div className="grid-container">
-          <div className="grid-row">
+          <div className="display-flex flex-row flex-justify">
             <div className="tablet:grid-col-8">
               <div className="margin-bottom-1">
                 <h1 className="heading-2 captioned" tabIndex="-1">
@@ -80,7 +78,7 @@ export const CaseDetailHeader = connect(
               </p>
             </div>
 
-            {!hideActionButtons && (
+            {!hideActionButtons && caseDetailHeaderHelper.showExternalButtons && (
               <div className="tablet:grid-col-4">
                 {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
                   <Button
@@ -111,26 +109,10 @@ export const CaseDetailHeader = connect(
                     File First IRS Document
                   </Button>
                 )}
-
-                {caseDetailHeaderHelper.showEditCaseButton && (
-                  <>
-                    <Button
-                      className="tablet-full-width push-right margin-right-0"
-                      icon="edit"
-                      id="edit-case-context-button"
-                      onClick={() => {
-                        openUpdateCaseModalSequence();
-                      }}
-                    >
-                      Edit
-                    </Button>
-                    {showModal == 'UpdateCaseModalDialog' && (
-                      <UpdateCaseModalDialog />
-                    )}
-                  </>
-                )}
               </div>
             )}
+
+            {!hideActionButtons && <CaseDetailHeaderMenu />}
           </div>
         </div>
       </div>
