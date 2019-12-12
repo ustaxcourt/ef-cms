@@ -468,4 +468,21 @@ describe('fileDocumentHelper', () => {
       });
     });
   });
+
+  it('shows the multi select form and map cases when there are many cases to file ', () => {
+    state.form = {
+      documentType: 'Motion for Leave to File',
+      selectedCases: ['101-19', '102-19'],
+    };
+    state.caseDetail.consolidatedCases = [
+      { ...MOCK_CASE, docketNumber: '101-19' },
+      { ...MOCK_CASE, docketNumber: '102-19' },
+    ];
+    const result = runCompute(fileDocumentHelper, { state });
+    expect(result.showMultiDocumentFilingPartyForm).toBeTruthy();
+    expect(result.selectedCasesAsCase).toMatchObject([
+      { docketNumber: '101-19' },
+      { docketNumber: '102-19' },
+    ]);
+  });
 });
