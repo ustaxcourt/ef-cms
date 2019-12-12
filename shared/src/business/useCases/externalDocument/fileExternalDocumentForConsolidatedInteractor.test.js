@@ -89,7 +89,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         applicationContext,
         documentIds: ['dddddddd-1111-dddd-1111-dddddddddddd'],
         documentMetadata: {
-          caseId: caseRecords.caseId,
           documentType: 'Memorandum in Support',
         },
       });
