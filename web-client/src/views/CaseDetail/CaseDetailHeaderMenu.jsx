@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -9,7 +9,6 @@ export const CaseDetailHeaderMenu = connect(
   {
     caseDetail: state.caseDetail,
     caseDetailHeaderHelper: state.caseDetailHeaderHelper,
-    hideActionButtons: props.hideActionButtons,
     menuHelper: state.menuHelper,
     openCreateCaseDeadlineModalSequence:
       sequences.openCreateCaseDeadlineModalSequence,
@@ -21,7 +20,6 @@ export const CaseDetailHeaderMenu = connect(
   ({
     caseDetail,
     caseDetailHeaderHelper,
-    hideActionButtons,
     menuHelper,
     openCreateCaseDeadlineModalSequence,
     openCreateOrderChooseTypeModalSequence,
@@ -30,7 +28,7 @@ export const CaseDetailHeaderMenu = connect(
   }) => {
     return (
       <>
-        {!hideActionButtons && caseDetailHeaderHelper.showCaseDetailHeaderMenu && (
+        {caseDetailHeaderHelper.showCaseDetailHeaderMenu && (
           <div className="tablet:grid-col-1">
             <ul className="usa-nav__primary usa-accordion case-detail-menu flex-column flex-align-end">
               <li

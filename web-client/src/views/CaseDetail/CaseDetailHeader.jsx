@@ -112,7 +112,7 @@ export const CaseDetailHeader = connect(
               </div>
             )}
 
-            <CaseDetailHeaderMenu hideActionButtons={hideActionButtons} />
+            {!hideActionButtons && <CaseDetailHeaderMenu />}
           </div>
         </div>
       </div>
