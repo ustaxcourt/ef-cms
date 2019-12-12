@@ -86,6 +86,23 @@ export const fileDocumentHelper = (get, applicationContext) => {
     secondarySupportingDocumentCount && secondarySupportingDocumentCount >= 5
   );
 
+  const consolidatedCaseMap = (caseDetail.consolidatedCases || []).reduce(
+    (acc, consolidatedCase) => {
+      acc[consolidatedCase.docketNumber] = consolidatedCase;
+      return acc;
+    },
+    {},
+  );
+
+  const selectedCasesAsCase = (form.selectedCases || [])
+    .map(docketNumber => consolidatedCaseMap[docketNumber])
+    .map(consolidatedCase => {
+      consolidatedCase.showSecondaryParty =
+        consolidatedCase.partyType === PARTY_TYPES.petitionerSpouse ||
+        consolidatedCase.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
+      return consolidatedCase;
+    });
+
   let exported = {
     certificateOfServiceDateFormatted,
     isSecondaryDocumentUploadOptional:
@@ -101,11 +118,13 @@ export const fileDocumentHelper = (get, applicationContext) => {
         form.secondaryDocumentFile &&
         objectionDocumentTypes.includes(form.secondaryDocument.documentType),
     },
+    selectedCasesAsCase,
     showAddSecondarySupportingDocuments,
     showAddSecondarySupportingDocumentsLimitReached,
     showAddSupportingDocuments,
     showAddSupportingDocumentsLimitReached,
     showFilingIncludes,
+    showMultiDocumentFilingPartyForm: !!form.selectedCases,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentInclusionsForm,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
