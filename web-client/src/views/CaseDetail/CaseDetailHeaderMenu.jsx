@@ -42,6 +42,7 @@ export const CaseDetailHeaderMenu = connect(
                   className={classNames(
                     'usa-accordion__button usa-nav__link hidden-underline case-detail-menu__button',
                   )}
+                  id="case-detail-menu-button"
                   onClick={() => {
                     toggleMenuSequence({ caseDetailMenu: 'CaseDetailMenu' });
                   }}

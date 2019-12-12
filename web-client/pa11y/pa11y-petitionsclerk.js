@@ -82,7 +82,7 @@ module.exports = [
   },
   {
     actions: [
-      'click element .case-detail-menu__button',
+      'click element #case-detail-menu-button',
       'click element #button-create-order',
       'set field #eventCode to ODD',
       'check field #eventCode',
