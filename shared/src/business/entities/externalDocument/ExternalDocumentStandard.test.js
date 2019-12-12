@@ -47,7 +47,7 @@ describe('ExternalDocumentStandard', () => {
           });
           expect(extDoc.getFormattedValidationErrors()).toEqual({
             documentType:
-              'Proposed Stipulated Decision must be filed seperatly in each case',
+              'Proposed Stipulated Decision must be filed separately in each case',
           });
         });
       });
