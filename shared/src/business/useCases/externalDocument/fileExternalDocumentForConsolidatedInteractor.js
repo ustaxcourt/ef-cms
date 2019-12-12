@@ -41,6 +41,10 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
   // TODO: Return error if lead case not found?
 
+  const consolidatedCaseEntities = consolidatedCases.map(
+    consolidatedCase => new Case(consolidatedCase, { applicationContext }),
+  );
+
   const {
     secondaryDocument,
     secondarySupportingDocuments,
@@ -98,7 +102,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
     }
   }
 
-  const saveCases = [];
+  const saveCasesMap = {};
   const saveWorkItems = [];
   const sendEmails = [];
 
@@ -118,11 +122,9 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
         { applicationContext },
       ).toRawObject();
 
-      consolidatedCases.forEach(consolidatedCase => {
-        const caseEntity = new Case(consolidatedCase, { applicationContext });
-
+      consolidatedCaseEntities.forEach(caseEntity => {
         // TODO: Create Case method for this?
-        const isLeadCase = consolidatedCase.caseId === leadCaseId;
+        const isLeadCase = caseEntity.caseId === leadCaseId;
 
         const servedParties = aggregatePartiesForService(caseEntity);
 
@@ -249,19 +251,22 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           }
         }
 
-        saveCases.push(
-          applicationContext.getPersistenceGateway().updateCase({
-            applicationContext,
-            caseToUpdate: caseEntity.validate().toRawObject(),
-          }),
-        );
+        saveCasesMap[
+          caseEntity.caseId
+        ] = applicationContext.getPersistenceGateway().updateCase({
+          applicationContext,
+          caseToUpdate: caseEntity.validate().toRawObject(),
+        });
       }); // consolidatedCases
     }
   }); // documentsToAdd
+  const saveCases = Object.keys(saveCasesMap).map(
+    caseId => saveCasesMap[caseId],
+  );
 
   const savedCases = await Promise.all(saveCases);
   await Promise.all(saveWorkItems);
   await Promise.all(sendEmails);
 
-  return savedCases.map(consolidatedCase => consolidatedCase);
+  return savedCases;
 };

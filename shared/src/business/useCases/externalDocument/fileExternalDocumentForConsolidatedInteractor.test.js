@@ -11,6 +11,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   const caseId0 = '00000000-b37b-479d-9201-067ec6e335bb';
   const caseId1 = '11111111-b37b-479d-9201-067ec6e335bb';
   const documentId0 = 'd0d0d0d0-b37b-479d-9201-067ec6e335bb';
+  const documentId1 = 'd1d1d1d1-b37b-479d-9201-067ec6e335bb';
+  const documentId2 = 'd2d2d2d2-b37b-479d-9201-067ec6e335bb';
+  const documentId3 = 'd3d3d3d3-b37b-479d-9201-067ec6e335bb';
 
   beforeEach(() => {
     sendBulkTemplatedEmailMock = jest.fn();
@@ -68,7 +71,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
         }),
         saveWorkItemForNonPaper: async () => {},
-        updateCase: async ({ caseToUpdate }) => caseToUpdate,
+        updateCase: async ({ caseToUpdate }) => await caseToUpdate,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -158,6 +161,56 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     expect(leadCase.documents[0].workItems.length).toEqual(1);
     expect(nonLeadCase.documents[0].workItems.length).toEqual(0);
+  });
+
+  it('Should file multiple documents for each case if a secondary document is provided', async () => {
+    expect(caseRecords[0].documents.length).toEqual(0);
+    expect(caseRecords[1].documents.length).toEqual(0);
+
+    const result = await fileExternalDocumentForConsolidatedInteractor({
+      applicationContext,
+      documentIds: [documentId0, documentId1],
+      documentMetadata: {
+        documentType: 'Memorandum in Support',
+        secondaryDocument: {
+          documentType: 'Redacted',
+        },
+      },
+      leadCaseId: caseId0,
+    });
+
+    expect(result[0].documents.length).toEqual(2);
+    expect(result[1].documents.length).toEqual(2);
+  });
+
+  it('Should file multiple documents for each case if a supporting documents are provided', async () => {
+    expect(caseRecords[0].documents.length).toEqual(0);
+    expect(caseRecords[1].documents.length).toEqual(0);
+
+    const result = await fileExternalDocumentForConsolidatedInteractor({
+      applicationContext,
+      documentIds: [documentId0, documentId1, documentId2, documentId3],
+      documentMetadata: {
+        documentType: 'Memorandum in Support',
+        secondaryDocument: {
+          documentType: 'Redacted',
+        },
+        secondarySupportingDocuments: [
+          {
+            documentType: 'Redacted',
+          },
+        ],
+        supportingDocuments: [
+          {
+            documentType: 'Redacted',
+          },
+        ],
+      },
+      leadCaseId: caseId0,
+    });
+
+    expect(result[0].documents.length).toEqual(4);
+    expect(result[1].documents.length).toEqual(4);
   });
 
   // service on parties?
