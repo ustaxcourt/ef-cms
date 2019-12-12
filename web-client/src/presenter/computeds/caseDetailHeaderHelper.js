@@ -50,6 +50,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     showConsolidatedCaseIcon,
     showCreateOrderButton,
     showEditCaseButton: permissions.UPDATE_CASE_CONTEXT,
+    showExternalButtons: isExternalUser,
     showFileFirstDocumentButton,
     showPendingAccessToCaseButton,
     showRequestAccessToCaseButton,

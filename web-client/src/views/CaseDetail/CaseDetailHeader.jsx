@@ -78,9 +78,7 @@ export const CaseDetailHeader = connect(
               </p>
             </div>
 
-            <CaseDetailHeaderMenu hideActionButtons={hideActionButtons} />
-
-            {!hideActionButtons || (
+            {!hideActionButtons && caseDetailHeaderHelper.showExternalButtons && (
               <div className="tablet:grid-col-4">
                 {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
                   <Button
@@ -113,6 +111,8 @@ export const CaseDetailHeader = connect(
                 )}
               </div>
             )}
+
+            <CaseDetailHeaderMenu hideActionButtons={hideActionButtons} />
           </div>
         </div>
       </div>

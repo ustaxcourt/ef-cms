@@ -43,6 +43,8 @@ module.exports = [
   },
   {
     actions: [
+      'wait for .case-detail-menu to be visible',
+      'click element .case-detail-menu',
       'wait for #edit-case-context-button to be visible',
       'wait for .progress-indicator to be hidden',
       'click element #edit-case-context-button',
