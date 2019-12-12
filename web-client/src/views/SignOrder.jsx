@@ -1,5 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { CaseDetailHeader } from './CaseDetailHeader';
+import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PDFSignerPageButtons } from './PDFSignerPageButtons';
 import { connect } from '@cerebral/react';

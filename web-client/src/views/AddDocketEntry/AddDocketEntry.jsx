@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
