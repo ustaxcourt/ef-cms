@@ -87,19 +87,29 @@ export const fileDocumentHelper = (get, applicationContext) => {
   );
 
   // filing document for consolidated cases
-  const selectedCases = get(state.form.selectedCases);
-  let formattedSelectedCases = '';
+  let selectedDocketNumbers = get(state.form.selectedCases);
+  let formattedDocketNumbers = null;
 
-  if (selectedCases) {
-    formattedSelectedCases = [
-      selectedCases.slice(0, -1).join(', '),
-      selectedCases.slice(-1)[0],
-    ].join(selectedCases.length < 2 ? '' : ' & ');
+  if (selectedDocketNumbers) {
+    // convert to Case entity-like object to use entity method
+    selectedDocketNumbers = selectedDocketNumbers.map(docketNumber => ({
+      docketNumber,
+    }));
+
+    const sortedDocketNumbers = applicationContext
+      .getEntityConstructors()
+      .Case.sortByDocketNumber(selectedDocketNumbers)
+      .map(({ docketNumber }) => docketNumber);
+
+    formattedDocketNumbers = [
+      sortedDocketNumbers.slice(0, -1).join(', '),
+      sortedDocketNumbers.slice(-1)[0],
+    ].join(sortedDocketNumbers.length < 2 ? '' : ' & ');
   }
 
   let exported = {
     certificateOfServiceDateFormatted,
-    formattedSelectedCases,
+    formattedDocketNumbers,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,

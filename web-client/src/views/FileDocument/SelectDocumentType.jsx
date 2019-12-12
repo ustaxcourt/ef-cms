@@ -32,10 +32,10 @@ export const SelectDocumentType = connect(
         <div className="grid-container">
           <div className="grid-row">
             <div className="tablet:grid-col-6">
-              {fileDocumentHelper.formattedSelectedCases && (
+              {fileDocumentHelper.formattedDocketNumbers && (
                 <Hint exclamation>
                   Your documents will be filed in docket numbers{' '}
-                  {fileDocumentHelper.formattedSelectedCases}.
+                  {fileDocumentHelper.formattedDocketNumbers}.
                 </Hint>
               )}
               <h1 id="file-a-document-header" tabIndex="-1">

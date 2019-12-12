@@ -311,23 +311,36 @@ describe('fileDocumentHelper', () => {
     });
 
     describe('selected cases (consolidated cases)', () => {
+      it('formats nothing if none are selected', () => {
+        const result = runCompute(fileDocumentHelper, { state });
+        expect(result.formattedDocketNumbers).toEqual(null);
+      });
+
       it('formats one selected case', () => {
         state.form.selectedCases = ['101-19'];
         const result = runCompute(fileDocumentHelper, { state });
-        expect(result.formattedSelectedCases).toEqual('101-19');
+        expect(result.formattedDocketNumbers).toEqual('101-19');
       });
 
       it('formats two selected cases', () => {
         state.form.selectedCases = ['100-19', '101-19'];
         const result = runCompute(fileDocumentHelper, { state });
-        expect(result.formattedSelectedCases).toEqual('100-19 & 101-19');
+        expect(result.formattedDocketNumbers).toEqual('100-19 & 101-19');
       });
 
       it('formats three selected cases', () => {
         state.form.selectedCases = ['100-19', '101-19', '102-19'];
         const result = runCompute(fileDocumentHelper, { state });
-        expect(result.formattedSelectedCases).toEqual(
+        expect(result.formattedDocketNumbers).toEqual(
           '100-19, 101-19 & 102-19',
+        );
+      });
+
+      it('formats three, out-of-order selected cases', () => {
+        state.form.selectedCases = ['104-19', '101-19', '102-19'];
+        const result = runCompute(fileDocumentHelper, { state });
+        expect(result.formattedDocketNumbers).toEqual(
+          '101-19, 102-19 & 104-19',
         );
       });
     });
