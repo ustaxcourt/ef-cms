@@ -39,9 +39,7 @@ export const FileDocumentWizard = connect(
               <ViewAllDocuments />
             </Tab>
             <Tab tabName="FileDocument">
-              <div className="grid-container">
-                <FileDocument />
-              </div>
+              <FileDocument />
             </Tab>
             <Tab tabName="FileDocumentReview">
               <div className="grid-container">
