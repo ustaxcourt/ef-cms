@@ -41,7 +41,7 @@ export const MultiDocumentPartiesFiling = connect(
                       {formattedConsolidatedCase.caseCaption}
                     </legend>
 
-                    <div className="usa-checkbox">
+                    <div className="usa-checkbox margin-top-1">
                       <input
                         aria-describedby={`who-legend-${formattedConsolidatedCase.docketNumber}`}
                         checked={
