@@ -82,7 +82,6 @@ export const CaseDetailHeader = connect(
               <div className="tablet:grid-col-4">
                 {caseDetailHeaderHelper.showFileDocumentButton && (
                   <Button
-                    secondary
                     className="tablet-full-width push-right margin-right-0"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/before-you-file-a-document`}
                     icon="file"
@@ -94,7 +93,6 @@ export const CaseDetailHeader = connect(
 
                 {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
                   <Button
-                    secondary
                     className="tablet-full-width push-right margin-right-0"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
                     id="button-request-access"
@@ -114,7 +112,6 @@ export const CaseDetailHeader = connect(
 
                 {caseDetailHeaderHelper.showFileFirstDocumentButton && (
                   <Button
-                    secondary
                     className="tablet-full-width push-right margin-right-0"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
                     icon="file"
