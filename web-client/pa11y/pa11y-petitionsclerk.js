@@ -168,8 +168,10 @@ module.exports = [
   {
     actions: [
       'wait for #case-detail-menu-button to be visible',
+      'wait for .progress-indicator to be hidden',
       'click element #case-detail-menu-button',
       'wait for #button-add-deadline to be visible',
+      'wait for .progress-indicator to be hidden',
       'click element #button-add-deadline',
       'wait for #deadline-date-legend to be visible',
     ],
