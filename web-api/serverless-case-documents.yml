@@ -227,6 +227,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  fileExternalDocumentToConsolidated:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileExternalDocumentToConsolidatedCasesLambda
+    events:
+      - http:
+          path: /consolidated/{leadCaseId}/external-document
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   fileDocketEntry:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileDocketEntryToCaseLambda
     events:
