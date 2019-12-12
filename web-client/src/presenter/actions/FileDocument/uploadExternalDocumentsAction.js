@@ -6,6 +6,9 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.path the next object in the path
+ * @param {Function} providers.store the cerebral store function
  * @returns {object} the next path based on if validation was successful or error
  */
 export const uploadExternalDocumentsAction = async ({
@@ -14,7 +17,7 @@ export const uploadExternalDocumentsAction = async ({
   path,
   store,
 }) => {
-  const { caseId, docketNumber } = get(state.caseDetail);
+  const { caseId, docketNumber, leadCaseId } = get(state.caseDetail);
   const form = get(state.form);
 
   const documentMetadata = { ...form, caseId, docketNumber };
@@ -50,6 +53,7 @@ export const uploadExternalDocumentsAction = async ({
         applicationContext,
         documentFiles,
         documentMetadata,
+        leadCaseId,
         progressFunctions,
       });
   } catch (err) {
