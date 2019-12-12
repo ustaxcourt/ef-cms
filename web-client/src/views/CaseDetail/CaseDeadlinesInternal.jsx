@@ -8,8 +8,6 @@ export const CaseDeadlinesInternal = connect(
   {
     caseDeadlines: state.formattedCaseDetail.caseDeadlines,
     caseDetailHelper: state.caseDetailHelper,
-    openCreateCaseDeadlineModalSequence:
-      sequences.openCreateCaseDeadlineModalSequence,
     openDeleteCaseDeadlineModalSequence:
       sequences.openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence:
@@ -18,23 +16,11 @@ export const CaseDeadlinesInternal = connect(
   function CaseDeadlinesInternal({
     caseDeadlines,
     caseDetailHelper,
-    openCreateCaseDeadlineModalSequence,
     openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence,
   }) {
     return (
       <>
-        <div>
-          <Button
-            className="push-right margin-right-0 margin-bottom-1"
-            id="button-add-deadline"
-            onClick={() => {
-              openCreateCaseDeadlineModalSequence();
-            }}
-          >
-            <FontAwesomeIcon icon="calendar-alt" size="1x" /> Add Deadline
-          </Button>
-        </div>
         {caseDetailHelper.showCaseDeadlinesInternalEmpty && (
           <p className="margin-bottom-5">
             There are no deadlines for this case.

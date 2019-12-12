@@ -1,5 +1,5 @@
 import { Button } from '../ustc-ui/Button/Button';
-import { CaseDetailHeader } from './CaseDetailHeader';
+import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { PDFSignerMessage } from './PDFSignerMessage';
 import { PDFSignerToolbar } from './PDFSignerToolbar';
 import { connect } from '@cerebral/react';
@@ -194,7 +194,7 @@ export const SignStipDecision = connect(
                     >
                       (Signed) {pdfForSigning.nameForSigning}
                       <br />
-                      Chief Judge
+                      {pdfForSigning.nameForSigningLine2}
                     </span>
                     {!process.env.CI && (
                       <canvas

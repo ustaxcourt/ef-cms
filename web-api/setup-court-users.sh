@@ -16,13 +16,17 @@ generate_post_data() {
   role=$2
   section=$3
   name=$4
+  judgeFullName=$5
+  judgeTitle=$6
   cat <<EOF
 {
   "email": "$email",
   "password": "Testing1234$",
   "role": "$role",
   "section": "$section",
-  "name": "$name"
+  "name": "$name",
+  "judgeFullName": "$judgeFullName",
+  "judgeTitle": "$judgeTitle"
 }
 EOF
 }
@@ -32,11 +36,13 @@ createAccount() {
   role=$2
   section=$3
   name=$4
+  judgeFullName=$5
+  judgeTitle=$6
 
   curl --header "Content-Type: application/json" \
     --header "Authorization: Bearer ${adminToken}" \
     --request POST \
-    --data "$(generate_post_data "${email}" "${role}" "${section}" "${name}")" \
+    --data "$(generate_post_data "${email}" "${role}" "${section}" "${name}" "${judgeFullName}" "${judgeTitle}")" \
       "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}"
 
   response=$(aws cognito-idp admin-initiate-auth \
@@ -78,6 +84,8 @@ do
   # placeOfTrial="${ADDR[5]}"
   # realEmail="${ADDR[6]}"
   fakeEmail="${ADDR[7]/$'\r'}"
-  createAccount "${fakeEmail}" "${role}" "${section}" "${name}"
+  judgeFullName="${ADDR[8]/$'\r'}"
+  judgeTitle="${ADDR[9]/$'\r'}"
+  createAccount "${fakeEmail}" "${role}" "${section}" "${name}" "${judgeFullName}" "${judgeTitle}"
 done < court_users.csv
 

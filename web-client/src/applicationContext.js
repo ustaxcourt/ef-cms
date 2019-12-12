@@ -120,6 +120,7 @@ import { getCaseTypesInteractor } from '../../shared/src/business/useCases/getCa
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getConsolidatedCasesByUserInteractor } from '../../shared/src/proxies/getConsolidatedCasesByUserProxy';
+import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentQCBatchedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForSectionProxy';
 import { getDocumentQCBatchedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
@@ -477,6 +478,7 @@ const applicationContext = {
   },
   getPersistenceGateway: () => {
     return {
+      getDocument,
       getItem,
       removeItem,
       setItem,
