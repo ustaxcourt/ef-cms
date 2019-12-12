@@ -33,14 +33,17 @@ export const MultiDocumentPartiesFiling = connect(
               {fileDocumentHelper.selectedCasesAsCase.map(
                 (formattedConsolidatedCase, index) => (
                   <React.Fragment key={index}>
-                    <legend className="with-hint" id="who-legend">
+                    <legend
+                      className="with-hint"
+                      id={`who-legend-${formattedConsolidatedCase.docketNumber}`}
+                    >
                       {formattedConsolidatedCase.docketNumber}{' '}
                       {formattedConsolidatedCase.caseCaption}
                     </legend>
 
                     <div className="usa-checkbox">
                       <input
-                        aria-describedby="who-legend"
+                        aria-describedby={`who-legend-${formattedConsolidatedCase.docketNumber}`}
                         checked={
                           (form.casesParties &&
                             form.casesParties[
@@ -52,8 +55,8 @@ export const MultiDocumentPartiesFiling = connect(
                           false
                         }
                         className="usa-checkbox__input"
-                        id="party-primary"
-                        name={`form.casesParties[${formattedConsolidatedCase.docketNumber}].partyPrimary`}
+                        id={`party-primary-${formattedConsolidatedCase.docketNumber}`}
+                        name={`casesParties.${formattedConsolidatedCase.docketNumber}.partyPrimary`}
                         type="checkbox"
                         onChange={e => {
                           updateFileDocumentWizardFormValueSequence({
@@ -65,7 +68,7 @@ export const MultiDocumentPartiesFiling = connect(
                       />
                       <label
                         className="usa-checkbox__label"
-                        htmlFor="party-primary"
+                        htmlFor={`party-primary-${formattedConsolidatedCase.docketNumber}`}
                       >
                         {formattedConsolidatedCase.contactPrimary.name},
                         Petitioner
@@ -74,7 +77,7 @@ export const MultiDocumentPartiesFiling = connect(
                     {formattedConsolidatedCase.showSecondaryParty && (
                       <div className="usa-checkbox">
                         <input
-                          aria-describedby="who-legend"
+                          aria-describedby={`who-legend-${formattedConsolidatedCase.docketNumber}`}
                           checked={
                             (form.casesParties &&
                               form.casesParties[
@@ -86,8 +89,8 @@ export const MultiDocumentPartiesFiling = connect(
                             false
                           }
                           className="usa-checkbox__input"
-                          id="party-secondary"
-                          name={`form.casesParties[${formattedConsolidatedCase.docketNumber}].partySecondary`}
+                          id={`party-secondary-${formattedConsolidatedCase.docketNumber}`}
+                          name={`casesParties.${formattedConsolidatedCase.docketNumber}.partySecondary`}
                           type="checkbox"
                           onChange={e => {
                             updateFileDocumentWizardFormValueSequence({
@@ -99,7 +102,7 @@ export const MultiDocumentPartiesFiling = connect(
                         />
                         <label
                           className="usa-checkbox__label"
-                          htmlFor="party-secondary"
+                          htmlFor={`party-secondary-${formattedConsolidatedCase.docketNumber}`}
                         >
                           {formattedConsolidatedCase.contactSecondary.name},
                           Petitioner
