@@ -2,6 +2,7 @@ import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CheckConsolidatedCasesModal } from './CheckConsolidatedCasesModal';
 import { CompleteDocumentTypeSection } from './CompleteDocumentTypeSection';
+import { Hint } from '../../ustc-ui/Hint/Hint';
 import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -10,6 +11,7 @@ import React from 'react';
 export const SelectDocumentType = connect(
   {
     completeDocumentSelectSequence: sequences.completeDocumentSelectSequence,
+    fileDocumentHelper: state.fileDocumentHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     gotoViewAllDocumentsSequence: sequences.gotoViewAllDocumentsSequence,
     reasons: state.viewAllDocumentsHelper.reasons,
@@ -19,6 +21,7 @@ export const SelectDocumentType = connect(
   },
   ({
     completeDocumentSelectSequence,
+    fileDocumentHelper,
     formCancelToggleCancelSequence,
     gotoViewAllDocumentsSequence,
     reasons,
@@ -29,6 +32,12 @@ export const SelectDocumentType = connect(
         <div className="grid-container">
           <div className="grid-row">
             <div className="tablet:grid-col-6">
+              {fileDocumentHelper.formattedDocketNumbers && (
+                <Hint exclamation>
+                  Your documents will be filed in docket numbers{' '}
+                  {fileDocumentHelper.formattedDocketNumbers}.
+                </Hint>
+              )}
               <h1 id="file-a-document-header" tabIndex="-1">
                 What Document are You Filing?
               </h1>
