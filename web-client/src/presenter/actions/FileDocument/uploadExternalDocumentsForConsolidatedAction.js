@@ -2,7 +2,7 @@ import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 /**
- * upload document to s3.
+ * upload document to s3 for consolidated cases.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -45,7 +45,7 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
 
   const progressFunctions = setupPercentDone(documentFiles, store);
 
-  let cases;
+  let cases = [];
 
   try {
     cases = await applicationContext
@@ -66,7 +66,7 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
       document => document.processingStatus === 'pending',
     );
 
-  let pendingDocuments = [];
+  const pendingDocuments = [];
 
   cases.forEach(caseDetail => {
     pendingDocuments.push(...getPendingDocumentsForCase(caseDetail));
