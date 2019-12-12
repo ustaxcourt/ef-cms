@@ -16,7 +16,7 @@ const {
 const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
-const { includes, isEqual, reduce, some, values } = require('lodash');
+const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
 
 const VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments.',
@@ -35,7 +35,7 @@ const VALIDATION_ERROR_MESSAGES = {
     {
       contains: 'contains an invalid value',
       message:
-        'Proposed Stipulated Decision must be filed seperatly in each case',
+        'Proposed Stipulated Decision must be filed separately in each case',
     },
     'Select a document type',
   ],
@@ -262,7 +262,12 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
         },
         [],
       );
-      if (!isEqual(documentMetadata.selectedCases, casesWithAPartySelected)) {
+      if (
+        !isEqual(
+          sortBy(documentMetadata.selectedCases),
+          sortBy(casesWithAPartySelected),
+        )
+      ) {
         addProperty(
           'partyPrimary',
           joi

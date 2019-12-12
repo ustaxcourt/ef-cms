@@ -310,6 +310,41 @@ describe('fileDocumentHelper', () => {
       ).toEqual('01/01/19');
     });
 
+    describe('selected cases (consolidated cases)', () => {
+      it('formats nothing if none are selected', () => {
+        const result = runCompute(fileDocumentHelper, { state });
+        expect(result.formattedDocketNumbers).toEqual(null);
+      });
+
+      it('formats one selected case', () => {
+        state.form.selectedCases = ['101-19'];
+        const result = runCompute(fileDocumentHelper, { state });
+        expect(result.formattedDocketNumbers).toEqual('101-19');
+      });
+
+      it('formats two selected cases', () => {
+        state.form.selectedCases = ['100-19', '101-19'];
+        const result = runCompute(fileDocumentHelper, { state });
+        expect(result.formattedDocketNumbers).toEqual('100-19 & 101-19');
+      });
+
+      it('formats three selected cases', () => {
+        state.form.selectedCases = ['100-19', '101-19', '102-19'];
+        const result = runCompute(fileDocumentHelper, { state });
+        expect(result.formattedDocketNumbers).toEqual(
+          '100-19, 101-19 & 102-19',
+        );
+      });
+
+      it('formats three, out-of-order selected cases', () => {
+        state.form.selectedCases = ['104-19', '101-19', '102-19'];
+        const result = runCompute(fileDocumentHelper, { state });
+        expect(result.formattedDocketNumbers).toEqual(
+          '101-19, 102-19 & 104-19',
+        );
+      });
+    });
+
     describe('for secondary supporting document', () => {
       it('shows Add Secondary Supporting Document button and not limit reached message when secondarySupportingDocuments is undefined', () => {
         const result = runCompute(fileDocumentHelper, { state });
@@ -432,5 +467,22 @@ describe('fileDocumentHelper', () => {
         ).toEqual('01/01/19');
       });
     });
+  });
+
+  it('shows the multi select form and map cases when there are many cases to file ', () => {
+    state.form = {
+      documentType: 'Motion for Leave to File',
+      selectedCases: ['101-19', '102-19'],
+    };
+    state.caseDetail.consolidatedCases = [
+      { ...MOCK_CASE, docketNumber: '101-19' },
+      { ...MOCK_CASE, docketNumber: '102-19' },
+    ];
+    const result = runCompute(fileDocumentHelper, { state });
+    expect(result.showMultiDocumentFilingPartyForm).toBeTruthy();
+    expect(result.selectedCasesAsCase).toMatchObject([
+      { docketNumber: '101-19' },
+      { docketNumber: '102-19' },
+    ]);
   });
 });
