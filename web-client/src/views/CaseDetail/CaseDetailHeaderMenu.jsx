@@ -1,0 +1,128 @@
+import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { connect } from '@cerebral/react';
+import { props, sequences, state } from 'cerebral';
+import React from 'react';
+import classNames from 'classnames';
+
+export const CaseDetailHeaderMenu = connect(
+  {
+    caseDetail: state.caseDetail,
+    caseDetailHeaderHelper: state.caseDetailHeaderHelper,
+    hideActionButtons: props.hideActionButtons,
+    menuHelper: state.menuHelper,
+    openCreateCaseDeadlineModalSequence:
+      sequences.openCreateCaseDeadlineModalSequence,
+    openCreateOrderChooseTypeModalSequence:
+      sequences.openCreateOrderChooseTypeModalSequence,
+    openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
+    toggleMenuSequence: sequences.toggleMenuSequence,
+  },
+  ({
+    caseDetail,
+    caseDetailHeaderHelper,
+    hideActionButtons,
+    menuHelper,
+    openCreateCaseDeadlineModalSequence,
+    openCreateOrderChooseTypeModalSequence,
+    openUpdateCaseModalSequence,
+    toggleMenuSequence,
+  }) => {
+    return (
+      <>
+        {!hideActionButtons && caseDetailHeaderHelper.showCaseDetailHeaderMenu && (
+          <div className="tablet:grid-col-1">
+            <ul className="usa-nav__primary usa-accordion case-detail-menu flex-column flex-align-end">
+              <li
+                className={classNames(
+                  'usa-nav__primary-item',
+                  menuHelper.isCaseDetailMenuOpen && 'usa-nav__submenu--open',
+                )}
+              >
+                <button
+                  aria-expanded={menuHelper.isCaseDetailMenuOpen}
+                  className={classNames(
+                    'usa-accordion__button usa-nav__link hidden-underline case-detail-menu__button',
+                  )}
+                  onClick={() => {
+                    toggleMenuSequence({ caseDetailMenu: 'CaseDetailMenu' });
+                  }}
+                >
+                  Actions
+                  <FontAwesomeIcon
+                    className="margin-left-05"
+                    icon={
+                      menuHelper.isCaseDetailMenuOpen
+                        ? 'caret-up'
+                        : 'caret-down'
+                    }
+                    size="1x"
+                  />
+                </button>
+                {menuHelper.isCaseDetailMenuOpen && (
+                  <ul className="usa-nav__submenu position-right-0">
+                    <li className="usa-nav__submenu-item">
+                      <Button
+                        icon="calendar-alt"
+                        onClick={() => {
+                          toggleMenuSequence({
+                            caseDetailMenu: 'CaseDetailMenu',
+                          });
+                          openCreateCaseDeadlineModalSequence();
+                        }}
+                      >
+                        Add deadline
+                      </Button>
+                    </li>
+                    {caseDetailHeaderHelper.showCreateOrderButton && (
+                      <li className="usa-nav__submenu-item">
+                        <Button
+                          icon="clipboard-list"
+                          onClick={() => {
+                            toggleMenuSequence({
+                              caseDetailMenu: 'CaseDetailMenu',
+                            });
+                            openCreateOrderChooseTypeModalSequence();
+                          }}
+                        >
+                          Create order
+                        </Button>
+                      </li>
+                    )}
+                    {caseDetailHeaderHelper.showAddDocketEntryButton && (
+                      <li className="usa-nav__submenu-item">
+                        <Button
+                          link
+                          href={`/case-detail/${caseDetail.docketNumber}/add-docket-entry`}
+                          icon="plus-circle"
+                        >
+                          Add Docket entry
+                        </Button>
+                      </li>
+                    )}
+                    {caseDetailHeaderHelper.showEditCaseButton && (
+                      <li className="usa-nav__submenu-item">
+                        <Button
+                          icon="edit"
+                          id="edit-case-context-button"
+                          onClick={() => {
+                            toggleMenuSequence({
+                              caseDetailMenu: 'CaseDetailMenu',
+                            });
+                            openUpdateCaseModalSequence();
+                          }}
+                        >
+                          Edit case status/ caption
+                        </Button>
+                      </li>
+                    )}
+                  </ul>
+                )}
+              </li>
+            </ul>
+          </div>
+        )}
+      </>
+    );
+  },
+);

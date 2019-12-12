@@ -7,6 +7,7 @@ import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
 import { CaseInformationInternal } from './CaseInformationInternal';
 import { CaseNotes } from './CaseNotes';
 import { CreateCaseDeadlineModalDialog } from './CreateCaseDeadlineModalDialog';
+import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
 import { DeleteCaseDeadlineModalDialog } from './DeleteCaseDeadlineModalDialog';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
@@ -21,6 +22,7 @@ import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { UnblockFromTrialModal } from './UnblockFromTrialModal';
 import { UnprioritizeCaseModal } from './UnprioritizeCaseModal';
+import { UpdateCaseModalDialog } from '../CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -161,6 +163,10 @@ export const CaseDetailInternal = connect(
         {showModal === 'RemoveFromTrialSessionModal' && (
           <RemoveFromTrialSessionModal />
         )}
+        {showModal === 'CreateOrderChooseTypeModal' && (
+          <CreateOrderChooseTypeModal />
+        )}
+        {showModal == 'UpdateCaseModalDialog' && <UpdateCaseModalDialog />}
       </>
     );
   },
