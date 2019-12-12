@@ -35,7 +35,7 @@ const VALIDATION_ERROR_MESSAGES = {
     {
       contains: 'contains an invalid value',
       message:
-        'Proposed Stipulated Decision must be filed seperatly in each case',
+        'Proposed Stipulated Decision must be filed separately in each case',
     },
     'Select a document type',
   ],
