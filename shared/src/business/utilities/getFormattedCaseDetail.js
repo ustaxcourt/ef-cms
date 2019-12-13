@@ -13,6 +13,7 @@ const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
 
 const formatDocument = (applicationContext, document) => {
   const result = cloneDeep(document);
+
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
@@ -122,7 +123,7 @@ const formatDocketRecordWithDocument = (
 
     const { index } = record;
 
-    if (record.documentId) {
+    if (record.documentId && documentMap[record.documentId]) {
       formattedDocument = formatDocument(
         applicationContext,
         documentMap[record.documentId],
