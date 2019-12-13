@@ -269,7 +269,7 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
   });
 
   it('runs batch process for case in IRS queue and sends internal message for a paper case', async () => {
-    mockCase = { ...MOCK_CASE, isPaper: true };
+    mockCase = { ...MOCK_CASE, isPaper: true, mailingDate: 'testing' };
     mockCase.documents[0].workItems = MOCK_WORK_ITEMS;
     applicationContext = {
       environment: { stage: 'local' },
