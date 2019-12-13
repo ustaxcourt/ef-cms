@@ -83,6 +83,16 @@ const PetitionerInformation = connect(
             <div className="content-wrapper">
               <h3 className="underlined" id="primary-label">
                 Petitioner Contact Info
+                {caseDetailHelper.showEditContacts && (
+                  <Button
+                    link
+                    className="push-right margin-right-0 margin-top-neg-1"
+                    href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
+                    icon="edit"
+                  >
+                    Edit
+                  </Button>
+                )}
               </h3>
               {formattedCaseDetail.contactPrimary && (
                 <div>
@@ -97,21 +107,11 @@ const PetitionerInformation = connect(
                       },
                     )}
                   </address>
-
-                  {caseDetailHelper.showEditContacts && (
-                    <p>
-                      <Button
-                        link
-                        href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
-                      >
-                        <FontAwesomeIcon icon="edit" size="sm" />
-                        Edit
-                      </Button>
-                    </p>
-                  )}
                   {formattedCaseDetail.contactPrimary.serviceIndicator && (
                     <div className="margin-top-4">
-                      <span className="semi-bold">Service: </span>
+                      <p className="semi-bold margin-bottom-0">
+                        Service preference
+                      </p>
                       {formattedCaseDetail.contactPrimary.serviceIndicator}
                     </div>
                   )}
@@ -128,6 +128,16 @@ const PetitionerInformation = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined" id="primary-label">
                     Spouse Contact Info
+                    {caseDetailHelper.showEditContacts && (
+                      <Button
+                        link
+                        className="push-right margin-right-0 margin-top-neg-1"
+                        icon="question-circle"
+                        onClick={() => openEditSecondaryContactModalSequence()}
+                      >
+                        Why can’t I edit this?
+                      </Button>
+                    )}
                   </h3>
                   <div>
                     <address aria-labelledby="secondary-label">
@@ -138,18 +148,11 @@ const PetitionerInformation = connect(
                           {},
                         )}
                     </address>
-                    {caseDetailHelper.showEditContacts && (
-                      <Button
-                        link
-                        icon="question-circle"
-                        onClick={() => openEditSecondaryContactModalSequence()}
-                      >
-                        Why can’t I edit this?
-                      </Button>
-                    )}
                     {formattedCaseDetail.contactSecondary.serviceIndicator && (
                       <div className="margin-top-4">
-                        <span className="semi-bold">Service: </span>
+                        <p className="semi-bold margin-bottom-0">
+                          Service preference
+                        </p>
                         {formattedCaseDetail.contactSecondary.serviceIndicator}
                       </div>
                     )}
