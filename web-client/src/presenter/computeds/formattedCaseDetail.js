@@ -156,6 +156,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
     entry => entry.hasDocument && entry.isPending,
   );
 
+  result.consolidatedCases = caseDetail.consolidatedCases || [];
+
   result.showBlockedTag = caseDetail.blocked;
   result.docketRecordSort = docketRecordSort;
   result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
