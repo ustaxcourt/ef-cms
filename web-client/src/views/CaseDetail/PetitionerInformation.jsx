@@ -77,74 +77,87 @@ const PetitionerInformation = connect(
     validationErrors,
   }) => {
     const mainPartyInformation = () => (
-      <div className="grid-container padding-x-0">
-        <div className="grid-row">
-          <div className="tablet:grid-col-3">
-            {formattedCaseDetail.contactPrimary && (
-              <div>
-                <address aria-labelledby="primary-label">
-                  {AddressDisplay(
-                    formattedCaseDetail.contactPrimary,
-                    constants,
-                    {
-                      nameOverride:
-                        caseDetailHelper.showCaseNameForPrimary &&
-                        formattedCaseDetail.caseName,
-                    },
-                  )}
-                </address>
-
-                {caseDetailHelper.showEditContacts && (
-                  <p>
-                    <Button
-                      link
-                      href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
-                    >
-                      <FontAwesomeIcon icon="edit" size="sm" />
-                      Edit
-                    </Button>
-                  </p>
-                )}
-                {formattedCaseDetail.contactPrimary.serviceIndicator && (
-                  <div className="margin-top-4">
-                    <span className="semi-bold">Service: </span>
-                    {formattedCaseDetail.contactPrimary.serviceIndicator}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          <div className="tablet:grid-col-3">
-            {formattedCaseDetail.contactSecondary &&
-              formattedCaseDetail.contactSecondary.name && (
+      <div className="grid-row grid-gap-6">
+        <div className="tablet:grid-col-4">
+          <div className="card height-full">
+            <div className="content-wrapper">
+              <h3 className="underlined" id="primary-label">
+                Petitioner Contact Info
+              </h3>
+              {formattedCaseDetail.contactPrimary && (
                 <div>
-                  <address aria-labelledby="secondary-label">
-                    {formattedCaseDetail.contactSecondary.name &&
-                      AddressDisplay(
-                        formattedCaseDetail.contactSecondary,
-                        constants,
-                        {},
-                      )}
+                  <address aria-labelledby="primary-label">
+                    {AddressDisplay(
+                      formattedCaseDetail.contactPrimary,
+                      constants,
+                      {
+                        nameOverride:
+                          caseDetailHelper.showCaseNameForPrimary &&
+                          formattedCaseDetail.caseName,
+                      },
+                    )}
                   </address>
+
                   {caseDetailHelper.showEditContacts && (
-                    <Button
-                      link
-                      onClick={() => openEditSecondaryContactModalSequence()}
-                    >
-                      <FontAwesomeIcon icon="question-circle" size="sm" />
-                      Why can’t I edit this?
-                    </Button>
+                    <p>
+                      <Button
+                        link
+                        href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
+                      >
+                        <FontAwesomeIcon icon="edit" size="sm" />
+                        Edit
+                      </Button>
+                    </p>
                   )}
-                  {formattedCaseDetail.contactSecondary.serviceIndicator && (
+                  {formattedCaseDetail.contactPrimary.serviceIndicator && (
                     <div className="margin-top-4">
                       <span className="semi-bold">Service: </span>
-                      {formattedCaseDetail.contactSecondary.serviceIndicator}
+                      {formattedCaseDetail.contactPrimary.serviceIndicator}
                     </div>
                   )}
                 </div>
               )}
+            </div>
           </div>
         </div>
+
+        {formattedCaseDetail.contactSecondary &&
+          formattedCaseDetail.contactSecondary.name && (
+            <div className="tablet:grid-col-4">
+              <div className="card height-full">
+                <div className="content-wrapper">
+                  <h3 className="underlined" id="primary-label">
+                    Spouse Contact Info
+                  </h3>
+                  <div>
+                    <address aria-labelledby="secondary-label">
+                      {formattedCaseDetail.contactSecondary.name &&
+                        AddressDisplay(
+                          formattedCaseDetail.contactSecondary,
+                          constants,
+                          {},
+                        )}
+                    </address>
+                    {caseDetailHelper.showEditContacts && (
+                      <Button
+                        link
+                        icon="question-circle"
+                        onClick={() => openEditSecondaryContactModalSequence()}
+                      >
+                        Why can’t I edit this?
+                      </Button>
+                    )}
+                    {formattedCaseDetail.contactSecondary.serviceIndicator && (
+                      <div className="margin-top-4">
+                        <span className="semi-bold">Service: </span>
+                        {formattedCaseDetail.contactSecondary.serviceIndicator}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
       </div>
     );
 
@@ -260,14 +273,7 @@ const PetitionerInformation = connect(
     return (
       <>
         <div className="subsection party-information">
-          <div className="card">
-            <div className="content-wrapper">
-              <h3 className="underlined" id="primary-label">
-                {formattedCaseDetail.partyType || 'My Party Type'}
-              </h3>
-              {mainPartyInformation()}
-            </div>
-          </div>
+          {mainPartyInformation()}
         </div>
         {caseDetailHelper.showPractitionerSection && (
           <div className="subsection party-information">
