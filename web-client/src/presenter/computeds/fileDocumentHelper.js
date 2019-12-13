@@ -106,8 +106,12 @@ export const fileDocumentHelper = (get, applicationContext) => {
       consolidatedCase.showSecondaryParty =
         consolidatedCase.partyType === PARTY_TYPES.petitionerSpouse ||
         consolidatedCase.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
-      return formatCase(applicationContext, consolidatedCase);
+      return consolidatedCase;
     });
+
+  const formattedSelectedCasesAsCase = selectedCasesAsCase.map(selectedCase =>
+    formatCase(applicationContext, selectedCase),
+  );
 
   // filing document for consolidated cases
   let selectedDocketNumbers = get(state.form.selectedCases);
@@ -133,6 +137,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
   let exported = {
     certificateOfServiceDateFormatted,
     formattedDocketNumbers,
+    formattedSelectedCasesAsCase,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
