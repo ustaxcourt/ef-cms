@@ -115,9 +115,9 @@ export const DocumentDetail = connect(
                   <Button
                     link
                     href={documentDetailHelper.formattedDocument.signUrl}
+                    icon={['fas', 'pencil-alt']}
                   >
-                    <FontAwesomeIcon icon={['fas', 'pencil-alt']} /> Apply
-                    Signature
+                    Apply Signature
                   </Button>
                 )}
                 {documentDetailHelper.showRemoveSignature && (

@@ -4,6 +4,10 @@
     padding-bottom: 0.5rem;
     background-color: $color-white;
     color: color($theme-color-primary);
+
+    &:hover {
+      color: color($theme-color-primary-dark);
+    }
   }
   .usa-nav__submenu {
     background-color: $color-white;

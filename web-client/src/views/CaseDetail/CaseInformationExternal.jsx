@@ -112,7 +112,7 @@ export const CaseInformationExternal = connect(
                             icon="print"
                             size="1x"
                           />
-                          Print receipt
+                          Print Confirmation
                         </Button>
                       </If>
                     </h3>
@@ -153,7 +153,7 @@ export const CaseInformationExternal = connect(
                       icon="print"
                       size="1x"
                     />
-                    Print receipt
+                    Print Confirmation
                   </Button>
                 </If>
                 <PetitionDetails caseDetail={formattedCaseDetail} />

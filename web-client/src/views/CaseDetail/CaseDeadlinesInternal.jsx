@@ -30,7 +30,7 @@ export const CaseDeadlinesInternal = connect(
           <table className="usa-table docket-record row-border-only subsection deadlines">
             <thead>
               <tr>
-                <th>Due Date</th>
+                <th>Due date</th>
                 <th></th>
                 <th>Description</th>
                 <th></th>
@@ -51,20 +51,6 @@ export const CaseDeadlinesInternal = connect(
                     <Button
                       link
                       className="margin-right-0 padding-0"
-                      icon="trash"
-                      onClick={() => {
-                        openDeleteCaseDeadlineModalSequence({
-                          caseDeadlineId: item.caseDeadlineId,
-                        });
-                      }}
-                    >
-                      Remove
-                    </Button>
-                  </td>
-                  <td className="smaller-column center-column">
-                    <Button
-                      link
-                      className="margin-right-0 padding-0"
                       onClick={() => {
                         openEditCaseDeadlineModalSequence({
                           caseDeadlineId: item.caseDeadlineId,
@@ -77,6 +63,20 @@ export const CaseDeadlinesInternal = connect(
                         size="1x"
                       />
                       Edit
+                    </Button>
+                  </td>
+                  <td className="smaller-column center-column">
+                    <Button
+                      link
+                      className="margin-right-0 padding-0 red-warning"
+                      icon="trash"
+                      onClick={() => {
+                        openDeleteCaseDeadlineModalSequence({
+                          caseDeadlineId: item.caseDeadlineId,
+                        });
+                      }}
+                    >
+                      Delete
                     </Button>
                   </td>
                 </tr>
