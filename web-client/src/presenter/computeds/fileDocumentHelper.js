@@ -10,7 +10,6 @@ export const supportingDocumentFreeTextTypes = [
 export const fileDocumentHelper = (get, applicationContext) => {
   const { formatCase } = applicationContext.getUtilities();
   const { CATEGORY_MAP, PARTY_TYPES } = applicationContext.getConstants();
-  const { formatCase } = applicationContext.getUtilities();
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
