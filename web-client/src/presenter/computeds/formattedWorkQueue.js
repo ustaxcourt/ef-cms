@@ -155,6 +155,85 @@ export const formatWorkItem = ({
   return result;
 };
 
+export const getWorkItemDocumentLink = ({
+  applicationContext,
+  get,
+  workItem = {},
+  workQueueIsInternal,
+}) => {
+  const result = cloneDeep(workItem);
+  const permissions = get(state.permissions);
+
+  const formattedDocument = applicationContext
+    .getUtilities()
+    .formatDocument(applicationContext, result.document);
+
+  const isInProgress = formattedDocument && formattedDocument.isInProgress;
+
+  console.log('result.isRead', result.isRead);
+  console.log('result.completedAt', result.completedAt);
+  console.log('isInProgress', isInProgress);
+  console.log('result.isCourtIssuedDocument', result.isCourtIssuedDocument);
+  const qcWorkItemsUntouched =
+    !isInProgress &&
+    formattedDocument &&
+    !result.isRead &&
+    !result.completedAt &&
+    !result.isCourtIssuedDocument;
+
+  const showDocumentEditLink =
+    formattedDocument &&
+    permissions.UPDATE_CASE &&
+    (!formattedDocument.isInProgress ||
+      (permissions.DOCKET_ENTRY && formattedDocument.isInProgress));
+
+  let editLink; //defaults to doc detail
+  if (showDocumentEditLink && permissions.DOCKET_ENTRY && formattedDocument) {
+    if (
+      formattedDocument.isCourtIssuedDocument &&
+      !formattedDocument.servedAt
+    ) {
+      editLink = '/edit-court-issued';
+    } else if (isInProgress) {
+      editLink = '/complete';
+    } else if (
+      !result.isCourtIssuedDocument &&
+      !formattedDocument.isPetition &&
+      qcWorkItemsUntouched
+    ) {
+      editLink = '/edit';
+    }
+  }
+  if (!editLink) {
+    const { box, queue } = get(state.workQueueToDisplay);
+    const { USER_ROLES } = applicationContext.getConstants();
+    const user = applicationContext.getCurrentUser();
+    const messageId = result.messages[0] && result.messages[0].messageId;
+
+    const workItemIdToMarkAsRead = !result.isRead ? result.workItemId : null;
+
+    const markReadPath =
+      workItemIdToMarkAsRead && box === 'inbox' && queue === 'my'
+        ? `/mark/${workItemIdToMarkAsRead}`
+        : '';
+
+    if (
+      messageId &&
+      (workQueueIsInternal ||
+        permissions.DOCKET_ENTRY ||
+        (!workQueueIsInternal &&
+          user.role === USER_ROLES.petitionsClerk &&
+          box === 'outbox'))
+    ) {
+      editLink = `/messages/${messageId}${markReadPath}`;
+    } else {
+      editLink = `${markReadPath}`;
+    }
+  }
+
+  return editLink;
+};
+
 export const filterWorkItems = ({
   applicationContext,
   user,
@@ -306,14 +385,22 @@ export const formattedWorkQueue = (get, applicationContext) => {
         workQueueToDisplay,
       }),
     )
-    .map(item =>
-      formatWorkItem({
+    .map(item => {
+      const result = formatWorkItem({
         applicationContext,
         selectedWorkItems,
         workItem: item,
         workQueueIsInternal,
-      }),
-    );
+      });
+      const editLink = getWorkItemDocumentLink({
+        applicationContext,
+        get,
+        selectedWorkItems,
+        workItem: item,
+        workQueueIsInternal,
+      });
+      return { ...result, editLink };
+    });
 
   const sortFields = {
     documentQc: {

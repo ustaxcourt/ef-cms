@@ -7,7 +7,6 @@ import React from 'react';
 export const SectionWorkQueueInProgress = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
-    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
@@ -18,7 +17,6 @@ export const SectionWorkQueueInProgress = connect(
   },
   ({
     assignSelectedWorkItemsSequence,
-    documentEditLinkHelper,
     formattedWorkQueue,
     selectAssigneeSequence,
     selectedWorkItems,
@@ -139,21 +137,7 @@ export const SectionWorkQueueInProgress = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={
-                        `/case-detail/${item.docketNumber}/documents/${item.document.documentId}` +
-                        documentEditLinkHelper({
-                          messageId: item.currentMessage.messageId,
-                          shouldLinkToComplete:
-                            item.document.isFileAttached === false,
-                          shouldLinkToEdit:
-                            workQueueHelper.showEditDocketEntry &&
-                            item.isQC &&
-                            item.document.eventCode !== 'P',
-                          shouldLinkToEditCourtIssued:
-                            workQueueHelper.showEditDocketEntry &&
-                            item.isCourtIssuedDocument,
-                        })
-                      }
+                      href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
                       onClick={e => {
                         e.stopPropagation();
                       }}
