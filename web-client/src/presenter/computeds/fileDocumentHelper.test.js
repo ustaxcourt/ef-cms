@@ -475,8 +475,18 @@ describe('fileDocumentHelper', () => {
       selectedCases: ['101-19', '102-19'],
     };
     state.caseDetail.consolidatedCases = [
-      { ...MOCK_CASE, docketNumber: '101-19' },
-      { ...MOCK_CASE, docketNumber: '102-19' },
+      {
+        ...MOCK_CASE,
+        docketNumber: '101-19',
+        docketRecord: null,
+        documents: null,
+      },
+      {
+        ...MOCK_CASE,
+        docketNumber: '102-19',
+        docketRecord: null,
+        documents: null,
+      },
     ];
     const result = runCompute(fileDocumentHelper, { state });
     expect(result.showMultiDocumentFilingPartyForm).toBeTruthy();
