@@ -1993,6 +1993,24 @@ describe('Case entity', () => {
 
         expect(result).toEqual(true);
       });
+
+      it('should accept a caseToConsolidate param to check its eligible case status', () => {
+        let result;
+
+        // verify a failure on the current (this) case
+        caseEntity.status = 'New';
+        result = caseEntity.canConsolidate();
+        expect(result).toEqual(false);
+
+        // should also fail because duplicate of (this) case
+        const otherCase = { ...caseEntity };
+        result = caseEntity.canConsolidate(otherCase);
+        expect(result).toEqual(false);
+
+        otherCase.status = 'Submitted';
+        result = caseEntity.canConsolidate(otherCase);
+        expect(result).toEqual(true);
+      });
     });
 
     describe('getConsolidationStatus', () => {
@@ -2021,7 +2039,7 @@ describe('Case entity', () => {
       });
 
       it('should fail when case statuses are not the same', () => {
-        pendingCaseEntity.status = 'New';
+        pendingCaseEntity.status = 'Calendared';
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -2087,8 +2105,8 @@ describe('Case entity', () => {
         ]);
       });
 
-      it('should return all reasons for the failure', () => {
-        leadCaseEntity.status = 'Closed';
+      it('should only return the ineligible failure if the pending case status is ineligible', () => {
+        leadCaseEntity.status = 'Submitted';
         pendingCaseEntity.status = 'Closed';
         pendingCaseEntity.procedureType = 'small';
         pendingCaseEntity.trialLocation = 'Flavortown, AR';
@@ -2101,6 +2119,20 @@ describe('Case entity', () => {
         expect(result.canConsolidate).toEqual(false);
         expect(result.reason).toEqual([
           'Case status is Closed and cannot be consolidated',
+        ]);
+      });
+
+      it('should return all reasons for the failure if the case status is eligible', () => {
+        pendingCaseEntity.procedureType = 'small';
+        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+        pendingCaseEntity.associatedJudge = 'Smashmouth';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual([
           'Case procedure is not the same',
           'Place of trial is not the same',
           'Judge is not the same',
