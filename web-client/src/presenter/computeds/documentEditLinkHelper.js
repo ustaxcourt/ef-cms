@@ -1,10 +1,7 @@
 import { state } from 'cerebral';
 
 export const documentEditLinkHelper = (get, applicationContext) => ({
-  docketNumber,
-  documentId,
   messageId,
-  shouldLinkedToDetails,
   shouldLinkToComplete,
   shouldLinkToEdit,
   shouldLinkToEditCourtIssued,
@@ -29,22 +26,19 @@ export const documentEditLinkHelper = (get, applicationContext) => ({
     return messageId && linkToMessagesTab;
   };
 
-  const baseUri = `/case-detail/${docketNumber}/documents/${documentId}`;
   const markReadPath = workItemIdToMarkAsRead
     ? `/mark/${workItemIdToMarkAsRead}`
     : '';
 
-  if (shouldLinkedToDetails) {
-    return `${baseUri}`;
-  } else if (shouldLinkToComplete) {
-    return `${baseUri}/complete`;
+  if (shouldLinkToComplete) {
+    return '/complete';
   } else if (shouldLinkToEditCourtIssued) {
-    return `${baseUri}/edit-court-issued`;
+    return '/edit-court-issued';
   } else if (shouldLinkToEdit) {
-    return `${baseUri}/edit`;
+    return '/edit';
   } else if (shouldLinkToMessagesTab()) {
-    return `${baseUri}/messages/${messageId}${markReadPath}`;
+    return `/messages/${messageId}${markReadPath}`;
   } else {
-    return `${baseUri}${markReadPath}`;
+    return `${markReadPath}`;
   }
 };

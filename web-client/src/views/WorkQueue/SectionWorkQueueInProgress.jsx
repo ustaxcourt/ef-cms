@@ -139,20 +139,21 @@ export const SectionWorkQueueInProgress = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentEditLinkHelper({
-                        docketNumber: item.docketNumber,
-                        documentId: item.document.documentId,
-                        messageId: item.currentMessage.messageId,
-                        shouldLinkToComplete:
-                          item.document.isFileAttached === false,
-                        shouldLinkToEdit:
-                          workQueueHelper.showEditDocketEntry &&
-                          item.isQC &&
-                          item.document.eventCode !== 'P',
-                        shouldLinkToEditCourtIssued:
-                          workQueueHelper.showEditDocketEntry &&
-                          item.isCourtIssuedDocument,
-                      })}
+                      href={
+                        `/case-detail/${item.docketNumber}/documents/${item.document.documentId}` +
+                        documentEditLinkHelper({
+                          messageId: item.currentMessage.messageId,
+                          shouldLinkToComplete:
+                            item.document.isFileAttached === false,
+                          shouldLinkToEdit:
+                            workQueueHelper.showEditDocketEntry &&
+                            item.isQC &&
+                            item.document.eventCode !== 'P',
+                          shouldLinkToEditCourtIssued:
+                            workQueueHelper.showEditDocketEntry &&
+                            item.isCourtIssuedDocument,
+                        })
+                      }
                       onClick={e => {
                         e.stopPropagation();
                       }}

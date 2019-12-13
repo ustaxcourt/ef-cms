@@ -86,12 +86,13 @@ export const IndividualWorkQueueOutbox = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentEditLinkHelper({
-                        docketNumber: item.docketNumber,
-                        documentId: item.document.documentId,
-                        messageId: item.currentMessage.messageId,
-                        workItemIdToMarkAsRead: null,
-                      })}
+                      href={
+                        `/case-detail/${item.docketNumber}/documents/${item.document.documentId}` +
+                        documentEditLinkHelper({
+                          messageId: item.currentMessage.messageId,
+                          workItemIdToMarkAsRead: null,
+                        })
+                      }
                       onClick={e => {
                         e.stopPropagation();
                       }}
