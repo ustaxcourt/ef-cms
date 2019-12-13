@@ -218,7 +218,7 @@ const PetitionerInformation = connect(
             className="label margin-right-4 margin-top-05"
             id="practitioner-counsel-search-description"
           >
-            Add Counsel
+            Add counsel
           </span>
         </div>
         <div className="grid-col-3 margin-top-neg-05">
@@ -249,7 +249,7 @@ const PetitionerInformation = connect(
                   )}
                   id="practitioner-search-field"
                   name="practitionerSearch"
-                  placeholder="Enter Bar No. or Name"
+                  placeholder="Enter bar no. or name"
                   type="search"
                   value={form.practitionerSearch || ''}
                   onChange={e => {

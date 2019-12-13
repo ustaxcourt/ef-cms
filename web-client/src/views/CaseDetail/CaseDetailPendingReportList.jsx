@@ -50,7 +50,7 @@ export const CaseDetailPendingReportList = connect(
               <th>Date filed</th>
               <th>Filings and proceedings</th>
               <th>Filed by</th>
-              <th>Remove</th>
+              <th></th>
             </tr>
           </thead>
           {pendingItemsDocketEntries.map((entry, arrayIndex) => (

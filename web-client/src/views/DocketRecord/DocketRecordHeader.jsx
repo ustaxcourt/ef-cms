@@ -47,24 +47,24 @@ export const DocketRecordHeader = connect(
               >
                 {[
                   {
-                    label: 'Oldest',
+                    label: 'oldest',
                     value: 'byDate',
                   },
                   {
-                    label: 'Newest',
+                    label: 'newest',
                     value: 'byDateDesc',
                   },
                   {
-                    label: 'No. (Ascending)',
+                    label: 'no. (ascending)',
                     value: 'byIndex',
                   },
                   {
-                    label: 'No. (Descending)',
+                    label: 'no. (descending)',
                     value: 'byIndexDesc',
                   },
                 ].map(item => (
                   <option key={item.value} value={item.value}>
-                    Sort By {item.label}
+                    Sort by {item.label}
                   </option>
                 ))}
               </select>
@@ -108,13 +108,13 @@ export const DocketRecordHeader = connect(
               }}
             >
               {formattedCaseDetail.docketRecordSort === 'byDate' &&
-                'Oldest to Newest'}
+                'Oldest to newest'}
               {formattedCaseDetail.docketRecordSort === 'byDateDesc' &&
-                'Newest to Oldest'}
+                'Newest to oldest'}
               {formattedCaseDetail.docketRecordSort === 'byIndex' &&
-                'Order Ascending'}
+                'Order ascending'}
               {formattedCaseDetail.docketRecordSort === 'byIndexDesc' &&
-                'Order Descending'}
+                'Order descending'}
               <FontAwesomeIcon icon="sort" size="sm" />
             </Button>
           </div>
