@@ -1214,7 +1214,7 @@ describe('document detail helper', () => {
   });
 
   describe('showViewOrdersNeededButton', () => {
-    it("should show the 'view orders needed' link if a document has been served and user is petitionsclerk", () => {
+    it("should show the 'view orders needed' link if a document has been served and user is petitionsclerk and document is a petition", () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -1227,7 +1227,7 @@ describe('document detail helper', () => {
             documents: [
               {
                 documentId: 'abc',
-                documentType: 'Stipulated Decision',
+                documentType: 'Petition',
                 status: 'served',
               },
             ],
