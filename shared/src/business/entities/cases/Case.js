@@ -1225,37 +1225,42 @@ Case.prototype.getCaseContacts = function(shape) {
  * @returns {object} object with canConsolidate flag and reason string
  */
 Case.prototype.getConsolidationStatus = function({ caseEntity }) {
+  let canConsolidate = true;
+  const reason = [];
+
   if (!this.canConsolidate(caseEntity.status)) {
-    return {
-      canConsolidate: false,
-      reason: `Case status is ${caseEntity.status} and cannot be consolidated`,
-    };
+    canConsolidate = false;
+    reason.push(
+      `Case status is ${caseEntity.status} and cannot be consolidated`,
+    );
   }
 
   if (this.docketNumber === caseEntity.docketNumber) {
-    return { canConsolidate: false, reason: 'Cases are the same' };
+    canConsolidate = false;
+    reason.push('Cases are the same');
   }
 
   if (this.status !== caseEntity.status) {
-    return { canConsolidate: false, reason: 'Case status is not the same' };
+    canConsolidate = false;
+    reason.push('Case status is not the same');
   }
 
   if (this.procedureType !== caseEntity.procedureType) {
-    return { canConsolidate: false, reason: 'Case procedure is not the same' };
+    canConsolidate = false;
+    reason.push('Case procedure is not the same');
   }
 
   if (this.trialLocation !== caseEntity.trialLocation) {
-    return {
-      canConsolidate: false,
-      reason: 'Place of trial is not the same',
-    };
+    canConsolidate = false;
+    reason.push('Place of trial is not the same');
   }
 
   if (this.associatedJudge !== caseEntity.associatedJudge) {
-    return { canConsolidate: false, reason: 'Judge is not the same' };
+    canConsolidate = false;
+    reason.push('Judge is not the same');
   }
 
-  return { canConsolidate: true, reason: '' };
+  return { canConsolidate, reason };
 };
 
 /**
