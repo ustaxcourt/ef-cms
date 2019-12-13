@@ -1228,11 +1228,13 @@ Case.prototype.getConsolidationStatus = function({ caseEntity }) {
   let canConsolidate = true;
   const reason = [];
 
-  if (!this.canConsolidate(caseEntity.status)) {
-    canConsolidate = false;
-    reason.push(
-      `Case status is ${caseEntity.status} and cannot be consolidated`,
-    );
+  if (!this.canConsolidate(caseEntity)) {
+    return {
+      canConsolidate: false,
+      reason: [
+        `Case status is ${caseEntity.status} and cannot be consolidated`,
+      ],
+    };
   }
 
   if (this.docketNumber === caseEntity.docketNumber) {
@@ -1267,8 +1269,9 @@ Case.prototype.getConsolidationStatus = function({ caseEntity }) {
  * checks case eligibility for consolidation by the current case's status
  *
  * @returns {boolean} true if eligible for consolidation, false otherwise
+ * @param {object} caseToConsolidate (optional) case to check for consolidation eligibility
  */
-Case.prototype.canConsolidate = function() {
+Case.prototype.canConsolidate = function(caseToConsolidate) {
   const ineligibleStatusTypes = [
     Case.STATUS_TYPES.batchedForIRS,
     Case.STATUS_TYPES.new,
@@ -1278,7 +1281,9 @@ Case.prototype.canConsolidate = function() {
     Case.STATUS_TYPES.onAppeal,
   ];
 
-  return !ineligibleStatusTypes.includes(this.status);
+  const caseToCheck = caseToConsolidate || this;
+
+  return !ineligibleStatusTypes.includes(caseToCheck.status);
 };
 
 /**
