@@ -371,7 +371,9 @@ export const FileDocumentReview = connect(
                   <h3 className="underlined">Parties Filing The Document(s)</h3>
                   <div className="grid-row grid-gap">
                     <MultiDocumentPartiesFilingReview
-                      selectedCases={fileDocumentHelper.selectedCasesAsCase}
+                      selectedCases={
+                        fileDocumentHelper.formattedSelectedCasesAsCase
+                      }
                     />
                   </div>
                 </div>
