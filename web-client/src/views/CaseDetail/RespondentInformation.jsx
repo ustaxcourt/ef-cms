@@ -115,7 +115,7 @@ const RespondentInformation = connect(
             className="label margin-right-4 margin-top-05"
             id="respondent-counsel-search-description"
           >
-            Add Counsel
+            Add counsel
           </span>
         </div>
         <div className="grid-col-3 margin-top-neg-05">
@@ -146,7 +146,7 @@ const RespondentInformation = connect(
                   )}
                   id="respondent-search-field"
                   name="respondentSearch"
-                  placeholder="Enter Bar No. or Name"
+                  placeholder="Enter bar no. or name"
                   type="search"
                   value={form.respondentSearch || ''}
                   onChange={e => {

@@ -60,7 +60,14 @@ export const DraftDocuments = connect(
                         {draftDocument.signedAt &&
                           draftDocument.signedAtFormattedTZ}
                         {!draftDocument.signedAt && (
-                          <a href={draftDocument.signUrl}>Add Signature</a>
+                          <Button
+                            link
+                            className="padding-0"
+                            href={draftDocument.signUrl}
+                            icon={['fas', 'pencil-alt']}
+                          >
+                            Apply Signature
+                          </Button>
                         )}
                       </td>
 
@@ -68,6 +75,7 @@ export const DraftDocuments = connect(
                         {draftDocument.signedAt ? (
                           <Button
                             link
+                            className="padding-0"
                             data-document-id={draftDocument.documentId}
                             icon="edit"
                             onClick={() => {
@@ -82,7 +90,12 @@ export const DraftDocuments = connect(
                             Edit
                           </Button>
                         ) : (
-                          <Button link href={draftDocument.editUrl} icon="edit">
+                          <Button
+                            link
+                            className="padding-0"
+                            href={draftDocument.editUrl}
+                            icon="edit"
+                          >
                             Edit
                           </Button>
                         )}
@@ -91,7 +104,7 @@ export const DraftDocuments = connect(
                       <td className="smaller-column">
                         <Button
                           link
-                          className="red-warning"
+                          className="red-warning padding-0"
                           icon="trash"
                           onClick={() => {
                             archiveDraftDocumentModalSequence({
