@@ -37,16 +37,18 @@ export const CaseDetail = connect(
                 aria-label="additional case info"
                 className="usa-select"
                 id="mobile-document-detail-tab-selector"
-                name="partyType"
-                value={caseDetailHelper.documentDetailTab}
                 onChange={e => {
                   setCaseDetailPageTabSequence({
-                    tab: e.target.value,
+                    caseInformationTab: e.target.value,
                   });
                 }}
               >
                 <option value="docketRecord">Docket Record</option>
-                <option value="caseInformation">Case Information</option>
+                <optgroup label="Case Information">
+                  <option value="overview">Overview</option>
+                  <option value="petitioner">Petitioner</option>
+                  <option value="respondent">Respondent</option>
+                </optgroup>
               </select>
             </div>
           </div>
