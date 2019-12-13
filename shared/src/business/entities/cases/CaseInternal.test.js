@@ -20,6 +20,7 @@ describe('CaseInternal entity', () => {
           postalCode: '05198',
           state: 'AK',
         },
+        mailingDate: 'test',
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitionFile: { anObject: true },
         petitionFileSize: 1,

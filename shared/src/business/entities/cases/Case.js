@@ -137,6 +137,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
     },
     'Please enter a valid IRS notice date',
   ],
+  mailingDate: 'Enter a mailing date',
   ownershipDisclosureFile: 'Upload an Ownership Disclosure Statement',
   ownershipDisclosureFileSize: [
     {
@@ -218,6 +219,7 @@ function Case(rawCase, { applicationContext }) {
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
+  this.mailingDate = rawCase.mailingDate;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
   this.highPriority = rawCase.highPriority;
   this.highPriorityReason = rawCase.highPriorityReason;
@@ -382,6 +384,18 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
+    mailingDate: joi.when('isPaper', {
+      is: true,
+      otherwise: joi
+        .string()
+        .max(25)
+        .allow(null)
+        .optional(),
+      then: joi
+        .string()
+        .max(25)
+        .required(),
+    }),
     noticeOfAttachments: joi.boolean().optional(),
     orderForAmendedPetition: joi.boolean().optional(),
     orderForAmendedPetitionAndFilingFee: joi.boolean().optional(),

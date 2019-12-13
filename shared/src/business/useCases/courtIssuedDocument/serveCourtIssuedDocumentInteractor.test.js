@@ -145,6 +145,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         ...documentsWithCaseClosingEventCodes,
       ],
       isPaper: true,
+      mailingDate: 'testing',
     },
   ];
 
