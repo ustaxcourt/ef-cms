@@ -86,7 +86,7 @@ const PetitionerInformation = connect(
                 {caseDetailHelper.showEditContacts && (
                   <Button
                     link
-                    className="push-right margin-right-0 margin-top-neg-1"
+                    className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
                     href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
                     icon="edit"
                   >
@@ -131,7 +131,7 @@ const PetitionerInformation = connect(
                     {caseDetailHelper.showEditContacts && (
                       <Button
                         link
-                        className="push-right margin-right-0 margin-top-neg-1"
+                        className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
                         icon="question-circle"
                         onClick={() => openEditSecondaryContactModalSequence()}
                       >
@@ -171,7 +171,7 @@ const PetitionerInformation = connect(
             formattedCaseDetail.practitioners.map((practitioner, index) => (
               <div
                 className={classNames(
-                  'tablet:grid-col-3',
+                  'tablet:grid-col-3 counsel-information',
                   index > 3 && 'margin-top-3',
                 )}
                 key={index}
