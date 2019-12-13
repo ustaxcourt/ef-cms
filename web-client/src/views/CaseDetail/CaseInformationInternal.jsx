@@ -11,29 +11,39 @@ import React from 'react';
 const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
   <React.Fragment>
     <div className="grid-row">
-      <div className="grid-col-4">
+      <div className="grid-col-6">
         <p className="label">Notice/Case Type</p>
         <p>{caseDetail.caseType}</p>
       </div>
-      <div className="grid-col-4">
+      <div className="grid-col-6">
         <p className="label">Case Procedure</p>
-        <p>{caseDetail.procedureType}</p>
-      </div>
-      <div className="grid-col-4">
-        <p className="label">Requested Place of Trial</p>
-        <p>{caseDetail.formattedPreferredTrialCity}</p>
+        <p>{caseDetail.procedureType} Tax Case</p>
       </div>
     </div>
     <div className="grid-row">
-      <div className="grid-col-4">
+      <div className="grid-col-6">
         <p className="label">IRS Notice Date</p>
         <p className="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
       </div>
-      <div className="grid-col-4">
+      <div className="grid-col-6">
+        <p className="label">Party Type</p>
+        <p className="irs-notice-date">{caseDetail.partyType}</p>
+      </div>
+    </div>
+    <div className="grid-row">
+      <div className="grid-col-6">
+        <p className="label">Requested Place of Trial</p>
+        <p className="margin-bottom-0">
+          {caseDetail.formattedPreferredTrialCity}
+        </p>
+      </div>
+      <div className="grid-col-6">
         {showPaymentRecord && (
           <React.Fragment>
             <p className="label">Petition Fee Paid</p>
-            <p className="pay-gov-id-display">{caseDetail.payGovId}</p>
+            <p className="pay-gov-id-display margin-bottom-0">
+              {caseDetail.payGovId}
+            </p>
           </React.Fragment>
         )}
       </div>
@@ -179,7 +189,7 @@ const TrialInformation = ({
     {caseDetail.showNotScheduled && (
       <>
         <h3 className="underlined">Trial - Not Scheduled</h3>
-        <div className="display-flex flex-row flex-justify">
+        <div className="margin-bottom-1">
           <Button
             link
             icon="plus-circle"
@@ -190,6 +200,8 @@ const TrialInformation = ({
           >
             Add to Trial
           </Button>
+        </div>
+        <div className="margin-bottom-1">
           <Button
             link
             className="high-priority-btn"
@@ -200,6 +212,8 @@ const TrialInformation = ({
           >
             Mark High Priority
           </Button>
+        </div>
+        <div>
           <Button
             link
             className="block-from-trial-btn red-warning"

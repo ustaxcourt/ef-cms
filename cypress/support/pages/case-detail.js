@@ -2,6 +2,10 @@ exports.navigateTo = (username, caseId) => {
   cy.login(username, `/case-detail/${caseId}`);
 };
 
+exports.getActionMenuButton = () => {
+  return cy.get('button.case-detail-menu__button');
+};
+
 exports.getEditCaseCaptionButton = () => {
   return cy.get('button#edit-case-context-button');
 };
