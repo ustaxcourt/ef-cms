@@ -1,0 +1,34 @@
+#main-content .big-blue-header .case-detail-menu {
+  .case-detail-menu__button {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background-color: $color-white;
+    color: color($theme-color-primary);
+  }
+  .usa-nav__submenu {
+    background-color: $color-white;
+    box-shadow: 3px 9px 9px rgba(0, 0, 0, 0.2);
+
+    .usa-nav__submenu-item button {
+      padding: 0.2rem;
+      color: color($theme-color-primary);
+      font-weight: $font-semibold;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .usa-nav__submenu-item a {
+      padding: 0.2rem;
+      background-color: $color-white;
+      color: color($theme-color-primary);
+      font-size: 0.93rem;
+      font-weight: $font-semibold;
+    }
+
+    &.position-right-0 {
+      right: 0;
+    }
+  }
+}

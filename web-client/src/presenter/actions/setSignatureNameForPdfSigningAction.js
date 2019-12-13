@@ -22,13 +22,8 @@ export const setSignatureNameForPdfSigningAction = async ({
         applicationContext,
         user,
       });
-    nameForPdfSigning = judgeUser.name;
-    if (nameForPdfSigning.includes('Special')) {
-      nameForPdfSigning = nameForPdfSigning.replace('Special Trial ', '');
-      nameForSigningLine2 = 'Special Trial Judge';
-    } else {
-      nameForSigningLine2 = '';
-    }
+    nameForPdfSigning = judgeUser.judgeFullName;
+    nameForSigningLine2 = judgeUser.judgeTitle;
   } else {
     nameForPdfSigning = applicationContext.getChiefJudgeNameForSigning();
     nameForSigningLine2 = 'Chief Judge';

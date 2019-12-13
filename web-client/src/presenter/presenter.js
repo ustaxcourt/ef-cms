@@ -202,6 +202,7 @@ import { setPageSequence } from './sequences/PDFPreviewModal/setPageSequence';
 import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setScannerSourceSequence } from './sequences/setScannerSourceSequence';
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
+import { setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence } from './sequences/setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setWorkItemActionSequence } from './sequences/setWorkItemActionSequence';
 import { setWorkQueueIsInternalSequence } from './sequences/setWorkQueueIsInternalSequence';
@@ -522,6 +523,7 @@ export const presenter = {
     setPdfPreviewUrlSequence,
     setScannerSourceSequence,
     setSelectedBatchIndexSequence,
+    setSelectedCasesForConsolidatedCaseDocumentSubmissionSequence,
     setTrialSessionCalendarSequence,
     setWorkItemActionSequence,
     setWorkQueueIsInternalSequence,

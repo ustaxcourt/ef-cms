@@ -30,12 +30,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     orderToShowCause,
   } = caseDetail;
   const permissions = get(state.permissions);
-
-  const showAddDocketEntryButton =
-    permissions.DOCKET_ENTRY && ['CaseDetailInternal'].includes(currentPage);
-  const showCreateOrderButton =
-    permissions.COURT_ISSUED_DOCUMENT &&
-    ['CaseDetailInternal'].includes(currentPage);
   const showCaseNotes = permissions.TRIAL_SESSION_WORKING_COPY;
 
   let showFileDocumentButton =
@@ -141,14 +135,12 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState.respondentMatches &&
       modalState.respondentMatches.length,
     showActionRequired,
-    showAddDocketEntryButton,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
     showCaseInformationExternal: isExternalUser,
     showCaseNameForPrimary,
     showCaseNotes,
-    showCreateOrderButton,
     showDocketRecordInProgressState: !isExternalUser,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContacts,

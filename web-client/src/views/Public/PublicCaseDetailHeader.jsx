@@ -8,7 +8,7 @@ export const PublicCaseDetailHeader = connect(
   },
   ({ publicCaseDetailHeaderHelper }) => {
     return (
-      <div className="big-blue-header">
+      <div className="big-blue-header margin-bottom-0">
         <div className="grid-container">
           <div className="grid-row">
             <div className="tablet:grid-col-8">

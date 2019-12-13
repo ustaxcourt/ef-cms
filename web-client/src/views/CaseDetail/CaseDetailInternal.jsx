@@ -7,6 +7,7 @@ import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
 import { CaseInformationInternal } from './CaseInformationInternal';
 import { CaseNotes } from './CaseNotes';
 import { CreateCaseDeadlineModalDialog } from './CreateCaseDeadlineModalDialog';
+import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
 import { DeleteCaseDeadlineModalDialog } from './DeleteCaseDeadlineModalDialog';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
@@ -14,13 +15,15 @@ import { EditCaseDeadlineModalDialog } from './EditCaseDeadlineModalDialog';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './MessagesInProgress';
-import { PartyInformation } from './PartyInformation';
+import { PetitionerInformation } from './PetitionerInformation';
 import { PrioritizeCaseModal } from './PrioritizeCaseModal';
 import { RemoveFromTrialSessionModal } from './RemoveFromTrialSessionModal';
+import { RespondentInformation } from './RespondentInformation';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { UnblockFromTrialModal } from './UnblockFromTrialModal';
 import { UnprioritizeCaseModal } from './UnprioritizeCaseModal';
+import { UpdateCaseModalDialog } from '../CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -104,10 +107,10 @@ export const CaseDetailInternal = connect(
                 <CaseInformationInternal />
               </Tab>
               <Tab id="tab-petitioner" tabName="petitioner" title="Petitioner">
-                <PartyInformation />
+                <PetitionerInformation />
               </Tab>
               <Tab id="tab-respondent" tabName="respondent" title="Respondent">
-                <PartyInformation />
+                <RespondentInformation />
               </Tab>
             </Tabs>
           )}
@@ -161,6 +164,10 @@ export const CaseDetailInternal = connect(
         {showModal === 'RemoveFromTrialSessionModal' && (
           <RemoveFromTrialSessionModal />
         )}
+        {showModal === 'CreateOrderChooseTypeModal' && (
+          <CreateOrderChooseTypeModal />
+        )}
+        {showModal == 'UpdateCaseModalDialog' && <UpdateCaseModalDialog />}
       </>
     );
   },
