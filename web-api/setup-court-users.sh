@@ -26,7 +26,7 @@ generate_post_data() {
   "section": "$section",
   "name": "$name",
   "judgeFullName": "$judgeFullName",
-  "judgeTitle": "$judgeTitle",
+  "judgeTitle": "$judgeTitle"
 }
 EOF
 }
