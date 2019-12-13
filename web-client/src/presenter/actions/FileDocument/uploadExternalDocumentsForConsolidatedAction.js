@@ -2,7 +2,7 @@ import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from 'cerebral';
 
 /**
- * upload document to s3.
+ * upload document to s3 for consolidated cases.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -11,13 +11,14 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store function
  * @returns {object} the next path based on if validation was successful or error
  */
-export const uploadExternalDocumentsAction = async ({
+export const uploadExternalDocumentsForConsolidatedAction = async ({
   applicationContext,
   get,
   path,
   store,
 }) => {
-  const { caseId, docketNumber } = get(state.caseDetail);
+  const currentCase = get(state.caseDetail);
+  const { caseId, docketNumber, leadCaseId } = currentCase;
   const form = get(state.form);
 
   const documentMetadata = { ...form, caseId, docketNumber };
@@ -44,36 +45,47 @@ export const uploadExternalDocumentsAction = async ({
 
   const progressFunctions = setupPercentDone(documentFiles, store);
 
-  let caseDetail;
+  let cases = [];
 
   try {
-    caseDetail = await applicationContext
+    cases = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor({
         applicationContext,
         documentFiles,
         documentMetadata,
+        leadCaseId,
         progressFunctions,
       });
   } catch (err) {
     return path.error();
   }
 
-  const pendingDocuments = caseDetail.documents.filter(
-    document => document.processingStatus === 'pending',
-  );
+  const getPendingDocumentsForCase = caseDetail =>
+    caseDetail.documents.filter(
+      document => document.processingStatus === 'pending',
+    );
+
+  const pendingDocuments = [];
+
+  cases.forEach(caseDetail => {
+    pendingDocuments.push(...getPendingDocumentsForCase(caseDetail));
+  });
+
   const addCoversheet = document => {
     return applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
-      caseId: caseDetail.caseId,
+      caseId: document.caseId,
       documentId: document.documentId,
     });
   };
+
   await Promise.all(pendingDocuments.map(addCoversheet));
 
   return path.success({
-    caseDetail,
+    caseDetail: currentCase,
     caseId: docketNumber,
+    consolidatedCases: cases,
     documentsFiled: documentMetadata,
   });
 };

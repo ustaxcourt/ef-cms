@@ -17,7 +17,7 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
       </div>
       <div className="grid-col-6">
         <p className="label">Case Procedure</p>
-        <p>{caseDetail.procedureType}</p>
+        <p>{caseDetail.procedureType} Tax Case</p>
       </div>
     </div>
     <div className="grid-row">
@@ -33,13 +33,17 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
     <div className="grid-row">
       <div className="grid-col-6">
         <p className="label">Requested Place of Trial</p>
-        <p>{caseDetail.formattedPreferredTrialCity}</p>
+        <p className="margin-bottom-0">
+          {caseDetail.formattedPreferredTrialCity}
+        </p>
       </div>
       <div className="grid-col-6">
         {showPaymentRecord && (
           <React.Fragment>
             <p className="label">Petition Fee Paid</p>
-            <p className="pay-gov-id-display">{caseDetail.payGovId}</p>
+            <p className="pay-gov-id-display margin-bottom-0">
+              {caseDetail.payGovId}
+            </p>
           </React.Fragment>
         )}
       </div>
@@ -185,7 +189,7 @@ const TrialInformation = ({
     {caseDetail.showNotScheduled && (
       <>
         <h3 className="underlined">Trial - Not Scheduled</h3>
-        <div className="display-flex flex-row flex-justify">
+        <div className="margin-bottom-1">
           <Button
             link
             icon="plus-circle"
@@ -196,6 +200,8 @@ const TrialInformation = ({
           >
             Add to Trial
           </Button>
+        </div>
+        <div className="margin-bottom-1">
           <Button
             link
             className="high-priority-btn"
@@ -206,6 +212,8 @@ const TrialInformation = ({
           >
             Mark High Priority
           </Button>
+        </div>
+        <div>
           <Button
             link
             className="block-from-trial-btn red-warning"
