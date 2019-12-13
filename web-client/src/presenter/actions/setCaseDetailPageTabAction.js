@@ -8,13 +8,10 @@ import { state } from 'cerebral';
  * @param {object} providers.props.tab the tab to display
  */
 export const setCaseDetailPageTabAction = ({ props, store }) => {
-  if (props.tab) {
-    store.set(state.caseDetailPage.primaryTab, props.tab);
-  } else if (props.caseInformationTab) {
+  if (props.isSecondary) {
     store.set(state.caseDetailPage.primaryTab, 'caseInformation');
-    store.set(
-      state.caseDetailPage.caseInformationTab,
-      props.caseInformationTab,
-    );
+    store.set(state.caseDetailPage.caseInformationTab, props.tab);
+  } else {
+    store.set(state.caseDetailPage.primaryTab, props.tab);
   }
 };
