@@ -35,14 +35,14 @@ export const submitExternalDocumentSequence = [
       uploadExternalDocumentsAction,
       {
         error: [openFileUploadErrorModal],
-        success: [...onSuccess],
+        success: onSuccess,
       },
     ],
     yes: [
       uploadExternalDocumentsForConsolidatedAction,
       {
         error: [openFileUploadErrorModal],
-        success: [...onSuccess],
+        success: onSuccess,
       },
     ],
   },
