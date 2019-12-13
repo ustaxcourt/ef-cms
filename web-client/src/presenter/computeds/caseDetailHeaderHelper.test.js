@@ -314,4 +314,49 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showCaseDetailHeaderMenu).toEqual(false);
     expect(result.showCreateOrderButton).toEqual(false);
   });
+
+  it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case', () => {
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        permissions: {
+          FILE_EXTERNAL_DOCUMENT: true,
+        },
+        screenMetadata: { isAssociated: true },
+      },
+    });
+    expect(result.showFileDocumentButton).toEqual(true);
+  });
+
+  it('should not show file document button if user does not have FILE_EXTERNAL_DOCUMENT permission', () => {
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        permissions: {
+          FILE_EXTERNAL_DOCUMENT: false,
+        },
+        screenMetadata: { isAssociated: true },
+      },
+    });
+    expect(result.showFileDocumentButton).toEqual(false);
+  });
+
+  it('should not show file document button if user has FILE_EXTERNAL_DOCUMENT permission but the user is not associated with the case', () => {
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        permissions: {
+          FILE_EXTERNAL_DOCUMENT: true,
+        },
+        screenMetadata: { isAssociated: false },
+      },
+    });
+    expect(result.showFileDocumentButton).toEqual(false);
+  });
 });

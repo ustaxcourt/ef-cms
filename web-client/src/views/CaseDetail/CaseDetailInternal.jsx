@@ -15,9 +15,10 @@ import { EditCaseDeadlineModalDialog } from './EditCaseDeadlineModalDialog';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './MessagesInProgress';
-import { PartyInformation } from './PartyInformation';
+import { PetitionerInformation } from './PetitionerInformation';
 import { PrioritizeCaseModal } from './PrioritizeCaseModal';
 import { RemoveFromTrialSessionModal } from './RemoveFromTrialSessionModal';
+import { RespondentInformation } from './RespondentInformation';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { UnblockFromTrialModal } from './UnblockFromTrialModal';
@@ -106,10 +107,10 @@ export const CaseDetailInternal = connect(
                 <CaseInformationInternal />
               </Tab>
               <Tab id="tab-petitioner" tabName="petitioner" title="Petitioner">
-                <PartyInformation />
+                <PetitionerInformation />
               </Tab>
               <Tab id="tab-respondent" tabName="respondent" title="Respondent">
-                <PartyInformation />
+                <RespondentInformation />
               </Tab>
             </Tabs>
           )}
