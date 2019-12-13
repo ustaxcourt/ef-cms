@@ -121,7 +121,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
-      caseIdsForFiling: [caseId0, caseId1],
+      docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0],
       documentMetadata: {
         documentType: 'Memorandum in Support',
@@ -140,7 +140,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
-      caseIdsForFiling: [caseId0, caseId1],
+      docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0],
       documentMetadata: {
         documentType: 'Memorandum in Support',
@@ -169,7 +169,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   it('Should generate only ONE QC work item for the filing, to be found on the document of the lowest docket number case to be filed in', async () => {
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
-      caseIdsForFiling: [caseId0, caseId1],
+      docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0],
       documentMetadata: {
         documentType: 'Memorandum in Support',
@@ -195,7 +195,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
-      caseIdsForFiling: [caseId0, caseId1],
+      docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0, documentId1],
       documentMetadata: {
         documentType: 'Memorandum in Support',
@@ -216,7 +216,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
-      caseIdsForFiling: [caseId0, caseId1],
+      docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0, documentId1, documentId2, documentId3],
       documentMetadata: {
         documentType: 'Memorandum in Support',

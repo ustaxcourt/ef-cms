@@ -17,7 +17,7 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 exports.fileExternalDocumentForConsolidatedInteractor = async ({
   applicationContext,
-  caseIdsForFiling,
+  docketNumbersForFiling,
   documentIds,
   documentMetadata,
   leadCaseId,
@@ -49,7 +49,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
     const { caseId } = consolidatedCase;
     const caseEntity = new Case(consolidatedCase, { applicationContext });
 
-    if (caseIdsForFiling.includes(consolidatedCase.caseId)) {
+    if (docketNumbersForFiling.includes(consolidatedCase.docketNumber)) {
       // this serves the purpose of offering two different
       // look-ups to be used further down while minimizing
       // iterations over the case array
