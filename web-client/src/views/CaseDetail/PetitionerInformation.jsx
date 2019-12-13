@@ -126,7 +126,7 @@ const PetitionerInformation = connect(
             <div className="tablet:grid-col-4">
               <div className="card height-full">
                 <div className="content-wrapper">
-                  <h3 className="underlined" id="primary-label">
+                  <h3 className="underlined" id="secondary-label">
                     Spouse Contact Info
                     {caseDetailHelper.showEditContacts && (
                       <Button
