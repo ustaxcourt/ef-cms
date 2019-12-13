@@ -9,33 +9,33 @@ import React from 'react';
 const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
   <React.Fragment>
     <div className="grid-row">
-      <div className="grid-col-6">
+      <div className="tablet:grid-col-6">
         <p className="label">Notice/Case Type</p>
         <p>{caseDetail.caseType}</p>
       </div>
-      <div className="grid-col-6">
+      <div className="tablet:grid-col-6">
         <p className="label">Case Procedure</p>
         <p>{caseDetail.procedureType} Tax Case</p>
       </div>
     </div>
     <div className="grid-row">
-      <div className="grid-col-6">
+      <div className="tablet:grid-col-6">
         <p className="label">IRS Notice Date</p>
         <p className="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
       </div>
-      <div className="grid-col-6">
+      <div className="tablet:grid-col-6">
         <p className="label">Party Type</p>
         <p className="irs-notice-date">{caseDetail.partyType}</p>
       </div>
     </div>
     <div className="grid-row">
-      <div className="grid-col-6">
+      <div className="tablet:grid-col-6">
         <p className="label">Requested Place of Trial</p>
         <p className="margin-bottom-0">
           {caseDetail.formattedPreferredTrialCity}
         </p>
       </div>
-      <div className="grid-col-6">
+      <div className="tablet:grid-col-6">
         {showPaymentRecord && (
           <React.Fragment>
             <p className="label">Petition Fee Paid</p>
@@ -89,8 +89,8 @@ export const CaseInformationExternal = connect(
   }) => {
     return (
       <div className="petitions-details">
-        <div className="grid-container padding-x-0">
-          <NonMobile>
+        <NonMobile>
+          <div className="grid-container padding-x-0 margin-top-5">
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
                 <div className="card height-full">
@@ -132,11 +132,13 @@ export const CaseInformationExternal = connect(
                 </div>
               </div>
             </div>
-          </NonMobile>
-          <Mobile>
+          </div>
+        </NonMobile>
+        <Mobile>
+          <div className="grid-container padding-x-0 margin-top-3">
             <div className="margin-top-2">
-              <div className="case-info-card">
-                <h3 className="underlined">Petition Details</h3>{' '}
+              <div className="case-info-card padding-bottom-3">
+                <h3>Petition Details</h3>{' '}
                 <If bind="caseDetail.irsSendDate">
                   <Button
                     link
@@ -163,8 +165,8 @@ export const CaseInformationExternal = connect(
                 <TrialInformation caseDetail={formattedCaseDetail} />
               </div>
             </div>
-          </Mobile>
-        </div>
+          </div>
+        </Mobile>
       </div>
     );
   },

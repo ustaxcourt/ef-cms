@@ -78,7 +78,7 @@ const RespondentInformation = connect(
             formattedCaseDetail.respondents.map((respondent, index) => (
               <div
                 className={classNames(
-                  'tablet:grid-col-3',
+                  'tablet:grid-col-3 counsel-information',
                   index > 3 && 'margin-top-3',
                 )}
                 key={index}
