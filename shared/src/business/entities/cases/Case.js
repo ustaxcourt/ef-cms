@@ -384,10 +384,18 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
-    mailingDate: joi
-      .string()
-      .max(25)
-      .required(),
+    mailingDate: joi.when('isPaper', {
+      is: true,
+      otherwise: joi
+        .string()
+        .max(25)
+        .allow(null)
+        .optional(),
+      then: joi
+        .string()
+        .max(25)
+        .required(),
+    }),
     noticeOfAttachments: joi.boolean().optional(),
     orderForAmendedPetition: joi.boolean().optional(),
     orderForAmendedPetitionAndFilingFee: joi.boolean().optional(),
