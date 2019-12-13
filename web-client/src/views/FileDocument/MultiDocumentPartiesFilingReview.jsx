@@ -5,11 +5,10 @@ import React from 'react';
 
 export const MultiDocumentPartiesFilingReview = connect(
   {
-    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
   },
   ({ form, selectedCases }) => {
-    return formattedSelectedCasesAsCase.map(selectedCase => (
+    return selectedCases.map(selectedCase => (
       <div
         className="tablet:grid-col-3 margin-bottom-5"
         key={selectedCase.caseId}

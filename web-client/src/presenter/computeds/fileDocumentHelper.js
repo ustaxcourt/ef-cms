@@ -113,7 +113,6 @@ export const fileDocumentHelper = (get, applicationContext) => {
     formatCase(applicationContext, selectedCase),
   );
 
-  // filing document for consolidated cases
   let selectedDocketNumbers = get(state.form.selectedCases);
   let formattedDocketNumbers = null;
 
