@@ -82,8 +82,6 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #tab-in-progress to be visible',
-      'click element #tab-in-progress',
       'wait for #button-create-order to be visible',
       'click element #button-create-order',
       'wait for #eventCode to be visible',
@@ -92,7 +90,7 @@ module.exports = [
     ],
     notes: 'checks a11y of create order modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=create-order',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/orders-needed&info=create-order',
   },
   {
     actions: [
@@ -169,9 +167,11 @@ module.exports = [
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-order/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/sign',
   {
     actions: [
-      'wait for #tab-deadlines to be visible',
-      'click element #tab-deadlines',
+      'wait for #case-detail-menu-button to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #case-detail-menu-button',
       'wait for #button-add-deadline to be visible',
+      'wait for .progress-indicator to be hidden',
       'click element #button-add-deadline',
       'wait for #deadline-date-legend to be visible',
     ],

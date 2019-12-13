@@ -3,12 +3,12 @@ import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
 import { CaseInformationExternal } from './CaseInformationExternal';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { ErrorNotification } from '../ErrorNotification';
-import { PartyInformation } from './PartyInformation';
+import { PetitionerInformation } from './PetitionerInformation';
+import { RespondentInformation } from './RespondentInformation';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-
 import React from 'react';
 
 export const CaseDetail = connect(
@@ -67,10 +67,10 @@ export const CaseDetail = connect(
                 <CaseInformationExternal />
               </Tab>
               <Tab id="tab-petitioner" tabName="petitioner" title="Petitioner">
-                <PartyInformation />
+                <PetitionerInformation />
               </Tab>
               <Tab id="tab-respondent" tabName="respondent" title="Respondent">
-                <PartyInformation />
+                <RespondentInformation />
               </Tab>
             </Tabs>
           )}
