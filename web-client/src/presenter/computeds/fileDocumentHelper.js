@@ -8,6 +8,7 @@ export const supportingDocumentFreeTextTypes = [
 ];
 
 export const fileDocumentHelper = (get, applicationContext) => {
+  const { formatCase } = applicationContext.getUtilities();
   const { CATEGORY_MAP, PARTY_TYPES } = applicationContext.getConstants();
   const { formatCase } = applicationContext.getUtilities();
   const caseDetail = get(state.caseDetail);
@@ -102,6 +103,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
       }
       return acc;
     }, [])
+    .map(consolidatedCase => formatCase(applicationContext, consolidatedCase))
     .map(consolidatedCase => {
       consolidatedCase.showSecondaryParty =
         consolidatedCase.partyType === PARTY_TYPES.petitionerSpouse ||
