@@ -11,25 +11,31 @@ import React from 'react';
 const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
   <React.Fragment>
     <div className="grid-row">
-      <div className="grid-col-4">
+      <div className="grid-col-6">
         <p className="label">Notice/Case Type</p>
         <p>{caseDetail.caseType}</p>
       </div>
-      <div className="grid-col-4">
+      <div className="grid-col-6">
         <p className="label">Case Procedure</p>
         <p>{caseDetail.procedureType}</p>
       </div>
-      <div className="grid-col-4">
-        <p className="label">Requested Place of Trial</p>
-        <p>{caseDetail.formattedPreferredTrialCity}</p>
-      </div>
     </div>
     <div className="grid-row">
-      <div className="grid-col-4">
+      <div className="grid-col-6">
         <p className="label">IRS Notice Date</p>
         <p className="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
       </div>
-      <div className="grid-col-4">
+      <div className="grid-col-6">
+        <p className="label">Party Type</p>
+        <p className="irs-notice-date">{caseDetail.partyType}</p>
+      </div>
+    </div>
+    <div className="grid-row">
+      <div className="grid-col-6">
+        <p className="label">Requested Place of Trial</p>
+        <p>{caseDetail.formattedPreferredTrialCity}</p>
+      </div>
+      <div className="grid-col-6">
         {showPaymentRecord && (
           <React.Fragment>
             <p className="label">Petition Fee Paid</p>

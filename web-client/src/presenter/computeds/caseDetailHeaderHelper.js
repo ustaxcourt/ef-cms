@@ -43,6 +43,11 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const showCaseDetailHeaderMenu =
     !isExternalUser && ['CaseDetailInternal'].includes(currentPage);
 
+  const showFileDocumentButton =
+    permissions.FILE_EXTERNAL_DOCUMENT &&
+    ['CaseDetail'].includes(currentPage) &&
+    userAssociatedWithCase;
+
   return {
     hidePublicCaseInformation: !isExternalUser,
     showAddDocketEntryButton,
@@ -51,6 +56,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     showCreateOrderButton,
     showEditCaseButton: permissions.UPDATE_CASE_CONTEXT,
     showExternalButtons: isExternalUser,
+    showFileDocumentButton,
     showFileFirstDocumentButton,
     showPendingAccessToCaseButton,
     showRequestAccessToCaseButton,
