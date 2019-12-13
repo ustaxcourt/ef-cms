@@ -137,8 +137,8 @@ export const CaseInformationExternal = connect(
         <Mobile>
           <div className="grid-container padding-x-0 margin-top-3">
             <div className="margin-top-2">
-              <div className="case-info-card">
-                <h3 className="underlined">Petition Details</h3>{' '}
+              <div className="case-info-card padding-bottom-3">
+                <h3>Petition Details</h3>{' '}
                 <If bind="caseDetail.irsSendDate">
                   <Button
                     link
