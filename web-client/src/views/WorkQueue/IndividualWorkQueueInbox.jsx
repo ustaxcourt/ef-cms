@@ -6,11 +6,10 @@ import React from 'react';
 
 export const IndividualWorkQueueInbox = connect(
   {
-    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentEditLinkHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({ formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -86,21 +85,7 @@ export const IndividualWorkQueueInbox = connect(
                         className={
                           item.isRead ? 'case-link' : 'link case-link-bold'
                         }
-                        href={
-                          `/case-detail/${item.docketNumber}/documents/${item.document.documentId}` +
-                          documentEditLinkHelper({
-                            messageId: item.currentMessage.messageId,
-                            shouldLinkToComplete:
-                              item.document.isFileAttached === false,
-                            shouldLinkToEdit:
-                              workQueueHelper.showEditDocketEntry &&
-                              item.isQC &&
-                              item.document.eventCode !== 'P',
-                            workItemIdToMarkAsRead: !item.isRead
-                              ? item.workItemId
-                              : null,
-                          })
-                        }
+                        href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
                         onClick={e => {
                           e.stopPropagation();
                         }}

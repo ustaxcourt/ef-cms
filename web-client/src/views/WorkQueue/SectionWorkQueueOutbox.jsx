@@ -6,17 +6,11 @@ import React from 'react';
 
 export const SectionWorkQueueOutbox = connect(
   {
-    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({
-    documentEditLinkHelper,
-    formattedWorkQueue,
-    workQueueHelper,
-    workQueueSectionHelper,
-  }) => {
+  ({ formattedWorkQueue, workQueueHelper, workQueueSectionHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -81,12 +75,7 @@ export const SectionWorkQueueOutbox = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={
-                        `/case-detail/${item.docketNumber}/documents/${item.document.documentId}` +
-                        documentEditLinkHelper({
-                          messageId: item.currentMessage.messageId,
-                        })
-                      }
+                      href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
                       onClick={e => {
                         e.stopPropagation();
                       }}
