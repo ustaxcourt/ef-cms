@@ -61,7 +61,8 @@ export const AddConsolidatedCaseModal = connect(
                 className="usa-checkbox__label"
                 htmlFor="confirm-selection"
               >
-                {caseDetail.docketNumber} {caseDetail.caseCaption}
+                {caseDetail.docketNumber}
+                {caseDetail.docketNumberSuffix} {caseDetail.caseCaption}
               </label>
             </div>
           </FormGroup>
