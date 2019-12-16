@@ -7,6 +7,7 @@ import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { createCaseDeadlineAction } from '../actions/CaseDeadline//createCaseDeadlineAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -25,7 +26,7 @@ export const createCaseDeadlineSequence = [
       setWaitingForResponseAction,
       createCaseDeadlineAction,
       {
-        success: [stopShowValidationAction],
+        success: [stopShowValidationAction, setAlertSuccessAction],
       },
       clearFormAction,
       clearScreenMetadataAction,
