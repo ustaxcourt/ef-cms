@@ -6,11 +6,10 @@ import React from 'react';
 
 export const SectionWorkQueueBatched = connect(
   {
-    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentEditLinkHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({ formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -61,10 +60,7 @@ export const SectionWorkQueueBatched = connect(
                     <div className="message-document-title">
                       <a
                         className="case-link"
-                        href={documentEditLinkHelper({
-                          docketNumber: item.docketNumber,
-                          documentId: item.document.documentId,
-                        })}
+                        href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}`}
                         onClick={e => {
                           e.stopPropagation();
                         }}
