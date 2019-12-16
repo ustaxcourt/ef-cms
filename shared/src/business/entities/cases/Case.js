@@ -334,8 +334,14 @@ joiValidationDecorator(
       })
       .optional(),
     caseType: joi.string().optional(),
-    contactPrimary: joi.object().optional(),
-    contactSecondary: joi.object().optional(),
+    contactPrimary: joi
+      .object()
+      .optional()
+      .allow(null),
+    contactSecondary: joi
+      .object()
+      .optional()
+      .allow(null),
     createdAt: joi
       .date()
       .iso()
