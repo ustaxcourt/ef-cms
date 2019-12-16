@@ -152,7 +152,7 @@ const commonValidationRequirements = {
   address3: joi.string().optional(),
   city: joi.string().required(),
   email: joi.string().optional(),
-  inCareOf: joi.string().optiona(),
+  inCareOf: joi.string().optional(),
   name: joi.string().required(),
   phone: joi.string().required(),
   secondaryName: joi.string().optional(),
