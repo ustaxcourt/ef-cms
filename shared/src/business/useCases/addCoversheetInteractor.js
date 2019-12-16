@@ -76,7 +76,7 @@ exports.addCoverToPdf = async ({
     includesCertificateOfService:
       documentEntity.certificateOfService === true ? true : false,
     mailingDate: documentEntity.mailingDate || '',
-    originallyFiledElectronically: !caseEntity.isPaper,
+    originallyFiledElectronically: !documentEntity.isPaper,
   };
 
   // create pdfDoc object from file data
