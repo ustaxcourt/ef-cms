@@ -149,7 +149,13 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   let schema = {
     attachments: joi.boolean().required(),
     certificateOfService: joi.boolean().required(),
+    documentType: joi.string().optional(),
+    eventCode: joi.string().optional(),
+    freeText: joi.string().optional(),
     hasSupportingDocuments: joi.boolean().required(),
+    lodged: joi.boolean().optional(),
+    ordinalValue: joi.string().optional(),
+    previousDocument: joi.string().optional(),
     primaryDocumentFile: joi.object().required(),
     primaryDocumentFileSize: joi
       .number()
