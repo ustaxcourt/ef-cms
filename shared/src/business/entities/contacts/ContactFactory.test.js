@@ -12,6 +12,7 @@ describe('Petition', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
+        mailingDate: 'tesing',
         partyType: ContactFactory.PARTY_TYPES.corporation,
         petitionFile: {},
         petitionFileSize: 1,
@@ -42,6 +43,7 @@ describe('Petition', () => {
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
+        mailingDate: 'tesing',
         partyType: ContactFactory.PARTY_TYPES.corporation,
         petitionFile: {},
         petitionFileSize: 1,
@@ -73,6 +75,7 @@ describe('Petition', () => {
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.petitioner,
       petitionFile: {},
       petitionFileSize: 1,
@@ -103,6 +106,7 @@ describe('Petition', () => {
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
       petitionFile: {},
       petitionFileSize: 1,
@@ -121,6 +125,7 @@ describe('Petition', () => {
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.estate,
       petitionFile: {},
       petitionFileSize: 1,
@@ -151,6 +156,7 @@ describe('Petition', () => {
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.estate,
       petitionFile: {},
       petitionFileSize: 1,
@@ -166,9 +172,11 @@ describe('Petition', () => {
   it('can validate invalid Partnership (BBA Regime) contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'other',
+
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
       petitionFile: {},
       petitionFileSize: 1,
@@ -184,6 +192,7 @@ describe('Petition', () => {
   it('can validate valid Partnership (BBA Regime) contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'other',
+
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -200,6 +209,7 @@ describe('Petition', () => {
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
       petitionFile: {},
       petitionFileSize: 1,
@@ -215,9 +225,11 @@ describe('Petition', () => {
   it('can validate invalid Trust contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'other',
+
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.trust,
       petitionFile: {},
       petitionFileSize: 1,
@@ -233,6 +245,7 @@ describe('Petition', () => {
   it('can validate valid Trust contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'other',
+
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -248,6 +261,7 @@ describe('Petition', () => {
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.trust,
       petitionFile: {},
       petitionFileSize: 1,
@@ -263,9 +277,11 @@ describe('Petition', () => {
   it('can validate invalid Conservator contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'other',
+
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.conservator,
       petitionFile: {},
       petitionFileSize: 1,
@@ -281,6 +297,7 @@ describe('Petition', () => {
   it('can validate valid Conservator contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'other',
+
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -294,6 +311,7 @@ describe('Petition', () => {
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.conservator,
       petitionFile: {},
       petitionFileSize: 1,
@@ -309,9 +327,11 @@ describe('Petition', () => {
   it('can validate invalid Guardian contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'other',
+
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.guardian,
       petitionFile: {},
       petitionFileSize: 1,
@@ -327,6 +347,7 @@ describe('Petition', () => {
   it('can validate valid Guardian contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'other',
+
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -340,6 +361,7 @@ describe('Petition', () => {
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.guardian,
       petitionFile: {},
       petitionFileSize: 1,
@@ -355,9 +377,11 @@ describe('Petition', () => {
   it('can validate invalid Custodian contact', () => {
     let caseExternal = new CaseExternal({
       caseType: 'other',
+
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.custodian,
       petitionFile: {},
       petitionFileSize: 1,
@@ -373,6 +397,7 @@ describe('Petition', () => {
   it('can validate valid Custodian contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'other',
+
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -386,6 +411,7 @@ describe('Petition', () => {
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.custodian,
       petitionFile: {},
       petitionFileSize: 1,
@@ -401,9 +427,11 @@ describe('Petition', () => {
   it('can validate invalid Donor contact', () => {
     let caseExternal = new CaseExternal({
       caseType: 'other',
+
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.donor,
       petitionFile: {},
       petitionFileSize: 1,
@@ -419,6 +447,7 @@ describe('Petition', () => {
   it('can validate valid Donor contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'other',
+
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -433,6 +462,7 @@ describe('Petition', () => {
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.donor,
       petitionFile: {},
       petitionFileSize: 1,
@@ -448,9 +478,11 @@ describe('Petition', () => {
   it('can validate invalid Transferee contact', () => {
     let caseExternal = new CaseExternal({
       caseType: 'other',
+
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.transferee,
       petitionFile: {},
       petitionFileSize: 1,
@@ -466,6 +498,7 @@ describe('Petition', () => {
   it('can validate valid Transferee contact', () => {
     caseExternal = new CaseExternal({
       caseType: 'other',
+
       contactPrimary: {
         address1: '876 12th Ave',
         city: 'Nashville',
@@ -480,6 +513,7 @@ describe('Petition', () => {
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'tesing',
       partyType: ContactFactory.PARTY_TYPES.transferee,
       petitionFile: {},
       petitionFileSize: 1,
@@ -509,6 +543,7 @@ describe('Petition', () => {
       filingType: 'Myself',
       hasIrsNotice: true,
       irsNoticeDate: '2009-10-13',
+      mailingDate: 'testing',
       partyType: ContactFactory.PARTY_TYPES.transferee,
       petitionFile: {},
       petitionFileSize: 1,

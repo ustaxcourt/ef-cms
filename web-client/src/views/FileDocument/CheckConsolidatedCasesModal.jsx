@@ -6,12 +6,12 @@ import React from 'react';
 
 export const CheckConsolidatedCasesModal = connect(
   {
-    caseDetail: state.caseDetail,
     error: state.modal.error,
+    formattedCaseDetail: state.formattedCaseDetail,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
-  ({ caseDetail, error, modal, updateModalValueSequence }) => {
+  ({ error, formattedCaseDetail, modal, updateModalValueSequence }) => {
     return (
       <ConfirmModal
         cancelLabel="Cancel"
@@ -26,39 +26,45 @@ export const CheckConsolidatedCasesModal = connect(
           to file this document in.
         </p>
         <FormGroup errorText={error}>
-          {caseDetail.consolidatedCases.map((consolidatedCase, index) => (
-            <div className="padding-bottom-2" key={index}>
-              <input
-                className="usa-checkbox__input"
-                id={`case-${consolidatedCase.docketNumber}`}
-                name={`casesToFileDocument[${consolidatedCase.docketNumber}]`}
-                type="checkbox"
-                onChange={e => {
-                  let casesToFileDocument;
+          {formattedCaseDetail.consolidatedCases.map(
+            (formattedConsolidatedCase, index) => (
+              <div className="padding-bottom-2" key={index}>
+                <input
+                  className="usa-checkbox__input"
+                  id={`case-${formattedConsolidatedCase.docketNumber}`}
+                  name={`casesToFileDocument[${formattedConsolidatedCase.docketNumber}]`}
+                  type="checkbox"
+                  onChange={e => {
+                    let casesToFileDocument;
 
-                  casesToFileDocument = {
-                    ...modal.casesToFileDocument,
-                    [consolidatedCase.docketNumber]: e.target.checked,
-                  };
+                    casesToFileDocument = {
+                      ...modal.casesToFileDocument,
+                      [formattedConsolidatedCase.docketNumber]:
+                        e.target.checked,
+                    };
 
-                  if (!e.target.checked) {
-                    delete casesToFileDocument[consolidatedCase.docketNumber];
-                  }
+                    if (!e.target.checked) {
+                      delete casesToFileDocument[
+                        formattedConsolidatedCase.docketNumber
+                      ];
+                    }
 
-                  updateModalValueSequence({
-                    key: 'casesToFileDocument',
-                    value: casesToFileDocument,
-                  });
-                }}
-              />
-              <label
-                className="usa-checkbox__label"
-                htmlFor={`case-${consolidatedCase.docketNumber}`}
-              >
-                {consolidatedCase.docketNumber} {consolidatedCase.caseCaption}
-              </label>
-            </div>
-          ))}
+                    updateModalValueSequence({
+                      key: 'casesToFileDocument',
+                      value: casesToFileDocument,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor={`case-${formattedConsolidatedCase.docketNumber}`}
+                >
+                  {formattedConsolidatedCase.docketNumber}{' '}
+                  {formattedConsolidatedCase.caseName}
+                </label>
+              </div>
+            ),
+          )}
         </FormGroup>
       </ConfirmModal>
     );
