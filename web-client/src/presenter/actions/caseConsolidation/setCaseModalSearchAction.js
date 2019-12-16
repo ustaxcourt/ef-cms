@@ -11,5 +11,6 @@ export const setCaseModalSearchAction = ({ props, store }) => {
   const { caseDetail } = props;
 
   store.unset(state.modal.error);
+  store.unset(state.modal.confirmSelection);
   store.set(state.modal.caseDetail, caseDetail);
 };
