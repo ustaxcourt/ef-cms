@@ -1,9 +1,7 @@
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmEditModal } from './ConfirmEditModal';
-import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -12,32 +10,18 @@ export const DraftDocuments = connect(
   {
     archiveDraftDocumentModalSequence:
       sequences.archiveDraftDocumentModalSequence,
-    caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
-    openCreateOrderChooseTypeModalSequence:
-      sequences.openCreateOrderChooseTypeModalSequence,
     showModal: state.showModal,
   },
   ({
     archiveDraftDocumentModalSequence,
-    caseDetailHelper,
     formattedCaseDetail,
     openConfirmEditModalSequence,
-    openCreateOrderChooseTypeModalSequence,
     showModal,
   }) => {
     return (
       <>
-        {caseDetailHelper.showCreateOrderButton && (
-          <Button
-            className="margin-bottom-3"
-            id="button-create-order"
-            onClick={() => openCreateOrderChooseTypeModalSequence()}
-          >
-            <FontAwesomeIcon icon="clipboard-list" size="1x" /> Create Order
-          </Button>
-        )}
         {formattedCaseDetail.formattedDraftDocuments.length === 0 && (
           <p>There are no draft documents.</p>
         )}
@@ -76,7 +60,14 @@ export const DraftDocuments = connect(
                         {draftDocument.signedAt &&
                           draftDocument.signedAtFormattedTZ}
                         {!draftDocument.signedAt && (
-                          <a href={draftDocument.signUrl}>Add Signature</a>
+                          <Button
+                            link
+                            className="padding-0"
+                            href={draftDocument.signUrl}
+                            icon={['fas', 'pencil-alt']}
+                          >
+                            Apply Signature
+                          </Button>
                         )}
                       </td>
 
@@ -84,6 +75,7 @@ export const DraftDocuments = connect(
                         {draftDocument.signedAt ? (
                           <Button
                             link
+                            className="padding-0"
                             data-document-id={draftDocument.documentId}
                             icon="edit"
                             onClick={() => {
@@ -98,7 +90,12 @@ export const DraftDocuments = connect(
                             Edit
                           </Button>
                         ) : (
-                          <Button link href={draftDocument.editUrl} icon="edit">
+                          <Button
+                            link
+                            className="padding-0"
+                            href={draftDocument.editUrl}
+                            icon="edit"
+                          >
                             Edit
                           </Button>
                         )}
@@ -107,7 +104,7 @@ export const DraftDocuments = connect(
                       <td className="smaller-column">
                         <Button
                           link
-                          className="red-warning"
+                          className="red-warning padding-0"
                           icon="trash"
                           onClick={() => {
                             archiveDraftDocumentModalSequence({
@@ -131,9 +128,6 @@ export const DraftDocuments = connect(
           <ArchiveDraftDocumentModal />
         )}
         {showModal === 'ConfirmEditModal' && <ConfirmEditModal />}
-        {showModal === 'CreateOrderChooseTypeModal' && (
-          <CreateOrderChooseTypeModal />
-        )}
       </>
     );
   },

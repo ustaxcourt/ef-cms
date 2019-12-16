@@ -24,7 +24,7 @@ describe('Start a case as a practitioner ', () => {
     fillInAndSubmitForm();
   });
 
-  it('expect the cast list to be displayed with 3 items now', () => {
+  it('expect the case list to be displayed with 3 items now', () => {
     getCaseList().should('exist');
     getCaseList().should('have.length', 3);
   });

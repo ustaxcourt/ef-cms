@@ -85,14 +85,33 @@
   }
 }
 
-.petitions-details,
+.petitions-details {
+  @media only screen and (max-width: $medium-screen - 1px) {
+    margin-top: 1.5rem;
+  }
+  @media only screen and (min-width: $medium-screen) {
+    margin-top: 2.5rem;
+  }
+}
+
 .internal-information {
   margin-top: 2.5rem;
+}
+
+.internal-information,
+.petitions-details {
   .chunk {
     margin-bottom: 1rem;
   }
   &.less {
     margin-top: 1.5rem;
+  }
+  p {
+    margin-top: 0;
+    margin-bottom: 25px;
+    &.label {
+      margin-bottom: 4px;
+    }
   }
 }
 
@@ -121,15 +140,22 @@
   }
 
   @media only screen and (max-width: $medium-screen) {
+    .counsel-information {
+      margin-bottom: 2rem;
+    }
+
     .card {
       border: none;
       box-shadow: none;
 
       .content-wrapper {
-        padding: 0px;
+        padding: 0;
+        margin-bottom: 2rem;
 
         .underlined {
+          padding-bottom: 0;
           border-bottom: none;
+          margin-bottom: 0;
         }
       }
     }

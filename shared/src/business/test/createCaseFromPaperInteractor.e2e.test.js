@@ -54,6 +54,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
         ...MOCK_CASE,
         caseCaption: 'Bob Jones2, Petitioner',
         createdAt: RECEIVED_DATE,
+        mailingDate: 'testing',
         petitionFile: { name: 'something' },
         petitionFileSize: 1,
         receivedAt: RECEIVED_DATE,

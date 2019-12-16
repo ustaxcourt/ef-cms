@@ -66,6 +66,27 @@ export const formattedCaseDetail = (get, applicationContext) => {
         filingsAndProceedingsWithAdditionalInfo += ` ${document.additionalInfo2}`;
       }
 
+      const showDocumentEditLink =
+        document &&
+        permissions.UPDATE_CASE &&
+        (!document.isInProgress ||
+          (permissions.DOCKET_ENTRY && document.isInProgress));
+
+      let editLink = ''; //defaults to doc detail
+      if (showDocumentEditLink && permissions.DOCKET_ENTRY && document) {
+        if (document.isCourtIssuedDocument && !document.servedAt) {
+          editLink = '/edit-court-issued';
+        } else if (isInProgress) {
+          editLink = '/complete';
+        } else if (
+          !document.isCourtIssuedDocument &&
+          !document.isPetition &&
+          qcWorkItemsUntouched
+        ) {
+          editLink = '/edit';
+        }
+      }
+
       return {
         action: record.action,
         canEdit: document && document.canEdit,
@@ -74,6 +95,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         descriptionDisplay:
           (document && document.documentTitle) || record.description,
         documentId: document && document.documentId,
+        editLink,
         eventCode: record.eventCode || (document && document.eventCode),
         filedBy: document && document.filedBy,
         filingsAndProceedingsWithAdditionalInfo,
@@ -93,12 +115,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
             (document.isNotServedCourtIssuedDocument ||
               document.isInProgress) &&
             !permissions.DOCKET_ENTRY),
-        showDocumentEditLink:
-          document &&
-          permissions.UPDATE_CASE &&
-          (!document.isNotServedCourtIssuedDocument ||
-            (document.isNotServedCourtIssuedDocument &&
-              permissions.DOCKET_ENTRY)),
+        showDocumentEditLink,
         showDocumentProcessing:
           document &&
           !permissions.UPDATE_CASE &&
@@ -129,6 +146,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
       return {
         ...draftDocument,
         descriptionDisplay: draftDocument.documentTitle,
+        editLink: '',
         showDocumentEditLink: draftDocument && permissions.UPDATE_CASE,
       };
     },
@@ -138,8 +156,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
     entry => entry.hasDocument && entry.isPending,
   );
 
-  // TODO these are just defaults
-  result.consolidatedCases = [];
+  result.consolidatedCases = result.consolidatedCases || [];
 
   result.showBlockedTag = caseDetail.blocked;
   result.docketRecordSort = docketRecordSort;

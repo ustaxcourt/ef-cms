@@ -15,6 +15,7 @@ function ExternalDocumentStandard(rawProps) {
   this.category = rawProps.category;
   this.documentTitle = rawProps.documentTitle;
   this.documentType = rawProps.documentType;
+  this.selectedCases = rawProps.selectedCases;
 }
 
 ExternalDocumentStandard.prototype.getDocumentTitle = function() {
@@ -28,7 +29,23 @@ ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES = {
 ExternalDocumentStandard.schema = {
   category: joi.string().required(),
   documentTitle: joi.string().optional(),
-  documentType: joi.string().required(),
+  documentType: joi
+    .string()
+    .required()
+    .when('selectedCases', {
+      is: joi
+        .array()
+        .min(1)
+        .required(),
+      then: joi
+        .string()
+        .required()
+        .invalid('Proposed Stipulated Decision'),
+    }),
+  selectedCases: joi
+    .array()
+    .items(joi.string())
+    .optional(),
 };
 
 joiValidationDecorator(

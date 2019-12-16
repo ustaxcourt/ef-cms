@@ -73,7 +73,7 @@ export const WorkingCopySessionList = connect(
                 </Button>
               </th>
               <th aria-label="manually added indicator"></th>
-              <th className="no-wrap">Case name</th>
+              <th className="no-wrap">Case title</th>
               <th className="no-wrap">
                 <Button
                   link

@@ -115,6 +115,26 @@ export const CaseInfo = connect(
                 </div>
               </fieldset>
             </FormGroup>
+
+            <FormGroup errorText={caseDetailErrors.mailingDate}>
+              <label className="usa-label" htmlFor="mailing-date">
+                Mailing date
+              </label>
+              <input
+                className="usa-input usa-input-inline"
+                id="mailing-date"
+                maxLength="25"
+                name="mailingDate"
+                value={caseDetail.mailingDate || ''}
+                onBlur={() => validateCaseDetailSequence()}
+                onChange={e => {
+                  updateCaseValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
           </>
         )}
 
@@ -191,7 +211,7 @@ export const CaseInfo = connect(
               <>
                 <a
                   aria-label="View PDF: Ownership Disclosure Statement"
-                  href={`${baseUrl}/documents/${caseDetailEditHelper.requestForPlaceOfTrialDocumentId}/document-download-url?token=${token}`}
+                  href={`${baseUrl}/case-documents/${caseDetail.caseId}/${caseDetailEditHelper.requestForPlaceOfTrialDocumentId}/document-download-url?token=${token}`}
                   rel="noopener noreferrer"
                   target="_blank"
                 >

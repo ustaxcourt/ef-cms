@@ -14,10 +14,10 @@
   }
 
   ul {
-    padding-left: 0px;
+    padding-left: 0;
     border-bottom: 1px solid color($theme-color-base-lighter);
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 2.5rem;
     line-height: 2;
     list-style-type: none;
 
@@ -27,7 +27,7 @@
       button {
         position: relative;
         top: 2px;
-        padding: 0px;
+        padding: 0;
         border: none;
         margin-right: 45px;
         background: none;
@@ -68,12 +68,12 @@
   &.container-tabs {
     nav {
       ul {
-        margin: 0px;
+        margin: 0;
 
         li {
           border-right: 1px solid color($theme-color-base-lighter);
           border-bottom: 1px solid color($theme-color-base-lighter);
-          margin-right: 0px;
+          margin-right: 0;
           text-align: center;
 
           &:last-child {
@@ -82,11 +82,8 @@
 
           button {
             display: inline-block;
-            padding-top: 10px;
-            padding-right: 27px;
-            padding-bottom: 15px;
-            padding-left: 27px;
-            margin-right: 0px;
+            padding: 10px 27px 15px;
+            margin-right: 0;
             font-size: 17px;
             text-align: center;
 
@@ -106,6 +103,69 @@
           &.active {
             border-bottom: 2px solid $color-primary-alt-lightest;
             background-color: $color-primary-alt-lightest;
+
+            button {
+              border-bottom: none;
+              color: inherit;
+              cursor: default;
+
+              &:hover {
+                span {
+                  border-bottom: 3px solid color($theme-color-primary);
+                }
+              }
+
+              span {
+                border-bottom: 3px solid color($theme-color-primary);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.container-tabs-dark {
+    nav {
+      ul {
+        border-bottom: none;
+        margin: 0 0 1.5rem 0;
+        background-color: color($theme-color-primary);
+
+        li {
+          border-right: 1px solid color($theme-color-base-lighter);
+          border-bottom: none;
+          margin-right: 0;
+          background-color: color($theme-color-primary);
+          text-align: center;
+
+          &:first-child {
+            border-left: 1px solid color($theme-color-base-lighter);
+          }
+
+          button {
+            display: inline-block;
+            padding: 10px 27px 15px;
+            margin-right: 0;
+            color: $color-white;
+            font-size: 17px;
+            text-align: center;
+
+            &:hover,
+            &:focus {
+              border-bottom: none;
+              background-color: none;
+
+              span {
+                padding-bottom: 0;
+                border-bottom: 3px solid $color-white;
+              }
+            }
+          }
+
+          &.active {
+            border-bottom: none;
+            background-color: $color-white;
 
             button {
               border-bottom: none;

@@ -8,8 +8,6 @@ export const CaseDeadlinesInternal = connect(
   {
     caseDeadlines: state.formattedCaseDetail.caseDeadlines,
     caseDetailHelper: state.caseDetailHelper,
-    openCreateCaseDeadlineModalSequence:
-      sequences.openCreateCaseDeadlineModalSequence,
     openDeleteCaseDeadlineModalSequence:
       sequences.openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence:
@@ -18,54 +16,37 @@ export const CaseDeadlinesInternal = connect(
   function CaseDeadlinesInternal({
     caseDeadlines,
     caseDetailHelper,
-    openCreateCaseDeadlineModalSequence,
     openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence,
   }) {
     return (
       <>
-        <div>
-          <Button
-            className="push-right margin-right-0 margin-bottom-1"
-            id="button-add-deadline"
-            onClick={() => {
-              openCreateCaseDeadlineModalSequence();
-            }}
-          >
-            <FontAwesomeIcon icon="calendar-alt" size="1x" /> Add Deadline
-          </Button>
-        </div>
         {caseDetailHelper.showCaseDeadlinesInternalEmpty && (
           <p className="margin-bottom-5">
             There are no deadlines for this case.
           </p>
         )}
         {caseDetailHelper.showCaseDeadlinesInternal && (
-          <table className="usa-table row-border-only subsection deadlines">
+          <table className="usa-table docket-record row-border-only subsection deadlines">
+            <thead>
+              <tr>
+                <th>Due date</th>
+                <th></th>
+                <th>Description</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
             <tbody>
               {caseDeadlines.map((item, idx) => (
                 <tr key={idx}>
-                  <td className="smaller-column center-column semi-bold">
+                  <td className="smaller-column semi-bold">
                     {item.deadlineDateFormatted}
                   </td>
                   <td className="overdue smaller-column center-column semi-bold">
                     {item.overdue ? 'Overdue' : ''}
                   </td>
                   <td className="padding-extra">{item.description}</td>
-                  <td className="smaller-column center-column">
-                    <Button
-                      link
-                      className="margin-right-0 padding-0"
-                      icon="trash"
-                      onClick={() => {
-                        openDeleteCaseDeadlineModalSequence({
-                          caseDeadlineId: item.caseDeadlineId,
-                        });
-                      }}
-                    >
-                      Remove
-                    </Button>
-                  </td>
                   <td className="smaller-column center-column">
                     <Button
                       link
@@ -82,6 +63,20 @@ export const CaseDeadlinesInternal = connect(
                         size="1x"
                       />
                       Edit
+                    </Button>
+                  </td>
+                  <td className="smaller-column center-column">
+                    <Button
+                      link
+                      className="margin-right-0 padding-0 red-warning"
+                      icon="trash"
+                      onClick={() => {
+                        openDeleteCaseDeadlineModalSequence({
+                          caseDeadlineId: item.caseDeadlineId,
+                        });
+                      }}
+                    >
+                      Delete
                     </Button>
                   </td>
                 </tr>

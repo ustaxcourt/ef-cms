@@ -1,7 +1,6 @@
 const joi = require('joi-browser');
 const {
   createISODateString,
-  dateStringsCompared,
   formatDateString,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
@@ -138,6 +137,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
     },
     'Please enter a valid IRS notice date',
   ],
+  mailingDate: 'Enter a mailing date',
   ownershipDisclosureFile: 'Upload an Ownership Disclosure Statement',
   ownershipDisclosureFileSize: [
     {
@@ -219,6 +219,7 @@ function Case(rawCase, { applicationContext }) {
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
+  this.mailingDate = rawCase.mailingDate;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
   this.highPriority = rawCase.highPriority;
   this.highPriorityReason = rawCase.highPriorityReason;
@@ -386,6 +387,18 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
+    mailingDate: joi.when('isPaper', {
+      is: true,
+      otherwise: joi
+        .string()
+        .max(25)
+        .allow(null)
+        .optional(),
+      then: joi
+        .string()
+        .max(25)
+        .required(),
+    }),
     noticeOfAttachments: joi.boolean().optional(),
     orderForAmendedPetition: joi.boolean().optional(),
     orderForAmendedPetitionAndFilingFee: joi.boolean().optional(),
@@ -1227,51 +1240,56 @@ Case.prototype.getCaseContacts = function(shape) {
  * get consolidation status between current case entity and another case entity
  *
  * @param {object} caseEntity the pending case entity to check
- * @param {object} trialSessionEntity this case's trial session entity
- * @param {object} pendingTrialSessionEntity the pending case's trial session entity
  * @returns {object} object with canConsolidate flag and reason string
  */
-Case.prototype.getConsolidationStatus = function({
-  caseEntity,
-  pendingTrialSessionEntity,
-  trialSessionEntity,
-}) {
-  if (this.status !== caseEntity.status) {
-    return { canConsolidate: false, reason: 'Case status is not the same' };
-  }
+Case.prototype.getConsolidationStatus = function({ caseEntity }) {
+  let canConsolidate = true;
+  const reason = [];
 
-  if (this.procedureType !== caseEntity.procedureType) {
-    return { canConsolidate: false, reason: 'Case procedure is not the same' };
-  }
-
-  if (
-    trialSessionEntity.trialLocation !== pendingTrialSessionEntity.trialLocation
-  ) {
-    return { canConsolidate: false, reason: 'Place of trial is not the same' };
-  }
-
-  if (
-    trialSessionEntity.judge.userId !== pendingTrialSessionEntity.judge.userId
-  ) {
-    return { canConsolidate: false, reason: 'Judge is not the same' };
-  }
-
-  if (!this.canConsolidate(caseEntity.status)) {
+  if (!this.canConsolidate(caseEntity)) {
     return {
       canConsolidate: false,
-      reason: `Case status is ${caseEntity.status} and cannot be consolidated`,
+      reason: [
+        `Case status is ${caseEntity.status} and cannot be consolidated`,
+      ],
     };
   }
 
-  return { canConsolidate: true, reason: '' };
+  if (this.docketNumber === caseEntity.docketNumber) {
+    canConsolidate = false;
+    reason.push('Cases are the same');
+  }
+
+  if (this.status !== caseEntity.status) {
+    canConsolidate = false;
+    reason.push('Case status is not the same');
+  }
+
+  if (this.procedureType !== caseEntity.procedureType) {
+    canConsolidate = false;
+    reason.push('Case procedure is not the same');
+  }
+
+  if (this.trialLocation !== caseEntity.trialLocation) {
+    canConsolidate = false;
+    reason.push('Place of trial is not the same');
+  }
+
+  if (this.associatedJudge !== caseEntity.associatedJudge) {
+    canConsolidate = false;
+    reason.push('Judge is not the same');
+  }
+
+  return { canConsolidate, reason };
 };
 
 /**
  * checks case eligibility for consolidation by the current case's status
  *
  * @returns {boolean} true if eligible for consolidation, false otherwise
+ * @param {object} caseToConsolidate (optional) case to check for consolidation eligibility
  */
-Case.prototype.canConsolidate = function() {
+Case.prototype.canConsolidate = function(caseToConsolidate) {
   const ineligibleStatusTypes = [
     Case.STATUS_TYPES.batchedForIRS,
     Case.STATUS_TYPES.new,
@@ -1281,7 +1299,9 @@ Case.prototype.canConsolidate = function() {
     Case.STATUS_TYPES.onAppeal,
   ];
 
-  return !ineligibleStatusTypes.includes(this.status);
+  const caseToCheck = caseToConsolidate || this;
+
+  return !ineligibleStatusTypes.includes(caseToCheck.status);
 };
 
 /**
@@ -1296,6 +1316,29 @@ Case.prototype.setLeadCase = function(leadCaseId) {
 };
 
 /**
+ * sorts the given array of cases by docket number
+ *
+ * @param {Array} cases the cases to check for lead case computation
+ * @returns {Case} the lead Case entity
+ */
+Case.sortByDocketNumber = function(cases) {
+  const casesOrdered = cases.sort((a, b) => {
+    const aSplit = a.docketNumber.split('-');
+    const bSplit = b.docketNumber.split('-');
+
+    if (aSplit[1] !== bSplit[1]) {
+      // compare years if they aren't the same
+      return aSplit[1].localeCompare(bSplit[1]);
+    } else {
+      // compare index if years are the same
+      return aSplit[0].localeCompare(bSplit[0]);
+    }
+  });
+
+  return casesOrdered;
+};
+
+/**
  * return the lead case for the given set of cases based on createdAt
  * (does NOT evaluate leadCaseId)
  *
@@ -1303,9 +1346,7 @@ Case.prototype.setLeadCase = function(leadCaseId) {
  * @returns {Case} the lead Case entity
  */
 Case.findLeadCaseForCases = function(cases) {
-  const casesOrdered = cases.sort((a, b) => {
-    return dateStringsCompared(a.createdAt, b.createdAt);
-  });
+  const casesOrdered = Case.sortByDocketNumber([...cases]);
   return casesOrdered.shift();
 };
 

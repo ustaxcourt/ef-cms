@@ -124,11 +124,20 @@ body {
 
   .address {
     position: absolute;
-    top: 9.5in;
-    left: 1in;
+    left: 0.5in;
+    bottom: 0.5in;
+  }
+
+  .docket {
+    padding-left: 0.5in;
   }
 }
 
 @page {
-  margin: 0.5in;
+  margin: 2cm 1cm;
+  size: 8.5in 11in;
+}
+@page :first {
+  margin-top: 1cm;
+  margin-bottom: 2cm;
 }

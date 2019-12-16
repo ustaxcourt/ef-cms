@@ -200,6 +200,9 @@ const {
   fileDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/fileDocketEntryInteractor');
 const {
+  fileExternalDocumentForConsolidatedInteractor,
+} = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentForConsolidatedInteractor');
+const {
   fileExternalDocumentInteractor,
 } = require('../../shared/src/business/useCases/externalDocument/fileExternalDocumentInteractor');
 const {
@@ -287,7 +290,9 @@ const {
 const {
   getCasesByUserInteractor,
 } = require('../../shared/src/business/useCases/getCasesByUserInteractor');
-
+const {
+  getConsolidatedCasesByCaseInteractor,
+} = require('../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor');
 const {
   getConsolidatedCasesByUserInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByUserInteractor');
@@ -955,6 +960,7 @@ module.exports = (appContextUser = {}) => {
         fileCourtIssuedDocketEntryInteractor,
         fileCourtIssuedOrderInteractor,
         fileDocketEntryInteractor,
+        fileExternalDocumentForConsolidatedInteractor,
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
         generateDocketRecordPdfInteractor,
@@ -970,6 +976,7 @@ module.exports = (appContextUser = {}) => {
         getCaseInteractor,
         getCaseNoteInteractor,
         getCasesByUserInteractor,
+        getConsolidatedCasesByCaseInteractor,
         getConsolidatedCasesByUserInteractor,
         getDocumentQCBatchedForSectionInteractor,
         getDocumentQCBatchedForUserInteractor,

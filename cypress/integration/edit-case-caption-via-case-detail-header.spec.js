@@ -1,4 +1,5 @@
 const {
+  getActionMenuButton,
   getCaptionTextArea,
   getCaseTitleContaining,
   getEditCaseCaptionButton,
@@ -10,6 +11,7 @@ describe('Edit a case caption from case detail header', function() {
   before(() => {
     cy.seed();
     navigateToCaseDetail('docketclerk', '101-19');
+    getActionMenuButton().click();
     getEditCaseCaptionButton().click();
     getCaptionTextArea()
       .clear()

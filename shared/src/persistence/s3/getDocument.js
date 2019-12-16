@@ -1,10 +1,14 @@
-const getDownloadPolicy = async ({ applicationContext, documentId }) => {
+const getDownloadPolicy = async ({
+  applicationContext,
+  caseId,
+  documentId,
+}) => {
   const {
     data: { url },
   } = await applicationContext
     .getHttpClient()
     .get(
-      `${applicationContext.getBaseUrl()}/documents/${documentId}/download-policy-url`,
+      `${applicationContext.getBaseUrl()}/case-documents/${caseId}/${documentId}/download-policy-url`,
       {
         headers: {
           Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
@@ -14,7 +18,12 @@ const getDownloadPolicy = async ({ applicationContext, documentId }) => {
   return url;
 };
 
-exports.getDocument = async ({ applicationContext, documentId, protocol }) => {
+exports.getDocument = async ({
+  applicationContext,
+  caseId,
+  documentId,
+  protocol,
+}) => {
   // TODO: Fix protocol flag
   if (protocol === 'S3') {
     // TODO: should this be in the persistence gateway?
@@ -24,7 +33,11 @@ exports.getDocument = async ({ applicationContext, documentId, protocol }) => {
       Key: documentId,
     });
   } else {
-    const url = await getDownloadPolicy({ applicationContext, documentId });
+    const url = await getDownloadPolicy({
+      applicationContext,
+      caseId,
+      documentId,
+    });
     const { data: fileBlob } = await applicationContext.getHttpClient()({
       method: 'GET',
       responseType: 'blob',

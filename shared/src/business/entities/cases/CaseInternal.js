@@ -30,6 +30,7 @@ function CaseInternal(rawCase) {
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt;
+  this.mailingDate = rawCase.mailingDate;
   this.requestForPlaceOfTrialFile = rawCase.requestForPlaceOfTrialFile;
   this.requestForPlaceOfTrialFileSize = rawCase.requestForPlaceOfTrialFileSize;
   this.stinFile = rawCase.stinFile;
@@ -72,6 +73,10 @@ const paperRequirements = joi.object().keys({
   ),
   caseCaption: joi.string().required(),
   caseType: joi.string().required(),
+  mailingDate: joi
+    .string()
+    .max(25)
+    .required(),
   ownershipDisclosureFile: joi.object().optional(),
   ownershipDisclosureFileSize: joi.when('ownershipDisclosureFile', {
     is: joi.exist().not(null),
