@@ -62,6 +62,7 @@ joiValidationDecorator(
   joi.object().keys({
     documentTitle: joi.string().required(),
     documentType: joi.string().required(),
+    eventCode: joi.string().optional(),
     orderBody: joi.string().required(),
   }),
   function() {
