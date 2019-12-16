@@ -38,7 +38,7 @@ export const MultiDocumentPartiesFiling = connect(
                       id={`who-legend-${formattedConsolidatedCase.docketNumber}`}
                     >
                       {formattedConsolidatedCase.docketNumber}{' '}
-                      {formattedConsolidatedCase.caseCaption}
+                      {formattedConsolidatedCase.caseName}
                     </legend>
 
                     <div className="usa-checkbox margin-top-1">

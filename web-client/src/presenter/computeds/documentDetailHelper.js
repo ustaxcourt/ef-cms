@@ -153,7 +153,8 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showViewOrdersNeededButton =
     (document.status === 'served' ||
       caseDetail.status === STATUS_TYPES.batchedForIRS) &&
-    user.role === USER_ROLES.petitionsClerk;
+    user.role === USER_ROLES.petitionsClerk &&
+    formattedDocument.isPetition;
 
   const showPrintCaseConfirmationButton =
     document.status === 'served' && formattedDocument.isPetition === true;

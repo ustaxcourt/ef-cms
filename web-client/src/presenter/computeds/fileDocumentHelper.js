@@ -8,6 +8,7 @@ export const supportingDocumentFreeTextTypes = [
 ];
 
 export const fileDocumentHelper = (get, applicationContext) => {
+  const { formatCase } = applicationContext.getUtilities();
   const { CATEGORY_MAP, PARTY_TYPES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
@@ -101,6 +102,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
       }
       return acc;
     }, [])
+    .map(consolidatedCase => formatCase(applicationContext, consolidatedCase))
     .map(consolidatedCase => {
       consolidatedCase.showSecondaryParty =
         consolidatedCase.partyType === PARTY_TYPES.petitionerSpouse ||
@@ -108,7 +110,10 @@ export const fileDocumentHelper = (get, applicationContext) => {
       return consolidatedCase;
     });
 
-  // filing document for consolidated cases
+  const formattedSelectedCasesAsCase = selectedCasesAsCase.map(selectedCase =>
+    formatCase(applicationContext, selectedCase),
+  );
+
   let selectedDocketNumbers = get(state.form.selectedCases);
   let formattedDocketNumbers = null;
 
@@ -132,6 +137,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
   let exported = {
     certificateOfServiceDateFormatted,
     formattedDocketNumbers,
+    formattedSelectedCasesAsCase,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,

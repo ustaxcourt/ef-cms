@@ -17,6 +17,7 @@ describe('validatePetition', () => {
     expect(Object.keys(errors)).toEqual([
       'caseCaption',
       'caseType',
+      'mailingDate',
       'partyType',
       'petitionFile',
       'procedureType',
@@ -34,6 +35,7 @@ describe('validatePetition', () => {
       petition: {
         caseCaption: 'testing',
         caseType: 'testing',
+        mailingDate: 'testing',
         partyType: 'testing',
         petitionFile: {},
         petitionFileSize: 100,

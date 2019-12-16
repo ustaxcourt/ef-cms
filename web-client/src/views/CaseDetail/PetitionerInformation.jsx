@@ -83,6 +83,16 @@ const PetitionerInformation = connect(
             <div className="content-wrapper">
               <h3 className="underlined" id="primary-label">
                 Petitioner Contact Info
+                {caseDetailHelper.showEditContacts && (
+                  <Button
+                    link
+                    className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
+                    href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
+                    icon="edit"
+                  >
+                    Edit
+                  </Button>
+                )}
               </h3>
               {formattedCaseDetail.contactPrimary && (
                 <div>
@@ -97,21 +107,11 @@ const PetitionerInformation = connect(
                       },
                     )}
                   </address>
-
-                  {caseDetailHelper.showEditContacts && (
-                    <p>
-                      <Button
-                        link
-                        href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
-                      >
-                        <FontAwesomeIcon icon="edit" size="sm" />
-                        Edit
-                      </Button>
-                    </p>
-                  )}
                   {formattedCaseDetail.contactPrimary.serviceIndicator && (
                     <div className="margin-top-4">
-                      <span className="semi-bold">Service: </span>
+                      <p className="semi-bold margin-bottom-0">
+                        Service preference
+                      </p>
                       {formattedCaseDetail.contactPrimary.serviceIndicator}
                     </div>
                   )}
@@ -126,8 +126,18 @@ const PetitionerInformation = connect(
             <div className="tablet:grid-col-4">
               <div className="card height-full">
                 <div className="content-wrapper">
-                  <h3 className="underlined" id="primary-label">
+                  <h3 className="underlined" id="secondary-label">
                     Spouse Contact Info
+                    {caseDetailHelper.showEditContacts && (
+                      <Button
+                        link
+                        className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
+                        icon="question-circle"
+                        onClick={() => openEditSecondaryContactModalSequence()}
+                      >
+                        Why can’t I edit this?
+                      </Button>
+                    )}
                   </h3>
                   <div>
                     <address aria-labelledby="secondary-label">
@@ -138,18 +148,11 @@ const PetitionerInformation = connect(
                           {},
                         )}
                     </address>
-                    {caseDetailHelper.showEditContacts && (
-                      <Button
-                        link
-                        icon="question-circle"
-                        onClick={() => openEditSecondaryContactModalSequence()}
-                      >
-                        Why can’t I edit this?
-                      </Button>
-                    )}
                     {formattedCaseDetail.contactSecondary.serviceIndicator && (
                       <div className="margin-top-4">
-                        <span className="semi-bold">Service: </span>
+                        <p className="semi-bold margin-bottom-0">
+                          Service preference
+                        </p>
                         {formattedCaseDetail.contactSecondary.serviceIndicator}
                       </div>
                     )}
@@ -168,7 +171,7 @@ const PetitionerInformation = connect(
             formattedCaseDetail.practitioners.map((practitioner, index) => (
               <div
                 className={classNames(
-                  'tablet:grid-col-3',
+                  'tablet:grid-col-3 counsel-information',
                   index > 3 && 'margin-top-3',
                 )}
                 key={index}
@@ -215,7 +218,7 @@ const PetitionerInformation = connect(
             className="label margin-right-4 margin-top-05"
             id="practitioner-counsel-search-description"
           >
-            Add Counsel
+            Add counsel
           </span>
         </div>
         <div className="grid-col-3 margin-top-neg-05">
@@ -246,7 +249,7 @@ const PetitionerInformation = connect(
                   )}
                   id="practitioner-search-field"
                   name="practitionerSearch"
-                  placeholder="Enter Bar No. or Name"
+                  placeholder="Enter bar no. or name"
                   type="search"
                   value={form.practitionerSearch || ''}
                   onChange={e => {

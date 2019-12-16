@@ -151,6 +151,11 @@ export default (test, fakeFile, trialLocation = 'Birmingham, Alabama') => {
       value: '1234567890',
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'mailingDate',
+      value: 'testing',
+    });
+
     await test.runSequence('validatePetitionFromPaperSequence');
     expect(test.getState('alertError')).toBeUndefined();
     expect(test.getState('validationErrors')).toEqual({});

@@ -13,6 +13,7 @@ const { post } = require('../requests');
  */
 exports.fileExternalDocumentForConsolidatedInteractor = ({
   applicationContext,
+  docketNumbersForFiling,
   documentIds,
   documentMetadata,
   leadCaseId,
@@ -20,6 +21,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = ({
   return post({
     applicationContext,
     body: {
+      docketNumbersForFiling,
       documentIds,
       documentMetadata,
     },
