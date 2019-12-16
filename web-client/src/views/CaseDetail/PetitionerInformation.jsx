@@ -78,7 +78,7 @@ const PetitionerInformation = connect(
   }) => {
     const mainPartyInformation = () => (
       <div className="grid-row grid-gap-6">
-        <div className="tablet:grid-col-4">
+        <div className="tablet:grid-col-6">
           <div className="card height-full">
             <div className="content-wrapper">
               <h3 className="underlined" id="primary-label">
@@ -123,7 +123,7 @@ const PetitionerInformation = connect(
 
         {formattedCaseDetail.contactSecondary &&
           formattedCaseDetail.contactSecondary.name && (
-            <div className="tablet:grid-col-4">
+            <div className="tablet:grid-col-6">
               <div className="card height-full">
                 <div className="content-wrapper">
                   <h3 className="underlined" id="secondary-label">
