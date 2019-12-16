@@ -9,11 +9,12 @@ describe('setCaseModalSearchAction', () => {
         presenter,
       },
       props: { caseDetail: { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' } },
-      state: { modal: { error: 'asasdasd' } },
+      state: { modal: { confirmSelection: true, error: 'asasdasd' } },
     });
     expect(result.state.modal.caseDetail).toEqual({
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     expect(result.state.modal.error).toBeUndefined();
+    expect(result.state.modal.confirmSelection).toBeUndefined();
   });
 });
