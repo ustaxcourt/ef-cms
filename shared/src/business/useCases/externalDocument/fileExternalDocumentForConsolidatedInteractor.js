@@ -17,6 +17,7 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 exports.fileExternalDocumentForConsolidatedInteractor = async ({
   applicationContext,
+  docketNumbersForFiling,
   documentIds,
   documentMetadata,
   leadCaseId,
@@ -41,9 +42,27 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 
   // TODO: Return error if lead case not found?
 
-  const consolidatedCaseEntities = consolidatedCases.map(
-    consolidatedCase => new Case(consolidatedCase, { applicationContext }),
-  );
+  const casesForDocumentFiling = [];
+  const caseIdsForDocumentFiling = [];
+
+  const consolidatedCaseEntities = consolidatedCases.map(consolidatedCase => {
+    const { caseId } = consolidatedCase;
+    const caseEntity = new Case(consolidatedCase, { applicationContext });
+
+    if (docketNumbersForFiling.includes(consolidatedCase.docketNumber)) {
+      // this serves the purpose of offering two different
+      // look-ups to be used further down while minimizing
+      // iterations over the case array
+      caseIdsForDocumentFiling.push(caseId);
+      casesForDocumentFiling.push(caseEntity);
+    }
+
+    return caseEntity;
+  });
+
+  const caseWithLowestDocketNumber = Case.sortByDocketNumber(
+    casesForDocumentFiling,
+  ).shift();
 
   const {
     secondaryDocument,
@@ -123,10 +142,9 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
       ).toRawObject();
 
       consolidatedCaseEntities.forEach(caseEntity => {
-        // TODO: Create Case method for this?
-        const isLeadCase = caseEntity.caseId === leadCaseId;
-
-        const servedParties = aggregatePartiesForService(caseEntity);
+        const isFilingDocumentForCase = caseIdsForDocumentFiling.includes(
+          caseEntity.caseId,
+        );
 
         const documentEntity = new Document(
           {
@@ -141,115 +159,126 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           },
         );
 
-        if (isLeadCase) {
-          // this is the lead case
-          const workItem = new WorkItem(
-            {
-              assigneeId: null,
-              assigneeName: null,
-              caseId: caseEntity.caseId,
-              caseStatus: caseEntity.status,
-              caseTitle: Case.getCaseCaptionNames(
-                Case.getCaseCaption(caseEntity),
-              ),
-              docketNumber: caseEntity.docketNumber,
-              docketNumberSuffix: caseEntity.docketNumberSuffix,
-              document: {
-                ...documentEntity.toRawObject(),
-                createdAt: documentEntity.createdAt,
+        if (isFilingDocumentForCase) {
+          const isCaseForWorkItem =
+            caseEntity.caseId === caseWithLowestDocketNumber.caseId;
+
+          const servedParties = aggregatePartiesForService(caseEntity);
+
+          if (isCaseForWorkItem) {
+            // The case with the lowest docket number
+            // in the filing gets the work item
+            const workItem = new WorkItem(
+              {
+                assigneeId: null,
+                assigneeName: null,
+                caseId: caseEntity.caseId,
+                caseStatus: caseEntity.status,
+                caseTitle: Case.getCaseCaptionNames(
+                  Case.getCaseCaption(caseEntity),
+                ),
+                docketNumber: caseEntity.docketNumber,
+                docketNumberSuffix: caseEntity.docketNumberSuffix,
+                document: {
+                  ...documentEntity.toRawObject(),
+                  createdAt: documentEntity.createdAt,
+                },
+                isQC: true,
+                section: DOCKET_SECTION,
+                sentBy: user.userId,
               },
-              isQC: true,
-              section: DOCKET_SECTION,
-              sentBy: user.userId,
-            },
-            { applicationContext },
-          );
+              { applicationContext },
+            );
 
-          const message = new Message(
-            {
-              from: user.name,
-              fromUserId: user.userId,
-              message: `${documentEntity.documentType} filed by ${capitalize(
-                user.role,
-              )} is ready for review.`,
-            },
-            { applicationContext },
-          );
+            const message = new Message(
+              {
+                from: user.name,
+                fromUserId: user.userId,
+                message: `${documentEntity.documentType} filed by ${capitalize(
+                  user.role,
+                )} is ready for review.`,
+              },
+              { applicationContext },
+            );
 
-          workItem.addMessage(message);
-          documentEntity.addWorkItem(workItem);
+            workItem.addMessage(message);
+            documentEntity.addWorkItem(workItem);
 
-          if (metadata.isPaper) {
-            workItem.setAsCompleted({
-              message: 'completed',
-              user,
-            });
+            if (metadata.isPaper) {
+              workItem.setAsCompleted({
+                message: 'completed',
+                user,
+              });
 
-            workItem.assignToUser({
-              assigneeId: user.userId,
-              assigneeName: user.name,
-              section: user.section,
-              sentBy: user.name,
-              sentBySection: user.section,
-              sentByUserId: user.userId,
-            });
+              workItem.assignToUser({
+                assigneeId: user.userId,
+                assigneeName: user.name,
+                section: user.section,
+                sentBy: user.name,
+                sentBySection: user.section,
+                sentByUserId: user.userId,
+              });
+            }
+
+            saveWorkItems.push(
+              applicationContext
+                .getPersistenceGateway()
+                .saveWorkItemForNonPaper({
+                  applicationContext,
+                  workItem: workItem.validate().toRawObject(),
+                }),
+            );
           }
 
-          saveWorkItems.push(
-            applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-              applicationContext,
-              workItem: workItem.validate().toRawObject(),
-            }),
-          );
-        }
+          caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
-        caseEntity.addDocumentWithoutDocketRecord(documentEntity);
+          if (documentEntity.isAutoServed()) {
+            documentEntity.setAsServed(servedParties.all);
+
+            const destinations = servedParties.electronic.map(party => ({
+              email: party.email,
+              templateData: {
+                caseCaption: caseEntity.caseCaption,
+                docketNumber: caseEntity.docketNumber,
+                documentName: documentEntity.documentTitle,
+                loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
+                name: party.name,
+                serviceDate: formatDateString(
+                  documentEntity.servedAt,
+                  'MMDDYYYY',
+                ),
+                serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
+              },
+            }));
+
+            if (destinations.length > 0) {
+              sendEmails.push(
+                applicationContext.getDispatchers().sendBulkTemplatedEmail({
+                  applicationContext,
+                  defaultTemplateData: {
+                    caseCaption: 'undefined',
+                    docketNumber: 'undefined',
+                    documentName: 'undefined',
+                    loginUrl: 'undefined',
+                    name: 'undefined',
+                    serviceDate: 'undefined',
+                    serviceTime: 'undefined',
+                  },
+                  destinations,
+                  templateName: process.env.EMAIL_SERVED_TEMPLATE,
+                }),
+              );
+            }
+          }
+        }
 
         const docketRecordEntity = new DocketRecord({
           description: metadata.documentTitle,
           documentId: documentEntity.documentId,
           filingDate: documentEntity.receivedAt,
         });
+
         caseEntity.addDocketRecord(docketRecordEntity);
-
-        if (documentEntity.isAutoServed()) {
-          documentEntity.setAsServed(servedParties.all);
-
-          const destinations = servedParties.electronic.map(party => ({
-            email: party.email,
-            templateData: {
-              caseCaption: caseEntity.caseCaption,
-              docketNumber: caseEntity.docketNumber,
-              documentName: documentEntity.documentTitle,
-              loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-              name: party.name,
-              serviceDate: formatDateString(
-                documentEntity.servedAt,
-                'MMDDYYYY',
-              ),
-              serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
-            },
-          }));
-
-          if (destinations.length > 0) {
-            sendEmails.push(
-              applicationContext.getDispatchers().sendBulkTemplatedEmail({
-                applicationContext,
-                defaultTemplateData: {
-                  caseCaption: 'undefined',
-                  docketNumber: 'undefined',
-                  documentName: 'undefined',
-                  loginUrl: 'undefined',
-                  name: 'undefined',
-                  serviceDate: 'undefined',
-                  serviceTime: 'undefined',
-                },
-                destinations,
-                templateName: process.env.EMAIL_SERVED_TEMPLATE,
-              }),
-            );
-          }
-        }
 
         saveCasesMap[
           caseEntity.caseId
