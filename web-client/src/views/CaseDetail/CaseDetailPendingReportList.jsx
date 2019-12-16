@@ -22,7 +22,7 @@ export const CaseDetailPendingReportList = connect(
   }) => {
     return (
       <>
-        <div>
+        <div className="margin-top-neg-3">
           <Button
             link
             aria-describedby="tab-pending-report"
