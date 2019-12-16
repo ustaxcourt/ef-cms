@@ -20,6 +20,7 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
   const currentCase = get(state.caseDetail);
   const { caseId, docketNumber, leadCaseId } = currentCase;
   const form = get(state.form);
+  const { selectedCases } = form;
 
   const documentMetadata = { ...form, caseId, docketNumber };
 
@@ -52,6 +53,7 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
       .getUseCases()
       .uploadExternalDocumentsInteractor({
         applicationContext,
+        docketNumbersForFiling: selectedCases,
         documentFiles,
         documentMetadata,
         leadCaseId,
