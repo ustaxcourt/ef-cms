@@ -170,10 +170,6 @@ export const getWorkItemDocumentLink = ({
 
   const isInProgress = formattedDocument && formattedDocument.isInProgress;
 
-  console.log('result.isRead', result.isRead);
-  console.log('result.completedAt', result.completedAt);
-  console.log('isInProgress', isInProgress);
-  console.log('result.isCourtIssuedDocument', result.isCourtIssuedDocument);
   const qcWorkItemsUntouched =
     !isInProgress &&
     formattedDocument &&
