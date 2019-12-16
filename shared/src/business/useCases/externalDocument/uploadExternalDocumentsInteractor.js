@@ -17,6 +17,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.uploadExternalDocumentsInteractor = async ({
   applicationContext,
+  docketNumbersForFiling,
   documentFiles,
   documentMetadata,
   leadCaseId,
@@ -90,6 +91,7 @@ exports.uploadExternalDocumentsInteractor = async ({
       .getUseCases()
       .fileExternalDocumentForConsolidatedInteractor({
         applicationContext,
+        docketNumbersForFiling,
         documentIds,
         documentMetadata,
         leadCaseId,

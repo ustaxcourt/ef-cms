@@ -151,6 +151,26 @@ export const PrimaryDocumentForm = connect(
             </fieldset>
           </FormGroup>
 
+          <FormGroup errorText={validationErrors.mailingDate}>
+            <label className="usa-label" htmlFor="mailing-date">
+              Mailing date <span className="usa-hint">(optional)</span>
+            </label>
+            <input
+              className="usa-input usa-input-inline"
+              id="mailing-date"
+              maxLength="25"
+              name="mailingDate"
+              value={form.mailingDate || ''}
+              onBlur={() => validateDocketEntrySequence()}
+              onChange={e => {
+                updateDocketEntryFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+          </FormGroup>
+
           <FormGroup errorText={validationErrors.eventCode}>
             <label
               className="usa-label"
