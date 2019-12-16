@@ -141,6 +141,10 @@ p.semi-bold {
   font-weight: $font-semibold;
 }
 
+.read-only {
+  font-size: 17px;
+}
+
 a {
   color: color($theme-color-primary);
 
