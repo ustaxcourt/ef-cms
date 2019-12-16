@@ -1,37 +1,32 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
+import { cloneDeep } from 'lodash';
 import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWorkQueue';
+import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
-const { cloneDeep } = require('lodash');
 
-import {
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} from '../../../../shared/src/business/utilities/DateHandler';
+let globalUser;
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed, {
   ...applicationContext,
-  getCurrentUser: () => ({
-    role: User.ROLES.petitionsClerk,
-    section: 'petitions',
-    userId: 'abc',
-  }),
-  getUtilities: () => {
-    return {
-      createISODateString,
-      formatDateString,
-      formatNow,
-      prepareDateFromString,
-    };
+  getCurrentUser: () => {
+    return globalUser;
   },
 });
 
-const baseState = {
-  constants: { USER_ROLES: User.ROLES },
+const petitionsClerkUser = {
+  role: User.ROLES.petitionsClerk,
+  section: 'petitions',
+  userId: 'abc',
+};
+
+const getBaseState = user => {
+  globalUser = user;
+  return {
+    permissions: getUserPermissions(user),
+  };
 };
 
 const FORMATTED_WORK_ITEM = {
@@ -131,7 +126,7 @@ describe('formatted work queue computed', () => {
   beforeEach(() => {
     result = runCompute(formattedWorkQueue, {
       state: {
-        ...baseState,
+        ...getBaseState(petitionsClerkUser),
         selectedWorkItems: [workItem],
         workQueue: [workItem],
         workQueueToDisplay: {
@@ -152,7 +147,7 @@ describe('formatted work queue computed', () => {
     workItemCopy.document.documentType = 'O - Order';
     const result2 = runCompute(formattedWorkQueue, {
       state: {
-        ...baseState,
+        ...getBaseState(petitionsClerkUser),
         selectedWorkItems: [workItemCopy],
         workQueue: [workItemCopy],
         workQueueToDisplay: {
@@ -183,7 +178,7 @@ describe('formatted work queue computed', () => {
     workItem.isInitializeCase = true;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
-        ...baseState,
+        ...getBaseState(petitionsClerkUser),
         selectedWorkItems: [],
         workQueue: [workItem],
         workQueueToDisplay: {
@@ -200,7 +195,7 @@ describe('formatted work queue computed', () => {
     workItem.isInitializeCase = true;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
-        ...baseState,
+        ...getBaseState(petitionsClerkUser),
         selectedWorkItems: [],
         workQueue: [workItem],
         workQueueToDisplay: {
@@ -217,7 +212,7 @@ describe('formatted work queue computed', () => {
     workItem.caseStatus = Case.STATUS_TYPES.batchedForIRS;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
-        ...baseState,
+        ...getBaseState(petitionsClerkUser),
         selectedWorkItems: [],
         workQueue: [workItem],
         workQueueToDisplay: {
@@ -235,7 +230,7 @@ describe('formatted work queue computed', () => {
     workItem.caseStatus = Case.STATUS_TYPES.recalled;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
-        ...baseState,
+        ...getBaseState(petitionsClerkUser),
         selectedWorkItems: [],
         workQueue: [workItem],
         workQueueToDisplay: {
@@ -254,7 +249,7 @@ describe('formatted work queue computed', () => {
 
     const result = runCompute(formattedWorkQueue, {
       state: {
-        ...baseState,
+        ...getBaseState(petitionsClerkUser),
         selectedWorkItems: [],
         workQueue: [workItem],
         workQueueToDisplay: {
@@ -273,7 +268,7 @@ describe('formatted work queue computed', () => {
 
     const result = runCompute(formattedWorkQueue, {
       state: {
-        ...baseState,
+        ...getBaseState(petitionsClerkUser),
         selectedWorkItems: [],
         workQueue: [workItem],
         workQueueToDisplay: {
