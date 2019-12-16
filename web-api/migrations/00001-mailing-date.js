@@ -15,7 +15,7 @@ const up = async (documentClient, tableName) => {
 
     for (let item of results.Items) {
       if (isCaseRecord(item)) {
-        if (item.isPaper) {
+        if (item.isPaper && item.mailingDate === undefined) {
           console.log(`adding mailingDate to a paper case of "${item.caseId}"`);
           item.mailingDate = '01/01/2010';
 
