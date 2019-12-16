@@ -145,6 +145,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         ...documentsWithCaseClosingEventCodes,
       ],
       isPaper: true,
+      mailingDate: 'testing',
     },
   ];
 
@@ -296,13 +297,14 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       );
     });
 
-    const result = await serveCourtIssuedDocumentInteractor({
+    await serveCourtIssuedDocumentInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
-    const updatedDocument = result.updatedCase.documents.find(
+    const updatedCase = updateCaseMock.mock.calls[0][0].caseToUpdate;
+    const updatedDocument = updatedCase.documents.find(
       document =>
         document.documentId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     );
@@ -322,13 +324,14 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       );
     });
 
-    const result = await serveCourtIssuedDocumentInteractor({
+    await serveCourtIssuedDocumentInteractor({
       applicationContext,
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
     });
 
-    const updatedDocument = result.updatedCase.documents.find(
+    const updatedCase = updateCaseMock.mock.calls[0][0].caseToUpdate;
+    const updatedDocument = updatedCase.documents.find(
       document =>
         document.documentId === 'cf105788-5d34-4451-aa8d-dfd9a851b675',
     );
@@ -355,7 +358,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
-    expect(result.paperServicePdfData).toBeUndefined();
+    expect(result).toBeUndefined();
   });
 
   it('should not call sendBulkTemplatedEmail if there are no electronically-served parties but should return paperServicePdfData', async () => {
@@ -373,7 +376,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     expect(sendBulkTemplatedEmailMock).not.toHaveBeenCalled();
-    expect(result.paperServicePdfData).toBeDefined();
+    expect(result).toBeDefined();
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId', async () => {
@@ -441,13 +444,15 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         );
       });
 
-      const result = await serveCourtIssuedDocumentInteractor({
+      await serveCourtIssuedDocumentInteractor({
         applicationContext,
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentId: document.documentId,
       });
 
-      expect(result.updatedCase.status).toEqual(Case.STATUS_TYPES.closed);
+      const updatedCase = updateCaseMock.mock.calls[0][0].caseToUpdate;
+
+      expect(updatedCase.status).toEqual(Case.STATUS_TYPES.closed);
       expect(deleteCaseTrialSortMappingRecordsMock).toHaveBeenCalled();
     });
   });

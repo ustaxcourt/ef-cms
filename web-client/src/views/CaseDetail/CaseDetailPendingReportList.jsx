@@ -22,11 +22,11 @@ export const CaseDetailPendingReportList = connect(
   }) => {
     return (
       <>
-        <div>
+        <div className="margin-top-neg-3">
           <Button
             link
             aria-describedby="tab-pending-report"
-            className="push-right margin-top-2"
+            className="margin-top-neg-1 margin-bottom-1"
             href={`/case-detail/${formattedCaseDetail.docketNumber}/pending-report`}
             icon="print"
           >
@@ -50,7 +50,7 @@ export const CaseDetailPendingReportList = connect(
               <th>Date filed</th>
               <th>Filings and proceedings</th>
               <th>Filed by</th>
-              <th>Remove</th>
+              <th></th>
             </tr>
           </thead>
           {pendingItemsDocketEntries.map((entry, arrayIndex) => (

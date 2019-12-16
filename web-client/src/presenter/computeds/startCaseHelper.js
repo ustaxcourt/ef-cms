@@ -27,7 +27,7 @@ export const startCaseHelper = (get, applicationContext) => {
       PARTY_TYPES.petitionerSpouse,
     ].includes(form.partyType)
   ) {
-    contactSecondaryLabel = 'Spouse‘s Contact Information';
+    contactSecondaryLabel = 'Spouse’s contact information';
   }
 
   const hasContactSecondary =

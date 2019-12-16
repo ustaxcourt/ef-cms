@@ -27,6 +27,17 @@ describe('getConsolidatedCasesByUserInteractor', () => {
               },
               {
                 caseId: '234',
+                docketNumber: '234-02',
+                leadCaseId: '123',
+              },
+              {
+                caseId: '345',
+                docketNumber: '345-01',
+                leadCaseId: '123',
+              },
+              {
+                caseId: '456',
+                docketNumber: '456-01',
                 leadCaseId: '123',
               },
             ],
@@ -72,7 +83,18 @@ describe('getConsolidatedCasesByUserInteractor', () => {
         caseId: '123',
         consolidatedCases: [
           {
+            caseId: '345',
+            docketNumber: '345-01',
+            leadCaseId: '123',
+          },
+          {
+            caseId: '456',
+            docketNumber: '456-01',
+            leadCaseId: '123',
+          },
+          {
             caseId: '234',
+            docketNumber: '234-02',
             leadCaseId: '123',
           },
         ],

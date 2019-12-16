@@ -163,22 +163,6 @@ exports.fileExternalDocumentInteractor = async ({
       workItem.addMessage(message);
       documentEntity.addWorkItem(workItem);
 
-      if (metadata.isPaper) {
-        workItem.setAsCompleted({
-          message: 'completed',
-          user,
-        });
-
-        workItem.assignToUser({
-          assigneeId: user.userId,
-          assigneeName: user.name,
-          section: user.section,
-          sentBy: user.name,
-          sentBySection: user.section,
-          sentByUserId: user.userId,
-        });
-      }
-
       workItems.push(workItem);
       caseEntity.addDocumentWithoutDocketRecord(documentEntity);
 
@@ -236,23 +220,12 @@ exports.fileExternalDocumentInteractor = async ({
 
   const workItemsSaved = [];
   for (let workItem of workItems) {
-    if (workItem.document.isPaper) {
-      workItemsSaved.push(
-        applicationContext
-          .getPersistenceGateway()
-          .saveWorkItemForDocketClerkFilingExternalDocument({
-            applicationContext,
-            workItem: workItem.validate().toRawObject(),
-          }),
-      );
-    } else {
-      workItemsSaved.push(
-        applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
-          applicationContext,
-          workItem: workItem.validate().toRawObject(),
-        }),
-      );
-    }
+    workItemsSaved.push(
+      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      }),
+    );
   }
   await Promise.all(workItemsSaved);
 

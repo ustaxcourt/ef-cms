@@ -474,6 +474,23 @@ describe('formatCase', () => {
       isLeadCase: false,
     });
   });
+
+  it('should set consolidated cases if there are any', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      consolidatedCases: [mockCaseDetail],
+    });
+
+    expect(result).toHaveProperty('consolidatedCases');
+    expect(result.consolidatedCases).toMatchObject([mockCaseDetail]);
+  });
+
+  it('should not set consolidated cases if none are passed', () => {
+    const result = formatCase(applicationContext, mockCaseDetail);
+
+    expect(result).toMatchObject(mockCaseDetail);
+    expect(result).not.toHaveProperty('consolidatedCases');
+  });
 });
 
 describe('formatCaseDeadlines', () => {

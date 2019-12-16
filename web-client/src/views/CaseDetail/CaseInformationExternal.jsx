@@ -6,12 +6,44 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const PetitionDetails = ({ caseDetail }) => (
+const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
   <React.Fragment>
     <div className="grid-row">
       <div className="tablet:grid-col-6">
-        <p className="label">Petition Fee Paid</p>
-        <p>{caseDetail.payGovId}</p>
+        <p className="label">Notice/Case Type</p>
+        <p>{caseDetail.caseType}</p>
+      </div>
+      <div className="tablet:grid-col-6">
+        <p className="label">Case Procedure</p>
+        <p>{caseDetail.procedureType} Tax Case</p>
+      </div>
+    </div>
+    <div className="grid-row">
+      <div className="tablet:grid-col-6">
+        <p className="label">IRS Notice Date</p>
+        <p className="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
+      </div>
+      <div className="tablet:grid-col-6">
+        <p className="label">Party Type</p>
+        <p className="irs-notice-date">{caseDetail.partyType}</p>
+      </div>
+    </div>
+    <div className="grid-row">
+      <div className="tablet:grid-col-6">
+        <p className="label">Requested Place of Trial</p>
+        <p className="margin-bottom-0">
+          {caseDetail.formattedPreferredTrialCity}
+        </p>
+      </div>
+      <div className="tablet:grid-col-6">
+        {showPaymentRecord && (
+          <React.Fragment>
+            <p className="label">Petition Fee Paid</p>
+            <p className="pay-gov-id-display margin-bottom-0">
+              {caseDetail.payGovId}
+            </p>
+          </React.Fragment>
+        )}
       </div>
     </div>
   </React.Fragment>
@@ -19,36 +51,46 @@ const PetitionDetails = ({ caseDetail }) => (
 
 const TrialInformation = ({ caseDetail }) => (
   <React.Fragment>
-    <div className="grid-row">
-      <div className="tablet:grid-col-6">
-        <p className="label">Place of trial</p>
-        <p>{caseDetail.formattedTrialCity}</p>
-      </div>
-      <div className="tablet:grid-col-6">
-        <p className="label">Trial date</p>
-        <p>{caseDetail.formattedTrialDate}</p>
-      </div>
-    </div>
-    <div className="grid-row">
-      <div className="tablet:grid-col-6">
-        <p className="label">Trial judge</p>
-        <p>{caseDetail.formattedAssociatedJudge}</p>
-      </div>
-    </div>
+    {caseDetail.formattedTrialDate && (
+      <>
+        <div className="grid-row">
+          <div className="tablet:grid-col-4">
+            <p className="label">Place of trial</p>
+            <p>{caseDetail.formattedTrialCity}</p>
+          </div>
+          <div className="tablet:grid-col-4">
+            <p className="label">Trial date</p>
+            <p>{caseDetail.formattedTrialDate}</p>
+          </div>
+          <div className="tablet:grid-col-4">
+            <p className="label">Trial judge</p>
+            <p>{caseDetail.formattedAssociatedJudge}</p>
+          </div>
+        </div>
+      </>
+    )}
+    {!caseDetail.formattedTrialDate && (
+      <p>This case is not scheduled for trial</p>
+    )}
   </React.Fragment>
 );
 
-export const CaseInformationPublic = connect(
+export const CaseInformationExternal = connect(
   {
+    caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
   },
-  ({ formattedCaseDetail, navigateToPrintableCaseConfirmationSequence }) => {
+  ({
+    caseDetailHelper,
+    formattedCaseDetail,
+    navigateToPrintableCaseConfirmationSequence,
+  }) => {
     return (
       <div className="petitions-details">
-        <div className="grid-container padding-x-0">
-          <NonMobile>
+        <NonMobile>
+          <div className="grid-container padding-x-0 margin-top-5">
             <div className="grid-row grid-gap">
               <div className="grid-col-6">
                 <div className="card height-full">
@@ -70,11 +112,14 @@ export const CaseInformationPublic = connect(
                             icon="print"
                             size="1x"
                           />
-                          Print receipt
+                          Print Confirmation
                         </Button>
                       </If>
                     </h3>
-                    <PetitionDetails caseDetail={formattedCaseDetail} />
+                    <PetitionDetails
+                      caseDetail={formattedCaseDetail}
+                      showPaymentRecord={caseDetailHelper.showPaymentRecord}
+                    />
                   </div>
                 </div>
               </div>
@@ -87,11 +132,13 @@ export const CaseInformationPublic = connect(
                 </div>
               </div>
             </div>
-          </NonMobile>
-          <Mobile>
+          </div>
+        </NonMobile>
+        <Mobile>
+          <div className="grid-container padding-x-0 margin-top-3">
             <div className="margin-top-2">
-              <div className="case-info-card">
-                <h3 className="underlined">Petition Details</h3>{' '}
+              <div className="case-info-card padding-bottom-3">
+                <h3>Petition Details</h3>{' '}
                 <If bind="caseDetail.irsSendDate">
                   <Button
                     link
@@ -106,7 +153,7 @@ export const CaseInformationPublic = connect(
                       icon="print"
                       size="1x"
                     />
-                    Print receipt
+                    Print Confirmation
                   </Button>
                 </If>
                 <PetitionDetails caseDetail={formattedCaseDetail} />
@@ -118,8 +165,8 @@ export const CaseInformationPublic = connect(
                 <TrialInformation caseDetail={formattedCaseDetail} />
               </div>
             </div>
-          </Mobile>
-        </div>
+          </div>
+        </Mobile>
       </div>
     );
   },

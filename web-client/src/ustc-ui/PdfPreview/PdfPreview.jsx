@@ -3,23 +3,38 @@ import { sequences, state } from 'cerebral';
 
 import React, { useEffect } from 'react';
 
-export const PdfPreview = connect(
+const PdfPreviewComponent = connect(
   {
     clearPdfPreviewUrlSequence: sequences.clearPdfPreviewUrlSequence,
     pdfPreviewUrl: state.pdfPreviewUrl,
   },
   ({ clearPdfPreviewUrlSequence, pdfPreviewUrl }) => {
-    useEffect(() => () => clearPdfPreviewUrlSequence(), []);
+    // always renders. use life-cycle hooks here.
+
+    const onRemove = () => {
+      clearPdfPreviewUrlSequence();
+    };
+
+    useEffect(() => {
+      return onRemove;
+    }, []);
 
     return (
-      !process.env.CI &&
-      pdfPreviewUrl && (
-        <iframe
-          id="pdf-preview-iframe"
-          src={pdfPreviewUrl}
-          title="PDF Preview"
-        />
-      )
+      <iframe id="pdf-preview-iframe" src={pdfPreviewUrl} title="PDF Preview" />
     );
+  },
+);
+
+export const PdfPreview = connect(
+  {
+    pdfPreviewUrl: state.pdfPreviewUrl,
+  },
+  ({ pdfPreviewUrl }) => {
+    // conditional rendering, no life-cycle hooks.
+    if (!pdfPreviewUrl || process.env.CI) {
+      return '';
+    }
+
+    return <PdfPreviewComponent />;
   },
 );

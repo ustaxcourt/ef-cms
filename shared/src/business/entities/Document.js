@@ -41,6 +41,7 @@ function Document(rawDocument, { applicationContext }) {
   this.createdAt = rawDocument.createdAt || createISODateString();
   this.docketNumber = rawDocument.docketNumber;
   this.documentId = rawDocument.documentId;
+  this.mailingDate = rawDocument.mailingDate;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
   this.draftState = rawDocument.draftState;

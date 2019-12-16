@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
+import { MultiDocumentPartiesFiling } from './MultiDocumentPartiesFiling';
 import { PartiesFiling } from './PartiesFiling';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
@@ -12,6 +13,7 @@ import React from 'react';
 
 export const FileDocument = connect(
   {
+    fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
@@ -20,6 +22,7 @@ export const FileDocument = connect(
     showModal: state.showModal,
   },
   ({
+    fileDocumentHelper,
     form,
     formCancelToggleCancelSequence,
     navigateBackSequence,
@@ -27,7 +30,7 @@ export const FileDocument = connect(
     showModal,
   }) => {
     return (
-      <React.Fragment>
+      <div className="grid-container">
         <Focus>
           <h1
             className="margin-bottom-105"
@@ -53,7 +56,9 @@ export const FileDocument = connect(
           </>
         )}
 
-        <PartiesFiling />
+        {(fileDocumentHelper.showMultiDocumentFilingPartyForm && (
+          <MultiDocumentPartiesFiling />
+        )) || <PartiesFiling />}
 
         <div className="margin-top-4">
           <Button
@@ -81,7 +86,7 @@ export const FileDocument = connect(
         {showModal === 'WhatCanIIncludeModalOverlay' && (
           <WhatCanIIncludeModalOverlay />
         )}
-      </React.Fragment>
+      </div>
     );
   },
 );

@@ -1,13 +1,10 @@
 import { AddPractitionerModal } from './AddPractitionerModal';
-import { AddRespondentModal } from './AddRespondentModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { EditPractitionersModal } from './EditPractitionersModal';
-import { EditRespondentsModal } from './EditRespondentsModal';
 import { EditSecondaryContactModal } from '../EditSecondaryContactModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
-import { RespondentExistsModal } from './RespondentExistsModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -49,7 +46,7 @@ const AddressDisplay = (contact, constants, { nameOverride } = {}) => {
   );
 };
 
-const PartyInformation = connect(
+const PetitionerInformation = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     caseInformationHelper: state.caseInformationHelper,
@@ -58,11 +55,8 @@ const PartyInformation = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     openAddPractitionerModalSequence:
       sequences.openAddPractitionerModalSequence,
-    openAddRespondentModalSequence: sequences.openAddRespondentModalSequence,
     openEditPractitionersModalSequence:
       sequences.openEditPractitionersModalSequence,
-    openEditRespondentsModalSequence:
-      sequences.openEditRespondentsModalSequence,
     openEditSecondaryContactModalSequence:
       sequences.openEditSecondaryContactModalSequence,
     showModal: state.showModal,
@@ -76,83 +70,97 @@ const PartyInformation = connect(
     form,
     formattedCaseDetail,
     openAddPractitionerModalSequence,
-    openAddRespondentModalSequence,
     openEditPractitionersModalSequence,
-    openEditRespondentsModalSequence,
     openEditSecondaryContactModalSequence,
     showModal,
     updateFormValueSequence,
     validationErrors,
   }) => {
     const mainPartyInformation = () => (
-      <div className="grid-container padding-x-0">
-        <div className="grid-row">
-          <div className="tablet:grid-col-3">
-            {formattedCaseDetail.contactPrimary && (
-              <div>
-                <address aria-labelledby="primary-label">
-                  {AddressDisplay(
-                    formattedCaseDetail.contactPrimary,
-                    constants,
-                    {
-                      nameOverride:
-                        caseDetailHelper.showCaseNameForPrimary &&
-                        formattedCaseDetail.caseName,
-                    },
-                  )}
-                </address>
-
+      <div className="grid-row grid-gap-6">
+        <div className="tablet:grid-col-6">
+          <div className="card height-full">
+            <div className="content-wrapper">
+              <h3 className="underlined" id="primary-label">
+                Petitioner Contact Info
                 {caseDetailHelper.showEditContacts && (
-                  <p>
-                    <Button
-                      link
-                      href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
-                    >
-                      <FontAwesomeIcon icon="edit" size="sm" />
-                      Edit
-                    </Button>
-                  </p>
+                  <Button
+                    link
+                    className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
+                    href={`/case-detail/${formattedCaseDetail.docketNumber}/contacts/primary/edit`}
+                    icon="edit"
+                  >
+                    Edit
+                  </Button>
                 )}
-                {formattedCaseDetail.contactPrimary.serviceIndicator && (
-                  <div className="margin-top-4">
-                    <span className="semi-bold">Service: </span>
-                    {formattedCaseDetail.contactPrimary.serviceIndicator}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          <div className="tablet:grid-col-3">
-            {formattedCaseDetail.contactSecondary &&
-              formattedCaseDetail.contactSecondary.name && (
+              </h3>
+              {formattedCaseDetail.contactPrimary && (
                 <div>
-                  <address aria-labelledby="secondary-label">
-                    {formattedCaseDetail.contactSecondary.name &&
-                      AddressDisplay(
-                        formattedCaseDetail.contactSecondary,
-                        constants,
-                        {},
-                      )}
+                  <address aria-labelledby="primary-label">
+                    {AddressDisplay(
+                      formattedCaseDetail.contactPrimary,
+                      constants,
+                      {
+                        nameOverride:
+                          caseDetailHelper.showCaseNameForPrimary &&
+                          formattedCaseDetail.caseName,
+                      },
+                    )}
                   </address>
-                  {caseDetailHelper.showEditContacts && (
-                    <Button
-                      link
-                      onClick={() => openEditSecondaryContactModalSequence()}
-                    >
-                      <FontAwesomeIcon icon="question-circle" size="sm" />
-                      Why can’t I edit this?
-                    </Button>
-                  )}
-                  {formattedCaseDetail.contactSecondary.serviceIndicator && (
+                  {formattedCaseDetail.contactPrimary.serviceIndicator && (
                     <div className="margin-top-4">
-                      <span className="semi-bold">Service: </span>
-                      {formattedCaseDetail.contactSecondary.serviceIndicator}
+                      <p className="semi-bold margin-bottom-0">
+                        Service preference
+                      </p>
+                      {formattedCaseDetail.contactPrimary.serviceIndicator}
                     </div>
                   )}
                 </div>
               )}
+            </div>
           </div>
         </div>
+
+        {formattedCaseDetail.contactSecondary &&
+          formattedCaseDetail.contactSecondary.name && (
+            <div className="tablet:grid-col-6">
+              <div className="card height-full">
+                <div className="content-wrapper">
+                  <h3 className="underlined" id="secondary-label">
+                    Spouse Contact Info
+                    {caseDetailHelper.showEditContacts && (
+                      <Button
+                        link
+                        className="push-right margin-right-0 margin-top-neg-1 ustc-button--mobile-inline margin-left-2"
+                        icon="question-circle"
+                        onClick={() => openEditSecondaryContactModalSequence()}
+                      >
+                        Why can’t I edit this?
+                      </Button>
+                    )}
+                  </h3>
+                  <div>
+                    <address aria-labelledby="secondary-label">
+                      {formattedCaseDetail.contactSecondary.name &&
+                        AddressDisplay(
+                          formattedCaseDetail.contactSecondary,
+                          constants,
+                          {},
+                        )}
+                    </address>
+                    {formattedCaseDetail.contactSecondary.serviceIndicator && (
+                      <div className="margin-top-4">
+                        <p className="semi-bold margin-bottom-0">
+                          Service preference
+                        </p>
+                        {formattedCaseDetail.contactSecondary.serviceIndicator}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
       </div>
     );
 
@@ -163,7 +171,7 @@ const PartyInformation = connect(
             formattedCaseDetail.practitioners.map((practitioner, index) => (
               <div
                 className={classNames(
-                  'tablet:grid-col-3',
+                  'tablet:grid-col-3 counsel-information',
                   index > 3 && 'margin-top-3',
                 )}
                 key={index}
@@ -203,43 +211,6 @@ const PartyInformation = connect(
       </div>
     );
 
-    const respondentPartyInformation = () => (
-      <div className="grid-container padding-x-0">
-        <div className="grid-row">
-          {formattedCaseDetail.respondents &&
-            formattedCaseDetail.respondents.map((respondent, index) => (
-              <div
-                className={classNames(
-                  'tablet:grid-col-3',
-                  index > 3 && 'margin-top-3',
-                )}
-                key={index}
-              >
-                <address aria-labelledby="respondent-label">
-                  {respondent.name &&
-                    AddressDisplay(
-                      {
-                        ...respondent,
-                        ...respondent.contact,
-                      },
-                      constants,
-                      {
-                        nameOverride: respondent.name,
-                      },
-                    )}
-                </address>
-                {respondent.serviceIndicator && (
-                  <div className="margin-top-4">
-                    <span className="semi-bold">Service: </span>
-                    {respondent.serviceIndicator}
-                  </div>
-                )}
-              </div>
-            ))}
-        </div>
-      </div>
-    );
-
     const practitionerSearch = () => (
       <>
         <div className="grid-col-3 text-right">
@@ -247,11 +218,14 @@ const PartyInformation = connect(
             className="label margin-right-4 margin-top-05"
             id="practitioner-counsel-search-description"
           >
-            Add Counsel
+            Add counsel
           </span>
         </div>
         <div className="grid-col-3 margin-top-neg-05">
-          <FormGroup errorText={validationErrors.practitionerSearchError}>
+          <FormGroup
+            className="margin-bottom-0"
+            errorText={validationErrors.practitionerSearchError}
+          >
             <form
               className="usa-search"
               onSubmit={e => {
@@ -275,7 +249,7 @@ const PartyInformation = connect(
                   )}
                   id="practitioner-search-field"
                   name="practitionerSearch"
-                  placeholder="Enter Bar No. or Name"
+                  placeholder="Enter bar no. or name"
                   type="search"
                   value={form.practitionerSearch || ''}
                   onChange={e => {
@@ -299,76 +273,10 @@ const PartyInformation = connect(
       </>
     );
 
-    const respondentSearch = () => (
-      <>
-        <div className="grid-col-3 text-right">
-          <span
-            className="label margin-right-4 margin-top-05"
-            id="respondent-counsel-search-description"
-          >
-            Add Counsel
-          </span>
-        </div>
-        <div className="grid-col-3 margin-top-neg-05">
-          <FormGroup errorText={validationErrors.respondentSearchError}>
-            <form
-              className="usa-search"
-              onSubmit={e => {
-                e.preventDefault();
-                openAddRespondentModalSequence();
-              }}
-            >
-              <div role="search">
-                <label
-                  className="usa-sr-only"
-                  htmlFor="respondent-search-field"
-                >
-                  Search
-                </label>
-                <input
-                  aria-describedby="respondent-counsel-search-description"
-                  className={classNames(
-                    'usa-input margin-bottom-0',
-                    validationErrors.respondentSearchError &&
-                      'usa-input--error',
-                  )}
-                  id="respondent-search-field"
-                  name="respondentSearch"
-                  placeholder="Enter Bar No. or Name"
-                  type="search"
-                  value={form.respondentSearch || ''}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-                <button
-                  className="usa-button"
-                  id="search-for-respondent"
-                  type="submit"
-                >
-                  <span className="usa-search__submit-text">Search</span>
-                </button>
-              </div>
-            </form>
-          </FormGroup>
-        </div>
-      </>
-    );
-
     return (
       <>
         <div className="subsection party-information">
-          <div className="card">
-            <div className="content-wrapper">
-              <h3 className="underlined" id="primary-label">
-                {formattedCaseDetail.partyType || 'My Party Type'}
-              </h3>
-              {mainPartyInformation()}
-            </div>
-          </div>
+          {mainPartyInformation()}
         </div>
         {caseDetailHelper.showPractitionerSection && (
           <div className="subsection party-information">
@@ -399,44 +307,15 @@ const PartyInformation = connect(
             </div>
           </div>
         )}
-        {caseDetailHelper.showRespondentSection && (
-          <div className="subsection party-information">
-            <div className="card">
-              <div className="content-wrapper">
-                <div className="grid-row header-row">
-                  <div className="grid-col-6 display-flex" id="secondary-label">
-                    <h3>Respondent Counsel</h3>
-                    {caseInformationHelper.showEditRespondents && (
-                      <Button
-                        link
-                        className="margin-left-205 padding-0 height-3"
-                        id="edit-respondents-button"
-                        onClick={() => openEditRespondentsModalSequence()}
-                      >
-                        <FontAwesomeIcon icon="edit" size="sm" />
-                        Edit
-                      </Button>
-                    )}
-                  </div>
-                  {caseInformationHelper.showAddCounsel && respondentSearch()}
-                </div>
-                {respondentPartyInformation()}
-              </div>
-            </div>
-          </div>
-        )}
         {caseDetailHelper.showEditSecondaryContactModal && (
           <EditSecondaryContactModal />
         )}
         {showModal === 'AddPractitionerModal' && <AddPractitionerModal />}
-        {showModal === 'AddRespondentModal' && <AddRespondentModal />}
         {showModal === 'EditPractitionersModal' && <EditPractitionersModal />}
-        {showModal === 'EditRespondentsModal' && <EditRespondentsModal />}
         {showModal === 'PractitionerExistsModal' && <PractitionerExistsModal />}
-        {showModal === 'RespondentExistsModal' && <RespondentExistsModal />}
       </>
     );
   },
 );
 
-export { AddressDisplay, PartyInformation };
+export { AddressDisplay, PetitionerInformation };

@@ -154,10 +154,14 @@ resources:
 functions:
   serveCourtIssuedDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.serveCourtIssuedDocumentLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
           path: /{caseId}/{documentId}/serve-court-issued
-          method: put
+          method: post
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
@@ -216,6 +220,18 @@ functions:
     events:
       - http:
           path: /{caseId}/external-document
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  fileExternalDocumentToConsolidated:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileExternalDocumentToConsolidatedCasesLambda
+    events:
+      - http:
+          path: /consolidated/{leadCaseId}/external-document
           method: post
           cors: true
           authorizer:
@@ -320,3 +336,23 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getDownloadPolicyUrl:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.downloadPolicyUrlLambda
+    events:
+      - http:
+          path: /{caseId}/{documentId}/download-policy-url
+          method: get
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getDocumentDownloadUrl:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.getDocumentDownloadUrlLambda
+    events:
+      - http:
+          path: /{caseId}/{documentId}/document-download-url
+          method: get
+          cors: true

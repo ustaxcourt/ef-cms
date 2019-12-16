@@ -9,9 +9,8 @@ export const FilingsAndProceedings = connect(
   {
     arrayIndex: props.arrayIndex,
     baseUrl: state.baseUrl,
+    caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
-    docketRecordHelper: state.docketRecordHelper,
-    documentEditLinkHelper: state.documentEditLinkHelper,
     entry: props.entry,
     formattedCaseDetail: state.formattedCaseDetail,
     showDocketRecordDetailModalSequence:
@@ -21,9 +20,8 @@ export const FilingsAndProceedings = connect(
   ({
     arrayIndex,
     baseUrl,
+    caseDetail,
     caseDetailHelper,
-    docketRecordHelper,
-    documentEditLinkHelper,
     entry,
     formattedCaseDetail,
     showDocketRecordDetailModalSequence,
@@ -35,7 +33,7 @@ export const FilingsAndProceedings = connect(
           <NonMobile>
             <a
               aria-label={`View PDF: ${entry.description}`}
-              href={`${baseUrl}/documents/${entry.documentId}/document-download-url?token=${token}`}
+              href={`${baseUrl}/case-documents/${caseDetail.caseId}/${entry.documentId}/document-download-url?token=${token}`}
               rel="noreferrer noopener"
               target="_blank"
             >
@@ -84,17 +82,7 @@ export const FilingsAndProceedings = connect(
         {entry.showDocumentEditLink && (
           <a
             aria-label="View PDF"
-            href={documentEditLinkHelper({
-              docketNumber: formattedCaseDetail.docketNumber,
-              documentId: entry.documentId,
-              shouldLinkToComplete: entry.isFileAttached === false,
-              shouldLinkToEdit:
-                docketRecordHelper.showEditDocketEntry && entry.canEdit,
-              shouldLinkToEditCourtIssued:
-                docketRecordHelper.showEditDocketEntry &&
-                entry.isCourtIssuedDocument,
-              shouldLinkedToDetails: entry.isServed,
-            })}
+            href={`/case-detail/${formattedCaseDetail.docketNumber}/documents/${entry.documentId}${entry.editLink}`}
           >
             {entry.isPaper && (
               <span className="filing-type-icon-mobile">
