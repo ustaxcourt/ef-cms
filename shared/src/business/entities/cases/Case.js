@@ -231,6 +231,7 @@ function Case(rawCase, { applicationContext }) {
   this.payGovDate = rawCase.payGovDate;
   this.payGovId = rawCase.payGovId;
   this.preferredTrialCity = rawCase.preferredTrialCity;
+  this.proceduralNote = rawCase.proceduralNote;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.status = rawCase.status || Case.STATUS_TYPES.new;
@@ -419,6 +420,7 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null),
+    proceduralNote: joi.string().optional(),
     procedureType: joi.string().optional(),
     receivedAt: joi
       .date()
