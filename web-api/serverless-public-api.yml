@@ -139,7 +139,7 @@ functions:
       - http:
           path: /search
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
 
   getPublicCase:
     handler: web-api/${self:provider.dir}/publicApiHandlers.getPublicCaseLambda
@@ -147,7 +147,7 @@ functions:
       - http:
           path: /cases/{caseId}
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
 
   getPublicDocumentDownloadUrl:
     handler: web-api/${self:provider.dir}/publicApiHandlers.getPublicDocumentDownloadUrlLambda
@@ -155,7 +155,7 @@ functions:
       - http:
           path: /{caseId}/{documentId}/public-document-download-url
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
 
   generatePublicDocketRecordPdfLambda:
     handler: web-api/${self:provider.dir}/publicApiHandlers.generatePublicDocketRecordPdfLambda
@@ -167,4 +167,4 @@ functions:
       - http:
           path: /cases/{caseId}/generate-docket-record
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}

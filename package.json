@@ -3,6 +3,7 @@
   "description": "US Tax Court Management System",
   "version": "0.1.0",
   "license": "CC0-1.0",
+  "repository": "https://github.com/ustaxcourt/ef-cms",
   "devDependencies": {
     "@babel/cli": "^7.7.5",
     "@babel/core": "^7.7.5",
@@ -41,7 +42,7 @@
     "elasticsearch": "^16.5.0",
     "eslint": "^6.7.2",
     "eslint-config-prettier": "^6.6.0",
-    "eslint-plugin-cypress": "^2.8.0",
+    "eslint-plugin-cypress": "^2.8.1",
     "eslint-plugin-jest": "^23.1.1",
     "eslint-plugin-jsdoc": "^18.4.3",
     "eslint-plugin-jsx-a11y": "^6.2.3",
