@@ -157,12 +157,12 @@ export const formatWorkItem = ({
 
 export const getWorkItemDocumentLink = ({
   applicationContext,
-  get,
-  workItem = {},
-  workQueueIsInternal,
+  permissions,
+  workItem,
+  workQueueToDisplay,
 }) => {
+  const { box, queue, workQueueIsInternal } = workQueueToDisplay;
   const result = cloneDeep(workItem);
-  const permissions = get(state.permissions);
 
   const formattedDocument = applicationContext
     .getUtilities()
@@ -201,7 +201,6 @@ export const getWorkItemDocumentLink = ({
     }
   }
   if (!editLink) {
-    const { box, queue } = get(state.workQueueToDisplay);
     const { USER_ROLES } = applicationContext.getConstants();
     const user = applicationContext.getCurrentUser();
     const messageId = result.messages[0] && result.messages[0].messageId;
@@ -219,7 +218,7 @@ export const getWorkItemDocumentLink = ({
         permissions.DOCKET_ENTRY ||
         (!workQueueIsInternal &&
           user.role === USER_ROLES.petitionsClerk &&
-          box === 'outbox'))
+          box === 'inbox'))
     ) {
       editLink = `/messages/${messageId}${markReadPath}`;
     } else {
@@ -369,6 +368,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
+  const permissions = get(state.permissions);
   const { workQueueIsInternal } = workQueueToDisplay;
   const selectedWorkItems = get(state.selectedWorkItems);
   const { USER_ROLES } = applicationContext.getConstants();
@@ -390,10 +390,10 @@ export const formattedWorkQueue = (get, applicationContext) => {
       });
       const editLink = getWorkItemDocumentLink({
         applicationContext,
-        get,
+        permissions,
         selectedWorkItems,
         workItem: item,
-        workQueueIsInternal,
+        workQueueToDisplay,
       });
       return { ...result, editLink };
     });
