@@ -301,7 +301,10 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     status: joi.string().optional(),
-    supportingDocument: joi.string().optional(),
+    supportingDocument: joi
+      .string()
+      .optional()
+      .allow(null),
     trialLocation: joi.string().optional(),
     userId: joi.string().required(),
     workItems: joi.array().optional(),
