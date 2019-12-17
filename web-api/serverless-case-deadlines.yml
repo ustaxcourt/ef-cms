@@ -156,7 +156,7 @@ functions:
       - http:
           path: /{caseId}
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -168,7 +168,7 @@ functions:
       - http:
           path: /{caseId}
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -180,7 +180,7 @@ functions:
       - http:
           path: /{caseId}/{caseDeadlineId}
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -192,7 +192,7 @@ functions:
       - http:
           path: /{caseId}/{caseDeadlineId}
           method: delete
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -204,7 +204,7 @@ functions:
       - http:
           path: /
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
