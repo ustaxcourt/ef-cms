@@ -3,6 +3,7 @@
   "description": "US Tax Court Management System",
   "version": "0.1.0",
   "license": "CC0-1.0",
+  "repository": "https://github.com/ustaxcourt/ef-cms",
   "devDependencies": {
     "@babel/cli": "^7.7.5",
     "@babel/core": "^7.7.5",

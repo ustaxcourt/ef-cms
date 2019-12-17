@@ -164,6 +164,9 @@ const {
   deleteDocument,
 } = require('../../shared/src/persistence/s3/deleteDocument');
 const {
+  deleteProceduralNoteInteractor,
+} = require('../../shared/src/business/useCases/proceduralNote/deleteProceduralNoteInteractor');
+const {
   deleteSectionOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteSectionOutboxRecord');
 const {
@@ -504,6 +507,9 @@ const {
 const {
   saveIntermediateDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/editDocketEntry/saveIntermediateDocketEntryInteractor');
+const {
+  saveProceduralNoteInteractor,
+} = require('../../shared/src/business/useCases/proceduralNote/saveProceduralNoteInteractor');
 const {
   saveSignedDocumentInteractor,
 } = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
@@ -956,6 +962,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
         deleteCounselFromCaseInteractor,
+        deleteProceduralNoteInteractor,
         fetchPendingItemsInteractor,
         fileCourtIssuedDocketEntryInteractor,
         fileCourtIssuedOrderInteractor,
@@ -1014,6 +1021,7 @@ module.exports = (appContextUser = {}) => {
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,
         saveIntermediateDocketEntryInteractor,
+        saveProceduralNoteInteractor,
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
         serveCourtIssuedDocumentInteractor,

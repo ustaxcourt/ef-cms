@@ -18,11 +18,17 @@ export const setAddEditCaseNoteModalStateFromDetailAction = ({
   const { caseId } = props;
 
   const notes = get(state.caseDetail.caseNote.notes);
-  const caseCaption = get(state.caseDetail.caseCaption);
+  const { caseCaption, docketNumber, docketNumberSuffix } = get(
+    state.caseDetail,
+  );
   const caseCaptionNames = applicationContext.getCaseCaptionNames(
     caseCaption || '',
   );
 
+  store.set(
+    state.modal.docketNumber,
+    `${docketNumber}${docketNumberSuffix ? docketNumberSuffix : ''}`,
+  );
   store.set(state.modal.caseCaptionNames, caseCaptionNames);
   store.set(state.modal.caseId, caseId);
   store.set(state.modal.notes, notes);
