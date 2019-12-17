@@ -57,7 +57,7 @@ describe('saveProceduralNoteInteractor', () => {
       result = await saveProceduralNoteInteractor({
         applicationContext,
         caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        note: 'This is my procedural note',
+        proceduralNote: 'This is my procedural note',
       });
     } catch (e) {
       error = e;
