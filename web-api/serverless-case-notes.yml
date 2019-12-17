@@ -187,3 +187,27 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  deleteProceduralNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.deleteProceduralNoteLambda
+    events:
+      - http:
+          path: /procedural/{caseId}
+          method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  saveProcecuralNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.saveProceduralNoteLambda
+    events:
+      - http:
+          path: /procedural/{caseId}
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
