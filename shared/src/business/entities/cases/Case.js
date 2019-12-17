@@ -611,6 +611,9 @@ Case.prototype.addDocumentWithoutDocketRecord = function(document) {
 
 Case.prototype.closeCase = function() {
   this.status = Case.STATUS_TYPES.closed;
+  this.unsetAsBlocked();
+  this.unsetAsHighPriority();
+  return this;
 };
 
 /**
@@ -1184,6 +1187,28 @@ Case.prototype.setCaseCaption = function(caseCaption) {
 Case.prototype.setCaseTitle = function(caseCaption) {
   this.caseTitle = `${caseCaption.trim()} ${Case.CASE_CAPTION_POSTFIX}`;
   return this;
+};
+
+/**
+ * get case contacts
+ *
+ * @returns {object} object containing case contacts
+ * @param {object} shape specific contact params to be returned
+ */
+Case.prototype.getCaseContacts = function(shape) {
+  const caseContacts = {};
+  [
+    'contactPrimary',
+    'contactSecondary',
+    'practitioners',
+    'respondents',
+  ].forEach(contact => {
+    if (!shape || (shape && shape[contact] === true)) {
+      caseContacts[contact] = this[contact];
+    }
+  });
+
+  return caseContacts;
 };
 
 module.exports = { Case };

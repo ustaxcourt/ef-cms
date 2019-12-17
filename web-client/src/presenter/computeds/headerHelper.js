@@ -19,7 +19,6 @@ export const headerHelper = (get, applicationContext) => {
   const isDashboard = currentPage.startsWith('Dashboard');
   const isMessages = currentPage.startsWith('Messages');
 
-  const pageIsInterstitial = currentPage == 'Interstitial';
   const pageIsHome =
     isDashboard ||
     ([
@@ -37,7 +36,6 @@ export const headerHelper = (get, applicationContext) => {
       : '/document-qc/my/inbox',
     pageIsDocumentQC: isMessages && !workQueueIsInternal,
     pageIsHome,
-    pageIsInterstitial,
     pageIsMessages: isMessages && workQueueIsInternal,
     pageIsMyCases:
       isDashboard && applicationContext.getUtilities().isExternalUser(userRole),
@@ -55,6 +53,7 @@ export const headerHelper = (get, applicationContext) => {
     showSearchInHeader:
       user &&
       userRole &&
+      userRole !== USER_ROLES.petitioner &&
       userRole !== USER_ROLES.practitioner &&
       userRole !== USER_ROLES.respondent,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,

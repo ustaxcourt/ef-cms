@@ -10,7 +10,6 @@ import { DocumentMessages } from './DocumentMessages';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { RecallPetitionModalDialog } from '../RecallPetitionModalDialog';
-import { ServeConfirmModalDialog } from '../ServeConfirmModalDialog';
 import { ServeToIrsModalDialog } from '../ServeToIrsModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -30,8 +29,6 @@ export const DocumentDetail = connect(
     navigateToPathSequence: sequences.navigateToPathSequence,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
-    openServeConfirmModalDialogSequence:
-      sequences.openServeConfirmModalDialogSequence,
     removeSignatureFromOrderSequence:
       sequences.removeSignatureFromOrderSequence,
     setModalDialogNameSequence: sequences.setModalDialogNameSequence,
@@ -47,7 +44,6 @@ export const DocumentDetail = connect(
     messageId,
     navigateToPathSequence,
     navigateToPrintableCaseConfirmationSequence,
-    openServeConfirmModalDialogSequence,
     removeSignatureFromOrderSequence,
     setModalDialogNameSequence,
     showModal,
@@ -200,15 +196,6 @@ export const DocumentDetail = connect(
                 Serve to IRS
               </Button>
             )}
-            {documentDetailHelper.showServeDocumentButton && (
-              <Button
-                className="serve-to-irs margin-right-0"
-                onClick={() => openServeConfirmModalDialogSequence()}
-              >
-                <FontAwesomeIcon icon={['fas', 'paper-plane']} />
-                Serve Document
-              </Button>
-            )}
             {documentDetailHelper.showRecallButton && (
               <span className="recall-button-box">
                 <FontAwesomeIcon icon={['far', 'clock']} size="lg" />
@@ -269,11 +256,6 @@ export const DocumentDetail = connect(
         {showModal === 'ServeToIrsModalDialog' && <ServeToIrsModalDialog />}
         {showModal === 'RecallPetitionModalDialog' && (
           <RecallPetitionModalDialog />
-        )}
-        {showModal === 'ServeConfirmModalDialog' && (
-          <ServeConfirmModalDialog
-            documentType={documentDetailHelper.formattedDocument.documentType}
-          />
         )}
         {showModal === 'ArchiveDraftDocumentModal' && (
           <ArchiveDraftDocumentModal />

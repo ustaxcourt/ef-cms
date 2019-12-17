@@ -82,7 +82,7 @@ export const DocketRecordHeader = connect(
                 Printable Docket Record
               </Button>
             </div>
-            <div className="tablet:grid-col-2">
+            <div className="tablet:grid-col-2 padding-top-1">
               <div className="only-large-screens">
                 <select
                   aria-label="docket record"

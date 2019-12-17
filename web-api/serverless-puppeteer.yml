@@ -9,6 +9,7 @@ custom:
   prune:
     automatic: true
     number: 3
+    includeLayers: true
 
 provider:
   name: aws
@@ -29,4 +30,3 @@ layers:
     package:
       exclude:
         - puppeteer_lambda_layer.tar.gz
-    retain: true

@@ -1,6 +1,7 @@
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
+import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { BlockedCasesReport } from './BlockedCasesReport/BlockedCasesReport';
@@ -17,6 +18,7 @@ import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocumentDetail } from './DocumentDetail/DocumentDetail';
 import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { Error } from './Error';
+import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { Footer } from './Footer';
 import { Header } from './Header/Header';
@@ -103,8 +105,9 @@ export const AppComponent = connect(
     currentPage: state.currentPage,
     currentPageHeader: state.currentPageHeader,
     showModal: state.showModal,
+    zipInProgress: state.batchDownloads.zipInProgress,
   },
-  ({ currentPage, showModal }) => {
+  ({ currentPage, showModal, zipInProgress }) => {
     const focusMain = e => {
       e && e.preventDefault();
       const header = document.querySelector('#main-content h1');
@@ -131,11 +134,15 @@ export const AppComponent = connect(
         <Header />
         <main id="main-content" role="main">
           <CurrentPage />
+          {zipInProgress && <BatchDownloadProgress />}
         </main>
         <Footer />
         <Loading />
         {showModal === 'TrialSessionPlanningModal' && (
           <TrialSessionPlanningModal />
+        )}
+        {showModal === 'FileCompressionErrorModal' && (
+          <FileCompressionErrorModal />
         )}
       </React.Fragment>
     );

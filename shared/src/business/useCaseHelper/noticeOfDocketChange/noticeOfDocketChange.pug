@@ -3,22 +3,28 @@ html(lang="en")
   head
     meta(charset="utf-8")
     title Notice of Docket Change
-    style= styles
+    style= css
   body
     .page-container
       .page-header
         img.logo(src=logo)
-        h1.text-center United States Tax Court
+        h1.text-center.min-height-100 United States Tax Court
 
-    p.float-left.width-half= caseTitle
-    p.float-right Docket Number: #{docketNumber}
+        .min-height-100.clear
+          p.float-left.width-half= caseTitle
+          p.float-right Docket Number: #{docketNumber}
 
-    h2.text-center Notice of Docket Change
+        h2.text-center Notice of Docket Change
 
-    .info-box
-      h3 Docket Entry No. #{docketEntryIndex} has been changed
-      p
-        if filingsAndProceedings
-          | “#{filingsAndProceedings.before}” has been changed to “#{filingsAndProceedings.after}”.  
-        if filingParties
-          | “#{filingParties.before}” has been changed to “#{filingParties.after}”.
+      .info-box.margin-top-80
+        h3 Docket Entry No. #{docketEntryIndex} has been changed
+        p
+          if filingsAndProceedings.before != filingsAndProceedings.after
+            | “#{filingsAndProceedings.before}” has been changed to “#{filingsAndProceedings.after}”. 
+          if filingParties.before != filingParties.after
+            | The filing party/parties has been changed from "#{filingParties.before}” to “#{filingParties.after}”.
+
+      p.float-right.width-third 
+        | Stephanie A. Servoss
+        br
+        | Clerk of the Court

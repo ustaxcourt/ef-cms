@@ -113,10 +113,13 @@ exports.fileExternalDocumentInteractor = async ({
           documentType: metadata.documentType,
           relationship,
           userId: user.userId,
+          ...caseEntity.getCaseContacts({
+            contactPrimary: true,
+            contactSecondary: true,
+          }),
         },
         { applicationContext },
       );
-      documentEntity.generateFiledBy(caseToUpdate);
 
       const workItem = new WorkItem(
         {

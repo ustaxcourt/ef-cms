@@ -123,17 +123,6 @@ exports.generateCaseConfirmationPdf = async ({
       Key: documentId,
     };
 
-    s3Client.upload(params, function() {
-      resolve();
-    });
+    s3Client.upload(params, resolve);
   });
-
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    documentId,
-  });
-
-  return url;
 };

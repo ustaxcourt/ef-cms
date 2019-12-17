@@ -48,6 +48,8 @@ set -- \
   --dynamo_stream_arn "arn:aws:dynamodb:ddblocal:000000000000:table/efcms-local/stream/*" \
   --elasticsearch_endpoint "http://localhost:9200"
 
+echo "starting public api service"
+npx sls offline start "$@" --config web-api/serverless-public-api.yml &
 echo "starting api service"
 npx sls offline start "$@" --config web-api/serverless-api.yml &
 echo "starting cases service"
@@ -78,9 +80,9 @@ node ./web-api/proxy.js
 
 echo "proxy stopped"
 
-if [ ! -e "$CIRCLECI" ]; then 
+if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"
   pkill -P $DYNAMO_PID
   pkill -p $ESEARCH_PID
-fi 
+fi
 kill $S3RVER_PID

@@ -184,8 +184,7 @@ describe('creation form', () => {
 describe('can view case detail', () => {
   before(() => {
     cy.viewport(1200, 900);
-    cy.get('#search-field').type(createdDocketNumber);
-    cy.get('#search-input').submit();
+    cy.login('petitioner', `/case-detail/${createdDocketNumber}`);
     cy.url().should('include', 'case-detail');
   });
 

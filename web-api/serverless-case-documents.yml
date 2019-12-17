@@ -152,18 +152,6 @@ resources:
             MetricsEnabled: true
 
 functions:
-  serveSignedStipDecision:
-    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.serveSignedStipDecisionLambda
-    events:
-      - http:
-          path: /{caseId}/{documentId}/serve
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   serveCourtIssuedDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.serveCourtIssuedDocumentLambda
     events:
@@ -273,6 +261,8 @@ functions:
 
   completeDocketEntryQC:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.completeDocketEntryQCLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     events:
       - http:
           path: /{caseId}/docket-entry-complete

@@ -46,6 +46,8 @@ exports.deleteCounselFromCaseInteractor = async ({
     caseEntity.removePractitioner(userToDelete);
   } else if (userToDelete.role === User.ROLES.respondent) {
     caseEntity.removeRespondent(userToDelete);
+  } else {
+    throw new Error('User is not a practitioner or respondent');
   }
 
   await applicationContext.getPersistenceGateway().deleteUserFromCase({

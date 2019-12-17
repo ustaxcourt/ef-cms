@@ -87,6 +87,8 @@ function Document(rawDocument, { applicationContext }) {
   this.workItems = (this.workItems || []).map(
     workItem => new WorkItem(workItem, { applicationContext }),
   );
+
+  this.generateFiledBy(rawDocument);
 }
 
 const practitionerAssociationDocumentTypes = [
@@ -121,6 +123,12 @@ Document.INITIAL_DOCUMENT_TYPES = {
     documentType: 'Statement of Taxpayer Identification',
     eventCode: 'STIN',
   },
+};
+
+Document.NOTICE_OF_DOCKET_CHANGE = {
+  documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
+  documentType: 'Notice of Docket Change',
+  eventCode: 'NODC',
 };
 
 Document.SIGNED_DOCUMENT_TYPES = {
@@ -184,6 +192,7 @@ Document.getDocumentTypes = () => {
     ...orderDocTypes,
     ...courtIssuedDocTypes,
     ...signedTypes,
+    Document.NOTICE_OF_DOCKET_CHANGE.documentType,
   ];
 
   return documentTypes;
@@ -296,12 +305,13 @@ Document.prototype.setAsServed = function(servedParties = null) {
 
 /**
  * generates the filedBy string from parties selected for the document
- * and contact info from the case detail
+and contact info from the case detail
  *
  * @param {object} caseDetail the case detail
+ * @param {boolean} force flag to force filedBy's generation
  */
-Document.prototype.generateFiledBy = function(caseDetail) {
-  if (!this.filedBy) {
+Document.prototype.generateFiledBy = function(caseDetail, force = false) {
+  if (force || !this.filedBy) {
     let filedByArray = [];
     this.partyRespondent && filedByArray.push('Resp.');
 
@@ -367,6 +377,10 @@ Document.prototype.unsignDocument = function() {
 
 Document.prototype.setAsProcessingStatusAsCompleted = function() {
   this.processingStatus = 'complete';
+};
+
+Document.prototype.getQCWorkItem = function() {
+  return this.workItems.find(workItem => workItem.isQC === true);
 };
 
 exports.Document = Document;

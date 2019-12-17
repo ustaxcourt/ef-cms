@@ -272,7 +272,79 @@ describe('Document entity', () => {
         },
         { applicationContext },
       );
+      document.generateFiledBy(caseDetail, true);
+      expect(document.filedBy).toEqual('Resp. & Petr. Bob');
+    });
+
+    it('should generate correct filedBy string for partyPrimary and partyRespondent only once', () => {
+      const document = new Document(
+        {
+          attachments: false,
+          category: 'Miscellaneous',
+          certificateOfService: false,
+          createdAt: '2019-04-19T18:24:09.515Z',
+          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          documentTitle:
+            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
+          documentType: 'Amended',
+          eventCode: 'ADED',
+          exhibits: true,
+          hasSupportingDocuments: true,
+          ordinalValue: 'First',
+          partyPrimary: false,
+          partyRespondent: true,
+          previousDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          relationship: 'primaryDocument',
+          scenario: 'Nonstandard F',
+          supportingDocument: 'Brief in Support',
+          supportingDocumentFreeText: null,
+        },
+        { applicationContext },
+      );
       document.generateFiledBy(caseDetail);
+
+      expect(document.filedBy).toEqual('Resp.');
+
+      document.partyPrimary = true;
+      document.generateFiledBy(caseDetail);
+
+      expect(document.filedBy).toEqual('Resp.');
+    });
+
+    it('should generate correct filedBy string for partyPrimary and partyRespondent more than once with force = true', () => {
+      const document = new Document(
+        {
+          attachments: false,
+          category: 'Miscellaneous',
+          certificateOfService: false,
+          createdAt: '2019-04-19T18:24:09.515Z',
+          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          documentTitle:
+            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
+          documentType: 'Amended',
+          eventCode: 'ADED',
+          exhibits: true,
+          hasSupportingDocuments: true,
+          ordinalValue: 'First',
+          partyPrimary: false,
+          partyRespondent: true,
+          previousDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          relationship: 'primaryDocument',
+          scenario: 'Nonstandard F',
+          supportingDocument: 'Brief in Support',
+          supportingDocumentFreeText: null,
+        },
+        { applicationContext },
+      );
+      document.generateFiledBy(caseDetail);
+
+      expect(document.filedBy).toEqual('Resp.');
+
+      document.partyPrimary = true;
+      document.generateFiledBy(caseDetail, true);
+
       expect(document.filedBy).toEqual('Resp. & Petr. Bob');
     });
 
@@ -472,6 +544,260 @@ describe('Document entity', () => {
       document.generateFiledBy(caseDetail);
       expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner1');
     });
+
+    it('should generate correct filedBy string for partyPrimary in the constructor when called with a contactPrimary property', () => {
+      const document = new Document(
+        {
+          attachments: false,
+          category: 'Petition',
+          certificateOfService: false,
+          contactPrimary: caseDetail.contactPrimary,
+          createdAt: '2019-04-19T17:29:13.120Z',
+          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          documentTitle: 'Amended Petition',
+          documentType: 'Amended Petition',
+          eventCode: 'PAP',
+          exhibits: false,
+          hasSupportingDocuments: true,
+          objections: 'No',
+          partyPrimary: true,
+          relationship: 'primaryDocument',
+          scenario: 'Standard',
+          supportingDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          supportingDocumentFreeText: 'Test',
+        },
+        { applicationContext },
+      );
+      expect(document.filedBy).toEqual('Petr. Bob');
+    });
+
+    it('should generate correct filedBy string for partySecondary in the constructor when called with a contactSecondary property', () => {
+      const document = new Document(
+        {
+          attachments: false,
+          category: 'Petition',
+          certificateOfService: false,
+          contactSecondary: caseDetail.contactSecondary,
+          createdAt: '2019-04-19T17:29:13.120Z',
+          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          documentTitle: 'Amended Petition',
+          documentType: 'Amended Petition',
+          eventCode: 'PAP',
+          exhibits: false,
+          hasSupportingDocuments: true,
+          objections: 'No',
+          partyPrimary: false,
+          partySecondary: true,
+          relationship: 'primaryDocument',
+          scenario: 'Standard',
+          supportingDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          supportingDocumentFreeText: 'Test',
+        },
+        { applicationContext },
+      );
+      expect(document.filedBy).toEqual('Petr. Bill');
+    });
+
+    it('should generate correct filedBy string for partyPrimary and partyRespondent in the constructor when values are present', () => {
+      const document = new Document(
+        {
+          attachments: false,
+          category: 'Miscellaneous',
+          certificateOfService: false,
+          createdAt: '2019-04-19T18:24:09.515Z',
+          documentId: 'c501a558-7632-497e-87c1-0c5f39f66718',
+          documentTitle:
+            'First Amended Unsworn Declaration under Penalty of Perjury in Support',
+          documentType: 'Amended',
+          eventCode: 'ADED',
+          exhibits: true,
+          hasSupportingDocuments: true,
+          ordinalValue: 'First',
+          partyPrimary: true,
+          partyRespondent: true,
+          previousDocument:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          relationship: 'primaryDocument',
+          scenario: 'Nonstandard F',
+          supportingDocument: 'Brief in Support',
+          supportingDocumentFreeText: null,
+          ...caseDetail,
+        },
+        { applicationContext },
+      );
+      expect(document.filedBy).toEqual('Resp. & Petr. Bob');
+    });
+
+    it('should generate correct filedBy string for partyPrimary and partySecondary in the constructor when values are present', () => {
+      const document = new Document(
+        {
+          attachments: true,
+          category: 'Motion',
+          certificateOfService: true,
+          certificateOfServiceDate: '2018-06-07',
+          certificateOfServiceDay: '7',
+          certificateOfServiceMonth: '6',
+          certificateOfServiceYear: '2018',
+          createdAt: '2019-04-19T17:39:10.476Z',
+          documentId: '362baeaf-7692-4b04-878b-2946dcfa26ee',
+          documentTitle:
+            'Motion for Leave to File Computation for Entry of Decision',
+          documentType: 'Motion for Leave to File',
+          eventCode: 'M115',
+          exhibits: true,
+          hasSecondarySupportingDocuments: false,
+          hasSupportingDocuments: true,
+          objections: 'Yes',
+          partyPrimary: true,
+          partySecondary: true,
+          relationship: 'primaryDocument',
+          scenario: 'Nonstandard H',
+          secondarySupportingDocument: null,
+          secondarySupportingDocumentFreeText: null,
+          supportingDocument: 'Declaration in Support',
+          supportingDocumentFreeText: 'Rachael',
+          ...caseDetail,
+        },
+        { applicationContext },
+      );
+      expect(document.filedBy).toEqual('Petrs. Bob & Bill');
+    });
+
+    it('should generate correct filedBy string for partyRespondent and partyPractitioner in the constructor when values are present', () => {
+      const document = new Document(
+        {
+          category: 'Supporting Document',
+          createdAt: '2019-04-19T17:29:13.122Z',
+          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          documentTitle:
+            'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
+          documentType:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          eventCode: 'USDL',
+          freeText: 'Test',
+          lodged: true,
+          partyPractitioner: true,
+          partyRespondent: true,
+          practitioner: [
+            {
+              name: 'Test Practitioner',
+              partyPractitioner: true,
+            },
+          ],
+          previousDocument: 'Amended Petition',
+          relationship: 'primarySupportingDocument',
+          scenario: 'Nonstandard C',
+          ...caseDetail,
+        },
+        { applicationContext },
+      );
+      expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner');
+    });
+
+    it('should generate correct filedBy string for partyRespondent and partyPractitioner set to false in the constructor when values are present', () => {
+      const document = new Document(
+        {
+          category: 'Supporting Document',
+          createdAt: '2019-04-19T17:29:13.122Z',
+          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          documentTitle:
+            'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
+          documentType:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          eventCode: 'USDL',
+          freeText: 'Test',
+          lodged: true,
+          partyPractitioner: true,
+          partyRespondent: true,
+          practitioner: [
+            {
+              name: 'Test Practitioner',
+              partyPractitioner: false,
+            },
+          ],
+          previousDocument: 'Amended Petition',
+          relationship: 'primarySupportingDocument',
+          scenario: 'Nonstandard C',
+          ...caseDetail,
+        },
+        { applicationContext },
+      );
+      expect(document.filedBy).toEqual('Resp.');
+    });
+
+    it('should generate correct filedBy string for partyRespondent and multiple partyPractitioners in the constructor when values are present', () => {
+      const document = new Document(
+        {
+          category: 'Supporting Document',
+          createdAt: '2019-04-19T17:29:13.122Z',
+          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          documentTitle:
+            'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
+          documentType:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          eventCode: 'USDL',
+          freeText: 'Test',
+          lodged: true,
+          partyPractitioner: true,
+          partyRespondent: true,
+          practitioner: [
+            {
+              name: 'Test Practitioner',
+              partyPractitioner: true,
+            },
+            {
+              name: 'Test Practitioner1',
+              partyPractitioner: true,
+            },
+          ],
+          previousDocument: 'Amended Petition',
+          relationship: 'primarySupportingDocument',
+          scenario: 'Nonstandard C',
+          ...caseDetail,
+        },
+        { applicationContext },
+      );
+      expect(document.filedBy).toEqual(
+        'Resp. & Counsel Test Practitioner & Counsel Test Practitioner1',
+      );
+    });
+
+    it('should generate correct filedBy string for partyRespondent and multiple partyPractitioners with one set to false in the constructor when values are present', () => {
+      const document = new Document(
+        {
+          category: 'Supporting Document',
+          createdAt: '2019-04-19T17:29:13.122Z',
+          documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
+          documentTitle:
+            'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition',
+          documentType:
+            'Unsworn Declaration under Penalty of Perjury in Support',
+          eventCode: 'USDL',
+          freeText: 'Test',
+          lodged: true,
+          partyPractitioner: true,
+          partyRespondent: true,
+          practitioner: [
+            {
+              name: 'Test Practitioner',
+              partyPractitioner: false,
+            },
+            {
+              name: 'Test Practitioner1',
+              partyPractitioner: true,
+            },
+          ],
+          previousDocument: 'Amended Petition',
+          relationship: 'primarySupportingDocument',
+          scenario: 'Nonstandard C',
+          ...caseDetail,
+        },
+        { applicationContext },
+      );
+      expect(document.filedBy).toEqual('Resp. & Counsel Test Practitioner1');
+    });
   });
 
   describe('unsignDocument', () => {
@@ -497,6 +823,96 @@ describe('Document entity', () => {
       expect(document.qcByUser.name).toEqual('Jean Luc');
       expect(document.qcByUser.userId).toEqual('ncc-1701-c');
       expect(document.qcAt).toBeDefined();
+    });
+  });
+
+  describe('getQCWorkItem', () => {
+    it('returns the first workItem with isQC = true', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          workItems: [
+            {
+              assigneeId: 'bill',
+              assigneeName: 'bill',
+              caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              caseStatus: 'new',
+              caseTitle: 'testing',
+              docketNumber: '101-18',
+              document: {},
+              isQC: false,
+              messages: [
+                {
+                  from: 'Test User',
+                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+                  message: 'hello world',
+                  messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                },
+              ],
+              sentBy: 'bill',
+              workItemId: 'dda4acce-7b0f-40e2-b5a7-261b5c0dee28',
+            },
+            {
+              assigneeId: 'bob',
+              assigneeName: 'bob',
+              caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              caseStatus: 'new',
+              caseTitle: 'testing',
+              docketNumber: '101-18',
+              document: {},
+              isQC: true,
+              messages: [
+                {
+                  from: 'Test User',
+                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+                  message: 'hello world',
+                  messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                },
+              ],
+              sentBy: 'bob',
+              workItemId: '062d334b-7589-4b28-9dcf-72989574b7a7',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      expect(document.getQCWorkItem()).toMatchObject({
+        workItemId: '062d334b-7589-4b28-9dcf-72989574b7a7',
+      });
+    });
+
+    it('returns undefined if there is no QC work item', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          workItems: [
+            {
+              assigneeId: 'bill',
+              assigneeName: 'bill',
+              caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              caseStatus: 'new',
+              caseTitle: 'testing',
+              docketNumber: '101-18',
+              document: {},
+              isQC: false,
+              messages: [
+                {
+                  from: 'Test User',
+                  fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+                  message: 'hello world',
+                  messageId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+                },
+              ],
+              sentBy: 'bill',
+              workItemId: 'dda4acce-7b0f-40e2-b5a7-261b5c0dee28',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+
+      expect(document.getQCWorkItem()).toBeUndefined();
     });
   });
 });

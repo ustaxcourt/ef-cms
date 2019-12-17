@@ -3,6 +3,7 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.js',
     '!integration-tests/**/*.js',
+    '!integration-tests-public/**/*.js',
     '!src/applicationContext.js',
     '!src/router.js',
     '!src/index.dev.js',
@@ -18,6 +19,7 @@ module.exports = {
     },
   },
   globals: {
+    atob: x => x,
     window: { document: {} },
   },
   testEnvironment: 'node',

@@ -26,7 +26,7 @@ export const RecentMessagesInbox = connect(
               <th>Case name</th>
               <th>Document</th>
               {workQueueHelper.showCaseStatusColumn && (
-                <th className="no-wrap">Case Status</th>
+                <th className="no-wrap">Case status</th>
               )}
               {workQueueHelper.showFromColumn && <th>From</th>}
             </tr>

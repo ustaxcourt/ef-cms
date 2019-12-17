@@ -27,4 +27,20 @@ describe('generateCourtIssuedDocumentTitleInteractor', () => {
     });
     expect(title).toEqual('Order fixing amount of bond at 100 million dollars');
   });
+
+  it('does not generate a document title if the passed in documentMetadata is not valid', async () => {
+    applicationContext = {
+      environment: { stage: 'local' },
+      getEntityConstructors: () => ({
+        CourtIssuedDocumentFactory,
+      }),
+    };
+    const title = await generateCourtIssuedDocumentTitleInteractor({
+      applicationContext,
+      documentMetadata: {
+        freeText: '100 million dollars',
+      },
+    });
+    expect(title).toBeUndefined();
+  });
 });

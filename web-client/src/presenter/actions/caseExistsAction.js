@@ -1,5 +1,3 @@
-import { NotFoundError } from '../errors/NotFoundError';
-
 /**
  * Checks for existence of a case using the getCase use case using the props.docketNumber
  *
@@ -15,12 +13,8 @@ export const caseExistsAction = async ({ applicationContext, path, props }) => {
       applicationContext,
       docketNumber: props.caseId,
     });
+    return path.success();
   } catch (e) {
-    if (e instanceof NotFoundError) {
-      return path.error();
-    } else {
-      throw e;
-    }
+    return path.error();
   }
-  return path.success();
 };

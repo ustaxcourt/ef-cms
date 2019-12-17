@@ -38,6 +38,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
   if (!caseDetail.partyType) {
     return {};
   }
+  const showDateReceivedEdit = caseDetail.isPaper;
   const documentIdWhitelist = get(state.screenMetadata.filedDocumentIds);
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
@@ -137,6 +138,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     previouslyFiledWizardDocuments,
     primary: optionsForCategory,
     secondary: secondaryOptionsForCategory,
+    showDateReceivedEdit,
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,

@@ -51,6 +51,7 @@ import {
   faGavel,
   faHandPaper,
   faHome,
+  faInfoCircle,
   faLaptop,
   faLink,
   faListUl,
@@ -196,6 +197,7 @@ const app = {
       faTrash,
       faUser,
       faUserCheck,
+      faInfoCircle,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
