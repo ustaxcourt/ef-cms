@@ -9,10 +9,10 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 export const saveProceduralNoteAction = async ({ applicationContext, get }) => {
-  const proceduralNote = get(state.form.proceduralNote);
-  const caseId = get(state.form.caseId);
+  const proceduralNote = get(state.modal.notes);
+  const { caseId } = get(state.caseDetail);
 
-  const results = await applicationContext
+  const caseDetail = await applicationContext
     .getUseCases()
     .saveProceduralNoteInteractor({
       applicationContext,
@@ -20,5 +20,10 @@ export const saveProceduralNoteAction = async ({ applicationContext, get }) => {
       proceduralNote,
     });
 
-  return { results };
+  return {
+    alertSuccess: {
+      message: 'Your note has been saved',
+    },
+    caseDetail,
+  };
 };

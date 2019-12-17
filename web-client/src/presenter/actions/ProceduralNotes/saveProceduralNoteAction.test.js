@@ -13,20 +13,26 @@ describe('saveProceduralNote', () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
-  it('saves a procedural note on a case when provided with a caseId', async () => {
+  it('saves a procedural note on case with id from caseDetail.caseId', async () => {
     const caseId = '123-abc';
     const result = await runAction(saveProceduralNoteAction, {
       modules: {
         presenter,
       },
       state: {
-        form: {
+        caseDetail: {
           caseId,
-          proceduralNote: 'This is a procedural note',
+        },
+        modal: {
+          notes: 'This is a procedural note',
         },
       },
     });
     expect(result).toBeDefined();
     expect(saveProceduralNoteInteractorMock).toHaveBeenCalled();
+    expect(saveProceduralNoteInteractorMock.mock.calls[0][0]).toMatchObject({
+      caseId,
+      proceduralNote: 'This is a procedural note',
+    });
   });
 });
