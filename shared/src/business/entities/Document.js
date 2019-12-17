@@ -260,7 +260,7 @@ joiValidationDecorator(
     partyRespondent: joi.boolean().optional(),
     partySecondary: joi.boolean().optional(),
     pending: joi.boolean().optional(),
-    practitioner: joi.object().optional(),
+    practitioner: joi.array().optional(),
     previousDocument: joi.string().optional(),
     processingStatus: joi.string().optional(),
     qcAt: joi
