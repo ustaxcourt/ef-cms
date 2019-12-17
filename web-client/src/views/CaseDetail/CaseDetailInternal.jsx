@@ -32,7 +32,6 @@ export const CaseDetailInternal = connect(
   {
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
-    caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     primaryTab: state.caseDetailPage.primaryTab,
     showModal: state.showModal,
@@ -41,7 +40,6 @@ export const CaseDetailInternal = connect(
   ({
     baseUrl,
     caseDetail,
-    caseDetailHelper,
     formattedCaseDetail,
     primaryTab,
     showModal,
@@ -119,7 +117,7 @@ export const CaseDetailInternal = connect(
               <div className="title">
                 <h1>Notes</h1>
               </div>
-              {caseDetailHelper.showCaseNotes && <CaseNotes />}
+              <CaseNotes />
             </>
           )}
         </section>

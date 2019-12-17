@@ -30,7 +30,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     orderToShowCause,
   } = caseDetail;
   const permissions = get(state.permissions);
-  const showCaseNotes = permissions.TRIAL_SESSION_WORKING_COPY;
+  const showJudgesNotes = permissions.TRIAL_SESSION_WORKING_COPY;
 
   let showFileDocumentButton =
     permissions.FILE_EXTERNAL_DOCUMENT && ['CaseDetail'].includes(currentPage);
@@ -140,7 +140,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesInternalEmpty,
     showCaseInformationExternal: isExternalUser,
     showCaseNameForPrimary,
-    showCaseNotes,
     showDocketRecordInProgressState: !isExternalUser,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContacts,
@@ -148,6 +147,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
+    showJudgesNotes,
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !caseIsPaid,
     showPaymentRecord: caseIsPaid,
