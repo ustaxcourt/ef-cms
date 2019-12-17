@@ -2,7 +2,7 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { saveProceduralNoteAction } from './saveProceduralNoteAction';
 
-const saveProceduralNoteInteractorMock = jest.fn();
+const saveProceduralNoteInteractorMock = jest.fn().mockReturnValue(true);
 presenter.providers.applicationContext = {
   getUseCases: () => ({
     saveProceduralNoteInteractor: saveProceduralNoteInteractorMock,
@@ -15,7 +15,7 @@ describe('saveProceduralNote', () => {
   });
   it('saves a procedural note on a case when provided with a caseId', async () => {
     const caseId = '123-abc';
-    await runAction(saveProceduralNoteAction, {
+    const result = await runAction(saveProceduralNoteAction, {
       modules: {
         presenter,
       },
@@ -26,6 +26,7 @@ describe('saveProceduralNote', () => {
         },
       },
     });
+    expect(result).toBeDefined();
     expect(saveProceduralNoteInteractorMock).toHaveBeenCalled();
   });
 });
