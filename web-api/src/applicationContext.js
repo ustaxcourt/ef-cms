@@ -10,11 +10,12 @@ const AWS = require('aws-sdk');
 
 // ^ must come first --------------------
 
+const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
+
 const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
 const util = require('util');
-const uuidv4 = require('uuid/v4');
 const {
   addCaseToTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor');
@@ -58,6 +59,9 @@ const {
   CaseInternal,
 } = require('../../shared/src/business/entities/cases/CaseInternal');
 const {
+  casePublicSearchInteractor,
+} = require('../../shared/src/business/useCases/public/casePublicSearchInteractor');
+const {
   CaseSearch,
 } = require('../../shared/src/business/entities/cases/CaseSearch');
 const {
@@ -96,12 +100,6 @@ const {
 const {
   createCaseInteractor,
 } = require('../../shared/src/business/useCases/createCaseInteractor');
-const {
-  createCaseNote,
-} = require('../../shared/src/persistence/dynamo/caseNotes/createCaseNote');
-const {
-  createCaseNoteInteractor,
-} = require('../../shared/src/business/useCases/caseNote/createCaseNoteInteractor');
 const {
   createCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords');
@@ -180,6 +178,9 @@ const {
 const {
   deleteWorkItemFromSection,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
+const {
+  ExternalDocumentFactory,
+} = require('../../shared/src/business/entities/externalDocument/ExternalDocumentFactory');
 const {
   fetchPendingItems,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItems');
@@ -363,6 +364,9 @@ const {
   getPractitionersBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getPractitionersBySearchKeyInteractor');
 const {
+  getPublicCaseInteractor,
+} = require('../../shared/src/business/useCases/public/getPublicCaseInteractor');
+const {
   getRespondentsBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getRespondentsBySearchKeyInteractor');
 const {
@@ -508,9 +512,6 @@ const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
 const {
-  serveSignedStipDecisionInteractor,
-} = require('../../shared/src/business/useCases/serveSignedStipDecisionInteractor');
-const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
 const {
@@ -616,9 +617,6 @@ const {
   verifyCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
 const {
-  verifyCaseForUserInteractor,
-} = require('../../shared/src/business/useCases/caseAssociationRequest/verifyCaseForUserInteractor');
-const {
   verifyPendingCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyPendingCaseForUser');
 const {
@@ -657,6 +655,7 @@ const environment = {
 };
 
 let user;
+
 const getCurrentUser = () => {
   return user;
 };
@@ -719,7 +718,9 @@ module.exports = (appContextUser = {}) => {
     },
     getEmailClient: () => {
       if (!sesCache) {
-        sesCache = new SES();
+        sesCache = new SES({
+          region: 'us-east-1',
+        });
       }
       return sesCache;
     },
@@ -728,6 +729,7 @@ module.exports = (appContextUser = {}) => {
       CaseExternal: CaseExternalIncomplete,
       CaseInternal: CaseInternal,
       CaseSearch,
+      ExternalDocumentFactory,
     }),
     getNodeSass: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
@@ -759,7 +761,6 @@ module.exports = (appContextUser = {}) => {
         createCase,
         createCaseCatalogRecord,
         createCaseDeadline,
-        createCaseNote,
         createCaseTrialSortMappingRecords,
         createSectionInboxRecord,
         createTrialSession,
@@ -896,9 +897,7 @@ module.exports = (appContextUser = {}) => {
         generateTrialSessionPlanningReportTemplate,
       };
     },
-    getUniqueId: () => {
-      return uuidv4();
-    },
+    getUniqueId,
     getUseCaseHelpers: () => {
       return {
         fetchPendingItems,
@@ -917,13 +916,13 @@ module.exports = (appContextUser = {}) => {
         batchDownloadTrialSessionInteractor,
         blockCaseFromTrialInteractor,
         caseAdvancedSearchInteractor,
+        casePublicSearchInteractor,
         checkForReadyForTrialCasesInteractor,
         completeDocketEntryQCInteractor,
         completeWorkItemInteractor,
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,
         createCaseInteractor,
-        createCaseNoteInteractor,
         createCourtIssuedOrderPdfFromHtmlInteractor,
         createTrialSessionInteractor,
         createUserInteractor,
@@ -964,6 +963,7 @@ module.exports = (appContextUser = {}) => {
         getJudgeForUserChambersInteractor,
         getNotificationsInteractor,
         getPractitionersBySearchKeyInteractor,
+        getPublicCaseInteractor,
         getRespondentsBySearchKeyInteractor,
         getSentMessagesForSectionInteractor,
         getSentMessagesForUserInteractor,
@@ -987,7 +987,6 @@ module.exports = (appContextUser = {}) => {
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
         serveCourtIssuedDocumentInteractor,
-        serveSignedStipDecisionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
         setWorkItemAsReadInteractor,
@@ -1008,7 +1007,6 @@ module.exports = (appContextUser = {}) => {
         updateUserContactInformationInteractor,
         userIsAssociated,
         validatePdfInteractor,
-        verifyCaseForUserInteractor,
         verifyPendingCaseForUserInteractor,
         virusScanPdfInteractor: args =>
           process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),

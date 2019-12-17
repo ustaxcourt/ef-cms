@@ -4,14 +4,14 @@ import { validateAddPractitionerAction } from './validateAddPractitionerAction';
 import sinon from 'sinon';
 
 describe('validateAddPractitioner', () => {
-  let validateAddPractitionerStub;
+  let validateAddPractitionerInteractorStub;
   let successStub;
   let errorStub;
 
   let mockAddPractitioner;
 
   beforeEach(() => {
-    validateAddPractitionerStub = sinon.stub();
+    validateAddPractitionerInteractorStub = sinon.stub();
     successStub = sinon.stub();
     errorStub = sinon.stub();
 
@@ -22,7 +22,7 @@ describe('validateAddPractitioner', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateAddPractitioner: validateAddPractitionerStub,
+        validateAddPractitionerInteractor: validateAddPractitionerInteractorStub,
       }),
     };
 
@@ -33,7 +33,7 @@ describe('validateAddPractitioner', () => {
   });
 
   it('should call the path success when no errors are found', async () => {
-    validateAddPractitionerStub.returns(null);
+    validateAddPractitionerInteractorStub.returns(null);
     await runAction(validateAddPractitionerAction, {
       modules: {
         presenter,
@@ -47,7 +47,7 @@ describe('validateAddPractitioner', () => {
   });
 
   it('should call the path error when any errors are found', async () => {
-    validateAddPractitionerStub.returns('error');
+    validateAddPractitionerInteractorStub.returns('error');
     await runAction(validateAddPractitionerAction, {
       modules: {
         presenter,

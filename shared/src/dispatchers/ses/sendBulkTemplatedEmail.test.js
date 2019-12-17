@@ -15,6 +15,7 @@ describe('sendBulkTemplatedEmail', () => {
       }),
       logger: {
         error: () => null,
+        info: () => null,
       },
     };
 

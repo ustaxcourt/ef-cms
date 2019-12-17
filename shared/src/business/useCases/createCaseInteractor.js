@@ -127,11 +127,11 @@ exports.createCaseInteractor = async ({
 
   const caseToAdd = new Case(
     {
-      practitioners,
-      userId: user.userId,
-      ...petitionEntity.toRawObject(),
       docketNumber,
       isPaper: false,
+      ...petitionEntity.toRawObject(),
+      practitioners,
+      userId: user.userId,
     },
     {
       applicationContext,
@@ -149,10 +149,14 @@ exports.createCaseInteractor = async ({
       partySecondary,
       practitioner: practitioners[0],
       userId: user.userId,
+      ...caseToAdd.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   );
-  petitionDocumentEntity.generateFiledBy(caseToAdd);
+
   const newWorkItem = addPetitionDocumentToCase({
     applicationContext,
     caseToAdd,
@@ -178,10 +182,14 @@ exports.createCaseInteractor = async ({
       partySecondary,
       practitioner: practitioners[0],
       userId: user.userId,
+      ...caseToAdd.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   );
-  stinDocumentEntity.generateFiledBy(caseToAdd);
+
   caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
 
   if (ownershipDisclosureFileId) {
@@ -196,10 +204,14 @@ exports.createCaseInteractor = async ({
         partySecondary,
         practitioner: practitioners[0],
         userId: user.userId,
+        ...caseToAdd.getCaseContacts({
+          contactPrimary: true,
+          contactSecondary: true,
+        }),
       },
       { applicationContext },
     );
-    odsDocumentEntity.generateFiledBy(caseToAdd);
+
     caseToAdd.addDocument(odsDocumentEntity);
   }
 

@@ -9,6 +9,7 @@ import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { advancedSearchHelper } from './computeds/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
+import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
@@ -37,6 +38,7 @@ import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
+import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
@@ -72,6 +74,8 @@ export const state = {
     documentTitle: null,
   },
   assigneeId: null,
+  batchDownloadHelper,
+  batchDownloads: {},
   batchIndexToRescan: null,
   batches: [],
   betaBar: {
@@ -100,6 +104,7 @@ export const state = {
   currentPageIndex: 0,
   currentTab: '',
   dashboardExternalHelper,
+  docketNumberSearchForm: {},
   docketRecordHelper,
   docketRecordIndex: 0,
   document: {},
@@ -131,6 +136,7 @@ export const state = {
   headerHelper,
   internalTypesHelper,
   isAccountMenuOpen: false,
+  loadingHelper,
   menuHelper,
   mobileMenu: {
     isVisible: false,
@@ -164,6 +170,7 @@ export const state = {
   scanHelper,
   scanner: {},
   screenMetadata: {},
+  searchMode: 'byName',
   searchTerm: '',
   sectionInboxCount: 0,
   sectionUsers: [],

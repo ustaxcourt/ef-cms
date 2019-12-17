@@ -12,6 +12,7 @@ cypress/videos
 cypress-smoketests/screenshots
 cypress-smoketests/videos
 dist/
+dist-public/
 gen.conf
 graph-generators/node_modules/
 graph-generators/*png
@@ -22,8 +23,8 @@ parcel-debug-*
 puppeteer_lambda_layer.tar.gz
 shared/coverage
 web-api/storage/s3/*
-web-api/runtimes/clamav/bin	
-web-api/runtimes/clamav/lib	
+web-api/runtimes/clamav/bin
+web-api/runtimes/clamav/lib
 web-api/runtimes/clamav/clamav_lambda_layer.tar.gz
 web-client/.cache/
 web-client/coverage-integration/*

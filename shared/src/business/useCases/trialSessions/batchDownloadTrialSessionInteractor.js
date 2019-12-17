@@ -16,7 +16,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.trialSessionId the id of the trial session
  * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
  */
-exports.batchDownloadTrialSessionInteractor = async ({
+const batchDownloadTrialSessionInteractor = async ({
   applicationContext,
   trialSessionId,
 }) => {
@@ -95,24 +95,94 @@ exports.batchDownloadTrialSessionInteractor = async ({
     });
   });
 
+  let numberOfDocketRecordsGenerated = 0;
+  const numberOfDocketRecordsToGenerate = sessionCases.length;
+  const numberOfFilesToBatch = numberOfDocketRecordsToGenerate + s3Ids.length;
+
+  const onDocketRecordCreation = async caseId => {
+    if (caseId) {
+      numberOfDocketRecordsGenerated += 1;
+    }
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'batch_download_docket_generated',
+        caseId,
+        numberOfDocketRecordsGenerated,
+        numberOfDocketRecordsToGenerate,
+        numberOfFilesToBatch,
+      },
+      userId: user.userId,
+    });
+  };
+
+  await onDocketRecordCreation();
+
   for (let index = 0; index < sessionCases.length; index++) {
     let { caseId } = sessionCases[index];
     extraFiles.push(
-      await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
-        applicationContext,
-        caseId,
-      }),
+      await applicationContext
+        .getUseCases()
+        .generateDocketRecordPdfInteractor({
+          applicationContext,
+          caseId,
+        })
+        .then(async result => {
+          await onDocketRecordCreation(caseId);
+          return result;
+        }),
     );
     extraFileNames.push(
       `${sessionCases[index].caseFolder}/0_Docket Record.pdf`,
     );
   }
 
+  const onEntry = entryData => {
+    applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'batch_download_entry',
+        ...entryData,
+        numberOfDocketRecordsToGenerate,
+        numberOfFilesToBatch,
+      },
+      userId: user.userId,
+    });
+  };
+
+  const onProgress = progressData => {
+    applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'batch_download_progress',
+        ...progressData,
+        numberOfDocketRecordsToGenerate,
+        numberOfFilesToBatch,
+      },
+      userId: user.userId,
+    });
+  };
+
+  const onUploadStart = () => {
+    applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'batch_download_upload_start',
+        numberOfDocketRecordsToGenerate,
+        numberOfFilesToBatch,
+      },
+      userId: user.userId,
+    });
+  };
+
   await applicationContext.getPersistenceGateway().zipDocuments({
     applicationContext,
     extraFileNames,
     extraFiles,
     fileNames,
+    onEntry,
+    onProgress,
+    onUploadStart,
     s3Ids,
     uploadToTempBucket: true,
     zipName,
@@ -134,4 +204,36 @@ exports.batchDownloadTrialSessionInteractor = async ({
     },
     userId: user.userId,
   });
+};
+
+/**
+ * batchDownloadTrialSessionInteractor
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.trialSessionId the id of the trial session
+ * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
+ */
+exports.batchDownloadTrialSessionInteractor = async ({
+  applicationContext,
+  trialSessionId,
+}) => {
+  try {
+    await batchDownloadTrialSessionInteractor({
+      applicationContext,
+      trialSessionId,
+    });
+  } catch (error) {
+    const { userId } = applicationContext.getCurrentUser();
+
+    applicationContext.logger.info('Error', error);
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'batch_download_error',
+        error,
+      },
+      userId,
+    });
+  }
 };

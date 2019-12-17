@@ -1410,11 +1410,28 @@ describe('Case entity', () => {
 
   describe('closeCase', () => {
     it('should update the status of the case to closed', () => {
-      const myCase = new Case(MOCK_CASE, {
-        applicationContext,
-      });
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: true,
+          blockedDate: '2019-03-01T21:40:46.415Z',
+          blockedReason: 'something else',
+          highPriority: true,
+          highPriorityReason: 'something',
+        },
+        {
+          applicationContext,
+        },
+      );
       myCase.closeCase();
-      expect(myCase.status).toEqual(Case.STATUS_TYPES.closed);
+      expect(myCase).toMatchObject({
+        blocked: false,
+        blockedDate: undefined,
+        blockedReason: undefined,
+        highPriority: false,
+        highPriorityReason: undefined,
+        status: Case.STATUS_TYPES.closed,
+      });
     });
   });
 
@@ -1880,6 +1897,74 @@ describe('Case entity', () => {
       expect(updatedCase.caseTitle).toEqual(
         'A whole new caption v. Commissioner of Internal Revenue, Respondent',
       );
+    });
+  });
+
+  describe('getCaseContacts', () => {
+    const contactPrimary = {
+      name: 'Test Petitioner',
+      title: 'Executor',
+    };
+
+    const contactSecondary = { name: 'Contact Secondary' };
+
+    const practitioners = [
+      {
+        name: 'Petitioner One',
+      },
+    ];
+
+    const respondents = [
+      {
+        name: 'Respondent One',
+      },
+    ];
+
+    it('should return an object containing all contact types', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary,
+          contactSecondary,
+          practitioners,
+          respondents,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const caseContacts = testCase.getCaseContacts();
+      expect(caseContacts).toMatchObject({
+        contactPrimary,
+        contactSecondary,
+        practitioners,
+        respondents,
+      });
+    });
+
+    it('should return an object contacts matching the `shape` if provided', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary,
+          contactSecondary,
+          practitioners,
+          respondents,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const caseContacts = testCase.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      });
+      expect(caseContacts).toMatchObject({
+        contactPrimary,
+        contactSecondary,
+      });
     });
   });
 });

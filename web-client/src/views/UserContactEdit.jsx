@@ -12,7 +12,8 @@ import React from 'react';
 export const UserContactEdit = connect(
   {
     navigateBackSequence: sequences.navigateBackSequence,
-    submitEditUserContactSequence: sequences.submitEditUserContactSequence,
+    submitUpdateUserContactInformationSequence:
+      sequences.submitUpdateUserContactInformationSequence,
     updateUserContactValueSequence: sequences.updateUserContactValueSequence,
     user: state.user,
     validateUserContactSequence: sequences.validateUserContactSequence,
@@ -20,7 +21,7 @@ export const UserContactEdit = connect(
   },
   ({
     navigateBackSequence,
-    submitEditUserContactSequence,
+    submitUpdateUserContactInformationSequence,
     updateUserContactValueSequence,
     user,
     validateUserContactSequence,
@@ -112,7 +113,7 @@ export const UserContactEdit = connect(
           </div>
           <Button
             onClick={() => {
-              submitEditUserContactSequence();
+              submitUpdateUserContactInformationSequence();
             }}
           >
             Save

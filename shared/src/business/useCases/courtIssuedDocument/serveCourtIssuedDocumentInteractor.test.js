@@ -31,6 +31,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   let putWorkItemInOutboxMock;
   let testPdfDoc;
   let deleteCaseTrialSortMappingRecordsMock;
+  let extendCase;
+
+  let getTrialSessionByIdMock;
+  let updateTrialSessionMock;
 
   const mockUser = {
     role: User.ROLES.docketClerk,
@@ -100,6 +104,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   beforeEach(() => {
     testPdfDoc = testPdfDocBytes();
+    extendCase = {};
 
     updateCaseMock = jest.fn(({ caseToUpdate }) => caseToUpdate);
     deleteCaseTrialSortMappingRecordsMock = jest.fn();
@@ -112,6 +117,35 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     deleteWorkItemFromInboxMock = jest.fn();
     putWorkItemInOutboxMock = jest.fn();
 
+    getTrialSessionByIdMock = jest.fn().mockReturnValue({
+      caseOrder: [
+        {
+          caseId: '46c4064f-b44a-4ac3-9dfb-9ce9f00e43f5',
+        },
+      ],
+      createdAt: '2019-10-27T05:00:00.000Z',
+      gsi1pk: 'trial-session-catalog',
+      isCalendared: true,
+      judge: {
+        name: 'Judge Armen',
+        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      },
+      maxCases: 100,
+      pk: 'trial-session-959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      sessionType: 'Regular',
+      sk: 'trial-session-959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      startDate: '2019-11-27T05:00:00.000Z',
+      startTime: '10:00',
+      status: 'Upcoming',
+      swingSession: true,
+      swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
+      term: 'Fall',
+      termYear: '2019',
+      trialLocation: 'Houston, Texas',
+      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    });
+    updateTrialSessionMock = jest.fn();
+
     applicationContext = {
       environment: { documentsBucketName: 'documents' },
       getCurrentUser: () => mockUser,
@@ -122,11 +156,21 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
         deleteWorkItemFromInbox: deleteWorkItemFromInboxMock,
         getCaseByCaseId: ({ caseId }) => {
-          return mockCases.find(mockCase => mockCase.caseId === caseId);
+          const theCase = mockCases.find(
+            mockCase => mockCase.caseId === caseId,
+          );
+          if (theCase) {
+            return {
+              ...theCase,
+              ...extendCase,
+            };
+          }
         },
+        getTrialSessionById: getTrialSessionByIdMock,
         putWorkItemInOutbox: putWorkItemInOutboxMock,
         saveDocument: saveDocumentMock,
         updateCase: updateCaseMock,
+        updateTrialSession: updateTrialSessionMock,
       }),
       getStorageClient: () => ({
         getObject: getObjectMock,
@@ -233,6 +277,20 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+  });
+
+  it('should remove the case from the trial session if the case has a trialSessionId', async () => {
+    extendCase.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+    saveDocumentMock = jest.fn();
+
+    await serveCourtIssuedDocumentInteractor({
+      applicationContext,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentId: documentsWithCaseClosingEventCodes[0].documentId,
+    });
+
+    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(updateTrialSessionMock).toHaveBeenCalled();
   });
 
   documentsWithCaseClosingEventCodes.forEach(document => {

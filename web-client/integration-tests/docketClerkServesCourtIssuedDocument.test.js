@@ -24,6 +24,7 @@ import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionerSignsOut from './journey/petitionerSignsOut';
+import petitionsClerkPrioritizesCase from './journey/petitionsClerkPrioritizesCase';
 
 const test = setupTest();
 test.draftOrders = [];
@@ -52,6 +53,7 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   petitionsClerkLogIn(test);
   petitionsClerkViewsCaseDetail(test, 4);
   petitionsClerkViewsDraftOrder(test, 0);
+  petitionsClerkPrioritizesCase(test);
   petitionsClerkSignsOut(test);
 
   docketClerkLogIn(test);

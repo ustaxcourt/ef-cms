@@ -11,11 +11,10 @@ const { get } = require('../requests');
 exports.batchDownloadTrialSessionInteractor = ({
   applicationContext,
   trialSessionId,
-  zipName,
 }) => {
   return get({
     applicationContext,
     body: {},
-    endpoint: `/trial-sessions/${trialSessionId}/batch-download/${zipName}`,
+    endpoint: `/trial-sessions/${trialSessionId}/batch-download`,
   });
 };

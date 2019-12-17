@@ -24,6 +24,7 @@ resource "aws_s3_bucket" "deployment_us_east_1" {
   }
 }
 
+data "aws_caller_identity" "current" {}
 
 resource "aws_s3_bucket" "deployment_us_west_2" {
   provider = "aws.us-west-1"
@@ -55,6 +56,20 @@ resource "aws_s3_bucket" "documents_us_east_1" {
 
   tags {
     environment = "${var.environment}"
+  }
+
+  replication_configuration {
+    role = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_replication_role_${var.environment}"
+
+    rules {
+      status = "Enabled"
+      prefix = ""
+
+      destination {
+        bucket        = "${aws_s3_bucket.documents_us_west_1.arn}"
+        storage_class = "STANDARD"
+      }
+    }
   }
 }
 

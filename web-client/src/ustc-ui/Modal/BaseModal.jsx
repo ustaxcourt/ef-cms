@@ -11,7 +11,9 @@ export const BaseModal = connect(
   {
     onBlur: sequences[props.onBlurSequence],
   },
-  ({ children, className, onBlur, preventCancelOnBlur }) => {
+  ({ children, className, extraClassNames, onBlur, preventCancelOnBlur }) => {
+    extraClassNames = extraClassNames || null;
+
     const elRef = React.useRef(null);
 
     const getEl = () => {
@@ -83,7 +85,10 @@ export const BaseModal = connect(
             <div
               aria-live="assertive"
               aria-modal="true"
-              className="modal-dialog padding-205"
+              className={classNames(
+                'modal-dialog padding-205',
+                extraClassNames,
+              )}
               role="status"
               onClick={event => event.stopPropagation()}
             >

@@ -13,7 +13,7 @@ An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), crea
 API | Front-End | Shared Code
 --- | --------- | -----------
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br> | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)| [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)
-    
+
 [![Known Vulnerabilities](https://snyk.io//test/github/flexion/ef-cms/badge.svg?targetFile=package.json)](https://snyk.io//test/github/flexion/ef-cms?targetFile=package.json)
 
 <a href="docs/images/screenshot-petitioner.png"><img src="docs/images/screenshot-petitioner.png" width="47%" style="float: left; margin: 0 4px;" /></a>
@@ -64,6 +64,7 @@ Assuming you have Docker installed, the following command will spin up a Docker 
 `./docker-run.sh`
 
 - You can access the UI at http://localhost:1234
+- You can access the public UI at http://localhost:5678
 - You can access the API at http://localhost:3000
 - You can access the DynamoDB shell at http://localhost:8000/shell
 - You can access the DynamoDB admin UI at http://localhost:8001
@@ -82,9 +83,9 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 ### Setup
 
-For ClamAV, macOS users can do the following:	
-- `brew install clamav`	
-- `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`	
+For ClamAV, macOS users can do the following:
+- `brew install clamav`
+- `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`
 - `sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)
 
 Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the top-level directory.
@@ -98,6 +99,7 @@ Both the front-end (`/web-client`) and API (`/web-api`) share code that exists i
 ##### Other Start Commands
 
 - Run `cd web-client && npm start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
+- Run `npm run start:public` to start the UI for the public access portion of the site
 
 #### Terminal B
 
@@ -183,10 +185,6 @@ Install the following for best results:
 - https://atom.io/packages/language-groovy
 - https://atom.io/packages/linter-eslint
 - https://atom.io/packages/prettier-atom (enable ESLint and StyleLint integrations in settings)
-
-## Using the application with Internet Explorer 11
-
-If using Internet Explorer 11 with Windows 7, [download and install Adobe Reader](https://get.adobe.com/reader/). This will permit PDFs to be viewed in-browser.
 
 ## Forked dependencies
 

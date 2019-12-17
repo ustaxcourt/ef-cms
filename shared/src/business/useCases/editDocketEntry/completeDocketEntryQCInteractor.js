@@ -1,4 +1,11 @@
 const {
+  formatDocument,
+  getFilingsAndProceedings,
+} = require('../../utilities/getFormattedCaseDetail');
+const {
+  generateNoticeOfDocketChangePdf,
+} = require('../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -7,6 +14,7 @@ const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { omit } = require('lodash');
+const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -41,45 +49,93 @@ exports.completeDocketEntryQCInteractor = async ({
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const { index: docketRecordIndexUpdated } = caseEntity.docketRecord.find(
+    record => record.documentId === documentId,
+  );
 
   const currentDocument = caseEntity.getDocumentById({
     documentId,
   });
 
-  const needsNewCoversheet =
-    entryMetadata.additionalInfo != currentDocument.additionalInfo ||
-    entryMetadata.documentTitle != currentDocument.documentTitle;
-
-  const documentEntity = new Document(
+  const updatedDocument = new Document(
     {
-      workItems: currentDocument.workItems,
       ...entryMetadata,
+      createdAt: currentDocument.createdAt, // eslint-disable-line
       documentId,
       documentType,
       relationship: 'primaryDocument',
       userId: user.userId,
+      workItems: currentDocument.workItems,
+      ...caseEntity.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   ).validate();
 
-  documentEntity.generateFiledBy(caseToUpdate);
-  documentEntity.setQCed(user);
+  updatedDocument.generateFiledBy(caseToUpdate, true);
+  updatedDocument.setQCed(user);
+
+  let updatedDocumentTitle = updatedDocument.documentTitle;
+  if (updatedDocument.additionalInfo) {
+    updatedDocumentTitle += ` ${updatedDocument.additionalInfo}`;
+  }
+  updatedDocumentTitle += ` ${getFilingsAndProceedings(
+    formatDocument(applicationContext, updatedDocument),
+  )}`;
+  if (updatedDocument.additionalInfo2) {
+    updatedDocumentTitle += ` ${updatedDocument.additionalInfo2}`;
+  }
+
+  let currentDocumentTitle = currentDocument.documentTitle;
+  if (currentDocument.additionalInfo) {
+    currentDocumentTitle += ` ${currentDocument.additionalInfo}`;
+  }
+  currentDocumentTitle += ` ${getFilingsAndProceedings(
+    formatDocument(applicationContext, currentDocument),
+  )}`;
+  if (currentDocument.additionalInfo2) {
+    currentDocumentTitle += ` ${currentDocument.additionalInfo2}`;
+  }
+
+  const needsNewCoversheet =
+    updatedDocument.additionalInfo != currentDocument.additionalInfo ||
+    updatedDocumentTitle != currentDocumentTitle;
+
+  const needsNoticeOfDocketChange =
+    updatedDocument.filedBy != currentDocument.filedBy ||
+    updatedDocumentTitle != currentDocumentTitle;
+
+  const docketChangeInfo = {
+    caseTitle: caseToUpdate.caseTitle,
+    docketEntryIndex: docketRecordIndexUpdated,
+    docketNumber: `${
+      caseToUpdate.docketNumber
+    }${caseToUpdate.docketNumberSuffix || ''}`,
+    filingParties: {
+      after: updatedDocument.filedBy,
+      before: currentDocument.filedBy,
+    },
+    filingsAndProceedings: {
+      after: updatedDocumentTitle,
+      before: currentDocumentTitle,
+    },
+  };
 
   const docketRecordEntry = new DocketRecord({
-    description: entryMetadata.documentTitle,
-    documentId: documentEntity.documentId,
+    description: updatedDocumentTitle,
+    documentId: updatedDocument.documentId,
     editState: '{}',
-    filingDate: documentEntity.receivedAt,
+    filingDate: updatedDocument.receivedAt,
   });
 
   caseEntity.updateDocketRecordEntry(omit(docketRecordEntry, 'index'));
-  caseEntity.updateDocument(documentEntity);
+  caseEntity.updateDocument(updatedDocument);
 
-  const workItemsToUpdate = currentDocument.workItems.filter(
-    workItem => workItem.isQC === true,
-  );
+  const workItemToUpdate = updatedDocument.getQCWorkItem();
 
-  for (const workItemToUpdate of workItemsToUpdate) {
+  if (workItemToUpdate) {
     await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
       applicationContext,
       workItem: workItemToUpdate,
@@ -91,8 +147,8 @@ exports.completeDocketEntryQCInteractor = async ({
       docketNumber: caseToUpdate.docketNumber,
       docketNumberSuffix: caseToUpdate.docketNumberSuffix,
       document: {
-        ...documentEntity.toRawObject(),
-        createdAt: documentEntity.createdAt,
+        ...updatedDocument.toRawObject(),
+        createdAt: updatedDocument.createdAt,
       },
     });
 
@@ -125,6 +181,29 @@ exports.completeDocketEntryQCInteractor = async ({
         applicationContext,
         workItem: workItemToUpdate.validate().toRawObject(),
       });
+  }
+
+  if (needsNoticeOfDocketChange) {
+    const noticeDocumentId = await generateNoticeOfDocketChangePdf({
+      applicationContext,
+      docketChangeInfo,
+    });
+
+    const noticeUpdatedDocument = new Document(
+      {
+        ...Document.NOTICE_OF_DOCKET_CHANGE,
+        documentId: noticeDocumentId,
+        userId: user.userId,
+      },
+      { applicationContext },
+    );
+
+    noticeUpdatedDocument.documentTitle = replaceBracketed(
+      Document.NOTICE_OF_DOCKET_CHANGE.documentTitle,
+      docketChangeInfo.docketEntryIndex,
+    );
+
+    caseEntity.addDocument(noticeUpdatedDocument);
   }
 
   await applicationContext.getPersistenceGateway().updateCase({

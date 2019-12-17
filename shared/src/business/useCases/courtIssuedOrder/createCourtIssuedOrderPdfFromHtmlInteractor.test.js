@@ -27,4 +27,21 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
 
     expect(result).toEqual(PDF_MOCK_BUFFER);
   });
+
+  it('should catch, log, and rethrow an error thrown by chromium', async () => {
+    const loggerErrorMock = jest.fn();
+    await expect(
+      createCourtIssuedOrderPdfFromHtmlInteractor({
+        applicationContext: {
+          getChromiumBrowser: () => {
+            throw new Error('some chromium error');
+          },
+          logger: { error: loggerErrorMock, info: () => {} },
+        },
+        htmlString: 'Hello World from the use case',
+      }),
+    ).rejects.toThrow();
+
+    expect(loggerErrorMock).toHaveBeenCalled();
+  });
 });

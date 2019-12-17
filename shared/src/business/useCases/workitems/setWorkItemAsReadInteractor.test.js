@@ -32,12 +32,11 @@ describe('setWorkItemAsReadInteractor', () => {
         role: User.ROLES.petitionsClerk,
         userId: 'petitionsclerk',
       }),
-      getPersistenceGateway: () => {
-        return {
-          setWorkItemAsRead: async () => [],
-        };
-      },
+      getPersistenceGateway: () => ({
+        setWorkItemAsRead: async () => [],
+      }),
     };
+
     const res = await setWorkItemAsReadInteractor({
       applicationContext,
       messageId: 'abc',

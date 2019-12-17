@@ -1,5 +1,4 @@
 import { fakeFile, setupTest } from './helpers';
-import petitionerAddNewCaseToTestObj from './journey/petitionerAddNewCaseToTestObj';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';

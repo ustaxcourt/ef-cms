@@ -3,6 +3,7 @@ web-client/.scannerwork
 web-client/.sonar-cache
 web-client/coverage
 web-client/dist
+web-client/dist-public
 web-client/node_modules
 web-client/terraform/main/.terraform
 web-client/terraform/common/.terraform

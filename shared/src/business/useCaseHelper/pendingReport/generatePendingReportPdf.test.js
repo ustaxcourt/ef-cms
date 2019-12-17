@@ -29,7 +29,6 @@ const mockPendingItems = [
     docketNumber: '101-19',
     docketNumberSuffix: 'W',
     documentId: '33ddbf4f-90f8-417c-8967-57851b0b9069',
-    documentTitle: 'Administrative Record',
     documentType: 'Administrative Record',
     eventCode: 'ADMR',
     filedBy: 'Petr. Brett Osborne',
@@ -104,7 +103,6 @@ const mockPendingItems = [
   },
   {
     associatedJudge: 'Chief Judge',
-    caseCaption: 'Brett Osborne, Petitioner',
     caseId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
     caseStatus: 'New',
     category: 'Supporting Document',
@@ -193,6 +191,20 @@ const mockPendingItems = [
 ];
 
 describe('generatePendingReportPdf', () => {
+  it('throws an error if the user is unauthorized', async () => {
+    await expect(
+      generatePendingReportPdf({
+        applicationContext: {
+          getCurrentUser: () => {
+            return { role: User.ROLES.petitioner, userId: 'petitioner' };
+          },
+        },
+        pendingItems: mockPendingItems,
+        reportTitle: 'something',
+      }),
+    ).rejects.toThrow();
+  });
+
   it('returns the pdf buffer produced by chromium', async () => {
     const result = await generatePendingReportPdf({
       applicationContext: {
@@ -202,7 +214,7 @@ describe('generatePendingReportPdf', () => {
         getCaseCaptionNames: Case.getCaseCaptionNames,
         getChromiumBrowser: () => chromiumBrowserMock,
         getCurrentUser: () => {
-          return { role: User.ROLES.petitioner, userId: 'petitioner' };
+          return { role: User.ROLES.petitionsClerk, userId: 'petitionsClerk' };
         },
         getNodeSass: () => ({ render: (data, cb) => cb(data, { css: '' }) }),
         getPersistenceGateway: () => ({
@@ -224,5 +236,46 @@ describe('generatePendingReportPdf', () => {
     });
 
     expect(result).toEqual('https://www.example.com');
+  });
+
+  it('should catch, log, and rethrow an error thrown by chromium', async () => {
+    const loggerErrorMock = jest.fn();
+    await expect(
+      generatePendingReportPdf({
+        applicationContext: {
+          environment: {
+            tempDocumentsBucketName: 'MockDocumentBucketName',
+          },
+          getCaseCaptionNames: Case.getCaseCaptionNames,
+          getChromiumBrowser: () => {
+            throw new Error('bad!');
+          },
+          getCurrentUser: () => {
+            return {
+              role: User.ROLES.petitionsClerk,
+              userId: 'petitionsClerk',
+            };
+          },
+          getNodeSass: () => ({ render: (data, cb) => cb(data, { css: '' }) }),
+          getPersistenceGateway: () => ({
+            getCaseByCaseId: () => ({ docketNumber: '101-19' }),
+            getDownloadPolicyUrl: () => ({
+              url: 'https://www.example.com',
+            }),
+          }),
+          getPug: () => ({ compile: () => () => '' }),
+          getStorageClient: () => ({
+            upload: (params, callback) => callback(),
+          }),
+          getUniqueId: () => 'uniqueId',
+          getUtilities: () => ({ formatDateString }),
+          logger: { error: loggerErrorMock, info: () => {} },
+        },
+        pendingItems: mockPendingItems,
+        reportTitle: 'something',
+      }),
+    ).rejects.toThrow();
+
+    expect(loggerErrorMock).toHaveBeenCalled();
   });
 });

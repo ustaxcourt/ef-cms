@@ -52,7 +52,7 @@ exports.generatePendingReportPdf = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.PENDING_ITEMS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

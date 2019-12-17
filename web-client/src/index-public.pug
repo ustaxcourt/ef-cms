@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    meta(built="" + (new Date()).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'America/New_York'}) + " EST")
+    meta(revision="" + (process.env.CIRCLE_SHA1 || '').substr(0,7))
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    title U.S. Tax Court Electronic Filing and Case Management System
+    link(rel="stylesheet" href="index-public.scss")
+    link(rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png")
+    link(rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png")
+    link(rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png")
+    link(rel="manifest" href="./site.webmanifest")
+    link(rel="mask-icon" href="./safari-pinned-tab.svg" color="#5bbad5")
+    meta(name="msapplication-TileColor" content="#da532c")
+    meta(name="theme-color" content="#ffffff")
+  body
+    #app-public
+    #modal-root
+    script(src="index-public." + process.env.USTC_ENV + ".js")

@@ -1,4 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearDocketNumberSearchFormAction } from '../actions/clearDocketNumberSearchFormAction';
+import { clearSearchTermAction } from '../actions/clearSearchTermAction';
 import { props, state } from 'cerebral';
 import { set, unset } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -6,10 +8,12 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { submitCaseAdvancedSearchAction } from '../actions/AdvancedSearch/submitCaseAdvancedSearchAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { validateAdvancedSearchAction } from '../actions/AdvancedSearch/validateAdvancedSearchAction';
+import { validateCaseAdvancedSearchAction } from '../actions/AdvancedSearch/validateCaseAdvancedSearchAction';
 
 export const submitCaseAdvancedSearchSequence = [
-  validateAdvancedSearchAction,
+  clearSearchTermAction,
+  clearDocketNumberSearchFormAction,
+  validateCaseAdvancedSearchAction,
   {
     error: [
       setAlertErrorAction,

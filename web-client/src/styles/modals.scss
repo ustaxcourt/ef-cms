@@ -68,6 +68,12 @@
   }
 }
 
+.modal-error {
+  .modal-dialog {
+    border-color: color($theme-color-secondary-dark);
+  }
+}
+
 .app-timeout-modal {
   > .modal-header,
   .usa-button--outline {
