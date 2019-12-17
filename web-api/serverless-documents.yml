@@ -157,7 +157,7 @@ functions:
       - http:
           path: /{documentId}/validate
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
     alarms:
       - errorExceptions
 
@@ -167,7 +167,7 @@ functions:
       - http:
           path: /{documentId}/upload-policy
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -183,7 +183,7 @@ functions:
       - http:
           path: /filing-receipt-pdf
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
 
   virusScan:
     handler: web-api/${self:provider.dir}/documentsHandlers.virusScanPdfLambda
@@ -195,5 +195,5 @@ functions:
       - http:
           path: /{documentId}/virus-scan
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           async: true
