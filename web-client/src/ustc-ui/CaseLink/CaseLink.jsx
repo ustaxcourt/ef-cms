@@ -3,12 +3,26 @@ import React from 'react';
 import classNames from 'classnames';
 
 export const CaseLink = connect(props => {
-  const { children, className, docketNumber, formattedCase } = props;
+  const {
+    children,
+    className,
+    docketNumber,
+    formattedCase,
+    onlyLinkForOwner,
+  } = props;
 
   const docketNumberString =
     docketNumber || (formattedCase && formattedCase.docketNumber);
   const docketNumberWithSuffixString =
     formattedCase && formattedCase.docketNumberWithSuffix;
+
+  if (onlyLinkForOwner && !formattedCase.isOwner) {
+    return (
+      <span>
+        {children || docketNumberWithSuffixString || docketNumberString}
+      </span>
+    );
+  }
 
   return (
     <a

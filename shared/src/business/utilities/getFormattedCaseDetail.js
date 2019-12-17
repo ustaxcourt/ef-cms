@@ -192,6 +192,10 @@ const formatCase = (applicationContext, caseDetail) => {
     return {};
   }
   const result = cloneDeep(caseDetail);
+  const user = applicationContext.getCurrentUser();
+
+  result.isOwner = result.userId === user.userId;
+
   result.docketRecordWithDocument = [];
 
   if (result.documents)

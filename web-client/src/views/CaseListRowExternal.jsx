@@ -2,7 +2,7 @@ import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
-const getCaseRow = (formattedCase, isNestedCase) => {
+const getCaseRow = (formattedCase, isNestedCase, onlyLinkForOwner) => {
   return (
     <React.Fragment key={formattedCase.caseId}>
       <tr>
@@ -20,25 +20,31 @@ const getCaseRow = (formattedCase, isNestedCase) => {
         </td>
         <td className="hide-on-mobile">
           <div className={isNestedCase ? 'margin-left-2' : ''}>
-            <CaseLink formattedCase={formattedCase} />
+            <CaseLink
+              formattedCase={formattedCase}
+              onlyLinkForOwner={onlyLinkForOwner}
+            />
           </div>
         </td>
         <td className="hide-on-mobile">{formattedCase.caseName}</td>
         <td>{formattedCase.createdAtFormatted}</td>
         <td className="show-on-mobile">
           <div className={isNestedCase ? 'margin-left-2' : ''}>
-            <CaseLink formattedCase={formattedCase} />
+            <CaseLink
+              formattedCase={formattedCase}
+              onlyLinkForOwner={onlyLinkForOwner}
+            />
           </div>
           {formattedCase.caseName}
         </td>
       </tr>
       {formattedCase.consolidatedCases &&
         formattedCase.consolidatedCases.map(consolidatedCase =>
-          getCaseRow(consolidatedCase, true),
+          getCaseRow(consolidatedCase, true, onlyLinkForOwner),
         )}
     </React.Fragment>
   );
 };
 
-export const CaseListRowExternal = ({ formattedCase }) =>
-  getCaseRow(formattedCase);
+export const CaseListRowExternal = ({ formattedCase, onlyLinkForOwner }) =>
+  getCaseRow(formattedCase, false, onlyLinkForOwner);
