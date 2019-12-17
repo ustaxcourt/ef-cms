@@ -15,7 +15,7 @@ describe('deleteProceduralNote', () => {
   });
   it('deletes a procedural note from a case when provided with a caseId', async () => {
     const caseId = '123-abc';
-    const result = await runAction(deleteProceduralNoteAction, {
+    await runAction(deleteProceduralNoteAction, {
       modules: {
         presenter,
       },
