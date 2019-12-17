@@ -28,6 +28,9 @@ describe('formatCase', () => {
     mockCaseDetail = {
       ...mockCaseDetailBase,
     };
+    applicationContext.setCurrentUser({
+      userId: '123',
+    });
   });
 
   it('should return an empty object if caseDetail is empty', () => {
@@ -490,6 +493,24 @@ describe('formatCase', () => {
 
     expect(result).toMatchObject(mockCaseDetail);
     expect(result).not.toHaveProperty('consolidatedCases');
+  });
+
+  it('should show current user is the case owner when current user is the case owner', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      userId: '123',
+    });
+
+    expect(result.isOwner).toEqual(true);
+  });
+
+  it('should show current user is not the case owner when current user is not the case owner', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      userId: '1234',
+    });
+
+    expect(result.isOwner).toEqual(false);
   });
 });
 
