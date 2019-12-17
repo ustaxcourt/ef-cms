@@ -112,13 +112,13 @@ export const CaseDetailHeaderMenu = connect(
                 )}
                 {caseDetailHeaderHelper.showAddDocketEntryButton && (
                   <li className="usa-nav__submenu-item">
-                    <a
+                    <Button
                       link
                       href={`/case-detail/${caseDetail.docketNumber}/add-docket-entry`}
                       icon="plus-circle"
                     >
                       Add Docket Entry
-                    </a>
+                    </Button>
                   </li>
                 )}
                 {caseDetailHeaderHelper.showEditCaseButton && (
