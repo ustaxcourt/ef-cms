@@ -155,6 +155,80 @@ export const formatWorkItem = ({
   return result;
 };
 
+export const getWorkItemDocumentLink = ({
+  applicationContext,
+  permissions,
+  workItem,
+  workQueueToDisplay,
+}) => {
+  const { box, queue, workQueueIsInternal } = workQueueToDisplay;
+  const result = cloneDeep(workItem);
+
+  const formattedDocument = applicationContext
+    .getUtilities()
+    .formatDocument(applicationContext, result.document);
+
+  const isInProgress = formattedDocument && formattedDocument.isInProgress;
+
+  const qcWorkItemsUntouched =
+    !isInProgress &&
+    formattedDocument &&
+    !result.isRead &&
+    !result.completedAt &&
+    !result.isCourtIssuedDocument;
+
+  const showDocumentEditLink =
+    formattedDocument &&
+    permissions.UPDATE_CASE &&
+    (!formattedDocument.isInProgress ||
+      (permissions.DOCKET_ENTRY && formattedDocument.isInProgress));
+
+  let editLink; //defaults to doc detail
+  if (showDocumentEditLink && permissions.DOCKET_ENTRY && formattedDocument) {
+    if (
+      formattedDocument.isCourtIssuedDocument &&
+      !formattedDocument.servedAt
+    ) {
+      editLink = '/edit-court-issued';
+    } else if (isInProgress) {
+      editLink = '/complete';
+    } else if (
+      !result.isCourtIssuedDocument &&
+      !formattedDocument.isPetition &&
+      qcWorkItemsUntouched
+    ) {
+      editLink = '/edit';
+    }
+  }
+  if (!editLink) {
+    const { USER_ROLES } = applicationContext.getConstants();
+    const user = applicationContext.getCurrentUser();
+    const messageId = result.messages[0] && result.messages[0].messageId;
+
+    const workItemIdToMarkAsRead = !result.isRead ? result.workItemId : null;
+
+    const markReadPath =
+      workItemIdToMarkAsRead && box === 'inbox' && queue === 'my'
+        ? `/mark/${workItemIdToMarkAsRead}`
+        : '';
+
+    if (
+      messageId &&
+      (workQueueIsInternal ||
+        permissions.DOCKET_ENTRY ||
+        (!workQueueIsInternal &&
+          user.role === USER_ROLES.petitionsClerk &&
+          box === 'inbox'))
+    ) {
+      editLink = `/messages/${messageId}${markReadPath}`;
+    } else {
+      editLink = `${markReadPath}`;
+    }
+  }
+
+  return editLink;
+};
+
 export const filterWorkItems = ({
   applicationContext,
   user,
@@ -294,6 +368,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
+  const permissions = get(state.permissions);
   const { workQueueIsInternal } = workQueueToDisplay;
   const selectedWorkItems = get(state.selectedWorkItems);
   const { USER_ROLES } = applicationContext.getConstants();
@@ -306,14 +381,22 @@ export const formattedWorkQueue = (get, applicationContext) => {
         workQueueToDisplay,
       }),
     )
-    .map(item =>
-      formatWorkItem({
+    .map(item => {
+      const result = formatWorkItem({
         applicationContext,
         selectedWorkItems,
         workItem: item,
         workQueueIsInternal,
-      }),
-    );
+      });
+      const editLink = getWorkItemDocumentLink({
+        applicationContext,
+        permissions,
+        selectedWorkItems,
+        workItem: item,
+        workQueueToDisplay,
+      });
+      return { ...result, editLink };
+    });
 
   const sortFields = {
     documentQc: {

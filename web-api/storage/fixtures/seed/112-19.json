@@ -2,6 +2,7 @@
   {
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
+    "proceduralNote": "This is a procedural note!",
     "contactSecondary": {},
     "isPaper": false,
     "initialTitle": "Brian Earl Spilner, Petitioner v. Commissioner of Internal Revenue, Respondent",

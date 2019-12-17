@@ -136,7 +136,10 @@ export const CaseDetailHeader = connect(
                   </NonMobile>
                 )}
 
-              {!hideActionButtons && <CaseDetailHeaderMenu />}
+              {!hideActionButtons &&
+                caseDetailHeaderHelper.showCaseDetailHeaderMenu && (
+                  <CaseDetailHeaderMenu />
+                )}
             </div>
           </div>
         </div>
