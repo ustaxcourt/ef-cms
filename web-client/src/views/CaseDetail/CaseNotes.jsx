@@ -1,6 +1,8 @@
 import { AddEditCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditCaseNoteModal';
+import { AddEditProceduralNoteModal } from './AddEditProceduralNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DeleteCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteCaseNoteConfirmModal';
+import { DeleteProceduralNoteConfirmModal } from './DeleteProceduralNoteConfirmModal';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -12,15 +14,21 @@ export const CaseNotes = connect(
     caseDetailHelper: state.caseDetailHelper,
     openAddEditCaseNoteModalFromDetailSequence:
       sequences.openAddEditCaseNoteModalFromDetailSequence,
+    openAddEditProceduralNoteModalSequence:
+      sequences.openAddEditProceduralNoteModalSequence,
     openDeleteCaseNoteConfirmModalSequence:
       sequences.openDeleteCaseNoteConfirmModalSequence,
+    openDeleteProceduralNoteConfirmModalSequence:
+      sequences.openDeleteProceduralNoteConfirmModalSequence,
     showModal: state.showModal,
   },
   ({
     caseDetail,
     caseDetailHelper,
     openAddEditCaseNoteModalFromDetailSequence,
+    openAddEditProceduralNoteModalSequence,
     openDeleteCaseNoteConfirmModalSequence,
+    openDeleteProceduralNoteConfirmModalSequence,
     showModal,
   }) => {
     return (
@@ -37,7 +45,7 @@ export const CaseNotes = connect(
                         className="float-right margin-right-0 margin-top-1 padding-0"
                         icon="sticky-note"
                         onClick={() => {
-                          //TODO
+                          openAddEditProceduralNoteModalSequence();
                         }}
                       >
                         Add Case Note
@@ -54,7 +62,7 @@ export const CaseNotes = connect(
                             link
                             icon="edit"
                             onClick={() => {
-                              //TODO
+                              openAddEditProceduralNoteModalSequence();
                             }}
                           >
                             Edit Note
@@ -66,7 +74,7 @@ export const CaseNotes = connect(
                             className="red-warning no-wrap"
                             icon="trash"
                             onClick={() => {
-                              //TODO
+                              openDeleteProceduralNoteConfirmModalSequence();
                             }}
                           >
                             Delete Note
@@ -81,7 +89,7 @@ export const CaseNotes = connect(
                 <div className="tablet:grid-col-6">
                   <div className="card height-full">
                     <div className="content-wrapper">
-                      {!caseDetail.caseNote.notes && (
+                      {(!caseDetail.caseNote || !caseDetail.caseNote.notes) && (
                         <Button
                           link
                           className="float-right margin-right-0 margin-top-1 padding-0"
@@ -99,7 +107,7 @@ export const CaseNotes = connect(
                       <div className="margin-top-1  margin-bottom-4">
                         <Text bind="caseDetail.caseNote.notes" />
                       </div>
-                      {caseDetail.caseNote.notes && (
+                      {caseDetail.caseNote && caseDetail.caseNote.notes && (
                         <div className="grid-row">
                           <div className="tablet:grid-col-6">
                             <Button
@@ -142,6 +150,12 @@ export const CaseNotes = connect(
         )}
         {showModal === 'AddEditCaseNoteModal' && (
           <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteOnCaseDetailSequence" />
+        )}
+        {showModal === 'DeleteProceduralNoteConfirmModal' && (
+          <DeleteProceduralNoteConfirmModal onConfirmSequence="deleteProceduralNoteSequence" />
+        )}
+        {showModal === 'AddEditProceduralNoteModal' && (
+          <AddEditProceduralNoteModal onConfirmSequence="updateProceduralNoteSequence" />
         )}
       </>
     );
