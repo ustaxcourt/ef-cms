@@ -12,13 +12,13 @@ export const deleteProceduralNoteAction = async ({
   applicationContext,
   get,
 }) => {
-  const caseId = get(state.form.caseId);
-  const results = await applicationContext
+  const caseId = get(state.caseDetail.caseId);
+  const caseDetail = await applicationContext
     .getUseCases()
     .deleteProceduralNoteInteractor({
       applicationContext,
       caseId,
     });
 
-  return { results };
+  return { caseDetail };
 };

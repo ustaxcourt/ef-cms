@@ -109,7 +109,7 @@ export const ConfirmModal = connect(
         </div>
         <div className="margin-bottom-2">{children}</div>
         {(!noConfirm || !noCancel) && (
-          <>
+          <div className="margin-top-5">
             {!noConfirm && (
               <Button onClick={runConfirmSequence}>{confirmLabel}</Button>
             )}
@@ -118,7 +118,7 @@ export const ConfirmModal = connect(
                 {cancelLabel}
               </Button>
             )}
-          </>
+          </div>
         )}
       </BaseModal>
     );

@@ -13,14 +13,15 @@ describe('deleteProceduralNote', () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
-  it('deletes a procedural note from a case when provided with a caseId', async () => {
+
+  it('deletes a procedural note using caseDetail.caseId', async () => {
     const caseId = '123-abc';
     await runAction(deleteProceduralNoteAction, {
       modules: {
         presenter,
       },
       state: {
-        form: {
+        caseDetail: {
           caseId,
         },
       },
