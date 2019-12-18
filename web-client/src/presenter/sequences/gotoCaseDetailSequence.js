@@ -3,8 +3,8 @@ import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
-import { getCaseNoteForCaseAction } from '../actions/TrialSession/getCaseNoteForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/getConsolidatedCasesByCaseAction';
+import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
@@ -26,7 +26,7 @@ const gotoCaseDetailExternal = [
 ];
 
 const gotoCaseDetailInternalWithNotes = [
-  getCaseNoteForCaseAction,
+  getJudgesCaseNoteForCaseAction,
   setJudgesCaseNoteOnCaseDetailAction,
   ...gotoCaseDetailInternal,
 ];
