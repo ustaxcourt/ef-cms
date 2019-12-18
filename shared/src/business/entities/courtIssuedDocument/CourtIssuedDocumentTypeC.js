@@ -13,8 +13,8 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 function CourtIssuedDocumentTypeC(rawProps) {
   this.attachments = rawProps.attachments;
   this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
   this.docketNumbers = rawProps.docketNumbers;
+  this.documentType = rawProps.documentType;
 }
 
 CourtIssuedDocumentTypeC.prototype.getDocumentTitle = function() {
