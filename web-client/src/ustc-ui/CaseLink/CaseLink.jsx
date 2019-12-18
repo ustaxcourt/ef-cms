@@ -12,7 +12,7 @@ export const CaseLink = connect(props => {
 
   if (onlyText) {
     return (
-      <span>
+      <span className={classNames('no-wrap', className)}>
         {children || docketNumberWithSuffixString || docketNumberString}
       </span>
     );
