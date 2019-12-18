@@ -191,6 +191,7 @@ const formatCase = (applicationContext, caseDetail) => {
   if (isEmpty(caseDetail)) {
     return {};
   }
+  const formatCaseEntity = new Case(caseDetail, { applicationContext });
   const result = cloneDeep(caseDetail);
   result.docketRecordWithDocument = [];
 
@@ -213,43 +214,25 @@ const formatCase = (applicationContext, caseDetail) => {
     entry => entry.document && entry.document.pending,
   );
 
-  result.draftDocuments = (result.documents || []).filter(document => {
-    const isNotArchived = !document.archived;
-    const isNotServed = !document.servedAt;
-    const isDocumentOnDocketRecord = result.docketRecord.find(
-      docketEntry => docketEntry.documentId === document.documentId,
-    );
-    const isStipDecision = document.documentType === 'Stipulated Decision';
-    const isDraftOrder = orderDocumentTypes.includes(document.documentType);
-    const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
-      document.documentType,
-    );
-    return (
-      isNotArchived &&
-      isNotServed &&
-      (isStipDecision ||
-        (isDraftOrder && !isDocumentOnDocketRecord) ||
-        (isCourtIssuedDocument && !isDocumentOnDocketRecord))
-    );
-  });
-
-  result.draftDocuments = result.draftDocuments.map(document => ({
-    ...document,
-    editUrl:
-      document.documentType === 'Stipulated Decision'
-        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
-    signUrl:
-      document.documentType === 'Stipulated Decision'
-        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
-    signedAtFormatted: applicationContext
-      .getUtilities()
-      .formatDateString(document.signedAt, 'MMDDYY'),
-    signedAtFormattedTZ: applicationContext
-      .getUtilities()
-      .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
-  }));
+  result.draftDocuments = (result.documents || [])
+    .filter(document => formatCaseEntity.isDocumentDraft(document.documentId))
+    .map(document => ({
+      ...document,
+      editUrl:
+        document.documentType === 'Stipulated Decision'
+          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+          : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
+      signUrl:
+        document.documentType === 'Stipulated Decision'
+          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+          : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
+      signedAtFormatted: applicationContext
+        .getUtilities()
+        .formatDateString(document.signedAt, 'MMDDYY'),
+      signedAtFormattedTZ: applicationContext
+        .getUtilities()
+        .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
+    }));
 
   // establish an initial sort by ascending index
   result.docketRecordWithDocument.sort((a, b) => {
