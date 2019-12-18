@@ -49,7 +49,7 @@ export const CaseListPetitioner = connect(
             <tbody>
               {formattedCases.map(item => (
                 <CaseListRowExternal
-                  onlyLinkForOwner
+                  onlyLinkIfRequestedUserAssociated
                   formattedCase={item}
                   key={item.caseId}
                 />

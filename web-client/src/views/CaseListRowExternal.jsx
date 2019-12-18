@@ -2,7 +2,12 @@ import { CaseLink } from '../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
-const getCaseRow = (formattedCase, isNestedCase, onlyLinkForOwner) => {
+const getCaseRow = ({
+  formattedCase,
+  isNestedCase,
+  onlyLinkIfRequestedUserAssociated,
+  onlyText,
+}) => {
   return (
     <React.Fragment key={formattedCase.caseId}>
       <tr>
@@ -20,31 +25,42 @@ const getCaseRow = (formattedCase, isNestedCase, onlyLinkForOwner) => {
         </td>
         <td className="hide-on-mobile">
           <div className={isNestedCase ? 'margin-left-2' : ''}>
-            <CaseLink
-              formattedCase={formattedCase}
-              onlyLinkForOwner={onlyLinkForOwner}
-            />
+            <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
           </div>
         </td>
         <td className="hide-on-mobile">{formattedCase.caseName}</td>
         <td>{formattedCase.createdAtFormatted}</td>
         <td className="show-on-mobile">
           <div className={isNestedCase ? 'margin-left-2' : ''}>
-            <CaseLink
-              formattedCase={formattedCase}
-              onlyLinkForOwner={onlyLinkForOwner}
-            />
+            <CaseLink formattedCase={formattedCase} onlyText={onlyText} />
           </div>
           {formattedCase.caseName}
         </td>
       </tr>
       {formattedCase.consolidatedCases &&
         formattedCase.consolidatedCases.map(consolidatedCase =>
-          getCaseRow(consolidatedCase, true, onlyLinkForOwner),
+          getCaseRow({
+            formattedCase: consolidatedCase,
+            isNestedCase: true,
+            onlyLinkIfRequestedUserAssociated,
+            onlyText:
+              onlyLinkIfRequestedUserAssociated &&
+              consolidatedCase.isRequestingUserAssociated === false,
+          }),
         )}
     </React.Fragment>
   );
 };
 
-export const CaseListRowExternal = ({ formattedCase, onlyLinkForOwner }) =>
-  getCaseRow(formattedCase, false, onlyLinkForOwner);
+export const CaseListRowExternal = ({
+  formattedCase,
+  onlyLinkIfRequestedUserAssociated,
+}) =>
+  getCaseRow({
+    formattedCase,
+    isNestedCase: false,
+    onlyLinkIfRequestedUserAssociated,
+    onlyText:
+      onlyLinkIfRequestedUserAssociated &&
+      formattedCase.isRequestingUserAssociated === false,
+  });
