@@ -1,11 +1,11 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { updateDeleteCaseNotePropsFromModalStateAction } from './updateDeleteCaseNotePropsFromModalStateAction';
+import { updateDeleteJudgesCaseNotePropsFromModalStateAction } from './updateDeleteJudgesCaseNotePropsFromModalStateAction';
 
-describe('updateDeleteCaseNotePropsFromModalStateAction', () => {
+describe('updateDeleteJudgesCaseNotePropsFromModalStateAction', () => {
   it('should set the modal docketNumber state', async () => {
     const result = await runAction(
-      updateDeleteCaseNotePropsFromModalStateAction,
+      updateDeleteJudgesCaseNotePropsFromModalStateAction,
       {
         modules: {
           presenter,

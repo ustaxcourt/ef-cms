@@ -1,11 +1,11 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { updateCaseNoteInTrialSessionWorkingCopyAction } from './updateCaseNoteInTrialSessionWorkingCopyAction';
+import { updateJudgesCaseNoteInTrialSessionWorkingCopyAction } from './updateJudgesCaseNoteInTrialSessionWorkingCopyAction';
 
-describe('updateCaseNoteInTrialSessionWorkingCopyAction', () => {
+describe('updateJudgesCaseNoteInTrialSessionWorkingCopyAction', () => {
   it('should set the modal caseId state', async () => {
     const result = await runAction(
-      updateCaseNoteInTrialSessionWorkingCopyAction,
+      updateJudgesCaseNoteInTrialSessionWorkingCopyAction,
       {
         modules: {
           presenter,

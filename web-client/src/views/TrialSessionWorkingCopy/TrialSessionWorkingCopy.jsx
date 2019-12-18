@@ -67,13 +67,13 @@ export const TrialSessionWorkingCopy = connect(
           <SessionNotes />
           <WorkingCopySessionList />
           {showModal === 'DeleteJudgesCaseNoteConfirmModal' && (
-            <DeleteJudgesCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteFromWorkingCopySequence" />
+            <DeleteJudgesCaseNoteConfirmModal onConfirmSequence="deleteJudgesCaseNoteFromWorkingCopySequence" />
           )}
           {showModal === 'DeleteSessionNoteConfirmModal' && (
             <DeleteSessionNoteConfirmModal />
           )}
           {showModal === 'AddEditJudgesCaseNoteModal' && (
-            <AddEditJudgesCaseNoteModal onConfirmSequence="updateCaseNoteOnWorkingCopySequence" />
+            <AddEditJudgesCaseNoteModal onConfirmSequence="updateJudgesCaseNoteOnWorkingCopySequence" />
           )}
           {showModal === 'AddEditSessionNoteModal' && (
             <AddEditSessionNoteModal />

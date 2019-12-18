@@ -40,7 +40,7 @@ export default test => {
       notes: 'this is a note added from the modal',
     });
 
-    await test.runSequence('updateCaseNoteOnWorkingCopySequence');
+    await test.runSequence('updateJudgesCaseNoteOnWorkingCopySequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
