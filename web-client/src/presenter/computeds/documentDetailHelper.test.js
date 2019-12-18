@@ -511,7 +511,7 @@ describe('document detail helper', () => {
 
     it('should set showAddDocketEntryButton false when the user does not have the DOCKET_ENTRY permission', async () => {
       const user = {
-        role: User.ROLES.petitionsClerk,
+        role: User.ROLES.petitioner,
         userId: '123',
       };
 
@@ -535,7 +535,7 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showAddDocketEntryButton).toEqual(false);
+      expect(result.showAddDocketEntryButton).toBeFalsy();
     });
 
     it('should set showAddDocketEntryButton false when the document type is not an order or stipulated decision', async () => {
