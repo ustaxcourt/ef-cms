@@ -5,7 +5,7 @@ const {
 } = require('../middleware/apiGatewayHelper');
 
 /**
- * used for updating a case note
+ * used for updating a judge's case note
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
@@ -20,7 +20,7 @@ exports.handler = event =>
 
       const results = await applicationContext
         .getUseCases()
-        .updateCaseNoteInteractor({
+        .updateJudgesCaseNoteInteractor({
           applicationContext,
           caseId,
           notes,
