@@ -70,10 +70,16 @@ export const formattedCaseDetail = (get, applicationContext) => {
         document &&
         permissions.UPDATE_CASE &&
         (!document.isInProgress ||
-          (permissions.DOCKET_ENTRY && document.isInProgress));
+          ((permissions.DOCKET_ENTRY ||
+            permissions.CREATE_ORDER_DOCKET_ENTRY) &&
+            document.isInProgress));
 
       let editLink = ''; //defaults to doc detail
-      if (showDocumentEditLink && permissions.DOCKET_ENTRY && document) {
+      if (
+        showDocumentEditLink &&
+        (permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY) &&
+        document
+      ) {
         if (document.isCourtIssuedDocument && !document.servedAt) {
           editLink = '/edit-court-issued';
         } else if (isInProgress) {
@@ -114,7 +120,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
           (document &&
             (document.isNotServedCourtIssuedDocument ||
               document.isInProgress) &&
-            !permissions.DOCKET_ENTRY),
+            !(
+              permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY
+            )),
         showDocumentEditLink,
         showDocumentProcessing:
           document &&

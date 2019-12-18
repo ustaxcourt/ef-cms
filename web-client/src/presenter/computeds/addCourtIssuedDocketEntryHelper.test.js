@@ -4,18 +4,27 @@ import { cloneDeep } from 'lodash';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+let user = {
+  role: 'docketclerk',
+};
+
 const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
   addCourtIssuedDocketEntryHelperComputed,
   {
     ...applicationContext,
+
     getConstants: () => {
       return {
         COURT_ISSUED_EVENT_CODES: [
           { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
           { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
         ],
+        USER_ROLES: {
+          petitionsClerk: 'petitionsclerk',
+        },
       };
     },
+    getCurrentUser: () => user,
   },
 );
 
