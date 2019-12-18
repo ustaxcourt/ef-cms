@@ -4,9 +4,9 @@ export default test => {
       docketNumber: test.docketNumber,
     });
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.proceduralNote')).toBeUndefined();
+    expect(test.getState('caseDetail.caseNote')).toBeUndefined();
 
-    await test.runSequence('openAddEditProceduralNoteModalSequence');
+    await test.runSequence('openAddEditCaseNoteModalSequence');
 
     expect(test.getState('modal')).toMatchObject({
       notes: undefined,
@@ -21,11 +21,11 @@ export default test => {
       notes: 'this is a note added from the modal',
     });
 
-    await test.runSequence('updateProceduralNoteSequence');
+    await test.runSequence('updateCaseNoteSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('caseDetail.proceduralNote')).toEqual(
+    expect(test.getState('caseDetail.caseNote')).toEqual(
       'this is a note added from the modal',
     );
   });

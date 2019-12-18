@@ -1,14 +1,14 @@
 import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { setAddEditProceduralNoteModalStateFromDetailAction } from './setAddEditProceduralNoteModalStateFromDetailAction';
+import { setAddEditCaseNoteModalStateFromDetailAction } from './setAddEditCaseNoteModalStateFromDetailAction';
 
 presenter.providers.applicationContext = applicationContext;
 
-describe('setAddEditProceduralNoteModalStateFromDetailAction', () => {
+describe('setAddEditCaseNoteModalStateFromDetailAction', () => {
   it('should set the modal state from caseDetail', async () => {
     const result = await runAction(
-      setAddEditProceduralNoteModalStateFromDetailAction,
+      setAddEditCaseNoteModalStateFromDetailAction,
       {
         modules: {
           presenter,
@@ -17,9 +17,9 @@ describe('setAddEditProceduralNoteModalStateFromDetailAction', () => {
           caseDetail: {
             caseCaption: 'Sisqo, Petitioner',
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            caseNote: 'i got some notes',
             docketNumber: '101-19',
             docketNumberSuffix: 'L',
-            proceduralNote: 'i got some notes',
           },
         },
       },
@@ -34,7 +34,7 @@ describe('setAddEditProceduralNoteModalStateFromDetailAction', () => {
 
   it('should set the modal state when caseCaption and docketNumberSuffix do not exist', async () => {
     const result = await runAction(
-      setAddEditProceduralNoteModalStateFromDetailAction,
+      setAddEditCaseNoteModalStateFromDetailAction,
       {
         modules: {
           presenter,
@@ -42,8 +42,8 @@ describe('setAddEditProceduralNoteModalStateFromDetailAction', () => {
         state: {
           caseDetail: {
             caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            caseNote: 'i got some notes',
             docketNumber: '101-19',
-            proceduralNote: 'i got some notes',
           },
         },
       },

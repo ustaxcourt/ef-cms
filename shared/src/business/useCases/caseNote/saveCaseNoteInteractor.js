@@ -17,7 +17,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.saveCaseNoteInteractor = async ({
   applicationContext,
   caseId,
-  proceduralNote,
+  caseNote,
 }) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.PROCEDURAL_NOTES)) {
@@ -32,7 +32,7 @@ exports.saveCaseNoteInteractor = async ({
     });
 
   const caseToUpdate = new Case(
-    { ...caseRecord, proceduralNote },
+    { ...caseRecord, caseNote },
     {
       applicationContext,
     },

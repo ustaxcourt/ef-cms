@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store
  */
-export const setDeleteProceduralNoteModalStateAction = ({ get, store }) => {
+export const setDeleteCaseNoteModalStateAction = ({ get, store }) => {
   const { caseId } = get(state.caseDetail);
   store.set(state.modal.caseId, caseId);
 };

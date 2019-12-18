@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { saveProceduralNoteAction } from '../actions/ProceduralNotes/saveProceduralNoteAction';
+import { saveCaseNoteAction } from '../actions/ProceduralNotes/saveCaseNoteAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -11,7 +11,7 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateNoteAction } from '../actions/validateNoteAction';
 
-export const updateProceduralNoteSequence = [
+export const updateCaseNoteSequence = [
   startShowValidationAction,
   validateNoteAction,
   {
@@ -20,7 +20,7 @@ export const updateProceduralNoteSequence = [
       setWaitingForResponseAction,
       stopShowValidationAction,
       clearAlertsAction,
-      saveProceduralNoteAction,
+      saveCaseNoteAction,
       setCaseAction,
       setAlertSuccessAction,
       clearModalAction,

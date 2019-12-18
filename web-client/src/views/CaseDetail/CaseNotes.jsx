@@ -11,23 +11,23 @@ export const CaseNotes = connect(
   {
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
+    openAddEditCaseNoteModalSequence:
+      sequences.openAddEditCaseNoteModalSequence,
     openAddEditJudgesCaseNoteModalFromDetailSequence:
       sequences.openAddEditJudgesCaseNoteModalFromDetailSequence,
-    openAddEditProceduralNoteModalSequence:
-      sequences.openAddEditProceduralNoteModalSequence,
+    openDeleteCaseNoteConfirmModalSequence:
+      sequences.openDeleteCaseNoteConfirmModalSequence,
     openDeleteJudgesCaseNoteConfirmModalSequence:
       sequences.openDeleteJudgesCaseNoteConfirmModalSequence,
-    openDeleteProceduralNoteConfirmModalSequence:
-      sequences.openDeleteProceduralNoteConfirmModalSequence,
     showModal: state.showModal,
   },
   ({
     caseDetail,
     caseDetailHelper,
+    openAddEditCaseNoteModalSequence,
     openAddEditJudgesCaseNoteModalFromDetailSequence,
-    openAddEditProceduralNoteModalSequence,
+    openDeleteCaseNoteConfirmModalSequence,
     openDeleteJudgesCaseNoteConfirmModalSequence,
-    openDeleteProceduralNoteConfirmModalSequence,
     showModal,
   }) => {
     return (
@@ -38,14 +38,14 @@ export const CaseNotes = connect(
               <div className="tablet:grid-col-6">
                 <div className="card height-full">
                   <div className="content-wrapper">
-                    {!caseDetail.proceduralNote && (
+                    {!caseDetail.caseNote && (
                       <Button
                         link
                         className="float-right margin-right-0 margin-top-1 padding-0"
                         icon="sticky-note"
                         id="add-procedural-note-button"
                         onClick={() => {
-                          openAddEditProceduralNoteModalSequence();
+                          openAddEditCaseNoteModalSequence();
                         }}
                       >
                         Add Case Note
@@ -53,16 +53,16 @@ export const CaseNotes = connect(
                     )}
                     <h3 className="underlined">Case Notes</h3>
                     <div className="margin-top-1 margin-bottom-4">
-                      <Text bind="caseDetail.proceduralNote" />
+                      <Text bind="caseDetail.caseNote" />
                     </div>
-                    {caseDetail.proceduralNote && (
+                    {caseDetail.caseNote && (
                       <div className="grid-row">
                         <div className="tablet:grid-col-6">
                           <Button
                             link
                             icon="edit"
                             onClick={() => {
-                              openAddEditProceduralNoteModalSequence();
+                              openAddEditCaseNoteModalSequence();
                             }}
                           >
                             Edit Note
@@ -75,7 +75,7 @@ export const CaseNotes = connect(
                             icon="trash"
                             id="delete-procedural-note-button"
                             onClick={() => {
-                              openDeleteProceduralNoteConfirmModalSequence();
+                              openDeleteCaseNoteConfirmModalSequence();
                             }}
                           >
                             Delete Note
@@ -156,7 +156,7 @@ export const CaseNotes = connect(
           <AddEditJudgesCaseNoteModal onConfirmSequence="updateJudgesCaseNoteOnCaseDetailSequence" />
         )}
         {showModal === 'DeleteCaseNoteConfirmModal' && (
-          <DeleteCaseNoteConfirmModal onConfirmSequence="deleteProceduralNoteSequence" />
+          <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteSequence" />
         )}
       </>
     );

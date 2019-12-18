@@ -1,21 +1,21 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { saveProceduralNoteAction } from './saveProceduralNoteAction';
+import { saveCaseNoteAction } from './saveCaseNoteAction';
 
-const saveProceduralNoteInteractorMock = jest.fn().mockReturnValue(true);
+const saveCaseNoteInteractorMock = jest.fn().mockReturnValue(true);
 presenter.providers.applicationContext = {
   getUseCases: () => ({
-    saveProceduralNoteInteractor: saveProceduralNoteInteractorMock,
+    saveCaseNoteInteractor: saveCaseNoteInteractorMock,
   }),
 };
 
-describe('saveProceduralNote', () => {
+describe('saveCaseNote', () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
   it('saves a procedural note on case with id from caseDetail.caseId', async () => {
     const caseId = '123-abc';
-    const result = await runAction(saveProceduralNoteAction, {
+    const result = await runAction(saveCaseNoteAction, {
       modules: {
         presenter,
       },
@@ -29,10 +29,10 @@ describe('saveProceduralNote', () => {
       },
     });
     expect(result).toBeDefined();
-    expect(saveProceduralNoteInteractorMock).toHaveBeenCalled();
-    expect(saveProceduralNoteInteractorMock.mock.calls[0][0]).toMatchObject({
+    expect(saveCaseNoteInteractorMock).toHaveBeenCalled();
+    expect(saveCaseNoteInteractorMock.mock.calls[0][0]).toMatchObject({
       caseId,
-      proceduralNote: 'This is a procedural note',
+      caseNote: 'This is a procedural note',
     });
   });
 });

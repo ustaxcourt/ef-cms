@@ -16,14 +16,14 @@ exports.handler = event =>
     const applicationContext = createApplicationContext(user);
     try {
       const { caseId } = event.pathParameters || {};
-      const { proceduralNote } = JSON.parse(event.body);
+      const { caseNote } = JSON.parse(event.body);
 
       const results = await applicationContext
         .getUseCases()
         .saveCaseNoteInteractor({
           applicationContext,
           caseId,
-          proceduralNote,
+          caseNote,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);

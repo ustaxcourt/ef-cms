@@ -1,14 +1,14 @@
 import { setupTest, uploadPetition } from './helpers';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
-import petitionsClerkAddsProceduralNote from './journey/petitionsClerkAddsProceduralNote';
-import petitionsClerkDeletesProceduralNote from './journey/petitionsClerkDeletesProceduralNote';
+import petitionsClerkAddsCaseNote from './journey/petitionsClerkAddsCaseNote';
+import petitionsClerkDeletesCaseNote from './journey/petitionsClerkDeletesCaseNote';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
 
-describe('petitions clerk procedural notes journey', () => {
+describe('petitions clerk case notes journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -21,7 +21,7 @@ describe('petitions clerk procedural notes journey', () => {
   userSignsOut(test);
 
   petitionsClerkLogIn(test);
-  petitionsClerkAddsProceduralNote(test);
-  petitionsClerkDeletesProceduralNote(test);
+  petitionsClerkAddsCaseNote(test);
+  petitionsClerkDeletesCaseNote(test);
   userSignsOut(test);
 });
