@@ -13,6 +13,7 @@ const ROLE_PERMISSIONS = {
   CREATE_USER: 'CREATE_USER',
   DOCKET_ENTRY: 'DOCKET_ENTRY',
   FILE_EXTERNAL_DOCUMENT: 'FILE_EXTERNAL_DOCUMENT',
+  FILE_IN_CONSOLIDATED: 'FILE_IN_CONSOLIDATED',
   GET_CASE: 'GET_CASE',
   GET_READ_MESSAGES: 'GET_READ_MESSAGES',
   GET_USERS_IN_SECTION: 'GET_USERS_IN_SECTION',
@@ -60,7 +61,7 @@ const allInternalUserPermissions = [
 
 const AUTHORIZATION_MAP = {
   adc: allInternalUserPermissions,
-  admin: [ROLE_PERMISSIONS.CREATE_USER],
+  admin: [ROLE_PERMISSIONS.CREATE_USER, ROLE_PERMISSIONS.FILE_IN_CONSOLIDATED],
   admissionsclerk: allInternalUserPermissions,
   calendarclerk: allInternalUserPermissions,
   chambers: [
