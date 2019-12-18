@@ -9,7 +9,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateCalendaredCaseJudgesNoteAction } from '../actions/TrialSessionWorkingCopy/updateCalendaredCaseJudgesNoteAction';
-import { updateCaseNoteAction } from '../actions/TrialSession/updateCaseNoteAction';
+import { updateJudgesCaseNoteAction } from '../actions/TrialSession/updateJudgesCaseNoteAction';
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
 import { validateNoteAction } from '../actions/validateNoteAction';
 
@@ -23,7 +23,7 @@ export const updateCaseNoteOnWorkingCopySequence = [
       stopShowValidationAction,
       clearAlertsAction,
       updateNotePropsFromModalStateAction,
-      updateCaseNoteAction,
+      updateJudgesCaseNoteAction,
       getTrialSessionWorkingCopyAction,
       setTrialSessionWorkingCopyAction,
       updateCalendaredCaseJudgesNoteAction,
