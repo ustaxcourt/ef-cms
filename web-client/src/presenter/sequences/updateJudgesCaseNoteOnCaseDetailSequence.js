@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { setCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setCaseNoteOnCaseDetailAction';
+import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -22,7 +22,7 @@ export const updateJudgesCaseNoteOnCaseDetailSequence = [
       clearAlertsAction,
       updateNotePropsFromModalStateAction,
       updateCaseNoteAction,
-      setCaseNoteOnCaseDetailAction,
+      setJudgesCaseNoteOnCaseDetailAction,
       clearModalAction,
       clearModalStateAction,
       unsetWaitingForResponseAction,

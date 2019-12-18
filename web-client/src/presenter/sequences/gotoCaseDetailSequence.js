@@ -10,11 +10,11 @@ import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
-import { setCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setCaseNoteOnCaseDetailAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/caseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
+import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
 
@@ -27,7 +27,7 @@ const gotoCaseDetailExternal = [
 
 const gotoCaseDetailInternalWithNotes = [
   getCaseNoteForCaseAction,
-  setCaseNoteOnCaseDetailAction,
+  setJudgesCaseNoteOnCaseDetailAction,
   ...gotoCaseDetailInternal,
 ];
 

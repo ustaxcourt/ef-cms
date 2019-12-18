@@ -90,7 +90,8 @@ export const CaseNotes = connect(
                 <div className="tablet:grid-col-6">
                   <div className="card height-full">
                     <div className="content-wrapper">
-                      {(!caseDetail.caseNote || !caseDetail.caseNote.notes) && (
+                      {(!caseDetail.judgesNote ||
+                        !caseDetail.judgesNote.notes) && (
                         <Button
                           link
                           className="float-right margin-right-0 margin-top-1 padding-0"
@@ -106,9 +107,9 @@ export const CaseNotes = connect(
                       )}
                       <h3 className="underlined">Judge’s Notes</h3>
                       <div className="margin-top-1  margin-bottom-4">
-                        <Text bind="caseDetail.caseNote.notes" />
+                        <Text bind="caseDetail.judgesNote.notes" />
                       </div>
-                      {caseDetail.caseNote && caseDetail.caseNote.notes && (
+                      {caseDetail.judgesNote && caseDetail.judgesNote.notes && (
                         <div className="grid-row">
                           <div className="tablet:grid-col-6">
                             <Button

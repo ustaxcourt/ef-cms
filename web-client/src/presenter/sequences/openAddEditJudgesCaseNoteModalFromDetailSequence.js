@@ -1,9 +1,9 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { setAddEditCaseNoteModalStateFromDetailAction } from '../actions/TrialSessionWorkingCopy/setAddEditCaseNoteModalStateFromDetailAction';
+import { setAddEditJudgesCaseNoteModalStateFromDetailAction } from '../actions/TrialSessionWorkingCopy/setAddEditJudgesCaseNoteModalStateFromDetailAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const openAddEditJudgesCaseNoteModalFromDetailSequence = [
   clearModalStateAction,
-  setAddEditCaseNoteModalStateFromDetailAction,
+  setAddEditJudgesCaseNoteModalStateFromDetailAction,
   setShowModalFactoryAction('AddEditJudgesCaseNoteModal'),
 ];
