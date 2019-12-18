@@ -10,8 +10,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to update procedural note
- * @param {string} providers.notes the note to update
+ * @param {string} providers.caseId the id of the case to update case note
+ * @param {string} providers.caseNote the note to update
  * @returns {object} the updated case note returned from persistence
  */
 exports.saveCaseNoteInteractor = async ({
