@@ -1,7 +1,7 @@
+import { canFileInConsolidatedCasesAction } from '../actions/FileDocument/canFileInConsolidatedCasesAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
 import { getPrintableFilingReceiptSequence } from './getPrintableFilingReceiptSequence';
-import { isConsolidatedCaseAction } from '../actions/FileDocument/isConsolidatedCaseAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
@@ -29,7 +29,7 @@ const onSuccess = [
 
 export const submitExternalDocumentSequence = [
   openFileUploadStatusModalAction,
-  isConsolidatedCaseAction,
+  canFileInConsolidatedCasesAction,
   {
     no: [
       uploadExternalDocumentsAction,

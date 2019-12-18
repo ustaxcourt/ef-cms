@@ -1,9 +1,9 @@
+import { canFileInConsolidatedCasesAction } from '../actions/FileDocument/canFileInConsolidatedCasesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
 import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
 import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
-import { isConsolidatedCaseAction } from '../actions/FileDocument/isConsolidatedCaseAction';
 import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateToFileADocumentAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
@@ -28,7 +28,7 @@ export const completeDocumentSelectSequence = [
       generateTitleAction,
       setDocketNumberPropAction,
       setDefaultFileDocumentFormValuesAction,
-      isConsolidatedCaseAction,
+      canFileInConsolidatedCasesAction,
       {
         no: [],
         yes: [unset(state.form.partyPrimary)],
