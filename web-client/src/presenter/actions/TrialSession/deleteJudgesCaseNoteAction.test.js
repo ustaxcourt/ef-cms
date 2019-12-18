@@ -10,7 +10,7 @@ describe('deleteJudgesCaseNoteAction', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        deleteCaseNoteInteractor: deleteJudgesCaseNoteInteractorStub,
+        deleteJudgesCaseNoteInteractor: deleteJudgesCaseNoteInteractorStub,
       }),
     };
   });

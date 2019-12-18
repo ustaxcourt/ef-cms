@@ -1,6 +1,5 @@
 module.exports = {
-  deleteCaseNoteLambda: require('./caseNote/deleteJudgesCaseNoteLambda')
-    .handler,
+  deleteCaseNoteLambda: require('./caseNote/deleteCaseNoteLambda').handler,
   deleteJudgesCaseNoteLambda: require('./caseNote/deleteJudgesCaseNoteLambda')
     .handler,
   getJudgesCaseNoteLambda: require('./caseNote/getJudgesCaseNoteLambda')
