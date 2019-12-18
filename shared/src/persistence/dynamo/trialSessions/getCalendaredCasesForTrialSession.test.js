@@ -26,7 +26,7 @@ describe('getCalendaredCasesForTrialSession', () => {
         {
           caseId: MOCK_CASE.caseId,
           notes: 'hey this is a note',
-          pk: `case-note|${MOCK_CASE.caseId}`,
+          pk: `judges-case-note|${MOCK_CASE.caseId}`,
           sk: '123',
         },
       ]);
