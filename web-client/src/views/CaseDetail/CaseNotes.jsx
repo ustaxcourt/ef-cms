@@ -1,7 +1,7 @@
-import { AddEditCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditCaseNoteModal';
+import { AddEditJudgesCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditJudgesCaseNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
-import { DeleteCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteCaseNoteConfirmModal';
-import { DeleteProceduralNoteConfirmModal } from './DeleteProceduralNoteConfirmModal';
+import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
+import { DeleteJudgesCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteJudgesCaseNoteConfirmModal';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -146,14 +146,14 @@ export const CaseNotes = connect(
             </div>
           </div>
         </div>
+        {showModal === 'DeleteJudgesCaseNoteConfirmModal' && (
+          <DeleteJudgesCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteFromCaseDetailSequence" />
+        )}
+        {showModal === 'AddEditJudgesCaseNoteModal' && (
+          <AddEditJudgesCaseNoteModal onConfirmSequence="updateCaseNoteOnCaseDetailSequence" />
+        )}
         {showModal === 'DeleteCaseNoteConfirmModal' && (
-          <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteFromCaseDetailSequence" />
-        )}
-        {showModal === 'AddEditCaseNoteModal' && (
-          <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteOnCaseDetailSequence" />
-        )}
-        {showModal === 'DeleteProceduralNoteConfirmModal' && (
-          <DeleteProceduralNoteConfirmModal onConfirmSequence="deleteProceduralNoteSequence" />
+          <DeleteCaseNoteConfirmModal onConfirmSequence="deleteProceduralNoteSequence" />
         )}
       </>
     );

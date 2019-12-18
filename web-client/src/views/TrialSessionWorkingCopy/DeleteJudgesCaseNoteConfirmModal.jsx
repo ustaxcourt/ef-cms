@@ -2,7 +2,7 @@ import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { connect } from '@cerebral/react';
 import React from 'react';
 
-export const DeleteProceduralNoteConfirmModal = connect(
+export const DeleteJudgesCaseNoteConfirmModal = connect(
   {},
   ({ onConfirmSequence }) => (
     <ConfirmModal

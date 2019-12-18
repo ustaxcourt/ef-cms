@@ -5,7 +5,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const AddEditProceduralNoteModal = connect(
+export const AddEditJudgesCaseNoteModal = connect(
   {
     modal: state.modal,
     validateNoteSequence: sequences.validateNoteSequence,
@@ -15,27 +15,27 @@ export const AddEditProceduralNoteModal = connect(
     return (
       <ConfirmModal
         cancelLabel="Cancel"
-        className="add-edit-procedural-note-modal"
+        className="add-edit-note-modal"
         confirmLabel="Save"
         preventCancelOnBlur={true}
-        title="Add/Edit Case Notes"
+        title="Add/Edit Notes"
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence={onConfirmSequence}
       >
         <h5 className="margin-bottom-4">
-          {`Docket ${modal.docketNumber}: ${modal.caseCaptionNames}`}
+          Docket {modal.docketNumber}: {modal.caseCaptionNames}
         </h5>
         <FormGroup
           className="margin-bottom-2"
           errorText={validationErrors.notes}
         >
-          <label className="usa-label" htmlFor="procedural-notes">
-            Case note
+          <label className="usa-label" htmlFor="case-notes">
+            Judge’s notes
           </label>
           <BindedTextarea
             ariaLabel="notes"
             bind="modal.notes"
-            id="procedural-notes"
+            id="case-notes"
             onChange={() => {
               validateNoteSequence();
             }}
