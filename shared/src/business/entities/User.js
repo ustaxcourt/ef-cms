@@ -100,6 +100,7 @@ const userValidation = {
     .string()
     .valid(Object.values(User.ROLES))
     .required(),
+  section: joi.string().optional(),
   token: joi.string().optional(),
   userId: joi.string().required(),
 };

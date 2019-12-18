@@ -147,7 +147,7 @@ exports.createCaseInteractor = async ({
       eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
       partyPrimary: true,
       partySecondary,
-      practitioner: practitioners[0],
+      practitioner: practitioners,
       userId: user.userId,
       ...caseToAdd.getCaseContacts({
         contactPrimary: true,
@@ -180,7 +180,7 @@ exports.createCaseInteractor = async ({
       eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
       partyPrimary: true,
       partySecondary,
-      practitioner: practitioners[0],
+      practitioner: practitioners,
       userId: user.userId,
       ...caseToAdd.getCaseContacts({
         contactPrimary: true,
@@ -202,7 +202,7 @@ exports.createCaseInteractor = async ({
           Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
         partyPrimary: true,
         partySecondary,
-        practitioner: practitioners[0],
+        practitioner: practitioners,
         userId: user.userId,
         ...caseToAdd.getCaseContacts({
           contactPrimary: true,
