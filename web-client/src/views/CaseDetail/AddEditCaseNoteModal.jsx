@@ -15,27 +15,27 @@ export const AddEditCaseNoteModal = connect(
     return (
       <ConfirmModal
         cancelLabel="Cancel"
-        className="add-edit-note-modal"
+        className="add-edit-procedural-note-modal"
         confirmLabel="Save"
         preventCancelOnBlur={true}
-        title="Add/Edit Notes"
+        title="Add/Edit Case Notes"
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence={onConfirmSequence}
       >
         <h5 className="margin-bottom-4">
-          Docket {modal.docketNumber}: {modal.caseCaptionNames}
+          {`Docket ${modal.docketNumber}: ${modal.caseCaptionNames}`}
         </h5>
         <FormGroup
           className="margin-bottom-2"
           errorText={validationErrors.notes}
         >
-          <label className="usa-label" htmlFor="case-notes">
-            Judge’s notes
+          <label className="usa-label" htmlFor="procedural-notes">
+            Case note
           </label>
           <BindedTextarea
             ariaLabel="notes"
             bind="modal.notes"
-            id="case-notes"
+            id="procedural-notes"
             onChange={() => {
               validateNoteSequence();
             }}

@@ -1,4 +1,4 @@
-import { AddEditProceduralNoteModal } from './AddEditProceduralNoteModal';
+import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
 import { AddToTrialModal } from './AddToTrialModal';
 import { BlockFromTrialModal } from './BlockFromTrialModal';
 import { CaseDeadlinesInternal } from './CaseDeadlinesInternal';
@@ -155,8 +155,8 @@ export const CaseDetailInternal = connect(
         {showModal === 'DeleteCaseDeadlineModalDialog' && (
           <DeleteCaseDeadlineModalDialog />
         )}
-        {showModal === 'AddEditProceduralNoteModal' && (
-          <AddEditProceduralNoteModal onConfirmSequence="updateProceduralNoteSequence" />
+        {showModal === 'AddEditCaseNoteModal' && (
+          <AddEditCaseNoteModal onConfirmSequence="updateProceduralNoteSequence" />
         )}
         {showModal === 'AddToTrialModal' && <AddToTrialModal />}
         {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}

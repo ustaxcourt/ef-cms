@@ -42,7 +42,7 @@ import {
   MAX_FILE_SIZE_MB,
 } from '../../shared/src/persistence/s3/getUploadPolicy';
 import { NewTrialSession } from '../../shared/src/business/entities/trialSessions/NewTrialSession';
-import { Note } from '../../shared/src/business/entities/Note';
+import { Note } from '../../shared/src/business/entities/notes/Note';
 import { Order } from '../../shared/src/business/entities/orders/Order';
 import { OrderWithoutBody } from '../../shared/src/business/entities/orders/OrderWithoutBody';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
