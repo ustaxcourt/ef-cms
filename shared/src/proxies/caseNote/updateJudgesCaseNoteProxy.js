@@ -1,7 +1,7 @@
 const { put } = require('../requests');
 
 /**
- * updateCaseNoteInteractorProxy
+ * updateJudgesCaseNoteInteractorProxy
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,10 +9,14 @@ const { put } = require('../requests');
  * @param {string} providers.notes the notes to add to the case for the user
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateCaseNoteInteractor = ({ applicationContext, caseId, notes }) => {
+exports.updateJudgesCaseNoteInteractor = ({
+  applicationContext,
+  caseId,
+  notes,
+}) => {
   return put({
     applicationContext,
     body: { notes },
-    endpoint: `/case-notes/${caseId}`,
+    endpoint: `/case-notes/judges/${caseId}`,
   });
 };
