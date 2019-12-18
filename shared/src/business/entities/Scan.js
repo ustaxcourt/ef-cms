@@ -14,7 +14,6 @@ const { remove } = require('lodash');
  * @constructor
  */
 function Scan({ applicationContext, rawScan }) {
-  this.applicationContext = applicationContext;
   this.batches = rawScan.batches || [];
   this.createdAt = rawScan.createdAt || createISODateString();
   this.scanId = rawScan.scanId || applicationContext.getUniqueId();

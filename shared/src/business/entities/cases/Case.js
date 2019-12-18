@@ -327,6 +327,7 @@ joiValidationDecorator(
       otherwise: joi.optional().allow(null),
       then: joi.string().required(),
     }),
+    caseCaption: joi.string().optional(),
     caseId: joi
       .string()
       .uuid({
@@ -334,6 +335,14 @@ joiValidationDecorator(
       })
       .optional(),
     caseType: joi.string().optional(),
+    contactPrimary: joi
+      .object()
+      .optional()
+      .allow(null),
+    contactSecondary: joi
+      .object()
+      .optional()
+      .allow(null),
     createdAt: joi
       .date()
       .iso()
@@ -403,6 +412,7 @@ joiValidationDecorator(
     orderForFilingFee: joi.boolean().optional(),
     orderForOds: joi.boolean().optional(),
     orderForRatification: joi.boolean().optional(),
+    orderToChangeDesignatedPlaceOfTrial: joi.boolean().optional(),
     orderToShowCause: joi.boolean().optional(),
     partyType: joi.string().optional(),
     payGovDate: joi
