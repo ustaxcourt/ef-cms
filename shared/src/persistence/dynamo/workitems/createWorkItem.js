@@ -27,9 +27,9 @@ exports.createWorkItem = async ({ applicationContext, workItem }) => {
 
   await put({
     Item: {
+      gsi1pk: `workitem-${workItem.workItemId}`,
       pk: `workitem-${workItem.workItemId}`,
       sk: `workitem-${workItem.workItemId}`,
-      gsi1pk: `workitem-${workItem.workItemId}`,
       ...workItem,
     },
     applicationContext,

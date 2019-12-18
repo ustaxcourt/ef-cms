@@ -21,7 +21,7 @@ export const rescanBatchAction = async ({
 }) => {
   store.set(state.isScanning, true);
   const batchIndex = get(state.batchIndexToRescan);
-  const scanner = applicationContext.getScanner();
+  const scanner = await applicationContext.getScanner();
   scanner.setSourceByIndex(props.scannerSourceIndex);
 
   try {

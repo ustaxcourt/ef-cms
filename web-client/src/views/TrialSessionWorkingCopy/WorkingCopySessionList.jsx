@@ -90,16 +90,16 @@ export const WorkingCopySessionList = connect(
                       sort === 'practitioner' && 'sortActive',
                     )}
                   >
-                    Petitioner Counsel
+                    Petitioner counsel
                   </span>
                   {(sort === 'practitioner' && sortOrder === 'desc' && (
                     <FontAwesomeIcon icon="caret-up" />
                   )) || <FontAwesomeIcon icon="caret-down" />}
                 </Button>
               </th>
-              <th className="no-wrap">Respondent Counsel</th>
+              <th className="no-wrap">Respondent counsel</th>
               <th className="no-wrap" colSpan="2">
-                Trial Status
+                Trial status
               </th>
             </tr>
           </thead>
@@ -175,7 +175,7 @@ export const WorkingCopySessionList = connect(
                     <td className="text-right font-body-2xs">
                       <strong>Notes:</strong>
                     </td>
-                    <td className="font-body-2xs" colSpan="3">
+                    <td className="font-body-2xs" colSpan="4">
                       <Text
                         bind={`trialSessionWorkingCopy.caseNotes.${item.caseId}.notes`}
                       />

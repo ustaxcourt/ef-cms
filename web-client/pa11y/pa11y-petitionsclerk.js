@@ -56,17 +56,6 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #caption-edit-button to be visible',
-      'wait for .progress-indicator to be hidden',
-      'click element #caption-edit-button',
-      'wait for .modal-dialog to be visible',
-    ],
-    notes: 'checks a11y of case caption edit dialog',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=case-caption-edit',
-  },
-  {
-    actions: [
       'wait for #tab-pending-messages to be visible',
       'wait for .progress-indicator to be hidden',
       'click element #tab-pending-messages',
@@ -93,6 +82,8 @@ module.exports = [
   },
   {
     actions: [
+      'wait for #tab-draft-documents to be visible',
+      'click element #tab-draft-documents',
       'wait for #button-create-order to be visible',
       'click element #button-create-order',
       'wait for #eventCode to be visible',
@@ -251,4 +242,16 @@ module.exports = [
   // this url probably needs to be moved to calendaring when those users are created
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=non-calendared-case',
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/reports/case-deadlines',
+  {
+    actions: [
+      'wait for #reports-btn to be visible',
+      'click element #reports-btn',
+      'wait for #trial-session-planning-btn to be visible',
+      'click element #trial-session-planning-btn',
+      'wait for .trial-session-planning-modal to be visible',
+    ],
+    notes: 'checks the trial session planning modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=trial-session-planning-modal',
+  },
 ];

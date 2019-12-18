@@ -77,7 +77,7 @@ describe('Get users in section', () => {
       getCurrentUser: () => {
         return {
           role: User.ROLES.petitioner,
-          userId: 'taxpayer',
+          userId: 'petitioner',
         };
       },
       getPersistenceGateway: () => {

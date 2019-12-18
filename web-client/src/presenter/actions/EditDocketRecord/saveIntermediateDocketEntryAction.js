@@ -25,10 +25,10 @@ export const saveIntermediateDocketEntryAction = async ({
 
   entryMetadata = {
     ...entryMetadata,
-    docketNumber,
-    documentId,
     caseId,
     createdAt: entryMetadata.dateReceived,
+    docketNumber,
+    documentId,
     receivedAt: entryMetadata.dateReceived,
   };
 

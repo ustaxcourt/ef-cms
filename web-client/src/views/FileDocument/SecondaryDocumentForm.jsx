@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InclusionsForm } from './InclusionsForm';
 import { ObjectionsForm } from './ObjectionsForm';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -20,15 +20,7 @@ export const SecondaryDocumentForm = connect(
       <React.Fragment>
         <h2 className="margin-top-4">{form.secondaryDocument.documentTitle}</h2>
         <div className="blue-container">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.secondaryDocumentFile && 'usa-form-group--error',
-              !fileDocumentHelper.showSecondaryDocumentInclusionsForm &&
-                !fileDocumentHelper.secondaryDocument.showObjection &&
-                'margin-bottom-0',
-            )}
-          >
+          <FormGroup errorText={validationErrors.secondaryDocumentFile}>
             <label
               className={classNames(
                 'usa-label ustc-upload with-hint',
@@ -56,12 +48,7 @@ export const SecondaryDocumentForm = connect(
               updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
               validationSequence="validateExternalDocumentInformationSequence"
             />
-
-            <Text
-              bind="validationErrors.secondaryDocumentFile"
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
 
           {fileDocumentHelper.showSecondaryDocumentInclusionsForm && (
             <InclusionsForm

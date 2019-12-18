@@ -1,10 +1,10 @@
 import {
-  ADC_SECTION,
   DOCKET_SECTION,
   IRS_BATCH_SYSTEM_SECTION,
+  PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/WorkQueue';
+import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { state } from 'cerebral';
-import _ from 'lodash';
 
 const isDateToday = (date, applicationContext) => {
   const now = applicationContext.getUtilities().formatNow('MMDDYY');
@@ -46,15 +46,24 @@ export const formatWorkItem = ({
   workItem = {},
   selectedWorkItems = [],
   workQueueIsInternal,
-  USER_ROLES,
 }) => {
-  const result = _.cloneDeep(workItem);
+  const {
+    COURT_ISSUED_EVENT_CODES,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+
+  const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
+    courtIssuedDoc => courtIssuedDoc.documentType,
+  );
+
+  const result = cloneDeep(workItem);
 
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
 
-  result.messages = _.orderBy(result.messages, 'createdAt', 'desc');
+  result.messages = orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
     message.createdAtFormatted = formatDateIfToday(
       message.createdAt,
@@ -65,7 +74,7 @@ export const formatWorkItem = ({
       .getUtilities()
       .formatDateString(message.createdAt, 'DATE_TIME_TZ');
   });
-  result.sentBySection = _.capitalize(result.sentBySection);
+  result.sentBySection = capitalize(result.sentBySection);
   result.completedAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.completedAt, 'DATE_TIME');
@@ -85,17 +94,17 @@ export const formatWorkItem = ({
   }
 
   switch (result.caseStatus.trim()) {
-    case 'Batched for IRS':
+    case STATUS_TYPES.batchedForIRS:
       result.showBatchedStatusIcon = true;
       result.showUnreadStatusIcon = false;
       result.showUnassignedIcon = false;
       break;
-    case 'Recalled':
+    case STATUS_TYPES.recalled:
       result.showRecalledStatusIcon = true;
       result.showUnreadStatusIcon = false;
       break;
-    case 'General Docket - Not at Issue':
-    case 'New':
+    case STATUS_TYPES.generalDocket:
+    case STATUS_TYPES.new:
     default:
       result.showBatchedStatusIcon = false;
       result.showRecalledStatusIcon = false;
@@ -111,7 +120,7 @@ export const formatWorkItem = ({
   }${result.docketNumberSuffix || ''}`;
 
   result.selected = !!selectedWorkItems.find(
-    workItem => workItem.workItemId == result.workItemId,
+    selectedWorkItem => selectedWorkItem.workItemId == result.workItemId,
   );
 
   result.currentMessage = result.messages[0];
@@ -139,19 +148,26 @@ export const formatWorkItem = ({
     ).createdAtTimeFormattedTZ;
   }
 
+  result.isCourtIssuedDocument = !!courtIssuedDocumentTypes.includes(
+    result.document.documentType,
+  );
+
   return result;
 };
 
 export const filterWorkItems = ({
   applicationContext,
   user,
-  USER_ROLES,
   workQueueToDisplay,
 }) => {
+  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+
   const { box, queue, workQueueIsInternal } = workQueueToDisplay;
-  const docQCUserSection =
-    user.section === ADC_SECTION ? DOCKET_SECTION : user.section;
-  const { Case } = applicationContext.getEntityConstructors();
+  let docQCUserSection = user.section;
+
+  if (user.section !== PETITIONS_SECTION) {
+    docQCUserSection = DOCKET_SECTION;
+  }
 
   const filters = {
     documentQc: {
@@ -162,7 +178,7 @@ export const filterWorkItems = ({
             item.isQC &&
             item.sentByUserId === user.userId &&
             item.section === IRS_BATCH_SYSTEM_SECTION &&
-            item.caseStatus === Case.STATUS_TYPES.batchedForIRS
+            item.caseStatus === STATUS_TYPES.batchedForIRS
           );
         },
         inProgress: item => {
@@ -202,7 +218,7 @@ export const filterWorkItems = ({
             !item.completedAt &&
             item.isQC &&
             item.section === IRS_BATCH_SYSTEM_SECTION &&
-            item.caseStatus === Case.STATUS_TYPES.batchedForIRS
+            item.caseStatus === STATUS_TYPES.batchedForIRS
           );
         },
         inProgress: item => {
@@ -280,12 +296,11 @@ export const formattedWorkQueue = (get, applicationContext) => {
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const { workQueueIsInternal } = workQueueToDisplay;
   const selectedWorkItems = get(state.selectedWorkItems);
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { USER_ROLES } = applicationContext.getConstants();
 
   let workQueue = workItems
     .filter(
       filterWorkItems({
-        USER_ROLES,
         applicationContext,
         user,
         workQueueToDisplay,
@@ -293,7 +308,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
     )
     .map(item =>
       formatWorkItem({
-        USER_ROLES,
         applicationContext,
         selectedWorkItems,
         workItem: item,
@@ -371,7 +385,7 @@ export const formattedWorkQueue = (get, applicationContext) => {
       workQueueToDisplay.queue
     ][workQueueToDisplay.box];
 
-  workQueue = _.orderBy(workQueue, [sortField, 'docketNumber'], sortDirection);
+  workQueue = orderBy(workQueue, [sortField, 'docketNumber'], sortDirection);
 
   return workQueue;
 };

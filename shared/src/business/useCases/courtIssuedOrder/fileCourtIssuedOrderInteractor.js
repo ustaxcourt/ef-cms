@@ -1,6 +1,6 @@
 const {
-  CREATE_COURT_ISSUED_ORDER,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { Document } = require('../../entities/Document');
@@ -22,7 +22,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
   const authorizedUser = applicationContext.getCurrentUser();
   const { caseId } = documentMetadata;
 
-  if (!isAuthorized(authorizedUser, CREATE_COURT_ISSUED_ORDER)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -39,14 +39,18 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
+  if (documentMetadata.eventCode === 'O') {
+    documentMetadata.freeText = documentMetadata.documentTitle;
+  }
+
   const documentEntity = new Document(
     {
       ...documentMetadata,
-      relationship: 'primaryDocument',
       documentId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
-      userId: user.userId,
       filedBy: user.name,
+      relationship: 'primaryDocument',
+      userId: user.userId,
     },
     { applicationContext },
   );

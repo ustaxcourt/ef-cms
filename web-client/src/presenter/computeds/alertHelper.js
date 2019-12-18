@@ -1,9 +1,9 @@
 import { state } from 'cerebral';
 import { uniq } from 'lodash';
 
-export const alertHelper = get => {
+export const alertHelper = (get, applicationContext) => {
   const alertError = get(state.alertError) || {};
-  const userIsIdentified = get(state.user) || false;
+  const userIsIdentified = applicationContext.getCurrentUser() || false;
 
   return {
     messagesDeduped: uniq(alertError.messages),

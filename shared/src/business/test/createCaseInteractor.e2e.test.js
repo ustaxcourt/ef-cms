@@ -5,9 +5,10 @@ const {
 const {
   getDocumentQCInboxForSectionInteractor,
 } = require('../useCases/workitems/getDocumentQCInboxForSectionInteractor');
+const { Case } = require('../entities/cases/Case');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { User } = require('../entities/User');
 
 const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -42,7 +43,7 @@ describe('createCase integration test', () => {
           address3: 'Anim est dolor animi',
           city: 'Rerum eaque cupidata',
           countryType: 'domestic',
-          email: 'taxpayer@example.com',
+          email: 'petitioner@example.com',
           name: 'Rick Petitioner',
           phone: '+1 (599) 681-5435',
           postalCode: '89614',
@@ -89,13 +90,12 @@ describe('createCase integration test', () => {
             {
               assigneeId: null,
               assigneeName: null,
-              caseStatus: 'New',
+              caseStatus: Case.STATUS_TYPES.new,
               docketNumber: '101-19',
               docketNumberSuffix: 'S',
               document: {
                 documentType: 'Petition',
                 filedBy: 'Petr. Rick Petitioner',
-                workItems: [],
               },
               isInitializeCase: true,
               messages: [
@@ -129,7 +129,7 @@ describe('createCase integration test', () => {
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
-      status: 'New',
+      status: Case.STATUS_TYPES.new,
       userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
@@ -149,7 +149,7 @@ describe('createCase integration test', () => {
     expect(docketsSectionInbox).toMatchObject([
       {
         assigneeName: null,
-        caseStatus: 'New',
+        caseStatus: Case.STATUS_TYPES.new,
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {
@@ -157,7 +157,6 @@ describe('createCase integration test', () => {
           eventCode: 'P',
           filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         isInitializeCase: true,
         messages: [

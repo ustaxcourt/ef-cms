@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  WORKITEM,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -13,7 +13,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @returns {Promise<User[]>} the internal users
  */
 exports.getInternalUsersInteractor = async ({ applicationContext }) => {
-  if (!isAuthorized(applicationContext.getCurrentUser(), WORKITEM)) {
+  if (
+    !isAuthorized(
+      applicationContext.getCurrentUser(),
+      ROLE_PERMISSIONS.WORKITEM,
+    )
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 

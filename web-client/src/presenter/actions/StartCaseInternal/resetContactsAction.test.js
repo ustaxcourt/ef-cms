@@ -1,15 +1,16 @@
 import { ContactFactory } from '../../../../../shared/src/business/entities/contacts/ContactFactory';
+import { applicationContext } from '../../../applicationContext';
+import { presenter } from '../../presenter';
 import { resetContactsAction } from './resetContactsAction';
 import { runAction } from 'cerebral/test';
+
+presenter.providers.applicationContext = applicationContext;
 
 describe('resetContactsAction', () => {
   it('clears the contactPrimary except for countryType for a domestic address', async () => {
     const { state } = await runAction(resetContactsAction, {
+      modules: { presenter },
       state: {
-        constants: {
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
         form: {
           contactPrimary: {
             address1: '123 Abc Ln',
@@ -34,11 +35,8 @@ describe('resetContactsAction', () => {
 
   it('clears the contactPrimary except for countryType (which should be set back to the domestic default) for an international address', async () => {
     const { state } = await runAction(resetContactsAction, {
+      modules: { presenter },
       state: {
-        constants: {
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
         form: {
           contactPrimary: {
             address1: '123 Abc Ln',
@@ -63,11 +61,8 @@ describe('resetContactsAction', () => {
 
   it('clears the contactPrimary except for countryType and clears the contactSecondary except for countryType', async () => {
     const { state } = await runAction(resetContactsAction, {
+      modules: { presenter },
       state: {
-        constants: {
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
         form: {
           contactPrimary: {
             address1: '123 Abc Ln',

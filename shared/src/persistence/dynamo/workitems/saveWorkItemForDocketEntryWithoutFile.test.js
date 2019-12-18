@@ -24,7 +24,7 @@ describe('saveWorkItemForDocketEntryWithoutFile', () => {
     });
   });
 
-  it('invokes the peristence layer 4 times to store the work item, user and section inbox records, and work item mapping record', async () => {
+  it('invokes the persistence layer 4 times to store the work item, user and section inbox records, and work item mapping record', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',

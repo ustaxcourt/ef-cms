@@ -1,161 +1,187 @@
 import { formatWorkItem } from './formattedWorkQueue';
+import { orderBy } from 'lodash';
 import { state } from 'cerebral';
-import _ from 'lodash';
+
+export const formatDocumentWorkItems = ({ applicationContext, workItems }) => {
+  const allWorkItems = orderBy(workItems, 'createdAt', 'desc').filter(
+    workItem => !workItem.hideFromPendingMessages,
+  );
+  const incompleteWorkItems = allWorkItems
+    .filter(items => !items.completedAt)
+    .map(items =>
+      formatWorkItem({
+        applicationContext,
+        workItem: items,
+      }),
+    );
+  const completedWorkItems = allWorkItems
+    .filter(items => items.completedAt)
+    .map(items => {
+      const formatted = formatWorkItem({
+        applicationContext,
+        workItem: items,
+      });
+      formatted.messages = formatted.messages.filter(
+        message => !message.message.includes('Served on IRS'),
+      );
+      return formatted;
+    });
+  const qcWorkItem = allWorkItems.filter(item => !item.isInternal)[0];
+
+  return { completedWorkItems, incompleteWorkItems, qcWorkItem };
+};
 
 export const documentDetailHelper = (get, applicationContext) => {
-  let showSignDocumentButton = false;
-  const currentUser = applicationContext.getCurrentUser();
-  const userRole = get(state.user.role);
+  const user = applicationContext.getCurrentUser();
+  const {
+    COURT_ISSUED_EVENT_CODES,
+    ORDER_TYPES_MAP,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+  const orderDocumentTypes = ORDER_TYPES_MAP.map(
+    orderType => orderType.documentType,
+  );
+  const courtIssuedDocumentTypes = COURT_ISSUED_EVENT_CODES.map(
+    courtIssuedDoc => courtIssuedDoc.documentType,
+  );
+  const STIPULATED_DECISION_DOCUMENT_TYPE = 'Stipulated Decision';
+  const newOrRecalledStatus = [STATUS_TYPES.new, STATUS_TYPES.recalled];
+
   const caseDetail = get(state.caseDetail);
-  const USER_ROLES = get(state.constants.USER_ROLES);
-
-  const SIGNED_STIPULATED_DECISION = 'Stipulated Decision';
-
-  let showServeDocumentButton = false;
-
+  const permissions = get(state.permissions);
   const documentId = get(state.documentId);
-  let isDraftDocument = false;
-  const document = (caseDetail.documents || []).find(
+  const document = caseDetail.documents.find(
     item => item.documentId === documentId,
   );
-  let formattedDocument = {};
-  let documentEditUrl;
-  let isSigned = false;
-  let isStipDecision = false;
-  let isOrder = false;
-  if (document) {
-    formattedDocument = applicationContext
-      .getUtilities()
-      .formatDocument(applicationContext, document);
-    const allWorkItems = _.orderBy(
-      formattedDocument.workItems,
-      'createdAt',
-      'desc',
-    );
-    formattedDocument.workItems = (allWorkItems || [])
-      .filter(items => !items.completedAt)
-      .map(items =>
-        formatWorkItem({
-          USER_ROLES,
-          applicationContext,
-          workItem: items,
-        }),
-      );
-    formattedDocument.completedWorkItems = (allWorkItems || [])
-      .filter(items => items.completedAt)
-      .map(items => {
-        const formatted = formatWorkItem({
-          USER_ROLES,
-          applicationContext,
-          workItem: items,
-        });
-        formatted.messages = formatted.messages.filter(
-          message => !message.message.includes('Served on IRS'),
-        );
-        return formatted;
-      });
-    const qcItem = (allWorkItems || []).filter(item => !item.isInternal)[0];
-
-    if (formattedDocument.qcByUser) {
-      formattedDocument.qcInfo = {
-        date: applicationContext
-          .getUtilities()
-          .formatDateString(formattedDocument.qcAt, 'MMDDYY'),
-        name: formattedDocument.qcByUser.name,
-      };
-    } else if (qcItem && qcItem.completedAt) {
-      formattedDocument.qcInfo = {
-        date: applicationContext
-          .getUtilities()
-          .formatDateString(qcItem.completedAt, 'MMDDYY'),
-        name: qcItem.completedBy,
-      };
-    }
-
-    formattedDocument.signUrl =
-      formattedDocument.documentType === 'Stipulated Decision'
-        ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/edit-order/${formattedDocument.documentId}/sign`;
-
-    formattedDocument.editUrl =
-      formattedDocument.documentType === 'Stipulated Decision'
-        ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/edit-order/${formattedDocument.documentId}`;
-
-    const stipulatedWorkItem = formattedDocument.workItems.find(
-      workItem =>
-        workItem.document.documentType === 'Proposed Stipulated Decision' &&
-        workItem.assigneeId === currentUser.userId &&
-        !workItem.completedAt,
-    );
-
-    // Check all documents associated with the case
-    // to see if there is a signed stip decision
-    const signedDocument = caseDetail.documents.find(
-      doc => doc.documentType === SIGNED_STIPULATED_DECISION && !doc.archived,
-    );
-
-    showSignDocumentButton =
-      !!stipulatedWorkItem &&
-      currentUser.role === USER_ROLES.adc &&
-      !signedDocument;
-
-    showServeDocumentButton =
-      document.status !== 'served' &&
-      currentUser.role === USER_ROLES.docketClerk &&
-      document.documentType === SIGNED_STIPULATED_DECISION;
-
-    const { ORDER_TYPES_MAP } = applicationContext.getConstants();
-
-    isSigned = !!document.signedAt;
-    isStipDecision = document.documentType === 'Stipulated Decision';
-    isOrder = !!ORDER_TYPES_MAP.find(
-      order => order.documentType === document.documentType,
-    );
-    isDraftDocument =
-      (isStipDecision && !isSigned) || (!document.servedAt && isOrder);
-
-    if (isDraftDocument) {
-      documentEditUrl =
-        document.documentType === 'Stipulated Decision'
-          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-          : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`;
-    }
+  if (!document) {
+    return;
   }
 
-  const formattedDocumentIsPetition =
-    (formattedDocument && formattedDocument.isPetition) || false;
-  const showCaseDetailsEdit = ['New', 'Recalled'].includes(caseDetail.status);
-  const showCaseDetailsView = ['Batched for IRS'].includes(caseDetail.status);
-  const showDocumentInfoTab =
-    formattedDocumentIsPetition && (showCaseDetailsEdit || showCaseDetailsView);
+  const formattedDocument = applicationContext
+    .getUtilities()
+    .formatDocument(applicationContext, document);
 
-  const showDocumentViewerTopMargin =
-    !showServeDocumentButton &&
-    (!showSignDocumentButton &&
-      (!['New', 'Recalled'].includes(caseDetail.status) ||
-        !formattedDocument.isPetition));
+  const {
+    completedWorkItems,
+    incompleteWorkItems,
+    qcWorkItem,
+  } = formatDocumentWorkItems({
+    applicationContext,
+    workItems: formattedDocument.workItems,
+  });
+  formattedDocument.completedWorkItems = completedWorkItems;
+  formattedDocument.workItems = incompleteWorkItems;
+
+  if (formattedDocument.qcByUser) {
+    formattedDocument.qcInfo = {
+      date: applicationContext
+        .getUtilities()
+        .formatDateString(formattedDocument.qcAt, 'MMDDYY'),
+      name: formattedDocument.qcByUser.name,
+    };
+  } else if (qcWorkItem && qcWorkItem.completedAt) {
+    formattedDocument.qcInfo = {
+      date: applicationContext
+        .getUtilities()
+        .formatDateString(qcWorkItem.completedAt, 'MMDDYY'),
+      name: qcWorkItem.completedBy,
+    };
+  }
+
+  const isStipDecision =
+    document.documentType === STIPULATED_DECISION_DOCUMENT_TYPE;
+
+  formattedDocument.signUrl = isStipDecision
+    ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
+    : `/case-detail/${caseDetail.docketNumber}/edit-order/${formattedDocument.documentId}/sign`;
+
+  formattedDocument.editUrl = isStipDecision
+    ? `/case-detail/${caseDetail.docketNumber}/documents/${formattedDocument.documentId}/sign`
+    : `/case-detail/${caseDetail.docketNumber}/edit-order/${formattedDocument.documentId}`;
+
+  const stipulatedWorkItem = formattedDocument.workItems.find(
+    workItem =>
+      workItem.document.documentType === 'Proposed Stipulated Decision' &&
+      workItem.assigneeId === user.userId &&
+      !workItem.completedAt,
+  );
+
+  // Check all documents associated with the case
+  // to see if there is a signed stip decision
+  const signedDocument = caseDetail.documents.find(
+    doc =>
+      doc.documentType === STIPULATED_DECISION_DOCUMENT_TYPE && !doc.archived,
+  );
+
+  const showSignDocumentButton =
+    permissions.COURT_ISSUED_DOCUMENT &&
+    !!stipulatedWorkItem &&
+    !signedDocument;
+
+  const isSigned = !!document.signedAt;
+  const isNotServed = !document.servedAt;
+  const isDocumentOnDocketRecord = caseDetail.docketRecord.find(
+    docketEntry => docketEntry.documentId === document.documentId,
+  );
+  const isOrder = orderDocumentTypes.includes(document.documentType);
+  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+    document.documentType,
+  );
+  const isDraftDocument =
+    isNotServed &&
+    (isStipDecision ||
+      (isOrder && !isDocumentOnDocketRecord) ||
+      (isCourtIssuedDocument && !isDocumentOnDocketRecord));
+
+  const showServeToIrsButton =
+    newOrRecalledStatus.includes(caseDetail.status) &&
+    formattedDocument.isPetition &&
+    user.role === USER_ROLES.petitionsClerk;
+  const showRecallButton =
+    caseDetail.status === STATUS_TYPES.batchedForIRS &&
+    formattedDocument.isPetition;
+
+  const showCaseDetailsEdit = newOrRecalledStatus.includes(caseDetail.status);
+  const showCaseDetailsView = [STATUS_TYPES.batchedForIRS].includes(
+    caseDetail.status,
+  );
+  const showDocumentInfoTab =
+    formattedDocument.isPetition &&
+    (showCaseDetailsEdit || showCaseDetailsView);
 
   const showViewOrdersNeededButton =
-    ((document && document.status === 'served') ||
-      caseDetail.status === 'Batched for IRS') &&
-    userRole === USER_ROLES.petitionsClerk;
+    (document.status === 'served' ||
+      caseDetail.status === STATUS_TYPES.batchedForIRS) &&
+    user.role === USER_ROLES.petitionsClerk;
+
+  const showPrintCaseConfirmationButton =
+    document.status === 'served' && formattedDocument.isPetition === true;
+
+  const showAddDocketEntryButton = permissions.DOCKET_ENTRY && isDraftDocument;
 
   return {
-    documentEditUrl,
+    createdFiledLabel: isOrder ? 'Created' : 'Filed', // Should actually be all court-issued documents
     formattedDocument,
     isDraftDocument,
     showAction: (action, workItemId) => {
       const actions = get(state.workItemActions);
       return actions[workItemId] === action;
     },
+    showAddDocketEntryButton,
     showCaseDetailsEdit,
     showCaseDetailsView,
     showConfirmEditOrder: isSigned && isOrder,
+    showCreatedFiled: (!isOrder && !isCourtIssuedDocument) || isDraftDocument,
     showDocumentInfoTab,
-    showDocumentViewerTopMargin,
+    showEditDocketEntry:
+      !isDraftDocument &&
+      permissions.DOCKET_ENTRY &&
+      formattedDocument.isPetition === false,
+    showPrintCaseConfirmationButton,
+    showRecallButton,
     showRemoveSignature: isOrder && isSigned,
-    showServeDocumentButton,
+    showServeToIrsButton,
     showSignDocumentButton,
     showViewOrdersNeededButton,
   };

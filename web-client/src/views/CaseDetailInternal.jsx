@@ -1,8 +1,8 @@
 import { AddToTrialModal } from './CaseDetail/AddToTrialModal';
 import { BlockFromTrialModal } from './CaseDetail/BlockFromTrialModal';
-import { Button } from '../ustc-ui/Button/Button';
 import { CaseDeadlinesInternal } from './CaseDetail/CaseDeadlinesInternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
+import { CaseDetailPendingReportList } from './CaseDetail/CaseDetailPendingReportList';
 import { CaseInformationInternal } from './CaseDetail/CaseInformationInternal';
 import { CaseNotes } from './CaseDetail/CaseNotes';
 import { CreateCaseDeadlineModalDialog } from './CaseDetail/CreateCaseDeadlineModalDialog';
@@ -30,7 +30,6 @@ export const CaseDetailInternal = connect(
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
-    setCaseToReadyForTrialSequence: sequences.setCaseToReadyForTrialSequence,
     showModal: state.showModal,
     token: state.token,
   },
@@ -39,17 +38,37 @@ export const CaseDetailInternal = connect(
     caseDetailHelper,
     formattedCaseDetail,
     setCaseDetailPageTabSequence,
-    setCaseToReadyForTrialSequence,
     showModal,
     token,
   }) => {
     return (
       <>
         <CaseDetailHeader />
-        <section className="usa-section grid-container">
+        <section
+          className="usa-section grid-container"
+          id="case-detail-internal"
+        >
           <SuccessNotification />
           <ErrorNotification />
-          <CaseDeadlinesInternal />
+          <Tabs
+            bind="caseDetailPage.deadlinesTab"
+            className="classic-horizontal-header3 tab-border"
+          >
+            <Tab
+              id="tab-case-deadlines"
+              tabName="caseDeadlines"
+              title="Deadlines"
+            >
+              <CaseDeadlinesInternal />
+            </Tab>
+            <Tab
+              id="tab-pending-report"
+              tabName="pendingReport"
+              title="Pending Report"
+            >
+              <CaseDetailPendingReportList />
+            </Tab>
+          </Tabs>
 
           <div>
             <div className="title">
@@ -105,7 +124,7 @@ export const CaseDetailInternal = connect(
                   <PartyInformation />
                 </div>
               </Tab>
-              {caseDetailHelper.showNotes && (
+              {caseDetailHelper.showCaseNotes && (
                 <Tab id="tab-case-notes" tabName="caseNotes" title="Notes">
                   <CaseNotes />
                 </Tab>
@@ -120,6 +139,7 @@ export const CaseDetailInternal = connect(
               {formattedCaseDetail.contactPrimary && (
                 <a
                   aria-label="View PDF"
+                  className="usa-button usa-button--unstyled margin-right-1"
                   href={`${baseUrl}/documents/${
                     formattedCaseDetail.docketNumber
                   }_${formattedCaseDetail.contactPrimary.name.replace(
@@ -131,12 +151,6 @@ export const CaseDetailInternal = connect(
                   Batch Zip Download
                 </a>
               )}
-              <Button
-                secondary
-                onClick={() => setCaseToReadyForTrialSequence()}
-              >
-                Set Case Status to Ready for Trial
-              </Button>
             </>
           )}
         </section>

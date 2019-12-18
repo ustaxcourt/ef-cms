@@ -9,7 +9,7 @@ const {
 describe('Edit a case caption from case detail header', function() {
   before(() => {
     cy.seed();
-    navigateToCaseDetail('petitionsclerk', '101-19');
+    navigateToCaseDetail('docketclerk', '101-19');
     getEditCaseCaptionButton().click();
     getCaptionTextArea()
       .clear()

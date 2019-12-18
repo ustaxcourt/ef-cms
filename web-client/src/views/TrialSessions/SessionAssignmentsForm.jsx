@@ -5,11 +5,12 @@ import React from 'react';
 export const SessionAssignmentsForm = connect(
   {
     form: state.form,
+    judges: state.judges,
+    trialClerks: state.trialClerks,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
-    users: state.users,
   },
-  ({ form, updateTrialSessionFormDataSequence, users }) => {
+  ({ form, judges, trialClerks, updateTrialSessionFormDataSequence }) => {
     return (
       <>
         <h2 className="margin-top-4">Session Assignments</h2>
@@ -27,12 +28,12 @@ export const SessionAssignmentsForm = connect(
               onChange={e => {
                 updateTrialSessionFormDataSequence({
                   key: e.target.name,
-                  value: users.find(judge => judge.userId === e.target.value),
+                  value: judges.find(judge => judge.userId === e.target.value),
                 });
               }}
             >
               <option value="">- Select -</option>
-              {users.map((judge, idx) => (
+              {judges.map((judge, idx) => (
                 <option key={idx} value={judge.userId}>
                   {judge.name}
                 </option>
@@ -52,20 +53,23 @@ export const SessionAssignmentsForm = connect(
               aria-describedby="trial-clerk-label"
               className="usa-select"
               id="trial-clerk"
-              name="trialClerk"
-              value={form.trialClerk || ''}
+              name="trialClerkId"
+              value={form.trialClerkId || ''}
               onChange={e => {
                 updateTrialSessionFormDataSequence({
                   key: e.target.name,
-                  value: e.target.value,
+                  value: trialClerks.find(
+                    trialClerk => trialClerk.userId === e.target.value,
+                  ),
                 });
               }}
             >
               <option value="">- Select -</option>
-              {/* hardcoding these for #1191 - will be dynamic at some point */}
-              <option value="Bob Barker">Bob Barker</option>
-              <option value="Bill Dance">Bill Dance</option>
-              <option value="Jerry Seinfeld">Jerry Seinfeld</option>
+              {trialClerks.map((trialClerk, idx) => (
+                <option key={idx} value={trialClerk.userId}>
+                  {trialClerk.name}
+                </option>
+              ))}
             </select>
           </div>
 

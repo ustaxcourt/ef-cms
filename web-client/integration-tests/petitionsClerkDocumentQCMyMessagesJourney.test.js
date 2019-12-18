@@ -1,4 +1,11 @@
 import { fakeFile, setupTest } from './helpers';
+import petitionerAddNewCaseToTestObj from './journey/petitionerAddNewCaseToTestObj';
+import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
+import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
+import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
+import petitionerLogin from './journey/petitionerLogIn';
+import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
+import petitionerSignsOut from './journey/petitionerSignsOut';
 import petitionsClerkBulkAssignsCases from './journey/petitionsClerkBulkAssignsCases';
 import petitionsClerkCreatesMessage from './journey/petitionsClerkCreatesMessage';
 import petitionsClerkGetsMyDocumentQCInboxCount from './journey/petitionsClerkGetsMyDocumentQCInboxCount';
@@ -12,13 +19,6 @@ import petitionsClerkViewsMyDocumentQC from './journey/petitionsClerkViewsMyDocu
 import petitionsClerkViewsMyMessagesInbox from './journey/petitionsClerkViewsMyMessagesInbox';
 import petitionsClerkViewsSectionDocumentQC from './journey/petitionsClerkViewsSectionDocumentQC';
 import petitionsClerkViewsUnreadMessage from './journey/petitionsClerkViewsUnreadMessage';
-import taxPayerSignsOut from './journey/taxpayerSignsOut';
-import taxpayerAddNewCaseToTestObj from './journey/taxpayerAddNewCaseToTestObj';
-import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
-import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
-import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
-import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
 
 const test = setupTest();
 
@@ -34,18 +34,18 @@ describe('Petitions Clerk Document QC Journey', () => {
   petitionsClerkViewsMyDocumentQC(test, true);
   petitionsClerkSignsOut(test);
 
-  taxpayerLogin(test);
+  petitionerLogin(test);
 
   // Create multiple cases for testing
   for (let i = 0; i < caseCreationCount; i++) {
-    taxpayerNavigatesToCreateCase(test);
-    taxpayerChoosesProcedureType(test);
-    taxpayerChoosesCaseType(test);
-    taxpayerCreatesNewCase(test, fakeFile);
-    taxpayerAddNewCaseToTestObj(test);
+    petitionerNavigatesToCreateCase(test);
+    petitionerChoosesProcedureType(test);
+    petitionerChoosesCaseType(test);
+    petitionerCreatesNewCase(test, fakeFile);
+    petitionerAddNewCaseToTestObj(test);
   }
 
-  taxPayerSignsOut(test);
+  petitionerSignsOut(test);
 
   petitionsClerkLogIn(test);
   petitionsClerkViewsSectionDocumentQC(test);

@@ -5,7 +5,7 @@ const {
 } = require('../../errors/errors');
 const {
   isAuthorized,
-  UPDATE_CASE,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
@@ -23,7 +23,7 @@ exports.recallPetitionFromIRSHoldingQueueInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, UPDATE_CASE)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError(
       'Unauthorized for recall from IRS Holding Queue',
     );

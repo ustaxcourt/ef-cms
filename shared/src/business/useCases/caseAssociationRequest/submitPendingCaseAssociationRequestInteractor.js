@@ -2,7 +2,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 const {
   isAuthorized,
-  PENDING_CASE_ASSOCIATE,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 
 /**
@@ -11,7 +11,7 @@ const {
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the case id
- * @returns {Promise<*>} the promise of the pending case assocation request
+ * @returns {Promise<*>} the promise of the pending case association request
  */
 exports.submitPendingCaseAssociationRequestInteractor = async ({
   applicationContext,
@@ -19,7 +19,9 @@ exports.submitPendingCaseAssociationRequestInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, PENDING_CASE_ASSOCIATE)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 

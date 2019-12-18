@@ -1,8 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PartiesRepresenting } from './PartiesRepresenting';
 import { RequestAccessDocumentForm } from './RequestAccessDocumentForm';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { reactSelectValue } from '../../ustc-ui/utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
@@ -33,7 +33,7 @@ export const RequestAccess = connect(
     validationErrors,
   }) => {
     return (
-      <React.Fragment>
+      <>
         <Focus>
           <h1
             className="margin-bottom-105"
@@ -43,7 +43,7 @@ export const RequestAccess = connect(
             Request Access to This Case
           </h1>
         </Focus>
-        <p className="margin-bottom-4 margin-top-0 required-statement">
+        <p className="margin-bottom-3 margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
         <div>
@@ -52,12 +52,7 @@ export const RequestAccess = connect(
           </h2>
         </div>
         <div className="blue-container">
-          <div
-            className={classNames(
-              'usa-form-group margin-bottom-0',
-              validationErrors.documentType && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.documentType}>
             <label
               className="usa-label"
               htmlFor="react-select-2-input"
@@ -106,34 +101,32 @@ export const RequestAccess = connect(
                 validateCaseAssociationRequestSequence();
               }}
             />
-            <Text
-              bind="validationErrors.documentType"
-              className="usa-error-message"
-            />
+          </FormGroup>
+          <RequestAccessDocumentForm />
+          {requestAccessHelper.showPartiesRepresenting && (
+            <PartiesRepresenting />
+          )}
+          <div className="margin-top-5">
+            <Button
+              id="submit-document"
+              type="submit"
+              onClick={() => {
+                reviewRequestAccessInformationSequence();
+              }}
+            >
+              Review Filing
+            </Button>
+            <Button
+              link
+              onClick={() => {
+                formCancelToggleCancelSequence();
+              }}
+            >
+              Cancel
+            </Button>
           </div>
         </div>
-        <RequestAccessDocumentForm />
-        {requestAccessHelper.showPartiesRepresenting && <PartiesRepresenting />}
-        <div className="margin-top-5">
-          <Button
-            id="submit-document"
-            type="submit"
-            onClick={() => {
-              reviewRequestAccessInformationSequence();
-            }}
-          >
-            Review Filing
-          </Button>
-          <Button
-            link
-            onClick={() => {
-              formCancelToggleCancelSequence();
-            }}
-          >
-            Cancel
-          </Button>
-        </div>
-      </React.Fragment>
+      </>
     );
   },
 );

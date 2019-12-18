@@ -5,6 +5,8 @@ module.exports = {
   completeDocketEntryQCLambda: require('./documents/completeDocketEntryQCLambda')
     .handler,
   createWorkItemLambda: require('./workitems/createWorkItemLambda').handler,
+  fileCourtIssuedDocketEntryLambda: require('./documents/fileCourtIssuedDocketEntryLambda')
+    .handler,
   fileCourtIssuedOrderToCaseLambda: require('./documents/fileCourtIssuedOrderToCaseLambda')
     .handler,
   fileDocketEntryToCaseLambda: require('./documents/fileDocketEntryToCaseLambda')
@@ -13,9 +15,11 @@ module.exports = {
     .handler,
   saveIntermediateDocketEntryLambda: require('./documents/saveIntermediateDocketEntryLambda')
     .handler,
-  serveSignedStipDecisionLambda: require('./cases/serveSignedStipDecisionLambda')
+  serveCourtIssuedDocumentLambda: require('./cases/serveCourtIssuedDocumentLambda')
     .handler,
   signDocumentLambda: require('./documents/signDocumentLambda').handler,
+  updateCourtIssuedDocketEntryLambda: require('./documents/updateCourtIssuedDocketEntryLambda')
+    .handler,
   updateCourtIssuedOrderToCaseLambda: require('./documents/updateCourtIssuedOrderToCaseLambda')
     .handler,
   updateDocketEntryOnCaseLambda: require('./documents/updateDocketEntryOnCaseLambda')

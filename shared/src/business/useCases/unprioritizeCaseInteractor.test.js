@@ -1,7 +1,7 @@
-const { unprioritizeCaseInteractor } = require('./unprioritizeCaseInteractor');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
 const { Case } = require('../entities/cases/Case');
+const { MOCK_CASE } = require('../../test/mockCase');
+const { unprioritizeCaseInteractor } = require('./unprioritizeCaseInteractor');
+const { User } = require('../entities/User');
 
 describe('unprioritizeCaseInteractor', () => {
   let applicationContext;
@@ -28,9 +28,9 @@ describe('unprioritizeCaseInteractor', () => {
           getCaseByCaseId: () =>
             Promise.resolve({
               ...MOCK_CASE,
-              status: Case.STATUS_TYPES.generalDocketReadyForTrial,
               highPriority: true,
               highPriorityReason: 'because',
+              status: Case.STATUS_TYPES.generalDocketReadyForTrial,
             }),
           updateCase: ({ caseToUpdate }) => caseToUpdate,
           updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsMock,
@@ -67,9 +67,9 @@ describe('unprioritizeCaseInteractor', () => {
           getCaseByCaseId: () =>
             Promise.resolve({
               ...MOCK_CASE,
-              status: Case.STATUS_TYPES.new,
               highPriority: true,
               highPriorityReason: 'because',
+              status: Case.STATUS_TYPES.new,
             }),
           updateCase: ({ caseToUpdate }) => caseToUpdate,
           updateCaseTrialSortMappingRecords: updateCaseTrialSortMappingRecordsMock,

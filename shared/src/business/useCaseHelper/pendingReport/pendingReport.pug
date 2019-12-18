@@ -1,0 +1,30 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    title Pending Report
+    style= styles
+  body
+    .page-container
+      .page-header
+        img.logo(src=logo)
+        h1.text-center United States Tax Court
+        p.text-center= reportTitle
+      table
+        thead
+          tr
+            th Docket
+            th Date filed
+            th Case name
+            th Filings and proceedings
+            th Case status
+            th Judge
+        tbody
+          each pendingItem in pendingItems
+            tr
+              td.no-wrap #{pendingItem.docketNumber}#{pendingItem.docketNumberSuffix}
+              td= pendingItem.formattedFiledDate
+              td= pendingItem.caseCaptionNames
+              td= pendingItem.formattedName
+              td= pendingItem.caseStatus
+              td= pendingItem.associatedJudgeFormatted

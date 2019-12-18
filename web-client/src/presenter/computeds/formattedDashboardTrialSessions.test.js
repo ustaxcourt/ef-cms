@@ -8,6 +8,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 const formattedDashboardTrialSessions = withAppContextDecorator(
   formattedDashboardTrialSessionsComputed,
+  applicationContext,
 );
 
 describe('formattedDashboardTrialSessions', () => {
@@ -120,10 +121,12 @@ describe('formattedDashboardTrialSessions', () => {
   });
 
   it('filter trial sessions by the logged in user', () => {
+    applicationContext.getCurrentUser = () => ({
+      userId: '1',
+    });
     const result = runCompute(formattedDashboardTrialSessions, {
       state: {
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: { userId: '1' },
       },
     });
 
@@ -132,21 +135,25 @@ describe('formattedDashboardTrialSessions', () => {
   });
 
   it('returns no trial sessions if judge userId does not match any trial sessions', () => {
+    applicationContext.getCurrentUser = () => ({
+      userId: '100',
+    });
     const result = runCompute(formattedDashboardTrialSessions, {
       state: {
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: { userId: '100' },
       },
     });
     expect(result.formattedRecentSessions.length).toBe(0);
     expect(result.formattedUpcomingSessions.length).toBe(0);
   });
 
-  it('returns no at most 5 trial sessions for judge userId', () => {
+  it('returns at most 5 trial sessions for judge userId', () => {
+    applicationContext.getCurrentUser = () => ({
+      userId: '6',
+    });
     const result = runCompute(formattedDashboardTrialSessions, {
       state: {
         trialSessions: TRIAL_SESSIONS_LIST,
-        user: { userId: '6' },
       },
     });
     expect(result.formattedRecentSessions.length).toBe(0);

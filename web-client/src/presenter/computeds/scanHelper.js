@@ -4,7 +4,7 @@ export const scanHelper = (get, applicationContext) => {
   // Master switch for the time being
   const scanFeatureEnabled = true;
 
-  const user = get(state.user);
+  const user = applicationContext.getCurrentUser();
   const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);
   const configScriptLoaded = get(state.scanner.configScriptLoaded);
   const applicationForWaiverOfFilingFeeFileCompleted = !!get(

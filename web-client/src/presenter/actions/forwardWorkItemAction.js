@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store needed for when setting caseDetail
  * @param {object} providers.applicationContext needed for getting the forwardWorkItem use case
  * @param {object} providers.props the cerebral props object containing workItemId
- * @returns {object} the success alert object used for displayinng a green alert at the top of the page
+ * @returns {object} the success alert object used for displaying a green alert at the top of the page
  */
 export const forwardWorkItemAction = async ({
   applicationContext,
@@ -20,7 +20,7 @@ export const forwardWorkItemAction = async ({
   const { workItemId } = props;
 
   const form = get(state.form)[props.workItemId];
-  const userId = get(state.user.userId);
+  const { userId } = applicationContext.getCurrentUser();
 
   const updatedWorkItem = await applicationContext
     .getUseCases()

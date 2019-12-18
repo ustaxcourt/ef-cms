@@ -17,9 +17,10 @@ const {
 const {
   sendPetitionToIRSHoldingQueueInteractor,
 } = require('../useCases/sendPetitionToIRSHoldingQueueInteractor');
+const { Case } = require('../entities/cases/Case');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { User } = require('../entities/User');
 
 const DATE = '2019-03-01T22:54:06.000Z';
@@ -48,7 +49,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
           address3: 'Anim est dolor animi',
           city: 'Rerum eaque cupidata',
           countryType: 'domestic',
-          email: 'taxpayer@example.com',
+          email: 'petitioner@example.com',
           name: 'Rick Petitioner',
           phone: '+1 (599) 681-5435',
           postalCode: '89614',
@@ -76,7 +77,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       applicationContext,
       caseId,
     });
-    expect(theCase.status).toEqual('New');
+    expect(theCase.status).toEqual(Case.STATUS_TYPES.new);
 
     await sendPetitionToIRSHoldingQueueInteractor({
       applicationContext,
@@ -87,7 +88,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       applicationContext,
       caseId,
     });
-    expect(theCase.status).toEqual('Batched for IRS');
+    expect(theCase.status).toEqual(Case.STATUS_TYPES.batchedForIRS);
 
     let petitionSectionOutbox = await getDocumentQCBatchedForSectionInteractor({
       applicationContext,
@@ -97,14 +98,13 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       {
         assigneeId: '63784910-c1af-4476-8988-a02f92da8e09',
         assigneeName: 'IRS Holding Queue',
-        caseStatus: 'Batched for IRS',
+        caseStatus: Case.STATUS_TYPES.batchedForIRS,
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {
           documentType: 'Petition',
           filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         isInitializeCase: true,
         messages: [
@@ -143,7 +143,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       applicationContext,
       caseId,
     });
-    expect(theCase.status).toEqual('Recalled');
+    expect(theCase.status).toEqual(Case.STATUS_TYPES.recalled);
 
     const petitionSectionInbox = await getDocumentQCInboxForSectionInteractor({
       applicationContext,
@@ -153,7 +153,7 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Petitionsclerk',
-        caseStatus: 'Recalled',
+        caseStatus: Case.STATUS_TYPES.recalled,
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {
@@ -198,14 +198,13 @@ describe('recallPetitionFromIRSHoldingQueueInteractor integration test', () => {
       {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Petitionsclerk',
-        caseStatus: 'Recalled',
+        caseStatus: Case.STATUS_TYPES.recalled,
         docketNumber: '101-19',
         docketNumberSuffix: 'S',
         document: {
           documentType: 'Petition',
           filedBy: 'Petr. Rick Petitioner',
           userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-          workItems: [],
         },
         isInitializeCase: true,
         messages: [

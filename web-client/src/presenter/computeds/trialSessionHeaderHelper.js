@@ -1,22 +1,23 @@
 import { state } from 'cerebral';
 
-export const trialSessionHeaderHelper = (get, applicationContext) => {
+export const trialSessionHeaderHelper = get => {
   const trialSession = get(state.trialSession);
-  const sessionJudgeId = get(state.trialSession.judge.userId);
   if (!trialSession) return {};
-
-  const assignedJudgeIsCurrentUser =
-    sessionJudgeId == applicationContext.getCurrentUser().userId;
+  const judgeUser = get(state.judgeUser);
+  const judgeIsAssignedToSession =
+    judgeUser &&
+    trialSession.judge &&
+    trialSession.judge.userId === judgeUser.userId;
 
   const showSwitchToSessionDetail =
-    assignedJudgeIsCurrentUser &&
+    judgeIsAssignedToSession &&
     'TrialSessionWorkingCopy'.includes(get(state.currentPage));
   const showSwitchToWorkingCopy =
-    assignedJudgeIsCurrentUser &&
+    judgeIsAssignedToSession &&
     'TrialSessionDetail'.includes(get(state.currentPage));
 
   const result = {
-    assignedJudgeIsCurrentUser,
+    assignedJudgeIsCurrentUser: judgeIsAssignedToSession,
     showSwitchToSessionDetail,
     showSwitchToWorkingCopy,
     title: 'Session Working Copy',

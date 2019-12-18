@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  WORKITEM,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { cloneDeep } = require('lodash');
@@ -25,7 +25,7 @@ exports.assignWorkItemsInteractor = async ({
   workItemId,
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
-  if (!isAuthorized(authorizedUser, WORKITEM)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSIGN_WORK_ITEM)) {
     throw new UnauthorizedError('Unauthorized to assign work item');
   }
 

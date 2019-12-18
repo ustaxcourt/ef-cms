@@ -230,8 +230,7 @@ export const PendingMessages = connect(
                           className="usa-label"
                           htmlFor={`complete-message-${idx}`}
                         >
-                          Add message{' '}
-                          <span className="usa-hint">(optional)</span>
+                          Add note <span className="usa-hint">(optional)</span>
                         </label>
                         <textarea
                           className="usa-textarea margin-bottom-5"

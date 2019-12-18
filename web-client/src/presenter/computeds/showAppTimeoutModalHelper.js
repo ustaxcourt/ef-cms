@@ -1,8 +1,8 @@
 import { state } from 'cerebral';
 
-export const showAppTimeoutModalHelper = get => {
+export const showAppTimeoutModalHelper = (get, applicationContext) => {
   const showModalState = get(state.showModal);
-  const currentUser = get(state.user);
+  const currentUser = applicationContext.getCurrentUser();
   const hasCurrentUser = !!currentUser;
   const isUploading = get(state.isUploading);
 

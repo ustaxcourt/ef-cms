@@ -21,7 +21,7 @@ export const CaseListPetitioner = connect(
                 className="new-case tablet-full-width margin-right-0"
                 href="/before-filing-a-petition"
                 icon="file"
-                id="init-file-petition"
+                id="file-a-petition"
               >
                 File a Petition
               </Button>
@@ -38,9 +38,9 @@ export const CaseListPetitioner = connect(
           >
             <thead>
               <tr>
-                <th>Docket Number</th>
-                <th>Case Name</th>
-                <th>Date Filed</th>
+                <th>Docket number</th>
+                <th>Case name</th>
+                <th>Date filed</th>
               </tr>
             </thead>
             <tbody>

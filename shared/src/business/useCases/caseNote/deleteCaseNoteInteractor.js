@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  TRIAL_SESSION_WORKING_COPY,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -15,13 +15,17 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.deleteCaseNoteInteractor = async ({ applicationContext, caseId }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, TRIAL_SESSION_WORKING_COPY)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const judgeUser = await applicationContext
+    .getUseCases()
+    .getJudgeForUserChambersInteractor({ applicationContext, user });
 
   return await applicationContext.getPersistenceGateway().deleteCaseNote({
     applicationContext,
     caseId,
-    userId: user.userId,
+    userId: judgeUser.userId,
   });
 };

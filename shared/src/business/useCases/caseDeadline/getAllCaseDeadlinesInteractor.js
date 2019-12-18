@@ -1,9 +1,9 @@
 const {
-  CASE_DEADLINE,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
 const { Case } = require('../../entities/cases/Case');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * getAllCaseDeadlinesInteractor
@@ -15,7 +15,7 @@ const { Case } = require('../../entities/cases/Case');
 exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, CASE_DEADLINE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

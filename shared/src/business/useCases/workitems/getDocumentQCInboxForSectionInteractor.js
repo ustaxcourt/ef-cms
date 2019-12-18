@@ -1,7 +1,11 @@
-const { ADC_SECTION, DOCKET_SECTION } = require('../../entities/WorkQueue');
+const {
+  DOCKET_SECTION,
+  IRS_BATCH_SYSTEM_SECTION,
+  PETITIONS_SECTION,
+} = require('../../entities/WorkQueue');
 const {
   isAuthorized,
-  WORKITEM,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -18,24 +22,22 @@ exports.getDocumentQCInboxForSectionInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, WORKITEM)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
     );
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
-  const sectionToExcept =
-    user.section === ADC_SECTION ? DOCKET_SECTION : section;
+  let sectionToShow = section;
+  if (section !== IRS_BATCH_SYSTEM_SECTION && section !== PETITIONS_SECTION) {
+    sectionToShow = DOCKET_SECTION;
+  }
 
   const workItems = await applicationContext
     .getPersistenceGateway()
     .getDocumentQCInboxForSection({
       applicationContext,
-      section: sectionToExcept,
+      section: sectionToShow,
     });
 
   return workItems;

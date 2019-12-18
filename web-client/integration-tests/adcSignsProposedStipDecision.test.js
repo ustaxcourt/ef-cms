@@ -16,14 +16,14 @@ import practitionerLogin from './journey/practitionerLogIn';
 import practitionerSignsOut from './journey/practitionerSignsOut';
 import practitionerViewsCaseDetail from './journey/practitionerViewsCaseDetail';
 
-// taxpayer
-import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
-import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
-import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
-import taxpayerLogIn from './journey/taxpayerLogIn';
-import taxpayerNavigatesToCreateCase from './journey/taxpayerNavigatesToCreateCase';
-import taxpayerSignsOut from './journey/taxpayerSignsOut';
-import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
+// petitioner
+import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
+import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
+import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
+import petitionerLogIn from './journey/petitionerLogIn';
+import petitionerNavigatesToCreateCase from './journey/petitionerNavigatesToCreateCase';
+import petitionerSignsOut from './journey/petitionerSignsOut';
+import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 // adc
 import adcLogIn from './journey/adcLogIn';
@@ -34,11 +34,7 @@ import adcViewsStipulatedDecisionForSigning from './journey/adcViewsStipulatedDe
 
 const test = setupTest({
   useCases: {
-    loadPDFForSigningInteractor: () => {
-      return new Promise(resolve => {
-        resolve(null);
-      });
-    },
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
   },
 });
 
@@ -46,21 +42,17 @@ describe('Sr. Attorney Signs Proposed Stipulated Decision', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
     global.window.pdfjsObj = {
-      getData: () => {
-        return new Promise(resolve => {
-          resolve(new Uint8Array(fakeFile));
-        });
-      },
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
     };
   });
 
-  taxpayerLogIn(test);
-  taxpayerNavigatesToCreateCase(test);
-  taxpayerChoosesProcedureType(test);
-  taxpayerChoosesCaseType(test);
-  taxpayerCreatesNewCase(test, fakeFile);
-  taxpayerViewsDashboard(test);
-  taxpayerSignsOut(test);
+  petitionerLogIn(test);
+  petitionerNavigatesToCreateCase(test);
+  petitionerChoosesProcedureType(test);
+  petitionerChoosesCaseType(test);
+  petitionerCreatesNewCase(test, fakeFile);
+  petitionerViewsDashboard(test);
+  petitionerSignsOut(test);
 
   practitionerLogin(test);
   practitionerViewsCaseDetail(test);

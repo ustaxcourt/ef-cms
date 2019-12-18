@@ -1,3 +1,5 @@
+const { post } = require('../requests');
+
 /**
  * createCourtIssuedOrderPdfFromHtmlInteractor
  *
@@ -12,21 +14,18 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = ({
   docketNumberWithSuffix,
   htmlString,
 }) => {
-  return applicationContext
-    .getHttpClient()
-    .post(
-      `${applicationContext.getBaseUrl()}/api/court-issued-order`,
-      {
-        docketNumberWithSuffix,
-        htmlString,
-      },
-      {
-        headers: {
-          Accept: 'application/pdf',
-          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-        },
-        responseType: 'blob',
-      },
-    )
-    .then(response => new Blob([response.data], { type: 'application/pdf' }));
+  return post({
+    applicationContext,
+    body: {
+      docketNumberWithSuffix,
+      htmlString,
+    },
+    endpoint: '/api/court-issued-order',
+    headers: {
+      Accept: 'application/pdf',
+    },
+    options: {
+      responseType: 'blob',
+    },
+  });
 };

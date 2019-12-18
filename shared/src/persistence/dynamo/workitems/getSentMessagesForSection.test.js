@@ -12,14 +12,14 @@ describe('getSentMessagesForSection', () => {
             completedAt: 'today',
             completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
             isQC: true,
-            section: 'docket',
+            sentBySection: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
             completedAt: 'today',
             completedByUserId: 'bob',
             isQC: true,
-            section: 'docket',
+            sentBySection: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
           {
@@ -32,7 +32,7 @@ describe('getSentMessagesForSection', () => {
           {
             completedAt: null,
             isQC: false,
-            section: 'docket',
+            sentBySection: 'docket',
             userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
@@ -55,13 +55,13 @@ describe('getSentMessagesForSection', () => {
     };
     const items = await getSentMessagesForSection({
       applicationContext,
-      seciton: 'docket',
+      section: 'docket',
     });
     expect(items).toEqual([
       {
         completedAt: null,
         isQC: false,
-        section: 'docket',
+        sentBySection: 'docket',
         userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ]);

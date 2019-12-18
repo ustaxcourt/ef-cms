@@ -55,12 +55,12 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
     .sort(sortByDateAndDocketNumber(applicationContext))
     .map(d => ({
       ...d,
-      formattedDeadline: applicationContext
-        .getUtilities()
-        .formatDateString(d.deadlineDate, 'MMDDYY'),
       deadlineDateReal: applicationContext
         .getUtilities()
         .prepareDateFromString(d.deadlineDate),
+      formattedDeadline: applicationContext
+        .getUtilities()
+        .formatDateString(d.deadlineDate, 'MMDDYY'),
       formattedDocketNumber: `${d.docketNumber}${d.docketNumberSuffix || ''}`,
     }))
     .filter(d => filterByDate(d.deadlineDateReal));

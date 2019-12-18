@@ -55,7 +55,7 @@ export const WhatToExpect = () => (
       className="margin-right-0"
       href="/before-filing-a-petition"
       icon="file"
-      id="init-file-petition"
+      id="file-a-petition"
     >
       File a Petition
     </Button>

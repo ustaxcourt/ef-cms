@@ -1,6 +1,6 @@
 const {
-  FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -12,15 +12,14 @@ exports.uploadExternalDocumentsInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   const uploadedDocumentPromises = [];
 
   /**
-   * uploads a document and then immediately processes it to scan for viruses,
-   * validate the PDF content, and sanitize the document.
+   * uploads a document and then immediately processes it to scan for viruses and validate the document
    *
    * @param {string} documentLabel the string identifying which documentFile and progressFunction
    * @returns {Promise<string>} the documentId returned from a successful upload
@@ -33,6 +32,7 @@ exports.uploadExternalDocumentsInteractor = async ({
         document: documentFiles[documentLabel],
         onUploadProgress: progressFunctions[documentLabel],
       });
+
     await applicationContext.getUseCases().virusScanPdfInteractor({
       applicationContext,
       documentId,
@@ -41,10 +41,7 @@ exports.uploadExternalDocumentsInteractor = async ({
       applicationContext,
       documentId,
     });
-    await applicationContext.getUseCases().sanitizePdfInteractor({
-      applicationContext,
-      documentId,
-    });
+
     return documentId;
   };
 

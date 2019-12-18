@@ -1,3 +1,5 @@
+import { Case } from '../../../shared/src/business/entities/cases/Case';
+
 export default test => {
   return it('Petitions clerk runs batch process', async () => {
     test.setState('caseDetail', {});
@@ -5,7 +7,9 @@ export default test => {
       docketNumber: test.docketNumber,
     });
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
+    expect(test.getState('caseDetail.status')).toEqual(
+      Case.STATUS_TYPES.batchedForIRS,
+    );
 
     await test.runSequence('runBatchProcessSequence');
 
@@ -15,7 +19,7 @@ export default test => {
     });
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
     expect(test.getState('caseDetail.status')).toEqual(
-      'General Docket - Not at Issue',
+      Case.STATUS_TYPES.generalDocket,
     );
   });
 };

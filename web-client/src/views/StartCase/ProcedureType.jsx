@@ -1,8 +1,7 @@
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const ProcedureType = connect(
   {
@@ -14,13 +13,7 @@ export const ProcedureType = connect(
   },
   ({ legend, onChange, procedureTypes, validationErrors, value }) => {
     return (
-      <div
-        className={classNames(
-          validationErrors.procedureType
-            ? 'usa-form-group usa-form-group--error'
-            : 'usa-form-group',
-        )}
-      >
+      <FormGroup errorText={validationErrors.procedureType}>
         <fieldset
           className="usa-fieldset margin-bottom-0"
           id="procedure-type-radios"
@@ -32,7 +25,7 @@ export const ProcedureType = connect(
             <div className="usa-radio usa-radio__inline" key={procedureType}>
               <input
                 aria-describedby="procedure-type-legend"
-                aria-labelledby={`proc-type-${idx}`}
+                aria-labelledby={`procedure-type-${idx}`}
                 checked={value === procedureType}
                 className="usa-radio__input"
                 data-type={procedureType}
@@ -45,15 +38,14 @@ export const ProcedureType = connect(
               <label
                 className="usa-radio__label"
                 htmlFor={procedureType}
-                id={`proc-type-${idx}`}
+                id={`procedure-type-${idx}`}
               >
                 {procedureType} case
               </label>
             </div>
           ))}
         </fieldset>
-        <ValidationText field="procedureType" />
-      </div>
+      </FormGroup>
     );
   },
 );

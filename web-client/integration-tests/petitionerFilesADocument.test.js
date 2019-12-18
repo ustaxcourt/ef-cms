@@ -1,32 +1,32 @@
 import { fakeFile, setupTest } from './helpers';
-import taxpayerCancelsCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
-import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
-import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
-import taxpayerFilesDocumentForCase from './journey/taxpayerFilesDocumentForCase';
-import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxpayerSignsOut from './journey/taxpayerSignsOut';
-import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
-import taxpayerViewsCaseDetailAfterFilingDocument from './journey/taxpayerViewsCaseDetailAfterFilingDocument';
-import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
+import petitionerCancelsCreateCase from './journey/petitionerCancelsCreateCase';
+import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
+import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
+import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
+import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
+import petitionerLogin from './journey/petitionerLogIn';
+import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
+import petitionerSignsOut from './journey/petitionerSignsOut';
+import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
+import petitionerViewsCaseDetailAfterFilingDocument from './journey/petitionerViewsCaseDetailAfterFilingDocument';
+import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 const test = setupTest();
 
-describe('Taxpayer files document', () => {
+describe('petitioner files document', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
-  taxpayerLogin(test);
-  taxpayerCancelsCreateCase(test);
-  taxpayerNavigatesToCreateCase(test);
-  taxpayerChoosesProcedureType(test);
-  taxpayerChoosesCaseType(test);
-  taxpayerCreatesNewCase(test, fakeFile);
-  taxpayerViewsDashboard(test);
-  taxpayerViewsCaseDetail(test);
-  taxpayerFilesDocumentForCase(test, fakeFile);
-  taxpayerViewsCaseDetailAfterFilingDocument(test);
-  taxpayerSignsOut(test);
+  petitionerLogin(test);
+  petitionerCancelsCreateCase(test);
+  petitionerNavigatesToCreateCase(test);
+  petitionerChoosesProcedureType(test);
+  petitionerChoosesCaseType(test);
+  petitionerCreatesNewCase(test, fakeFile);
+  petitionerViewsDashboard(test);
+  petitionerViewsCaseDetail(test);
+  petitionerFilesDocumentForCase(test, fakeFile);
+  petitionerViewsCaseDetailAfterFilingDocument(test);
+  petitionerSignsOut(test);
 });

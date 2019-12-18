@@ -1,3 +1,4 @@
+import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { formattedTrialSessionDetails } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
@@ -16,12 +17,12 @@ describe('formattedTrialSessionDetails', () => {
     state: 'CT',
     term: 'Fall',
     termYear: '2019',
-    trialClerk: 'Test Trial Clerk',
+    trialClerk: { name: 'Test Trial Clerk' },
     trialLocation: 'Hartford, Connecticut',
   };
 
   it('returns undefined if state.trialSession is undefined', () => {
-    const result = formattedTrialSessionDetails({});
+    const result = formattedTrialSessionDetails({ applicationContext });
     expect(result).toBeUndefined();
   });
 
@@ -176,7 +177,7 @@ describe('formattedTrialSessionDetails', () => {
       '101-18',
     );
     expect(result.formattedEligibleCases[0].caseCaptionNames).toEqual(
-      'Test Taxpayer',
+      'Test Petitioner',
     );
     expect(result.formattedEligibleCases[1].docketNumberWithSuffix).toEqual(
       '101-18W',
@@ -202,16 +203,16 @@ describe('formattedTrialSessionDetails', () => {
             caseCaption: 'Test Person & Someone Else, Petitioners',
             docketNumber: '102-17',
             docketNumberSuffix: 'W',
-            status: 'Closed',
+            status: Case.STATUS_TYPES.closed,
           },
           {
             ...MOCK_CASE,
             caseCaption: 'Someone Else, Petitioner',
+            disposition: 'omg',
             docketNumber: '101-16',
             docketNumberSuffix: 'S',
             removedFromTrial: true,
             removedFromTrialDate: '2019-03-01T21:40:46.415Z',
-            disposition: 'omg',
           },
         ],
       },
@@ -224,7 +225,7 @@ describe('formattedTrialSessionDetails', () => {
       'Test Person & Someone Else',
     );
     expect(result.allCases[2].docketNumberWithSuffix).toEqual('101-18');
-    expect(result.allCases[2].caseCaptionNames).toEqual('Test Taxpayer');
+    expect(result.allCases[2].caseCaptionNames).toEqual('Test Petitioner');
 
     expect(result.openCases.length).toEqual(1);
     expect(result.inactiveCases.length).toEqual(2);

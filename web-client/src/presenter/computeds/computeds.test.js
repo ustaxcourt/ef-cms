@@ -18,6 +18,7 @@ describe('formatted case details computed', () => {
       state: {
         caseDetail: {
           caseCaption: 'Brett Osborne, Petitioner',
+          docketRecord: [],
           documents: [
             {
               createdAt: '2018-11-21T20:49:28.192Z',
@@ -44,6 +45,7 @@ describe('formatted case details computed', () => {
         cases: [
           {
             caseCaption: 'Brett Osborne, Petitioner',
+            docketRecord: [],
             documents: [
               {
                 createdAt: '2018-11-21T20:49:28.192Z',

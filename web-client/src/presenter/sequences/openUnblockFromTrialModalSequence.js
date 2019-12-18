@@ -1,6 +1,5 @@
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const openUnblockFromTrialModalSequence = [
-  set(state.showModal, 'UnblockFromTrialModal'),
+  setShowModalFactoryAction('UnblockFromTrialModal'),
 ];

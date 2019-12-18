@@ -1,14 +1,17 @@
 const moment = require('moment');
+const {
+  MOCK_CASE,
+  MOCK_CASE_WITHOUT_PENDING,
+} = require('../../../test/mockCase');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
-const { TrialSession } = require('../trialSessions/TrialSession');
-const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
-const { WorkItem } = require('../WorkItem');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
+const { WorkItem } = require('../WorkItem');
 
 describe('Case entity', () => {
   let applicationContext;
@@ -104,6 +107,23 @@ describe('Case entity', () => {
     });
   });
 
+  describe('toRawObject', () => {
+    beforeEach(() => {
+      jest.spyOn(Case.prototype, 'doesHavePendingItems');
+    });
+
+    afterEach(() => {
+      Case.prototype.doesHavePendingItems.mockRestore();
+    });
+
+    it('calls own function to update values after decorated toRawObject', () => {
+      const myCase = new Case({}, { applicationContext });
+      const result = myCase.toRawObject();
+      expect(Case.prototype.doesHavePendingItems).toHaveBeenCalled();
+      expect(result.hasPendingItems).toBeFalsy();
+    });
+  });
+
   describe('isValid', () => {
     it('Creates a valid case', () => {
       const myCase = new Case(MOCK_CASE, {
@@ -138,7 +158,7 @@ describe('Case entity', () => {
               documentType: 'testing',
             },
           ],
-          petitioners: [{ name: 'Test Taxpayer' }],
+          petitioners: [{ name: 'Test Petitioner' }],
         },
         {
           applicationContext,
@@ -241,8 +261,8 @@ describe('Case entity', () => {
         {
           ...MOCK_CASE,
           blocked: true,
-          blockedReason: 'something',
           blockedDate: '2019-03-01T21:42:29.073Z',
+          blockedReason: 'something',
         },
         {
           applicationContext,
@@ -372,30 +392,32 @@ describe('Case entity', () => {
   describe('getCaseCaption', () => {
     it('party type Petitioner', () => {
       const caseTitle = Case.getCaseCaption(MOCK_CASE);
-      expect(caseTitle).toEqual('Test Taxpayer, Petitioner');
+      expect(caseTitle).toEqual('Test Petitioner, Petitioner');
     });
 
     it('party type Petitioner & Spouse', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
         contactSecondary: {
-          name: 'Test Taxpayer 2',
+          name: 'Test Petitioner 2',
         },
+        partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
       });
-      expect(caseTitle).toEqual('Test Taxpayer & Test Taxpayer 2, Petitioners');
+      expect(caseTitle).toEqual(
+        'Test Petitioner & Test Petitioner 2, Petitioners',
+      );
     });
 
     it('party type Petitioner & Deceased Spouse', () => {
       const caseTitle = Case.getCaseCaption({
         ...MOCK_CASE,
-        partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
         contactSecondary: {
-          name: 'Test Taxpayer 2',
+          name: 'Test Petitioner 2',
         },
+        partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
       });
       expect(caseTitle).toEqual(
-        'Test Taxpayer & Test Taxpayer 2, Deceased, Test Taxpayer, Surviving Spouse, Petitioners',
+        'Test Petitioner & Test Petitioner 2, Deceased, Test Petitioner, Surviving Spouse, Petitioners',
       );
     });
 
@@ -404,10 +426,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.estate,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Estate of Test Taxpayer, Deceased, Test Taxpayer 2, Executor, Petitioner(s)',
+        'Estate of Test Petitioner, Deceased, Test Petitioner 2, Executor, Petitioner(s)',
       );
     });
 
@@ -417,7 +439,7 @@ describe('Case entity', () => {
         partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
       });
       expect(caseTitle).toEqual(
-        'Estate of Test Taxpayer, Deceased, Petitioner',
+        'Estate of Test Petitioner, Deceased, Petitioner',
       );
     });
 
@@ -426,10 +448,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.trust,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer, Test Taxpayer 2, Trustee, Petitioner(s)',
+        'Test Petitioner, Test Petitioner 2, Trustee, Petitioner(s)',
       );
     });
 
@@ -438,7 +460,7 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.corporation,
       });
-      expect(caseTitle).toEqual('Test Taxpayer, Petitioner');
+      expect(caseTitle).toEqual('Test Petitioner, Petitioner');
     });
 
     it('party type Partnership Tax Matters', () => {
@@ -446,10 +468,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer, Test Taxpayer 2, Tax Matters Partner, Petitioner',
+        'Test Petitioner, Test Petitioner 2, Tax Matters Partner, Petitioner',
       );
     });
 
@@ -458,10 +480,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer, Test Taxpayer 2, A Partner Other Than the Tax Matters Partner, Petitioner',
+        'Test Petitioner, Test Petitioner 2, A Partner Other Than the Tax Matters Partner, Petitioner',
       );
     });
 
@@ -470,10 +492,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer, Test Taxpayer 2, Partnership Representative, Petitioner(s)',
+        'Test Petitioner, Test Petitioner 2, Partnership Representative, Petitioner(s)',
       );
     });
 
@@ -482,10 +504,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.conservator,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer, Test Taxpayer 2, Conservator, Petitioner',
+        'Test Petitioner, Test Petitioner 2, Conservator, Petitioner',
       );
     });
 
@@ -494,10 +516,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.guardian,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer, Test Taxpayer 2, Guardian, Petitioner',
+        'Test Petitioner, Test Petitioner 2, Guardian, Petitioner',
       );
     });
 
@@ -506,10 +528,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.custodian,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer, Test Taxpayer 2, Custodian, Petitioner',
+        'Test Petitioner, Test Petitioner 2, Custodian, Petitioner',
       );
     });
 
@@ -518,10 +540,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer, Minor, Test Taxpayer 2, Next Friend, Petitioner',
+        'Test Petitioner, Minor, Test Petitioner 2, Next Friend, Petitioner',
       );
     });
 
@@ -530,10 +552,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer, Incompetent, Test Taxpayer 2, Next Friend, Petitioner',
+        'Test Petitioner, Incompetent, Test Petitioner 2, Next Friend, Petitioner',
       );
     });
 
@@ -542,7 +564,7 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.donor,
       });
-      expect(caseTitle).toEqual('Test Taxpayer, Donor, Petitioner');
+      expect(caseTitle).toEqual('Test Petitioner, Donor, Petitioner');
     });
 
     it('party type Transferee', () => {
@@ -550,7 +572,7 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.transferee,
       });
-      expect(caseTitle).toEqual('Test Taxpayer, Transferee, Petitioner');
+      expect(caseTitle).toEqual('Test Petitioner, Transferee, Petitioner');
     });
 
     it('party type Surviving Spouse', () => {
@@ -558,10 +580,10 @@ describe('Case entity', () => {
         ...MOCK_CASE,
         partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
       };
-      mockCase.contactPrimary.secondaryName = 'Test Taxpayer 2';
+      mockCase.contactPrimary.secondaryName = 'Test Petitioner 2';
       const caseTitle = Case.getCaseCaption(mockCase);
       expect(caseTitle).toEqual(
-        'Test Taxpayer, Deceased, Test Taxpayer 2, Surviving Spouse, Petitioner',
+        'Test Petitioner, Deceased, Test Petitioner 2, Surviving Spouse, Petitioner',
       );
     });
   });
@@ -569,24 +591,24 @@ describe('Case entity', () => {
   describe('getCaseCaptionNames', () => {
     it('party type Petitioner', () => {
       const caseCaptionNames = Case.getCaseCaptionNames(
-        'Test Taxpayer, Petitioner',
+        'Test Petitioner, Petitioner',
       );
-      expect(caseCaptionNames).toEqual('Test Taxpayer');
+      expect(caseCaptionNames).toEqual('Test Petitioner');
     });
 
     it('party type Petitioner & Spouse', () => {
       const caseCaptionNames = Case.getCaseCaptionNames(
-        'Test Taxpayer & Test Taxpayer 2, Petitioners',
+        'Test Petitioner & Test Petitioner 2, Petitioners',
       );
-      expect(caseCaptionNames).toEqual('Test Taxpayer & Test Taxpayer 2');
+      expect(caseCaptionNames).toEqual('Test Petitioner & Test Petitioner 2');
     });
 
     it('party type Estate with an Executor/Personal Representative/Fiduciary/etc.', () => {
       const caseCaptionNames = Case.getCaseCaptionNames(
-        'Estate of Test Taxpayer 2, Deceased, Test Taxpayer, Executor, Petitioner(s)',
+        'Estate of Test Petitioner 2, Deceased, Test Petitioner, Executor, Petitioner(s)',
       );
       expect(caseCaptionNames).toEqual(
-        'Estate of Test Taxpayer 2, Deceased, Test Taxpayer, Executor',
+        'Estate of Test Petitioner 2, Deceased, Test Petitioner, Executor',
       );
     });
   });
@@ -597,7 +619,7 @@ describe('Case entity', () => {
         applicationContext,
       });
       caseRecord.sendToIRSHoldingQueue();
-      expect(caseRecord.status).toEqual('Batched for IRS');
+      expect(caseRecord.status).toEqual(Case.STATUS_TYPES.batchedForIRS);
     });
   });
 
@@ -1056,7 +1078,7 @@ describe('Case entity', () => {
           assigneeId: 'bob',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: 'new',
+          caseStatus: Case.STATUS_TYPES.new,
           caseTitle: 'testing',
           docketNumber: '101-18',
           document: {},
@@ -1073,7 +1095,7 @@ describe('Case entity', () => {
           assigneeId: 'bob',
           assigneeName: 'bob',
           caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          caseStatus: 'new',
+          caseStatus: Case.STATUS_TYPES.new,
           caseTitle: 'testing',
           docketNumber: '101-18',
           document: {},
@@ -1231,8 +1253,8 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          receivedAt: '2018-12-12T05:00:00Z',
           procedureType: 'Small',
+          receivedAt: '2018-12-12T05:00:00Z',
         },
         {
           applicationContext,
@@ -1250,8 +1272,8 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          receivedAt: '2018-12-12T05:00:00Z',
           caseType: 'passport',
+          receivedAt: '2018-12-12T05:00:00Z',
         },
         {
           applicationContext,
@@ -1269,8 +1291,8 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          receivedAt: '2018-12-12T05:00:00Z',
           caseType: 'cdp (lien/levy)',
+          receivedAt: '2018-12-12T05:00:00Z',
         },
         {
           applicationContext,
@@ -1288,9 +1310,9 @@ describe('Case entity', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
-          receivedAt: '2018-12-12T05:00:00Z',
-          procedureType: 'Small',
           highPriority: true,
+          procedureType: 'Small',
+          receivedAt: '2018-12-12T05:00:00Z',
         },
         {
           applicationContext,
@@ -1306,11 +1328,12 @@ describe('Case entity', () => {
   });
 
   describe('setAsCalendared', () => {
-    it('should set case as calendared with only judge and trialSessionId', () => {
+    it('should set case as calendared with only judge and trialSessionId if the trial session is calendared', () => {
       const myCase = new Case(MOCK_CASE, {
         applicationContext,
       });
       myCase.setAsCalendared({
+        isCalendared: true,
         judge: {
           name: 'Judge Judy',
         },
@@ -1320,7 +1343,7 @@ describe('Case entity', () => {
       expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
     });
 
-    it('should set case as calendared with all trial session fields', () => {
+    it('should set case as calendared with all trial session fields if the trial session is calendared', () => {
       const myCase = new Case(
         {
           ...MOCK_CASE,
@@ -1331,6 +1354,7 @@ describe('Case entity', () => {
       );
       const trialSession = new TrialSession(
         {
+          isCalendared: true,
           judge: { name: 'Judge Buch' },
           maxCases: 100,
           sessionType: 'Regular',
@@ -1345,7 +1369,39 @@ describe('Case entity', () => {
 
       expect(myCase.status).toEqual(Case.STATUS_TYPES.calendared);
       expect(myCase.trialDate).toBeTruthy();
-      expect(myCase.trialJudge).toBeTruthy();
+      expect(myCase.associatedJudge).toBeTruthy();
+      expect(myCase.trialLocation).toBeTruthy();
+      expect(myCase.trialSessionId).toBeTruthy();
+      expect(myCase.trialTime).toBeTruthy();
+    });
+
+    it('should set all trial session fields but not set the case as calendared if the trial session is not calendared', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: false,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, AL',
+        },
+        { applicationContext },
+      );
+      myCase.setAsCalendared(trialSession);
+
+      expect(myCase.status).toEqual(Case.STATUS_TYPES.new);
+      expect(myCase.trialDate).toBeTruthy();
+      expect(myCase.associatedJudge).toBeTruthy();
       expect(myCase.trialLocation).toBeTruthy();
       expect(myCase.trialSessionId).toBeTruthy();
       expect(myCase.trialTime).toBeTruthy();
@@ -1354,11 +1410,28 @@ describe('Case entity', () => {
 
   describe('closeCase', () => {
     it('should update the status of the case to closed', () => {
-      const myCase = new Case(MOCK_CASE, {
-        applicationContext,
-      });
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: true,
+          blockedDate: '2019-03-01T21:40:46.415Z',
+          blockedReason: 'something else',
+          highPriority: true,
+          highPriorityReason: 'something',
+        },
+        {
+          applicationContext,
+        },
+      );
       myCase.closeCase();
-      expect(myCase.status).toEqual(Case.STATUS_TYPES.closed);
+      expect(myCase).toMatchObject({
+        blocked: false,
+        blockedDate: undefined,
+        blockedReason: undefined,
+        highPriority: false,
+        highPriorityReason: undefined,
+        status: Case.STATUS_TYPES.closed,
+      });
     });
   });
 
@@ -1627,6 +1700,7 @@ describe('Case entity', () => {
       );
       const trialSession = new TrialSession(
         {
+          isCalendared: true,
           judge: { name: 'Judge Buch' },
           maxCases: 100,
           sessionType: 'Regular',
@@ -1641,7 +1715,7 @@ describe('Case entity', () => {
 
       expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
       expect(caseToUpdate.trialDate).toBeTruthy();
-      expect(caseToUpdate.trialJudge).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
       expect(caseToUpdate.trialLocation).toBeTruthy();
       expect(caseToUpdate.trialSessionId).toBeTruthy();
       expect(caseToUpdate.trialTime).toBeTruthy();
@@ -1652,10 +1726,245 @@ describe('Case entity', () => {
         Case.STATUS_TYPES.generalDocketReadyForTrial,
       );
       expect(caseToUpdate.trialDate).toBeFalsy();
-      expect(caseToUpdate.trialJudge).toBeFalsy();
+      expect(caseToUpdate.associatedJudge).toEqual(Case.CHIEF_JUDGE);
       expect(caseToUpdate.trialLocation).toBeFalsy();
       expect(caseToUpdate.trialSessionId).toBeFalsy();
       expect(caseToUpdate.trialTime).toBeFalsy();
+    });
+  });
+
+  describe('removeFromTrialWithAssociatedJudge', () => {
+    it('removes the case from trial, updating the associated judge if one is passed in', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, AL',
+        },
+        { applicationContext },
+      );
+      caseToUpdate.setAsCalendared(trialSession);
+
+      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(caseToUpdate.trialDate).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialLocation).toBeTruthy();
+      expect(caseToUpdate.trialSessionId).toBeTruthy();
+      expect(caseToUpdate.trialTime).toBeTruthy();
+
+      caseToUpdate.removeFromTrialWithAssociatedJudge('Judge Armen');
+
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Armen');
+      expect(caseToUpdate.trialDate).toBeFalsy();
+      expect(caseToUpdate.trialLocation).toBeFalsy();
+      expect(caseToUpdate.trialSessionId).toBeFalsy();
+      expect(caseToUpdate.trialTime).toBeFalsy();
+    });
+
+    it('removes the case from trial, leaving the associated judge unchanged if one is not passed in', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+      const trialSession = new TrialSession(
+        {
+          isCalendared: true,
+          judge: { name: 'Judge Buch' },
+          maxCases: 100,
+          sessionType: 'Regular',
+          startDate: '2025-03-01T00:00:00.000Z',
+          term: 'Fall',
+          termYear: '2025',
+          trialLocation: 'Birmingham, AL',
+        },
+        { applicationContext },
+      );
+      caseToUpdate.setAsCalendared(trialSession);
+
+      expect(caseToUpdate.status).toEqual(Case.STATUS_TYPES.calendared);
+      expect(caseToUpdate.trialDate).toBeTruthy();
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialLocation).toBeTruthy();
+      expect(caseToUpdate.trialSessionId).toBeTruthy();
+      expect(caseToUpdate.trialTime).toBeTruthy();
+
+      caseToUpdate.removeFromTrialWithAssociatedJudge();
+
+      expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+      expect(caseToUpdate.trialDate).toBeFalsy();
+      expect(caseToUpdate.trialLocation).toBeFalsy();
+      expect(caseToUpdate.trialSessionId).toBeFalsy();
+      expect(caseToUpdate.trialTime).toBeFalsy();
+    });
+  });
+
+  describe('hasPendingItems', () => {
+    it('should not show the case as having pending items if no documents are pending', () => {
+      const caseToUpdate = new Case(
+        {
+          ...MOCK_CASE_WITHOUT_PENDING,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(caseToUpdate.hasPendingItems).toEqual(false);
+      expect(caseToUpdate.doesHavePendingItems()).toEqual(false);
+    });
+    it('should show the case as having pending items if some documents are pending', () => {
+      const mockCase = {
+        ...MOCK_CASE,
+      };
+      mockCase.documents[0].pending = true;
+
+      const caseToUpdate = new Case(mockCase, {
+        applicationContext,
+      });
+
+      expect(caseToUpdate.hasPendingItems).toEqual(true);
+      expect(caseToUpdate.doesHavePendingItems()).toEqual(true);
+    });
+  });
+
+  describe('setCaseStatus', () => {
+    it('should update the case status and set the associated judge to the chief judge if the new status is General Docket - Not At Issue', () => {
+      const updatedCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: 'Judge Buch',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      updatedCase.setCaseStatus(Case.STATUS_TYPES.generalDocket);
+
+      expect(updatedCase.status).toEqual(Case.STATUS_TYPES.generalDocket);
+      expect(updatedCase.associatedJudge).toEqual(Case.CHIEF_JUDGE);
+    });
+
+    it('should update the case status and leave the associated judge unchanged if the new status is Closed', () => {
+      const updatedCase = new Case(
+        {
+          ...MOCK_CASE,
+          associatedJudge: 'Judge Buch',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      updatedCase.setCaseStatus(Case.STATUS_TYPES.closed);
+
+      expect(updatedCase.status).toEqual(Case.STATUS_TYPES.closed);
+      expect(updatedCase.associatedJudge).toEqual('Judge Buch');
+    });
+  });
+
+  describe('setCaseCaption', () => {
+    it('should set the case caption and update the case title', () => {
+      const updatedCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      updatedCase.setCaseCaption('A whole new caption');
+
+      expect(updatedCase.caseCaption).toEqual('A whole new caption');
+      expect(updatedCase.caseTitle).toEqual(
+        'A whole new caption v. Commissioner of Internal Revenue, Respondent',
+      );
+    });
+  });
+
+  describe('getCaseContacts', () => {
+    const contactPrimary = {
+      name: 'Test Petitioner',
+      title: 'Executor',
+    };
+
+    const contactSecondary = { name: 'Contact Secondary' };
+
+    const practitioners = [
+      {
+        name: 'Petitioner One',
+      },
+    ];
+
+    const respondents = [
+      {
+        name: 'Respondent One',
+      },
+    ];
+
+    it('should return an object containing all contact types', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary,
+          contactSecondary,
+          practitioners,
+          respondents,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const caseContacts = testCase.getCaseContacts();
+      expect(caseContacts).toMatchObject({
+        contactPrimary,
+        contactSecondary,
+        practitioners,
+        respondents,
+      });
+    });
+
+    it('should return an object contacts matching the `shape` if provided', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary,
+          contactSecondary,
+          practitioners,
+          respondents,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const caseContacts = testCase.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      });
+      expect(caseContacts).toMatchObject({
+        contactPrimary,
+        contactSecondary,
+      });
     });
   });
 });

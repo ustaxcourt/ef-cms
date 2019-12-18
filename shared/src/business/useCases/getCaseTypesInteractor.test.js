@@ -9,7 +9,7 @@ describe('Get case types', () => {
       getCurrentUser: () => {
         return {
           role: User.ROLES.petitioner,
-          userId: 'taxpayer',
+          userId: 'petitioner',
         };
       },
     };

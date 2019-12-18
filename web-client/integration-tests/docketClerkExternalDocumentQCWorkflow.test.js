@@ -38,11 +38,11 @@ describe('Create a work item', () => {
   });
 
   it('login as a tax payer and create a case', async () => {
-    await loginAs(test, 'taxpayer');
+    await loginAs(test, 'petitioner');
     caseDetail = await uploadPetition(test);
   });
 
-  it('taxpayer uploads the external documents', async () => {
+  it('petitioner uploads the external documents', async () => {
     await uploadExternalDecisionDocument(test);
     await uploadExternalDecisionDocument(test);
     await uploadExternalDecisionDocument(test);

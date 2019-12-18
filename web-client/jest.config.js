@@ -1,15 +1,25 @@
 module.exports = {
   collectCoverage: true,
+  collectCoverageFrom: [
+    'src/**/*.js',
+    '!integration-tests/**/*.js',
+    '!integration-tests-public/**/*.js',
+    '!src/applicationContext.js',
+    '!src/router.js',
+    '!src/index.dev.js',
+    '!src/index.prod.js',
+  ],
   coverageDirectory: './coverage',
   coverageThreshold: {
     global: {
-      branches: 90,
+      branches: 93,
       functions: 95,
       lines: 95,
       statements: 95,
     },
   },
   globals: {
+    atob: x => x,
     window: { document: {} },
   },
   testEnvironment: 'node',
@@ -20,7 +30,4 @@ module.exports = {
     '^.+\\.jsx$': 'babel-jest',
   },
   verbose: true,
-  // TODO: remove 'e2e/**/*.js' - this is including e2e tests in our global coverage %
-  // TODO: add in '!src/**/*.test.js' - this is including unit tests in our global coverage %
-  // collectCoverageFrom: ['src/presenter/**/*.js', '!src/**/*.test.js'],
 };

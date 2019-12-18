@@ -2,11 +2,11 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { formatDateString } = require('../../utilities/DateHandler');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
+const { formatDateString } = require('../../utilities/DateHandler');
+const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**
  *

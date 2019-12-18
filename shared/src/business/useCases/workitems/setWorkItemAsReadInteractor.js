@@ -1,6 +1,6 @@
 const {
-  GET_READ_MESSAGES,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -18,13 +18,11 @@ exports.setWorkItemAsReadInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, GET_READ_MESSAGES)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.GET_READ_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return applicationContext.getPersistenceGateway().setWorkItemAsRead({
-    applicationContext,
-    userId: user.userId,
-    workItemId,
-  });
+  return applicationContext
+    .getPersistenceGateway()
+    .setWorkItemAsRead({ applicationContext, userId: user.userId, workItemId });
 };

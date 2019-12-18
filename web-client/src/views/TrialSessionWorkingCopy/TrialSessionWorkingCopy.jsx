@@ -20,14 +20,12 @@ export const TrialSessionWorkingCopy = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     showModal: state.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
-    user: state.user,
   },
   ({
     batchDownloadTrialSessionSequence,
     formattedTrialSessionDetails,
     showModal,
     trialSessionHeaderHelper,
-    user,
   }) => {
     return (
       <>
@@ -36,7 +34,7 @@ export const TrialSessionWorkingCopy = connect(
           <div className="grid-row">
             <div className="grid-col-9">
               <h2 className="heading-1">
-                {user.name} - Session Copy
+                {formattedTrialSessionDetails.formattedJudge} - Session Copy
                 {trialSessionHeaderHelper.showSwitchToSessionDetail && (
                   <a
                     className="button-switch-box margin-left-2"
@@ -54,8 +52,8 @@ export const TrialSessionWorkingCopy = connect(
                 aria-label="Download batch of documents in a trial session"
                 onClick={() =>
                   batchDownloadTrialSessionSequence({
+                    allowRetry: true,
                     trialSessionId: formattedTrialSessionDetails.trialSessionId,
-                    zipName: formattedTrialSessionDetails.zipName,
                   })
                 }
               >
@@ -64,7 +62,6 @@ export const TrialSessionWorkingCopy = connect(
               </Button>
             </div>
           </div>
-
           <SuccessNotification />
           <ErrorNotification />
           <SessionNotes />

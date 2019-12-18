@@ -1,3 +1,4 @@
+import { FormGroup } from '../FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import React from 'react';
 import classNames from 'classnames';
@@ -7,9 +8,7 @@ export const TextArea = connect(props => {
   const ariaLabelledby = props['aria-labelledby'];
 
   return (
-    <div
-      className={classNames('usa-form-group', error && 'usa-form-group--error')}
-    >
+    <FormGroup errorText={error}>
       <label className="usa-label" htmlFor={id}>
         {label}
       </label>
@@ -20,7 +19,6 @@ export const TextArea = connect(props => {
         name={name}
         onChange={onChange}
       />
-      {error && <div className="usa-error-message beneath">{error}</div>}
-    </div>
+    </FormGroup>
   );
 });

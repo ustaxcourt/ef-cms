@@ -3,6 +3,7 @@ const client = require('../../dynamodbClientService');
 const {
   createMappingRecord,
 } = require('../../dynamo/helpers/createMappingRecord');
+const { User } = require('../../../business/entities/User');
 
 exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   delete user.password;
@@ -20,7 +21,7 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
       applicationContext,
     });
 
-    if (user.role === 'judge') {
+    if (user.role === User.ROLES.judge) {
       await client.put({
         Item: {
           pk: 'judge|user',
@@ -42,7 +43,8 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   });
 
   if (
-    (user.role === 'practitioner' || user.role === 'respondent') &&
+    (user.role === User.ROLES.practitioner ||
+      user.role === User.ROLES.respondent) &&
     user.name &&
     user.barNumber
   ) {
@@ -102,12 +104,27 @@ exports.createUser = async ({ applicationContext, user }) => {
       .promise();
     userId = response.User.Username;
   } catch (err) {
+    // the user already exists
     const response = await cognito
       .adminGetUser({
         UserPoolId: process.env.USER_POOL_ID,
         Username: user.email,
       })
       .promise();
+
+    await cognito
+      .adminUpdateUserAttributes({
+        UserAttributes: [
+          {
+            Name: 'custom:role',
+            Value: user.role,
+          },
+        ],
+        UserPoolId: process.env.USER_POOL_ID,
+        Username: response.Username,
+      })
+      .promise();
+
     userId = response.Username;
   }
 

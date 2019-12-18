@@ -12,7 +12,6 @@ describe('CaseNote', () => {
         userId: '"userId" is required',
       });
     });
-
     it('should be valid when all fields are present', () => {
       const entity = new CaseNote({
         caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

@@ -1,7 +1,7 @@
 const { put } = require('../../dynamodbClientService');
 
 /**
- * createUserrOutboxRecord
+ * createUserOutboxRecord
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -15,9 +15,9 @@ exports.createUserOutboxRecord = async ({
 }) => {
   await put({
     Item: {
+      gsi1pk: `workitem-${workItem.workItemId}`,
       pk: `user-outbox-${userId}`,
       sk: workItem.createdAt,
-      gsi1pk: `workitem-${workItem.workItemId}`,
       ...workItem,
     },
     applicationContext,

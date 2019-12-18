@@ -1,9 +1,9 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile } from '../../ustc-ui/Responsive/Responsive';
 import { NonstandardForm } from './NonstandardForm';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import {
   fileDocumentSecondaryOnChange,
@@ -13,7 +13,6 @@ import {
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
-import classNames from 'classnames';
 
 export const CompleteDocumentTypeSectionRemainder = connect(
   {
@@ -58,13 +57,11 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                 </h4>
               </Focus>
             </div>
-            <div
-              className={classNames(
-                'usa-form-group',
+            <FormGroup
+              errorText={
                 validationErrors.secondaryDocument &&
-                  validationErrors.secondaryDocument.documentType &&
-                  'usa-form-group--error',
-              )}
+                validationErrors.secondaryDocument.documentType
+              }
             >
               <label
                 className="usa-label"
@@ -128,11 +125,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                   Need help selecting a document?
                 </Button>
               </Mobile>
-              <Text
-                bind="validationErrors.secondaryDocument.documentType"
-                className="usa-error-message"
-              />
-            </div>
+            </FormGroup>
             {completeDocumentTypeSectionHelper.secondary
               .showNonstandardForm && (
               <NonstandardForm

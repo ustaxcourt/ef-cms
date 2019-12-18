@@ -2,10 +2,10 @@ const joi = require('joi-browser');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-const { replaceBracketed } = require('../utilities/replaceBracketed');
 const {
   SupportingDocumentInformationFactory,
 } = require('./externalDocument/SupportingDocumentInformationFactory');
+const { replaceBracketed } = require('../utilities/replaceBracketed');
 
 const {
   VALIDATION_ERROR_MESSAGES,
@@ -16,9 +16,9 @@ CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
   documentTitleTemplate: 'Select a document',
   eventCode: 'Select a document',
   exhibits: 'Enter selection for Exhibits.',
-  scenario: 'Select a document',
   representingPrimary: 'Select a party',
   representingSecondary: 'Select a party',
+  scenario: 'Select a document',
 };
 
 /**

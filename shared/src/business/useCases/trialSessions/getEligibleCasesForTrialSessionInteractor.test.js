@@ -76,4 +76,58 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
 
     expect(error).toBeUndefined();
   });
+
+  it('should return cases that are set for this session even if uncalendared', async () => {
+    const getCalendaredCasesForTrialSessionInteractorMock = jest.fn();
+
+    const associatedCase = {
+      ...MOCK_CASE,
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+    };
+    applicationContext = {
+      getCurrentUser: () => {
+        return new User({
+          name: 'Docket Clerk',
+          role: User.ROLES.docketClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => ({
+        getEligibleCasesForTrialSession: () => [MOCK_CASE],
+        getTrialSessionById: () => ({
+          ...MOCK_TRIAL,
+          caseOrder: [
+            {
+              caseId: associatedCase.caseId,
+              isManuallyAdded: true,
+            },
+          ],
+          isCalendared: false,
+        }),
+      }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCases: () => ({
+        getCalendaredCasesForTrialSessionInteractor: () => {
+          getCalendaredCasesForTrialSessionInteractorMock();
+          return [associatedCase];
+        },
+      }),
+    };
+
+    let error;
+    let result;
+
+    try {
+      result = await getEligibleCasesForTrialSessionInteractor({
+        applicationContext,
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      });
+    } catch (e) {
+      error = e;
+    }
+
+    expect(getCalendaredCasesForTrialSessionInteractorMock).toHaveBeenCalled();
+    expect(error).toBeUndefined();
+    expect(result).toMatchObject([associatedCase, MOCK_CASE]);
+  });
 });

@@ -9,60 +9,62 @@ const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
 Size.whitelist = fontSizes;
 Quill.register(Size, true);
 
-export const TextEditor = class TextEditorComponent extends React.Component {
-  render() {
-    const inlineStylesFontSizes = {};
+export const TextEditor = ({
+  defaultValue,
+  updateFormValueSequence,
+  updateScreenMetadataSequence,
+}) => {
+  const inlineStylesFontSizes = {};
 
-    fontSizes.forEach(item => {
-      inlineStylesFontSizes[item] = `font-size: ${item};`;
-    });
+  fontSizes.forEach(item => {
+    inlineStylesFontSizes[item] = `font-size: ${item};`;
+  });
 
-    return (
-      <ReactQuill
-        defaultValue={this.props.defaultValue}
-        formats={[
-          'size',
-          'bold',
-          'italic',
-          'underline',
-          'bullet',
-          'list',
-          'indent',
-        ]}
-        modules={{
-          toolbar: [
-            [
-              {
-                size: fontSizes,
-              },
-            ],
-            ['bold', 'italic', 'underline'],
-            [
-              { list: 'bullet' },
-              { list: 'ordered' },
-              { indent: '-1' },
-              { indent: '+1' },
-            ],
-          ],
-        }}
-        onChange={(content, delta, source, editor) => {
-          const fullDelta = editor.getContents();
-          const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
-            inlineStyles: {
-              size: inlineStylesFontSizes,
+  return (
+    <ReactQuill
+      defaultValue={defaultValue}
+      formats={[
+        'size',
+        'bold',
+        'italic',
+        'underline',
+        'bullet',
+        'list',
+        'indent',
+      ]}
+      modules={{
+        toolbar: [
+          [
+            {
+              size: fontSizes,
             },
-          });
-          const html = converter.convert();
-          this.props.updateFormValueSequence({
-            key: 'richText',
-            value: html,
-          });
-          this.props.updateScreenMetadataSequence({
-            key: 'pristine',
-            value: false,
-          });
-        }}
-      />
-    );
-  }
+          ],
+          ['bold', 'italic', 'underline'],
+          [
+            { list: 'bullet' },
+            { list: 'ordered' },
+            { indent: '-1' },
+            { indent: '+1' },
+          ],
+        ],
+      }}
+      onChange={(content, delta, source, editor) => {
+        const fullDelta = editor.getContents();
+        const converter = new QuillDeltaToHtmlConverter(fullDelta.ops, {
+          inlineStyles: {
+            size: inlineStylesFontSizes,
+          },
+        });
+        const html = converter.convert();
+        updateFormValueSequence({
+          key: 'richText',
+          value: html,
+        });
+        updateScreenMetadataSequence({
+          key: 'pristine',
+          value: false,
+        });
+      }}
+    />
+  );
 };

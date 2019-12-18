@@ -21,8 +21,18 @@ describe('castToISO', () => {
     );
   });
 
+  it('returns an iso string for 01-01-2009 when the date string of 2009 is passed in', () => {
+    expect(castToISO(applicationContext, '2009')).toEqual(
+      '2009-01-01T05:00:00.000Z',
+    );
+  });
+
   it('returns null when the date string passed in is invalid', () => {
     expect(castToISO(applicationContext, 'x-10-10')).toEqual('-1');
+  });
+
+  it('returns null when the date string passed in is an empty string', () => {
+    expect(castToISO(applicationContext, '')).toEqual(null);
   });
 
   it('returns the same iso string passed in when an iso string is passed in', () => {
@@ -37,7 +47,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
       state: {
-        caseDetail: {},
+        caseDetail: { payGovId: '' },
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
@@ -58,7 +68,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       combinedCaseDetailWithForm: {
         irsNoticeDate: '2009-01-01T05:00:00.000Z',
         payGovDate: '2009-01-01T05:00:00.000Z',
-        payGovId: undefined,
+        payGovId: null,
         receivedAt: '2009-03-03T05:00:00.000Z',
       },
     });
@@ -199,7 +209,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output.combinedCaseDetailWithForm.receivedAt).toEqual(null);
   });
 
-  it('delets the payGovDate if the user cleared the form', async () => {
+  it('deletes the payGovDate if the user cleared the form', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
 
@@ -225,5 +235,22 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       '-1',
     );
     // expect(results.output.combinedCaseDetailWithForm.payGovDate).toEqual(null);
+  });
+
+  it('adds the props.caseCaption to the combinedCaseDetailWithForm', async () => {
+    const results = await runAction(getFormCombinedWithCaseDetailAction, {
+      modules,
+      props: { caseCaption: 'Test Petitioner, Petitioner' },
+      state: {
+        caseDetail: {},
+        constants: {
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+        },
+        form: {},
+      },
+    });
+    expect(results.output.combinedCaseDetailWithForm.caseCaption).toEqual(
+      'Test Petitioner, Petitioner',
+    );
   });
 });

@@ -1,11 +1,10 @@
 import { Address } from './Address';
 import { Country } from './Country';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const ContactSecondary = connect(
   {
@@ -35,20 +34,18 @@ export const ContactSecondary = connect(
     return (
       <>
         {parentView === 'StartCase' ? (
-          <h3 className="margin-top-4 padding-left-205">
+          <h3 className="margin-top-4">
             {contactsHelper.contactSecondary.header}
           </h3>
         ) : (
           <h4>{contactsHelper.contactSecondary.header}</h4>
         )}
         <div className="blue-container contact-group">
-          <div
-            className={classNames(
-              'usa-form-group',
+          <FormGroup
+            errorText={
               validationErrors.contactSecondary &&
-                validationErrors.contactSecondary.name &&
-                'usa-form-group--error',
-            )}
+              validationErrors.contactSecondary.name
+            }
           >
             <label className="usa-label" htmlFor="secondaryName">
               {contactsHelper.contactSecondary.nameLabel}
@@ -70,16 +67,13 @@ export const ContactSecondary = connect(
                 });
               }}
             />
-            <ValidationText field="contactSecondary.name" />
-          </div>
+          </FormGroup>
           {contactsHelper.contactSecondary.displayInCareOf && (
-            <div
-              className={classNames(
-                'usa-form-group',
+            <FormGroup
+              errorText={
                 validationErrors.contactSecondary &&
-                  validationErrors.contactSecondary.inCareOf &&
-                  'usa-form-group--error',
-              )}
+                validationErrors.contactSecondary.inCareOf
+              }
             >
               <label className="usa-label" htmlFor="secondaryInCareOf">
                 {contactsHelper.contactSecondary.inCareOfLabel ? (
@@ -114,8 +108,7 @@ export const ContactSecondary = connect(
                   });
                 }}
               />
-              <ValidationText field="contactSecondary.inCareOf" />
-            </div>
+            </FormGroup>
           )}
           <Country
             bind={bind}
@@ -142,13 +135,11 @@ export const ContactSecondary = connect(
             />
           )}
           {contactsHelper.contactSecondary.displayPhone && (
-            <div
-              className={classNames(
-                'usa-form-group',
+            <FormGroup
+              errorText={
                 validationErrors.contactSecondary &&
-                  validationErrors.contactSecondary.phone &&
-                  'usa-form-group--error',
-              )}
+                validationErrors.contactSecondary.phone
+              }
             >
               <label className="usa-label" htmlFor="secondaryPhone">
                 Phone number
@@ -178,8 +169,7 @@ export const ContactSecondary = connect(
                   });
                 }}
               />
-              <ValidationText field="contactSecondary.phone" />
-            </div>
+            </FormGroup>
           )}
         </div>
       </>

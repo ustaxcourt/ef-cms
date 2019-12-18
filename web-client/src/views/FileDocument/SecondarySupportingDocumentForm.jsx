@@ -1,8 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { SupportingDocumentInclusionsForm } from './SupportingDocumentInclusionsForm';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -50,17 +50,17 @@ export const SecondarySupportingDocumentForm = connect(
           </div>
         </h2>
         <div className="blue-container">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.secondarySupportingDocuments &&
-                validationErrors.secondarySupportingDocuments[index] &&
-                validationErrors.secondarySupportingDocuments[index]
-                  .supportingDocument &&
-                'usa-form-group--error',
+          <FormGroup
+            className={
               !form.secondarySupportingDocuments[index].supportingDocument &&
-                'margin-bottom-0',
-            )}
+              'margin-bottom-0'
+            }
+            errorText={
+              validationErrors.secondarySupportingDocuments &&
+              validationErrors.secondarySupportingDocuments[index] &&
+              validationErrors.secondarySupportingDocuments[index]
+                .supportingDocument
+            }
           >
             <label
               className="usa-label"
@@ -114,23 +114,17 @@ export const SecondarySupportingDocumentForm = connect(
                 );
               })}
             </select>
-            <Text
-              bind={`validationErrors.secondarySupportingDocuments.${index}.supportingDocument`}
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
 
           {fileDocumentHelper.secondarySupportingDocuments[index]
             .showSupportingDocumentFreeText && (
-            <div
-              className={classNames(
-                'usa-form-group',
+            <FormGroup
+              errorText={
                 validationErrors.secondarySupportingDocuments &&
-                  validationErrors.secondarySupportingDocuments[index] &&
-                  validationErrors.secondarySupportingDocuments[index]
-                    .supportingDocumentFreeText &&
-                  'usa-form-group--error',
-              )}
+                validationErrors.secondarySupportingDocuments[index] &&
+                validationErrors.secondarySupportingDocuments[index]
+                  .supportingDocumentFreeText
+              }
             >
               <label
                 className="usa-label"
@@ -164,25 +158,19 @@ export const SecondarySupportingDocumentForm = connect(
                   });
                 }}
               />
-              <Text
-                bind={`validationErrors.secondarySupportingDocuments.${index}.supportingDocumentFreeText`}
-                className="usa-error-message"
-              />
-            </div>
+            </FormGroup>
           )}
 
           {fileDocumentHelper.secondarySupportingDocuments[index]
             .showSupportingDocumentUpload && (
             <>
-              <div
-                className={classNames(
-                  'usa-form-group',
+              <FormGroup
+                errorText={
                   validationErrors.secondarySupportingDocuments &&
-                    validationErrors.secondarySupportingDocuments[index] &&
-                    validationErrors.secondarySupportingDocuments[index]
-                      .supportingDocumentFile &&
-                    'usa-form-group--error',
-                )}
+                  validationErrors.secondarySupportingDocuments[index] &&
+                  validationErrors.secondarySupportingDocuments[index]
+                    .supportingDocumentFile
+                }
               >
                 <label
                   className={classNames(
@@ -209,11 +197,7 @@ export const SecondarySupportingDocumentForm = connect(
                   updateFormValueSequence="updateFileDocumentWizardFormValueSequence"
                   validationSequence="validateExternalDocumentInformationSequence"
                 />
-                <Text
-                  bind={`validationErrors.secondarySupportingDocuments.${index}.supportingDocumentFile`}
-                  className="usa-error-message"
-                />
-              </div>
+              </FormGroup>
 
               <SupportingDocumentInclusionsForm
                 bind={`form.secondarySupportingDocuments.${index}`}

@@ -18,7 +18,7 @@ describe('Practitioner', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       role: User.ROLES.practitioner,
-      userId: 'taxpayer',
+      userId: 'petitioner',
     });
     expect(user.isValid()).toBeTruthy();
   });

@@ -1,8 +1,8 @@
 import { state } from 'cerebral';
 
-export const primaryContactEditHelper = get => {
+export const primaryContactEditHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
-  const { PARTY_TYPES } = get(state.constants);
+  const { PARTY_TYPES } = applicationContext.getConstants();
 
   return {
     showInCareOf:

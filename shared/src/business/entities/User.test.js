@@ -1,7 +1,7 @@
 const { User } = require('./User');
 
 describe('User entity', () => {
-  it('Creates a valid international taxpayer user', () => {
+  it('Creates a valid international petitioner user', () => {
     const user = new User({
       contact: {
         address1: '234 Main St',
@@ -17,12 +17,12 @@ describe('User entity', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       role: User.ROLES.petitioner,
-      userId: 'taxpayer',
+      userId: 'petitioner',
     });
     expect(user.isValid()).toBeTruthy();
   });
 
-  it('Creates a valid domestic taxpayer user', () => {
+  it('Creates a valid domestic petitioner user', () => {
     const user = new User({
       contact: {
         address1: '234 Main St',
@@ -37,12 +37,12 @@ describe('User entity', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       role: User.ROLES.petitioner,
-      userId: 'taxpayer',
+      userId: 'petitioner',
     });
     expect(user.isValid()).toBeTruthy();
   });
 
-  it('Creates a valid taxpayer user without address2 or address3', () => {
+  it('Creates a valid petitioner user without address2 or address3', () => {
     const user = new User({
       contact: {
         address1: '234 Main St',
@@ -55,7 +55,7 @@ describe('User entity', () => {
       firstName: 'firstName',
       lastName: 'lastName',
       role: User.ROLES.petitioner,
-      userId: 'taxpayer',
+      userId: 'petitioner',
     });
     expect(user.isValid()).toBeTruthy();
   });

@@ -162,9 +162,13 @@ exports.joiValidationDecorator = function(
     return this;
   };
 
-  entityConstructor.prototype.toRawObject = function convertToRawObject() {
+  const toRawObjectPrototype = function() {
     return toRawObject(this);
   };
+
+  entityConstructor.prototype.toRawObject = toRawObjectPrototype;
+
+  entityConstructor.prototype.toRawObjectFromJoi = toRawObjectPrototype;
 
   entityConstructor.validateRawCollection = function(
     collection,

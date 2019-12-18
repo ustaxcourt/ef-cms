@@ -1,28 +1,22 @@
 import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
+  const user = applicationContext.getCurrentUser();
   const { Case } = applicationContext.getEntityConstructors();
-  const USER_ROLES = get(state.constants.USER_ROLES);
+  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
-  const caseHasRespondent =
-    !!caseDetail && !!caseDetail.respondents && !!caseDetail.respondents.length;
-  const userRole = get(state.user.role);
   const showActionRequired =
-    !caseDetail.payGovId && userRole === USER_ROLES.petitioner;
+    !caseDetail.payGovId && user.role === USER_ROLES.petitioner;
   const documentDetailTab =
     get(state.caseDetailPage.informationTab) || 'docketRecord';
   const form = get(state.form);
   const currentPage = get(state.currentPage);
-  const directDocumentLinkDesired = ['CaseDetail'].includes(currentPage);
   const caseIsPaid = caseDetail.payGovId && !form.paymentType;
   const isExternalUser = applicationContext
     .getUtilities()
-    .isExternalUser(userRole);
-  const isRequestAccessForm = currentPage === 'RequestAccessWizard';
-  const isJudge = 'judge' == userRole;
+    .isExternalUser(user.role);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-  const pendingAssociation = get(state.screenMetadata.pendingAssociation);
   const modalState = get(state.modal);
   const {
     noticeOfAttachments,
@@ -34,53 +28,38 @@ export const caseDetailHelper = (get, applicationContext) => {
     orderForRatification,
     orderToShowCause,
   } = caseDetail;
+  const permissions = get(state.permissions);
 
-  let showFileDocumentButton = ['CaseDetail'].includes(currentPage);
-  let showAddDocketEntryButton =
-    ['CaseDetailInternal'].includes(currentPage) &&
-    userRole === USER_ROLES.docketClerk;
-  let showCreateOrderButton =
-    ['CaseDetailInternal'].includes(currentPage) &&
-    [
-      USER_ROLES.docketClerk,
-      USER_ROLES.judge,
-      USER_ROLES.petitionsClerk,
-      USER_ROLES.adc,
-    ].includes(userRole);
-  let showRequestAccessToCaseButton = false;
-  let showPendingAccessToCaseButton = false;
-  let showFileFirstDocumentButton = false;
+  const showAddDocketEntryButton =
+    permissions.DOCKET_ENTRY && ['CaseDetailInternal'].includes(currentPage);
+  const showCreateOrderButton =
+    permissions.COURT_ISSUED_DOCUMENT &&
+    ['CaseDetailInternal'].includes(currentPage);
+  const showCaseNotes = permissions.TRIAL_SESSION_WORKING_COPY;
+
+  let showFileDocumentButton =
+    permissions.FILE_EXTERNAL_DOCUMENT && ['CaseDetail'].includes(currentPage);
+
   let showCaseDeadlinesExternal = false;
   let showCaseDeadlinesInternal = false;
   let showCaseDeadlinesInternalEmpty = false;
   let userHasAccessToCase = false;
+  let showQcWorkItemsUntouchedState = false;
 
   if (isExternalUser) {
     if (userAssociatedWithCase) {
       userHasAccessToCase = true;
       showFileDocumentButton = true;
-      showRequestAccessToCaseButton = false;
-      showPendingAccessToCaseButton = false;
-      showFileFirstDocumentButton = false;
 
       if (caseDeadlines && caseDeadlines.length > 0) {
         showCaseDeadlinesExternal = true;
       }
     } else {
       showFileDocumentButton = false;
-      if (userRole === 'practitioner') {
-        showRequestAccessToCaseButton =
-          !pendingAssociation && !isRequestAccessForm;
-        showPendingAccessToCaseButton = pendingAssociation;
-      }
-      if (userRole === 'respondent') {
-        showFileFirstDocumentButton = !caseHasRespondent;
-        showRequestAccessToCaseButton =
-          caseHasRespondent && !isRequestAccessForm;
-      }
     }
   } else {
     userHasAccessToCase = true;
+    showQcWorkItemsUntouchedState = true;
 
     if (caseDeadlines && caseDeadlines.length > 0) {
       showCaseDeadlinesInternal = true;
@@ -91,18 +70,17 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const showCaseNameForPrimary = !get(state.caseDetail.contactSecondary.name);
 
-  let showEditPrimaryContactButton = false;
+  let showEditContacts = false;
 
-  if (userRole === USER_ROLES.petitioner) {
-    showEditPrimaryContactButton = true;
-  } else if (userRole === USER_ROLES.respondent) {
-    showEditPrimaryContactButton = false;
-  } else if (userRole === USER_ROLES.practitioner) {
-    showEditPrimaryContactButton = userAssociatedWithCase;
+  if (user.role === USER_ROLES.petitioner) {
+    showEditContacts = true;
+  } else if (user.role === USER_ROLES.respondent) {
+    showEditContacts = false;
+  } else if (user.role === USER_ROLES.practitioner) {
+    showEditContacts = userAssociatedWithCase;
   }
 
-  const showServeToIrsButton = ['New', 'Recalled'].includes(caseDetail.status);
-  const showRecallButton = caseDetail.status === 'Batched for IRS';
+  const showRecallButton = caseDetail.status === STATUS_TYPES.batchedForIRS;
 
   const practitionerMatchesFormatted =
     modalState && modalState.practitionerMatches;
@@ -148,7 +126,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     caseDeadlines,
     documentDetailTab,
     hasOrders,
-    hidePublicCaseInformation: !isExternalUser,
     practitionerMatchesFormatted,
     practitionerSearchResultsCount:
       modalState &&
@@ -160,48 +137,33 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState.respondentMatches &&
       modalState.respondentMatches.length,
     showActionRequired,
-    showAddCounsel: !isExternalUser,
     showAddDocketEntryButton,
-    showCaptionEditButton:
-      caseDetail.status !== 'Batched for IRS' && !isExternalUser,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
     showCaseInformationPublic: isExternalUser,
     showCaseNameForPrimary,
+    showCaseNotes,
     showCreateOrderButton,
-    showDirectDownloadLink: directDocumentLinkDesired,
     showDocketRecordInProgressState: !isExternalUser,
-    showDocumentDetailLink: !directDocumentLinkDesired,
     showDocumentStatus: !caseDetail.irsSendDate,
-    showEditContactButton: isExternalUser,
-    showEditPractitioners:
-      !isExternalUser &&
-      (caseDetail.practitioners && !!caseDetail.practitioners.length),
-    showEditPrimaryContactButton,
-    showEditRespondents:
-      !isExternalUser &&
-      (caseDetail.respondents && !!caseDetail.respondents.length),
+    showEditContacts,
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
-    showFileFirstDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
-    showNotes: isJudge,
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !caseIsPaid,
     showPaymentRecord: caseIsPaid,
-    showPendingAccessToCaseButton,
     showPractitionerSection:
       !isExternalUser ||
       (caseDetail.practitioners && !!caseDetail.practitioners.length),
     showPreferredTrialCity: caseDetail.preferredTrialCity,
+    showQcWorkItemsUntouchedState,
     showRecallButton,
-    showRequestAccessToCaseButton,
     showRespondentSection:
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),
-    showServeToIrsButton,
     userHasAccessToCase,
   };
 };

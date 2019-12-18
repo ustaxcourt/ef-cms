@@ -24,10 +24,9 @@ export const CaseDeadlinesInternal = connect(
   }) {
     return (
       <>
-        <div className="title">
-          <h1>Deadlines</h1>
+        <div>
           <Button
-            className="push-right margin-right-0"
+            className="push-right margin-right-0 margin-bottom-1"
             id="button-add-deadline"
             onClick={() => {
               openCreateCaseDeadlineModalSequence();
@@ -57,17 +56,13 @@ export const CaseDeadlinesInternal = connect(
                     <Button
                       link
                       className="margin-right-0 padding-0"
+                      icon="trash"
                       onClick={() => {
                         openDeleteCaseDeadlineModalSequence({
                           caseDeadlineId: item.caseDeadlineId,
                         });
                       }}
                     >
-                      <FontAwesomeIcon
-                        className="margin-right-05"
-                        icon="trash"
-                        size="1x"
-                      />
                       Remove
                     </Button>
                   </td>

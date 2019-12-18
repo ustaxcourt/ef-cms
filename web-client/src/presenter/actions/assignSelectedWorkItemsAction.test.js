@@ -9,7 +9,7 @@ presenter.providers.applicationContext = {
 };
 
 describe('setPathAction', () => {
-  it('updates only the section queue items to have the new assignee informaion', async () => {
+  it('updates only the section queue items to have the new assignee information', async () => {
     const result = await runAction(assignSelectedWorkItemsAction, {
       modules: {
         presenter,

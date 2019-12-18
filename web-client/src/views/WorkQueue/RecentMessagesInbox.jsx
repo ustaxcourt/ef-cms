@@ -5,11 +5,11 @@ import React from 'react';
 
 export const RecentMessagesInbox = connect(
   {
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({ documentEditLinkHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -22,11 +22,11 @@ export const RecentMessagesInbox = connect(
               <th aria-label="Docket Number" className="small" colSpan="2">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              <th className="small">Filed</th>
+              <th className="small">Received</th>
               <th>Case name</th>
               <th>Document</th>
               {workQueueHelper.showCaseStatusColumn && (
-                <th className="no-wrap">Case Status</th>
+                <th className="no-wrap">Case status</th>
               )}
               {workQueueHelper.showFromColumn && <th>From</th>}
             </tr>
@@ -51,14 +51,16 @@ export const RecentMessagesInbox = connect(
                         className={
                           item.isRead ? 'case-link' : 'link case-link-bold'
                         }
-                        href={documentHelper({
+                        href={documentEditLinkHelper({
                           docketNumber: item.docketNumber,
                           documentId: item.document.documentId,
                           messageId: item.currentMessage.messageId,
                           shouldLinkToComplete:
                             item.document.isFileAttached === false,
                           shouldLinkToEdit:
-                            item.isQC && item.document.eventCode !== 'P',
+                            workQueueHelper.showEditDocketEntry &&
+                            item.isQC &&
+                            item.document.eventCode !== 'P',
                           workItemIdToMarkAsRead: !item.isRead
                             ? item.workItemId
                             : null,

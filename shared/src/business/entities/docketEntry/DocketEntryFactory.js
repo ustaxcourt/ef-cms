@@ -3,15 +3,15 @@ const {
   ExternalDocumentFactory,
 } = require('../externalDocument/ExternalDocumentFactory');
 const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('../externalDocument/ExternalDocumentInformationFactory');
-const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const {
   MAX_FILE_SIZE_BYTES,
   MAX_FILE_SIZE_MB,
 } = require('../../../persistence/s3/getUploadPolicy');
+const {
+  VALIDATION_ERROR_MESSAGES,
+} = require('../externalDocument/ExternalDocumentInformationFactory');
 const { includes, omit } = require('lodash');
 
 DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
@@ -57,6 +57,7 @@ function DocketEntryFactory(rawProps) {
     this.objections = rawPropsParam.objections;
     this.ordinalValue = rawPropsParam.ordinalValue;
     this.partyPrimary = rawPropsParam.partyPrimary;
+    this.trialLocation = rawPropsParam.trialLocation;
     this.partyRespondent = rawPropsParam.partyRespondent;
     this.partySecondary = rawPropsParam.partySecondary;
     this.previousDocument = rawPropsParam.previousDocument;

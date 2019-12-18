@@ -10,7 +10,7 @@ describe('deleteWorkItemFromInbox', () => {
     });
   });
 
-  it('invokes the peristence layer with pk of {assigneeId}|workItem, docket|workItem and other expected params', async () => {
+  it('invokes the persistence layer with pk of {assigneeId}|workItem, docket|workItem and other expected params', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
@@ -41,7 +41,7 @@ describe('deleteWorkItemFromInbox', () => {
     });
   });
 
-  it('invokes the peristence layer with pk of docket|workItem and other expected params when assigneeId is not set', async () => {
+  it('invokes the persistence layer with pk of docket|workItem and other expected params when assigneeId is not set', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',

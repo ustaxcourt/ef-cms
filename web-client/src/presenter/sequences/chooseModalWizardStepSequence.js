@@ -1,6 +1,3 @@
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { chooseModalWizardStepAction } from '../actions/chooseModalWizardStepAction';
 
-export const chooseModalWizardStepSequence = [
-  set(state.modal.wizardStep, props.value),
-];
+export const chooseModalWizardStepSequence = [chooseModalWizardStepAction];

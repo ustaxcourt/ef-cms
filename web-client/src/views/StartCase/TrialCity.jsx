@@ -1,3 +1,4 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
 import React from 'react';
@@ -27,12 +28,7 @@ export const TrialCity = connect(
     value,
   }) => {
     return (
-      <div
-        className={classNames(
-          'usa-form-group',
-          validationErrors.preferredTrialCity && 'usa-form-group--error',
-        )}
-      >
+      <FormGroup errorText={validationErrors.preferredTrialCity}>
         <label
           className={classNames('usa-label', showHint && 'with-hint')}
           htmlFor="preferred-trial-city"
@@ -73,7 +69,7 @@ export const TrialCity = connect(
             </optgroup>
           ))}
         </select>
-      </div>
+      </FormGroup>
     );
   },
 );

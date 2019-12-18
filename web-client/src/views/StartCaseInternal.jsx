@@ -7,15 +7,14 @@ import { FileUploadErrorModal } from './FileUploadErrorModal';
 import { FileUploadStatusModal } from './FileUploadStatusModal';
 import { Focus } from '../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
+import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { ProcedureType } from './StartCase/ProcedureType';
 import { ScanBatchPreviewer } from './ScanBatchPreviewer';
 import { TrialCityOptions } from './TrialCityOptions';
-import { ValidationText } from '../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { limitLength } from '../ustc-ui/utils/limitLength';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const StartCaseInternal = connect(
   {
@@ -73,19 +72,14 @@ export const StartCaseInternal = connect(
                 <Focus>
                   <h2 className="margin-bottom-105">Case Information</h2>
                 </Focus>
-                <p className="margin-bottom-4 margin-top-0 required-statement">
+                <p className="margin-bottom-3 margin-top-0 required-statement">
                   *All fields required unless otherwise noted
                 </p>
               </div>
 
               <div className="grid-col-5">
                 <div className="blue-container margin-bottom-4 document-detail-one-third">
-                  <div
-                    className={classNames(
-                      'usa-form-group',
-                      validationErrors.receivedAt && 'usa-form-group--error',
-                    )}
-                  >
+                  <FormGroup errorText={validationErrors.receivedAt}>
                     <fieldset className="usa-fieldset margin-bottom-0">
                       <legend className="usa-legend" id="date-received-legend">
                         Date received
@@ -158,16 +152,10 @@ export const StartCaseInternal = connect(
                           />
                         </div>
                       </div>
-                      <ValidationText field="receivedAt" />
                     </fieldset>
-                  </div>
+                  </FormGroup>
 
-                  <div
-                    className={classNames(
-                      'usa-form-group',
-                      validationErrors.caseCaption && 'usa-form-group--error',
-                    )}
-                  >
+                  <FormGroup errorText={validationErrors.caseCaption}>
                     <label className="usa-label" htmlFor="case-caption">
                       Case caption
                     </label>
@@ -188,8 +176,7 @@ export const StartCaseInternal = connect(
                     <p className="margin-top-1">
                       {constants.CASE_CAPTION_POSTFIX}
                     </p>
-                    <ValidationText field="caseCaption" />
-                  </div>
+                  </FormGroup>
 
                   <CaseTypeSelect
                     allowDefaultOption={true}
@@ -212,13 +199,7 @@ export const StartCaseInternal = connect(
                     }}
                   />
 
-                  <div
-                    className={classNames(
-                      'usa-form-group',
-                      validationErrors.preferredTrialCity &&
-                        'usa-form-group--error',
-                    )}
-                  >
+                  <FormGroup errorText={validationErrors.preferredTrialCity}>
                     <label className="usa-label" htmlFor="preferred-trial-city">
                       Trial location{' '}
                       <span className="usa-hint">(Required with RQT)</span>
@@ -239,16 +220,9 @@ export const StartCaseInternal = connect(
                       <option value="">- Select -</option>
                       <TrialCityOptions />
                     </select>
-                    <ValidationText field="preferredTrialCity" />
-                  </div>
+                  </FormGroup>
 
-                  <div
-                    className={classNames(
-                      'usa-form-group',
-                      !form.partyType && 'margin-bottom-0',
-                      validationErrors.partyType && 'usa-form-group--error',
-                    )}
-                  >
+                  <FormGroup errorText={validationErrors.partyType}>
                     <label className="usa-label" htmlFor="party-type">
                       Party type
                     </label>
@@ -279,8 +253,7 @@ export const StartCaseInternal = connect(
                         ),
                       )}
                     </select>
-                    <ValidationText field="partyType" />
-                  </div>
+                  </FormGroup>
 
                   {(startCaseInternalHelper.showPrimaryContact ||
                     startCaseInternalHelper.showSecondaryContact) && (

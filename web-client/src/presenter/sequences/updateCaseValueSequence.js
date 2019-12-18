@@ -1,6 +1,3 @@
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { updateCaseValueAction } from '../actions/updateCaseValueAction';
 
-export const updateCaseValueSequence = [
-  set(state.caseDetail[props.key], props.value),
-];
+export const updateCaseValueSequence = [updateCaseValueAction];

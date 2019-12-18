@@ -1,8 +1,8 @@
 import { state } from 'cerebral';
 
-export const dashboardExternalHelper = get => {
+export const dashboardExternalHelper = (get, applicationContext) => {
   const cases = get(state.cases);
-  const user = get(state.user) || {};
+  const user = applicationContext.getCurrentUser() || {};
 
   return {
     showCaseList: cases.length > 0,

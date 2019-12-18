@@ -77,19 +77,19 @@ describe('getAuthHeader', () => {
   it('should return the user token from the authorization header', () => {
     const response = getAuthHeader({
       headers: {
-        Authorization: 'Bearer taxpayer',
+        Authorization: 'Bearer petitioner',
       },
     });
-    expect(response).toEqual('taxpayer');
+    expect(response).toEqual('petitioner');
   });
 
   it('should return the user token from the authorization header (lowercase a in authorization)', () => {
     const response = getAuthHeader({
       headers: {
-        authorization: 'Bearer taxpayer',
+        authorization: 'Bearer petitioner',
       },
     });
-    expect(response).toEqual('taxpayer');
+    expect(response).toEqual('petitioner');
   });
 
   it('should return the user token from the Authorization header #2', () => {

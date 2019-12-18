@@ -11,7 +11,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       getCurrentUser: () => {
         return {
           role: 'admin',
-          userId: 'taxpayer',
+          userId: 'petitioner',
         };
       },
     };
@@ -31,7 +31,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       getCurrentUser: () => {
         return {
           role: User.ROLES.petitioner,
-          userId: 'taxpayer',
+          userId: 'petitioner',
         };
       },
       getPersistenceGateway: () => ({

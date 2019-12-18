@@ -1,6 +1,6 @@
 const {
-  FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
@@ -24,7 +24,7 @@ exports.updateDocketEntryInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -50,14 +50,17 @@ exports.updateDocketEntryInteractor = async ({
     {
       ...currentDocument,
       ...documentMetadata,
-      relationship: 'primaryDocument',
       documentId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
+      relationship: 'primaryDocument',
       userId: user.userId,
+      ...caseEntity.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   );
-  documentEntity.generateFiledBy(caseToUpdate);
 
   const docketRecordEntry = new DocketRecord({
     description: documentMetadata.documentTitle,
@@ -79,7 +82,7 @@ exports.updateDocketEntryInteractor = async ({
       workItem: workItemToDelete,
     });
 
-    const workItem = currentDocument.workItems[0];
+    const workItem = documentEntity.getQCWorkItem();
     Object.assign(workItem, {
       assigneeId: null,
       assigneeName: null,

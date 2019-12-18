@@ -10,9 +10,9 @@ const { put } = require('../../dynamodbClientService');
 exports.createSectionInboxRecord = async ({ applicationContext, workItem }) => {
   await put({
     Item: {
+      gsi1pk: `workitem-${workItem.workItemId}`,
       pk: `section-${workItem.section}`,
       sk: `workitem-${workItem.workItemId}`,
-      gsi1pk: `workitem-${workItem.workItemId}`,
       ...workItem,
     },
     applicationContext,

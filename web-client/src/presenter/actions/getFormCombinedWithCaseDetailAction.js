@@ -136,11 +136,6 @@ export const getFormCombinedWithCaseDetailAction = ({
     caseDetail.receivedAt,
   );
 
-  // cannot store empty strings in persistence
-  if (caseDetail.preferredTrialCity === '') {
-    delete caseDetail.preferredTrialCity;
-  }
-
   if (caseCaption && (caseCaption = caseCaption.trim())) {
     caseDetail.caseCaption = caseCaption;
   }

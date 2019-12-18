@@ -1,8 +1,7 @@
 import { clearCaseAssociationWizardDataAction } from '../actions/clearCaseAssociationWizardDataAction';
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { setFormValueAction } from '../actions/setFormValueAction';
 
 export const updateCaseAssociationFormValueSequence = [
-  set(state.form[props.key], props.value),
+  setFormValueAction,
   clearCaseAssociationWizardDataAction,
 ];

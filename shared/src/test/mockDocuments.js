@@ -5,7 +5,7 @@ exports.MOCK_DOCUMENTS = [
     documentTitle: 'Petition',
     documentType: 'Petition',
     processingStatus: 'pending',
-    userId: 'taxpayer',
+    userId: 'petitioner',
     workItems: [],
   },
   {
@@ -14,7 +14,7 @@ exports.MOCK_DOCUMENTS = [
     documentTitle: 'Statement of Taxpayer Identification',
     documentType: 'Statement of Taxpayer Identification',
     processingStatus: 'pending',
-    userId: 'taxpayer',
+    userId: 'petitioner',
     workItems: [],
   },
   {
@@ -24,7 +24,7 @@ exports.MOCK_DOCUMENTS = [
     documentType: 'Answer',
     eventCode: 'A',
     processingStatus: 'pending',
-    userId: 'taxpayer',
+    userId: 'petitioner',
     workItems: [],
   },
   {
@@ -32,8 +32,9 @@ exports.MOCK_DOCUMENTS = [
     documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
     documentTitle: 'Proposed Stipulated Decision',
     documentType: 'Proposed Stipulated Decision',
+    eventCode: 'PSDEC',
     processingStatus: 'pending',
-    userId: 'taxpayer',
+    userId: 'petitioner',
     workItems: [],
   },
 ];

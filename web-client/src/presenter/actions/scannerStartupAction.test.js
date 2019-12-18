@@ -32,7 +32,7 @@ describe('scannerStartupAction', () => {
       },
     });
 
-    const dynamScriptClass = result.state.scanner.dynanScriptClass;
+    const { dynamScriptClass } = result.state.scanner;
 
     expect(dynamScriptClass).toEqual('dynam-scanner-injection');
   });

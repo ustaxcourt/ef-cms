@@ -5,7 +5,7 @@ const {
 const { createISODateString } = require('../utilities/DateHandler');
 const { IRS_BATCH_SYSTEM_SECTION, PETITIONS_SECTION } = require('./WorkQueue');
 const { Message } = require('./Message');
-const { orderBy } = require('lodash');
+const { omit, orderBy } = require('lodash');
 
 /**
  * constructor
@@ -29,7 +29,8 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.createdAt = rawWorkItem.createdAt || createISODateString();
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberSuffix = rawWorkItem.docketNumberSuffix;
-  this.document = rawWorkItem.document;
+  this.document = omit(rawWorkItem.document, 'workItems');
+  this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
   this.inProgress = rawWorkItem.inProgress;
   this.isInitializeCase = rawWorkItem.isInitializeCase;
   this.isQC = rawWorkItem.isQC;
@@ -97,6 +98,7 @@ joiValidationDecorator(
       .allow(null)
       .optional(),
     document: joi.object().required(),
+    hideFromPendingMessages: joi.boolean().optional(),
     inProgress: joi.boolean().optional(),
     isInitializeCase: joi.boolean().optional(),
     isQC: joi.boolean().required(),
@@ -308,4 +310,4 @@ WorkItem.prototype.setAsSentToIRS = function({
   return this;
 };
 
-module.exports = { WorkItem };
+module.exports = { IRS_BATCH_SYSTEM_USER_ID, WorkItem };

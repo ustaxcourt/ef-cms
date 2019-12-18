@@ -1,4 +1,7 @@
+import { Case } from '../../shared/src/business/entities/cases/Case';
+
 import {
+  createCourtIssuedDocketEntry,
   createMessage,
   fakeFile,
   getFormattedDocumentQCSectionInbox,
@@ -39,8 +42,8 @@ describe('a user signs and serves a stipulated decision', () => {
   let signedDocumentId = null;
   let caseDetail;
 
-  it('login as a taxpayer and create a case', async () => {
-    await loginAs(test, 'taxpayer');
+  it('login as a petitioner and create a case', async () => {
+    await loginAs(test, 'petitioner');
     caseDetail = await uploadPetition(test);
     ({ docketNumber } = caseDetail.docketNumber);
   });
@@ -87,7 +90,7 @@ describe('a user signs and serves a stipulated decision', () => {
     await signProposedStipulatedDecision(test, stipulatedDecision);
   });
 
-  it('docketclerk serves the signed stipulated decision', async () => {
+  it('docketclerk creates a docket entry for the signed stipulated decision', async () => {
     await loginAs(test, 'docketclerk');
     const inbox = await getFormattedMyInbox(test);
     const signedStipulatedDecision = inbox.find(
@@ -96,28 +99,38 @@ describe('a user signs and serves a stipulated decision', () => {
         item.docketNumber === caseDetail.docketNumber,
     );
     signedDocumentId = signedStipulatedDecision.document.documentId;
-    await serveDocument({
-      docketNumber: signedStipulatedDecision.docketNumber,
-      documentId: signedStipulatedDecision.document.documentId,
-      messageId: signedStipulatedDecision.currentMessage.messageId,
+    await createCourtIssuedDocketEntry({
+      docketNumber: test.docketNumber,
+      documentId: signedDocumentId,
       test,
-      workItemIdToMarkAsRead: signedStipulatedDecision.workItemId,
+    });
+  });
+
+  it('docketclerk serves the signed stipulated decision', async () => {
+    await loginAs(test, 'docketclerk');
+    caseDetail = test.getState('caseDetail');
+    const signedDocument = caseDetail.documents.find(
+      d => d.documentId === signedDocumentId,
+    );
+    signedDocumentId = signedDocument.documentId;
+    await serveDocument({
+      docketNumber: test.docketNumber,
+      documentId: signedDocumentId,
+      test,
     });
   });
 
   it('the case status should become closed', async () => {
-    caseDetail = test.getState('caseDetail');
-    ({ docketNumber } = caseDetail);
-
     await viewCaseDetail({
-      docketNumber,
+      docketNumber: test.docketNumber,
       test,
     });
+    caseDetail = test.getState('caseDetail');
 
     const signedDocument = caseDetail.documents.find(
       d => d.documentId === signedDocumentId,
     );
     expect(signedDocument.status).toEqual('served');
-    expect(caseDetail.status).toEqual('Closed');
+    expect(caseDetail.status).toEqual(Case.STATUS_TYPES.closed);
   });
 });

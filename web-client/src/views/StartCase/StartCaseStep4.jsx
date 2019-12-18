@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { ProcedureType } from './ProcedureType';
 import { TrialCity } from './TrialCity';
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -47,10 +46,10 @@ export const StartCaseStep4 = connect(
       <>
         <Focus>
           <h2 className="focusable margin-bottom-105" tabIndex="-1">
-            4. How do you want this case handled?
+            4. How Do You Want This Case Handled?
           </h2>
         </Focus>
-        <p className="margin-bottom-4 margin-top-0 required-statement">
+        <p className="margin-bottom-3 margin-top-0 required-statement ">
           *All fields required unless otherwise noted
         </p>
         <p>
@@ -149,7 +148,6 @@ export const StartCaseStep4 = connect(
                   validateStartCaseWizardSequence();
                 }}
               />
-              <ValidationText field="preferredTrialCity" />
             </div>
           </>
         )}

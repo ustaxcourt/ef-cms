@@ -1,9 +1,9 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -47,11 +47,11 @@ export const StartCaseStep1 = connect(
         </Hint>
 
         <div className="blue-container margin-bottom-5">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.stinFile && 'usa-form-group--error',
-            )}
+          <FormGroup
+            errorText={[
+              validationErrors.stinFile,
+              validationErrors.stinFileSize,
+            ]}
           >
             <label
               className={classNames(
@@ -77,15 +77,7 @@ export const StartCaseStep1 = connect(
               updateFormValueSequence="updateStartCaseFormValueSequence"
               validationSequence="validateStartCaseWizardSequence"
             />
-            <Text
-              bind="validationErrors.stinFile"
-              className="usa-error-message"
-            />
-            <Text
-              bind="validationErrors.stinFileSize"
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
         </div>
 
         <Button

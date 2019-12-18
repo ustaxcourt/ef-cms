@@ -17,7 +17,7 @@ export default test => {
       value: false,
     });
 
-    await test.runSequence('autoSaveCaseSequence');
+    await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     // irsNoticeDate - valid
@@ -37,7 +37,7 @@ export default test => {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('autoSaveCaseSequence');
+    await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     // irsNoticeDate - invalid
@@ -57,7 +57,7 @@ export default test => {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('autoSaveCaseSequence');
+    await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
       irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[1],
     });
@@ -79,7 +79,7 @@ export default test => {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('autoSaveCaseSequence');
+    await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
     await test.runSequence('updateFormValueSequence', {
       key: 'irsYear',
@@ -93,7 +93,7 @@ export default test => {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('autoSaveCaseSequence');
+    await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
       '2018-12-24T05:00:00.000Z',
@@ -116,7 +116,7 @@ export default test => {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('autoSaveCaseSequence');
+    await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     // payGovId and payGovDate
@@ -136,7 +136,7 @@ export default test => {
       key: 'payGovDay',
       value: '24',
     });
-    await test.runSequence('autoSaveCaseSequence');
+    await test.runSequence('submitCaseDetailEditSaveSequence');
 
     expect(test.getState('caseDetailErrors')).toEqual({});
 

@@ -10,10 +10,10 @@ import { state } from 'cerebral';
  */
 
 export const scannerShutdownAction = ({ get, store }) => {
-  const dynanScriptClass = get(state.scanner.dynanScriptClass);
-  if (dynanScriptClass) {
+  const dynamScriptClass = get(state.scanner.dynamScriptClass);
+  if (dynamScriptClass) {
     const injectedScripts = Array.from(
-      document.getElementsByClassName(dynanScriptClass),
+      document.getElementsByClassName(dynamScriptClass),
     );
     injectedScripts.forEach(scriptEl => scriptEl.remove());
   }

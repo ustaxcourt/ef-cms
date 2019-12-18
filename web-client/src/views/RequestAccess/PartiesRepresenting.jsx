@@ -1,7 +1,7 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const PartiesRepresenting = connect(
   {
@@ -26,13 +26,7 @@ export const PartiesRepresenting = connect(
           Tell Us About the Parties You’re Representing
         </h2>
         <div className="blue-container">
-          <div
-            className={classNames(
-              'usa-form-group margin-bottom-0',
-              requestAccessHelper.partyValidationError &&
-                'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={requestAccessHelper.partyValidationError}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">
                 Who are you representing?
@@ -84,12 +78,7 @@ export const PartiesRepresenting = connect(
                 </div>
               )}
             </fieldset>
-            {requestAccessHelper.partyValidationError && (
-              <span className="usa-error-message">
-                {requestAccessHelper.partyValidationError}
-              </span>
-            )}
-          </div>
+          </FormGroup>
         </div>
       </React.Fragment>
     );

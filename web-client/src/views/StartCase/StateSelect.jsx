@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 
 export const StateSelect = ({
@@ -49,13 +48,4 @@ export const StateSelect = ({
       </optgroup>
     </select>
   );
-};
-
-StateSelect.propTypes = {
-  data: PropTypes.object,
-  type: PropTypes.string,
-  updateFormValueSequence: PropTypes.func,
-  usStates: PropTypes.object,
-  useFullStateName: PropTypes.bool,
-  validateStartCaseSequence: PropTypes.func,
 };

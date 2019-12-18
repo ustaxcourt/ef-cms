@@ -16,6 +16,11 @@ const testJudgeUser = {
   userId: '1',
 };
 
+const baseState = {
+  constants: { USER_ROLES: User.ROLES },
+  judgeUser: testJudgeUser,
+};
+
 describe('formattedTrialSessions', () => {
   const TRIAL_SESSIONS_LIST = [
     {
@@ -61,6 +66,7 @@ describe('formattedTrialSessions', () => {
     try {
       runCompute(formattedTrialSessions, {
         state: {
+          ...baseState,
           trialSessions: TRIAL_SESSIONS_LIST,
         },
       });
@@ -83,6 +89,7 @@ describe('formattedTrialSessions', () => {
   it('groups trial sessions into arrays according to session weeks', () => {
     const result = runCompute(formattedTrialSessions, {
       state: {
+        ...baseState,
         trialSessions: TRIAL_SESSIONS_LIST,
         user: testJudgeUser,
       },
@@ -99,6 +106,7 @@ describe('formattedTrialSessions', () => {
   it('filter trial sessions', () => {
     const result = runCompute(formattedTrialSessions, {
       state: {
+        ...baseState,
         screenMetadata: { trialSessionFilters: { judge: { userId: '1' } } },
         trialSessions: TRIAL_SESSIONS_LIST,
         user: testJudgeUser,
@@ -110,6 +118,7 @@ describe('formattedTrialSessions', () => {
   it('returns all trial sessions if judge userId trial session filter is an empty string', () => {
     const result = runCompute(formattedTrialSessions, {
       state: {
+        ...baseState,
         screenMetadata: { trialSessionFilters: { judge: { userId: '' } } },
         trialSessions: TRIAL_SESSIONS_LIST,
         user: testJudgeUser,
@@ -142,6 +151,7 @@ describe('formattedTrialSessions', () => {
     };
     let result = runCompute(formattedTrialSessions, {
       state: {
+        ...baseState,
         form,
         trialSessions,
         user: testJudgeUser,
@@ -153,6 +163,7 @@ describe('formattedTrialSessions', () => {
     form.term = 'Spring';
     result = runCompute(formattedTrialSessions, {
       state: {
+        ...baseState,
         form,
         trialSessions,
         user: testJudgeUser,
@@ -164,6 +175,7 @@ describe('formattedTrialSessions', () => {
     form.termYear = '2011'; // similar term but not a matching year
     result = runCompute(formattedTrialSessions, {
       state: {
+        ...baseState,
         form,
         trialSessions,
         user: testJudgeUser,
@@ -208,6 +220,7 @@ describe('formattedTrialSessions', () => {
     ];
     const result = runCompute(formattedTrialSessions, {
       state: {
+        ...baseState,
         form: {
           term: 'Winter',
         },
@@ -246,9 +259,11 @@ describe('formattedTrialSessions', () => {
     ]);
   });
 
-  it('sets userIsAssignedToSession false for all sessions if the logged in user is not a judge role', () => {
+  it('sets userIsAssignedToSession false for all sessions if there is no associated judgeUser', () => {
     const result = runCompute(formattedTrialSessions, {
       state: {
+        ...baseState,
+        judgeUser: undefined,
         trialSessions: TRIAL_SESSIONS_LIST,
         user: { role: User.ROLES.petitionsClerk, userId: '1' },
       },
@@ -294,6 +309,7 @@ describe('formattedTrialSessions', () => {
   it('sets userIsAssignedToSession true for sessions the judge user is assigned to', () => {
     const result = runCompute(formattedTrialSessions, {
       state: {
+        ...baseState,
         trialSessions: TRIAL_SESSIONS_LIST,
         user: testJudgeUser,
       },

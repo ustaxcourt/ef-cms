@@ -14,6 +14,8 @@ ESEARCH_PID=$!
 node ./web-api/start-s3rver &
 S3RVER_PID=$!
 
+npm run build:assets
+
 echo "seeding s3"
 npm run seed:s3
 
@@ -24,11 +26,14 @@ echo "creating elasticsearch index"
 npm run seed:elasticsearch
 
 # these exported values expire when script terminates
-export SKIP_SANITIZE=true
 export SKIP_VIRUS_SCAN=true
 export AWS_ACCESS_KEY_ID=noop
 export AWS_SECRET_ACCESS_KEY=noop
 export SLS_DEPLOYMENT_BUCKET=noop
+
+if [[ -z "${RUN_DIR}" ]]; then
+  RUN_DIR="src"
+fi
 
 # set common arguments used by sls below (appearing as "$@")
 set -- \
@@ -38,10 +43,13 @@ set -- \
   --noAuth \
   --noTimeout \
   --region us-east-1 \
+  --run_dir "${RUN_DIR}" \
   --stage local \
   --dynamo_stream_arn "arn:aws:dynamodb:ddblocal:000000000000:table/efcms-local/stream/*" \
   --elasticsearch_endpoint "http://localhost:9200"
 
+echo "starting public api service"
+npx sls offline start "$@" --config web-api/serverless-public-api.yml &
 echo "starting api service"
 npx sls offline start "$@" --config web-api/serverless-api.yml &
 echo "starting cases service"
@@ -72,9 +80,9 @@ node ./web-api/proxy.js
 
 echo "proxy stopped"
 
-if [ ! -e "$CIRCLECI" ]; then 
+if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"
   pkill -P $DYNAMO_PID
   pkill -p $ESEARCH_PID
-fi 
+fi
 kill $S3RVER_PID

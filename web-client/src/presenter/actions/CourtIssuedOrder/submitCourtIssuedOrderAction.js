@@ -27,8 +27,8 @@ export const submitCourtIssuedOrderAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
-    docketNumber,
     caseId,
+    docketNumber,
   };
 
   documentMetadata.draftState = { ...documentMetadata };
@@ -42,13 +42,6 @@ export const submitCourtIssuedOrderAction = async ({
     applicationContext,
     documentId,
   });
-
-  // TODO: ghostscript is causing problems with fonts on generated orders
-  // - this will be resolved in a cleanup issue later
-  /*await applicationContext.getUseCases().sanitizePdfInteractor({
-      applicationContext,
-      documentId,
-    });*/
 
   if (documentIdToEdit) {
     caseDetail = await applicationContext

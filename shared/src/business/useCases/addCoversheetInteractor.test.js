@@ -1,13 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 const sinon = require('sinon');
-const { addCoversheetInteractor } = require('./addCoversheetInteractor.js');
 const {
   createISODateString,
   formatDateString,
   formatNow,
   prepareDateFromString,
 } = require('../utilities/DateHandler');
+const { addCoversheetInteractor } = require('./addCoversheetInteractor.js');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { PDFDocument } = require('pdf-lib');
 
@@ -25,7 +25,7 @@ describe('addCoversheetInteractor', () => {
   const testingCaseData = {
     caseId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
     contactPrimary: {
-      name: 'Johnny Taxpayer',
+      name: 'Johnny Petitioner',
     },
     createdAt: '2019-04-19T14:45:15.595Z',
     docketNumber: '101-19',
@@ -46,23 +46,23 @@ describe('addCoversheetInteractor', () => {
   const optionalTestingCaseData = {
     ...testingCaseData,
     contactPrimary: {
-      name: 'Janie Taxpayer',
+      name: 'Janie Petitioner',
     },
     contactSecondary: {
-      name: 'Janie Taxpayer',
+      name: 'Janie Petitioner',
     },
     docketNumber: '102-19',
     documents: [
       {
         ...testingCaseData.documents[0],
+        addToCoversheet: true,
+        additionalInfo: 'Additional Info Something',
         certificateOfService: true,
         documentId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
         documentType:
           'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
-        lodged: true,
-        additionalInfo: 'Additional Info Something',
-        addToCoversheet: true,
         isPaper: true,
+        lodged: true,
       },
     ],
     irsSendDate: '2019-04-19T14:45:15.595Z',

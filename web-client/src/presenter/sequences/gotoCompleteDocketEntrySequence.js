@@ -4,12 +4,11 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForEditAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
-import { state } from 'cerebral';
+import { setupCompleteDocketEntryAction } from '../actions/setupCompleteDocketEntryAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditDocketEntry = [
@@ -22,10 +21,7 @@ export const gotoEditDocketEntry = [
   setCaseAction,
   setDocketEntryFormForEditAction,
   setDocumentIdAction,
-  set(state.isEditingDocketEntry, true),
-  set(state.wizardStep, 'PrimaryDocumentForm'),
-  set(state.documentUploadMode, 'scan'),
-  set(state.documentSelectedForScan, 'primaryDocumentFile'),
+  setupCompleteDocketEntryAction,
   setCurrentPageAction('AddDocketEntry'),
 ];
 

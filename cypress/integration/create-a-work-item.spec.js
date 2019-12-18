@@ -38,7 +38,14 @@ describe('Create a work item ', () => {
     getModal().should('not.exist');
   });
 
-  it('creates another work item card in the in progress of the document', () => {
+  it('creates another work item card in the in progress tab of the document', () => {
+    navigateToDocumentDetail(
+      'petitionsclerk',
+      '104-19',
+      'c63be3f2-2240-451e-b6bd-8206d52a070b',
+    );
+    getMessagesTab().click();
+    getInProgressTab().click();
     getCardContaining('yolo').should('exist');
   });
 

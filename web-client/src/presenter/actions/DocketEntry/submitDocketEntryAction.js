@@ -30,11 +30,11 @@ export const submitDocketEntryAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
-    isFileAttached,
-    isPaper: true,
-    docketNumber,
     caseId,
     createdAt: applicationContext.getUtilities().createISODateString(),
+    docketNumber,
+    isFileAttached,
+    isPaper: true,
     receivedAt: documentMetadata.dateReceived,
   };
 
@@ -43,13 +43,7 @@ export const submitDocketEntryAction = async ({
       applicationContext,
       documentId: primaryDocumentFileId,
     });
-
     await applicationContext.getUseCases().validatePdfInteractor({
-      applicationContext,
-      documentId: primaryDocumentFileId,
-    });
-
-    await applicationContext.getUseCases().sanitizePdfInteractor({
       applicationContext,
       documentId: primaryDocumentFileId,
     });
@@ -77,14 +71,10 @@ export const submitDocketEntryAction = async ({
   }
 
   if (isFileAttached) {
-    const documentIdForFile = primaryDocumentFileId
-      ? primaryDocumentFileId
-      : documentId;
-
     await applicationContext.getUseCases().addCoversheetInteractor({
       applicationContext,
       caseId: caseDetail.caseId,
-      documentId: documentIdForFile,
+      documentId: primaryDocumentFileId,
     });
   }
 

@@ -1,10 +1,9 @@
 import { clearWizardDataAction } from '../actions/FileDocument/clearWizardDataAction';
 import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultSecondaryDocumentAction';
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { setFormValueAction } from '../actions/setFormValueAction';
 
 export const updateFileDocumentWizardFormValueSequence = [
-  set(state.form[props.key], props.value),
+  setFormValueAction,
   clearWizardDataAction,
   defaultSecondaryDocumentAction,
 ];

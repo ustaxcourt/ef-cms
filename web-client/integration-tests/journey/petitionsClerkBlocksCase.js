@@ -5,7 +5,7 @@ export default test => {
     });
     expect(test.getState('caseDetail').blocked).toBeFalsy();
 
-    await test.runSequence('blockFromTrialSequence');
+    await test.runSequence('blockCaseFromTrialSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       reason: 'Provide a reason',
@@ -16,7 +16,7 @@ export default test => {
       value: 'just because',
     });
 
-    await test.runSequence('blockFromTrialSequence');
+    await test.runSequence('blockCaseFromTrialSequence');
 
     expect(test.getState('alertSuccess').title).toEqual(
       'This case is now blocked from being set for trial',
@@ -25,7 +25,7 @@ export default test => {
     expect(test.getState('caseDetail').blockedReason).toEqual('just because');
 
     // we need to wait for elasticsearch to get updated by the processing stream lambda
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
     await test.runSequence('gotoBlockedCasesReportSequence');
 

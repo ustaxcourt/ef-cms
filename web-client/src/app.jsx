@@ -48,8 +48,10 @@ import {
   faFileAlt as faFileAltSolid,
   faFilePdf,
   faFlag,
+  faGavel,
   faHandPaper,
   faHome,
+  faInfoCircle,
   faLaptop,
   faLink,
   faListUl,
@@ -67,6 +69,7 @@ import {
   faSlash,
   faSort,
   faSpinner,
+  faStar,
   faStepBackward,
   faStepForward,
   faSync,
@@ -104,6 +107,11 @@ const app = {
       presenter.state.user;
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
+
+    const userPermissions = applicationContext.getCurrentUserPermissions();
+    if (userPermissions) {
+      presenter.state.permissions = userPermissions;
+    }
 
     // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
     presenter.state = mapValues(presenter.state, value => {
@@ -160,6 +168,7 @@ const app = {
       faPencilAlt,
       faFileAlt,
       faFileAltSolid,
+      faGavel,
       faHome,
       faFilePdf,
       faFilePdfRegular,
@@ -179,6 +188,7 @@ const app = {
       faSignOutAlt,
       faSlash,
       faSort,
+      faStar,
       faSpinner,
       faSync,
       faThumbtack,
@@ -187,6 +197,7 @@ const app = {
       faTrash,
       faUser,
       faUserCheck,
+      faInfoCircle,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {

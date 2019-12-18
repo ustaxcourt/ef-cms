@@ -11,8 +11,10 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validatePetitionAction } from '../actions/validatePetitionAction';
 
 export const submitFilePetitionSequence = [
@@ -34,9 +36,11 @@ export const submitFilePetitionSequence = [
         success: [
           setCaseAction,
           closeFileUploadStatusModalAction,
+          setWaitingForResponseAction,
           getCreateCaseAlertSuccessAction,
           setAlertSuccessAction,
           setSaveAlertsForNavigationAction,
+          unsetWaitingForResponseAction,
           navigateToDashboardAction,
         ],
       },

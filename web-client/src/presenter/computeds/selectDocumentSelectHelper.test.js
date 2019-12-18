@@ -1,15 +1,17 @@
-import { Document } from '../../../../shared/src/business/entities/Document';
+import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
-import { selectDocumentSelectHelper } from './selectDocumentSelectHelper';
+import { selectDocumentSelectHelper as selectDocumentSelectHelperComputed } from './selectDocumentSelectHelper';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const selectDocumentSelectHelper = withAppContextDecorator(
+  selectDocumentSelectHelperComputed,
+  applicationContext,
+);
 
 describe('selectDocumentSelectHelper', () => {
   it('returns documentTypes for select components (regular and sorted)', () => {
     const result = runCompute(selectDocumentSelectHelper, {
-      state: {
-        constants: {
-          CATEGORY_MAP: Document.CATEGORY_MAP,
-        },
-      },
+      state: {},
     });
 
     expect(result.documentTypesForSelect).toBeTruthy();

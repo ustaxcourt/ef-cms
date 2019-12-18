@@ -15,14 +15,16 @@ An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), crea
 API | Front-End | Shared Code
 --- | --------- | -----------
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br> | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)| [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)
-    
+
 [![Known Vulnerabilities](https://snyk.io//test/github/flexion/ef-cms/badge.svg?targetFile=package.json)](https://snyk.io//test/github/flexion/ef-cms?targetFile=package.json)
 
-<a href="docs/images/screenshot-new-petition.png"><img src="docs/images/screenshot-new-petition.png" width="49%" style="float: left; border: 2px solid #000; margin: 0 4px;" /></a>
-<a href="docs/images/screenshot-cases.png"><img src="docs/images/screenshot-cases.png" width="49%" style="float: left;" /></a>
+<a href="docs/images/screenshot-petitioner.png"><img src="docs/images/screenshot-petitioner.png" width="47%" style="float: left; margin: 0 4px;" /></a>
+<a href="docs/images/screenshot-case.png"><img src="docs/images/screenshot-case.png" width="47%" style="float: left; margin: 0 4px;" /></a>
 
-<a href="docs/images/screenshot-docket-record.png"><img src="docs/images/screenshot-docket-record.png" width="49%" style="float: left;" /></a>
-<a href="docs/images/screenshot-answer.png"><img src="docs/images/screenshot-answer.png" width="49%" style="float: left;" /></a>
+<a href="docs/images/screenshot-judge.png"><img src="docs/images/screenshot-judge.png" width="47%" style="float: left; margin: 4px 4px 0 0;" /></a>
+<a href="docs/images/screenshot-sessions.png"><img src="docs/images/screenshot-sessions.png" width="47%" style="float: left; margin: 4px 0 0 4px;" /></a>
+
+<br clear="both">
 
 The fork of this project in which the bulk of development is occurring is [Flexion’s fork](https://github.com/flexion/ef-cms).
 
@@ -38,15 +40,12 @@ For documentation about the CI/CD setup, API, style guide, UX, code review, etc.
 
 ## AWS diagram
 
-<a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000; " /></a>
+<a href="docs/images/aws-diagram.png"><img src="docs/images/aws-diagram.png" style="border: 2px solid #000;" /></a>
 
 ## Dependency diagrams
 
-Client:
-<a href="docs/images/client-dependencies.png"><img src="docs/images/client-dependencies.png" style="border: 2px solid #000; " /></a>
-
-Server:
-<a href="docs/images/server-dependencies.png"><img src="docs/images/server-dependencies.png" style="border: 2px solid #000; " /></a>
+- <a href="docs/images/client-dependencies.png">Client</a>
+- <a href="docs/images/server-dependencies.png">Server</a>
 
 ## Backlog
 
@@ -67,6 +66,7 @@ Assuming you have Docker installed, the following command will spin up a Docker 
 `./docker-run.sh`
 
 - You can access the UI at http://localhost:1234
+- You can access the public UI at http://localhost:5678
 - You can access the API at http://localhost:3000
 - You can access the DynamoDB shell at http://localhost:8000/shell
 - You can access the DynamoDB admin UI at http://localhost:8001
@@ -81,23 +81,14 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 - Node v10.15.3
 - npm v6.4.1
-- Ghostscript v9.23 (see Setup below)
 - ClamAV v0.101.2 (see Setup below)
 
 ### Setup
-
-Follow [the installation prerequisites for Ghostscript4JS](https://www.npmjs.com/package/ghostscript4js#prerequisites). macOS users can do the following:
-- `brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/e61385fb91ced20245d063f728401e9727293ce0/Formula/ghostscript.rb`
-- `echo 'export GS4JS_HOME="/usr/local/lib"' >> ~/.bash_profile`
-- `source ~/.bash_profile`
 
 For ClamAV, macOS users can do the following:
 - `brew install clamav`
 - `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`
 - `sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)
-- `echo 'export CLAMAV_CLAMSCAN_PATH="/usr/local/bin/clamscan"' >> ~/.bash_profile`
-- `source ~/.bash_profile`
-- `freshclam` (installs virus definitions)
 
 Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the top-level directory.
 
@@ -110,6 +101,7 @@ Both the front-end (`/web-client`) and API (`/web-api`) share code that exists i
 ##### Other Start Commands
 
 - Run `cd web-client && npm start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
+- Run `npm run start:public` to start the UI for the public access portion of the site
 
 #### Terminal B
 
@@ -124,21 +116,32 @@ There are two login mechanisms available — the legacy mock login system, and a
 You can log in using these usernames:
 
 ```
-taxpayer
-petitionsclerk
-petitionsclerk1
-docketclerk
-docketclerk1
-respondent
-respondent1 - respondent4
+External Users:
+petitioner
 practitioner
 practitioner1 - practitioner4
+respondent
+respondent1 - respondent4
+Internal Users:
 adc
+admissionsclerk
+calendarclerk
+clerkofcourt
+docketclerk
+docketclerk1
+petitionsclerk
+petitionsclerk1
+trialclerk
 judgeArmen
+armensChambers
 judgeAshford
+ashfordsChambers
 judgeBuch
+buchsChambers
 judgeCarluzzo
+carluzzosChambers
 judgeCohen
+cohensChambers
 ```
 
 No password is required.
@@ -148,18 +151,27 @@ No password is required.
 To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with:
 
 ```
+External Users:
 petitioner1@example.com – petitioner5@example.com
-petitionsclerk1@example.com – petitionsclerk5@example.com
-docketclerk1@example.com – docketclerk5@example.com
-respondent1@example.com – respondent10@example.com
 practitioner1@example.com – practitioner10@example.com
+respondent1@example.com – respondent10@example.com
+Internal Users:
 adc1@example.com – adc5@example.com
-judgeArmen@example.com
-judgeAshford@example.com
-judgeBuch@example.com
-judgeCarluzzo@example.com
-judgeCohen@example.com
+admissionsclerk1@example.com – admissionsclerk5@example.com
+calendarclerk1@example.com – calendarclerk5@example.com
+clerkofcourt1@example.com – clerkofcourt5@example.com
+docketclerk1@example.com – docketclerk5@example.com
+petitionsclerk1@example.com – petitionsclerk5@example.com
+trialclerk1@example.com – trialclerk5@example.com
+jashford@example.com
+ashfordsChambers1@example.com - ashfordsChambers5@example.com
+jbuch@example.com
+buchsChambers1@example.com - buchsChambers5@example.com
+jcohen@example.com
+cohensChambers1@example.com - cohensChambers5@example.com
 ```
+
+For a full list of available users, see [court_users.csv](web-api/court_users.csv).
 
 The password for all accounts is:
 
@@ -176,18 +188,12 @@ Install the following for best results:
 - https://atom.io/packages/linter-eslint
 - https://atom.io/packages/prettier-atom (enable ESLint and StyleLint integrations in settings)
 
-## Using the application with Internet Explorer 11
-
-If using Internet Explorer 11 with Windows 7, [download and install Adobe Reader](https://get.adobe.com/reader/). This will permit PDFs to be viewed in-browser.
-
 ## Forked dependencies
 
-The software has several dependencies that required minor modifications to suit our needs. Rather than attempt to persuade their creators to adopt our modifications, those repositories have been forked within the U.S. Tax Court's GitHub organization, and the modifications made there. Those repositories are:
+The software has several dependencies that required minor modifications to suit our needs. In some cases, those are urgent security-related modifications that we needed to make immediately, rather than waiting for those dependencies to be patched. In other cases, they're customizations that package maintainers are not interested in making. In both scenarios, those repositories have been forked within the U.S. Tax Court's GitHub organization, and the modifications made there. Those repositories are:
 
 - [serverless-s3-local](https://github.com/ustaxcourt/serverless-s3-local)
 - [s3rver](https://github.com/ustaxcourt/s3rver)
-- [serverless-plugin-bind-deployment-id](https://github.com/ustaxcourt/serverless-plugin-bind-deployment-id)
-- [serverless-dynamodb-local](https://github.com/ustaxcourt/serverless-dynamodb-local)
 
 _If these repositories are deleted, the build will fail._ To verify that these repositories are still required, see each of the `package.json` files in the repo (e.g., `find . -name package.json -exec grep "github:ustaxcourt" {} \; |awk 'BEGIN {FS=": ";}{print$2}' |uniq`). Note that `s3rver` is a dependency of `serverless-s3-local`, and so it will not be found in our `package.json` files.
 

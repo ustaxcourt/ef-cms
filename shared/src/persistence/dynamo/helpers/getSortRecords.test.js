@@ -13,7 +13,7 @@ describe('getSortRecords', () => {
     client.query.restore();
   });
 
-  it('invokes the peristence layer with the expected pk and sk', async () => {
+  it('invokes the persistence layer with the expected pk and sk', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',

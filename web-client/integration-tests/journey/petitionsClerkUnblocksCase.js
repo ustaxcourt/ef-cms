@@ -5,7 +5,7 @@ export default test => {
     });
     expect(test.getState('caseDetail').blocked).toBeTruthy();
 
-    await test.runSequence('unblockFromTrialSequence');
+    await test.runSequence('unblockCaseFromTrialSequence');
 
     expect(test.getState('alertSuccess').title).toEqual(
       'The block on this case has been removed',

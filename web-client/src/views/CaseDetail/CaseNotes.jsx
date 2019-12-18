@@ -67,14 +67,14 @@ export const CaseNotes = connect(
                         <div className="tablet:grid-col-6 text-align-right">
                           <Button
                             link
-                            className="red-warning"
+                            className="red-warning no-wrap"
+                            icon="trash"
                             onClick={() => {
                               openDeleteCaseNoteConfirmModalSequence({
                                 caseId: caseDetail.caseId,
                               });
                             }}
                           >
-                            <FontAwesomeIcon icon="trash"></FontAwesomeIcon>
                             Delete Note
                           </Button>
                         </div>

@@ -1,11 +1,22 @@
-import { CaseSearch } from '../../../../shared/src/business/entities/cases/CaseSearch';
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { advancedSearchHelper as advancedSearchHelperComputed } from './advancedSearchHelper';
+import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+let pageSizeOverride = 5;
+
 const advancedSearchHelper = withAppContextDecorator(
   advancedSearchHelperComputed,
+  {
+    ...applicationContext,
+    getConstants: () => {
+      return {
+        ...applicationContext.getConstants(),
+        CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
+      };
+    },
+  },
 );
 
 describe('advancedSearchHelper', () => {
@@ -13,10 +24,6 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: {},
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-        },
       },
     });
     expect(result).toEqual({ showStateSelect: false });
@@ -27,10 +34,6 @@ describe('advancedSearchHelper', () => {
       state: {
         advancedSearchForm: {
           countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
-        },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
         },
       },
     });
@@ -43,10 +46,6 @@ describe('advancedSearchHelper', () => {
         advancedSearchForm: {
           countryType: ContactFactory.COUNTRY_TYPES.INTERNATIONAL,
         },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-        },
       },
     });
     expect(result).toEqual({ showStateSelect: false });
@@ -56,11 +55,6 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          US_STATES: ContactFactory.US_STATES,
-        },
         searchResults: [],
       },
     });
@@ -75,11 +69,6 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          US_STATES: ContactFactory.US_STATES,
-        },
         searchResults: [
           {
             contactPrimary: { name: 'Test Person', state: 'TN' },
@@ -96,77 +85,67 @@ describe('advancedSearchHelper', () => {
     });
   });
 
-  it('formats search results and sorts by docket number', () => {
+  it('formats search results', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          US_STATES: ContactFactory.US_STATES,
-        },
         searchResults: [
           {
-            caseCaption: 'Test Taxpayer, Petitioner',
+            caseCaption: 'Test Petitioner, Petitioner',
             contactPrimary: { name: 'Test Person', state: 'TN' },
-            createdAt: '2019-03-01T05:00:00.000Z',
             docketNumber: '101-19',
+            receivedAt: '2019-03-01T05:00:00.000Z',
           },
           {
-            caseCaption: 'Test Taxpayer & Another Taxpayer, Petitioner(s)',
+            caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: { name: 'Test Person', state: 'TX' },
             contactSecondary: { name: 'Another Person', state: 'TX' },
-            createdAt: '2019-05-01T05:00:00.000Z',
             docketNumber: '102-18',
             docketNumberSuffix: 'W',
-            receivedAt: '2018-05-01T05:00:00.000Z',
+            receivedAt: '2019-05-01T05:00:00.000Z',
           },
         ],
       },
     });
     expect(result.formattedSearchResults).toMatchObject([
       {
-        caseCaptionNames: 'Test Taxpayer & Another Taxpayer',
-        contactPrimaryName: 'Test Person',
-        contactSecondaryName: 'Another Person',
-        docketNumberWithSuffix: '102-18W',
-        formattedFiledDate: '05/01/18',
-        fullStateNamePrimary: 'Texas',
-      },
-      {
-        caseCaptionNames: 'Test Taxpayer',
+        caseCaptionNames: 'Test Petitioner',
         contactPrimaryName: 'Test Person',
         contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
         fullStateNamePrimary: 'Tennessee',
       },
+      {
+        caseCaptionNames: 'Test Petitioner & Another Petitioner',
+        contactPrimaryName: 'Test Person',
+        contactSecondaryName: 'Another Person',
+        docketNumberWithSuffix: '102-18W',
+        formattedFiledDate: '05/01/19',
+        fullStateNamePrimary: 'Texas',
+      },
     ]);
   });
 
   it('only returns formatted results that should be currently shown based on form.currentPage', () => {
+    pageSizeOverride = 1;
     let result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: 1,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          US_STATES: ContactFactory.US_STATES,
-        },
         searchResults: [
           {
-            caseCaption: 'Test Taxpayer, Petitioner',
+            caseCaption: 'Test Petitioner, Petitioner',
             contactPrimary: { name: 'Test Person', state: 'TN' },
-            createdAt: '2019-03-01T05:00:00.000Z',
             docketNumber: '101-19',
+            receivedAt: '2019-03-01T05:00:00.000Z',
           },
           {
-            caseCaption: 'Test Taxpayer & Another Taxpayer, Petitioner(s)',
+            caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: { name: 'Test Person', state: 'TX' },
             contactSecondary: { name: 'Another Person', state: 'TX' },
-            createdAt: '2018-05-01T05:00:00.000Z',
             docketNumber: '102-18',
             docketNumberSuffix: 'W',
+            receivedAt: '2018-05-01T05:00:00.000Z',
           },
         ],
       },
@@ -175,45 +154,38 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults.length).toEqual(1);
     expect(result.formattedSearchResults).toMatchObject([
       {
-        caseCaptionNames: 'Test Taxpayer & Another Taxpayer',
+        caseCaptionNames: 'Test Petitioner',
         contactPrimaryName: 'Test Person',
-        contactSecondaryName: 'Another Person',
-        docketNumberWithSuffix: '102-18W',
-        formattedFiledDate: '05/01/18',
-        fullStateNamePrimary: 'Texas',
+        docketNumberWithSuffix: '101-19',
+        receivedAt: '2019-03-01T05:00:00.000Z',
       },
     ]);
 
     result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 3 },
-        constants: {
-          CASE_SEARCH_PAGE_SIZE: 1,
-          COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
-          US_STATES: ContactFactory.US_STATES,
-        },
         searchResults: [
           {
-            caseCaption: 'Test Taxpayer, Petitioner',
+            caseCaption: 'Test Petitioner, Petitioner',
             contactPrimary: { name: 'Test Person', state: 'TN' },
-            createdAt: '2019-03-01T05:00:00.000Z',
             docketNumber: '101-19',
+            receivedAt: '2019-03-01T05:00:00.000Z',
           },
           {
-            caseCaption: 'Test Taxpayer & Another Taxpayer, Petitioner(s)',
+            caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: { name: 'Test Person', state: 'TX' },
             contactSecondary: { name: 'Another Person', state: 'TX' },
-            createdAt: '2018-05-01T05:00:00.000Z',
             docketNumber: '102-18',
             docketNumberSuffix: 'W',
+            receivedAt: '2018-05-01T05:00:00.000Z',
           },
           {
             caseCaption: 'Test Petitioner & Another Petitioner, Petitioner(s)',
             contactPrimary: { name: 'Test Petitioner', state: 'CA' },
             contactSecondary: { name: 'Another Petitioner', state: 'TN' },
-            createdAt: '2018-04-01T05:00:00.000Z',
             docketNumber: '101-18',
             docketNumberSuffix: 'W',
+            receivedAt: '2018-04-01T05:00:00.000Z',
           },
         ],
       },
@@ -222,16 +194,15 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults.length).toEqual(3);
     expect(result.formattedSearchResults).toMatchObject([
       {
-        caseCaptionNames: 'Test Petitioner & Another Petitioner',
-        contactPrimaryName: 'Test Petitioner',
-        contactSecondaryName: 'Another Petitioner',
-        docketNumberWithSuffix: '101-18W',
-        formattedFiledDate: '04/01/18',
-        fullStateNamePrimary: 'California',
-        fullStateNameSecondary: 'Tennessee',
+        caseCaptionNames: 'Test Petitioner',
+        contactPrimaryName: 'Test Person',
+        contactSecondaryName: undefined,
+        docketNumberWithSuffix: '101-19',
+        formattedFiledDate: '03/01/19',
+        fullStateNamePrimary: 'Tennessee',
       },
       {
-        caseCaptionNames: 'Test Taxpayer & Another Taxpayer',
+        caseCaptionNames: 'Test Petitioner & Another Petitioner',
         contactPrimaryName: 'Test Person',
         contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
@@ -239,12 +210,13 @@ describe('advancedSearchHelper', () => {
         fullStateNamePrimary: 'Texas',
       },
       {
-        caseCaptionNames: 'Test Taxpayer',
-        contactPrimaryName: 'Test Person',
-        contactSecondaryName: undefined,
-        docketNumberWithSuffix: '101-19',
-        formattedFiledDate: '03/01/19',
-        fullStateNamePrimary: 'Tennessee',
+        caseCaptionNames: 'Test Petitioner & Another Petitioner',
+        contactPrimaryName: 'Test Petitioner',
+        contactSecondaryName: 'Another Petitioner',
+        docketNumberWithSuffix: '101-18W',
+        formattedFiledDate: '04/01/18',
+        fullStateNamePrimary: 'California',
+        fullStateNameSecondary: 'Tennessee',
       },
     ]);
   });

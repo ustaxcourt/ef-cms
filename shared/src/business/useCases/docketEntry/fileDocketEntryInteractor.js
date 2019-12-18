@@ -1,6 +1,6 @@
 const {
-  FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { capitalize, pick } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
@@ -33,7 +33,7 @@ exports.fileDocketEntryInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -99,14 +99,17 @@ exports.fileDocketEntryInteractor = async ({
         {
           ...baseMetadata,
           ...metadata,
-          relationship,
           documentId,
           documentType: metadata.documentType,
+          relationship,
           userId: user.userId,
+          ...caseEntity.getCaseContacts({
+            contactPrimary: true,
+            contactSecondary: true,
+          }),
         },
         { applicationContext },
       );
-      documentEntity.generateFiledBy(caseToUpdate);
 
       const workItem = new WorkItem(
         {

@@ -1,7 +1,13 @@
-import { runCompute } from 'cerebral/test';
-
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
-import { caseDetailEditHelper } from './caseDetailEditHelper';
+import { applicationContext } from '../../applicationContext';
+import { caseDetailEditHelper as caseDetailEditHelperComputed } from './caseDetailEditHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const caseDetailEditHelper = withAppContextDecorator(
+  caseDetailEditHelperComputed,
+  applicationContext,
+);
 
 describe('case detail edit computed', () => {
   it('sets partyTypes from constants ', () => {
@@ -9,9 +15,6 @@ describe('case detail edit computed', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.conservator,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -23,9 +26,6 @@ describe('case detail edit computed', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.conservator,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -39,9 +39,6 @@ describe('case detail edit computed', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.corporation,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
@@ -53,9 +50,6 @@ describe('case detail edit computed', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.custodian,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -69,9 +63,6 @@ describe('case detail edit computed', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.donor,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
@@ -83,9 +74,6 @@ describe('case detail edit computed', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.estate,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -99,9 +87,6 @@ describe('case detail edit computed', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.estateWithoutExecutor,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
@@ -113,9 +98,6 @@ describe('case detail edit computed', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.guardian,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -129,9 +111,6 @@ describe('case detail edit computed', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForIncompetentPerson,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
@@ -143,9 +122,6 @@ describe('case detail edit computed', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -159,9 +135,6 @@ describe('case detail edit computed', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
@@ -173,9 +146,6 @@ describe('case detail edit computed', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.partnershipBBA,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -189,9 +159,6 @@ describe('case detail edit computed', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.partnershipOtherThanTaxMatters,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
@@ -203,9 +170,6 @@ describe('case detail edit computed', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -219,9 +183,6 @@ describe('case detail edit computed', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
@@ -233,9 +194,6 @@ describe('case detail edit computed', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -249,9 +207,6 @@ describe('case detail edit computed', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.survivingSpouse,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
@@ -264,9 +219,6 @@ describe('case detail edit computed', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.transferee,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result.showPrimaryContact).toBeTruthy();
@@ -278,9 +230,6 @@ describe('case detail edit computed', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.trust,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -299,9 +248,6 @@ describe('case detail edit computed', () => {
             },
           ],
           partyType: ContactFactory.PARTY_TYPES.corporation,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -323,9 +269,6 @@ describe('case detail edit computed', () => {
           ],
           partyType: ContactFactory.PARTY_TYPES.corporation,
         },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
-        },
       },
     });
     expect(result.showOwnershipDisclosureStatement).toBeTruthy();
@@ -336,9 +279,6 @@ describe('case detail edit computed', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -351,9 +291,6 @@ describe('case detail edit computed', () => {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
           preferredTrialCity: 'Somewhere, USA',
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -369,9 +306,6 @@ describe('case detail edit computed', () => {
           documents: [],
           isPaper: true,
           partyType: ContactFactory.PARTY_TYPES.petitioner,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
@@ -393,9 +327,6 @@ describe('case detail edit computed', () => {
           ],
           isPaper: true,
           partyType: ContactFactory.PARTY_TYPES.petitioner,
-        },
-        constants: {
-          PARTY_TYPES: ContactFactory.PARTY_TYPES,
         },
       },
     });
