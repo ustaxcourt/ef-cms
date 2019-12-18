@@ -2,7 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { CaseNote } = require('../../entities/cases/CaseNote');
+const { JudgesCaseNote } = require('../../entities/notes/JudgesCaseNote');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -28,7 +28,7 @@ exports.updateJudgesCaseNoteInteractor = async ({
     .getUseCases()
     .getJudgeForUserChambersInteractor({ applicationContext, user });
 
-  const caseNoteEntity = new CaseNote({
+  const caseNoteEntity = new JudgesCaseNote({
     caseId,
     notes,
     userId: judgeUser.userId,
