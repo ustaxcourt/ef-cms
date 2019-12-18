@@ -1,11 +1,9 @@
-const createApplicationContext = require('../applicationContext');
-const {
-  getUserFromAuthHeader,
-  handle,
-} = require('../middleware/apiGatewayHelper');
+const createApplicationContext = require('../../applicationContext');
+const { getUserFromAuthHeader } = require('../../middleware/apiGatewayHelper');
+const { handle } = require('../../middleware/apiGatewayHelper');
 
 /**
- * used for saving a case procedural note
+ * used for deleting a case note
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
@@ -16,14 +14,11 @@ exports.handler = event =>
     const applicationContext = createApplicationContext(user);
     try {
       const { caseId } = event.pathParameters || {};
-      const { proceduralNote } = JSON.parse(event.body);
-
       const results = await applicationContext
         .getUseCases()
-        .saveProceduralNoteInteractor({
+        .deleteCaseNoteInteractor({
           applicationContext,
           caseId,
-          proceduralNote,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);

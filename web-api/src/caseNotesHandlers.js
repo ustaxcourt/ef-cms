@@ -1,9 +1,11 @@
 module.exports = {
-  deleteCaseNoteLambda: require('./caseNote/deleteCaseNoteLambda').handler,
-  deleteProceduralNoteLambda: require('./proceduralNote/deleteProceduralNoteLambda')
+  deleteCaseNoteLambda: require('./caseNote/deleteJudgesCaseNoteLambda')
     .handler,
-  getCaseNoteLambda: require('./caseNote/getCaseNoteLambda').handler,
-  saveProceduralNoteLambda: require('./proceduralNote/saveProceduralNoteLambda')
+  deleteJudgesCaseNoteLambda: require('./caseNote/deleteJudgesCaseNoteLambda')
     .handler,
-  updateCaseNoteLambda: require('./caseNote/updateCaseNoteLambda').handler,
+  getJudgesCaseNoteLambda: require('./caseNote/getJudgesCaseNoteLambda')
+    .handler,
+  saveCaseNoteLambda: require('./caseNote/saveCaseNoteLambda').handler,
+  updateJudgesCaseNoteLambda: require('./caseNote/updateJudgesCaseNoteLambda')
+    .handler,
 };
