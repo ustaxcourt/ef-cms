@@ -61,7 +61,7 @@ const allInternalUserPermissions = [
 
 const AUTHORIZATION_MAP = {
   adc: allInternalUserPermissions,
-  admin: [ROLE_PERMISSIONS.CREATE_USER],
+  admin: [ROLE_PERMISSIONS.CREATE_USER, ROLE_PERMISSIONS.FILE_IN_CONSOLIDATED],
   admissionsclerk: allInternalUserPermissions,
   calendarclerk: allInternalUserPermissions,
   chambers: [
