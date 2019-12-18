@@ -15,9 +15,17 @@ const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes } = require('lodash');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
+const { Order } = require('../orders/Order');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
 const { User } = require('../User');
+
+const orderDocumentTypes = Order.ORDER_TYPES.map(
+  orderType => orderType.documentType,
+);
+const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+  courtIssuedDoc => courtIssuedDoc.documentType,
+);
 
 Case.STATUS_TYPES = {
   assignedCase: 'Assigned - Case',
@@ -1356,6 +1364,32 @@ Case.sortByDocketNumber = function(cases) {
 Case.findLeadCaseForCases = function(cases) {
   const casesOrdered = Case.sortByDocketNumber([...cases]);
   return casesOrdered.shift();
+};
+
+/**
+ * @param {string} documentId the id of the document to check
+ * @returns {boolean} true if the document is draft, false otherwise
+ */
+Case.prototype.isDocumentDraft = function(documentId) {
+  const document = this.getDocumentById({ documentId });
+
+  const isNotArchived = !document.archived;
+  const isNotServed = !document.servedAt;
+  const isDocumentOnDocketRecord = this.docketRecord.find(
+    docketEntry => docketEntry.documentId === document.documentId,
+  );
+  const isStipDecision = document.documentType === 'Stipulated Decision';
+  const isDraftOrder = orderDocumentTypes.includes(document.documentType);
+  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+    document.documentType,
+  );
+  return (
+    isNotArchived &&
+    isNotServed &&
+    (isStipDecision ||
+      (isDraftOrder && !isDocumentOnDocketRecord) ||
+      (isCourtIssuedDocument && !isDocumentOnDocketRecord))
+  );
 };
 
 module.exports = { Case };
