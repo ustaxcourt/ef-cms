@@ -1,11 +1,11 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { unsetCaseNoteFromTrialSessionWorkingCopyAction } from './unsetCaseNoteFromTrialSessionWorkingCopyAction';
+import { unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction } from './unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction';
 
-describe('unsetCaseNoteFromTrialSessionWorkingCopyAction', () => {
+describe('unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction', () => {
   it('should set the modal caseId state', async () => {
     const result = await runAction(
-      unsetCaseNoteFromTrialSessionWorkingCopyAction,
+      unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction,
       {
         modules: {
           presenter,

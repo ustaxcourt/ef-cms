@@ -1,15 +1,15 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetCaseNoteFromTrialSessionWorkingCopyAction } from '../actions/TrialSessionWorkingCopy/unsetCaseNoteFromTrialSessionWorkingCopyAction';
+import { unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction } from '../actions/TrialSessionWorkingCopy/unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { updateDeleteCaseNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateDeleteCaseNotePropsFromModalStateAction';
+import { updateDeleteJudgesCaseNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateDeleteJudgesCaseNotePropsFromModalStateAction';
 import { updateTrialSessionWorkingCopyAction } from '../actions/TrialSession/updateTrialSessionWorkingCopyAction';
 
-export const deleteCaseWorkingCopyNoteSequence = [
+export const deleteCaseWorkingCopyJudgesNoteSequence = [
   setWaitingForResponseAction,
-  updateDeleteCaseNotePropsFromModalStateAction,
-  unsetCaseNoteFromTrialSessionWorkingCopyAction,
+  updateDeleteJudgesCaseNotePropsFromModalStateAction,
+  unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction,
   updateTrialSessionWorkingCopyAction,
   clearModalAction,
   clearModalStateAction,

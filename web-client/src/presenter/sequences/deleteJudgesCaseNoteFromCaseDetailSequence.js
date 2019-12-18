@@ -4,11 +4,11 @@ import { deleteJudgesCaseNoteAction } from '../actions/TrialSession/deleteJudges
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { updateDeleteCaseNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateDeleteCaseNotePropsFromModalStateAction';
+import { updateDeleteJudgesCaseNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateDeleteJudgesCaseNotePropsFromModalStateAction';
 
 export const deleteJudgesCaseNoteFromCaseDetailSequence = [
   setWaitingForResponseAction,
-  updateDeleteCaseNotePropsFromModalStateAction,
+  updateDeleteJudgesCaseNotePropsFromModalStateAction,
   deleteJudgesCaseNoteAction,
   setJudgesCaseNoteOnCaseDetailAction,
   clearModalAction,

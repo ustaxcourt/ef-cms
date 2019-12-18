@@ -9,7 +9,7 @@ import { unset } from 'lodash';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const unsetCaseNoteFromTrialSessionWorkingCopyAction = ({
+export const unsetJudgesCaseNoteFromTrialSessionWorkingCopyAction = ({
   get,
   props,
   store,

@@ -6,11 +6,11 @@ import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTri
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateCalendaredCaseJudgesNoteAction } from '../actions/TrialSessionWorkingCopy/updateCalendaredCaseJudgesNoteAction';
-import { updateDeleteCaseNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateDeleteCaseNotePropsFromModalStateAction';
+import { updateDeleteJudgesCaseNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateDeleteJudgesCaseNotePropsFromModalStateAction';
 
-export const deleteCaseNoteFromWorkingCopySequence = [
+export const deleteJudgesCaseNoteFromWorkingCopySequence = [
   setWaitingForResponseAction,
-  updateDeleteCaseNotePropsFromModalStateAction,
+  updateDeleteJudgesCaseNotePropsFromModalStateAction,
   deleteJudgesCaseNoteAction,
   getTrialSessionWorkingCopyAction,
   setTrialSessionWorkingCopyAction,
