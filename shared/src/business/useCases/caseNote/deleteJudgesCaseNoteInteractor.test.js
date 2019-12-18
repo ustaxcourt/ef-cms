@@ -1,20 +1,11 @@
 const {
-  deleteProceduralNoteInteractor,
-} = require('./deleteProceduralNoteInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
+  deleteJudgesCaseNoteInteractor,
+} = require('./deleteJudgesCaseNoteInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
-const updateCaseMock = jest.fn().mockImplementation(async c => c);
-const getCaseByCaseIdMock = jest
-  .fn()
-  .mockResolvedValue({ ...MOCK_CASE, proceduralNote: 'My Procedural Note' });
-
-describe('deleteProceduralNoteInteractor', () => {
+describe('deleteJudgesCaseNoteInteractor', () => {
   let applicationContext;
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
 
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext = {
@@ -24,9 +15,10 @@ describe('deleteProceduralNoteInteractor', () => {
     };
     let error;
     try {
-      await deleteProceduralNoteInteractor({
+      await deleteJudgesCaseNoteInteractor({
         applicationContext,
         caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
     } catch (err) {
       error = err;
@@ -35,7 +27,7 @@ describe('deleteProceduralNoteInteractor', () => {
     expect(error).toBeInstanceOf(UnauthorizedError);
   });
 
-  it('deletes a procedural note', async () => {
+  it('deletes a case note', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () =>
@@ -45,16 +37,21 @@ describe('deleteProceduralNoteInteractor', () => {
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
       getPersistenceGateway: () => ({
-        getCaseByCaseId: getCaseByCaseIdMock,
-        updateCase: updateCaseMock,
+        deleteJudgesCaseNote: v => v,
+      }),
+      getUseCases: () => ({
+        getJudgeForUserChambersInteractor: () => ({
+          role: User.ROLES.judge,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        }),
       }),
     };
 
     let error;
-    let result;
+    let caseNote;
 
     try {
-      result = await deleteProceduralNoteInteractor({
+      caseNote = await deleteJudgesCaseNoteInteractor({
         applicationContext,
         caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -63,9 +60,6 @@ describe('deleteProceduralNoteInteractor', () => {
     }
 
     expect(error).toBeUndefined();
-    expect(result).toBeDefined();
-    expect(getCaseByCaseIdMock).toHaveBeenCalled();
-    expect(updateCaseMock).toHaveBeenCalled();
-    expect(result.proceduralNote).not.toBeDefined();
+    expect(caseNote).toBeDefined();
   });
 });

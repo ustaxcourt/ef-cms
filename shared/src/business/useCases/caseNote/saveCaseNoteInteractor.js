@@ -6,22 +6,24 @@ const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * deleteProceduralNoteInteractor
+ * saveCaseNoteInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case the procedural note is attached to
- * @returns {Promise} the promise of the delete call
+ * @param {string} providers.caseId the id of the case to update procedural note
+ * @param {string} providers.notes the note to update
+ * @returns {object} the updated case note returned from persistence
  */
-exports.deleteProceduralNoteInteractor = async ({
+exports.saveCaseNoteInteractor = async ({
   applicationContext,
   caseId,
+  proceduralNote,
 }) => {
   const user = applicationContext.getCurrentUser();
-
   if (!isAuthorized(user, ROLE_PERMISSIONS.PROCEDURAL_NOTES)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
@@ -29,10 +31,12 @@ exports.deleteProceduralNoteInteractor = async ({
       caseId,
     });
 
-  delete caseRecord.proceduralNote;
-  const caseToUpdate = new Case(caseRecord, {
-    applicationContext,
-  })
+  const caseToUpdate = new Case(
+    { ...caseRecord, proceduralNote },
+    {
+      applicationContext,
+    },
+  )
     .validate()
     .toRawObject();
 
@@ -40,5 +44,6 @@ exports.deleteProceduralNoteInteractor = async ({
     applicationContext,
     caseToUpdate,
   });
+
   return result;
 };

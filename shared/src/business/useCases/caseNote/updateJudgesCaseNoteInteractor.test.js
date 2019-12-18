@@ -1,8 +1,10 @@
+const {
+  updateJudgesCaseNoteInteractor,
+} = require('./updateJudgesCaseNoteInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { updateCaseNoteInteractor } = require('./updateCaseNoteInteractor');
 const { User } = require('../../entities/User');
 
-describe('updateCaseNoteInteractor', () => {
+describe('updateJudgesCaseNoteInteractor', () => {
   let applicationContext;
   const mockCaseNote = {
     caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -18,7 +20,7 @@ describe('updateCaseNoteInteractor', () => {
     };
     let error;
     try {
-      await updateCaseNoteInteractor({
+      await updateJudgesCaseNoteInteractor({
         applicationContext,
         caseId: mockCaseNote.caseId,
         notes: mockCaseNote.notes,
@@ -40,7 +42,7 @@ describe('updateCaseNoteInteractor', () => {
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
       getPersistenceGateway: () => ({
-        updateCaseNote: v => v.caseNoteToUpdate,
+        updateJudgesCaseNote: v => v.caseNoteToUpdate,
       }),
       getUseCases: () => ({
         getJudgeForUserChambersInteractor: () => ({
@@ -54,7 +56,7 @@ describe('updateCaseNoteInteractor', () => {
     let caseNote;
 
     try {
-      caseNote = await updateCaseNoteInteractor({
+      caseNote = await updateJudgesCaseNoteInteractor({
         applicationContext,
         caseId: mockCaseNote.caseId,
         notes: mockCaseNote.notes,

@@ -6,14 +6,19 @@ const { CaseNote } = require('../../entities/cases/CaseNote');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getCaseNoteInteractor
+ * updateJudgesCaseNoteInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseId the id of the case to get notes for
- * @returns {object} the case note object if one is found
+ * @param {string} providers.caseId the id of the case to update notes
+ * @param {string} providers.notes the notes to update
+ * @returns {object} the updated case note returned from persistence
  */
-exports.getCaseNoteInteractor = async ({ applicationContext, caseId }) => {
+exports.updateJudgesCaseNoteInteractor = async ({
+  applicationContext,
+  caseId,
+  notes,
+}) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
     throw new UnauthorizedError('Unauthorized');
@@ -23,15 +28,18 @@ exports.getCaseNoteInteractor = async ({ applicationContext, caseId }) => {
     .getUseCases()
     .getJudgeForUserChambersInteractor({ applicationContext, user });
 
-  const caseNote = await applicationContext
-    .getPersistenceGateway()
-    .getCaseNote({
-      applicationContext,
-      caseId,
-      userId: judgeUser.userId,
-    });
+  const caseNoteEntity = new CaseNote({
+    caseId,
+    notes,
+    userId: judgeUser.userId,
+  });
 
-  if (caseNote) {
-    return new CaseNote(caseNote).validate().toRawObject();
-  }
+  const caseNoteToUpdate = caseNoteEntity.validate().toRawObject();
+
+  await applicationContext.getPersistenceGateway().updateJudgesCaseNote({
+    applicationContext,
+    caseNoteToUpdate,
+  });
+
+  return caseNoteToUpdate;
 };
