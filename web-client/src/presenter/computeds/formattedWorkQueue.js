@@ -159,7 +159,7 @@ export const getWorkItemDocumentLink = ({
   applicationContext,
   permissions,
   workItem,
-  workQueueToDisplay,
+  workQueueToDisplay = {},
 }) => {
   const { box, queue, workQueueIsInternal } = workQueueToDisplay;
   const result = cloneDeep(workItem);
@@ -184,7 +184,12 @@ export const getWorkItemDocumentLink = ({
       (permissions.DOCKET_ENTRY && formattedDocument.isInProgress));
 
   let editLink; //defaults to doc detail
-  if (showDocumentEditLink && permissions.DOCKET_ENTRY && formattedDocument) {
+  if (
+    showDocumentEditLink &&
+    permissions.DOCKET_ENTRY &&
+    formattedDocument &&
+    !workQueueIsInternal
+  ) {
     if (
       formattedDocument.isCourtIssuedDocument &&
       !formattedDocument.servedAt
@@ -391,7 +396,6 @@ export const formattedWorkQueue = (get, applicationContext) => {
       const editLink = getWorkItemDocumentLink({
         applicationContext,
         permissions,
-        selectedWorkItems,
         workItem: item,
         workQueueToDisplay,
       });
