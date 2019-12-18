@@ -14,6 +14,14 @@ function PublicContact(rawContact) {
   this.state = rawContact.state;
 }
 
-joiValidationDecorator(PublicContact, joi.object(), undefined, {});
+joiValidationDecorator(
+  PublicContact,
+  joi.object().keys({
+    name: joi.string().optional(),
+    state: joi.string().optional(),
+  }),
+  undefined,
+  {},
+);
 
 module.exports = { PublicContact };

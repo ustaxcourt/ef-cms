@@ -27,6 +27,46 @@ function PublicDocument(rawDocument) {
   this.status = rawDocument.status;
 }
 
-joiValidationDecorator(PublicDocument, joi.object(), undefined, {});
+joiValidationDecorator(
+  PublicDocument,
+  joi.object().keys({
+    additionalInfo: joi.string().optional(),
+    additionalInfo2: joi.string().optional(),
+    caseId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional(),
+    createdAt: joi
+      .date()
+      .iso()
+      .optional(),
+    documentId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional(),
+    documentTitle: joi.string().optional(),
+    documentType: joi.string().optional(),
+    eventCode: joi.string().optional(),
+    filedBy: joi.string().optional(),
+    isPaper: joi.boolean().optional(),
+    processingStatus: joi.string().optional(),
+    receivedAt: joi
+      .date()
+      .iso()
+      .optional(),
+    servedAt: joi
+      .date()
+      .iso()
+      .optional(),
+    servedParties: joi.array().optional(),
+    status: joi.string().optional(),
+  }),
+  undefined,
+  {},
+);
 
 module.exports = { PublicDocument };
