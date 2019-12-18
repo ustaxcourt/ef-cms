@@ -15,16 +15,9 @@ exports.getConsolidatedCasesByUserInteractor = async ({
   let foundCases = [];
   let userCaseIdsMap = {};
 
-  const userCases = (
-    await applicationContext
-      .getPersistenceGateway()
-      .getCasesByUser({ applicationContext, userId })
-  ).map(userCase => {
-    const { caseId } = userCase;
-    userCase.isRequestingUserAssociated = true;
-    userCaseIdsMap[caseId] = true;
-    return userCase;
-  });
+  const userCases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByUser({ applicationContext, userId });
 
   if (userCases.length) {
     const caseMapping = {};
@@ -32,6 +25,9 @@ exports.getConsolidatedCasesByUserInteractor = async ({
 
     userCases.forEach(caseRecord => {
       const { caseId, leadCaseId } = caseRecord;
+
+      caseRecord.isRequestingUserAssociated = true;
+      userCaseIdsMap[caseId] = true;
 
       if (!leadCaseId || leadCaseId === caseId) {
         caseMapping[caseId] = caseRecord;
