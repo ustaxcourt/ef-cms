@@ -70,7 +70,6 @@ describe('generateDocketRecordPdfInteractor', () => {
         },
       ],
     }),
-    getCurrentUser: () => {},
     getEntityConstructors: () => ({
       Case,
     }),

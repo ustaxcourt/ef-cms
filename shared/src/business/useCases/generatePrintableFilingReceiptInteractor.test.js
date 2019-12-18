@@ -62,7 +62,6 @@ describe('generatePrintableFilingReceiptInteractor', () => {
           },
         ],
       }),
-      getCurrentUser: () => {},
       getEntityConstructors: () => ({
         Case,
       }),
