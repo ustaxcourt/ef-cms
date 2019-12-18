@@ -1,29 +1,21 @@
 import { state } from 'cerebral';
 
 /**
- * save a procedural note on a case
+ * delete a case note from a case
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
  * @returns {Promise} async action
  */
-export const saveProceduralNoteAction = async ({ applicationContext, get }) => {
-  const proceduralNote = get(state.modal.notes);
-  const { caseId } = get(state.caseDetail);
-
+export const deleteCaseNoteAction = async ({ applicationContext, get }) => {
+  const caseId = get(state.caseDetail.caseId);
   const caseDetail = await applicationContext
     .getUseCases()
-    .saveProceduralNoteInteractor({
+    .deleteCaseNoteInteractor({
       applicationContext,
       caseId,
-      proceduralNote,
     });
 
-  return {
-    alertSuccess: {
-      message: 'Your note has been saved',
-    },
-    caseDetail,
-  };
+  return { caseDetail };
 };

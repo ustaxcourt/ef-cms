@@ -1,13 +1,13 @@
 import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { setDeleteProceduralNoteModalStateAction } from './setDeleteProceduralNoteModalStateAction';
+import { setDeleteCaseNoteModalStateAction } from './setDeleteCaseNoteModalStateAction';
 
 presenter.providers.applicationContext = applicationContext;
 
-describe('setDeleteProceduralNoteModalStateAction', () => {
+describe('setDeleteCaseNoteModalStateAction', () => {
   it('should set the modal state caseId from caseDetail', async () => {
-    const result = await runAction(setDeleteProceduralNoteModalStateAction, {
+    const result = await runAction(setDeleteCaseNoteModalStateAction, {
       modules: {
         presenter,
       },

@@ -55,7 +55,7 @@ describe('saveCaseNoteInteractor', () => {
       result = await saveCaseNoteInteractor({
         applicationContext,
         caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        proceduralNote: 'This is my case note',
+        caseNote: 'This is my case note',
       });
     } catch (e) {
       error = e;
@@ -65,6 +65,6 @@ describe('saveCaseNoteInteractor', () => {
     expect(result).toBeDefined();
     expect(getCaseByCaseIdMock).toHaveBeenCalled();
     expect(updateCaseMock).toHaveBeenCalled();
-    expect(result.proceduralNote).toEqual('This is my case note');
+    expect(result.caseNote).toEqual('This is my case note');
   });
 });

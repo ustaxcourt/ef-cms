@@ -1,14 +1,14 @@
 import { state } from 'cerebral';
 
 /**
- * set the state for the add edit procedural notes modal
+ * set the state for the add edit case notes modal
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store
  */
-export const setAddEditProceduralNoteModalStateFromDetailAction = ({
+export const setAddEditCaseNoteModalStateFromDetailAction = ({
   applicationContext,
   get,
   store,
@@ -16,9 +16,9 @@ export const setAddEditProceduralNoteModalStateFromDetailAction = ({
   const {
     caseCaption,
     caseId,
+    caseNote,
     docketNumber,
     docketNumberSuffix,
-    proceduralNote,
   } = get(state.caseDetail);
 
   const caseCaptionNames = applicationContext.getCaseCaptionNames(
@@ -31,5 +31,5 @@ export const setAddEditProceduralNoteModalStateFromDetailAction = ({
   );
   store.set(state.modal.caseCaptionNames, caseCaptionNames);
   store.set(state.modal.caseId, caseId);
-  store.set(state.modal.notes, proceduralNote);
+  store.set(state.modal.notes, caseNote);
 };

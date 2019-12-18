@@ -156,7 +156,7 @@ export const CaseDetailInternal = connect(
           <DeleteCaseDeadlineModalDialog />
         )}
         {showModal === 'AddEditCaseNoteModal' && (
-          <AddEditCaseNoteModal onConfirmSequence="updateProceduralNoteSequence" />
+          <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteSequence" />
         )}
         {showModal === 'AddToTrialModal' && <AddToTrialModal />}
         {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}

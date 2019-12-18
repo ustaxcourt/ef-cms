@@ -6,7 +6,7 @@ const { User } = require('../../entities/User');
 const updateCaseMock = jest.fn().mockImplementation(async c => c);
 const getCaseByCaseIdMock = jest
   .fn()
-  .mockResolvedValue({ ...MOCK_CASE, proceduralNote: 'My Procedural Note' });
+  .mockResolvedValue({ ...MOCK_CASE, caseNote: 'My Procedural Note' });
 
 describe('deleteCaseNoteInteractor', () => {
   let applicationContext;
@@ -64,6 +64,6 @@ describe('deleteCaseNoteInteractor', () => {
     expect(result).toBeDefined();
     expect(getCaseByCaseIdMock).toHaveBeenCalled();
     expect(updateCaseMock).toHaveBeenCalled();
-    expect(result.proceduralNote).not.toBeDefined();
+    expect(result.caseNote).not.toBeDefined();
   });
 });

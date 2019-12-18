@@ -26,7 +26,7 @@ exports.deleteCaseNoteInteractor = async ({ applicationContext, caseId }) => {
       caseId,
     });
 
-  delete caseRecord.proceduralNote;
+  delete caseRecord.caseNote;
   const caseToUpdate = new Case(caseRecord, {
     applicationContext,
   })
