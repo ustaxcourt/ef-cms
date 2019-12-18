@@ -44,6 +44,7 @@ export const CaseNotes = connect(
                         link
                         className="float-right margin-right-0 margin-top-1 padding-0"
                         icon="sticky-note"
+                        id="add-procedural-note-button"
                         onClick={() => {
                           openAddEditProceduralNoteModalSequence();
                         }}
@@ -73,6 +74,7 @@ export const CaseNotes = connect(
                             link
                             className="red-warning no-wrap"
                             icon="trash"
+                            id="delete-procedural-note-button"
                             onClick={() => {
                               openDeleteProceduralNoteConfirmModalSequence();
                             }}

@@ -18,7 +18,7 @@ function CaseNote(rawProps) {
 }
 
 CaseNote.VALIDATION_ERROR_MESSAGES = {
-  notes: 'Notes can not be empty.',
+  notes: 'Enter note',
 };
 
 CaseNote.schema = joi.object().keys({
