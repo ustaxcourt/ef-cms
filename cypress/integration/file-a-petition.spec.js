@@ -4,7 +4,7 @@ let createdDocketNumber;
 describe('File a petition', function() {
   before(() => {
     cy.seed();
-    cy.login('taxpayer');
+    cy.login('petitioner');
   });
 
   it('finds footer element', () => {
@@ -17,7 +17,7 @@ describe('File a petition', function() {
       .then($trs => {
         rowCount = $trs.length;
       });
-    cy.get('#init-file-petition').click();
+    cy.get('#file-a-petition').click();
   });
 
   describe('USA Banner', () => {
@@ -39,7 +39,7 @@ describe('File a petition', function() {
 
 describe('creation form', () => {
   before(() => {
-    cy.login('taxpayer', 'file-a-petition/step-1');
+    cy.login('petitioner', 'file-a-petition/step-1');
   });
 
   it('has a stin file input', () => {
@@ -184,8 +184,7 @@ describe('creation form', () => {
 describe('can view case detail', () => {
   before(() => {
     cy.viewport(1200, 900);
-    cy.get('#search-field').type(createdDocketNumber);
-    cy.get('#search-input').submit();
+    cy.login('petitioner', `/case-detail/${createdDocketNumber}`);
     cy.url().should('include', 'case-detail');
   });
 

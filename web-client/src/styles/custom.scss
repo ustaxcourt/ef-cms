@@ -71,6 +71,22 @@ hr {
   clear: both;
 }
 
+.sticky-footer {
+  background-color: $color-white;
+
+  &.sticky-footer--space {
+    height: 135px;
+  }
+  &.sticky-footer--container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-bottom: 1em;
+    border-top: 3px ridge;
+    margin-bottom: 0;
+  }
+}
+
 .label {
   display: block;
   margin-bottom: 5px;
@@ -252,7 +268,7 @@ select[disabled] {
 }
 
 .required-statement  {
-  font-weight: $font-semibold;
+  font-weight: 600;
 }
 
 .usa-accordion__button.font-normal {
@@ -669,12 +685,6 @@ select.ustc-input-error {
   display: inline-block;
 }
 
-#tabContent-completed,
-#tabContent-inProgress {
-  max-height: 931px;
-  overflow-y: auto;
-}
-
 .ustc-create-message-modal,
 .forward-form {
   .usa-form-group--error input,
@@ -888,7 +898,7 @@ header.usa-header {
     background: $color-white;
     color: color($theme-color-primary-darker);
     font-weight: $font-bold;
-
+    white-space: nowrap;
     &.ustc-tag--yellow {
       background: color($theme-color-warning);
     }
@@ -1388,6 +1398,10 @@ button.change-scanner-button {
     .right-gray-border {
       border-right: 1px solid color($theme-color-base-light);
     }
+
+    .advanced-search__form-container {
+      height: 326px;
+    }
   }
   /* little screens */
   @media only screen and (max-width: $medium-screen - 1) {
@@ -1397,8 +1411,10 @@ button.change-scanner-button {
     }
   }
 
+
   .advanced-search__button {
     margin-top: 39px;
+    margin-bottom: 20px;
   }
 }
 
@@ -1416,4 +1432,15 @@ button.change-scanner-button {
   background: color($theme-color-secondary-dark);
   color: white;
   font-size: 14px;
+}
+
+.docket-entry-preview-text {
+  overflow: hidden;
+  width: 600px;
+  max-height: 41px;
+  margin: 0.5rem 0;
+}
+
+#service-parties {
+  font-size: 17px;
 }

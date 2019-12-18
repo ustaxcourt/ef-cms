@@ -36,7 +36,7 @@ describe('uploadExternalDocumentsAction', () => {
           documentType: 'Answer',
           eventCode: 'A',
           processingStatus: 'pending',
-          userId: 'taxpayer',
+          userId: 'petitioner',
           workItems: [],
         },
       ],

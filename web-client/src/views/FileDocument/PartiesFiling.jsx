@@ -1,7 +1,7 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const PartiesFiling = connect(
   {
@@ -26,13 +26,7 @@ export const PartiesFiling = connect(
           Tell Us About the Parties Filing The Document(s)
         </h2>
         <div className="blue-container">
-          <div
-            className={classNames(
-              'usa-form-group margin-bottom-0',
-              fileDocumentHelper.partyValidationError &&
-                'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={fileDocumentHelper.partyValidationError}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">
                 Who are you filing the document(s) for?
@@ -107,12 +101,7 @@ export const PartiesFiling = connect(
                 </label>
               </div>
             </fieldset>
-            {fileDocumentHelper.partyValidationError && (
-              <span className="usa-error-message">
-                {fileDocumentHelper.partyValidationError}
-              </span>
-            )}
-          </div>
+          </FormGroup>
         </div>
       </React.Fragment>
     );

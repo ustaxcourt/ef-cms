@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  WORKITEM,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { IRS_BATCH_SYSTEM_SECTION } = require('../../entities/WorkQueue');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -20,7 +20,7 @@ exports.getDocumentQCBatchedForSectionInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, WORKITEM)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
     );

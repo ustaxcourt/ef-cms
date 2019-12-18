@@ -27,6 +27,7 @@ import docketClerkSelectsAssignee from './journey/docketClerkSelectsAssignee';
 import docketClerkSelectsWorkItems from './journey/docketClerkSelectsWorkItems';
 import docketClerkStartsNewMessageThreadOnAnswer from './journey/docketClerkStartsNewMessageThreadOnAnswer';
 import docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC from './journey/docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC';
+import docketClerkUpdatesCaseCaption from './journey/docketClerkUpdatesCaseCaption';
 import docketClerkViewsCaseDetail from './journey/docketClerkViewsCaseDetail';
 import docketClerkViewsDecisionDocument from './journey/docketClerkViewsDecisionDocument';
 import docketClerkViewsDocument from './journey/docketClerkViewsDocument';
@@ -34,13 +35,21 @@ import docketClerkViewsMessages from './journey/docketClerkViewsMessages';
 import docketClerkViewsMessagesAfterForward from './journey/docketClerkViewsMessagesAfterForward';
 import docketClerkViewsMessagesWithoutWorkItem from './journey/docketClerkViewsMessagesWithoutWorkItem';
 import docketClerkViewsOutboxAfterForward from './journey/docketClerkViewsOutboxAfterForward';
+import petitionerCancelsCreateCase from './journey/petitionerCancelsCreateCase';
+import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
+import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
+import petitionerCreatesNewCaseTestAllOptions from './journey/petitionerCreatesNewCaseTestAllOptions';
+import petitionerLogin from './journey/petitionerLogIn';
+import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
+import petitionerSignsOut from './journey/petitionerSignsOut';
+import petitionerViewsCaseDetail from './journey/petitionerViewsCaseDetail';
+import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAssignsWorkItemToOther from './journey/petitionsClerkAssignsWorkItemToOther';
 import petitionsClerkAssignsWorkItemToSelf from './journey/petitionsClerkAssignsWorkItemToSelf';
 import petitionsClerkCaseSearch from './journey/petitionsClerkCaseSearch';
 import petitionsClerkIrsHoldingQueue from './journey/petitionsClerkIrsHoldingQueue';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkSubmitsCaseToIrs from './journey/petitionsClerkSubmitsCaseToIrs';
-import petitionsClerkUpdatesCaseCaption from './journey/petitionsClerkUpdatesCaseCaption';
 import petitionsClerkUpdatesCaseDetail from './journey/petitionsClerkUpdatesCaseDetail';
 import petitionsClerkViewsCaseDetail from './journey/petitionsClerkViewsCaseDetail';
 import petitionsClerkViewsMessages from './journey/petitionsClerkViewsMessages';
@@ -51,15 +60,6 @@ import respondentAddsStipulatedDecision from './journey/respondentAddsStipulated
 import respondentLogIn from './journey/respondentLogIn';
 import respondentViewsCaseDetailOfBatchedCase from './journey/respondentViewsCaseDetailOfBatchedCase';
 import respondentViewsDashboard from './journey/respondentViewsDashboard';
-import taxPayerSignsOut from './journey/taxpayerSignsOut';
-import taxpayerCancelsCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
-import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
-import taxpayerCreatesNewCaseTestAllOptions from './journey/taxpayerCreatesNewCaseTestAllOptions';
-import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxpayerViewsCaseDetail from './journey/taxpayerViewsCaseDetail';
-import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 
 let test;
 global.FormData = FormData;
@@ -120,15 +120,15 @@ describe('Case journey', () => {
     });
   });
 
-  taxpayerLogin(test);
-  taxpayerCancelsCreateCase(test);
-  taxpayerNavigatesToCreateCase(test);
-  taxpayerChoosesProcedureType(test);
-  taxpayerChoosesCaseType(test);
-  taxpayerCreatesNewCaseTestAllOptions(test, fakeFile);
-  taxpayerViewsDashboard(test);
-  taxpayerViewsCaseDetail(test);
-  taxPayerSignsOut(test);
+  petitionerLogin(test);
+  petitionerCancelsCreateCase(test);
+  petitionerNavigatesToCreateCase(test);
+  petitionerChoosesProcedureType(test);
+  petitionerChoosesCaseType(test);
+  petitionerCreatesNewCaseTestAllOptions(test, fakeFile);
+  petitionerViewsDashboard(test);
+  petitionerViewsCaseDetail(test);
+  petitionerSignsOut(test);
 
   petitionsClerkLogIn(test);
   petitionsClerkCaseSearch(test);
@@ -139,7 +139,6 @@ describe('Case journey', () => {
   petitionsClerkViewsMessagesAfterReassign(test);
   petitionsClerkViewsCaseDetail(test);
   petitionsClerkUpdatesCaseDetail(test);
-  petitionsClerkUpdatesCaseCaption(test);
   petitionsClerkSubmitsCaseToIrs(test);
   petitionsClerkIrsHoldingQueue(test);
 
@@ -153,6 +152,7 @@ describe('Case journey', () => {
   docketClerkLogIn(test);
   docketClerkViewsMessagesWithoutWorkItem(test);
   docketClerkViewsCaseDetail(test);
+  docketClerkUpdatesCaseCaption(test);
   docketClerkViewsDecisionDocument(test);
   docketClerkStartsNewMessageThreadOnAnswer(test);
   docketClerkStartsNewMessageThreadOnStipulatedDecisionToADC(test);

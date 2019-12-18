@@ -26,11 +26,11 @@ export const submitDocketEntryWithFileAction = async ({
 
   documentMetadata = {
     ...documentMetadata,
-    isFileAttached: true,
-    isPaper: true,
-    docketNumber,
     caseId,
     createdAt: documentMetadata.dateReceived,
+    docketNumber,
+    isFileAttached: true,
+    isPaper: true,
     receivedAt: documentMetadata.dateReceived,
   };
 
@@ -40,11 +40,6 @@ export const submitDocketEntryWithFileAction = async ({
   });
 
   await applicationContext.getUseCases().validatePdfInteractor({
-    applicationContext,
-    documentId: primaryDocumentFileId,
-  });
-
-  await applicationContext.getUseCases().sanitizePdfInteractor({
     applicationContext,
     documentId: primaryDocumentFileId,
   });

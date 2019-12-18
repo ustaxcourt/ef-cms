@@ -20,14 +20,43 @@ const { Respondent } = require('../Respondent');
 const { User } = require('../User');
 
 Case.STATUS_TYPES = {
+  assignedCase: 'Assigned - Case',
+  assignedMotion: 'Assigned - Motion',
   batchedForIRS: 'Batched for IRS',
   calendared: 'Calendared',
+  cav: 'CAV',
   closed: 'Closed',
   generalDocket: 'General Docket - Not at Issue',
   generalDocketReadyForTrial: 'General Docket - At Issue (Ready for Trial)',
+  jurisdictionRetained: 'Jurisdiction Retained',
   new: 'New',
+  onAppeal: 'On Appeal',
   recalled: 'Recalled',
+  rule155: 'Rule 155',
+  submitted: 'Submitted',
 };
+
+Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
+  Case.STATUS_TYPES.submitted,
+  Case.STATUS_TYPES.cav,
+  Case.STATUS_TYPES.rule155,
+  Case.STATUS_TYPES.jurisdictionRetained,
+  Case.STATUS_TYPES.assignedCase,
+  Case.STATUS_TYPES.assignedMotion,
+];
+
+Case.STATUS_TYPES_MANUAL_UPDATE = [
+  Case.STATUS_TYPES.generalDocket,
+  Case.STATUS_TYPES.generalDocketReadyForTrial,
+  Case.STATUS_TYPES.submitted,
+  Case.STATUS_TYPES.cav,
+  Case.STATUS_TYPES.rule155,
+  Case.STATUS_TYPES.jurisdictionRetained,
+  Case.STATUS_TYPES.assignedCase,
+  Case.STATUS_TYPES.assignedMotion,
+  Case.STATUS_TYPES.closed,
+  Case.STATUS_TYPES.onAppeal,
+];
 
 Case.ANSWER_CUTOFF_AMOUNT = 45;
 Case.ANSWER_CUTOFF_UNIT = 'day';
@@ -81,6 +110,8 @@ Case.ANSWER_DOCUMENT_CODES = [
   'ASAP',
   'AATT',
 ];
+
+Case.CHIEF_JUDGE = 'Chief Judge';
 
 Case.VALIDATION_ERROR_MESSAGES = {
   applicationForWaiverOfFilingFeeFile:
@@ -173,6 +204,7 @@ function Case(rawCase, { applicationContext }) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
+  this.associatedJudge = rawCase.associatedJudge || Case.CHIEF_JUDGE;
   this.blocked = rawCase.blocked;
   this.blockedDate = rawCase.blockedDate;
   this.blockedReason = rawCase.blockedReason;
@@ -200,7 +232,6 @@ function Case(rawCase, { applicationContext }) {
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
-  this.trialJudge = rawCase.trialJudge;
   this.trialLocation = rawCase.trialLocation;
   this.trialSessionId = rawCase.trialSessionId;
   this.trialTime = rawCase.trialTime;
@@ -210,9 +241,7 @@ function Case(rawCase, { applicationContext }) {
     rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
 
   if (rawCase.caseCaption) {
-    this.caseTitle = `${rawCase.caseCaption.trim()} ${
-      Case.CASE_CAPTION_POSTFIX
-    }`;
+    this.setCaseTitle(rawCase.caseCaption);
     this.initialTitle = rawCase.initialTitle || this.caseTitle;
   }
 
@@ -223,6 +252,8 @@ function Case(rawCase, { applicationContext }) {
   } else {
     this.documents = [];
   }
+
+  this.hasPendingItems = this.documents.some(document => document.pending);
 
   if (Array.isArray(rawCase.practitioners)) {
     this.practitioners = rawCase.practitioners.map(
@@ -277,6 +308,7 @@ function Case(rawCase, { applicationContext }) {
 joiValidationDecorator(
   Case,
   joi.object().keys({
+    associatedJudge: joi.string().required(),
     blocked: joi.boolean().optional(),
     blockedDate: joi.when('blocked', {
       is: true,
@@ -382,7 +414,6 @@ joiValidationDecorator(
       .iso()
       .optional()
       .allow(null),
-    trialJudge: joi.string().optional(),
     trialLocation: joi.string().optional(),
     trialSessionId: joi
       .string()
@@ -471,6 +502,16 @@ Case.getCaseCaption = function(rawCase) {
   return caseCaption;
 };
 
+Case.prototype.toRawObject = function() {
+  const result = this.toRawObjectFromJoi();
+  result.hasPendingItems = this.doesHavePendingItems();
+  return result;
+};
+
+Case.prototype.doesHavePendingItems = function() {
+  return this.documents.some(document => document.pending);
+};
+
 /**
  * get the case caption without the ", Petitioner/s/(s)" postfix
  *
@@ -492,10 +533,10 @@ Case.prototype.attachRespondent = function(respondent) {
  * @returns {void} modifies the respondents array on the case
  */
 Case.prototype.updateRespondent = function(respondentToUpdate) {
-  const respondent = this.respondents.find(
+  const foundRespondent = this.respondents.find(
     respondent => respondent.userId === respondentToUpdate.userId,
   );
-  if (respondent) Object.assign(respondent, respondentToUpdate);
+  if (foundRespondent) Object.assign(foundRespondent, respondentToUpdate);
 };
 
 /**
@@ -522,10 +563,10 @@ Case.prototype.attachPractitioner = function(practitioner) {
  * @param {string} practitionerToUpdate the practitioner user object with updated info
  */
 Case.prototype.updatePractitioner = function(practitionerToUpdate) {
-  const practitioner = this.practitioners.find(
+  const foundPractitioner = this.practitioners.find(
     practitioner => practitioner.userId === practitionerToUpdate.userId,
   );
-  if (practitioner) Object.assign(practitioner, practitionerToUpdate);
+  if (foundPractitioner) Object.assign(foundPractitioner, practitionerToUpdate);
 };
 
 /**
@@ -570,11 +611,14 @@ Case.prototype.addDocumentWithoutDocketRecord = function(document) {
 
 Case.prototype.closeCase = function() {
   this.status = Case.STATUS_TYPES.closed;
+  this.unsetAsBlocked();
+  this.unsetAsHighPriority();
+  return this;
 };
 
 /**
  *
- * @param {Date} sendDate the timestamp when the case was sent to the IRS
+ * @param {Date} sendDate the time stamp when the case was sent to the IRS
  * @returns {Case} the updated case entity
  */
 Case.prototype.markAsSentToIRS = function(sendDate) {
@@ -689,7 +733,7 @@ Case.prototype.getShowCaseNameForPrimary = function() {
 
 /**
  *
- * @param {string} payGovDate an ISO formatted datestring
+ * @param {string} payGovDate an ISO formatted date string
  * @returns {Case} the updated case entity
  */
 Case.prototype.markAsPaidByPayGov = function(payGovDate) {
@@ -770,10 +814,10 @@ Case.prototype.addDocketRecord = function(docketRecordEntity) {
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocketRecordEntry = function(updatedDocketEntry) {
-  const entry = this.docketRecord.find(
+  const foundEntry = this.docketRecord.find(
     entry => entry.documentId === updatedDocketEntry.documentId,
   );
-  if (entry) Object.assign(entry, updatedDocketEntry);
+  if (foundEntry) Object.assign(foundEntry, updatedDocketEntry);
   return this;
 };
 
@@ -797,10 +841,10 @@ Case.prototype.updateDocketRecord = function(
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocument = function(updatedDocument) {
-  const document = this.documents.find(
+  const foundDocument = this.documents.find(
     document => document.documentId === updatedDocument.documentId,
   );
-  if (document) Object.assign(document, updatedDocument);
+  if (foundDocument) Object.assign(foundDocument, updatedDocument);
   return this;
 };
 
@@ -959,14 +1003,16 @@ Case.prototype.generateTrialSortTags = function() {
  * @returns {Case} the updated case entity
  */
 Case.prototype.setAsCalendared = function(trialSessionEntity) {
+  if (trialSessionEntity.judge && trialSessionEntity.judge.name) {
+    this.associatedJudge = trialSessionEntity.judge.name;
+  }
   this.trialSessionId = trialSessionEntity.trialSessionId;
   this.trialDate = trialSessionEntity.startDate;
   this.trialTime = trialSessionEntity.startTime;
-  if (trialSessionEntity.judge && trialSessionEntity.judge.name) {
-    this.trialJudge = trialSessionEntity.judge.name;
-  }
   this.trialLocation = trialSessionEntity.trialLocation;
-  this.status = Case.STATUS_TYPES.calendared;
+  if (trialSessionEntity.isCalendared === true) {
+    this.status = Case.STATUS_TYPES.calendared;
+  }
   return this;
 };
 
@@ -1058,18 +1104,111 @@ Case.prototype.unsetAsHighPriority = function() {
 };
 
 /**
- * remove from trial, setting case status back to generalDocketReadyForTrial
+ * remove case from trial, setting case status to generalDocketReadyForTrial
  *
  * @returns {Case} the updated case entity
  */
 Case.prototype.removeFromTrial = function() {
   this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
+  this.associatedJudge = Case.CHIEF_JUDGE;
   this.trialDate = undefined;
-  this.trialJudge = undefined;
   this.trialLocation = undefined;
   this.trialSessionId = undefined;
   this.trialTime = undefined;
   return this;
+};
+
+/**
+ * remove case from trial with optional associated judge
+ *
+ * @param {string} associatedJudge (optional) the associated judge for the case
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.removeFromTrialWithAssociatedJudge = function(associatedJudge) {
+  if (associatedJudge) {
+    this.associatedJudge = associatedJudge;
+  }
+
+  this.trialDate = undefined;
+  this.trialLocation = undefined;
+  this.trialSessionId = undefined;
+  this.trialTime = undefined;
+  return this;
+};
+
+/**
+ * set associated judge
+ *
+ * @param {string} associatedJudge the judge to associate with the case
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setAssociatedJudge = function(associatedJudge) {
+  this.associatedJudge = associatedJudge;
+  return this;
+};
+
+/**
+ * set case status
+ *
+ * @param {string} caseStatus the case status to update
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setCaseStatus = function(caseStatus) {
+  this.status = caseStatus;
+  if (
+    [
+      Case.STATUS_TYPES.generalDocket,
+      Case.STATUS_TYPES.generalDocketReadyForTrial,
+    ].includes(caseStatus)
+  ) {
+    this.associatedJudge = Case.CHIEF_JUDGE;
+  }
+  return this;
+};
+
+/**
+ * set case caption
+ *
+ * @param {string} caseCaption the case caption to update
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setCaseCaption = function(caseCaption) {
+  this.caseCaption = caseCaption;
+  this.setCaseTitle(caseCaption);
+  return this;
+};
+
+/**
+ * set case title
+ *
+ * @param {string} caseCaption the case caption to build the case title
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.setCaseTitle = function(caseCaption) {
+  this.caseTitle = `${caseCaption.trim()} ${Case.CASE_CAPTION_POSTFIX}`;
+  return this;
+};
+
+/**
+ * get case contacts
+ *
+ * @returns {object} object containing case contacts
+ * @param {object} shape specific contact params to be returned
+ */
+Case.prototype.getCaseContacts = function(shape) {
+  const caseContacts = {};
+  [
+    'contactPrimary',
+    'contactSecondary',
+    'practitioners',
+    'respondents',
+  ].forEach(contact => {
+    if (!shape || (shape && shape[contact] === true)) {
+      caseContacts[contact] = this[contact];
+    }
+  });
+
+  return caseContacts;
 };
 
 module.exports = { Case };

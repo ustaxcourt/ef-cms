@@ -7,6 +7,7 @@ import React from 'react';
 export const DocketRecordHeader = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
+    docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableDocketRecordSequence:
       sequences.navigateToPrintableDocketRecordSequence,
@@ -17,6 +18,7 @@ export const DocketRecordHeader = connect(
   },
   ({
     caseDetailHelper,
+    docketRecordHelper,
     formattedCaseDetail,
     navigateToPrintableDocketRecordSequence,
     printDocketRecordSequence,
@@ -44,7 +46,7 @@ export const DocketRecordHeader = connect(
                   Entry
                 </Button>
               )}
-              {caseDetailHelper.showFileDocumentButton && (
+              {docketRecordHelper.showFileDocumentButton && (
                 <Button
                   href={`/case-detail/${formattedCaseDetail.docketNumber}/before-you-file-a-document`}
                   id="button-file-document"
@@ -80,7 +82,7 @@ export const DocketRecordHeader = connect(
                 Printable Docket Record
               </Button>
             </div>
-            <div className="tablet:grid-col-2">
+            <div className="tablet:grid-col-2 padding-top-1">
               <div className="only-large-screens">
                 <select
                   aria-label="docket record"

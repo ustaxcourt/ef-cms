@@ -1,3 +1,4 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -5,6 +6,8 @@ import classNames from 'classnames';
 
 export const ReportsMenu = connect(
   {
+    openTrialSessionPlanningModalSequence:
+      sequences.openTrialSessionPlanningModalSequence,
     pageIsReports: state.headerHelper.pageIsReports,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
@@ -12,6 +15,7 @@ export const ReportsMenu = connect(
   },
   ({
     isExpanded,
+    openTrialSessionPlanningModalSequence,
     pageIsReports,
     resetHeaderAccordionsSequence,
     toggleMenuSequence,
@@ -25,6 +29,7 @@ export const ReportsMenu = connect(
             'usa-accordion__button usa-nav__link',
             pageIsReports && 'usa-current',
           )}
+          id="reports-btn"
           onClick={() => {
             toggleMenuSequence({ openMenu: 'ReportsMenu' });
           }}
@@ -33,6 +38,18 @@ export const ReportsMenu = connect(
         </button>
         {isExpanded && (
           <ul className="usa-nav__submenu">
+            <li className="usa-nav__submenu-item">
+              <a
+                href="/reports/blocked-cases"
+                id="all-blocked-cases"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                }}
+              >
+                Blocked Cases
+              </a>
+            </li>
             <li className="usa-nav__submenu-item">
               <a
                 href="/reports/case-deadlines"
@@ -47,15 +64,28 @@ export const ReportsMenu = connect(
             </li>
             <li className="usa-nav__submenu-item">
               <a
-                href="/reports/blocked-cases"
-                id="all-blocked-cases"
+                href="/reports/pending-report"
+                id="pending-report"
                 onClick={() => {
                   resetHeaderAccordionsSequence();
                   toggleMobileMenuSequence();
                 }}
               >
-                Blocked Cases
+                Pending Report
               </a>
+            </li>
+            <li className="usa-nav__submenu-item" id="reports-nav">
+              <Button
+                link
+                id="trial-session-planning-btn"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                  openTrialSessionPlanningModalSequence();
+                }}
+              >
+                Trial Session Planning
+              </Button>
             </li>
           </ul>
         )}

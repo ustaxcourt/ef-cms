@@ -35,8 +35,8 @@ export const getSortFunction = searchText => {
   };
 };
 
-export const internalTypesHelper = get => {
-  const { INTERNAL_CATEGORY_MAP } = get(state.constants);
+export const internalTypesHelper = (get, applicationContext) => {
+  const { INTERNAL_CATEGORY_MAP } = applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
 
   const internalDocumentTypesForSelect = getDocumentTypesForSelect(

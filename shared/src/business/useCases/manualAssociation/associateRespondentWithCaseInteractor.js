@@ -1,10 +1,10 @@
 const {
-  ASSOCIATE_USER_WITH_CASE,
-  isAuthorized,
-} = require('../../../authorization/authorizationClientService');
-const {
   associateRespondentToCase,
 } = require('../../useCaseHelper/caseAssociation/associateRespondentToCase');
+const {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -23,7 +23,9 @@ exports.associateRespondentWithCaseInteractor = async ({
 }) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authenticatedUser, ASSOCIATE_USER_WITH_CASE)) {
+  if (
+    !isAuthorized(authenticatedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 

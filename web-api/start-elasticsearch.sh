@@ -10,9 +10,6 @@ fi
 ES_ARCH_RENAMED="elasticsearch.tar.gz"
 ES_DESTINATION=".elasticsearch/"
 
-pwd
-ls
-
 if [ ! -d "$ES_DESTINATION" ]; then
   mkdir -p "$ES_DESTINATION"
   curl "$ES_DOWNLOAD" --output "${ES_DESTINATION}/${ES_ARCH_RENAMED}" --create-dirs

@@ -5,11 +5,13 @@ const {
 } = require('../entities/WorkQueue');
 const {
   isAuthorized,
-  UPDATE_CASE,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
 const { Document } = require('../entities/Document');
+const { IRS_BATCH_SYSTEM_USER_ID, WorkItem } = require('../entities/WorkItem');
+const { Message } = require('../entities/Message');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -22,7 +24,7 @@ const { UnauthorizedError } = require('../../errors/errors');
 exports.runBatchProcessInteractor = async ({ applicationContext }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, UPDATE_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for send to IRS Holding Queue');
   }
 
@@ -34,6 +36,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     });
 
   let zips = [];
+
   const processWorkItem = async workItem => {
     const caseToBatch = await applicationContext
       .getPersistenceGateway()
@@ -110,22 +113,90 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
       batchedByUserId,
     });
 
-    await Promise.all([
+    const casePromises = [
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
         applicationContext,
         section: PETITIONS_SECTION,
         userId: batchedByUserId,
         workItem: initializeCaseWorkItem,
       }),
-      applicationContext.getPersistenceGateway().updateCase({
-        applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
-      }),
       applicationContext.getPersistenceGateway().updateWorkItem({
         applicationContext,
         workItemToUpdate: initializeCaseWorkItem,
       }),
-    ]);
+    ];
+
+    if (caseEntity.isPaper) {
+      const qcWorkItem = petitionDocument.getQCWorkItem();
+
+      const qcWorkItemUser = await applicationContext
+        .getPersistenceGateway()
+        .getUserById({
+          applicationContext,
+          userId: qcWorkItem.completedByUserId,
+        });
+
+      const message = 'Case confirmation is ready to be printed.';
+
+      const workItemEntity = new WorkItem(
+        {
+          assigneeId: qcWorkItemUser.userId,
+          assigneeName: qcWorkItemUser.name,
+          caseId: caseEntity.caseId,
+          caseStatus: caseEntity.status,
+          caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseEntity)),
+          docketNumber: caseEntity.docketNumber,
+          docketNumberSuffix: caseEntity.docketNumberSuffix,
+          document: {
+            ...petitionDocumentEntity.toRawObject(),
+            createdAt: petitionDocumentEntity.createdAt,
+          },
+          isInitializeCase: false,
+          isQC: false,
+          section: qcWorkItemUser.section,
+          sentBy: 'IRS Holding Queue',
+          sentBySection: IRS_BATCH_SYSTEM_SECTION,
+          sentByUserId: IRS_BATCH_SYSTEM_USER_ID,
+        },
+        { applicationContext },
+      );
+
+      const newMessage = new Message(
+        {
+          from: 'IRS Holding Queue',
+          fromUserId: IRS_BATCH_SYSTEM_USER_ID,
+          message,
+          to: qcWorkItemUser.name,
+          toUserId: qcWorkItemUser.userId,
+        },
+        { applicationContext },
+      );
+
+      workItemEntity.addMessage(newMessage);
+      petitionDocumentEntity.addWorkItem(workItemEntity);
+      caseEntity.updateDocument(petitionDocumentEntity);
+
+      casePromises.push(
+        applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+          applicationContext,
+          messageId: newMessage.messageId,
+          workItem: workItemEntity.validate().toRawObject(),
+        }),
+      );
+    }
+
+    casePromises.push(
+      applicationContext.getPersistenceGateway().updateCase({
+        applicationContext,
+        caseToUpdate: caseEntity.validate().toRawObject(),
+      }),
+      applicationContext.getUseCaseHelpers().generateCaseConfirmationPdf({
+        applicationContext,
+        caseEntity,
+      }),
+    );
+
+    await Promise.all(casePromises);
 
     zips = zips.concat({
       fileNames,
@@ -134,7 +205,11 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     });
   };
 
-  await Promise.all(workItemsInHoldingQueue.map(processWorkItem));
+  // can't use promise.all here because generating the case confirmation PDFs
+  // all at the same time causes errors
+  for (const workItem of workItemsInHoldingQueue) {
+    await processWorkItem(workItem);
+  }
 
   return {
     processedCases: zips,

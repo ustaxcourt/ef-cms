@@ -7,11 +7,11 @@ import classNames from 'classnames';
 
 export const AccountMenu = connect(
   {
+    headerHelper: state.headerHelper,
     signOutSequence: sequences.signOutSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
-    user: state.user,
   },
-  ({ isExpanded, signOutSequence, toggleMenuSequence, user }) => {
+  ({ headerHelper, isExpanded, signOutSequence, toggleMenuSequence }) => {
     const LogOutButton = () => (
       <button
         className="account-menu-item usa-button usa-button--unstyled"
@@ -37,7 +37,7 @@ export const AccountMenu = connect(
                 className={classNames(
                   'usa-accordion__button usa-nav__link hidden-underline',
                 )}
-                title={`Hello, ${user.name}`}
+                title={`Hello, ${headerHelper.userName}`}
                 onClick={() => {
                   toggleMenuSequence({ openMenu: 'AccountMenu' });
                 }}

@@ -43,7 +43,7 @@ describe('Get internal users', () => {
         applicationContext: {
           getCurrentUser: () => ({
             role: User.ROLES.petitioner,
-            userId: 'taxpayer',
+            userId: 'petitioner',
           }),
         },
       });

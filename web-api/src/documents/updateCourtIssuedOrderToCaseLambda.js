@@ -17,8 +17,8 @@ exports.handler = event =>
         .getUseCases()
         .updateCourtIssuedOrderInteractor({
           ...JSON.parse(event.body),
-          documentIdToEdit: event.pathParameters.documentId,
           applicationContext,
+          documentIdToEdit: event.pathParameters.documentId,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);

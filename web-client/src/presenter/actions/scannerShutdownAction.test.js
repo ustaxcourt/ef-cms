@@ -16,7 +16,7 @@ describe('scannerShutdownAction', () => {
     await runAction(scannerShutdownAction, {
       state: {
         scanner: {
-          dynanScriptClass: dynamScriptClass,
+          dynamScriptClass: dynamScriptClass,
         },
       },
     });

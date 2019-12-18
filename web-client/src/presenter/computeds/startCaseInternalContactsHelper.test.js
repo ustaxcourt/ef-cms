@@ -1,7 +1,13 @@
-import { runCompute } from 'cerebral/test';
-
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
-import { startCaseInternalContactsHelper } from './startCaseInternalContactsHelper';
+import { applicationContext } from '../../applicationContext';
+import { runCompute } from 'cerebral/test';
+import { startCaseInternalContactsHelper as startCaseInternalContactsHelperComputed } from './startCaseInternalContactsHelper';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const startCaseInternalContactsHelper = withAppContextDecorator(
+  startCaseInternalContactsHelperComputed,
+  applicationContext,
+);
 
 describe('startCaseInternalContactsHelper', () => {
   it('should validate form view information for party type Conservator', () => {

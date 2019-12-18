@@ -1,10 +1,6 @@
 const {
-  GET_CASE,
-  GET_CASES_BY_STATUS,
   isAuthorized,
-  PETITION,
-  UPDATE_CASE,
-  WORKITEM,
+  ROLE_PERMISSIONS,
 } = require('./authorizationClientService');
 const { User } = require('../business/entities/User');
 
@@ -23,50 +19,53 @@ describe('Authorization client service', () => {
     expect(
       isAuthorized(
         { role: User.ROLES.petitionsClerk, userId: 'petitionsclerk' },
-        GET_CASE,
+        ROLE_PERMISSIONS.GET_CASE,
       ),
     ).toBeTruthy();
   });
 
-  it('should return false when a user doesnt have a petitionsclerk role', () => {
+  it("should return false when a user doesn't have a petitionsclerk role", () => {
     expect(
       isAuthorized(
         { role: User.ROLES.petitioner, userId: 'someUser' },
-        GET_CASES_BY_STATUS,
+        ROLE_PERMISSIONS.GET_CASES_BY_STATUS,
       ),
     ).toBeFalsy();
   });
 
-  it('should authorize a petitions clerk for workitems', () => {
+  it('should authorize a petitions clerk for work items', () => {
     expect(
       isAuthorized(
         { role: User.ROLES.petitionsClerk, userId: 'petitionsclerk' },
-        WORKITEM,
+        ROLE_PERMISSIONS.WORKITEM,
       ),
     ).toBeTruthy();
   });
 
-  it('should authorize a petitions clerk for petition creation', () => {
+  it('should authorize a petitions clerk for start a case from paper', () => {
     expect(
       isAuthorized(
         { role: User.ROLES.petitionsClerk, userId: 'petitionsclerk' },
-        PETITION,
+        ROLE_PERMISSIONS.START_PAPER_CASE,
       ),
     ).toBeTruthy();
   });
 
-  it('should authorize a docket clerk for workitems', () => {
+  it('should authorize a docket clerk for work items', () => {
     expect(
       isAuthorized(
         { role: User.ROLES.docketClerk, userId: 'docketclerk' },
-        WORKITEM,
+        ROLE_PERMISSIONS.WORKITEM,
       ),
     ).toBeTruthy();
   });
 
-  it('should authorize an adc user for workitems', () => {
+  it('should authorize an adc user for work items', () => {
     expect(
-      isAuthorized({ role: User.ROLES.adc, userId: 'adc' }, WORKITEM),
+      isAuthorized(
+        { role: User.ROLES.adc, userId: 'adc' },
+        ROLE_PERMISSIONS.WORKITEM,
+      ),
     ).toBeTruthy();
   });
 
@@ -74,16 +73,16 @@ describe('Authorization client service', () => {
     expect(
       isAuthorized(
         { role: User.ROLES.respondent, userId: 'respondent' },
-        UPDATE_CASE,
+        ROLE_PERMISSIONS.GET_CASE,
       ),
     ).toBeTruthy();
   });
 
-  it('should authorize a docketclerk for updatecase', () => {
+  it('should authorize a docketclerk for update case', () => {
     expect(
       isAuthorized(
         { role: User.ROLES.docketClerk, userId: 'docketclerk' },
-        UPDATE_CASE,
+        ROLE_PERMISSIONS.UPDATE_CASE,
       ),
     ).toBeTruthy();
   });
@@ -92,7 +91,7 @@ describe('Authorization client service', () => {
     expect(
       isAuthorized(
         { role: User.ROLES.docketClerk, userId: '123456' },
-        UPDATE_CASE,
+        ROLE_PERMISSIONS.UPDATE_CASE,
         123456,
       ),
     ).toBeTruthy();

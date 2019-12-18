@@ -7,7 +7,7 @@ import React from 'react';
 export const SectionWorkQueueInbox = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
@@ -18,7 +18,7 @@ export const SectionWorkQueueInbox = connect(
   },
   ({
     assignSelectedWorkItemsSequence,
-    documentHelper,
+    documentEditLinkHelper,
     formattedWorkQueue,
     selectAssigneeSequence,
     selectedWorkItems,
@@ -70,14 +70,14 @@ export const SectionWorkQueueInbox = connect(
             <tr>
               {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
               <th aria-label="Docket Number">Docket</th>
-              <th>Filed</th>
+              <th>{workQueueHelper.inboxFiledColumnLabel}</th>
               <th>Case name</th>
               {!workQueueHelper.hideIconColumn && (
                 <th aria-label="Status Icon" className="padding-right-0" />
               )}
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
-              <th>Case Status</th>
+              <th>Case status</th>
               {workQueueHelper.showAssignedToColumn && (
                 <th>{workQueueHelper.assigneeColumnTitle}</th>
               )}
@@ -171,14 +171,16 @@ export const SectionWorkQueueInbox = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentHelper({
+                      href={documentEditLinkHelper({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
                         messageId: item.currentMessage.messageId,
                         shouldLinkToComplete:
                           item.document.isFileAttached === false,
                         shouldLinkToEdit:
-                          item.isQC && item.document.eventCode !== 'P',
+                          workQueueHelper.showEditDocketEntry &&
+                          item.isQC &&
+                          item.document.eventCode !== 'P',
                       })}
                       onClick={e => {
                         e.stopPropagation();

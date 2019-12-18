@@ -40,6 +40,7 @@ module "dynamsoft_us_east" {
   }
   ami = "ami-0a313d6098716f372"
   availability_zones = ["us-east-1a"]
+  is_dynamsoft_enabled = "${var.is_dynamsoft_enabled}"
   dynamsoft_s3_zip_path = "${var.dynamsoft_s3_zip_path}"
   dynamsoft_url = "${var.dynamsoft_url}"
   dynamsoft_product_keys = "${var.dynamsoft_product_keys}"
@@ -55,6 +56,7 @@ module "dynamsoft_us_west" {
   }
   ami = "ami-06397100adf427136"
   availability_zones = ["us-west-1a"]
+  is_dynamsoft_enabled = "${var.is_dynamsoft_enabled}"
   dynamsoft_s3_zip_path = "${var.dynamsoft_s3_zip_path}"
   dynamsoft_url = "${var.dynamsoft_url}"
   dynamsoft_product_keys = "${var.dynamsoft_product_keys}"
@@ -77,6 +79,7 @@ resource "aws_route53_record" "record_east_www" {
   type    = "CNAME"
   zone_id = "${data.aws_route53_zone.zone.zone_id}"
   set_identifier = "us-east-1"
+  count = "${var.is_dynamsoft_enabled}"
   records = [
     "${module.dynamsoft_us_east.dns_name}",
   ]
@@ -91,6 +94,7 @@ resource "aws_route53_record" "record_west_www" {
   type    = "CNAME"
   zone_id = "${data.aws_route53_zone.zone.zone_id}"
   set_identifier = "us-west-1"
+  count = "${var.is_dynamsoft_enabled}"
   records = [
     "${module.dynamsoft_us_west.dns_name}"
   ]

@@ -1,3 +1,4 @@
+import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -12,7 +13,9 @@ export default test => {
     });
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
-    expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
+    expect(test.getState('caseDetail.status')).toEqual(
+      Case.STATUS_TYPES.batchedForIRS,
+    );
     expect(test.getState('caseDetail.documents').length).toEqual(2);
 
     const helper = runCompute(caseDetailHelper, {

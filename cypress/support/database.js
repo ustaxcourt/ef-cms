@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { chunk } = require('lodash');
 
 AWS.config = new AWS.Config();
 AWS.config.accessKeyId = 'noop';
@@ -12,24 +13,45 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
   region: 'us-east-1',
 });
 
-const deleteItem = item => {
-  return documentClient.delete({
-    Key: {
-      pk: item.pk,
-      sk: item.sk,
-    },
-    TableName: 'efcms-local',
-  });
-};
-
 const clearDatabase = async () => {
-  const { Items: items } = await documentClient
-    .scan({
-      TableName: 'efcms-local',
-    })
-    .promise();
+  let hasMoreResults = true;
+  let lastKey = null;
+  let count = 0;
+  while (hasMoreResults) {
+    hasMoreResults = false;
 
-  await Promise.all(items.map(deleteItem));
+    await documentClient
+      .scan({
+        ExclusiveStartKey: lastKey,
+        TableName: 'efcms-local',
+      })
+      .promise()
+      .then(async results => {
+        hasMoreResults = !!results.LastEvaluatedKey;
+        lastKey = results.LastEvaluatedKey;
+
+        const chunks = chunk(results.Items, 25);
+        for (let c of chunks) {
+          count += 25;
+          console.log(`deleting chunk: ${count} total deleted`);
+
+          await documentClient
+            .batchWrite({
+              RequestItems: {
+                ['efcms-local']: c.map(item => ({
+                  DeleteRequest: {
+                    Key: {
+                      pk: item.pk,
+                      sk: item.sk,
+                    },
+                  },
+                })),
+              },
+            })
+            .promise();
+        }
+      });
+  }
 };
 
 const seedDatabase = () => {

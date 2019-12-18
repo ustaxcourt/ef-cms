@@ -1,4 +1,5 @@
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -6,7 +7,6 @@ import classNames from 'classnames';
 
 export const IRSNotice = connect(
   {
-    autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     caseDetail: state.caseDetail,
     caseDetailErrors: state.caseDetailErrors,
     caseTypes: state.caseTypes,
@@ -15,9 +15,9 @@ export const IRSNotice = connect(
     setIrsNoticeFalseSequence: sequences.setIrsNoticeFalseSequence,
     updateCaseValueSequence: sequences.updateCaseValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
   },
   ({
-    autoSaveCaseSequence,
     caseDetail,
     caseDetailErrors,
     caseTypes,
@@ -26,6 +26,7 @@ export const IRSNotice = connect(
     setIrsNoticeFalseSequence,
     updateCaseValueSequence,
     updateFormValueSequence,
+    validateCaseDetailSequence,
   }) => {
     const renderIrsNoticeRadios = () => {
       return (
@@ -47,7 +48,6 @@ export const IRSNotice = connect(
                   key: e.target.name,
                   value: true,
                 });
-                autoSaveCaseSequence();
               }}
             />
             <label
@@ -69,7 +69,6 @@ export const IRSNotice = connect(
               value="No"
               onChange={() => {
                 setIrsNoticeFalseSequence();
-                autoSaveCaseSequence();
               }}
             />
             <label
@@ -86,12 +85,7 @@ export const IRSNotice = connect(
 
     const renderIrsNoticeDate = () => {
       return (
-        <div
-          className={classNames(
-            'usa-form-group margin-bottom-0',
-            caseDetailErrors.irsNoticeDate && 'usa-form-group--error',
-          )}
-        >
+        <FormGroup errorText={caseDetailErrors.irsNoticeDate}>
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="date-of-notice-legend">
               Date of notice <span className="usa-hint">(optional)</span>
@@ -112,9 +106,7 @@ export const IRSNotice = connect(
                   placeholder="MM"
                   type="number"
                   value={form.irsMonth || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
+                  onBlur={() => validateCaseDetailSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -138,9 +130,7 @@ export const IRSNotice = connect(
                   placeholder="DD"
                   type="number"
                   value={form.irsDay || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
+                  onBlur={() => validateCaseDetailSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -164,9 +154,7 @@ export const IRSNotice = connect(
                   placeholder="YYYY"
                   type="number"
                   value={form.irsYear || ''}
-                  onBlur={() => {
-                    autoSaveCaseSequence();
-                  }}
+                  onBlur={() => validateCaseDetailSequence()}
                   onChange={e => {
                     updateFormValueSequence({
                       key: e.target.name,
@@ -177,12 +165,7 @@ export const IRSNotice = connect(
               </div>
             </div>
           </fieldset>
-          {caseDetailErrors.irsNoticeDate && (
-            <div className="usa-error-message" role="alert">
-              {caseDetailErrors.irsNoticeDate}
-            </div>
-          )}
-        </div>
+        </FormGroup>
       );
     };
 
@@ -194,7 +177,7 @@ export const IRSNotice = connect(
           allowDefaultOption={true}
           caseTypes={caseTypes}
           legend="Type of case"
-          validation="autoSaveCaseSequence"
+          validation="validateCaseDetailSequence"
           value={caseDetail.caseType}
           onChange="updateCaseValueSequence"
         />

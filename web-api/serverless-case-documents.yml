@@ -6,11 +6,15 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-jetpack
   # - serverless-plugin-warmup
 
 custom:
   #warmup:
   #enabled: true
+
+  jetpack:
+    mode: yarn
 
   prune:
     automatic: true
@@ -75,18 +79,20 @@ provider:
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
+  role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
   userPoolId: us-east-1_7uRkF0Axn
   masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
-  clamavDefDir: /opt/var/lib/clamav
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
   apiGateway:
     binaryMediaTypes:
       - 'application/pdf'
+  clamavDefDir: /opt/var/lib/clamav
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
@@ -98,65 +104,16 @@ provider:
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
-    GS_LIB: /opt/share/ghostscript/9.06/Resource/Init
-    CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
-
-  iamRoleStatements:
-    - Effect: 'Allow'
-      Action:
-        - 'xray:PutTraceSegments'
-        - 'xray:PutTelemetryRecords'
-      Resource:
-        - '*'
-    - Effect: 'Allow'
-      Action:
-        - 'lambda:InvokeFunction'
-      Resource:
-        - arn:aws:lambda:${opt:region}:${opt:accountId}:function:${self:service}-${opt:stage, self:provider.stage}-*
-    - Effect: 'Allow'
-      Action:
-        - cognito-idp:AdminCreateUser
-        - cognito-idp:AdminGetUser
-      Resource:
-        - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
-    - Effect: 'Allow'
-      Action:
-        - 's3:*'
-      Resource:
-        Fn::Join:
-          - ''
-          - - 'arn:aws:s3:::'
-            - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
-            - '/*'
-    - Effect: 'Allow'
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:BatchGetItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-        - dynamodb:BatchWriteItem
-      Resource:
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}
-        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-    - Effect: 'Allow'
-      Action:
-        - 'ses:*'
-      Resource:
-        - '*'
+    CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
 
 package:
   exclude:
     - ./**
   include:
-    - web-api/src/caseDocumentsHandlers.js
+    - web-api/${self:provider.dir}/caseDocumentsHandlers.js
 
   excludeDevDependencies: true
 
@@ -195,11 +152,11 @@ resources:
             MetricsEnabled: true
 
 functions:
-  serveSignedStipDecision:
-    handler: web-api/src/caseDocumentsHandlers.serveSignedStipDecisionLambda
+  serveCourtIssuedDocument:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.serveCourtIssuedDocumentLambda
     events:
       - http:
-          path: /{caseId}/{documentId}/serve
+          path: /{caseId}/{documentId}/serve-court-issued
           method: put
           cors: true
           authorizer:
@@ -208,7 +165,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createWorkItem:
-    handler: web-api/src/caseDocumentsHandlers.createWorkItemLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.createWorkItemLambda
     events:
       - http:
           path: /{caseId}/{documentId}/work-items
@@ -220,7 +177,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   addCoversheet:
-    handler: web-api/src/caseDocumentsHandlers.addCoversheetLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.addCoversheetLambda
     memorySize: 3008
     timeout: 900
     events:
@@ -235,7 +192,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   signDocument:
-    handler: web-api/src/caseDocumentsHandlers.signDocumentLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.signDocumentLambda
     events:
       - http:
           path: /{caseId}/{documentId}/sign
@@ -247,7 +204,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   archiveDraftDocument:
-    handler: web-api/src/caseDocumentsHandlers.archiveDraftDocumentLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.archiveDraftDocumentLambda
     events:
       - http:
           path: /{caseId}/{documentId}
@@ -255,7 +212,7 @@ functions:
           cors: true
 
   fileExternalDocument:
-    handler: web-api/src/caseDocumentsHandlers.fileExternalDocumentToCaseLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileExternalDocumentToCaseLambda
     events:
       - http:
           path: /{caseId}/external-document
@@ -267,7 +224,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   fileDocketEntry:
-    handler: web-api/src/caseDocumentsHandlers.fileDocketEntryToCaseLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileDocketEntryToCaseLambda
     events:
       - http:
           path: /{caseId}/docket-entry
@@ -279,7 +236,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateDocketEntry:
-    handler: web-api/src/caseDocumentsHandlers.updateDocketEntryOnCaseLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateDocketEntryOnCaseLambda
     events:
       - http:
           path: /{caseId}/docket-entry
@@ -291,7 +248,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   saveIntermediateDocketEntry:
-    handler: web-api/src/caseDocumentsHandlers.saveIntermediateDocketEntryLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.saveIntermediateDocketEntryLambda
     events:
       - http:
           path: /{caseId}/docket-entry-in-progress
@@ -303,7 +260,9 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   completeDocketEntryQC:
-    handler: web-api/src/caseDocumentsHandlers.completeDocketEntryQCLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.completeDocketEntryQCLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     events:
       - http:
           path: /{caseId}/docket-entry-complete
@@ -314,8 +273,32 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  fileCourtIssuedDocketEntry:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileCourtIssuedDocketEntryLambda
+    events:
+      - http:
+          path: /{caseId}/court-issued-docket-entry
+          method: post
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCourtIssuedDocketEntry:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCourtIssuedDocketEntryLambda
+    events:
+      - http:
+          path: /{caseId}/court-issued-docket-entry
+          method: put
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   fileCourtIssuedOrder:
-    handler: web-api/src/caseDocumentsHandlers.fileCourtIssuedOrderToCaseLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileCourtIssuedOrderToCaseLambda
     events:
       - http:
           path: /{caseId}/court-issued-order
@@ -327,7 +310,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCourtIssuedOrder:
-    handler: web-api/src/caseDocumentsHandlers.updateCourtIssuedOrderToCaseLambda
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateCourtIssuedOrderToCaseLambda
     events:
       - http:
           path: /{caseId}/court-issued-orders/{documentId}

@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  WORKITEM,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -17,7 +17,7 @@ exports.getSentMessagesForSectionInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, WORKITEM)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
     );

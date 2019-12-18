@@ -7,7 +7,6 @@ import React from 'react';
 
 export const PartyInformation = connect(
   {
-    autoSaveCaseSequence: sequences.autoSaveCaseSequence,
     baseUrl: state.baseUrl,
     caseDetail: state.caseDetail,
     caseDetailEditHelper: state.caseDetailEditHelper,
@@ -17,7 +16,6 @@ export const PartyInformation = connect(
     updateCaseValueSequence: sequences.updateCaseValueSequence,
   },
   ({
-    autoSaveCaseSequence,
     baseUrl,
     caseDetail,
     caseDetailEditHelper,
@@ -38,9 +36,6 @@ export const PartyInformation = connect(
               id="case-caption"
               name="caseCaption"
               value={caseDetail.caseCaption}
-              onBlur={() => {
-                autoSaveCaseSequence();
-              }}
               onChange={e => {
                 updateCaseValueSequence({
                   key: e.target.name,
@@ -68,7 +63,6 @@ export const PartyInformation = connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
-                autoSaveCaseSequence();
               }}
             >
               <option value="">- Select -</option>
@@ -114,7 +108,6 @@ export const PartyInformation = connect(
                       key: e.target.name,
                       value: e.target.checked,
                     });
-                    autoSaveCaseSequence();
                   }}
                 />
                 <label className="usa-checkbox__label" htmlFor="order-for-ods">
@@ -134,7 +127,7 @@ export const PartyInformation = connect(
               parentView="CaseDetail"
               showPrimaryContact={caseDetailEditHelper.showPrimaryContact}
               showSecondaryContact={caseDetailEditHelper.showSecondaryContact}
-              onBlur="autoSaveCaseSequence"
+              onBlur="validateCaseDetailSequence"
               onChange="updateCaseValueSequence"
             />
           </div>

@@ -1,79 +1,71 @@
 import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { scanHelper as scanHelperComputed } from './scanHelper';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
-const scanHelper = withAppContextDecorator(scanHelperComputed, {
-  getUtilities: () => {
-    return {
-      isInternalUser: User.isInternalUser,
-    };
-  },
-});
+const scanHelper = withAppContextDecorator(
+  scanHelperComputed,
+  applicationContext,
+);
 
 describe('scanHelper', () => {
   it('sets hasScanFeature to `true` for `petitionsclerk` user roles', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.petitionsClerk,
+    });
     const result = runCompute(scanHelper, {
-      state: {
-        user: {
-          role: User.ROLES.petitionsClerk,
-        },
-      },
+      state: {},
     });
     expect(result.hasScanFeature).toBeTruthy();
   });
 
   it('sets hasScanFeature to `true` for `docketclerk` user roles', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.docketClerk,
+    });
     const result = runCompute(scanHelper, {
-      state: {
-        user: {
-          role: User.ROLES.docketClerk,
-        },
-      },
+      state: {},
     });
     expect(result.hasScanFeature).toBeTruthy();
   });
 
   it('sets hasScanFeature to `true` for `adc` user roles', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.adc,
+    });
     const result = runCompute(scanHelper, {
-      state: {
-        user: {
-          role: User.ROLES.adc,
-        },
-      },
+      state: {},
     });
     expect(result.hasScanFeature).toBeTruthy();
   });
 
   it('sets hasScanFeature to `false` for `petitioner` user roles', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.petitioner,
+    });
     const result = runCompute(scanHelper, {
-      state: {
-        user: {
-          role: User.ROLES.petitioner,
-        },
-      },
+      state: {},
     });
     expect(result.hasScanFeature).toBeFalsy();
   });
 
   it('sets hasScanFeature to `false` for `practitioner` user roles', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.practitioner,
+    });
     const result = runCompute(scanHelper, {
-      state: {
-        user: {
-          role: User.ROLES.practitioner,
-        },
-      },
+      state: {},
     });
     expect(result.hasScanFeature).toBeFalsy();
   });
 
   it('sets hasScanFeature to `false` for `respondent` user roles', () => {
+    applicationContext.getCurrentUser = () => ({
+      role: User.ROLES.respondent,
+    });
     const result = runCompute(scanHelper, {
-      state: {
-        user: {
-          role: User.ROLES.respondent,
-        },
-      },
+      state: {},
     });
     expect(result.hasScanFeature).toBeFalsy();
   });

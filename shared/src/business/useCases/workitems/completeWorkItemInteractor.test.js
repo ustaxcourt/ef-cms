@@ -11,7 +11,7 @@ describe('completeWorkItemInteractor', () => {
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
     document: {
-      sentBy: 'taxpayer',
+      sentBy: 'petitioner',
     },
     messages: [],
     section: 'docket',
@@ -26,7 +26,7 @@ describe('completeWorkItemInteractor', () => {
         return {
           name: 'Petitioner',
           role: User.ROLES.petitioner,
-          userId: 'taxpayer',
+          userId: 'petitioner',
         };
       },
       getPersistenceGateway: () => ({

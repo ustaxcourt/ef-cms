@@ -1,14 +1,14 @@
 const {
   isAuthorized,
-  PETITION,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { User } = require('../entities/User');
 const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
 const { PETITIONS_SECTION } = require('../entities/WorkQueue');
 const { UnauthorizedError } = require('../../errors/errors');
+const { User } = require('../entities/User');
 const { WorkItem } = require('../entities/WorkItem');
 
 const addPetitionDocumentToCase = ({
@@ -79,7 +79,7 @@ exports.createCaseInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, PETITION)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -127,11 +127,11 @@ exports.createCaseInteractor = async ({
 
   const caseToAdd = new Case(
     {
-      userId: user.userId,
-      practitioners,
-      ...petitionEntity.toRawObject(),
       docketNumber,
       isPaper: false,
+      ...petitionEntity.toRawObject(),
+      practitioners,
+      userId: user.userId,
     },
     {
       applicationContext,
@@ -149,10 +149,14 @@ exports.createCaseInteractor = async ({
       partySecondary,
       practitioner: practitioners[0],
       userId: user.userId,
+      ...caseToAdd.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   );
-  petitionDocumentEntity.generateFiledBy(caseToAdd);
+
   const newWorkItem = addPetitionDocumentToCase({
     applicationContext,
     caseToAdd,
@@ -178,10 +182,14 @@ exports.createCaseInteractor = async ({
       partySecondary,
       practitioner: practitioners[0],
       userId: user.userId,
+      ...caseToAdd.getCaseContacts({
+        contactPrimary: true,
+        contactSecondary: true,
+      }),
     },
     { applicationContext },
   );
-  stinDocumentEntity.generateFiledBy(caseToAdd);
+
   caseToAdd.addDocumentWithoutDocketRecord(stinDocumentEntity);
 
   if (ownershipDisclosureFileId) {
@@ -196,10 +204,14 @@ exports.createCaseInteractor = async ({
         partySecondary,
         practitioner: practitioners[0],
         userId: user.userId,
+        ...caseToAdd.getCaseContacts({
+          contactPrimary: true,
+          contactSecondary: true,
+        }),
       },
       { applicationContext },
     );
-    odsDocumentEntity.generateFiledBy(caseToAdd);
+
     caseToAdd.addDocument(odsDocumentEntity);
   }
 

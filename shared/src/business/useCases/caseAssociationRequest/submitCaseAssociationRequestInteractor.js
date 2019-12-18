@@ -4,12 +4,12 @@ const {
 const {
   associateRespondentToCase,
 } = require('../../useCaseHelper/caseAssociation/associateRespondentToCase');
+const {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
-const {
-  ASSOCIATE_SELF_WITH_CASE,
-  isAuthorized,
-} = require('../../../authorization/authorizationClientService');
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -21,7 +21,7 @@ const {
  * the primary contact on the case, false otherwise
  * @param {string} providers.representingSecondary true if the user is representing
  * the secondary contact on the case, false otherwise
- * @returns {Promise<*>} the promise of the case assocation request
+ * @returns {Promise<*>} the promise of the case association request
  */
 exports.submitCaseAssociationRequestInteractor = async ({
   applicationContext,
@@ -31,7 +31,9 @@ exports.submitCaseAssociationRequestInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ASSOCIATE_SELF_WITH_CASE)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 

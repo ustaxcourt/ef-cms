@@ -6,11 +6,11 @@ import React from 'react';
 
 export const IndividualWorkQueueInbox = connect(
   {
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({ documentEditLinkHelper, formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -23,7 +23,7 @@ export const IndividualWorkQueueInbox = connect(
               <th aria-label="Docket Number" className="small" colSpan="2">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              <th className="small">Filed</th>
+              <th className="small">Received</th>
               <th>Case name</th>
               <th aria-label="Status Icon" className="padding-right-0">
                 &nbsp;
@@ -33,7 +33,7 @@ export const IndividualWorkQueueInbox = connect(
               <th>Case status</th>
               {!workQueueHelper.hideFromColumn && <th>From</th>}
               {!workQueueHelper.hideSectionColumn && (
-                <th className="max-width-7">Section</th>
+                <th className="small">Section</th>
               )}
             </tr>
           </thead>
@@ -86,14 +86,16 @@ export const IndividualWorkQueueInbox = connect(
                         className={
                           item.isRead ? 'case-link' : 'link case-link-bold'
                         }
-                        href={documentHelper({
+                        href={documentEditLinkHelper({
                           docketNumber: item.docketNumber,
                           documentId: item.document.documentId,
                           messageId: item.currentMessage.messageId,
                           shouldLinkToComplete:
                             item.document.isFileAttached === false,
                           shouldLinkToEdit:
-                            item.isQC && item.document.eventCode !== 'P',
+                            workQueueHelper.showEditDocketEntry &&
+                            item.isQC &&
+                            item.document.eventCode !== 'P',
                           workItemIdToMarkAsRead: !item.isRead
                             ? item.workItemId
                             : null,
@@ -127,7 +129,7 @@ export const IndividualWorkQueueInbox = connect(
                     </td>
                   )}
                   {!workQueueHelper.hideSectionColumn && (
-                    <td className="message-queue-row max-width-7">
+                    <td className="message-queue-row small">
                       {item.sentBySection}
                     </td>
                   )}

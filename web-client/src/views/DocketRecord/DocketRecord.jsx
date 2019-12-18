@@ -11,12 +11,14 @@ export const DocketRecord = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     clearDocumentSequence: sequences.clearDocumentSequence,
+    docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.showModal,
   },
   ({
     caseDetailHelper,
+    docketRecordHelper,
     formattedCaseDetail,
     refreshCaseSequence,
     showModal,
@@ -41,15 +43,17 @@ export const DocketRecord = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Number" className="center-column">
-                No.
+              <th className="center-column">
+                <span>
+                  <span className="usa-sr-only">Number</span>
+                  <span aria-hidden="true">No.</span>
+                </span>
               </th>
               <th>Date</th>
               <th className="center-column">Event</th>
               <th aria-hidden="true" className="icon-column" />
               <th>Filings and proceedings</th>
               <th>Filed by</th>
-              <th>Status</th>
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
@@ -61,10 +65,30 @@ export const DocketRecord = connect(
                 const isInProgress =
                   caseDetailHelper.showDocketRecordInProgressState &&
                   document &&
-                  document.isFileAttached === false;
+                  document.isInProgress;
+
+                const qcWorkItemsUntouched =
+                  !isInProgress &&
+                  caseDetailHelper.showQcWorkItemsUntouchedState &&
+                  document &&
+                  document.qcWorkItemsUntouched &&
+                  !document.isCourtIssuedDocument;
+
+                const isPaper =
+                  !isInProgress &&
+                  !qcWorkItemsUntouched &&
+                  document &&
+                  document.isPaper;
+
                 return (
                   <tr
-                    className={classNames(isInProgress && 'in-progress')}
+                    className={classNames(
+                      document &&
+                        document.isInProgress &&
+                        caseDetailHelper.showDocketRecordInProgressState &&
+                        'in-progress',
+                      qcWorkItemsUntouched && 'qc-untouched',
+                    )}
                     key={index}
                   >
                     <td className="center-column hide-on-mobile">{index}</td>
@@ -80,7 +104,7 @@ export const DocketRecord = connect(
                       aria-hidden="true"
                       className="filing-type-icon hide-on-mobile"
                     >
-                      {document && document.isPaper && !isInProgress && (
+                      {isPaper && (
                         <FontAwesomeIcon icon={['fas', 'file-alt']} />
                       )}
 
@@ -88,8 +112,12 @@ export const DocketRecord = connect(
                         <FontAwesomeIcon icon={['fas', 'thumbtack']} />
                       )}
 
+                      {qcWorkItemsUntouched && (
+                        <FontAwesomeIcon icon={['fa', 'star']} />
+                      )}
+
                       {document &&
-                        caseDetailHelper.showDirectDownloadLink &&
+                        docketRecordHelper.showDirectDownloadLink &&
                         caseDetailHelper.showDocketRecordInProgressState &&
                         document.processingStatus !== 'complete' && (
                           <FontAwesomeIcon
@@ -108,11 +136,13 @@ export const DocketRecord = connect(
                     <td className="hide-on-mobile">
                       {document && document.filedBy}
                     </td>
-                    <td className="hide-on-mobile">
-                      {document && document.processingStatus}
-                    </td>
                     <td className="hide-on-mobile">{record.action}</td>
                     <td>
+                      {document && document.isNotServedCourtIssuedDocument && (
+                        <span className="text-secondary text-semibold">
+                          Not served
+                        </span>
+                      )}
                       {document && document.isStatusServed && (
                         <span>{document.servedAtFormatted}</span>
                       )}

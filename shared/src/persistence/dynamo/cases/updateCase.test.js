@@ -1,5 +1,6 @@
 const client = require('../../../../../shared/src/persistence/dynamodbClientService');
 const sinon = require('sinon');
+const { Case } = require('../../../business/entities/cases/Case');
 const { updateCase } = require('./updateCase');
 
 describe('updateCase', () => {
@@ -12,7 +13,7 @@ describe('updateCase', () => {
     });
     getStub = sinon.stub(client, 'get').resolves({
       docketNumberSuffix: null,
-      status: 'General Docket - Not at Issue',
+      status: Case.STATUS_TYPES.generalDocket,
     });
 
     applicationContext = {
@@ -33,8 +34,8 @@ describe('updateCase', () => {
         caseId: '123',
         docketNumber: '101-18',
         docketNumberSuffix: null,
-        status: 'General Docket - Not at Issue',
-        userId: 'taxpayer',
+        status: Case.STATUS_TYPES.generalDocket,
+        userId: 'petitioner',
       },
     });
     expect(putStub.getCall(0).args[0].Item).toMatchObject({

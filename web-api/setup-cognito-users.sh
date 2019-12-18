@@ -96,7 +96,7 @@ createAccount() {
       --region "${REGION}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
       --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
-      --session "${session}"
+      --session="${session}"
   fi
 }
 
@@ -104,6 +104,16 @@ createManyAccounts() {
   emailPrefix=$1
   role=$1
   section=$2
+  for i in $(seq 1 30);
+  do
+    createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}" "" "${section}"
+  done
+}
+
+createChambersAccount() {
+  emailPrefix=$1
+  section=$1
+  role=$2
   for i in $(seq 1 5);
   do
     createAccount "${emailPrefix}${i}@example.com" "${role}" "${i}" "" "${section}"
@@ -137,10 +147,17 @@ createJudgeAccount() {
 
 createAdmin "ustcadmin@example.com" "admin" "admin"
 
+createManyAccounts "adc" "adc"
+createManyAccounts "admissionsclerk" "admissions"
+createManyAccounts "calendarclerk" "calendar"
+createManyAccounts "clerkofcourt" "clerkofcourt"
+createManyAccounts "docketclerk" "docket"
 createManyAccounts "petitioner" "petitioner"
 createManyAccounts "petitionsclerk" "petitions"
-createManyAccounts "docketclerk" "docket"
-createManyAccounts "adc" "adc"
+createManyAccounts "trialclerk" "trialClerks"
+createChambersAccount "ashfordsChambers" "chambers"
+createChambersAccount "buchsChambers" "chambers"
+createChambersAccount "cohensChambers" "chambers"
 createPractitionerAccount "1" "PT1234"
 createPractitionerAccount "2" "PT5432"
 createPractitionerAccount "3" "PT1111"
@@ -161,11 +178,3 @@ createRespondentAccount "7" "RT0000" "Test respondent"
 createRespondentAccount "8" "RT1111" "Test respondent"
 createRespondentAccount "9" "RT2222" "Test respondent"
 createRespondentAccount "10" "RT3333" "Test respondent"
-createJudgeAccount "Armen"
-createJudgeAccount "Ashford"
-createJudgeAccount "Buch"
-createJudgeAccount "Carluzzo"
-createJudgeAccount "Cohen"
-createJudgeAccount "Gustafson"
-createJudgeAccount "Pugh"
-createJudgeAccount "Urda"

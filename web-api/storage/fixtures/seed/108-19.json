@@ -157,7 +157,7 @@
     "irsNoticeDate": null,
     "orderForFilingFee": false,
     "partyType": "Trust",
-    "trialJudge": "Judge Armen",
+    "associatedJudge": "Judge Armen",
     "irsSendDate": "2019-08-16T19:22:13.919Z",
     "caseType": "Worker Classification",
     "trialLocation": "Houston, Texas",
@@ -172,7 +172,7 @@
       "name": "Garrett Carpenter",
       "state": "MD",
       "countryType": "domestic",
-      "email": "taxpayer"
+      "email": "petitioner"
     },
     "createdAt": "2019-08-16T19:21:46.146Z",
     "receivedAt": "2019-08-16T19:21:46.146Z",

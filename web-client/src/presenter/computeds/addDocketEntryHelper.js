@@ -18,12 +18,27 @@ const getInternalDocumentTypes = typeMap => {
   return orderBy(filteredTypeList, ['label'], ['asc']);
 };
 
+export const getSupportingDocumentTypeList = categoryMap => {
+  return categoryMap['Supporting Document'].map(entry => {
+    const entryCopy = { ...entry }; //to prevent against modifying constants
+    entryCopy.documentTypeDisplay = entryCopy.documentType.replace(
+      /\sin\sSupport$/i,
+      '',
+    );
+    return entryCopy;
+  });
+};
+
 export const addDocketEntryHelper = (get, applicationContext) => {
-  const { INTERNAL_CATEGORY_MAP, PARTY_TYPES } = get(state.constants);
+  const {
+    INTERNAL_CATEGORY_MAP,
+    PARTY_TYPES,
+  } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {};
   }
+  const showDateReceivedEdit = caseDetail.isPaper;
   const documentIdWhitelist = get(state.screenMetadata.filedDocumentIds);
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
@@ -33,15 +48,9 @@ export const addDocketEntryHelper = (get, applicationContext) => {
 
   const internalDocumentTypes = getInternalDocumentTypes(INTERNAL_CATEGORY_MAP);
 
-  const supportingDocumentTypeList = INTERNAL_CATEGORY_MAP[
-    'Supporting Document'
-  ].map(entry => {
-    entry.documentTypeDisplay = entry.documentType.replace(
-      /\sin\sSupport$/i,
-      '',
-    );
-    return entry;
-  });
+  const supportingDocumentTypeList = getSupportingDocumentTypeList(
+    INTERNAL_CATEGORY_MAP,
+  );
 
   const objectionDocumentTypes = [
     ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
@@ -119,6 +128,9 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     optionsForCategory.showSecondaryDocumentForm = true;
   }
 
+  const { Document } = applicationContext.getEntityConstructors();
+  const showTrackOption = !Document.isPendingOnCreation(form);
+
   return {
     certificateOfServiceDateFormatted,
     internalDocumentTypes,
@@ -126,6 +138,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     previouslyFiledWizardDocuments,
     primary: optionsForCategory,
     secondary: secondaryOptionsForCategory,
+    showDateReceivedEdit,
     showObjection: objectionDocumentTypes.includes(form.documentType),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
@@ -137,6 +150,7 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     showSupportingDocumentSelect: form.documentType && form.documentType !== '',
     showSupportingDocumentValid: !!form.supportingDocumentFile,
     showSupportingInclusions,
+    showTrackOption,
     supportingDocumentTypeList,
   };
 };

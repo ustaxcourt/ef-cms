@@ -1,3 +1,4 @@
+const { Case } = require('../../entities/cases/Case');
 const { forwardWorkItemInteractor } = require('./forwardWorkItemInteractor');
 const { MOCK_CASE } = require('../../../../src/test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -12,7 +13,7 @@ describe('forwardWorkItemInteractor', () => {
     docketNumber: '101-18',
     docketNumberSuffix: 'S',
     document: {
-      sentBy: 'taxpayer',
+      sentBy: 'petitioner',
     },
     isQC: true,
     messages: [],
@@ -39,13 +40,13 @@ describe('forwardWorkItemInteractor', () => {
               documentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
               documentType: 'Proposed Stipulated Decision',
               processingStatus: 'pending',
-              userId: 'taxpayer',
+              userId: 'petitioner',
               workItems: [
                 {
                   assigneeId: null,
                   assigneeName: null,
                   caseId: 'd3d92ca6-d9b3-4bd6-8328-e94a9fc36f88',
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   createdAt: '2019-07-12T17:09:41.027Z',
                   docketNumber: '106-19',
                   docketNumberSuffix: null,
@@ -83,7 +84,7 @@ describe('forwardWorkItemInteractor', () => {
                   assigneeId: null,
                   assigneeName: null,
                   caseId: 'd3d92ca6-d9b3-4bd6-8328-e94a9fc36f88',
-                  caseStatus: 'New',
+                  caseStatus: Case.STATUS_TYPES.new,
                   createdAt: '2019-07-12T17:09:41.027Z',
                   docketNumber: '106-19',
                   docketNumberSuffix: null,
@@ -148,7 +149,7 @@ describe('forwardWorkItemInteractor', () => {
       docketNumber: '101-18',
       docketNumberSuffix: 'S',
       document: {
-        sentBy: 'taxpayer',
+        sentBy: 'petitioner',
       },
       isInitializeCase: undefined,
       isQC: false,

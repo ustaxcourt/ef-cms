@@ -1,6 +1,9 @@
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { fakeFile, setupTest } from './helpers';
 import { uploadPetition } from './helpers';
+import petitionerLogin from './journey/petitionerLogIn';
+import petitionerSignsOut from './journey/petitionerSignsOut';
+import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import practitionerCreatesNewCase from './journey/practitionerCreatesNewCase';
 import practitionerFilesDocumentForOwnedCase from './journey/practitionerFilesDocumentForOwnedCase';
 import practitionerLogin from './journey/practitionerLogIn';
@@ -15,9 +18,6 @@ import practitionerViewsCaseDetailOfOwnedCase from './journey/practitionerViewsC
 import practitionerViewsCaseDetailOfPendingCase from './journey/practitionerViewsCaseDetailOfPendingCase';
 import practitionerViewsDashboard from './journey/practitionerViewsDashboard';
 import practitionerViewsDashboardBeforeAddingCase from './journey/practitionerViewsDashboardBeforeAddingCase';
-import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerSignsOut from './journey/taxpayerSignsOut';
-import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 
 const test = setupTest();
 
@@ -34,8 +34,8 @@ describe('Practitioner requests access to case', () => {
   practitionerSignsOut(test);
 
   //tests for practitioner requesting access to existing case
-  //taxpayer must first create a case for practitioner to request access to
-  taxpayerLogin(test);
+  //petitioner must first create a case for practitioner to request access to
+  petitionerLogin(test);
   it('Create test case #1', async () => {
     await uploadPetition(test, {
       contactSecondary: {
@@ -50,8 +50,8 @@ describe('Practitioner requests access to case', () => {
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
   });
-  taxpayerViewsDashboard(test);
-  taxpayerSignsOut(test);
+  petitionerViewsDashboard(test);
+  petitionerSignsOut(test);
 
   practitionerLogin(test);
   practitionerSearchesForNonexistentCase(test);
@@ -65,9 +65,9 @@ describe('Practitioner requests access to case', () => {
   practitionerSignsOut(test);
 
   //tests for practitioner requesting access to existing case
-  //taxpayer must first create a case for practitioner to request access to
-  taxpayerLogin(test);
-  taxpayerViewsDashboard(test);
+  //petitioner must first create a case for practitioner to request access to
+  petitionerLogin(test);
+  petitionerViewsDashboard(test);
   it('Create test case #2', async () => {
     await uploadPetition(test, {
       contactSecondary: {
@@ -82,8 +82,8 @@ describe('Practitioner requests access to case', () => {
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
   });
-  taxpayerViewsDashboard(test);
-  taxpayerSignsOut(test);
+  petitionerViewsDashboard(test);
+  petitionerSignsOut(test);
 
   practitionerLogin(test);
   practitionerSearchesForCase(test);

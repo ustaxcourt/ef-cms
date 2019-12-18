@@ -16,7 +16,6 @@ export default test => {
       key: 'irsYear',
       value: '2050',
     });
-    await test.runSequence('autoSaveCaseSequence');
 
     await test.runSequence('clickServeToIrsSequence');
     expect(test.getState('caseDetailErrors')).toEqual({
@@ -27,7 +26,6 @@ export default test => {
       key: 'irsYear',
       value: '2017',
     });
-    await test.runSequence('autoSaveCaseSequence');
 
     await test.runSequence('clickServeToIrsSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
@@ -38,7 +36,9 @@ export default test => {
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
       '2017-12-24T05:00:00.000Z',
     );
-    expect(test.getState('caseDetail.status')).toEqual('Batched for IRS');
+    expect(test.getState('caseDetail.status')).toEqual(
+      Case.STATUS_TYPES.batchedForIRS,
+    );
     expect(test.getState('alertSuccess.title')).toEqual(
       'The petition is now batched for IRS service.',
     );

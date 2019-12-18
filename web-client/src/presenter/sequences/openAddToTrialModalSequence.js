@@ -1,5 +1,6 @@
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { set } from 'cerebral/factories';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setTrialSessionsOnModalAction } from '../actions/TrialSession/setTrialSessionsOnModalAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { state } from 'cerebral';
@@ -13,5 +14,5 @@ export const openAddToTrialModalSequence = [
   unsetWaitingForResponseAction,
   setTrialSessionsOnModalAction,
   set(state.modal.showAllLocations, false),
-  set(state.showModal, 'AddToTrialModal'),
+  setShowModalFactoryAction('AddToTrialModal'),
 ];

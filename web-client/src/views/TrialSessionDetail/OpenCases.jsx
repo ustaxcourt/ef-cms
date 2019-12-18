@@ -24,8 +24,8 @@ export const OpenCases = connect(
               <th>Docket</th>
               <th aria-label="manually added indicator"></th>
               <th>Case name</th>
-              <th>Petitioner Counsel</th>
-              <th>Respondent Counsel</th>
+              <th>Petitioner counsel</th>
+              <th>Respondent counsel</th>
             </tr>
           </thead>
           {openCases.map((item, idx) => (

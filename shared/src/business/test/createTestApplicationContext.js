@@ -1,3 +1,4 @@
+const DateHandler = require('../utilities/DateHandler');
 const docketNumberGenerator = require('../../persistence/dynamo/cases/docketNumberGenerator');
 const uuidv4 = require('uuid/v4');
 const {
@@ -18,7 +19,6 @@ const {
 const {
   getDocumentQCBatchedForSection,
 } = require('../../persistence/dynamo/workitems/getDocumentQCBatchedForSection');
-const DateHandler = require('../utilities/DateHandler');
 const {
   getDocumentQCBatchedForUser,
 } = require('../../persistence/dynamo/workitems/getDocumentQCBatchedForUser');
@@ -54,17 +54,17 @@ const {
 } = require('../../persistence/dynamo/workitems/saveWorkItemForNonPaper');
 
 const {
-  deleteUserOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
-const {
-  deleteSectionOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
+  createSectionInboxRecord,
+} = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
 const {
   createUserInboxRecord,
 } = require('../../persistence/dynamo/workitems/createUserInboxRecord');
 const {
-  createSectionInboxRecord,
-} = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
+  deleteSectionOutboxRecord,
+} = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
+const {
+  deleteUserOutboxRecord,
+} = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
 
 const {
   saveWorkItemForPaper,

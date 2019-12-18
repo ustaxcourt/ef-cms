@@ -2,18 +2,18 @@ import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
 import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
+import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { InternationalAddress } from './StartCase/InternationalAddress';
-import { Text } from '../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const UserContactEdit = connect(
   {
     navigateBackSequence: sequences.navigateBackSequence,
-    submitEditUserContactSequence: sequences.submitEditUserContactSequence,
+    submitUpdateUserContactInformationSequence:
+      sequences.submitUpdateUserContactInformationSequence,
     updateUserContactValueSequence: sequences.updateUserContactValueSequence,
     user: state.user,
     validateUserContactSequence: sequences.validateUserContactSequence,
@@ -21,7 +21,7 @@ export const UserContactEdit = connect(
   },
   ({
     navigateBackSequence,
-    submitEditUserContactSequence,
+    submitUpdateUserContactInformationSequence,
     updateUserContactValueSequence,
     user,
     validateUserContactSequence,
@@ -82,14 +82,12 @@ export const UserContactEdit = connect(
                 onChange="updateUserContactValueSequence"
               />
             )}
-            <div
-              className={classNames(
-                'usa-form-group margin-bottom-0',
+            <FormGroup
+              errorText={
                 validationErrors &&
-                  validationErrors.contact &&
-                  validationErrors.contact.phone &&
-                  'usa-form-group--error',
-              )}
+                validationErrors.contact &&
+                validationErrors.contact.phone
+              }
             >
               <label className="usa-label" htmlFor="phone">
                 Phone number
@@ -111,15 +109,11 @@ export const UserContactEdit = connect(
                   });
                 }}
               />
-              <Text
-                bind={'validationErrors.contact.phone'}
-                className="usa-error-message"
-              />
-            </div>
+            </FormGroup>
           </div>
           <Button
             onClick={() => {
-              submitEditUserContactSequence();
+              submitUpdateUserContactInformationSequence();
             }}
           >
             Save

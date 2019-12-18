@@ -21,7 +21,7 @@ export default (test, overrides = {}) => {
       value: overrides.receivedAtYear,
     });
 
-    await test.runSequence('autoSaveCaseSequence');
+    await test.runSequence('submitCaseDetailEditSaveSequence');
 
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,

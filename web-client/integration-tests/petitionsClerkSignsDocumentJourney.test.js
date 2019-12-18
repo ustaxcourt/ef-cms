@@ -1,4 +1,11 @@
 import { fakeFile, setupTest } from './helpers';
+import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
+import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
+import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
+import petitionerLogin from './journey/petitionerLogIn';
+import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
+import petitionerSignsOut from './journey/petitionerSignsOut';
+import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkAddsOrderToCase from './journey/petitionsClerkAddsOrderToCase';
 import petitionsClerkAppliesSignatureToDraftDocument from './journey/petitionsClerkAppliesSignatureToDraftDocument';
 import petitionsClerkClearsSignatureFromDraftDocument from './journey/petitionsClerkClearsSignatureFromDraftDocument';
@@ -11,21 +18,10 @@ import petitionsClerkViewsCaseDetailAfterAddingOrder from './journey/petitionsCl
 import petitionsClerkViewsDocumentDetail from './journey/petitionsClerkViewsDocumentDetail';
 import petitionsClerkViewsDraftDocuments from './journey/petitionsClerkViewsDraftDocuments';
 import petitionsClerkViewsSignDraftDocument from './journey/petitionsClerkViewsSignDraftDocument';
-import taxPayerSignsOut from './journey/taxpayerSignsOut';
-import taxpayerChoosesCaseType from './journey/taxpayerChoosesCaseType';
-import taxpayerChoosesProcedureType from './journey/taxpayerChoosesProcedureType';
-import taxpayerCreatesNewCase from './journey/taxpayerCreatesNewCase';
-import taxpayerLogin from './journey/taxpayerLogIn';
-import taxpayerNavigatesToCreateCase from './journey/taxpayerCancelsCreateCase';
-import taxpayerViewsDashboard from './journey/taxpayerViewsDashboard';
 
 const test = setupTest({
   useCases: {
-    loadPDFForSigningInteractor: () => {
-      return new Promise(resolve => {
-        resolve(null);
-      });
-    },
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
   },
 });
 
@@ -33,21 +29,17 @@ describe('Petitions Clerk Create Order Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
     global.window.pdfjsObj = {
-      getData: () => {
-        return new Promise(resolve => {
-          resolve(new Uint8Array(fakeFile));
-        });
-      },
+      getData: () => Promise.resolve(new Uint8Array(fakeFile)),
     };
   });
 
-  taxpayerLogin(test);
-  taxpayerNavigatesToCreateCase(test);
-  taxpayerChoosesProcedureType(test);
-  taxpayerChoosesCaseType(test);
-  taxpayerCreatesNewCase(test, fakeFile);
-  taxpayerViewsDashboard(test);
-  taxPayerSignsOut(test);
+  petitionerLogin(test);
+  petitionerNavigatesToCreateCase(test);
+  petitionerChoosesProcedureType(test);
+  petitionerChoosesCaseType(test);
+  petitionerCreatesNewCase(test, fakeFile);
+  petitionerViewsDashboard(test);
+  petitionerSignsOut(test);
 
   petitionsClerkLogIn(test);
   petitionsClerkViewsCaseDetail(test);

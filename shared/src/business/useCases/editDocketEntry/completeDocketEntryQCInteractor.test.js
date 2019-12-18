@@ -2,6 +2,10 @@ const {
   completeDocketEntryQCInteractor,
 } = require('./completeDocketEntryQCInteractor');
 const { User } = require('../../entities/User');
+import {
+  createISODateString,
+  formatDateString,
+} from '../../../../../shared/src/business/utilities/DateHandler';
 
 describe('completeDocketEntryQCInteractor', () => {
   let applicationContext;
@@ -24,9 +28,15 @@ describe('completeDocketEntryQCInteractor', () => {
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     createdAt: '',
     docketNumber: '45678-18',
+    docketRecord: [
+      {
+        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        index: 42,
+      },
+    ],
     documents: [
       {
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335b1',
+        documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         workItems: [workItem],
@@ -99,12 +109,18 @@ describe('completeDocketEntryQCInteractor', () => {
           saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
           updateCase: updateCaseSpy,
         }),
+        getUtilities: () => {
+          return {
+            createISODateString,
+            formatDateString,
+          };
+        },
       };
       await completeDocketEntryQCInteractor({
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Memorandum in Support',
         },
       });

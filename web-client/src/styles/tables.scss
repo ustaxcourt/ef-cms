@@ -59,7 +59,7 @@ table,
     border-top: 1px solid color($theme-color-base-lighter);
   }
 
-  tbody:not(.action-bar) {
+  tbody {
     &:hover {
       td.focus-toggle {
         button.focus-button {
@@ -89,31 +89,6 @@ table,
       .collapse-header {
         padding: 0;
       }
-    }
-  }
-
-  .action-bar {
-    background-color: $color-primary-alt-lightest;
-    font-size: 1em;
-
-    label {
-      display: inline-block;
-      margin: 0;
-    }
-
-    select {
-      display: inline-block;
-      width: auto;
-      margin: 0 1em;
-    }
-
-    button {
-      margin: 0;
-    }
-
-    .selected-count {
-      margin-right: 3em;
-      font-weight: $font-bold;
     }
   }
 
@@ -313,7 +288,7 @@ table.work-queue {
     }
   }
 
-  tbody:not(.action-bar) {
+  tbody {
     &:hover {
       td.focus-toggle {
         button.focus-button {
@@ -374,31 +349,6 @@ table.work-queue {
       .collapse-header {
         padding: 0;
       }
-    }
-  }
-
-  .action-bar {
-    background-color: $color-primary-alt-lightest;
-    font-size: 1em;
-
-    label {
-      display: inline-block;
-      margin: 0;
-    }
-
-    select {
-      display: inline-block;
-      width: auto;
-      margin: 0 1em;
-    }
-
-    button {
-      margin: 0;
-    }
-
-    .selected-count {
-      margin-right: 3em;
-      font-weight: $font-bold;
     }
   }
 
@@ -466,6 +416,15 @@ table.docket-record {
       }
       .fa-thumbtack {
         color: color($theme-color-warning);
+      }
+    }
+
+    tr.qc-untouched {
+      td {
+        font-weight: bold;
+      }
+      .fa-star {
+        color: color($theme-color-secondary-dark);
       }
     }
 

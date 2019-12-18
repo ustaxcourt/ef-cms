@@ -29,13 +29,21 @@ exports.get = ({ applicationContext, endpoint, params }) =>
  * @param {string} providers.endpoint the endpoint to call
  * @returns {Promise<*>} the response data
  */
-exports.post = ({ applicationContext, body, endpoint }) =>
+exports.post = ({
+  applicationContext,
+  body,
+  endpoint,
+  headers = {},
+  options = {},
+}) =>
   applicationContext
     .getHttpClient()
     .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
       headers: {
         Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+        ...headers,
       },
+      ...options,
     })
     .then(response => response.data);
 

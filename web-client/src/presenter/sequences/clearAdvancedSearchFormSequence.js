@@ -1,9 +1,7 @@
-import { set, unset } from 'cerebral/factories';
+import { clearAdvancedSearchFormAction } from '../actions/clearAdvancedSearchFormAction';
 import { setDefaultCountryTypeOnAdvancedSearchFormAction } from '../actions/AdvancedSearch/setDefaultCountryTypeOnAdvancedSearchFormAction';
-import { state } from 'cerebral';
 
 export const clearAdvancedSearchFormSequence = [
-  set(state.advancedSearchForm, { currentPage: 1 }),
-  unset(state.searchResults),
+  clearAdvancedSearchFormAction,
   setDefaultCountryTypeOnAdvancedSearchFormAction,
 ];

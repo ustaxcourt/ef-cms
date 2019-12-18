@@ -8,8 +8,8 @@ custom:
   region: ${opt:region, 'us-east-1'}
   prune:
     automatic: true
-    includeLayers: true
     number: 3
+    includeLayers: true
 
 provider:
   name: aws
@@ -25,9 +25,8 @@ layers:
     name: ${self:provider.stage}-puppeteer
     description: Chrome headless binary provided via chrome-aws-lambda and puppeteer-core for interaction.
     compatibleRuntimes:
-      - nodejs8.10
+      - nodejs10.x
     path: web-api/runtimes/puppeteer
     package:
       exclude:
         - puppeteer_lambda_layer.tar.gz
-    retain: true

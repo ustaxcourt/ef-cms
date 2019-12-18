@@ -4,14 +4,14 @@ import { validateAddRespondentAction } from './validateAddRespondentAction';
 import sinon from 'sinon';
 
 describe('validateAddRespondent', () => {
-  let validateAddRespondentStub;
+  let validateAddRespondentInteractorStub;
   let successStub;
   let errorStub;
 
   let mockAddRespondent;
 
   beforeEach(() => {
-    validateAddRespondentStub = sinon.stub();
+    validateAddRespondentInteractorStub = sinon.stub();
     successStub = sinon.stub();
     errorStub = sinon.stub();
 
@@ -21,7 +21,7 @@ describe('validateAddRespondent', () => {
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        validateAddRespondent: validateAddRespondentStub,
+        validateAddRespondentInteractor: validateAddRespondentInteractorStub,
       }),
     };
 
@@ -32,7 +32,7 @@ describe('validateAddRespondent', () => {
   });
 
   it('should call the path success when no errors are found', async () => {
-    validateAddRespondentStub.returns(null);
+    validateAddRespondentInteractorStub.returns(null);
     await runAction(validateAddRespondentAction, {
       modules: {
         presenter,
@@ -46,7 +46,7 @@ describe('validateAddRespondent', () => {
   });
 
   it('should call the path error when any errors are found', async () => {
-    validateAddRespondentStub.returns('error');
+    validateAddRespondentInteractorStub.returns('error');
     await runAction(validateAddRespondentAction, {
       modules: {
         presenter,

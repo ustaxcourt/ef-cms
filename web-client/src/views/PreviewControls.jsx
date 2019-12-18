@@ -50,7 +50,7 @@ export const PreviewControls = connect(
           <FontAwesomeIcon
             className={'icon-button'}
             icon={['fas', 'caret-left']}
-            id="prev"
+            id="previous"
             size="2x"
           />
         </Button>

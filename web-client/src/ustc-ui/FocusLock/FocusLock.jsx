@@ -25,7 +25,7 @@ export const FocusLock = ({ children }) => {
       return false;
     }
     if (event.target == lastTabbable && !event.shiftKey) {
-      // tab (withotu shift) when on lastTabbable: move focus to firstTabbable
+      // tab (without shift) when on lastTabbable: move focus to firstTabbable
       firstTabbable.focus();
       event.preventDefault();
       return false;

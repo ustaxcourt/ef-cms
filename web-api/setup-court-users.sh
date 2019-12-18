@@ -55,7 +55,7 @@ createAccount() {
       --region "${REGION}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
       --challenge-responses 'NEW_PASSWORD="Testing1234$",'USERNAME="${email}" \
-      --session "${session}"
+      --session="${session}"
   fi
 }
 
@@ -72,11 +72,11 @@ do
   IFS=';' read -ra ADDR <<< "$line"
   section="${ADDR[0]}"
   role="${ADDR[1]}"
-  firstname="${ADDR[2]}"
-  lastname="${ADDR[3]}"
+  # firstname="${ADDR[2]}"
+  # lastname="${ADDR[3]}"
   name="${ADDR[4]}"
-  placeOfTrial="${ADDR[5]}"
-  realEmail="${ADDR[6]}"
+  # placeOfTrial="${ADDR[5]}"
+  # realEmail="${ADDR[6]}"
   fakeEmail="${ADDR[7]/$'\r'}"
   createAccount "${fakeEmail}" "${role}" "${section}" "${name}"
 done < court_users.csv

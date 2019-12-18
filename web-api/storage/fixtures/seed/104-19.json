@@ -26,7 +26,7 @@
             "isQC": true,
             "isInitializeCase": true,
             "assigneeId": null,
-            "sentBy": "taxpayer",
+            "sentBy": "petitioner",
             "createdAt": "2019-03-05T17:34:13.490Z",
             "assigneeName": null,
             "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
@@ -84,7 +84,7 @@
       "name": "Mufutau Wade",
       "state": "HI",
       "countryType": "domestic",
-      "email": "taxpayer"
+      "email": "petitioner"
     },
     "createdAt": "2019-03-05T17:34:13.490Z",
     "receivedAt": "2019-03-05T17:34:13.490Z",
@@ -103,7 +103,7 @@
         "custom:role": "petitioner",
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "iat": 1551807217,
-        "email": "taxpayer",
+        "email": "petitioner",
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InBldGl0aW9uZXIiLCJlbWFpbCI6InRheHBheWVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwic2VjdGlvbiI6InBldGl0aW9uZXIiLCJ1c2VySWQiOiJ0YXhwYXllciIsImlhdCI6MTU1MTgwNzIxN30.BMAZc6z99e-w6lo_u3Qj9zPulispzrVeP3QKX0AWEaE"
       }
     ],
@@ -142,7 +142,8 @@
     "pk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
     "businessType": "Corporation",
     "docketNumber": "104-19",
-    "status": "New"
+    "status": "New",
+    "associatedJudge": "Chief Judge"
   },
   {
     "sk": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
@@ -173,7 +174,7 @@
     "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
-    "sentBy": "taxpayer",
+    "sentBy": "petitioner",
     "createdAt": "2019-03-05T17:34:13.490Z",
     "assigneeName": null,
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",
@@ -211,7 +212,7 @@
     "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
-    "sentBy": "taxpayer",
+    "sentBy": "petitioner",
     "createdAt": "2019-03-05T17:34:13.490Z",
     "assigneeName": null,
     "caseId": "5f6e8b8e-4fac-4fd7-bf3c-42f0d7c3ca05",

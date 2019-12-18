@@ -3,27 +3,26 @@ module.exports = {
     .handler,
   associateRespondentWithCaseLambda: require('./manualAssociation/associateRespondentWithCaseLambda')
     .handler,
-  blockCaseLambda: require('./cases/blockCaseLambda').handler,
-  caseSearchLambda: require('./cases/caseSearchLambda').handler,
+  blockCaseFromTrialLambda: require('./cases/blockCaseFromTrialLambda').handler,
+  caseAdvancedSearchLambda: require('./cases/caseAdvancedSearchLambda').handler,
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
   deleteCounselFromCaseLambda: require('./cases/deleteCounselFromCaseLambda')
-    .handler,
-  generateCaseConfirmationPdfLambda: require('./cases/generateCaseConfirmationPdfLambda')
     .handler,
   getBlockedCasesLambda: require('./cases/getBlockedCasesLambda').handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
   prioritizeCaseLambda: require('./cases/prioritizeCaseLambda').handler,
   recallPetitionFromIRSHoldingQueueLambda: require('./cases/recallPetitionFromIRSHoldingQueueLambda')
     .handler,
+  saveCaseDetailInternalEditLambda: require('./cases/saveCaseDetailInternalEditLambda')
+    .handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
-  setCaseToReadyForTrialLambda: require('./cases/setCaseToReadyForTrialLambda')
+  unblockCaseFromTrialLambda: require('./cases/unblockCaseFromTrialLambda')
     .handler,
-  unblockCaseLambda: require('./cases/unblockCaseLambda').handler,
   unprioritizeCaseLambda: require('./cases/unprioritizeCaseLambda').handler,
-  updateCaseLambda: require('./cases/updateCaseLambda').handler,
+  updateCaseContextLambda: require('./cases/updateCaseContextLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
     .handler,
   updateCounselOnCaseLambda: require('./cases/updateCounselOnCaseLambda')

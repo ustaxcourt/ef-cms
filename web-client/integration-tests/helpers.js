@@ -15,13 +15,14 @@ import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
-import { workQueueHelper } from '../src/presenter/computeds/workQueueHelper';
+import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormData from 'form-data';
 const {
   ContactFactory,
 } = require('../../shared/src/business/entities/contacts/ContactFactory');
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
+const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 
 const fakeData =
   'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
@@ -108,21 +109,37 @@ exports.signProposedStipulatedDecision = async (test, stipDecision) => {
   await test.runSequence('completeDocumentSigningSequence');
 };
 
-exports.serveDocument = async ({
+exports.serveDocument = async ({ docketNumber, documentId, test }) => {
+  await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+    docketNumber,
+    documentId,
+  });
+
+  await test.runSequence('openConfirmInitiateServiceModalSequence');
+  await test.runSequence('serveCourtIssuedDocumentSequence');
+};
+
+exports.createCourtIssuedDocketEntry = async ({
   docketNumber,
   documentId,
-  messageId,
   test,
-  workItemIdToMarkAsRead,
 }) => {
   await test.runSequence('gotoDocumentDetailSequence', {
     docketNumber,
     documentId,
-    messageId,
-    workItemIdToMarkAsRead,
   });
 
-  await test.runSequence('serveDocumentSequence');
+  await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    docketNumber,
+    documentId,
+  });
+
+  await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+    key: 'judge',
+    value: 'Judge Buch',
+  });
+
+  await test.runSequence('submitCourtIssuedDocketEntrySequence');
 };
 
 exports.getFormattedMyInbox = async test => {
@@ -432,6 +449,7 @@ exports.setupTest = ({ useCases = {} } = {}) => {
     CATEGORIES: Document.CATEGORIES,
     CATEGORY_MAP: Document.CATEGORY_MAP,
     COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
+    COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
     INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
     ORDER_TYPES_MAP: Order.ORDER_TYPES,
     PARTY_TYPES: ContactFactory.PARTY_TYPES,

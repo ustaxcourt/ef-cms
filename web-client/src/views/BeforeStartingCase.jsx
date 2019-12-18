@@ -21,9 +21,9 @@ export const BeforeStartingCase = () => (
       </div>
     </div>
     <section className="usa-section before-starting-case grid-container">
-      <h3 className="captioned margin-bottom-2" tabIndex="-1">
+      <h2 className="captioned margin-bottom-2" tabIndex="-1">
         Tips for Preparing Documents Before You File
-      </h3>
+      </h2>
       <div className="grid-container padding-x-0 margin-bottom-5" role="list">
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-6">

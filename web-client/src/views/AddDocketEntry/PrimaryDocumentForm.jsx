@@ -1,7 +1,7 @@
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Inclusions } from './Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import {
   docketEntryOnChange,
@@ -39,12 +39,7 @@ export const PrimaryDocumentForm = connect(
     return (
       <>
         <div className="blue-container docket-entry-form">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.lodged && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.lodged}>
             <fieldset className="usa-fieldset">
               <legend className="usa-legend">Filing status</legend>
               {['File', 'Lodge'].map(option => (
@@ -73,18 +68,9 @@ export const PrimaryDocumentForm = connect(
                 </div>
               ))}
             </fieldset>
-            <Text
-              bind="validationErrors.lodged"
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
 
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.dateReceived && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.dateReceived}>
             <fieldset className="usa-fieldset date-received">
               <legend id="usa-legend date-received-legend">
                 Date received
@@ -163,18 +149,9 @@ export const PrimaryDocumentForm = connect(
                 </div>
               </div>
             </fieldset>
-            <Text
-              bind="validationErrors.dateReceived"
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
 
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.eventCode && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.eventCode}>
             <label
               className="usa-label"
               htmlFor="react-select-2-input"
@@ -221,20 +198,13 @@ export const PrimaryDocumentForm = connect(
                 });
               }}
             />
-            <Text
-              bind="validationErrors.eventCode"
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
 
           {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
-            <div
-              className={classNames(
-                'usa-form-group',
-                validationErrors.secondaryDocument &&
-                  !form.secondaryDocument &&
-                  'usa-form-group--error',
-              )}
+            <FormGroup
+              errorText={
+                validationErrors.secondaryDocument && !form.secondaryDocument
+              }
             >
               <label
                 className="usa-label"
@@ -282,13 +252,7 @@ export const PrimaryDocumentForm = connect(
                   });
                 }}
               />
-              {!form.secondaryDocument && (
-                <Text
-                  bind="validationErrors.secondaryDocument"
-                  className="usa-error-message"
-                />
-              )}
-            </div>
+            </FormGroup>
           )}
 
           {addDocketEntryHelper.primary.showNonstandardForm && (
@@ -385,13 +349,9 @@ export const PrimaryDocumentForm = connect(
 
           <Inclusions />
 
-          <div
-            className={classNames(
-              'usa-form-group',
-              addDocketEntryHelper.partyValidationError &&
-                'usa-form-group--error',
-              !addDocketEntryHelper.showObjection && 'margin-bottom-0',
-            )}
+          <FormGroup
+            className={!addDocketEntryHelper.showObjection && 'margin-bottom-0'}
+            errorText={addDocketEntryHelper.partyValidationError}
           >
             <fieldset
               className={classNames(
@@ -467,19 +427,10 @@ export const PrimaryDocumentForm = connect(
                   Respondent
                 </label>
               </div>
-              <Text
-                bind="addDocketEntryHelper.partyValidationError"
-                className="usa-error-message"
-              />
             </fieldset>
-          </div>
+          </FormGroup>
           {addDocketEntryHelper.showObjection && (
-            <div
-              className={classNames(
-                'usa-form-group margin-bottom-0',
-                validationErrors.objections && 'usa-form-group--error',
-              )}
-            >
+            <FormGroup errorText={validationErrors.objections}>
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="objections-legend">
                   Are there any objections to this document?
@@ -511,11 +462,37 @@ export const PrimaryDocumentForm = connect(
                   </div>
                 ))}
               </fieldset>
-              <Text
-                bind="validationErrors.objections"
-                className="usa-error-message"
-              />
-            </div>
+            </FormGroup>
+          )}
+
+          {addDocketEntryHelper.showTrackOption && (
+            <>
+              <hr />
+              <div className="usa-form-group">
+                <fieldset className="usa-fieldset">
+                  <legend className="usa-legend">Track document?</legend>
+                  <div className="usa-checkbox">
+                    <input
+                      checked={form.pending || false}
+                      className="usa-checkbox__input"
+                      id="pending"
+                      name="pending"
+                      type="checkbox"
+                      onChange={e => {
+                        updateDocketEntryFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateDocketEntrySequence();
+                      }}
+                    />
+                    <label className="usa-checkbox__label" htmlFor="pending">
+                      Add to pending report
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+            </>
           )}
         </div>
       </>

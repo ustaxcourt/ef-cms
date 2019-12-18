@@ -2,7 +2,7 @@ const fs = require('fs');
 const tmp = require('tmp');
 
 /**
- * virusScanDocument
+ * virusScanPdfInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context

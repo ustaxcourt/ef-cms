@@ -22,7 +22,7 @@ describe('putWorkItemInOutbox', () => {
     });
   });
 
-  it('invokes the peristence layer with pk of {userId}|outbox and {section}|outbox and other expected params', async () => {
+  it('invokes the persistence layer with pk of {userId}|outbox and {section}|outbox and other expected params', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',

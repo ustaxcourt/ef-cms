@@ -1,8 +1,8 @@
 const qs = require('qs');
 
 /**
- * After a succesful login with Cognito, it redirects to our app via
- * `/login?code=XXX`. This one time use authorization code expires after
+ * After a successful login with Cognito, it redirects to our app via
+ * `/login?code=ABC`. This one time use authorization code expires after
  * 5 minutes and is used for fetching the id token and refresh token
  * from Cognito.
  *

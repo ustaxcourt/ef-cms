@@ -1,6 +1,6 @@
 const {
-  FILE_EXTERNAL_DOCUMENT,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
@@ -20,7 +20,7 @@ exports.saveIntermediateDocketEntryInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -50,17 +50,15 @@ exports.saveIntermediateDocketEntryInteractor = async ({
     documentId: entryMetadata.documentId,
   });
 
-  const workItemsToPutInProgress = currentDocument.workItems
-    .filter(wi => wi.isQC === true)
-    .filter(wi => !wi.inProgress);
+  const workItemToPutInProgress = currentDocument.getQCWorkItem();
 
-  const workItemUpdates = [];
-  for (const workItemToUpdate of workItemsToPutInProgress) {
-    Object.assign(workItemToUpdate, {
+  if (workItemToPutInProgress && !workItemToPutInProgress.inProgress) {
+    const workItemUpdates = [];
+    Object.assign(workItemToPutInProgress, {
       inProgress: true,
     });
 
-    const rawWorkItem = workItemToUpdate.validate().toRawObject();
+    const rawWorkItem = workItemToPutInProgress.validate().toRawObject();
 
     workItemUpdates.push(
       applicationContext.getPersistenceGateway().updateWorkItem({
@@ -82,8 +80,8 @@ exports.saveIntermediateDocketEntryInteractor = async ({
         workItem: rawWorkItem,
       }),
     );
+    await Promise.all(workItemUpdates);
   }
-  await Promise.all(workItemUpdates);
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

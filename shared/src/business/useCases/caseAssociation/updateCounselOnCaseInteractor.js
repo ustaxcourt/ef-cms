@@ -1,12 +1,12 @@
 const {
-  ASSOCIATE_USER_WITH_CASE,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { User } = require('../../entities/User');
 const { Practitioner } = require('../../entities/Practitioner');
 const { Respondent } = require('../../entities/Respondent');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 /**
  * updateCounselOnCaseInteractor
@@ -26,7 +26,7 @@ exports.updateCounselOnCaseInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ASSOCIATE_USER_WITH_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -54,6 +54,8 @@ exports.updateCounselOnCaseInteractor = async ({
     caseEntity.updateRespondent(
       new Respondent({ userId: userToUpdate.userId, ...userData }),
     );
+  } else {
+    throw new Error('User is not a practitioner or respondent');
   }
 
   return await applicationContext.getPersistenceGateway().updateCase({

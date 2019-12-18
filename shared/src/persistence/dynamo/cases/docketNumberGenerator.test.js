@@ -1,5 +1,5 @@
-const { createDocketNumber } = require('./docketNumberGenerator');
 const DateHandler = require('../../../business/utilities/DateHandler');
+const { createDocketNumber } = require('./docketNumberGenerator');
 
 describe('Create docket number', function() {
   it('should create a docketNumber', async () => {

@@ -12,7 +12,6 @@ describe('submitCourtIssuedOrderAction', () => {
     presenter.providers.applicationContext = {
       getUseCases: () => ({
         fileCourtIssuedOrderInteractor: fileCourtIssuedOrderStub,
-        sanitizePdfInteractor: () => {},
         validatePdfInteractor: () => {},
         virusScanPdfInteractor: () => {},
       }),

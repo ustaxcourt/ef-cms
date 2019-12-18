@@ -30,6 +30,7 @@ module.exports = [
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/complete',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry',
+  'http://localhost:1234/mock-login?token=docketclerk&path=/reports/pending-report',
   {
     actions: [
       'wait for element #certificate-of-service to be visible',
@@ -39,5 +40,27 @@ module.exports = [
     notes: 'reveal all secondary drop-downs and inputs ',
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-docket-entry&info=show-cos-inputs',
+  },
+  {
+    actions: [
+      'wait for #edit-case-context-button to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #edit-case-context-button',
+      'wait for .modal-dialog to be visible',
+    ],
+    notes: 'checks a11y of case context edit dialog',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19&info=case-context-edit',
+  },
+  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/110-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
+  {
+    actions: [
+      'wait for #serve-to-parties-btn to be visible',
+      'click element #serve-to-parties-btn',
+      'wait for .confirm-initiate-service-modal to be visible',
+    ],
+    notes: 'checks a11y of confirm-initiate-service-modal dialog',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
   },
 ];

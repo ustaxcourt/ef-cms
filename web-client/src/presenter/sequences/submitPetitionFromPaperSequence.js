@@ -6,21 +6,20 @@ import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction'
 import { gotoDocumentDetailSequence } from '../sequences/gotoDocumentDetailSequence';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
-import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setPetitionIdAction } from '../actions/setPetitionIdAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validatePetitionFromPaperAction } from '../actions/validatePetitionFromPaperAction';
 
 export const submitPetitionFromPaperSequence = [
   checkForActiveBatchesAction,
   {
-    hasActiveBatches: [set(state.showModal, 'UnfinishedScansModal')],
+    hasActiveBatches: [setShowModalFactoryAction('UnfinishedScansModal')],
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
@@ -42,7 +41,7 @@ export const submitPetitionFromPaperSequence = [
               setCaseAction,
               setPetitionIdAction,
               closeFileUploadStatusModalAction,
-              ...gotoDocumentDetailSequence,
+              gotoDocumentDetailSequence,
             ],
           },
         ],

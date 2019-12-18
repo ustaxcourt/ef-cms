@@ -4,8 +4,10 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTrialSessionWorkingCopyAction';
 import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateCalendaredCaseNoteAction } from '../actions/TrialSessionWorkingCopy/updateCalendaredCaseNoteAction';
 import { updateCaseNoteAction } from '../actions/TrialSession/updateCaseNoteAction';
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
@@ -17,6 +19,7 @@ export const updateCaseNoteOnWorkingCopySequence = [
   {
     error: [setValidationErrorsAction],
     success: [
+      setWaitingForResponseAction,
       stopShowValidationAction,
       clearAlertsAction,
       updateNotePropsFromModalStateAction,
@@ -26,6 +29,7 @@ export const updateCaseNoteOnWorkingCopySequence = [
       updateCalendaredCaseNoteAction,
       clearModalAction,
       clearModalStateAction,
+      unsetWaitingForResponseAction,
     ],
   },
 ];

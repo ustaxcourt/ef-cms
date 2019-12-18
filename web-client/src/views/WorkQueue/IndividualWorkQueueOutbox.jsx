@@ -6,13 +6,13 @@ import React from 'react';
 
 export const IndividualWorkQueueOutbox = connect(
   {
-    documentHelper: state.documentHelper,
+    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
   ({
-    documentHelper,
+    documentEditLinkHelper,
     formattedWorkQueue,
     workQueueHelper,
     workQueueSectionHelper,
@@ -29,7 +29,7 @@ export const IndividualWorkQueueOutbox = connect(
               <th aria-label="Docket Number" className="small" colSpan="2">
                 <span className="padding-left-2px">Docket</span>
               </th>
-              {workQueueHelper.showReceivedColumn && <th>Filed</th>}
+              {workQueueHelper.showReceivedColumn && <th>Received</th>}
               {workQueueHelper.showSentColumn && (
                 <th className="small">Sent</th>
               )}
@@ -46,7 +46,7 @@ export const IndividualWorkQueueOutbox = connect(
                 </th>
               )}
               {!workQueueHelper.hideSectionColumn && (
-                <th className="max-width-7">Section</th>
+                <th className="small">Section</th>
               )}
               {workQueueHelper.showServedColumn && <th>Served</th>}
             </tr>
@@ -86,7 +86,7 @@ export const IndividualWorkQueueOutbox = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentHelper({
+                      href={documentEditLinkHelper({
                         docketNumber: item.docketNumber,
                         documentId: item.document.documentId,
                         messageId: item.currentMessage.messageId,
@@ -121,7 +121,7 @@ export const IndividualWorkQueueOutbox = connect(
                   </td>
                 )}
                 {!workQueueHelper.hideSectionColumn && (
-                  <td className="message-queue-row max-width-7">
+                  <td className="message-queue-row small">
                     {workQueueSectionHelper.sectionDisplay(item.section)}
                   </td>
                 )}

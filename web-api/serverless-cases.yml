@@ -8,11 +8,15 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-jetpack
   # - serverless-plugin-warmup
 
 custom:
   #warmup:
   #enabled: true
+
+  jetpack:
+    mode: yarn
 
   prune:
     automatic: true
@@ -77,19 +81,21 @@ provider:
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
+  role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   elasticsearchEndpoint: ${opt:elasticsearch_endpoint}
   masterRegion: us-east-1
   userPoolId: us-east-1_7uRkF0Axn
   masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
-  clamavDefDir: /opt/var/lib/clamav
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
   apiGateway:
     binaryMediaTypes:
       - 'application/pdf'
+  clamavDefDir: /opt/var/lib/clamav
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
@@ -102,71 +108,16 @@ provider:
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
-    GS_LIB: /opt/share/ghostscript/9.06/Resource/Init
-    CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
-
-  iamRoleStatements:
-    - Effect: 'Allow'
-      Action:
-        - 'xray:PutTraceSegments'
-        - 'xray:PutTelemetryRecords'
-      Resource:
-        - '*'
-    - Effect: 'Allow'
-      Action:
-        - 'lambda:InvokeFunction'
-      Resource:
-        - arn:aws:lambda:${opt:region}:${opt:accountId}:function:${self:service}-${opt:stage, self:provider.stage}-*
-    - Effect: 'Allow'
-      Action:
-        - cognito-idp:AdminCreateUser
-        - cognito-idp:AdminGetUser
-      Resource:
-        - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
-    - Effect: 'Allow'
-      Action:
-        - 's3:*'
-      Resource:
-        Fn::Join:
-          - ''
-          - - 'arn:aws:s3:::'
-            - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
-            - '/*'
-    - Effect: 'Allow'
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:BatchGetItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-        - dynamodb:BatchWriteItem
-      Resource:
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}
-        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-    - Effect: 'Allow'
-      Action:
-        - 'ses:*'
-      Resource:
-        - '*'
-    - Effect: 'Allow'
-      Action:
-        - 'es:*'
-      Resource:
-        - '*'
+    CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
 
 package:
   exclude:
     - ./**
   include:
-    - web-api/src/casesHandlers.js
-
+    - web-api/${self:provider.dir}/casesHandlers.js
   excludeDevDependencies: true
 
 resources:
@@ -204,8 +155,8 @@ resources:
             MetricsEnabled: true
 
 functions:
-  updateCase:
-    handler: web-api/src/casesHandlers.updateCaseLambda
+  saveCaseDetailInternalEdit:
+    handler: web-api/${self:provider.dir}/casesHandlers.saveCaseDetailInternalEditLambda
     events:
       - http:
           path: /{caseId}
@@ -217,7 +168,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCaseTrialSortTags:
-    handler: web-api/src/casesHandlers.updateCaseTrialSortTagsLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.updateCaseTrialSortTagsLambda
     events:
       - http:
           path: /{caseId}/update-case-trial-sort-tags
@@ -229,8 +180,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updatePrimaryContact:
-    runtime: nodejs8.10
-    handler: web-api/src/casesHandlers.updatePrimaryContactLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.updatePrimaryContactLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
     memorySize: 3008
@@ -245,20 +195,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  setCaseToReadyForTrial:
-    handler: web-api/src/casesHandlers.setCaseToReadyForTrialLambda
-    events:
-      - http:
-          path: /{caseId}/set-to-ready-for-trial
-          method: put
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   createCase:
-    handler: web-api/src/casesHandlers.createCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.createCaseLambda
     events:
       - http:
           path: /
@@ -270,7 +208,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   createCaseFromPaper:
-    handler: web-api/src/casesHandlers.createCaseFromPaperLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.createCaseFromPaperLambda
     events:
       - http:
           path: /paper
@@ -282,7 +220,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCase:
-    handler: web-api/src/casesHandlers.getCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.getCaseLambda
     events:
       - http:
           path: /{caseId}
@@ -297,8 +235,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  caseSearch:
-    handler: web-api/src/casesHandlers.caseSearchLambda
+  caseAdvancedSearch:
+    handler: web-api/${self:provider.dir}/casesHandlers.caseAdvancedSearchLambda
     events:
       - http:
           path: /search
@@ -310,7 +248,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   sendToIRS:
-    handler: web-api/src/casesHandlers.sendPetitionToIRSHoldingQueueLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.sendPetitionToIRSHoldingQueueLambda
     events:
       - http:
           path: /{caseId}/send-to-irs-holding-queue
@@ -322,7 +260,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   recallFromIRS:
-    handler: web-api/src/casesHandlers.recallPetitionFromIRSHoldingQueueLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.recallPetitionFromIRSHoldingQueueLambda
     events:
       - http:
           path: /{caseId}/recall-from-irs-holding-queue
@@ -333,25 +271,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  generateCaseConfirmationPdf:
-    runtime: nodejs8.10
-    handler: web-api/src/casesHandlers.generateCaseConfirmationPdfLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: /{caseId}/confirmation
-          method: post
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   associatePractitionerWithCase:
-    handler: web-api/src/casesHandlers.associatePractitionerWithCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.associatePractitionerWithCaseLambda
     events:
       - http:
           path: /{caseId}/associate-practitioner
@@ -363,7 +284,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   associateRespondentWithCase:
-    handler: web-api/src/casesHandlers.associateRespondentWithCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.associateRespondentWithCaseLambda
     events:
       - http:
           path: /{caseId}/associate-respondent
@@ -375,7 +296,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCounselOnCase:
-    handler: web-api/src/casesHandlers.updateCounselOnCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.updateCounselOnCaseLambda
     events:
       - http:
           path: /{caseId}/counsel/{userId}
@@ -387,7 +308,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   deleteCounselFromCase:
-    handler: web-api/src/casesHandlers.deleteCounselFromCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.deleteCounselFromCaseLambda
     events:
       - http:
           path: /{caseId}/counsel/{userId}
@@ -398,8 +319,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  blockCase:
-    handler: web-api/src/casesHandlers.blockCaseLambda
+  blockCaseFromTrial:
+    handler: web-api/${self:provider.dir}/casesHandlers.blockCaseFromTrialLambda
     events:
       - http:
           path: /{caseId}/block
@@ -410,8 +331,8 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  unblockCase:
-    handler: web-api/src/casesHandlers.unblockCaseLambda
+  unblockCaseFromTrial:
+    handler: web-api/${self:provider.dir}/casesHandlers.unblockCaseFromTrialLambda
     events:
       - http:
           path: /{caseId}/block
@@ -423,7 +344,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getBlockedCases:
-    handler: web-api/src/casesHandlers.getBlockedCasesLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.getBlockedCasesLambda
     events:
       - http:
           path: /blocked/{trialLocation}
@@ -435,7 +356,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   prioritizeCase:
-    handler: web-api/src/casesHandlers.prioritizeCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.prioritizeCaseLambda
     events:
       - http:
           path: /{caseId}/high-priority
@@ -447,11 +368,23 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   unprioritizeCase:
-    handler: web-api/src/casesHandlers.unprioritizeCaseLambda
+    handler: web-api/${self:provider.dir}/casesHandlers.unprioritizeCaseLambda
     events:
       - http:
           path: /{caseId}/high-priority
           method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateCaseContext:
+    handler: web-api/${self:provider.dir}/casesHandlers.updateCaseContextLambda
+    events:
+      - http:
+          path: /{caseId}/case-context
+          method: put
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

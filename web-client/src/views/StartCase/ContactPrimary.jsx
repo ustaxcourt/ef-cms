@@ -1,11 +1,10 @@
 import { Address } from './Address';
 import { Country } from './Country';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const ContactPrimary = connect(
   {
@@ -35,20 +34,18 @@ export const ContactPrimary = connect(
     return (
       <>
         {parentView === 'StartCase' ? (
-          <h3 className="margin-top-4 padding-left-205">
+          <h3 className="margin-top-4">
             {contactsHelper.contactPrimary.header}
           </h3>
         ) : (
           <h4>{contactsHelper.contactPrimary.header}</h4>
         )}
         <div className="blue-container contact-group">
-          <div
-            className={classNames(
-              'usa-form-group',
+          <FormGroup
+            errorText={
               validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.name &&
-                'usa-form-group--error',
-            )}
+              validationErrors.contactPrimary.name
+            }
           >
             <label className="usa-label" htmlFor="name">
               {contactsHelper.contactPrimary.nameLabel}
@@ -70,18 +67,15 @@ export const ContactPrimary = connect(
                 });
               }}
             />
-            <ValidationText field="contactPrimary.name" />
-          </div>
+          </FormGroup>
 
           {contactsHelper.contactPrimary.displaySecondaryName && (
-            <div
-              className={classNames(
-                'usa-form-group',
+            <FormGroup
+              errorText={
                 validationErrors &&
-                  validationErrors.contactPrimary &&
-                  validationErrors.contactPrimary.secondaryName &&
-                  'usa-form-group--error',
-              )}
+                validationErrors.contactPrimary &&
+                validationErrors.contactPrimary.secondaryName
+              }
             >
               <label className="usa-label" htmlFor="secondary-name">
                 {contactsHelper.contactPrimary.secondaryNameLabel}
@@ -100,8 +94,7 @@ export const ContactPrimary = connect(
                   });
                 }}
               />
-              <ValidationText field="contactPrimary.secondaryName" />
-            </div>
+            </FormGroup>
           )}
 
           {contactsHelper.contactPrimary.displayTitle && (
@@ -133,13 +126,11 @@ export const ContactPrimary = connect(
           )}
 
           {contactsHelper.contactPrimary.displayInCareOf && (
-            <div
-              className={classNames(
-                'usa-form-group',
+            <FormGroup
+              errorText={
                 validationErrors.contactPrimary &&
-                  validationErrors.contactPrimary.inCareOf &&
-                  'usa-form-group--error',
-              )}
+                validationErrors.contactPrimary.inCareOf
+              }
             >
               <label className="usa-label" htmlFor="inCareOf">
                 {contactsHelper.contactPrimary.inCareOfLabel ? (
@@ -174,8 +165,7 @@ export const ContactPrimary = connect(
                   });
                 }}
               />
-              <ValidationText field="contactPrimary.inCareOf" />
-            </div>
+            </FormGroup>
           )}
 
           <Country
@@ -203,13 +193,12 @@ export const ContactPrimary = connect(
               onChange={onChange}
             />
           )}
-          <div
-            className={classNames(
-              'usa-form-group phone-input',
+          <FormGroup
+            className="phone-input"
+            errorText={
               validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.phone &&
-                'usa-form-group--error',
-            )}
+              validationErrors.contactPrimary.phone
+            }
           >
             <label className="usa-label" htmlFor="phone">
               Phone number
@@ -239,8 +228,7 @@ export const ContactPrimary = connect(
                 });
               }}
             />
-            <ValidationText field="contactPrimary.phone" />
-          </div>
+          </FormGroup>
         </div>
       </>
     );

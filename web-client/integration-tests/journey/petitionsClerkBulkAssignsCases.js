@@ -1,6 +1,6 @@
 export default test => {
   return it('Petitions clerk bulk assigns cases', async () => {
-    const selectedWorkItems = test.taxpayerNewCases.map(workItem => {
+    const selectedWorkItems = test.petitionerNewCases.map(workItem => {
       return {
         workItemId: workItem.documents[0].workItems[0].workItemId,
       };

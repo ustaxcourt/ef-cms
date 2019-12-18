@@ -1,7 +1,22 @@
 import { state } from 'cerebral';
 
+export const deconstructDate = (dateString, { applicationContext }) => {
+  const momentObj =
+    dateString &&
+    applicationContext.getUtilities().prepareDateFromString(dateString);
+  let result;
+  if (momentObj && momentObj.toDate() instanceof Date && momentObj.isValid()) {
+    result = {
+      day: momentObj.format('D'),
+      month: momentObj.format('M'),
+      year: momentObj.format('YYYY'),
+    };
+  }
+  return result;
+};
+
 /**
- * takes a date from a docket entry and create seperate form inputs
+ * takes a date from a docket entry and create separate form inputs
  *
  * @param {object} providers the providers object
  * @param {Function} providers.props the cerebral props object
@@ -13,80 +28,47 @@ export const deconstructDatesToFormAction = async ({
   store,
 }) => {
   const { docketEntry } = props;
+  let formDate;
 
-  if (docketEntry.receivedAt) {
-    const receivedAt = applicationContext
-      .getUtilities()
-      .prepareDateFromString(docketEntry.receivedAt);
-
-    if (
-      receivedAt &&
-      receivedAt.toDate() instanceof Date &&
-      receivedAt.isValid()
-    ) {
-      store.set(state.form.dateReceivedMonth, receivedAt.format('M'));
-      store.set(state.form.dateReceivedDay, receivedAt.format('D'));
-      store.set(state.form.dateReceivedYear, receivedAt.format('YYYY'));
-    }
-  }
-
-  if (docketEntry.serviceDate) {
-    const serviceDate = applicationContext
-      .getUtilities()
-      .prepareDateFromString(docketEntry.serviceDate);
-
-    if (
-      serviceDate &&
-      serviceDate.toDate() instanceof Date &&
-      serviceDate.isValid()
-    ) {
-      store.set(state.form.month, serviceDate.format('M'));
-      store.set(state.form.day, serviceDate.format('D'));
-      store.set(state.form.year, serviceDate.format('YYYY'));
-    }
+  if (
+    (formDate = deconstructDate(docketEntry.receivedAt, { applicationContext }))
+  ) {
+    store.set(state.form.dateReceivedMonth, formDate.month);
+    store.set(state.form.dateReceivedDay, formDate.day);
+    store.set(state.form.dateReceivedYear, formDate.year);
   }
 
   if (
-    docketEntry.secondaryDocument &&
-    docketEntry.secondaryDocument.serviceDate
+    (formDate = deconstructDate(docketEntry.serviceDate, {
+      applicationContext,
+    }))
   ) {
-    const serviceDate = applicationContext
-      .getUtilities()
-      .prepareDateFromString(docketEntry.secondaryDocument.serviceDate);
-
-    if (
-      serviceDate &&
-      serviceDate.toDate() instanceof Date &&
-      serviceDate.isValid()
-    ) {
-      store.set(state.form.secondaryDocument.month, serviceDate.format('M'));
-      store.set(state.form.secondaryDocument.day, serviceDate.format('D'));
-      store.set(state.form.secondaryDocument.year, serviceDate.format('YYYY'));
-    }
+    store.set(state.form.month, formDate.month);
+    store.set(state.form.day, formDate.day);
+    store.set(state.form.year, formDate.year);
   }
 
-  if (docketEntry.certificateOfServiceDate) {
-    const certificateOfServiceDate = applicationContext
-      .getUtilities()
-      .prepareDateFromString(docketEntry.certificateOfServiceDate);
+  if (
+    (formDate = deconstructDate(
+      docketEntry.secondaryDocument &&
+        docketEntry.secondaryDocument.serviceDate,
+      {
+        applicationContext,
+      },
+    ))
+  ) {
+    store.set(state.form.secondaryDocument.month, formDate.month);
+    store.set(state.form.secondaryDocument.day, formDate.day);
+    store.set(state.form.secondaryDocument.year, formDate.year);
+  }
 
-    if (
-      certificateOfServiceDate &&
-      certificateOfServiceDate.toDate() instanceof Date &&
-      certificateOfServiceDate.isValid()
-    ) {
-      store.set(
-        state.form.certificateOfServiceMonth,
-        certificateOfServiceDate.format('M'),
-      );
-      store.set(
-        state.form.certificateOfServiceDay,
-        certificateOfServiceDate.format('D'),
-      );
-      store.set(
-        state.form.certificateOfServiceYear,
-        certificateOfServiceDate.format('YYYY'),
-      );
-    }
+  if (
+    (formDate = deconstructDate(docketEntry.certificateOfServiceDate, {
+      applicationContext,
+    }))
+  ) {
+    store.set(state.form.certificateOfServiceMonth, formDate.month);
+    store.set(state.form.certificateOfServiceDay, formDate.day);
+    store.set(state.form.certificateOfServiceYear, formDate.year);
   }
 };

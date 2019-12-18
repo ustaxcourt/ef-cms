@@ -1,5 +1,5 @@
-const { customHandle } = require('../customHandle');
 const createApplicationContext = require('../applicationContext');
+const { customHandle } = require('../customHandle');
 const { getUserFromAuthHeader } = require('../middleware/apiGatewayHelper');
 
 /**

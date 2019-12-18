@@ -6,11 +6,15 @@ plugins:
   - serverless-prune-plugin
   - serverless-plugin-tracing
   - serverless-latest-layer-version
+  - serverless-jetpack
   # - serverless-plugin-warmup
 
 custom:
   #warmup:
   #enabled: true
+
+  jetpack:
+    mode: yarn
 
   prune:
     automatic: true
@@ -75,18 +79,20 @@ provider:
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
+  role: arn:aws:iam::${opt:accountId}:role/lambda_role_${opt:stage}
+  dir: ${opt:run_dir, 'src'}
   s3Endpoint: s3.us-east-1.amazonaws.com
   dynamodbEndpoint: dynamodb.${opt:region}.amazonaws.com
   masterRegion: us-east-1
   userPoolId: us-east-1_7uRkF0Axn
   masterDynamodbEndpoint: dynamodb.us-east-1.amazonaws.com
-  clamavDefDir: /opt/var/lib/clamav
   deploymentBucket:
     name: ${env:SLS_DEPLOYMENT_BUCKET}
     serverSideEncryption: AES256
   apiGateway:
     binaryMediaTypes:
       - 'application/pdf'
+  clamavDefDir: /opt/var/lib/clamav
 
   environment:
     S3_ENDPOINT: ${self:custom.vars.s3Endpoint, self:provider.s3Endpoint}
@@ -97,66 +103,16 @@ provider:
     STAGE: ${self:custom.stage}
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
-    GS_LIB: /opt/share/ghostscript/9.06/Resource/Init
-    CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
     EMAIL_SOURCE: noreply@mail.efcms-${opt:stage}.${opt:domain}
     EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
     EFCMS_DOMAIN: ${opt:domain}
-
-  iamRoleStatements:
-    - Effect: 'Allow'
-      Action:
-        - 'xray:PutTraceSegments'
-        - 'xray:PutTelemetryRecords'
-      Resource:
-        - '*'
-    - Effect: 'Allow'
-      Action:
-        - 'lambda:InvokeFunction'
-      Resource:
-        - arn:aws:lambda:${opt:region}:${opt:accountId}:function:${self:service}-${opt:stage, self:provider.stage}-*
-    - Effect: 'Allow'
-      Action:
-        - cognito-idp:AdminCreateUser
-        - cognito-idp:AdminGetUser
-      Resource:
-        - arn:aws:cognito-idp:${opt:region}:${opt:accountId}:userpool/${self:provider.environment.USER_POOL_ID}
-    - Effect: 'Allow'
-      Action:
-        - 's3:*'
-      Resource:
-        Fn::Join:
-          - ''
-          - - 'arn:aws:s3:::'
-            - ${self:provider.environment.DOCUMENTS_BUCKET_NAME}
-            - '/*'
-    - Effect: 'Allow'
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:BatchGetItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-        - dynamodb:BatchWriteItem
-      Resource:
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}
-        - arn:aws:dynamodb:${opt:region}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}
-        - arn:aws:dynamodb:${self:provider.environment.MASTER_REGION}:${opt:accountId}:table/${opt:efcmsTableName}/index/*
-    - Effect: 'Allow'
-      Action:
-        - 'ses:*'
-      Resource:
-        - '*'
+    CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
 
 package:
   exclude:
     - ./**
   include:
-    - web-api/src/caseDeadlinesHandlers.js
-
+    - web-api/${self:provider.dir}/caseDeadlinesHandlers.js
   excludeDevDependencies: true
 
 resources:
@@ -195,7 +151,7 @@ resources:
 
 functions:
   createCaseDeadline:
-    handler: web-api/src/caseDeadlinesHandlers.createCaseDeadlineLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.createCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}
@@ -207,7 +163,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getCaseDeadlinesForCase:
-    handler: web-api/src/caseDeadlinesHandlers.getCaseDeadlinesForCaseLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.getCaseDeadlinesForCaseLambda
     events:
       - http:
           path: /{caseId}
@@ -219,7 +175,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   updateCaseDeadline:
-    handler: web-api/src/caseDeadlinesHandlers.updateCaseDeadlineLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.updateCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}/{caseDeadlineId}
@@ -231,7 +187,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   deleteCaseDeadline:
-    handler: web-api/src/caseDeadlinesHandlers.deleteCaseDeadlineLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.deleteCaseDeadlineLambda
     events:
       - http:
           path: /{caseId}/{caseDeadlineId}
@@ -243,7 +199,7 @@ functions:
               Ref: ApiGatewayAuthorizer
 
   getAllCaseDeadlines:
-    handler: web-api/src/caseDeadlinesHandlers.getAllCaseDeadlinesLambda
+    handler: web-api/${self:provider.dir}/caseDeadlinesHandlers.getAllCaseDeadlinesLambda
     events:
       - http:
           path: /

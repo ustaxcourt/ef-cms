@@ -11,7 +11,7 @@ describe('Petition', () => {
         city: 'Los Angeles',
         country: 'USA',
         countryType: 'domestic',
-        email: 'taxpayer@example.com',
+        email: 'petitioner@example.com',
         name: 'Eric',
         phone: '555-555-1212',
         postalCode: '90210',

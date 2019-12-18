@@ -1,14 +1,11 @@
-import { mapValueHelper } from './mapValueHelper';
 import { state } from 'cerebral';
 
-export const workQueueHelper = get => {
+export const workQueueHelper = (get, applicationContext) => {
+  const user = applicationContext.getCurrentUser();
   const selectedWorkItems = get(state.selectedWorkItems);
   const workQueueToDisplay = get(state.workQueueToDisplay);
-  const userSection = get(state.user.section);
-  const userRole = get(state.user.role);
-  const USER_ROLES = get(state.constants.USER_ROLES);
-  const isJudge = userRole === USER_ROLES.judge;
-  const userRoleMap = mapValueHelper(userRole);
+  const { USER_ROLES } = applicationContext.getConstants();
+  const isJudge = user.role === USER_ROLES.judge;
   const { myInboxUnreadCount, qcUnreadCount } = get(state.notifications);
   const { workQueueIsInternal } = workQueueToDisplay;
   const showInbox = workQueueToDisplay.box === 'inbox';
@@ -21,12 +18,12 @@ export const workQueueHelper = get => {
     : qcUnreadCount;
   const workQueueType = workQueueIsInternal ? 'Messages' : 'Document QC';
   const isDisplayingQC = !workQueueIsInternal;
-  const userIsPetitionsClerk = userRole === USER_ROLES.petitionsClerk;
-  const userIsDocketClerk = userRole === USER_ROLES.docketClerk;
+  const userIsPetitionsClerk = user.role === USER_ROLES.petitionsClerk;
+  const userIsDocketClerk = user.role === USER_ROLES.docketClerk;
   const userIsOther = ![
     USER_ROLES.docketClerk,
     USER_ROLES.petitionsClerk,
-  ].includes(userRole);
+  ].includes(user.role);
   const workQueueTitle = `${
     showIndividualWorkQueue
       ? 'My'
@@ -34,9 +31,14 @@ export const workQueueHelper = get => {
       ? 'Docket'
       : 'Section'
   } ${workQueueType}`;
+  const permissions = get(state.permissions);
+
+  const inboxFiledColumnLabel = workQueueIsInternal ? 'Received' : 'Filed';
+
+  const showStartCaseButton = permissions.START_PAPER_CASE && isDisplayingQC;
 
   return {
-    assigneeColumnTitle: isDisplayingQC ? 'Assigned To' : 'To',
+    assigneeColumnTitle: isDisplayingQC ? 'Assigned to' : 'To',
     currentBoxView: workQueueToDisplay.box,
     getQueuePath: ({ box, queue }) => {
       return `/${
@@ -49,6 +51,7 @@ export const workQueueHelper = get => {
     hideIconColumn: !workQueueIsInternal && userIsOther,
     hideSectionColumn: isDisplayingQC,
     inboxCount: showIndividualWorkQueue ? myUnreadCount : sectionInboxCount,
+    inboxFiledColumnLabel,
     isDisplayingQC,
     linkToDocumentMessages: !isDisplayingQC,
     queueEmptyMessage: workQueueIsInternal
@@ -68,6 +71,7 @@ export const workQueueHelper = get => {
     showBatchedByColumn: isDisplayingQC && userIsPetitionsClerk && showOutbox,
     showBatchedForIRSTab: userIsPetitionsClerk && workQueueIsInternal === false,
     showCaseStatusColumn: isJudge,
+    showEditDocketEntry: permissions.DOCKET_ENTRY,
     showFromColumn: isJudge,
     showInProgressTab: isDisplayingQC && userIsDocketClerk,
     showInbox,
@@ -79,19 +83,15 @@ export const workQueueHelper = get => {
     showOutbox,
     showProcessedByColumn: isDisplayingQC && userIsDocketClerk && showOutbox,
     showReceivedColumn: isDisplayingQC,
-    showRunBatchIRSProcessButton: userSection === 'petitions',
+    showRunBatchIRSProcessButton: permissions.UPDATE_CASE,
     showSectionSentTab:
       workQueueIsInternal || userIsDocketClerk || userIsPetitionsClerk,
     showSectionWorkQueue: workQueueToDisplay.queue === 'section',
-    showSelectColumn:
-      (isDisplayingQC && (userIsPetitionsClerk || userIsDocketClerk)) ||
-      (workQueueIsInternal && !isDisplayingQC),
+    showSelectColumn: isDisplayingQC && permissions.ASSIGN_WORK_ITEM,
     showSendToBar: selectedWorkItems.length > 0,
     showSentColumn: !isDisplayingQC,
     showServedColumn: userIsPetitionsClerk && isDisplayingQC,
-    showStartCaseButton:
-      (!!userRoleMap.petitionsclerk || !!userRoleMap.docketclerk) &&
-      isDisplayingQC,
+    showStartCaseButton,
     workQueueIsInternal,
     workQueueTitle,
     workQueueType,

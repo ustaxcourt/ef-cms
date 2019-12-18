@@ -1,6 +1,6 @@
 const {
   isAuthorized,
-  VIEW_DOCUMENTS,
+  ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -16,7 +16,7 @@ exports.getDownloadPolicyUrlInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, VIEW_DOCUMENTS)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_DOCUMENTS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

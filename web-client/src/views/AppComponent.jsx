@@ -1,6 +1,7 @@
 import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
+import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { BlockedCasesReport } from './BlockedCasesReport/BlockedCasesReport';
@@ -8,6 +9,7 @@ import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
 import { CaseDetail } from './CaseDetail';
 import { CaseDetailInternal } from './CaseDetailInternal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
+import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
@@ -16,6 +18,7 @@ import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocumentDetail } from './DocumentDetail/DocumentDetail';
 import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { Error } from './Error';
+import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { Footer } from './Footer';
 import { Header } from './Header/Header';
@@ -25,6 +28,7 @@ import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { Messages } from './Messages/Messages';
 import { OrdersNeededSummary } from './CaseDetailEdit/OrdersNeededSummary';
+import { PendingReport } from './PendingReport/PendingReport';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
@@ -32,18 +36,20 @@ import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SignStipDecision } from './SignStipDecision';
+import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
+import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
+import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const pages = {
   AddDocketEntry,
@@ -56,6 +62,7 @@ const pages = {
   CaseDetail,
   CaseDetailInternal,
   CaseSearchNoMatches,
+  CourtIssuedDocketEntry,
   CreateOrder,
   DashboardJudge,
   DashboardPetitioner,
@@ -71,6 +78,7 @@ const pages = {
   LogIn,
   Messages,
   OrdersNeededSummary,
+  PendingReport,
   PrimaryContactEdit,
   PrintableDocketRecord,
   PrintableTrialCalendar,
@@ -78,10 +86,12 @@ const pages = {
   SelectDocumentType,
   SignOrder,
   SignStipDecision,
+  SimplePdfPreviewPage,
   StartCaseInternal,
   StartCaseWizard,
   StyleGuide,
   TrialSessionDetail,
+  TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
   UserContactEdit,
@@ -90,27 +100,33 @@ const pages = {
 /**
  * Root application component
  */
-class App extends React.Component {
-  componentDidUpdate() {
-    this.focusMain();
-  }
+export const AppComponent = connect(
+  {
+    currentPage: state.currentPage,
+    currentPageHeader: state.currentPageHeader,
+    showModal: state.showModal,
+    zipInProgress: state.batchDownloads.zipInProgress,
+  },
+  ({ currentPage, showModal, zipInProgress }) => {
+    const focusMain = e => {
+      e && e.preventDefault();
+      const header = document.querySelector('#main-content h1');
+      if (header) header.focus();
+      return false;
+    };
 
-  focusMain(e) {
-    e && e.preventDefault();
-    const header = document.querySelector('#main-content h1');
-    if (header) header.focus();
-    return false;
-  }
+    useEffect(() => {
+      focusMain();
+    });
 
-  render() {
-    const CurrentPage = pages[this.props.currentPage];
+    const CurrentPage = pages[currentPage];
     return (
       <React.Fragment>
         <a
           className="usa-skipnav"
           href="#main-content"
           tabIndex="0"
-          onClick={this.focusMain}
+          onClick={focusMain}
         >
           Skip to main content
         </a>
@@ -118,23 +134,17 @@ class App extends React.Component {
         <Header />
         <main id="main-content" role="main">
           <CurrentPage />
+          {zipInProgress && <BatchDownloadProgress />}
         </main>
         <Footer />
         <Loading />
+        {showModal === 'TrialSessionPlanningModal' && (
+          <TrialSessionPlanningModal />
+        )}
+        {showModal === 'FileCompressionErrorModal' && (
+          <FileCompressionErrorModal />
+        )}
       </React.Fragment>
     );
-  }
-}
-
-App.propTypes = {
-  currentPage: PropTypes.string,
-  currentPageHeader: PropTypes.string,
-};
-
-export const AppComponent = connect(
-  {
-    currentPage: state.currentPage,
-    currentPageHeader: state.currentPageHeader,
   },
-  App,
 );

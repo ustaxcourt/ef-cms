@@ -2,10 +2,9 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateToFileADocumentAction';
-import { set } from 'cerebral/factories';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
-import { state } from 'cerebral';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocumentTypeAction';
 
 export const openCompleteSelectDocumentTypeModalSequence = [
@@ -13,7 +12,7 @@ export const openCompleteSelectDocumentTypeModalSequence = [
   defaultSecondaryDocumentAction,
   validateSelectDocumentTypeAction,
   {
-    error: [set(state.showModal, 'CompleteSelectDocumentModalDialog')],
+    error: [setShowModalFactoryAction('CompleteSelectDocumentModalDialog')],
     success: [
       generateTitleAction,
       setDocketNumberPropAction,

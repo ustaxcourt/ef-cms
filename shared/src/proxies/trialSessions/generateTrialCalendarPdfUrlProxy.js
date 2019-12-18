@@ -1,3 +1,5 @@
+const { post } = require('../requests');
+
 /**
  * generateTrialCalendarPdfInteractor (proxy)
  *
@@ -10,20 +12,15 @@ exports.generateTrialCalendarPdfInteractor = ({
   applicationContext,
   trialSessionId,
 }) => {
-  return applicationContext
-    .getHttpClient()
-    .post(
-      `${applicationContext.getBaseUrl()}/api/trial-calendar-pdf`,
-      {
-        trialSessionId,
-      },
-      {
-        headers: {
-          Accept: 'application/pdf',
-          Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-        },
-        responseType: 'blob',
-      },
-    )
-    .then(response => new Blob([response.data], { type: 'application/pdf' }));
+  return post({
+    applicationContext,
+    body: {
+      trialSessionId,
+    },
+    endpoint: '/api/trial-calendar-pdf',
+    headers: {
+      Accept: 'application/pdf',
+    },
+    options: { responseType: 'blob' },
+  });
 };

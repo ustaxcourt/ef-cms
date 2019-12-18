@@ -11,6 +11,8 @@ resource "aws_instance" "dynamsoft" {
     environment = "${var.environment}"
   }
 
+  count = "${var.is_dynamsoft_enabled}"
+
   user_data = "${data.template_file.setup_dynamsoft.rendered}"
 
   iam_instance_profile = "dynamsoft_s3_download_role"
@@ -103,6 +105,8 @@ resource "aws_elb" "dynamsoft_elb" {
     target              = "HTTP:80/"
     interval            = 30
   }
+
+  count = "${var.is_dynamsoft_enabled}"
 
   instances                   = ["${aws_instance.dynamsoft.id}"]
   cross_zone_load_balancing   = false

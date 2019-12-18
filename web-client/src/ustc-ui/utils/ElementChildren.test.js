@@ -63,7 +63,7 @@ describe('getDefaultAttribute', () => {
         sds
       </div>,
       22,
-      <div id="sdsdf" key="fetch">
+      <div id="something" key="fetch">
         something
       </div>,
     ];

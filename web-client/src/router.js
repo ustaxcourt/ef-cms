@@ -34,21 +34,39 @@ const back = () => {
 const router = {
   initialize: app => {
     document.title = 'U.S. Tax Court';
-    const checkLoggedIn = cb => {
+    const { ROLE_PERMISSIONS } = app.getState('constants');
+
+    const ifHasAccess = (cb, permissionToCheck) => {
       return function() {
-        if (!app.getState('user')) {
+        const gotoLoginPage = () => {
           const path = app.getState('cognitoLoginUrl');
-          window.location.replace(path);
+          externalRoute(path);
+        };
+        const goto404 = () => {
+          app.getSequence('navigateToPathSequence')({
+            path: '404',
+          });
+        };
+
+        if (!app.getState('user')) {
+          gotoLoginPage();
         } else {
-          app.getSequence('clearAlertSequence')();
-          cb.apply(null, arguments);
+          if (
+            permissionToCheck &&
+            !app.getState('permissions')[permissionToCheck]
+          ) {
+            goto404();
+          } else {
+            app.getSequence('clearAlertSequence')();
+            cb.apply(null, arguments);
+          }
         }
       };
     };
 
     route(
       '/',
-      checkLoggedIn(() => {
+      ifHasAccess(() => {
         setPageTitle('Dashboard');
         app.getSequence('gotoDashboardSequence')();
       }),
@@ -56,7 +74,7 @@ const router = {
 
     route(
       '/case-detail/*',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
         app.getSequence('gotoCaseDetailSequence')({ docketNumber });
       }),
@@ -64,7 +82,7 @@ const router = {
 
     route(
       '/case-detail/*/documents/*',
-      checkLoggedIn((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, documentId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Document details`,
         );
@@ -72,12 +90,12 @@ const router = {
           docketNumber,
           documentId,
         });
-      }),
+      }, ROLE_PERMISSIONS.UPDATE_CASE),
     );
 
     route(
       '/case-detail/*/documents/*/complete',
-      checkLoggedIn((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, documentId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
         );
@@ -90,7 +108,7 @@ const router = {
 
     route(
       '/case-detail/*/documents/*/edit',
-      checkLoggedIn((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, documentId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
         );
@@ -102,8 +120,21 @@ const router = {
     );
 
     route(
+      '/case-detail/*/documents/*/edit-court-issued',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
+        );
+        app.getSequence('gotoEditCourtIssuedDocketEntrySequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/documents/*/sign',
-      checkLoggedIn((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, documentId) => {
         app.getSequence('gotoSignPDFDocumentSequence')({
           docketNumber,
           documentId,
@@ -114,7 +145,7 @@ const router = {
 
     route(
       '/case-detail/*/documents/*/messages/*/sign',
-      checkLoggedIn((docketNumber, documentId, messageId) => {
+      ifHasAccess((docketNumber, documentId, messageId) => {
         app.getSequence('gotoSignPDFDocumentSequence')({
           docketNumber,
           documentId,
@@ -126,7 +157,7 @@ const router = {
 
     route(
       '/case-detail/*/documents/*/mark/*',
-      checkLoggedIn((docketNumber, documentId, workItemIdToMarkAsRead) => {
+      ifHasAccess((docketNumber, documentId, workItemIdToMarkAsRead) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Document details`,
         );
@@ -140,7 +171,7 @@ const router = {
 
     route(
       '/case-detail/*/documents/*/messages/*',
-      checkLoggedIn((docketNumber, documentId, messageId) => {
+      ifHasAccess((docketNumber, documentId, messageId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Document details`,
         );
@@ -154,7 +185,7 @@ const router = {
 
     route(
       '/case-detail/*/documents/*/messages/*/mark/*',
-      checkLoggedIn(
+      ifHasAccess(
         (docketNumber, documentId, messageId, workItemIdToMarkAsRead) => {
           setPageTitle(
             `${getPageTitleDocketPrefix(docketNumber)} Document details`,
@@ -171,7 +202,7 @@ const router = {
 
     route(
       '/case-detail/*/before-you-file-a-document',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(
             docketNumber,
@@ -183,7 +214,7 @@ const router = {
 
     route(
       '/case-detail/*/file-a-document',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} File a document`,
         );
@@ -199,7 +230,7 @@ const router = {
 
     route(
       '/case-detail/*/file-a-document/details',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} File a document`,
         );
@@ -217,7 +248,7 @@ const router = {
 
     route(
       '/case-detail/*/file-a-document/review',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} File a document`,
         );
@@ -235,7 +266,7 @@ const router = {
 
     route(
       '/case-detail/*/file-a-document/all-document-categories',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} File a document`,
         );
@@ -253,7 +284,7 @@ const router = {
 
     route(
       '/case-detail/*/contacts/primary/edit',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Primary contact`,
         );
@@ -262,7 +293,7 @@ const router = {
     );
     route(
       '/case-detail/*/create-order',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
         );
@@ -272,7 +303,7 @@ const router = {
 
     route(
       '/case-detail/*/edit-order/*',
-      checkLoggedIn((docketNumber, documentIdToEdit) => {
+      ifHasAccess((docketNumber, documentIdToEdit) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
         const sequence = app.getSequence('gotoEditOrderSequence');
         sequence({
@@ -284,7 +315,7 @@ const router = {
 
     route(
       '/case-detail/*/edit-order/*/sign',
-      checkLoggedIn((docketNumber, documentId) => {
+      ifHasAccess((docketNumber, documentId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
         const sequence = app.getSequence('gotoSignOrderSequence');
         sequence({
@@ -296,7 +327,7 @@ const router = {
 
     route(
       '/case-detail/*/add-docket-entry',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
         );
@@ -305,8 +336,21 @@ const router = {
     );
 
     route(
+      '/case-detail/*/documents/*/add-court-issued-docket-entry',
+      ifHasAccess((docketNumber, documentId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
+        );
+        app.getSequence('gotoAddCourtIssuedDocketEntrySequence')({
+          docketNumber,
+          documentId,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/printable-docket-record',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Docket record`);
         app.getSequence('gotoPrintableDocketRecordSequence')({ docketNumber });
       }),
@@ -314,7 +358,7 @@ const router = {
 
     route(
       '/case-detail/*/confirmation',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Case Confirmation`,
         );
@@ -325,8 +369,21 @@ const router = {
     );
 
     route(
+      '/case-detail/*/pending-report',
+      ifHasAccess(docketNumber => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Case Confirmation`,
+        );
+        app.getSequence('gotoPrintablePendingReportSequence')({
+          caseIdFilter: true,
+          docketNumber,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/request-access',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Request access`,
         );
@@ -342,7 +399,7 @@ const router = {
 
     route(
       '/case-detail/*/request-access/review',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Request access review`,
         );
@@ -360,7 +417,7 @@ const router = {
 
     route(
       '/case-detail/*/orders-needed',
-      checkLoggedIn(docketNumber => {
+      ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Orders needed`);
         app.getSequence('gotoOrdersNeededSequence')({ docketNumber });
       }),
@@ -368,7 +425,7 @@ const router = {
 
     route(
       '/document-qc..',
-      checkLoggedIn(() => {
+      ifHasAccess(() => {
         const path = route._.getPathFromBase();
         const validPaths = [
           'document-qc',
@@ -409,32 +466,32 @@ const router = {
 
     route(
       '/trial-session-detail/*',
-      checkLoggedIn(trialSessionId => {
+      ifHasAccess(trialSessionId => {
         setPageTitle('Trial session information');
         app.getSequence('gotoTrialSessionDetailSequence')({ trialSessionId });
-      }),
+      }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
     );
 
     route(
       '/trial-session-working-copy/*',
-      checkLoggedIn(trialSessionId => {
+      ifHasAccess(trialSessionId => {
         setPageTitle('Trial session working copy');
         app.getSequence('gotoTrialSessionWorkingCopySequence')({
           trialSessionId,
         });
-      }),
+      }, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY),
     );
 
     route(
       '/trial-sessions..',
-      checkLoggedIn(() => {
+      ifHasAccess(() => {
         var query = {};
         forEach(route.query(), (value, key) => {
           set(query, key, value);
         });
         setPageTitle('Trial sessions');
         app.getSequence('gotoTrialSessionsSequence')({ query });
-      }),
+      }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
     );
 
     route('/idle-logout', () => {
@@ -452,7 +509,7 @@ const router = {
 
     route(
       '/before-filing-a-petition',
-      checkLoggedIn(() => {
+      ifHasAccess(() => {
         setPageTitle('Before you file a petition');
         app.getSequence('gotoBeforeStartCaseSequence')();
       }),
@@ -460,7 +517,7 @@ const router = {
 
     route(
       '/file-a-petition/step-*',
-      checkLoggedIn(step => {
+      ifHasAccess(step => {
         setPageTitle('File a petition');
         if (app.getState('currentPage') === 'StartCaseWizard') {
           app.getSequence('chooseStartCaseWizardStepSequence')({
@@ -486,7 +543,7 @@ const router = {
 
     route(
       '/file-a-petition-pa11y/step-*',
-      checkLoggedIn(step => {
+      ifHasAccess(step => {
         setPageTitle('File a petition');
         app.getSequence('gotoStartCaseWizardSequence')({
           step,
@@ -497,10 +554,10 @@ const router = {
 
     route(
       '/add-a-trial-session',
-      checkLoggedIn(() => {
+      ifHasAccess(() => {
         setPageTitle('Add a trial session');
         app.getSequence('gotoAddTrialSessionSequence')();
-      }),
+      }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
     );
 
     route('/style-guide', () => {
@@ -510,7 +567,7 @@ const router = {
 
     route(
       '/messages..',
-      checkLoggedIn(() => {
+      ifHasAccess(() => {
         const path = route._.getPathFromBase();
         const validPaths = [
           'messages',
@@ -549,7 +606,7 @@ const router = {
 
     route(
       '/reports/case-deadlines',
-      checkLoggedIn(() => {
+      ifHasAccess(() => {
         setPageTitle('Case deadlines');
         app.getSequence('gotoAllCaseDeadlinesSequence')();
       }),
@@ -557,15 +614,34 @@ const router = {
 
     route(
       '/reports/blocked-cases',
-      checkLoggedIn(() => {
+      ifHasAccess(() => {
         setPageTitle('Blocked cases');
         app.getSequence('gotoBlockedCasesReportSequence')();
       }),
     );
 
     route(
+      '/reports/pending-report',
+      ifHasAccess(() => {
+        setPageTitle('Pending report');
+        app.getSequence('gotoPendingReportSequence')();
+      }),
+    );
+
+    route(
+      '/reports/pending-report/printable..',
+      ifHasAccess(() => {
+        const { judgeFilter } = route.query();
+        setPageTitle('Pending report');
+        app.getSequence('gotoPrintablePendingReportSequence')({
+          judgeFilter,
+        });
+      }),
+    );
+
+    route(
       '/user/contact/edit',
-      checkLoggedIn(() => {
+      ifHasAccess(() => {
         setPageTitle('Edit user contact');
         app.getSequence('gotoUserContactEditSequence')();
       }),
@@ -573,19 +649,19 @@ const router = {
 
     route(
       '/search/no-matches',
-      checkLoggedIn(() => {
+      ifHasAccess(() => {
         setPageTitle('Search results');
         app.getSequence('gotoCaseSearchNoMatchesSequence')();
-      }),
+      }, ROLE_PERMISSIONS.ADVANCED_SEARCH),
     );
 
     route(
       '/search..',
-      checkLoggedIn(() => {
+      ifHasAccess(() => {
         const query = route.query();
         setPageTitle('Advanced search');
         app.getSequence('gotoAdvancedSearchSequence')(query);
-      }),
+      }, ROLE_PERMISSIONS.ADVANCED_SEARCH),
     );
 
     route('/mock-login...', () => {

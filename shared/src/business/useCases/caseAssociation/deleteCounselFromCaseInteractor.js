@@ -1,10 +1,10 @@
 const {
-  ASSOCIATE_USER_WITH_CASE,
   isAuthorized,
+  ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { User } = require('../../entities/User');
 const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 /**
  * deleteCounselFromCaseInteractor
@@ -22,7 +22,7 @@ exports.deleteCounselFromCaseInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ASSOCIATE_USER_WITH_CASE)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -46,6 +46,8 @@ exports.deleteCounselFromCaseInteractor = async ({
     caseEntity.removePractitioner(userToDelete);
   } else if (userToDelete.role === User.ROLES.respondent) {
     caseEntity.removeRespondent(userToDelete);
+  } else {
+    throw new Error('User is not a practitioner or respondent');
   }
 
   await applicationContext.getPersistenceGateway().deleteUserFromCase({

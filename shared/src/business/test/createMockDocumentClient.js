@@ -21,7 +21,7 @@ const createMockDocumentClient = () => {
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     },
     ['7805d1ab-18d0-43ec-bafb-654e83405416 7805d1ab-18d0-43ec-bafb-654e83405416']: {
-      email: 'taxpayer',
+      email: 'petitioner',
       name: 'Test Petitioner',
       pk: '7805d1ab-18d0-43ec-bafb-654e83405416',
       role: User.ROLES.petitioner,

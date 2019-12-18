@@ -15,9 +15,18 @@ export const getUsersInSectionAction = ({ section }) =>
    * @returns {object} the list of users in a section
    */
   async ({ applicationContext }) => {
+    let sectionToGet = section;
+
+    if (!sectionToGet) {
+      const user = applicationContext.getCurrentUser();
+      sectionToGet = user.section;
+    }
     const users = await applicationContext
       .getUseCases()
-      .getUsersInSectionInteractor({ applicationContext, section });
+      .getUsersInSectionInteractor({
+        applicationContext,
+        section: sectionToGet,
+      });
 
     return {
       users: sortBy(users, 'name'),

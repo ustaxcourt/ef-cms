@@ -1,12 +1,14 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { TrialSessionWorkingCopy } from '../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { trialSessionWorkingCopyHelper as trialSessionWorkingCopyHelperComputed } from './trialSessionWorkingCopyHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const trialSessionWorkingCopyHelper = withAppContextDecorator(
   trialSessionWorkingCopyHelperComputed,
+  applicationContext,
 );
 
 const TRIAL_SESSION = {
@@ -20,19 +22,14 @@ const TRIAL_SESSION = {
   state: 'CT',
   term: 'Fall',
   termYear: '2019',
-  trialClerk: 'Test Trial Clerk',
+  trialClerk: { name: 'Test Trial Clerk' },
   trialLocation: 'Hartford, Connecticut',
 };
 
 describe('trial session working copy computed', () => {
   it('computes defaults with no data', () => {
     const result = runCompute(trialSessionWorkingCopyHelper, {
-      state: {
-        constants: {
-          STATUS_TYPES: Case.STATUS_TYPES,
-          TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-        },
-      },
+      state: {},
     });
     expect(result.title).toBeDefined();
   });
@@ -41,10 +38,6 @@ describe('trial session working copy computed', () => {
     it('sorts calendared cases by docket number', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
-          constants: {
-            STATUS_TYPES: Case.STATUS_TYPES,
-            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
@@ -75,10 +68,6 @@ describe('trial session working copy computed', () => {
     it('sorts calendared cases by docket number in descending order', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
-          constants: {
-            STATUS_TYPES: Case.STATUS_TYPES,
-            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
@@ -109,10 +98,6 @@ describe('trial session working copy computed', () => {
     it('sorts calendared cases by pro-se', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
-          constants: {
-            STATUS_TYPES: Case.STATUS_TYPES,
-            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
@@ -157,10 +142,6 @@ describe('trial session working copy computed', () => {
     it('no cases are returned if trialSessionWorkingCopy.filters and trialSessionWorkingCopy.caseMetadata are null', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
-          constants: {
-            STATUS_TYPES: Case.STATUS_TYPES,
-            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
@@ -184,10 +165,6 @@ describe('trial session working copy computed', () => {
     it('filters calendared cases by a single trial status when all trial statuses are set', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
-          constants: {
-            STATUS_TYPES: Case.STATUS_TYPES,
-            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
@@ -216,10 +193,6 @@ describe('trial session working copy computed', () => {
 
       result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
-          constants: {
-            STATUS_TYPES: Case.STATUS_TYPES,
-            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
@@ -254,10 +227,6 @@ describe('trial session working copy computed', () => {
     it('filters calendared cases by multiple trial statuses when some trial statuses are not set', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
-          constants: {
-            STATUS_TYPES: Case.STATUS_TYPES,
-            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
@@ -295,10 +264,6 @@ describe('trial session working copy computed', () => {
     it('filters calendared cases by statusUnassigned when some trial statuses are not set', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
-          constants: {
-            STATUS_TYPES: Case.STATUS_TYPES,
-            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
@@ -331,10 +296,6 @@ describe('trial session working copy computed', () => {
     it('should not return any sessions if none of the trial statuses are set and statusUnassigned is false', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
-          constants: {
-            STATUS_TYPES: Case.STATUS_TYPES,
-            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
@@ -360,10 +321,6 @@ describe('trial session working copy computed', () => {
     it('should return all sessions if none of the trial statuses are set and statusUnassigned is true', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
-          constants: {
-            STATUS_TYPES: Case.STATUS_TYPES,
-            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
@@ -395,33 +352,29 @@ describe('trial session working copy computed', () => {
     it('should return sessions without an assigned status', () => {
       let result = runCompute(trialSessionWorkingCopyHelper, {
         state: {
-          constants: {
-            STATUS_TYPES: Case.STATUS_TYPES,
-            TRIAL_STATUS_TYPES: TrialSessionWorkingCopy.TRIAL_STATUS_TYPES,
-          },
           trialSession: {
             ...TRIAL_SESSION,
             calendaredCases: [
               MOCK_CASE,
               {
                 ...MOCK_CASE,
-                status: Case.STATUS_TYPES.closed,
                 docketNumber: '102-19',
+                status: Case.STATUS_TYPES.closed,
               },
               {
                 ...MOCK_CASE,
-                status: Case.STATUS_TYPES.closed,
                 docketNumber: '5000-17',
+                status: Case.STATUS_TYPES.closed,
               },
               {
                 ...MOCK_CASE,
-                status: Case.STATUS_TYPES.closed,
                 docketNumber: '500-17',
+                status: Case.STATUS_TYPES.closed,
               },
               {
                 ...MOCK_CASE,
-                status: Case.STATUS_TYPES.closed,
                 docketNumber: '90-07',
+                status: Case.STATUS_TYPES.closed,
               },
             ],
           },

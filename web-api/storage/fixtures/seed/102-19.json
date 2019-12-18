@@ -37,7 +37,7 @@
             "isQC": true,
             "isInitializeCase": true,
             "assigneeId": null,
-            "sentBy": "taxpayer",
+            "sentBy": "petitioner",
             "createdAt": "2019-03-01T21:42:29.073Z",
             "assigneeName": null,
             "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
@@ -84,7 +84,7 @@
       "name": "Selma Horn",
       "state": "DE",
       "countryType": "domestic",
-      "email": "taxpayer"
+      "email": "petitioner"
     },
     "createdAt": "2019-03-01T21:42:29.073Z",
     "receivedAt": "2019-03-01T21:42:29.073Z",
@@ -99,7 +99,7 @@
         "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "custom:role": "petitioner",
         "iat": 1551476326,
-        "email": "taxpayer",
+        "email": "petitioner",
         "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ0YXhwYXllciIsInNlY3Rpb24iOiJwZXRpdGlvbmVyIiwibmFtZSI6IlRlc3QgUGV0aXRpb25lciIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25lciIsInJvbGUiOiJwZXRpdGlvbmVyIiwiZW1haWwiOiJ0YXhwYXllciIsImlhdCI6MTU1MTQ3NjMyNn0.4oFS9lipN-OViu7SuWmkBrUeZMk8-i4o0XdbDLEkaaU"
       }
     ],
@@ -126,7 +126,8 @@
     "pk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
     "docketNumber": "102-19",
     "status": "New",
-    "hasVerifiedIrsNotice": true
+    "hasVerifiedIrsNotice": true,
+    "associatedJudge": "Chief Judge"
   },
   {
     "sk": "fa1179bd-04f5-4934-a716-964d8d7babc6",
@@ -152,7 +153,7 @@
     "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
-    "sentBy": "taxpayer",
+    "sentBy": "petitioner",
     "createdAt": "2019-03-01T21:42:29.073Z",
     "assigneeName": null,
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
@@ -190,7 +191,7 @@
     "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
-    "sentBy": "taxpayer",
+    "sentBy": "petitioner",
     "createdAt": "2019-03-01T21:42:29.073Z",
     "assigneeName": null,
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",
@@ -227,7 +228,7 @@
     "isQC": true,
     "isInitializeCase": true,
     "assigneeId": null,
-    "sentBy": "taxpayer",
+    "sentBy": "petitioner",
     "createdAt": "2019-03-01T21:42:29.073Z",
     "assigneeName": null,
     "caseId": "fa1179bd-04f5-4934-a716-964d8d7babc6",

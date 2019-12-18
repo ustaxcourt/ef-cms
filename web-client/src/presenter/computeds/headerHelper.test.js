@@ -1,26 +1,22 @@
 import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../applicationContext';
+import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { headerHelper as headerHelperComputed } from './headerHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
-const headerHelper = withAppContextDecorator(headerHelperComputed, {
-  getUtilities: () => {
-    return {
-      isExternalUser: User.isExternalUser,
-      isInternalUser: User.isInternalUser,
-    };
-  },
-});
+const headerHelper = withAppContextDecorator(
+  headerHelperComputed,
+  applicationContext,
+);
 
-const getState = role => {
+const getBaseState = user => {
+  applicationContext.getCurrentUser = () => user;
   return {
-    constants: { USER_ROLES: User.ROLES },
     notifications: {
       unreadCount: 0,
     },
-    user: {
-      role,
-    },
+    permissions: getUserPermissions(user),
   };
 };
 
@@ -36,19 +32,19 @@ const external = [
 ];
 
 describe('headerHelper', () => {
-  it('should show search in header for users other than practitioners and respondents', () => {
+  it('should show search in header for users other than petitioner, practitioners and respondents', () => {
     let result = runCompute(headerHelper, {
-      state: getState(User.ROLES.petitioner),
+      state: getBaseState({ role: User.ROLES.petitioner }),
+    });
+    expect(result.showSearchInHeader).toBeFalsy();
+
+    result = runCompute(headerHelper, {
+      state: getBaseState({ role: User.ROLES.petitionsClerk }),
     });
     expect(result.showSearchInHeader).toBeTruthy();
 
     result = runCompute(headerHelper, {
-      state: getState(User.ROLES.petitionsClerk),
-    });
-    expect(result.showSearchInHeader).toBeTruthy();
-
-    result = runCompute(headerHelper, {
-      state: getState(User.ROLES.docketClerk),
+      state: getBaseState({ role: User.ROLES.docketClerk }),
     });
     expect(result.showSearchInHeader).toBeTruthy();
   });
@@ -56,7 +52,7 @@ describe('headerHelper', () => {
   it('should show document qc for internal users', () => {
     internal.forEach(role => {
       const result = runCompute(headerHelper, {
-        state: getState(role),
+        state: getBaseState({ role }),
       });
       expect(result.showDocumentQC).toBeTruthy();
     });
@@ -64,7 +60,7 @@ describe('headerHelper', () => {
   it('should show messages for internal users', () => {
     internal.forEach(role => {
       const result = runCompute(headerHelper, {
-        state: getState(role),
+        state: getBaseState({ role }),
       });
       expect(result.showMessages).toBeTruthy();
     });
@@ -72,7 +68,7 @@ describe('headerHelper', () => {
   it('should show trial sessions for internal users', () => {
     internal.forEach(role => {
       const result = runCompute(headerHelper, {
-        state: getState(role),
+        state: getBaseState({ role }),
       });
       expect(result.showTrialSessions).toBeTruthy();
     });
@@ -80,26 +76,26 @@ describe('headerHelper', () => {
   it('should show cases for external users', () => {
     external.forEach(role => {
       const result = runCompute(headerHelper, {
-        state: getState(role),
+        state: getBaseState({ role }),
       });
       expect(result.showMyCases).toBeTruthy();
     });
   });
   it('should NOT show search in header for practitioners or respondents', () => {
     let result = runCompute(headerHelper, {
-      state: getState('practitioner'),
+      state: getBaseState({ role: User.ROLES.practitioner }),
     });
     expect(result.showSearchInHeader).toBeFalsy();
 
     result = runCompute(headerHelper, {
-      state: getState('respondent'),
+      state: getBaseState({ role: User.ROLES.respondent }),
     });
     expect(result.showSearchInHeader).toBeFalsy();
   });
   it('should NOT show document qc for external users', () => {
     external.forEach(role => {
       const result = runCompute(headerHelper, {
-        state: getState(role),
+        state: getBaseState({ role }),
       });
       expect(result.showDocumentQC).toBeFalsy();
     });
@@ -107,7 +103,7 @@ describe('headerHelper', () => {
   it('should NOT show trial sessions for external users', () => {
     external.forEach(role => {
       const result = runCompute(headerHelper, {
-        state: getState(role),
+        state: getBaseState({ role }),
       });
       expect(result.showTrialSessions).toBeFalsy();
     });
@@ -115,7 +111,7 @@ describe('headerHelper', () => {
   it('should NOT show messages for external users', () => {
     external.forEach(role => {
       const result = runCompute(headerHelper, {
-        state: getState(role),
+        state: getBaseState({ role }),
       });
       expect(result.showMessages).toBeFalsy();
     });
@@ -123,7 +119,7 @@ describe('headerHelper', () => {
   it('should NOT show cases for internal users', () => {
     internal.forEach(role => {
       const result = runCompute(headerHelper, {
-        state: getState(role),
+        state: getBaseState({ role }),
       });
       expect(result.showMyCases).toBeFalsy();
     });
@@ -131,7 +127,7 @@ describe('headerHelper', () => {
   it('should know when the page is Messages', () => {
     const result = runCompute(headerHelper, {
       state: {
-        ...getState(User.ROLES.petitionsClerk),
+        ...getBaseState({ role: User.ROLES.petitionsClerk }),
         currentPage: 'Messages',
         workQueueToDisplay: {
           workQueueIsInternal: true,
@@ -143,7 +139,7 @@ describe('headerHelper', () => {
   it('should know when the page is My Cases', () => {
     const result = runCompute(headerHelper, {
       state: {
-        ...getState('petitioner'),
+        ...getBaseState({ role: User.ROLES.petitioner }),
         currentPage: 'DashboardPetitioner',
       },
     });
@@ -152,7 +148,7 @@ describe('headerHelper', () => {
   it('should not set pageIsMessages or pageIsDocumentQC to true if currentPage is TrialSessions', () => {
     const result = runCompute(headerHelper, {
       state: {
-        ...getState(User.ROLES.petitionsClerk),
+        ...getBaseState({ role: User.ROLES.petitionsClerk }),
         currentPage: 'TrialSessions',
       },
     });
@@ -162,7 +158,7 @@ describe('headerHelper', () => {
   it('should know when the page is TrialSessions', () => {
     const result = runCompute(headerHelper, {
       state: {
-        ...getState(User.ROLES.petitionsClerk),
+        ...getBaseState({ role: User.ROLES.petitionsClerk }),
         currentPage: 'TrialSessions',
       },
     });
@@ -171,7 +167,7 @@ describe('headerHelper', () => {
   it('should know when the page is TrialSessionDetails', () => {
     const result = runCompute(headerHelper, {
       state: {
-        ...getState(User.ROLES.petitionsClerk),
+        ...getBaseState({ role: User.ROLES.petitionsClerk }),
         currentPage: 'TrialSessionDetails',
       },
     });
@@ -181,7 +177,7 @@ describe('headerHelper', () => {
   it('should show border under Reports tab when page is CaseDeadlines', () => {
     const result = runCompute(headerHelper, {
       state: {
-        ...getState(User.ROLES.petitionsClerk),
+        ...getBaseState({ role: User.ROLES.petitionsClerk }),
         currentPage: 'CaseDeadlines',
       },
     });
@@ -191,7 +187,7 @@ describe('headerHelper', () => {
   it('should show border under Reports tab when page is BlockedCasesReport', () => {
     const result = runCompute(headerHelper, {
       state: {
-        ...getState(User.ROLES.petitionsClerk),
+        ...getBaseState({ role: User.ROLES.petitionsClerk }),
         currentPage: 'BlockedCasesReport',
       },
     });

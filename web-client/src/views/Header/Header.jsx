@@ -179,10 +179,10 @@ export const Header = connect(
     const reset = e => {
       const clickedWithinComponent = headerRef.current.contains(e.target);
       const clickedOnMenuButton = e.target.closest('.usa-accordion__button');
-      const clickedOnSubnav = e.target.closest('.usa-nav__submenu-item');
+      const clickedOnSubNav = e.target.closest('.usa-nav__submenu-item');
       if (!clickedWithinComponent) {
         return resetHeaderAccordionsSequence();
-      } else if (!clickedOnMenuButton && !clickedOnSubnav) {
+      } else if (!clickedOnMenuButton && !clickedOnSubNav) {
         return resetHeaderAccordionsSequence();
       }
     };

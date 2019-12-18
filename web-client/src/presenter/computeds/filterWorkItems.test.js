@@ -122,7 +122,7 @@ const generateWorkItem = (data, document) => {
     assigneeId: null,
     assigneeName: null,
     caseId: '123',
-    caseStatus: 'New',
+    caseStatus: Case.STATUS_TYPES.new,
     createdAt: '2018-12-27T18:05:54.166Z',
     docketNumber: '100-01',
     document: {
@@ -303,7 +303,7 @@ describe('filterWorkItems', () => {
 
     workItemPetitionsMyDocumentQCServed = generateWorkItem({
       assigneeId: petitionsClerk1.userId,
-      caseStatus: 'Calendared',
+      caseStatus: Case.STATUS_TYPES.calendared,
       completedAt: '2019-07-18T18:05:54.166Z',
       completedByUserId: petitionsClerk1.userId,
       docketNumber: '100-07',
@@ -329,7 +329,7 @@ describe('filterWorkItems', () => {
 
     workItemPetitionsSectionDocumentQCServed = generateWorkItem({
       assigneeId: petitionsClerk2.userId,
-      caseStatus: 'Calendared',
+      caseStatus: Case.STATUS_TYPES.calendared,
       completedAt: '2019-07-18T18:05:54.166Z',
       completedByUserId: petitionsClerk2.userId,
       docketNumber: '100-10',
@@ -496,7 +496,7 @@ describe('filterWorkItems', () => {
     expect(filtered.length).toEqual(2);
     // One item is assigned to user
     expect(assigned).toEqual(workItemPetitionsMyMessagesInbox.docketNumber);
-    // One item is assigend to another user
+    // One item is assigned to another user
     expect(unassigned).toEqual(
       workItemPetitionsSectionMessagesInbox.docketNumber,
     );
@@ -561,8 +561,8 @@ describe('filterWorkItems', () => {
   it('Returns sent messages for a Petitions Clerk in My Document QC Outbox', () => {
     const filtered = workQueueOutbox.filter(
       filterWorkItems({
-        applicationContext,
         USER_ROLES: User.ROLES,
+        applicationContext,
         ...MY_DOCUMENT_QC_OUTBOX,
         user: petitionsClerk1,
       }),
@@ -597,7 +597,7 @@ describe('filterWorkItems', () => {
     expect(filtered.length).toEqual(2);
     // One item is assigned to user
     expect(assigned).toEqual(workItemPetitionsMyDocumentQCInbox.docketNumber);
-    // One item is assigend to another user
+    // One item is assigned to another user
     expect(unassigned).toEqual(
       workItemPetitionsSectionDocumentQCInbox.docketNumber,
     );
@@ -639,8 +639,8 @@ describe('filterWorkItems', () => {
     const user = petitionsClerk1;
     const filtered = workQueueOutbox.filter(
       filterWorkItems({
-        applicationContext,
         USER_ROLES: User.ROLES,
+        applicationContext,
         ...SECTION_DOCUMENT_QC_OUTBOX,
         user,
       }),
@@ -711,7 +711,7 @@ describe('filterWorkItems', () => {
     expect(filtered.length).toEqual(2);
     // One item is assigned to user
     expect(assigned).toEqual(workItemDocketMyMessagesInbox.docketNumber);
-    // One item is assigend to another user
+    // One item is assigned to another user
     expect(unassigned).toEqual(workItemDocketSectionMessagesInbox.docketNumber);
   });
 
@@ -775,7 +775,7 @@ describe('filterWorkItems', () => {
     expect(filtered.length).toEqual(2);
     // One item is assigned to user
     expect(assigned).toEqual(workItemDocketMyDocumentQCInbox.docketNumber);
-    // One item is assigend to another user
+    // One item is assigned to another user
     expect(unassigned).toEqual(
       workItemDocketSectionDocumentQCInbox.docketNumber,
     );

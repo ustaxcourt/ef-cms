@@ -3,15 +3,14 @@ import { CaseDetailHeader } from '../CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from 'cerebral';
 import React from 'react';
 
 export const PrintableDocketRecord = connect(
   {
-    formattedCaseDetail: state.formattedCaseDetail,
-    navigateToCaseDetailSequence: sequences.navigateToCaseDetailSequence,
+    navigateBackSequence: sequences.navigateBackSequence,
   },
-  ({ formattedCaseDetail, navigateToCaseDetailSequence }) => {
+  ({ navigateBackSequence }) => {
     return (
       <>
         <CaseDetailHeader hideActionButtons />
@@ -20,13 +19,11 @@ export const PrintableDocketRecord = connect(
             link
             className="margin-bottom-3"
             onClick={() => {
-              navigateToCaseDetailSequence({
-                caseId: formattedCaseDetail.docketNumber,
-              });
+              navigateBackSequence();
             }}
           >
             <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
-            Back to Case
+            Back
           </Button>
           <PdfPreview />
         </div>

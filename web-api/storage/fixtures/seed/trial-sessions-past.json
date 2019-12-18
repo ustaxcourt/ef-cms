@@ -19,7 +19,8 @@
     "trialLocation": "Houston, Texas",
     "trialSessionId": "c7220f03-e46e-4d5e-8e1d-a640e64df552",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "caseOrder": []
   },
   {
     "pk": "trial-session-working-copy|c7220f03-e46e-4d5e-8e1d-a640e64df552",
@@ -47,7 +48,8 @@
     "trialLocation": "Austin, Texas",
     "trialSessionId": "a3bee7c0-bd98-4504-890b-b00eb398e547",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "caseOrder": []
   },
   {
     "pk": "trial-session-working-copy|a3bee7c0-bd98-4504-890b-b00eb398e547",
@@ -73,7 +75,8 @@
     "trialLocation": "Seattle, Washington",
     "trialSessionId": "b4bee7c0-bd98-4504-890b-b00eb398e547",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "caseOrder": []
   },
   {
     "pk": "trial-session-working-copy|b4bee7c0-bd98-4504-890b-b00eb398e547",
@@ -99,7 +102,8 @@
     "trialLocation": "Las Vegas, Nevada",
     "trialSessionId": "c5bee7c0-bd98-4504-890b-b00eb398e547",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "caseOrder": []
   },
   {
     "pk": "trial-session-working-copy|c5bee7c0-bd98-4504-890b-b00eb398e547",
@@ -125,7 +129,8 @@
     "trialLocation": "Kansas City, Missouri",
     "trialSessionId": "7c6975cf-2b10-4e84-bcae-91e162d2f9ee",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "caseOrder": []
   },
   {
     "pk": "trial-session-working-copy|7c6975cf-2b10-4e84-bcae-91e162d2f9ee",
@@ -151,7 +156,8 @@
     "trialLocation": "Denver, Colorado",
     "trialSessionId": "0d943468-bc2e-4631-84e3-b084cf5b1fbb",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "caseOrder": []
   },
   {
     "pk": "trial-session-working-copy|0d943468-bc2e-4631-84e3-b084cf5b1fbb",
@@ -177,12 +183,40 @@
     "trialLocation": "Birmingham, Alabama",
     "trialSessionId": "259159ca-f4a1-4b2b-bc24-bd1fbe6defee",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "caseOrder": []
   },
   {
     "pk": "trial-session-working-copy|259159ca-f4a1-4b2b-bc24-bd1fbe6defee",
     "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "259159ca-f4a1-4b2b-bc24-bd1fbe6defee",
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "pk": "trial-session-259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
+    "sk": "trial-session-259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
+    "gsi1pk": "trial-session-catalog",
+    "maxCases": 8,
+    "sessionType": "Small",
+    "judge": {
+      "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
+      "name": "Judge Buch"
+    },
+    "startDate": "2018-11-02T05:00:00.000Z",
+    "createdAt": "2018-11-02T05:00:00.000Z",
+    "startTime": "09:00",
+    "term": "Fall",
+    "termYear": "2018",
+    "trialLocation": "Birmingham, Alabama",
+    "trialSessionId": "259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
+    "isCalendared": false,
+    "status": "Closed",
+    "caseOrder": []
+  },
+  {
+    "pk": "trial-session-working-copy|259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
+    "sk": "dabbad02-18d0-43ec-bafb-654e83405416",
+    "trialSessionId": "259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
+    "userId": "dabbad02-18d0-43ec-bafb-654e83405416"
   }
 ]

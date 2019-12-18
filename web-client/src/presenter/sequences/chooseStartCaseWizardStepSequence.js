@@ -1,7 +1,5 @@
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { chooseStartCaseWizardStepAction } from '../actions/chooseStartCaseWizardStepAction';
 
 export const chooseStartCaseWizardStepSequence = [
-  set(state.wizardStep, props.value),
-  set(state.form.wizardStep, props.step),
+  chooseStartCaseWizardStepAction,
 ];

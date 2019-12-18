@@ -103,7 +103,7 @@ export const StartCaseStep5 = connect(
                         <label className="usa-label" htmlFor="filing-location">
                           Trial location
                         </label>
-                        <p>{form.preferredTrialCity}</p>
+                        {form.preferredTrialCity}
                       </div>
                     </div>
                   </div>
@@ -121,7 +121,7 @@ export const StartCaseStep5 = connect(
                         <label className="usa-label" htmlFor="filing-parties">
                           Party type
                         </label>
-                        <p>{form.partyType}</p>
+                        {form.partyType}
 
                         <div className="margin-top-3 margin-bottom-2">
                           <label className="usa-label" htmlFor="filing-parties">
@@ -255,25 +255,27 @@ export const StartCaseStep5 = connect(
           </div>
         </div>
 
-        <Button
-          id="submit-case"
-          onClick={() => {
-            submitFilePetitionSequence();
-          }}
-        >
-          Submit to U.S. Tax Court
-        </Button>
-        <Button secondary onClick={() => navigateBackSequence()}>
-          Back
-        </Button>
-        <Button
-          link
-          onClick={() => {
-            formCancelToggleCancelSequence();
-          }}
-        >
-          Cancel
-        </Button>
+        <div className="margin-top-5">
+          <Button
+            id="submit-case"
+            onClick={() => {
+              submitFilePetitionSequence();
+            }}
+          >
+            Submit to U.S. Tax Court
+          </Button>
+          <Button secondary onClick={() => navigateBackSequence()}>
+            Back
+          </Button>
+          <Button
+            link
+            onClick={() => {
+              formCancelToggleCancelSequence();
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
         {showModal === 'CaseDifferenceModalOverlay' && (
           <CaseDifferenceModalOverlay />
         )}

@@ -2,9 +2,9 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTypeSelect } from './CaseTypeSelect';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -44,7 +44,7 @@ export const StartCaseStep2 = connect(
             2. Tell Us About Your Petition
           </h2>
         </Focus>
-        <p className="margin-bottom-4 margin-top-0 required-statement ">
+        <p className="margin-bottom-3 margin-top-0 required-statement ">
           *All fields required unless otherwise noted
         </p>
         <h3>Upload Your Petition</h3>
@@ -55,11 +55,11 @@ export const StartCaseStep2 = connect(
         <div className="blue-container grid-container padding-x-0">
           <div className="grid-row grid-gap">
             <div className="mobile-lg:grid-col-5">
-              <div
-                className={classNames(
-                  'usa-form-group',
-                  validationErrors.petitionFile && 'usa-form-group--error',
-                )}
+              <FormGroup
+                errorText={[
+                  validationErrors.petitionFile,
+                  validationErrors.petitionFileSize,
+                ]}
               >
                 <label
                   className={classNames(
@@ -85,58 +85,50 @@ export const StartCaseStep2 = connect(
                   updateFormValueSequence="updateStartCaseFormValueSequence"
                   validationSequence="validateStartCaseWizardSequence"
                 />
-
-                <ValidationText field="petitionFile" />
-                <ValidationText field="petitionFileSize" />
-              </div>
+              </FormGroup>
             </div>
           </div>
         </div>
 
-        <h3 className="margin-top-4">Why are you filing this petition?</h3>
+        <h3 className="margin-top-4">Why Are You Filing This Petition?</h3>
         <div className="blue-container margin-bottom-5">
           <div className="usa-form-group">
-            <fieldset
-              className={classNames(
-                'usa-fieldset',
-                validationErrors.hasIrsNotice && 'usa-form-group--error',
-              )}
-              id="irs-notice-radios"
-            >
-              <legend className="usa-legend" id="notice-legend">
-                {startCaseHelper.noticeLegend}
-              </legend>
-              <div className="usa-form-group">
-                {['Yes', 'No'].map((option, idx) => (
-                  <div className="usa-radio usa-radio__inline" key={option}>
-                    <input
-                      aria-describedby="notice-legend"
-                      checked={form.hasIrsNotice === (option === 'Yes')}
-                      className="usa-radio__input"
-                      id={`hasIrsNotice-${option}`}
-                      name="hasIrsNotice"
-                      type="radio"
-                      value={option === 'Yes'}
-                      onChange={e => {
-                        updateStartCaseFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value === 'true',
-                        });
-                        validateStartCaseWizardSequence();
-                      }}
-                    />
-                    <label
-                      className="usa-radio__label"
-                      htmlFor={`hasIrsNotice-${option}`}
-                      id={`hasIrsNotice-${idx}`}
-                    >
-                      {option}
-                    </label>
-                  </div>
-                ))}
-                <ValidationText field="hasIrsNotice" />
-              </div>
-            </fieldset>
+            <FormGroup errorText={validationErrors.hasIrsNotice}>
+              <fieldset className="usa-fieldset" id="irs-notice-radios">
+                <legend className="usa-legend" id="notice-legend">
+                  {startCaseHelper.noticeLegend}
+                </legend>
+                <div className="usa-form-group">
+                  {['Yes', 'No'].map((option, idx) => (
+                    <div className="usa-radio usa-radio__inline" key={option}>
+                      <input
+                        aria-describedby="notice-legend"
+                        checked={form.hasIrsNotice === (option === 'Yes')}
+                        className="usa-radio__input"
+                        id={`hasIrsNotice-${option}`}
+                        name="hasIrsNotice"
+                        type="radio"
+                        value={option === 'Yes'}
+                        onChange={e => {
+                          updateStartCaseFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value === 'true',
+                          });
+                          validateStartCaseWizardSequence();
+                        }}
+                      />
+                      <label
+                        className="usa-radio__label"
+                        htmlFor={`hasIrsNotice-${option}`}
+                        id={`hasIrsNotice-${idx}`}
+                      >
+                        {option}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </fieldset>
+            </FormGroup>
 
             {startCaseHelper.showHasIrsNoticeOptions && (
               <CaseTypeSelect

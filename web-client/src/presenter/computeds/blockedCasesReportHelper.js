@@ -10,14 +10,14 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
       .map(blockedCase => {
         return {
           ...blockedCase,
+          blockedDateFormatted: applicationContext
+            .getUtilities()
+            .formatDateString(blockedCase.blockedDate, 'MMDDYY'),
           caseName: applicationContext.getCaseCaptionNames(
             blockedCase.caseCaption || '',
           ),
           docketNumberWithSuffix:
             blockedCase.docketNumber + (blockedCase.docketNumberSuffix || ''),
-          blockedDateFormatted: applicationContext
-            .getUtilities()
-            .formatDateString(blockedCase.blockedDate, 'MMDDYY'),
         };
       });
   }

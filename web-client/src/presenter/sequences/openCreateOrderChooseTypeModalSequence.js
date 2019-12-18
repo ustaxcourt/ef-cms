@@ -1,10 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const openCreateOrderChooseTypeModalSequence = [
   clearFormAction,
   clearAlertsAction,
-  set(state.showModal, 'CreateOrderChooseTypeModal'),
+  setShowModalFactoryAction('CreateOrderChooseTypeModal'),
 ];

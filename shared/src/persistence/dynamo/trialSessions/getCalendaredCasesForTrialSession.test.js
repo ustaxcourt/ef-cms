@@ -19,7 +19,17 @@ describe('getCalendaredCasesForTrialSession', () => {
 
     sinon
       .stub(client, 'batchGet')
-      .resolves([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }]);
+      .onCall(0)
+      .resolves([{ ...MOCK_CASE, pk: MOCK_CASE.caseId }])
+      .onCall(1)
+      .resolves([
+        {
+          caseId: MOCK_CASE.caseId,
+          notes: 'hey this is a note',
+          pk: `case-note|${MOCK_CASE.caseId}`,
+          sk: '123',
+        },
+      ]);
   });
 
   afterEach(() => {
@@ -38,6 +48,26 @@ describe('getCalendaredCasesForTrialSession', () => {
     });
     expect(result).toMatchObject([
       { ...MOCK_CASE, disposition: 'something', removedFromTrial: true },
+    ]);
+  });
+
+  it('should get the cases calendared for a trial session and the case notes if a userId is passed in', async () => {
+    const applicationContext = {
+      environment: {
+        stage: 'dev',
+      },
+    };
+    const result = await getCalendaredCasesForTrialSession({
+      applicationContext,
+      userId: '123',
+    });
+    expect(result).toMatchObject([
+      {
+        ...MOCK_CASE,
+        disposition: 'something',
+        notes: { notes: 'hey this is a note' },
+        removedFromTrial: true,
+      },
     ]);
   });
 });

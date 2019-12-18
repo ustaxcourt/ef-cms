@@ -5,10 +5,11 @@ import { state } from 'cerebral';
  * gets the start case internal form view options based on partyType
  *
  * @param {Function} get the cerebral get function
+ * @param {object} applicationContext the application context
  * @returns {object} object containing the view settings
  */
-export const startCaseInternalHelper = get => {
-  const { PARTY_TYPES } = get(state.constants);
+export const startCaseInternalHelper = (get, applicationContext) => {
+  const { PARTY_TYPES } = applicationContext.getConstants();
   const partyType = get(state.form.partyType);
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 

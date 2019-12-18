@@ -1,10 +1,10 @@
+const adc = require('./pa11y/pa11y-adc');
 const docketclerk = require('./pa11y/pa11y-docketclerk');
+const judge = require('./pa11y/pa11y-judge');
+const petitioner = require('./pa11y/pa11y-petitioner');
 const petitionsclerk = require('./pa11y/pa11y-petitionsclerk');
 const practitioner = require('./pa11y/pa11y-practitioner');
 const respondent = require('./pa11y/pa11y-respondent');
-const adc = require('./pa11y/pa11y-adc');
-const petitioner = require('./pa11y/pa11y-petitioner');
-const judge = require('./pa11y/pa11y-judge');
 
 const userUrls = [
   ...docketclerk,
@@ -28,7 +28,7 @@ if (process.env.CI) {
     actions: ['wait for element #ci-environment to be visible'],
     notes: 'Confirm Pa11y is running against client in CI mode',
     url:
-      'http://localhost:1234/mock-login?token=taxpayer&path=/&info=verify-ci-client-environment',
+      'http://localhost:1234/mock-login?token=petitioner&path=/&info=verify-ci-client-environment',
   });
 }
 

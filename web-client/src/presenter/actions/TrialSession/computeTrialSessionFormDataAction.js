@@ -18,8 +18,6 @@ const computeTerm = ({ month, year }) => {
       term = 'Spring';
     } else if (termsByMonth.fall.includes(selectedMonth)) {
       term = 'Fall';
-    } else {
-      term = undefined;
     }
   }
 
@@ -83,5 +81,10 @@ export const computeTrialSessionFormDataAction = ({ get, props, store }) => {
   if (props.key === 'judgeId') {
     store.set(state.form.judgeId, props.value.userId);
     store.set(state.form.judge, props.value);
+  }
+
+  if (props.key === 'trialClerkId') {
+    store.set(state.form.trialClerkId, props.value.userId);
+    store.set(state.form.trialClerk, props.value);
   }
 };

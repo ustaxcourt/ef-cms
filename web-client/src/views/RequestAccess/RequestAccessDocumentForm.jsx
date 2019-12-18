@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { SupportingDocuments } from '../FileDocument/SupportingDocuments';
@@ -43,12 +44,7 @@ export const RequestAccessDocumentForm = connect(
         </Hint>
 
         <div className="blue-container">
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors.primaryDocumentFile && 'usa-form-group--error',
-            )}
-          >
+          <FormGroup errorText={validationErrors.primaryDocumentFile}>
             <label
               className={classNames(
                 'usa-label ustc-upload with-hint',
@@ -73,11 +69,7 @@ export const RequestAccessDocumentForm = connect(
               updateFormValueSequence="updateCaseAssociationFormValueSequence"
               validationSequence="validateCaseAssociationRequestSequence"
             />
-            <Text
-              bind="validationErrors.primaryDocumentFile"
-              className="usa-error-message"
-            />
-          </div>
+          </FormGroup>
 
           <div className="usa-form-group margin-bottom-0">
             <fieldset className="usa-fieldset margin-bottom-0">
@@ -88,7 +80,7 @@ export const RequestAccessDocumentForm = connect(
                   className="margin-top-1"
                   onClick={() =>
                     openCleanModalSequence({
-                      value: 'WhatCanIIncludeModalOverlay',
+                      showModal: 'WhatCanIIncludeModalOverlay',
                     })
                   }
                 >
@@ -148,121 +140,115 @@ export const RequestAccessDocumentForm = connect(
             </fieldset>
 
             {form.certificateOfService && (
-              <fieldset
-                className={classNames(
-                  'usa-fieldset margin-bottom-0 margin-top-2',
-                  validationErrors &&
-                    validationErrors.certificateOfServiceDate &&
-                    'usa-form-group--error margin-top-2',
-                )}
+              <FormGroup
+                errorText={
+                  validationErrors && validationErrors.certificateOfServiceDate
+                }
               >
-                <legend className="usa-legend" id="service-date-legend">
-                  Service date
-                </legend>
-                <div className="usa-memorable-date">
-                  <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                    <label
-                      aria-hidden="true"
-                      className="usa-label"
-                      htmlFor="service-date-month"
-                    >
-                      MM
-                    </label>
-                    <input
-                      aria-describedby="service-date-legend"
-                      aria-label="month, two digits"
-                      className="usa-input usa-input-inline"
-                      id="service-date-month"
-                      max="12"
-                      min="1"
-                      name="certificateOfServiceMonth"
-                      type="number"
-                      value={form.certificateOfServiceMonth || ''}
-                      onBlur={() => {
-                        validateCaseAssociationRequestSequence();
-                      }}
-                      onChange={e => {
-                        updateCaseAssociationFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
+                <fieldset
+                  className={classNames(
+                    'usa-fieldset margin-bottom-0 margin-top-2',
+                  )}
+                >
+                  <legend className="usa-legend" id="service-date-legend">
+                    Service date
+                  </legend>
+                  <div className="usa-memorable-date">
+                    <div className="usa-form-group usa-form-group--month margin-bottom-0">
+                      <label
+                        aria-hidden="true"
+                        className="usa-label"
+                        htmlFor="service-date-month"
+                      >
+                        MM
+                      </label>
+                      <input
+                        aria-describedby="service-date-legend"
+                        aria-label="month, two digits"
+                        className="usa-input usa-input-inline"
+                        id="service-date-month"
+                        max="12"
+                        min="1"
+                        name="certificateOfServiceMonth"
+                        type="number"
+                        value={form.certificateOfServiceMonth || ''}
+                        onBlur={() => {
+                          validateCaseAssociationRequestSequence();
+                        }}
+                        onChange={e => {
+                          updateCaseAssociationFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className="usa-form-group usa-form-group--day margin-bottom-0">
+                      <label
+                        aria-hidden="true"
+                        className="usa-label"
+                        htmlFor="service-date-day"
+                      >
+                        DD
+                      </label>
+                      <input
+                        aria-describedby="service-date-legend"
+                        aria-label="day, two digits"
+                        className="usa-input usa-input-inline"
+                        id="service-date-day"
+                        max="31"
+                        min="1"
+                        name="certificateOfServiceDay"
+                        type="number"
+                        value={form.certificateOfServiceDay || ''}
+                        onBlur={() => {
+                          validateCaseAssociationRequestSequence();
+                        }}
+                        onChange={e => {
+                          updateCaseAssociationFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className="usa-form-group usa-form-group--year margin-bottom-0">
+                      <label
+                        aria-hidden="true"
+                        className="usa-label"
+                        htmlFor="service-date-year"
+                      >
+                        YYYY
+                      </label>
+                      <input
+                        aria-describedby="service-date-legend"
+                        aria-label="year, four digits"
+                        className="usa-input usa-input-inline"
+                        id="service-date-year"
+                        max="2100"
+                        min="1900"
+                        name="certificateOfServiceYear"
+                        type="number"
+                        value={form.certificateOfServiceYear || ''}
+                        onBlur={() => {
+                          validateCaseAssociationRequestSequence();
+                        }}
+                        onChange={e => {
+                          updateCaseAssociationFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                    <label
-                      aria-hidden="true"
-                      className="usa-label"
-                      htmlFor="service-date-day"
-                    >
-                      DD
-                    </label>
-                    <input
-                      aria-describedby="service-date-legend"
-                      aria-label="day, two digits"
-                      className="usa-input usa-input-inline"
-                      id="service-date-day"
-                      max="31"
-                      min="1"
-                      name="certificateOfServiceDay"
-                      type="number"
-                      value={form.certificateOfServiceDay || ''}
-                      onBlur={() => {
-                        validateCaseAssociationRequestSequence();
-                      }}
-                      onChange={e => {
-                        updateCaseAssociationFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                    <label
-                      aria-hidden="true"
-                      className="usa-label"
-                      htmlFor="service-date-year"
-                    >
-                      YYYY
-                    </label>
-                    <input
-                      aria-describedby="service-date-legend"
-                      aria-label="year, four digits"
-                      className="usa-input usa-input-inline"
-                      id="service-date-year"
-                      max="2100"
-                      min="1900"
-                      name="certificateOfServiceYear"
-                      type="number"
-                      value={form.certificateOfServiceYear || ''}
-                      onBlur={() => {
-                        validateCaseAssociationRequestSequence();
-                      }}
-                      onChange={e => {
-                        updateCaseAssociationFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-              </fieldset>
+                </fieldset>
+              </FormGroup>
             )}
-            <Text
-              bind="validationErrors.certificateOfServiceDate"
-              className="usa-error-message"
-            />
           </div>
 
           {requestAccessHelper.documentWithObjections && (
-            <div
-              className={classNames(
-                'usa-form-group margin-top-2 margin-bottom-0',
-                validationErrors.objections && 'usa-form-group--error',
-              )}
-            >
+            <FormGroup errorText={validationErrors.objections}>
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend id="objections-legend">
                   Are there any objections to this document?
@@ -293,12 +279,8 @@ export const RequestAccessDocumentForm = connect(
                     </label>
                   </div>
                 ))}
-                <Text
-                  bind="validationErrors.objections"
-                  className="usa-error-message"
-                />
               </fieldset>
-            </div>
+            </FormGroup>
           )}
         </div>
 

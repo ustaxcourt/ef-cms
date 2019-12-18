@@ -1,5 +1,5 @@
 /**
- * fetched the document qc inbox items for a sectiom.
+ * fetched the document qc inbox items for a section.
  *
  * @param {object} applicationContext object that contains all the context specific methods
  * @returns {Promise<{workItems: Array}>} a list of work items

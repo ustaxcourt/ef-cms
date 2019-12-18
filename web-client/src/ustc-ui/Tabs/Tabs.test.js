@@ -94,7 +94,7 @@ describe('TabsComponent', () => {
     );
   });
 
-  it('should not show tab for items without title (for tabless tabs)', () => {
+  it('should not show tab for items without title (for tab-less tabs)', () => {
     const testRenderer = TestRenderer.create(
       <TabsComponent defaultActiveTab="my">
         <Tab id="tab-my-queue" tabName="my">

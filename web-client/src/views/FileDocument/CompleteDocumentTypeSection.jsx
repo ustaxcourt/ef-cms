@@ -1,9 +1,9 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile } from '../../ustc-ui/Responsive/Responsive';
 import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay/';
-import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import {
   fileDocumentPrimaryOnChange,
@@ -13,7 +13,6 @@ import {
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import Select from 'react-select';
-import classNames from 'classnames';
 
 export const CompleteDocumentTypeSection = connect(
   {
@@ -41,12 +40,7 @@ export const CompleteDocumentTypeSection = connect(
   }) => {
     return (
       <React.Fragment>
-        <div
-          className={classNames(
-            'usa-form-group',
-            validationErrors.documentType && 'usa-form-group--error',
-          )}
-        >
+        <FormGroup errorText={validationErrors.documentType}>
           <label
             className="usa-label"
             htmlFor="document-type"
@@ -105,11 +99,7 @@ export const CompleteDocumentTypeSection = connect(
               Need help selecting a document?
             </Button>
           </Mobile>
-          <Text
-            bind="validationErrors.documentType"
-            className="usa-error-message"
-          />
-        </div>
+        </FormGroup>
 
         <CompleteDocumentTypeSectionRemainder />
 

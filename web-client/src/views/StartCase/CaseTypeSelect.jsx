@@ -1,4 +1,4 @@
-import { ValidationText } from '../../ustc-ui/Text/ValidationText';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
@@ -26,11 +26,9 @@ export const CaseTypeSelect = connect(
   }) => {
     return (
       <div className={classNames('subsection', className)}>
-        <div
-          className={classNames(
-            'usa-form-group case-type-select margin-bottom-0',
-            validationErrors.caseType && 'usa-form-group--error',
-          )}
+        <FormGroup
+          className="case-type-select"
+          errorText={validationErrors.caseType}
         >
           <fieldset className="usa-fieldset margin-bottom-0">
             <legend className="usa-legend" id="case-type-select-legend">
@@ -61,8 +59,7 @@ export const CaseTypeSelect = connect(
               ))}
             </select>
           </fieldset>
-          <ValidationText field="caseType" />
-        </div>
+        </FormGroup>
       </div>
     );
   },

@@ -142,6 +142,13 @@ exports.userMap = {
     role: 'judge',
     userId: 'dabbad0a-18d0-43ec-bafb-654e83405416',
   },
+  petitioner: {
+    'custom:role': 'petitioner',
+    email: 'petitioner',
+    name: 'Test Petitioner',
+    role: 'petitioner',
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+  },
   petitionsclerk: {
     'custom:role': 'petitionsclerk',
     email: 'petitionsclerk',
@@ -342,13 +349,6 @@ exports.userMap = {
     name: 'Jaquelyn Lane',
     role: 'respondent',
     userId: '726c38b1-1432-49b3-9383-77a998c0ba4f',
-  },
-  taxpayer: {
-    'custom:role': 'petitioner',
-    email: 'taxpayer',
-    name: 'Test Petitioner',
-    role: 'petitioner',
-    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
   },
   trialclerk: {
     'custom:role': 'trialclerk',

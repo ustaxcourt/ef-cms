@@ -1,23 +1,19 @@
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
-import { Document } from '../../../../shared/src/business/entities/Document';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { addDocketEntryHelper as addDocketEntryHelperComputed } from './addDocketEntryHelper';
+import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const state = {
   caseDetail: MOCK_CASE,
-  constants: {
-    CATEGORY_MAP: Document.CATEGORY_MAP,
-    INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
-    PARTY_TYPES: ContactFactory.PARTY_TYPES,
-  },
   form: {},
   validationErrors: {},
 };
 
 const addDocketEntryHelper = withAppContextDecorator(
   addDocketEntryHelperComputed,
+  applicationContext,
 );
 
 describe('addDocketEntryHelper', () => {
@@ -45,11 +41,6 @@ describe('addDocketEntryHelper', () => {
   it('does not error with empty caseDetail (for cerebral debugger)', () => {
     let testState = {
       caseDetail: {},
-      constants: {
-        CATEGORY_MAP: Document.CATEGORY_MAP,
-        INTERNAL_CATEGORY_MAP: Document.INTERNAL_CATEGORY_MAP,
-        PARTY_TYPES: ContactFactory.PARTY_TYPES,
-      },
     };
 
     const result = runCompute(addDocketEntryHelper, {
@@ -79,7 +70,7 @@ describe('addDocketEntryHelper', () => {
     expect(result.showPrimaryDocumentValid).toBeTruthy();
   });
 
-  it('shows secondary party for petionerSpouse or petitionerDeceasedSpouse', () => {
+  it('shows secondary party for petitionerSpouse or petitionerDeceasedSpouse', () => {
     state.caseDetail.partyType = ContactFactory.PARTY_TYPES.petitionerSpouse;
     const result = runCompute(addDocketEntryHelper, { state });
     expect(result.showSecondaryParty).toBeTruthy();
@@ -114,5 +105,28 @@ describe('addDocketEntryHelper', () => {
     };
     const result = runCompute(addDocketEntryHelper, { state });
     expect(result.showSupportingInclusions).toBeTruthy();
+  });
+
+  it('should show track option as default', () => {
+    const result = runCompute(addDocketEntryHelper, { state });
+    expect(result.showTrackOption).toBeTruthy();
+  });
+
+  it('should not show track option for auto-tracked items', () => {
+    state.form.eventCode = 'OSC';
+    const result = runCompute(addDocketEntryHelper, { state });
+    expect(result.showTrackOption).toBeFalsy();
+  });
+
+  it('should not show date received edit if filed electronically', () => {
+    state.caseDetail.isPaper = false;
+    const result = runCompute(addDocketEntryHelper, { state });
+    expect(result.showDateReceivedEdit).toBeFalsy();
+  });
+
+  it('should show date received edit if filed with paper', () => {
+    state.caseDetail.isPaper = true;
+    const result = runCompute(addDocketEntryHelper, { state });
+    expect(result.showDateReceivedEdit).toBeTruthy();
   });
 });

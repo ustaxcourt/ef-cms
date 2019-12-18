@@ -3,32 +3,27 @@ import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
 
-class FileUploadErrorModalComponent extends ModalDialog {
-  constructor(props) {
-    super(props);
-    this.modal = {
-      cancelLabel: 'Cancel Upload',
-      classNames: 'file-upload-error',
-      confirmLabel: 'Try Again',
-    };
-  }
-
-  renderBody() {
-    return (
-      <div>
-        <div className="uhoh">Uh-oh!</div>
-        <div className="message">
-          An error occured while uploading your document and it wasn’t
-          completed.
-        </div>
-      </div>
-    );
-  }
-}
-
 export const FileUploadErrorModal = connect(
   {
     cancelSequence: sequences.cancelFileUploadSequence,
   },
-  FileUploadErrorModalComponent,
+  ({ cancelSequence, confirmSequence }) => {
+    return (
+      <ModalDialog
+        cancelLabel="Cancel Upload"
+        cancelSequence={cancelSequence}
+        className="file-upload-error"
+        confirmLabel="Try Again"
+        confirmSequence={confirmSequence}
+      >
+        <div>
+          <div className="uh-oh">Uh-oh!</div>
+          <div className="message">
+            An error occured while uploading your document and it wasn’t
+            completed.
+          </div>
+        </div>
+      </ModalDialog>
+    );
+  },
 );

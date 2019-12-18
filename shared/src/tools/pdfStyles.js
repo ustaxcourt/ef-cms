@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 exports.pdfStyles = function() {
   return `
 @font-face {

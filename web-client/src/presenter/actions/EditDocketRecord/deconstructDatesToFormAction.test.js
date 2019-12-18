@@ -1,22 +1,33 @@
 import { applicationContext } from '../../../applicationContext';
-import { deconstructDatesToFormAction } from './deconstructDatesToFormAction';
-import { prepareDateFromString } from '../../../../../shared/src/business/utilities/DateHandler';
+import {
+  deconstructDate,
+  deconstructDatesToFormAction,
+} from './deconstructDatesToFormAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = applicationContext;
+describe('deconstructDate', () => {
+  it('returns month, day, and year when provided a valid ISO timestamp', () => {
+    const input = '2019-10-30T12:39:54.007Z';
+    const result = deconstructDate(input, { applicationContext });
+    expect(result).toMatchObject({ day: '30', month: '10', year: '2019' });
+  });
+  it('returns undefined if given a value not representative of an ISO timestamp', () => {
+    const input = '';
+    const result = deconstructDate(input, { applicationContext });
+    expect(result).toBeUndefined();
+  });
+});
 
 describe('deconstructDatesToFormAction', () => {
+  it('returns undefined if no valid date is provided', () => {});
   it('deconstructs the date', async () => {
     const result = await runAction(deconstructDatesToFormAction, {
       modules: {
         presenter: {
           providers: {
-            applicationContext: {
-              getUtilities: () => ({
-                prepareDateFromString,
-              }),
-            },
+            applicationContext,
           },
         },
       },
@@ -48,5 +59,21 @@ describe('deconstructDatesToFormAction', () => {
       },
       year: '2010',
     });
+  });
+  it('deconstructs no dates', async () => {
+    const result = await runAction(deconstructDatesToFormAction, {
+      modules: {
+        presenter: {
+          providers: {
+            applicationContext,
+          },
+        },
+      },
+      props: {
+        docketEntry: {},
+      },
+    });
+
+    expect(result.state.form).toBeUndefined();
   });
 });

@@ -29,6 +29,9 @@ describe('Get trial session working copy', () => {
           getTrialSessionWorkingCopy: () => {},
         };
       },
+      getUseCases: () => ({
+        getJudgeForUserChambersInteractor: () => null,
+      }),
     };
     await expect(
       getTrialSessionWorkingCopyInteractor({
@@ -53,6 +56,12 @@ describe('Get trial session working copy', () => {
             Promise.resolve(omit(MOCK_WORKING_COPY, 'userId')),
         };
       },
+      getUseCases: () => ({
+        getJudgeForUserChambersInteractor: () => ({
+          role: User.ROLES.judge,
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        }),
+      }),
     };
     let error;
     try {
@@ -82,6 +91,12 @@ describe('Get trial session working copy', () => {
           getTrialSessionWorkingCopy: () => Promise.resolve(MOCK_WORKING_COPY),
         };
       },
+      getUseCases: () => ({
+        getJudgeForUserChambersInteractor: () => ({
+          role: User.ROLES.judge,
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        }),
+      }),
     };
     const result = await getTrialSessionWorkingCopyInteractor({
       applicationContext,

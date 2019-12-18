@@ -3,8 +3,7 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getScannerSourcesAction } from '../actions/getScannerSourcesAction';
 import { loadCachedScannerSourceAction } from '../actions/loadCachedScannerSourceAction';
 import { primeScannerSelectModalAction } from '../actions/primeScannerSelectModalAction';
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const openChangeScannerSourceModalSequence = [
   clearModalAction,
@@ -12,5 +11,5 @@ export const openChangeScannerSourceModalSequence = [
   getScannerSourcesAction,
   loadCachedScannerSourceAction,
   primeScannerSelectModalAction,
-  set(state.showModal, 'SelectScannerSourceModal'),
+  setShowModalFactoryAction('SelectScannerSourceModal'),
 ];
