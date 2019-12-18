@@ -153,7 +153,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/caseNotes/deleteCaseNote');
 const {
   deleteCaseNoteInteractor,
-} = require('../../shared/src/business/useCases/caseNote/deleteCaseNoteInteractor');
+} = require('../../shared/src/business/useCases/caseNote/deleteJudgesCaseNoteInteractor');
 const {
   deleteCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords');
@@ -283,7 +283,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/caseNotes/getCaseNote');
 const {
   getCaseNoteInteractor,
-} = require('../../shared/src/business/useCases/caseNote/getCaseNoteInteractor');
+} = require('../../shared/src/business/useCases/caseNote/getJudgesCaseNoteInteractor');
 const {
   getCasesByLeadCaseId,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadCaseId');
@@ -584,7 +584,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/caseNotes/updateCaseNote');
 const {
   updateCaseNoteInteractor,
-} = require('../../shared/src/business/useCases/caseNote/updateCaseNoteInteractor');
+} = require('../../shared/src/business/useCases/caseNote/updateJudgesCaseNoteInteractor');
 const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');

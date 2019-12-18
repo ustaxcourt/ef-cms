@@ -1,9 +1,18 @@
 const { deleteCaseNoteInteractor } = require('./deleteCaseNoteInteractor');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
+const updateCaseMock = jest.fn().mockImplementation(async c => c);
+const getCaseByCaseIdMock = jest
+  .fn()
+  .mockResolvedValue({ ...MOCK_CASE, proceduralNote: 'My Procedural Note' });
+
 describe('deleteCaseNoteInteractor', () => {
   let applicationContext;
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext = {
@@ -16,7 +25,6 @@ describe('deleteCaseNoteInteractor', () => {
       await deleteCaseNoteInteractor({
         applicationContext,
         caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
     } catch (err) {
       error = err;
@@ -25,7 +33,7 @@ describe('deleteCaseNoteInteractor', () => {
     expect(error).toBeInstanceOf(UnauthorizedError);
   });
 
-  it('deletes a case note', async () => {
+  it('deletes a procedural note', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () =>
@@ -35,21 +43,16 @@ describe('deleteCaseNoteInteractor', () => {
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         }),
       getPersistenceGateway: () => ({
-        deleteCaseNote: v => v,
-      }),
-      getUseCases: () => ({
-        getJudgeForUserChambersInteractor: () => ({
-          role: User.ROLES.judge,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        }),
+        getCaseByCaseId: getCaseByCaseIdMock,
+        updateCase: updateCaseMock,
       }),
     };
 
     let error;
-    let caseNote;
+    let result;
 
     try {
-      caseNote = await deleteCaseNoteInteractor({
+      result = await deleteCaseNoteInteractor({
         applicationContext,
         caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -58,6 +61,9 @@ describe('deleteCaseNoteInteractor', () => {
     }
 
     expect(error).toBeUndefined();
-    expect(caseNote).toBeDefined();
+    expect(result).toBeDefined();
+    expect(getCaseByCaseIdMock).toHaveBeenCalled();
+    expect(updateCaseMock).toHaveBeenCalled();
+    expect(result.proceduralNote).not.toBeDefined();
   });
 });

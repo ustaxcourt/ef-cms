@@ -1,7 +1,5 @@
-const {
-  saveProceduralNoteInteractor,
-} = require('./saveProceduralNoteInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { saveCaseNoteInteractor } = require('./saveCaseNoteInteractor');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
@@ -10,7 +8,7 @@ const updateCaseMock = jest
   .mockImplementation(async ({ caseToUpdate }) => caseToUpdate);
 const getCaseByCaseIdMock = jest.fn().mockResolvedValue(MOCK_CASE);
 
-describe('saveProceduralNoteInteractor', () => {
+describe('saveCaseNoteInteractor', () => {
   let applicationContext;
   afterEach(() => {
     jest.clearAllMocks();
@@ -24,7 +22,7 @@ describe('saveProceduralNoteInteractor', () => {
     };
     let error;
     try {
-      await saveProceduralNoteInteractor({
+      await saveCaseNoteInteractor({
         applicationContext,
         caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -35,7 +33,7 @@ describe('saveProceduralNoteInteractor', () => {
     expect(error).toBeInstanceOf(UnauthorizedError);
   });
 
-  it('saves a procedural note', async () => {
+  it('saves a case note', async () => {
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: () =>
@@ -54,10 +52,10 @@ describe('saveProceduralNoteInteractor', () => {
     let result;
 
     try {
-      result = await saveProceduralNoteInteractor({
+      result = await saveCaseNoteInteractor({
         applicationContext,
         caseId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        proceduralNote: 'This is my procedural note',
+        proceduralNote: 'This is my case note',
       });
     } catch (e) {
       error = e;
@@ -67,6 +65,6 @@ describe('saveProceduralNoteInteractor', () => {
     expect(result).toBeDefined();
     expect(getCaseByCaseIdMock).toHaveBeenCalled();
     expect(updateCaseMock).toHaveBeenCalled();
-    expect(result.proceduralNote).toEqual('This is my procedural note');
+    expect(result.proceduralNote).toEqual('This is my case note');
   });
 });

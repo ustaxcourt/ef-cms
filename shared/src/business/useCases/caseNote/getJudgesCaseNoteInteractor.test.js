@@ -1,4 +1,6 @@
-const { getCaseNoteInteractor } = require('./getCaseNoteInteractor');
+const {
+  getJudgesCaseNoteInteractor,
+} = require('./getJudgesCaseNoteInteractor');
 const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -23,7 +25,7 @@ describe('Get case note', () => {
       },
       getPersistenceGateway: () => {
         return {
-          getCaseNote: () => {},
+          getJudgesCaseNote: () => {},
         };
       },
       getUseCases: () => ({
@@ -31,7 +33,7 @@ describe('Get case note', () => {
       }),
     };
     await expect(
-      getCaseNoteInteractor({
+      getJudgesCaseNoteInteractor({
         applicationContext,
         caseId: MOCK_NOTE.caseId,
       }),
@@ -49,7 +51,7 @@ describe('Get case note', () => {
       },
       getPersistenceGateway: () => {
         return {
-          getCaseNote: () => Promise.resolve(omit(MOCK_NOTE, 'userId')),
+          getJudgesCaseNote: () => Promise.resolve(omit(MOCK_NOTE, 'userId')),
         };
       },
       getUseCases: () => ({
@@ -61,7 +63,7 @@ describe('Get case note', () => {
     };
     let error;
     try {
-      await getCaseNoteInteractor({
+      await getJudgesCaseNoteInteractor({
         applicationContext,
         caseId: MOCK_NOTE.caseId,
       });
@@ -84,7 +86,7 @@ describe('Get case note', () => {
       },
       getPersistenceGateway: () => {
         return {
-          getCaseNote: () => Promise.resolve(MOCK_NOTE),
+          getJudgesCaseNote: () => Promise.resolve(MOCK_NOTE),
         };
       },
       getUseCases: () => ({
@@ -94,7 +96,7 @@ describe('Get case note', () => {
         }),
       }),
     };
-    const result = await getCaseNoteInteractor({
+    const result = await getJudgesCaseNoteInteractor({
       applicationContext,
       caseId: MOCK_NOTE.caseId,
     });
@@ -112,7 +114,7 @@ describe('Get case note', () => {
       },
       getPersistenceGateway: () => {
         return {
-          getCaseNote: () => null,
+          getJudgesCaseNote: () => null,
         };
       },
       getUseCases: () => ({
@@ -122,7 +124,7 @@ describe('Get case note', () => {
         }),
       }),
     };
-    const result = await getCaseNoteInteractor({
+    const result = await getJudgesCaseNoteInteractor({
       applicationContext,
       caseId: MOCK_NOTE.caseId,
     });
