@@ -1,22 +1,22 @@
-import { deleteCaseNoteAction } from './deleteCaseNoteAction';
+import { deleteJudgesCaseNoteAction } from './deleteJudgesCaseNoteAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 
-describe('deleteCaseNoteAction', () => {
-  let deleteCaseNoteInteractorStub;
+describe('deleteJudgesCaseNoteAction', () => {
+  let deleteJudgesCaseNoteInteractorStub;
 
   beforeEach(() => {
-    deleteCaseNoteInteractorStub = jest.fn();
+    deleteJudgesCaseNoteInteractorStub = jest.fn();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
-        deleteCaseNoteInteractor: deleteCaseNoteInteractorStub,
+        deleteCaseNoteInteractor: deleteJudgesCaseNoteInteractorStub,
       }),
     };
   });
 
   it('deletes a case note', async () => {
-    const result = await runAction(deleteCaseNoteAction, {
+    const result = await runAction(deleteJudgesCaseNoteAction, {
       modules: {
         presenter,
       },
@@ -27,11 +27,11 @@ describe('deleteCaseNoteAction', () => {
     });
 
     expect(result.output).toMatchObject({
-      caseNote: {
+      judgesNote: {
         caseId: 'case-id-123',
         trialSessionId: 'trial-session-id-123',
       },
     });
-    expect(deleteCaseNoteInteractorStub).toHaveBeenCalled();
+    expect(deleteJudgesCaseNoteInteractorStub).toHaveBeenCalled();
   });
 });

@@ -1,5 +1,5 @@
 /**
- * delete a case note
+ * delete a judge's case note
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -7,16 +7,19 @@
  * @param {object} providers.get the cerebral get function
  * @returns {object} the details of a caseNote
  */
-export const deleteCaseNoteAction = async ({ applicationContext, props }) => {
+export const deleteJudgesCaseNoteAction = async ({
+  applicationContext,
+  props,
+}) => {
   const { caseId, trialSessionId } = props;
 
-  await applicationContext.getUseCases().deleteCaseNoteInteractor({
+  await applicationContext.getUseCases().deleteJudgesCaseNoteInteractor({
     applicationContext,
     caseId,
   });
 
   return {
-    caseNote: {
+    judgesNote: {
       caseId,
       trialSessionId,
     },
