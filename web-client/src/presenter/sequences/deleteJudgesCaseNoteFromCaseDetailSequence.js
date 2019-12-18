@@ -6,7 +6,7 @@ import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAct
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateDeleteCaseNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateDeleteCaseNotePropsFromModalStateAction';
 
-export const deleteCaseNoteFromCaseDetailSequence = [
+export const deleteJudgesCaseNoteFromCaseDetailSequence = [
   setWaitingForResponseAction,
   updateDeleteCaseNotePropsFromModalStateAction,
   deleteCaseNoteAction,
