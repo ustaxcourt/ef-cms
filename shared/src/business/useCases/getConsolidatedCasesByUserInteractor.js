@@ -15,15 +15,16 @@ exports.getConsolidatedCasesByUserInteractor = async ({
   let foundCases = [];
   let userCaseIdsMap = {};
 
-  const userCases = (await applicationContext
-    .getPersistenceGateway()
-    .getCasesByUser({ applicationContext, userId }))
-    .map(userCase => {
-      const { caseId } = userCase;
-      userCase.isRequestingUserAssociated = true;
-      userCaseIdsMap[caseId] = true;
-      return userCase;
-    });
+  const userCases = (
+    await applicationContext
+      .getPersistenceGateway()
+      .getCasesByUser({ applicationContext, userId })
+  ).map(userCase => {
+    const { caseId } = userCase;
+    userCase.isRequestingUserAssociated = true;
+    userCaseIdsMap[caseId] = true;
+    return userCase;
+  });
 
   if (userCases.length) {
     const caseMapping = {};
@@ -45,18 +46,17 @@ exports.getConsolidatedCasesByUserInteractor = async ({
 
     for (let i = 0; i < leadCaseIdsToGet.length; i++) {
       const leadCaseId = leadCaseIdsToGet[i];
-      const consolidatedCases = (await applicationContext
-        .getPersistenceGateway()
-        .getCasesByLeadCaseId({
+      const consolidatedCases = (
+        await applicationContext.getPersistenceGateway().getCasesByLeadCaseId({
           applicationContext,
           leadCaseId,
-        }))
-        .map(consolidatedCase => {
-          consolidatedCase.isRequestingUserAssociated = !!userCaseIdsMap[
-            consolidatedCase.caseId
-          ];
-          return consolidatedCase;
-        });
+        })
+      ).map(consolidatedCase => {
+        consolidatedCase.isRequestingUserAssociated = !!userCaseIdsMap[
+          consolidatedCase.caseId
+        ];
+        return consolidatedCase;
+      });
 
       if (caseMapping[leadCaseId]) {
         const caseConsolidatedCases = consolidatedCases.filter(
