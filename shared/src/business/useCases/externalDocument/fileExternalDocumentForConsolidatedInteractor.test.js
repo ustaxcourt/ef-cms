@@ -72,7 +72,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       getCurrentUser: () => {
         return {
           name: 'Guy Fieri',
-          role: User.ROLES.petitioner,
+          role: 'admin', // Avoiding adding admin user to User entity
           userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
@@ -83,7 +83,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         getCasesByLeadCaseId: async () => caseRecords,
         getUserById: () => ({
           name: 'Guy Fieri',
-          role: User.ROLES.petitioner,
+          role: 'admin', // Avoiding adding admin user to User entity
           userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
         }),
         saveWorkItemForNonPaper: async () => {},
