@@ -1,5 +1,4 @@
 import { AddEditCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditCaseNoteModal';
-import { AddEditProceduralNoteModal } from './AddEditProceduralNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DeleteCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteCaseNoteConfirmModal';
 import { DeleteProceduralNoteConfirmModal } from './DeleteProceduralNoteConfirmModal';
@@ -155,9 +154,6 @@ export const CaseNotes = connect(
         )}
         {showModal === 'DeleteProceduralNoteConfirmModal' && (
           <DeleteProceduralNoteConfirmModal onConfirmSequence="deleteProceduralNoteSequence" />
-        )}
-        {showModal === 'AddEditProceduralNoteModal' && (
-          <AddEditProceduralNoteModal onConfirmSequence="updateProceduralNoteSequence" />
         )}
       </>
     );
