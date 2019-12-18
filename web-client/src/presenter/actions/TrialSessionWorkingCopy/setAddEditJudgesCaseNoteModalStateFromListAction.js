@@ -2,7 +2,7 @@ import { get as _get, find } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * set the state for the add edit notes modal
+ * set the state for the add edit judge's notes modal
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
  */
-export const setAddEditCaseNoteModalStateFromListAction = ({
+export const setAddEditJudgesCaseNoteModalStateFromListAction = ({
   applicationContext,
   get,
   props,
@@ -18,7 +18,7 @@ export const setAddEditCaseNoteModalStateFromListAction = ({
 }) => {
   const { caseId } = props;
 
-  const notes = _get(get(state.trialSessionWorkingCopy.caseNotes), [
+  const notes = _get(get(state.trialSessionWorkingCopy.judgesNotes), [
     caseId,
     'notes',
   ]);

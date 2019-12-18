@@ -45,7 +45,7 @@ export default test => {
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(
-      test.getState(`trialSessionWorkingCopy.caseNotes.${caseId}.notes`),
+      test.getState(`trialSessionWorkingCopy.judgesNotes.${caseId}.notes`),
     ).toEqual('this is a note added from the modal');
   });
 };

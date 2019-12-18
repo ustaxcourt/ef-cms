@@ -6,20 +6,20 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting the state.calendaredCases
  */
-export const updateCalendaredCaseNoteAction = ({ get, props, store }) => {
+export const updateCalendaredCaseJudgesNoteAction = ({ get, props, store }) => {
   const calendaredCases = get(state.trialSession.calendaredCases);
-  const { caseNote } = props;
+  const { judgesNote } = props;
   const caseToUpdate = calendaredCases.find(
-    aCase => aCase.caseId === caseNote.caseId,
+    aCase => aCase.caseId === judgesNote.caseId,
   );
-  caseToUpdate.notes = caseNote;
+  caseToUpdate.notes = judgesNote;
 
-  let caseNotes = [];
+  let judgesNotes = [];
   for (const calendaredCase of calendaredCases) {
-    caseNotes.push(calendaredCase.notes);
+    judgesNotes.push(calendaredCase.notes);
   }
   store.set(
-    state.trialSessionWorkingCopy.caseNotes,
-    makeMap(caseNotes, 'caseId'),
+    state.trialSessionWorkingCopy.judgesNotes,
+    makeMap(judgesNotes, 'caseId'),
   );
 };

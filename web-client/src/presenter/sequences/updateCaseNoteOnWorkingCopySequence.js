@@ -8,7 +8,7 @@ import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAct
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { updateCalendaredCaseNoteAction } from '../actions/TrialSessionWorkingCopy/updateCalendaredCaseNoteAction';
+import { updateCalendaredCaseJudgesNoteAction } from '../actions/TrialSessionWorkingCopy/updateCalendaredCaseJudgesNoteAction';
 import { updateCaseNoteAction } from '../actions/TrialSession/updateCaseNoteAction';
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
 import { validateNoteAction } from '../actions/validateNoteAction';
@@ -26,7 +26,7 @@ export const updateCaseNoteOnWorkingCopySequence = [
       updateCaseNoteAction,
       getTrialSessionWorkingCopyAction,
       setTrialSessionWorkingCopyAction,
-      updateCalendaredCaseNoteAction,
+      updateCalendaredCaseJudgesNoteAction,
       clearModalAction,
       clearModalStateAction,
       unsetWaitingForResponseAction,
