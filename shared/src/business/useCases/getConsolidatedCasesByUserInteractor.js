@@ -54,27 +54,27 @@ exports.getConsolidatedCasesByUserInteractor = async ({
         return consolidatedCase;
       });
 
-      if (caseMapping[leadCaseId]) {
-        const caseConsolidatedCases = consolidatedCases.filter(
-          consolidatedCase => consolidatedCase.caseId !== leadCaseId,
-        );
-        caseMapping[leadCaseId].consolidatedCases = Case.sortByDocketNumber(
-          caseConsolidatedCases,
-        );
-      } else {
+      if (!caseMapping[leadCaseId]) {
         const leadCase = consolidatedCases.find(
           consolidatedCase => consolidatedCase.caseId === leadCaseId,
         );
-
-        const caseConsolidatedCases = consolidatedCases.filter(
-          consolidatedCase => consolidatedCase.caseId !== leadCaseId,
-        );
-
-        leadCase.consolidatedCases = Case.sortByDocketNumber(
-          caseConsolidatedCases,
-        );
+        leadCase.isRequestingUserAssociated = false;
         caseMapping[leadCaseId] = leadCase;
       }
+
+      const caseConsolidatedCases = [];
+      consolidatedCases.forEach(consolidatedCase => {
+        consolidatedCase.isRequestingUserAssociated = !!userCaseIdsMap[
+          consolidatedCase.caseId
+        ];
+        if (consolidatedCase.caseId !== leadCaseId) {
+          caseConsolidatedCases.push(consolidatedCase);
+        }
+      });
+
+      caseMapping[leadCaseId].consolidatedCases = Case.sortByDocketNumber(
+        caseConsolidatedCases,
+      );
     }
 
     foundCases = Object.keys(caseMapping).map(caseId => caseMapping[caseId]);
