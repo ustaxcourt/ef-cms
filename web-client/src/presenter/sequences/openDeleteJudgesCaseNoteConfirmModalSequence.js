@@ -1,9 +1,9 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { setDeleteCaseNoteModalStateAction } from '../actions/TrialSessionWorkingCopy/setDeleteCaseNoteModalStateAction';
+import { setDeleteJudgesCaseNoteModalStateAction } from '../actions/TrialSessionWorkingCopy/setDeleteJudgesCaseNoteModalStateAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const openDeleteJudgesCaseNoteConfirmModalSequence = [
   clearModalStateAction,
-  setDeleteCaseNoteModalStateAction,
+  setDeleteJudgesCaseNoteModalStateAction,
   setShowModalFactoryAction('DeleteJudgesCaseNoteConfirmModal'),
 ];
