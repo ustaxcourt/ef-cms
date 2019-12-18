@@ -1,7 +1,7 @@
 const joi = require('joi-browser');
 const {
   joiValidationDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('../../../utilities/JoiValidationDecorator');
 
 Note.validationName = 'Note';
 

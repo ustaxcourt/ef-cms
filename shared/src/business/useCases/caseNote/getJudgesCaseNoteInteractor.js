@@ -2,7 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { CaseNote } = require('../../entities/cases/CaseNote');
+const { JudgesCaseNote } = require('../../entities/notes/JudgesCaseNote');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -35,6 +35,6 @@ exports.getJudgesCaseNoteInteractor = async ({
     });
 
   if (caseNote) {
-    return new CaseNote(caseNote).validate().toRawObject();
+    return new JudgesCaseNote(caseNote).validate().toRawObject();
   }
 };
