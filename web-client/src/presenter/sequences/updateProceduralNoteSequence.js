@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { saveCaseNoteAction } from '../actions/ProceduralNotes/saveCaseNoteAction';
+import { saveCaseNoteAction } from '../actions/CaseNotes/saveCaseNoteAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
