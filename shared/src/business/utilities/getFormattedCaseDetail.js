@@ -2,11 +2,7 @@ const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty } = require('lodash');
 const { dateStringsCompared } = require('./DateHandler');
 const { Document } = require('../entities/Document');
-const { Order } = require('../entities/orders/Order');
 
-const orderDocumentTypes = Order.ORDER_TYPES.map(
-  orderType => orderType.documentType,
-);
 const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
