@@ -71,7 +71,7 @@ describe('Get case note', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'The CaseNote entity was invalid ValidationError: child "userId" fails because ["userId" is required]',
+      'The JudgesCaseNote entity was invalid ValidationError: child "userId" fails because ["userId" is required]',
     );
   });
 
