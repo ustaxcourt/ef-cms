@@ -2,7 +2,10 @@ version: 2
 jobs:
   bundle:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -37,7 +40,10 @@ jobs:
 
   build-api:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - attach_workspace:
           at: ~/
@@ -67,7 +73,10 @@ jobs:
 
   build-shared:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
     steps:
@@ -91,7 +100,10 @@ jobs:
 
   build-client:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: large
@@ -119,7 +131,10 @@ jobs:
 
   e2e-pa11y:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: large
@@ -129,8 +144,8 @@ jobs:
       - run:
           name: Pa11y
           command: |
-            npm run build:all &&
-            SLS_DEBUG=* RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
+            npm run build:all
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
@@ -141,10 +156,15 @@ jobs:
             AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /dev/null &
             sleep 5
             npm run test:pa11y:public
+      - store_artifacts:
+          path: /tmp/pa11y-server.txt
 
   e2e-cypress:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: large
