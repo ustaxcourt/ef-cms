@@ -1,7 +1,7 @@
 const sinon = require('sinon');
-const { updateCaseNote } = require('./updateCaseNote');
+const { updateJudgesCaseNote } = require('./updateJudgesCaseNote');
 
-describe('updateCaseNote', () => {
+describe('updateJudgesCaseNote', () => {
   let putStub;
   beforeEach(() => {
     putStub = sinon.stub().returns({
@@ -9,7 +9,7 @@ describe('updateCaseNote', () => {
     });
   });
 
-  it('invokes the persistence layer with pk of case-note|{caseId}, sk of {userId} and other expected params', async () => {
+  it('invokes the persistence layer with pk of judges-case-note|{caseId}, sk of {userId} and other expected params', async () => {
     const applicationContext = {
       environment: {
         stage: 'dev',
@@ -18,7 +18,7 @@ describe('updateCaseNote', () => {
         put: putStub,
       }),
     };
-    await updateCaseNote({
+    await updateJudgesCaseNote({
       applicationContext,
       caseNoteToUpdate: {
         caseId: '456',
@@ -29,7 +29,7 @@ describe('updateCaseNote', () => {
     expect(putStub.getCall(0).args[0]).toMatchObject({
       Item: {
         notes: 'something!!!',
-        pk: 'case-note|456',
+        pk: 'judges-case-note|456',
         sk: '123',
       },
       applicationContext: { environment: { stage: 'dev' } },

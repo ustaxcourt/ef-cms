@@ -1,13 +1,13 @@
 const client = require('../../dynamodbClientService');
 const sinon = require('sinon');
-const { getCaseNote } = require('./getCaseNote');
+const { getJudgesCaseNote } = require('./getJudgesCaseNote');
 
-describe('getCaseNote', () => {
+describe('getJudgesCaseNote', () => {
   beforeEach(() => {
     sinon.stub(client, 'get').resolves({
       caseId: '123',
       notes: 'something',
-      pk: 'case-note|123',
+      pk: 'judges-case-note|123',
       sk: '456',
       userId: '456',
     });
@@ -23,7 +23,7 @@ describe('getCaseNote', () => {
         stage: 'dev',
       },
     };
-    const result = await getCaseNote({
+    const result = await getJudgesCaseNote({
       applicationContext,
       caseId: '123',
       userId: '456',
