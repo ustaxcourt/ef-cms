@@ -1,14 +1,14 @@
 import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { setAddEditCaseNoteModalStateFromDetailAction } from './setAddEditCaseNoteModalStateFromDetailAction';
+import { setAddEditJudgesCaseNoteModalStateFromDetailAction } from './setAddEditJudgesCaseNoteModalStateFromDetailAction';
 
 presenter.providers.applicationContext = applicationContext;
 
-describe('setAddEditCaseNoteModalStateFromDetailAction', () => {
+describe('setAddEditJudgesCaseNoteModalStateFromDetailAction', () => {
   it('should set the modal state from caseDetail and props', async () => {
     const result = await runAction(
-      setAddEditCaseNoteModalStateFromDetailAction,
+      setAddEditJudgesCaseNoteModalStateFromDetailAction,
       {
         modules: {
           presenter,
@@ -17,9 +17,9 @@ describe('setAddEditCaseNoteModalStateFromDetailAction', () => {
         state: {
           caseDetail: {
             caseCaption: 'Sisqo, Petitioner',
-            caseNote: { notes: 'i got some notes' },
             docketNumber: '101-19',
             docketNumberSuffix: 'L',
+            judgesNote: { notes: 'i got some notes' },
           },
         },
       },
@@ -34,7 +34,7 @@ describe('setAddEditCaseNoteModalStateFromDetailAction', () => {
 
   it('should set the modal state when caseCaption and docketNumberSuffix do not exist', async () => {
     const result = await runAction(
-      setAddEditCaseNoteModalStateFromDetailAction,
+      setAddEditJudgesCaseNoteModalStateFromDetailAction,
       {
         modules: {
           presenter,
@@ -42,8 +42,8 @@ describe('setAddEditCaseNoteModalStateFromDetailAction', () => {
         props: { caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
         state: {
           caseDetail: {
-            caseNote: { notes: 'i got some notes' },
             docketNumber: '101-19',
+            judgesNote: { notes: 'i got some notes' },
           },
         },
       },

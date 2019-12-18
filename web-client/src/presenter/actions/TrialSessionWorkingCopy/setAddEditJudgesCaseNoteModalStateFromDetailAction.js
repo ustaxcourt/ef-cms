@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
  */
-export const setAddEditCaseNoteModalStateFromDetailAction = ({
+export const setAddEditJudgesCaseNoteModalStateFromDetailAction = ({
   applicationContext,
   get,
   props,
@@ -17,7 +17,7 @@ export const setAddEditCaseNoteModalStateFromDetailAction = ({
 }) => {
   const { caseId } = props;
 
-  const notes = get(state.caseDetail.caseNote.notes);
+  const notes = get(state.caseDetail.judgesNote.notes);
   const { caseCaption, docketNumber, docketNumberSuffix } = get(
     state.caseDetail,
   );
