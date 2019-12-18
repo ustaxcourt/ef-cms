@@ -1,7 +1,7 @@
 const { put } = require('../requests');
 
 /**
- * saveProceduralNoteInteractor
+ * saveCaseNoteInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -9,7 +9,7 @@ const { put } = require('../requests');
  * @param {string} providers.proceduralNote the procedural notes to add
  * @returns {Promise<*>} the promise of the api call
  */
-exports.saveProceduralNoteInteractor = ({
+exports.saveCaseNoteInteractor = ({
   applicationContext,
   caseId,
   proceduralNote,
@@ -17,6 +17,6 @@ exports.saveProceduralNoteInteractor = ({
   return put({
     applicationContext,
     body: { proceduralNote },
-    endpoint: `/case-notes/procedural/${caseId}`,
+    endpoint: `/case-notes/${caseId}`,
   });
 };
