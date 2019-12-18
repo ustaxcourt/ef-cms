@@ -11,7 +11,7 @@ import { updateCaseNoteAction } from '../actions/TrialSession/updateCaseNoteActi
 import { updateNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateNotePropsFromModalStateAction';
 import { validateNoteAction } from '../actions/validateNoteAction';
 
-export const updateCaseNoteOnCaseDetailSequence = [
+export const updateJudgesCaseNoteOnCaseDetailSequence = [
   startShowValidationAction,
   validateNoteAction,
   {

@@ -49,8 +49,8 @@ import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUse
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createWorkItemSequence } from './sequences/createWorkItemSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
-import { deleteCaseNoteFromCaseDetailSequence } from './sequences/deleteCaseNoteFromCaseDetailSequence';
 import { deleteCaseNoteFromWorkingCopySequence } from './sequences/deleteCaseNoteFromWorkingCopySequence';
+import { deleteJudgesCaseNoteFromCaseDetailSequence } from './sequences/deleteJudgesCaseNoteFromCaseDetailSequence';
 import { deleteProceduralNoteSequence } from './sequences/deleteProceduralNoteSequence';
 import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingCopySessionNoteSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
@@ -114,8 +114,8 @@ import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { navigateToPrintableDocketRecordSequence } from './sequences/navigateToPrintableDocketRecordSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
-import { openAddEditCaseNoteModalFromDetailSequence } from './sequences/openAddEditCaseNoteModalFromDetailSequence';
-import { openAddEditCaseNoteModalFromListSequence } from './sequences/openAddEditCaseNoteModalFromListSequence';
+import { openAddEditJudgesCaseNoteModalFromDetailSequence } from './sequences/openAddEditJudgesCaseNoteModalFromDetailSequence';
+import { openAddEditJudgesCaseNoteModalFromListSequence } from './sequences/openAddEditJudgesCaseNoteModalFromListSequence';
 import { openAddEditProceduralNoteModalSequence } from './sequences/openAddEditProceduralNoteModalSequence';
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddPractitionerModalSequence } from './sequences/openAddPractitionerModalSequence';
@@ -138,7 +138,7 @@ import { openCreateMessageAlongsideDocketRecordQCModalSequence } from './sequenc
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
-import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCaseNoteConfirmModalSequence';
+import { openDeleteJudgesCaseNoteConfirmModalSequence } from './sequences/openDeleteJudgesCaseNoteConfirmModalSequence';
 import { openDeleteProceduralNoteConfirmModalSequence } from './sequences/openDeleteProceduralNoteConfirmModalSequence';
 import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDeleteSessionNoteConfirmModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
@@ -260,7 +260,6 @@ import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvance
 import { updateBatchDownloadProgressSequence } from './sequences/updateBatchDownloadProgressSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
-import { updateCaseNoteOnCaseDetailSequence } from './sequences/updateCaseNoteOnCaseDetailSequence';
 import { updateCaseNoteOnWorkingCopySequence } from './sequences/updateCaseNoteOnWorkingCopySequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
 import { updateCaseValueByIndexSequence } from './sequences/updateCaseValueByIndexSequence';
@@ -276,6 +275,7 @@ import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequ
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
+import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageValueInModalSequence } from './sequences/updateMessageValueInModalSequence';
 import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
@@ -376,8 +376,8 @@ export const presenter = {
     createCaseDeadlineSequence,
     createWorkItemSequence,
     deleteCaseDeadlineSequence,
-    deleteCaseNoteFromCaseDetailSequence,
     deleteCaseNoteFromWorkingCopySequence,
+    deleteJudgesCaseNoteFromCaseDetailSequence,
     deleteProceduralNoteSequence,
     deleteWorkingCopySessionNoteSequence,
     dismissAlertSequence,
@@ -441,8 +441,8 @@ export const presenter = {
     navigateToPrintableCaseConfirmationSequence,
     navigateToPrintableDocketRecordSequence,
     notFoundErrorSequence,
-    openAddEditCaseNoteModalFromDetailSequence,
-    openAddEditCaseNoteModalFromListSequence,
+    openAddEditJudgesCaseNoteModalFromDetailSequence,
+    openAddEditJudgesCaseNoteModalFromListSequence,
     openAddEditProceduralNoteModalSequence,
     openAddEditSessionNoteModalSequence,
     openAddPractitionerModalSequence,
@@ -465,7 +465,7 @@ export const presenter = {
     openCreateMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
     openDeleteCaseDeadlineModalSequence,
-    openDeleteCaseNoteConfirmModalSequence,
+    openDeleteJudgesCaseNoteConfirmModalSequence,
     openDeleteProceduralNoteConfirmModalSequence,
     openDeleteSessionNoteConfirmModalSequence,
     openEditCaseDeadlineModalSequence,
@@ -585,7 +585,6 @@ export const presenter = {
     updateBatchDownloadProgressSequence,
     updateCaseAssociationFormValueSequence,
     updateCaseDeadlineSequence,
-    updateCaseNoteOnCaseDetailSequence,
     updateCaseNoteOnWorkingCopySequence,
     updateCasePartyTypeSequence,
     updateCaseValueByIndexSequence,
@@ -601,6 +600,7 @@ export const presenter = {
     updateFileDocumentWizardFormValueSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,
+    updateJudgesCaseNoteOnCaseDetailSequence,
     updateMessageValueInModalSequence,
     updateMessageValueSequence,
     updateModalValueSequence,

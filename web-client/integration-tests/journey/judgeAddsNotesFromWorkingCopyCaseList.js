@@ -19,7 +19,7 @@ export default test => {
 
     const { caseId } = workingCopyHelper.formattedCases[0];
 
-    await test.runSequence('openAddEditCaseNoteModalFromListSequence', {
+    await test.runSequence('openAddEditJudgesCaseNoteModalFromListSequence', {
       caseId,
     });
 
