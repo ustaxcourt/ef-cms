@@ -5,7 +5,7 @@ import { runAction } from 'cerebral/test';
 const deleteCaseNoteInteractorMock = jest.fn();
 presenter.providers.applicationContext = {
   getUseCases: () => ({
-    deleteProceduralNoteInteractor: deleteCaseNoteInteractorMock,
+    deleteCaseNoteInteractor: deleteCaseNoteInteractorMock,
   }),
 };
 

@@ -16,7 +16,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.deleteCaseNoteInteractor = async ({ applicationContext, caseId }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.PROCEDURAL_NOTES)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_NOTES)) {
     throw new UnauthorizedError('Unauthorized');
   }
   const caseRecord = await applicationContext
