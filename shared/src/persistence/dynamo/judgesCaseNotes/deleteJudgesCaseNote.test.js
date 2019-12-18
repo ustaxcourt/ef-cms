@@ -1,7 +1,7 @@
 const sinon = require('sinon');
-const { deleteCaseNote } = require('./deleteCaseNote');
+const { deleteJudgesCaseNote } = require('./deleteJudgesCaseNote');
 
-describe('deleteCaseNote', () => {
+describe('deleteJudgesCaseNote', () => {
   let applicationContext;
   let deleteStub;
 
@@ -21,7 +21,7 @@ describe('deleteCaseNote', () => {
   });
 
   it('attempts to delete the case note', async () => {
-    await deleteCaseNote({
+    await deleteJudgesCaseNote({
       applicationContext,
       caseId: '456',
       userId: '123',
@@ -29,7 +29,7 @@ describe('deleteCaseNote', () => {
 
     expect(deleteStub.getCall(0).args[0]).toMatchObject({
       Key: {
-        pk: 'case-note|456',
+        pk: 'judges-case-note|456',
         sk: '123',
       },
       TableName: 'efcms-dev',
