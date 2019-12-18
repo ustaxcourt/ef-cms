@@ -5,7 +5,7 @@ import { getTrialSessionWorkingCopyAction } from '../actions/TrialSession/getTri
 import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
-import { updateCalendaredCaseNoteAction } from '../actions/TrialSessionWorkingCopy/updateCalendaredCaseNoteAction';
+import { updateCalendaredCaseJudgesNoteAction } from '../actions/TrialSessionWorkingCopy/updateCalendaredCaseJudgesNoteAction';
 import { updateDeleteCaseNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateDeleteCaseNotePropsFromModalStateAction';
 
 export const deleteCaseNoteFromWorkingCopySequence = [
@@ -14,7 +14,7 @@ export const deleteCaseNoteFromWorkingCopySequence = [
   deleteCaseNoteAction,
   getTrialSessionWorkingCopyAction,
   setTrialSessionWorkingCopyAction,
-  updateCalendaredCaseNoteAction,
+  updateCalendaredCaseJudgesNoteAction,
   clearModalAction,
   clearModalStateAction,
   unsetWaitingForResponseAction,
