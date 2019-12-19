@@ -6,7 +6,6 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    working_directory: /home/app
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -35,7 +34,7 @@ jobs:
             - node_modules # location depends on npm version
           key: npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - persist_to_workspace:
-          root: /home/app
+          root: ~/
           paths:
             - project
 
@@ -45,10 +44,9 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    working_directory: /home/app
     steps:
       - attach_workspace:
-          at: /home/app
+          at: ~/
       - run:
           name: Lint
           command: |
@@ -81,7 +79,6 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
-    working_directory: /home/app
     steps:
       - attach_workspace:
           at: /home/app
@@ -110,7 +107,6 @@ jobs:
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: large
-    working_directory: /home/app
     steps:
       - attach_workspace:
           at: /home/app
@@ -142,10 +138,9 @@ jobs:
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: large
-    working_directory: /home/app
     steps:
       - attach_workspace:
-          at: /home/app
+          at: ~/
       - run:
           name: Pa11y
           command: |
@@ -173,10 +168,9 @@ jobs:
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: large
-    working_directory: /home/app
     steps:
       - attach_workspace:
-          at: /home/app
+          at: ~/
       - run:
           name: Cypress
           command: |
