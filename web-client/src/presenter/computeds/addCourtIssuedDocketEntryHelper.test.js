@@ -18,6 +18,7 @@ const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
         COURT_ISSUED_EVENT_CODES: [
           { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
           { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
+          { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
         ],
         USER_ROLES: {
           petitionsClerk: 'petitionsclerk',
@@ -57,6 +58,13 @@ describe('addCourtIssuedDocketEntryHelper', () => {
         eventCode: 'HAHA',
         label: 'Hyena',
         value: 'HAHA',
+      },
+      {
+        code: 'Shenzi',
+        documentType: 'Hyena',
+        eventCode: 'O',
+        label: 'Hyena',
+        value: 'O',
       },
     ]);
   });
@@ -138,5 +146,13 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     expect(result.formattedDocumentTitle).toEqual(
       'Circle of Life (Attachment(s))',
     );
+  });
+
+  it('petitionsclerk should only have 1 element in the document types of Order "O"', () => {
+    user.role = 'petitionsclerk';
+    const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
+    expect(result.documentTypes).toMatchObject([
+      { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
+    ]);
   });
 });
