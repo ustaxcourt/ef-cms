@@ -13,6 +13,7 @@ exports.getConsolidatedCasesByUserInteractor = async ({
   userId,
 }) => {
   let foundCases = [];
+  let userCaseIdsMap = {};
 
   const userCases = await applicationContext
     .getPersistenceGateway()
@@ -24,6 +25,9 @@ exports.getConsolidatedCasesByUserInteractor = async ({
 
     userCases.forEach(caseRecord => {
       const { caseId, leadCaseId } = caseRecord;
+
+      caseRecord.isRequestingUserAssociated = true;
+      userCaseIdsMap[caseId] = true;
 
       if (!leadCaseId || leadCaseId === caseId) {
         caseMapping[caseId] = caseRecord;
@@ -45,27 +49,27 @@ exports.getConsolidatedCasesByUserInteractor = async ({
           leadCaseId,
         });
 
-      if (caseMapping[leadCaseId]) {
-        const caseConsolidatedCases = consolidatedCases.filter(
-          consolidatedCase => consolidatedCase.caseId !== leadCaseId,
-        );
-        caseMapping[leadCaseId].consolidatedCases = Case.sortByDocketNumber(
-          caseConsolidatedCases,
-        );
-      } else {
+      if (!caseMapping[leadCaseId]) {
         const leadCase = consolidatedCases.find(
           consolidatedCase => consolidatedCase.caseId === leadCaseId,
         );
-
-        const caseConsolidatedCases = consolidatedCases.filter(
-          consolidatedCase => consolidatedCase.caseId !== leadCaseId,
-        );
-
-        leadCase.consolidatedCases = Case.sortByDocketNumber(
-          caseConsolidatedCases,
-        );
+        leadCase.isRequestingUserAssociated = false;
         caseMapping[leadCaseId] = leadCase;
       }
+
+      const caseConsolidatedCases = [];
+      consolidatedCases.forEach(consolidatedCase => {
+        consolidatedCase.isRequestingUserAssociated = !!userCaseIdsMap[
+          consolidatedCase.caseId
+        ];
+        if (consolidatedCase.caseId !== leadCaseId) {
+          caseConsolidatedCases.push(consolidatedCase);
+        }
+      });
+
+      caseMapping[leadCaseId].consolidatedCases = Case.sortByDocketNumber(
+        caseConsolidatedCases,
+      );
     }
 
     foundCases = Object.keys(caseMapping).map(caseId => caseMapping[caseId]);

@@ -219,6 +219,7 @@ function Case(rawCase, { applicationContext }) {
   this.blockedReason = rawCase.blockedReason;
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
+  this.caseNote = rawCase.caseNote;
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
   this.contactSecondary = rawCase.contactSecondary;
@@ -239,7 +240,6 @@ function Case(rawCase, { applicationContext }) {
   this.payGovDate = rawCase.payGovDate;
   this.payGovId = rawCase.payGovId;
   this.preferredTrialCity = rawCase.preferredTrialCity;
-  this.proceduralNote = rawCase.proceduralNote;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.status = rawCase.status || Case.STATUS_TYPES.new;
@@ -342,6 +342,7 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
+    caseNote: joi.string().optional(),
     caseType: joi.string().optional(),
     contactPrimary: joi
       .object()
@@ -438,7 +439,6 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null),
-    proceduralNote: joi.string().optional(),
     procedureType: joi.string().optional(),
     receivedAt: joi
       .date()
