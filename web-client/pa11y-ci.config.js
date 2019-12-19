@@ -36,7 +36,10 @@ if (process.env.CI) {
 
 module.exports = {
   defaults: {
-    concurrency: 2,
+    chromeLaunchConfig: {
+      args: ['--no-sandbox'],
+    },
+    concurrency: 3,
     debug: true,
     'include-notices': true,
     'include-warnings': true,

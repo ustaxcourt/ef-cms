@@ -158,7 +158,7 @@ functions:
           method: get
           cors: 
             origins:
-              - localhost:1234
+              - http://localhost:1234
               - ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
