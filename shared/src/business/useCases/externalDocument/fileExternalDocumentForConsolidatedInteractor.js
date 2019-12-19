@@ -25,7 +25,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_IN_CONSOLIDATED)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

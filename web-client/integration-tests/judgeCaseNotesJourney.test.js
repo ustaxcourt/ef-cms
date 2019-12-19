@@ -44,11 +44,11 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
 
   const caseOverrides = {
     ...overrides,
-    procedureType: 'Small',
-    receivedAtYear: '2019',
-    receivedAtMonth: '01',
-    receivedAtDay: '01',
     caseType: 'Deficiency',
+    procedureType: 'Small',
+    receivedAtDay: '01',
+    receivedAtMonth: '01',
+    receivedAtYear: '2019',
   };
   petitionerLogin(test);
   it('Create case', async () => {

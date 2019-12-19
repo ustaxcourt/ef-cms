@@ -152,11 +152,11 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getCaseNote:
-    handler: web-api/${self:provider.dir}/caseNotesHandlers.getCaseNoteLambda
+  getJudgesCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.getJudgesCaseNoteLambda
     events:
       - http:
-          path: /{caseId}
+          path: /judges/{caseId}
           method: get
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
@@ -164,12 +164,24 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateCaseNote:
-    handler: web-api/${self:provider.dir}/caseNotesHandlers.updateCaseNoteLambda
+  updateJudgesCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.updateJudgesCaseNoteLambda
     events:
       - http:
-          path: /{caseId}
+          path: /judges/{caseId}
           method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  deleteJudgesCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.deleteJudgesCaseNoteLambda
+    events:
+      - http:
+          path: /judges/{caseId}
+          method: delete
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
@@ -182,29 +194,17 @@ functions:
       - http:
           path: /{caseId}
           method: delete
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  deleteProceduralNote:
-    handler: web-api/${self:provider.dir}/caseNotesHandlers.deleteProceduralNoteLambda
-    events:
-      - http:
-          path: /procedural/{caseId}
-          method: delete
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  saveProcecuralNote:
-    handler: web-api/${self:provider.dir}/caseNotesHandlers.saveProceduralNoteLambda
+  saveCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.saveCaseNoteLambda
     events:
       - http:
-          path: /procedural/{caseId}
+          path: /{caseId}
           method: put
           cors: true
           authorizer:
