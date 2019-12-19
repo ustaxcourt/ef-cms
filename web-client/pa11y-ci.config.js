@@ -46,7 +46,7 @@ module.exports = {
     standard: 'WCAG2AA',
     timeout: 45000,
     useIncognitoBrowserContext: true,
-    wait: 5000,
+    wait: 10000,
   },
   urls: [...initialUrls, ...userUrls],
 };
