@@ -21,7 +21,11 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
 }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
+  const hasPermission =
+    isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
+    isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
+
+  if (!hasPermission) {
     throw new UnauthorizedError('Unauthorized');
   }
 

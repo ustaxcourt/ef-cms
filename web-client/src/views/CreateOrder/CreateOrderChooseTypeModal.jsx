@@ -9,8 +9,8 @@ export const CreateOrderChooseTypeModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.submitCreateOrderModalSequence,
-    constants: state.constants,
     form: state.form,
+    orderTypesHelper: state.orderTypesHelper,
     updateFormValue: sequences.updateCreateOrderModalFormValueSequence,
     validateSequence: sequences.validateOrderWithoutBodySequence,
     validationErrors: state.validationErrors,
@@ -18,8 +18,8 @@ export const CreateOrderChooseTypeModal = connect(
   ({
     cancelSequence,
     confirmSequence,
-    constants,
     form,
+    orderTypesHelper,
     updateFormValue,
     validateSequence,
     validationErrors,
@@ -52,11 +52,14 @@ export const CreateOrderChooseTypeModal = connect(
               }}
             >
               <option value="">- Select -</option>
-              {map(constants.ORDER_TYPES_MAP, ({ documentType, eventCode }) => (
-                <option key={eventCode} value={eventCode}>
-                  {documentType}
-                </option>
-              ))}
+              {map(
+                orderTypesHelper.orderTypes,
+                ({ documentType, eventCode }) => (
+                  <option key={eventCode} value={eventCode}>
+                    {documentType}
+                  </option>
+                ),
+              )}
             </select>
           </FormGroup>
           {form.eventCode == 'O' && (

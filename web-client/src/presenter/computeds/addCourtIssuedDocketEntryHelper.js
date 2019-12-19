@@ -2,7 +2,10 @@ import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
-  const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
+  const {
+    COURT_ISSUED_EVENT_CODES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
   const caseDetail = applicationContext
     .getUtilities()
     .setServiceIndicatorsForCase({
@@ -11,7 +14,14 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
 
   const form = get(state.form);
 
-  const documentTypes = COURT_ISSUED_EVENT_CODES.map(type => ({
+  const user = applicationContext.getCurrentUser();
+
+  let eventCodes = COURT_ISSUED_EVENT_CODES;
+  if (user.role === USER_ROLES.petitionsClerk) {
+    eventCodes = eventCodes.filter(entry => entry.eventCode === 'O');
+  }
+
+  const documentTypes = eventCodes.map(type => ({
     ...type,
     label: type.documentType,
     value: type.eventCode,
