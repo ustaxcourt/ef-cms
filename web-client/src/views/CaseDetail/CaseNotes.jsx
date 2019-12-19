@@ -1,6 +1,7 @@
-import { AddEditCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditCaseNoteModal';
+import { AddEditJudgesCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditJudgesCaseNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
-import { DeleteCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteCaseNoteConfirmModal';
+import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
+import { DeleteJudgesCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteJudgesCaseNoteConfirmModal';
 import { Text } from '../../ustc-ui/Text/Text';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -10,17 +11,23 @@ export const CaseNotes = connect(
   {
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
-    openAddEditCaseNoteModalFromDetailSequence:
-      sequences.openAddEditCaseNoteModalFromDetailSequence,
+    openAddEditCaseNoteModalSequence:
+      sequences.openAddEditCaseNoteModalSequence,
+    openAddEditJudgesCaseNoteModalFromDetailSequence:
+      sequences.openAddEditJudgesCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence:
       sequences.openDeleteCaseNoteConfirmModalSequence,
+    openDeleteJudgesCaseNoteConfirmModalSequence:
+      sequences.openDeleteJudgesCaseNoteConfirmModalSequence,
     showModal: state.showModal,
   },
   ({
     caseDetail,
     caseDetailHelper,
-    openAddEditCaseNoteModalFromDetailSequence,
+    openAddEditCaseNoteModalSequence,
+    openAddEditJudgesCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence,
+    openDeleteJudgesCaseNoteConfirmModalSequence,
     showModal,
   }) => {
     return (
@@ -31,13 +38,14 @@ export const CaseNotes = connect(
               <div className="tablet:grid-col-6">
                 <div className="card height-full">
                   <div className="content-wrapper">
-                    {!caseDetail.proceduralNote && (
+                    {!caseDetail.caseNote && (
                       <Button
                         link
                         className="float-right margin-right-0 margin-top-1 padding-0"
                         icon="sticky-note"
+                        id="add-procedural-note-button"
                         onClick={() => {
-                          //TODO
+                          openAddEditCaseNoteModalSequence();
                         }}
                       >
                         Add Case Note
@@ -45,16 +53,16 @@ export const CaseNotes = connect(
                     )}
                     <h3 className="underlined">Case Notes</h3>
                     <div className="margin-top-1 margin-bottom-4">
-                      <Text bind="caseDetail.proceduralNote" />
+                      <Text bind="caseDetail.caseNote" />
                     </div>
-                    {caseDetail.proceduralNote && (
+                    {caseDetail.caseNote && (
                       <div className="grid-row">
                         <div className="tablet:grid-col-6">
                           <Button
                             link
                             icon="edit"
                             onClick={() => {
-                              //TODO
+                              openAddEditCaseNoteModalSequence();
                             }}
                           >
                             Edit Note
@@ -65,8 +73,9 @@ export const CaseNotes = connect(
                             link
                             className="red-warning no-wrap"
                             icon="trash"
+                            id="delete-procedural-note-button"
                             onClick={() => {
-                              //TODO
+                              openDeleteCaseNoteConfirmModalSequence();
                             }}
                           >
                             Delete Note
@@ -81,13 +90,14 @@ export const CaseNotes = connect(
                 <div className="tablet:grid-col-6">
                   <div className="card height-full">
                     <div className="content-wrapper">
-                      {!caseDetail.caseNote.notes && (
+                      {(!caseDetail.judgesNote ||
+                        !caseDetail.judgesNote.notes) && (
                         <Button
                           link
                           className="float-right margin-right-0 margin-top-1 padding-0"
                           icon="plus-circle"
                           onClick={() => {
-                            openAddEditCaseNoteModalFromDetailSequence({
+                            openAddEditJudgesCaseNoteModalFromDetailSequence({
                               caseId: caseDetail.caseId,
                             });
                           }}
@@ -97,18 +107,20 @@ export const CaseNotes = connect(
                       )}
                       <h3 className="underlined">Judge’s Notes</h3>
                       <div className="margin-top-1  margin-bottom-4">
-                        <Text bind="caseDetail.caseNote.notes" />
+                        <Text bind="caseDetail.judgesNote.notes" />
                       </div>
-                      {caseDetail.caseNote.notes && (
+                      {caseDetail.judgesNote && caseDetail.judgesNote.notes && (
                         <div className="grid-row">
                           <div className="tablet:grid-col-6">
                             <Button
                               link
                               icon="edit"
                               onClick={() => {
-                                openAddEditCaseNoteModalFromDetailSequence({
-                                  caseId: caseDetail.caseId,
-                                });
+                                openAddEditJudgesCaseNoteModalFromDetailSequence(
+                                  {
+                                    caseId: caseDetail.caseId,
+                                  },
+                                );
                               }}
                             >
                               Edit Note
@@ -120,7 +132,7 @@ export const CaseNotes = connect(
                               className="red-warning no-wrap"
                               icon="trash"
                               onClick={() => {
-                                openDeleteCaseNoteConfirmModalSequence({
+                                openDeleteJudgesCaseNoteConfirmModalSequence({
                                   caseId: caseDetail.caseId,
                                 });
                               }}
@@ -137,11 +149,14 @@ export const CaseNotes = connect(
             </div>
           </div>
         </div>
-        {showModal === 'DeleteCaseNoteConfirmModal' && (
-          <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteFromCaseDetailSequence" />
+        {showModal === 'DeleteJudgesCaseNoteConfirmModal' && (
+          <DeleteJudgesCaseNoteConfirmModal onConfirmSequence="deleteJudgesCaseNoteFromCaseDetailSequence" />
         )}
-        {showModal === 'AddEditCaseNoteModal' && (
-          <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteOnCaseDetailSequence" />
+        {showModal === 'AddEditJudgesCaseNoteModal' && (
+          <AddEditJudgesCaseNoteModal onConfirmSequence="updateJudgesCaseNoteOnCaseDetailSequence" />
+        )}
+        {showModal === 'DeleteCaseNoteConfirmModal' && (
+          <DeleteCaseNoteConfirmModal onConfirmSequence="deleteCaseNoteSequence" />
         )}
       </>
     );

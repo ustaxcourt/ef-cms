@@ -100,7 +100,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'objections',
-      value: true,
+      value: 'Yes',
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
