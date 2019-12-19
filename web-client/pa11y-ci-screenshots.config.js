@@ -1,12 +1,12 @@
 const sanitize = require('sanitize-filename');
 
+const adc = require('./pa11y/pa11y-adc');
 const docketclerk = require('./pa11y/pa11y-docketclerk');
+const judge = require('./pa11y/pa11y-judge');
+const petitioner = require('./pa11y/pa11y-petitioner');
 const petitionsclerk = require('./pa11y/pa11y-petitionsclerk');
 const practitioner = require('./pa11y/pa11y-practitioner');
 const respondent = require('./pa11y/pa11y-respondent');
-const adc = require('./pa11y/pa11y-adc');
-const petitioner = require('./pa11y/pa11y-petitioner');
-const judge = require('./pa11y/pa11y-judge');
 
 const userUrls = [
   ...docketclerk,
@@ -48,9 +48,6 @@ const screenshotUrls = urls.map(item => {
 
 module.exports = {
   defaults: {
-    chromeLaunchConfig: {
-      args: ['--no-sandbox'],
-    },
     concurrency: 3,
     debug: true,
     'include-notices': true,
