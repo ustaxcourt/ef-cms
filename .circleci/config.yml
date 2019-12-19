@@ -62,7 +62,7 @@ jobs:
           name: Web API - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
+            /home/app/sonar_home/bin/sonar-scanner \
             -Dsonar.projectKey="${API_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
@@ -89,7 +89,7 @@ jobs:
           name: Shared - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
+            /home/app/sonar_home/bin/sonar-scanner \
             -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
@@ -120,7 +120,7 @@ jobs:
           name: Web Client - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
+            /home/app/sonar_home/bin/sonar-scanner \
             -Dsonar.projectKey="${UI_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
