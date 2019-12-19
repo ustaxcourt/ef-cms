@@ -1,30 +1,18 @@
-import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
-import { AddToTrialModal } from './AddToTrialModal';
-import { BlockFromTrialModal } from './BlockFromTrialModal';
 import { CaseDeadlinesInternal } from './CaseDeadlinesInternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailPendingReportList } from './CaseDetailPendingReportList';
 import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
 import { CaseInformationInternal } from './CaseInformationInternal';
 import { CaseNotes } from './CaseNotes';
-import { CreateCaseDeadlineModalDialog } from './CreateCaseDeadlineModalDialog';
-import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
-import { DeleteCaseDeadlineModalDialog } from './DeleteCaseDeadlineModalDialog';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
-import { EditCaseDeadlineModalDialog } from './EditCaseDeadlineModalDialog';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './MessagesInProgress';
 import { PetitionerInformation } from './PetitionerInformation';
-import { PrioritizeCaseModal } from './PrioritizeCaseModal';
-import { RemoveFromTrialSessionModal } from './RemoveFromTrialSessionModal';
 import { RespondentInformation } from './RespondentInformation';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { UnblockFromTrialModal } from './UnblockFromTrialModal';
-import { UnprioritizeCaseModal } from './UnprioritizeCaseModal';
-import { UpdateCaseModalDialog } from '../CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -35,17 +23,9 @@ export const CaseDetailInternal = connect(
     caseDetail: state.caseDetail,
     formattedCaseDetail: state.formattedCaseDetail,
     primaryTab: state.caseDetailPage.primaryTab,
-    showModal: state.showModal,
     token: state.token,
   },
-  ({
-    baseUrl,
-    caseDetail,
-    formattedCaseDetail,
-    primaryTab,
-    showModal,
-    token,
-  }) => {
+  ({ baseUrl, caseDetail, formattedCaseDetail, primaryTab, token }) => {
     return (
       <>
         <CaseDetailHeader className="margin-bottom-0" />
@@ -145,31 +125,6 @@ export const CaseDetailInternal = connect(
             </>
           )}
         </section>
-
-        {showModal === 'CreateCaseDeadlineModalDialog' && (
-          <CreateCaseDeadlineModalDialog />
-        )}
-        {showModal === 'EditCaseDeadlineModalDialog' && (
-          <EditCaseDeadlineModalDialog />
-        )}
-        {showModal === 'DeleteCaseDeadlineModalDialog' && (
-          <DeleteCaseDeadlineModalDialog />
-        )}
-        {showModal === 'AddEditCaseNoteModal' && (
-          <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteSequence" />
-        )}
-        {showModal === 'AddToTrialModal' && <AddToTrialModal />}
-        {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}
-        {showModal === 'UnblockFromTrialModal' && <UnblockFromTrialModal />}
-        {showModal === 'PrioritizeCaseModal' && <PrioritizeCaseModal />}
-        {showModal === 'UnprioritizeCaseModal' && <UnprioritizeCaseModal />}
-        {showModal === 'RemoveFromTrialSessionModal' && (
-          <RemoveFromTrialSessionModal />
-        )}
-        {showModal === 'CreateOrderChooseTypeModal' && (
-          <CreateOrderChooseTypeModal />
-        )}
-        {showModal == 'UpdateCaseModalDialog' && <UpdateCaseModalDialog />}
       </>
     );
   },
