@@ -4209,7 +4209,7 @@
         }
       }
     },
-    "/case-notes/{caseId}": {
+    "/case-notes/judges/{caseId}": {
       "parameters": [
         {
           "name": "caseId",
@@ -4220,14 +4220,14 @@
       ],
       "get": {
         "tags": ["caseNotes"],
-        "summary": "gets the logged in user's note for a case",
-        "description": "gets the logged in user's note for a case.\n",
+        "summary": "gets the logged in user's judge's note for a case",
+        "description": "gets the logged in user's judge's note for a case.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseNote"
+              "$ref": "#/definitions/judgeNote"
             }
           }
         },
@@ -4239,14 +4239,14 @@
       },
       "post": {
         "tags": ["caseNotes"],
-        "summary": "create and associate a note to a case for the logged in user",
-        "description": "create and associate a note to a case for the logged in user.\n",
+        "summary": "create and associate a judge's note to a case for the logged in user",
+        "description": "create and associate a judge's note to a case for the logged in user.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/caseNote"
+              "$ref": "#/definitions/judgeNote"
             }
           }
         },
@@ -4258,8 +4258,79 @@
       },
       "put": {
         "tags": ["caseNotes"],
-        "summary": "update a case note for the logged in user",
-        "description": "update a case note for the logged in user.\n",
+        "summary": "update a judge's note for the logged in user",
+        "description": "update a judge's note for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/judgeNote"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["caseNotes"],
+        "summary": "delete the judge's note for the logged in user",
+        "description": "delete the judge's note for the logged in user.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/judgeNote"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-notes/{caseId}": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["caseNotes"],
+        "summary": "update a case procedural note",
+        "description": "update a case procedural note.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -4277,8 +4348,8 @@
       },
       "delete": {
         "tags": ["caseNotes"],
-        "summary": "delete the case note for the logged in user",
-        "description": "delete the case note for the logged in user.\n",
+        "summary": "delete the case procedural note",
+        "description": "delete the case procedural note.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -4663,7 +4734,7 @@
       },
       "description": "a case deadline"
     },
-    "caseNote": {
+    "judgeNote": {
       "type": "object",
       "properties": {
         "caseId": {
@@ -4672,14 +4743,28 @@
         },
         "userId": {
           "type": "string",
-          "description": "id of the user who owns the note"
+          "description": "id of the judge user who owns the note"
+        },
+        "notes": {
+          "type": "string",
+          "description": "judge's notes for the case"
+        }
+      },
+      "description": "a case judge's note"
+    },
+    "caseNote": {
+      "type": "object",
+      "properties": {
+        "caseId": {
+          "type": "string",
+          "description": "id of the case"
         },
         "notes": {
           "type": "string",
           "description": "notes for the case"
         }
       },
-      "description": "a case note"
+      "description": "a case procedural note"
     }
   }
 }

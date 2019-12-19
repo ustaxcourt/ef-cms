@@ -10,6 +10,8 @@ export const CaseDetailHeaderMenu = connect(
     caseDetail: state.caseDetail,
     caseDetailHeaderHelper: state.caseDetailHeaderHelper,
     isCaseDetailMenuOpen: state.menuHelper.isCaseDetailMenuOpen,
+    openAddEditCaseNoteModalSequence:
+      sequences.openAddEditCaseNoteModalSequence,
     openCreateCaseDeadlineModalSequence:
       sequences.openCreateCaseDeadlineModalSequence,
     openCreateOrderChooseTypeModalSequence:
@@ -22,6 +24,7 @@ export const CaseDetailHeaderMenu = connect(
     caseDetail,
     caseDetailHeaderHelper,
     isCaseDetailMenuOpen,
+    openAddEditCaseNoteModalSequence,
     openCreateCaseDeadlineModalSequence,
     openCreateOrderChooseTypeModalSequence,
     openUpdateCaseModalSequence,
@@ -135,6 +138,18 @@ export const CaseDetailHeaderMenu = connect(
                     </Button>
                   </li>
                 )}
+                <li className="usa-nav__submenu-item">
+                  <Button
+                    icon="sticky-note"
+                    id="add-case-note-button"
+                    onClick={() => {
+                      resetCaseMenuSequence();
+                      openAddEditCaseNoteModalSequence();
+                    }}
+                  >
+                    Add Case Note
+                  </Button>
+                </li>
               </ul>
             )}
           </li>

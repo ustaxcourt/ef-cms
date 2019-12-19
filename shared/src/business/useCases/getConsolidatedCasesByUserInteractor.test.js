@@ -85,32 +85,39 @@ describe('getConsolidatedCasesByUserInteractor', () => {
           {
             caseId: '345',
             docketNumber: '345-01',
+            isRequestingUserAssociated: true,
             leadCaseId: '123',
           },
           {
             caseId: '456',
             docketNumber: '456-01',
+            isRequestingUserAssociated: false,
             leadCaseId: '123',
           },
           {
             caseId: '234',
             docketNumber: '234-02',
+            isRequestingUserAssociated: false,
             leadCaseId: '123',
           },
         ],
+        isRequestingUserAssociated: true,
         leadCaseId: '123',
       },
       {
         caseId: '345',
+        isRequestingUserAssociated: true,
       },
       {
         caseId: '001',
         consolidatedCases: [
           {
             caseId: '002',
+            isRequestingUserAssociated: true,
             leadCaseId: '001',
           },
         ],
+        isRequestingUserAssociated: false,
         leadCaseId: '001',
       },
     ]);

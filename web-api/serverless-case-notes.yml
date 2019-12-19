@@ -152,25 +152,37 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getCaseNote:
-    handler: web-api/${self:provider.dir}/caseNotesHandlers.getCaseNoteLambda
+  getJudgesCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.getJudgesCaseNoteLambda
     events:
       - http:
-          path: /{caseId}
+          path: /judges/{caseId}
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateCaseNote:
-    handler: web-api/${self:provider.dir}/caseNotesHandlers.updateCaseNoteLambda
+  updateJudgesCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.updateJudgesCaseNoteLambda
     events:
       - http:
-          path: /{caseId}
+          path: /judges/{caseId}
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  deleteJudgesCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.deleteJudgesCaseNoteLambda
+    events:
+      - http:
+          path: /judges/{caseId}
+          method: delete
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -182,6 +194,18 @@ functions:
       - http:
           path: /{caseId}
           method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  saveCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.saveCaseNoteLambda
+    events:
+      - http:
+          path: /{caseId}
+          method: put
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

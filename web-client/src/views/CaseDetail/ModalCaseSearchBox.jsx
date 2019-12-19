@@ -35,7 +35,7 @@ export const ModalCaseSearchBox = connect(
             name="searchTerm"
             placeholder="Enter docket no. (123-19)"
             type="search"
-            value={searchTerm}
+            value={searchTerm || ''}
             onChange={e => {
               updateModalValueSequence({
                 key: 'searchTerm',
