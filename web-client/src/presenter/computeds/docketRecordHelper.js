@@ -5,12 +5,10 @@ export const docketRecordHelper = get => {
 
   const showDirectDownloadLink = !permissions.UPDATE_CASE;
 
-  const canShowEditDocketEntryLink = permissions.DOCKET_ENTRY;
-
   return {
-    canShowEditDocketEntryLink,
     showDirectDownloadLink,
     showDocumentDetailLink: !showDirectDownloadLink,
-    showEditDocketEntry: permissions.DOCKET_ENTRY,
+    showEditDocketEntry:
+      permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY,
   };
 };
