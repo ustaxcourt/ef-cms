@@ -23,11 +23,3 @@ RUN apt-get install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libc
   unzip wget jq shellcheck clamav
 
 RUN freshclam
-
-# Add a chrome user and setup home dir.
-RUN groupadd --system chrome && \
-    useradd --system --create-home --gid chrome --groups audio,video chrome && \
-    mkdir --parents /home/chrome/reports && \
-    chown --recursive chrome:chrome /home/chrome
-
-USER chrome

@@ -48,6 +48,9 @@ const screenshotUrls = urls.map(item => {
 
 module.exports = {
   defaults: {
+    chromeLaunchConfig: {
+      args: ['--no-sandbox'],
+    },
     concurrency: 3,
     debug: true,
     'include-notices': true,
