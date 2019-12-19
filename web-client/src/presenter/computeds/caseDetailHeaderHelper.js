@@ -41,7 +41,8 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     permissions.DOCKET_ENTRY && ['CaseDetailInternal'].includes(currentPage);
 
   const showCaseDetailHeaderMenu =
-    !isExternalUser && ['CaseDetailInternal'].includes(currentPage);
+    !isExternalUser &&
+    ['CaseDetailInternal', 'DocumentDetail'].includes(currentPage);
 
   const showFileDocumentButton =
     permissions.FILE_EXTERNAL_DOCUMENT &&
