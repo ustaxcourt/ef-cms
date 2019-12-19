@@ -19,6 +19,8 @@ export const rescanBatchAction = async ({
   props,
   store,
 }) => {
+  const { duplexEnabled } = props;
+
   store.set(state.isScanning, true);
   const batchIndex = get(state.batchIndexToRescan);
   const scanner = await applicationContext.getScanner();
@@ -27,6 +29,7 @@ export const rescanBatchAction = async ({
   try {
     const { scannedBuffer: pages } = await scanner.startScanSession({
       applicationContext,
+      duplexEnabled,
     });
     const documentSelectedForScan = get(state.documentSelectedForScan);
     const batches = get(state.batches[documentSelectedForScan]);
