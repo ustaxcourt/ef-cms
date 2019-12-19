@@ -32,6 +32,7 @@ describe('startScanAction', () => {
         presenter,
       },
       props: {
+        duplexEnabled: false,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
@@ -89,6 +90,7 @@ describe('startScanAction', () => {
         presenter,
       },
       props: {
+        duplexEnabled: false,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
