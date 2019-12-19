@@ -159,7 +159,9 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showPrintCaseConfirmationButton =
     document.status === 'served' && formattedDocument.isPetition === true;
 
-  const showAddDocketEntryButton = permissions.DOCKET_ENTRY && isDraftDocument;
+  const showAddDocketEntryButton =
+    (permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY) &&
+    isDraftDocument;
 
   return {
     createdFiledLabel: isOrder ? 'Created' : 'Filed', // Should actually be all court-issued documents
