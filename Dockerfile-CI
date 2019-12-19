@@ -29,3 +29,5 @@ RUN groupadd --system chrome && \
     useradd --system --create-home --gid chrome --groups audio,video chrome && \
     mkdir --parents /home/chrome/reports && \
     chown --recursive chrome:chrome /home/chrome
+
+USER chrome
