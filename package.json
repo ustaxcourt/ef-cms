@@ -78,7 +78,7 @@
     "nock": "^11.7.0",
     "node-sass": "^4.13.0",
     "npm-run-all": "^4.1.5",
-    "pa11y-ci": "^2.3.0",
+    "pa11y-ci": "github:sutt0n/pa11y-ci",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-bundle-visualiser": "^1.2.0",
     "parcel-plugin-static-files-copy": "^2.2.1",
