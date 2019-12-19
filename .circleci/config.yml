@@ -81,7 +81,7 @@ jobs:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
     steps:
       - attach_workspace:
-          at: /home/app
+          at: ~/
       - run:
           name: Shared - Test
           command: npm run test:shared
@@ -109,7 +109,7 @@ jobs:
     resource_class: large
     steps:
       - attach_workspace:
-          at: /home/app
+          at: /~
       - run:
           name: Web Client - Test
           command: |
