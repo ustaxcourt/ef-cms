@@ -1,9 +1,9 @@
+import { canFileInConsolidatedCasesAction } from '../actions/FileDocument/canFileInConsolidatedCasesAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/getConsolidatedCasesByCaseAction';
-import { isConsolidatedCaseAction } from '../actions/FileDocument/isConsolidatedCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { set } from 'cerebral/factories';
@@ -23,7 +23,7 @@ const gotoFileDocument = [
   setCaseAction,
   set(state.wizardStep, 'SelectDocumentType'),
   setCurrentPageAction('FileDocumentWizard'),
-  isConsolidatedCaseAction,
+  canFileInConsolidatedCasesAction,
   {
     no: [],
     yes: [

@@ -28,7 +28,11 @@ export const CaseListPractitioner = connect(
           </thead>
           <tbody>
             {formattedCases.map(item => (
-              <CaseListRowExternal formattedCase={item} key={item.caseId} />
+              <CaseListRowExternal
+                onlyLinkIfRequestedUserAssociated
+                formattedCase={item}
+                key={item.caseId}
+              />
             ))}
           </tbody>
         </table>
