@@ -100,9 +100,9 @@ exports.getScannerInterface = () => {
     }
   };
 
-  const startScanSession = ({ options = {} }) => {
+  const startScanSession = ({ duplexEnabled = false }) => {
     DWObject.IfDisableSourceAfterAcquire = true;
-    DWObject.IfDuplexEnabled = options.duplexEnabled || false;
+    DWObject.IfDuplexEnabled = duplexEnabled;
     DWObject.OpenSource();
     DWObject.AcquireImage();
 

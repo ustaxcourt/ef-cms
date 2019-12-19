@@ -178,21 +178,21 @@ describe('getScannerInterface', () => {
     expect(error).toBeDefined();
   });
 
-  it('can enable/disable duplex mode by calling startScanSession with option.duplexEnabled set to true or false', async () => {
+  it('can enable/disable duplex mode by calling startScanSession with duplexEnabled set to true or false', async () => {
     const scannerAPI = getScannerInterface();
     scannerAPI.setDWObject(DWObject);
     expect(DWObject.IfDuplexEnabled).toEqual(false); // default
 
-    const options = {
+    await scannerAPI.startScanSession({
+      applicationContext,
       duplexEnabled: true,
-    };
-
-    await scannerAPI.startScanSession({ applicationContext, options });
+    });
     expect(DWObject.IfDuplexEnabled).toEqual(true);
 
-    options.duplexEnabled = false;
-
-    await scannerAPI.startScanSession({ applicationContext, options });
+    await scannerAPI.startScanSession({
+      applicationContext,
+      duplexEnabled: false,
+    });
     expect(DWObject.IfDuplexEnabled).toEqual(false);
   });
 
