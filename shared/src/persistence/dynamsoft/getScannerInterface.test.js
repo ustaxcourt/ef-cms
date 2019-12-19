@@ -178,6 +178,24 @@ describe('getScannerInterface', () => {
     expect(error).toBeDefined();
   });
 
+  it('can enable/disable duplex mode by calling startScanSession with option.duplexEnabled set to true or false', async () => {
+    const scannerAPI = getScannerInterface();
+    scannerAPI.setDWObject(DWObject);
+    expect(DWObject.IfDuplexEnabled).toEqual(false); // default
+
+    const options = {
+      duplexEnabled: true,
+    };
+
+    await scannerAPI.startScanSession({ applicationContext, options });
+    expect(DWObject.IfDuplexEnabled).toEqual(true);
+
+    options.duplexEnabled = false;
+
+    await scannerAPI.startScanSession({ applicationContext, options });
+    expect(DWObject.IfDuplexEnabled).toEqual(false);
+  });
+
   it('should attempt to load the dynamsoft libraries', async () => {
     delete global.document;
     let calls = 0;
