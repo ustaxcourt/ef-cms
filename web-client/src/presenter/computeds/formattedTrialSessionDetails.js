@@ -7,7 +7,15 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       applicationContext,
       trialSession: get(state.trialSession),
     });
-  formattedTrialSession.canDelete = true;
-  formattedTrialSession.canEdit = true;
+
+  const trialDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(formattedTrialSession.startDate, 'YYYYMMDD');
+  const nowDateFormatted = applicationContext
+    .getUtilities()
+    .formatNow('YYYYMMDD');
+  const trialDateInFuture = trialDateFormatted > nowDateFormatted;
+  formattedTrialSession.canDelete = trialDateInFuture;
+  formattedTrialSession.canEdit = trialDateInFuture;
   return formattedTrialSession;
 };

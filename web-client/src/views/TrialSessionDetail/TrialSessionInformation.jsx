@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { DeleteTrialSessionModal } from './DeleteTrialSessionModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -7,12 +8,17 @@ import classNames from 'classnames';
 export const TrialSessionInformation = connect(
   {
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+    openConfirmDeleteTrialSessionModalSequence:
+      sequences.openConfirmDeleteTrialSessionModalSequence,
     printTrialCalendarSequence: sequences.printTrialCalendarSequence,
+    showModal: state.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
   },
   ({
     formattedTrialSessionDetails,
+    openConfirmDeleteTrialSessionModalSequence,
     printTrialCalendarSequence,
+    showModal,
     trialSessionHeaderHelper,
   }) => {
     return (
@@ -46,18 +52,21 @@ export const TrialSessionInformation = connect(
               </h1>
             </div>
             <div className="grid-col-3 display-flex">
+              <span className="flex-push-right width-0 margin-left-auto" />
               {formattedTrialSessionDetails.canDelete && (
                 <Button
                   link
-                  className="margin-top-2 margin-left-auto red-warning"
+                  className="margin-top-2 red-warning"
                   icon="trash"
                   onClick={() => {
-                    // TODO
-                    // deleteTrialSessionSequence();
+                    openConfirmDeleteTrialSessionModalSequence();
                   }}
                 >
                   Delete Session
                 </Button>
+              )}
+              {showModal === 'DeleteTrialSessionModal' && (
+                <DeleteTrialSessionModal />
               )}
               {formattedTrialSessionDetails.isCalendared && (
                 <Button
