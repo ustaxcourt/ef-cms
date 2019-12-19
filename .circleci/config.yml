@@ -7,32 +7,32 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
+      # - restore_cache:
+      #     name: Source - Restoring Cache
+      #     keys:
+      #       - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+      #       - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+      #       - source-{{ .Environment.CACHE_VERSION }}-
       - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - restore_cache:
-          name: NPM - Restoring Cache
-          keys:
-            - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - npm-{{ .Environment.CACHE_VERSION }}-
+      # - save_cache:
+      #     name: Source - Saving Cache
+      #     key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+      #     paths:
+      #       - '.git'
+      # - restore_cache:
+      #     name: NPM - Restoring Cache
+      #     keys:
+      #       - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      #       - npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+      #       - npm-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: NPM - Install
           command: npm i
-      - save_cache:
-          name: NPM - Save to Cache
-          paths:
-            - node_modules # location depends on npm version
-          key: npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      # - save_cache:
+      #     name: NPM - Save to Cache
+      #     paths:
+      #       - node_modules # location depends on npm version
+      #     key: npm-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "package-lock.json" }}
       - persist_to_workspace:
           root: ~/
           paths:
