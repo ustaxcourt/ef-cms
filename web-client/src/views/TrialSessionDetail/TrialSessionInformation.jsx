@@ -19,7 +19,7 @@ export const TrialSessionInformation = connect(
       <>
         <div className="grid-container padding-x-0">
           <div className="grid-row">
-            <div className="grid-col-10">
+            <div className="grid-col-9">
               <h1>
                 Session Information
                 {trialSessionHeaderHelper.showSwitchToWorkingCopy && (
@@ -30,19 +30,45 @@ export const TrialSessionInformation = connect(
                     View Judge Session Copy
                   </a>
                 )}
+                {formattedTrialSessionDetails.canEdit && (
+                  <Button
+                    link
+                    className="margin-left-2 margin-top-2"
+                    icon="edit"
+                    onClick={() => {
+                      // TODO
+                      // editTrialSessionSequence();
+                    }}
+                  >
+                    Edit
+                  </Button>
+                )}
               </h1>
             </div>
-            <div className="grid-col-2">
+            <div className="grid-col-3 display-flex">
+              {formattedTrialSessionDetails.canDelete && (
+                <Button
+                  link
+                  className="margin-top-2 margin-left-auto red-warning"
+                  icon="trash"
+                  onClick={() => {
+                    // TODO
+                    // deleteTrialSessionSequence();
+                  }}
+                >
+                  Delete Session
+                </Button>
+              )}
               {formattedTrialSessionDetails.isCalendared && (
                 <Button
                   link
-                  className="float-right margin-top-2"
+                  className="margin-top-2 margin-left-4"
                   icon="print"
                   onClick={() => {
                     printTrialCalendarSequence();
                   }}
                 >
-                  Printable Trial Calendar
+                  Print
                 </Button>
               )}
             </div>
