@@ -1,6 +1,5 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-
 import React from 'react';
 
 export const MessagesInProgress = connect(
