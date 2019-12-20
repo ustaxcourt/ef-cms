@@ -16,12 +16,15 @@ export const startScanAction = async ({
   props,
   store,
 }) => {
+  const { duplexEnabled } = props;
+
   store.set(state.isScanning, true);
   const scanner = await applicationContext.getScanner();
   scanner.setSourceByIndex(props.scannerSourceIndex);
   try {
     const { scannedBuffer: pages } = await scanner.startScanSession({
       applicationContext,
+      duplexEnabled,
     });
 
     const documentSelectedForScan = get(state.documentSelectedForScan);
