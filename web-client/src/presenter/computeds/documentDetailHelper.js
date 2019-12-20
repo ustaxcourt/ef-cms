@@ -159,7 +159,7 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showPrintCaseConfirmationButton =
     document.status === 'served' && formattedDocument.isPetition === true;
 
-  const showAddDocketEntryButton =
+  const showAddCourtIssuedDocketEntryButton =
     (permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY) &&
     isDraftDocument;
 
@@ -171,16 +171,22 @@ export const documentDetailHelper = (get, applicationContext) => {
       const actions = get(state.workItemActions);
       return actions[workItemId] === action;
     },
-    showAddDocketEntryButton,
+    showAddCourtIssuedDocketEntryButton,
     showCaseDetailsEdit,
     showCaseDetailsView,
     showConfirmEditOrder: isSigned && isOrder,
     showCreatedFiled: (!isOrder && !isCourtIssuedDocument) || isDraftDocument,
     showDocumentInfoTab,
+    showEditCourtIssuedDocketEntry:
+      !isDraftDocument &&
+      permissions.DOCKET_ENTRY &&
+      formattedDocument.isPetition === false &&
+      formattedDocument.isCourtIssuedDocument,
     showEditDocketEntry:
       !isDraftDocument &&
       permissions.DOCKET_ENTRY &&
-      formattedDocument.isPetition === false,
+      formattedDocument.isPetition === false &&
+      !formattedDocument.isCourtIssuedDocument,
     showPrintCaseConfirmationButton,
     showRecallButton,
     showRemoveSignature: isOrder && isSigned,
