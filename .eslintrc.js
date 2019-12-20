@@ -6,10 +6,12 @@ module.exports = {
     'plugin:security/recommended',
     'prettier/react',
     'prettier/standard',
+    'plugin:import/errors',
   ],
   plugins: [
     'cypress',
     'eslint-plugin-sort-imports-es6-autofix',
+    'import',
     'jest',
     'jsdoc',
     'jsx-a11y',
@@ -22,6 +24,7 @@ module.exports = {
     'spellcheck',
   ],
   rules: {
+    'import/named': 1,
     'no-prototype-builtins': 0,
     'react/prop-types': 0,
     'require-atomic-updates': 0,
@@ -290,6 +293,11 @@ module.exports = {
     react: {
       version: '16.12.0',
     },
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx'],
+      },
+    },
   },
   env: {
     'cypress/globals': true,
@@ -303,5 +311,5 @@ module.exports = {
     jsx: true,
     sourceType: 'module',
   },
-  parser: "babel-eslint",
+  parser: 'babel-eslint',
 };
