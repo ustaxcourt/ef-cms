@@ -142,14 +142,23 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Pa11y
+          name: Pa11y - Web Client 1
           command: |
             npm run build:all
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
-            npm run test:pa11y --node-flags --max-old-space-size=1024
+            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
+      - run:
+          name: Pa11y - Web Client 2
+          command: |
+            npm run build:all
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Public Site
           command: |
