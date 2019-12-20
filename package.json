@@ -108,6 +108,7 @@
     "s3-zip": "^3.1.3",
     "s3rver": "github:ustaxcourt/s3rver#created_presigned_post_support",
     "sanitize-filename": "^1.6.3",
+    "sass": "^1.23.7",
     "serverless": "^1.59.2",
     "serverless-domain-manager": "github:codyseibert/serverless-domain-manager",
     "serverless-jetpack": "^0.7.0",
