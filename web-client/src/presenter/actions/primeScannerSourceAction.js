@@ -10,6 +10,7 @@ import { state } from 'cerebral';
 export const primeScannerSourceAction = async ({ get }) => {
   const scannerSourceName = get(state.modal.scanner);
   const scannerSourceIndex = get(state.modal.index);
+  const duplexEnabled = get(state.modal.duplexEnabled);
 
-  return { scannerSourceIndex, scannerSourceName };
+  return { duplexEnabled, scannerSourceIndex, scannerSourceName };
 };
