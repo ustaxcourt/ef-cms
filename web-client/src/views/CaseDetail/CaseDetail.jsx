@@ -2,9 +2,8 @@ import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
 import { CaseInformationExternal } from './CaseInformationExternal';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-
 import { ErrorNotification } from '../ErrorNotification';
+import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
 import { SuccessNotification } from '../SuccessNotification';
