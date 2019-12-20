@@ -310,3 +310,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  deleteTrialSession:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.deleteTrialSessionLambda
+    events:
+      - http:
+          path: /{trialSessionId}
+          method: delete
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
