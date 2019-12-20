@@ -97,7 +97,11 @@ const app = {
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor({ applicationContext, key: 'scannerSourceName' });
+    const duplexEnabled = await applicationContext
+      .getUseCases()
+      .getItemInteractor({ applicationContext, key: 'duplexEnabled' });
     presenter.state.scanner = {
+      duplexEnabled,
       scannerSourceName,
     };
 
