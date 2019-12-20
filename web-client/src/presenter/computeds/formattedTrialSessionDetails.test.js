@@ -40,6 +40,8 @@ describe('formattedTrialSessionDetails', () => {
       },
     });
     expect(result).toMatchObject({
+      canDelete: false,
+      canEdit: false,
       formattedCityStateZip: 'Hartford, CT 12345',
       formattedCourtReporter: 'Test Court Reporter',
       formattedIrsCalendarAdministrator: 'Test Calendar Admin',
@@ -49,6 +51,20 @@ describe('formattedTrialSessionDetails', () => {
       formattedTrialClerk: 'Test Trial Clerk',
       noLocationEntered: false,
       showSwingSession: false,
+    });
+  });
+  it('formats trial session as editable if date is in future', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          startDate: '2079-11-25T15:00:00.000Z',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      canDelete: true,
+      canEdit: true,
     });
   });
 

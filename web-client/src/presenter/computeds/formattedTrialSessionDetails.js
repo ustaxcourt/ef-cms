@@ -8,14 +8,17 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       trialSession: get(state.trialSession),
     });
 
-  const trialDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(formattedTrialSession.startDate, 'YYYYMMDD');
-  const nowDateFormatted = applicationContext
-    .getUtilities()
-    .formatNow('YYYYMMDD');
-  const trialDateInFuture = trialDateFormatted > nowDateFormatted;
-  formattedTrialSession.canDelete = trialDateInFuture;
-  formattedTrialSession.canEdit = trialDateInFuture;
+  if (formattedTrialSession && formattedTrialSession.startDate) {
+    const trialDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(formattedTrialSession.startDate, 'YYYYMMDD');
+    const nowDateFormatted = applicationContext
+      .getUtilities()
+      .formatNow('YYYYMMDD');
+    const trialDateInFuture = trialDateFormatted > nowDateFormatted;
+    formattedTrialSession.canDelete = trialDateInFuture;
+    formattedTrialSession.canEdit = trialDateInFuture;
+  }
+
   return formattedTrialSession;
 };
