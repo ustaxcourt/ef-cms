@@ -7,7 +7,7 @@ import docketClerkSearchesForCaseToConsolidateWith from './journey/docketClerkSe
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
 import docketClerkUpdatesCaseStatusToReadyForTrial from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 // petitioner
-import petitionerLogin from './journey/petitionerLogin';
+import petitionerLogin from './journey/petitionerLogIn';
 import petitionerVerifiesConsolidatedCases from './journey/petitionerVerifiesConsolidatedCases';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
