@@ -1,5 +1,17 @@
+import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
+import { AddToTrialModal } from './AddToTrialModal';
+import { BlockFromTrialModal } from './BlockFromTrialModal';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CreateCaseDeadlineModalDialog } from './CreateCaseDeadlineModalDialog';
+import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
+import { DeleteCaseDeadlineModalDialog } from './DeleteCaseDeadlineModalDialog';
+import { EditCaseDeadlineModalDialog } from './EditCaseDeadlineModalDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { PrioritizeCaseModal } from './PrioritizeCaseModal';
+import { RemoveFromTrialSessionModal } from './RemoveFromTrialSessionModal';
+import { UnblockFromTrialModal } from './UnblockFromTrialModal';
+import { UnprioritizeCaseModal } from './UnprioritizeCaseModal';
+import { UpdateCaseModalDialog } from '../CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
@@ -18,6 +30,7 @@ export const CaseDetailHeaderMenu = connect(
       sequences.openCreateOrderChooseTypeModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
+    showModal: state.showModal,
     toggleMenuSequence: sequences.toggleMenuSequence,
   },
   ({
@@ -29,6 +42,7 @@ export const CaseDetailHeaderMenu = connect(
     openCreateOrderChooseTypeModalSequence,
     openUpdateCaseModalSequence,
     resetCaseMenuSequence,
+    showModal,
     toggleMenuSequence,
   }) => {
     const menuRef = useRef(null);
@@ -154,6 +168,30 @@ export const CaseDetailHeaderMenu = connect(
             )}
           </li>
         </ul>
+        {showModal === 'CreateCaseDeadlineModalDialog' && (
+          <CreateCaseDeadlineModalDialog />
+        )}
+        {showModal === 'EditCaseDeadlineModalDialog' && (
+          <EditCaseDeadlineModalDialog />
+        )}
+        {showModal === 'DeleteCaseDeadlineModalDialog' && (
+          <DeleteCaseDeadlineModalDialog />
+        )}
+        {showModal === 'AddEditCaseNoteModal' && (
+          <AddEditCaseNoteModal onConfirmSequence="updateCaseNoteSequence" />
+        )}
+        {showModal === 'AddToTrialModal' && <AddToTrialModal />}
+        {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}
+        {showModal === 'UnblockFromTrialModal' && <UnblockFromTrialModal />}
+        {showModal === 'PrioritizeCaseModal' && <PrioritizeCaseModal />}
+        {showModal === 'UnprioritizeCaseModal' && <UnprioritizeCaseModal />}
+        {showModal === 'RemoveFromTrialSessionModal' && (
+          <RemoveFromTrialSessionModal />
+        )}
+        {showModal === 'CreateOrderChooseTypeModal' && (
+          <CreateOrderChooseTypeModal />
+        )}
+        {showModal == 'UpdateCaseModalDialog' && <UpdateCaseModalDialog />}
       </div>
     );
   },
