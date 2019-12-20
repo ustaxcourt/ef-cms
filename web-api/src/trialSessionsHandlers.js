@@ -5,6 +5,8 @@ module.exports = {
     .handler,
   createTrialSessionLambda: require('./trialSessions/createTrialSessionLambda')
     .handler,
+  deleteTrialSessionLambda: require('./trialSessions/deleteTrialSessionLambda')
+    .handler,
   getCalendaredCasesForTrialSessionLambda: require('./trialSessions/getCalendaredCasesForTrialSessionLambda')
     .handler,
   getEligibleCasesForTrialSessionLambda: require('./trialSessions/getEligibleCasesForTrialSessionLambda')

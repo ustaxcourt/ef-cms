@@ -170,6 +170,15 @@ const {
   deleteSectionOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteSectionOutboxRecord');
 const {
+  deleteTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/deleteTrialSession');
+const {
+  deleteTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/deleteTrialSessionInteractor');
+const {
+  deleteTrialSessionWorkingCopy,
+} = require('../../shared/src/persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy');
+const {
   deleteUserConnection,
 } = require('../../shared/src/persistence/dynamo/notifications/deleteUserConnection');
 const {
@@ -802,6 +811,8 @@ module.exports = (appContextUser = {}) => {
         deleteDocument,
         deleteJudgesCaseNote,
         deleteSectionOutboxRecord,
+        deleteTrialSession,
+        deleteTrialSessionWorkingCopy,
         deleteUserConnection,
         deleteUserFromCase,
         deleteUserOutboxRecord,
@@ -963,6 +974,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseNoteInteractor,
         deleteCounselFromCaseInteractor,
         deleteJudgesCaseNoteInteractor,
+        deleteTrialSessionInteractor,
         fetchPendingItemsInteractor,
         fileCourtIssuedDocketEntryInteractor,
         fileCourtIssuedOrderInteractor,
