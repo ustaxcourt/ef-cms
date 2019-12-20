@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { DeleteTrialSessionModal } from './DeleteTrialSessionModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -7,19 +8,24 @@ import classNames from 'classnames';
 export const TrialSessionInformation = connect(
   {
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+    openConfirmDeleteTrialSessionModalSequence:
+      sequences.openConfirmDeleteTrialSessionModalSequence,
     printTrialCalendarSequence: sequences.printTrialCalendarSequence,
+    showModal: state.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
   },
   ({
     formattedTrialSessionDetails,
+    openConfirmDeleteTrialSessionModalSequence,
     printTrialCalendarSequence,
+    showModal,
     trialSessionHeaderHelper,
   }) => {
     return (
       <>
         <div className="grid-container padding-x-0">
           <div className="grid-row">
-            <div className="grid-col-10">
+            <div className="grid-col-9">
               <h1>
                 Session Information
                 {trialSessionHeaderHelper.showSwitchToWorkingCopy && (
@@ -30,19 +36,48 @@ export const TrialSessionInformation = connect(
                     View Judge Session Copy
                   </a>
                 )}
+                {formattedTrialSessionDetails.canEdit && (
+                  <Button
+                    link
+                    className="margin-left-2 margin-top-2"
+                    icon="edit"
+                    onClick={() => {
+                      // TODO
+                      // editTrialSessionSequence();
+                    }}
+                  >
+                    Edit
+                  </Button>
+                )}
               </h1>
             </div>
-            <div className="grid-col-2">
+            <div className="grid-col-3 display-flex">
+              <span className="flex-push-right width-0 margin-left-auto" />
+              {formattedTrialSessionDetails.canDelete && (
+                <Button
+                  link
+                  className="margin-top-2 red-warning"
+                  icon="trash"
+                  onClick={() => {
+                    openConfirmDeleteTrialSessionModalSequence();
+                  }}
+                >
+                  Delete Session
+                </Button>
+              )}
+              {showModal === 'DeleteTrialSessionModal' && (
+                <DeleteTrialSessionModal />
+              )}
               {formattedTrialSessionDetails.isCalendared && (
                 <Button
                   link
-                  className="float-right margin-top-2"
+                  className="margin-top-2 margin-left-4"
                   icon="print"
                   onClick={() => {
                     printTrialCalendarSequence();
                   }}
                 >
-                  Printable Trial Calendar
+                  Print
                 </Button>
               )}
             </div>
