@@ -149,6 +149,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
+            ls -la ~/
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Web Client 2
