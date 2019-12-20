@@ -178,6 +178,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     showCreatedFiled: (!isOrder && !isCourtIssuedDocument) || isDraftDocument,
     showDocumentInfoTab,
     showEditCourtIssuedDocketEntry:
+      isNotServed &&
       !isDraftDocument &&
       permissions.DOCKET_ENTRY &&
       formattedDocument.isPetition === false &&
