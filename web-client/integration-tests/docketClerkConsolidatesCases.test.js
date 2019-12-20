@@ -1,16 +1,15 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
+// docketclerk
 import docketClerkConsolidatesCases from './journey/docketClerkConsolidatesCases';
-import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkOpensCaseConsolidateModal from './journey/docketClerkOpensCaseConsolidateModal';
 import docketClerkSearchesForCaseToConsolidateWith from './journey/docketClerkSearchesForCaseToConsolidateWith';
-import docketClerkSetsCalendarForTrialSession from './journey/docketClerkSetsCalendarForTrialSession';
 import docketClerkSignsOut from './journey/docketClerkSignsOut';
-import docketClerkUpdatesCaseStatusFromCalendaredToSubmitted from './journey/docketClerkUpdatesCaseStatusFromCalendaredToSubmitted';
 import docketClerkUpdatesCaseStatusToReadyForTrial from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-import docketClerkViewsEligibleCasesForTrialSession from './journey/docketClerkViewsEligibleCasesForTrialSession';
-import docketClerkViewsInactiveCasesForTrialSession from './journey/docketClerkViewsInactiveCasesForTrialSession';
-import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
+// petitioner
+import petitionerLogin from './journey/petitionerLogIn';
+import petitionerVerifiesConsolidatedCases from './journey/petitionerVerifiesConsolidatedCases';
+import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 
 const test = setupTest();
 const trialLocation = `Boise, Idaho, ${Date.now()}`;
@@ -49,4 +48,8 @@ describe('Case Consolidation Journey', () => {
   docketClerkSearchesForCaseToConsolidateWith(test);
   docketClerkConsolidatesCases(test);
   docketClerkSignsOut(test);
+
+  petitionerLogin(test);
+  petitionerViewsDashboard(test);
+  petitionerVerifiesConsolidatedCases(test);
 });

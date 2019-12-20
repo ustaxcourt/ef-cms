@@ -1,8 +1,7 @@
-import { sequences, state } from 'cerebral';
-
 import { Contacts } from '../StartCase/Contacts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PartyInformation = connect(
