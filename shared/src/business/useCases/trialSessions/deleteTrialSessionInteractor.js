@@ -39,6 +39,13 @@ exports.deleteTrialSessionInteractor = async ({
     applicationContext,
   });
 
+  if (
+    trialSessionEntity.startDate <
+    applicationContext.getUtilities().createISODateString()
+  ) {
+    throw new Error('Trial session cannot be updated after its start date');
+  }
+
   await applicationContext.getPersistenceGateway().deleteTrialSession({
     applicationContext,
     trialSessionId,
