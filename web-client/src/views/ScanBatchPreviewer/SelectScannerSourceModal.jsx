@@ -58,7 +58,7 @@ export const SelectScannerSourceModal = connect(
 
         <select
           className="usa-select"
-          defaultValue={modal.duplexEnabled.toString()}
+          defaultValue={modal.duplexEnabled ? 'true' : 'false'}
           id="scanner-duplex-select"
           onChange={e => {
             updateModalValueSequence({
