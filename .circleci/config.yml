@@ -7,6 +7,12 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
+      - run:
+        command: |
+          ls -la /home/app/
+          ls -la /home/app/sonar_home
+          ls -la /root/
+          ls -la /root/project
       - restore_cache:
           name: Source - Restoring Cache
           keys:
@@ -27,7 +33,8 @@ jobs:
             - npm-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: NPM - Install
-          command: npm i
+          command: |
+            npm i
       - save_cache:
           name: NPM - Save to Cache
           paths:
