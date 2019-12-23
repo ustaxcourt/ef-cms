@@ -17,6 +17,7 @@ import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocumentDetail } from './DocumentDetail/DocumentDetail';
 import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
+import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { Error } from './Error';
 import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompressionErrorModal';
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
@@ -71,6 +72,7 @@ const pages = {
   DashboardRespondent,
   DocumentDetail,
   EditDocketEntry,
+  EditTrialSession,
   Error,
   FileDocumentWizard,
   IdleLogout,
