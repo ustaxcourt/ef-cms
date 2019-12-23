@@ -27,9 +27,7 @@ jobs:
             - npm-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: NPM - Install
-          command: |
-            npm i
-            npm rebuild node-sass
+          command: npm i
       - save_cache:
           name: NPM - Save to Cache
           paths:
