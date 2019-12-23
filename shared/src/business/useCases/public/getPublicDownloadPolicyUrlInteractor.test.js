@@ -11,7 +11,8 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     const applicationContext = {
       getPersistenceGateway: () => ({
         getCaseByCaseId: () => ({ ...MOCK_CASE }),
-        getPublicDownloadPolicyUrl: () => 'localhost',
+        getPublicDownloadPolicyUrl: () =>
+          'http://example.com/document/c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
     };
     await expect(
@@ -27,7 +28,8 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     const applicationContext = {
       getPersistenceGateway: () => ({
         getCaseByCaseId: () => ({ ...MOCK_CASE }),
-        getPublicDownloadPolicyUrl: () => 'localhost',
+        getPublicDownloadPolicyUrl: () =>
+          'http://example.com/document/8008b288-8b6b-48e3-8239-599266b13b8b',
       }),
     };
     MOCK_CASE.documents.push(
@@ -47,6 +49,8 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       caseId: '123',
       documentId: '8008b288-8b6b-48e3-8239-599266b13b8b',
     });
-    expect(result).toEqual('localhost');
+    expect(result).toEqual(
+      'http://example.com/document/8008b288-8b6b-48e3-8239-599266b13b8b',
+    );
   });
 });

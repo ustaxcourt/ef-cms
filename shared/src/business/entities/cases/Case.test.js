@@ -1994,7 +1994,7 @@ describe('Case entity', () => {
         expect(result).toEqual(true);
       });
 
-      it('should accept a caseToConsolidate param to check its eligible case status', () => {
+      it('should accept a case for consolidatation as a param to check its eligible case status', () => {
         let result;
 
         // verify a failure on the current (this) case
