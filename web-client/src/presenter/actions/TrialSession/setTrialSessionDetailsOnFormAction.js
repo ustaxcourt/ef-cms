@@ -19,5 +19,8 @@ export const setTrialSessionDetailsOnFormAction = ({
       applicationContext,
       dateString: props.trialSession.startDate,
     }),
+    judgeId: props.trialSession.judge && props.trialSession.judge.userId,
+    trialClerkId:
+      props.trialSession.trialClerk && props.trialSession.trialClerk.userId,
   });
 };
