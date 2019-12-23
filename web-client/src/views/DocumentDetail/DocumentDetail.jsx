@@ -144,16 +144,12 @@ export const DocumentDetail = connect(
             )}
           </div>
           <div className="float-right">
-            {documentDetailHelper.showAddDocketEntryButton && (
+            {documentDetailHelper.showAddCourtIssuedDocketEntryButton && (
               <Button
                 className="margin-right-0"
                 href={`/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/add-court-issued-docket-entry`}
+                icon="plus-circle"
               >
-                <FontAwesomeIcon
-                  className="margin-right-05"
-                  icon="plus-circle"
-                  size="1x"
-                />
                 Add Docket Entry
               </Button>
             )}
@@ -163,8 +159,19 @@ export const DocumentDetail = connect(
                 link
                 className="margin-right-0 padding-bottom-0"
                 href={`/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/edit`}
+                icon={['fas', 'edit']}
               >
-                <FontAwesomeIcon icon={['fas', 'edit']} />
+                Edit
+              </Button>
+            )}
+
+            {documentDetailHelper.showEditCourtIssuedDocketEntry && (
+              <Button
+                link
+                className="margin-right-0 padding-bottom-0"
+                href={`/case-detail/${caseDetail.docketNumber}/documents/${documentDetailHelper.formattedDocument.documentId}/edit-court-issued`}
+                icon={['fas', 'edit']}
+              >
                 Edit
               </Button>
             )}
@@ -172,17 +179,13 @@ export const DocumentDetail = connect(
             {documentDetailHelper.showPrintCaseConfirmationButton && (
               <Button
                 className="margin-right-0"
+                icon="print"
                 onClick={() => {
                   navigateToPrintableCaseConfirmationSequence({
                     docketNumber: formattedCaseDetail.docketNumber,
                   });
                 }}
               >
-                <FontAwesomeIcon
-                  className="margin-right-05"
-                  icon="print"
-                  size="1x"
-                />
                 Print Confirmation
               </Button>
             )}
@@ -190,9 +193,9 @@ export const DocumentDetail = connect(
             {documentDetailHelper.showServeToIrsButton && (
               <Button
                 className="serve-to-irs margin-right-0"
+                icon={['fas', 'clock']}
                 onClick={() => clickServeToIrsSequence()}
               >
-                <FontAwesomeIcon icon={['fas', 'clock']} />
                 Serve to IRS
               </Button>
             )}
@@ -215,6 +218,7 @@ export const DocumentDetail = connect(
             {documentDetailHelper.showSignDocumentButton && (
               <Button
                 className="serve-to-irs margin-right-0"
+                icon={['fas', 'edit']}
                 onClick={() =>
                   navigateToPathSequence({
                     path: messageId
@@ -223,7 +227,6 @@ export const DocumentDetail = connect(
                   })
                 }
               >
-                <FontAwesomeIcon icon={['fas', 'edit']} />
                 Sign This Document
               </Button>
             )}
