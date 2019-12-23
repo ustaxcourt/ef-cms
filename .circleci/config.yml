@@ -7,13 +7,6 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
-      - run:
-          name: Testing
-          command: |
-            ls -la /home/app/
-            ls -la /home/app/sonar_home
-            ls -la /root/
-            ls -la /root/project
       - restore_cache:
           name: Source - Restoring Cache
           keys:
