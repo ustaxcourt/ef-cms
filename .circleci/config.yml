@@ -2,7 +2,10 @@ version: 2
 jobs:
   bundle:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -37,7 +40,10 @@ jobs:
 
   build-api:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - attach_workspace:
           at: ~/
@@ -56,7 +62,7 @@ jobs:
           name: Web API - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
+            /home/app/sonar_home/bin/sonar-scanner \
             -Dsonar.projectKey="${API_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
@@ -67,7 +73,10 @@ jobs:
 
   build-shared:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
     steps:
@@ -80,7 +89,7 @@ jobs:
           name: Shared - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
+            /home/app/sonar_home/bin/sonar-scanner \
             -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
@@ -91,7 +100,10 @@ jobs:
 
   build-client:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: large
@@ -108,7 +120,7 @@ jobs:
           name: Web Client - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
+            /home/app/sonar_home/bin/sonar-scanner \
             -Dsonar.projectKey="${UI_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
@@ -119,35 +131,55 @@ jobs:
 
   e2e-pa11y:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
       - run:
-          name: Pa11y
+          name: Create Pa11y Artifacts Directory
+          command: mkdir /tmp/pa11y
+      - run:
+          name: Pa11y - Web Client 1
           command: |
-            npm run build:all &&
-            SLS_DEBUG=* RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
+            npm run build:all
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-1.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
-            npm run test:pa11y
+            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
+      - run:
+          name: Pa11y - Web Client 2
+          command: |
+            npm run build:all
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Public Site
           command: |
-            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /dev/null &
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /tmp/pa11y/pa11y-server-public.txt &
             sleep 5
             npm run test:pa11y:public
+      - store_artifacts:
+          path: /tmp/pa11y
 
   e2e-cypress:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
@@ -166,7 +198,7 @@ jobs:
             sleep 5
             npm run cypress
       - store_artifacts:
-          path: /home/circleci/project/cypress/videos/
+          path: /root/project/cypress/videos/
 
   deploy-ui:
     machine:
