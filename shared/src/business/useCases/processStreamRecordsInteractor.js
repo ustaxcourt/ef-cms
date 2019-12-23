@@ -1,5 +1,13 @@
 const { createISODateString } = require('../utilities/DateHandler');
 
+const filterRecords = records => {
+  return records.filter(
+    record =>
+      !record.dynamodb.Keys.pk.S.includes('workitem-') &&
+      !record.dynamodb.Keys.pk.S.includes('|user'),
+  );
+};
+
 /**
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -14,7 +22,9 @@ exports.processStreamRecordsInteractor = async ({
   const searchClient = applicationContext.getSearchClient();
 
   const results = [];
-  for (const record of recordsToProcess) {
+  const filteredRecords = filterRecords(recordsToProcess);
+
+  for (const record of filteredRecords) {
     if (['INSERT', 'MODIFY'].includes(record.eventName)) {
       try {
         results.push(
