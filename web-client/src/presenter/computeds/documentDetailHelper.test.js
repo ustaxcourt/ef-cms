@@ -390,8 +390,8 @@ describe('document detail helper', () => {
     });
   });
 
-  describe('showAddDocketEntryButton', () => {
-    it('should set showAddDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is an unsigned stipulated decision', async () => {
+  describe('showAddCourtIssuedDocketEntryButton', () => {
+    it('should set showAddCourtIssuedDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is an unsigned stipulated decision', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -417,10 +417,10 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showAddDocketEntryButton).toEqual(true);
+      expect(result.showAddCourtIssuedDocketEntryButton).toEqual(true);
     });
 
-    it('should set showAddDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is a signed stipulated decision', async () => {
+    it('should set showAddCourtIssuedDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is a signed stipulated decision', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -447,10 +447,10 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showAddDocketEntryButton).toEqual(true);
+      expect(result.showAddCourtIssuedDocketEntryButton).toEqual(true);
     });
 
-    it('should set showAddDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is an unsigned order', async () => {
+    it('should set showAddCourtIssuedDocketEntryButton true when the user has the DOCKET_ENTRY permission and the document is an unsigned order', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -476,10 +476,10 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showAddDocketEntryButton).toEqual(true);
+      expect(result.showAddCourtIssuedDocketEntryButton).toEqual(true);
     });
 
-    it('should set showAddDocketEntryButton false when the user has the DOCKET_ENTRY permission and the document is a served order', async () => {
+    it('should set showAddCourtIssuedDocketEntryButton false when the user has the DOCKET_ENTRY permission and the document is a served order', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -506,10 +506,10 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showAddDocketEntryButton).toEqual(false);
+      expect(result.showAddCourtIssuedDocketEntryButton).toEqual(false);
     });
 
-    it('should set showAddDocketEntryButton false when the user does not have the DOCKET_ENTRY permission', async () => {
+    it('should set showAddCourtIssuedDocketEntryButton false when the user does not have the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitioner,
         userId: '123',
@@ -535,10 +535,10 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showAddDocketEntryButton).toBeFalsy();
+      expect(result.showAddCourtIssuedDocketEntryButton).toBeFalsy();
     });
 
-    it('should set showAddDocketEntryButton false when the document type is not an order or stipulated decision', async () => {
+    it('should set showAddCourtIssuedDocketEntryButton false when the document type is not an order or stipulated decision', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -564,7 +564,7 @@ describe('document detail helper', () => {
           },
         },
       });
-      expect(result.showAddDocketEntryButton).toEqual(false);
+      expect(result.showAddCourtIssuedDocketEntryButton).toEqual(false);
     });
   });
 
@@ -821,8 +821,8 @@ describe('document detail helper', () => {
     });
   });
 
-  describe('showEditDocketEntry', () => {
-    it('should set showEditDocketEntry false when the the document is a signed stipulated decision and the user has the DOCKET_ENTRY permission', async () => {
+  describe('showEditDocketEntry and showEditCourtIssuedDocketEntry', () => {
+    it('should set showEditDocketEntry false and showEditCourtIssuedDocketEntry true when the the document is a signed stipulated decision with a docket entry and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -832,11 +832,15 @@ describe('document detail helper', () => {
         state: {
           ...getBaseState(user),
           caseDetail: {
-            docketRecord: [],
+            docketRecord: [
+              {
+                documentId: 'abc',
+              },
+            ],
             documents: [
               {
                 documentId: 'abc',
-                documentType: 'Stipulated Decision',
+                documentType: 'SDEC - Stipulated Decision Entered,',
                 signedAt: getDateISO(),
               },
             ],
@@ -850,6 +854,7 @@ describe('document detail helper', () => {
         },
       });
       expect(result.showEditDocketEntry).toEqual(false);
+      expect(result.showEditCourtIssuedDocketEntry).toEqual(true);
     });
 
     it('should set showEditDocketEntry false when the the document is an unsigned stipulated decision and the user has the DOCKET_ENTRY permission', async () => {

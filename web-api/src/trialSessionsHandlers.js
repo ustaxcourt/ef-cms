@@ -25,6 +25,8 @@ module.exports = {
     .handler,
   setTrialSessionCalendarLambda: require('./trialSessions/setTrialSessionCalendarLambda')
     .handler,
+  updateTrialSessionLambda: require('./trialSessions/updateTrialSessionLambda')
+    .handler,
   updateTrialSessionWorkingCopyLambda: require('./trialSessions/updateTrialSessionWorkingCopyLambda')
     .handler,
 };
