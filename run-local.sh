@@ -87,6 +87,6 @@ echo "proxy stopped"
 if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"
   pkill -P $DYNAMO_PID
-  pkill -p $ESEARCH_PID
+  pkill -P $ESEARCH_PID
 fi
 kill $S3RVER_PID
