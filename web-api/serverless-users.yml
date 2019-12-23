@@ -156,10 +156,7 @@ functions:
       - http:
           path: /
           method: get
-          cors: 
-            origins:
-              - http://localhost:1234
-              - ui-${self:provider.stage}.ef-cms.${opt:domain}
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
