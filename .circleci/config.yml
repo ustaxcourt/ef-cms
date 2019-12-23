@@ -198,7 +198,7 @@ jobs:
             sleep 5
             npm run cypress
       - store_artifacts:
-          path: /home/circleci/project/cypress/videos/
+          path: /root/project/cypress/videos/
 
   deploy-ui:
     machine:
