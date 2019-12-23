@@ -4,7 +4,7 @@
   "reporterOptions": {
     "toConsole": true
   },
-  "defaultCommandTimeout": 12000,
+  "defaultCommandTimeout": 20000,
   "requestTimeout": 12000,
   "viewportWidth": 1200,
   "viewportHeight": 900
