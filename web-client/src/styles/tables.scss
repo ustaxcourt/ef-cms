@@ -265,7 +265,6 @@ table.work-queue {
       overflow: hidden;
       height: 100%;
       max-height: 57px; /* fallback */
-      /* autoprefixer: ignore next */
       -webkit-box-orient: vertical;
       font-size: 15px;
       -webkit-line-clamp: 3; /* number of lines to show */
