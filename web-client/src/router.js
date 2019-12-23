@@ -568,6 +568,14 @@ const router = {
       }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
     );
 
+    route(
+      '/edit-trial-session/*',
+      ifHasAccess(trialSessionId => {
+        setPageTitle('Edit trial session');
+        app.getSequence('gotoEditTrialSessionSequence')({ trialSessionId });
+      }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
+    );
+
     route('/style-guide', () => {
       setPageTitle('Style guide');
       app.getSequence('gotoStyleGuideSequence')();

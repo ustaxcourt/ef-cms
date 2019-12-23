@@ -136,8 +136,11 @@ export const WorkingCopySessionList = connect(
                       ariaLabel="trial status"
                       bind={`trialSessionWorkingCopy.caseMetadata.${item.docketNumber}.trialStatus`}
                       id={`trialSessionWorkingCopy-${item.docketNumber}`}
-                      onChange={() => {
-                        autoSaveTrialSessionWorkingCopySequence();
+                      onChange={value => {
+                        autoSaveTrialSessionWorkingCopySequence({
+                          key: `caseMetadata.${item.docketNumber}.trialStatus`,
+                          value,
+                        });
                       }}
                     >
                       <option value="">-Trial Status-</option>
