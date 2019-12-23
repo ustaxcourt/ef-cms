@@ -27,8 +27,7 @@ jobs:
             - npm-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: NPM - Install
-          command: |
-            npm i
+          command: npm i
       - save_cache:
           name: NPM - Save to Cache
           paths:
@@ -143,11 +142,13 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
+          name: Create Pa11y Artifacts Directory
+          command: mkdir /tmp/pa11y
+      - run:
           name: Pa11y - Web Client 1
           command: |
-            ls -la /root/project/web-client/
             npm run build:all
-            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-1.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
@@ -156,7 +157,7 @@ jobs:
           name: Pa11y - Web Client 2
           command: |
             npm run build:all
-            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
@@ -164,11 +165,11 @@ jobs:
       - run:
           name: Pa11y - Public Site
           command: |
-            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /dev/null &
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /tmp/pa11y/pa11y-server-public.txt &
             sleep 5
             npm run test:pa11y:public
       - store_artifacts:
-          path: /tmp/pa11y-server.txt
+          path: /tmp/pa11y
 
   e2e-cypress:
     docker:
