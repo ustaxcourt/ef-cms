@@ -2,7 +2,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -27,6 +26,5 @@ exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
 
   return allCaseDeadlines.map(caseDeadline => ({
     ...caseDeadline,
-    caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseDeadline)),
   }));
 };
