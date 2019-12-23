@@ -37,6 +37,7 @@ export const startScanAction = async ({
       ...batches,
       ...[
         {
+          duplexEnabled,
           index: nextIndex,
           pages,
         },

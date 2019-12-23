@@ -49,7 +49,8 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   ];
 
   const selectedEventCode = get(state.form.eventCode);
-  const showServiceStamp = selectedEventCode === 'O';
+  const showServiceStamp =
+    selectedEventCode === 'O' && user.role !== USER_ROLES.petitionsClerk;
 
   const formattedDocumentTitle = `${form.generatedDocumentTitle}${
     form.attachments ? ' (Attachment(s))' : ''
