@@ -24,7 +24,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(indexSpy).not.toHaveBeenCalled();
   });
 
-  it('calls index function with correct params only for records with eventName "INSERT" or "MODIFY"', async () => {
+  it('calls index function with correct params only for records with eventName "INSERT" or "MODIFY" and filters out workitem and user records', async () => {
     await processStreamRecordsInteractor({
       applicationContext,
       recordsToProcess: [
@@ -52,6 +52,20 @@ describe('processStreamRecordsInteractor', () => {
         {
           dynamodb: {
             Keys: { pk: { S: '4' } },
+            NewImage: { caseId: { S: '4' } },
+          },
+          eventName: 'MODIFY',
+        },
+        {
+          dynamodb: {
+            Keys: { pk: { S: 'workitem-123' } },
+            NewImage: { caseId: { S: '4' } },
+          },
+          eventName: 'MODIFY',
+        },
+        {
+          dynamodb: {
+            Keys: { pk: { S: '123|user' } },
             NewImage: { caseId: { S: '4' } },
           },
           eventName: 'MODIFY',
