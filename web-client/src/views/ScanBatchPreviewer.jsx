@@ -313,6 +313,12 @@ export const ScanBatchPreviewer = connect(
                           </span>
                         )}
                       </td>
+
+                      <td>
+                        <span>
+                          {(batch.duplexEnabled && 'Double') || 'Single'} sided
+                        </span>
+                      </td>
                       <td>
                         <span>{batch.pages.length} pages</span>
                       </td>
