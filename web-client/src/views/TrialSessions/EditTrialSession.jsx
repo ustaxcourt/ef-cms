@@ -30,11 +30,11 @@ export const EditTrialSession = connect(
         <TrialSessionDetailHeader />
 
         <section className="usa-section grid-container DocumentDetail">
-          <h1>Edit Trial Session</h1>
+          <h1 id="edit-trial-session-header">Edit Trial Session</h1>
 
           <form
             noValidate
-            aria-labelledby="start-case-header"
+            aria-labelledby="edit-trial-session-header"
             className="usa-form maxw-none"
             role="form"
             onSubmit={e => {
