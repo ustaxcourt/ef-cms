@@ -121,7 +121,8 @@ jobs:
     docker:
       - image: sutt0n/ef-cms:latest
     environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
+      resource_class: xlarge
     resource_class: large
     steps:
       - attach_workspace:
