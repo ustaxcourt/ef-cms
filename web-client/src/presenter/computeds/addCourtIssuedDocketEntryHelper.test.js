@@ -155,4 +155,10 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
     ]);
   });
+
+  it('should not show service stamp if user is petitions clerk', () => {
+    user.role = 'petitionsclerk';
+    const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
+    expect(result.showServiceStamp).toEqual(false);
+  });
 });

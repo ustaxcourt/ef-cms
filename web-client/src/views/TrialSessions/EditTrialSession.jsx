@@ -1,43 +1,45 @@
-import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { LocationInformationForm } from './LocationInformationForm';
 import { SessionAssignmentsForm } from './SessionAssignmentsForm';
 import { SessionInformationForm } from './SessionInformationForm';
+import { TrialSessionDetailHeader } from '../TrialSessionDetail/TrialSessionDetailHeader';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const AddTrialSession = connect(
+export const EditTrialSession = connect(
   {
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.showModal,
-    submitTrialSessionSequence: sequences.submitTrialSessionSequence,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
+    updateTrialSessionSequence: sequences.updateTrialSessionSequence,
   },
   ({
     form,
     formCancelToggleCancelSequence,
     showModal,
-    submitTrialSessionSequence,
     updateTrialSessionFormDataSequence,
+    updateTrialSessionSequence,
   }) => {
     return (
       <>
-        <BigHeader text="Create Trial Session" />
+        <TrialSessionDetailHeader />
 
         <section className="usa-section grid-container DocumentDetail">
+          <h1 id="edit-trial-session-header">Edit Trial Session</h1>
+
           <form
             noValidate
-            aria-labelledby="start-case-header"
+            aria-labelledby="edit-trial-session-header"
             className="usa-form maxw-none"
             role="form"
             onSubmit={e => {
               e.preventDefault();
-              submitTrialSessionSequence();
+              updateTrialSessionSequence();
             }}
           >
             {showModal === 'FormCancelModalDialog' && (
@@ -76,7 +78,7 @@ export const AddTrialSession = connect(
               </div>
             </div>
 
-            <Button type="submit">Add Session</Button>
+            <Button type="submit">Save</Button>
             <Button
               link
               onClick={() => {

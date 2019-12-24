@@ -2,8 +2,8 @@
   const AWS = require('aws-sdk');
   AWS.config.region = 'us-east-1';
 
-  const elasticsearch = require('elasticsearch');
   const connectionClass = require('http-aws-es');
+  const elasticsearch = require('elasticsearch');
 
   AWS.config.httpOptions.timeout = 300000;
 
@@ -38,7 +38,7 @@
       searchClientCache.indices.create({
         body: {
           settings: {
-            'index.mapping.total_fields.limit': '2000',
+            'index.mapping.total_fields.limit': '2500',
           },
         },
         index: 'efcms',
@@ -46,7 +46,7 @@
     } else {
       searchClientCache.indices.putSettings({
         body: {
-          'index.mapping.total_fields.limit': '2000',
+          'index.mapping.total_fields.limit': '2500',
         },
         index: 'efcms',
       });
