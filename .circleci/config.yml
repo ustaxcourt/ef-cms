@@ -134,7 +134,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
-            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:1
       - run:
           name: Pa11y - Web Client 2
           command: |
@@ -143,7 +143,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
-            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:2
       - run:
           name: Pa11y - Public Site
           command: |
