@@ -154,6 +154,15 @@ jobs:
             sleep 5
             npm run test:pa11y:docketclerk --node-flags --max-old-space-size=1024
       - run:
+          name: Pa11y - Web Client Petitionsclerk
+          command: |
+            npm run build:all
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run test:pa11y:petitionsclerk --node-flags --max-old-space-size=1024
+      - run:
           name: Pa11y - Web Client Petitioner
           command: |
             npm run build:all

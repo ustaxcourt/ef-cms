@@ -1,8 +1,6 @@
 const adc = require('./pa11y/pa11y-adc');
 const judge = require('./pa11y/pa11y-judge');
 
-const userUrls = [...judge, ...adc];
-
 const initialUrls = [
   'http://localhost:1234/',
   'http://localhost:1234/mock-login',
@@ -35,5 +33,5 @@ module.exports = {
     useIncognitoBrowserContext: true,
     wait: 5000,
   },
-  urls: [...initialUrls, ...userUrls],
+  urls: [...initialUrls, ...judge, ...adc],
 };
