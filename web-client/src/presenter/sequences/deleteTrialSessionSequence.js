@@ -1,4 +1,14 @@
+import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearModalAction } from '../actions/clearModalAction';
+import { deleteTrialSessionAction } from '../actions/TrialSession/deleteTrialSessionAction';
+import { navigateToTrialSessionsAction } from '../actions/TrialSession/navigateToTrialSessionsAction';
+
 export const deleteTrialSessionSequence = [
-  // TODO
-  () => console.log('I would delete a trial session here'),
+  clearAlertsAction,
+  deleteTrialSessionAction,
+  {
+    error: [],
+    success: [navigateToTrialSessionsAction],
+  },
+  clearModalAction,
 ];

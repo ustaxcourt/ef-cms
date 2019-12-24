@@ -7,6 +7,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 
 const MOCK_TRIAL = {
   caseOrder: [{ caseId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb' }],
+  isCalendared: false,
   judge: {
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   },
@@ -88,6 +89,35 @@ describe('deleteTrialSessionInteractor', () => {
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Trial session cannot be updated after its start date');
+  });
+
+  it('throws error when trial session is calendared', async () => {
+    applicationContext = {
+      getCurrentUser: () => {
+        return new User({
+          name: 'Docket Clerk',
+          role: User.ROLES.docketClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => ({
+        getTrialSessionById: () => ({
+          ...MOCK_TRIAL,
+          isCalendared: true,
+          startDate: '2100-12-01T00:00:00.000Z',
+        }),
+      }),
+      getUtilities: () => ({
+        createISODateString: () => '2050-12-01T00:00:00.000Z',
+      }),
+    };
+
+    await expect(
+      deleteTrialSessionInteractor({
+        applicationContext,
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.toThrow('Trial session cannot be deleted after it is calendared');
   });
 
   it('deletes the trial session and invokes expected persistence methods', async () => {
