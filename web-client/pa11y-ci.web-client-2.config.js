@@ -9,7 +9,7 @@ const urls = [...petitionsclerk, ...practitioner, ...respondent];
 module.exports = {
   defaults: {
     chromeLaunchConfig: {
-      args: ['--no-sandbox'],
+      args: ['--no-sandbox', '--disable-dev-shm-usage'],
     },
     concurrency: 3,
     debug: true,
