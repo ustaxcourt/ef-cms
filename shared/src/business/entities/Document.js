@@ -108,7 +108,7 @@ Document.INITIAL_DOCUMENT_TYPES = {
   },
   ownershipDisclosure: {
     documentType: 'Ownership Disclosure Statement',
-    eventCode: 'ODS',
+    eventCode: 'DISC',
   },
   petition: {
     documentType: 'Petition',
