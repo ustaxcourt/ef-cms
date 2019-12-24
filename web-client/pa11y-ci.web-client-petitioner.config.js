@@ -1,7 +1,4 @@
-const adc = require('./pa11y/pa11y-adc');
-const judge = require('./pa11y/pa11y-judge');
-
-const userUrls = [...judge, ...adc];
+const petitioner = require('./pa11y/pa11y-petitioner');
 
 const initialUrls = [
   'http://localhost:1234/',
@@ -35,5 +32,5 @@ module.exports = {
     useIncognitoBrowserContext: true,
     wait: 5000,
   },
-  urls: [...initialUrls, ...userUrls],
+  urls: [...initialUrls, ...petitioner],
 };
