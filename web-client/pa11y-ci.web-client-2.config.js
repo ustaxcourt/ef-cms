@@ -1,8 +1,8 @@
 const petitionsclerk = require('./pa11y/pa11y-petitionsclerk');
 const practitioner = require('./pa11y/pa11y-practitioner');
-const respondent = require('./pa11y/pa11y-respondent');
+// const respondent = require('./pa11y/pa11y-respondent');
 
-const urls = [...petitionsclerk, ...practitioner, ...respondent];
+const urls = [...petitionsclerk, ...practitioner];
 
 // see https://github.com/pa11y/pa11y#command-line-interface
 
