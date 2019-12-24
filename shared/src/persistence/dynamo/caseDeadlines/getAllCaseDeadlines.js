@@ -57,11 +57,11 @@ exports.getAllCaseDeadlines = async ({ applicationContext }) => {
     ...pick(caseMap[m.caseId], [
       'docketNumber',
       'docketNumberSuffix',
-      'caseTitle',
       'partyType',
       'contactPrimary',
       'contactSecondary',
     ]),
+    caseTitle: caseMap[m.caseId].caseCaption,
   }));
 
   return stripInternalKeys(afterCaseMapping);

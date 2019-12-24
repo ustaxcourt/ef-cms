@@ -40,11 +40,8 @@ export const TrialSessionInformation = connect(
                   <Button
                     link
                     className="margin-left-2 margin-top-2"
+                    href={`/edit-trial-session/${formattedTrialSessionDetails.trialSessionId}`}
                     icon="edit"
-                    onClick={() => {
-                      // TODO
-                      // editTrialSessionSequence();
-                    }}
                   >
                     Edit
                   </Button>
