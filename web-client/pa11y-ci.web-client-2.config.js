@@ -11,7 +11,7 @@ module.exports = {
     chromeLaunchConfig: {
       args: ['--no-sandbox', '--disable-dev-shm-usage'],
     },
-    concurrency: 1,
+    concurrency: 3,
     debug: true,
     'include-notices': true,
     'include-warnings': true,
