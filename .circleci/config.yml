@@ -129,7 +129,7 @@ jobs:
       - run:
           name: Pa11y - Web Client Round 1
           command: |
-            npm run build:all &&
+            npm run build:all
             SLS_DEBUG=* RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
@@ -138,6 +138,7 @@ jobs:
       - run:
           name: Pa11y - Web Client Round 2
           command: |
+            sleep 5
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
@@ -146,6 +147,7 @@ jobs:
       - run:
           name: Pa11y - Web Client Docketclerk
           command: |
+            sleep 5
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
@@ -154,6 +156,7 @@ jobs:
       - run:
           name: Pa11y - Web Client Petitionsclerk
           command: |
+            sleep 5
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
@@ -162,6 +165,7 @@ jobs:
       - run:
           name: Pa11y - Web Client Petitioner
           command: |
+            sleep 5
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
