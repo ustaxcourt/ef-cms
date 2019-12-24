@@ -1,8 +1,6 @@
 const practitioner = require('./pa11y/pa11y-practitioner');
 const respondent = require('./pa11y/pa11y-respondent');
 
-// see https://github.com/pa11y/pa11y#command-line-interface
-
 module.exports = {
   defaults: {
     chromeLaunchConfig: {

@@ -1,7 +1,5 @@
 const petitionsclerk = require('./pa11y/pa11y-petitionsclerk');
 
-// see https://github.com/pa11y/pa11y#command-line-interface
-
 module.exports = {
   defaults: {
     chromeLaunchConfig: {
