@@ -55,6 +55,9 @@ export const updateTrialSessionAction = async ({
   }
 
   return path.success({
+    alertSuccess: {
+      message: 'Your changes have been saved',
+    },
     trialSession: result.trialSessionId,
   });
 };
