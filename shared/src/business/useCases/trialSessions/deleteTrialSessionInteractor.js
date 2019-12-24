@@ -46,6 +46,10 @@ exports.deleteTrialSessionInteractor = async ({
     throw new Error('Trial session cannot be updated after its start date');
   }
 
+  if (trialSessionEntity.isCalendared) {
+    throw new Error('Trial session cannot be deleted after it is calendared');
+  }
+
   await applicationContext.getPersistenceGateway().deleteTrialSession({
     applicationContext,
     trialSessionId,

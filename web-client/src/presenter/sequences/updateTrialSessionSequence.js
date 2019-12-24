@@ -1,8 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeFormDateAction } from '../actions/computeFormDateAction';
 import { computeTrialSessionFormDataAction } from '../actions/TrialSession/computeTrialSessionFormDataAction';
-import { getCreateTrialSessionAlertSuccessAction } from '../actions/TrialSession/getCreateTrialSessionAlertSuccessAction';
-import { navigateToTrialSessionsAction } from '../actions/TrialSession/navigateToTrialSessionsAction';
+import { navigateToTrialSessionDetailAction } from '../actions/TrialSession/navigateToTrialSessionDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -35,9 +34,8 @@ export const updateTrialSessionSequence = [
         error: [],
         success: [
           setSaveAlertsForNavigationAction,
-          getCreateTrialSessionAlertSuccessAction,
           setAlertSuccessAction,
-          navigateToTrialSessionsAction,
+          navigateToTrialSessionDetailAction,
         ],
       },
       unsetWaitingForResponseAction,
