@@ -25,8 +25,6 @@ exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
       applicationContext,
     });
 
-  console.log('---', allCaseDeadlines);
-
   return allCaseDeadlines.map(caseDeadline => ({
     ...caseDeadline,
     caseTitle: Case.getCaseCaptionNames(caseDeadline.caseTitle),
