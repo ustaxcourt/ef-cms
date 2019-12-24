@@ -1,9 +1,12 @@
-const adc = require('./pa11y/pa11y-adc');
-const docketclerk = require('./pa11y/pa11y-docketclerk');
+// const adc = require('./pa11y/pa11y-adc');
+// const docketclerk = require('./pa11y/pa11y-docketclerk');
 const judge = require('./pa11y/pa11y-judge');
-const petitioner = require('./pa11y/pa11y-petitioner');
+// const petitioner = require('./pa11y/pa11y-petitioner');
 
-const userUrls = [...docketclerk, ...judge, ...petitioner, ...adc];
+// TODO: add these back
+// const userUrls = [...docketclerk, ...judge, ...petitioner, ...adc];
+
+const userUrls = [...judge];
 
 const initialUrls = [
   'http://localhost:1234/',
