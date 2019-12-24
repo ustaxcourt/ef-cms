@@ -1,9 +1,7 @@
-const adc = require('./pa11y/pa11y-adc');
 const docketclerk = require('./pa11y/pa11y-docketclerk');
 const judge = require('./pa11y/pa11y-judge');
-const petitioner = require('./pa11y/pa11y-petitioner');
 
-const userUrls = [...docketclerk, ...judge, ...petitioner, ...adc];
+const userUrls = [...docketclerk, ...judge];
 
 const initialUrls = [
   'http://localhost:1234/',
@@ -28,7 +26,7 @@ module.exports = {
     chromeLaunchConfig: {
       args: ['--no-sandbox', '--disable-dev-shm-usage'],
     },
-    concurrency: 1,
+    concurrency: 3,
     debug: true,
     'include-notices': true,
     'include-warnings': true,
