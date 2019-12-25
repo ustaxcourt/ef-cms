@@ -1,20 +1,5 @@
 const adc = require('./pa11y/pa11y-adc');
-const docketclerk = require('./pa11y/pa11y-docketclerk');
 const judge = require('./pa11y/pa11y-judge');
-const petitioner = require('./pa11y/pa11y-petitioner');
-const petitionsclerk = require('./pa11y/pa11y-petitionsclerk');
-const practitioner = require('./pa11y/pa11y-practitioner');
-const respondent = require('./pa11y/pa11y-respondent');
-
-const userUrls = [
-  ...docketclerk,
-  ...judge,
-  ...petitioner,
-  ...petitionsclerk,
-  ...practitioner,
-  ...respondent,
-  ...adc,
-];
 
 const initialUrls = [
   'http://localhost:1234/',
@@ -37,7 +22,7 @@ if (process.env.CI) {
 module.exports = {
   defaults: {
     chromeLaunchConfig: {
-      args: ['--no-sandbox'],
+      args: ['--no-sandbox', '--disable-dev-shm-usage'],
     },
     concurrency: 3,
     debug: true,
@@ -48,5 +33,5 @@ module.exports = {
     useIncognitoBrowserContext: true,
     wait: 5000,
   },
-  urls: [...initialUrls, ...userUrls],
+  urls: [...initialUrls, ...judge, ...adc],
 };

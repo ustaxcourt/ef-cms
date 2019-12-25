@@ -121,20 +121,56 @@ jobs:
     docker:
       - image: sutt0n/ef-cms:latest
     environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
       - run:
-          name: Pa11y
+          name: Pa11y - Web Client Round 1
           command: |
-            npm run build:all &&
+            npm run build:all
             SLS_DEBUG=* RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
-            npm run test:pa11y
+            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
+      - run:
+          name: Pa11y - Web Client Round 2
+          command: |
+            sleep 5
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+      - run:
+          name: Pa11y - Web Client Docketclerk
+          command: |
+            sleep 5
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run test:pa11y:docketclerk --node-flags --max-old-space-size=1024
+      - run:
+          name: Pa11y - Web Client Petitionsclerk
+          command: |
+            sleep 5
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run test:pa11y:petitionsclerk --node-flags --max-old-space-size=1024
+      - run:
+          name: Pa11y - Web Client Petitioner
+          command: |
+            sleep 5
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run test:pa11y:petitioner --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Public Site
           command: |
@@ -147,7 +183,7 @@ jobs:
       - image: sutt0n/ef-cms:latest
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
