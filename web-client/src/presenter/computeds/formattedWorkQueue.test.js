@@ -111,7 +111,7 @@ describe('formatted work queue computed', () => {
       documentId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',
     },
-    isQC: false,
+    isQC: false, // not in QC state - should not show in QC boxes
     messages: [
       {
         createdAt: '2018-12-27T18:05:54.164Z',
@@ -135,7 +135,7 @@ describe('formatted work queue computed', () => {
   };
   const qcWorkItem = {
     ...workItem,
-    isQC: true,
+    isQC: true, // in QC state - should show in QC boxes
     section: 'docket',
   };
 
@@ -231,7 +231,7 @@ describe('formatted work queue computed', () => {
     );
   });
 
-  it('sets showSendTo and showComplete', () => {
+  it('sets showSendTo and showComplete to false when isInitializeCase is true', () => {
     workItem.isInitializeCase = true;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
@@ -248,7 +248,8 @@ describe('formatted work queue computed', () => {
     expect(result2[0].showSendTo).toBeFalsy();
     expect(result2[0].showComplete).toBeFalsy();
   });
-  it('sets showBatchedStatusIcon when false', () => {
+  it('sets showBatchedStatusIcon to false when caseStatus is NOT batchedForIRS', () => {
+    // workItem.caseStatus is generalDocket
     workItem.isInitializeCase = true;
     const result2 = runCompute(formattedWorkQueue, {
       state: {
@@ -264,7 +265,7 @@ describe('formatted work queue computed', () => {
     });
     expect(result2[0].showBatchedStatusIcon).toBeFalsy();
   });
-  it('sets showBatchedStatusIcon when true', () => {
+  it('sets showBatchedStatusIcon to true when caseStatus is batchedForIRS', () => {
     workItem.isInitializeCase = true;
     workItem.caseStatus = Case.STATUS_TYPES.batchedForIRS;
     const result2 = runCompute(formattedWorkQueue, {
@@ -588,7 +589,7 @@ describe('formatted work queue computed', () => {
             pending: false,
           },
           isInitializeCase: true,
-          isQC: true,
+          isQC: true, // in QC state - should show in QC boxes
           messages: [baseMessage],
           section: 'petitions',
         },
@@ -616,7 +617,7 @@ describe('formatted work queue computed', () => {
             pending: false,
           },
           isInitializeCase: false,
-          isQC: true,
+          isQC: true, // in QC state - should show in QC boxes
           messages: [baseMessage],
           section: 'petitions',
         },
@@ -644,7 +645,7 @@ describe('formatted work queue computed', () => {
             pending: false,
           },
           isInitializeCase: false,
-          isQC: true,
+          isQC: true, // in QC state - should show in QC boxes
           messages: [baseMessage],
           section: 'docket',
         },
@@ -679,7 +680,7 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          isQC: true,
+          isQC: true, // in QC state - should show in QC boxes
           messages: [baseMessage],
           section: 'docket',
         },
@@ -714,7 +715,7 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          isQC: true,
+          isQC: true, // in QC state - should show in QC boxes
           messages: [baseMessage],
           section: 'docket',
         },
@@ -747,7 +748,7 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          isQC: true,
+          isQC: true, // in QC state - should show in QC boxes
           messages: [baseMessage],
           section: 'docket',
         },
@@ -780,7 +781,7 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          isQC: true,
+          isQC: true, // in QC state - should show in QC boxes
           messages: [baseMessage],
           section: 'docket',
         },
@@ -813,7 +814,7 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          isQC: true,
+          isQC: true, // in QC state - should show in QC boxes
           messages: [baseMessage],
           section: 'docket',
         },
@@ -848,7 +849,7 @@ describe('formatted work queue computed', () => {
             scenario: 'Standard',
           },
           isInitializeCase: false,
-          isQC: true,
+          isQC: true, // in QC state - should show in QC boxes
           messages: [baseMessage],
           section: 'docket',
         },
