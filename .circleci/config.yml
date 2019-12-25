@@ -133,7 +133,7 @@ jobs:
             SLS_DEBUG=* RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 25
+            sleep 5
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Web Client Round 2
@@ -142,7 +142,7 @@ jobs:
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 25
+            sleep 5
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Web Client Docketclerk
@@ -151,7 +151,7 @@ jobs:
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 25
+            sleep 5
             npm run test:pa11y:docketclerk --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Web Client Petitionsclerk
@@ -160,7 +160,7 @@ jobs:
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 25
+            sleep 5
             npm run test:pa11y:petitionsclerk --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Web Client Petitioner
@@ -169,7 +169,7 @@ jobs:
             SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 25
+            sleep 5
             npm run test:pa11y:petitioner --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Public Site
