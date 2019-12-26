@@ -163,12 +163,25 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
   createTrialSession:
     handler: web-api/${self:provider.dir}/trialSessionsHandlers.createTrialSessionLambda
     events:
       - http:
           path: /
           method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateTrialSession:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.updateTrialSessionLambda
+    events:
+      - http:
+          path: /
+          method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
@@ -222,6 +235,7 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
   getCalendaredCasesForTrialSession:
     handler: web-api/${self:provider.dir}/trialSessionsHandlers.getCalendaredCasesForTrialSessionLambda
     events:
@@ -305,6 +319,18 @@ functions:
       - http:
           path: /planning-report
           method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  deleteTrialSession:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.deleteTrialSessionLambda
+    events:
+      - http:
+          path: /{trialSessionId}
+          method: delete
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS

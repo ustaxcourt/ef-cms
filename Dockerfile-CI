@@ -1,5 +1,7 @@
 FROM cypress/base:12.13.0
 
+WORKDIR /home/app/ef-cms
+
 RUN sh -c 'echo "deb [check-valid-until=no] http://archive.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/jessie-backports.list'
 RUN sed -i '/deb http:\/\/deb.debian.org\/debian jessie-updates main/d' /etc/apt/sources.list
 
@@ -10,7 +12,8 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update && \
 RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.0.0.1744-linux.zip
 RUN unzip sonar-scanner-cli-4.0.0.1744-linux.zip
 RUN rm sonar-scanner-cli-4.0.0.1744-linux.zip
-RUN mv sonar-scanner-4.0.0.1744-linux /tmp/sonar-scanner
+RUN mkdir /home/app/sonar_home && \
+  mv sonar-scanner-4.0.0.1744-linux/* /home/app/sonar_home
 
 RUN apt-get install -y gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 \
   libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 \

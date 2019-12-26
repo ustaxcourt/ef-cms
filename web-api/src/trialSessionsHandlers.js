@@ -5,6 +5,8 @@ module.exports = {
     .handler,
   createTrialSessionLambda: require('./trialSessions/createTrialSessionLambda')
     .handler,
+  deleteTrialSessionLambda: require('./trialSessions/deleteTrialSessionLambda')
+    .handler,
   getCalendaredCasesForTrialSessionLambda: require('./trialSessions/getCalendaredCasesForTrialSessionLambda')
     .handler,
   getEligibleCasesForTrialSessionLambda: require('./trialSessions/getEligibleCasesForTrialSessionLambda')
@@ -22,6 +24,8 @@ module.exports = {
   setTrialSessionAsSwingSessionLambda: require('./trialSessions/setTrialSessionAsSwingSessionLambda')
     .handler,
   setTrialSessionCalendarLambda: require('./trialSessions/setTrialSessionCalendarLambda')
+    .handler,
+  updateTrialSessionLambda: require('./trialSessions/updateTrialSessionLambda')
     .handler,
   updateTrialSessionWorkingCopyLambda: require('./trialSessions/updateTrialSessionWorkingCopyLambda')
     .handler,
