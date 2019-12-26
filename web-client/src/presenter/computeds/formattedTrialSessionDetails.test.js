@@ -82,7 +82,7 @@ describe('formattedTrialSessionDetails', () => {
     });
     expect(result).toMatchObject({
       canDelete: false,
-      canEdit: true,
+      canEdit: false,
     });
   });
 
