@@ -80,12 +80,9 @@ describe('generateDocketRecordPdfInteractor', () => {
     }),
     getTemplateGenerators: () => {
       return {
-        generatePrintableDocketRecordTemplate: ({
-          docketRecord,
-          partyInfo,
-        }) => {
+        generatePrintableDocketRecordTemplate: async ({ content }) => {
           generatePrintableDocketRecordTemplateMock();
-          return `<!DOCTYPE html>${docketRecord} ${partyInfo}</html>`;
+          return `<!DOCTYPE html>${content.docketRecord} ${content.partyInfo}</html>`;
         },
       };
     },
@@ -108,6 +105,7 @@ describe('generateDocketRecordPdfInteractor', () => {
     const result = await generateDocketRecordPdfInteractor({
       applicationContext,
       caseDetail,
+      includePartyDetail: true,
     });
 
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
@@ -135,9 +133,60 @@ describe('generateDocketRecordPdfInteractor', () => {
         }),
       },
       caseId: 'ca123',
+      includePartyDetail: true,
     });
 
     expect(result.indexOf('Test Secondary')).toBeGreaterThan(-1);
+  });
+
+  it('displays no party information if "includePartyDetail" flag is undefined or falsy', async () => {
+    let result = await generateDocketRecordPdfInteractor({
+      applicationContext: {
+        ...applicationContext,
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: () => ({
+            ...caseDetail,
+            contactSecondary: {
+              address1: 'address 1',
+              city: 'City',
+              countryType: 'domestic',
+              name: 'Test Secondary',
+              phone: '123-123-1234',
+              postalCode: '12345',
+              state: 'ST',
+            },
+          }),
+        }),
+      },
+      caseId: 'ca123',
+      // includePartyDetail not provided, is undefined
+    });
+
+    expect(result.indexOf('Test Secondary')).toEqual(-1);
+
+    result = await generateDocketRecordPdfInteractor({
+      applicationContext: {
+        ...applicationContext,
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: () => ({
+            ...caseDetail,
+            contactSecondary: {
+              address1: 'address 1',
+              city: 'City',
+              countryType: 'domestic',
+              name: 'Test Secondary',
+              phone: '123-123-1234',
+              postalCode: '12345',
+              state: 'ST',
+            },
+          }),
+        }),
+      },
+      caseId: 'ca123',
+      includePartyDetail: false,
+    });
+
+    expect(result.indexOf('Test Secondary')).toEqual(-1);
   });
 
   it('Displays practitioners associated with the case', async () => {
@@ -178,6 +227,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         }),
       },
       caseId: 'ca-123',
+      includePartyDetail: true,
     });
 
     expect(result.indexOf('Test Practitioner')).toBeGreaterThan(-1);
@@ -205,6 +255,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         }),
       },
       caseId: 'ca123',
+      includePartyDetail: true,
     });
 
     expect(result.indexOf('Respondent Counsel')).toBeGreaterThan(-1);
@@ -229,6 +280,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         }),
       },
       caseId: 'ca-123',
+      includePartyDetail: true,
     });
 
     expect(result.indexOf('Test C/O')).toBeGreaterThan(-1);
@@ -241,6 +293,7 @@ describe('generateDocketRecordPdfInteractor', () => {
     const result = await generateDocketRecordPdfInteractor({
       applicationContext,
       caseDetail: { ...caseDetail },
+      includePartyDetail: true,
     });
 
     expect(result.indexOf(caseDetail.caseCaption)).toBeGreaterThan(-1);

@@ -915,4 +915,115 @@ describe('Document entity', () => {
       expect(document.getQCWorkItem()).toBeUndefined();
     });
   });
+
+  describe('isPublicAccessible', () => {
+    it('should be public accessible if it is a served Stipulated Decision document', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentType: 'Stipulated Decision',
+          servedAt: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isPublicAccessible()).toBeTruthy();
+    });
+
+    it('should be public accessible if it is a served Order document', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentType: 'Order',
+          servedAt: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isPublicAccessible()).toBeTruthy();
+    });
+
+    it('should be public accessible if it is a served court-issued order document', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentType: 'O - Order',
+          servedAt: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isPublicAccessible()).toBeTruthy();
+    });
+
+    it('should not be public accessible if it is an unserved court-issued document', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentType: 'Stipulated Decision',
+        },
+        { applicationContext },
+      );
+      expect(document.isPublicAccessible()).toBeFalsy();
+    });
+
+    it('should not be public accessible if it is a served non-court-issued document', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentType: 'Petition',
+          servedAt: '2019-03-01T21:40:46.415Z',
+        },
+        { applicationContext },
+      );
+      expect(document.isPublicAccessible()).toBeFalsy();
+    });
+  });
+
+  describe('isAutoServed', () => {
+    it('should return true if the documentType is an external document and the documentTitle does not contain Simultaneous', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentTitle: 'Answer to Second Amendment to Petition',
+          documentType: 'Answer to Second Amendment to Petition',
+        },
+        { applicationContext },
+      );
+      expect(document.isAutoServed()).toBeTruthy();
+    });
+
+    it('should return true if the documentType is a practitioner association document and the documentTitle does not contain Simultaneous', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentTitle: 'Entry of Appearance',
+          documentType: 'Entry of Appearance',
+        },
+        { applicationContext },
+      );
+      expect(document.isAutoServed()).toBeTruthy();
+    });
+
+    it('should return false if the documentType is an external document and the documentTitle contains Simultaneous', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentTitle: 'Amended Simultaneous Memoranda of Law',
+          documentType: 'Amended Simultaneous Memoranda of Law',
+        },
+        { applicationContext },
+      );
+      expect(document.isAutoServed()).toBeFalsy();
+    });
+
+    it('should return false if the documentType is an internally-filed document', () => {
+      const document = new Document(
+        {
+          ...A_VALID_DOCUMENT,
+          documentTitle: 'Application for Examination Pursuant to Rule 73',
+          documentType: 'Application for Examination Pursuant to Rule 73',
+        },
+        { applicationContext },
+      );
+      expect(document.isAutoServed()).toBeFalsy();
+    });
+  });
 });

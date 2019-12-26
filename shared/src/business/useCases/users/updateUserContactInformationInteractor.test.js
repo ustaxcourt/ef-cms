@@ -59,9 +59,9 @@ describe('updateUserContactInformationInteractor', () => {
       },
       getTemplateGenerators: () => {
         return {
-          generateChangeOfAddressTemplate: () => '<div></div>',
+          generateChangeOfAddressTemplate: async () => '<div></div>',
           generateHTMLTemplateForPDF: () => '<div></div>',
-          generatePrintableDocketRecordTemplate: () => '<div></div>',
+          generatePrintableDocketRecordTemplate: async () => '<div></div>',
         };
       },
       getUniqueId: () => 'a7d90c05-f6cd-442c-a168-202db587f16f',
@@ -133,9 +133,9 @@ describe('updateUserContactInformationInteractor', () => {
       },
       getTemplateGenerators: () => {
         return {
-          generateChangeOfAddressTemplate: () => '<div></div>',
+          generateChangeOfAddressTemplate: async () => '<div></div>',
           generateHTMLTemplateForPDF: () => '<div></div>',
-          generatePrintableDocketRecordTemplate: () => '<div></div>',
+          generatePrintableDocketRecordTemplate: async () => '<div></div>',
         };
       },
       getUniqueId: () => 'a7d90c05-f6cd-442c-a168-202db587f16f',

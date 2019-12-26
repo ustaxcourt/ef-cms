@@ -23,9 +23,10 @@ exports.addCoverToPdf = async ({
 
   const dateServedFormatted =
     (documentEntity.servedAt &&
-      applicationContext
-        .getUtilities()
-        .formatDateString(documentEntity.servedAt, 'MMDDYYYY')) ||
+      'Served ' +
+        applicationContext
+          .getUtilities()
+          .formatDateString(documentEntity.servedAt, 'MMDDYYYY')) ||
     '';
 
   let dateReceivedFormatted;
@@ -74,7 +75,8 @@ exports.addCoverToPdf = async ({
     documentTitle,
     includesCertificateOfService:
       documentEntity.certificateOfService === true ? true : false,
-    originallyFiledElectronically: !caseEntity.isPaper,
+    mailingDate: documentEntity.mailingDate || '',
+    originallyFiledElectronically: !documentEntity.isPaper,
   };
 
   // create pdfDoc object from file data
@@ -353,6 +355,13 @@ exports.addCoverToPdf = async ({
     yPos: contentPetitionerLabel.yPos,
   };
 
+  const contentMailingDate = {
+    content: getContentByKey('mailingDate'),
+    fontSize: fontSizeCaption,
+    xPos: 1530,
+    yPos: contentVLabel.yPos + 125,
+  };
+
   const contentDocketNumber = {
     content: `Docket Number: ${getContentByKey('docketNumber')}`,
     fontSize: fontSizeCaption,
@@ -401,7 +410,7 @@ exports.addCoverToPdf = async ({
     },
     content: getContentByKey('dateServed'),
     fontName: helveticaBoldFont,
-    fontSize: fontSizeTitle,
+    fontSize: fontSizeCaption,
     xPos: 531,
     yPos: 231,
   };
@@ -483,6 +492,7 @@ exports.addCoverToPdf = async ({
     contentRespondentLabel,
     contentElectronicallyFiled,
     contentDocketNumber,
+    contentMailingDate,
     contentDocumentTitle,
     contentCertificateOfService,
     contentDateServed,

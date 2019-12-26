@@ -1,6 +1,6 @@
 const {
-  aggregateElectronicallyServedParties,
-} = require('../../utilities/aggregateElectronicallyServedParties');
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
 const {
   createISODateString,
   formatDateString,
@@ -17,6 +17,7 @@ const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { PDFDocument } = require('pdf-lib');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 const completeWorkItem = async ({
@@ -91,9 +92,9 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   );
 
   // Serve on all parties
-  const servedParties = aggregateElectronicallyServedParties(caseEntity);
+  const servedParties = aggregatePartiesForService(caseEntity);
 
-  courtIssuedDocument.setAsServed(servedParties);
+  courtIssuedDocument.setAsServed(servedParties.all);
 
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
@@ -183,14 +184,12 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     }
   }
 
-  const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
+  await applicationContext.getPersistenceGateway().updateCase({
+    applicationContext,
+    caseToUpdate: caseEntity.validate().toRawObject(),
+  });
 
-  const destinations = servedParties.map(party => ({
+  const destinations = servedParties.electronic.map(party => ({
     email: party.email,
     templateData: {
       caseCaption: caseToUpdate.caseCaption,
@@ -203,20 +202,65 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     },
   }));
 
-  await applicationContext.getDispatchers().sendBulkTemplatedEmail({
-    applicationContext,
-    defaultTemplateData: {
-      caseCaption: 'undefined',
-      docketNumber: 'undefined',
-      documentName: 'undefined',
-      loginUrl: 'undefined',
-      name: 'undefined',
-      serviceDate: 'undefined',
-      serviceTime: 'undefined',
-    },
-    destinations,
-    templateName: process.env.EMAIL_SERVED_TEMPLATE,
-  });
+  if (destinations.length > 0) {
+    await applicationContext.getDispatchers().sendBulkTemplatedEmail({
+      applicationContext,
+      defaultTemplateData: {
+        caseCaption: 'undefined',
+        docketNumber: 'undefined',
+        documentName: 'undefined',
+        loginUrl: 'undefined',
+        name: 'undefined',
+        serviceDate: 'undefined',
+        serviceTime: 'undefined',
+      },
+      destinations,
+      templateName: process.env.EMAIL_SERVED_TEMPLATE,
+    });
+  }
 
-  return updatedCase;
+  let paperServicePdfBuffer;
+  if (servedParties.paper.length > 0) {
+    const courtIssuedOrderDoc = await PDFDocument.load(newPdfData);
+    const addressPages = [];
+    let newPdfDoc = await PDFDocument.create();
+
+    for (let party of servedParties.paper) {
+      addressPages.push(
+        await applicationContext
+          .getUseCaseHelpers()
+          .generatePaperServiceAddressPagePdf({
+            applicationContext,
+            contactData: party,
+            docketNumberWithSuffix: `${
+              caseToUpdate.docketNumber
+            }${caseToUpdate.docketNumberSuffix || ''}`,
+          }),
+      );
+    }
+
+    for (let addressPage of addressPages) {
+      const addressPageDoc = await PDFDocument.load(addressPage);
+      let copiedPages = await newPdfDoc.copyPages(
+        addressPageDoc,
+        addressPageDoc.getPageIndices(),
+      );
+      copiedPages.forEach(page => {
+        newPdfDoc.addPage(page);
+      });
+
+      copiedPages = await newPdfDoc.copyPages(
+        courtIssuedOrderDoc,
+        courtIssuedOrderDoc.getPageIndices(),
+      );
+      copiedPages.forEach(page => {
+        newPdfDoc.addPage(page);
+      });
+    }
+
+    const paperServicePdfData = await newPdfDoc.save();
+    paperServicePdfBuffer = Buffer.from(paperServicePdfData);
+  }
+
+  return paperServicePdfBuffer;
 };

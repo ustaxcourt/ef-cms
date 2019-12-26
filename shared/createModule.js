@@ -5,8 +5,11 @@ const fs = require('fs');
 const targets = [
   'shared/src/business/assets/ustcPdf.scss',
   'shared/src/business/useCaseHelper/caseConfirmation/caseConfirmation.pug',
+  'shared/src/business/useCaseHelper/courtIssuedDocument/paperServiceAddressPage.pug',
   'shared/src/business/useCaseHelper/noticeOfDocketChange/noticeOfDocketChange.pug',
   'shared/src/business/useCaseHelper/pendingReport/pendingReport.pug',
+  'shared/src/business/utilities/htmlGenerator/index.pug',
+  'shared/src/business/utilities/htmlGenerator/index.scss',
   'shared/static/images/ustc_seal.png',
 ];
 

@@ -82,13 +82,13 @@ ZAP Scanning Report
 <td><a href="#high">High</a></td><td align="center">0</td>
 </tr>
 <tr bgcolor="#e8e8e8">
-<td><a href="#medium">Medium</a></td><td align="center">1</td>
+<td><a href="#medium">Medium</a></td><td align="center">0</td>
 </tr>
 <tr bgcolor="#e8e8e8">
-<td><a href="#low">Low</a></td><td align="center">2</td>
+<td><a href="#low">Low</a></td><td align="center">4</td>
 </tr>
 <tr bgcolor="#e8e8e8">
-<td><a href="#info">Informational</a></td><td align="center">2</td>
+<td><a href="#info">Informational</a></td><td align="center">1</td>
 </tr>
 </table>
 <div class="spacer-lg"></div>
@@ -98,19 +98,79 @@ ZAP Scanning Report
   
   
   
-<tr height="24" class="risk-medium">
-<th width="20%"><a name="medium"></a>Medium (Medium)</th><th width="80%">Cross-Domain Misconfiguration</th>
+<tr height="24" class="risk-low">
+<a name="low"></a><th width="20%">Low (High)</th><th width="80%">Strict-Transport-Security Header Not Set</th>
 </tr>
   
   
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%">Description</td><td width="80%"><p>Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server</p></td>
+<td width="20%">Description</td><td width="80%"><p>HTTP Strict Transport Security (HSTS) is a web security policy mechanism whereby a web server declares that complying user agents (such as a web browser) are to interact with it using only secure HTTPS connections (i.e. HTTP layered over TLS/SSL). HSTS is an IETF standards track protocol and is specified in RFC 6797.</p></td>
 </tr>
 <TR vAlign="top">
 <TD colspan="2"></TD>
 </TR>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/trial-sessions/trialSessionId/eligible-cases</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/cases/caseId</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/users/internal</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/cases/caseId/generate-docket-record</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">POST</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/court-issued-orders/documentId</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">PUT</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/work-items/workItemId</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
   
   
   
@@ -122,92 +182,44 @@ ZAP Scanning Report
 <td width="20%" class="indent2">Method</td><td width="80%">POST</td>
 </tr>
   
+  
+  
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">Access-Control-Allow-Origin: *</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-deadlines/caseId/caseDeadlineId</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">DELETE</td>
 </tr>
   
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/search</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/work-items/workItemId</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">Access-Control-Allow-Origin: *</td>
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
 </tr>
   
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/swagger.json</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">Access-Control-Allow-Origin: *</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/documents/documentId/virus-scan</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">POST</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">Access-Control-Allow-Origin: *</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/cases/caseId</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/users/userId/document-qc/served</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
 <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
 </tr>
   
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">Access-Control-Allow-Origin: *</td>
-</tr>
-  
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/swagger</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/users/userId/document-qc/inbox</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
 <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">Access-Control-Allow-Origin: *</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/documents/documentId/document-download-url</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">Access-Control-Allow-Origin: *</td>
 </tr>
   
   
@@ -217,40 +229,109 @@ ZAP Scanning Report
 </tr>
   
 <tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/cases/caseId/block</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
 <td width="20%" class="indent2">Method</td><td width="80%">POST</td>
 </tr>
   
+  
+  
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">Access-Control-Allow-Origin: *</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/court-issued-docket-entry</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
 </tr>
   
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%">Instances</td><td width="80%">8</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/documentId/work-items</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
-<td width="20%">Solution</td><td width="80%"><p>Ensure that sensitive data is not available in an unauthenticated manner (using IP address white-listing, for instance).</p><p>Configure the "Access-Control-Allow-Origin" HTTP header to a more restrictive set of domains, or remove all CORS headers entirely, to allow the web browser to enforce the Same Origin Policy (SOP) in a more restrictive manner.</p></td>
+<td width="20%" class="indent2">Method</td><td width="80%">POST</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/external-document</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
-<td width="20%">Other information</td><td width="80%"><p>The CORS misconfiguration on the web server permits cross-domain read requests from arbitrary third party domains, using unauthenticated APIs on this domain. Web browser implementations do not permit arbitrary third parties to read the response from authenticated APIs, however. This reduces the risk somewhat. This misconfiguration could be used by an attacker to access data that is available in an unauthenticated manner, but which uses some other form of security, such as IP address white-listing.</p></td>
-</tr>
-<TR vAlign="top">
-<TD colspan="2"></TD>
-</TR>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Reference</td><td width="80%"><p>http://www.hpenterprisesecurity.com/vulncat/en/vulncat/vb/html5_overly_permissive_cors_policy.html</p></td>
+<td width="20%" class="indent2">Method</td><td width="80%">POST</td>
 </tr>
   
+  
+  
 <tr bgcolor="#e8e8e8">
-<td width="20%">CWE Id</td><td width="80%">264</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/cases/caseId/associate-respondent</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
-<td width="20%">WASC Id</td><td width="80%">14</td>
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/cases/caseId</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/sections/section/messages/sent</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/documents/upload-policy</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Instances</td><td width="80%">174</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Solution</td><td width="80%"><p>Ensure that your web server, application server, load balancer, etc. is configured to enforce Strict-Transport-Security.</p></td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Reference</td><td width="80%"><p>https://www.owasp.org/index.php/HTTP_Strict_Transport_Security</p><p>https://www.owasp.org/index.php/List_of_useful_HTTP_headers</p><p>http://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security</p><p>http://caniuse.com/stricttransportsecurity</p><p>http://tools.ietf.org/html/rfc6797</p></td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">CWE Id</td><td width="80%">16</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">WASC Id</td><td width="80%">15</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
@@ -280,48 +361,6 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/users/userId/messages/inbox</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/documentId/coversheet</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/docket-entry-complete</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/trial-sessions/trialSessionId/working-copy/</td>
 </tr>
   
@@ -336,49 +375,7 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/search</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-notes/caseId</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/sections/section/messages/inbox</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/docket-record-pdf</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
@@ -420,20 +417,6 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/trial-sessions/trialSessionId/set-swing-session/</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/court-issued-order/</td>
 </tr>
   
@@ -448,7 +431,7 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/pending-items/</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/sections/section/document-qc/inbox</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
@@ -462,7 +445,7 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/sections/section/document-qc/inbox</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/cases/caseId/generate-docket-record/</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
@@ -504,34 +487,6 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/work-items</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/users/</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
 <td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/documentId/sign</td>
 </tr>
   
@@ -546,7 +501,7 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/trial-calendar-pdf</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/cases/caseId/generate-docket-record</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
@@ -560,7 +515,133 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%">Instances</td><td width="80%">150</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/search/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/pending-report/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/work-items/workItemId/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-deadlines/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/documentId/sign/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/court-issued-order/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/sections/section/messages/inbox/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/documentId/work-items</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/cases/caseId/counsel/userId</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">null</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Instances</td><td width="80%">158</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
@@ -645,15 +726,15 @@ ZAP Scanning Report
   
   
   
-<tr height="24" class="risk-info">
-<th width="20%"><a name="info"></a>Informational (High)</th><th width="80%">A Client Error response code was returned by the server</th>
+<tr height="24" class="risk-low">
+<a name="low"></a><th width="20%">Low (Medium)</th><th width="80%">Content Security Policy (CSP) Header Not Set</th>
 </tr>
   
   
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%">Description</td><td width="80%"><p>A response code of 401 was returned by the server.</p><p>This may indicate that the application is failing to handle unexpected input correctly.</p><p>Raised by the 'Alert on HTTP Response Code Error' script</p></td>
+<td width="20%">Description</td><td width="80%"><p>Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page &mdash; covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.</p></td>
 </tr>
 <TR vAlign="top">
 <TD colspan="2"></TD>
@@ -662,86 +743,58 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/users</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/swagger</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
 <td width="20%" class="indent2">Method</td><td width="80%">GET</td>
 </tr>
   
+  
+  
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
+<td width="20%">Instances</td><td width="80%">1</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Solution</td><td width="80%"><p>Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header, to achieve optimal browser support: "Content-Security-Policy" for Chrome 25+, Firefox 23+ and Safari 7+, "X-Content-Security-Policy" for Firefox 4.0+ and Internet Explorer 10+, and "X-WebKit-CSP" for Chrome 14+ and Safari 6+.</p></td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Reference</td><td width="80%"><p>https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Introducing_Content_Security_Policy</p><p>https://www.owasp.org/index.php/Content_Security_Policy</p><p>http://www.w3.org/TR/CSP/</p><p>http://w3c.github.io/webappsec/specs/content-security-policy/csp-specification.dev.html</p><p>http://www.html5rocks.com/en/tutorials/security/content-security-policy/</p><p>http://caniuse.com/#feat=contentsecuritypolicy</p><p>http://content-security-policy.com/</p></td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">CWE Id</td><td width="80%">16</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">WASC Id</td><td width="80%">15</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Source ID</td><td width="80%">3</td>
+</tr>
+
+</table>
+<div class="spacer"></div>
+<table width="100%" class="results">
+  
+  
+  
+<tr height="24" class="risk-info">
+<th width="20%"><a name="info"></a>Informational (High)</th><th width="80%">A Client Error response code was returned by the server</th>
 </tr>
   
   
   
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/users/</td>
-</tr>
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+<td width="20%">Description</td><td width="80%"><p>A response code of 405 was returned by the server.</p><p>This may indicate that the application is failing to handle unexpected input correctly.</p><p>Raised by the 'Alert on HTTP Response Code Error' script</p></td>
 </tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/sections/section/document-qc/inbox/</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/work-items/workItemId/</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/users/userId/messages/inbox</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/court-issued-orders/</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
-</tr>
+<TR vAlign="top">
+<TD colspan="2"></TD>
+</TR>
   
   
   
@@ -755,48 +808,6 @@ ZAP Scanning Report
   
 <tr bgcolor="#e8e8e8">
 <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/docket-entry-complete</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-notes/caseId</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/trial-sessions/166819692957550722</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
 </tr>
   
   
@@ -816,43 +827,15 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/cases/search</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/cases/caseId/generate-docket-record/</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+<td width="20%" class="indent2">Method</td><td width="80%">POST</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/cases/caseId/contact-primary/</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">PUT</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/sections/section/messages/inbox/</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
 </tr>
   
   
@@ -886,7 +869,7 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/trial-sessions/trialSessionId/cases/1484343739066593748</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/cases/217650676433521207</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
@@ -895,20 +878,6 @@ ZAP Scanning Report
   
 <tr bgcolor="#e8e8e8">
 <td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/search</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
 </tr>
   
   
@@ -942,7 +911,175 @@ ZAP Scanning Report
   
   
 <tr bgcolor="#e8e8e8">
-<td width="20%">Instances</td><td width="80%">415</td>
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-notes/caseId/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">PUT</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/users/userId/messages/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-deadlines/caseId/caseDeadlineId</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/cases/caseId/generate-docket-record</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">POST</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/cases/caseId/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 404</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/documentId/coversheet/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">POST</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/api/court-issued-order</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">POST</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/court-issued-order/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/docket-entry-complete/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">PUT</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-deadlines/caseId/</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 401</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/documents/upload-policy</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 403</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/case-documents/caseId/documentId/sign</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
+</tr>
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%" class="indent2">Evidence</td><td width="80%">HTTP/1.1 405</td>
+</tr>
+  
+  
+  
+<tr bgcolor="#e8e8e8">
+<td width="20%">Instances</td><td width="80%">443</td>
 </tr>
   
 <tr bgcolor="#e8e8e8">
@@ -963,115 +1100,6 @@ ZAP Scanning Report
   
 <tr bgcolor="#e8e8e8">
 <td width="20%">Source ID</td><td width="80%">4</td>
-</tr>
-
-</table>
-<div class="spacer"></div>
-<table width="100%" class="results">
-  
-  
-  
-<tr height="24" class="risk-info">
-<th width="20%"><a name="info"></a>Informational (Low)</th><th width="80%">Timestamp Disclosure - Unix</th>
-</tr>
-  
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Description</td><td width="80%"><p>A timestamp was disclosed by the application/web server - Unix</p></td>
-</tr>
-<TR vAlign="top">
-<TD colspan="2"></TD>
-</TR>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/cases/paper</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">28210346</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/public-api/search</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">92826091</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/documents/documentId/download-policy-url</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">GET</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">33731959</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent1">URL</td><td width="80%">https://efcms-dev.ustc-case-mgmt.flexion.us/trial-sessions/trialSessionId/set-swing-session</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Method</td><td width="80%">OPTION</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%" class="indent2">Evidence</td><td width="80%">65823066</td>
-</tr>
-  
-  
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Instances</td><td width="80%">4</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Solution</td><td width="80%"><p>Manually confirm that the timestamp data is not sensitive, and that the data cannot be aggregated to disclose exploitable patterns.</p></td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Other information</td><td width="80%"><p>28210346, which evaluates to: 1970-11-23 12:12:26</p></td>
-</tr>
-<TR vAlign="top">
-<TD colspan="2"></TD>
-</TR>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Reference</td><td width="80%"><p>https://www.owasp.org/index.php/Top_10_2013-A6-Sensitive_Data_Exposure</p><p>http://projects.webappsec.org/w/page/13246936/Information%20Leakage</p></td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">CWE Id</td><td width="80%">200</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">WASC Id</td><td width="80%">13</td>
-</tr>
-  
-<tr bgcolor="#e8e8e8">
-<td width="20%">Source ID</td><td width="80%">3</td>
 </tr>
 
 </table>

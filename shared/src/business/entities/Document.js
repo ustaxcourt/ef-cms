@@ -6,7 +6,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-const { flatten } = require('lodash');
+const { flatten, map } = require('lodash');
 const { Order } = require('./orders/Order');
 const { WorkItem } = require('./WorkItem');
 
@@ -40,6 +40,7 @@ function Document(rawDocument, { applicationContext }) {
   this.createdAt = rawDocument.createdAt || createISODateString();
   this.docketNumber = rawDocument.docketNumber;
   this.documentId = rawDocument.documentId;
+  this.mailingDate = rawDocument.mailingDate;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
   this.draftState = rawDocument.draftState;
@@ -381,6 +382,45 @@ Document.prototype.setAsProcessingStatusAsCompleted = function() {
 
 Document.prototype.getQCWorkItem = function() {
   return this.workItems.find(workItem => workItem.isQC === true);
+};
+
+Document.prototype.isPublicAccessible = function() {
+  const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
+  const courtIssuedDocumentTypes = map(
+    Document.COURT_ISSUED_EVENT_CODES,
+    'documentType',
+  );
+
+  const isServed = !!this.servedAt;
+  const isStipDecision = this.documentType === 'Stipulated Decision';
+  const isOrder = orderDocumentTypes.includes(this.documentType);
+  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+    this.documentType,
+  );
+
+  return (isStipDecision || isOrder || isCourtIssuedDocument) && isServed;
+};
+
+Document.prototype.isAutoServed = function() {
+  const externalDocumentTypes = flatten(Object.values(documentMapExternal)).map(
+    t => t.documentType,
+  );
+
+  const isExternalDocumentType = externalDocumentTypes.includes(
+    this.documentType,
+  );
+  const isPractitionerAssociationDocumentType = practitionerAssociationDocumentTypes.includes(
+    this.documentType,
+  );
+  //if fully concatenated document title includes the word Simultaneous, do not auto-serve
+  const isSimultaneous = (this.documentTitle || this.documentType).includes(
+    'Simultaneous',
+  );
+
+  return (
+    (isExternalDocumentType || isPractitionerAssociationDocumentType) &&
+    !isSimultaneous
+  );
 };
 
 exports.Document = Document;

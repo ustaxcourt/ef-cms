@@ -77,7 +77,7 @@ provider:
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
@@ -161,7 +161,7 @@ functions:
       - http:
           path: /{caseId}
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -173,7 +173,7 @@ functions:
       - http:
           path: /{caseId}/update-case-trial-sort-tags
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -189,7 +189,7 @@ functions:
       - http:
           path: /{caseId}/contact-primary
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -201,7 +201,7 @@ functions:
       - http:
           path: /
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -213,7 +213,7 @@ functions:
       - http:
           path: /paper
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -229,7 +229,7 @@ functions:
             parameters:
               paths:
                 caseId: true
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -241,7 +241,7 @@ functions:
       - http:
           path: /search
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -253,7 +253,7 @@ functions:
       - http:
           path: /{caseId}/send-to-irs-holding-queue
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -265,7 +265,7 @@ functions:
       - http:
           path: /{caseId}/recall-from-irs-holding-queue
           method: delete
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -277,7 +277,7 @@ functions:
       - http:
           path: /{caseId}/associate-practitioner
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -289,7 +289,7 @@ functions:
       - http:
           path: /{caseId}/associate-respondent
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -301,7 +301,7 @@ functions:
       - http:
           path: /{caseId}/counsel/{userId}
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -313,7 +313,7 @@ functions:
       - http:
           path: /{caseId}/counsel/{userId}
           method: delete
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -325,7 +325,7 @@ functions:
       - http:
           path: /{caseId}/block
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -337,7 +337,7 @@ functions:
       - http:
           path: /{caseId}/block
           method: delete
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -349,7 +349,7 @@ functions:
       - http:
           path: /blocked/{trialLocation}
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -361,7 +361,7 @@ functions:
       - http:
           path: /{caseId}/high-priority
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -373,7 +373,7 @@ functions:
       - http:
           path: /{caseId}/high-priority
           method: delete
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -385,7 +385,31 @@ functions:
       - http:
           path: /{caseId}/case-context
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  addConsolidatedCase:
+    handler: web-api/${self:provider.dir}/casesHandlers.addConsolidatedCaseLambda
+    events:
+      - http:
+          path: /{caseId}/consolidate-case
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getConsolidatedCasesByCase:
+    handler: web-api/${self:provider.dir}/casesHandlers.getConsolidatedCasesByCaseLambda
+    events:
+      - http:
+          path: /{caseId}/consolidated-cases
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:

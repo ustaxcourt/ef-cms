@@ -16,15 +16,16 @@ import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContacts
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
+import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
+import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
-import { documentEditLinkHelper } from './computeds/documentEditLinkHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
@@ -90,6 +91,8 @@ export const state = {
   caseDetailErrors: {},
   caseDetailHeaderHelper,
   caseDetailHelper,
+  caseDetailPage: {},
+  caseDetailSubnavHelper,
   caseInformationHelper,
   caseTypeDescriptionHelper,
   caseTypes: [],
@@ -97,6 +100,7 @@ export const state = {
   cognitoLoginUrl: null,
   completeDocumentTypeSectionHelper,
   completeForm: {},
+  confirmInitiateServiceModalHelper,
   contactsHelper,
   createOrderHelper,
   currentPage: 'Interstitial',
@@ -112,7 +116,6 @@ export const state = {
     tab: '',
   },
   documentDetailHelper,
-  documentEditLinkHelper,
   documentId: null,
   documentSelectedForPreview: null,
   documentSelectedForScan: null,
@@ -178,7 +181,9 @@ export const state = {
   selectDocumentTypeHelper,
   selectedBatchIndex: 0,
   selectedWorkItems: [],
-  sessionMetadata: {},
+  sessionMetadata: {
+    docketRecordSort: [],
+  },
   showAppTimeoutModalHelper,
   showModal: '',
   showValidation: false,
@@ -189,6 +194,9 @@ export const state = {
   trialCitiesHelper,
   trialSessionHeaderHelper,
   trialSessionWorkingCopyHelper,
+  trialSessionsTab: {
+    group: null,
+  },
   updateCaseModalHelper,
   usaBanner: {
     showDetails: false,

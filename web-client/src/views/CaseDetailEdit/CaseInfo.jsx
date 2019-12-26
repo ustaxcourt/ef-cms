@@ -115,6 +115,11 @@ export const CaseInfo = connect(
                 </div>
               </fieldset>
             </FormGroup>
+
+            <div className="usa-form-group read-only">
+              <div className="label">Mailing date</div>
+              <p>{caseDetail.mailingDate}</p>
+            </div>
           </>
         )}
 
@@ -191,7 +196,7 @@ export const CaseInfo = connect(
               <>
                 <a
                   aria-label="View PDF: Ownership Disclosure Statement"
-                  href={`${baseUrl}/documents/${caseDetailEditHelper.requestForPlaceOfTrialDocumentId}/document-download-url?token=${token}`}
+                  href={`${baseUrl}/case-documents/${caseDetail.caseId}/${caseDetailEditHelper.requestForPlaceOfTrialDocumentId}/document-download-url?token=${token}`}
                   rel="noopener noreferrer"
                   target="_blank"
                 >

@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 export const caseDetailHelper = (get, applicationContext) => {
@@ -9,7 +10,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   const showActionRequired =
     !caseDetail.payGovId && user.role === USER_ROLES.petitioner;
   const documentDetailTab =
-    get(state.caseDetailPage.informationTab) || 'docketRecord';
+    get(state.caseDetailPage.primaryTab) || 'docketRecord';
   const form = get(state.form);
   const currentPage = get(state.currentPage);
   const caseIsPaid = caseDetail.payGovId && !form.paymentType;
@@ -29,13 +30,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     orderToShowCause,
   } = caseDetail;
   const permissions = get(state.permissions);
-
-  const showAddDocketEntryButton =
-    permissions.DOCKET_ENTRY && ['CaseDetailInternal'].includes(currentPage);
-  const showCreateOrderButton =
-    permissions.COURT_ISSUED_DOCUMENT &&
-    ['CaseDetailInternal'].includes(currentPage);
-  const showCaseNotes = permissions.TRIAL_SESSION_WORKING_COPY;
+  const showJudgesNotes = permissions.TRIAL_SESSION_WORKING_COPY;
 
   let showFileDocumentButton =
     permissions.FILE_EXTERNAL_DOCUMENT && ['CaseDetail'].includes(currentPage);
@@ -121,10 +116,13 @@ export const caseDetailHelper = (get, applicationContext) => {
     orderDesignatingPlaceOfTrial,
   ].some(hasOrder => !!hasOrder);
 
+  const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
+
   return {
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
     documentDetailTab,
+    hasConsolidatedCases,
     hasOrders,
     practitionerMatchesFormatted,
     practitionerSearchResultsCount:
@@ -137,14 +135,11 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState.respondentMatches &&
       modalState.respondentMatches.length,
     showActionRequired,
-    showAddDocketEntryButton,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
-    showCaseInformationPublic: isExternalUser,
+    showCaseInformationExternal: isExternalUser,
     showCaseNameForPrimary,
-    showCaseNotes,
-    showCreateOrderButton,
     showDocketRecordInProgressState: !isExternalUser,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContacts,
@@ -152,6 +147,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
+    showJudgesNotes,
     showPayGovIdInput: form.paymentType == 'payGov',
     showPaymentOptions: !caseIsPaid,
     showPaymentRecord: caseIsPaid,

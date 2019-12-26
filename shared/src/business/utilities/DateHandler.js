@@ -59,9 +59,40 @@ const formatNow = formatStr => {
   return module.exports.formatDateString(now, formatStr);
 };
 
+/**
+ * @param {string} a the first date to be compared
+ * @param {string} b the second date to be compared
+ * @returns {number} difference between date a and date b
+ */
+const dateStringsCompared = (a, b) => {
+  const simpleDatePattern = /^(\d{4}-\d{2}-\d{2})/;
+  const simpleDateLength = 10; // e.g. YYYY-MM-DD
+
+  if (a.length == simpleDateLength || b.length == simpleDateLength) {
+    // at least one date has a simple format, compare only year, month, and day
+    const [aSimple, bSimple] = [
+      a.match(simpleDatePattern)[0],
+      b.match(simpleDatePattern)[0],
+    ];
+    if (aSimple.localeCompare(bSimple) == 0) {
+      return 0;
+    }
+  }
+
+  const secondsDifference = 30 * 1000;
+  const aDate = new Date(a);
+  const bDate = new Date(b);
+  if (Math.abs(aDate - bDate) < secondsDifference) {
+    // treat as equal time stamps
+    return 0;
+  }
+  return aDate - bDate;
+};
+
 module.exports = {
   FORMATS,
   createISODateString,
+  dateStringsCompared,
   formatDateString,
   formatNow,
   isStringISOFormatted,

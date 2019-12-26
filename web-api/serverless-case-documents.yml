@@ -75,7 +75,7 @@ provider:
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
@@ -154,11 +154,15 @@ resources:
 functions:
   serveCourtIssuedDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.serveCourtIssuedDocumentLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
     events:
       - http:
           path: /{caseId}/{documentId}/serve-court-issued
-          method: put
-          cors: true
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -170,7 +174,7 @@ functions:
       - http:
           path: /{caseId}/{documentId}/work-items
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -184,7 +188,7 @@ functions:
       - http:
           path: /{caseId}/{documentId}/coversheet
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           # async: true
           authorizer:
             type: COGNITO_USER_POOLS
@@ -197,7 +201,7 @@ functions:
       - http:
           path: /{caseId}/{documentId}/sign
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -209,7 +213,7 @@ functions:
       - http:
           path: /{caseId}/{documentId}
           method: delete
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
 
   fileExternalDocument:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileExternalDocumentToCaseLambda
@@ -217,7 +221,19 @@ functions:
       - http:
           path: /{caseId}/external-document
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  fileExternalDocumentToConsolidated:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.fileExternalDocumentToConsolidatedCasesLambda
+    events:
+      - http:
+          path: /consolidated/{leadCaseId}/external-document
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -229,7 +245,7 @@ functions:
       - http:
           path: /{caseId}/docket-entry
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -241,7 +257,7 @@ functions:
       - http:
           path: /{caseId}/docket-entry
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -253,7 +269,7 @@ functions:
       - http:
           path: /{caseId}/docket-entry-in-progress
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -267,7 +283,7 @@ functions:
       - http:
           path: /{caseId}/docket-entry-complete
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -279,7 +295,7 @@ functions:
       - http:
           path: /{caseId}/court-issued-docket-entry
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -291,7 +307,7 @@ functions:
       - http:
           path: /{caseId}/court-issued-docket-entry
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -303,7 +319,7 @@ functions:
       - http:
           path: /{caseId}/court-issued-order
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -315,8 +331,28 @@ functions:
       - http:
           path: /{caseId}/court-issued-orders/{documentId}
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  getDownloadPolicyUrl:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.downloadPolicyUrlLambda
+    events:
+      - http:
+          path: /{caseId}/{documentId}/download-policy-url
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  getDocumentDownloadUrl:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.getDocumentDownloadUrlLambda
+    events:
+      - http:
+          path: /{caseId}/{documentId}/document-download-url
+          method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}

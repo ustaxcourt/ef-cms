@@ -465,6 +465,14 @@ const router = {
     );
 
     route(
+      '/print-preview/*',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
+        app.getSequence('gotoPrintPreviewSequence')({ docketNumber });
+      }),
+    );
+
+    route(
       '/trial-session-detail/*',
       ifHasAccess(trialSessionId => {
         setPageTitle('Trial session information');

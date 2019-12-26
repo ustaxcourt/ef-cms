@@ -5,11 +5,10 @@ import React from 'react';
 
 export const IndividualWorkQueueInProgress = connect(
   {
-    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },
-  ({ documentEditLinkHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({ formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -23,7 +22,7 @@ export const IndividualWorkQueueInProgress = connect(
                 <span className="padding-left-2px">Docket</span>
               </th>
               <th>Filed</th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               <th>Case status</th>
@@ -49,23 +48,7 @@ export const IndividualWorkQueueInProgress = connect(
                     <div className="message-document-title">
                       <a
                         className="case-link"
-                        href={documentEditLinkHelper({
-                          docketNumber: item.docketNumber,
-                          documentId: item.document.documentId,
-                          messageId: item.currentMessage.messageId,
-                          shouldLinkToComplete:
-                            item.document.isFileAttached === false,
-                          shouldLinkToEdit:
-                            workQueueHelper.showEditDocketEntry &&
-                            item.isQC &&
-                            item.document.eventCode !== 'P',
-                          shouldLinkToEditCourtIssued:
-                            workQueueHelper.showEditDocketEntry &&
-                            item.isCourtIssuedDocument,
-                          workItemIdToMarkAsRead: !item.isRead
-                            ? item.workItemId
-                            : null,
-                        })}
+                        href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
                         onClick={e => {
                           e.stopPropagation();
                         }}

@@ -1967,4 +1967,318 @@ describe('Case entity', () => {
       });
     });
   });
+
+  describe('Case Consolidation Eligibility', () => {
+    describe('canConsolidate', () => {
+      let caseEntity;
+
+      beforeEach(() => {
+        caseEntity = new Case(
+          { ...MOCK_CASE, status: 'Submitted' },
+          {
+            applicationContext,
+          },
+        );
+      });
+
+      it('should fail when the pending case status is ineligible', () => {
+        caseEntity.status = 'New';
+        const result = caseEntity.canConsolidate();
+
+        expect(result).toEqual(false);
+      });
+
+      it('should pass when a case has an eligible case status', () => {
+        const result = caseEntity.canConsolidate();
+
+        expect(result).toEqual(true);
+      });
+
+      it('should accept a case for consolidatation as a param to check its eligible case status', () => {
+        let result;
+
+        // verify a failure on the current (this) case
+        caseEntity.status = 'New';
+        result = caseEntity.canConsolidate();
+        expect(result).toEqual(false);
+
+        // should also fail because duplicate of (this) case
+        const otherCase = { ...caseEntity };
+        result = caseEntity.canConsolidate(otherCase);
+        expect(result).toEqual(false);
+
+        otherCase.status = 'Submitted';
+        result = caseEntity.canConsolidate(otherCase);
+        expect(result).toEqual(true);
+      });
+    });
+
+    describe('getConsolidationStatus', () => {
+      let leadCaseEntity;
+      let pendingCaseEntity;
+
+      beforeEach(() => {
+        leadCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+
+        pendingCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            docketNumber: '102-19',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+      });
+
+      it('should fail when case statuses are not the same', () => {
+        pendingCaseEntity.status = 'Calendared';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual(['Case status is not the same']);
+      });
+
+      it('should fail when cases are the same', () => {
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: leadCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual(['Cases are the same']);
+      });
+
+      it('should fail when case procedures are not the same', () => {
+        pendingCaseEntity.procedureType = 'small';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual(['Case procedure is not the same']);
+      });
+
+      it('should fail when case trial locations are not the same', () => {
+        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual(['Place of trial is not the same']);
+      });
+
+      it('should fail when case judges are not the same', () => {
+        pendingCaseEntity.associatedJudge = 'Smashmouth';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual(['Judge is not the same']);
+      });
+
+      it('should fail when case statuses are both ineligible', () => {
+        leadCaseEntity.status = 'Closed';
+        pendingCaseEntity.status = 'Closed';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual([
+          'Case status is Closed and cannot be consolidated',
+        ]);
+      });
+
+      it('should only return the ineligible failure if the pending case status is ineligible', () => {
+        leadCaseEntity.status = 'Submitted';
+        pendingCaseEntity.status = 'Closed';
+        pendingCaseEntity.procedureType = 'small';
+        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+        pendingCaseEntity.associatedJudge = 'Smashmouth';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual([
+          'Case status is Closed and cannot be consolidated',
+        ]);
+      });
+
+      it('should return all reasons for the failure if the case status is eligible', () => {
+        pendingCaseEntity.procedureType = 'small';
+        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+        pendingCaseEntity.associatedJudge = 'Smashmouth';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual([
+          'Case procedure is not the same',
+          'Place of trial is not the same',
+          'Judge is not the same',
+        ]);
+      });
+
+      it('should pass when both cases are eligible for consolidation', () => {
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(true);
+        expect(result.reason).toEqual([]);
+      });
+    });
+
+    describe('setLeadCase', () => {
+      it('Should set the leadCaseId on the given case', async () => {
+        const leadCaseId = 'd64ba5a9-b37b-479d-9201-067ec6e335cc';
+        const caseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+        const result = caseEntity.setLeadCase(leadCaseId);
+
+        expect(result.leadCaseId).toEqual(leadCaseId);
+      });
+    });
+
+    describe('sortByDocketNumber', () => {
+      it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {
+        const result = Case.sortByDocketNumber([
+          {
+            caseId: '123',
+            docketNumber: '110-19',
+          },
+          {
+            caseId: '234',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+
+        expect(result).toEqual([
+          {
+            caseId: '234',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '123',
+            docketNumber: '110-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+      });
+
+      it('Should return the cases as an array sorted by docket number for cases filed in different years', () => {
+        const result = Case.sortByDocketNumber([
+          {
+            caseId: '123',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '234',
+            docketNumber: '110-18',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+          {
+            caseId: '456',
+            docketNumber: '120-18',
+          },
+        ]);
+
+        expect(result).toEqual([
+          {
+            caseId: '234',
+            docketNumber: '110-18',
+          },
+          {
+            caseId: '456',
+            docketNumber: '120-18',
+          },
+          {
+            caseId: '123',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+      });
+    });
+
+    describe('findLeadCaseForCases', () => {
+      it('Should return the case with the lowest docket number for cases filed in the same year', () => {
+        const result = Case.findLeadCaseForCases([
+          {
+            caseId: '123',
+            docketNumber: '110-19',
+          },
+          {
+            caseId: '234',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+
+        expect(result.caseId).toEqual('234');
+      });
+
+      it('Should return the case with the lowest docket number for cases filed in different years', () => {
+        const result = Case.findLeadCaseForCases([
+          {
+            caseId: '123',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '234',
+            docketNumber: '110-18',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+
+        expect(result.caseId).toEqual('234');
+      });
+    });
+  });
 });

@@ -1,10 +1,27 @@
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
-import { back, externalRoute, route, router } from './routerPublic';
+import {
+  back,
+  createObjectURL,
+  externalRoute,
+  revokeObjectURL,
+  route,
+  router,
+} from './routerPublic';
+
+// Icons - Solid
+import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
+import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
+import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
-import { faSync } from '@fortawesome/free-solid-svg-icons';
-import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
+import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
+
+// Icons - Regular
+import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
+import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
+
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
@@ -29,7 +46,17 @@ const appPublic = {
       return value;
     });
 
-    library.add(faSearch, faSync, faTimesCircleRegular, faUser);
+    library.add(
+      faFileAltSolid,
+      faPrint,
+      faSearch,
+      faSync,
+      faTimesCircle,
+      faTimesCircleRegular,
+      faArrowAltCircleLeftSolid,
+      faArrowAltCircleLeftRegular,
+      faUser,
+    );
 
     presenter.providers.applicationContext = applicationContext;
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
@@ -38,7 +65,9 @@ const appPublic = {
 
     presenter.providers.router = {
       back,
+      createObjectURL,
       externalRoute,
+      revokeObjectURL,
       route,
     };
 

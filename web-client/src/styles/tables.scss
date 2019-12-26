@@ -399,6 +399,7 @@ table.docket-record {
     }
 
     .filing-type-icon {
+      padding-right: 0;
       text-align: right;
 
       svg {
@@ -441,6 +442,10 @@ table.docket-record {
 
     .hide-on-mobile {
       display: none;
+    }
+
+    &.responsive-table tr {
+      display: table-row;
     }
 
     td {
@@ -547,6 +552,12 @@ table.case-list tbody tr:nth-child(even) td {
 }
 
 .draft-documents {
+  thead {
+    th {
+      background-color: color($theme-color-base-lightest);
+      font-weight: $font-semibold;
+    }
+  }
   .smaller-column {
     width: 130px;
   }

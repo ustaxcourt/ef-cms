@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { CaseDetailHeader } from '../CaseDetailHeader';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
 import { ErrorNotification } from '../ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -13,11 +13,13 @@ export const OrdersNeededSummary = connect(
     openCreateOrderChooseTypeModalSequence:
       sequences.openCreateOrderChooseTypeModalSequence,
     printFromBrowserSequence: sequences.printFromBrowserSequence,
+    showModal: state.showModal,
   },
   ({
     formattedCaseDetail,
     openCreateOrderChooseTypeModalSequence,
     printFromBrowserSequence,
+    showModal,
   }) => {
     return (
       <>
@@ -25,17 +27,20 @@ export const OrdersNeededSummary = connect(
         <section className="grid-container">
           <SuccessNotification />
           <ErrorNotification />
+          {showModal == 'CreateOrderChooseTypeModal' && (
+            <CreateOrderChooseTypeModal />
+          )}
           <div>
             <h1>
               Orders Needed{' '}
               <div className="display-inline-block margin-left-2 margin-top-neg-1">
                 <Button
                   link
+                  icon="print"
                   onClick={() => {
                     printFromBrowserSequence();
                   }}
                 >
-                  <FontAwesomeIcon icon="print" size="sm" />
                   Print
                 </Button>
               </div>
@@ -72,10 +77,11 @@ export const OrdersNeededSummary = connect(
 
           <div className="margin-top-3">
             <Button
+              icon="clipboard-list"
               id="button-create-order"
               onClick={() => openCreateOrderChooseTypeModalSequence()}
             >
-              <FontAwesomeIcon icon="clipboard-list" size="1x" /> Create Order
+              Create Order
             </Button>
           </div>
         </section>

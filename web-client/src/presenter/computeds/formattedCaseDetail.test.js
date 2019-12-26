@@ -1,16 +1,44 @@
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { User } from '../../../../shared/src/business/entities/User';
+import { applicationContext } from '../../applicationContext';
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
+import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+let globalUser;
+
 const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
+  {
+    ...applicationContext,
+    getCurrentUser: () => {
+      return globalUser;
+    },
+  },
 );
+
+const getBaseState = user => {
+  globalUser = user;
+  return {
+    permissions: getUserPermissions(user),
+  };
+};
+
+const petitionsClerkUser = {
+  role: User.ROLES.petitionsClerk,
+  userId: '123',
+};
+const docketClerkUser = {
+  role: User.ROLES.docketClerk,
+  userId: '234',
+};
 
 describe('formattedCaseDetail', () => {
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
+        ...getBaseState(petitionsClerkUser),
         caseDetail: {},
       },
     });
@@ -18,6 +46,32 @@ describe('formattedCaseDetail', () => {
       caseDeadlines: [],
       docketRecordWithDocument: [],
     });
+  });
+
+  it('formats the irs date', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        caseDetail: {
+          caseCaption: 'Brett Osborne, Petitioner',
+          docketRecord: [],
+          documents: [
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              documentType: 'Petition',
+              status: 'served',
+            },
+          ],
+          irsSendDate: '2018-11-21T20:49:28.192Z',
+          petitioners: [{ name: 'bob' }],
+        },
+        constants: {
+          CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
+        },
+        form: {},
+      },
+    });
+    expect(result.irsDateFormatted).toContain('11/21/18');
+    expect(result.documents[0].isPetition).toEqual(true);
   });
 
   it('maps docket record dates', () => {
@@ -36,6 +90,7 @@ describe('formattedCaseDetail', () => {
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
+        ...getBaseState(petitionsClerkUser),
         caseDetail,
         caseDetailErrors: {},
       },
@@ -69,6 +124,7 @@ describe('formattedCaseDetail', () => {
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
+        ...getBaseState(petitionsClerkUser),
         caseDetail,
         caseDetailErrors: {},
       },
@@ -78,7 +134,7 @@ describe('formattedCaseDetail', () => {
     );
   });
 
-  it('formats docket record document data strings and descriptions correctly', () => {
+  it('formats docket record document data strings and descriptions and docket entry fields correctly', () => {
     const caseDetail = {
       caseCaption: 'Brett Osborne, Petitioner',
       contactPrimary: {
@@ -183,6 +239,7 @@ describe('formattedCaseDetail', () => {
         },
         {
           additionalInfo: 'Additional Info',
+          additionalInfo2: 'Additional Info2',
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           documentId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -207,6 +264,7 @@ describe('formattedCaseDetail', () => {
     };
     const result = runCompute(formattedCaseDetail, {
       state: {
+        ...getBaseState(petitionsClerkUser),
         caseDetail,
         caseDetailErrors: {},
       },
@@ -239,6 +297,131 @@ describe('formattedCaseDetail', () => {
             'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition Additional Info',
           filingsAndProceedings: '(Lodged)',
         },
+      },
+    ]);
+    expect(result.formattedDocketEntries).toMatchObject([
+      {
+        description: 'Amended Petition',
+        editLink: '',
+        filingsAndProceedingsWithAdditionalInfo: ' (No Objection)',
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentEditLink: true,
+        showDocumentProcessing: false,
+        showInProgress: false,
+        showLinkToDocument: false,
+      },
+      {
+        description:
+          'First Amended Unsworn Declaration under Penalty of Perjury in Support',
+        editLink: '',
+        filingsAndProceedingsWithAdditionalInfo: ' (Exhibit(s))',
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentEditLink: true,
+        showDocumentProcessing: false,
+        showInProgress: false,
+        showLinkToDocument: false,
+      },
+      {
+        description:
+          'Motion for Leave to File Computation for Entry of Decision',
+        editLink: '',
+        filingsAndProceedingsWithAdditionalInfo:
+          ' (C/S 06/07/18) (Exhibit(s)) (Attachment(s)) (Objection)',
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentEditLink: true,
+        showDocumentProcessing: false,
+        showInProgress: false,
+        showLinkToDocument: false,
+      },
+      {
+        description:
+          'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition Additional Info',
+        editLink: '',
+        filingsAndProceedingsWithAdditionalInfo:
+          ' Additional Info (Lodged) Additional Info2',
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentEditLink: true,
+        showDocumentProcessing: false,
+        showInProgress: false,
+        showLinkToDocument: false,
+      },
+    ]);
+  });
+
+  it('should return correct editLink for docket clerk users', () => {
+    const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      contactPrimary: {
+        name: 'Bob',
+      },
+      docketRecord: [
+        {
+          description: 'Order for Amended Petition',
+          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          filingDate: '2019-04-19T17:29:13.120Z',
+        },
+        {
+          description: 'Answer',
+          documentId: '733d0ac4-5f7c-4024-93ae-b6d791d3c8bd',
+          filingDate: '2019-05-19T17:29:13.120Z',
+        },
+        {
+          description: 'Motion to Dismiss for Lack of Jurisdiction',
+          documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+          filingDate: '2019-06-19T17:29:13.120Z',
+        },
+      ],
+      documents: [
+        {
+          attachments: false,
+          certificateOfService: false,
+          createdAt: '2019-04-19T17:29:13.120Z',
+          documentId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
+          documentTitle: 'Order for Amended Petition',
+          documentType: 'OAP - Order for Amended Petition',
+          eventCode: 'OAP',
+        },
+        {
+          attachments: false,
+          certificateOfService: false,
+          createdAt: '2019-05-19T17:29:13.120Z',
+          documentId: '733d0ac4-5f7c-4024-93ae-b6d791d3c8bd',
+          documentTitle: 'Answer',
+          documentType: 'Answer',
+          eventCode: 'A',
+          isFileAttached: false,
+        },
+        {
+          attachments: false,
+          certificateOfService: false,
+          createdAt: '2019-06-19T17:29:13.120Z',
+          documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+          documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+          documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+          eventCode: 'M073',
+          workItems: [{ isQC: true }],
+        },
+      ],
+    };
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail,
+        caseDetailErrors: {},
+      },
+    });
+    expect(result.formattedDocketEntries).toMatchObject([
+      {
+        editLink: '/edit-court-issued',
+        showDocumentEditLink: true,
+      },
+      {
+        editLink: '/complete',
+        showDocumentEditLink: true,
+      },
+      {
+        editLink: '/edit',
+        showDocumentEditLink: true,
       },
     ]);
   });
@@ -311,6 +494,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = sortedCaseDetail;
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -340,6 +524,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = sortedCaseDetail;
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
           sessionMetadata: {
@@ -373,6 +558,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = sortedCaseDetail;
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
           sessionMetadata: {
@@ -405,6 +591,7 @@ describe('formattedCaseDetail', () => {
       const caseDetail = sortedCaseDetail;
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
           sessionMetadata: {
@@ -442,6 +629,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -456,6 +644,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -470,6 +659,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -484,6 +674,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -501,6 +692,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -517,6 +709,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -538,6 +731,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -558,6 +752,7 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
@@ -587,6 +782,7 @@ describe('formattedCaseDetail', () => {
 
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDeadlines,
           caseDetail,
           caseDetailErrors: {},
@@ -623,6 +819,7 @@ describe('formattedCaseDetail', () => {
 
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDeadlines,
           caseDetail,
           caseDetailErrors: {},
@@ -639,11 +836,147 @@ describe('formattedCaseDetail', () => {
       };
       const result = runCompute(formattedCaseDetail, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           caseDetailErrors: {},
         },
       });
       expect(result.caseDeadlines.length).toEqual(0);
+    });
+  });
+
+  it('formats draft documents', () => {
+    const caseDetail = {
+      caseCaption: 'Brett Osborne, Petitioner',
+      docketRecord: [
+        {
+          description: 'Petition',
+          documentId: 'Petition',
+          filedBy: 'Jessica Frase Marine',
+          filingDate: '2019-02-28T21:14:39.488Z',
+        },
+      ],
+      documents: [
+        {
+          createdAt: '2019-02-28T21:14:39.488Z',
+          documentId: 'Petition',
+          documentType: 'Petition',
+          showValidationInput: '2019-02-28T21:14:39.488Z',
+          status: 'served',
+        },
+        {
+          archived: false,
+          createdAt: '2019-02-28T21:14:39.488Z',
+          documentId: 'd-1-2-3',
+          documentTitle: 'Order to do something',
+          documentType: 'Order',
+        },
+        {
+          archived: false,
+          createdAt: '2019-02-28T21:14:39.488Z',
+          documentId: 'd-2-3-4',
+          documentTitle: 'Stipulated Decision',
+          documentType: 'Stipulated Decision',
+        },
+      ],
+      hasIrsNotice: false,
+      hasVerifiedIrsNotice: false,
+      petitioners: [{ name: 'bob' }],
+    };
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail,
+        caseDetailErrors: {},
+      },
+    });
+    expect(result.formattedDraftDocuments).toMatchObject([
+      {
+        createdAtFormatted: '02/28/19',
+        descriptionDisplay: 'Order to do something',
+        documentId: 'd-1-2-3',
+        documentType: 'Order',
+        editLink: '',
+        isCourtIssuedDocument: false,
+        isInProgress: false,
+        isNotServedCourtIssuedDocument: false,
+        isPetition: false,
+        isStatusServed: false,
+        showDocumentEditLink: true,
+        signedAtFormatted: undefined,
+        signedAtFormattedTZ: undefined,
+      },
+      {
+        createdAtFormatted: '02/28/19',
+        descriptionDisplay: 'Stipulated Decision',
+        documentId: 'd-2-3-4',
+        documentType: 'Stipulated Decision',
+        editLink: '',
+        isCourtIssuedDocument: true,
+        isInProgress: false,
+        isNotServedCourtIssuedDocument: true,
+        isPetition: false,
+        isStatusServed: false,
+        showDocumentEditLink: true,
+        signedAtFormatted: undefined,
+        signedAtFormattedTZ: undefined,
+      },
+    ]);
+  });
+
+  describe('consolidatedCases', () => {
+    it('should format consolidated cases if they exist', () => {
+      const caseDetail = {
+        associatedJudge: 'Judge Judy',
+        consolidatedCases: [
+          {
+            associatedJudge: 'Guy Fieri',
+            petitioners: [{ name: 'Bobby Flay' }],
+            status: Case.STATUS_TYPES.calendared,
+            trialDate: '2018-12-11T05:00:00Z',
+            trialLocation: 'Flavortown',
+            trialSessionId: '123',
+          },
+        ],
+        petitioners: [{ name: 'bob' }],
+        status: Case.STATUS_TYPES.calendared,
+        trialDate: '2018-12-11T05:00:00Z',
+        trialLocation: 'England is my City',
+        trialSessionId: '123',
+      };
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+
+      expect(result.consolidatedCases).toBeDefined();
+      expect(result.consolidatedCases.length).toEqual(1);
+    });
+
+    it('should default consolidatedCases to an empty array if they do not exist', () => {
+      const caseDetail = {
+        associatedJudge: 'Judge Judy',
+        petitioners: [{ name: 'bob' }],
+        status: Case.STATUS_TYPES.calendared,
+        trialDate: '2018-12-11T05:00:00Z',
+        trialLocation: 'England is my City',
+        trialSessionId: '123',
+      };
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+        },
+      });
+
+      expect(result.consolidatedCases).toBeDefined();
+      expect(result.consolidatedCases).toEqual([]);
     });
   });
 });

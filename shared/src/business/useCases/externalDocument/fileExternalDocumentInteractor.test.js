@@ -12,6 +12,7 @@ describe('fileExternalDocumentInteractor', () => {
   let caseRecord = {
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     contactPrimary: {
+      email: 'fieri@example.com',
       name: 'Guy Fieri',
     },
     createdAt: '',
@@ -37,6 +38,7 @@ describe('fileExternalDocumentInteractor', () => {
     role: User.ROLES.petitioner,
     userId: 'petitioner',
   };
+
   it('should throw an error if not authorized', async () => {
     let error;
     try {
@@ -71,11 +73,14 @@ describe('fileExternalDocumentInteractor', () => {
     expect(error.message).toContain('Unauthorized');
   });
 
-  it('add documents and workitems', async () => {
+  it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
     let error;
-    let getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
-    let saveWorkItemForNonPaperSpy = sinon.spy();
-    let updateCaseSpy = sinon.spy();
+    const getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
+    const saveWorkItemForNonPaperSpy = sinon.spy();
+    const updateCaseSpy = sinon.spy();
+    const sendBulkTemplatedEmailMock = jest.fn();
+
+    let updatedCase;
     try {
       applicationContext = {
         environment: { stage: 'local' },
@@ -86,6 +91,9 @@ describe('fileExternalDocumentInteractor', () => {
             userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
           });
         },
+        getDispatchers: () => ({
+          sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
+        }),
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdSpy,
           getUserById: ({ userId }) => MOCK_USERS[userId],
@@ -94,11 +102,12 @@ describe('fileExternalDocumentInteractor', () => {
         }),
         getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       };
-      await fileExternalDocumentInteractor({
+      updatedCase = await fileExternalDocumentInteractor({
         applicationContext,
         documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
           caseId: caseRecord.caseId,
+          documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
         },
       });
@@ -109,5 +118,58 @@ describe('fileExternalDocumentInteractor', () => {
     expect(getCaseByCaseIdSpy.called).toEqual(true);
     expect(saveWorkItemForNonPaperSpy.called).toEqual(true);
     expect(updateCaseSpy.called).toEqual(true);
+    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(updatedCase.documents[3].status).toEqual('served');
+    expect(updatedCase.documents[3].servedAt).toBeDefined();
+  });
+
+  it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
+    let error;
+    const getCaseByCaseIdSpy = sinon.stub().returns(caseRecord);
+    const saveWorkItemForNonPaperSpy = sinon.spy();
+    const updateCaseSpy = sinon.spy();
+    const sendBulkTemplatedEmailMock = jest.fn();
+
+    let updatedCase;
+    try {
+      applicationContext = {
+        environment: { stage: 'local' },
+        getCurrentUser: () => {
+          return new User({
+            name: 'Respondent',
+            role: User.ROLES.respondent,
+            userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+          });
+        },
+        getDispatchers: () => ({
+          sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
+        }),
+        getPersistenceGateway: () => ({
+          getCaseByCaseId: getCaseByCaseIdSpy,
+          getUserById: ({ userId }) => MOCK_USERS[userId],
+          saveWorkItemForNonPaper: saveWorkItemForNonPaperSpy,
+          updateCase: updateCaseSpy,
+        }),
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      };
+      updatedCase = await fileExternalDocumentInteractor({
+        applicationContext,
+        documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+        documentMetadata: {
+          caseId: caseRecord.caseId,
+          documentTitle: 'Amended Simultaneous Memoranda of Law',
+          documentType: 'Amended Simultaneous Memoranda of Law',
+        },
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeUndefined();
+    expect(getCaseByCaseIdSpy.called).toEqual(true);
+    expect(saveWorkItemForNonPaperSpy.called).toEqual(true);
+    expect(updateCaseSpy.called).toEqual(true);
+    expect(sendBulkTemplatedEmailMock).not.toHaveBeenCalled();
+    expect(updatedCase.documents[3].status).toBeUndefined();
+    expect(updatedCase.documents[3].servedAt).toBeUndefined();
   });
 });

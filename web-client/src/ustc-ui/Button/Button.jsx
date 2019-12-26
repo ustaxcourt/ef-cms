@@ -10,14 +10,11 @@ export const Button = props => {
     icon,
     link,
     secondary,
-    type,
     ...remainingProps
   } = props;
 
   let { marginDirection } = props;
   marginDirection = marginDirection || 'right';
-
-  remainingProps.type = type || 'button';
 
   const Element = href ? 'a' : 'button';
 
@@ -30,7 +27,7 @@ export const Button = props => {
   );
 
   return (
-    <Element className={classes} type="button" {...remainingProps}>
+    <Element className={classes} {...remainingProps}>
       {icon && (
         <FontAwesomeIcon className="margin-right-05" icon={icon} size="1x" />
       )}

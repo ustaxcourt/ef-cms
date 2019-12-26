@@ -12,16 +12,215 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/file-a-petition/step-1&info=reveal-file-a-petition-inputs',
   },
+
+  /* case detail */
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19',
   {
     actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
     ],
-    notes: 'checks a11y of case information tab panel',
+    notes: 'checks a11y of case information tab, overview secondary tab',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=tab-case-info',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/108-19&info=case-information-tab-overview',
   },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-petitioner to be visible',
+      'click element #tab-petitioner',
+    ],
+    notes: 'checks a11y of case information tab, petitioner secondary tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=case-information-tab-petitioner',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-respondent to be visible',
+      'click element #tab-respondent',
+    ],
+    notes: 'checks a11y of case information tab, respondent secondary tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/107-19&info=case-information-tab-respondent',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-petitioner to be visible',
+      'click element #tab-petitioner',
+      'wait for #practitioner-search-field to be visible',
+      'set field #practitioner-search-field to GL1111',
+      'check field #practitioner-search-field',
+      'click element button#search-for-practitioner',
+      'wait for #counsel-matches-legend to be visible',
+    ],
+    notes: 'checks a11y of add practitioner modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=add-practitioner-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-petitioner to be visible',
+      'click element #tab-petitioner',
+      'wait for button#edit-practitioners-button to be visible',
+      'click element button#edit-practitioners-button',
+      'wait for #practitioner-representing-0 to be visible',
+    ],
+    notes: 'checks a11y of edit practitioners modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=edit-practitioners-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-respondent to be visible',
+      'click element #tab-respondent',
+      'wait for #respondent-search-field to be visible',
+      'set field #respondent-search-field to WN7777',
+      'check field #respondent-search-field',
+      'click element button#search-for-respondent',
+      'wait for #counsel-matches-legend to be visible',
+    ],
+    notes: 'checks a11y of add respondent modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=add-respondent-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #tab-respondent to be visible',
+      'click element #tab-respondent',
+      'wait for button#edit-respondents-button to be visible',
+      'click element button#edit-respondents-button',
+      'wait for #respondent-0 to be visible',
+    ],
+    notes: 'checks a11y of edit respondents modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=edit-respondents-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-in-progress to be visible',
+      'click element #tab-in-progress',
+      'wait for button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"] to be visible',
+      'click element button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"]',
+    ],
+    notes: 'checks the confirm modal when editing a signed draft document',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19&info=edit-signed-order-confirm-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-deadlines to be visible',
+      'click element #tab-deadlines',
+    ],
+    notes: 'checks a11y of deadlines tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/107-19&info=deadlines-tab',
+  },
+  {
+    actions: [
+      'wait for #case-detail-menu-button to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #case-detail-menu-button',
+      'wait for #button-add-deadline to be visible',
+      'wait for .progress-indicator to be hidden',
+      'click element #button-add-deadline',
+      'wait for #deadline-date-legend to be visible',
+    ],
+    notes: 'checks a11y of add deadline modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=add-deadline',
+  },
+  {
+    actions: [
+      'wait for #tab-in-progress to be visible',
+      'click element #tab-in-progress',
+    ],
+    notes: 'checks a11y of in progress tab, draft documents secondary tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=in-progress-tab-drafts',
+  },
+  {
+    actions: [
+      'wait for #tab-in-progress to be visible',
+      'click element #tab-in-progress',
+      'wait for #tab-messages to be visible',
+      'click element #tab-messages',
+    ],
+    notes: 'checks a11y of in progress tab, messages secondary tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=in-progress-tab-messages',
+  },
+  {
+    actions: [
+      'wait for #tab-in-progress to be visible',
+      'click element #tab-in-progress',
+      'wait for #tab-pending-report to be visible',
+      'click element #tab-pending-report',
+    ],
+    notes: 'checks a11y of in progress tab, pending report secondary tab',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/109-19&info=in-progress-tab-pending-report',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #remove-from-trial-session-btn to be visible',
+      'click element #remove-from-trial-session-btn',
+      'wait for #remove-from-trial-session-modal to be visible',
+    ],
+    notes: 'checks the remove from trial session modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/108-19&info=remove-case-from-session-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for .high-priority-btn to be visible',
+      'click element .high-priority-btn',
+      'wait for #prioritize-case-modal to be visible',
+    ],
+    notes: 'opens the prioritize case modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19&info=prioritize-case-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #remove-high-priority-btn to be visible',
+      'click element #remove-high-priority-btn',
+      'wait for #unprioritize-modal to be visible',
+    ],
+    notes: 'opens the unprioritize case modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/110-19&info=unprioritize-case-modal',
+  },
+  {
+    actions: [
+      'wait for #tab-case-information to be visible',
+      'click element #tab-case-information',
+      'wait for #add-to-trial-session-btn to be visible',
+      'click element #add-to-trial-session-btn',
+      'wait for #add-to-trial-session-modal to be visible',
+    ],
+    notes: 'checks the add to trial session modal',
+    url:
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19&info=add-case-to-session-modal',
+  },
+
+  /* document detail */
   {
     actions: [
       'wait for button#tab-irs-notice to be visible',
@@ -68,6 +267,8 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/documents/89c781f6-71ba-4ead-93d8-c681c2183a73&info=create-message-dialog',
   },
+
+  /* trial sessions */
   {
     actions: ['wait for table#upcoming-sessions to be visible'],
     notes: 'checks a11y of trial sessions table list',
@@ -80,10 +281,11 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',
   },
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=non-calendared-case',
+
+  /* misc */
   {
     actions: [
-      'wait for #tab-draft-documents to be visible',
-      'click element #tab-draft-documents',
       'wait for #button-create-order to be visible',
       'click element #button-create-order',
       'wait for #eventCode to be visible',
@@ -92,82 +294,7 @@ module.exports = [
     ],
     notes: 'checks a11y of create order modal',
     url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=create-order',
-  },
-  {
-    actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
-      'wait for #practitioner-search-field to be visible',
-      'set field #practitioner-search-field to GL1111',
-      'check field #practitioner-search-field',
-      'click element button#search-for-practitioner',
-      'wait for #counsel-matches-legend to be visible',
-    ],
-    notes: 'checks a11y of add practitioner modal',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=add-practitioner-modal',
-  },
-  {
-    actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
-      'wait for button#edit-practitioners-button to be visible',
-      'click element button#edit-practitioners-button',
-      'wait for #practitioner-representing-0 to be visible',
-    ],
-    notes: 'checks a11y of edit practitioners modal',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=edit-practitioners-modal',
-  },
-  {
-    actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
-      'wait for #respondent-search-field to be visible',
-      'set field #respondent-search-field to WN7777',
-      'check field #respondent-search-field',
-      'click element button#search-for-respondent',
-      'wait for #counsel-matches-legend to be visible',
-    ],
-    notes: 'checks a11y of add respondent modal',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19&info=add-respondent-modal',
-  },
-  {
-    actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
-      'wait for button#edit-respondents-button to be visible',
-      'click element button#edit-respondents-button',
-      'wait for #respondent-0 to be visible',
-    ],
-    notes: 'checks a11y of edit respondents modal',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/103-19&info=edit-respondents-modal',
-  },
-  {
-    actions: [
-      'wait for #tab-draft-documents to be visible',
-      'click element #tab-draft-documents',
-      'wait for button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"] to be visible',
-      'click element button[data-document-id="25100ec6-eeeb-4e88-872f-c99fad1fe6c7"]',
-    ],
-    notes: 'checks the confirm modal when editing a signed draft document',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19&info=edit-signed-order-confirm-modal',
-  },
-
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-order/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/sign',
-  {
-    actions: [
-      'wait for #button-add-deadline to be visible',
-      'click element #button-add-deadline',
-      'wait for #deadline-date-legend to be visible',
-    ],
-    notes: 'checks a11y of add deadline modal',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/105-19&info=add-deadline',
+      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/102-19/orders-needed&info=create-order',
   },
   {
     actions: [
@@ -178,6 +305,8 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19/orders-needed&info=orders-needed-summary',
   },
+
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19/edit-order/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/sign',
   {
     actions: [
       'wait for #trial-location to be visible',
@@ -189,58 +318,7 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/reports/blocked-cases&info=blocked-cases-alabama',
   },
-
-  {
-    actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
-      'wait for #remove-from-trial-session-btn to be visible',
-      'click element #remove-from-trial-session-btn',
-      'wait for #remove-from-trial-session-modal to be visible',
-    ],
-    notes: 'checks the remove from trial session modal',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/108-19&info=remove-case-from-session-modal',
-  },
-  {
-    actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
-      'wait for .high-priority-btn to be visible',
-      'click element .high-priority-btn',
-      'wait for #prioritize-case-modal to be visible',
-    ],
-    notes: 'opens the prioritize case modal',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/101-19&info=prioritize-case-modal',
-  },
-  {
-    actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
-      'wait for #remove-high-priority-btn to be visible',
-      'click element #remove-high-priority-btn',
-      'wait for #unprioritize-modal to be visible',
-    ],
-    notes: 'opens the unprioritize case modal',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/110-19&info=unprioritize-case-modal',
-  },
-  {
-    actions: [
-      'wait for #tab-case-info to be visible',
-      'click element #tab-case-info',
-      'wait for #add-to-trial-session-btn to be visible',
-      'click element #add-to-trial-session-btn',
-      'wait for #add-to-trial-session-modal to be visible',
-    ],
-    notes: 'checks the add to trial session modal',
-    url:
-      'http://localhost:1234/mock-login?token=petitionsclerk&path=/case-detail/104-19&info=add-case-to-session-modal',
-  },
-
   // this url probably needs to be moved to calendaring when those users are created
-  'http://localhost:1234/mock-login?token=petitionsclerk&path=/trial-session-detail/5b18af9e-4fbd-459b-8db7-7b15108c7fa5&info=non-calendared-case',
   'http://localhost:1234/mock-login?token=petitionsclerk&path=/reports/case-deadlines',
   {
     actions: [

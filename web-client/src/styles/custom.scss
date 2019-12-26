@@ -343,10 +343,6 @@ select[disabled] {
 }
 
 .create-case-review {
-  label {
-    margin-bottom: 8px;
-  }
-
   p.address-name {
     margin-bottom: 0px;
   }
@@ -458,6 +454,10 @@ select[disabled] {
 
   .usa-hint {
     margin: 0;
+  }
+
+  &.block {
+    display: block;
   }
 
   svg {
@@ -894,6 +894,13 @@ header.usa-header {
   button:hover {
     color: $color-primary-alt;
   }
+  .usa-button--outline {
+    background-color: $color-white;
+    color: color($theme-color-primary);
+    &:hover {
+      color: color($theme-color-primary-dark);
+    }
+  }
   .usa-tag {
     background: $color-white;
     color: color($theme-color-primary-darker);
@@ -935,7 +942,16 @@ hr.lighter {
   border-top: 1px solid color($theme-color-base-lighter);
 }
 
-.mobile-document-detail-tabs {
+.case-detail-primary-tabs__container {
+  background-color: color($theme-color-primary);
+}
+
+.case-detail-primary-tabs__tabs {
+  max-width: 1440px;
+  padding-right: 2rem;
+  padding-left: 2rem;
+  margin: 0 auto;
+
   @media only screen and (max-width: $medium-screen) {
     nav {
       display: none;
@@ -1279,8 +1295,9 @@ hr.lighter {
   }
 }
 
-.pdf-preview-btn {
+button.usa-button.pdf-preview-btn {
   line-height: 1.4rem;
+  text-align: left;
   word-break: break-all;
 }
 
@@ -1410,7 +1427,6 @@ button.change-scanner-button {
       margin-bottom: 20px;
     }
   }
-
 
   .advanced-search__button {
     margin-top: 39px;

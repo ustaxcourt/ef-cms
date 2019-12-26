@@ -101,6 +101,7 @@ exports.fileDocketEntryInteractor = async ({
           ...metadata,
           documentId,
           documentType: metadata.documentType,
+          mailingDate: metadata.mailingDate,
           relationship,
           userId: user.userId,
           ...caseEntity.getCaseContacts({
