@@ -18,7 +18,7 @@ export const SelectScannerSourceModal = connect(
       onCancelSequence="clearModalSequence"
       onConfirmSequence="selectScannerSequence"
     >
-      <div className="margin-top-1">
+      <div className="usa-form-group margin-top-1">
         <legend className="usa-legend" id="scanner-select">
           What scanner are you using?
         </legend>
@@ -51,7 +51,7 @@ export const SelectScannerSourceModal = connect(
           })}
         </select>
       </div>
-      <div className="margin-top-4">
+      <div className="usa-form-group margin-top-4">
         <label className="usa-label" htmlFor="scanner-duplex-select">
           How would you like to scan your documents?
         </label>
