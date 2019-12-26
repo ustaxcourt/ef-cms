@@ -3,7 +3,9 @@ import { state } from 'cerebral';
 export const scanBatchPreviewerHelper = get => {
   const selectedBatchIndex = get(state.selectedBatchIndex) || 0;
   const documentSelectedForScan = get(state.documentSelectedForScan);
-  const batches = get(state.batches[documentSelectedForScan]) || [];
+  const batches =
+    (documentSelectedForScan && get(state.batches[documentSelectedForScan])) ||
+    [];
   const selectedBatch = batches.length
     ? batches.find(b => b.index === selectedBatchIndex)
     : { pages: [] };
@@ -26,10 +28,21 @@ export const scanBatchPreviewerHelper = get => {
     selectPageImage = b64encoded;
   }
 
+  const duplexEnabled = get(state.scanner.duplexEnabled);
+  const scannerSource = get(state.scanner.scannerSourceName);
+
+  let scannerSourceDisplayName = 'None';
+  if (scannerSource) {
+    scannerSourceDisplayName = `${scannerSource} (${(duplexEnabled &&
+      'Double') ||
+      'Single'} sided)`;
+  }
+
   return {
     batches,
     currentPage: currentPageIndex,
-    scannerSource: get(state.scanner.scannerSourceName),
+    scannerSource,
+    scannerSourceDisplayName,
     selectedBatch: batches.length
       ? batches.find(b => b.index === selectedBatchIndex)
       : {},

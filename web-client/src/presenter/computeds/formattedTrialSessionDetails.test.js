@@ -13,6 +13,7 @@ describe('formattedTrialSessionDetails', () => {
     city: 'Hartford',
     courtReporter: 'Test Court Reporter',
     irsCalendarAdministrator: 'Test Calendar Admin',
+    isCalendared: false,
     judge: { name: 'Test Judge' },
     postalCode: '12345',
     startDate: '2019-11-25T15:00:00.000Z',
@@ -40,6 +41,8 @@ describe('formattedTrialSessionDetails', () => {
       },
     });
     expect(result).toMatchObject({
+      canDelete: false,
+      canEdit: false,
       formattedCityStateZip: 'Hartford, CT 12345',
       formattedCourtReporter: 'Test Court Reporter',
       formattedIrsCalendarAdministrator: 'Test Calendar Admin',
@@ -49,6 +52,37 @@ describe('formattedTrialSessionDetails', () => {
       formattedTrialClerk: 'Test Trial Clerk',
       noLocationEntered: false,
       showSwingSession: false,
+    });
+  });
+
+  it('formats trial session as editable if date is in future', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          startDate: '2079-11-25T15:00:00.000Z',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      canDelete: true,
+      canEdit: true,
+    });
+  });
+
+  it('formats trial session with canDelete false if the session is calendared', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: true,
+          startDate: '2079-11-25T15:00:00.000Z',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      canDelete: false,
+      canEdit: true,
     });
   });
 

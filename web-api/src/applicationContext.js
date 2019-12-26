@@ -170,6 +170,15 @@ const {
   deleteSectionOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteSectionOutboxRecord');
 const {
+  deleteTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/deleteTrialSession');
+const {
+  deleteTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/deleteTrialSessionInteractor');
+const {
+  deleteTrialSessionWorkingCopy,
+} = require('../../shared/src/persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy');
+const {
   deleteUserConnection,
 } = require('../../shared/src/persistence/dynamo/notifications/deleteUserConnection');
 const {
@@ -616,6 +625,9 @@ const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
 const {
+  updateTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/updateTrialSessionInteractor');
+const {
   updateTrialSessionWorkingCopy,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy');
 const {
@@ -802,6 +814,8 @@ module.exports = (appContextUser = {}) => {
         deleteDocument,
         deleteJudgesCaseNote,
         deleteSectionOutboxRecord,
+        deleteTrialSession,
+        deleteTrialSessionWorkingCopy,
         deleteUserConnection,
         deleteUserFromCase,
         deleteUserOutboxRecord,
@@ -963,6 +977,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseNoteInteractor,
         deleteCounselFromCaseInteractor,
         deleteJudgesCaseNoteInteractor,
+        deleteTrialSessionInteractor,
         fetchPendingItemsInteractor,
         fileCourtIssuedDocketEntryInteractor,
         fileCourtIssuedOrderInteractor,
@@ -1041,6 +1056,7 @@ module.exports = (appContextUser = {}) => {
         updateDocketEntryInteractor,
         updateJudgesCaseNoteInteractor,
         updatePrimaryContactInteractor,
+        updateTrialSessionInteractor,
         updateTrialSessionWorkingCopyInteractor,
         updateUserContactInformationInteractor,
         userIsAssociated,
