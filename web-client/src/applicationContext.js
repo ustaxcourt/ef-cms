@@ -50,6 +50,7 @@ import { TrialSession } from '../../shared/src/business/entities/trialSessions/T
 import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../shared/src/business/entities/User';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
+import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
@@ -66,6 +67,10 @@ import {
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
+import {
+  constants,
+  setServiceIndicatorsForCase,
+} from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
@@ -82,10 +87,11 @@ import { createWorkItemInteractor } from '../../shared/src/proxies/workitems/cre
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAssociation/deleteCounselFromCaseProxy';
-import { downloadDocumentFileInteractor } from '../../shared/src/business/useCases/downloadDocumentFileInteractor';
+import { deleteProceduralNoteInteractor } from '../../shared/src/proxies/proceduralNote/deleteProceduralNoteProxy';
 import { fileCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/fileCourtIssuedDocketEntryProxy';
 import { fileCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/fileCourtIssuedOrderProxy';
 import { fileDocketEntryInteractor } from '../../shared/src/proxies/documents/fileDocketEntryProxy';
+import { fileExternalDocumentForConsolidatedInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentForConsolidatedProxy';
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
@@ -113,6 +119,8 @@ import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseNoteInteractor } from '../../shared/src/proxies/caseNote/getCaseNoteProxy';
 import { getCaseTypesInteractor } from '../../shared/src/business/useCases/getCaseTypesInteractor';
 import { getCasesByUserInteractor } from '../../shared/src/proxies/getCasesByUserProxy';
+import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
+import { getConsolidatedCasesByUserInteractor } from '../../shared/src/proxies/getConsolidatedCasesByUserProxy';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentQCBatchedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForSectionProxy';
 import { getDocumentQCBatchedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCBatchedForUserProxy';
@@ -151,11 +159,11 @@ import { runBatchProcessInteractor } from '../../shared/src/proxies/runBatchProc
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
 import { saveIntermediateDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/saveIntermediateDocketEntryProxy';
+import { saveProceduralNoteInteractor } from '../../shared/src/proxies/proceduralNote/saveProceduralNoteProxy';
 import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxies/sendPetitionToIRSHoldingQueueProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
-import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setTrialSessionAsSwingSessionInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
@@ -229,6 +237,7 @@ const setCurrentUserToken = newToken => {
 
 const allUseCases = {
   addCaseToTrialSessionInteractor,
+  addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
@@ -249,11 +258,12 @@ const allUseCases = {
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,
-  downloadDocumentFileInteractor,
+  deleteProceduralNoteInteractor,
   fetchPendingItemsInteractor,
   fileCourtIssuedDocketEntryInteractor,
   fileCourtIssuedOrderInteractor,
   fileDocketEntryInteractor,
+  fileExternalDocumentForConsolidatedInteractor,
   fileExternalDocumentInteractor,
   filePetitionFromPaperInteractor,
   filePetitionInteractor,
@@ -275,6 +285,8 @@ const allUseCases = {
   getCaseNoteInteractor,
   getCaseTypesInteractor,
   getCasesByUserInteractor,
+  getConsolidatedCasesByCaseInteractor,
+  getConsolidatedCasesByUserInteractor,
   getDocumentQCBatchedForSectionInteractor,
   getDocumentQCBatchedForUserInteractor,
   getDocumentQCInboxForSectionInteractor,
@@ -310,6 +322,7 @@ const allUseCases = {
   runTrialSessionPlanningReportInteractor,
   saveCaseDetailInternalEditInteractor,
   saveIntermediateDocketEntryInteractor,
+  saveProceduralNoteInteractor,
   sendPetitionToIRSHoldingQueueInteractor,
   serveCourtIssuedDocumentInteractor,
   setItemInteractor,
@@ -386,7 +399,7 @@ const applicationContext = {
     );
   },
   getConstants: () =>
-    deepFreeze({
+    (process.env.USTC_DEBUG ? i => i : deepFreeze)({
       BUSINESS_TYPES: ContactFactory.BUSINESS_TYPES,
       CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
       CASE_SEARCH_PAGE_SIZE: CaseSearch.CASE_SEARCH_PAGE_SIZE,
@@ -406,6 +419,7 @@ const applicationContext = {
       REFRESH_INTERVAL: 20 * MINUTES,
       ROLE_PERMISSIONS,
       SECTIONS,
+      SERVICE_INDICATOR_TYPES: constants,
       SERVICE_STAMP_OPTIONS,
       SESSION_DEBOUNCE: 250,
       SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
@@ -481,12 +495,12 @@ const applicationContext = {
       const scanner = await import(
         '../../shared/src/persistence/dynamsoft/getScannerMockInterface'
       );
-      return scanner.getScannerInterface;
+      return scanner.getScannerInterface();
     } else {
       const scanner = await import(
         '../../shared/src/persistence/dynamsoft/getScannerInterface'
       );
-      return scanner.getScannerInterface;
+      return scanner.getScannerInterface();
     }
   },
   getScannerResourceUri: () => {
@@ -518,12 +532,6 @@ const applicationContext = {
       setServiceIndicatorsForCase,
       sortDocketRecords,
     };
-  },
-  getWebSocketClient: token => {
-    const notificationsUrl = process.env.WS_URL || 'ws://localhost:3011';
-    const connectionUrl = `${notificationsUrl}?token=${token}`;
-    const socket = new WebSocket(connectionUrl);
-    return socket;
   },
   setCurrentUser,
   setCurrentUserToken,

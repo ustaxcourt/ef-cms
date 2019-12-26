@@ -39,7 +39,7 @@ export const CaseDeadlines = connect(
                   <tr>
                     <th>Due date</th>
                     <th>Docket</th>
-                    <th>Case name</th>
+                    <th>Case title</th>
                     <th>Description</th>
                   </tr>
                 </thead>

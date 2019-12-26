@@ -31,9 +31,32 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     }
   }
 
+  const showConsolidatedCaseIcon = !!caseDetail.leadCaseId;
+
+  const showCreateOrderButton =
+    permissions.COURT_ISSUED_DOCUMENT &&
+    ['CaseDetailInternal'].includes(currentPage);
+
+  const showAddDocketEntryButton =
+    permissions.DOCKET_ENTRY && ['CaseDetailInternal'].includes(currentPage);
+
+  const showCaseDetailHeaderMenu =
+    !isExternalUser && ['CaseDetailInternal'].includes(currentPage);
+
+  const showFileDocumentButton =
+    permissions.FILE_EXTERNAL_DOCUMENT &&
+    ['CaseDetail'].includes(currentPage) &&
+    userAssociatedWithCase;
+
   return {
     hidePublicCaseInformation: !isExternalUser,
+    showAddDocketEntryButton,
+    showCaseDetailHeaderMenu,
+    showConsolidatedCaseIcon,
+    showCreateOrderButton,
     showEditCaseButton: permissions.UPDATE_CASE_CONTEXT,
+    showExternalButtons: isExternalUser,
+    showFileDocumentButton,
     showFileFirstDocumentButton,
     showPendingAccessToCaseButton,
     showRequestAccessToCaseButton,

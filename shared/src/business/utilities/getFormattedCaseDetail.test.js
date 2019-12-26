@@ -452,6 +452,45 @@ describe('formatCase', () => {
       showPrioritized: true,
     });
   });
+
+  it('should set isLeadCase true on the case if it has a leadCaseId that matches its caseId', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      leadCaseId: mockCaseDetail.caseId,
+    });
+
+    expect(result).toMatchObject({
+      isLeadCase: true,
+    });
+  });
+
+  it('should set isLeadCase false on the case if it has a leadCaseId that matches its caseId', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      leadCaseId: 'notthecaseid',
+    });
+
+    expect(result).toMatchObject({
+      isLeadCase: false,
+    });
+  });
+
+  it('should set consolidated cases if there are any', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      consolidatedCases: [mockCaseDetail],
+    });
+
+    expect(result).toHaveProperty('consolidatedCases');
+    expect(result.consolidatedCases).toMatchObject([mockCaseDetail]);
+  });
+
+  it('should not set consolidated cases if none are passed', () => {
+    const result = formatCase(applicationContext, mockCaseDetail);
+
+    expect(result).toMatchObject(mockCaseDetail);
+    expect(result).not.toHaveProperty('consolidatedCases');
+  });
 });
 
 describe('formatCaseDeadlines', () => {

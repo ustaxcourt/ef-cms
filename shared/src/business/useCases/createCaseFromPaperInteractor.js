@@ -137,6 +137,7 @@ exports.createCaseFromPaperInteractor = async ({
       documentType: Document.INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: Document.INITIAL_DOCUMENT_TYPES.petition.eventCode,
       isPaper: true,
+      mailingDate: petitionEntity.mailingDate,
       partyPrimary: true,
       partySecondary,
       receivedAt: caseToAdd.receivedAt,
@@ -176,6 +177,7 @@ exports.createCaseFromPaperInteractor = async ({
           Document.INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee
             .eventCode,
         isPaper: true,
+        mailingDate: petitionEntity.mailingDate,
         partyPrimary: true,
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
@@ -212,6 +214,7 @@ exports.createCaseFromPaperInteractor = async ({
         eventCode:
           Document.INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
         isPaper: true,
+        mailingDate: petitionEntity.mailingDate,
         partyPrimary: true,
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
@@ -235,6 +238,7 @@ exports.createCaseFromPaperInteractor = async ({
         documentType: Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
         eventCode: Document.INITIAL_DOCUMENT_TYPES.stin.eventCode,
         isPaper: true,
+        mailingDate: petitionEntity.mailingDate,
         partyPrimary: true,
         partySecondary,
         receivedAt: caseToAdd.receivedAt,
@@ -260,6 +264,7 @@ exports.createCaseFromPaperInteractor = async ({
         eventCode:
           Document.INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
         isPaper: true,
+        mailingDate: petitionEntity.mailingDate,
         partyPrimary: true,
         partySecondary,
         receivedAt: caseToAdd.receivedAt,

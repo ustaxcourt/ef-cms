@@ -1,30 +1,50 @@
+import { Hint } from '../ustc-ui/Hint/Hint';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const ConfirmInitiateServiceModal = connect(
   {
-    cancelSequence: sequences.clearModalSequence,
+    cancelSequence: sequences.dismissModalSequence,
+    confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
     confirmSequence: sequences.serveCourtIssuedDocumentSequence,
   },
-  ({ cancelSequence, confirmSequence, documentTitle }) => {
+  ({
+    cancelSequence,
+    confirmInitiateServiceModalHelper,
+    confirmSequence,
+    documentTitle,
+  }) => {
     return (
       <ModalDialog
-        cancelLabel="No, take me back"
+        cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
         className="confirm-initiate-service-modal"
-        confirmLabel="Yes, serve"
+        confirmLabel="Yes, Serve"
         confirmSequence={confirmSequence}
-        message=""
         title="Are you ready to initiate service?"
       >
         <p className="margin-bottom-1">
           The following document will be served on all parties:
         </p>
-        <p className="margin-top-0 margin-bottom-5">
+        <p className="margin-top-0 margin-bottom-2">
           <strong>{documentTitle}</strong>
         </p>
+        {confirmInitiateServiceModalHelper.showPaperAlert && (
+          <Hint exclamation fullWidth className="block">
+            <div className="margin-bottom-1">
+              This case has parties receiving paper service:
+            </div>
+            {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
+              contact => (
+                <div className="margin-bottom-1" key={contact.name}>
+                  {contact.name}
+                </div>
+              ),
+            )}
+          </Hint>
+        )}
       </ModalDialog>
     );
   },

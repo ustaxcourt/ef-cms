@@ -121,20 +121,56 @@ jobs:
     docker:
       - image: sutt0n/ef-cms:latest
     environment:
-      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+      _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
       - run:
-          name: Pa11y
+          name: Pa11y - Web Client Round 1
           command: |
-            npm run build:all &&
+            npm run build:all
             SLS_DEBUG=* RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
-            npm run test:pa11y
+            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
+      - run:
+          name: Pa11y - Web Client Round 2
+          command: |
+            sleep 5
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+      - run:
+          name: Pa11y - Web Client Docketclerk
+          command: |
+            sleep 5
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run test:pa11y:docketclerk --node-flags --max-old-space-size=1024
+      - run:
+          name: Pa11y - Web Client Petitionsclerk
+          command: |
+            sleep 5
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run test:pa11y:petitionsclerk --node-flags --max-old-space-size=1024
+      - run:
+          name: Pa11y - Web Client Petitioner
+          command: |
+            sleep 5
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:3000/api/swagger
+            sleep 5
+            npm run test:pa11y:petitioner --node-flags --max-old-space-size=1024
       - run:
           name: Pa11y - Public Site
           command: |
@@ -147,7 +183,7 @@ jobs:
       - image: sutt0n/ef-cms:latest
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - attach_workspace:
           at: ~/
@@ -186,11 +222,14 @@ jobs:
           name: Setup Dynamsoft Keys
           command: echo "export DYNAMSOFT_PRODUCT_KEYS='$(./get-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          name: Setup ES Instance Count
+          command: echo "export ES_INSTANCE_COUNT='$(./get-es-instance-count.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
           name: 'Deploy - Web Client - Terraform'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}"  -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
       - run:
           name: 'Deploy - Web API - Terraform'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "POST_CONFIRMATION_ROLE_ARN=${POST_CONFIRMATION_ROLE_ARN}" -e "CLOUDWATCH_ROLE_ARN=${CLOUDWATCH_ROLE_ARN}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
+          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -e "SES_DMARC_EMAIL=${SES_DMARC_EMAIL}" -e "POST_CONFIRMATION_ROLE_ARN=${POST_CONFIRMATION_ROLE_ARN}" -e "CLOUDWATCH_ROLE_ARN=${CLOUDWATCH_ROLE_ARN}" -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           name: Setup Elasticsearch Index Settings
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"

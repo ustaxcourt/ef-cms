@@ -191,52 +191,6 @@ describe('case detail computed', () => {
     expect(result.showFileDocumentButton).toEqual(false);
   });
 
-  it('should show add docket entry button if current page is CaseDetailInternal and user role is docketclerk', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetailInternal',
-        form: {},
-      },
-    });
-    expect(result.showAddDocketEntryButton).toEqual(true);
-  });
-
-  it('should not show add docket entry button if current page is not CaseDetailInternal or user role is not docketclerk', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: '789',
-    };
-    let result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-      },
-    });
-    expect(result.showAddDocketEntryButton).toEqual(false);
-
-    result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-        user: {
-          role: User.ROLES.petitioner,
-          userId: '789',
-        },
-      },
-    });
-    expect(result.showAddDocketEntryButton).toEqual(false);
-  });
-
   it('should show payment record and not payment options if case is paid', () => {
     const user = {
       role: User.ROLES.petitioner,
@@ -730,5 +684,32 @@ describe('case detail computed', () => {
 
       expect(result.hasOrders).toEqual(true);
     });
+  });
+
+  it('should show empty state for consolidated cases', () => {
+    const user = {
+      role: User.ROLES.practitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          consolidatedCases: [],
+          noticeOfAttachments: false,
+          orderDesignatingPlaceOfTrial: false,
+          orderForAmendedPetition: false,
+          orderForAmendedPetitionAndFilingFee: false,
+          orderForFilingFee: false,
+          orderForOds: false,
+          orderForRatification: false,
+          orderToChangeDesignatedPlaceOfTrial: false,
+          orderToShowCause: true,
+        },
+        form: {},
+        modal: {},
+      },
+    });
+    expect(result.hasConsolidatedCases).toEqual(false);
   });
 });

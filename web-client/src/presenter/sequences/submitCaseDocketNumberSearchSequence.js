@@ -6,7 +6,9 @@ import { set, unset } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setDocketNumberFromAdvancedSearchAction } from '../actions/AdvancedSearch/setDocketNumberFromAdvancedSearchAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { state } from 'cerebral';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateCaseDocketNumberSearchAction } from '../actions/AdvancedSearch/validateCaseDocketNumberSearchAction';
 
 export const submitCaseDocketNumberSearchSequence = [
@@ -20,11 +22,12 @@ export const submitCaseDocketNumberSearchSequence = [
       unset(state.searchResults),
     ],
     success: [
+      setWaitingForResponseAction,
       setDocketNumberFromAdvancedSearchAction,
       caseExistsAction,
       {
-        error: [set(state.searchResults, [])],
-        success: [navigateToCaseDetailAction],
+        error: [unsetWaitingForResponseAction, set(state.searchResults, [])],
+        success: [unsetWaitingForResponseAction, navigateToCaseDetailAction],
       },
     ],
   },

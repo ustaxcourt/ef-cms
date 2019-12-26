@@ -6,12 +6,11 @@ import React from 'react';
 
 export const IndividualWorkQueueBatched = connect(
   {
-    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
     workQueueSectionHelper: state.workQueueSectionHelper,
   },
-  ({ documentEditLinkHelper, formattedWorkQueue, workQueueHelper }) => {
+  ({ formattedWorkQueue, workQueueHelper }) => {
     return (
       <React.Fragment>
         <table
@@ -25,7 +24,7 @@ export const IndividualWorkQueueBatched = connect(
                 <span className="padding-left-2px">Docket</span>
               </th>
               <th>Filed</th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th aria-label="Status Icon padding-right-0">&nbsp;</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
@@ -60,10 +59,7 @@ export const IndividualWorkQueueBatched = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentEditLinkHelper({
-                        docketNumber: item.docketNumber,
-                        documentId: item.document.documentId,
-                      })}
+                      href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}`}
                       onClick={e => {
                         e.stopPropagation();
                       }}

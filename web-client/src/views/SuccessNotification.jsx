@@ -38,10 +38,14 @@ export const SuccessNotification = connect(
               <div className="grid-container padding-x-0">
                 <div className="grid-row">
                   <div className="tablet:grid-col-10">
-                    <p className="heading-3 usa-alert__heading padding-top-0">
-                      {alertSuccess.title}
+                    {alertSuccess.title && (
+                      <p className="heading-3 usa-alert__heading padding-top-0">
+                        {alertSuccess.title}
+                      </p>
+                    )}
+                    <p className="usa-alert__text padding-top-0">
+                      {alertSuccess.message}
                     </p>
-                    <p className="usa-alert__text">{alertSuccess.message}</p>
                     {alertSuccess.linkUrl && (
                       <Button
                         link

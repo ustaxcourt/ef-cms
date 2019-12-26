@@ -82,7 +82,8 @@ exports.casePublicSearchInteractor = async providers => {
     return item.docketNumber && item.caseCaption; // TODO - This is not accurate
   });
 
-  const makeSafe = item => new PublicCase(item).toRawObject();
+  const makeSafe = item =>
+    new PublicCase(item, { applicationContext }).toRawObject();
 
   return filteredCases.map(makeSafe);
 };

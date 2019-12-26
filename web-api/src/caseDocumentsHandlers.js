@@ -5,6 +5,8 @@ module.exports = {
   completeDocketEntryQCLambda: require('./documents/completeDocketEntryQCLambda')
     .handler,
   createWorkItemLambda: require('./workitems/createWorkItemLambda').handler,
+  downloadPolicyUrlLambda: require('./documents/downloadPolicyUrlLambda')
+    .handler,
   fileCourtIssuedDocketEntryLambda: require('./documents/fileCourtIssuedDocketEntryLambda')
     .handler,
   fileCourtIssuedOrderToCaseLambda: require('./documents/fileCourtIssuedOrderToCaseLambda')
@@ -12,6 +14,10 @@ module.exports = {
   fileDocketEntryToCaseLambda: require('./documents/fileDocketEntryToCaseLambda')
     .handler,
   fileExternalDocumentToCaseLambda: require('./documents/fileExternalDocumentToCaseLambda')
+    .handler,
+  fileExternalDocumentToConsolidatedCasesLambda: require('./documents/fileExternalDocumentToConsolidatedCasesLambda')
+    .handler,
+  getDocumentDownloadUrlLambda: require('./documents/getDocumentDownloadUrlLambda')
     .handler,
   saveIntermediateDocketEntryLambda: require('./documents/saveIntermediateDocketEntryLambda')
     .handler,

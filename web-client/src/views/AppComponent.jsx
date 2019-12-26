@@ -6,8 +6,8 @@ import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
 import { BlockedCasesReport } from './BlockedCasesReport/BlockedCasesReport';
 import { CaseDeadlines } from './CaseDeadlines/CaseDeadlines';
-import { CaseDetail } from './CaseDetail';
-import { CaseDetailInternal } from './CaseDetailInternal';
+import { CaseDetail } from './CaseDetail/CaseDetail';
+import { CaseDetailInternal } from './CaseDetail/CaseDetailInternal';
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
@@ -30,6 +30,7 @@ import { Messages } from './Messages/Messages';
 import { OrdersNeededSummary } from './CaseDetailEdit/OrdersNeededSummary';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PrimaryContactEdit } from './PrimaryContactEdit';
+import { PrintPreview } from './CourtIssuedDocketEntry/PrintPreview';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
@@ -80,6 +81,7 @@ const pages = {
   OrdersNeededSummary,
   PendingReport,
   PrimaryContactEdit,
+  PrintPreview,
   PrintableDocketRecord,
   PrintableTrialCalendar,
   RequestAccessWizard,

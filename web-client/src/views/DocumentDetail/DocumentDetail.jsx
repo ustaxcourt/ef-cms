@@ -1,8 +1,8 @@
 import { ArchiveDraftDocumentModal } from '../DraftDocuments/ArchiveDraftDocumentModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailEdit } from '../CaseDetailEdit/CaseDetailEdit';
-import { CaseDetailHeader } from '../CaseDetailHeader';
-import { CaseDetailReadOnly } from '../CaseDetailReadOnly';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { CaseDetailReadOnly } from './CaseDetailReadOnly';
 import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
 import { DocumentDetailHeader } from './DocumentDetailHeader';
 import { DocumentDisplayIframe } from './DocumentDisplayIframe';
@@ -115,9 +115,9 @@ export const DocumentDetail = connect(
                   <Button
                     link
                     href={documentDetailHelper.formattedDocument.signUrl}
+                    icon={['fas', 'pencil-alt']}
                   >
-                    <FontAwesomeIcon icon={['fas', 'pencil-alt']} /> Apply
-                    Signature
+                    Apply Signature
                   </Button>
                 )}
                 {documentDetailHelper.showRemoveSignature && (
