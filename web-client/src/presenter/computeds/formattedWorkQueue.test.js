@@ -728,7 +728,7 @@ describe('formatted work queue computed', () => {
       expect(result).toEqual('');
     });
 
-    it("should return /edit if document is an external doc that has not been qc'd and user is docketclerk", () => {
+    it("should return /edit if document is an external doc that has not been qc'd (isQC is true) and user is docketclerk", () => {
       const { permissions } = getBaseState(docketClerkUser);
 
       const result = getWorkItemDocumentLink({
@@ -761,7 +761,7 @@ describe('formatted work queue computed', () => {
       expect(result).toEqual('/edit');
     });
 
-    it("should return editLink with a direct link to the message if document is an external doc that has not been qc'd and user is petitionsClerk", () => {
+    it("should return editLink with a direct link to the message if document is an external doc that has not been qc'd (isQC is true) and user is petitionsClerk", () => {
       const { permissions } = getBaseState(petitionsClerkUser);
 
       const result = getWorkItemDocumentLink({
