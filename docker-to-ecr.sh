@@ -6,7 +6,7 @@ AWS_ACCOUNT_ID="${AWS_ACCOUNT_ID%\"}"
 AWS_ACCOUNT_ID="${AWS_ACCOUNT_ID#\"}"
 
 IMAGE_TAG=$(git rev-parse --short HEAD)
-MANIFEST=$(aws ecr batch-get-image --repository-name ef-cms-us-east-1 --image-ids imageTag=latest --query 'images[].imageManifest' --output text)
+MANIFEST=$(aws ecr batch-get-image --repository-name ef-cms-us-east-1 --image-ids imageTag=latest --region us-east-1 --query 'images[].imageManifest' --output text)
 
 if [[ ! -z $MANIFEST ]]; then 
   aws ecr batch-delete-image --repository-name ef-cms-us-east-1 --image-ids imageTag="latest"
