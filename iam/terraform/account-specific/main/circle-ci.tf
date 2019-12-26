@@ -82,6 +82,14 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Resource": "*"
     },
     {
+      "Sid": "Ecr",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:*"
+      ],
+      "Resource": "*"
+    },
+    {
       "Sid": "CloudFront",
       "Effect": "Allow",
       "Action": [
