@@ -34,7 +34,7 @@ describe('scanBatchPreviewerHelper', () => {
       let testState = {
         ...state,
         scanner: {
-          scanMode: 'flatbed',
+          scanMode: 'feeder',
           scannerSourceName: 'Some Scanner 247',
         },
       };
@@ -58,6 +58,20 @@ describe('scanBatchPreviewerHelper', () => {
       });
       expect(result.scannerSourceDisplayName).toEqual(
         'Some Scanner 247 (Double sided)',
+      );
+    });
+
+    it('returns correct values when a scanner is selected and is using flatbed', () => {
+      let testState = {
+        ...state,
+        scanner: { scanMode: 'flatbed', scannerSourceName: 'Some Scanner 247' },
+      };
+
+      const result = runCompute(scanBatchPreviewerHelper, {
+        state: testState,
+      });
+      expect(result.scannerSourceDisplayName).toEqual(
+        'Some Scanner 247 (Flatbed)',
       );
     });
   });
