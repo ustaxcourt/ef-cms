@@ -29,7 +29,18 @@ function TrialSessionWorkingCopy(rawSession) {
 
 TrialSessionWorkingCopy.prototype.init = function(rawSession) {
   this.caseMetadata = rawSession.caseMetadata || {};
-  this.filters = rawSession.filters;
+  this.filters = rawSession.filters || {
+    aBasisReached: true,
+    continued: true,
+    dismissed: true,
+    recall: true,
+    rule122: true,
+    setForTrial: true,
+    settled: true,
+    showAll: true,
+    statusUnassigned: true,
+    takenUnderAdvisement: true,
+  };
   this.sessionNotes = rawSession.sessionNotes;
   this.sort = rawSession.sort;
   this.sortOrder = rawSession.sortOrder;
@@ -49,7 +60,21 @@ TrialSessionWorkingCopy.validationRules = {
       }),
     )
     .optional(),
-  filters: joi.object().optional(),
+  filters: joi
+    .object()
+    .keys({
+      aBasisReached: joi.boolean().required(),
+      continued: joi.boolean().required(),
+      dismissed: joi.boolean().required(),
+      recall: joi.boolean().required(),
+      rule122: joi.boolean().required(),
+      setForTrial: joi.boolean().required(),
+      settled: joi.boolean().required(),
+      showAll: joi.boolean().required(),
+      statusUnassigned: joi.boolean().required(),
+      takenUnderAdvisement: joi.boolean().required(),
+    })
+    .required(),
   sessionNotes: joi.string().optional(),
   sort: joi.string().optional(),
   sortOrder: joi.string().optional(),
