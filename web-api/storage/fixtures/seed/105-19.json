@@ -54,7 +54,7 @@
         "filedBy": "Test Practitioner",
         "workItems": [],
         "caseId": "6f3d97f8-1bdd-4779-a150-c076d08ad8fd",
-        "documentId": "cdf5a93e-abbd-4225-88df-88fc03f8af18",
+        "documentId": "f1aa4aa3-c214-424c-8870-d0049c5744d7",
         "userId": "9805d1ab-18d0-43ec-bafb-654e83405416"
       }
     ],
@@ -84,6 +84,10 @@
     "orderForOds": false,
     "orderForRatification": false,
     "hasIrsNotice": true,
+    "petitionPaymentStatus": "Waived",
+    "petitionPaymentDate": "2019-03-27T21:53:00.297Z",
+    "petitionPaymentWaivedDate": "2019-03-27T21:53:00.297Z",
+    "petitionPaymentMethod": "check",
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "practitioners": [
