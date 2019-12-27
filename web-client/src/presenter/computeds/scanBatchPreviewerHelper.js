@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 import getScanModeLabel from '../../utilities/getScanModeLabel';
 
-export const scanBatchPreviewerHelper = get => {
+export const scanBatchPreviewerHelper = (get, applicationContext) => {
   const selectedBatchIndex = get(state.selectedBatchIndex) || 0;
   const documentSelectedForScan = get(state.documentSelectedForScan);
   const batches =
@@ -35,7 +35,7 @@ export const scanBatchPreviewerHelper = get => {
   let scannerSourceDisplayName = 'None';
 
   if (scannerSource) {
-    const scanModeLabel = getScanModeLabel(scanMode);
+    const scanModeLabel = getScanModeLabel(applicationContext, scanMode);
     scannerSourceDisplayName = `${scannerSource} (${scanModeLabel})`;
   }
 
