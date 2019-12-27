@@ -1,3 +1,4 @@
+import { Scan } from '../../../../shared/src/business/entities/Scan';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
@@ -8,12 +9,15 @@ const state = {
   batches: [],
 };
 
+const { SCAN_MODES } = Scan;
+
 const scanBatchPreviewerHelper = withAppContextDecorator(
   scanBatchPreviewerHelperComputed,
   applicationContext,
 );
 
 applicationContext.getCurrentUser = () => ({ role: User.ROLES.practitioner });
+applicationContext.getConstants = () => ({ SCAN_MODES });
 
 describe('scanBatchPreviewerHelper', () => {
   beforeEach(() => {
@@ -34,7 +38,7 @@ describe('scanBatchPreviewerHelper', () => {
       let testState = {
         ...state,
         scanner: {
-          scanMode: 'feeder',
+          scanMode: SCAN_MODES.FEEDER,
           scannerSourceName: 'Some Scanner 247',
         },
       };
