@@ -97,11 +97,11 @@ const app = {
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor({ applicationContext, key: 'scannerSourceName' });
-    const duplexEnabled = await applicationContext
+    const scanMode = await applicationContext
       .getUseCases()
-      .getItemInteractor({ applicationContext, key: 'duplexEnabled' });
+      .getItemInteractor({ applicationContext, key: 'scanMode' });
     presenter.state.scanner = {
-      duplexEnabled,
+      scanMode,
       scannerSourceName,
     };
 
