@@ -12,13 +12,13 @@ export default scanMode => {
 
   switch (scanMode) {
     case 'feeder':
-      scanModeLabel = 'Single Sided';
+      scanModeLabel = 'Single sided';
       break;
     case 'flatbed':
       scanModeLabel = 'Flatbed';
       break;
     case 'duplex':
-      scanModeLabel = 'Double Sided';
+      scanModeLabel = 'Double sided';
   }
   return scanModeLabel;
 };

@@ -36,7 +36,7 @@ export const scanBatchPreviewerHelper = get => {
 
   if (scannerSource) {
     const scanModeLabel = getScanModeLabel(scanMode);
-    scannerSourceDisplayName = `${scannerSource} ${scanModeLabel}`;
+    scannerSourceDisplayName = `${scannerSource} (${scanModeLabel})`;
   }
 
   return {
