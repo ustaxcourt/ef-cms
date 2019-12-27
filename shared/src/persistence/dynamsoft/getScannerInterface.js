@@ -112,7 +112,7 @@ exports.getScannerInterface = () => {
     ret.DWObject = DWObject;
   };
 
-  const startScanSession = ({ applicationContext, duplexEnabled = false }) => {
+  const startScanSession = ({ applicationContext, scanMode = 'feeder' }) => {
     return new Promise((resolve, reject) => {
       const onScanFinished = () => {
         const count = DWObject.HowManyImagesInBuffer;
@@ -163,8 +163,8 @@ exports.getScannerInterface = () => {
       DWObject.IfShowIndicator = false;
       DWObject.IfShowProgressBar = false;
       DWObject.Resolution = 300;
-      DWObject.IfFeederEnabled = true;
-      DWObject.IfDuplexEnabled = duplexEnabled;
+      DWObject.IfDuplexEnabled = !!(scanMode === 'duplex');
+      DWObject.IfFeederEnabled = !!(scanMode === 'feeder');
       DWObject.PixelType = window['EnumDWT_PixelType'].TWPT_RGB;
       DWObject.PageSize = window['EnumDWT_CapSupportedSizes'].TWSS_A4;
 
