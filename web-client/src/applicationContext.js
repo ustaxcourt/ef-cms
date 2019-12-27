@@ -27,6 +27,7 @@ import { ExternalDocumentFactory } from '../../shared/src/business/entities/exte
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
 import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { Scan } from '../../shared/src/business/entities/Scan';
 import {
   compareISODateStrings,
   compareStrings,
@@ -422,6 +423,7 @@ const applicationContext = {
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
       REFRESH_INTERVAL: 20 * MINUTES,
       ROLE_PERMISSIONS,
+      SCAN_MODES: Scan.SCAN_MODES,
       SECTIONS,
       SERVICE_INDICATOR_TYPES: constants,
       SERVICE_STAMP_OPTIONS,
