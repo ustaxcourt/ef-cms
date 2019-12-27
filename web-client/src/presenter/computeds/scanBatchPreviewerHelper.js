@@ -39,6 +39,10 @@ export const scanBatchPreviewerHelper = (get, applicationContext) => {
     scannerSourceDisplayName = `${scannerSource} (${scanModeLabel})`;
   }
 
+  batches.forEach(batch => {
+    batch.scanModeLabel = getScanModeLabel(applicationContext, batch.scanMode);
+  });
+
   return {
     batches,
     currentPage: currentPageIndex,

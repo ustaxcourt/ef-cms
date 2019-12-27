@@ -316,7 +316,7 @@ export const ScanBatchPreviewer = connect(
                       </td>
 
                       <td>
-                        <span>{getScanModeLabel(batch.scanMode)}</span>
+                        <span>{batch.scanModeLabel}</span>
                       </td>
                       <td>
                         <span>{batch.pages.length} pages</span>
