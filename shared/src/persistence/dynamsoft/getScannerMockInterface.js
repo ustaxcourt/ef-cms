@@ -104,7 +104,7 @@ exports.getScannerInterface = () => {
     const { SCAN_MODES } = applicationContext.getConstants();
     DWObject.IfDisableSourceAfterAcquire = true;
     DWObject.IfDuplexEnabled = scanMode === SCAN_MODES.DUPLEX;
-    DWObject.IfFeederEnabled = scanMode === SCAN_MODES.FEEDER;
+    DWObject.IfFeederEnabled = scanMode !== SCAN_MODES.FLATBED;
     DWObject.OpenSource();
     DWObject.AcquireImage();
 
