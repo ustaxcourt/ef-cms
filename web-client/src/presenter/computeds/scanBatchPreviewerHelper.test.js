@@ -34,7 +34,7 @@ describe('scanBatchPreviewerHelper', () => {
       let testState = {
         ...state,
         scanner: {
-          duplexEnabled: false,
+          scanMode: 'flatbed',
           scannerSourceName: 'Some Scanner 247',
         },
       };
@@ -50,7 +50,7 @@ describe('scanBatchPreviewerHelper', () => {
     it('returns correct values when a scanner is selected and is using double sided', () => {
       let testState = {
         ...state,
-        scanner: { duplexEnabled: true, scannerSourceName: 'Some Scanner 247' },
+        scanner: { scanMode: 'duplex', scannerSourceName: 'Some Scanner 247' },
       };
 
       const result = runCompute(scanBatchPreviewerHelper, {
