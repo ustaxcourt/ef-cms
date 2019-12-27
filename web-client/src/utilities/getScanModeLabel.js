@@ -7,17 +7,18 @@
  *
  */
 
-export default scanMode => {
+export default (applicationContext, scanMode) => {
+  const { SCAN_MODES } = applicationContext.getConstants();
   let scanModeLabel = '';
 
   switch (scanMode) {
-    case 'feeder':
+    case SCAN_MODES.FEEDER:
       scanModeLabel = 'Single sided';
       break;
-    case 'flatbed':
+    case SCAN_MODES.FLATBED:
       scanModeLabel = 'Flatbed';
       break;
-    case 'duplex':
+    case SCAN_MODES.DUPLEX:
       scanModeLabel = 'Double sided';
   }
   return scanModeLabel;
