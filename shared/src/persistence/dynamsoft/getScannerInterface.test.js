@@ -178,22 +178,39 @@ describe('getScannerInterface', () => {
     expect(error).toBeDefined();
   });
 
-  it('can enable/disable duplex mode by calling startScanSession with duplexEnabled set to true or false', async () => {
+  it('can enable duplex mode by calling startScanSession with scanMode set to `duplex`', async () => {
     const scannerAPI = getScannerInterface();
     scannerAPI.setDWObject(DWObject);
     expect(DWObject.IfDuplexEnabled).toEqual(false); // default
 
     await scannerAPI.startScanSession({
       applicationContext,
-      duplexEnabled: true,
+      scanMode: 'duplex',
     });
     expect(DWObject.IfDuplexEnabled).toEqual(true);
 
     await scannerAPI.startScanSession({
       applicationContext,
-      duplexEnabled: false,
+      scanMode: 'flatbed',
     });
     expect(DWObject.IfDuplexEnabled).toEqual(false);
+  });
+
+  it('can enable flatbed scanning by calling startScanSession with scanMode set to `flatbed`', async () => {
+    const scannerAPI = getScannerInterface();
+    scannerAPI.setDWObject(DWObject);
+
+    await scannerAPI.startScanSession({
+      applicationContext,
+      scanMode: 'flatbed',
+    });
+    expect(DWObject.IfFeederEnabled).toEqual(false);
+
+    await scannerAPI.startScanSession({
+      applicationContext,
+      scanMode: 'feeder',
+    });
+    expect(DWObject.IfFeederEnabled).toEqual(true);
   });
 
   it('should attempt to load the dynamsoft libraries', async () => {

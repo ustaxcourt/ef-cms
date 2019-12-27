@@ -32,7 +32,7 @@ describe('startScanAction', () => {
         presenter,
       },
       props: {
-        duplexEnabled: false,
+        scanMode: 'feeder',
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
@@ -90,7 +90,7 @@ describe('startScanAction', () => {
         presenter,
       },
       props: {
-        duplexEnabled: false,
+        scanMode: 'feeder',
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },

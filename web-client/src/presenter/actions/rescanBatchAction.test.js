@@ -34,7 +34,7 @@ describe('rescanBatchAction', () => {
         presenter,
       },
       props: {
-        duplexEnabled: false,
+        scanMode: 'feeder',
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
@@ -78,7 +78,7 @@ describe('rescanBatchAction', () => {
         presenter,
       },
       props: {
-        duplexEnabled: false,
+        scanMode: 'feeder',
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
@@ -109,7 +109,7 @@ describe('rescanBatchAction', () => {
         presenter,
       },
       props: {
-        duplexEnabled: false,
+        scanMode: 'feeder',
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
