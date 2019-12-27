@@ -10,5 +10,5 @@ import { state } from 'cerebral';
 export const primeScannerSelectModalAction = ({ get, store }) => {
   store.set(state.modal.scanner, get(state.scanner.scannerSourceName));
   store.set(state.modal.index, get(state.scanner.scannerSourceIndex));
-  store.set(state.modal.duplexEnabled, get(state.scanner.duplexEnabled));
+  store.set(state.modal.scanMode, get(state.scanner.scanMode));
 };
