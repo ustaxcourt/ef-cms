@@ -100,9 +100,10 @@ exports.getScannerInterface = () => {
     }
   };
 
-  const startScanSession = ({ duplexEnabled = false }) => {
+  const startScanSession = ({ scanMode = 'feeder' }) => {
     DWObject.IfDisableSourceAfterAcquire = true;
-    DWObject.IfDuplexEnabled = duplexEnabled;
+    DWObject.IfDuplexEnabled = scanMode === 'duplex';
+    DWObject.IfFeederEnabled = scanMode === 'feeder';
     DWObject.OpenSource();
     DWObject.AcquireImage();
 
