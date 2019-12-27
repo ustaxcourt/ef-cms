@@ -17,6 +17,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
+import getScanModeLabel from '../utilities/getScanModeLabel';
 
 export const ScanBatchPreviewer = connect(
   {
@@ -315,9 +316,7 @@ export const ScanBatchPreviewer = connect(
                       </td>
 
                       <td>
-                        <span>
-                          {(batch.duplexEnabled && 'Double') || 'Single'} sided
-                        </span>
+                        <span>{getScanModeLabel(batch.scanMode)}</span>
                       </td>
                       <td>
                         <span>{batch.pages.length} pages</span>
