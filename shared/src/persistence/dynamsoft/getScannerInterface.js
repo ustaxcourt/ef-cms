@@ -163,8 +163,8 @@ exports.getScannerInterface = () => {
       DWObject.IfShowIndicator = false;
       DWObject.IfShowProgressBar = false;
       DWObject.Resolution = 300;
-      DWObject.IfDuplexEnabled = !!(scanMode === 'duplex');
-      DWObject.IfFeederEnabled = !!(scanMode === 'feeder');
+      DWObject.IfDuplexEnabled = scanMode === 'duplex';
+      DWObject.IfFeederEnabled = scanMode === 'feeder';
       DWObject.PixelType = window['EnumDWT_PixelType'].TWPT_RGB;
       DWObject.PageSize = window['EnumDWT_CapSupportedSizes'].TWSS_A4;
 
