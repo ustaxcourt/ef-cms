@@ -57,7 +57,7 @@ To exercise the CI/CD pipeline locally, run the following:
 
 This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral tests, Pa11y, etc. over all the components.
 
-## Running / verifing the project via Docker
+## Running / verifying the project via Docker
 
 Assuming you have Docker installed, the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it:
 
@@ -70,6 +70,9 @@ Assuming you have Docker installed, the following command will spin up a Docker 
 - You can access the DynamoDB admin UI at http://localhost:8001
 - You can access S3 local at http://localhost:9000
 - You can access the style guide at http://localhost:1234/style-guide
+
+### ECR
+ECR is Amazon’s docker container registry that holds images for `ef-cms` builds on CircleCI. Currently, images can be managed in the AWS ECR console under the `ef-cms-us-east-1`. If you need to update the Docker image, you can do so (with appropriate permissions) by running `./docker-to-ecr.sh`. This command will build an image per the `Dockerfile-CI` config, tag it as `latest` and push it to the repo in ECR.
 
 ## Running this project locally without Docker
 
