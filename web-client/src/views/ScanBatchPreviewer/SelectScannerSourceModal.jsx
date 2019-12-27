@@ -58,17 +58,18 @@ export const SelectScannerSourceModal = connect(
 
         <select
           className="usa-select"
-          defaultValue={modal.duplexEnabled ? 'true' : 'false'}
+          defaultValue={modal.scanMode}
           id="scanner-duplex-select"
           onChange={e => {
             updateModalValueSequence({
-              key: 'duplexEnabled',
-              value: e.target.value === 'true',
+              key: 'scanMode',
+              value: e.target.value,
             });
           }}
         >
-          <option value={false}>- Single Sided -</option>
-          <option value={true}>- Double Sided -</option>
+          <option value="feeder">- Feeder -</option>
+          <option value="flatbed">- Flatbed -</option>
+          <option value="duplex">- Double Sided -</option>
         </select>
       </div>
       {sources.length === 0 && (

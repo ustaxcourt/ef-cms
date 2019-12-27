@@ -24,16 +24,14 @@ export const getCachedScannerSourceAction = async ({
       key: 'scannerSourceIndex',
     });
 
-  const duplexEnabled = await applicationContext
-    .getPersistenceGateway()
-    .getItem({
-      applicationContext,
-      key: 'duplexEnabled',
-    });
+  const scanMode = await applicationContext.getPersistenceGateway().getItem({
+    applicationContext,
+    key: 'scanMode',
+  });
 
   if (scannerSourceName) {
     return path.sourceInCache({
-      duplexEnabled,
+      scanMode,
       scannerSourceIndex,
       scannerSourceName,
     });
