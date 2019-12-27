@@ -217,6 +217,18 @@ describe('getScannerInterface', () => {
     expect(DWObject.IfFeederEnabled).toEqual(true);
   });
 
+  it('should scan from feeder when calling startScanSession with scanMode set to `DUPLEX`', async () => {
+    const scannerAPI = getScannerInterface();
+    scannerAPI.setDWObject(DWObject);
+
+    await scannerAPI.startScanSession({
+      applicationContext,
+      scanMode: SCAN_MODES.DUPLEX,
+    });
+    expect(DWObject.IfDuplexEnabled).toEqual(true);
+    expect(DWObject.IfFeederEnabled).toEqual(true);
+  });
+
   it('should attempt to load the dynamsoft libraries', async () => {
     delete global.document;
     let calls = 0;
