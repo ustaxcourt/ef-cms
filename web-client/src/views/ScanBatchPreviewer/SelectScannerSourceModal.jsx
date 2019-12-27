@@ -6,10 +6,11 @@ import React from 'react';
 export const SelectScannerSourceModal = connect(
   {
     modal: state.modal,
+    scanModeOptions: state.scanHelper.scanModeOptions,
     sources: state.scanHelper.sources,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
-  ({ modal, sources, updateModalValueSequence }) => (
+  ({ modal, scanModeOptions, sources, updateModalValueSequence }) => (
     <ConfirmModal
       cancelLabel="Cancel"
       confirmLabel="Select"
@@ -67,9 +68,13 @@ export const SelectScannerSourceModal = connect(
             });
           }}
         >
-          <option value="feeder">- Feeder -</option>
-          <option value="flatbed">- Flatbed -</option>
-          <option value="duplex">- Double Sided -</option>
+          {scanModeOptions.map((scanMode, index) => {
+            return (
+              <option key={index} value={scanMode.value}>
+                - {scanMode.label} -
+              </option>
+            );
+          })}
         </select>
       </div>
       {sources.length === 0 && (
