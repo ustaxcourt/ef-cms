@@ -17,7 +17,6 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import getScanModeLabel from '../utilities/getScanModeLabel';
 
 export const ScanBatchPreviewer = connect(
   {
