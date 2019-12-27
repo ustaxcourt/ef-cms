@@ -85,9 +85,7 @@
     "orderForRatification": false,
     "hasIrsNotice": true,
     "petitionPaymentStatus": "Waived",
-    "petitionPaymentDate": "2019-03-27T21:53:00.297Z",
     "petitionPaymentWaivedDate": "2019-03-27T21:53:00.297Z",
-    "petitionPaymentMethod": "check",
     "initialDocketNumberSuffix": "_",
     "docketNumberSuffix": null,
     "practitioners": [

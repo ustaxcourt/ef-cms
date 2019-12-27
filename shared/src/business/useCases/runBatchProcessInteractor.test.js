@@ -447,6 +447,9 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
       getUseCaseHelpers: () => ({
         generateCaseConfirmationPdf: () => {},
       }),
+      getUtilities: () => ({
+        formatDateString: () => '12/27/18',
+      }),
     };
     await runBatchProcessInteractor({
       applicationContext,
@@ -454,8 +457,57 @@ describe('zip petition documents and send to dummy S3 IRS respository', () => {
     expect(
       updateCaseStub.getCall(0).args[0].caseToUpdate.docketRecord,
     ).toContainEqual({
-      description: 'Paid 2018-12-27T00:00:00.000Z check',
+      description: 'Paid 12/27/18 check',
       eventCode: 'FEE',
+      filingDate: '2018-12-27T00:00:00.000Z',
+      index: 5,
+    });
+  });
+
+  it('creates a docket entry for cases that have been paid', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      petitionPaymentStatus: 'Waived',
+      petitionPaymentWaivedDate: '2018-12-27T00:00:00.000Z',
+    };
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return new User({
+          name: 'bob',
+          role: User.ROLES.petitionsClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => {
+        return {
+          deleteDocument: deleteDocumentStub,
+          deleteWorkItemFromSection: deleteWorkItemFromSectionStub,
+          getCaseByCaseId: () => Promise.resolve(mockCase),
+          getDocumentQCInboxForSection: () => Promise.resolve(MOCK_WORK_ITEMS),
+          putWorkItemInUsersOutbox: putWorkItemInUsersOutboxStub,
+          updateCase: updateCaseStub,
+          updateWorkItem: updateWorkItemStub,
+          zipDocuments: zipDocumentsStub,
+        };
+      },
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        generateCaseConfirmationPdf: () => {},
+      }),
+      getUtilities: () => ({
+        formatDateString: () => '12/27/18',
+      }),
+    };
+    await runBatchProcessInteractor({
+      applicationContext,
+    });
+    expect(
+      updateCaseStub.getCall(0).args[0].caseToUpdate.docketRecord,
+    ).toContainEqual({
+      description: 'Waived 12/27/18',
+      eventCode: 'FEEW',
       filingDate: '2018-12-27T00:00:00.000Z',
       index: 5,
     });
