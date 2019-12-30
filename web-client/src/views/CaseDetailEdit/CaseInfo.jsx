@@ -237,7 +237,7 @@ export const CaseInfo = connect(
               Fee payment date <span className="usa-hint">(optional)</span>
             </legend>
             <div className="usa-memorable-date">
-              <div className="usa-form-group usa-form-group--month">
+              <div className="usa-form-group usa-form-group--month margin-bottom-0">
                 <input
                   aria-describedby="fee-payment-date-legend"
                   aria-label="month, two digits"
@@ -261,7 +261,7 @@ export const CaseInfo = connect(
                   }}
                 />
               </div>
-              <div className="usa-form-group usa-form-group--day">
+              <div className="usa-form-group usa-form-group--day margin-bottom-0">
                 <input
                   aria-describedby="fee-payment-date-legend"
                   aria-label="day, two digits"
@@ -285,7 +285,7 @@ export const CaseInfo = connect(
                   }}
                 />
               </div>
-              <div className="usa-form-group usa-form-group--year">
+              <div className="usa-form-group usa-form-group--year margin-bottom-0">
                 <input
                   aria-describedby="fee-payment-date-legend"
                   aria-label="year, four digits"

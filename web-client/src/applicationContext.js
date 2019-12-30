@@ -423,18 +423,19 @@ const applicationContext = {
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
       OTHER_TYPES: ContactFactory.OTHER_TYPES,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
+      PAYMENT_STATUS: Case.PAYMENT_STATUS,
       REFRESH_INTERVAL: 20 * MINUTES,
       ROLE_PERMISSIONS,
       SCAN_MODES: Scan.SCAN_MODES,
       SECTIONS,
       SERVICE_INDICATOR_TYPES: constants,
       SERVICE_STAMP_OPTIONS,
-      SESSION_DEBOUNCE: 250,
-      SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
+      SESSION_DEBOUNCE: 250, // 5 minutes
+      SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 55 minutes
       SESSION_TIMEOUT:
         (process.env.SESSION_TIMEOUT &&
           parseInt(process.env.SESSION_TIMEOUT)) ||
-        55 * MINUTES, // 55 minutes
+        55 * MINUTES,
       STATUS_TYPES: Case.STATUS_TYPES,
       STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
       STATUS_TYPES_WITH_ASSOCIATED_JUDGE:
