@@ -110,7 +110,13 @@ export const EditPetitionDetails = connect(
 
           {form.petitionPaymentStatus === paymentStatus.PAID && (
             <>
-              <FormGroup>
+              <FormGroup
+                errorText={
+                  validationErrors.paymentDateMonth ||
+                  validationErrors.paymentDateDay ||
+                  validationErrors.paymentDateYear
+                }
+              >
                 <fieldset className="usa-fieldset margin-bottom-0">
                   <legend className="usa-legend" id="payment-date-legend">
                     Payment date
@@ -122,7 +128,8 @@ export const EditPetitionDetails = connect(
                         aria-label="month, two digits"
                         className={classNames(
                           'usa-input usa-input--inline',
-                          // caseDetailErrors.payGovDate && 'usa-input-error',
+                          validationErrors.paymentDateMonth &&
+                            'usa-input-error',
                         )}
                         id="payment-date-month"
                         max="12"
@@ -146,7 +153,7 @@ export const EditPetitionDetails = connect(
                         aria-label="day, two digits"
                         className={classNames(
                           'usa-input usa-input--inline',
-                          // caseDetailErrors.payGovDate && 'usa-input-error',
+                          validationErrors.paymentDateDay && 'usa-input-error',
                         )}
                         id="payment-date-day"
                         max="31"
@@ -170,7 +177,7 @@ export const EditPetitionDetails = connect(
                         aria-label="year, four digits"
                         className={classNames(
                           'usa-input usa-input--inline',
-                          // caseDetailErrors.payGovDate && 'usa-input-error',
+                          validationErrors.paymentDateYear && 'usa-input-error',
                         )}
                         id="payment-date-year"
                         name="paymentDateYear"
@@ -190,21 +197,23 @@ export const EditPetitionDetails = connect(
                 </fieldset>
               </FormGroup>
 
-              <FormGroup>
-                <label className="usa-label" htmlFor="fee-payment-id">
-                  Payment Method
+              <FormGroup errorText={validationErrors.petitionPaymentMethod}>
+                <label className="usa-label" htmlFor="petition-payment-method">
+                  Payment method
                 </label>
                 <input
-                  className="usa-input"
-                  id="fee-payment-id"
-                  name="payGovId"
-                  type="number"
-                  // value={caseDetail.payGovId || ''}
+                  className={classNames(
+                    'usa-input',
+                    validationErrors.petitionPaymentMethod && 'usa-input-error',
+                  )}
+                  id="petition-payment-method"
+                  name="petitionPaymentMethod"
+                  value={form.petitionPaymentMethod || ''}
                   onChange={e => {
-                    // updateCaseValueSequence({
-                    //   key: e.target.name,
-                    //   value: e.target.value,
-                    // });
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
                   }}
                 />
               </FormGroup>
