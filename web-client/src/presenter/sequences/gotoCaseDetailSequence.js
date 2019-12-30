@@ -43,6 +43,7 @@ export const gotoCaseDetailSequence = [
   getCaseDeadlinesForCaseAction,
   setDefaultDocketRecordSortAction,
   setBaseUrlAction,
+  set(state.caseDetailPage.showEditPetition, false),
   set(state.editDocumentEntryPoint, 'CaseDetail'),
   runPathForUserRoleAction,
   {

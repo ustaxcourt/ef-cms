@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -17,6 +18,7 @@ export const updatePetitionFeePaymentSequence = [
     success: [
       setCurrentPageAction('Interstitial'),
       updatePetitionFeePaymentAction,
+      setCaseAction,
       set(state.caseDetailPage.showEditPetition, false),
       setCurrentPageAction('CaseDetailInternal'),
     ],
