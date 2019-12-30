@@ -253,68 +253,6 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showCreateOrderButton).toEqual(true);
   });
 
-  it('should not show add docket entry button if current page is not CaseDetailInternal or user role is not docketclerk', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: '789',
-    };
-    let result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-      },
-    });
-    expect(result.showAddDocketEntryButton).toEqual(false);
-
-    result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-        user: {
-          role: User.ROLES.petitioner,
-          userId: '789',
-        },
-      },
-    });
-    expect(result.showAddDocketEntryButton).toEqual(false);
-  });
-
-  it('should not show case detail header menu or create order button if current page is not CaseDetailInternal or user role is petitioner', () => {
-    const user = {
-      role: User.ROLES.docketClerk,
-      userId: '789',
-    };
-    let result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-      },
-    });
-    expect(result.showCaseDetailHeaderMenu).toEqual(false);
-    expect(result.showCreateOrderButton).toEqual(false);
-
-    result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-        user: {
-          role: User.ROLES.petitioner,
-          userId: '789',
-        },
-      },
-    });
-    expect(result.showCaseDetailHeaderMenu).toEqual(false);
-    expect(result.showCreateOrderButton).toEqual(false);
-  });
-
   it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
