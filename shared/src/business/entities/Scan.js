@@ -20,6 +20,11 @@ function Scan({ applicationContext, rawScan }) {
 }
 
 Scan.validationName = 'Scan';
+Scan.SCAN_MODES = {
+  DUPLEX: 'duplex',
+  FEEDER: 'feeder',
+  FLATBED: 'flatbed',
+};
 
 /**
  * adds a batch to the current scan

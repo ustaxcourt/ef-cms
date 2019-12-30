@@ -94,12 +94,10 @@ exports.updateTrialSessionInteractor = async ({
     }
   }
 
-  const updatedTrialSession = await applicationContext
-    .getPersistenceGateway()
-    .updateTrialSession({
-      applicationContext,
-      trialSessionToUpdate: newTrialSessionEntity.validate().toRawObject(),
-    });
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: newTrialSessionEntity.validate().toRawObject(),
+  });
 
-  return updatedTrialSession;
+  return newTrialSessionEntity.toRawObject();
 };

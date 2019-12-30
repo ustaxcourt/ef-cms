@@ -4,7 +4,11 @@ import { state } from 'cerebral';
 export const caseDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const { Case } = applicationContext.getEntityConstructors();
-  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const {
+    PARTY_TYPES,
+    STATUS_TYPES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const showActionRequired =
@@ -63,7 +67,10 @@ export const caseDetailHelper = (get, applicationContext) => {
     }
   }
 
-  const showCaseNameForPrimary = !get(state.caseDetail.contactSecondary.name);
+  const showCaseNameForPrimary = ![
+    PARTY_TYPES.petitioner,
+    PARTY_TYPES.petitionerDeceasedSpouse,
+  ].includes(caseDetail.partyType);
 
   let showEditContacts = false;
 

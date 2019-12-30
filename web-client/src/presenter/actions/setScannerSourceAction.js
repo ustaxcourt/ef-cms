@@ -33,14 +33,14 @@ export const setScannerSourceAction = async ({
 
     await applicationContext.getUseCases().setItemInteractor({
       applicationContext,
-      key: 'duplexEnabled',
-      value: props.duplexEnabled,
+      key: 'scanMode',
+      value: props.scanMode,
     });
 
     // This may not be necessary
     store.set(state.scanner.scannerSourceName, props.scannerSourceName);
     store.set(state.scanner.scannerSourceIndex, props.scannerSourceIndex);
-    store.set(state.scanner.duplexEnabled, props.duplexEnabled);
+    store.set(state.scanner.scanMode, props.scanMode);
   } else {
     // you didn't pick a scanner source
   }

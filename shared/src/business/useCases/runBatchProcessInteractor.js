@@ -9,6 +9,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
+const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { IRS_BATCH_SYSTEM_USER_ID, WorkItem } = require('../entities/WorkItem');
 const { Message } = require('../entities/Message');
@@ -46,6 +47,35 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
       });
 
     const caseEntity = new Case(caseToBatch, { applicationContext });
+
+    if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+      caseEntity.addDocketRecord(
+        new DocketRecord({
+          description: `Paid ${applicationContext
+            .getUtilities()
+            .formatDateString(caseEntity.petitionPaymentDate, 'MM/DD/YY')} ${
+            caseEntity.petitionPaymentMethod
+          }`,
+          eventCode: 'FEE',
+          filingDate: caseEntity.petitionPaymentDate,
+        }),
+      );
+    } else if (
+      caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED
+    ) {
+      caseEntity.addDocketRecord(
+        new DocketRecord({
+          description: `Waived ${applicationContext
+            .getUtilities()
+            .formatDateString(
+              caseEntity.petitionPaymentWaivedDate,
+              'MM/DD/YY',
+            )}`,
+          eventCode: 'FEEW',
+          filingDate: caseEntity.petitionPaymentWaivedDate,
+        }),
+      );
+    }
 
     await applicationContext.getPersistenceGateway().deleteWorkItemFromSection({
       applicationContext,

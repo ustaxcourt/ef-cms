@@ -58,6 +58,6 @@ export const updateTrialSessionAction = async ({
     alertSuccess: {
       message: 'Your changes have been saved',
     },
-    trialSession: result.trialSessionId,
+    trialSessionId: result.trialSessionId,
   });
 };

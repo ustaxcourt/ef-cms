@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
+import getScanModeLabel from '../../utilities/getScanModeLabel';
 
-export const scanBatchPreviewerHelper = get => {
+export const scanBatchPreviewerHelper = (get, applicationContext) => {
   const selectedBatchIndex = get(state.selectedBatchIndex) || 0;
   const documentSelectedForScan = get(state.documentSelectedForScan);
   const batches =
@@ -28,15 +29,19 @@ export const scanBatchPreviewerHelper = get => {
     selectPageImage = b64encoded;
   }
 
-  const duplexEnabled = get(state.scanner.duplexEnabled);
+  const scanMode = get(state.scanner.scanMode);
   const scannerSource = get(state.scanner.scannerSourceName);
 
   let scannerSourceDisplayName = 'None';
+
   if (scannerSource) {
-    scannerSourceDisplayName = `${scannerSource} (${(duplexEnabled &&
-      'Double') ||
-      'Single'} sided)`;
+    const scanModeLabel = getScanModeLabel(applicationContext, scanMode);
+    scannerSourceDisplayName = `${scannerSource} (${scanModeLabel})`;
   }
+
+  batches.forEach(batch => {
+    batch.scanModeLabel = getScanModeLabel(applicationContext, batch.scanMode);
+  });
 
   return {
     batches,

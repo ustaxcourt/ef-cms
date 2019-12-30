@@ -27,6 +27,12 @@ const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
 
+Case.PAYMENT_STATUS = {
+  PAID: 'Paid',
+  UNPAID: 'Not Paid',
+  WAIVED: 'Waived',
+};
+
 Case.STATUS_TYPES = {
   assignedCase: 'Assigned - Case',
   assignedMotion: 'Assigned - Motion',
@@ -172,6 +178,10 @@ Case.VALIDATION_ERROR_MESSAGES = {
     },
     'Your Petition file size is empty',
   ],
+  petitionPaymentDate: 'Please enter a valid Petition Fee payment date',
+  petitionPaymentMethod: 'Enter a valid Petition Fee payment method',
+  petitionPaymentStatus: 'Enter a valid Petition Fee payment status',
+  petitionPaymentWaivedDate: 'Enter a valid date waived',
   preferredTrialCity: 'Select a preferred trial location',
   procedureType: 'Select a case procedure',
   receivedAt: [
@@ -239,6 +249,11 @@ function Case(rawCase, { applicationContext }) {
   this.partyType = rawCase.partyType;
   this.payGovDate = rawCase.payGovDate;
   this.payGovId = rawCase.payGovId;
+  this.petitionPaymentStatus =
+    rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
+  this.petitionPaymentDate = rawCase.petitionPaymentDate;
+  this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
+  this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
@@ -434,6 +449,41 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
+    petitionPaymentDate: joi.when('petitionPaymentStatus', {
+      is: Case.PAYMENT_STATUS.PAID,
+      otherwise: joi
+        .date()
+        .iso()
+        .optional()
+        .allow(null),
+      then: joi
+        .date()
+        .iso()
+        .required(),
+    }),
+    petitionPaymentMethod: joi.when('petitionPaymentStatus', {
+      is: Case.PAYMENT_STATUS.PAID,
+      otherwise: joi
+        .string()
+        .allow(null)
+        .optional(),
+      then: joi.string().required(),
+    }),
+    petitionPaymentStatus: joi
+      .string()
+      .valid(Object.values(Case.PAYMENT_STATUS)),
+    petitionPaymentWaivedDate: joi.when('petitionPaymentStatus', {
+      is: Case.PAYMENT_STATUS.WAIVED,
+      otherwise: joi
+        .date()
+        .iso()
+        .allow(null)
+        .optional(),
+      then: joi
+        .date()
+        .iso()
+        .required(),
+    }),
     practitioners: joi.array().optional(),
     preferredTrialCity: joi
       .string()
@@ -448,7 +498,7 @@ joiValidationDecorator(
     respondents: joi.array().optional(),
     status: joi
       .string()
-      .valid(Object.keys(Case.STATUS_TYPES).map(key => Case.STATUS_TYPES[key]))
+      .valid(Object.values(Case.STATUS_TYPES))
       .optional(),
     trialDate: joi
       .date()
