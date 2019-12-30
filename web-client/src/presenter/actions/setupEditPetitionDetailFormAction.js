@@ -30,5 +30,23 @@ export const setupEditPetitionDetailFormAction = ({
     store.set(state.form.paymentDateWaivedYear, paymentDateWaivedYear);
     store.set(state.form.paymentDateWaivedMonth, paymentDateWaivedMonth);
     store.set(state.form.paymentDateWaivedDay, paymentDateWaivedDay);
+  } else if (caseDetail.petitionPaymentStatus === paymentStatus.PAID) {
+    const [
+      paymentDateYear,
+      paymentDateMonth,
+      paymentDateDay,
+    ] = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.petitionPaymentDate, 'YYYY-MM-DD')
+      .split('-');
+
+    store.set(state.form.paymentDateYear, paymentDateYear);
+    store.set(state.form.paymentDateMonth, paymentDateMonth);
+    store.set(state.form.paymentDateDay, paymentDateDay);
+
+    store.set(
+      state.form.petitionPaymentMethod,
+      caseDetail.petitionPaymentMethod,
+    );
   }
 };

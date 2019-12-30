@@ -8,7 +8,7 @@ import { sequences } from 'cerebral';
 import { state } from 'cerebral';
 import React from 'react';
 
-const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
+const PetitionDetails = ({ caseDetail, caseDetailHelper }) => (
   <React.Fragment>
     <div className="grid-row">
       <div className="grid-col-6">
@@ -38,14 +38,12 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
         </p>
       </div>
       <div className="grid-col-6">
-        {showPaymentRecord && (
-          <React.Fragment>
-            <p className="label">Petition Fee Paid</p>
-            <p className="pay-gov-id-display margin-bottom-0">
-              {caseDetail.payGovId}
-            </p>
-          </React.Fragment>
-        )}
+        <>
+          <p className="label">Filing Fee</p>
+          <p className="pay-gov-id-display margin-bottom-0">
+            {caseDetailHelper.filingFee}
+          </p>
+        </>
       </div>
     </div>
   </React.Fragment>
@@ -330,7 +328,7 @@ export const CaseInformationInternal = connect(
 
                   <PetitionDetails
                     caseDetail={formattedCaseDetail}
-                    showPaymentRecord={caseDetailHelper.showPaymentRecord}
+                    caseDetailHelper={caseDetailHelper}
                   />
                 </div>
               </div>

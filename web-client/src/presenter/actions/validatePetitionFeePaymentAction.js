@@ -26,7 +26,16 @@ export const validatePetitionFeePaymentAction = ({
 
   if (form.petitionPaymentStatus === paymentStatus.PAID) {
     // payment date is required
+    if (!form.paymentDateMonth)
+      errors.paymentDateMonth = 'You must provide a valid month';
+    if (!form.paymentDateDay)
+      errors.paymentDateDay = 'You must provide a valid day';
+    if (!form.paymentDateYear)
+      errors.paymentDateYear = 'You must provide a valid year';
+
     // payment note is required
+    if (!form.petitionPaymentMethod)
+      errors.petitionPaymentMethod = 'You must provide a valid payment method';
   } else if (form.petitionPaymentStatus === paymentStatus.WAIVED) {
     // waived date is required
     if (!form.paymentDateWaivedMonth)
@@ -40,6 +49,7 @@ export const validatePetitionFeePaymentAction = ({
   }
 
   if (isEmpty(errors)) {
+    // TODO: seems hacky being here
     const petitionPaymentWaivedDate = applicationContext
       .getUtilities()
       .createISODateString(
@@ -50,6 +60,14 @@ export const validatePetitionFeePaymentAction = ({
       state.form.petitionPaymentWaivedDate,
       new Date(petitionPaymentWaivedDate),
     );
+
+    const petitionPaymentDate = applicationContext
+      .getUtilities()
+      .createISODateString(
+        `${form.paymentDateYear}-${form.paymentDateMonth}-${form.paymentDateDay}`,
+        'YYYY-MM-DD',
+      );
+    store.set(state.form.petitionPaymentDate, new Date(petitionPaymentDate));
     return path.success();
   } else {
     return path.error({
