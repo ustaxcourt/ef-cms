@@ -285,6 +285,7 @@ import { updateJudgesCaseNoteOnWorkingCopySequence } from './sequences/updateJud
 import { updateMessageValueInModalSequence } from './sequences/updateMessageValueInModalSequence';
 import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
+import { updatePetitionFeePaymentSequence } from './sequences/updatePetitionFeePaymentSequence';
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
@@ -616,6 +617,7 @@ export const presenter = {
     updateMessageValueInModalSequence,
     updateMessageValueSequence,
     updateModalValueSequence,
+    updatePetitionFeePaymentSequence,
     updatePetitionValueSequence,
     updateScreenMetadataSequence,
     updateSearchTermSequence,

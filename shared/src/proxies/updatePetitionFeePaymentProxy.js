@@ -12,7 +12,7 @@ const { put } = require('./requests');
  * @param {string} providers.petitionPaymentWaivedDate the date on which petition fee payment was waived
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updatePetitionFeePaymentProxy = ({
+exports.updatePetitionFeePaymentInteractor = ({
   applicationContext,
   caseId,
   petitionPaymentDate,
