@@ -1,6 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
-import { CreateOrderChooseTypeModal } from '../CreateOrder/CreateOrderChooseTypeModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
@@ -19,7 +18,6 @@ export const OrdersNeededSummary = connect(
     formattedCaseDetail,
     openCreateOrderChooseTypeModalSequence,
     printFromBrowserSequence,
-    showModal,
   }) => {
     return (
       <>
@@ -27,9 +25,6 @@ export const OrdersNeededSummary = connect(
         <section className="grid-container">
           <SuccessNotification />
           <ErrorNotification />
-          {showModal == 'CreateOrderChooseTypeModal' && (
-            <CreateOrderChooseTypeModal />
-          )}
           <div>
             <h1>
               Orders Needed{' '}

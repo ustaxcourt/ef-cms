@@ -104,7 +104,7 @@ export const CaseDetailHeaderMenu = connect(
                 <li className="usa-nav__submenu-item">
                   <Button
                     icon="calendar-alt"
-                    id="button-add-deadline"
+                    id="menu-button-add-deadline"
                     onClick={() => {
                       resetCaseMenuSequence();
                       openCreateCaseDeadlineModalSequence();
@@ -117,7 +117,7 @@ export const CaseDetailHeaderMenu = connect(
                   <li className="usa-nav__submenu-item">
                     <Button
                       icon="clipboard-list"
-                      id="button-create-order"
+                      id="menu-button-create-order"
                       onClick={() => {
                         resetCaseMenuSequence();
                         openCreateOrderChooseTypeModalSequence();
@@ -142,7 +142,7 @@ export const CaseDetailHeaderMenu = connect(
                   <li className="usa-nav__submenu-item">
                     <Button
                       icon="edit"
-                      id="edit-case-context-button"
+                      id="menu-edit-case-context-button"
                       onClick={() => {
                         resetCaseMenuSequence();
                         openUpdateCaseModalSequence();
@@ -155,7 +155,7 @@ export const CaseDetailHeaderMenu = connect(
                 <li className="usa-nav__submenu-item">
                   <Button
                     icon="sticky-note"
-                    id="add-case-note-button"
+                    id="menu-add-case-note-button"
                     onClick={() => {
                       resetCaseMenuSequence();
                       openAddEditCaseNoteModalSequence();
