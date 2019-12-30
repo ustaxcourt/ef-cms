@@ -332,4 +332,5 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=trial-session-planning-modal',
   },
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/edit-trial-session/6b6975cf-2b10-4e84-bcae-91e162d2f9d1',
 ];

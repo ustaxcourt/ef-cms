@@ -55,12 +55,29 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('formats trial session as editable if date is in future', () => {
+  it('trial session can not be edited or deleted when in the past', () => {
     const result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
-          startDate: '2079-11-25T15:00:00.000Z',
+          isCalendared: false,
+          startDate: '2000-11-25T15:00:00.000Z',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      canDelete: false,
+      canEdit: false,
+    });
+  });
+
+  it('trial session can be edited only in the future', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: false,
+          startDate: '2090-11-25T15:00:00.000Z',
         },
       },
     });
@@ -70,13 +87,29 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('formats trial session with canDelete false if the session is calendared', () => {
+  it('trial session can not be deleted when calendared but it sill can be edited if in the future', () => {
     const result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
           ...TRIAL_SESSION,
           isCalendared: true,
-          startDate: '2079-11-25T15:00:00.000Z',
+          startDate: '2090-11-25T15:00:00.000Z',
+        },
+      },
+    });
+    expect(result).toMatchObject({
+      canDelete: false,
+      canEdit: true,
+    });
+  });
+
+  it('trial session can not be deleted or edited when calendared and in the past', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          isCalendared: true,
+          startDate: '2000-11-25T15:00:00.000Z',
         },
       },
     });

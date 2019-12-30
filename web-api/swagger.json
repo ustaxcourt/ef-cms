@@ -3162,6 +3162,25 @@
           }
         ]
       },
+      "put": {
+        "tags": ["trialsessions"],
+        "summary": "updates a trial session",
+        "description": "updates a trial session.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/trialSession"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
       "options": {
         "consumes": ["application/json"],
         "produces": ["application/json"],
