@@ -6,10 +6,11 @@ import React from 'react';
 export const SelectScannerSourceModal = connect(
   {
     modal: state.modal,
+    scanModeOptions: state.scanHelper.scanModeOptions,
     sources: state.scanHelper.sources,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
-  ({ modal, sources, updateModalValueSequence }) => (
+  ({ modal, scanModeOptions, sources, updateModalValueSequence }) => (
     <ConfirmModal
       cancelLabel="Cancel"
       confirmLabel="Select"
@@ -58,17 +59,22 @@ export const SelectScannerSourceModal = connect(
 
         <select
           className="usa-select"
-          defaultValue={modal.duplexEnabled ? 'true' : 'false'}
+          defaultValue={modal.scanMode}
           id="scanner-duplex-select"
           onChange={e => {
             updateModalValueSequence({
-              key: 'duplexEnabled',
-              value: e.target.value === 'true',
+              key: 'scanMode',
+              value: e.target.value,
             });
           }}
         >
-          <option value={false}>- Single Sided -</option>
-          <option value={true}>- Double Sided -</option>
+          {scanModeOptions.map((scanMode, index) => {
+            return (
+              <option key={index} value={scanMode.value}>
+                - {scanMode.label} -
+              </option>
+            );
+          })}
         </select>
       </div>
       {sources.length === 0 && (

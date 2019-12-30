@@ -53,6 +53,4 @@ const applicationContextPublic = {
   },
 };
 
-module.exports = {
-  applicationContextPublic,
-};
+export { applicationContextPublic };

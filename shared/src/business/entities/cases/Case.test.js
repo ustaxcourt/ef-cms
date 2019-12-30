@@ -297,6 +297,39 @@ describe('Case entity', () => {
       );
       expect(myCase.isValid()).toBeTruthy();
     });
+
+    describe('with different payment statuses', () => {
+      it('requires payment date and method if petition fee status is paid', () => {
+        const myCase = new Case(
+          {
+            ...MOCK_CASE,
+            petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+          },
+          {
+            applicationContext,
+          },
+        );
+        expect(myCase.getFormattedValidationErrors()).toMatchObject({
+          petitionPaymentDate: expect.anything(),
+          petitionPaymentMethod: expect.anything(),
+        });
+      });
+
+      it('requires waived date to be specified if petition fee is waived', () => {
+        const myCase = new Case(
+          {
+            ...MOCK_CASE,
+            petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+          },
+          {
+            applicationContext,
+          },
+        );
+        expect(myCase.getFormattedValidationErrors()).toMatchObject({
+          petitionPaymentWaivedDate: expect.anything(),
+        });
+      });
+    });
   });
 
   describe('validate', () => {

@@ -1,3 +1,4 @@
+import { Scan } from '../../../../shared/src/business/entities/Scan';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
@@ -8,12 +9,15 @@ const state = {
   batches: [],
 };
 
+const { SCAN_MODES } = Scan;
+
 const scanBatchPreviewerHelper = withAppContextDecorator(
   scanBatchPreviewerHelperComputed,
   applicationContext,
 );
 
 applicationContext.getCurrentUser = () => ({ role: User.ROLES.practitioner });
+applicationContext.getConstants = () => ({ SCAN_MODES });
 
 describe('scanBatchPreviewerHelper', () => {
   beforeEach(() => {
@@ -34,7 +38,7 @@ describe('scanBatchPreviewerHelper', () => {
       let testState = {
         ...state,
         scanner: {
-          duplexEnabled: false,
+          scanMode: SCAN_MODES.FEEDER,
           scannerSourceName: 'Some Scanner 247',
         },
       };
@@ -50,7 +54,7 @@ describe('scanBatchPreviewerHelper', () => {
     it('returns correct values when a scanner is selected and is using double sided', () => {
       let testState = {
         ...state,
-        scanner: { duplexEnabled: true, scannerSourceName: 'Some Scanner 247' },
+        scanner: { scanMode: 'duplex', scannerSourceName: 'Some Scanner 247' },
       };
 
       const result = runCompute(scanBatchPreviewerHelper, {
@@ -58,6 +62,20 @@ describe('scanBatchPreviewerHelper', () => {
       });
       expect(result.scannerSourceDisplayName).toEqual(
         'Some Scanner 247 (Double sided)',
+      );
+    });
+
+    it('returns correct values when a scanner is selected and is using flatbed', () => {
+      let testState = {
+        ...state,
+        scanner: { scanMode: 'flatbed', scannerSourceName: 'Some Scanner 247' },
+      };
+
+      const result = runCompute(scanBatchPreviewerHelper, {
+        state: testState,
+      });
+      expect(result.scannerSourceDisplayName).toEqual(
+        'Some Scanner 247 (Flatbed)',
       );
     });
   });

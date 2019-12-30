@@ -315,9 +315,7 @@ export const ScanBatchPreviewer = connect(
                       </td>
 
                       <td>
-                        <span>
-                          {(batch.duplexEnabled && 'Double') || 'Single'} sided
-                        </span>
+                        <span>{batch.scanModeLabel}</span>
                       </td>
                       <td>
                         <span>{batch.pages.length} pages</span>

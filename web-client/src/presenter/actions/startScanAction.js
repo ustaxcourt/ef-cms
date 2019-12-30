@@ -16,7 +16,7 @@ export const startScanAction = async ({
   props,
   store,
 }) => {
-  const { duplexEnabled } = props;
+  const { scanMode } = props;
 
   store.set(state.isScanning, true);
   const scanner = await applicationContext.getScanner();
@@ -24,7 +24,7 @@ export const startScanAction = async ({
   try {
     const { scannedBuffer: pages } = await scanner.startScanSession({
       applicationContext,
-      duplexEnabled,
+      scanMode,
     });
 
     const documentSelectedForScan = get(state.documentSelectedForScan);
@@ -37,9 +37,9 @@ export const startScanAction = async ({
       ...batches,
       ...[
         {
-          duplexEnabled,
           index: nextIndex,
           pages,
+          scanMode,
         },
       ],
     ]);

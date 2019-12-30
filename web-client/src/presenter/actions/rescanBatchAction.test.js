@@ -1,3 +1,4 @@
+import { Scan } from '../../../../shared/src/business/entities/Scan';
 import { presenter } from '../presenter';
 import { rescanBatchAction } from './rescanBatchAction';
 import { runAction } from 'cerebral/test';
@@ -6,8 +7,12 @@ let mockStartScanSession = jest.fn(() => ({
   scannedBuffer: [{ e: 5 }, { f: 6 }],
 }));
 const mockRemoveItemInteractor = jest.fn();
+const { SCAN_MODES } = Scan;
 
 presenter.providers.applicationContext = {
+  getConstants: () => ({
+    SCAN_MODES,
+  }),
   getScanner: () => ({
     getSourceNameByIndex: () => 'scanner',
     setSourceByIndex: () => null,
@@ -34,7 +39,7 @@ describe('rescanBatchAction', () => {
         presenter,
       },
       props: {
-        duplexEnabled: false,
+        scanMode: SCAN_MODES.FEEDER,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
@@ -78,7 +83,7 @@ describe('rescanBatchAction', () => {
         presenter,
       },
       props: {
-        duplexEnabled: false,
+        scanMode: SCAN_MODES.FEEDER,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
@@ -109,7 +114,7 @@ describe('rescanBatchAction', () => {
         presenter,
       },
       props: {
-        duplexEnabled: false,
+        scanMode: SCAN_MODES.FEEDER,
         scannerSourceIndex: 0,
         scannerSourceName: 'scanner',
       },
