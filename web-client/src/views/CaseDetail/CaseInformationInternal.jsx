@@ -264,6 +264,7 @@ export const CaseInformationInternal = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    gotoEditPetitionDetailsSequence: sequences.gotoEditPetitionDetailsSequence,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
@@ -280,6 +281,7 @@ export const CaseInformationInternal = connect(
   ({
     caseDetailHelper,
     formattedCaseDetail,
+    gotoEditPetitionDetailsSequence,
     navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
@@ -298,6 +300,14 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Petition Details
+                    <Button
+                      link
+                      className="margin-left-2"
+                      icon="edit"
+                      onClick={() => gotoEditPetitionDetailsSequence()}
+                    >
+                      Edit
+                    </Button>
                     <If bind="caseDetail.irsSendDate">
                       <Button
                         link

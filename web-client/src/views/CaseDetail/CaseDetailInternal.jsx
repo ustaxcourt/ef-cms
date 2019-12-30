@@ -6,6 +6,7 @@ import { CaseInformationInternal } from './CaseInformationInternal';
 import { CaseNotes } from './CaseNotes';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
+import { EditPetitionDetails } from './EditPetitionDetails';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './MessagesInProgress';
@@ -23,9 +24,17 @@ export const CaseDetailInternal = connect(
     caseDetail: state.caseDetail,
     formattedCaseDetail: state.formattedCaseDetail,
     primaryTab: state.caseDetailPage.primaryTab,
+    showEditPetition: state.caseDetailPage.showEditPetition,
     token: state.token,
   },
-  ({ baseUrl, caseDetail, formattedCaseDetail, primaryTab, token }) => {
+  ({
+    baseUrl,
+    caseDetail,
+    formattedCaseDetail,
+    primaryTab,
+    showEditPetition,
+    token,
+  }) => {
     return (
       <>
         <CaseDetailHeader className="margin-bottom-0" />
@@ -77,7 +86,10 @@ export const CaseDetailInternal = connect(
               </Tab>
             </Tabs>
           )}
-          {primaryTab === 'caseInformation' && (
+          {primaryTab === 'caseInformation' && showEditPetition && (
+            <EditPetitionDetails></EditPetitionDetails>
+          )}
+          {primaryTab === 'caseInformation' && !showEditPetition && (
             <Tabs
               bind="caseDetailPage.caseInformationTab"
               className="classic-horizontal-header3 tab-border"
