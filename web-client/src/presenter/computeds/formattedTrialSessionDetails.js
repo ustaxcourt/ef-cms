@@ -18,8 +18,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     const trialDateInFuture = trialDateFormatted > nowDateFormatted;
     formattedTrialSession.canDelete =
       trialDateInFuture && !formattedTrialSession.isCalendared;
-    formattedTrialSession.canEdit =
-      trialDateInFuture && !formattedTrialSession.isCalendared;
+    formattedTrialSession.canEdit = trialDateInFuture;
   }
 
   return formattedTrialSession;
