@@ -52,7 +52,7 @@ custom:
         topic: ${self:provider.stage}-cloudwatch-alerts
         notifications:
           - protocol: email
-            endpoint: jsutton@flexion.us
+            endpoint: ustaxcourt@flexion.us
 
   customDomain:
     domainName: efcms-${self:provider.stage}-ws.${opt:domain}
