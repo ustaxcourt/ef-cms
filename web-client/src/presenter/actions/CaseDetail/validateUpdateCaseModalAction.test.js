@@ -55,7 +55,7 @@ describe('validateUpdateCaseModalAction', () => {
     expect(errorStub).not.toHaveBeenCalled();
   });
 
-  it('should call path.error and not path.sucess if caseCaption is not defined', async () => {
+  it('should call path.error and not path.success if caseCaption is not defined', async () => {
     await runAction(validateUpdateCaseModalAction, {
       modules: {
         presenter,
@@ -72,7 +72,7 @@ describe('validateUpdateCaseModalAction', () => {
     expect(successStub).not.toHaveBeenCalled();
   });
 
-  it('should call path.error and not path.sucess if caseStatus is not defined', async () => {
+  it('should call path.error and not path.success if caseStatus is not defined', async () => {
     await runAction(validateUpdateCaseModalAction, {
       modules: {
         presenter,

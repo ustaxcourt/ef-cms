@@ -235,7 +235,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     };
   });
 
-  it('should throw an Unathorized error if the user role does not have the SERVE_DOCUMENT permission', async () => {
+  it('should throw an Unauthorized error if the user role does not have the SERVE_DOCUMENT permission', async () => {
     let error;
 
     // petitioner role does NOT have the SERVE_DOCUMENT permission

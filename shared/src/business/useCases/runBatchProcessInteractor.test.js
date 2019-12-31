@@ -42,7 +42,7 @@ const MOCK_WORK_ITEMS = [
     workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
   },
 ];
-describe('zip petition documents and send to dummy S3 IRS respository', () => {
+describe('zip petition documents and send to dummy S3 IRS repository', () => {
   let deleteWorkItemFromSectionStub = sinon.stub().resolves(null);
   let zipDocumentsStub = sinon.stub().resolves(null);
   let deleteDocumentStub = sinon.stub().resolves(null);
