@@ -51,25 +51,25 @@ Case.STATUS_TYPES = {
 };
 
 Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
-  Case.STATUS_TYPES.submitted,
-  Case.STATUS_TYPES.cav,
-  Case.STATUS_TYPES.rule155,
-  Case.STATUS_TYPES.jurisdictionRetained,
   Case.STATUS_TYPES.assignedCase,
   Case.STATUS_TYPES.assignedMotion,
+  Case.STATUS_TYPES.cav,
+  Case.STATUS_TYPES.jurisdictionRetained,
+  Case.STATUS_TYPES.rule155,
+  Case.STATUS_TYPES.submitted,
 ];
 
 Case.STATUS_TYPES_MANUAL_UPDATE = [
-  Case.STATUS_TYPES.generalDocket,
-  Case.STATUS_TYPES.generalDocketReadyForTrial,
-  Case.STATUS_TYPES.submitted,
-  Case.STATUS_TYPES.cav,
-  Case.STATUS_TYPES.rule155,
-  Case.STATUS_TYPES.jurisdictionRetained,
   Case.STATUS_TYPES.assignedCase,
   Case.STATUS_TYPES.assignedMotion,
+  Case.STATUS_TYPES.cav,
   Case.STATUS_TYPES.closed,
+  Case.STATUS_TYPES.generalDocket,
+  Case.STATUS_TYPES.generalDocketReadyForTrial,
+  Case.STATUS_TYPES.jurisdictionRetained,
   Case.STATUS_TYPES.onAppeal,
+  Case.STATUS_TYPES.rule155,
+  Case.STATUS_TYPES.submitted,
 ];
 
 Case.ANSWER_CUTOFF_AMOUNT = 45;
