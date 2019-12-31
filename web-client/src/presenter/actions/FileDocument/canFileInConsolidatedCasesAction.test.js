@@ -16,7 +16,7 @@ describe('canFileInConsolidatedCasesAction', () => {
     };
   });
 
-  it('should select yes when lead case id exists and the user has the FILE_IN_CONSOLIDATED permisssion', async () => {
+  it('should select yes when lead case id exists and the user has the FILE_IN_CONSOLIDATED permission', async () => {
     await runAction(canFileInConsolidatedCasesAction, {
       modules: {
         presenter,

@@ -1524,7 +1524,7 @@ describe('Case entity', () => {
   });
 
   describe('updatePractitioner', () => {
-    it('updates the given practioner on the case', () => {
+    it('updates the given practitioner on the case', () => {
       const caseToVerify = new Case(
         {
           practitioners: [
@@ -1584,7 +1584,7 @@ describe('Case entity', () => {
         {
           respondents: [
             new Practitioner({
-              email: 'rspndnt',
+              email: 'respondent@example.com',
               userId: 'respondent',
             }),
           ],
@@ -1595,7 +1595,9 @@ describe('Case entity', () => {
       );
 
       expect(caseToVerify.respondents).not.toBeNull();
-      expect(caseToVerify.respondents[0].email).toEqual('rspndnt');
+      expect(caseToVerify.respondents[0].email).toEqual(
+        'respondent@example.com',
+      );
 
       caseToVerify.updateRespondent({
         email: 'respondent@example.com',
