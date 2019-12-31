@@ -464,7 +464,7 @@ describe('formatCase', () => {
     });
   });
 
-  it('should set isLeadCase false property on the case if it has a leadCaseId that matches its caseId', () => {
+  it('should set isLeadCase false on the case if it has a leadCaseId that matches its caseId', () => {
     const result = formatCase(applicationContext, {
       ...mockCaseDetail,
       leadCaseId: 'notthecaseid',
