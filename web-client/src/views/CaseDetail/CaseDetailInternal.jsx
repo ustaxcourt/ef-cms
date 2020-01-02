@@ -87,7 +87,7 @@ export const CaseDetailInternal = connect(
             </Tabs>
           )}
           {primaryTab === 'caseInformation' && showEditPetition && (
-            <EditPetitionDetails></EditPetitionDetails>
+            <EditPetitionDetails />
           )}
           {primaryTab === 'caseInformation' && !showEditPetition && (
             <Tabs

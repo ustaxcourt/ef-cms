@@ -2,7 +2,7 @@ import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * validate the case or session note
+ * validates the edit petition fee payment inputs
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
@@ -16,7 +16,7 @@ export const validatePetitionFeePaymentAction = ({
   path,
 }) => {
   const form = get(state.form);
-  const paymentStatus = get(state.constants.PAYMENT_STATUS);
+  const paymentStatus = applicationContext.getConstants().PAYMENT_STATUS;
 
   let errors = {};
 
