@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -15,38 +14,55 @@ export const validatePetitionFeePaymentAction = ({
   get,
   path,
 }) => {
+  const caseDetail = get(state.caseDetail);
   const form = get(state.form);
-  const paymentStatus = applicationContext.getConstants().PAYMENT_STATUS;
 
-  let errors = {};
-
-  if (form.petitionPaymentStatus === paymentStatus.PAID) {
-    if (!form.petitionPaymentMethod) {
-      errors.petitionPaymentMethod = 'You must provide a valid payment method';
-    }
-
-    if (
-      !applicationContext
-        .getUtilities()
-        .isValidDateString(
-          `${form.paymentDateMonth}-${form.paymentDateDay}-${form.paymentDateYear}`,
-        )
-    ) {
-      errors.paymentDate = 'Enter a valid date payment date';
-    }
-  } else if (form.petitionPaymentStatus === paymentStatus.WAIVED) {
-    if (
-      !applicationContext
-        .getUtilities()
-        .isValidDateString(
-          `${form.paymentDateWaivedMonth}-${form.paymentDateWaivedDay}-${form.paymentDateWaivedYear}`,
-        )
-    ) {
-      errors.paymentDateWaived = 'Enter a valid payment waived date';
-    }
+  let petitionPaymentWaivedDate;
+  if (
+    applicationContext
+      .getUtilities()
+      .isValidDateString(
+        `${form.paymentDateWaivedMonth}-${form.paymentDateWaivedDay}-${form.paymentDateWaivedYear}`,
+      )
+  ) {
+    petitionPaymentWaivedDate = applicationContext
+      .getUtilities()
+      .createISODateStringFromObject({
+        day: form.paymentDateWaivedDay,
+        month: form.paymentDateWaivedMonth,
+        year: form.paymentDateWaivedYear,
+      });
   }
 
-  if (isEmpty(errors)) {
+  let petitionPaymentDate;
+  if (
+    applicationContext
+      .getUtilities()
+      .isValidDateString(
+        `${form.paymentDateMonth}-${form.paymentDateDay}-${form.paymentDateYear}`,
+      )
+  ) {
+    petitionPaymentDate = applicationContext
+      .getUtilities()
+      .createISODateStringFromObject({
+        day: form.paymentDateDay,
+        month: form.paymentDateMonth,
+        year: form.paymentDateYear,
+      });
+  }
+
+  const errors = applicationContext.getUseCases().validateCaseDetailInteractor({
+    applicationContext,
+    caseDetail: {
+      ...caseDetail,
+      petitionPaymentDate,
+      petitionPaymentMethod: form.petitionPaymentMethod,
+      petitionPaymentStatus: form.petitionPaymentStatus,
+      petitionPaymentWaivedDate,
+    },
+  });
+
+  if (!errors) {
     return path.success();
   } else {
     return path.error({

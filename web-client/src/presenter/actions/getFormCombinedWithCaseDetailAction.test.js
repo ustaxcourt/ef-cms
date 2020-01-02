@@ -47,7 +47,7 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
       state: {
-        caseDetail: { payGovId: '' },
+        caseDetail: {},
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
         },
@@ -55,9 +55,12 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           irsDay: '01',
           irsMonth: '01',
           irsYear: '2009',
-          payGovDay: '01',
-          payGovMonth: '01',
-          payGovYear: '2009',
+          paymentDateDay: '01',
+          paymentDateMonth: '01',
+          paymentDateWaivedDay: '01',
+          paymentDateWaivedMonth: '01',
+          paymentDateWaivedYear: '2009',
+          paymentDateYear: '2009',
           receivedAtDay: '03',
           receivedAtMonth: '03',
           receivedAtYear: '2009',
@@ -67,8 +70,9 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
         irsNoticeDate: '2009-01-01T05:00:00.000Z',
-        payGovDate: '2009-01-01T05:00:00.000Z',
-        payGovId: null,
+        payGovId: undefined,
+        petitionPaymentDate: '2009-01-01T05:00:00.000Z',
+        petitionPaymentWaivedDate: '2009-01-01T05:00:00.000Z',
         receivedAt: '2009-03-03T05:00:00.000Z',
       },
     });
@@ -86,9 +90,12 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           irsDay: '01',
           irsMonth: '01',
           irsYear: 'x',
-          payGovDay: '01',
-          payGovMonth: '01',
-          payGovYear: 'x',
+          paymentDateDay: '01',
+          paymentDateMonth: '01',
+          paymentDateWaivedDay: '01',
+          paymentDateWaivedMonth: '01',
+          paymentDateWaivedYear: 'x',
+          paymentDateYear: 'x',
           receivedAtDay: '01',
           receivedAtMonth: '01',
           receivedAtYear: 'x',
@@ -98,8 +105,9 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
         irsNoticeDate: '-1',
-        payGovDate: '-1',
         payGovId: undefined,
+        petitionPaymentDate: '-1',
+        petitionPaymentWaivedDate: '-1',
         receivedAt: '-1',
       },
     });
@@ -112,7 +120,8 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       state: {
         caseDetail: {
           irsNoticeDate: '2018-12-24T05:00:00.000Z',
-          payGovDate: '2018-12-24T05:00:00.000Z',
+          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
+          petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
           receivedAt: '2018-12-24T05:00:00.000Z',
         },
         constants: {
@@ -122,9 +131,12 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           irsDay: '24',
           irsMonth: '12',
           irsYear: '',
-          payGovDay: '24',
-          payGovMonth: '12',
-          payGovYear: '',
+          paymentDateDay: '24',
+          paymentDateMonth: '12',
+          paymentDateWaivedDay: '24',
+          paymentDateWaivedMonth: '12',
+          paymentDateWaivedYear: '',
+          paymentDateYear: '',
           receivedAtDay: '24',
           receivedAtMonth: '12',
           receivedAtYear: '',
@@ -134,8 +146,9 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
         irsNoticeDate: '2018-12-24T05:00:00.000Z',
-        payGovDate: '2018-12-24T05:00:00.000Z',
         payGovId: undefined,
+        petitionPaymentDate: '2018-12-24T05:00:00.000Z',
+        petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
         receivedAt: '2018-12-24T05:00:00.000Z',
       },
     });
@@ -147,7 +160,8 @@ describe('getFormCombinedWithCaseDetailAction', () => {
       state: {
         caseDetail: {
           irsNoticeDate: null,
-          payGovDate: '2018-12-24T05:00:00.000Z',
+          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
+          petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
           receivedAt: '2018-12-24T05:00:00.000Z',
         },
         constants: {
@@ -157,9 +171,12 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           irsDay: '24',
           irsMonth: '',
           irsYear: '',
-          payGovDay: '24',
-          payGovMonth: '',
-          payGovYear: '',
+          paymentDateDay: '24',
+          paymentDateMonth: '',
+          paymentDateWaivedDay: '24',
+          paymentDateWaivedMonth: '',
+          paymentDateWaivedYear: '',
+          paymentDateYear: '',
           receivedAtDay: '24',
           receivedAtMonth: '',
           receivedAtYear: '',
@@ -169,21 +186,23 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
         irsNoticeDate: null,
-        payGovDate: '2018-12-24T05:00:00.000Z',
         payGovId: undefined,
+        petitionPaymentDate: '2018-12-24T05:00:00.000Z',
+        petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
         receivedAt: '2018-12-24T05:00:00.000Z',
       },
     });
   });
 
-  it('clears the irsNoticeDate and payGovDate and receivedAt to null if it was once defined and the user clears the fields', async () => {
+  it('clears the irsNoticeDate and petitionPaymentDate and receivedAt to null if it was once defined and the user clears the fields', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
 
       state: {
         caseDetail: {
           irsNoticeDate: '2018-12-24T05:00:00.000Z',
-          payGovDate: '2018-12-24T05:00:00.000Z',
+          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
+          petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
           receivedAt: '2018-12-24T05:00:00.000Z',
         },
         constants: {
@@ -193,9 +212,12 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           irsDay: '',
           irsMonth: '',
           irsYear: '',
-          payGovDay: '',
-          payGovMonth: '',
-          payGovYear: '',
+          paymentDateDay: '',
+          paymentDateMonth: '',
+          paymentDateWaivedDay: '',
+          paymentDateWaivedMonth: '',
+          paymentDateWaivedYear: '',
+          paymentDateYear: '',
           receivedAtDay: '',
           receivedAtMonth: '',
           receivedAtYear: '',
@@ -205,18 +227,23 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output.combinedCaseDetailWithForm.irsNoticeDate).toEqual(
       null,
     );
-    expect(results.output.combinedCaseDetailWithForm.payGovDate).toEqual(null);
+    expect(
+      results.output.combinedCaseDetailWithForm.petitionPaymentDate,
+    ).toEqual(null);
+    expect(
+      results.output.combinedCaseDetailWithForm.petitionPaymentWaivedDate,
+    ).toEqual(null);
     expect(results.output.combinedCaseDetailWithForm.receivedAt).toEqual(null);
   });
 
-  it('deletes the payGovDate if the user cleared the form', async () => {
+  it('deletes the petitionPaymentDate if the user cleared the form', async () => {
     const results = await runAction(getFormCombinedWithCaseDetailAction, {
       modules,
 
       state: {
         caseDetail: {
           // irsNoticeDate: '2018-12-24T05:00:00.000Z',
-          payGovDate: '2018-12-24T05:00:00.000Z',
+          petitionPaymentDate: '2018-12-24T05:00:00.000Z',
         },
         constants: {
           CASE_CAPTION_POSTFIX: Case.CASE_CAPTION_POSTFIX,
@@ -225,16 +252,18 @@ describe('getFormCombinedWithCaseDetailAction', () => {
           irsDay: '12',
           irsMonth: '12',
           irsYear: 'notayear',
-          payGovDay: '',
-          payGovMonth: '',
-          payGovYear: '',
+          paymentDateDay: '',
+          paymentDateMonth: '',
+          paymentDateYear: '',
         },
       },
     });
     expect(results.output.combinedCaseDetailWithForm.irsNoticeDate).toEqual(
       '-1',
     );
-    // expect(results.output.combinedCaseDetailWithForm.payGovDate).toEqual(null);
+    expect(
+      results.output.combinedCaseDetailWithForm.petitionPaymentDate,
+    ).toEqual(null);
   });
 
   it('adds the props.caseCaption to the combinedCaseDetailWithForm', async () => {

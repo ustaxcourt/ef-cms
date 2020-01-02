@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { PetitionPaymentForm } from '../CaseDetail/PetitionPaymentForm';
 import { ProcedureType } from '../StartCase/ProcedureType';
 import { connect } from '@cerebral/react';
 import { limitLength } from '../../ustc-ui/utils/limitLength';
@@ -231,106 +232,14 @@ export const CaseInfo = connect(
           </div>
         </div>
 
-        <FormGroup errorText={caseDetailErrors.payGovDate}>
-          <fieldset className="usa-fieldset margin-bottom-0">
-            <legend className="usa-legend" id="fee-payment-date-legend">
-              Fee payment date <span className="usa-hint">(optional)</span>
-            </legend>
-            <div className="usa-memorable-date">
-              <div className="usa-form-group usa-form-group--month margin-bottom-0">
-                <input
-                  aria-describedby="fee-payment-date-legend"
-                  aria-label="month, two digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    caseDetailErrors.payGovDate && 'usa-input-error',
-                  )}
-                  id="fee-payment-date-month"
-                  max="12"
-                  min="1"
-                  name="payGovMonth"
-                  placeholder="MM"
-                  type="number"
-                  value={form.payGovMonth || ''}
-                  onBlur={() => validateCaseDetailSequence()}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group--day margin-bottom-0">
-                <input
-                  aria-describedby="fee-payment-date-legend"
-                  aria-label="day, two digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    caseDetailErrors.payGovDate && 'usa-input-error',
-                  )}
-                  id="fee-payment-date-day"
-                  max="31"
-                  min="1"
-                  name="payGovDay"
-                  placeholder="DD"
-                  type="number"
-                  value={form.payGovDay || ''}
-                  onBlur={() => validateCaseDetailSequence()}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="usa-form-group usa-form-group--year margin-bottom-0">
-                <input
-                  aria-describedby="fee-payment-date-legend"
-                  aria-label="year, four digits"
-                  className={classNames(
-                    'usa-input usa-input--inline',
-                    caseDetailErrors.payGovDate && 'usa-input-error',
-                  )}
-                  id="fee-payment-date-year"
-                  max="2100"
-                  min="1900"
-                  name="payGovYear"
-                  placeholder="YYYY"
-                  type="number"
-                  value={form.payGovYear || ''}
-                  onBlur={() => validateCaseDetailSequence()}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </fieldset>
-        </FormGroup>
-
-        <div className="usa-form-group">
-          <label className="usa-label" htmlFor="fee-payment-id">
-            Fee payment ID <span className="usa-hint">(optional)</span>
-          </label>
-          <input
-            className="usa-input"
-            id="fee-payment-id"
-            name="payGovId"
-            type="number"
-            value={caseDetail.payGovId || ''}
-            onChange={e => {
-              updateCaseValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-          />
-        </div>
+        <PetitionPaymentForm
+          bind="caseDetail"
+          dateBind="form"
+          updateDateSequence={updateFormValueSequence}
+          updateSequence={updateCaseValueSequence}
+          validateSequence={validateCaseDetailSequence}
+          validationErrorsBind="caseDetailErrors"
+        />
 
         <div className="order-checkbox">
           <input
