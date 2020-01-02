@@ -81,6 +81,7 @@ import {
   formatDateString,
   formatNow,
   isStringISOFormatted,
+  isValidDateString,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
@@ -537,6 +538,7 @@ const applicationContext = {
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isStringISOFormatted,
+      isValidDateString,
       prepareDateFromString,
       setServiceIndicatorsForCase,
       sortDocketRecords,
