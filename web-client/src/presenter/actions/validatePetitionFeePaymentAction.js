@@ -1,6 +1,5 @@
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
-import moment from 'moment';
 
 /**
  * validate the case or session note
@@ -15,7 +14,6 @@ export const validatePetitionFeePaymentAction = ({
   applicationContext,
   get,
   path,
-  store,
 }) => {
   const form = get(state.form);
   const paymentStatus = get(state.constants.PAYMENT_STATUS);
@@ -23,7 +21,6 @@ export const validatePetitionFeePaymentAction = ({
   let errors = {};
 
   if (form.petitionPaymentStatus === paymentStatus.PAID) {
-    // payment note is required
     if (!form.petitionPaymentMethod) {
       errors.petitionPaymentMethod = 'You must provide a valid payment method';
     }
