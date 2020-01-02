@@ -1,13 +1,13 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseDetailHeader } from './CaseDetailHeader';
 import { PetitionPaymentForm } from './PetitionPaymentForm';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const EditPetitionDetails = connect(
   {
-    cancelEditPetitionDetailsSequence:
-      sequences.cancelEditPetitionDetailsSequence,
+    docketNumber: state.caseDetail.docketNumber,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updatePetitionFeePaymentSequence:
       sequences.updatePetitionFeePaymentSequence,
@@ -15,37 +15,44 @@ export const EditPetitionDetails = connect(
       sequences.validatePetitionFeePaymentSequence,
   },
   ({
-    cancelEditPetitionDetailsSequence,
+    docketNumber,
     updateFormValueSequence,
     updatePetitionFeePaymentSequence,
     validatePetitionFeePaymentSequence,
   }) => {
     return (
       <>
-        <h1>Edit Petition Details</h1>
-        <div className="blue-container margin-bottom-4">
-          <h3 className="margin-bottom-2">Petition Fee</h3>
-          <PetitionPaymentForm
-            bind="form"
-            dateBind="form"
-            updateDateSequence={updateFormValueSequence}
-            updateSequence={updateFormValueSequence}
-            validateSequence={validatePetitionFeePaymentSequence}
-            validationErrorsBind="validationErrors"
-          />
-        </div>
+        <CaseDetailHeader />
 
-        <Button
-          onClick={() => {
-            updatePetitionFeePaymentSequence();
-          }}
+        <section
+          className="usa-section grid-container"
+          id="case-detail-internal"
         >
-          Save
-        </Button>
+          <h1>Edit Petition Details</h1>
+          <div className="blue-container margin-bottom-4">
+            <h3 className="margin-bottom-2">Petition Fee</h3>
+            <PetitionPaymentForm
+              bind="form"
+              dateBind="form"
+              updateDateSequence={updateFormValueSequence}
+              updateSequence={updateFormValueSequence}
+              validateSequence={validatePetitionFeePaymentSequence}
+              validationErrorsBind="validationErrors"
+            />
+          </div>
 
-        <Button link onClick={() => cancelEditPetitionDetailsSequence()}>
-          Cancel
-        </Button>
+          <Button
+            onClick={() => {
+              updatePetitionFeePaymentSequence();
+            }}
+          >
+            Save
+          </Button>
+
+          <Button link href={`/case-detail/${docketNumber}`}>
+            Cancel
+          </Button>
+        </section>
       </>
     );
   },

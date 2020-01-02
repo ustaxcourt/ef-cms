@@ -1,10 +1,16 @@
 import { clearFormAction } from '../actions/clearFormAction';
-import { set } from 'cerebral/factories';
+import { getCaseAction } from '../actions/getCaseAction';
+import { setCaseAction } from '../actions/setCaseAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setupEditPetitionDetailFormAction } from '../actions/setupEditPetitionDetailFormAction';
-import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditPetitionDetailsSequence = [
+  setCurrentPageAction('Interstitial'),
   clearFormAction,
-  set(state.caseDetailPage.showEditPetition, true), // TODO: probably put in action
+  getCaseAction,
+  setCaseAction,
+  stopShowValidationAction,
   setupEditPetitionDetailFormAction,
+  setCurrentPageAction('EditPetitionDetails'),
 ];

@@ -46,7 +46,6 @@ export const updatePetitionFeePaymentAction = async ({
 
   return {
     alertSuccess: {
-      message: 'Please confirm the information below is correct.',
       title: 'Your changes have been saved.',
     },
     caseDetail: updatedCase,
