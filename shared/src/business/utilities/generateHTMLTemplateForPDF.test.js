@@ -390,13 +390,19 @@ describe('generateNoticeOfTrialIssuedTemplate', () => {
       content: {
         caption: caseDetail.caseCaption,
         captionPostfix: caseDetail.caseCaptionPostfix,
-        date: '2/2/2020',
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
-        judgeName: 'Test Judge',
-        name: 'Test Name',
-        time: '10:00 AM',
-        trialInfo: 'Test Trial Info',
+        trialInfo: {
+          address1: '123 Some Street',
+          address2: 'Courtroom 2',
+          city: 'City',
+          courthouseName: 'Courthouse 1',
+          judge: 'Test Judge',
+          postalCode: '12345',
+          startDate: '2/2/2020',
+          startTime: '10:00 AM',
+          state: 'ST',
+        },
       },
     });
 
@@ -404,7 +410,12 @@ describe('generateNoticeOfTrialIssuedTemplate', () => {
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
     expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
     expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
-    expect(result.indexOf('Test Trial Info')).toBeGreaterThan(-1);
+    expect(result.indexOf('Courthouse 1')).toBeGreaterThan(-1);
+    expect(result.indexOf('123 Some Street')).toBeGreaterThan(-1);
+    expect(result.indexOf('Courtroom 2')).toBeGreaterThan(-1);
+    expect(result.indexOf('City')).toBeGreaterThan(-1);
+    expect(result.indexOf('ST')).toBeGreaterThan(-1);
+    expect(result.indexOf('12345')).toBeGreaterThan(-1);
     expect(result.indexOf('Test Judge')).toBeGreaterThan(-1);
     expect(result.indexOf('NOTICE SETTING CASE FOR TRIAL')).toBeGreaterThan(-1);
     expect(result.indexOf('beginning at 10:00 AM on 2/2/2020')).toBeGreaterThan(

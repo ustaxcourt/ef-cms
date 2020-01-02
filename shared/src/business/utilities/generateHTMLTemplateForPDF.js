@@ -199,10 +199,7 @@ const generateNoticeOfTrialIssuedTemplate = async ({
   const {
     caption,
     captionPostfix,
-    date,
     docketNumberWithSuffix,
-    judgeName,
-    time,
     trialInfo,
   } = content;
 
@@ -218,7 +215,12 @@ const generateNoticeOfTrialIssuedTemplate = async ({
         <tbody>
           <tr>
             <td>
-              ${trialInfo}
+              <p>${trialInfo.address2}</p>
+              <p>${trialInfo.courthouseName}</p>
+              <p>${trialInfo.address1}</p>
+              <p>
+                ${trialInfo.city}, ${trialInfo.state} ${trialInfo.postalCode}
+              </p>
             </td>
           </tr>
         </tbody>
@@ -237,7 +239,7 @@ const generateNoticeOfTrialIssuedTemplate = async ({
         <tbody>
           <tr>
             <td>
-              ${judgeName}
+              ${trialInfo.judge}
             </td>
           </tr>
         </tbody>
@@ -246,7 +248,7 @@ const generateNoticeOfTrialIssuedTemplate = async ({
     </div>
 
     <h2>NOTICE SETTING CASE FOR TRIAL</h2>
-    <p>This case is set for trial at the Trial Session beginning at ${time} on ${date}. The calendar for that Session will be called at that date and time, and the parties are expected to be present and to be prepared to try the case.  Your failure to appear may result in dismissal of the case and entry of decision against you.</p>
+    <p>This case is set for trial at the Trial Session beginning at ${trialInfo.startTime} on ${trialInfo.startDate}. The calendar for that Session will be called at that date and time, and the parties are expected to be present and to be prepared to try the case.  Your failure to appear may result in dismissal of the case and entry of decision against you.</p>
     <p>The Court will set the time for each trial at the end of the calendar call.  In setting trial times the Court attempts to accommodate the parties, but the final determination of trial times rests in the Court’s discretion. </p>
     <p>Information about presenting a case in the Tax Court can be found at <a target="_blank" href="www.ustaxcourt.gov">www.ustaxcourt.gov</a>.</p>
     <p>The parties should contact each other promptly and cooperate fully so that the necessary steps can be taken to comply with these requirements.  Your failure to cooperate may also result in dismissal of the case and entry of decision against you.</p>
