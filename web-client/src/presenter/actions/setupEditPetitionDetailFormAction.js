@@ -13,7 +13,7 @@ export const setupEditPetitionDetailFormAction = ({
   store,
 }) => {
   const caseDetail = get(state.caseDetail);
-  const paymentStatus = get(state.constants.PAYMENT_STATUS);
+  const paymentStatus = applicationContext.getConstants().PAYMENT_STATUS;
 
   store.set(state.form.petitionPaymentStatus, caseDetail.petitionPaymentStatus);
 

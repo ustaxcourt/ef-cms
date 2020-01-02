@@ -244,10 +244,8 @@ Follow these steps for creating the end of sprint PRs for the court.
 9. After the court approves and merges PR, merge master into develop
 10. Create a release in GitHub as sprint_00x against master and put the same description planned to be in the PR description for the court
 
-## Pa11y Bookmarklet
+## Accessibility HTML_CodeSniffer Bookmarklet
 
-The following bookmarklet is useful for running pa11y directly on the page you are viewing.  Add this to your bookmark bar and run it when you get to the route you want to verify:
+The following bookmarklet is useful for running pa11y directly on the page you are viewing.  The following link should have instruction on how to setup and use:
 
-```
-javascript:(function() {var _p='//squizlabs.github.io/HTML_CodeSniffer/build/';var _i=function(s,cb) {var sc=document.createElement('script');sc.onload = function() {sc.onload = null;sc.onreadystatechange = null;cb.call(this);};sc.onreadystatechange = function(){if(/^(complete|loaded)$/.test(this.readyState) === true){sc.onreadystatechange = null;sc.onload();}};sc.src=s;if (document.head) {document.head.appendChild(sc);} else {document.getElementsByTagName('head')[0].appendChild(sc);}}; var options={path:_p};_i(_p+'HTMLCS.js',function(){HTMLCSAuditor.run('WCAG2AA',null,options);});})();
-```
+https://squizlabs.github.io/HTML_CodeSniffer/
