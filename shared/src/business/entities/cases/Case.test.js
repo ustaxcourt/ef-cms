@@ -2375,7 +2375,7 @@ describe('Case entity', () => {
     });
   });
 
-  describe('setNoticeOfTrialDate', () => {
+  describe('setNoticeOfTrial', () => {
     it('should set noticeOfTrial on the given case', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
       const result = caseEntity.setNoticeOfTrial();
