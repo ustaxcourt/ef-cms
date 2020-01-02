@@ -2382,5 +2382,20 @@ describe('Case entity', () => {
 
       expect(result.isValid()).toBeTruthy();
     });
+
+    it('should set noticeOfTrialDate when passed through Case constructor', () => {
+      const isoDateString = new Date().toISOString();
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          noticeOfTrialDate: isoDateString,
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.isValid()).toBeTruthy();
+      expect(caseEntity.noticeOfTrialDate).toEqual(isoDateString);
+    });
   });
 });
