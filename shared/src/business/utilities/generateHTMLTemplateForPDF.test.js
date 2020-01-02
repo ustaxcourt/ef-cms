@@ -1,6 +1,7 @@
 import {
   generateChangeOfAddressTemplate,
   generateHTMLTemplateForPDF,
+  generateNoticeOfTrialIssuedTemplate,
   generatePrintableDocketRecordTemplate,
   generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
@@ -372,6 +373,43 @@ describe('generateChangeOfAddressTemplate', () => {
 
     expect(result.indexOf('c/o Guy Fieri')).toBeGreaterThan(-1);
     expect(result.indexOf('c/o Rachel Ray')).toBeGreaterThan(-1);
+  });
+});
+
+describe('generateNoticeOfTrialIssuedTemplate', () => {
+  const caseDetail = {
+    caseCaption: 'Test Case Caption',
+    caseCaptionPostfix: 'Test Caption Postfix',
+    docketNumber: '123-45',
+    docketNumberSuffix: 'S',
+  };
+
+  it('Returns HTML with the given case and trial session data', async () => {
+    const result = await generateNoticeOfTrialIssuedTemplate({
+      applicationContext,
+      content: {
+        caption: caseDetail.caseCaption,
+        captionPostfix: caseDetail.caseCaptionPostfix,
+        date: '2/2/2020',
+        docketNumberWithSuffix:
+          caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
+        judgeName: 'Test Judge',
+        name: 'Test Name',
+        time: '10:00 AM',
+        trialInfo: 'Test Trial Info',
+      },
+    });
+
+    expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
+    expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
+    expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
+    expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
+    expect(result.indexOf('Test Trial Info')).toBeGreaterThan(-1);
+    expect(result.indexOf('Test Judge')).toBeGreaterThan(-1);
+    expect(result.indexOf('NOTICE SETTING CASE FOR TRIAL')).toBeGreaterThan(-1);
+    expect(result.indexOf('beginning at 10:00 AM on 2/2/2020')).toBeGreaterThan(
+      -1,
+    );
   });
 });
 
