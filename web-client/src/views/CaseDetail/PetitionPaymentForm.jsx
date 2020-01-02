@@ -24,7 +24,7 @@ export const PetitionPaymentForm = connect(
   }) => {
     return (
       <>
-        <FormGroup errorText={''}>
+        <FormGroup>
           <fieldset className="usa-fieldset">
             <legend className="usa-legend">Fee paid?</legend>
             <div className="usa-radio usa-radio__inline">
@@ -42,10 +42,7 @@ export const PetitionPaymentForm = connect(
                   })
                 }
               />
-              <label
-                className="usa-radio__label"
-                htmlFor={'payment-status-paid'}
-              >
+              <label className="usa-radio__label" htmlFor="payment-status-paid">
                 {paymentStatus.PAID}
               </label>
             </div>
@@ -67,7 +64,7 @@ export const PetitionPaymentForm = connect(
               />
               <label
                 className="usa-radio__label"
-                htmlFor={'payment-status-unpaid'}
+                htmlFor="payment-status-unpaid"
               >
                 {paymentStatus.UNPAID}
               </label>
@@ -90,7 +87,7 @@ export const PetitionPaymentForm = connect(
               />
               <label
                 className="usa-radio__label"
-                htmlFor={'payment-status-waived'}
+                htmlFor="payment-status-waived"
               >
                 {paymentStatus.WAIVED}
               </label>
