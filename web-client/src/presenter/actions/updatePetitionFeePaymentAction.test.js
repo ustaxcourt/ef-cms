@@ -45,7 +45,6 @@ describe('updatePetitionFeePaymentAction', () => {
     });
     expect(result.output).toEqual({
       alertSuccess: {
-        message: 'Please confirm the information below is correct.',
         title: 'Your changes have been saved.',
       },
       caseDetail: { docketNumber: '123-45' },
@@ -79,7 +78,6 @@ describe('updatePetitionFeePaymentAction', () => {
     });
     expect(result.output).toEqual({
       alertSuccess: {
-        message: 'Please confirm the information below is correct.',
         title: 'Your changes have been saved.',
       },
       caseDetail: { docketNumber: '123-45' },
