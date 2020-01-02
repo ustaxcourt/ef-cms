@@ -1,5 +1,6 @@
 import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
+import moment from 'moment';
 
 /**
  * validate the case or session note
@@ -21,53 +22,34 @@ export const validatePetitionFeePaymentAction = ({
 
   let errors = {};
 
-  // TODO: There needs to be a better way to deal with validation / preprocessing all these 3 separate date input fields
-  // THIS IS MESSY
-
   if (form.petitionPaymentStatus === paymentStatus.PAID) {
-    // payment date is required
-    if (!form.paymentDateMonth)
-      errors.paymentDateMonth = 'You must provide a valid month';
-    if (!form.paymentDateDay)
-      errors.paymentDateDay = 'You must provide a valid day';
-    if (!form.paymentDateYear)
-      errors.paymentDateYear = 'You must provide a valid year';
-
     // payment note is required
-    if (!form.petitionPaymentMethod)
+    if (!form.petitionPaymentMethod) {
       errors.petitionPaymentMethod = 'You must provide a valid payment method';
+    }
+
+    if (
+      !applicationContext
+        .getUtilities()
+        .isValidDateString(
+          `${form.paymentDateMonth}-${form.paymentDateDay}-${form.paymentDateYear}`,
+        )
+    ) {
+      errors.paymentDate = 'Enter a valid date payment date';
+    }
   } else if (form.petitionPaymentStatus === paymentStatus.WAIVED) {
-    // waived date is required
-    if (!form.paymentDateWaivedMonth)
-      errors.paymentDateWaivedMonth = 'You must provide a valid month';
-    if (!form.paymentDateWaivedDay)
-      errors.paymentDateWaivedDay = 'You must provide a valid day';
-    if (!form.paymentDateWaivedYear)
-      errors.paymentDateWaivedYear = 'You must provide a valid year';
-  } else {
-    // do nothing?
+    if (
+      !applicationContext
+        .getUtilities()
+        .isValidDateString(
+          `${form.paymentDateWaivedMonth}-${form.paymentDateWaivedDay}-${form.paymentDateWaivedYear}`,
+        )
+    ) {
+      errors.paymentDateWaived = 'Enter a valid payment waived date';
+    }
   }
 
   if (isEmpty(errors)) {
-    // TODO: seems hacky being here
-    const petitionPaymentWaivedDate = applicationContext
-      .getUtilities()
-      .createISODateString(
-        `${form.paymentDateWaivedYear}-${form.paymentDateWaivedMonth}-${form.paymentDateWaivedDay}`,
-        'YYYY-MM-DD',
-      );
-    store.set(
-      state.form.petitionPaymentWaivedDate,
-      new Date(petitionPaymentWaivedDate),
-    );
-
-    const petitionPaymentDate = applicationContext
-      .getUtilities()
-      .createISODateString(
-        `${form.paymentDateYear}-${form.paymentDateMonth}-${form.paymentDateDay}`,
-        'YYYY-MM-DD',
-      );
-    store.set(state.form.petitionPaymentDate, new Date(petitionPaymentDate));
     return path.success();
   } else {
     return path.error({

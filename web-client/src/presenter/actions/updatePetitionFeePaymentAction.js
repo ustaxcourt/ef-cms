@@ -13,12 +13,25 @@ export const updatePetitionFeePaymentAction = async ({
   get,
 }) => {
   const caseToUpdate = get(state.caseDetail);
-  const {
-    petitionPaymentDate,
-    petitionPaymentMethod,
-    petitionPaymentStatus,
-    petitionPaymentWaivedDate,
-  } = get(state.form);
+  const form = get(state.form);
+
+  const petitionPaymentWaivedDate = applicationContext
+    .getUtilities()
+    .createISODateStringFromObject({
+      day: form.paymentDateWaivedDay,
+      month: form.paymentDateWaivedMonth,
+      year: form.paymentDateWaivedYear,
+    });
+
+  const petitionPaymentDate = applicationContext
+    .getUtilities()
+    .createISODateStringFromObject({
+      day: form.paymentDateDay,
+      month: form.paymentDateMonth,
+      year: form.paymentDateYear,
+    });
+
+  const { petitionPaymentMethod, petitionPaymentStatus } = get(state.form);
 
   const updatedCase = await applicationContext
     .getUseCases()
@@ -31,7 +44,6 @@ export const updatePetitionFeePaymentAction = async ({
       petitionPaymentWaivedDate,
     });
 
-  // TODO
   return {
     alertSuccess: {
       message: 'Please confirm the information below is correct.',

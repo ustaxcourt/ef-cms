@@ -44,6 +44,17 @@ const createISODateString = (dateString, inputFormat) => {
 };
 
 /**
+ * @param {object} options the date options containing year, month, day
+ * @returns {string} a formatted ISO date string
+ */
+const createISODateStringFromObject = options => {
+  return createISODateString(
+    `${options.year}-${options.month}-${options.day}`,
+    'YYYY-MM-DD',
+  );
+};
+
+/**
  * @param {string} dateString a date string like YYYY-MM-DD or an ISO date retrieved from persistence
  * @param {string} formatStr the desired formatting as specified by the moment library
  * @returns {string} a formatted date string
@@ -89,12 +100,23 @@ const dateStringsCompared = (a, b) => {
   return aDate - bDate;
 };
 
+/**
+ * @param {string} dateString the date string
+ * @param {string} formats the format to check against
+ * @returns {boolean} if the date string is valid
+ */
+const isValidDateString = (dateString, formats = ['M-D-YYYY', 'M/D/YYYY']) => {
+  return moment(dateString, formats, true).isValid();
+};
+
 module.exports = {
   FORMATS,
   createISODateString,
+  createISODateStringFromObject,
   dateStringsCompared,
   formatDateString,
   formatNow,
   isStringISOFormatted,
+  isValidDateString,
   prepareDateFromString,
 };
