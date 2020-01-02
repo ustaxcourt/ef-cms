@@ -6,6 +6,7 @@ export const caseDetailHelper = (get, applicationContext) => {
   const { Case } = applicationContext.getEntityConstructors();
   const {
     PARTY_TYPES,
+    PAYMENT_STATUS,
     STATUS_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
@@ -125,10 +126,25 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
+  let paymentDate = '';
+  let paymentMethod = '';
+  if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
+    paymentDate = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.petitionPaymentDate, 'MM/DD/YY');
+    paymentMethod = caseDetail.petitionPaymentMethod;
+  } else if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
+    paymentDate = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MM/DD/YY');
+  }
+  const filingFee = `${caseDetail.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
+
   return {
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
     documentDetailTab,
+    filingFee,
     hasConsolidatedCases,
     hasOrders,
     practitionerMatchesFormatted,

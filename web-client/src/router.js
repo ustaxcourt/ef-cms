@@ -291,6 +291,7 @@ const router = {
         app.getSequence('gotoPrimaryContactEditSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/create-order',
       ifHasAccess(docketNumber => {

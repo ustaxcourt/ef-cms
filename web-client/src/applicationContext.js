@@ -78,9 +78,11 @@ import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import {
   createISODateString,
+  createISODateStringFromObject,
   formatDateString,
   formatNow,
   isStringISOFormatted,
+  isValidDateString,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
@@ -183,6 +185,7 @@ import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
 import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updateJudgesCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateJudgesCaseNoteProxy';
+import { updatePetitionFeePaymentInteractor } from '../../shared/src/proxies/updatePetitionFeePaymentProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
 import { updateTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionProxy';
 import { updateTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionWorkingCopyProxy';
@@ -346,6 +349,7 @@ const allUseCases = {
   updateCourtIssuedOrderInteractor,
   updateDocketEntryInteractor,
   updateJudgesCaseNoteInteractor,
+  updatePetitionFeePaymentInteractor,
   updatePrimaryContactInteractor,
   updateTrialSessionInteractor,
   updateTrialSessionWorkingCopyInteractor,
@@ -421,6 +425,7 @@ const applicationContext = {
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
       OTHER_TYPES: ContactFactory.OTHER_TYPES,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
+      PAYMENT_STATUS: Case.PAYMENT_STATUS,
       REFRESH_INTERVAL: 20 * MINUTES,
       ROLE_PERMISSIONS,
       SCAN_MODES: Scan.SCAN_MODES,
@@ -428,11 +433,11 @@ const applicationContext = {
       SERVICE_INDICATOR_TYPES: constants,
       SERVICE_STAMP_OPTIONS,
       SESSION_DEBOUNCE: 250,
-      SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
+      SESSION_MODAL_TIMEOUT: 5 * MINUTES,
       SESSION_TIMEOUT:
         (process.env.SESSION_TIMEOUT &&
           parseInt(process.env.SESSION_TIMEOUT)) ||
-        55 * MINUTES, // 55 minutes
+        55 * MINUTES,
       STATUS_TYPES: Case.STATUS_TYPES,
       STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
       STATUS_TYPES_WITH_ASSOCIATED_JUDGE:
@@ -523,6 +528,7 @@ const applicationContext = {
       compareISODateStrings,
       compareStrings,
       createISODateString,
+      createISODateStringFromObject,
       formatCase,
       formatCaseDeadlines,
       formatCaseForTrialSession,
@@ -534,6 +540,7 @@ const applicationContext = {
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isStringISOFormatted,
+      isValidDateString,
       prepareDateFromString,
       setServiceIndicatorsForCase,
       sortDocketRecords,
