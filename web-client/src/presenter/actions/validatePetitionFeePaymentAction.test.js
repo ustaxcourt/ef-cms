@@ -52,28 +52,6 @@ describe('validatePetitionFeePaymentAction', () => {
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('should not send a payment date to the interactor if it is not a valid date', async () => {
-    await runAction(validatePetitionFeePaymentAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: MOCK_CASE,
-        form: {
-          paymentDateDay: '01',
-          paymentDateMonth: '01',
-          petitionPaymentMethod: 'check',
-          petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
-        },
-      },
-    });
-    expect(validateCaseDetailStub.mock.calls[0][0].caseDetail).toMatchObject({
-      petitionPaymentDate: undefined,
-      petitionPaymentMethod: 'check',
-      petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
-    });
-  });
-
   it('should call the path success when no errors are found', async () => {
     validateCaseDetailStub = jest.fn().mockReturnValue('error');
     await runAction(validatePetitionFeePaymentAction, {
