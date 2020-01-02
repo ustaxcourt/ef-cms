@@ -2375,10 +2375,10 @@ describe('Case entity', () => {
     });
   });
 
-  describe('setNoticeOfTrial', () => {
-    it('should set noticeOfTrial on the given case', () => {
+  describe('setNoticeOfTrialDate', () => {
+    it('should set noticeOfTrialDate on the given case', () => {
       const caseEntity = new Case(MOCK_CASE, { applicationContext });
-      const result = caseEntity.setNoticeOfTrial();
+      const result = caseEntity.setNoticeOfTrialDate();
 
       expect(result.isValid()).toBeTruthy();
     });

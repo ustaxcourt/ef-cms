@@ -312,7 +312,7 @@ function Case(rawCase, { applicationContext }) {
     this.docketRecord = [];
   }
 
-  this.noticeOfTrial = rawCase.noticeOfTrial || createISODateString();
+  this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
   this.orderForAmendedPetitionAndFilingFee =
@@ -1452,8 +1452,8 @@ Case.prototype.isDocumentDraft = function(documentId) {
  *
  * @returns {Case} this case entity
  */
-Case.prototype.setNoticeOfTrial = function() {
-  this.noticeOfTrial = createISODateString();
+Case.prototype.setNoticeOfTrialDate = function() {
+  this.noticeOfTrialDate = createISODateString();
   return this;
 };
 
