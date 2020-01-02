@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.caseDetail which is used for displaying the red alerts at the top of the page.
+ * sets the form with the necessary date related state that is found on the caseDetail for petition fee payments.
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object containing the props.caseDetail
