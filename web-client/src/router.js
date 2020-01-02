@@ -83,7 +83,7 @@ const router = {
     );
 
     route(
-      '/case-detail/*/edit-petition',
+      '/case-detail/*/edit-details',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
         app.getSequence('gotoEditPetitionDetailsSequence')({

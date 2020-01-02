@@ -1,11 +1,18 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validatePetitionFeePaymentAction } from '../actions/validatePetitionFeePaymentAction';
 
 export const validatePetitionFeePaymentSequence = [
-  validatePetitionFeePaymentAction,
+  shouldValidateAction,
   {
-    error: [setValidationErrorsAction],
-    success: [clearAlertsAction],
+    ignore: [],
+    validate: [
+      validatePetitionFeePaymentAction,
+      {
+        error: [setValidationErrorsAction],
+        success: [clearAlertsAction],
+      },
+    ],
   },
 ];

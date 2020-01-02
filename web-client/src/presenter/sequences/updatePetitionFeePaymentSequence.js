@@ -1,8 +1,11 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { state } from 'cerebral';
@@ -20,7 +23,10 @@ export const updatePetitionFeePaymentSequence = [
       updatePetitionFeePaymentAction,
       setCaseAction,
       set(state.caseDetailPage.showEditPetition, false),
-      setCurrentPageAction('CaseDetailInternal'),
+      setSaveAlertsForNavigationAction,
+      setAlertSuccessAction,
+      setAlertErrorAction,
+      navigateToCaseDetailAction,
     ],
   },
 ];
