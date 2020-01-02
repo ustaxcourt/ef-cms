@@ -76,7 +76,19 @@ const router = {
       '/case-detail/*',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
-        app.getSequence('gotoCaseDetailSequence')({ docketNumber });
+        app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    route(
+      '/case-detail/*/edit-petition',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        app.getSequence('gotoEditPetitionDetailsSequence')({
+          docketNumber,
+        });
       }),
     );
 
