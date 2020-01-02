@@ -1,25 +1,24 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
 export const PetitionPaymentForm = connect(
   {
-    form: state.form,
+    bind: state[props.bind],
+    dateBind: state[props.dateBind],
     navigateBackSequence: sequences.navigateBackSequence,
     paymentStatus: state.constants.PAYMENT_STATUS,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    validatePetitionFeePaymentSequence:
-      sequences.validatePetitionFeePaymentSequence,
-    validationErrors: state.validationErrors,
+    validationErrors: state[props.validationErrorsBind],
   },
   ({
-    form,
+    bind,
+    dateBind,
     paymentStatus,
-    updateFormValueSequence,
-    validatePetitionFeePaymentSequence,
+    updateDateSequence,
+    updateSequence,
+    validateSequence,
     validationErrors,
   }) => {
     return (
@@ -29,14 +28,14 @@ export const PetitionPaymentForm = connect(
             <legend className="usa-legend">Fee paid?</legend>
             <div className="usa-radio usa-radio__inline">
               <input
-                checked={form.petitionPaymentStatus === paymentStatus.PAID}
+                checked={bind.petitionPaymentStatus === paymentStatus.PAID}
                 className="usa-radio__input"
                 id="payment-status-paid"
                 name="petitionPaymentStatus"
                 type="radio"
                 value={paymentStatus.PAID}
                 onChange={e =>
-                  updateFormValueSequence({
+                  updateSequence({
                     key: e.target.name,
                     value: e.target.value,
                   })
@@ -49,14 +48,14 @@ export const PetitionPaymentForm = connect(
 
             <div className="usa-radio usa-radio__inline">
               <input
-                checked={form.petitionPaymentStatus === paymentStatus.UNPAID}
+                checked={bind.petitionPaymentStatus === paymentStatus.UNPAID}
                 className="usa-radio__input"
                 id="payment-status-unpaid"
                 name="petitionPaymentStatus"
                 type="radio"
                 value={paymentStatus.UNPAID}
                 onChange={e =>
-                  updateFormValueSequence({
+                  updateSequence({
                     key: e.target.name,
                     value: e.target.value,
                   })
@@ -72,14 +71,14 @@ export const PetitionPaymentForm = connect(
 
             <div className="usa-radio usa-radio__inline">
               <input
-                checked={form.petitionPaymentStatus === paymentStatus.WAIVED}
+                checked={bind.petitionPaymentStatus === paymentStatus.WAIVED}
                 className="usa-radio__input"
                 id="payment-status-waived"
                 name="petitionPaymentStatus"
                 type="radio"
                 value={paymentStatus.WAIVED}
                 onChange={e =>
-                  updateFormValueSequence({
+                  updateSequence({
                     key: e.target.name,
                     value: e.target.value,
                   })
@@ -95,9 +94,9 @@ export const PetitionPaymentForm = connect(
           </fieldset>
         </FormGroup>
 
-        {form.petitionPaymentStatus === paymentStatus.PAID && (
+        {bind.petitionPaymentStatus === paymentStatus.PAID && (
           <>
-            <FormGroup errorText={validationErrors.paymentDate}>
+            <FormGroup errorText={validationErrors.petitionPaymentDate}>
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="payment-date-legend">
                   Payment date
@@ -117,10 +116,10 @@ export const PetitionPaymentForm = connect(
                       name="paymentDateMonth"
                       placeholder="MM"
                       type="number"
-                      value={form.paymentDateMonth || ''}
-                      onBlur={() => validatePetitionFeePaymentSequence()}
+                      value={dateBind.paymentDateMonth || ''}
+                      onBlur={() => validateSequence()}
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateDateSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
@@ -141,10 +140,10 @@ export const PetitionPaymentForm = connect(
                       name="paymentDateDay"
                       placeholder="DD"
                       type="number"
-                      value={form.paymentDateDay || ''}
-                      onBlur={() => validatePetitionFeePaymentSequence()}
+                      value={dateBind.paymentDateDay || ''}
+                      onBlur={() => validateSequence()}
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateDateSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
@@ -163,10 +162,10 @@ export const PetitionPaymentForm = connect(
                       name="paymentDateYear"
                       placeholder="YYYY"
                       type="number"
-                      value={form.paymentDateYear || ''}
-                      onBlur={() => validatePetitionFeePaymentSequence()}
+                      value={dateBind.paymentDateYear || ''}
+                      onBlur={() => validateSequence()}
                       onChange={e => {
-                        updateFormValueSequence({
+                        updateDateSequence({
                           key: e.target.name,
                           value: e.target.value,
                         });
@@ -188,10 +187,10 @@ export const PetitionPaymentForm = connect(
                 )}
                 id="petition-payment-method"
                 name="petitionPaymentMethod"
-                value={form.petitionPaymentMethod || ''}
-                onBlur={() => validatePetitionFeePaymentSequence()}
+                value={bind.petitionPaymentMethod || ''}
+                onBlur={() => validateSequence()}
                 onChange={e => {
-                  updateFormValueSequence({
+                  updateSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
@@ -201,8 +200,8 @@ export const PetitionPaymentForm = connect(
           </>
         )}
 
-        {form.petitionPaymentStatus === paymentStatus.WAIVED && (
-          <FormGroup errorText={validationErrors.paymentDateWaived}>
+        {bind.petitionPaymentStatus === paymentStatus.WAIVED && (
+          <FormGroup errorText={validationErrors.petitionPaymentWaivedDate}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="payment-date-waived-legend">
                 Date waived
@@ -222,10 +221,10 @@ export const PetitionPaymentForm = connect(
                     name="paymentDateWaivedMonth"
                     placeholder="MM"
                     type="number"
-                    value={form.paymentDateWaivedMonth || ''}
-                    onBlur={() => validatePetitionFeePaymentSequence()}
+                    value={dateBind.paymentDateWaivedMonth || ''}
+                    onBlur={() => validateSequence()}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDateSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -246,10 +245,10 @@ export const PetitionPaymentForm = connect(
                     name="paymentDateWaivedDay"
                     placeholder="DD"
                     type="number"
-                    value={form.paymentDateWaivedDay || ''}
-                    onBlur={() => validatePetitionFeePaymentSequence()}
+                    value={dateBind.paymentDateWaivedDay || ''}
+                    onBlur={() => validateSequence()}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDateSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
@@ -268,10 +267,10 @@ export const PetitionPaymentForm = connect(
                     name="paymentDateWaivedYear"
                     placeholder="YYYY"
                     type="number"
-                    value={form.paymentDateWaivedYear || ''}
-                    onBlur={() => validatePetitionFeePaymentSequence()}
+                    value={dateBind.paymentDateWaivedYear || ''}
+                    onBlur={() => validateSequence()}
                     onChange={e => {
-                      updateFormValueSequence({
+                      updateDateSequence({
                         key: e.target.name,
                         value: e.target.value,
                       });
