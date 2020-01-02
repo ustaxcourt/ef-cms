@@ -78,6 +78,7 @@ import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import {
   createISODateString,
+  createISODateStringFromObject,
   formatDateString,
   formatNow,
   isStringISOFormatted,
@@ -527,6 +528,7 @@ const applicationContext = {
       compareISODateStrings,
       compareStrings,
       createISODateString,
+      createISODateStringFromObject,
       formatCase,
       formatCaseDeadlines,
       formatCaseForTrialSession,
