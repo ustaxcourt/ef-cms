@@ -262,7 +262,6 @@ export const CaseInformationInternal = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    gotoEditPetitionDetailsSequence: sequences.gotoEditPetitionDetailsSequence,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
@@ -279,7 +278,6 @@ export const CaseInformationInternal = connect(
   ({
     caseDetailHelper,
     formattedCaseDetail,
-    gotoEditPetitionDetailsSequence,
     navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
@@ -302,8 +300,8 @@ export const CaseInformationInternal = connect(
                       <Button
                         link
                         className="margin-left-2 padding-0"
+                        href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-details`}
                         icon="edit"
-                        onClick={() => gotoEditPetitionDetailsSequence()}
                       >
                         Edit
                       </Button>
