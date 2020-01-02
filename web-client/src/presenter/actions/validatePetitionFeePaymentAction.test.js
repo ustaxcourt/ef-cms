@@ -1,10 +1,18 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { validatePetitionFeePaymentAction } from './validatePetitionFeePaymentAction';
-const { Case } = require('../../../../shared/src/business/entities/cases/Case');
 
-presenter.providers.applicationContext = applicationContext;
+let validateCaseDetailStub = jest.fn().mockReturnValue(null);
+
+presenter.providers.applicationContext = {
+  ...applicationContext,
+  getUseCases: () => ({
+    validateCaseDetailInteractor: validateCaseDetailStub,
+  }),
+};
 
 describe('validatePetitionFeePaymentAction', () => {
   let successStub;
@@ -20,12 +28,13 @@ describe('validatePetitionFeePaymentAction', () => {
     };
   });
 
-  it('returns success path for valid data for a paid petition fee', async () => {
+  it('should call the path success when no errors are found', async () => {
     await runAction(validatePetitionFeePaymentAction, {
       modules: {
         presenter,
       },
       state: {
+        caseDetail: MOCK_CASE,
         form: {
           paymentDateDay: '01',
           paymentDateMonth: '01',
@@ -35,85 +44,28 @@ describe('validatePetitionFeePaymentAction', () => {
         },
       },
     });
-
+    expect(validateCaseDetailStub.mock.calls[0][0].caseDetail).toMatchObject({
+      petitionPaymentDate: '2001-01-01T05:00:00.000Z',
+      petitionPaymentMethod: 'check',
+      petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+    });
     expect(successStub).toHaveBeenCalled();
   });
 
-  it('returns error path for invalid data for a paid petition fee', async () => {
+  it('should call the path success when no errors are found', async () => {
+    validateCaseDetailStub = jest.fn().mockReturnValue('error');
     await runAction(validatePetitionFeePaymentAction, {
       modules: {
         presenter,
       },
       state: {
+        caseDetail: MOCK_CASE,
         form: {
-          paymentDateDay: '01',
-          paymentDateMonth: '01',
+          petitionPaymentMethod: 'check',
           petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
         },
       },
     });
-
     expect(errorStub).toHaveBeenCalled();
-    expect(errorStub.mock.calls[0][0]).toMatchObject({
-      errors: {
-        paymentDate: 'Enter a valid date payment date',
-        petitionPaymentMethod: 'You must provide a valid payment method',
-      },
-    });
-  });
-
-  it('returns success path for valid data for a waived petition fee', async () => {
-    await runAction(validatePetitionFeePaymentAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          paymentDateWaivedDay: '01',
-          paymentDateWaivedMonth: '01',
-          paymentDateWaivedYear: '2001',
-          petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
-        },
-      },
-    });
-
-    expect(successStub).toHaveBeenCalled();
-  });
-
-  it('returns error path for invalid data for a waived petition fee', async () => {
-    await runAction(validatePetitionFeePaymentAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          paymentDateWaivedDay: '01',
-          paymentDateWaivedMonth: '01',
-          petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
-        },
-      },
-    });
-
-    expect(errorStub).toHaveBeenCalled();
-    expect(errorStub.mock.calls[0][0]).toMatchObject({
-      errors: {
-        paymentDateWaived: 'Enter a valid payment waived date',
-      },
-    });
-  });
-
-  it('returns success path for an unpaid petition fee', async () => {
-    await runAction(validatePetitionFeePaymentAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
-        },
-      },
-    });
-
-    expect(successStub).toHaveBeenCalled();
   });
 });
