@@ -13,8 +13,8 @@ const updateCaseMock = jest
     return caseToUpdate;
   });
 const mockUser = {
-  role: User.ROLES.petitionsClerk,
-  userId: 'petitionsClerk',
+  role: User.ROLES.docketClerk,
+  userId: 'docketClerk',
 };
 
 const applicationContext = {
@@ -28,7 +28,7 @@ const applicationContext = {
 
 describe('updatePetitionFeePaymentInteractor', () => {
   beforeEach(() => {
-    mockUser.role = User.ROLES.petitionsClerk;
+    mockUser.role = User.ROLES.docketClerk;
     jest.clearAllMocks();
   });
 
