@@ -2374,4 +2374,13 @@ describe('Case entity', () => {
       expect(myCase.isDocumentDraft('3')).toEqual(true);
     });
   });
+
+  describe('setNoticeOfTrialDate', () => {
+    it('should set noticeOfTrial on the given case', () => {
+      const caseEntity = new Case(MOCK_CASE, { applicationContext });
+      const result = caseEntity.setNoticeOfTrial();
+
+      expect(result.isValid()).toBeTruthy();
+    });
+  });
 });

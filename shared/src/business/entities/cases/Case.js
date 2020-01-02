@@ -312,6 +312,7 @@ function Case(rawCase, { applicationContext }) {
     this.docketRecord = [];
   }
 
+  this.noticeOfTrial = rawCase.noticeOfTrial || createISODateString();
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
   this.orderForAmendedPetitionAndFilingFee =
@@ -431,6 +432,10 @@ joiValidationDecorator(
         .required(),
     }),
     noticeOfAttachments: joi.boolean().optional(),
+    noticeOfTrialDate: joi
+      .date()
+      .iso()
+      .optional(),
     orderForAmendedPetition: joi.boolean().optional(),
     orderForAmendedPetitionAndFilingFee: joi.boolean().optional(),
     orderForFilingFee: joi.boolean().optional(),
@@ -1440,6 +1445,16 @@ Case.prototype.isDocumentDraft = function(documentId) {
       (isDraftOrder && !isDocumentOnDocketRecord) ||
       (isCourtIssuedDocument && !isDocumentOnDocketRecord))
   );
+};
+
+/**
+ * sets the notice of trial date for a case
+ *
+ * @returns {Case} this case entity
+ */
+Case.prototype.setNoticeOfTrial = function() {
+  this.noticeOfTrial = createISODateString();
+  return this;
 };
 
 module.exports = { Case };
