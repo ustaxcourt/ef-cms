@@ -89,9 +89,12 @@ export const getFormCombinedWithCaseDetailAction = ({
     irsDay,
     irsMonth,
     irsYear,
-    payGovDay,
-    payGovMonth,
-    payGovYear,
+    paymentDateDay,
+    paymentDateMonth,
+    paymentDateWaivedDay,
+    paymentDateWaivedMonth,
+    paymentDateWaivedYear,
+    paymentDateYear,
     receivedAtDay,
     receivedAtMonth,
     receivedAtYear,
@@ -103,16 +106,20 @@ export const getFormCombinedWithCaseDetailAction = ({
     {
       ...get(state.form),
       irsNoticeDate: `${irsYear}-${irsMonth}-${irsDay}`,
-      payGovDate: `${payGovYear}-${payGovMonth}-${payGovDay}`,
+      petitionPaymentDate: `${paymentDateYear}-${paymentDateMonth}-${paymentDateDay}`,
+      petitionPaymentWaivedDate: `${paymentDateWaivedYear}-${paymentDateWaivedMonth}-${paymentDateWaivedDay}`,
       receivedAt: `${receivedAtYear}-${receivedAtMonth}-${receivedAtDay}`,
     },
     [
       'irsYear',
       'irsMonth',
       'irsDay',
-      'payGovYear',
-      'payGovMonth',
-      'payGovDay',
+      'paymentDateYear',
+      'paymentDateMonth',
+      'paymentDateDay',
+      'paymentDateWaivedYear',
+      'paymentDateWaivedMonth',
+      'paymentDateWaivedDay',
       'receivedAtYear',
       'receivedAtMonth',
       'receivedAtDay',
@@ -125,10 +132,15 @@ export const getFormCombinedWithCaseDetailAction = ({
     form.irsNoticeDate,
     caseDetail.irsNoticeDate,
   );
-  form.payGovDate = checkDate(
+  form.petitionPaymentDate = checkDate(
     applicationContext,
-    form.payGovDate,
-    caseDetail.payGovDate,
+    form.petitionPaymentDate,
+    caseDetail.petitionPaymentDate,
+  );
+  form.petitionPaymentWaivedDate = checkDate(
+    applicationContext,
+    form.petitionPaymentWaivedDate,
+    caseDetail.petitionPaymentWaivedDate,
   );
   form.receivedAt = checkDate(
     applicationContext,
