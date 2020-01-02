@@ -431,8 +431,8 @@ const applicationContext = {
       SECTIONS,
       SERVICE_INDICATOR_TYPES: constants,
       SERVICE_STAMP_OPTIONS,
-      SESSION_DEBOUNCE: 250, // 5 minutes
-      SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 55 minutes
+      SESSION_DEBOUNCE: 250,
+      SESSION_MODAL_TIMEOUT: 5 * MINUTES,
       SESSION_TIMEOUT:
         (process.env.SESSION_TIMEOUT &&
           parseInt(process.env.SESSION_TIMEOUT)) ||
