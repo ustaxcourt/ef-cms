@@ -767,4 +767,38 @@ describe('case detail computed', () => {
     });
     expect(result.filingFee).toEqual('Not Paid  ');
   });
+
+  it('should show edit petition details button if user has EDIT_PETITION_DETAILS permission', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: true },
+      },
+    });
+    expect(result.showEditPetitionDetailsButton).toEqual(true);
+  });
+
+  it('should not show edit petition details button if user does not have EDIT_PETITION_DETAILS permission', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: false },
+      },
+    });
+    expect(result.showEditPetitionDetailsButton).toEqual(false);
+  });
 });

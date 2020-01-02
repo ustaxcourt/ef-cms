@@ -166,6 +166,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showDocketRecordInProgressState: !isExternalUser,
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContacts,
+    showEditPetitionDetailsButton: permissions.EDIT_PETITION_DETAILS,
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,

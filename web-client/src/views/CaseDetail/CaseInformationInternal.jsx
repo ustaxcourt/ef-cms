@@ -298,14 +298,16 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Petition Details
-                    <Button
-                      link
-                      className="margin-left-2"
-                      icon="edit"
-                      onClick={() => gotoEditPetitionDetailsSequence()}
-                    >
-                      Edit
-                    </Button>
+                    {caseDetailHelper.showEditPetitionDetailsButton && (
+                      <Button
+                        link
+                        className="margin-left-2 padding-0"
+                        icon="edit"
+                        onClick={() => gotoEditPetitionDetailsSequence()}
+                      >
+                        Edit
+                      </Button>
+                    )}
                     <If bind="caseDetail.irsSendDate">
                       <Button
                         link
