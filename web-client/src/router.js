@@ -481,7 +481,14 @@ const router = {
       '/print-preview/*',
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
-        app.getSequence('gotoPrintPreviewSequence')({ docketNumber });
+        app.getSequence('gotoPrintPreviewSequence')({
+          alertWarning: {
+            message:
+              'This case has parties receiving paper service. Print and mail all paper service documents below.',
+            title: 'This document has been electronically served',
+          },
+          docketNumber,
+        });
       }),
     );
 

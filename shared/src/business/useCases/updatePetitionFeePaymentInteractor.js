@@ -27,8 +27,8 @@ exports.updatePetitionFeePaymentInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
-    throw new UnauthorizedError('Unauthorized for update case');
+  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITION_DETAILS)) {
+    throw new UnauthorizedError('Unauthorized for editing petition details');
   }
 
   const oldCase = await applicationContext
