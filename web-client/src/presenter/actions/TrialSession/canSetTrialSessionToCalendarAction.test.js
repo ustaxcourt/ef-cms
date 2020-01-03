@@ -24,7 +24,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
     };
   });
 
-  it('has invalid criteria to set trial session as calendared', async () => {
+  it('should return the no path if there is invalid criteria for calendaring a trial session', async () => {
     canSetTrialSessionAsCalendaredInteractorStub.mockReturnValue(false);
 
     await runAction(canSetTrialSessionToCalendarAction, {
@@ -40,7 +40,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
     expect(pathNoStub).toHaveBeenCalled();
   });
 
-  it('has valid criteria to set trial session as calendared', async () => {
+  it('should return the yes path if there is invalid criteria for calendaring a trial session', async () => {
     canSetTrialSessionAsCalendaredInteractorStub.mockReturnValue(true);
 
     await runAction(canSetTrialSessionToCalendarAction, {
