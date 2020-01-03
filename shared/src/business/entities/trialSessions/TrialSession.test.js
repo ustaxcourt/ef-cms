@@ -322,7 +322,7 @@ describe('TrialSession entity', () => {
   });
 
   describe('canSetAsCalendared', () => {
-    it('should be able to set a trial session as calendared if all properties are not null', () => {
+    it('should be able to set a trial session as calendared if all properties are not empty', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
@@ -340,7 +340,7 @@ describe('TrialSession entity', () => {
       expect(trialSession.canSetAsCalendared()).toBeTruthy();
     });
 
-    it('should NOT be able to set a trial session as calendared if one or more properties are not null', () => {
+    it('should NOT be able to set a trial session as calendared if one or more properties are not empty', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,

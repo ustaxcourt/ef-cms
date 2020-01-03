@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * create a trial session
+ * validates a trial session's eligibility to be calendared or not
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
