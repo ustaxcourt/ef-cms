@@ -33,7 +33,6 @@ export const TrialSessionDetail = connect(
         <ErrorNotification />
         <WarningNotification />
         <TrialSessionInformation />
-        {console.log(formattedTrialSessionDetails.isCalendared)}
         {!formattedTrialSessionDetails.isCalendared && (
           <Tabs
             bind="trialSessionDetailsTab.caseList"
