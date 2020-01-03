@@ -112,6 +112,20 @@ export default test => {
     expect(test.getState('caseDetailErrors')).toEqual({});
 
     // petitionPaymentDate
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'petitionPaymentStatus',
+      value: Case.PAYMENT_STATUS.PAID,
+    });
+    await test.runSequence('submitCaseDetailEditSaveSequence');
+    expect(test.getState('caseDetailErrors')).toEqual({
+      petitionPaymentDate: VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
+      petitionPaymentMethod: VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
+    });
+
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'petitionPaymentMethod',
+      value: 'check',
+    });
     await test.runSequence('updateFormValueSequence', {
       key: 'paymentDateYear',
       value: '2018',
