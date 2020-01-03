@@ -225,7 +225,6 @@ module.exports = {
           'param',
           'params',
           'paris',
-          'payGovDate',
           'pdfjs',
           'petitionsclerk',
           'petr',

@@ -159,7 +159,6 @@ export const getFormCombinedWithCaseDetailAction = ({
         'contactSecondary.serviceIndicator',
       ]),
       ...form,
-      payGovId: caseDetail.payGovId === '' ? null : caseDetail.payGovId,
     },
   };
 };

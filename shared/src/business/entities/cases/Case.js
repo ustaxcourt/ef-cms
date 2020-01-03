@@ -161,15 +161,6 @@ Case.VALIDATION_ERROR_MESSAGES = {
     'Your Ownership Disclosure Statement file size is empty',
   ],
   partyType: 'Select a party type',
-  payGovDate: [
-    {
-      contains: 'must be less than or equal to',
-      message:
-        'The Fee Payment date cannot be in the future. Enter a valid date.',
-    },
-    'Please enter a valid Fee Payment date',
-  ],
-  payGovId: 'Fee Payment Id must be in a valid format',
   petitionFile: 'Upload a Petition',
   petitionFileSize: [
     {
@@ -247,8 +238,6 @@ function Case(rawCase, { applicationContext }) {
   this.isPaper = rawCase.isPaper;
   this.leadCaseId = rawCase.leadCaseId;
   this.partyType = rawCase.partyType;
-  this.payGovDate = rawCase.payGovDate;
-  this.payGovId = rawCase.payGovId;
   this.petitionPaymentStatus =
     rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
   this.petitionPaymentDate = rawCase.petitionPaymentDate;
@@ -444,16 +433,6 @@ joiValidationDecorator(
     orderToChangeDesignatedPlaceOfTrial: joi.boolean().optional(),
     orderToShowCause: joi.boolean().optional(),
     partyType: joi.string().optional(),
-    payGovDate: joi
-      .date()
-      .iso()
-      .max('now')
-      .allow(null)
-      .optional(),
-    payGovId: joi
-      .string()
-      .allow(null)
-      .optional(),
     petitionPaymentDate: joi.when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.PAID,
       otherwise: joi
@@ -825,41 +804,6 @@ Case.prototype.getDocumentById = function({ documentId }) {
  */
 Case.prototype.getShowCaseNameForPrimary = function() {
   return !(this.contactSecondary && this.contactSecondary.name);
-};
-
-/**
- *
- * @param {string} payGovDate an ISO formatted date string
- * @returns {Case} the updated case entity
- */
-Case.prototype.markAsPaidByPayGov = function(payGovDate) {
-  this.payGovDate = payGovDate;
-
-  const newDocketItem = {
-    description: 'Filing fee paid',
-    filingDate: payGovDate,
-  };
-
-  let found;
-  let docketRecordIndex;
-  let datesMatch;
-
-  this.docketRecord.forEach((docketRecord, index) => {
-    if (docketRecord.description === newDocketItem.description) {
-      found = true;
-      docketRecordIndex = index;
-      if (docketRecord.filingDate === newDocketItem.filingDate) {
-        datesMatch = true;
-      }
-    }
-  });
-
-  if (payGovDate && !found) {
-    this.addDocketRecord(new DocketRecord(newDocketItem));
-  } else if (payGovDate && found && !datesMatch) {
-    this.updateDocketRecord(docketRecordIndex, new DocketRecord(newDocketItem));
-  }
-  return this;
 };
 
 /**
