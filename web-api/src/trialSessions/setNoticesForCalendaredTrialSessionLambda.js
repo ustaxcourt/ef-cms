@@ -15,7 +15,7 @@ exports.handler = event =>
     try {
       const results = await applicationContext
         .getUseCases()
-        .setNoticesForCalendaredTrialSession({
+        .setNoticesForCalendaredTrialSessionInteractor({
           applicationContext,
           trialSessionId: event.pathParameters.trialSessionId,
         });
