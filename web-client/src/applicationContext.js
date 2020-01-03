@@ -60,6 +60,7 @@ import { associateRespondentWithCaseInteractor } from '../../shared/src/proxies/
 import { authorizeCodeInteractor } from '../../shared/src/business/useCases/authorizeCodeInteractor';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
+import { canSetTrialSessionAsCalendaredInteractor } from '../../shared/src/business/useCases/trialSessions/canSetTrialSessionAsCalendaredInteractor';
 import { caseAdvancedSearchInteractor } from '../../shared/src/proxies/caseAdvancedSearchProxy';
 import {
   compareCasesByDocketNumber,
@@ -252,6 +253,7 @@ const allUseCases = {
   authorizeCodeInteractor,
   batchDownloadTrialSessionInteractor,
   blockCaseFromTrialInteractor,
+  canSetTrialSessionAsCalendaredInteractor,
   caseAdvancedSearchInteractor,
   completeDocketEntryQCInteractor,
   completeWorkItemInteractor,
@@ -475,6 +477,7 @@ const applicationContext = {
     NewTrialSession,
     Note,
     OrderWithoutBody,
+    TrialSession,
     User,
   }),
   getError: e => {
