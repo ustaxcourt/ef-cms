@@ -91,7 +91,7 @@ describe('deleteTrialSessionInteractor', () => {
     ).rejects.toThrow('Trial session cannot be updated after its start date');
   });
 
-  it('throws error when trial session is calendared', async () => {
+  it('throws error if trial session is calendared', async () => {
     applicationContext = {
       getCurrentUser: () => {
         return new User({
