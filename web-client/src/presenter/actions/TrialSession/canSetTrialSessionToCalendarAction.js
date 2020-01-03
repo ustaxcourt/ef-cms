@@ -14,12 +14,15 @@ export const canSetTrialSessionToCalendarAction = async ({
   get,
   path,
 }) => {
-  const { TrialSession } = applicationContext.getEntityConstructors();
-  const trialSessionEntity = new TrialSession(get(state.trialSession), {
-    applicationContext,
-  });
+  const trialSession = get(state.trialSession);
+  const canSetAsCalendared = applicationContext
+    .getUseCases()
+    .canSetTrialSessionAsCalendaredInteractor({
+      applicationContext,
+      trialSession,
+    });
 
-  if (trialSessionEntity.canSetAsCalendared()) {
+  if (canSetAsCalendared) {
     return path.yes();
   }
 
