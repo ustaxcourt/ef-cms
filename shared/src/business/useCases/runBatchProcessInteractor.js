@@ -51,11 +51,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
       caseEntity.addDocketRecord(
         new DocketRecord({
-          description: `Paid ${applicationContext
-            .getUtilities()
-            .formatDateString(caseEntity.petitionPaymentDate, 'MM/DD/YY')} ${
-            caseEntity.petitionPaymentMethod
-          }`,
+          description: 'Filing Fee Paid',
           eventCode: 'FEE',
           filingDate: caseEntity.petitionPaymentDate,
         }),
@@ -65,12 +61,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
     ) {
       caseEntity.addDocketRecord(
         new DocketRecord({
-          description: `Waived ${applicationContext
-            .getUtilities()
-            .formatDateString(
-              caseEntity.petitionPaymentWaivedDate,
-              'MM/DD/YY',
-            )}`,
+          description: 'Filing Fee Waived',
           eventCode: 'FEEW',
           filingDate: caseEntity.petitionPaymentWaivedDate,
         }),
