@@ -6,11 +6,13 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setSaveSuccessAction } from '../actions/setSaveSuccessAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateCaseDetailAction } from '../actions/validateCaseDetailAction';
 
 export const submitCaseDetailEditSaveSequence = [
   setWaitingForResponseAction,
+  startShowValidationAction,
   clearAlertsAction,
   getFormCombinedWithCaseDetailAction,
   validateCaseDetailAction,
