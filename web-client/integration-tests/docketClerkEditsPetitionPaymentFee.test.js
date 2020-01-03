@@ -42,8 +42,9 @@ describe('Create a work item', () => {
     await test.runSequence('updatePetitionFeePaymentSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      petitionPaymentDate: 'Enter a payment date',
-      petitionPaymentMethod: 'Enter payment method',
+      petitionPaymentDate: Case.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
+      petitionPaymentMethod:
+        Case.VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
     });
 
     await test.runSequence('updateFormValueSequence', {
