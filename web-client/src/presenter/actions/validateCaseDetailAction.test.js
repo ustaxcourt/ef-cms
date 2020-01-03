@@ -53,9 +53,6 @@ describe('validateCaseDetail', () => {
           irsDay: '13',
           irsMonth: '10',
           irsYear: '2009',
-          payGovDay: '01',
-          payGovMonth: '01',
-          payGovYear: '2010',
         },
       },
     });
