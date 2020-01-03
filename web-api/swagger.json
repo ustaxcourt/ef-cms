@@ -4599,10 +4599,6 @@
           "type": "string",
           "description": "date case created"
         },
-        "payGovDate": {
-          "type": "string",
-          "description": "the date the pay gov id was updated"
-        },
         "documents": {
           "type": "array",
           "description": "array of rawDocument ids and types associated with the case",
@@ -4624,10 +4620,6 @@
               }
             }
           }
-        },
-        "payGovId": {
-          "type": "string",
-          "description": "the pay gov id generated from pay.gov"
         },
         "caseId": {
           "type": "string",

@@ -17,7 +17,6 @@ import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequen
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
-import { cancelEditPetitionDetailsSequence } from './sequences/cancelEditPetitionDetailsSequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
@@ -352,7 +351,6 @@ export const presenter = {
     batchDownloadTrialSessionSequence,
     blockCaseFromTrialSequence,
     cancelAddDraftDocumentSequence,
-    cancelEditPetitionDetailsSequence,
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
