@@ -1,4 +1,3 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
@@ -190,40 +189,6 @@ describe('case detail computed', () => {
     });
     expect(result.userHasAccessToCase).toEqual(false);
     expect(result.showFileDocumentButton).toEqual(false);
-  });
-
-  it('should show payment record and not payment options if case is paid', () => {
-    const user = {
-      role: User.ROLES.petitioner,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { payGovId: '123' },
-        currentPage: 'CaseDetail',
-        form: {},
-      },
-    });
-    expect(result.showPaymentRecord).toEqual(true);
-    expect(result.showPaymentOptions).toEqual(false);
-  });
-
-  it('should not show payment record and show payment options if case is not paid', () => {
-    const user = {
-      role: User.ROLES.petitioner,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-      },
-    });
-    expect(result.showPaymentRecord).toBeUndefined();
-    expect(result.showPaymentOptions).toEqual(true);
   });
 
   it('should show case deadlines external view for external user who is associated with the case if there are deadlines on the case', () => {
@@ -714,60 +679,6 @@ describe('case detail computed', () => {
     expect(result.hasConsolidatedCases).toEqual(false);
   });
 
-  it('should format filing fee string for a paid petition fee', () => {
-    const user = {
-      role: User.ROLES.practitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          petitionPaymentDate: '2019-03-01T21:40:46.415Z',
-          petitionPaymentMethod: 'check',
-          petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
-        },
-        form: {},
-      },
-    });
-    expect(result.filingFee).toEqual('Paid 03/01/19 check');
-  });
-
-  it('should format filing fee string for a waived petition fee', () => {
-    const user = {
-      role: User.ROLES.practitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
-          petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
-        },
-        form: {},
-      },
-    });
-    expect(result.filingFee).toEqual('Waived 03/01/19 ');
-  });
-
-  it('should format filing fee string for an unpaid petition fee', () => {
-    const user = {
-      role: User.ROLES.practitioner,
-      userId: '123',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
-        },
-        form: {},
-      },
-    });
-    expect(result.filingFee).toEqual('Not Paid  ');
-  });
-
   it('should show edit petition details button if user has EDIT_PETITION_DETAILS permission', () => {
     const user = {
       role: User.ROLES.docketClerk,
@@ -800,5 +711,53 @@ describe('case detail computed', () => {
       },
     });
     expect(result.showEditPetitionDetailsButton).toEqual(false);
+  });
+
+  it('should show the filing fee section for a petitioner user', () => {
+    const user = {
+      role: User.ROLES.petitioner,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailExternal',
+        form: {},
+      },
+    });
+    expect(result.showFilingFeeExternal).toEqual(true);
+  });
+
+  it('should show the filing fee section for a practitioner user', () => {
+    const user = {
+      role: User.ROLES.practitioner,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailExternal',
+        form: {},
+      },
+    });
+    expect(result.showFilingFeeExternal).toEqual(true);
+  });
+
+  it('should not show the filing fee section for a respondent user', () => {
+    const user = {
+      role: User.ROLES.respondent,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailExternal',
+        form: {},
+      },
+    });
+    expect(result.showFilingFeeExternal).toEqual(false);
   });
 });

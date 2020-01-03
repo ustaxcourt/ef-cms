@@ -48,16 +48,15 @@ exports.saveCaseDetailInternalEditInteractor = async ({
     }).secondary.toRawObject();
   }
 
-  const paidCase = new Case(caseToUpdate, { applicationContext })
-    .markAsPaidByPayGov(caseToUpdate.payGovDate)
+  const updatedCase = new Case(caseToUpdate, { applicationContext })
     .setRequestForTrialDocketRecord(caseToUpdate.preferredTrialCity)
     .validate()
     .toRawObject();
 
   await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    caseToUpdate: paidCase,
+    caseToUpdate: updatedCase,
   });
 
-  return paidCase;
+  return updatedCase;
 };
