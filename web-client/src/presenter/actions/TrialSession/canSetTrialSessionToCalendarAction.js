@@ -1,4 +1,3 @@
-import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
