@@ -86,7 +86,7 @@ export const CaseDetailHeaderMenu = connect(
           >
             <button
               aria-expanded={isCaseDetailMenuOpen}
-              className="usa-accordion__button usa-nav__link hidden-underline case-detail-menu__button"
+              className="usa-accordion__button usa-nav__link hidden-underline case-detail-menu__button text-no-wrap"
               id="case-detail-menu-button"
               onClick={() => {
                 toggleMenuSequence({ caseDetailMenu: 'CaseDetailMenu' });
