@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the form's irs notice date and pay gov date based on the caseDetail provided in state.caseDetail
+ * sets the form's dates (split into month/day/year) based on the caseDetail provided in state.caseDetail
  *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function used for getting the state.caseDetail
