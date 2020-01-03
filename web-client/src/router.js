@@ -76,7 +76,19 @@ const router = {
       '/case-detail/*',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
-        app.getSequence('gotoCaseDetailSequence')({ docketNumber });
+        app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    route(
+      '/case-detail/*/edit-details',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        app.getSequence('gotoEditPetitionDetailsSequence')({
+          docketNumber,
+        });
       }),
     );
 
@@ -291,6 +303,7 @@ const router = {
         app.getSequence('gotoPrimaryContactEditSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/create-order',
       ifHasAccess(docketNumber => {
@@ -468,7 +481,14 @@ const router = {
       '/print-preview/*',
       ifHasAccess(docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
-        app.getSequence('gotoPrintPreviewSequence')({ docketNumber });
+        app.getSequence('gotoPrintPreviewSequence')({
+          alertWarning: {
+            message:
+              'This case has parties receiving paper service. Print and mail all paper service documents below.',
+            title: 'This document has been electronically served',
+          },
+          docketNumber,
+        });
       }),
     );
 
