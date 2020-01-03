@@ -262,9 +262,6 @@ const formatCase = (applicationContext, caseDetail) => {
   result.irsDateFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.irsSendDate, 'DATE_TIME');
-  result.payGovDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.payGovDate, 'MMDDYY');
 
   result.docketNumberWithSuffix = `${
     result.docketNumber
