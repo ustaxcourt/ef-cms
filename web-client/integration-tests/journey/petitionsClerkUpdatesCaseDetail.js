@@ -89,9 +89,7 @@ export default test => {
     });
     await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
-    expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2018-12-24T05:00:00.000Z',
-    );
+    expect(test.getState('caseDetail.irsNoticeDate')).toEqual(null);
 
     // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
