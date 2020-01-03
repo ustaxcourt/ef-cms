@@ -37,18 +37,14 @@ export const castToISO = (applicationContext, dateString) => {
 };
 
 /**
- * checks if the new date contains all expected parts; otherwise, it returns the originalDate
+ * checks if the new date contains all expected parts and returns date as an
+ * ISO string; otherwise, it returns null
  *
  * @param {object} applicationContext the application context*
  * @param {string} updatedDateString the new date string to verify
- * @param {string} originalDate the original date to return if the updatedDateString is bad
  * @returns {string} the updatedDateString if everything is correct.
  */
-export const checkDate = (
-  applicationContext,
-  updatedDateString,
-  originalDate,
-) => {
+export const checkDate = (applicationContext, updatedDateString) => {
   const hasAllDateParts = /.+-.+-.+/;
   if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
     updatedDateString = null;
@@ -60,11 +56,7 @@ export const checkDate = (
       updatedDateString = castToISO(applicationContext, updatedDateString);
     } else {
       //xx-xx-undefined
-      if (originalDate) {
-        updatedDateString = originalDate;
-      } else {
-        updatedDateString = null;
-      }
+      updatedDateString = null;
     }
   }
   return updatedDateString;
@@ -127,26 +119,16 @@ export const getFormCombinedWithCaseDetailAction = ({
     ],
   );
 
-  form.irsNoticeDate = checkDate(
-    applicationContext,
-    form.irsNoticeDate,
-    caseDetail.irsNoticeDate,
-  );
+  form.irsNoticeDate = checkDate(applicationContext, form.irsNoticeDate);
   form.petitionPaymentDate = checkDate(
     applicationContext,
     form.petitionPaymentDate,
-    caseDetail.petitionPaymentDate,
   );
   form.petitionPaymentWaivedDate = checkDate(
     applicationContext,
     form.petitionPaymentWaivedDate,
-    caseDetail.petitionPaymentWaivedDate,
   );
-  form.receivedAt = checkDate(
-    applicationContext,
-    form.receivedAt,
-    caseDetail.receivedAt,
-  );
+  form.receivedAt = checkDate(applicationContext, form.receivedAt);
 
   if (caseCaption && (caseCaption = caseCaption.trim())) {
     caseDetail.caseCaption = caseCaption;
