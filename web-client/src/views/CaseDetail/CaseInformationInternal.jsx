@@ -8,7 +8,7 @@ import { sequences } from 'cerebral';
 import { state } from 'cerebral';
 import React from 'react';
 
-const PetitionDetails = ({ caseDetail, caseDetailHelper }) => (
+const PetitionDetails = ({ caseDetail }) => (
   <React.Fragment>
     <div className="grid-row">
       <div className="grid-col-6">
@@ -38,12 +38,10 @@ const PetitionDetails = ({ caseDetail, caseDetailHelper }) => (
         </p>
       </div>
       <div className="grid-col-6">
-        <>
-          <p className="label">Filing Fee</p>
-          <p className="pay-gov-id-display margin-bottom-0">
-            {caseDetailHelper.filingFee}
-          </p>
-        </>
+        <p className="label">Filing Fee</p>
+        <p className="pay-gov-id-display margin-bottom-0">
+          {caseDetail.filingFee}
+        </p>
       </div>
     </div>
   </React.Fragment>

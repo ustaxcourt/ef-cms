@@ -6,7 +6,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const PetitionDetails = ({ caseDetail }) => (
+const PetitionDetails = ({ caseDetail, caseDetailHelper }) => (
   <React.Fragment>
     <div className="grid-row">
       <div className="tablet:grid-col-6">
@@ -35,6 +35,14 @@ const PetitionDetails = ({ caseDetail }) => (
           {caseDetail.formattedPreferredTrialCity}
         </p>
       </div>
+      {caseDetailHelper.showFilingFeeExternal && (
+        <div className="tablet:grid-col-6">
+          <p className="label">Filing Fee</p>
+          <p className="pay-gov-id-display margin-bottom-0">
+            {caseDetail.filingFee}
+          </p>
+        </div>
+      )}
     </div>
   </React.Fragment>
 );
@@ -67,11 +75,16 @@ const TrialInformation = ({ caseDetail }) => (
 
 export const CaseInformationExternal = connect(
   {
+    caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
   },
-  ({ formattedCaseDetail, navigateToPrintableCaseConfirmationSequence }) => {
+  ({
+    caseDetailHelper,
+    formattedCaseDetail,
+    navigateToPrintableCaseConfirmationSequence,
+  }) => {
     return (
       <div className="petitions-details">
         <NonMobile>
@@ -101,7 +114,10 @@ export const CaseInformationExternal = connect(
                         </Button>
                       </If>
                     </h3>
-                    <PetitionDetails caseDetail={formattedCaseDetail} />
+                    <PetitionDetails
+                      caseDetail={formattedCaseDetail}
+                      caseDetailHelper={caseDetailHelper}
+                    />
                   </div>
                 </div>
               </div>
@@ -138,7 +154,10 @@ export const CaseInformationExternal = connect(
                     Print Confirmation
                   </Button>
                 </If>
-                <PetitionDetails caseDetail={formattedCaseDetail} />
+                <PetitionDetails
+                  caseDetail={formattedCaseDetail}
+                  caseDetailHelper={caseDetailHelper}
+                />
               </div>
             </div>
             <div className="margin-top-2">
