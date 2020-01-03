@@ -475,6 +475,7 @@ const applicationContext = {
     NewTrialSession,
     Note,
     OrderWithoutBody,
+    TrialSession,
     User,
   }),
   getError: e => {
