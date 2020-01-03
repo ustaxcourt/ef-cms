@@ -27,7 +27,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
   it('has invalid criteria to set trial session as calendared', async () => {
     canSetTrialSessionAsCalendaredInteractorStub.mockReturnValue(false);
 
-    const result = await runAction(canSetTrialSessionToCalendarAction, {
+    await runAction(canSetTrialSessionToCalendarAction, {
       modules: {
         presenter,
       },
