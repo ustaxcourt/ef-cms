@@ -45,6 +45,26 @@ export default (test, overrides = {}) => {
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'address1',
+      value: '123 Flavor Ave',
+    });
+
+    await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'city',
+      value: 'Seattle',
+    });
+
+    await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'state',
+      value: 'WA',
+    });
+
+    await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'postalCode',
+      value: '98101',
+    });
+
+    await test.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
       value: overrides.judge || {
         name: 'Judge Cohen',

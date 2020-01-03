@@ -1,8 +1,10 @@
+import { canSetTrialSessionToCalendarAction } from '../actions/TrialSession/canSetTrialSessionToCalendarAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getSetTrialSessionCalendarAlertSuccessAction } from '../actions/TrialSession/getSetTrialSessionCalendarAlertSuccessAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setTrialSessionCalendarAction } from '../actions/TrialSession/setTrialSessionCalendarAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
@@ -11,13 +13,18 @@ import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForRespons
 
 export const setTrialSessionCalendarSequence = [
   setWaitingForResponseAction,
-  setTrialSessionCalendarAction,
-  clearModalAction,
-  getTrialSessionDetailsAction,
-  setTrialSessionDetailsAction,
-  getCalendaredCasesForTrialSessionAction,
-  setCalendaredCasesOnTrialSessionAction,
-  getSetTrialSessionCalendarAlertSuccessAction,
-  setAlertSuccessAction,
+  canSetTrialSessionToCalendarAction,
+  {
+    no: [setAlertWarningAction, clearModalAction],
+    yes: [
+      setTrialSessionCalendarAction,
+      getTrialSessionDetailsAction,
+      setTrialSessionDetailsAction,
+      getCalendaredCasesForTrialSessionAction,
+      setCalendaredCasesOnTrialSessionAction,
+      getSetTrialSessionCalendarAlertSuccessAction,
+      setAlertSuccessAction,
+    ],
+  },
   unsetWaitingForResponseAction,
 ];
