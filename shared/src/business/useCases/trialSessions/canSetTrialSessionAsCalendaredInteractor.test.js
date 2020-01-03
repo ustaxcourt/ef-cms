@@ -2,7 +2,6 @@ const {
   canSetTrialSessionAsCalendaredInteractor,
 } = require('./canSetTrialSessionAsCalendaredInteractor');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 const MOCK_TRIAL = {
