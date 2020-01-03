@@ -6,7 +6,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
+const PetitionDetails = ({ caseDetail }) => (
   <React.Fragment>
     <div className="grid-row">
       <div className="tablet:grid-col-6">
@@ -34,16 +34,6 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
         <p className="margin-bottom-0">
           {caseDetail.formattedPreferredTrialCity}
         </p>
-      </div>
-      <div className="tablet:grid-col-6">
-        {showPaymentRecord && (
-          <React.Fragment>
-            <p className="label">Petition Fee Paid</p>
-            <p className="pay-gov-id-display margin-bottom-0">
-              {caseDetail.payGovId}
-            </p>
-          </React.Fragment>
-        )}
       </div>
     </div>
   </React.Fragment>
@@ -77,16 +67,11 @@ const TrialInformation = ({ caseDetail }) => (
 
 export const CaseInformationExternal = connect(
   {
-    caseDetailHelper: state.caseDetailHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
   },
-  ({
-    caseDetailHelper,
-    formattedCaseDetail,
-    navigateToPrintableCaseConfirmationSequence,
-  }) => {
+  ({ formattedCaseDetail, navigateToPrintableCaseConfirmationSequence }) => {
     return (
       <div className="petitions-details">
         <NonMobile>
@@ -116,10 +101,7 @@ export const CaseInformationExternal = connect(
                         </Button>
                       </If>
                     </h3>
-                    <PetitionDetails
-                      caseDetail={formattedCaseDetail}
-                      showPaymentRecord={caseDetailHelper.showPaymentRecord}
-                    />
+                    <PetitionDetails caseDetail={formattedCaseDetail} />
                   </div>
                 </div>
               </div>

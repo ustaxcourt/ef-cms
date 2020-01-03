@@ -70,7 +70,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
         irsNoticeDate: '2009-01-01T05:00:00.000Z',
-        payGovId: undefined,
         petitionPaymentDate: '2009-01-01T05:00:00.000Z',
         petitionPaymentWaivedDate: '2009-01-01T05:00:00.000Z',
         receivedAt: '2009-03-03T05:00:00.000Z',
@@ -105,7 +104,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
         irsNoticeDate: '-1',
-        payGovId: undefined,
         petitionPaymentDate: '-1',
         petitionPaymentWaivedDate: '-1',
         receivedAt: '-1',
@@ -146,7 +144,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
         irsNoticeDate: '2018-12-24T05:00:00.000Z',
-        payGovId: undefined,
         petitionPaymentDate: '2018-12-24T05:00:00.000Z',
         petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
         receivedAt: '2018-12-24T05:00:00.000Z',
@@ -186,7 +183,6 @@ describe('getFormCombinedWithCaseDetailAction', () => {
     expect(results.output).toEqual({
       combinedCaseDetailWithForm: {
         irsNoticeDate: null,
-        payGovId: undefined,
         petitionPaymentDate: '2018-12-24T05:00:00.000Z',
         petitionPaymentWaivedDate: '2018-12-24T05:00:00.000Z',
         receivedAt: '2018-12-24T05:00:00.000Z',

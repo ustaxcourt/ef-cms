@@ -192,40 +192,6 @@ describe('case detail computed', () => {
     expect(result.showFileDocumentButton).toEqual(false);
   });
 
-  it('should show payment record and not payment options if case is paid', () => {
-    const user = {
-      role: User.ROLES.petitioner,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: { payGovId: '123' },
-        currentPage: 'CaseDetail',
-        form: {},
-      },
-    });
-    expect(result.showPaymentRecord).toEqual(true);
-    expect(result.showPaymentOptions).toEqual(false);
-  });
-
-  it('should not show payment record and show payment options if case is not paid', () => {
-    const user = {
-      role: User.ROLES.petitioner,
-      userId: '789',
-    };
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        currentPage: 'CaseDetail',
-        form: {},
-      },
-    });
-    expect(result.showPaymentRecord).toBeUndefined();
-    expect(result.showPaymentOptions).toEqual(true);
-  });
-
   it('should show case deadlines external view for external user who is associated with the case if there are deadlines on the case', () => {
     const user = {
       role: User.ROLES.petitioner,
