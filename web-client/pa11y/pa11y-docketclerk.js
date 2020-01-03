@@ -14,6 +14,39 @@ module.exports = [
       'http://localhost:1234/mock-login?token=docketclerk&path=/document-qc/section/inbox&info=section-queue-tab',
   },
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19',
+  {
+    actions: [
+      'wait for element .usa-radio__label[for=payment-status-paid] to be visible',
+      'click element .usa-radio__label[for=payment-status-paid]',
+      'wait for element #petition-payment-method to be visible',
+    ],
+    notes:
+      'checks a11y of form when petition fee payment status paid is selected',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-details&info=paid',
+  },
+  {
+    actions: [
+      'wait for element .usa-radio__label[for=payment-status-unpaid] to be visible',
+      'click element .usa-radio__label[for=payment-status-unpaid]',
+      'wait for element #petition-payment-method to be removed',
+    ],
+    notes:
+      'checks a11y of form when petition fee payment status unpaid is selected',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-details&info=unpaid',
+  },
+  {
+    actions: [
+      'wait for element .usa-radio__label[for=payment-status-waived] to be visible',
+      'click element .usa-radio__label[for=payment-status-waived]',
+      'wait for element #payment-date-waived-legend to be visible',
+    ],
+    notes:
+      'checks a11y of form when petition fee payment status waived is selected',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-details&info=waived',
+  },
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/documents/1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
   {
     actions: [

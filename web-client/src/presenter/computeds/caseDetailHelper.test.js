@@ -1,3 +1,4 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
 import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
@@ -711,5 +712,93 @@ describe('case detail computed', () => {
       },
     });
     expect(result.hasConsolidatedCases).toEqual(false);
+  });
+
+  it('should format filing fee string for a paid petition fee', () => {
+    const user = {
+      role: User.ROLES.practitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          petitionPaymentDate: '2019-03-01T21:40:46.415Z',
+          petitionPaymentMethod: 'check',
+          petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+        },
+        form: {},
+      },
+    });
+    expect(result.filingFee).toEqual('Paid 03/01/19 check');
+  });
+
+  it('should format filing fee string for a waived petition fee', () => {
+    const user = {
+      role: User.ROLES.practitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+          petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
+        },
+        form: {},
+      },
+    });
+    expect(result.filingFee).toEqual('Waived 03/01/19 ');
+  });
+
+  it('should format filing fee string for an unpaid petition fee', () => {
+    const user = {
+      role: User.ROLES.practitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        },
+        form: {},
+      },
+    });
+    expect(result.filingFee).toEqual('Not Paid  ');
+  });
+
+  it('should show edit petition details button if user has EDIT_PETITION_DETAILS permission', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: true },
+      },
+    });
+    expect(result.showEditPetitionDetailsButton).toEqual(true);
+  });
+
+  it('should not show edit petition details button if user does not have EDIT_PETITION_DETAILS permission', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailInternal',
+        form: {},
+        permissions: { EDIT_PETITION_DETAILS: false },
+      },
+    });
+    expect(result.showEditPetitionDetailsButton).toEqual(false);
   });
 });

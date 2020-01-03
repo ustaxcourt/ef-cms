@@ -27,7 +27,7 @@ export const CaseDetail = connect(
     setCaseDetailPageTabSequence,
   }) {
     return (
-      <React.Fragment>
+      <>
         <CaseDetailHeader className="margin-bottom-0" />
         <CaseDetailSubnavTabs />
 
@@ -134,7 +134,7 @@ export const CaseDetail = connect(
               </>
             )}
         </section>
-      </React.Fragment>
+      </>
     );
   },
 );

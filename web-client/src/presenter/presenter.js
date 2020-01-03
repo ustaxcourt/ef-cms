@@ -17,6 +17,7 @@ import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequen
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
+import { cancelEditPetitionDetailsSequence } from './sequences/cancelEditPetitionDetailsSequence';
 import { cancelEditPrimaryContactSequence } from './sequences/cancelEditPrimaryContactSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
@@ -82,6 +83,7 @@ import { gotoDocumentDetailSequence } from './sequences/gotoDocumentDetailSequen
 import { gotoEditCourtIssuedDocketEntrySequence } from './sequences/gotoEditCourtIssuedDocketEntrySequence';
 import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequence';
 import { gotoEditOrderSequence } from './sequences/gotoEditOrderSequence';
+import { gotoEditPetitionDetailsSequence } from './sequences/gotoEditPetitionDetailsSequence';
 import { gotoEditTrialSessionSequence } from './sequences/gotoEditTrialSessionSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
@@ -283,6 +285,7 @@ import { updateJudgesCaseNoteOnWorkingCopySequence } from './sequences/updateJud
 import { updateMessageValueInModalSequence } from './sequences/updateMessageValueInModalSequence';
 import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
+import { updatePetitionFeePaymentSequence } from './sequences/updatePetitionFeePaymentSequence';
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
@@ -309,6 +312,7 @@ import { validateInitialWorkItemMessageInModalSequence } from './sequences/valid
 import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
+import { validatePetitionFeePaymentSequence } from './sequences/validatePetitionFeePaymentSequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
 import { validatePrimaryContactSequence } from './sequences/validatePrimaryContactSequence';
 import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
@@ -348,6 +352,7 @@ export const presenter = {
     batchDownloadTrialSessionSequence,
     blockCaseFromTrialSequence,
     cancelAddDraftDocumentSequence,
+    cancelEditPetitionDetailsSequence,
     cancelEditPrimaryContactSequence,
     cancelFileUploadSequence,
     cerebralBindSimpleSetStateSequence,
@@ -413,6 +418,7 @@ export const presenter = {
     gotoEditCourtIssuedDocketEntrySequence,
     gotoEditDocketEntrySequence,
     gotoEditOrderSequence,
+    gotoEditPetitionDetailsSequence,
     gotoEditTrialSessionSequence,
     gotoFileDocumentSequence,
     gotoIdleLogoutSequence,
@@ -612,6 +618,7 @@ export const presenter = {
     updateMessageValueInModalSequence,
     updateMessageValueSequence,
     updateModalValueSequence,
+    updatePetitionFeePaymentSequence,
     updatePetitionValueSequence,
     updateScreenMetadataSequence,
     updateSearchTermSequence,
@@ -638,6 +645,7 @@ export const presenter = {
     validateInitialWorkItemMessageSequence,
     validateNoteSequence,
     validateOrderWithoutBodySequence,
+    validatePetitionFeePaymentSequence,
     validatePetitionFromPaperSequence,
     validatePrimaryContactSequence,
     validatePrioritizeCaseSequence,
