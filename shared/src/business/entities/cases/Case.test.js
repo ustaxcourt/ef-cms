@@ -2334,4 +2334,38 @@ describe('Case entity', () => {
       expect(caseEntity.noticeOfTrialDate).toEqual(isoDateString);
     });
   });
+
+  describe('setQcCompleteForTrial', () => {
+    it('should set qcCompleteForTrial on the given case', () => {
+      const caseEntity = new Case(MOCK_CASE, { applicationContext });
+      const result = caseEntity.setQcCompleteForTrial(true);
+
+      expect(result.isValid()).toBeTruthy();
+    });
+
+    it('should default qcCompleteForTrial to false if not provided when entity is constructed', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.isValid()).toBeTruthy();
+      expect(caseEntity.qcCompleteForTrial).toEqual(false);
+    });
+
+    it('should set qcCompleteForTrial to value provided when passed through Case constructor', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          qcCompleteForTrial: true,
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.isValid()).toBeTruthy();
+      expect(caseEntity.qcCompleteForTrial).toEqual(true);
+    });
+  });
 });
