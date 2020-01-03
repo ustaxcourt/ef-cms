@@ -30,7 +30,6 @@ export const EditPetitionDetails = connect(
         >
           <h1>Edit Petition Details</h1>
           <div className="blue-container margin-bottom-4">
-            <h3 className="margin-bottom-2">Petition Fee</h3>
             <PetitionPaymentForm
               bind="form"
               dateBind="form"
