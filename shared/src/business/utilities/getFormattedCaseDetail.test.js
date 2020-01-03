@@ -633,6 +633,45 @@ describe('getFormattedCaseDetail', () => {
   });
 });
 
+it('should format filing fee string for a paid petition fee', () => {
+  const result = getFormattedCaseDetail({
+    applicationContext,
+    caseDetail: {
+      ...mockCaseDetailBase,
+      petitionPaymentDate: '2019-03-01T21:40:46.415Z',
+      petitionPaymentMethod: 'check',
+      petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+    },
+  });
+
+  expect(result.filingFee).toEqual('Paid 03/01/19 check');
+});
+
+it('should format filing fee string for a waived petition fee', () => {
+  const result = getFormattedCaseDetail({
+    applicationContext,
+    caseDetail: {
+      ...mockCaseDetailBase,
+      petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+      petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
+    },
+  });
+
+  expect(result.filingFee).toEqual('Waived 03/01/19 ');
+});
+
+it('should format filing fee string for an unpaid petition fee', () => {
+  const result = getFormattedCaseDetail({
+    applicationContext,
+    caseDetail: {
+      ...mockCaseDetailBase,
+      petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+    },
+  });
+
+  expect(result.filingFee).toEqual('Not Paid  ');
+});
+
 describe('sortDocketRecords', () => {
   it('should sort docket records by date by default', () => {
     // following dates selected to ensure test coverage of 'dateStringsCompared'

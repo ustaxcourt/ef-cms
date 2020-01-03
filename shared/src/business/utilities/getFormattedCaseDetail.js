@@ -334,6 +334,20 @@ const formatCase = (applicationContext, caseDetail) => {
     result.leadCaseId && result.leadCaseId === result.caseId
   );
 
+  let paymentDate = '';
+  let paymentMethod = '';
+  if (caseDetail.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+    paymentDate = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.petitionPaymentDate, 'MM/DD/YY');
+    paymentMethod = caseDetail.petitionPaymentMethod;
+  } else if (caseDetail.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED) {
+    paymentDate = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MM/DD/YY');
+  }
+  result.filingFee = `${caseDetail.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
+
   const caseEntity = new Case(caseDetail, { applicationContext });
   result.canConsolidate = caseEntity.canConsolidate();
 
