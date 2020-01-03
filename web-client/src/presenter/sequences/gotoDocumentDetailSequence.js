@@ -23,11 +23,13 @@ import { setProcedureTypesAction } from '../actions/setProcedureTypesAction';
 import { setWorkItemAction } from '../actions/setWorkItemAction';
 import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
 import { state } from 'cerebral';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoDocumentDetailSequence = [
   setCurrentPageAction('Interstitial'),
   clearWorkItemActionMapAction,
   clearFormsAction,
+  stopShowValidationAction,
   set(state.documentDetail.tab, 'partyInfo'),
   setDocumentIdAction,
   getCaseAction,
