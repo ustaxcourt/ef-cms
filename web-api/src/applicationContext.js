@@ -235,6 +235,9 @@ const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
+  generateNoticeOfTrialIssuedInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
+const {
   generatePaperServiceAddressPagePdf,
 } = require('../../shared/src/business/useCaseHelper/courtIssuedDocument/generatePaperServiceAddressPagePdf');
 const {
@@ -550,6 +553,9 @@ const {
 const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
+const {
+  setNoticesForCalendaredTrialSession,
+} = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSession');
 const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
@@ -991,6 +997,7 @@ module.exports = (appContextUser = {}) => {
         fileExternalDocumentInteractor,
         forwardWorkItemInteractor,
         generateDocketRecordPdfInteractor,
+        generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
         generatePrintableFilingReceiptInteractor,
@@ -1045,6 +1052,7 @@ module.exports = (appContextUser = {}) => {
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
         serveCourtIssuedDocumentInteractor,
+        setNoticesForCalendaredTrialSession,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
         setWorkItemAsReadInteractor,

@@ -131,6 +131,12 @@ Document.NOTICE_OF_DOCKET_CHANGE = {
   eventCode: 'NODC',
 };
 
+Document.NOTICE_OF_TRIAL = {
+  documentTitle: 'Notice of Trial on [Date] at [Time]',
+  documentType: 'Notice of Trial',
+  eventCode: 'NDT',
+};
+
 Document.SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
@@ -193,6 +199,7 @@ Document.getDocumentTypes = () => {
     ...courtIssuedDocTypes,
     ...signedTypes,
     Document.NOTICE_OF_DOCKET_CHANGE.documentType,
+    Document.NOTICE_OF_TRIAL.documentType,
   ];
 
   return documentTypes;
