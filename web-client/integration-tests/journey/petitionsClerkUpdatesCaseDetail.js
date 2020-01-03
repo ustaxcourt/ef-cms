@@ -1,10 +1,4 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { runCompute } from 'cerebral/test';
-
-import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -95,9 +89,7 @@ export default test => {
     });
     await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
-    expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2018-12-24T05:00:00.000Z',
-    );
+    expect(test.getState('caseDetail.irsNoticeDate')).toEqual(null);
 
     // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
@@ -180,11 +172,5 @@ export default test => {
     expect(test.getState('caseDetail.petitionPaymentDate')).toEqual(
       '2018-12-24T05:00:00.000Z',
     );
-
-    // //
-    // const helper = runCompute(caseDetailHelper, {
-    //   state: test.getState(),
-    // });
-    // expect(helper.showPaymentRecord).toEqual(true);
   });
 };

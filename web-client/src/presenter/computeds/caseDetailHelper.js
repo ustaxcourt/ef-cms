@@ -6,19 +6,14 @@ export const caseDetailHelper = (get, applicationContext) => {
   const { Case } = applicationContext.getEntityConstructors();
   const {
     PARTY_TYPES,
-    PAYMENT_STATUS,
     STATUS_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
-  const showActionRequired =
-    !caseDetail.payGovId && user.role === USER_ROLES.petitioner;
   const documentDetailTab =
     get(state.caseDetailPage.primaryTab) || 'docketRecord';
-  const form = get(state.form);
   const currentPage = get(state.currentPage);
-  const caseIsPaid = caseDetail.payGovId && !form.paymentType;
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
@@ -126,25 +121,10 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
-  let paymentDate = '';
-  let paymentMethod = '';
-  if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
-    paymentDate = applicationContext
-      .getUtilities()
-      .formatDateString(caseDetail.petitionPaymentDate, 'MM/DD/YY');
-    paymentMethod = caseDetail.petitionPaymentMethod;
-  } else if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
-    paymentDate = applicationContext
-      .getUtilities()
-      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MM/DD/YY');
-  }
-  const filingFee = `${caseDetail.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
-
   return {
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
     caseDeadlines,
     documentDetailTab,
-    filingFee,
     hasConsolidatedCases,
     hasOrders,
     practitionerMatchesFormatted,
@@ -157,7 +137,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState &&
       modalState.respondentMatches &&
       modalState.respondentMatches.length,
-    showActionRequired,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
@@ -170,11 +149,10 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
+    showFilingFeeExternal:
+      isExternalUser && user.role !== USER_ROLES.respondent,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showJudgesNotes,
-    showPayGovIdInput: form.paymentType == 'payGov',
-    showPaymentOptions: !caseIsPaid,
-    showPaymentRecord: caseIsPaid,
     showPractitionerSection:
       !isExternalUser ||
       (caseDetail.practitioners && !!caseDetail.practitioners.length),
