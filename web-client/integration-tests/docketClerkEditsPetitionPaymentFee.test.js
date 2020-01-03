@@ -1,5 +1,7 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
+import { Case } from '../../shared/src/business/entities/cases/Case';
+
 const test = setupTest();
 
 describe('Create a work item', () => {
@@ -23,7 +25,7 @@ describe('Create a work item', () => {
 
     expect(test.getState('caseDetail.petitionPaymentDate')).toBeUndefined();
     expect(test.getState('caseDetail.petitionPaymentStatus')).toEqual(
-      'Not Paid',
+      Case.PAYMENT_STATUS.UNPAID,
     );
     expect(test.getState('caseDetail.docketRecord')).not.toContainEqual({
       description: 'Filing Fee Paid',
@@ -34,7 +36,7 @@ describe('Create a work item', () => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentStatus',
-      value: 'Paid',
+      value: Case.PAYMENT_STATUS.PAID,
     });
 
     await test.runSequence('updatePetitionFeePaymentSequence');
@@ -66,7 +68,9 @@ describe('Create a work item', () => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('caseDetail.petitionPaymentStatus')).toEqual('Paid');
+    expect(test.getState('caseDetail.petitionPaymentStatus')).toEqual(
+      Case.PAYMENT_STATUS.PAID,
+    );
     expect(test.getState('caseDetail.petitionPaymentDate')).toEqual(
       '2001-01-01T05:00:00.000Z',
     );
