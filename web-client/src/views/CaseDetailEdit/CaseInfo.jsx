@@ -241,24 +241,29 @@ export const CaseInfo = connect(
           validationErrorsBind="caseDetailErrors"
         />
 
-        <div className="order-checkbox">
-          <input
-            checked={caseDetail.orderForFilingFee}
-            className="usa-checkbox__input"
-            id="order-for-filing-fee"
-            name="orderForFilingFee"
-            type="checkbox"
-            onChange={e => {
-              updateCaseValueSequence({
-                key: e.target.name,
-                value: e.target.checked,
-              });
-            }}
-          />
-          <label className="usa-checkbox__label" htmlFor="order-for-filing-fee">
-            Order for Filing Fee
-          </label>
-        </div>
+        {caseDetailEditHelper.showOrderForFilingFee && (
+          <div className="order-checkbox">
+            <input
+              checked={caseDetail.orderForFilingFee}
+              className="usa-checkbox__input"
+              id="order-for-filing-fee"
+              name="orderForFilingFee"
+              type="checkbox"
+              onChange={e => {
+                updateCaseValueSequence({
+                  key: e.target.name,
+                  value: e.target.checked,
+                });
+              }}
+            />
+            <label
+              className="usa-checkbox__label"
+              htmlFor="order-for-filing-fee"
+            >
+              Order for Filing Fee
+            </label>
+          </div>
+        )}
 
         <h3 id="orders-needed">
           Orders Needed <span className="usa-hint">(optional)</span>

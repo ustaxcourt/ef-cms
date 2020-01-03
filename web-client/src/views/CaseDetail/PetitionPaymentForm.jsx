@@ -23,6 +23,7 @@ export const PetitionPaymentForm = connect(
   }) => {
     return (
       <>
+        <h3 className="margin-bottom-2">Petition Fee</h3>
         <FormGroup>
           <fieldset className="usa-fieldset">
             <legend className="usa-legend">Fee paid?</legend>
