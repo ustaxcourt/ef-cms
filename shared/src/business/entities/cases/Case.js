@@ -455,7 +455,8 @@ joiValidationDecorator(
     }),
     petitionPaymentStatus: joi
       .string()
-      .valid(Object.values(Case.PAYMENT_STATUS)),
+      .valid(Object.values(Case.PAYMENT_STATUS))
+      .required(),
     petitionPaymentWaivedDate: joi.when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.WAIVED,
       otherwise: joi
