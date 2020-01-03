@@ -21,10 +21,16 @@ describe('Create a work item', () => {
       docketNumber: caseDetail.docketNumber,
     });
 
-    expect(test.getState('caseDetail').petitionPaymentDate).toBeUndefined();
-    expect(test.getState('caseDetail').petitionPaymentStatus).toEqual(
+    expect(test.getState('caseDetail.petitionPaymentDate')).toBeUndefined();
+    expect(test.getState('caseDetail.petitionPaymentStatus')).toEqual(
       'Not Paid',
     );
+    expect(test.getState('caseDetail.docketRecord')).not.toContainEqual({
+      description: 'Filing Fee Paid',
+      eventCode: 'FEE',
+      filingDate: '2001-01-01T05:00:00.000Z',
+      index: 3,
+    });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentStatus',
@@ -60,9 +66,16 @@ describe('Create a work item', () => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('caseDetail').petitionPaymentStatus).toEqual('Paid');
-    expect(test.getState('caseDetail').petitionPaymentDate).toEqual(
+    expect(test.getState('caseDetail.petitionPaymentStatus')).toEqual('Paid');
+    expect(test.getState('caseDetail.petitionPaymentDate')).toEqual(
       '2001-01-01T05:00:00.000Z',
     );
+
+    expect(test.getState('caseDetail.docketRecord')).toContainEqual({
+      description: 'Filing Fee Paid',
+      eventCode: 'FEE',
+      filingDate: '2001-01-01T05:00:00.000Z',
+      index: 3,
+    });
   });
 });
