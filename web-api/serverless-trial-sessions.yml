@@ -200,6 +200,22 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  setNoticesForCalendaredTrialSession:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.setNoticesForCalendaredTrialSessionLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: /{trialSessionId}/generate-notices
+          method: post
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   setTrialSessionAsSwingSession:
     handler: web-api/${self:provider.dir}/trialSessionsHandlers.setTrialSessionAsSwingSessionLambda
     events:
