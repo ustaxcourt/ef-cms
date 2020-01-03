@@ -24,7 +24,7 @@
     },
     "swingSession": true,
     "startDate": "2020-11-27T05:00:00.000Z",
-    "isCalendared": false,
+    "isCalendared": true,
     "maxCases": 100,
     "status": "Upcoming",
     "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
