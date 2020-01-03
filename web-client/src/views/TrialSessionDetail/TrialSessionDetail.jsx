@@ -9,6 +9,7 @@ import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialSessionDetailHeader } from './TrialSessionDetailHeader';
 import { TrialSessionInformation } from './TrialSessionInformation';
+import { WarningNotification } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -30,9 +31,9 @@ export const TrialSessionDetail = connect(
       <section className="usa-section grid-container">
         <SuccessNotification />
         <ErrorNotification />
-
+        <WarningNotification />
         <TrialSessionInformation />
-
+        {console.log(formattedTrialSessionDetails.isCalendared)}
         {!formattedTrialSessionDetails.isCalendared && (
           <Tabs
             bind="trialSessionDetailsTab.caseList"
@@ -56,9 +57,7 @@ export const TrialSessionDetail = connect(
             </Tab>
           </Tabs>
         )}
-
         {showModal == 'SetCalendarModalDialog' && <SetCalendarModalDialog />}
-
         {formattedTrialSessionDetails.isCalendared && (
           <Tabs
             bind="trialSessionDetailsTab.calendaredCaseList"
