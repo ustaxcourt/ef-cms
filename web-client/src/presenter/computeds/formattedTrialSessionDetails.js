@@ -21,5 +21,11 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     formattedTrialSession.canEdit = trialDateInFuture;
   }
 
+  if (formattedTrialSession && formattedTrialSession.formattedEligibleCases) {
+    formattedTrialSession.eligibleCaseQcCompleteCount = formattedTrialSession.formattedEligibleCases.filter(
+      eligibleCase => eligibleCase.qcCompleteForTrial,
+    ).length;
+  }
+
   return formattedTrialSession;
 };
