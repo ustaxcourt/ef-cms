@@ -15,16 +15,8 @@ const MOCK_TRIAL = {
   trialLocation: 'Birmingham, AL',
 };
 
-let generateNoticeOfTrialIssuedInteractorMock;
-let saveDocumentMock;
-
 describe('setTrialSessionCalendarInteractor', () => {
   let applicationContext;
-
-  beforeEach(() => {
-    generateNoticeOfTrialIssuedInteractorMock = jest.fn();
-    saveDocumentMock = jest.fn();
-  });
 
   it('throws an exception when there is a permissions issue', async () => {
     applicationContext = {
@@ -39,14 +31,10 @@ describe('setTrialSessionCalendarInteractor', () => {
         deleteCaseTrialSortMappingRecords: () => {},
         getEligibleCasesForTrialSession: () => [MOCK_CASE],
         getTrialSessionById: () => MOCK_TRIAL,
-        saveDocument: saveDocumentMock,
         updateCase: () => {},
         updateTrialSession: () => {},
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUseCases: () => ({
-        generateNoticeOfTrialIssuedInteractor: generateNoticeOfTrialIssuedInteractorMock,
-      }),
     };
 
     let error;
@@ -84,14 +72,10 @@ describe('setTrialSessionCalendarInteractor', () => {
         ],
         getEligibleCasesForTrialSession: () => [MOCK_CASE],
         getTrialSessionById: () => MOCK_TRIAL,
-        saveDocument: saveDocumentMock,
         updateCase: () => {},
         updateTrialSession,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      getUseCases: () => ({
-        generateNoticeOfTrialIssuedInteractor: generateNoticeOfTrialIssuedInteractorMock,
-      }),
     };
 
     let error;
