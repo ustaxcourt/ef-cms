@@ -23,11 +23,15 @@ export const PetitionPaymentForm = connect(
   }) => {
     return (
       <>
+        <h3 className="margin-bottom-2">Petition Fee</h3>
         <FormGroup>
           <fieldset className="usa-fieldset">
-            <legend className="usa-legend">Fee paid?</legend>
+            <legend className="usa-legend" id="fee-paid-legend">
+              Fee paid?
+            </legend>
             <div className="usa-radio usa-radio__inline">
               <input
+                aria-describedby="fee-paid-legend"
                 checked={bind.petitionPaymentStatus === paymentStatus.PAID}
                 className="usa-radio__input"
                 id="payment-status-paid"
@@ -48,6 +52,7 @@ export const PetitionPaymentForm = connect(
 
             <div className="usa-radio usa-radio__inline">
               <input
+                aria-describedby="fee-paid-legend"
                 checked={bind.petitionPaymentStatus === paymentStatus.UNPAID}
                 className="usa-radio__input"
                 id="payment-status-unpaid"
@@ -71,6 +76,7 @@ export const PetitionPaymentForm = connect(
 
             <div className="usa-radio usa-radio__inline">
               <input
+                aria-describedby="fee-paid-legend"
                 checked={bind.petitionPaymentStatus === paymentStatus.WAIVED}
                 className="usa-radio__input"
                 id="payment-status-waived"

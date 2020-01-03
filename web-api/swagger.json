@@ -4053,6 +4053,58 @@
         }
       }
     },
+    "/cases/{caseId}/petition-fee": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "updates the petition payment fee on the case",
+        "description": "updates the petition payment fee on the case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/cases/{caseId}/associate-practitioner": {
       "parameters": [
         {
@@ -4599,10 +4651,6 @@
           "type": "string",
           "description": "date case created"
         },
-        "payGovDate": {
-          "type": "string",
-          "description": "the date the pay gov id was updated"
-        },
         "documents": {
           "type": "array",
           "description": "array of rawDocument ids and types associated with the case",
@@ -4624,10 +4672,6 @@
               }
             }
           }
-        },
-        "payGovId": {
-          "type": "string",
-          "description": "the pay gov id generated from pay.gov"
         },
         "caseId": {
           "type": "string",

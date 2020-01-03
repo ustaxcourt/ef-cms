@@ -262,9 +262,6 @@ const formatCase = (applicationContext, caseDetail) => {
   result.irsDateFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.irsSendDate, 'DATE_TIME');
-  result.payGovDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.payGovDate, 'MMDDYY');
 
   result.docketNumberWithSuffix = `${
     result.docketNumber
@@ -336,6 +333,20 @@ const formatCase = (applicationContext, caseDetail) => {
   result.isLeadCase = !!(
     result.leadCaseId && result.leadCaseId === result.caseId
   );
+
+  let paymentDate = '';
+  let paymentMethod = '';
+  if (caseDetail.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+    paymentDate = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.petitionPaymentDate, 'MM/DD/YY');
+    paymentMethod = caseDetail.petitionPaymentMethod;
+  } else if (caseDetail.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED) {
+    paymentDate = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MM/DD/YY');
+  }
+  result.filingFee = `${caseDetail.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
 
   const caseEntity = new Case(caseDetail, { applicationContext });
   result.canConsolidate = caseEntity.canConsolidate();

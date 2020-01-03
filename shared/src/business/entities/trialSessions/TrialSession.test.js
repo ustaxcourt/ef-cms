@@ -320,4 +320,42 @@ describe('TrialSession entity', () => {
       expect(trialSession.caseOrder).toEqual([]);
     });
   });
+
+  describe('canSetAsCalendared', () => {
+    it('should be able to set a trial session as calendared if all properties are not empty', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: { name: 'Judge Armen' },
+          postalCode: '12345',
+          state: 'TN',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.canSetAsCalendared()).toBeTruthy();
+    });
+
+    it('should NOT be able to set a trial session as calendared if one or more properties are not empty', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: {},
+          postalCode: '12345',
+          state: 'TN',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.canSetAsCalendared()).toBeFalsy();
+    });
+  });
 });
