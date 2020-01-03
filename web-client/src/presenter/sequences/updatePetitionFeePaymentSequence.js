@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
+import { navigateToCaseDetailCaseInformationAction } from '../actions/navigateToCaseDetailCaseInformationAction';
 import { set } from 'cerebral/factories';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -26,7 +26,7 @@ export const updatePetitionFeePaymentSequence = [
       setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
       setAlertErrorAction,
-      navigateToCaseDetailAction,
+      navigateToCaseDetailCaseInformationAction,
     ],
   },
 ];
