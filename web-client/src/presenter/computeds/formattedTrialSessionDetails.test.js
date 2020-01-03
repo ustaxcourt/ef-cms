@@ -87,7 +87,7 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('trial session can not be deleted when calendared but it sill can be edited if in the future', () => {
+  it('trial session can not be deleted when calendared but it still can be edited if in the future', () => {
     const result = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {
