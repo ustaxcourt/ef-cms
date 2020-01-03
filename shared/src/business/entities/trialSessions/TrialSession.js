@@ -411,7 +411,6 @@ TrialSession.prototype.deleteCaseFromCalendar = function({ caseId }) {
 TrialSession.prototype.canSetAsCalendared = function() {
   return ![
     this.address1,
-    this.address2,
     this.judge,
     this.city,
     this.state,
