@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { DocketRecord } = require('../entities/DocketRecord');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -48,6 +49,26 @@ exports.updatePetitionFeePaymentInteractor = async ({
     },
     { applicationContext },
   );
+
+  if (oldCase.petitionPaymentStatus === Case.PAYMENT_STATUS.UNPAID) {
+    if (isPaid) {
+      newCase.addDocketRecord(
+        new DocketRecord({
+          description: 'Filing Fee Paid',
+          eventCode: 'FEE',
+          filingDate: newCase.petitionPaymentDate,
+        }),
+      );
+    } else if (isWaived) {
+      newCase.addDocketRecord(
+        new DocketRecord({
+          description: 'Filing Fee Waived',
+          eventCode: 'FEEW',
+          filingDate: newCase.petitionPaymentWaivedDate,
+        }),
+      );
+    }
+  }
 
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
