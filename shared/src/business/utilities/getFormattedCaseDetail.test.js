@@ -15,7 +15,6 @@ const mockCaseDetailBase = {
   docketNumber: '123-45',
   docketNumberSuffix: 'S',
   irsSendDate: new Date(),
-  payGovDate: new Date(),
   receivedAt: new Date(),
 };
 
@@ -263,7 +262,6 @@ describe('formatCase', () => {
     expect(result).toHaveProperty('createdAtFormatted');
     expect(result).toHaveProperty('receivedAtFormatted');
     expect(result).toHaveProperty('irsDateFormatted');
-    expect(result).toHaveProperty('payGovDateFormatted');
     expect(result.docketNumberWithSuffix).toEqual('123-45');
     expect(result.irsNoticeDateFormatted).toEqual('No notice provided');
     expect(result.datePetitionSentToIrsMessage).toEqual(

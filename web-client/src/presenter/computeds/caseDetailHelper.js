@@ -12,13 +12,9 @@ export const caseDetailHelper = (get, applicationContext) => {
   } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
-  const showActionRequired =
-    !caseDetail.payGovId && user.role === USER_ROLES.petitioner;
   const documentDetailTab =
     get(state.caseDetailPage.primaryTab) || 'docketRecord';
-  const form = get(state.form);
   const currentPage = get(state.currentPage);
-  const caseIsPaid = caseDetail.payGovId && !form.paymentType;
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
@@ -157,7 +153,6 @@ export const caseDetailHelper = (get, applicationContext) => {
       modalState &&
       modalState.respondentMatches &&
       modalState.respondentMatches.length,
-    showActionRequired,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
@@ -172,9 +167,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showFileDocumentButton,
     showIrsServedDate: !!caseDetail.irsSendDate,
     showJudgesNotes,
-    showPayGovIdInput: form.paymentType == 'payGov',
-    showPaymentOptions: !caseIsPaid,
-    showPaymentRecord: caseIsPaid,
     showPractitionerSection:
       !isExternalUser ||
       (caseDetail.practitioners && !!caseDetail.practitioners.length),
