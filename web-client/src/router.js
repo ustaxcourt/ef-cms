@@ -83,6 +83,18 @@ const router = {
     );
 
     route(
+      '/case-detail/*/case-information',
+      ifHasAccess(docketNumber => {
+        window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
+        setPageTitle(`Docket ${docketNumber}`);
+        app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          primaryTab: 'caseInformation',
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/edit-details',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
