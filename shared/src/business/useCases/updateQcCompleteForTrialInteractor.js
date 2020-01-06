@@ -12,12 +12,14 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case to update
  * @param {boolean} providers.qcCompleteForTrial true if case is qc complete for trial, false otherwise
+ * @param {string} providers.trialSessionId the id of the trial session to update
  * @returns {object} the updated case data
  */
 exports.updateQcCompleteForTrialInteractor = async ({
   applicationContext,
   caseId,
   qcCompleteForTrial,
+  trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -31,7 +33,7 @@ exports.updateQcCompleteForTrialInteractor = async ({
 
   const newCase = new Case(oldCase, { applicationContext });
 
-  newCase.setQcCompleteForTrial(qcCompleteForTrial);
+  newCase.setQcCompleteForTrial({ qcCompleteForTrial, trialSessionId });
 
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
