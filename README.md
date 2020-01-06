@@ -59,7 +59,7 @@ This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral test
 
 ## Running / verifing the project via Docker
 
-Assuming you have Docker installed, the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it:
+Once [you have Docker installed](https://docs.docker.com/install/), the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it:
 
 `./docker-run.sh`
 
@@ -70,6 +70,8 @@ Assuming you have Docker installed, the following command will spin up a Docker 
 - You can access the DynamoDB admin UI at http://localhost:8001
 - You can access S3 local at http://localhost:9000
 - You can access the style guide at http://localhost:1234/style-guide
+
+Within Docker, you should allocate 4 CPUs, 16 GB of RAM, and 4 GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.
 
 ## Running this project locally without Docker
 
