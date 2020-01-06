@@ -254,3 +254,8 @@ select,
 textarea {
   line-height: inherit;
 }
+
+input[type='file']::-webkit-file-upload-button {
+  -webkit-appearance: initial;
+  border-radius: 5px;
+}
