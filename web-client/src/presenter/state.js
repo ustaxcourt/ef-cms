@@ -55,6 +55,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
+import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
@@ -194,6 +195,7 @@ export const state = {
   startCaseInternalHelper,
   timeRemaining: Number.POSITIVE_INFINITY,
   trialCitiesHelper,
+  trialSessionDetailsHelper,
   trialSessionHeaderHelper,
   trialSessionWorkingCopyHelper,
   trialSessionsTab: {

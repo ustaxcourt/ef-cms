@@ -128,7 +128,13 @@ TrialSession.prototype.init = function(rawSession, { applicationContext }) {
   }
   this.address1 = rawSession.address1;
   this.address2 = rawSession.address2;
-  this.caseOrder = rawSession.caseOrder || [];
+  this.caseOrder = (rawSession.caseOrder || []).map(caseOrder => ({
+    caseId: caseOrder.caseId,
+    disposition: caseOrder.disposition,
+    isManuallyAdded: caseOrder.isManuallyAdded,
+    removedFromTrial: caseOrder.removedFromTrial,
+    removedFromTrialDate: caseOrder.removedFromTrialDate,
+  }));
   this.city = rawSession.city;
   this.courtReporter = rawSession.courtReporter;
   this.courthouseName = rawSession.courthouseName;
@@ -259,6 +265,7 @@ joiValidationDecorator(
           otherwise: joi.optional().allow(null),
           then: joi.string().required(),
         }),
+        isManuallyAdded: joi.boolean().optional(),
         removedFromTrial: joi.boolean().optional(),
         removedFromTrialDate: joi.when('removedFromTrial', {
           is: true,
