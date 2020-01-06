@@ -68,6 +68,8 @@ const AUTHORIZATION_MAP = {
   admissionsclerk: allInternalUserPermissions,
   calendarclerk: [
     ...allInternalUserPermissions,
+    ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY,
+    ROLE_PERMISSIONS.SERVE_DOCUMENT,
     ROLE_PERMISSIONS.TRIAL_SESSION_QC_COMPLETE,
   ],
   chambers: [
