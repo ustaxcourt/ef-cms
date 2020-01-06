@@ -100,7 +100,13 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     // Serve notice
     await serveNoticeForCase(caseEntity, noticeDocument, noticeOfTrialIssued);
 
-    return caseEntity.toRawObject();
+    const rawCase = caseEntity.validate().toRawObject();
+    await applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: rawCase,
+    });
+
+    return rawCase;
   };
 
   /**
@@ -190,8 +196,10 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
   await Promise.all([...calendaredCases.map(setNoticeForCase)]);
 
-  const paperServicePdfData = await newPdfDoc.save();
-  const paperServicePdfBuffer = Buffer.from(paperServicePdfData);
+  if (newPdfDoc.getPages().length) {
+    const paperServicePdfData = await newPdfDoc.save();
+    const paperServicePdfBuffer = Buffer.from(paperServicePdfData);
 
-  return paperServicePdfBuffer;
+    return paperServicePdfBuffer;
+  }
 };
