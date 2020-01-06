@@ -1,12 +1,14 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { setupTest } from './helpers';
 import { uploadPetition } from './helpers';
+import calendarClerkLogIn from './journey/calendarClerkLogIn';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
 import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
+import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
@@ -284,143 +286,149 @@ describe('Trial Session Eligible Cases Journey', () => {
     userSignsOut(test);
   });
 
-  describe(`Set calendar for '${trialLocation}' session`, () => {
-    petitionsClerkLogIn(test);
-    petitionsClerkSetsATrialSessionsSchedule(test);
+  describe('Calendar clerk marks all cases as QCed', () => {
+    calendarClerkLogIn(test);
+    markAllCasesAsQCed(test, createdCases);
     userSignsOut(test);
   });
 
-  describe(`Result: Case #4, #5, and #1 are assigned to '${trialLocation}' session and their case statuses are updated to “Calendared for Trial”`, () => {
-    petitionsClerkLogIn(test);
+  // describe(`Set calendar for '${trialLocation}' session`, () => {
+  //   petitionsClerkLogIn(test);
+  //   petitionsClerkSetsATrialSessionsSchedule(test);
+  //   userSignsOut(test);
+  // });
 
-    it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session`, async () => {
-      await test.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: test.trialSessionId,
-      });
+  // describe(`Result: Case #4, #5, and #1 are assigned to '${trialLocation}' session and their case statuses are updated to “Calendared for Trial”`, () => {
+  //   petitionsClerkLogIn(test);
 
-      expect(test.getState('trialSession.calendaredCases').length).toEqual(3);
-      expect(test.getState('trialSession.isCalendared')).toEqual(true);
-      expect(test.getState('trialSession.calendaredCases.0.caseId')).toEqual(
-        createdCases[3],
-      );
-      expect(test.getState('trialSession.calendaredCases.1.caseId')).toEqual(
-        createdCases[4],
-      );
-      expect(test.getState('trialSession.calendaredCases.2.caseId')).toEqual(
-        createdCases[0],
-      );
-    });
+  //   it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session`, async () => {
+  //     await test.runSequence('gotoTrialSessionDetailSequence', {
+  //       trialSessionId: test.trialSessionId,
+  //     });
 
-    it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session; Case #2 and #3 are not assigned`, async () => {
-      //Case #1 - assigned
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: createdDocketNumbers[0],
-      });
-      expect(test.getState('caseDetail.status')).toEqual('Calendared');
-      expect(test.getState('caseDetail.trialLocation')).toEqual(trialLocation);
-      expect(test.getState('caseDetail.trialDate')).toEqual(
-        '2025-12-12T05:00:00.000Z',
-      );
-      expect(test.getState('caseDetail.associatedJudge')).toEqual(
-        'Judge Cohen',
-      );
+  //     expect(test.getState('trialSession.calendaredCases').length).toEqual(3);
+  //     expect(test.getState('trialSession.isCalendared')).toEqual(true);
+  //     expect(test.getState('trialSession.calendaredCases.0.caseId')).toEqual(
+  //       createdCases[3],
+  //     );
+  //     expect(test.getState('trialSession.calendaredCases.1.caseId')).toEqual(
+  //       createdCases[4],
+  //     );
+  //     expect(test.getState('trialSession.calendaredCases.2.caseId')).toEqual(
+  //       createdCases[0],
+  //     );
+  //   });
 
-      //Case #2 - not assigned
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: createdDocketNumbers[1],
-      });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
-      expect(test.getState('caseDetail.trialLocation')).toBeUndefined();
-      expect(test.getState('caseDetail.trialDate')).toBeUndefined();
-      expect(test.getState('caseDetail.associatedJudge')).toEqual(
-        Case.CHIEF_JUDGE,
-      );
+  //   it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session; Case #2 and #3 are not assigned`, async () => {
+  //     //Case #1 - assigned
+  //     await test.runSequence('gotoCaseDetailSequence', {
+  //       docketNumber: createdDocketNumbers[0],
+  //     });
+  //     expect(test.getState('caseDetail.status')).toEqual('Calendared');
+  //     expect(test.getState('caseDetail.trialLocation')).toEqual(trialLocation);
+  //     expect(test.getState('caseDetail.trialDate')).toEqual(
+  //       '2025-12-12T05:00:00.000Z',
+  //     );
+  //     expect(test.getState('caseDetail.associatedJudge')).toEqual(
+  //       'Judge Cohen',
+  //     );
 
-      //Case #3 - not assigned
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: createdDocketNumbers[2],
-      });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+  //     //Case #2 - not assigned
+  //     await test.runSequence('gotoCaseDetailSequence', {
+  //       docketNumber: createdDocketNumbers[1],
+  //     });
+  //     expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+  //     expect(test.getState('caseDetail.trialLocation')).toBeUndefined();
+  //     expect(test.getState('caseDetail.trialDate')).toBeUndefined();
+  //     expect(test.getState('caseDetail.associatedJudge')).toEqual(
+  //       Case.CHIEF_JUDGE,
+  //     );
 
-      //Case #4 - assigned
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: createdDocketNumbers[3],
-      });
-      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+  //     //Case #3 - not assigned
+  //     await test.runSequence('gotoCaseDetailSequence', {
+  //       docketNumber: createdDocketNumbers[2],
+  //     });
+  //     expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
 
-      //Case #5 - assigned
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: createdDocketNumbers[4],
-      });
-      expect(test.getState('caseDetail.status')).toEqual('Calendared');
-    });
+  //     //Case #4 - assigned
+  //     await test.runSequence('gotoCaseDetailSequence', {
+  //       docketNumber: createdDocketNumbers[3],
+  //     });
+  //     expect(test.getState('caseDetail.status')).toEqual('Calendared');
 
-    it(`verify case #1 can be manually removed from '${trialLocation}' session`, async () => {
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: createdDocketNumbers[0],
-      });
+  //     //Case #5 - assigned
+  //     await test.runSequence('gotoCaseDetailSequence', {
+  //       docketNumber: createdDocketNumbers[4],
+  //     });
+  //     expect(test.getState('caseDetail.status')).toEqual('Calendared');
+  //   });
 
-      await test.runSequence('removeCaseFromTrialSequence');
+  //   it(`verify case #1 can be manually removed from '${trialLocation}' session`, async () => {
+  //     await test.runSequence('gotoCaseDetailSequence', {
+  //       docketNumber: createdDocketNumbers[0],
+  //     });
 
-      expect(test.getState('validationErrors')).toEqual({
-        disposition: 'Enter a disposition',
-      });
+  //     await test.runSequence('removeCaseFromTrialSequence');
 
-      await test.runSequence('updateModalValueSequence', {
-        key: 'disposition',
-        value: 'testing',
-      });
+  //     expect(test.getState('validationErrors')).toEqual({
+  //       disposition: 'Enter a disposition',
+  //     });
 
-      await test.runSequence('removeCaseFromTrialSequence');
+  //     await test.runSequence('updateModalValueSequence', {
+  //       key: 'disposition',
+  //       value: 'testing',
+  //     });
 
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: createdDocketNumbers[0],
-      });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+  //     await test.runSequence('removeCaseFromTrialSequence');
 
-      await test.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: test.trialSessionId,
-      });
+  //     await test.runSequence('gotoCaseDetailSequence', {
+  //       docketNumber: createdDocketNumbers[0],
+  //     });
+  //     expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
 
-      expect(
-        test.getState('trialSession.calendaredCases.2.removedFromTrial'),
-      ).toBeTruthy();
-    });
+  //     await test.runSequence('gotoTrialSessionDetailSequence', {
+  //       trialSessionId: test.trialSessionId,
+  //     });
 
-    it(`verify case #1 can be manually added back to the '${trialLocation}' session`, async () => {
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: createdDocketNumbers[0],
-      });
-      expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
+  //     expect(
+  //       test.getState('trialSession.calendaredCases.2.removedFromTrial'),
+  //     ).toBeTruthy();
+  //   });
 
-      await test.runSequence('addCaseToTrialSessionSequence');
+  //   it(`verify case #1 can be manually added back to the '${trialLocation}' session`, async () => {
+  //     await test.runSequence('gotoCaseDetailSequence', {
+  //       docketNumber: createdDocketNumbers[0],
+  //     });
+  //     expect(test.getState('caseDetail.status')).not.toEqual('Calendared');
 
-      expect(test.getState('validationErrors')).toEqual({
-        trialSessionId: 'Select a Trial Session',
-      });
+  //     await test.runSequence('addCaseToTrialSessionSequence');
 
-      test.setState('modal.trialSessionId', test.trialSessionId);
+  //     expect(test.getState('validationErrors')).toEqual({
+  //       trialSessionId: 'Select a Trial Session',
+  //     });
 
-      await test.runSequence('addCaseToTrialSessionSequence');
+  //     test.setState('modal.trialSessionId', test.trialSessionId);
 
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: createdDocketNumbers[0],
-      });
-      expect(test.getState('caseDetail.status')).toEqual('Calendared');
+  //     await test.runSequence('addCaseToTrialSessionSequence');
 
-      await test.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: test.trialSessionId,
-      });
+  //     await test.runSequence('gotoCaseDetailSequence', {
+  //       docketNumber: createdDocketNumbers[0],
+  //     });
+  //     expect(test.getState('caseDetail.status')).toEqual('Calendared');
 
-      expect(
-        test.getState('trialSession.calendaredCases.2.removedFromTrial'),
-      ).toBeFalsy();
+  //     await test.runSequence('gotoTrialSessionDetailSequence', {
+  //       trialSessionId: test.trialSessionId,
+  //     });
 
-      expect(
-        test.getState('trialSession.calendaredCases.2.isManuallyAdded'),
-      ).toBeTruthy();
-    });
+  //     expect(
+  //       test.getState('trialSession.calendaredCases.2.removedFromTrial'),
+  //     ).toBeFalsy();
 
-    userSignsOut(test);
-  });
+  //     expect(
+  //       test.getState('trialSession.calendaredCases.2.isManuallyAdded'),
+  //     ).toBeTruthy();
+  //   });
+
+  //   userSignsOut(test);
+  // });
 });
