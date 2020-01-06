@@ -15,7 +15,7 @@ export const setTrialSessionCalendarSequence = [
   setWaitingForResponseAction,
   canSetTrialSessionToCalendarAction,
   {
-    no: [setAlertWarningAction, clearModalAction],
+    no: [setAlertWarningAction],
     yes: [
       setTrialSessionCalendarAction,
       getTrialSessionDetailsAction,
