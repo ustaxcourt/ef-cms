@@ -1,12 +1,14 @@
-export default (test, cases) => {
+export default (test, getCaseIds) => {
   return it('Marks all the eligible cases as QCed', async () => {
+    const caseIds = getCaseIds();
+
     await test.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: test.trialSessionId,
     });
 
-    for (const unQCedCase of cases) {
+    for (const caseId of caseIds) {
       await test.runSequence('updateQcCompleteForTrialSequence', {
-        caseId: unQCedCase.caseId,
+        caseId,
         qcCompleteForTrial: true,
       });
     }
