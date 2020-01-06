@@ -113,16 +113,20 @@ There are two login mechanisms available — the legacy mock login system, and a
 
 ### Mock login
 
-You can log in using these usernames:
+You can log in using the following accounts.
+
+#### External Users
 
 ```
-External Users:
 petitioner
 practitioner
 practitioner1 - practitioner4
 respondent
 respondent1 - respondent4
-Internal Users:
+```
+
+#### Internal Users
+```
 adc
 admissionsclerk
 calendarclerk
@@ -148,14 +152,17 @@ No password is required.
 
 ### AWS Cognito
 
-To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with:
+To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with the following accounts.
 
+#### External Users
 ```
-External Users:
 petitioner1@example.com – petitioner5@example.com
 practitioner1@example.com – practitioner10@example.com
 respondent1@example.com – respondent10@example.com
-Internal Users:
+```
+
+#### Internal Users
+```
 adc1@example.com – adc5@example.com
 admissionsclerk1@example.com – admissionsclerk5@example.com
 calendarclerk1@example.com – calendarclerk5@example.com
@@ -168,7 +175,7 @@ ashfordsChambers1@example.com - ashfordsChambers5@example.com
 jbuch@example.com
 buchsChambers1@example.com - buchsChambers5@example.com
 jcohen@example.com
-cohensChambers1@example.com - cohensChambers5@example.com
+cohensChambers1@example.com – cohensChambers5@example.com
 ```
 
 For a full list of available users, see [court_users.csv](web-api/court_users.csv).
