@@ -30,7 +30,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
         qcCompleteForTrial: true,
         trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
       }),
-    ).rejects.toThrow('Unauthorized for trial sessions');
+    ).rejects.toThrow('Unauthorized for trial session QC complete');
   });
 
   it('should call updateCase with the updated qcCompleteForTrial value and return the updated case', async () => {
@@ -38,8 +38,8 @@ describe('updateQcCompleteForTrialInteractor', () => {
       environment: { stage: 'local' },
       getCurrentUser: () => {
         return {
-          role: User.ROLES.docketClerk,
-          userId: 'docketClerk',
+          role: User.ROLES.calendarClerk,
+          userId: 'calendarClerk',
         };
       },
       getPersistenceGateway: () => {
