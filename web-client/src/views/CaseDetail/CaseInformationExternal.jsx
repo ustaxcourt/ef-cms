@@ -31,9 +31,7 @@ const PetitionDetails = ({ caseDetail, caseDetailHelper }) => (
     <div className="grid-row">
       <div className="tablet:grid-col-6">
         <p className="label">Requested Place of Trial</p>
-        <p className="margin-bottom-0">
-          {caseDetail.formattedPreferredTrialCity}
-        </p>
+        <p>{caseDetail.formattedPreferredTrialCity}</p>
       </div>
       {caseDetailHelper.showFilingFeeExternal && (
         <div className="tablet:grid-col-6">
