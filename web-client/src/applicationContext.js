@@ -169,6 +169,7 @@ import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxie
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
+import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setTrialSessionAsSwingSessionInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
@@ -335,6 +336,7 @@ const allUseCases = {
   sendPetitionToIRSHoldingQueueInteractor,
   serveCourtIssuedDocumentInteractor,
   setItemInteractor,
+  setNoticesForCalendaredTrialSessionInteractor,
   setTrialSessionAsSwingSessionInteractor,
   setTrialSessionCalendarInteractor,
   setWorkItemAsReadInteractor,
