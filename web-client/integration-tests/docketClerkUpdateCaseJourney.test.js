@@ -1,4 +1,5 @@
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import calendarClerkLogIn from './journey/calendarClerkLogIn';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCalendarForTrialSession from './journey/docketClerkSetsCalendarForTrialSession';
@@ -8,6 +9,8 @@ import docketClerkUpdatesCaseStatusToReadyForTrial from './journey/docketClerkUp
 import docketClerkViewsEligibleCasesForTrialSession from './journey/docketClerkViewsEligibleCasesForTrialSession';
 import docketClerkViewsInactiveCasesForTrialSession from './journey/docketClerkViewsInactiveCasesForTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
+import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
+import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
 
@@ -26,7 +29,7 @@ describe('docket clerk update case journey', () => {
   it('login as a petitioner and create a case', async () => {
     await loginAs(test, 'petitioner');
     const caseDetail = await uploadPetition(test, overrides);
-    test.caseId = caseDetail.caseId;
+    test.caseId = caseDetail.caseId; //
     test.docketNumber = caseDetail.docketNumber;
   });
 
@@ -35,6 +38,12 @@ describe('docket clerk update case journey', () => {
   docketClerkCreatesATrialSession(test, overrides);
   docketClerkViewsTrialSessionList(test, overrides);
   docketClerkViewsEligibleCasesForTrialSession(test);
+
+  calendarClerkLogIn(test);
+  markAllCasesAsQCed(test, () => [test.caseId]);
+  userSignsOut(test);
+
+  docketClerkLogIn(test);
   docketClerkSetsCalendarForTrialSession(test);
   docketClerkUpdatesCaseStatusFromCalendaredToSubmitted(test);
   docketClerkViewsInactiveCasesForTrialSession(test);
