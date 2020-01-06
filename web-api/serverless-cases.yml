@@ -402,6 +402,7 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
   addConsolidatedCase:
     handler: web-api/${self:provider.dir}/casesHandlers.addConsolidatedCaseLambda
     events:
@@ -420,6 +421,18 @@ functions:
       - http:
           path: /{caseId}/consolidated-cases
           method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updateQcCompleteForTrial:
+    handler: web-api/${self:provider.dir}/casesHandlers.updateQcCompleteForTrialLambda
+    events:
+      - http:
+          path: /{caseId}/qc-complete
+          method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
