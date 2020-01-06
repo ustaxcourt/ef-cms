@@ -23,8 +23,8 @@ exports.updateQcCompleteForTrialInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
-    throw new UnauthorizedError('Unauthorized for trial sessions');
+  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_QC_COMPLETE)) {
+    throw new UnauthorizedError('Unauthorized for trial session QC complete');
   }
 
   const oldCase = await applicationContext
