@@ -14,9 +14,7 @@ const client = new AWS.DynamoDB.DocumentClient({
 });
 
 const main = async () => {
-  // add users
-  // await createUsers();
-  // TODO remove the seeded users
+  await createUsers();
 
   // Seed db from json.
   let entries;

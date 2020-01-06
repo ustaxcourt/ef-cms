@@ -1,229 +1,115 @@
 [
   {
     "role": "docketclerk",
-    "sk": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Docketclerk",
     "section": "docket",
-    "pk": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "docketclerk"
   },
   {
-    "sk": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "docket|user"
-  },
-  {
     "role": "docketclerk",
-    "sk": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Docketclerk1",
     "section": "docket",
-    "pk": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "docketclerk1"
   },
   {
-    "sk": "2805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "docket|user"
-  },
-  {
     "role": "judge",
-    "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
     "name": "Judge Armen",
     "section": "armensChambers",
-    "pk": "dabbad00-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "email": "judgeArmen",
     "judgeFullName": "Robert N. Armen, Jr.",
     "judgeTitle": "Special Trial Judge"
   },
   {
-    "pk": "armensChambers|user",
-    "sk": "dabbad00-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "pk": "judge|user",
-    "sk": "dabbad00-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "role": "judge",
-    "sk": "dabbad01-18d0-43ec-bafb-654e83405416",
     "name": "Judge Ashford",
     "section": "ashfordsChambers",
-    "pk": "dabbad01-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad01-18d0-43ec-bafb-654e83405416",
     "email": "judgeAshford",
     "judgeFullName": "Tamara W. Ashford",
     "judgeTitle": "Judge"
   },
   {
-    "pk": "ashfordsChambers|user",
-    "sk": "dabbad01-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "pk": "judge|user",
-    "sk": "dabbad01-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "role": "judge",
-    "sk": "dabbad02-18d0-43ec-bafb-654e83405416",
     "name": "Judge Buch",
     "section": "buchsChambers",
-    "pk": "dabbad02-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad02-18d0-43ec-bafb-654e83405416",
     "email": "judgeBuch",
     "judgeFullName": "Ronald L. Buch",
     "judgeTitle": "Judge"
   },
   {
-    "pk": "buchsChambers|user",
-    "sk": "dabbad02-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "pk": "judge|user",
-    "sk": "dabbad02-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "role": "judge",
-    "sk": "dabbad03-18d0-43ec-bafb-654e83405416",
     "name": "Special Trial Judge Carluzzo",
     "section": "carluzzosChambers",
-    "pk": "dabbad03-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad03-18d0-43ec-bafb-654e83405416",
     "email": "judgeCarluzzo",
     "judgeFullName": "Lewis R. Carluzzo",
     "judgeTitle": "Chief Special Trial Judge"
   },
   {
-    "pk": "carluzzosChambers|user",
-    "sk": "dabbad03-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "pk": "judge|user",
-    "sk": "dabbad03-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "role": "judge",
-    "sk": "dabbad04-18d0-43ec-bafb-654e83405416",
     "name": "Judge Cohen",
     "section": "cohensChambers",
-    "pk": "dabbad04-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
     "email": "judgeCohen",
     "judgeFullName": "Mary Ann Cohen",
     "judgeTitle": "Judge"
   },
   {
-    "pk": "cohensChambers|user",
-    "sk": "dabbad04-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "pk": "judge|user",
-    "sk": "dabbad04-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "role": "judge",
-    "sk": "dabbad05-18d0-43ec-bafb-654e83405416",
     "name": "Judge Gustafson",
     "section": "gustafsonsChambers",
-    "pk": "dabbad05-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad05-18d0-43ec-bafb-654e83405416",
     "email": "judgeGustafson",
     "judgeFullName": "David Gustafson",
     "judgeTitle": "Judge"
   },
   {
-    "pk": "gustafsonsChambers|user",
-    "sk": "dabbad05-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "pk": "judge|user",
-    "sk": "dabbad05-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "role": "judge",
-    "sk": "dabbad06-18d0-43ec-bafb-654e83405416",
     "name": "Judge Pugh",
     "section": "pughsChambers",
-    "pk": "dabbad06-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad06-18d0-43ec-bafb-654e83405416",
     "email": "judgePugh",
     "judgeFullName": "Cary Douglas Pugh",
     "judgeTitle": "Judge"
   },
   {
-    "pk": "pughsChambers|user",
-    "sk": "dabbad06-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "pk": "judge|user",
-    "sk": "dabbad06-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "role": "judge",
-    "sk": "dabbad0a-18d0-43ec-bafb-654e83405416",
     "name": "Judge Urda",
     "section": "urdasChambers",
-    "pk": "dabbad0a-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad0a-18d0-43ec-bafb-654e83405416",
     "email": "judgeUrda",
     "judgeFullName": "Patrick J. Urda",
     "judgeTitle": "Judge"
   },
   {
-    "pk": "urdasChambers|user",
-    "sk": "dabbad0a-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "pk": "judge|user",
-    "sk": "dabbad0a-18d0-43ec-bafb-654e83405416"
-  },
-
-  {
-    "pk": "adc|user",
-    "sk": "6805d1ab-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "role": "adc",
-    "sk": "6805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test ADC",
     "section": "adc",
-    "pk": "6805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "6805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "adc"
   },
-
   {
     "role": "petitionsclerk",
-    "sk": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Petitionsclerk",
     "section": "petitions",
-    "pk": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "petitionsclerk"
   },
   {
-    "sk": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "petitions|user"
-  },
-  {
     "role": "petitionsclerk",
-    "sk": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Petitionsclerk1",
     "section": "petitions",
-    "pk": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "petitionsclerk1"
   },
   {
-    "sk": "4805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "petitions|user"
-  },
-  {
     "role": "practitioner",
-    "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Practitioner",
     "section": "practitioner",
-    "pk": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "practitioner",
     "barNumber": "PT1234",
@@ -239,19 +125,9 @@
     }
   },
   {
-    "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "Test Practitioner|practitioner"
-  },
-  {
-    "sk": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "PT1234|practitioner"
-  },
-  {
     "role": "practitioner",
-    "sk": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "name": "Test Practitioner",
     "section": "practitioner",
-    "pk": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "email": "practitioner1",
     "barNumber": "PT5432",
@@ -267,19 +143,9 @@
     }
   },
   {
-    "sk": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "pk": "Test Practitioner|practitioner"
-  },
-  {
-    "sk": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "pk": "PT5432|practitioner"
-  },
-  {
     "role": "practitioner",
-    "sk": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
     "name": "Lilah Gilbert",
     "section": "practitioner",
-    "pk": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
     "userId": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
     "email": "practitioner2",
     "barNumber": "GL1111",
@@ -295,19 +161,9 @@
     }
   },
   {
-    "sk": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "pk": "Lilah Gilbert|practitioner"
-  },
-  {
-    "sk": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "pk": "GL1111|practitioner"
-  },
-  {
     "role": "practitioner",
-    "sk": "9f25dc2c-764a-435c-86dd-323e53634537",
     "name": "Clark Stark",
     "section": "practitioner",
-    "pk": "9f25dc2c-764a-435c-86dd-323e53634537",
     "userId": "9f25dc2c-764a-435c-86dd-323e53634537",
     "email": "practitioner3",
     "barNumber": "SC2222",
@@ -323,19 +179,9 @@
     }
   },
   {
-    "sk": "9f25dc2c-764a-435c-86dd-323e53634537",
-    "pk": "Clark Stark|practitioner"
-  },
-  {
-    "sk": "9f25dc2c-764a-435c-86dd-323e53634537",
-    "pk": "SC2222|practitioner"
-  },
-  {
     "role": "practitioner",
-    "sk": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
     "name": "Alden Rivas",
     "section": "practitioner",
-    "pk": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
     "userId": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
     "email": "practitioner4",
     "barNumber": "RA3333",
@@ -351,19 +197,9 @@
     }
   },
   {
-    "sk": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
-    "pk": "Alden Rivas|practitioner"
-  },
-  {
-    "sk": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
-    "pk": "RA3333|practitioner"
-  },
-  {
     "role": "respondent",
-    "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Respondent",
     "section": "respondent",
-    "pk": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "respondent",
     "barNumber": "RT6789",
@@ -379,19 +215,9 @@
     }
   },
   {
-    "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "Test Respondent|respondent"
-  },
-  {
-    "sk": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "RT6789|respondent"
-  },
-  {
     "role": "respondent",
-    "sk": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
     "name": "Test Respondent1",
     "section": "respondent",
-    "pk": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
     "userId": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
     "email": "respondent1",
     "barNumber": "RT0987",
@@ -407,19 +233,9 @@
     }
   },
   {
-    "sk": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
-    "pk": "Test Respondent|respondent"
-  },
-  {
-    "sk": "5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
-    "pk": "RT0987|respondent"
-  },
-  {
     "role": "respondent",
-    "sk": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
     "name": "Nero West",
     "section": "respondent",
-    "pk": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
     "userId": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
     "email": "respondent2",
     "barNumber": "WN7777",
@@ -435,19 +251,9 @@
     }
   },
   {
-    "sk": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
-    "pk": "Nero West|respondent"
-  },
-  {
-    "sk": "2d9a7229-7d5a-459f-84ad-754504a9f10f",
-    "pk": "WN7777|respondent"
-  },
-  {
     "role": "respondent",
-    "sk": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "name": "Stuart Morrison",
     "section": "respondent",
-    "pk": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "userId": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "email": "respondent3",
     "barNumber": "MS8888",
@@ -463,19 +269,9 @@
     }
   },
   {
-    "sk": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
-    "pk": "Stuart Morrison|respondent"
-  },
-  {
-    "sk": "5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
-    "pk": "MS8888|respondent"
-  },
-  {
     "role": "respondent",
-    "sk": "726c38b1-1432-49b3-9383-77a998c0ba4f",
     "name": "Jaquelyn Lane",
     "section": "respondent",
-    "pk": "726c38b1-1432-49b3-9383-77a998c0ba4f",
     "userId": "726c38b1-1432-49b3-9383-77a998c0ba4f",
     "email": "respondent4",
     "address1": "3202 Elk Avenue",
@@ -484,191 +280,104 @@
     "phone": "517-563-1536"
   },
   {
-    "sk": "726c38b1-1432-49b3-9383-77a998c0ba4f",
-    "pk": "Jaquelyn Lane|respondent"
-  },
-  {
-    "sk": "726c38b1-1432-49b3-9383-77a998c0ba4f",
-    "pk": "LJ9999|respondent"
-  },
-  {
     "role": "petitioner",
-    "sk": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Petitioner",
     "section": "petitioner",
-    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "petitioner",
     "address1": "3202 Elk Avenue",
     "address2": "Hanover, MI 49241",
     "phone": "517-563-1536"
   },
-
-  {
-    "pk": "admissions|user",
-    "sk": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f"
-  },
   {
     "role": "admissionsclerk",
-    "sk": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
     "name": "Test Admissions Clerk",
     "section": "admissions",
-    "pk": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
     "userId": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
     "email": "admissionsclerk"
   },
-
-  {
-    "pk": "calendar|user",
-    "sk": "106249e9-ded0-4baa-9a35-c0073712c3d1"
-  },
   {
     "role": "calendarclerk",
-    "sk": "106249e9-ded0-4baa-9a35-c0073712c3d1",
     "name": "Test Calendar Clerk",
     "section": "calendar",
-    "pk": "106249e9-ded0-4baa-9a35-c0073712c3d1",
     "userId": "106249e9-ded0-4baa-9a35-c0073712c3d1",
     "email": "calendarclerk"
   },
-
-  {
-    "pk": "clerkofcourt|user",
-    "sk": "23dd8806-c0c7-4265-81f0-5f264ef78248"
-  },
   {
     "role": "clerkofcourt",
-    "sk": "23dd8806-c0c7-4265-81f0-5f264ef78248",
     "name": "Test Clerk of Court",
     "section": "clerkofcourt",
-    "pk": "23dd8806-c0c7-4265-81f0-5f264ef78248",
     "userId": "23dd8806-c0c7-4265-81f0-5f264ef78248",
     "email": "clerkofcourt"
   },
-
-  {
-    "pk": "trialClerks|user",
-    "sk": "f0a1e52a-876f-4c03-853c-f66e407e5a1e"
-  },
   {
     "role": "trialclerk",
-    "sk": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
     "name": "Test Trial Clerk",
     "section": "trialClerks",
-    "pk": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
     "userId": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
     "email": "trialclerk"
   },
-
-  {
-    "pk": "armensChambers|user",
-    "sk": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5"
-  },
   {
     "role": "chambers",
-    "sk": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
     "name": "Test Armen's Chambers",
     "section": "armensChambers",
-    "pk": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
     "userId": "9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5",
     "email": "armensChambers"
   },
-
-  {
-    "pk": "ashfordsChambers|user",
-    "sk": "817b48c5-d4e5-4544-9e11-9ba0102918f4"
-  },
   {
     "role": "chambers",
-    "sk": "817b48c5-d4e5-4544-9e11-9ba0102918f4",
     "name": "Test Ashford's Chambers",
     "section": "ashfordsChambers",
-    "pk": "817b48c5-d4e5-4544-9e11-9ba0102918f4",
     "userId": "817b48c5-d4e5-4544-9e11-9ba0102918f4",
     "email": "ashfordsChambers"
   },
-
-  {
-    "pk": "buchsChambers|user",
-    "sk": "49421c68-0c09-4b4b-b32c-a535279be8d0"
-  },
   {
     "role": "chambers",
-    "sk": "49421c68-0c09-4b4b-b32c-a535279be8d0",
     "name": "Test Buch's Chambers",
     "section": "buchsChambers",
-    "pk": "49421c68-0c09-4b4b-b32c-a535279be8d0",
     "userId": "49421c68-0c09-4b4b-b32c-a535279be8d0",
     "email": "buchsChambers"
   },
-
-  {
-    "pk": "carluzzosChambers|user",
-    "sk": "8c0902ab-d156-4cca-b80d-43f595aa5ab0"
-  },
   {
     "role": "chambers",
-    "sk": "8c0902ab-d156-4cca-b80d-43f595aa5ab0",
     "name": "Test Carluzzo's Chambers",
     "section": "carluzzosChambers",
-    "pk": "8c0902ab-d156-4cca-b80d-43f595aa5ab0",
     "userId": "8c0902ab-d156-4cca-b80d-43f595aa5ab0",
     "email": "carluzzosChambers"
   },
-
-  {
-    "pk": "cohensChambers|user",
-    "sk": "0bd3bc49-4e46-4caa-adeb-4960c56e17c8"
-  },
   {
     "role": "chambers",
-    "sk": "0bd3bc49-4e46-4caa-adeb-4960c56e17c8",
     "name": "Test Cohen's Chambers",
     "section": "cohensChambers",
-    "pk": "0bd3bc49-4e46-4caa-adeb-4960c56e17c8",
     "userId": "0bd3bc49-4e46-4caa-adeb-4960c56e17c8",
     "email": "cohensChambers"
   },
-
-  {
-    "pk": "gustafsonsChambers|user",
-    "sk": "3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2"
-  },
   {
     "role": "chambers",
-    "sk": "3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2",
     "name": "Test Gustafson's Chambers",
     "section": "gustafsonsChambers",
-    "pk": "3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2",
     "userId": "3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2",
     "email": "gustafsonsChambers"
   },
-
-  {
-    "pk": "pughsChambers|user",
-    "sk": "9fbae83a-a55b-4132-96df-e04a8ee675e3"
-  },
   {
     "role": "chambers",
-    "sk": "9fbae83a-a55b-4132-96df-e04a8ee675e3",
     "name": "Test Pugh's Chambers",
     "section": "pughsChambers",
-    "pk": "9fbae83a-a55b-4132-96df-e04a8ee675e3",
     "userId": "9fbae83a-a55b-4132-96df-e04a8ee675e3",
     "email": "pughsChambers"
   },
-
   {
-    "pk": "urdasChambers|user",
-    "sk": "44f02385-e4c6-49f9-a554-ecf93531d8a3"
+    "role": "chambers",
+    "name": "Test Urda's Chambers",
+    "section": "urdasChambers",
+    "userId": "44f02385-e4c6-49f9-a554-ecf93531d8a3",
+    "email": "urdasChambers"
   },
   {
     "role": "chambers",
-    "sk": "44f02385-e4c6-49f9-a554-ecf93531d8a3",
-    "name": "Test Urda's Chambers",
+    "name": "Test New Urda's Chambers",
     "section": "urdasChambers",
-    "pk": "44f02385-e4c6-49f9-a554-ecf93531d8a3",
-    "userId": "44f02385-e4c6-49f9-a554-ecf93531d8a3",
-    "email": "urdasChambers"
+    "userId": "44f02385-e4c6-49f9-a554-ecf93531d8a4",
+    "email": "urdasNewChambers"
   }
 ]
