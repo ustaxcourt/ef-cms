@@ -48,7 +48,7 @@ export const EditPetitionDetails = connect(
             Save
           </Button>
 
-          <Button link href={`/case-detail/${docketNumber}`}>
+          <Button link href={`/case-detail/${docketNumber}/case-information`}>
             Cancel
           </Button>
         </section>

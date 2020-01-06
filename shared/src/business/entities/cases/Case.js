@@ -245,6 +245,7 @@ function Case(rawCase, { applicationContext }) {
   this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
+  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || false;
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
@@ -475,6 +476,7 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     procedureType: joi.string().optional(),
+    qcCompleteForTrial: joi.boolean().required(),
     receivedAt: joi
       .date()
       .iso()
@@ -1399,6 +1401,11 @@ Case.prototype.isDocumentDraft = function(documentId) {
  */
 Case.prototype.setNoticeOfTrialDate = function() {
   this.noticeOfTrialDate = createISODateString();
+  return this;
+};
+
+Case.prototype.setQcCompleteForTrial = function(qcCompleteForTrial) {
+  this.qcCompleteForTrial = qcCompleteForTrial;
   return this;
 };
 
