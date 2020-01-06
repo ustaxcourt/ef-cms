@@ -66,8 +66,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         trialSessionId: trialSessionEntity.trialSessionId,
       });
 
-    // TODO: Add cover sheet
-
     const newDocumentId = applicationContext.getUniqueId();
 
     await applicationContext.getPersistenceGateway().saveDocument({
@@ -91,8 +89,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       },
       { applicationContext },
     );
-
-    // TODO: Call setAsServed on document?
 
     caseEntity.addDocument(noticeDocument);
     caseEntity.setNoticeOfTrialDate();
