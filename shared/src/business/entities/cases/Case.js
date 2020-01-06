@@ -1404,6 +1404,12 @@ Case.prototype.setNoticeOfTrialDate = function() {
   return this;
 };
 
+/**
+ * sets the qc complete for trial boolean for a case
+ *
+ * @param {boolean} qcCompleteForTrial the value to set for qcCompleteForTrial
+ * @returns {Case} this case entity
+ */
 Case.prototype.setQcCompleteForTrial = function(qcCompleteForTrial) {
   this.qcCompleteForTrial = qcCompleteForTrial;
   return this;
