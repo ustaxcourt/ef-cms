@@ -146,7 +146,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
     userSignsOut(test);
   });
 
-  describe('Calendar clerk marks all cases as QCed', () => {
+  describe('Calendar clerk marks all eligible cases as QCed', () => {
     calendarClerkLogIn(test);
     markAllCasesAsQCed(test, () => [
       createdCases[0],

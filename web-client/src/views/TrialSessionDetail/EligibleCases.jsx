@@ -44,7 +44,6 @@ export const EligibleCases = connect(
               )}
             </tr>
           </thead>
-          {console.log(formattedEligibleCases)}
           {formattedEligibleCases.map((item, idx) => (
             <tbody key={idx}>
               <tr className="eligible-cases-row">
