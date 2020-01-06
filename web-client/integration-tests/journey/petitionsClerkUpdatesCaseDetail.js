@@ -1,10 +1,4 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { runCompute } from 'cerebral/test';
-
-import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -95,9 +89,7 @@ export default test => {
     });
     await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
-    expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2018-12-24T05:00:00.000Z',
-    );
+    expect(test.getState('caseDetail.irsNoticeDate')).toEqual(null);
 
     // irsNoticeDate - valid
     await test.runSequence('updateFormValueSequence', {
@@ -119,21 +111,31 @@ export default test => {
     await test.runSequence('submitCaseDetailEditSaveSequence');
     expect(test.getState('caseDetailErrors')).toEqual({});
 
-    // payGovId and payGovDate
+    // petitionPaymentDate
     await test.runSequence('updateCaseValueSequence', {
-      key: 'payGovId',
-      value: '123',
+      key: 'petitionPaymentStatus',
+      value: Case.PAYMENT_STATUS.PAID,
+    });
+    await test.runSequence('submitCaseDetailEditSaveSequence');
+    expect(test.getState('caseDetailErrors')).toEqual({
+      petitionPaymentDate: VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
+      petitionPaymentMethod: VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
+    });
+
+    await test.runSequence('updateCaseValueSequence', {
+      key: 'petitionPaymentMethod',
+      value: 'check',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'payGovYear',
+      key: 'paymentDateYear',
       value: '2018',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'payGovMonth',
+      key: 'paymentDateMonth',
       value: '12',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'payGovDay',
+      key: 'paymentDateDay',
       value: '24',
     });
     await test.runSequence('submitCaseDetailEditSaveSequence');
@@ -178,18 +180,11 @@ export default test => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-    expect(test.getState('caseDetail.payGovId')).toEqual('123');
     expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
       '2018-12-24T05:00:00.000Z',
     );
-    expect(test.getState('caseDetail.payGovDate')).toEqual(
+    expect(test.getState('caseDetail.petitionPaymentDate')).toEqual(
       '2018-12-24T05:00:00.000Z',
     );
-
-    //
-    const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
-    });
-    expect(helper.showPaymentRecord).toEqual(true);
   });
 };

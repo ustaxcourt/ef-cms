@@ -3,6 +3,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { DocketRecord } = require('../entities/DocketRecord');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -11,6 +12,10 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case to update
+ * @param {string} providers.petitionPaymentDate the date the petition payment was made
+ * @param {string} providers.petitionPaymentMethod notes on method of payment (e.g. check)
+ * @param {string} providers.petitionPaymentStatus the status (paid, unpaid, waived)
+ * @param {string} providers.petitionPaymentWaivedDate the date on which petition fee payment was waived
  * @returns {object} the updated case data
  */
 exports.updatePetitionFeePaymentInteractor = async ({
@@ -23,8 +28,8 @@ exports.updatePetitionFeePaymentInteractor = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE)) {
-    throw new UnauthorizedError('Unauthorized for update case');
+  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITION_DETAILS)) {
+    throw new UnauthorizedError('Unauthorized for editing petition details');
   }
 
   const oldCase = await applicationContext
@@ -44,6 +49,26 @@ exports.updatePetitionFeePaymentInteractor = async ({
     },
     { applicationContext },
   );
+
+  if (oldCase.petitionPaymentStatus === Case.PAYMENT_STATUS.UNPAID) {
+    if (isPaid) {
+      newCase.addDocketRecord(
+        new DocketRecord({
+          description: 'Filing Fee Paid',
+          eventCode: 'FEE',
+          filingDate: newCase.petitionPaymentDate,
+        }),
+      );
+    } else if (isWaived) {
+      newCase.addDocketRecord(
+        new DocketRecord({
+          description: 'Filing Fee Waived',
+          eventCode: 'FEEW',
+          filingDate: newCase.petitionPaymentWaivedDate,
+        }),
+      );
+    }
+  }
 
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,

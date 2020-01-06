@@ -6,6 +6,7 @@ const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../../utilities/DateHandler');
+const { isEmpty } = require('lodash');
 
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
@@ -399,6 +400,22 @@ TrialSession.prototype.deleteCaseFromCalendar = function({ caseId }) {
     this.caseOrder.splice(index, 1);
   }
   return this;
+};
+
+/**
+ * checks certain properties of the trial session for emptiness.
+ * if one field is empty (via lodash.isEmpty), the method returns false
+ *
+ * @returns {boolean} TRUE if can set as calendared (properties were all not empty), FALSE otherwise
+ */
+TrialSession.prototype.canSetAsCalendared = function() {
+  return ![
+    this.address1,
+    this.judge,
+    this.city,
+    this.state,
+    this.postalCode,
+  ].some(property => isEmpty(property));
 };
 
 module.exports = { TrialSession };

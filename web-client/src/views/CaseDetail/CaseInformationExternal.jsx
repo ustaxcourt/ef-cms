@@ -6,7 +6,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
+const PetitionDetails = ({ caseDetail, caseDetailHelper }) => (
   <React.Fragment>
     <div className="grid-row">
       <div className="tablet:grid-col-6">
@@ -31,20 +31,16 @@ const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
     <div className="grid-row">
       <div className="tablet:grid-col-6">
         <p className="label">Requested Place of Trial</p>
-        <p className="margin-bottom-0">
-          {caseDetail.formattedPreferredTrialCity}
-        </p>
+        <p>{caseDetail.formattedPreferredTrialCity}</p>
       </div>
-      <div className="tablet:grid-col-6">
-        {showPaymentRecord && (
-          <React.Fragment>
-            <p className="label">Petition Fee Paid</p>
-            <p className="pay-gov-id-display margin-bottom-0">
-              {caseDetail.payGovId}
-            </p>
-          </React.Fragment>
-        )}
-      </div>
+      {caseDetailHelper.showFilingFeeExternal && (
+        <div className="tablet:grid-col-6">
+          <p className="label">Filing Fee</p>
+          <p className="pay-gov-id-display margin-bottom-0">
+            {caseDetail.filingFee}
+          </p>
+        </div>
+      )}
     </div>
   </React.Fragment>
 );
@@ -118,7 +114,7 @@ export const CaseInformationExternal = connect(
                     </h3>
                     <PetitionDetails
                       caseDetail={formattedCaseDetail}
-                      showPaymentRecord={caseDetailHelper.showPaymentRecord}
+                      caseDetailHelper={caseDetailHelper}
                     />
                   </div>
                 </div>
@@ -156,7 +152,10 @@ export const CaseInformationExternal = connect(
                     Print Confirmation
                   </Button>
                 </If>
-                <PetitionDetails caseDetail={formattedCaseDetail} />
+                <PetitionDetails
+                  caseDetail={formattedCaseDetail}
+                  caseDetailHelper={caseDetailHelper}
+                />
               </div>
             </div>
             <div className="margin-top-2">

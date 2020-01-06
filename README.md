@@ -243,3 +243,9 @@ Follow these steps for creating the end of sprint PRs for the court.
 8. When PR comments come in, make changes to master to fix the comments
 9. After the court approves and merges PR, merge master into develop
 10. Create a release in GitHub as sprint_00x against master and put the same description planned to be in the PR description for the court
+
+## Accessibility HTML_CodeSniffer Bookmarklet
+
+The following bookmarklet is useful for running pa11y directly on the page you are viewing.  The following link should have instruction on how to setup and use:
+
+https://squizlabs.github.io/HTML_CodeSniffer/
