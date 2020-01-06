@@ -1,6 +1,6 @@
 const {
-  setNoticesForCalendaredTrialSession,
-} = require('./setNoticesForCalendaredTrialSession');
+  setNoticesForCalendaredTrialSessionInteractor,
+} = require('./setNoticesForCalendaredTrialSessionInteractor');
 const { Document } = require('../../entities/Document');
 const { User } = require('../../entities/User');
 
@@ -19,7 +19,7 @@ let applicationContext;
 let generateNoticeOfTrialIssuedInteractorMock;
 let saveDocumentMock;
 
-describe('setNoticesForCalendaredTrialSession', () => {
+describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   beforeEach(() => {
     generateNoticeOfTrialIssuedInteractorMock = jest.fn();
     saveDocumentMock = jest.fn();
@@ -70,7 +70,7 @@ describe('setNoticesForCalendaredTrialSession', () => {
     let error;
 
     try {
-      await setNoticesForCalendaredTrialSession({
+      await setNoticesForCalendaredTrialSessionInteractor({
         applicationContext,
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -82,7 +82,7 @@ describe('setNoticesForCalendaredTrialSession', () => {
   });
 
   it('Should generate a Notice of Trial for each case', async () => {
-    const result = await setNoticesForCalendaredTrialSession({
+    const result = await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -102,7 +102,7 @@ describe('setNoticesForCalendaredTrialSession', () => {
   });
 
   it('Should set the noticeOfTrialDate field on each case', async () => {
-    const result = await setNoticesForCalendaredTrialSession({
+    const result = await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -112,7 +112,7 @@ describe('setNoticesForCalendaredTrialSession', () => {
   });
 
   it('Should create a docket entry for each case', async () => {
-    const result = await setNoticesForCalendaredTrialSession({
+    const result = await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
