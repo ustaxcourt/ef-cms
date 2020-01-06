@@ -1,17 +1,28 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const EligibleCases = connect(
   {
+    eligibleCaseQcCompleteCount:
+      state.formattedTrialSessionDetails.eligibleCaseQcCompleteCount,
     formattedEligibleCases:
       state.formattedTrialSessionDetails.formattedEligibleCases,
+    updateQcCompleteForTrialSequence:
+      sequences.updateQcCompleteForTrialSequence,
   },
-  ({ formattedEligibleCases }) => {
+  ({
+    eligibleCaseQcCompleteCount,
+    formattedEligibleCases,
+    updateQcCompleteForTrialSequence,
+  }) => {
     return (
       <React.Fragment>
+        <div className="float-right text-semibold margin-top-neg-3 margin-bottom-2">
+          Completed: {eligibleCaseQcCompleteCount}
+        </div>
         <table
           aria-describedby="eligible-cases-tab"
           className="usa-table ustc-table trial-sessions subsection"
@@ -25,6 +36,7 @@ export const EligibleCases = connect(
               <th>Petitioner counsel</th>
               <th>Respondent counsel</th>
               <th>Case type</th>
+              <th>QC complete?</th>
             </tr>
           </thead>
           {formattedEligibleCases.map((item, idx) => (
@@ -51,6 +63,26 @@ export const EligibleCases = connect(
                 </td>
                 <td>{item.respondent}</td>
                 <td>{item.caseType}</td>
+                <td className="text-center">
+                  <div className="text-center">
+                    <input
+                      checked={item.qcCompleteForTrial === true}
+                      className="usa-checkbox__input"
+                      id={`${item.caseId}-complete`}
+                      name={`${item.caseId}Complete`}
+                      type="checkbox"
+                      onChange={() => {
+                        updateQcCompleteForTrialSequence({
+                          caseId: item.caseId,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-checkbox__label"
+                      htmlFor={`${item.caseId}-complete`}
+                    ></label>
+                  </div>
+                </td>
               </tr>
             </tbody>
           ))}

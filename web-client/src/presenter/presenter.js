@@ -286,6 +286,7 @@ import { updateMessageValueSequence } from './sequences/updateMessageValueSequen
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
 import { updatePetitionFeePaymentSequence } from './sequences/updatePetitionFeePaymentSequence';
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
+import { updateQcCompleteForTrialSequence } from './sequences/updateQcCompleteForTrialSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
 import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
@@ -618,6 +619,7 @@ export const presenter = {
     updateModalValueSequence,
     updatePetitionFeePaymentSequence,
     updatePetitionValueSequence,
+    updateQcCompleteForTrialSequence,
     updateScreenMetadataSequence,
     updateSearchTermSequence,
     updateSessionMetadataSequence,

@@ -245,7 +245,7 @@ function Case(rawCase, { applicationContext }) {
   this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
-  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || false;
+  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
@@ -476,7 +476,7 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     procedureType: joi.string().optional(),
-    qcCompleteForTrial: joi.boolean().required(),
+    qcCompleteForTrial: joi.object().required(),
     receivedAt: joi
       .date()
       .iso()
@@ -1404,8 +1404,19 @@ Case.prototype.setNoticeOfTrialDate = function() {
   return this;
 };
 
-Case.prototype.setQcCompleteForTrial = function(qcCompleteForTrial) {
-  this.qcCompleteForTrial = qcCompleteForTrial;
+/**
+ * sets the qc complete for trial boolean for a case
+ *
+ * @param {object} providers the providers object
+ * @param {boolean} providers.qcCompleteForTrial the value to set for qcCompleteForTrial
+ * @param {string} providers.trialSessionId the id of the trial session to set qcCompleteForTrial for
+ * @returns {Case} this case entity
+ */
+Case.prototype.setQcCompleteForTrial = function({
+  qcCompleteForTrial,
+  trialSessionId,
+}) {
+  this.qcCompleteForTrial[trialSessionId] = qcCompleteForTrial;
   return this;
 };
 
