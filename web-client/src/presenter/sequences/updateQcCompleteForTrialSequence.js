@@ -1,3 +1,7 @@
+import { setQcCompleteOnCaseOnTrialSessionAction } from '../actions/TrialSession/setQcCompleteOnCaseOnTrialSessionAction';
+import { updateQcCompleteForTrialAction } from '../actions/TrialSession/updateQcCompleteForTrialAction';
+
 export const updateQcCompleteForTrialSequence = [
-  //TODO
+  updateQcCompleteForTrialAction,
+  { error: [], success: [setQcCompleteOnCaseOnTrialSessionAction] },
 ];
