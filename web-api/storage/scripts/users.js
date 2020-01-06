@@ -27,7 +27,7 @@ module.exports.createUsers = async () => {
       // TODO remove this line
       userRecord.email = userRecord.email + 'New';
 
-      const userId = uuidv4();
+      const userId = userRecord.userId || uuidv4();
 
       return createUserRecords({
         applicationContext,
