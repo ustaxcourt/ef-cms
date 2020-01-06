@@ -4115,7 +4115,7 @@
         },
         {
           "in": "body",
-          "name": "trail session info",
+          "name": "trial session info",
           "description": "the trial session info needed to identify and update a trial session",
           "schema": {
             "type": "object",
