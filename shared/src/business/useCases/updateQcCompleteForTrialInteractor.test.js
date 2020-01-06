@@ -1,7 +1,6 @@
 const {
   updateQcCompleteForTrialInteractor,
 } = require('./updateQcCompleteForTrialInteractor');
-const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
@@ -28,7 +27,8 @@ describe('updateQcCompleteForTrialInteractor', () => {
       updateQcCompleteForTrialInteractor({
         applicationContext,
         caseId: MOCK_CASE.caseId,
-        caseStatus: Case.STATUS_TYPES.cav,
+        qcCompleteForTrial: true,
+        trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
       }),
     ).rejects.toThrow('Unauthorized for trial sessions');
   });
@@ -53,7 +53,10 @@ describe('updateQcCompleteForTrialInteractor', () => {
       applicationContext,
       caseId: MOCK_CASE.caseId,
       qcCompleteForTrial: true,
+      trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
     });
-    expect(result.qcCompleteForTrial).toEqual(true);
+    expect(result.qcCompleteForTrial).toEqual({
+      '10aa100f-0330-442b-8423-b01690c76e3f': true,
+    });
   });
 });
