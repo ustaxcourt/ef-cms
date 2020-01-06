@@ -326,4 +326,30 @@ describe('formattedTrialSessionDetails', () => {
       { docketNumber: '102-19' },
     ]);
   });
+
+  it('returns count of eligible cases with QC complete', () => {
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: [
+            MOCK_CASE,
+            {
+              ...MOCK_CASE,
+              caseCaption: 'Test Person & Someone Else, Petitioners',
+              docketNumberSuffix: 'W',
+              qcCompleteForTrial: true,
+            },
+            {
+              ...MOCK_CASE,
+              caseCaption: undefined,
+              docketNumber: '103-19',
+              qcCompleteForTrial: true,
+            },
+          ],
+        },
+      },
+    });
+    expect(result.eligibleCaseQcCompleteCount).toEqual(2);
+  });
 });
