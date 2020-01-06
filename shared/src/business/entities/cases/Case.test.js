@@ -139,16 +139,6 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
-    it('adds a paygov date to an already existing case json', () => {
-      const myCase = new Case(
-        { payGovId: '1234', ...MOCK_CASE },
-        {
-          applicationContext,
-        },
-      );
-      expect(myCase.isValid()).toBeTruthy();
-    });
-
     it('Creates an invalid case with a document', () => {
       const myCase = new Case(
         {
@@ -653,60 +643,6 @@ describe('Case entity', () => {
       });
       caseRecord.sendToIRSHoldingQueue();
       expect(caseRecord.status).toEqual(Case.STATUS_TYPES.batchedForIRS);
-    });
-  });
-
-  describe('markAsPaidByPayGov', () => {
-    it('sets pay gov fields', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      expect(caseRecord.payGovDate).toBeDefined();
-    });
-
-    it('should add item to docket record when paid', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      const payGovDate = new Date().toISOString();
-      const initialDocketLength =
-        (caseRecord.docketRecord && caseRecord.docketRecord.length) || 0;
-      caseRecord.markAsPaidByPayGov(payGovDate);
-      const docketLength = caseRecord.docketRecord.length;
-      expect(docketLength).toEqual(initialDocketLength + 1);
-    });
-
-    it('should only set docket record once per time paid', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      const docketLength = caseRecord.docketRecord.length;
-      caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      caseRecord.markAsPaidByPayGov(new Date('2019-01-01').toISOString());
-      caseRecord.markAsPaidByPayGov(new Date('2019-01-01').toISOString());
-      expect(docketLength).toEqual(caseRecord.docketRecord.length);
-    });
-
-    it('should overwrite existing docket record entry if one already exists', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.addDocketRecord(
-        new DocketRecord({
-          description: 'Some Description',
-          filingDate: new Date().toISOString(),
-        }),
-      );
-      caseRecord.addDocketRecord(
-        new DocketRecord({
-          description: 'Filing fee paid',
-          filingDate: new Date().toISOString(),
-        }),
-      );
-      caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      expect(caseRecord.docketRecord.length).toEqual(5);
     });
   });
 
@@ -2372,6 +2308,30 @@ describe('Case entity', () => {
       );
       expect(myCase.isDocumentDraft('2')).toEqual(true);
       expect(myCase.isDocumentDraft('3')).toEqual(true);
+    });
+  });
+
+  describe('setNoticeOfTrialDate', () => {
+    it('should set noticeOfTrialDate on the given case', () => {
+      const caseEntity = new Case(MOCK_CASE, { applicationContext });
+      const result = caseEntity.setNoticeOfTrialDate();
+
+      expect(result.isValid()).toBeTruthy();
+    });
+
+    it('should set noticeOfTrialDate when passed through Case constructor', () => {
+      const isoDateString = new Date().toISOString();
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          noticeOfTrialDate: isoDateString,
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.isValid()).toBeTruthy();
+      expect(caseEntity.noticeOfTrialDate).toEqual(isoDateString);
     });
   });
 });
