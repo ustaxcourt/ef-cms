@@ -15,7 +15,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.trialSessionId the trial session id
  * @returns {Promise} the promises for the updateCase calls
  */
-exports.setNoticesForCalendaredTrialSession = async ({
+exports.setNoticesForCalendaredTrialSessionInteractor = async ({
   applicationContext,
   trialSessionId,
 }) => {
