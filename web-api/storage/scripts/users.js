@@ -1,10 +1,10 @@
 const createApplicationContext = require('../../src/applicationContext');
-import { omit } from 'lodash';
 const users = require('../fixtures/seed/users.json');
 const uuidv4 = require('uuid/v4');
 const {
   createUserRecords,
 } = require('../../../shared/src/persistence/dynamo/users/createUser.js');
+const { omit } = require('lodash');
 
 let usersById = {};
 let usersByEmail = {};
@@ -39,6 +39,9 @@ module.exports.createUsers = async () => {
       });
     }),
   );
+
+  console.log(Object.keys(usersByEmail));
+  console.log(Object.keys(usersById));
 };
 
 exports.asUserFromEmail = async (email, callback) => {
