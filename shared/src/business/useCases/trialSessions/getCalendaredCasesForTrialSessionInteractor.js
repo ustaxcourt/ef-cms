@@ -38,10 +38,25 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
       userId,
     });
 
-  return casesWithNotes.map(caseWithNotes => {
+  return casesWithNotes.map(caseWithAdditionalProperties => {
+    // TODO: revisit this approach.  I think our persistence layer is returning more than it should?
+    const {
+      disposition,
+      isManuallyAdded,
+      notes,
+      removedFromTrial,
+      removedFromTrialDate,
+    } = caseWithAdditionalProperties;
+
     return {
-      ...new Case(caseWithNotes, { applicationContext }),
-      notes: caseWithNotes.notes,
+      ...new Case(caseWithAdditionalProperties, { applicationContext })
+        .validate()
+        .toRawObject(),
+      disposition,
+      isManuallyAdded,
+      notes,
+      removedFromTrial,
+      removedFromTrialDate,
     };
   });
 };
