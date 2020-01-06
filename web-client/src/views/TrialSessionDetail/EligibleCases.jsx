@@ -10,12 +10,14 @@ export const EligibleCases = connect(
       state.formattedTrialSessionDetails.eligibleCaseQcCompleteCount,
     formattedEligibleCases:
       state.formattedTrialSessionDetails.formattedEligibleCases,
+    trialSessionId: state.trialSession.trialSessionId,
     updateQcCompleteForTrialSequence:
       sequences.updateQcCompleteForTrialSequence,
   },
   ({
     eligibleCaseQcCompleteCount,
     formattedEligibleCases,
+    trialSessionId,
     updateQcCompleteForTrialSequence,
   }) => {
     return (
@@ -66,7 +68,7 @@ export const EligibleCases = connect(
                 <td className="text-center">
                   <div className="text-center">
                     <input
-                      checked={item.qcCompleteForTrial === true}
+                      checked={item.qcCompleteForTrial[trialSessionId] === true}
                       className="usa-checkbox__input"
                       id={`${item.caseId}-complete`}
                       name={`${item.caseId}Complete`}
@@ -74,7 +76,9 @@ export const EligibleCases = connect(
                       onChange={() => {
                         updateQcCompleteForTrialSequence({
                           caseId: item.caseId,
-                          qcCompleteForTrial: !item.qcCompleteForTrial,
+                          qcCompleteForTrial: !item.qcCompleteForTrial[
+                            trialSessionId
+                          ],
                         });
                       }}
                     />
