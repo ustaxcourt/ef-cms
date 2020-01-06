@@ -21,7 +21,7 @@ module.exports = {
     .handler,
   runTrialSessionPlanningReportLambda: require('./trialSessions/runTrialSessionPlanningReportLambda')
     .handler,
-  setNoticesForCalendaredTrialSessionLambda: require('./trialSession/setNoticesForCalendaredTrialSessionLambda')
+  setNoticesForCalendaredTrialSessionLambda: require('./trialSessions/setNoticesForCalendaredTrialSessionLambda')
     .handler,
   setTrialSessionAsSwingSessionLambda: require('./trialSessions/setTrialSessionAsSwingSessionLambda')
     .handler,
