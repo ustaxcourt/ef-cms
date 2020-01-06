@@ -25,7 +25,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const calendaredCases = applicationContext
+  const calendaredCases = await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,

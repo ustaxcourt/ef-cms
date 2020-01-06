@@ -41,7 +41,7 @@ export const FileDocument = connect(
           </h1>
         </Focus>
 
-        <p className="margin-bottom-3 margin-top-0 required-statement ">
+        <p className="margin-bottom-3 margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
 
