@@ -20,14 +20,11 @@ module.exports.createUsers = async () => {
 
   await Promise.all(
     users.map(userRecord => {
-      if (!userRecord.email) {
+      if (!userRecord.userId) {
         return;
       }
 
-      // TODO remove this line
-      userRecord.email = userRecord.email + 'New';
-
-      const userId = userRecord.userId || uuidv4();
+      const { userId } = userRecord;
 
       return createUserRecords({
         applicationContext,
