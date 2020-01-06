@@ -1,7 +1,7 @@
-import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
+import { setQcCompleteOnCaseOnTrialSessionAction } from '../actions/TrialSession/setQcCompleteOnCaseOnTrialSessionAction';
 import { updateQcCompleteForTrialAction } from '../actions/TrialSession/updateQcCompleteForTrialAction';
 
 export const updateQcCompleteForTrialSequence = [
   updateQcCompleteForTrialAction,
-  { error: [], success: [setTrialSessionDetailsAction] },
+  { error: [], success: [setQcCompleteOnCaseOnTrialSessionAction] },
 ];

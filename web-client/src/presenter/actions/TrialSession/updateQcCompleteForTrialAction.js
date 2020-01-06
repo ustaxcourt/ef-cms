@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * update the qc complete for trial value on a case
  *
@@ -10,10 +12,12 @@
  */
 export const updateQcCompleteForTrialAction = async ({
   applicationContext,
+  get,
   path,
   props,
 }) => {
   const { caseId, qcCompleteForTrial } = props;
+  const trialSessionId = get(state.trialSession.trialSessionId);
 
   let result;
   try {
@@ -23,10 +27,11 @@ export const updateQcCompleteForTrialAction = async ({
         applicationContext,
         caseId,
         qcCompleteForTrial,
+        trialSessionId,
       });
   } catch (err) {
     return path.error();
   }
 
-  return path.success({ trialSession: result });
+  return path.success({ updatedCase: result });
 };
