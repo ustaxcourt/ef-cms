@@ -1,12 +1,14 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { setupTest } from './helpers';
 import { uploadPetition } from './helpers';
+import calendarClerkLogIn from './journey/calendarClerkLogIn';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
 import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
+import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
@@ -281,6 +283,17 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(test.getState('trialSession.isCalendared')).toEqual(false);
     });
 
+    userSignsOut(test);
+  });
+
+  describe('Calendar clerk marks all eligible cases as QCed', () => {
+    calendarClerkLogIn(test);
+    markAllCasesAsQCed(test, () => [
+      createdCases[0],
+      createdCases[1],
+      createdCases[3],
+      createdCases[4],
+    ]);
     userSignsOut(test);
   });
 

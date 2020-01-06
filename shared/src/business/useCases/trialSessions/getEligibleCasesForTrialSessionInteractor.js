@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -61,5 +62,9 @@ exports.getEligibleCasesForTrialSessionInteractor = async ({
       skPrefix: trialSessionEntity.generateSortKeyPrefix(),
     });
 
-  return calendaredCases.concat(eligibleCases);
+  return calendaredCases
+    .concat(eligibleCases)
+    .map(rawCase =>
+      new Case(rawCase, { applicationContext }).validate().toRawObject(),
+    );
 };

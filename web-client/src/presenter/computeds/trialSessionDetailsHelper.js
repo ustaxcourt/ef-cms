@@ -4,7 +4,7 @@ export const trialSessionDetailsHelper = get => {
   const { eligibleCases, trialSessionId } = get(state.trialSession);
   const permissions = get(state.permissions);
 
-  const eligibleCaseQcCompleteCount = eligibleCases.filter(
+  const eligibleCaseQcCompleteCount = (eligibleCases || []).filter(
     eligibleCase =>
       eligibleCase.qcCompleteForTrial &&
       eligibleCase.qcCompleteForTrial[trialSessionId],
