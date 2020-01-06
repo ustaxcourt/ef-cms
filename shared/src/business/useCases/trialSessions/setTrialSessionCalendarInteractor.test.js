@@ -51,7 +51,7 @@ describe('setTrialSessionCalendarInteractor', () => {
     expect(error).toBeDefined();
   });
 
-  it('should set a trial session to "calendared" is set as QCed', async () => {
+  it('should set a trial session to "calendared" and calendar all cases that have been QCed', async () => {
     let updateTrialSession = sinon.spy();
     let updateCaseSpy = sinon.spy();
 
@@ -97,7 +97,7 @@ describe('setTrialSessionCalendarInteractor', () => {
     expect(updateCaseSpy.called).toEqual(true);
   });
 
-  it('should NOT set a trial session to "calendared" if it has not been QCed', async () => {
+  it('should NOT set a trial session to "calendared" and calendar all cases that have been QCed', async () => {
     let updateTrialSession = sinon.spy();
     let updateCaseSpy = sinon.spy();
     applicationContext = {

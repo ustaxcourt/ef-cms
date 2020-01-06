@@ -1,10 +1,13 @@
 import { setupTest } from './helpers';
 import { uploadPetition } from './helpers';
+import calendarClerkLogIn from './journey/calendarClerkLogIn';
+import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
 import docketClerkViewsAnUpcomingTrialSession from './journey/docketClerkViewsAnUpcomingTrialSession';
 import docketClerkViewsTrialSessionList from './journey/docketClerkViewsTrialSessionList';
+import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
@@ -33,12 +36,17 @@ describe('Schedule A Trial Session', () => {
 
   test.casesReadyForTrial = [];
 
+  const createdCases = [];
+  const createdDocketNumbers = [];
+
   const makeCaseReadyForTrial = (test, id, caseOverrides) => {
     petitionerLogin(test);
     it(`Create case ${id}`, async () => {
       await uploadPetition(test, caseOverrides);
     });
     petitionerViewsDashboard(test);
+    captureCreatedCase(test, createdCases, createdDocketNumbers);
+
     userSignsOut(test);
     petitionsClerkLogIn(test);
     petitionsClerkSendsCaseToIRSHoldingQueue(test);
@@ -71,6 +79,13 @@ describe('Schedule A Trial Session', () => {
   petitionsClerkManuallyRemovesCaseFromTrial(test);
   petitionsClerkViewsATrialSessionsEligibleCases(test, caseCount);
 
+  calendarClerkLogIn(test);
+  markAllCasesAsQCed(test, () => {
+    return [createdCases[0], createdCases[1]];
+  });
+  userSignsOut(test);
+
+  petitionsClerkLogIn(test);
   petitionsClerkSetsATrialSessionsSchedule(test);
   petitionsClerkViewsACalendaredTrialSession(test, caseCount);
   userSignsOut(test);
