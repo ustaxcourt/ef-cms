@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -29,11 +30,18 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
   // userId is required for case notes.
   const userId = judgeUser ? judgeUser.userId : user.userId;
 
-  return await applicationContext
+  const casesWithNotes = await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,
       trialSessionId,
       userId,
     });
+
+  return casesWithNotes.map(caseWithNotes => {
+    return {
+      ...new Case(caseWithNotes, { applicationContext }),
+      notes: caseWithNotes.notes,
+    };
+  });
 };

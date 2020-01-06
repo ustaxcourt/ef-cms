@@ -41,6 +41,7 @@ export const EligibleCases = connect(
               <th>QC complete?</th>
             </tr>
           </thead>
+          {console.log(formattedEligibleCases)}
           {formattedEligibleCases.map((item, idx) => (
             <tbody key={idx}>
               <tr className="eligible-cases-row">
