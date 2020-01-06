@@ -153,7 +153,6 @@ import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequ
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
-import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
 import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
@@ -488,7 +487,6 @@ export const presenter = {
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openSelectDocumentWizardOverlaySequence,
-    openSetCalendarModalSequence,
     openTrialSessionPlanningModalSequence,
     openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence,
