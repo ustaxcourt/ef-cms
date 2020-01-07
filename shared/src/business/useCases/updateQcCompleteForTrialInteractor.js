@@ -13,7 +13,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.caseId the id of the case to update
  * @param {boolean} providers.qcCompleteForTrial true if case is qc complete for trial, false otherwise
  * @param {string} providers.trialSessionId the id of the trial session to update
- * @returns {object} the updated case data
+ * @returns {Promise<object>} the updated case data
  */
 exports.updateQcCompleteForTrialInteractor = async ({
   applicationContext,
