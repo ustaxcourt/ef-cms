@@ -10,7 +10,6 @@ const { isEmpty } = require('lodash');
  * @returns {object} errors (null if no errors)
  */
 exports.validatePetitionerInformationFormInteractor = ({
-  applicationContext,
   contactPrimary,
   contactSecondary,
   partyType,
@@ -19,8 +18,6 @@ exports.validatePetitionerInformationFormInteractor = ({
     contactInfo: { primary: contactPrimary, secondary: contactSecondary },
     partyType,
   });
-
-  console.log(contacts);
 
   return {
     contactPrimary: contacts.primary.getFormattedValidationErrors(),

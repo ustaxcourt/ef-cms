@@ -27,8 +27,6 @@ export const validatePetitionerInformationFormAction = ({
       partyType,
     });
 
-  console.log('errors', errors);
-
   if (!errors) {
     return path.success();
   } else {

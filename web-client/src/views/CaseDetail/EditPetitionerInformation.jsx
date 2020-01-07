@@ -12,6 +12,8 @@ export const EditPetitionerInformation = connect(
     form: state.form,
     startCaseInternalHelper: state.startCaseInternalHelper,
     updateFormPartyTypeSequence: sequences.updateFormPartyTypeSequence,
+    updatePetitionerInformationFormSequence:
+      sequences.updatePetitionerInformationFormSequence,
     validatePetitionerInformationFormSequence:
       sequences.validatePetitionerInformationFormSequence,
     validationErrors: state.validationErrors,
@@ -21,6 +23,7 @@ export const EditPetitionerInformation = connect(
     form,
     startCaseInternalHelper,
     updateFormPartyTypeSequence,
+    updatePetitionerInformationFormSequence,
     validatePetitionerInformationFormSequence,
     validationErrors,
   }) => {
@@ -52,7 +55,6 @@ export const EditPetitionerInformation = connect(
                   validatePetitionerInformationFormSequence();
                 }}
               >
-                <option value="">- Select -</option>
                 {Object.keys(startCaseInternalHelper.partyTypes).map(
                   partyType => (
                     <option
@@ -83,7 +85,13 @@ export const EditPetitionerInformation = connect(
             )}
           </div>
 
-          <Button onClick={() => {}}>Save</Button>
+          <Button
+            onClick={() => {
+              updatePetitionerInformationFormSequence();
+            }}
+          >
+            Save
+          </Button>
 
           <Button link href={`/case-detail/${docketNumber}/case-information`}>
             Cancel
