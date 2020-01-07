@@ -1,5 +1,5 @@
 const { capitalize } = require('lodash');
-const { generateHTMLTemplateForPDF } = require('./index');
+const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 /**
  * HTML template generator for printable trial session planning report PDF views

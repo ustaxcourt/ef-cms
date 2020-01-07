@@ -1,4 +1,4 @@
-const { generateHTMLTemplateForPDF } = require('./');
+const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 const createApplicationContext = require('../../../../../web-api/src/applicationContext');
 const applicationContext = createApplicationContext({});
