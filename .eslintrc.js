@@ -135,6 +135,7 @@ module.exports = {
           'binded',
           'buch',
           'buchs',
+          'calendarclerk',
           'cancelable',
           'carluzzo',
           'carluzzos',

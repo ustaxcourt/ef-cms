@@ -3,7 +3,7 @@ import { runAction } from 'cerebral/test';
 import { setQcCompleteOnCaseOnTrialSessionAction } from './setQcCompleteOnCaseOnTrialSessionAction';
 
 describe('setQcCompleteOnCaseOnTrialSessionAction', () => {
-  it('sets the props.trialSession on state.form, splitting the startDate into month, day, and year', async () => {
+  it('sets the updated qcCompleteForTrial value from the updated case on the state.trialSession.eligibleCases', async () => {
     const result = await runAction(setQcCompleteOnCaseOnTrialSessionAction, {
       modules: {
         presenter,
