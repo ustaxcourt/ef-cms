@@ -8,8 +8,6 @@ AWS.config.region = 'us-east-1';
 
 const data = require('../../web-api/storage/fixtures/seed');
 
-console.log('create Users');
-
 const { createUsers } = require('../../web-api/storage/scripts/createUsers');
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
