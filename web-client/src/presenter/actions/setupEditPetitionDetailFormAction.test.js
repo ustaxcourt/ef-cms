@@ -14,18 +14,24 @@ describe('setupEditPetitionDetailFormAction', () => {
       },
       state: {
         caseDetail: {
+          caseType: 'some case type',
           petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
           petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
+          preferredTrialCity: 'Somewhere, USA',
+          procedureType: 'Small',
         },
         form: {},
       },
     });
 
     expect(result.state.form).toEqual({
+      caseType: 'some case type',
       paymentDateWaivedDay: '01',
       paymentDateWaivedMonth: '03',
       paymentDateWaivedYear: '2019',
       petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+      preferredTrialCity: 'Somewhere, USA',
+      procedureType: 'Small',
     });
   });
 
@@ -66,6 +72,26 @@ describe('setupEditPetitionDetailFormAction', () => {
 
     expect(result.state.form).toEqual({
       petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+    });
+  });
+
+  it('sets the IRS notice date on the form as month, day, year if it is present', async () => {
+    const result = await runAction(setupEditPetitionDetailFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          irsNoticeDate: '2019-03-01T21:40:46.415Z',
+        },
+        form: {},
+      },
+    });
+
+    expect(result.state.form).toEqual({
+      irsDay: '01',
+      irsMonth: '03',
+      irsYear: '2019',
     });
   });
 });
