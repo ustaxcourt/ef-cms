@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * validates the edit petition fee payment inputs
+ * validates the edit petition details inputs
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function used for getting state.form
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validatePetitionFeePaymentAction = ({
+export const validatePetitionDetailsAction = ({
   applicationContext,
   get,
   path,
@@ -55,9 +55,8 @@ export const validatePetitionFeePaymentAction = ({
     applicationContext,
     caseDetail: {
       ...caseDetail,
+      ...form,
       petitionPaymentDate,
-      petitionPaymentMethod: form.petitionPaymentMethod,
-      petitionPaymentStatus: form.petitionPaymentStatus,
       petitionPaymentWaivedDate,
     },
   });

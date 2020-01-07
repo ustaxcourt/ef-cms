@@ -283,7 +283,7 @@ import { updateJudgesCaseNoteOnWorkingCopySequence } from './sequences/updateJud
 import { updateMessageValueInModalSequence } from './sequences/updateMessageValueInModalSequence';
 import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
-import { updatePetitionFeePaymentSequence } from './sequences/updatePetitionFeePaymentSequence';
+import { updatePetitionDetailsSequence } from './sequences/updatePetitionDetailsSequence';
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
 import { updateQcCompleteForTrialSequence } from './sequences/updateQcCompleteForTrialSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
@@ -311,7 +311,7 @@ import { validateInitialWorkItemMessageInModalSequence } from './sequences/valid
 import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
-import { validatePetitionFeePaymentSequence } from './sequences/validatePetitionFeePaymentSequence';
+import { validatePetitionDetailsSequence } from './sequences/validatePetitionDetailsSequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
 import { validatePrimaryContactSequence } from './sequences/validatePrimaryContactSequence';
 import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
@@ -615,7 +615,7 @@ export const presenter = {
     updateMessageValueInModalSequence,
     updateMessageValueSequence,
     updateModalValueSequence,
-    updatePetitionFeePaymentSequence,
+    updatePetitionDetailsSequence,
     updatePetitionValueSequence,
     updateQcCompleteForTrialSequence,
     updateScreenMetadataSequence,
@@ -643,7 +643,7 @@ export const presenter = {
     validateInitialWorkItemMessageSequence,
     validateNoteSequence,
     validateOrderWithoutBodySequence,
-    validatePetitionFeePaymentSequence,
+    validatePetitionDetailsSequence,
     validatePetitionFromPaperSequence,
     validatePrimaryContactSequence,
     validatePrioritizeCaseSequence,

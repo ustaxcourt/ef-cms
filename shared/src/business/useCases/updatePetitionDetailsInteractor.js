@@ -7,30 +7,31 @@ const { DocketRecord } = require('../entities/DocketRecord');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
- * updatePetitionFeePaymentInteractor
+ * updatePetitionDetailsInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case to update
- * @param {string} providers.petitionPaymentDate the date the petition payment was made
- * @param {string} providers.petitionPaymentMethod notes on method of payment (e.g. check)
- * @param {string} providers.petitionPaymentStatus the status (paid, unpaid, waived)
- * @param {string} providers.petitionPaymentWaivedDate the date on which petition fee payment was waived
+ * @param {object} providers.petitionDetails the petition details to update on the case
  * @returns {object} the updated case data
  */
-exports.updatePetitionFeePaymentInteractor = async ({
+exports.updatePetitionDetailsInteractor = async ({
   applicationContext,
   caseId,
-  petitionPaymentDate,
-  petitionPaymentMethod,
-  petitionPaymentStatus,
-  petitionPaymentWaivedDate,
+  petitionDetails,
 }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITION_DETAILS)) {
     throw new UnauthorizedError('Unauthorized for editing petition details');
   }
+
+  const {
+    petitionPaymentDate,
+    petitionPaymentMethod,
+    petitionPaymentStatus,
+    petitionPaymentWaivedDate,
+  } = petitionDetails;
 
   const oldCase = await applicationContext
     .getPersistenceGateway()

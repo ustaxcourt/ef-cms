@@ -2,26 +2,26 @@ import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { updatePetitionFeePaymentAction } from './updatePetitionFeePaymentAction';
+import { updatePetitionDetailsAction } from './updatePetitionDetailsAction';
 
-let updatePetitionFeePaymentInteractorStub;
+let updatePetitionDetailsInteractorStub;
 
 presenter.providers.applicationContext = {
   ...applicationContext,
   getUseCases: () => ({
-    updatePetitionFeePaymentInteractor: updatePetitionFeePaymentInteractorStub,
+    updatePetitionDetailsInteractor: updatePetitionDetailsInteractorStub,
   }),
 };
 
-describe('updatePetitionFeePaymentAction', () => {
+describe('updatePetitionDetailsAction', () => {
   beforeEach(() => {
-    updatePetitionFeePaymentInteractorStub = jest
+    updatePetitionDetailsInteractorStub = jest
       .fn()
       .mockReturnValue({ docketNumber: '123-45' });
   });
 
   it('creates date from form month, day, year fields and calls the use case with form data for a waived payment', async () => {
-    const result = await runAction(updatePetitionFeePaymentAction, {
+    const result = await runAction(updatePetitionDetailsAction, {
       modules: {
         presenter,
       },
@@ -36,12 +36,12 @@ describe('updatePetitionFeePaymentAction', () => {
       },
     });
 
-    expect(updatePetitionFeePaymentInteractorStub).toHaveBeenCalled();
-    expect(
-      updatePetitionFeePaymentInteractorStub.mock.calls[0][0],
-    ).toMatchObject({
-      petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
-      petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z',
+    expect(updatePetitionDetailsInteractorStub).toHaveBeenCalled();
+    expect(updatePetitionDetailsInteractorStub.mock.calls[0][0]).toMatchObject({
+      petitionDetails: {
+        petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+        petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z',
+      },
     });
     expect(result.output).toEqual({
       alertSuccess: {
@@ -54,7 +54,7 @@ describe('updatePetitionFeePaymentAction', () => {
   });
 
   it('creates date from form month, day, year fields and calls the use case with form data for a paid payment', async () => {
-    const result = await runAction(updatePetitionFeePaymentAction, {
+    const result = await runAction(updatePetitionDetailsAction, {
       modules: {
         presenter,
       },
@@ -69,12 +69,12 @@ describe('updatePetitionFeePaymentAction', () => {
       },
     });
 
-    expect(updatePetitionFeePaymentInteractorStub).toHaveBeenCalled();
-    expect(
-      updatePetitionFeePaymentInteractorStub.mock.calls[0][0],
-    ).toMatchObject({
-      petitionPaymentDate: '2001-01-01T05:00:00.000Z',
-      petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+    expect(updatePetitionDetailsInteractorStub).toHaveBeenCalled();
+    expect(updatePetitionDetailsInteractorStub.mock.calls[0][0]).toMatchObject({
+      petitionDetails: {
+        petitionPaymentDate: '2001-01-01T05:00:00.000Z',
+        petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+      },
     });
     expect(result.output).toEqual({
       alertSuccess: {
