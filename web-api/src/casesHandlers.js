@@ -35,4 +35,6 @@ module.exports = {
     .handler,
   updatePrimaryContactLambda: require('./cases/updatePrimaryContactLambda')
     .handler,
+  updateQcCompleteForTrialLambda: require('./cases/updateQcCompleteForTrialLambda')
+    .handler,
 };

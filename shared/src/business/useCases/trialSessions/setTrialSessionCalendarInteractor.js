@@ -40,12 +40,16 @@ exports.setTrialSessionCalendarInteractor = async ({
   trialSessionEntity.setAsCalendared();
 
   //get cases that have been manually added so we can set them as calendared
-  const manuallyAddedCases = await applicationContext
-    .getPersistenceGateway()
-    .getCalendaredCasesForTrialSession({
-      applicationContext,
-      trialSessionId,
-    });
+  const manuallyAddedCases = (
+    await applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession({
+        applicationContext,
+        trialSessionId,
+      })
+  ).filter(
+    manualCase => manualCase.qcCompleteForTrial[trialSessionId] === true,
+  );
 
   let eligibleCasesLimit = trialSessionEntity.maxCases;
 
@@ -53,13 +57,17 @@ exports.setTrialSessionCalendarInteractor = async ({
     eligibleCasesLimit -= manuallyAddedCases.length;
   }
 
-  const eligibleCases = await applicationContext
-    .getPersistenceGateway()
-    .getEligibleCasesForTrialSession({
-      applicationContext,
-      limit: eligibleCasesLimit,
-      skPrefix: trialSessionEntity.generateSortKeyPrefix(),
-    });
+  const eligibleCases = (
+    await applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialSession({
+        applicationContext,
+        limit: eligibleCasesLimit,
+        skPrefix: trialSessionEntity.generateSortKeyPrefix(),
+      })
+  ).filter(
+    eligibleCase => eligibleCase.qcCompleteForTrial[trialSessionId] === true,
+  );
 
   /**
    * sets a manually added case as calendared with the trial session details
