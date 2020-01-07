@@ -97,7 +97,7 @@ describe('setTrialSessionCalendarInteractor', () => {
     expect(updateCaseSpy.called).toEqual(true);
   });
 
-  it('should NOT set a trial session to "calendared" and calendar all cases that have been QCed', async () => {
+  it('should set a trial session to "calendared" but not calendar cases that have not been QCed', async () => {
     let updateTrialSession = sinon.spy();
     let updateCaseSpy = sinon.spy();
     applicationContext = {
