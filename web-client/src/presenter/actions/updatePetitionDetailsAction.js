@@ -31,6 +31,14 @@ export const updatePetitionDetailsAction = async ({
       year: form.paymentDateYear,
     });
 
+  const irsNoticeDate = applicationContext
+    .getUtilities()
+    .createISODateStringFromObject({
+      day: form.irsDay,
+      month: form.irsMonth,
+      year: form.irsYear,
+    });
+
   const updatedCase = await applicationContext
     .getUseCases()
     .updatePetitionDetailsInteractor({
@@ -38,6 +46,7 @@ export const updatePetitionDetailsAction = async ({
       caseId: caseToUpdate.caseId,
       petitionDetails: {
         ...form,
+        irsNoticeDate,
         petitionPaymentDate,
         petitionPaymentWaivedDate,
       },

@@ -85,4 +85,35 @@ describe('updatePetitionDetailsAction', () => {
       tab: 'caseInfo',
     });
   });
+
+  it('creates IRS notice date from form month, day, year fields and calls the use case with form data', async () => {
+    const result = await runAction(updatePetitionDetailsAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: { caseId: '123' },
+        form: {
+          irsDay: '01',
+          irsMonth: '01',
+          irsYear: '2001',
+        },
+      },
+    });
+
+    expect(updatePetitionDetailsInteractorStub).toHaveBeenCalled();
+    expect(updatePetitionDetailsInteractorStub.mock.calls[0][0]).toMatchObject({
+      petitionDetails: {
+        irsNoticeDate: '2001-01-01T05:00:00.000Z',
+      },
+    });
+    expect(result.output).toEqual({
+      alertSuccess: {
+        title: 'Your changes have been saved.',
+      },
+      caseDetail: { docketNumber: '123-45' },
+      caseId: '123-45',
+      tab: 'caseInfo',
+    });
+  });
 });
