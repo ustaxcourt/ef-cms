@@ -79,6 +79,7 @@ module.exports = {
         allowChildren: false,
       },
     ],
+    'no-irregular-whitespace': [2, { skipStrings: false }],
     'sort-imports-es6-autofix/sort-imports-es6': [
       2,
       {
