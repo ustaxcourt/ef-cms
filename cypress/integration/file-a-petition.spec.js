@@ -3,7 +3,7 @@ let createdDocketNumber;
 
 describe('File a petition', function() {
   before(() => {
-    cy.seed();
+    cy.task('seed');
     cy.login('petitioner');
   });
 
