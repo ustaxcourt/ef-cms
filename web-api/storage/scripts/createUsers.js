@@ -10,6 +10,8 @@ let usersByEmail = {};
 const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
 
 module.exports.createUsers = async () => {
+  usersByEmail = {};
+
   const user = {
     role: 'admin',
   };
