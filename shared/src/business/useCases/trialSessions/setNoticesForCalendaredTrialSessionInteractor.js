@@ -1,9 +1,13 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { Document } = require('../../entities/Document');
+const { PDFDocument } = require('pdf-lib');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -43,6 +47,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     applicationContext,
   });
 
+  const newPdfDoc = await PDFDocument.create();
+
   /**
    * generates a notice of trial session and adds to the case
    *
@@ -59,8 +65,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         docketNumber: caseEntity.docketNumber,
         trialSessionId: trialSessionEntity.trialSessionId,
       });
-
-    // TODO: Add cover sheet
 
     const newDocumentId = applicationContext.getUniqueId();
 
@@ -89,9 +93,109 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     caseEntity.addDocument(noticeDocument);
     caseEntity.setNoticeOfTrialDate();
 
-    return caseEntity.toRawObject();
-    // TODO: Set for service
+    // Serve notice
+    await serveNoticeForCase(caseEntity, noticeDocument, noticeOfTrialIssued);
+
+    const rawCase = caseEntity.validate().toRawObject();
+    await applicationContext.getPersistenceGateway().updateCase({
+      applicationContext,
+      caseToUpdate: rawCase,
+    });
+
+    return rawCase;
   };
 
-  return await Promise.all([...calendaredCases.map(setNoticeForCase)]);
+  /**
+   * serves a notice of trial session on electronic recipients and generates paper
+   * notices for those that get paper service
+   *
+   * @param {object} caseEntity the case entity
+   * @param {object} documentEntity the document entity
+   * @param {Uint8Array} documentPdfData the pdf data of the document being served
+   * @returns {void} sends service emails and updates `newPdfDoc` with paper service pages for printing
+   */
+  const serveNoticeForCase = async (
+    caseEntity,
+    documentEntity,
+    documentPdfData,
+  ) => {
+    const servedParties = aggregatePartiesForService(caseEntity);
+
+    const destinations = servedParties.electronic.map(party => ({
+      email: party.email,
+      templateData: {
+        caseCaption: caseEntity.caseCaption,
+        docketNumber: caseEntity.docketNumber,
+        documentName: documentEntity.documentTitle,
+        loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
+        name: party.name,
+        serviceDate: applicationContext.getUtilities().formatNow('MMDDYY'),
+        serviceTime: applicationContext.getUtilities().formatNow('TIME'),
+      },
+    }));
+
+    if (destinations.length > 0) {
+      await applicationContext.getDispatchers().sendBulkTemplatedEmail({
+        applicationContext,
+        defaultTemplateData: {
+          caseCaption: 'undefined',
+          docketNumber: 'undefined',
+          documentName: 'undefined',
+          loginUrl: 'undefined',
+          name: 'undefined',
+          serviceDate: 'undefined',
+          serviceTime: 'undefined',
+        },
+        destinations,
+        templateName: process.env.EMAIL_SERVED_TEMPLATE,
+      });
+    }
+
+    if (servedParties.paper.length > 0) {
+      const noticeDoc = await PDFDocument.load(documentPdfData);
+      const addressPages = [];
+
+      for (let party of servedParties.paper) {
+        addressPages.push(
+          await applicationContext
+            .getUseCaseHelpers()
+            .generatePaperServiceAddressPagePdf({
+              applicationContext,
+              contactData: party,
+              docketNumberWithSuffix: `${
+                caseEntity.docketNumber
+              }${caseEntity.docketNumberSuffix || ''}`,
+            }),
+        );
+      }
+
+      for (let addressPage of addressPages) {
+        const addressPageDoc = await PDFDocument.load(addressPage);
+        let copiedPages = await newPdfDoc.copyPages(
+          addressPageDoc,
+          addressPageDoc.getPageIndices(),
+        );
+        copiedPages.forEach(page => {
+          newPdfDoc.addPage(page);
+        });
+
+        copiedPages = await newPdfDoc.copyPages(
+          noticeDoc,
+          noticeDoc.getPageIndices(),
+        );
+        copiedPages.forEach(page => {
+          newPdfDoc.addPage(page);
+        });
+      }
+    }
+  };
+
+  await Promise.all([...calendaredCases.map(setNoticeForCase)]);
+
+  if (newPdfDoc.getPages().length) {
+    const paperServicePdfData = await newPdfDoc.save();
+    const paperServicePdfBuffer = Buffer.from(paperServicePdfData);
+
+    return paperServicePdfBuffer;
+  }
 };
