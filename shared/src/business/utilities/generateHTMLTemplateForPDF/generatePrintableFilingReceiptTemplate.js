@@ -1,4 +1,4 @@
-import { generateHTMLTemplateForPDF } from './index';
+const { generateHTMLTemplateForPDF } = require('./index');
 
 /**
  * HTML template generator for printable filing receipt PDF views
