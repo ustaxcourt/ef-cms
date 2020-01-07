@@ -108,6 +108,7 @@ provider:
     USER_POOL_ID: ${opt:userPoolId, self:provider.userPoolId}
     NODE_ENV: ${self:custom.vars.nodeEnv}
     CLAMAV_DEF_DIR: ${self:custom.vars.clamavDefDir, self:provider.clamavDefDir}
+    EMAIL_SERVED_TEMPLATE: case_served_${opt:stage}
 
 package:
   exclude:
@@ -194,6 +195,22 @@ functions:
       - http:
           path: /{trialSessionId}
           method: get
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  setNoticesForCalendaredTrialSession:
+    handler: web-api/${self:provider.dir}/trialSessionsHandlers.setNoticesForCalendaredTrialSessionLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: /{trialSessionId}/generate-notices
+          method: post
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS

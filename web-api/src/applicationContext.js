@@ -554,8 +554,8 @@ const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
 const {
-  setNoticesForCalendaredTrialSession,
-} = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSession');
+  setNoticesForCalendaredTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
@@ -631,6 +631,9 @@ const {
 const {
   updatePrimaryContactInteractor,
 } = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
+const {
+  updateQcCompleteForTrialInteractor,
+} = require('../../shared/src/business/useCases/updateQcCompleteForTrialInteractor');
 const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
@@ -1052,7 +1055,7 @@ module.exports = (appContextUser = {}) => {
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
         serveCourtIssuedDocumentInteractor,
-        setNoticesForCalendaredTrialSession,
+        setNoticesForCalendaredTrialSessionInteractor,
         setTrialSessionAsSwingSessionInteractor,
         setTrialSessionCalendarInteractor,
         setWorkItemAsReadInteractor,
@@ -1070,6 +1073,7 @@ module.exports = (appContextUser = {}) => {
         updateJudgesCaseNoteInteractor,
         updatePetitionFeePaymentInteractor,
         updatePrimaryContactInteractor,
+        updateQcCompleteForTrialInteractor,
         updateTrialSessionInteractor,
         updateTrialSessionWorkingCopyInteractor,
         updateUserContactInformationInteractor,
