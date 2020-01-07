@@ -43,9 +43,9 @@ exports.updatePetitionDetailsInteractor = async ({
   const newCase = new Case(
     {
       ...oldCase,
+      ...petitionDetails,
       petitionPaymentDate: isPaid ? petitionPaymentDate : null,
       petitionPaymentMethod: isPaid ? petitionPaymentMethod : null,
-      petitionPaymentStatus,
       petitionPaymentWaivedDate: isWaived ? petitionPaymentWaivedDate : null,
     },
     { applicationContext },
