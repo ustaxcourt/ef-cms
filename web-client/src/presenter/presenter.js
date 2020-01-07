@@ -83,6 +83,7 @@ import { gotoEditCourtIssuedDocketEntrySequence } from './sequences/gotoEditCour
 import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequence';
 import { gotoEditOrderSequence } from './sequences/gotoEditOrderSequence';
 import { gotoEditPetitionDetailsSequence } from './sequences/gotoEditPetitionDetailsSequence';
+import { gotoEditPetitionerInformationSequence } from './sequences/gotoEditPetitionerInformationSequence';
 import { gotoEditTrialSessionSequence } from './sequences/gotoEditTrialSessionSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
@@ -276,6 +277,7 @@ import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntr
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
+import { updateFormPartyTypeSequence } from './sequences/updateFormPartyTypeSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
@@ -313,6 +315,7 @@ import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
 import { validatePetitionFeePaymentSequence } from './sequences/validatePetitionFeePaymentSequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
+import { validatePetitionerInformationFormSequence } from './sequences/validatePetitionerInformationFormSequence';
 import { validatePrimaryContactSequence } from './sequences/validatePrimaryContactSequence';
 import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
@@ -417,6 +420,7 @@ export const presenter = {
     gotoEditDocketEntrySequence,
     gotoEditOrderSequence,
     gotoEditPetitionDetailsSequence,
+    gotoEditPetitionerInformationSequence,
     gotoEditTrialSessionSequence,
     gotoFileDocumentSequence,
     gotoIdleLogoutSequence,
@@ -598,6 +602,7 @@ export const presenter = {
     updateCaseNoteSequence,
     updateCasePartyTypeSequence,
     updateCaseValueByIndexSequence,
+
     updateCaseValueSequence,
     updateCaseWorkingCopyJudgesNoteSequence,
     updateCompleteFormValueSequence,
@@ -608,6 +613,7 @@ export const presenter = {
     updateDocketNumberSearchFormSequence,
     updateDocumentValueSequence,
     updateFileDocumentWizardFormValueSequence,
+    updateFormPartyTypeSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,
     updateJudgesCaseNoteOnCaseDetailSequence,
@@ -645,6 +651,7 @@ export const presenter = {
     validateOrderWithoutBodySequence,
     validatePetitionFeePaymentSequence,
     validatePetitionFromPaperSequence,
+    validatePetitionerInformationFormSequence,
     validatePrimaryContactSequence,
     validatePrioritizeCaseSequence,
     validateRemoveFromTrialSessionSequence,
