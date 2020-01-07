@@ -95,26 +95,35 @@ const PetitionerInformation = connect(
                 )}
               </h3>
               {formattedCaseDetail.contactPrimary && (
-                <div>
-                  <address aria-labelledby="primary-label">
-                    {AddressDisplay(
-                      formattedCaseDetail.contactPrimary,
-                      constants,
-                      {
-                        nameOverride:
-                          caseDetailHelper.showCaseNameForPrimary &&
-                          formattedCaseDetail.caseName,
-                      },
+                <div className="grid-row">
+                  <div className="grid-col-6">
+                    <p className="label margin-top-0">Party Type</p>
+                    <p className="irs-notice-date">
+                      {formattedCaseDetail.partyType}
+                    </p>
+                  </div>
+
+                  <div className="grid-col-6">
+                    <address aria-labelledby="primary-label">
+                      {AddressDisplay(
+                        formattedCaseDetail.contactPrimary,
+                        constants,
+                        {
+                          nameOverride:
+                            caseDetailHelper.showCaseNameForPrimary &&
+                            formattedCaseDetail.caseName,
+                        },
+                      )}
+                    </address>
+                    {formattedCaseDetail.contactPrimary.serviceIndicator && (
+                      <div className="margin-top-4">
+                        <p className="semi-bold margin-bottom-0">
+                          Service preference
+                        </p>
+                        {formattedCaseDetail.contactPrimary.serviceIndicator}
+                      </div>
                     )}
-                  </address>
-                  {formattedCaseDetail.contactPrimary.serviceIndicator && (
-                    <div className="margin-top-4">
-                      <p className="semi-bold margin-bottom-0">
-                        Service preference
-                      </p>
-                      {formattedCaseDetail.contactPrimary.serviceIndicator}
-                    </div>
-                  )}
+                  </div>
                 </div>
               )}
             </div>
