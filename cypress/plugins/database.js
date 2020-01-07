@@ -10,7 +10,7 @@ const data = require('../../web-api/storage/fixtures/seed');
 
 console.log('create Users');
 
-//const { createUsers } = require('../../web-api/storage/scripts/createUsers');
+const { createUsers } = require('../../web-api/storage/scripts/createUsers');
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'http://localhost:8000',
@@ -58,8 +58,9 @@ const clearDatabase = async () => {
   }
 };
 
-const seedDatabase = () => {
-  return Promise.all(
+const seedDatabase = async () => {
+  await createUsers();
+  await Promise.all(
     data.map(item =>
       documentClient
         .put({
@@ -71,7 +72,8 @@ const seedDatabase = () => {
   );
 };
 
-export const reseedDatabase = async () => {
+module.exports.reseedDatabase = async () => {
   await clearDatabase();
   await seedDatabase();
+  return null;
 };
