@@ -13,7 +13,6 @@ import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForRespons
 
 export const setTrialSessionCalendarSequence = [
   setWaitingForResponseAction,
-  clearModalAction,
   canSetTrialSessionToCalendarAction,
   {
     no: [setAlertWarningAction],
