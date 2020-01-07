@@ -29,7 +29,7 @@ describe('docket clerk update case journey', () => {
   it('login as a petitioner and create a case', async () => {
     await loginAs(test, 'petitioner');
     const caseDetail = await uploadPetition(test, overrides);
-    test.caseId = caseDetail.caseId; //
+    test.caseId = caseDetail.caseId;
     test.docketNumber = caseDetail.docketNumber;
   });
 
