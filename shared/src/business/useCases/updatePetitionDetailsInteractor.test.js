@@ -1,6 +1,6 @@
 const {
-  updatePetitionFeePaymentInteractor,
-} = require('./updatePetitionFeePaymentInteractor');
+  updatePetitionDetailsInteractor,
+} = require('./updatePetitionDetailsInteractor');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
@@ -21,7 +21,7 @@ const mockUser = {
 
 let applicationContext;
 
-describe('updatePetitionFeePaymentInteractor', () => {
+describe('updatePetitionDetailsInteractor', () => {
   beforeEach(() => {
     mockCase = cloneDeep(MOCK_CASE);
     mockUser.role = User.ROLES.docketClerk;
@@ -41,7 +41,7 @@ describe('updatePetitionFeePaymentInteractor', () => {
   it('should throw an error if the user is unauthorized to update a case', async () => {
     mockUser.role = User.ROLES.petitioner;
     await expect(
-      updatePetitionFeePaymentInteractor({
+      updatePetitionDetailsInteractor({
         applicationContext,
         caseId: mockCase.caseId,
       }),
@@ -49,10 +49,12 @@ describe('updatePetitionFeePaymentInteractor', () => {
   });
 
   it('should call updateCase with the updated case payment information (when unpaid) and return the updated case', async () => {
-    const result = await updatePetitionFeePaymentInteractor({
+    const result = await updatePetitionDetailsInteractor({
       applicationContext,
       caseId: mockCase.caseId,
-      petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+      petitionDetails: {
+        petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+      },
     });
     expect(updateCaseMock).toHaveBeenCalled();
     expect(result.petitionPaymentWaivedDate).toBe(null);
@@ -62,12 +64,14 @@ describe('updatePetitionFeePaymentInteractor', () => {
   });
 
   it('should call updateCase with the updated case payment information (when paid) and return the updated case', async () => {
-    const result = await updatePetitionFeePaymentInteractor({
+    const result = await updatePetitionDetailsInteractor({
       applicationContext,
       caseId: mockCase.caseId,
-      petitionPaymentDate: '2019-11-30T09:10:11.000Z',
-      petitionPaymentMethod: 'check',
-      petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+      petitionDetails: {
+        petitionPaymentDate: '2019-11-30T09:10:11.000Z',
+        petitionPaymentMethod: 'check',
+        petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+      },
     });
     expect(updateCaseMock).toHaveBeenCalled();
     expect(result.petitionPaymentWaivedDate).toBe(null);
@@ -77,11 +81,13 @@ describe('updatePetitionFeePaymentInteractor', () => {
   });
 
   it('should call updateCase with the updated case payment information (when waived) and return the updated case', async () => {
-    const result = await updatePetitionFeePaymentInteractor({
+    const result = await updatePetitionDetailsInteractor({
       applicationContext,
       caseId: mockCase.caseId,
-      petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
-      petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
+      petitionDetails: {
+        petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+        petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
+      },
     });
     expect(updateCaseMock).toHaveBeenCalled();
     expect(result.petitionPaymentDate).toBe(null);
@@ -94,11 +100,13 @@ describe('updatePetitionFeePaymentInteractor', () => {
 
   it('should create a docket entry when moved from unpaid to waived', async () => {
     mockCase.petitionPaymentStatus = Case.PAYMENT_STATUS.UNPAID;
-    const result = await updatePetitionFeePaymentInteractor({
+    const result = await updatePetitionDetailsInteractor({
       applicationContext,
       caseId: mockCase.caseId,
-      petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
-      petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
+      petitionDetails: {
+        petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+        petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
+      },
     });
     expect(result.docketRecord).toContainEqual({
       description: 'Filing Fee Waived',
@@ -115,12 +123,14 @@ describe('updatePetitionFeePaymentInteractor', () => {
 
   it('should create a docket entry when moved from unpaid to paid', async () => {
     mockCase.petitionPaymentStatus = Case.PAYMENT_STATUS.UNPAID;
-    const result = await updatePetitionFeePaymentInteractor({
+    const result = await updatePetitionDetailsInteractor({
       applicationContext,
       caseId: mockCase.caseId,
-      petitionPaymentDate: '2019-11-30T09:10:11.000Z',
-      petitionPaymentMethod: 'check',
-      petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+      petitionDetails: {
+        petitionPaymentDate: '2019-11-30T09:10:11.000Z',
+        petitionPaymentMethod: 'check',
+        petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+      },
     });
     expect(result.docketRecord).toContainEqual({
       description: 'Filing Fee Paid',

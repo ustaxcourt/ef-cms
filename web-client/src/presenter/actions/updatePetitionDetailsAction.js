@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral store used for getting state.form
  * @returns {object} alertSuccess, caseId, tab, caseDetail
  */
-export const updatePetitionFeePaymentAction = async ({
+export const updatePetitionDetailsAction = async ({
   applicationContext,
   get,
 }) => {
@@ -31,17 +31,16 @@ export const updatePetitionFeePaymentAction = async ({
       year: form.paymentDateYear,
     });
 
-  const { petitionPaymentMethod, petitionPaymentStatus } = get(state.form);
-
   const updatedCase = await applicationContext
     .getUseCases()
-    .updatePetitionFeePaymentInteractor({
+    .updatePetitionDetailsInteractor({
       applicationContext,
       caseId: caseToUpdate.caseId,
-      petitionPaymentDate,
-      petitionPaymentMethod,
-      petitionPaymentStatus,
-      petitionPaymentWaivedDate,
+      petitionDetails: {
+        ...form,
+        petitionPaymentDate,
+        petitionPaymentWaivedDate,
+      },
     });
 
   return {

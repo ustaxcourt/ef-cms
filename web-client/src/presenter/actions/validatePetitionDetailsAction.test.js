@@ -3,7 +3,7 @@ import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
-import { validatePetitionFeePaymentAction } from './validatePetitionFeePaymentAction';
+import { validatePetitionDetailsAction } from './validatePetitionDetailsAction';
 
 let validateCaseDetailStub = jest.fn().mockReturnValue(null);
 
@@ -14,7 +14,7 @@ presenter.providers.applicationContext = {
   }),
 };
 
-describe('validatePetitionFeePaymentAction', () => {
+describe('validatePetitionDetailsAction', () => {
   let successStub;
   let errorStub;
 
@@ -29,7 +29,7 @@ describe('validatePetitionFeePaymentAction', () => {
   });
 
   it('should call the path success when no errors are found', async () => {
-    await runAction(validatePetitionFeePaymentAction, {
+    await runAction(validatePetitionDetailsAction, {
       modules: {
         presenter,
       },
@@ -54,7 +54,7 @@ describe('validatePetitionFeePaymentAction', () => {
 
   it('should call the path success when no errors are found', async () => {
     validateCaseDetailStub = jest.fn().mockReturnValue('error');
-    await runAction(validatePetitionFeePaymentAction, {
+    await runAction(validatePetitionDetailsAction, {
       modules: {
         presenter,
       },

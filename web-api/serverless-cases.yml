@@ -387,11 +387,11 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updatePetitionFeePayment:
-    handler: web-api/${self:provider.dir}/casesHandlers.updatePetitionFeePaymentLambda
+  updatePetitionDetails:
+    handler: web-api/${self:provider.dir}/casesHandlers.updatePetitionDetailsLambda
     events:
       - http:
-          path: /{caseId}/petition-fee
+          path: /{caseId}/petition-details
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
