@@ -1,11 +1,21 @@
 const {
   generateChangeOfAddressTemplate,
-  generateNoticeOfTrialIssuedTemplate,
-  generatePrintableDocketRecordTemplate,
-  generatePrintableFilingReceiptTemplate,
-  generateTrialCalendarTemplate,
-  generateTrialSessionPlanningReportTemplate,
 } = require('./generateChangeOfAddressTemplate');
+const {
+  generateNoticeOfTrialIssuedTemplate,
+} = require('./generateNoticeOfTrialIssuedTemplate');
+const {
+  generatePrintableDocketRecordTemplate,
+} = require('./generatePrintableDocketRecordTemplate');
+const {
+  generatePrintableFilingReceiptTemplate,
+} = require('./generatePrintableFilingReceiptTemplate');
+const {
+  generateTrialCalendarTemplate,
+} = require('./generateTrialCalendarTemplate');
+const {
+  generateTrialSessionPlanningReportTemplate,
+} = require('./generateTrialSessionPlanningReportTemplate');
 
 /**
  * HTML template generator for printable PDF views
