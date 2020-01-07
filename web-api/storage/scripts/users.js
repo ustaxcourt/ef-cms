@@ -19,7 +19,7 @@ module.exports.createUsers = async () => {
   await Promise.all(
     users.map(userRecord => {
       if (!userRecord.userId) {
-        return;
+        throw new Error('User has no uuid');
       }
 
       const { userId } = userRecord;
