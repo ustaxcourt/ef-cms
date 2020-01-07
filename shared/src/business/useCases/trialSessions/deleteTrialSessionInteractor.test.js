@@ -64,7 +64,7 @@ describe('deleteTrialSessionInteractor', () => {
     ).rejects.toThrow('trial session not found');
   });
 
-  it('throws error when trial session start date is past now', async () => {
+  it('throws error when trial session start date is in the past', async () => {
     applicationContext = {
       getCurrentUser: () => {
         return new User({
