@@ -190,7 +190,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     }
   };
 
-  await Promise.all([...calendaredCases.map(setNoticeForCase)]);
+  for (var calendaredCase of calendaredCases) {
+    await setNoticeForCase(calendaredCase);
+  }
 
   if (newPdfDoc.getPages().length) {
     const paperServicePdfData = await newPdfDoc.save();
