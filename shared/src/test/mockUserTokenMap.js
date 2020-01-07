@@ -18,7 +18,6 @@ mockUsers.forEach(userRecord => {
   ]);
 
   newUser['custom:role'] = newUser.role;
-  if (!userMap[newUser.email]) console.log(newUser.email);
   userMap[newUser.email] = newUser;
 });
 

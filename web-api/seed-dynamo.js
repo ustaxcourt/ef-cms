@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const seedEntries = require('./storage/fixtures/seed');
-const { createUsers } = require('./storage/scripts/users');
+const { createUsers } = require('./storage/scripts/createUsers');
 
 const args = process.argv.slice(2);
 
