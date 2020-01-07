@@ -1,4 +1,4 @@
-const { generateHTMLTemplateForPDF } = require('./index');
+const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 /**
  * HTML template generator for printable change of address/telephone PDF views
