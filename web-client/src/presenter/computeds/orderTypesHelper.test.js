@@ -39,7 +39,7 @@ const state = {
 };
 
 describe('orderTypesHelper', () => {
-  it('should filter out and only return type O for docketclerk', () => {
+  it('should return all event codes for docketclerk', () => {
     const result = runCompute(orderTypesHelper, { state });
     expect(result.orderTypes).toEqual([
       { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
