@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the state.trialSession.eligibleCases
+ * sets the state.trialSession.eligibleCases with the updated case's qcCompleteForTrial value
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object containing the props.eligibleCases

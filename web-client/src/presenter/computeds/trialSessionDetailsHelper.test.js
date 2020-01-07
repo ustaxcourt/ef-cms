@@ -46,6 +46,18 @@ describe('trialSessionDetailsHelper', () => {
     expect(result.eligibleCaseQcCompleteCount).toEqual(2);
   });
 
+  it('returns eligibleCaseQcCompleteCount of 0 if eligibleCases is not on the state', () => {
+    const result = runCompute(trialSessionDetailsHelper, {
+      state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+        trialSession: {
+          ...TRIAL_SESSION,
+        },
+      },
+    });
+    expect(result.eligibleCaseQcCompleteCount).toEqual(0);
+  });
+
   it('returns showQcComplete true if the user has TRIAL_SESSION_QC_COMPLETE permission', () => {
     const result = runCompute(trialSessionDetailsHelper, {
       state: {
