@@ -16,10 +16,8 @@ export const EditPetitionDetails = connect(
     docketNumber: state.caseDetail.docketNumber,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatePetitionFeePaymentSequence:
-      sequences.updatePetitionFeePaymentSequence,
-    validatePetitionFeePaymentSequence:
-      sequences.validatePetitionFeePaymentSequence,
+    updatePetitionDetailsSequence: sequences.updatePetitionDetailsSequence,
+    validatePetitionDetailsSequence: sequences.validatePetitionDetailsSequence,
     validationErrors: state.validationErrors,
   },
   ({
@@ -27,8 +25,8 @@ export const EditPetitionDetails = connect(
     docketNumber,
     form,
     updateFormValueSequence,
-    updatePetitionFeePaymentSequence,
-    validatePetitionFeePaymentSequence,
+    updatePetitionDetailsSequence,
+    validatePetitionDetailsSequence,
     validationErrors,
   }) => {
     return (
@@ -48,7 +46,7 @@ export const EditPetitionDetails = connect(
                 allowDefaultOption={true}
                 caseTypes={caseTypes}
                 legend="Type of case"
-                validation="validatePetitionFeePaymentSequence"
+                validation="validatePetitionDetailsSequence"
                 value={form.caseType}
                 onChange="updateFormValueSequence"
               />
@@ -74,7 +72,7 @@ export const EditPetitionDetails = connect(
                         placeholder="MM"
                         type="number"
                         value={form.irsMonth || ''}
-                        onBlur={() => validatePetitionFeePaymentSequence()}
+                        onBlur={() => validatePetitionDetailsSequence()}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -98,7 +96,7 @@ export const EditPetitionDetails = connect(
                         placeholder="DD"
                         type="number"
                         value={form.irsDay || ''}
-                        onBlur={() => validatePetitionFeePaymentSequence()}
+                        onBlur={() => validatePetitionDetailsSequence()}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -122,7 +120,7 @@ export const EditPetitionDetails = connect(
                         placeholder="YYYY"
                         type="number"
                         value={form.irsYear || ''}
-                        onBlur={() => validatePetitionFeePaymentSequence()}
+                        onBlur={() => validatePetitionDetailsSequence()}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -163,7 +161,7 @@ export const EditPetitionDetails = connect(
                       key: e.target.name,
                       value: e.target.value,
                     });
-                    validatePetitionFeePaymentSequence();
+                    validatePetitionDetailsSequence();
                   }}
                 >
                   <option value="">- Select -</option>
@@ -177,14 +175,14 @@ export const EditPetitionDetails = connect(
               dateBind="form"
               updateDateSequence={updateFormValueSequence}
               updateSequence={updateFormValueSequence}
-              validateSequence={validatePetitionFeePaymentSequence}
+              validateSequence={validatePetitionDetailsSequence}
               validationErrorsBind="validationErrors"
             />
           </div>
 
           <Button
             onClick={() => {
-              updatePetitionFeePaymentSequence();
+              updatePetitionDetailsSequence();
             }}
           >
             Save

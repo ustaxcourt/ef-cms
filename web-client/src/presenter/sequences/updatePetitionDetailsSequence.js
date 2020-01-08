@@ -9,18 +9,18 @@ import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNav
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { state } from 'cerebral';
-import { updatePetitionFeePaymentAction } from '../actions/updatePetitionFeePaymentAction';
-import { validatePetitionFeePaymentAction } from '../actions/validatePetitionFeePaymentAction';
+import { updatePetitionDetailsAction } from '../actions/updatePetitionDetailsAction';
+import { validatePetitionDetailsAction } from '../actions/validatePetitionDetailsAction';
 
-export const updatePetitionFeePaymentSequence = [
+export const updatePetitionDetailsSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  validatePetitionFeePaymentAction,
+  validatePetitionDetailsAction,
   {
     error: [setAlertErrorAction, setValidationErrorsAction],
     success: [
       setCurrentPageAction('Interstitial'),
-      updatePetitionFeePaymentAction,
+      updatePetitionDetailsAction,
       setCaseAction,
       set(state.caseDetailPage.showEditPetition, false),
       setSaveAlertsForNavigationAction,
