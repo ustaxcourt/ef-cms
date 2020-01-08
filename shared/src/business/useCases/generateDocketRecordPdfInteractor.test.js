@@ -1,6 +1,8 @@
 import { Case } from '../entities/cases/Case';
+import { ContactFactory } from '../entities/contacts/ContactFactory';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
 import { getFormattedCaseDetail } from '../utilities/getFormattedCaseDetail';
+
 describe('generateDocketRecordPdfInteractor', () => {
   const generatePdfFromHtmlInteractorMock = jest.fn();
   const generatePrintableDocketRecordTemplateMock = jest.fn();
@@ -11,7 +13,7 @@ describe('generateDocketRecordPdfInteractor', () => {
     contactPrimary: {
       address1: 'address 1',
       city: 'City',
-      countryType: 'domestic',
+      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
       name: 'Test Petitioner',
       phone: '123-123-1234',
       postalCode: '12345',
@@ -57,6 +59,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         servedAtFormatted: '03/27/19 05:54 pm',
       },
     ],
+    partyType: ContactFactory.PARTY_TYPES.petitioner,
     practitioners: [],
     respondents: [],
   };
@@ -129,6 +132,7 @@ describe('generateDocketRecordPdfInteractor', () => {
               postalCode: '12345',
               state: 'ST',
             },
+            partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
           }),
         }),
       },
@@ -136,7 +140,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       includePartyDetail: true,
     });
 
-    expect(result.indexOf('Test Secondary')).toBeGreaterThan(-1);
+    expect(result.includes('Test Secondary')).toEqual(true);
   });
 
   it('displays no party information if "includePartyDetail" flag is undefined or falsy', async () => {
@@ -162,7 +166,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       // includePartyDetail not provided, is undefined
     });
 
-    expect(result.indexOf('Test Secondary')).toEqual(-1);
+    expect(result.includes('Test Secondary')).toEqual(false);
 
     result = await generateDocketRecordPdfInteractor({
       applicationContext: {
@@ -186,7 +190,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       includePartyDetail: false,
     });
 
-    expect(result.indexOf('Test Secondary')).toEqual(-1);
+    expect(result.includes('Test Secondary')).toEqual(false);
   });
 
   it('Displays practitioners associated with the case', async () => {
@@ -230,8 +234,8 @@ describe('generateDocketRecordPdfInteractor', () => {
       includePartyDetail: true,
     });
 
-    expect(result.indexOf('Test Practitioner')).toBeGreaterThan(-1);
-    expect(result.indexOf('Test Practitioner 2')).toBeGreaterThan(-1);
+    expect(result.includes('Test Practitioner')).toEqual(true);
+    expect(result.includes('Test Practitioner 2')).toEqual(true);
   });
 
   it('Displays respondents associated with the case', async () => {
@@ -258,8 +262,8 @@ describe('generateDocketRecordPdfInteractor', () => {
       includePartyDetail: true,
     });
 
-    expect(result.indexOf('Respondent Counsel')).toBeGreaterThan(-1);
-    expect(result.indexOf('Test Respondent')).toBeGreaterThan(-1);
+    expect(result.includes('Respondent Counsel')).toEqual(true);
+    expect(result.includes('Test Respondent')).toEqual(true);
   });
 
   it('Displays optional contact information if present', async () => {
@@ -283,10 +287,10 @@ describe('generateDocketRecordPdfInteractor', () => {
       includePartyDetail: true,
     });
 
-    expect(result.indexOf('Test C/O')).toBeGreaterThan(-1);
-    expect(result.indexOf('Test Title')).toBeGreaterThan(-1);
-    expect(result.indexOf('Address Two')).toBeGreaterThan(-1);
-    expect(result.indexOf('Address Three')).toBeGreaterThan(-1);
+    expect(result.includes('Test C/O')).toEqual(true);
+    expect(result.includes('Test Title')).toEqual(true);
+    expect(result.includes('Address Two')).toEqual(true);
+    expect(result.includes('Address Three')).toEqual(true);
   });
 
   it('Displays caseName instead of contactPrimary name when showCaseNameForPrimary is set', async () => {
@@ -296,6 +300,6 @@ describe('generateDocketRecordPdfInteractor', () => {
       includePartyDetail: true,
     });
 
-    expect(result.indexOf(caseDetail.caseCaption)).toBeGreaterThan(-1);
+    expect(result.includes(caseDetail.caseCaption)).toEqual(true);
   });
 });
