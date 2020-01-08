@@ -403,6 +403,11 @@ exports.setupTest = ({ useCases = {} } = {}) => {
             docketNumber: test.caseId,
           });
           break;
+        case `/case-detail/${test.docketNumber}/case-information`:
+          await test.runSequence('gotoCaseDetailSequence', {
+            docketNumber: test.docketNumber,
+          });
+          break;
         case '/':
           await test.runSequence('gotoDashboardSequence');
           break;
