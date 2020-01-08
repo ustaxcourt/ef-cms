@@ -15,7 +15,10 @@ div
             div #{oldData.address1}
             div #{oldData.address2}
             div #{oldData.address3}
-            div #{oldData.city}, #{oldData.state} #{oldData.postalCode}
+            div
+              if oldData.city 
+                | #{oldData.city}, 
+              | #{oldData.state} #{oldData.postalCode}
             if oldData.country
               div #{oldData.country}
             if showAddressAndPhoneChange
@@ -36,7 +39,10 @@ div
             div #{newData.address1}
             div #{newData.address2}
             div #{newData.address3}
-            div #{newData.city}, #{newData.state} #{newData.postalCode}
+            div
+              if newData.city 
+                | #{newData.city}, 
+              | #{newData.state} #{newData.postalCode}
             if newData.country
               div #{newData.country}
             if showAddressAndPhoneChange
