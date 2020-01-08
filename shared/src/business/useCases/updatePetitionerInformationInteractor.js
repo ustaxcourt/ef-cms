@@ -77,6 +77,7 @@ exports.updatePetitionerInformationInteractor = async ({
   }
 
   const createDocumentForChange = async ({
+    contactName,
     documentType,
     newData,
     oldData,
@@ -92,7 +93,7 @@ exports.updatePetitionerInformationInteractor = async ({
             caseDetail.docketNumber
           }${caseDetail.docketNumberSuffix || ''}`,
           documentTitle: documentType.title,
-          name: caseNameToUse,
+          name: contactName,
           newData,
           oldData,
         },
@@ -111,7 +112,7 @@ exports.updatePetitionerInformationInteractor = async ({
     const changeOfAddressDocument = new Document(
       {
         addToCoversheet: true,
-        additionalInfo: `for ${caseNameToUse}`,
+        additionalInfo: `for ${contactName}`,
         caseId,
         documentId: newDocumentId,
         documentType: documentType.title,
@@ -139,6 +140,7 @@ exports.updatePetitionerInformationInteractor = async ({
 
   if (primaryChange) {
     await createDocumentForChange({
+      contactName: caseNameToUse,
       documentType: primaryChange,
       newData: contactPrimary,
       oldData: oldCase.contactPrimary,
@@ -146,9 +148,10 @@ exports.updatePetitionerInformationInteractor = async ({
   }
   if (secondaryChange) {
     await createDocumentForChange({
+      contactName: contactSecondary.name,
       documentType: secondaryChange,
       newData: contactSecondary,
-      oldData: oldCase.contactSecondary,
+      oldData: oldCase.contactSecondary || {},
     });
   }
 
