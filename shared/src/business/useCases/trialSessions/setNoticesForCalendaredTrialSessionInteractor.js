@@ -168,7 +168,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
               contactData: party,
               docketNumberWithSuffix: `${
                 caseEntity.docketNumber
-              }${caseEntity.docketNumberSuffix || ''}`,
+                }${caseEntity.docketNumberSuffix || ''}`,
             }),
         );
       }
