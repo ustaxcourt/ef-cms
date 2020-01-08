@@ -76,7 +76,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const trialSessionStartDate = applicationContext
       .getUtilities()
-      .prepareDateFromString(trialSession.startDate, 'YYYY/MM/DD');
+      .formatDateString(trialSession.startDate, 'MMDDYYYY');
 
     const documentTitle = `Notice of Trial on ${trialSessionStartDate} at ${trialSession.trialLocation}`;
 
