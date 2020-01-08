@@ -6,9 +6,7 @@ AWS.config.accessKeyId = 'noop';
 AWS.config.secretAccessKey = 'noop';
 AWS.config.region = 'us-east-1';
 
-const data = require('../../web-api/storage/fixtures/seed');
-
-const { createUsers } = require('../../web-api/storage/scripts/createUsers');
+const { seedLocalDatabase } = require('../../web-api/storage/scripts/seedLocalDatabase');
 
 const documentClient = new AWS.DynamoDB.DocumentClient({
   endpoint: 'http://localhost:8000',
@@ -56,22 +54,8 @@ const clearDatabase = async () => {
   }
 };
 
-const seedDatabase = async () => {
-  await createUsers();
-  await Promise.all(
-    data.map(item =>
-      documentClient
-        .put({
-          Item: item,
-          TableName: 'efcms-local',
-        })
-        .promise(),
-    ),
-  );
-};
-
 module.exports.reseedDatabase = async () => {
   await clearDatabase();
-  await seedDatabase();
+  await seedLocalDatabase();
   return null;
 };
