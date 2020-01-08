@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -25,7 +26,7 @@ export const validatePetitionerInformationFormAction = ({
       partyType,
     });
 
-  if (!errors) {
+  if (!isEmpty(errors)) {
     return path.success();
   } else {
     return path.error({
