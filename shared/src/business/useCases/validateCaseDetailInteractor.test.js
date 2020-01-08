@@ -12,6 +12,7 @@ const contactPrimary = {
   city: 'Somewhere',
   countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
   name: 'Test Petitioner',
+  phone: '1234567890',
   postalCode: '12345',
   state: 'TN',
 };

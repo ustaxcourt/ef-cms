@@ -325,7 +325,7 @@ function Case(rawCase, { applicationContext }) {
       primary: rawCase.contactPrimary,
       secondary: rawCase.contactSecondary,
     },
-    isPaper: true,
+    isPaper: rawCase.isPaper,
     partyType: rawCase.partyType,
   });
   this.contactPrimary = contacts.primary;
