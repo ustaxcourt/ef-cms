@@ -245,6 +245,7 @@ module.exports = {
           'riker',
           'ruwe',
           'ruwes',
+          'scss',
           'semibold',
           'seriatim',
           'sinon',
