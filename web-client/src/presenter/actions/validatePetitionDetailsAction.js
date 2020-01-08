@@ -51,13 +51,32 @@ export const validatePetitionDetailsAction = ({
       });
   }
 
+  let irsNoticeDate;
+  if (
+    applicationContext
+      .getUtilities()
+      .isValidDateString(`${form.irsMonth}-${form.irsDay}-${form.irsYear}`)
+  ) {
+    irsNoticeDate = applicationContext
+      .getUtilities()
+      .createISODateStringFromObject({
+        day: form.irsDay,
+        month: form.irsMonth,
+        year: form.irsYear,
+      });
+  }
+
   const errors = applicationContext.getUseCases().validateCaseDetailInteractor({
     applicationContext,
     caseDetail: {
       ...caseDetail,
       ...form,
+      irsNoticeDate,
       petitionPaymentDate,
       petitionPaymentWaivedDate,
+      preferredTrialCity: form.preferredTrialCity
+        ? form.preferredTrialCity
+        : null,
     },
   });
 
