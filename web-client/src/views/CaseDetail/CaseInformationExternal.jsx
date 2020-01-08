@@ -10,37 +10,33 @@ const PetitionDetails = ({ caseDetail, caseDetailHelper }) => (
   <React.Fragment>
     <div className="grid-row">
       <div className="tablet:grid-col-6">
-        <p className="label">Notice/Case Type</p>
+        <p className="label">Notice/case type</p>
         <p>{caseDetail.caseType}</p>
       </div>
       <div className="tablet:grid-col-6">
-        <p className="label">Case Procedure</p>
+        <p className="label">Case procedure</p>
         <p>{caseDetail.procedureType} Tax Case</p>
       </div>
     </div>
     <div className="grid-row">
       <div className="tablet:grid-col-6">
-        <p className="label">IRS Notice Date</p>
+        <p className="label">IRS notice date</p>
         <p className="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
-      </div>
-      <div className="tablet:grid-col-6">
-        <p className="label">Party Type</p>
-        <p className="irs-notice-date">{caseDetail.partyType}</p>
-      </div>
-    </div>
-    <div className="grid-row">
-      <div className="tablet:grid-col-6">
-        <p className="label">Requested Place of Trial</p>
-        <p>{caseDetail.formattedPreferredTrialCity}</p>
       </div>
       {caseDetailHelper.showFilingFeeExternal && (
         <div className="tablet:grid-col-6">
-          <p className="label">Filing Fee</p>
+          <p className="label">Filing fee</p>
           <p className="pay-gov-id-display margin-bottom-0">
             {caseDetail.filingFee}
           </p>
         </div>
       )}
+    </div>
+    <div className="grid-row">
+      <div className="tablet:grid-col-6">
+        <p className="label">Requested place of trial</p>
+        <p>{caseDetail.formattedPreferredTrialCity}</p>
+      </div>
     </div>
   </React.Fragment>
 );
