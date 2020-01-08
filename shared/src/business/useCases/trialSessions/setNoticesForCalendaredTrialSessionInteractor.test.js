@@ -88,7 +88,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
       }),
       getPersistenceGateway: () => ({
-        deleteCaseTrialSortMappingRecords: () => { },
+        deleteCaseTrialSortMappingRecords: () => {},
         getCalendaredCasesForTrialSession: () => calendaredCases,
         getTrialSessionById: () => MOCK_TRIAL,
         saveDocument: saveDocumentMock,
@@ -100,7 +100,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
             }
           });
         },
-        updateTrialSession: () => { },
+        updateTrialSession: () => {},
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       getUseCaseHelpers: () => ({
