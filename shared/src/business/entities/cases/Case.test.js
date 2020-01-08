@@ -349,6 +349,29 @@ describe('Case entity', () => {
       }
       expect(error).toBeDefined();
     });
+
+    it('should throw an error on a case that is missing contacts', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary: {},
+          partyType: 'Petitioner & spouse',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors = testCase.getFormattedValidationErrors();
+      expect(errors).toMatchObject({
+        contactPrimary: {
+          name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
+        },
+        contactSecondary: {
+          name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
+        },
+      });
+    });
   });
 
   describe('isValidCaseId', () => {
@@ -1873,11 +1896,24 @@ describe('Case entity', () => {
 
   describe('getCaseContacts', () => {
     const contactPrimary = {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
       name: 'Test Petitioner',
+      postalCode: '12345',
+      state: 'TN',
       title: 'Executor',
     };
 
-    const contactSecondary = { name: 'Contact Secondary' };
+    const contactSecondary = {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      name: 'Contact Secondary',
+      postalCode: '12345',
+      state: 'TN',
+      title: 'Executor',
+    };
 
     const practitioners = [
       {
@@ -1897,6 +1933,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           contactPrimary,
           contactSecondary,
+          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
           practitioners,
           respondents,
         },
@@ -1920,6 +1957,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           contactPrimary,
           contactSecondary,
+          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
           practitioners,
           respondents,
         },
@@ -1965,7 +2003,7 @@ describe('Case entity', () => {
         expect(result).toEqual(true);
       });
 
-      it('should accept a case for consolidatation as a param to check its eligible case status', () => {
+      it('should accept a case for consolidation as a param to check its eligible case status', () => {
         let result;
 
         // verify a failure on the current (this) case
