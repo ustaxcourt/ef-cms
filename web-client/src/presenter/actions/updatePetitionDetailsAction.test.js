@@ -116,4 +116,42 @@ describe('updatePetitionDetailsAction', () => {
       tab: 'caseInfo',
     });
   });
+
+  it('should send preferredTrialCity to the use case as null if it is not on the form', async () => {
+    await runAction(updatePetitionDetailsAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: { caseId: '123' },
+        form: {},
+      },
+    });
+
+    expect(updatePetitionDetailsInteractorStub).toHaveBeenCalled();
+    expect(updatePetitionDetailsInteractorStub.mock.calls[0][0]).toMatchObject({
+      petitionDetails: {
+        preferredTrialCity: null,
+      },
+    });
+  });
+
+  it('should send preferredTrialCity to the use case if it is on the form', async () => {
+    await runAction(updatePetitionDetailsAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: { caseId: '123' },
+        form: { preferredTrialCity: 'Somewhere, USA' },
+      },
+    });
+
+    expect(updatePetitionDetailsInteractorStub).toHaveBeenCalled();
+    expect(updatePetitionDetailsInteractorStub.mock.calls[0][0]).toMatchObject({
+      petitionDetails: {
+        preferredTrialCity: 'Somewhere, USA',
+      },
+    });
+  });
 });

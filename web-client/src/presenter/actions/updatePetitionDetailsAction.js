@@ -49,6 +49,9 @@ export const updatePetitionDetailsAction = async ({
         irsNoticeDate,
         petitionPaymentDate,
         petitionPaymentWaivedDate,
+        preferredTrialCity: form.preferredTrialCity
+          ? form.preferredTrialCity
+          : null,
       },
     });
 
