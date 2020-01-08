@@ -5,6 +5,7 @@ const {
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { Document } = require('../entities/Document');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -39,12 +40,12 @@ exports.updatePetitionerInformationInteractor = async ({
       oldData: oldCase.contactPrimary,
     });
 
-  const secondaryChange = applicationContext
-    .getUtilities()
-    .getDocumentTypeForAddressChange({
-      newData: contactSecondary,
-      oldData: oldCase.contactSecondary,
-    });
+  const secondaryChange = contactSecondary
+    ? applicationContext.getUtilities().getDocumentTypeForAddressChange({
+        newData: contactSecondary,
+        oldData: oldCase.contactSecondary || {},
+      })
+    : undefined;
 
   const caseEntity = new Case(
     {
@@ -76,7 +77,6 @@ exports.updatePetitionerInformationInteractor = async ({
     newData,
     oldData,
   }) => {
-    // generate coa template
     const pdfContentHtml = await applicationContext
       .getTemplateGenerators()
       .generateChangeOfAddressTemplate({
@@ -148,6 +148,9 @@ exports.updatePetitionerInformationInteractor = async ({
     });
   }
 
+  if (!primaryChange && !secondaryChange) {
+    return Promise.resolve(); // nothing to be done.
+  }
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
