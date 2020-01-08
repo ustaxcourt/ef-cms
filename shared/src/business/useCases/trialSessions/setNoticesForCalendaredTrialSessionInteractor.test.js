@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-import { formatNow } from '../../utilities/DateHandler';
+import { formatDateString, formatNow } from '../../utilities/DateHandler';
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
@@ -113,6 +113,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         },
       }),
       getUtilities: () => ({
+        formatDateString,
         formatNow,
       }),
     };
