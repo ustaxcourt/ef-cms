@@ -399,6 +399,23 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  updatePetitionerInformation:
+    handler: web-api/${self:provider.dir}/casesHandlers.updatePetitionerInformationLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: /{caseId}/petitioner-info
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          async: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   addConsolidatedCase:
     handler: web-api/${self:provider.dir}/casesHandlers.addConsolidatedCaseLambda
     events:
