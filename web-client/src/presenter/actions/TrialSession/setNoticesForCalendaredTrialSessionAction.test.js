@@ -2,6 +2,8 @@ import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { setNoticesForCalendaredTrialSessionAction } from './setNoticesForCalendaredTrialSessionAction';
 
+global.Blob = () => {};
+
 describe('setNoticesForCalendaredTrialSessionAction', () => {
   let setNoticesForCalendaredTrialSessionInteractorStub;
   let pathPaperStub;
