@@ -26,7 +26,7 @@ export const validatePetitionerInformationFormAction = ({
       partyType,
     });
 
-  if (!isEmpty(errors)) {
+  if (isEmpty(errors.contactPrimary) && isEmpty(errors.contactSecondary)) {
     return path.success();
   } else {
     return path.error({
