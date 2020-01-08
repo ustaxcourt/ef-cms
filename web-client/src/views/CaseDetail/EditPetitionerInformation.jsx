@@ -9,8 +9,8 @@ import React from 'react';
 export const EditPetitionerInformation = connect(
   {
     docketNumber: state.caseDetail.docketNumber,
+    editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
-    startCaseInternalHelper: state.startCaseInternalHelper,
     updateFormPartyTypeSequence: sequences.updateFormPartyTypeSequence,
     updatePetitionerInformationFormSequence:
       sequences.updatePetitionerInformationFormSequence,
@@ -20,8 +20,8 @@ export const EditPetitionerInformation = connect(
   },
   ({
     docketNumber,
+    editPetitionerInformationHelper,
     form,
-    startCaseInternalHelper,
     updateFormPartyTypeSequence,
     updatePetitionerInformationFormSequence,
     validatePetitionerInformationFormSequence,
@@ -55,28 +55,32 @@ export const EditPetitionerInformation = connect(
                   validatePetitionerInformationFormSequence();
                 }}
               >
-                {Object.keys(startCaseInternalHelper.partyTypes).map(
+                {Object.keys(editPetitionerInformationHelper.partyTypes).map(
                   partyType => (
                     <option
                       key={partyType}
-                      value={startCaseInternalHelper.partyTypes[partyType]}
+                      value={
+                        editPetitionerInformationHelper.partyTypes[partyType]
+                      }
                     >
-                      {startCaseInternalHelper.partyTypes[partyType]}
+                      {editPetitionerInformationHelper.partyTypes[partyType]}
                     </option>
                   ),
                 )}
               </select>
             </FormGroup>
 
-            {(startCaseInternalHelper.showPrimaryContact ||
-              startCaseInternalHelper.showSecondaryContact) && (
+            {(editPetitionerInformationHelper.showPrimaryContact ||
+              editPetitionerInformationHelper.showSecondaryContact) && (
               <Contacts
                 bind="form"
                 contactsHelper="startCaseInternalContactsHelper"
                 emailBind="form.contactPrimary"
-                showPrimaryContact={startCaseInternalHelper.showPrimaryContact}
+                showPrimaryContact={
+                  editPetitionerInformationHelper.showPrimaryContact
+                }
                 showSecondaryContact={
-                  startCaseInternalHelper.showSecondaryContact
+                  editPetitionerInformationHelper.showSecondaryContact
                 }
                 wrapperClassName="contact-wrapper"
                 onBlur="validatePetitionerInformationFormSequence"

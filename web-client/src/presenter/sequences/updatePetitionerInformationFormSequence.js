@@ -1,8 +1,11 @@
+import { navigateToCaseDetailCaseInformationAction } from '../actions/navigateToCaseDetailCaseInformationAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
+import { updatePetitionerInformationAction } from '../actions/updatePetitionerInformationAction';
 import { validatePetitionerInformationFormAction } from '../actions/validatePetitionerInformationFormAction';
 
 /**
@@ -15,8 +18,11 @@ export const updatePetitionerInformationFormSequence = [
     error: [setValidationErrorsAction],
     success: [
       setWaitingForResponseAction,
+      updatePetitionerInformationAction,
       unsetWaitingForResponseAction,
+      setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
+      navigateToCaseDetailCaseInformationAction,
     ],
   },
 ];
