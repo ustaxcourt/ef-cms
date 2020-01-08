@@ -349,6 +349,29 @@ describe('Case entity', () => {
       }
       expect(error).toBeDefined();
     });
+
+    it('should throw an error on a case that is missing contacts', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary: {},
+          partyType: 'Petitioner & spouse',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors = testCase.getFormattedValidationErrors();
+      expect(errors).toMatchObject({
+        contactPrimary: {
+          name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
+        },
+        contactSecondary: {
+          name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
+        },
+      });
+    });
   });
 
   describe('isValidCaseId', () => {
@@ -370,7 +393,7 @@ describe('Case entity', () => {
       expect(Case.isValidDocketNumber('00101-00')).toBeTruthy();
     });
 
-    it('returns false if a invalid docketnumber', () => {
+    it('returns false if an invalid docket number', () => {
       expect(Case.isValidDocketNumber('00')).toBeFalsy();
     });
   });
@@ -667,13 +690,13 @@ describe('Case entity', () => {
       caseRecord.setRequestForTrialDocketRecord(preferredTrialCity);
       const docketLength = caseRecord.docketRecord.length;
       caseRecord.setRequestForTrialDocketRecord('Birmingham, Alabama');
-      caseRecord.setRequestForTrialDocketRecord('Somecity, USA');
+      caseRecord.setRequestForTrialDocketRecord('Some city, USA');
       expect(docketLength).toEqual(caseRecord.docketRecord.length);
     });
   });
 
   describe('addDocketRecord', () => {
-    it('adds a new docketrecord', () => {
+    it('adds a new docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -691,14 +714,14 @@ describe('Case entity', () => {
 
       caseRecord.addDocketRecord(
         new DocketRecord({
-          description: 'sdfs',
+          description: 'some description',
           filingDate: new Date().toISOString(),
         }),
       );
 
       expect(caseRecord.docketRecord[4].index).toEqual(6);
     });
-    it('validates the docketrecord', () => {
+    it('validates the docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -714,7 +737,7 @@ describe('Case entity', () => {
   });
 
   describe('updateDocketRecordEntry', () => {
-    it('updates an existing docketrecord', () => {
+    it('updates an existing docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -733,7 +756,7 @@ describe('Case entity', () => {
       expect(caseRecord.docketRecord[1].index).toEqual(7);
     });
 
-    it('validates the docketrecord', () => {
+    it('validates the docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -757,12 +780,12 @@ describe('Case entity', () => {
         },
       );
       try {
-        caseRecord.validateWithError(new Error('Imarealerror'));
+        caseRecord.validateWithError(new Error("I'm a real error"));
       } catch (e) {
         error = e;
       }
       expect(error).toBeDefined();
-      expect(error.message).toContain('Imarealerror');
+      expect(error.message).toContain("I'm a real error");
     });
 
     it('does not pass back an error passed in if valid', () => {
@@ -771,7 +794,7 @@ describe('Case entity', () => {
         applicationContext,
       });
       try {
-        caseRecord.validateWithError(new Error('Imarealerror'));
+        caseRecord.validateWithError(new Error("I'm a real error"));
       } catch (e) {
         error = e;
       }
@@ -863,7 +886,7 @@ describe('Case entity', () => {
     });
 
     it('returns the filing types for user role petitioner for unknown role', () => {
-      const filingTypes = Case.getFilingTypes('whodat');
+      const filingTypes = Case.getFilingTypes('unknown');
       expect(filingTypes).not.toBeNull();
       expect(filingTypes.length).toEqual(4);
       expect(filingTypes[0]).toEqual('Myself');
@@ -1873,11 +1896,24 @@ describe('Case entity', () => {
 
   describe('getCaseContacts', () => {
     const contactPrimary = {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
       name: 'Test Petitioner',
+      postalCode: '12345',
+      state: 'TN',
       title: 'Executor',
     };
 
-    const contactSecondary = { name: 'Contact Secondary' };
+    const contactSecondary = {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      name: 'Contact Secondary',
+      postalCode: '12345',
+      state: 'TN',
+      title: 'Executor',
+    };
 
     const practitioners = [
       {
@@ -1897,6 +1933,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           contactPrimary,
           contactSecondary,
+          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
           practitioners,
           respondents,
         },
@@ -1920,6 +1957,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           contactPrimary,
           contactSecondary,
+          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
           practitioners,
           respondents,
         },
@@ -1965,7 +2003,7 @@ describe('Case entity', () => {
         expect(result).toEqual(true);
       });
 
-      it('should accept a case for consolidatation as a param to check its eligible case status', () => {
+      it('should accept a case for consolidation as a param to check its eligible case status', () => {
         let result;
 
         // verify a failure on the current (this) case
@@ -2052,7 +2090,7 @@ describe('Case entity', () => {
       });
 
       it('should fail when case judges are not the same', () => {
-        pendingCaseEntity.associatedJudge = 'Smashmouth';
+        pendingCaseEntity.associatedJudge = 'Some judge';
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -2081,7 +2119,7 @@ describe('Case entity', () => {
         pendingCaseEntity.status = 'Closed';
         pendingCaseEntity.procedureType = 'small';
         pendingCaseEntity.trialLocation = 'Flavortown, AR';
-        pendingCaseEntity.associatedJudge = 'Smashmouth';
+        pendingCaseEntity.associatedJudge = 'Some judge';
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,
@@ -2096,7 +2134,7 @@ describe('Case entity', () => {
       it('should return all reasons for the failure if the case status is eligible', () => {
         pendingCaseEntity.procedureType = 'small';
         pendingCaseEntity.trialLocation = 'Flavortown, AR';
-        pendingCaseEntity.associatedJudge = 'Smashmouth';
+        pendingCaseEntity.associatedJudge = 'Some judge';
 
         const result = leadCaseEntity.getConsolidationStatus({
           caseEntity: pendingCaseEntity,

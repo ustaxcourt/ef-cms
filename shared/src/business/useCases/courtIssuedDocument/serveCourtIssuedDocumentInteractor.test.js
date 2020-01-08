@@ -8,6 +8,7 @@ const {
   serveCourtIssuedDocumentInteractor,
 } = require('./serveCourtIssuedDocumentInteractor');
 const { Case } = require('../../entities/cases/Case');
+const { ContactFactory } = require('../../entities/contacts/ContactFactory');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { Document } = require('../../entities/Document');
@@ -78,7 +79,15 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   const mockCases = [
     {
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      contactPrimary: { email: 'contact@example.com', name: 'Contact Primary' },
+      contactPrimary: {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        email: 'contact@example.com',
+        name: 'Contact Primary',
+        postalCode: '12345',
+        state: 'TN',
+      },
       docketNumber: '123-45',
       docketRecord: [
         {
@@ -109,6 +118,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         ...documentsWithCaseClosingEventCodes,
       ],
+      partyType: ContactFactory.PARTY_TYPES.petitioner,
     },
     {
       caseId: 'd857e73a-636e-4aa7-9de2-b5cee8770ff0',
