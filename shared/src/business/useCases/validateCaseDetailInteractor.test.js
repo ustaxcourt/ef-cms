@@ -7,6 +7,15 @@ const { User } = require('../entities/User');
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
+const contactPrimary = {
+  address1: '123 Main St',
+  city: 'Somewhere',
+  countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+  name: 'Test Petitioner',
+  postalCode: '12345',
+  state: 'TN',
+};
+
 describe('validate case detail', () => {
   let applicationContext;
 
@@ -45,6 +54,7 @@ describe('validate case detail', () => {
       applicationContext,
       caseDetail: {
         caseType: 'defined',
+        contactPrimary,
         docketNumber: '101-18',
         documents: [
           {
@@ -94,6 +104,7 @@ describe('validate case detail', () => {
       applicationContext,
       caseDetail: {
         caseType: 'defined',
+        contactPrimary,
         docketNumber: '101-18',
         documents: [
           {
@@ -131,6 +142,7 @@ describe('validate case detail', () => {
       applicationContext,
       caseDetail: {
         caseType: 'defined',
+        contactPrimary,
         docketNumber: '101-18',
         documents: [
           {

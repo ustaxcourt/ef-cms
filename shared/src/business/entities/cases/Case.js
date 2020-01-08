@@ -222,8 +222,6 @@ function Case(rawCase, { applicationContext }) {
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseNote = rawCase.caseNote;
   this.caseType = rawCase.caseType;
-  this.contactPrimary = rawCase.contactPrimary;
-  this.contactSecondary = rawCase.contactSecondary;
   this.createdAt = rawCase.createdAt || createISODateString();
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
@@ -321,6 +319,17 @@ function Case(rawCase, { applicationContext }) {
       rawValue: rawCase.orderDesignatingPlaceOfTrial,
     },
   );
+
+  const contacts = ContactFactory.createContacts({
+    contactInfo: {
+      primary: rawCase.contactPrimary,
+      secondary: rawCase.contactSecondary,
+    },
+    isPaper: true,
+    partyType: rawCase.partyType,
+  });
+  this.contactPrimary = contacts.primary;
+  this.contactSecondary = contacts.secondary;
 }
 
 joiValidationDecorator(
