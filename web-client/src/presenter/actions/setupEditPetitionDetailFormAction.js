@@ -15,7 +15,12 @@ export const setupEditPetitionDetailFormAction = ({
   const caseDetail = get(state.caseDetail);
   const paymentStatus = applicationContext.getConstants().PAYMENT_STATUS;
 
-  store.set(state.form.petitionPaymentStatus, caseDetail.petitionPaymentStatus);
+  store.set(state.form, {
+    caseType: caseDetail.caseType,
+    petitionPaymentStatus: caseDetail.petitionPaymentStatus,
+    preferredTrialCity: caseDetail.preferredTrialCity,
+    procedureType: caseDetail.procedureType,
+  });
 
   if (caseDetail.petitionPaymentStatus === paymentStatus.WAIVED) {
     const [
@@ -48,5 +53,16 @@ export const setupEditPetitionDetailFormAction = ({
       state.form.petitionPaymentMethod,
       caseDetail.petitionPaymentMethod,
     );
+  }
+
+  if (caseDetail.irsNoticeDate) {
+    const [irsYear, irsMonth, irsDay] = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.irsNoticeDate, 'YYYY-MM-DD')
+      .split('-');
+
+    store.set(state.form.irsYear, irsYear);
+    store.set(state.form.irsMonth, irsMonth);
+    store.set(state.form.irsDay, irsDay);
   }
 };
