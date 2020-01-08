@@ -14,7 +14,9 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseId the id of the case to update
- * @param {object} providers.petitionDetails the petition details to update on the case
+ * @param {object} providers.contactPrimary the primary contact information to update on the case
+ * @param {object} providers.contactSecondary the secondary contact information to update on the case
+ * @param {object} providers.partyType the party type to update on the case
  * @returns {object} the updated case data
  */
 exports.updatePetitionerInformationInteractor = async ({

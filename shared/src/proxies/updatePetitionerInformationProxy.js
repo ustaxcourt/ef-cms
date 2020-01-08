@@ -8,6 +8,7 @@ const { put } = require('./requests');
  * @param {string} providers.caseId the id of the case to update
  * @param {string} providers.contactPrimary the primary contact information to update
  * @param {string} providers.contactSecondary the secondary contact information to update
+ * @param {string} providers.partyType the party type to update
  * @returns {Promise<*>} the promise of the api call
  */
 exports.updatePetitionerInformationInteractor = ({
