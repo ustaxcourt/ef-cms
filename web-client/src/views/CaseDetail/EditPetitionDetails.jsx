@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
+import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PetitionPaymentForm } from './PetitionPaymentForm';
 import { ProcedureType } from '../StartCase/ProcedureType';
@@ -37,6 +38,8 @@ export const EditPetitionDetails = connect(
           className="usa-section grid-container"
           id="case-detail-internal"
         >
+          <ErrorNotification />
+
           <h1>Edit Petition Details</h1>
           <div className="blue-container margin-bottom-4">
             <div className="margin-bottom-5">
