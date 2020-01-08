@@ -188,6 +188,7 @@ import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/court
 import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updateJudgesCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateJudgesCaseNoteProxy';
 import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
+import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/updateQcCompleteForTrialProxy';
 import { updateTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionProxy';
@@ -356,6 +357,7 @@ const allUseCases = {
   updateDocketEntryInteractor,
   updateJudgesCaseNoteInteractor,
   updatePetitionDetailsInteractor,
+  updatePetitionerInformationInteractor,
   updatePrimaryContactInteractor,
   updateQcCompleteForTrialInteractor,
   updateTrialSessionInteractor,
