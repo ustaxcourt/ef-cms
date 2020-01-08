@@ -22,6 +22,7 @@ exports.updatePetitionerInformationInteractor = async ({
   caseId,
   contactPrimary,
   contactSecondary,
+  partyType,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -52,6 +53,7 @@ exports.updatePetitionerInformationInteractor = async ({
       ...oldCase,
       contactPrimary,
       contactSecondary,
+      partyType,
     },
     { applicationContext },
   );

@@ -13,7 +13,7 @@ export const updatePetitionerInformationAction = async ({
   get,
 }) => {
   const caseToUpdate = get(state.caseDetail);
-  const { contactPrimary, contactSecondary } = get(state.form);
+  const { contactPrimary, contactSecondary, partyType } = get(state.form);
 
   const updatedCase = await applicationContext
     .getUseCases()
@@ -22,6 +22,7 @@ export const updatePetitionerInformationAction = async ({
       caseId: caseToUpdate.caseId,
       contactPrimary,
       contactSecondary,
+      partyType,
     });
 
   return {

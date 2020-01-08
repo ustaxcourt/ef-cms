@@ -629,6 +629,9 @@ const {
   updatePetitionDetailsInteractor,
 } = require('../../shared/src/business/useCases/updatePetitionDetailsInteractor');
 const {
+  updatePetitionerInformationInteractor,
+} = require('../../shared/src/business/useCases/updatePetitionerInformationInteractor');
+const {
   updatePrimaryContactInteractor,
 } = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
 const {
@@ -1072,6 +1075,7 @@ module.exports = (appContextUser = {}) => {
         updateDocketEntryInteractor,
         updateJudgesCaseNoteInteractor,
         updatePetitionDetailsInteractor,
+        updatePetitionerInformationInteractor,
         updatePrimaryContactInteractor,
         updateQcCompleteForTrialInteractor,
         updateTrialSessionInteractor,
