@@ -11,6 +11,8 @@ const targets = [
   'shared/src/business/utilities/htmlGenerator/index.pug',
   'shared/src/business/utilities/htmlGenerator/index.scss',
   'shared/static/images/ustc_seal.png',
+  'shared/src/business/utilities/generateHtmlTemplateForPDF/changeOfAddress.pug',
+  'shared/src/business/utilities/generateHtmlTemplateForPDF/changeOfAddress.scss',
 ];
 
 // specify mime-types for supported base64 encodings here.
