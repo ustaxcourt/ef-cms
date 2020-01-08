@@ -626,8 +626,8 @@ const {
   updateJudgesCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/updateJudgesCaseNoteInteractor');
 const {
-  updatePetitionFeePaymentInteractor,
-} = require('../../shared/src/business/useCases/updatePetitionFeePaymentInteractor');
+  updatePetitionDetailsInteractor,
+} = require('../../shared/src/business/useCases/updatePetitionDetailsInteractor');
 const {
   updatePrimaryContactInteractor,
 } = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
@@ -1071,7 +1071,7 @@ module.exports = (appContextUser = {}) => {
         updateCourtIssuedOrderInteractor,
         updateDocketEntryInteractor,
         updateJudgesCaseNoteInteractor,
-        updatePetitionFeePaymentInteractor,
+        updatePetitionDetailsInteractor,
         updatePrimaryContactInteractor,
         updateQcCompleteForTrialInteractor,
         updateTrialSessionInteractor,
