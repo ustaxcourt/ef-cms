@@ -250,7 +250,7 @@ describe('selectDocumentTypeHelper', () => {
     });
     expect(result).toEqual({
       primary: {
-        ordinalField: 'What Iteration is This Filing?',
+        ordinalField: 'What iteration is this filing?',
         showNonstandardForm: true,
         showTextInput: true,
         textInputLabel: 'What is This Amendment For?',
