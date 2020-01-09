@@ -751,16 +751,6 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion for Preliminary Injunction",
-      "documentType": "Motion for Preliminary Injunction",
-      "category": "Motion",
-      "eventCode": "M025",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Motion for Pretrial Conference",
       "documentType": "Motion for Pretrial Conference",
       "category": "Motion",
@@ -1321,8 +1311,8 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(f)(2)",
-      "documentType": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(f)(2)",
+      "documentTitle": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(g)(3)",
+      "documentType": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(g)(3)",
       "category": "Motion",
       "eventCode": "M084",
       "scenario": "Standard",
