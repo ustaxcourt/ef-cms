@@ -22,11 +22,16 @@ export const createOrderAction = async ({ applicationContext, get }) => {
     '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
   );
   const caseCaption = get(state.caseDetail.caseCaption) || '';
+  const isOrderEvent = get(state.form.eventCode) == 'NOT'; // 'NOT' === 'notice'
   let caseCaptionNames = applicationContext.getCaseCaptionNames(caseCaption);
   let caseCaptionPostfix = '';
   if (caseCaptionNames !== caseCaption) {
     caseCaptionNames += ', ';
     caseCaptionPostfix = caseCaption.replace(caseCaptionNames, '');
+  }
+  let signatureForNotice = '';
+  if (isOrderEvent) {
+    signatureForNotice = `<p>${applicationContext.getClerkOfCourtNameForSigning()}<br />Clerk of the Court</p>`;
   }
   const docketNumberWithSuffix = get(
     state.formattedCaseDetail.docketNumberWithSuffix,
@@ -39,6 +44,7 @@ export const createOrderAction = async ({ applicationContext, get }) => {
       '#docketNumber': docketNumberWithSuffix,
       '#orderBody': richText,
       '#orderTitleHeader': documentTitle,
+      '#signature': signatureForNotice,
     },
     orderTemplate,
   );

@@ -248,6 +248,7 @@ module.exports = {
           'scss',
           'semibold',
           'seriatim',
+          'servoss',
           'sinon',
           'sisqo',
           'skipnav',
