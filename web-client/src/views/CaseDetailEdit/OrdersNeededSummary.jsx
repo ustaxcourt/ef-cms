@@ -76,7 +76,7 @@ export const OrdersNeededSummary = connect(
               id="button-create-order"
               onClick={() => openCreateOrderChooseTypeModalSequence()}
             >
-              Create Order
+              Create Order or Notice
             </Button>
           </div>
         </section>
