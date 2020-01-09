@@ -45,6 +45,7 @@ if (type === 'internal') {
     'petitioner-ignore',
     'eventCode',
     'scenario',
+    'variations-ignore',
     'labelPreviousDocument',
     'labelFreeText',
     'labelFreeText2',
