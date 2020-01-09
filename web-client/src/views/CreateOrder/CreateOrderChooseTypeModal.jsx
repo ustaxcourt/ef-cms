@@ -9,7 +9,6 @@ export const CreateOrderChooseTypeModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.submitCreateOrderModalSequence,
-    form: state.form,
     orderTypesHelper: state.orderTypesHelper,
     updateFormValue: sequences.updateCreateOrderModalFormValueSequence,
     validateSequence: sequences.validateOrderWithoutBodySequence,
@@ -18,7 +17,6 @@ export const CreateOrderChooseTypeModal = connect(
   ({
     cancelSequence,
     confirmSequence,
-    form,
     orderTypesHelper,
     updateFormValue,
     validateSequence,
@@ -62,10 +60,10 @@ export const CreateOrderChooseTypeModal = connect(
               )}
             </select>
           </FormGroup>
-          {form.eventCode == 'O' && (
+          {orderTypesHelper.showDocumentTitleInput && (
             <FormGroup errorText={validationErrors.documentTitle}>
               <label className="usa-label" htmlFor="documentTitle">
-                Order title
+                {orderTypesHelper.documentTitleInputLabel}
               </label>
               <input
                 className="usa-input"
