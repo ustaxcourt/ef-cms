@@ -410,7 +410,6 @@ functions:
           path: /{caseId}/petitioner-info
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          async: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
