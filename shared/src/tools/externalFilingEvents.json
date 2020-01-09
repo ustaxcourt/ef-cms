@@ -275,8 +275,8 @@
       "eventCode": "ADMT",
       "scenario": "Nonstandard I",
       "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": "What is This Amendment For?"
+      "labelFreeText": "What is This Amendment For?",
+      "ordinalField": "What iteration is this filing?"
     },
     {
       "documentTitle": "[First, Second, etc.] Amendment to [Document Name]",
