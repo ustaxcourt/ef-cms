@@ -273,9 +273,9 @@
       "documentType": "Amendment [anything]",
       "category": "Miscellaneous",
       "eventCode": "ADMT",
-      "scenario": "Nonstandard I",
-      "labelPreviousDocument": "",
-      "labelFreeText": "What is This Amendment For?",
+      "scenario": "Nonstandard F",
+      "labelPreviousDocument": "What is this amendment for?",
+      "labelFreeText": "",
       "ordinalField": "What iteration is this filing?"
     },
     {
