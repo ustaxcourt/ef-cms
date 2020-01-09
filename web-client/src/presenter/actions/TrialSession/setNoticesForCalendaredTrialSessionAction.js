@@ -25,7 +25,7 @@ export const setNoticesForCalendaredTrialSessionAction = async ({
       trialSessionId,
     });
 
-  if (pdfBlob) {
+  if ((pdfBlob && pdfBlob.size > 0) || pdfBlob.length > 0) {
     const pdfFile = new Blob([pdfBlob], { type: 'application/pdf' });
     const pdfUrl = router.createObjectURL(pdfFile);
     return path.paper({ pdfUrl });
