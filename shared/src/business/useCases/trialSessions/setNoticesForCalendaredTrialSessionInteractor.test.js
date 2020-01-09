@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+import { formatDateString, formatNow } from '../../utilities/DateHandler';
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
@@ -5,6 +8,19 @@ const { Document } = require('../../entities/Document');
 const { User } = require('../../entities/User');
 
 const { MOCK_CASE } = require('../../../test/mockCase');
+
+const fakeData =
+  'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
+
+const fakeFile = Buffer.from(fakeData, 'base64');
+fakeFile.name = 'fakeFile.pdf';
+
+const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
+
+const testPdfDocBytes = () => {
+  // sample.pdf is a 1 page document
+  return fs.readFileSync(testAssetsPath + 'sample.pdf');
+};
 
 const MOCK_TRIAL = {
   maxCases: 100,
@@ -16,13 +32,49 @@ const MOCK_TRIAL = {
 };
 
 let applicationContext;
+let calendaredCases;
 let generateNoticeOfTrialIssuedInteractorMock;
+let generatePaperServiceAddressPagePdfMock;
 let saveDocumentMock;
+let sendBulkTemplatedEmailMock;
+let testPdfDoc;
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   beforeEach(() => {
+    testPdfDoc = testPdfDocBytes();
+
     generateNoticeOfTrialIssuedInteractorMock = jest.fn();
     saveDocumentMock = jest.fn();
+    sendBulkTemplatedEmailMock = jest.fn();
+
+    generatePaperServiceAddressPagePdfMock = jest
+      .fn()
+      .mockResolvedValue(testPdfDoc);
+
+    const case0 = {
+      // should get electronic service
+      ...MOCK_CASE,
+      caseId: '000aa3f7-e2e3-43e6-885d-4ce341588000',
+      contactPrimary: {
+        ...MOCK_CASE.contactPrimary,
+        email: 'petitioner@example.com',
+      },
+      docketNumber: '102-20',
+    };
+
+    const case1 = {
+      // should get paper service
+      ...MOCK_CASE,
+      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      contactPrimary: {
+        ...MOCK_CASE.contactPrimary,
+      },
+      docketNumber: '103-20',
+      isPaper: true,
+      mailingDate: 'testing',
+    };
+
+    calendaredCases = [case0, case1];
 
     applicationContext = {
       getCurrentUser: () => {
@@ -32,28 +84,37 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
+      getDispatchers: () => ({
+        sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
+      }),
       getPersistenceGateway: () => ({
         deleteCaseTrialSortMappingRecords: () => {},
-        getCalendaredCasesForTrialSession: () => [
-          {
-            ...MOCK_CASE,
-            caseId: '000aa3f7-e2e3-43e6-885d-4ce341588000',
-            docketNumber: '102-20',
-          },
-          {
-            ...MOCK_CASE,
-            caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
-            docketNumber: '103-20',
-          },
-        ],
+        getCalendaredCasesForTrialSession: () => calendaredCases,
         getTrialSessionById: () => MOCK_TRIAL,
         saveDocument: saveDocumentMock,
-        updateCase: () => {},
+        updateCase: ({ caseToUpdate }) => {
+          calendaredCases.some((caseRecord, index) => {
+            if (caseRecord.caseId === caseToUpdate.caseId) {
+              calendaredCases[index] = caseToUpdate;
+              return true;
+            }
+          });
+        },
         updateTrialSession: () => {},
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
+      }),
       getUseCases: () => ({
-        generateNoticeOfTrialIssuedInteractor: generateNoticeOfTrialIssuedInteractorMock,
+        generateNoticeOfTrialIssuedInteractor: () => {
+          generateNoticeOfTrialIssuedInteractorMock();
+          return fakeFile;
+        },
+      }),
+      getUtilities: () => ({
+        formatDateString,
+        formatNow,
       }),
     };
   });
@@ -82,7 +143,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should generate a Notice of Trial for each case', async () => {
-    const result = await setNoticesForCalendaredTrialSessionInteractor({
+    await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -97,22 +158,22 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       );
     };
 
-    expect(findNoticeOfTrial(result[0])).toBeTruthy();
-    expect(findNoticeOfTrial(result[1])).toBeTruthy();
+    expect(findNoticeOfTrial(calendaredCases[0])).toBeTruthy();
+    expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
   });
 
   it('Should set the noticeOfTrialDate field on each case', async () => {
-    const result = await setNoticesForCalendaredTrialSessionInteractor({
+    await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(result[0]).toHaveProperty('noticeOfTrialDate');
-    expect(result[1]).toHaveProperty('noticeOfTrialDate');
+    expect(calendaredCases[0]).toHaveProperty('noticeOfTrialDate');
+    expect(calendaredCases[1]).toHaveProperty('noticeOfTrialDate');
   });
 
   it('Should create a docket entry for each case', async () => {
-    const result = await setNoticesForCalendaredTrialSessionInteractor({
+    await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
@@ -123,7 +184,25 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       );
     };
 
-    expect(findNoticeOfTrialDocketEntry(result[0])).toBeTruthy();
-    expect(findNoticeOfTrialDocketEntry(result[1])).toBeTruthy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeTruthy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
+  });
+
+  it('Should dispatch a service email for parties receiving electronic service', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+  });
+
+  it('Should return data with paper service documents to be printed if there are parties that receive paper service', async () => {
+    const result = await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(result).toBeDefined();
   });
 });

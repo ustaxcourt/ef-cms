@@ -3,6 +3,7 @@ service: ef-cms-public
 plugins:
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
+  # - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -28,10 +29,6 @@ custom:
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:

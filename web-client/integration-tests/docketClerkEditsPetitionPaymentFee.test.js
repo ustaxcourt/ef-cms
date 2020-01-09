@@ -39,7 +39,7 @@ describe('Create a work item', () => {
       value: Case.PAYMENT_STATUS.PAID,
     });
 
-    await test.runSequence('updatePetitionFeePaymentSequence');
+    await test.runSequence('updatePetitionDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       petitionPaymentDate: Case.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
@@ -65,7 +65,7 @@ describe('Create a work item', () => {
       value: 'check',
     });
 
-    await test.runSequence('updatePetitionFeePaymentSequence');
+    await test.runSequence('updatePetitionDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

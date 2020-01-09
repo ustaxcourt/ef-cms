@@ -1,14 +1,14 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { validatePetitionFeePaymentAction } from '../actions/validatePetitionFeePaymentAction';
+import { validatePetitionDetailsAction } from '../actions/validatePetitionDetailsAction';
 
-export const validatePetitionFeePaymentSequence = [
+export const validatePetitionDetailsSequence = [
   shouldValidateAction,
   {
     ignore: [],
     validate: [
-      validatePetitionFeePaymentAction,
+      validatePetitionDetailsAction,
       {
         error: [setValidationErrorsAction],
         success: [clearAlertsAction],

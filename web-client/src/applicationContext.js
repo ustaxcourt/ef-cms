@@ -187,7 +187,8 @@ import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
 import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updateJudgesCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateJudgesCaseNoteProxy';
-import { updatePetitionFeePaymentInteractor } from '../../shared/src/proxies/updatePetitionFeePaymentProxy';
+import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
+import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/updateQcCompleteForTrialProxy';
 import { updateTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionProxy';
@@ -216,6 +217,7 @@ import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/us
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
+import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
 import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
@@ -354,7 +356,8 @@ const allUseCases = {
   updateCourtIssuedOrderInteractor,
   updateDocketEntryInteractor,
   updateJudgesCaseNoteInteractor,
-  updatePetitionFeePaymentInteractor,
+  updatePetitionDetailsInteractor,
+  updatePetitionerInformationInteractor,
   updatePrimaryContactInteractor,
   updateQcCompleteForTrialInteractor,
   updateTrialSessionInteractor,
@@ -381,6 +384,7 @@ const allUseCases = {
   validatePdfInteractor,
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
+  validatePetitionerInformationFormInteractor,
   validatePrimaryContactInteractor,
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
