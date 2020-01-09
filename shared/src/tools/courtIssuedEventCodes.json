@@ -2,7 +2,7 @@
   {
     "eventCode": "O",
     "documentType": "O - Order",
-    "documentTitle": "[Anything]",
+    "documentTitle": "Order [Anything]",
     "scenario": "Type A"
   },
   {
@@ -280,5 +280,95 @@
     "documentType": "SDEC - Stipulated Decision Entered,",
     "documentTitle": "Stipulated Decision Entered, [Judge Name] [Anything]",
     "scenario": "Type B"
+  },
+  {
+    "eventCode": "MOP",
+    "documentType": "MOP - Memorandum Opinion",
+    "documentTitle": "Memorandum Opinion [judge]",
+    "scenario": "Type B"
+  },
+  {
+    "eventCode": "NOT",
+    "documentType": "NOT - Notice",
+    "documentTitle": "Notice [Anything]",
+    "scenario": "Type A"
+  },
+  {
+    "eventCode": "SOP",
+    "documentType": "Summary Opinion",
+    "documentTitle": "Summary Opinion [judge]",
+    "scenario": "Type B"
+  },
+  {
+    "eventCode": "WRIT",
+    "documentType": "Writ of Habeas Corpus Ad Testificandum",
+    "documentTitle": "Writ of Habeas Corpus Ad Testificandum [anything]",
+    "scenario": "Type A"
+  },
+  {
+    "eventCode": "CTRA",
+    "documentType": "CTRA - Corrected Transcript",
+    "documentTitle": "Corrected Transcipt of [Date]",
+    "scenario": "Type E"
+  },
+  {
+    "eventCode": "FTRL",
+    "documentType": "FTRL - Further Trial before ...",
+    "documentTitle": "Further Trial before [Judge] at [Place]",
+    "scenario": "Type F"
+  },
+  {
+    "eventCode": "HEAR",
+    "documentType": "HEAR - Hearing before ...",
+    "documentTitle": "Hearing before [Judge] at [Place]",
+    "scenario": "Type F"
+  },
+  {
+    "eventCode": "NTD",
+    "documentType": "NTD - Notice of Trial",
+    "documentTitle": "Notice of Trial on [Date] at [Place]",
+    "scenario": "Type G"
+  },
+  {
+    "eventCode": "PTRL",
+    "documentType": "PTRL - Partial Trial before ...",
+    "documentTitle": "Partial Trial before [Judge] at [Place]",
+    "scenario": "Type F"
+  },
+  {
+    "eventCode": "TRL",
+    "documentType": "TRL - Trial before ...",
+    "documentTitle": "Trial before [Judge] at [Place]",
+    "scenario": "Type F"
+  },
+  {
+    "eventCode": "ROA",
+    "documentType": "ROA - Record on Appeal",
+    "documentTitle": "Record on Appeal [Anything]",
+    "scenario": "Type A"
+  },
+  {
+    "eventCode": "TCOP",
+    "documentType": "TCOP - T.C. Opinion",
+    "documentTitle": "T.C. Opinion [judge] [anything]",
+    "scenario": "Type B"
+  },
+  {
+    "eventCode": "RTRA",
+    "documentType": "RTRA - Revised Transcript",
+    "documentTitle": "Revised Transcript of [anything]",
+    "scenario": "Type A"
+  },
+  {
+    "eventCode": "TRAN",
+    "documentType": "Transcript",
+    "documentTitle": "Transcript of [anything]",
+    "scenario": "Type A - NEED LOGIC for MVP"
+  },
+  {
+    "eventCode": "SPTO",
+    "documentType": "SPTO - Standing Pre-Trial Order",
+    "documentTitle": "Standing Pre-Trial Order",
+    "scenario": "HOLD hold (dependent on if we get to automated logic)"
   }
 ]
