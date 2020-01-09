@@ -157,7 +157,7 @@ Document.TRACKED_DOCUMENT_TYPES = {
   },
   proposedStipulatedDecision: {
     documentType: 'Proposed Stipulated Decision',
-    eventCode: 'PSDEC',
+    eventCode: 'PSDE',
   },
 };
 
