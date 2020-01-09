@@ -90,7 +90,7 @@ describe('update petitioner contact information on a case', () => {
     jest.clearAllMocks();
   });
 
-  it('updates no petitioner contact information when no changes are detected', async () => {
+  it('updates case even if no change of address or phone is detected', async () => {
     await updatePetitionerInformationInteractor({
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
@@ -98,7 +98,7 @@ describe('update petitioner contact information on a case', () => {
     });
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
-    expect(updateCaseStub).not.toHaveBeenCalled();
+    expect(updateCaseStub).toHaveBeenCalled();
   });
 
   it('updates petitioner contact when primary contact info changes', async () => {
