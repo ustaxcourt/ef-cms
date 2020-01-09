@@ -1056,17 +1056,6 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion for Preliminary Injunction",
-      "documentType": "Motion for Preliminary Injunction",
-      "category": "Motion",
-      "eventCode": "M025",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "labelFreeText2": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Motion for Pretrial Conference",
       "documentType": "Motion for Pretrial Conference",
       "category": "Motion",

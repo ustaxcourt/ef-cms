@@ -256,7 +256,7 @@ exports.uploadProposedStipulatedDecision = async test => {
     certificateOfServiceDate: null,
     documentTitle: 'Proposed Stipulated Decision',
     documentType: 'Proposed Stipulated Decision',
-    eventCode: 'PSDEC',
+    eventCode: 'PSDE',
     hasSecondarySupportingDocuments: false,
     hasSupportingDocuments: false,
     partyRespondent: true,
