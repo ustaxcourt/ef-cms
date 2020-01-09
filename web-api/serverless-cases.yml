@@ -33,10 +33,6 @@ custom:
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -391,11 +387,27 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updatePetitionFeePayment:
-    handler: web-api/${self:provider.dir}/casesHandlers.updatePetitionFeePaymentLambda
+  updatePetitionDetails:
+    handler: web-api/${self:provider.dir}/casesHandlers.updatePetitionDetailsLambda
     events:
       - http:
-          path: /{caseId}/petition-fee
+          path: /{caseId}/petition-details
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  updatePetitionerInformation:
+    handler: web-api/${self:provider.dir}/casesHandlers.updatePetitionerInformationLambda
+    layers:
+      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
+    memorySize: 3008
+    timeout: 900
+    events:
+      - http:
+          path: /{caseId}/petitioner-info
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

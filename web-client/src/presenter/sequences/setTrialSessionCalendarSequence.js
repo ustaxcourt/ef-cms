@@ -2,13 +2,17 @@ import { canSetTrialSessionToCalendarAction } from '../actions/TrialSession/canS
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getSetTrialSessionCalendarAlertSuccessAction } from '../actions/TrialSession/getSetTrialSessionCalendarAlertSuccessAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
+import { set } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSession/setNoticesForCalendaredTrialSessionAction';
+import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setTrialSessionCalendarAction } from '../actions/TrialSession/setTrialSessionCalendarAction';
+import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { state } from 'cerebral';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const setTrialSessionCalendarSequence = [
@@ -23,8 +27,18 @@ export const setTrialSessionCalendarSequence = [
       getCalendaredCasesForTrialSessionAction,
       setCalendaredCasesOnTrialSessionAction,
       setNoticesForCalendaredTrialSessionAction,
-      getSetTrialSessionCalendarAlertSuccessAction,
-      setAlertSuccessAction,
+      {
+        electronic: [
+          getSetTrialSessionCalendarAlertSuccessAction,
+          setAlertSuccessAction,
+        ],
+        paper: [
+          ...setPdfPreviewUrlSequence,
+          setTrialSessionCalendarAlertWarningAction,
+          setAlertWarningAction,
+          set(state.currentPage, 'SimplePdfPreviewPage'),
+        ],
+      },
     ],
   },
   unsetWaitingForResponseAction,

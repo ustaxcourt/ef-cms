@@ -100,4 +100,5 @@ module.exports = [
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
   },
   'http://localhost:1234/mock-login?token=docketclerk&path=/print-preview/110-19/',
+  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-petitioner-information',
 ];

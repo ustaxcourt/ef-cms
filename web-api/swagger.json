@@ -4053,7 +4053,7 @@
         }
       }
     },
-    "/cases/{caseId}/petition-fee": {
+    "/cases/{caseId}/petition-details": {
       "parameters": [
         {
           "name": "caseId",
@@ -4064,8 +4064,60 @@
       ],
       "put": {
         "tags": ["cases"],
-        "summary": "updates the petition payment fee on the case",
-        "description": "updates the petition payment fee on the case.\n",
+        "summary": "updates the petition details on the case",
+        "description": "updates the petition details on the case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cases/{caseId}/petitioner-info": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "updates the petitioner information on the case",
+        "description": "updates the petitioner information on the case.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
