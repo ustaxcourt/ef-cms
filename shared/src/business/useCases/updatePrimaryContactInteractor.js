@@ -45,18 +45,6 @@ exports.updatePrimaryContactInteractor = async ({
     throw new UnauthorizedError('Unauthorized for update case contact');
   }
 
-  let caseNameToUse;
-  const spousePartyTypes = [
-    ContactFactory.PARTY_TYPES.petitionerSpouse,
-    ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
-  ];
-
-  if (spousePartyTypes.includes(caseEntity.partyType)) {
-    caseNameToUse = caseEntity.contactPrimary.name;
-  } else {
-    caseNameToUse = Case.getCaseCaptionNames(caseEntity.caseCaption);
-  }
-
   const documentType = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({
@@ -80,7 +68,7 @@ exports.updatePrimaryContactInteractor = async ({
           caseDetail.docketNumber
         }${caseDetail.docketNumberSuffix || ''}`,
         documentTitle: documentType.title,
-        name: caseNameToUse,
+        name: contactInfo.name,
         newData: contactInfo,
         oldData: caseEntity.contactPrimary,
       },
@@ -106,7 +94,7 @@ exports.updatePrimaryContactInteractor = async ({
   const changeOfAddressDocument = new Document(
     {
       addToCoversheet: true,
-      additionalInfo: `for ${caseNameToUse}`,
+      additionalInfo: `for ${contactInfo.name}`,
       caseId,
       documentId: newDocumentId,
       documentType: documentType.title,
