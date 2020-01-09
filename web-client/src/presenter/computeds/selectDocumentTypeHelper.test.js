@@ -8,13 +8,13 @@ import { withAppContextDecorator } from '../../withAppContext';
 // external filing events don't currently contain Nonstandard I, Nonstandard J -- but if they did ...
 Document.CATEGORY_MAP['Miscellaneous'].push({
   category: 'Miscellaneous',
-  documentTitle: '[First, Second, etc.] Amendment to [anything]',
-  documentType: 'Amendment [anything]',
-  eventCode: 'ADMT',
-  labelFreeText: 'What is This Amendment For?',
+  documentTitle: '[First, Second, etc.] Something to [anything]',
+  documentType: 'Something [anything]',
+  eventCode: 'ABCD',
+  labelFreeText: 'What is this something for?',
   labelFreeText2: '',
   labelPreviousDocument: '',
-  ordinalField: 'What Iteration is This Filing?',
+  ordinalField: 'What iteration is this filing?',
   scenario: 'Nonstandard I',
 });
 
@@ -241,9 +241,11 @@ describe('selectDocumentTypeHelper', () => {
   });
 
   it('should return correct data for Nonstandard I document scenario', () => {
+    // we do not currently have any Nonstandard I documents (this is mocked out at the
+    // top of the file) - leaving this test here in case we add Nonstandard I docs later
     state.form = {
       category: 'Miscellaneous',
-      documentType: 'Amendment [anything]',
+      documentType: 'Something [anything]',
     };
     const result = runCompute(selectDocumentTypeHelper, {
       state,
@@ -253,7 +255,7 @@ describe('selectDocumentTypeHelper', () => {
         ordinalField: 'What iteration is this filing?',
         showNonstandardForm: true,
         showTextInput: true,
-        textInputLabel: 'What is This Amendment For?',
+        textInputLabel: 'What is this something for?',
       },
     });
   });
