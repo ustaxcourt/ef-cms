@@ -17,10 +17,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {string} providers.trialSessionId the trial session id
+ * @param {string} providers.caseId optional caseId to explicitly set the notice on the ONE specified case
  * @returns {Promise} the promises for the updateCase calls
  */
 exports.setNoticesForCalendaredTrialSessionInteractor = async ({
   applicationContext,
+  caseId,
   trialSessionId,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -29,12 +31,26 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const calendaredCases = await applicationContext
+  let calendaredCases = await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,
       trialSessionId,
     });
+
+  // opting to pull from the set of calendared cases rather than load the
+  // case individually to add an additional layer of validation
+  if (caseId) {
+    const singleCase = calendaredCases.find(
+      caseRecord => caseRecord.caseId === caseId,
+    );
+
+    calendaredCases = [singleCase];
+  }
+
+  if (calendaredCases.length === 0) {
+    return;
+  }
 
   const trialSession = await applicationContext
     .getPersistenceGateway()
