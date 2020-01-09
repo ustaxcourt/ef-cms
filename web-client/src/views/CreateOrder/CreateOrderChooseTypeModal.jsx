@@ -31,7 +31,7 @@ export const CreateOrderChooseTypeModal = connect(
         className=""
         confirmLabel="Continue"
         confirmSequence={confirmSequence}
-        title="Create Order"
+        title="Create Order or Notice"
       >
         <div className="ustc-create-order-modal">
           <FormGroup errorText={validationErrors.eventCode}>

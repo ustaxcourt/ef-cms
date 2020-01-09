@@ -123,7 +123,7 @@ export const CaseDetailHeaderMenu = connect(
                         openCreateOrderChooseTypeModalSequence();
                       }}
                     >
-                      Create Order
+                      Create Order or Notice
                     </Button>
                   </li>
                 )}

@@ -4,7 +4,7 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 
 const test = setupTest();
 
-describe('Create a work item', () => {
+describe('docket clerk edits a petition payment fee', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
   });
