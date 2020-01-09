@@ -4,7 +4,6 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { Document } = require('../entities/Document');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -43,12 +42,13 @@ exports.updatePetitionerInformationInteractor = async ({
       oldData: oldCase.contactPrimary,
     });
 
-  const secondaryChange = contactSecondary
-    ? applicationContext.getUtilities().getDocumentTypeForAddressChange({
-        newData: contactSecondary,
-        oldData: oldCase.contactSecondary || {},
-      })
-    : undefined;
+  const secondaryChange =
+    contactSecondary && contactSecondary.name
+      ? applicationContext.getUtilities().getDocumentTypeForAddressChange({
+          newData: contactSecondary,
+          oldData: oldCase.contactSecondary || {},
+        })
+      : undefined;
 
   const caseEntity = new Case(
     {
@@ -64,19 +64,9 @@ exports.updatePetitionerInformationInteractor = async ({
     ...caseEntity.toRawObject(),
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
   };
-  let caseNameToUse;
-  const spousePartyTypes = [
-    ContactFactory.PARTY_TYPES.petitionerSpouse,
-    ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
-  ];
-
-  if (spousePartyTypes.includes(caseEntity.partyType)) {
-    caseNameToUse = caseEntity.contactPrimary.name;
-  } else {
-    caseNameToUse = Case.getCaseCaptionNames(caseEntity.caseCaption);
-  }
 
   const createDocumentForChange = async ({
+    contactName,
     documentType,
     newData,
     oldData,
@@ -92,7 +82,7 @@ exports.updatePetitionerInformationInteractor = async ({
             caseDetail.docketNumber
           }${caseDetail.docketNumberSuffix || ''}`,
           documentTitle: documentType.title,
-          name: caseNameToUse,
+          name: contactName,
           newData,
           oldData,
         },
@@ -111,7 +101,7 @@ exports.updatePetitionerInformationInteractor = async ({
     const changeOfAddressDocument = new Document(
       {
         addToCoversheet: true,
-        additionalInfo: `for ${caseNameToUse}`,
+        additionalInfo: `for ${contactName}`,
         caseId,
         documentId: newDocumentId,
         documentType: documentType.title,
@@ -139,6 +129,7 @@ exports.updatePetitionerInformationInteractor = async ({
 
   if (primaryChange) {
     await createDocumentForChange({
+      contactName: contactPrimary.name,
       documentType: primaryChange,
       newData: contactPrimary,
       oldData: oldCase.contactPrimary,
@@ -146,15 +137,13 @@ exports.updatePetitionerInformationInteractor = async ({
   }
   if (secondaryChange) {
     await createDocumentForChange({
+      contactName: contactSecondary.name,
       documentType: secondaryChange,
       newData: contactSecondary,
-      oldData: oldCase.contactSecondary,
+      oldData: oldCase.contactSecondary || {},
     });
   }
 
-  if (!primaryChange && !secondaryChange) {
-    return Promise.resolve(); // nothing to be done.
-  }
   return await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),

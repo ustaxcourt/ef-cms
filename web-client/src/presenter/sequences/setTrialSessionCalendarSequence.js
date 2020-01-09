@@ -9,6 +9,7 @@ import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/
 import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSession/setNoticesForCalendaredTrialSessionAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setTrialSessionCalendarAction } from '../actions/TrialSession/setTrialSessionCalendarAction';
+import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { state } from 'cerebral';
@@ -33,6 +34,8 @@ export const setTrialSessionCalendarSequence = [
         ],
         paper: [
           ...setPdfPreviewUrlSequence,
+          setTrialSessionCalendarAlertWarningAction,
+          setAlertWarningAction,
           set(state.currentPage, 'SimplePdfPreviewPage'),
         ],
       },

@@ -72,7 +72,7 @@ describe('Document entity', () => {
 
       const raw2 = {
         documentType: 'it is a proposed stipulated decision',
-        eventCode: 'PSDEC',
+        eventCode: 'PSDE',
       };
       const doc2 = new Document(raw2, { applicationContext });
       expect(doc2.pending).toBeTruthy();

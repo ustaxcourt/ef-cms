@@ -166,7 +166,7 @@ describe('getScannerInterface', () => {
     });
   });
 
-  it('throws an exception if the hopper is empty', async () => {
+  it('throws an exception if the hopper is empty when scanning with the feeder', async () => {
     const scannerAPI = getScannerInterface();
     scannerAPI.setDWObject({
       ...DWObject,
@@ -175,11 +175,33 @@ describe('getScannerInterface', () => {
 
     let error;
     try {
-      await scannerAPI.startScanSession({ applicationContext });
+      await scannerAPI.startScanSession({
+        applicationContext,
+        scanMode: SCAN_MODES.FEEDER,
+      });
     } catch (err) {
       error = err;
     }
     expect(error).toBeDefined();
+  });
+
+  it('does NOT throw an exception if the hopper is empty when scanning with the flatbed', async () => {
+    const scannerAPI = getScannerInterface();
+    scannerAPI.setDWObject({
+      ...DWObject,
+      IfFeederLoaded: false,
+    });
+
+    let error;
+    try {
+      await scannerAPI.startScanSession({
+        applicationContext,
+        scanMode: SCAN_MODES.FLATBED,
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeUndefined();
   });
 
   it('can enable duplex mode by calling startScanSession with scanMode set to `DUPLEX`', async () => {
