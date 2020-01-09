@@ -205,4 +205,32 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     expect(result).toBeDefined();
   });
+
+  it('Should only set the notice for a single case if a caseId is set', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(calendaredCases[0]).not.toHaveProperty('noticeOfTrialDate');
+    expect(calendaredCases[1]).toHaveProperty('noticeOfTrialDate');
+  });
+
+  it('Should only create a docket entry for a single case if a caseId is set', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    const findNoticeOfTrialDocketEntry = caseRecord => {
+      return caseRecord.docketRecord.find(
+        entry => entry.description === Document.NOTICE_OF_TRIAL.documentType,
+      );
+    };
+
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeFalsy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
+  });
 });
