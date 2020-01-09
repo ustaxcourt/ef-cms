@@ -79,6 +79,7 @@ module.exports = {
         allowChildren: false,
       },
     ],
+    'no-irregular-whitespace': [2, { skipStrings: false }],
     'sort-imports-es6-autofix/sort-imports-es6': [
       2,
       {
@@ -133,8 +134,11 @@ module.exports = {
           'attributors',
           'backend',
           'binded',
+          'boolean',
+          'booleans',
           'buch',
           'buchs',
+          'calendarclerk',
           'cancelable',
           'carluzzo',
           'carluzzos',
@@ -268,6 +272,8 @@ module.exports = {
           'unmount',
           'unprioritize',
           'unprocessable',
+          'unset',
+          'unsets',
           'unsetting',
           'unstash',
           'unstyled',

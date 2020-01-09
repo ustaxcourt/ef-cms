@@ -17,7 +17,9 @@ export const resetContactsAction = ({ applicationContext, get, store }) => {
 
   store.set(state.form.contactPrimary, {
     countryType: COUNTRY_TYPES.DOMESTIC,
+    email: get(state.form.contactPrimary.email),
   });
+
   if (showContacts.contactSecondary) {
     store.set(state.form.contactSecondary, {
       countryType: COUNTRY_TYPES.DOMESTIC,

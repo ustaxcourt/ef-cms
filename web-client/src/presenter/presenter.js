@@ -83,6 +83,7 @@ import { gotoEditCourtIssuedDocketEntrySequence } from './sequences/gotoEditCour
 import { gotoEditDocketEntrySequence } from './sequences/gotoEditDocketEntrySequence';
 import { gotoEditOrderSequence } from './sequences/gotoEditOrderSequence';
 import { gotoEditPetitionDetailsSequence } from './sequences/gotoEditPetitionDetailsSequence';
+import { gotoEditPetitionerInformationSequence } from './sequences/gotoEditPetitionerInformationSequence';
 import { gotoEditTrialSessionSequence } from './sequences/gotoEditTrialSessionSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
 import { gotoIdleLogoutSequence } from './sequences/gotoIdleLogoutSequence';
@@ -153,7 +154,6 @@ import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequ
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openSelectDocumentWizardOverlaySequence } from './sequences/openSelectDocumentWizardOverlaySequence';
-import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
 import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
@@ -277,6 +277,7 @@ import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntr
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { updateDocumentValueSequence } from './sequences/updateDocumentValueSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
+import { updateFormPartyTypeSequence } from './sequences/updateFormPartyTypeSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateForwardFormValueSequence } from './sequences/updateForwardFormValueSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
@@ -284,8 +285,9 @@ import { updateJudgesCaseNoteOnWorkingCopySequence } from './sequences/updateJud
 import { updateMessageValueInModalSequence } from './sequences/updateMessageValueInModalSequence';
 import { updateMessageValueSequence } from './sequences/updateMessageValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
-import { updatePetitionFeePaymentSequence } from './sequences/updatePetitionFeePaymentSequence';
+import { updatePetitionDetailsSequence } from './sequences/updatePetitionDetailsSequence';
 import { updatePetitionValueSequence } from './sequences/updatePetitionValueSequence';
+import { updatePetitionerInformationFormSequence } from './sequences/updatePetitionerInformationFormSequence';
 import { updateQcCompleteForTrialSequence } from './sequences/updateQcCompleteForTrialSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
@@ -312,8 +314,9 @@ import { validateInitialWorkItemMessageInModalSequence } from './sequences/valid
 import { validateInitialWorkItemMessageSequence } from './sequences/validateInitialWorkItemMessageSequence';
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
-import { validatePetitionFeePaymentSequence } from './sequences/validatePetitionFeePaymentSequence';
+import { validatePetitionDetailsSequence } from './sequences/validatePetitionDetailsSequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
+import { validatePetitionerInformationFormSequence } from './sequences/validatePetitionerInformationFormSequence';
 import { validatePrimaryContactSequence } from './sequences/validatePrimaryContactSequence';
 import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
@@ -418,6 +421,7 @@ export const presenter = {
     gotoEditDocketEntrySequence,
     gotoEditOrderSequence,
     gotoEditPetitionDetailsSequence,
+    gotoEditPetitionerInformationSequence,
     gotoEditTrialSessionSequence,
     gotoFileDocumentSequence,
     gotoIdleLogoutSequence,
@@ -488,7 +492,6 @@ export const presenter = {
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openSelectDocumentWizardOverlaySequence,
-    openSetCalendarModalSequence,
     openTrialSessionPlanningModalSequence,
     openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence,
@@ -610,6 +613,7 @@ export const presenter = {
     updateDocketNumberSearchFormSequence,
     updateDocumentValueSequence,
     updateFileDocumentWizardFormValueSequence,
+    updateFormPartyTypeSequence,
     updateFormValueSequence,
     updateForwardFormValueSequence,
     updateJudgesCaseNoteOnCaseDetailSequence,
@@ -617,8 +621,9 @@ export const presenter = {
     updateMessageValueInModalSequence,
     updateMessageValueSequence,
     updateModalValueSequence,
-    updatePetitionFeePaymentSequence,
+    updatePetitionDetailsSequence,
     updatePetitionValueSequence,
+    updatePetitionerInformationFormSequence,
     updateQcCompleteForTrialSequence,
     updateScreenMetadataSequence,
     updateSearchTermSequence,
@@ -645,8 +650,9 @@ export const presenter = {
     validateInitialWorkItemMessageSequence,
     validateNoteSequence,
     validateOrderWithoutBodySequence,
-    validatePetitionFeePaymentSequence,
+    validatePetitionDetailsSequence,
     validatePetitionFromPaperSequence,
+    validatePetitionerInformationFormSequence,
     validatePrimaryContactSequence,
     validatePrioritizeCaseSequence,
     validateRemoveFromTrialSessionSequence,
