@@ -42,12 +42,13 @@ exports.updatePetitionerInformationInteractor = async ({
       oldData: oldCase.contactPrimary,
     });
 
-  const secondaryChange = contactSecondary
-    ? applicationContext.getUtilities().getDocumentTypeForAddressChange({
-        newData: contactSecondary,
-        oldData: oldCase.contactSecondary || {},
-      })
-    : undefined;
+  const secondaryChange =
+    contactSecondary && contactSecondary.name
+      ? applicationContext.getUtilities().getDocumentTypeForAddressChange({
+          newData: contactSecondary,
+          oldData: oldCase.contactSecondary || {},
+        })
+      : undefined;
 
   const caseEntity = new Case(
     {
