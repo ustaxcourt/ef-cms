@@ -20,7 +20,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "Answer",
@@ -198,7 +198,7 @@
       "eventCode": "APPL",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What Is This Application For?",
+      "labelFreeText": "What is this application for?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -333,8 +333,8 @@
       "category": "Miscellaneous",
       "eventCode": "AMDC",
       "scenario": "Nonstandard D",
-      "labelPreviousDocument": "Which Document Is This Certificate of Service For?",
-      "labelFreeText": "Date of Service",
+      "labelPreviousDocument": "Which document is this Certificate of Service for?",
+      "labelFreeText": "Date of service",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -347,7 +347,7 @@
       "labelPreviousDocument": "Which Document Are You Amending?",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "[First, Second, etc.] Amendment to [anything]",
@@ -355,10 +355,10 @@
       "category": "Miscellaneous",
       "eventCode": "ADMT",
       "scenario": "Nonstandard I",
-      "labelPreviousDocument": "",
-      "labelFreeText": "What is This Amendment For?",
+      "labelPreviousDocument": "What is this amendment for?",
+      "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration is This Filing?"
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "Appellate Filing Fee Received",
@@ -410,8 +410,8 @@
       "category": "Miscellaneous",
       "eventCode": "CS",
       "scenario": "Nonstandard D",
-      "labelPreviousDocument": "Which Document Is This Certificate of Service For?",
-      "labelFreeText": "Date of Service",
+      "labelPreviousDocument": "Which document is this Certificate of Service for?",
+      "labelFreeText": "Date of service",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -565,7 +565,7 @@
       "eventCode": "RATF",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What Are You Ratifying?",
+      "labelFreeText": "What are you ratifying?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -575,7 +575,7 @@
       "category": "Miscellaneous",
       "eventCode": "REDC",
       "scenario": "Nonstandard A",
-      "labelPreviousDocument": "Which Document Are You Redacting?",
+      "labelPreviousDocument": "Which document are you redacting?",
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": ""
@@ -587,7 +587,7 @@
       "eventCode": "RLRI",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Redacted Information Details",
+      "labelFreeText": "Redacted information details",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -743,7 +743,7 @@
       "eventCode": "M000",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What Is This Motion For?",
+      "labelFreeText": "What is this motion for?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -1359,7 +1359,7 @@
       "eventCode": "M052",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket Numbers (separate with a comma)",
+      "labelFreeText": "Docket numbers (separate with a comma)",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -1403,7 +1403,7 @@
       "eventCode": "M057",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -1414,7 +1414,7 @@
       "eventCode": "M058",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -1425,7 +1425,7 @@
       "eventCode": "M059",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -1524,7 +1524,7 @@
       "eventCode": "M067",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket Numbers to Be Consolidated (separate with a comma)",
+      "labelFreeText": "Docket numbers to be consolidated (separate with a comma)",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -1623,7 +1623,7 @@
       "eventCode": "M126",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Person, Notice, or Year",
+      "labelFreeText": "Person, notice, or Year",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -2177,7 +2177,7 @@
       "eventCode": "NOT",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What Is This Notice For?",
+      "labelFreeText": "What is this notice for?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -2364,7 +2364,7 @@
       "eventCode": "NINF",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What Do You Intend Not to File?",
+      "labelFreeText": "What do you intend not to file?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -2418,7 +2418,7 @@
       "category": "Notice",
       "eventCode": "NNOB",
       "scenario": "Nonstandard A",
-      "labelPreviousDocument": "Which Document Are You Not Objecting To?",
+      "labelPreviousDocument": "Which document are you not objecting to?",
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": ""
@@ -2429,7 +2429,7 @@
       "category": "Notice",
       "eventCode": "OBJN",
       "scenario": "Nonstandard A",
-      "labelPreviousDocument": "Which Document Are You Objecting To?",
+      "labelPreviousDocument": "Which document are you objecting to?",
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": ""
@@ -2809,7 +2809,7 @@
       "category": "Reply",
       "eventCode": "REPL",
       "scenario": "Nonstandard A",
-      "labelPreviousDocument": "Which Document Are You Replying To?",
+      "labelPreviousDocument": "Which document are you replying to?",
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": ""
@@ -2908,7 +2908,7 @@
       "category": "Reply",
       "eventCode": "SURP",
       "scenario": "Nonstandard A",
-      "labelPreviousDocument": "Which Document Are You Replying To?",
+      "labelPreviousDocument": "Which document are you replying to?",
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": ""
@@ -2922,7 +2922,7 @@
       "eventCode": "REQ",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What Is This Request For?",
+      "labelFreeText": "What is this request for?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -2935,7 +2935,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "Request for Judicial Notice",
@@ -2977,7 +2977,7 @@
       "eventCode": "RQT",
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
-      "labelFreeText": "Requested Location",
+      "labelFreeText": "Requested location",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -3000,7 +3000,7 @@
       "category": "Response, Opposition or Objection",
       "eventCode": "NOB",
       "scenario": "Nonstandard A",
-      "labelPreviousDocument": "Which Document Are You Not Objecting To?",
+      "labelPreviousDocument": "Which document are you not objecting to?",
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": ""
@@ -3011,7 +3011,7 @@
       "category": "Response, Opposition or Objection",
       "eventCode": "OBJE",
       "scenario": "Nonstandard A",
-      "labelPreviousDocument": "Which Document Are You Objecting To?",
+      "labelPreviousDocument": "Which document are you objecting to?",
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": ""
@@ -3023,7 +3023,7 @@
       "eventCode": "OBJ",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What Is Being Objected To?",
+      "labelFreeText": "What Is being objected to?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -3033,7 +3033,7 @@
       "category": "Response, Opposition or Objection",
       "eventCode": "OPPO",
       "scenario": "Nonstandard A",
-      "labelPreviousDocument": "Which Document Are You Opposed To?",
+      "labelPreviousDocument": "Which document are you opposed to?",
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": ""
@@ -3045,7 +3045,7 @@
       "eventCode": "OP",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What Is Being Opposed?",
+      "labelFreeText": "What is being opposed?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -3055,7 +3055,7 @@
       "category": "Response, Opposition or Objection",
       "eventCode": "RSP",
       "scenario": "Nonstandard A",
-      "labelPreviousDocument": "Which Document Are You Responding To?",
+      "labelPreviousDocument": "Which document are you responding to?",
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": ""
@@ -3067,7 +3067,7 @@
       "eventCode": "RESP",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What Is This Responding To?",
+      "labelFreeText": "What is this responding to?",
       "labelFreeText2": "",
       "ordinalField": ""
     }
@@ -3700,7 +3700,7 @@
       "eventCode": "STAT",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What Is This Statement For?",
+      "labelFreeText": "What is this statement for?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -3757,7 +3757,7 @@
       "eventCode": "STP",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What Is This Stipulation For?",
+      "labelFreeText": "What is this stipulation for?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -3792,7 +3792,7 @@
       "labelPreviousDocument": "",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "Stipulation of Pretrial Deadlines",
@@ -3834,7 +3834,7 @@
       "eventCode": "STBB",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket Number",
+      "labelFreeText": "Docket number",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -3868,10 +3868,10 @@
       "category": "Supplement",
       "eventCode": "SUPM",
       "scenario": "Nonstandard F",
-      "labelPreviousDocument": "Which Document Is This a Supplement To?",
+      "labelPreviousDocument": "Which document is this a supplement to?",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "[First, Second, etc.] Supplement To [anything]",
@@ -3880,7 +3880,7 @@
       "eventCode": "SPMT",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What Is This Supplement For?",
+      "labelFreeText": "What is this supplement for?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -3890,10 +3890,10 @@
       "category": "Supplement",
       "eventCode": "SPML",
       "scenario": "Nonstandard F",
-      "labelPreviousDocument": "Which Document Is This Supplemental For?",
+      "labelPreviousDocument": "Which document is this supplemental for?",
       "labelFreeText": "",
       "labelFreeText2": "",
-      "ordinalField": "What Iteration Is This Filing?"
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "[First, Second, etc.] Supplemental [anything]",
@@ -3902,7 +3902,7 @@
       "eventCode": "SATL",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "What is This Supplemental For?",
+      "labelFreeText": "What is this supplemental for?",
       "labelFreeText2": "",
       "ordinalField": ""
     }
@@ -3914,8 +3914,8 @@
       "category": "Supporting Document",
       "eventCode": "AFF",
       "scenario": "Nonstandard C",
-      "labelPreviousDocument": "Which Document Is This Affidavit in Support Of?",
-      "labelFreeText": "Who Signed This?",
+      "labelPreviousDocument": "Which document is this affidavit in support of?",
+      "labelFreeText": "Who signed this?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -3925,7 +3925,7 @@
       "category": "Supporting Document",
       "eventCode": "BRF",
       "scenario": "Nonstandard A",
-      "labelPreviousDocument": "Which Document Is This Brief in Support Of?",
+      "labelPreviousDocument": "Which document is this brief in support of?",
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": ""
@@ -3936,8 +3936,8 @@
       "category": "Supporting Document",
       "eventCode": "DCL",
       "scenario": "Nonstandard C",
-      "labelPreviousDocument": "Which Document Is This Declaration in Support Of?",
-      "labelFreeText": "Who Signed This?",
+      "labelPreviousDocument": "Which document is this declaration in support of?",
+      "labelFreeText": "Who signed this?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -3947,7 +3947,7 @@
       "category": "Supporting Document",
       "eventCode": "MISP",
       "scenario": "Nonstandard A",
-      "labelPreviousDocument": "Which Document Is This Memorandum in Support Of?",
+      "labelPreviousDocument": "Which document is this memorandum in support of?",
       "labelFreeText": "",
       "labelFreeText2": "",
       "ordinalField": ""
@@ -3958,8 +3958,8 @@
       "category": "Supporting Document",
       "eventCode": "USDL",
       "scenario": "Nonstandard C",
-      "labelPreviousDocument": "Which Document Is This Declaration in Support Of?",
-      "labelFreeText": "Who Signed This?",
+      "labelPreviousDocument": "Which document is this declaration in support of?",
+      "labelFreeText": "Who signed this?",
       "labelFreeText2": "",
       "ordinalField": ""
     }
