@@ -10,6 +10,7 @@ const targets = [
   'shared/src/business/useCaseHelper/pendingReport/pendingReport.pug',
   'shared/src/business/utilities/htmlGenerator/index.pug',
   'shared/src/business/utilities/htmlGenerator/index.scss',
+  'shared/src/business/utilities/generateHTMLTemplateForPDF/noticeOfTrialIssued.pug',
   'shared/static/images/ustc_seal.png',
 ];
 
