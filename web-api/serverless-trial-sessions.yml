@@ -33,10 +33,6 @@ custom:
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:

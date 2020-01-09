@@ -17,6 +17,7 @@ export const Contacts = connect(
     parentView,
     showPrimaryContact,
     showSecondaryContact,
+    wrapperClassName,
   }) => {
     return (
       <React.Fragment>
@@ -26,6 +27,7 @@ export const Contacts = connect(
             contactsHelper={contactsHelper}
             emailBind={emailBind}
             parentView={parentView}
+            wrapperClassName={wrapperClassName}
             onBlur={onBlur}
             onChange={onChange}
           />
@@ -35,6 +37,7 @@ export const Contacts = connect(
             bind={bind}
             contactsHelper={contactsHelper}
             parentView={parentView}
+            wrapperClassName={wrapperClassName}
             onBlur={onBlur}
             onChange={onChange}
           />

@@ -19,6 +19,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     .isExternalUser(user.role);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const modalState = get(state.modal);
+  let showEditPetitionerInformation = false;
   const {
     noticeOfAttachments,
     orderDesignatingPlaceOfTrial,
@@ -76,6 +77,8 @@ export const caseDetailHelper = (get, applicationContext) => {
     showEditContacts = false;
   } else if (user.role === USER_ROLES.practitioner) {
     showEditContacts = userAssociatedWithCase;
+  } else if (user.role === USER_ROLES.docketClerk) {
+    showEditPetitionerInformation = true;
   }
 
   const showRecallButton = caseDetail.status === STATUS_TYPES.batchedForIRS;
@@ -146,6 +149,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showDocumentStatus: !caseDetail.irsSendDate,
     showEditContacts,
     showEditPetitionDetailsButton: permissions.EDIT_PETITION_DETAILS,
+    showEditPetitionerInformation,
     showEditSecondaryContactModal:
       get(state.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,

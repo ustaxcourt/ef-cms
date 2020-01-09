@@ -230,7 +230,7 @@ const {
   generatePrintableFilingReceiptTemplate,
   generateTrialCalendarTemplate,
   generateTrialSessionPlanningReportTemplate,
-} = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF');
+} = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
 const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
@@ -626,8 +626,11 @@ const {
   updateJudgesCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/updateJudgesCaseNoteInteractor');
 const {
-  updatePetitionFeePaymentInteractor,
-} = require('../../shared/src/business/useCases/updatePetitionFeePaymentInteractor');
+  updatePetitionDetailsInteractor,
+} = require('../../shared/src/business/useCases/updatePetitionDetailsInteractor');
+const {
+  updatePetitionerInformationInteractor,
+} = require('../../shared/src/business/useCases/updatePetitionerInformationInteractor');
 const {
   updatePrimaryContactInteractor,
 } = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
@@ -1071,7 +1074,8 @@ module.exports = (appContextUser = {}) => {
         updateCourtIssuedOrderInteractor,
         updateDocketEntryInteractor,
         updateJudgesCaseNoteInteractor,
-        updatePetitionFeePaymentInteractor,
+        updatePetitionDetailsInteractor,
+        updatePetitionerInformationInteractor,
         updatePrimaryContactInteractor,
         updateQcCompleteForTrialInteractor,
         updateTrialSessionInteractor,

@@ -31,7 +31,9 @@ module.exports = {
     .handler,
   updateCounselOnCaseLambda: require('./cases/updateCounselOnCaseLambda')
     .handler,
-  updatePetitionFeePaymentLambda: require('./cases/updatePetitionFeePaymentLambda')
+  updatePetitionDetailsLambda: require('./cases/updatePetitionDetailsLambda')
+    .handler,
+  updatePetitionerInformationLambda: require('./cases/updatePetitionerInformationLambda')
     .handler,
   updatePrimaryContactLambda: require('./cases/updatePrimaryContactLambda')
     .handler,
