@@ -26,10 +26,10 @@ describe('generateNoticeOfTrialIssuedTemplate', () => {
           address2: 'Courtroom 2',
           city: 'City',
           courthouseName: 'Courthouse 1',
-          judge: 'Test Judge',
+          judge: { name: 'Test Judge' },
           postalCode: '12345',
           startDate: '2/2/2020',
-          startTime: '10:00 AM',
+          startTime: '10:00',
           state: 'ST',
         },
       },
@@ -37,7 +37,6 @@ describe('generateNoticeOfTrialIssuedTemplate', () => {
 
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
-    expect(result.indexOf('Test Caption Postfix')).toBeGreaterThan(-1);
     expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
     expect(result.indexOf('Courthouse 1')).toBeGreaterThan(-1);
     expect(result.indexOf('123 Some Street')).toBeGreaterThan(-1);
