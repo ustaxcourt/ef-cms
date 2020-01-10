@@ -1,4 +1,4 @@
-service: ef-cms-cases-parties
+service: ef-cms-case-parties
 plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
