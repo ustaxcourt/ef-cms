@@ -178,7 +178,7 @@ export default (test, fakeFile) => {
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'objections',
-      value: 'no',
+      value: 'No',
     });
 
     await test.runSequence('validateExternalDocumentInformationSequence');

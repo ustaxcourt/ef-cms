@@ -3,18 +3,18 @@ import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
-import { getCaseNoteForCaseAction } from '../actions/TrialSession/getCaseNoteForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/caseConsolidation/getConsolidatedCasesByCaseAction';
+import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
-import { setCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setCaseNoteOnCaseDetailAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/caseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
+import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
 
@@ -26,8 +26,8 @@ const gotoCaseDetailExternal = [
 ];
 
 const gotoCaseDetailInternalWithNotes = [
-  getCaseNoteForCaseAction,
-  setCaseNoteOnCaseDetailAction,
+  getJudgesCaseNoteForCaseAction,
+  setJudgesCaseNoteOnCaseDetailAction,
   ...gotoCaseDetailInternal,
 ];
 

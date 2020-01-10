@@ -1,9 +1,12 @@
 import { state } from 'cerebral';
+import getScanModeLabel from '../../utilities/getScanModeLabel';
 
-export const scanBatchPreviewerHelper = get => {
+export const scanBatchPreviewerHelper = (get, applicationContext) => {
   const selectedBatchIndex = get(state.selectedBatchIndex) || 0;
   const documentSelectedForScan = get(state.documentSelectedForScan);
-  const batches = get(state.batches[documentSelectedForScan]) || [];
+  const batches =
+    (documentSelectedForScan && get(state.batches[documentSelectedForScan])) ||
+    [];
   const selectedBatch = batches.length
     ? batches.find(b => b.index === selectedBatchIndex)
     : { pages: [] };
@@ -26,10 +29,25 @@ export const scanBatchPreviewerHelper = get => {
     selectPageImage = b64encoded;
   }
 
+  const scanMode = get(state.scanner.scanMode);
+  const scannerSource = get(state.scanner.scannerSourceName);
+
+  let scannerSourceDisplayName = 'None';
+
+  if (scannerSource) {
+    const scanModeLabel = getScanModeLabel(applicationContext, scanMode);
+    scannerSourceDisplayName = `${scannerSource} (${scanModeLabel})`;
+  }
+
+  batches.forEach(batch => {
+    batch.scanModeLabel = getScanModeLabel(applicationContext, batch.scanMode);
+  });
+
   return {
     batches,
     currentPage: currentPageIndex,
-    scannerSource: get(state.scanner.scannerSourceName),
+    scannerSource,
+    scannerSourceDisplayName,
     selectedBatch: batches.length
       ? batches.find(b => b.index === selectedBatchIndex)
       : {},

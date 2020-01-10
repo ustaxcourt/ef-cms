@@ -57,7 +57,7 @@ To exercise the CI/CD pipeline locally, run the following:
 
 This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral tests, Pa11y, etc. over all the components.
 
-## Running / verifing the project via Docker
+## Running / verifying the project via Docker
 
 Once [you have Docker installed](https://docs.docker.com/install/), the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it:
 
@@ -72,6 +72,9 @@ Once [you have Docker installed](https://docs.docker.com/install/), the followin
 - You can access the style guide at http://localhost:1234/style-guide
 
 Within Docker, you should allocate 4 CPUs, 16 GB of RAM, and 4 GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.
+
+### ECR
+ECR is Amazon’s docker container registry that holds images for `ef-cms` builds on CircleCI. Currently, images can be managed in the AWS ECR console under the `ef-cms-us-east-1`. If you need to update the Docker image, you can do so (with appropriate permissions) by running `./docker-to-ecr.sh`. This command will build an image per the `Dockerfile-CI` config, tag it as `latest` and push it to the repo in ECR.
 
 ## Running this project locally without Docker
 

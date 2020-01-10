@@ -1,43 +1,37 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { User } from '../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../applicationContext';
-import {
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} from '../../../../shared/src/business/utilities/DateHandler';
 import { extractedPendingMessagesFromCaseDetail as extractPendingMessagesFromCaseDetailComputed } from './extractPendingMessagesFromCaseDetail';
+import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
+
+let globalUser;
 
 const extractedPendingMessagesFromCaseDetail = withAppContextDecorator(
   extractPendingMessagesFromCaseDetailComputed,
   {
     ...applicationContext,
-    getCurrentUser: () => ({
-      role: User.ROLES.petitionsClerk,
-    }),
-    getUtilities: () => {
-      return {
-        createISODateString,
-        formatDateString,
-        formatNow,
-        prepareDateFromString,
-      };
-    },
+    getCurrentUser: () => globalUser,
   },
 );
 
-const baseState = {
-  constants: { STATUS_TYPES: Case.STATUS_TYPES, USER_ROLES: User.ROLES },
+const getBaseState = user => {
+  globalUser = user;
+  return {
+    permissions: getUserPermissions(user),
+  };
+};
+
+const petitionsClerkUser = {
+  role: User.ROLES.petitionsClerk,
+  userId: '123',
 };
 
 describe('extractPendingMessagesFromCaseDetail', () => {
   it('should not fail if work items is not defined', () => {
     const result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
-        ...baseState,
+        ...getBaseState(petitionsClerkUser),
         caseDetail: {
           documents: [{}],
         },
@@ -49,7 +43,7 @@ describe('extractPendingMessagesFromCaseDetail', () => {
   it('should not fail if documents is not defined', () => {
     const result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
-        ...baseState,
+        ...getBaseState(petitionsClerkUser),
         caseDetail: {},
       },
     });
@@ -59,7 +53,7 @@ describe('extractPendingMessagesFromCaseDetail', () => {
   it('sorts the workQueue by the latest currentMessage for each work item', () => {
     const result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
-        ...baseState,
+        ...getBaseState(petitionsClerkUser),
         caseDetail: {
           documents: [
             {
@@ -142,7 +136,7 @@ describe('extractPendingMessagesFromCaseDetail', () => {
   it('should filter out the batched for IRS messages', () => {
     const result = runCompute(extractedPendingMessagesFromCaseDetail, {
       state: {
-        ...baseState,
+        ...getBaseState(petitionsClerkUser),
         caseDetail: {
           documents: [
             {

@@ -33,20 +33,14 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const showConsolidatedCaseIcon = !!caseDetail.leadCaseId;
 
-  const showCreateOrderButton =
-    permissions.COURT_ISSUED_DOCUMENT &&
-    ['CaseDetailInternal'].includes(currentPage);
+  const showCreateOrderButton = permissions.COURT_ISSUED_DOCUMENT;
 
-  const showAddDocketEntryButton =
-    permissions.DOCKET_ENTRY && ['CaseDetailInternal'].includes(currentPage);
+  const showAddDocketEntryButton = permissions.DOCKET_ENTRY;
 
-  const showCaseDetailHeaderMenu =
-    !isExternalUser && ['CaseDetailInternal'].includes(currentPage);
+  const showCaseDetailHeaderMenu = !isExternalUser;
 
   const showFileDocumentButton =
-    permissions.FILE_EXTERNAL_DOCUMENT &&
-    ['CaseDetail'].includes(currentPage) &&
-    userAssociatedWithCase;
+    permissions.FILE_EXTERNAL_DOCUMENT && userAssociatedWithCase;
 
   return {
     hidePublicCaseInformation: !isExternalUser,
