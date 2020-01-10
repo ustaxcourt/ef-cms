@@ -10,7 +10,7 @@
           - Make the intended domain name available on your local system, e.g. `export EFCMS_DOMAIN="ef-cms.example.gov"`
           - Create the policies on your local system: `cd iam/terraform/account-specific/main && ../bin/deploy-app.sh`
                - Make a note of the `cloudwatch_role_arn` that is output, to use shortly for the CirleCI setup.
-          - cd `../../environment-specific/main` && ../bin/deploy-app stg`
+          - cd `../../environment-specific/main && ../bin/deploy-app.sh stg`
                - Make a note of the ARNs that are output, to use shortly for the CirleCI setup.
      - In IAM, attach the `circle_ci_policy` to your `CircleCI` user.
      - Note the AWS-generated access key and secret access key — it will needed shortly for the CircleCI setup.
