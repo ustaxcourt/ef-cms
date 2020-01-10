@@ -13,26 +13,19 @@ const generateNoticeOfTrialIssuedTemplate = async ({
   applicationContext,
   content,
 }) => {
-  const {
-    caption,
-    captionPostfix,
-    docketNumberWithSuffix,
-    trialInfo,
-  } = content;
+  const { caption, docketNumberWithSuffix, trialInfo } = content;
 
   const pug = applicationContext.getPug();
 
   const compiledFunction = pug.compile(template);
   const main = compiledFunction({
     caption,
-    captionPostfix,
     docketNumberWithSuffix,
     trialInfo,
   });
 
   const templateContent = {
     caption,
-    captionPostfix,
     docketNumberWithSuffix,
     main,
   };
@@ -40,6 +33,7 @@ const generateNoticeOfTrialIssuedTemplate = async ({
   return await generateHTMLTemplateForPDF({
     applicationContext,
     content: templateContent,
+    options: { overwriteMain: true },
   });
 };
 

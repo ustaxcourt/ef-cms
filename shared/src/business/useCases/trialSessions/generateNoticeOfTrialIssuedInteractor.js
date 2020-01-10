@@ -1,3 +1,5 @@
+const { Case } = require('../../entities/cases/Case');
+
 /**
  * generateNoticeOfTrialIssuedInteractor
  *
@@ -38,15 +40,14 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
     state,
   } = trialSession;
 
-  const { caseCaption, caseCaptionPostfix, docketNumberSuffix } = caseDetail;
+  const { caseCaption, docketNumberSuffix } = caseDetail;
 
   const contentHtml = await applicationContext
     .getTemplateGenerators()
     .generateNoticeOfTrialIssuedTemplate({
       applicationContext,
       content: {
-        caption: caseCaption,
-        captionPostfix: caseCaptionPostfix,
+        caption: Case.getCaseCaptionNames(caseCaption),
         docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
         trialInfo: {
           address1,

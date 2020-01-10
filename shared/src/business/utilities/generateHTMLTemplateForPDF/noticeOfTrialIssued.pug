@@ -1,3 +1,33 @@
+.court-header
+  .us-tax-court-seal
+  h1 United States Tax Court
+  p.heading-address
+    | 400 Second Street, N.W.
+    br
+    | Washington, D.C. 20217
+    br
+    br 
+    | October 6, 2019
+
+  .clear
+
+.case-information
+  #case-caption
+    p.margin-bottom-0 
+      | #{caption} 
+      br
+      span.space Petitioner
+  .clear
+  #caption
+    p.margin-top-0
+      span.space v.
+      br
+      | Commissioner of Internal Revenue
+      br
+      span.space Respondent
+  #docket-number Docket Number #{docketNumberWithSuffix}
+  .clear
+
 .clear
   .info-box.info-box-trial
     .info-box-header
@@ -16,7 +46,7 @@
     .info-box-content
       p #{trialInfo.judge.name}
 
-h3 NOTICE SETTING CASE FOR TRIAL
+h3.text-bold NOTICE SETTING CASE FOR TRIAL
 
 p This case is set for trial at the Trial Session beginning at #{trialInfo.startTime} on #{trialInfo.startDate}. The calendar for that Session will be called at that date and time, and the parties are expected to be present and to be prepared to try the case.  
   b Your failure to appear may result in dismissal of the case and entry of decision against you.
