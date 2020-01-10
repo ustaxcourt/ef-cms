@@ -23,6 +23,6 @@ exports.associatePractitionerWithCaseInteractor = ({
   return post({
     applicationContext,
     body: { caseId, representingPrimary, representingSecondary, userId },
-    endpoint: `/cases/${caseId}/associate-practitioner`,
+    endpoint: `/case-parties/${caseId}/associate-practitioner`,
   });
 };
