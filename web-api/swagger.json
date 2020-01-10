@@ -403,7 +403,7 @@
         }
       }
     },
-    "/cases/{caseId}/counsel/{userId}": {
+    "/case-parties/{caseId}/counsel/{userId}": {
       "parameters": [
         {
           "name": "caseId",
@@ -480,7 +480,7 @@
         }
       }
     },
-    "/cases/{caseId}/contact-primary": {
+    "/case-parties/{caseId}/contact-primary": {
       "parameters": [
         {
           "name": "caseId",
@@ -4053,7 +4053,7 @@
         }
       }
     },
-    "/cases/{caseId}/petition-details": {
+    "/case-parties/{caseId}/petition-details": {
       "parameters": [
         {
           "name": "caseId",
@@ -4105,7 +4105,7 @@
         }
       }
     },
-    "/cases/{caseId}/petitioner-info": {
+    "/case-parties/{caseId}/petitioner-info": {
       "parameters": [
         {
           "name": "caseId",
@@ -4225,7 +4225,7 @@
         }
       }
     },
-    "/cases/{caseId}/associate-practitioner": {
+    "/cases-parties/{caseId}/associate-practitioner": {
       "parameters": [
         {
           "name": "caseId",
@@ -4277,7 +4277,7 @@
         }
       }
     },
-    "/cases/{caseId}/associate-respondent": {
+    "/case-parties/{caseId}/associate-respondent": {
       "parameters": [
         {
           "name": "caseId",

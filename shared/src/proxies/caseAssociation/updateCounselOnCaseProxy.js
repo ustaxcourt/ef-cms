@@ -17,6 +17,6 @@ exports.updateCounselOnCaseInteractor = ({
   return put({
     applicationContext,
     body: { ...userData },
-    endpoint: `/cases/${caseId}/counsel/${userIdToUpdate}`,
+    endpoint: `/cases-parties/${caseId}/counsel/${userIdToUpdate}`,
   });
 };
