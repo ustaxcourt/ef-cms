@@ -28,7 +28,7 @@ describe('generateNoticeOfTrialIssuedTemplate', () => {
           courthouseName: 'Courthouse 1',
           judge: { name: 'Test Judge' },
           postalCode: '12345',
-          startDate: '2/2/2020',
+          startDate: '2020-02-02T05:00:00.000Z',
           startTime: '10:00',
           state: 'ST',
         },

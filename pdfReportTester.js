@@ -20,7 +20,7 @@ const {
         city: 'Chicago',
         courthouseName: 'Courthouse 123',
         judge: { name: 'Judge Happy' },
-        startDate: '12/12/2021',
+        startDate: '2025-12-12T05:00:00.000Z',
         startTime: '10:00',
         state: 'IL',
         zip: '55555',
