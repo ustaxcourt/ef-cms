@@ -240,6 +240,7 @@ module.exports = {
           'px',
           'ramsay',
           'rect',
+          'reindex',
           'renderer',
           'rescan',
           'riker',
