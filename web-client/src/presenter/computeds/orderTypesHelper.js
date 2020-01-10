@@ -8,7 +8,9 @@ export const orderTypesHelper = (get, applicationContext) => {
   let orderTypes = ORDER_TYPES_MAP;
 
   if (user.role === USER_ROLES.petitionsClerk) {
-    orderTypes = orderTypes.filter(order => order.eventCode === 'O');
+    orderTypes = orderTypes.filter(order =>
+      ['O', 'NOT'].includes(order.eventCode),
+    );
   }
 
   const showDocumentTitleInput = ['O', 'NOT'].includes(eventCode);
