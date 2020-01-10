@@ -110,6 +110,9 @@ const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
+  createElasticsearchReindexRecord,
+} = require('../../shared/src/persistence/dynamo/elasticsearch/createElasticsearchReindexRecord');
+const {
   createISODateString,
   formatDateString,
   formatNow,
@@ -160,6 +163,9 @@ const {
 const {
   deleteDocument,
 } = require('../../shared/src/persistence/s3/deleteDocument');
+const {
+  deleteElasticsearchReindexRecord,
+} = require('../../shared/src/persistence/dynamo/elasticsearch/deleteElasticsearchReindexRecord');
 const {
   deleteJudgesCaseNote,
 } = require('../../shared/src/persistence/dynamo/judgesCaseNotes/deleteJudgesCaseNote');
@@ -352,6 +358,9 @@ const {
   getDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/getDownloadPolicyUrlInteractor');
 const {
+  getElasticsearchReindexRecords,
+} = require('../../shared/src/persistence/dynamo/elasticsearch/getElasticsearchReindexRecords');
+const {
   getEligibleCasesForTrialCity,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialCity');
 const {
@@ -405,6 +414,9 @@ const {
 const {
   getPublicDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor');
+const {
+  getRecord,
+} = require('../../shared/src/persistence/dynamo/elasticsearch/getRecord');
 const {
   getRespondentsBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getRespondentsBySearchKeyInteractor');
@@ -819,6 +831,7 @@ module.exports = (appContextUser = {}) => {
         createCaseCatalogRecord,
         createCaseDeadline,
         createCaseTrialSortMappingRecords,
+        createElasticsearchReindexRecord,
         createSectionInboxRecord,
         createTrialSession,
         createTrialSessionWorkingCopy,
@@ -828,6 +841,7 @@ module.exports = (appContextUser = {}) => {
         deleteCaseDeadline,
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
+        deleteElasticsearchReindexRecord,
         deleteJudgesCaseNote,
         deleteSectionOutboxRecord,
         deleteTrialSession,
@@ -852,6 +866,7 @@ module.exports = (appContextUser = {}) => {
         getDocumentQCServedForSection,
         getDocumentQCServedForUser,
         getDownloadPolicyUrl,
+        getElasticsearchReindexRecords,
         getEligibleCasesForTrialCity,
         getEligibleCasesForTrialSession,
         getInboxMessagesForSection,
@@ -859,6 +874,7 @@ module.exports = (appContextUser = {}) => {
         getInternalUsers,
         getJudgesCaseNote,
         getPublicDownloadPolicyUrl,
+        getRecord,
         getSentMessagesForSection,
         getSentMessagesForUser,
         getTrialSessionById,
