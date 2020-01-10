@@ -53,7 +53,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
+        topic: ${self:service}-${self:provider.stage}-cloudwatch-alerts
         notifications:
           - protocol: email
             endpoint: ustaxcourt@flexion.us
