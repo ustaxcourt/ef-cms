@@ -22,17 +22,15 @@ const generateNoticeOfTrialIssuedTemplate = async ({
 
   const pug = applicationContext.getPug();
 
-  const footerDate = formatNow('MMDDYYYY');
   const headerDate = formatNow('MMMM D, YYYY');
-
   const trialStartTimeIso = createISODateString(trialInfo.startTime, 'HH:mm');
   trialInfo.startTime = formatDateString(trialStartTimeIso, 'hh:mm A');
+  trialInfo.startDate = formatDateString(trialInfo.startDate, 'MMDDYYYY');
 
   const compiledFunction = pug.compile(template);
   const main = compiledFunction({
     caption,
     docketNumberWithSuffix,
-    footerDate,
     headerDate,
     trialInfo,
   });
