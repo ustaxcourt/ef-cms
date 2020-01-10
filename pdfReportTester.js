@@ -12,8 +12,7 @@ const {
       getPug: () => pug,
     },
     content: {
-      caption: 'Jenny Craig, Petitioner',
-      captionPostfix: 'v. Commissioner of Internal Revenue, Respondent',
+      caption: 'Jenny Craig',
       docketNumberWithSuffix: '101-20S',
       trialInfo: {
         address1: '123 Testing St',
