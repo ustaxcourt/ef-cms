@@ -1,6 +1,5 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-
 import React from 'react';
 
 export const MessagesInProgress = connect(
@@ -41,7 +40,7 @@ export const MessagesInProgress = connect(
                     <p className="margin-y-0">
                       <a
                         className="case-link"
-                        href={`/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}`}
+                        href={`/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}${workItem.editLink}`}
                       >
                         {workItem.document.documentTitle ||
                           workItem.document.documentType}

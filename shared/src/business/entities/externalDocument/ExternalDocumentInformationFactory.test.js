@@ -383,7 +383,7 @@ describe('ExternalDocumentInformationFactory', () => {
         );
       });
 
-      describe('Responent Selected', () => {
+      describe('Respondent Selected', () => {
         beforeEach(() => {
           baseDoc.partyRespondent = true;
         });

@@ -1,10 +1,15 @@
+const petitionsclerk = require('./pa11y/pa11y-petitionsclerk');
 const practitioner = require('./pa11y/pa11y-practitioner');
 const respondent = require('./pa11y/pa11y-respondent');
+
+const urls = [...petitionsclerk, ...practitioner, ...respondent];
+
+// see https://github.com/pa11y/pa11y#command-line-interface
 
 module.exports = {
   defaults: {
     chromeLaunchConfig: {
-      args: ['--no-sandbox', '--disable-dev-shm-usage'],
+      args: ['--no-sandbox'],
     },
     concurrency: 3,
     debug: true,
@@ -15,5 +20,5 @@ module.exports = {
     useIncognitoBrowserContext: true,
     wait: 5000,
   },
-  urls: [...practitioner, ...respondent],
+  urls,
 };

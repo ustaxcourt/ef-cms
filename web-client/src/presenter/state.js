@@ -41,6 +41,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
+import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { primaryContactEditHelper } from './computeds/primaryContactEditHelper';
@@ -147,6 +148,7 @@ export const state = {
   modal: {},
   navigation: {},
   notifications: {},
+  orderTypesHelper,
   path: '/',
   paymentInfo: {
     showDetails: false,

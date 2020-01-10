@@ -2,7 +2,10 @@ version: 2
 jobs:
   bundle:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -24,7 +27,7 @@ jobs:
             - npm-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: NPM - Install
-          command: npm i
+          command: npm i && npm rebuild node-sass
       - save_cache:
           name: NPM - Save to Cache
           paths:
@@ -37,7 +40,10 @@ jobs:
 
   build-api:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - attach_workspace:
           at: ~/
@@ -56,7 +62,7 @@ jobs:
           name: Web API - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
+            /home/app/sonar_home/bin/sonar-scanner \
             -Dsonar.projectKey="${API_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
@@ -67,7 +73,10 @@ jobs:
 
   build-shared:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2024m'
     steps:
@@ -80,7 +89,7 @@ jobs:
           name: Shared - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
+            /home/app/sonar_home/bin/sonar-scanner \
             -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
@@ -91,7 +100,10 @@ jobs:
 
   build-client:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: large
@@ -108,7 +120,7 @@ jobs:
           name: Web Client - SonarQube
           command: |
             export SONAR_SCANNER_OPTS="-Xmx2048m"
-            /tmp/sonar-scanner/bin/sonar-scanner \
+            /home/app/sonar_home/bin/sonar-scanner \
             -Dsonar.projectKey="${UI_SONAR_KEY}" \
             -Dsonar.branch.name="${CIRCLE_BRANCH}" \
             -Dsonar.organization="${SONAR_ORG}" \
@@ -119,7 +131,10 @@ jobs:
 
   e2e-pa11y:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms2048m -Xmx4096m'
     resource_class: xlarge
@@ -127,60 +142,41 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Pa11y - Web Client Round 1
+          name: Create Pa11y Artifacts Directory
+          command: mkdir /tmp/pa11y
+      - run:
+          name: Pa11y - Web Client 1
           command: |
             npm run build:all
-            SLS_DEBUG=* RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /dev/null &
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-1.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
       - run:
-          name: Pa11y - Web Client Round 2
+          name: Pa11y - Web Client 2
           command: |
-            sleep 5
-            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
+            npm run build:all
+            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y/pa11y-server-2.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:3000/api/swagger
             sleep 5
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
       - run:
-          name: Pa11y - Web Client Docketclerk
-          command: |
-            sleep 5
-            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 5
-            npm run test:pa11y:docketclerk --node-flags --max-old-space-size=1024
-      - run:
-          name: Pa11y - Web Client Petitionsclerk
-          command: |
-            sleep 5
-            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 5
-            npm run test:pa11y:petitionsclerk --node-flags --max-old-space-size=1024
-      - run:
-          name: Pa11y - Web Client Petitioner
-          command: |
-            sleep 5
-            SLS_DEBUG="*" RUN_DIR=dist AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:api:ci start:client:ci > /tmp/pa11y-server.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:3000/api/swagger
-            sleep 5
-            npm run test:pa11y:petitioner --node-flags --max-old-space-size=1024
-      - run:
           name: Pa11y - Public Site
           command: |
-            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /dev/null &
+            AWS_ACCESS_KEY_ID=noop AWS_SECRET_ACCESS_KEY=noop npx run-p start:public > /tmp/pa11y/pa11y-server-public.txt &
             sleep 5
             npm run test:pa11y:public
+      - store_artifacts:
+          path: /tmp/pa11y
 
   e2e-cypress:
     docker:
-      - image: sutt0n/ef-cms:latest
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
     resource_class: xlarge
@@ -202,7 +198,7 @@ jobs:
             sleep 5
             npm run cypress
       - store_artifacts:
-          path: /home/circleci/project/cypress/videos/
+          path: /root/project/cypress/videos/
 
   deploy-ui:
     machine:
@@ -256,7 +252,7 @@ jobs:
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-east-1"
       - run:
           name: 'Deploy - Web API - Layers - ClamAV - us-east-1'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-east-1"
+          command: if [ "${ENV}" != "dev" ]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-east-1"; fi;
       - run:
           name: 'Deploy - Web API - Serverless - Public API - us-east-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-public-api.sh ${ENV} us-east-1"
@@ -313,7 +309,7 @@ jobs:
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-puppeteer.sh ${ENV} us-west-1"
       - run:
           name: 'Deploy - Web API - Layers - ClamAV - us-west-1'
-          command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-west-1"
+          command: if [ "${ENV}" != "dev" ]; then docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" --rm efcms /bin/sh -c "./web-api/run-serverless-clamav.sh ${ENV} us-west-1"; fi;
       - run:
           name: 'Deploy - Web API - Serverless - Public API - us-west-1'
           command: docker run -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" -v $(pwd)/.cache:/home/app/.cache --rm efcms /bin/sh -c "./web-api/run-serverless-public-api.sh ${ENV} us-west-1"

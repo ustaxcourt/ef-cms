@@ -1,5 +1,5 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
-import { extractNotesFromCalendaredCasesAction } from '../actions/TrialSession/extractNotesFromCalendaredCasesAction';
+import { extractJudgesNotesFromCalendaredCasesAction } from '../actions/TrialSession/extractJudgesNotesFromCalendaredCasesAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
@@ -36,7 +36,7 @@ const checkUserAssociationAndProceed = [
         yes: [
           getCalendaredCasesForTrialSessionAction,
           setCalendaredCasesOnTrialSessionAction,
-          extractNotesFromCalendaredCasesAction,
+          extractJudgesNotesFromCalendaredCasesAction,
         ],
       },
       setCurrentPageAction('TrialSessionWorkingCopy'),

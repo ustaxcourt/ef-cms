@@ -9,6 +9,7 @@ import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCourtIssuedDocumentInitialDataAction } from '../actions/CourtIssuedDocketEntry/setCourtIssuedDocumentInitialDataAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultServiceStampAction } from '../actions/CourtIssuedDocketEntry/setDefaultServiceStampAction';
 import { setDocumentIdAction } from '../actions/setDocumentIdAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { state } from 'cerebral';
@@ -28,6 +29,7 @@ export const gotoAddCourtIssuedDocketEntrySequence = [
       setCaseAction,
       setDocumentIdAction,
       setCourtIssuedDocumentInitialDataAction,
+      setDefaultServiceStampAction,
       generateCourtIssuedDocumentTitleAction,
       set(state.isEditingDocketEntry, false),
       setCurrentPageAction('CourtIssuedDocketEntry'),

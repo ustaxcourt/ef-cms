@@ -15,9 +15,23 @@ const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes } = require('lodash');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
+const { Order } = require('../orders/Order');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
 const { User } = require('../User');
+
+const orderDocumentTypes = Order.ORDER_TYPES.map(
+  orderType => orderType.documentType,
+);
+const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+  courtIssuedDoc => courtIssuedDoc.documentType,
+);
+
+Case.PAYMENT_STATUS = {
+  PAID: 'Paid',
+  UNPAID: 'Not Paid',
+  WAIVED: 'Waived',
+};
 
 Case.STATUS_TYPES = {
   assignedCase: 'Assigned - Case',
@@ -164,6 +178,10 @@ Case.VALIDATION_ERROR_MESSAGES = {
     },
     'Your Petition file size is empty',
   ],
+  petitionPaymentDate: 'Please enter a valid Petition Fee payment date',
+  petitionPaymentMethod: 'Enter a valid Petition Fee payment method',
+  petitionPaymentStatus: 'Enter a valid Petition Fee payment status',
+  petitionPaymentWaivedDate: 'Enter a valid date waived',
   preferredTrialCity: 'Select a preferred trial location',
   procedureType: 'Select a case procedure',
   receivedAt: [
@@ -211,6 +229,7 @@ function Case(rawCase, { applicationContext }) {
   this.blockedReason = rawCase.blockedReason;
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
+  this.caseNote = rawCase.caseNote;
   this.caseType = rawCase.caseType;
   this.contactPrimary = rawCase.contactPrimary;
   this.contactSecondary = rawCase.contactSecondary;
@@ -230,8 +249,12 @@ function Case(rawCase, { applicationContext }) {
   this.partyType = rawCase.partyType;
   this.payGovDate = rawCase.payGovDate;
   this.payGovId = rawCase.payGovId;
+  this.petitionPaymentStatus =
+    rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
+  this.petitionPaymentDate = rawCase.petitionPaymentDate;
+  this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
+  this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
-  this.proceduralNote = rawCase.proceduralNote;
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.status = rawCase.status || Case.STATUS_TYPES.new;
@@ -327,13 +350,23 @@ joiValidationDecorator(
       otherwise: joi.optional().allow(null),
       then: joi.string().required(),
     }),
+    caseCaption: joi.string().optional(),
     caseId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
       .optional(),
+    caseNote: joi.string().optional(),
     caseType: joi.string().optional(),
+    contactPrimary: joi
+      .object()
+      .optional()
+      .allow(null),
+    contactSecondary: joi
+      .object()
+      .optional()
+      .allow(null),
     createdAt: joi
       .date()
       .iso()
@@ -403,6 +436,7 @@ joiValidationDecorator(
     orderForFilingFee: joi.boolean().optional(),
     orderForOds: joi.boolean().optional(),
     orderForRatification: joi.boolean().optional(),
+    orderToChangeDesignatedPlaceOfTrial: joi.boolean().optional(),
     orderToShowCause: joi.boolean().optional(),
     partyType: joi.string().optional(),
     payGovDate: joi
@@ -415,12 +449,46 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
+    petitionPaymentDate: joi.when('petitionPaymentStatus', {
+      is: Case.PAYMENT_STATUS.PAID,
+      otherwise: joi
+        .date()
+        .iso()
+        .optional()
+        .allow(null),
+      then: joi
+        .date()
+        .iso()
+        .required(),
+    }),
+    petitionPaymentMethod: joi.when('petitionPaymentStatus', {
+      is: Case.PAYMENT_STATUS.PAID,
+      otherwise: joi
+        .string()
+        .allow(null)
+        .optional(),
+      then: joi.string().required(),
+    }),
+    petitionPaymentStatus: joi
+      .string()
+      .valid(Object.values(Case.PAYMENT_STATUS)),
+    petitionPaymentWaivedDate: joi.when('petitionPaymentStatus', {
+      is: Case.PAYMENT_STATUS.WAIVED,
+      otherwise: joi
+        .date()
+        .iso()
+        .allow(null)
+        .optional(),
+      then: joi
+        .date()
+        .iso()
+        .required(),
+    }),
     practitioners: joi.array().optional(),
     preferredTrialCity: joi
       .string()
       .optional()
       .allow(null),
-    proceduralNote: joi.string().optional(),
     procedureType: joi.string().optional(),
     receivedAt: joi
       .date()
@@ -430,7 +498,7 @@ joiValidationDecorator(
     respondents: joi.array().optional(),
     status: joi
       .string()
-      .valid(Object.keys(Case.STATUS_TYPES).map(key => Case.STATUS_TYPES[key]))
+      .valid(Object.values(Case.STATUS_TYPES))
       .optional(),
     trialDate: joi
       .date()
@@ -1346,6 +1414,32 @@ Case.sortByDocketNumber = function(cases) {
 Case.findLeadCaseForCases = function(cases) {
   const casesOrdered = Case.sortByDocketNumber([...cases]);
   return casesOrdered.shift();
+};
+
+/**
+ * @param {string} documentId the id of the document to check
+ * @returns {boolean} true if the document is draft, false otherwise
+ */
+Case.prototype.isDocumentDraft = function(documentId) {
+  const document = this.getDocumentById({ documentId });
+
+  const isNotArchived = !document.archived;
+  const isNotServed = !document.servedAt;
+  const isDocumentOnDocketRecord = this.docketRecord.find(
+    docketEntry => docketEntry.documentId === document.documentId,
+  );
+  const isStipDecision = document.documentType === 'Stipulated Decision';
+  const isDraftOrder = orderDocumentTypes.includes(document.documentType);
+  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+    document.documentType,
+  );
+  return (
+    isNotArchived &&
+    isNotServed &&
+    (isStipDecision ||
+      (isDraftOrder && !isDocumentOnDocketRecord) ||
+      (isCourtIssuedDocument && !isDocumentOnDocketRecord))
+  );
 };
 
 module.exports = { Case };

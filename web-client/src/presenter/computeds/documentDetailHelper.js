@@ -159,7 +159,9 @@ export const documentDetailHelper = (get, applicationContext) => {
   const showPrintCaseConfirmationButton =
     document.status === 'served' && formattedDocument.isPetition === true;
 
-  const showAddDocketEntryButton = permissions.DOCKET_ENTRY && isDraftDocument;
+  const showAddCourtIssuedDocketEntryButton =
+    (permissions.DOCKET_ENTRY || permissions.CREATE_ORDER_DOCKET_ENTRY) &&
+    isDraftDocument;
 
   return {
     createdFiledLabel: isOrder ? 'Created' : 'Filed', // Should actually be all court-issued documents
@@ -169,16 +171,23 @@ export const documentDetailHelper = (get, applicationContext) => {
       const actions = get(state.workItemActions);
       return actions[workItemId] === action;
     },
-    showAddDocketEntryButton,
+    showAddCourtIssuedDocketEntryButton,
     showCaseDetailsEdit,
     showCaseDetailsView,
     showConfirmEditOrder: isSigned && isOrder,
     showCreatedFiled: (!isOrder && !isCourtIssuedDocument) || isDraftDocument,
     showDocumentInfoTab,
+    showEditCourtIssuedDocketEntry:
+      isNotServed &&
+      !isDraftDocument &&
+      permissions.DOCKET_ENTRY &&
+      formattedDocument.isPetition === false &&
+      formattedDocument.isCourtIssuedDocument,
     showEditDocketEntry:
       !isDraftDocument &&
       permissions.DOCKET_ENTRY &&
-      formattedDocument.isPetition === false,
+      formattedDocument.isPetition === false &&
+      !formattedDocument.isCourtIssuedDocument,
     showPrintCaseConfirmationButton,
     showRecallButton,
     showRemoveSignature: isOrder && isSigned,

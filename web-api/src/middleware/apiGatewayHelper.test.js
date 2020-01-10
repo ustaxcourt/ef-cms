@@ -127,13 +127,13 @@ describe('getAuthHeader', () => {
           Authorization: 'bearer ',
         },
         queryStringParameters: {
-          token: 'teoken',
+          token: 'token',
         },
       });
     } catch (err) {
       error = err;
     }
-    expect(response).toEqual('teoken');
+    expect(response).toEqual('token');
     expect(error).toEqual(undefined);
   });
 
@@ -163,13 +163,13 @@ describe('getAuthHeader', () => {
           Authorization: 'bearer ',
         },
         query: {
-          token: 'teoken',
+          token: 'token',
         },
       });
     } catch (err) {
       error = err;
     }
-    expect(response).toEqual('teoken');
+    expect(response).toEqual('token');
     expect(error).toEqual(undefined);
   });
 

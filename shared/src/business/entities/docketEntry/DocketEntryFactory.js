@@ -82,9 +82,13 @@ function DocketEntryFactory(rawProps) {
       .iso()
       .max('now')
       .required(),
+    documentType: joi.string().optional(),
     eventCode: joi.string().required(),
+    freeText: joi.string().optional(),
     hasSupportingDocuments: joi.boolean(),
     lodged: joi.boolean(),
+    ordinalValue: joi.string().optional(),
+    previousDocument: joi.string().optional(),
     primaryDocumentFile: joi.object().optional(),
     primaryDocumentFileSize: joi.when('primaryDocumentFile', {
       is: joi.exist().not(null),
@@ -96,6 +100,12 @@ function DocketEntryFactory(rawProps) {
         .max(MAX_FILE_SIZE_BYTES)
         .integer(),
     }),
+    serviceDate: joi
+      .date()
+      .iso()
+      .max('now')
+      .optional(),
+    trialLocation: joi.string().optional(),
   };
 
   let schemaOptionalItems = {

@@ -97,7 +97,11 @@ const app = {
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor({ applicationContext, key: 'scannerSourceName' });
+    const scanMode = await applicationContext
+      .getUseCases()
+      .getItemInteractor({ applicationContext, key: 'scanMode' });
     presenter.state.scanner = {
+      scanMode,
       scannerSourceName,
     };
 

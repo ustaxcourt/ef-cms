@@ -27,6 +27,6 @@ exports.getAllCaseDeadlinesInteractor = async ({ applicationContext }) => {
 
   return allCaseDeadlines.map(caseDeadline => ({
     ...caseDeadline,
-    caseTitle: Case.getCaseCaptionNames(Case.getCaseCaption(caseDeadline)),
+    caseTitle: Case.getCaseCaptionNames(caseDeadline.caseTitle),
   }));
 };

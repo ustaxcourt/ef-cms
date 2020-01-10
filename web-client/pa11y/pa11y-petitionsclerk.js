@@ -131,9 +131,9 @@ module.exports = [
       'wait for #case-detail-menu-button to be visible',
       'wait for .progress-indicator to be hidden',
       'click element #case-detail-menu-button',
-      'wait for #button-add-deadline to be visible',
+      'wait for #menu-button-add-deadline to be visible',
       'wait for .progress-indicator to be hidden',
-      'click element #button-add-deadline',
+      'click element #menu-button-add-deadline',
       'wait for #deadline-date-legend to be visible',
     ],
     notes: 'checks a11y of add deadline modal',
@@ -289,7 +289,7 @@ module.exports = [
       'wait for #button-create-order to be visible',
       'click element #button-create-order',
       'wait for #eventCode to be visible',
-      'set field #eventCode to ODD',
+      'set field #eventCode to O',
       'check field #eventCode',
     ],
     notes: 'checks a11y of create order modal',
@@ -332,4 +332,5 @@ module.exports = [
     url:
       'http://localhost:1234/mock-login?token=petitionsclerk&path=/search&info=trial-session-planning-modal',
   },
+  'http://localhost:1234/mock-login?token=petitionsclerk&path=/edit-trial-session/6b6975cf-2b10-4e84-bcae-91e162d2f9d1',
 ];

@@ -149,9 +149,6 @@ const {
   deleteCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor');
 const {
-  deleteCaseNote,
-} = require('../../shared/src/persistence/dynamo/caseNotes/deleteCaseNote');
-const {
   deleteCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/deleteCaseNoteInteractor');
 const {
@@ -164,11 +161,23 @@ const {
   deleteDocument,
 } = require('../../shared/src/persistence/s3/deleteDocument');
 const {
-  deleteProceduralNoteInteractor,
-} = require('../../shared/src/business/useCases/proceduralNote/deleteProceduralNoteInteractor');
+  deleteJudgesCaseNote,
+} = require('../../shared/src/persistence/dynamo/judgesCaseNotes/deleteJudgesCaseNote');
+const {
+  deleteJudgesCaseNoteInteractor,
+} = require('../../shared/src/business/useCases/caseNote/deleteJudgesCaseNoteInteractor');
 const {
   deleteSectionOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteSectionOutboxRecord');
+const {
+  deleteTrialSession,
+} = require('../../shared/src/persistence/dynamo/trialSessions/deleteTrialSession');
+const {
+  deleteTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/deleteTrialSessionInteractor');
+const {
+  deleteTrialSessionWorkingCopy,
+} = require('../../shared/src/persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy');
 const {
   deleteUserConnection,
 } = require('../../shared/src/persistence/dynamo/notifications/deleteUserConnection');
@@ -279,12 +288,6 @@ const {
   getCaseInteractor,
 } = require('../../shared/src/business/useCases/getCaseInteractor');
 const {
-  getCaseNote,
-} = require('../../shared/src/persistence/dynamo/caseNotes/getCaseNote');
-const {
-  getCaseNoteInteractor,
-} = require('../../shared/src/business/useCases/caseNote/getCaseNoteInteractor');
-const {
   getCasesByLeadCaseId,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByLeadCaseId');
 const {
@@ -377,6 +380,12 @@ const {
 const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
+const {
+  getJudgesCaseNote,
+} = require('../../shared/src/persistence/dynamo/judgesCaseNotes/getJudgesCaseNote');
+const {
+  getJudgesCaseNoteInteractor,
+} = require('../../shared/src/business/useCases/caseNote/getJudgesCaseNoteInteractor');
 const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
@@ -502,14 +511,14 @@ const {
   saveCaseDetailInternalEditInteractor,
 } = require('../../shared/src/business/useCases/saveCaseDetailInternalEditInteractor');
 const {
+  saveCaseNoteInteractor,
+} = require('../../shared/src/business/useCases/caseNote/saveCaseNoteInteractor');
+const {
   saveDocument,
 } = require('../../shared/src/persistence/s3/saveDocument');
 const {
   saveIntermediateDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/editDocketEntry/saveIntermediateDocketEntryInteractor');
-const {
-  saveProceduralNoteInteractor,
-} = require('../../shared/src/business/useCases/proceduralNote/saveProceduralNoteInteractor');
 const {
   saveSignedDocumentInteractor,
 } = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
@@ -580,12 +589,6 @@ const {
   updateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor');
 const {
-  updateCaseNote,
-} = require('../../shared/src/persistence/dynamo/caseNotes/updateCaseNote');
-const {
-  updateCaseNoteInteractor,
-} = require('../../shared/src/business/useCases/caseNote/updateCaseNoteInteractor');
-const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
 const {
@@ -610,11 +613,23 @@ const {
   updateHighPriorityCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateHighPriorityCaseTrialSortMappingRecords');
 const {
+  updateJudgesCaseNote,
+} = require('../../shared/src/persistence/dynamo/judgesCaseNotes/updateJudgesCaseNote');
+const {
+  updateJudgesCaseNoteInteractor,
+} = require('../../shared/src/business/useCases/caseNote/updateJudgesCaseNoteInteractor');
+const {
+  updatePetitionFeePaymentInteractor,
+} = require('../../shared/src/business/useCases/updatePetitionFeePaymentInteractor');
+const {
   updatePrimaryContactInteractor,
 } = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
 const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
+const {
+  updateTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/updateTrialSessionInteractor');
 const {
   updateTrialSessionWorkingCopy,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy');
@@ -798,10 +813,12 @@ module.exports = (appContextUser = {}) => {
         createUserInboxRecord,
         createWorkItem,
         deleteCaseDeadline,
-        deleteCaseNote,
         deleteCaseTrialSortMappingRecords,
         deleteDocument,
+        deleteJudgesCaseNote,
         deleteSectionOutboxRecord,
+        deleteTrialSession,
+        deleteTrialSessionWorkingCopy,
         deleteUserConnection,
         deleteUserFromCase,
         deleteUserOutboxRecord,
@@ -813,7 +830,6 @@ module.exports = (appContextUser = {}) => {
         getCaseByCaseId,
         getCaseByDocketNumber,
         getCaseDeadlinesByCaseId,
-        getCaseNote,
         getCasesByLeadCaseId,
         getCasesByUser,
         getDocumentQCBatchedForSection,
@@ -828,6 +844,7 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForSection,
         getInboxMessagesForUser,
         getInternalUsers,
+        getJudgesCaseNote,
         getPublicDownloadPolicyUrl,
         getSentMessagesForSection,
         getSentMessagesForUser,
@@ -854,10 +871,10 @@ module.exports = (appContextUser = {}) => {
         setWorkItemAsRead,
         updateCase,
         updateCaseDeadline,
-        updateCaseNote,
         updateCaseTrialSortMappingRecords,
         updateDocumentProcessingStatus,
         updateHighPriorityCaseTrialSortMappingRecords,
+        updateJudgesCaseNote,
         updateTrialSession,
         updateTrialSessionWorkingCopy,
         updateUser,
@@ -962,7 +979,8 @@ module.exports = (appContextUser = {}) => {
         deleteCaseDeadlineInteractor,
         deleteCaseNoteInteractor,
         deleteCounselFromCaseInteractor,
-        deleteProceduralNoteInteractor,
+        deleteJudgesCaseNoteInteractor,
+        deleteTrialSessionInteractor,
         fetchPendingItemsInteractor,
         fileCourtIssuedDocketEntryInteractor,
         fileCourtIssuedOrderInteractor,
@@ -981,7 +999,6 @@ module.exports = (appContextUser = {}) => {
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseInteractor,
-        getCaseNoteInteractor,
         getCasesByUserInteractor,
         getConsolidatedCasesByCaseInteractor,
         getConsolidatedCasesByUserInteractor,
@@ -997,6 +1014,7 @@ module.exports = (appContextUser = {}) => {
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,
         getJudgeForUserChambersInteractor,
+        getJudgesCaseNoteInteractor,
         getNotificationsInteractor,
         getPractitionersBySearchKeyInteractor,
         getPublicCaseInteractor,
@@ -1020,8 +1038,8 @@ module.exports = (appContextUser = {}) => {
         runBatchProcessInteractor,
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,
+        saveCaseNoteInteractor,
         saveIntermediateDocketEntryInteractor,
-        saveProceduralNoteInteractor,
         saveSignedDocumentInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
         serveCourtIssuedDocumentInteractor,
@@ -1034,13 +1052,15 @@ module.exports = (appContextUser = {}) => {
         unprioritizeCaseInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
-        updateCaseNoteInteractor,
         updateCaseTrialSortTagsInteractor,
         updateCounselOnCaseInteractor,
         updateCourtIssuedDocketEntryInteractor,
         updateCourtIssuedOrderInteractor,
         updateDocketEntryInteractor,
+        updateJudgesCaseNoteInteractor,
+        updatePetitionFeePaymentInteractor,
         updatePrimaryContactInteractor,
+        updateTrialSessionInteractor,
         updateTrialSessionWorkingCopyInteractor,
         updateUserContactInformationInteractor,
         userIsAssociated,

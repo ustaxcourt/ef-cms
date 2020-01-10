@@ -297,6 +297,39 @@ describe('Case entity', () => {
       );
       expect(myCase.isValid()).toBeTruthy();
     });
+
+    describe('with different payment statuses', () => {
+      it('requires payment date and method if petition fee status is paid', () => {
+        const myCase = new Case(
+          {
+            ...MOCK_CASE,
+            petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+          },
+          {
+            applicationContext,
+          },
+        );
+        expect(myCase.getFormattedValidationErrors()).toMatchObject({
+          petitionPaymentDate: expect.anything(),
+          petitionPaymentMethod: expect.anything(),
+        });
+      });
+
+      it('requires waived date to be specified if petition fee is waived', () => {
+        const myCase = new Case(
+          {
+            ...MOCK_CASE,
+            petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+          },
+          {
+            applicationContext,
+          },
+        );
+        expect(myCase.getFormattedValidationErrors()).toMatchObject({
+          petitionPaymentWaivedDate: expect.anything(),
+        });
+      });
+    });
   });
 
   describe('validate', () => {
@@ -1491,7 +1524,7 @@ describe('Case entity', () => {
   });
 
   describe('updatePractitioner', () => {
-    it('updates the given practioner on the case', () => {
+    it('updates the given practitioner on the case', () => {
       const caseToVerify = new Case(
         {
           practitioners: [
@@ -1551,7 +1584,7 @@ describe('Case entity', () => {
         {
           respondents: [
             new Practitioner({
-              email: 'rspndnt',
+              email: 'respondent@example.com',
               userId: 'respondent',
             }),
           ],
@@ -1562,7 +1595,9 @@ describe('Case entity', () => {
       );
 
       expect(caseToVerify.respondents).not.toBeNull();
-      expect(caseToVerify.respondents[0].email).toEqual('rspndnt');
+      expect(caseToVerify.respondents[0].email).toEqual(
+        'respondent@example.com',
+      );
 
       caseToVerify.updateRespondent({
         email: 'respondent@example.com',
@@ -2279,6 +2314,64 @@ describe('Case entity', () => {
 
         expect(result.caseId).toEqual('234');
       });
+    });
+  });
+
+  describe('isDocumentDraft', () => {
+    it('should return false for non-draft documents', () => {
+      const myCase = new Case(
+        {
+          documents: [
+            {
+              documentId: '1',
+              documentType: 'Answer',
+            },
+            {
+              archived: false,
+              documentId: '2',
+              documentType: 'Order',
+            },
+            {
+              archived: false,
+              documentId: '3',
+              documentType: 'Stipulated Decision',
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isDocumentDraft('1')).toEqual(false);
+    });
+
+    it('should return true for draft documents', () => {
+      const myCase = new Case(
+        {
+          docketRecord: [
+            {
+              documentId: '1',
+            },
+          ],
+          documents: [
+            {
+              archived: false,
+              documentId: '2',
+              documentType: 'Order',
+            },
+            {
+              archived: false,
+              documentId: '3',
+              documentType: 'Stipulated Decision',
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isDocumentDraft('2')).toEqual(true);
+      expect(myCase.isDocumentDraft('3')).toEqual(true);
     });
   });
 });

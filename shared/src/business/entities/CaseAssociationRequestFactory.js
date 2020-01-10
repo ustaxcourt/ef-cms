@@ -121,6 +121,8 @@ function CaseAssociationRequestFactory(rawProps) {
     documentTitleTemplate: joi.string().required(),
     documentType: joi.string().required(),
     eventCode: joi.string().required(),
+    partyPractitioner: joi.boolean().optional(),
+    partyRespondent: joi.boolean().optional(),
     primaryDocumentFile: joi.object().required(),
     scenario: joi.string().required(),
   };
