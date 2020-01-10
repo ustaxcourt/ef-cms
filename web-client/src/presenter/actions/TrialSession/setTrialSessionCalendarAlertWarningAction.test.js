@@ -2,7 +2,7 @@ import { runAction } from 'cerebral/test';
 import { setTrialSessionCalendarAlertWarningAction } from './setTrialSessionCalendarAlertWarningAction';
 
 describe('setTrialSessionCalendarAlertWarningAction', () => {
-  it('should update the state from state', async () => {
+  it('should set state.alertWarning with the print paper service for parties message', async () => {
     const result = await runAction(setTrialSessionCalendarAlertWarningAction);
 
     expect(result.output).toEqual({
