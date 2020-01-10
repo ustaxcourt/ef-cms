@@ -1,4 +1,5 @@
 const template = require('./noticeOfTrialIssued.pug_');
+const { formatNow } = require('../DateHandler');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 /**
@@ -17,16 +18,22 @@ const generateNoticeOfTrialIssuedTemplate = async ({
 
   const pug = applicationContext.getPug();
 
+  const footerDate = formatNow('MMDDYYYY');
+  const headerDate = formatNow('MMMM D, YYYY');
   const compiledFunction = pug.compile(template);
   const main = compiledFunction({
     caption,
     docketNumberWithSuffix,
+    footerDate,
+    headerDate,
     trialInfo,
   });
 
   const templateContent = {
     caption,
     docketNumberWithSuffix,
+    footerDate,
+    headerDate,
     main,
   };
 
