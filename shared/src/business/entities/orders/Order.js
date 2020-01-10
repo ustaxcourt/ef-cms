@@ -38,6 +38,10 @@ Order.ORDER_TYPES = [
     documentType: 'Decision',
     eventCode: 'DEC',
   },
+  {
+    documentType: 'Notice',
+    eventCode: 'NOT',
+  },
 ];
 
 /**
