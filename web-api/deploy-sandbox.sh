@@ -46,7 +46,7 @@ function prepare_serverless() {
 function run_development() {
 
     if [[ "${ENVIRONMENT}" == "dev" ]] || [[ "${ENVIRONMENT}" == "staging" ]] || [[ "${ENVIRONMENT}" == "test" ]] || [[ "${ENVIRONMENT}" == "prod" ]]; then
-        echo "Cannot use this script to deploy to dev, staging or prod."
+        echo "Cannot use this script to deploy to dev, staging, test, or prod."
         exit 1
     fi
 
