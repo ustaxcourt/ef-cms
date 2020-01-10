@@ -434,6 +434,7 @@ workflows:
             branches:
               only:
                 - staging
+                - test
                 - master
                 - experimental
       - deploy-api-east:
@@ -447,6 +448,7 @@ workflows:
             branches:
               only:
                 - staging
+                - test
                 - master
                 - experimental
       - deploy-api-west:
@@ -460,6 +462,7 @@ workflows:
             branches:
               only:
                 - staging
+                - test
                 - master
                 - experimental
       - post-deploy:
@@ -472,5 +475,6 @@ workflows:
               only:
                 - develop
                 - staging
+                - test
                 - master
                 - experimental
