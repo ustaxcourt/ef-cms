@@ -1,7 +1,7 @@
 .court-header
   .us-tax-court-seal
   h1 United States Tax Court
-  p.heading-address
+  p.heading-address.margin-top-0
     | 400 Second Street, N.W.
     br
     | Washington, D.C. 20217
@@ -13,18 +13,13 @@
 
 .case-information
   #case-caption
-    p.margin-bottom-0 
-      | #{caption} 
-      br
-      span.space Petitioner
+    p #{caption}
+    p.space Petitioner
   .clear
   #caption
-    p.margin-top-0
-      span.space v.
-      br
-      | Commissioner of Internal Revenue
-      br
-      span.space Respondent
+    p.space.margin-top-0 v.
+    p Commissioner of Internal Revenue
+    p.space Respondent
   #docket-number Docket Number #{docketNumberWithSuffix}
   .clear
 
@@ -33,12 +28,16 @@
     .info-box-header
       p Trial At:
     .info-box-content
-      if trialInfo.courthouseName
-        p #{trialInfo.courthouseName}
-      p #{trialInfo.address1}
-      if trialInfo.address2
-        p #{trialInfo.address2}
-      p #{trialInfo.city}, #{trialInfo.state} #{trialInfo.postalCode}
+      p
+        if trialInfo.courthouseName
+          | #{trialInfo.courthouseName}
+        br
+        | #{trialInfo.address1}
+        if trialInfo.address2
+          br
+          | #{trialInfo.address2}
+        br
+        | #{trialInfo.city}, #{trialInfo.state} #{trialInfo.postalCode}
 
   .info-box.info-box-judge
     .info-box-header 
@@ -59,7 +58,9 @@ p The parties should contact each other promptly and cooperate fully so that the
   b Your failure to cooperate may also result in dismissal of the case and entry of decision against you.
  
 .signature
-  p Stephanie A. Servoss
-  p Clerk of the Court
+  p 
+    | Stephanie A. Servoss
+    br
+    | Clerk of the Court
 
 h3.text-bold.served-date Served #{footerDate}
