@@ -21,6 +21,6 @@ exports.updatePetitionerInformationInteractor = ({
   return put({
     applicationContext,
     body: { contactPrimary, contactSecondary, partyType },
-    endpoint: `/cases/${caseId}/petitioner-info`,
+    endpoint: `/case-parties/${caseId}/petitioner-info`,
   });
 };

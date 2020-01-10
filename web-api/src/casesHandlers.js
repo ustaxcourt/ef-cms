@@ -1,17 +1,11 @@
 module.exports = {
   addConsolidatedCaseLambda: require('./cases/addConsolidatedCaseLambda')
     .handler,
-  associatePractitionerWithCaseLambda: require('./manualAssociation/associatePractitionerWithCaseLambda')
-    .handler,
-  associateRespondentWithCaseLambda: require('./manualAssociation/associateRespondentWithCaseLambda')
-    .handler,
   blockCaseFromTrialLambda: require('./cases/blockCaseFromTrialLambda').handler,
   caseAdvancedSearchLambda: require('./cases/caseAdvancedSearchLambda').handler,
   createCaseFromPaperLambda: require('./cases/createCaseFromPaperLambda')
     .handler,
   createCaseLambda: require('./cases/createCaseLambda').handler,
-  deleteCounselFromCaseLambda: require('./cases/deleteCounselFromCaseLambda')
-    .handler,
   getBlockedCasesLambda: require('./cases/getBlockedCasesLambda').handler,
   getCaseLambda: require('./cases/getCaseLambda').handler,
   getConsolidatedCasesByCaseLambda: require('./cases/getConsolidatedCasesByCaseLambda')
@@ -28,14 +22,6 @@ module.exports = {
   unprioritizeCaseLambda: require('./cases/unprioritizeCaseLambda').handler,
   updateCaseContextLambda: require('./cases/updateCaseContextLambda').handler,
   updateCaseTrialSortTagsLambda: require('./cases/updateCaseTrialSortTagsLambda')
-    .handler,
-  updateCounselOnCaseLambda: require('./cases/updateCounselOnCaseLambda')
-    .handler,
-  updatePetitionDetailsLambda: require('./cases/updatePetitionDetailsLambda')
-    .handler,
-  updatePetitionerInformationLambda: require('./cases/updatePetitionerInformationLambda')
-    .handler,
-  updatePrimaryContactLambda: require('./cases/updatePrimaryContactLambda')
     .handler,
   updateQcCompleteForTrialLambda: require('./cases/updateQcCompleteForTrialLambda')
     .handler,
