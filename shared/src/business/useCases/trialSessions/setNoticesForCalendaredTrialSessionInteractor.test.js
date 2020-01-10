@@ -142,6 +142,21 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(error).toBeDefined();
   });
 
+  it('Should return immediately if there are no calendared cases to be set', async () => {
+    applicationContext.getPersistenceGateway = () => ({
+      getCalendaredCasesForTrialSession: () => [], // returning no cases
+    });
+
+    const result = await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).not.toHaveBeenCalled();
+    expect(saveDocumentMock).not.toHaveBeenCalled();
+    expect(result).toBeUndefined();
+  });
+
   it('Should generate a Notice of Trial for each case', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
@@ -204,5 +219,54 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(result).toBeDefined();
+  });
+
+  it('Should only generate a Notice of Trial for a single case if a caseId is set', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentMock).toHaveBeenCalled();
+
+    const findNoticeOfTrial = caseRecord => {
+      return caseRecord.documents.find(
+        document =>
+          document.documentType === Document.NOTICE_OF_TRIAL.documentType,
+      );
+    };
+
+    expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy();
+    expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
+  });
+
+  it('Should only set the notice for a single case if a caseId is set', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '000aa3f7-e2e3-43e6-885d-4ce341588000',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(calendaredCases[0]).toHaveProperty('noticeOfTrialDate');
+    expect(calendaredCases[1]).not.toHaveProperty('noticeOfTrialDate');
+  });
+
+  it('Should only create a docket entry for a single case if a caseId is set', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    const findNoticeOfTrialDocketEntry = caseRecord => {
+      return caseRecord.docketRecord.find(
+        entry => entry.description === Document.NOTICE_OF_TRIAL.documentType,
+      );
+    };
+
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeFalsy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
   });
 });
