@@ -20,6 +20,12 @@ h2 {
   font-family: serif;
 }
 
+p.heading-address {
+  width:100%;
+  text-align: center;
+  font-size: 12px;
+}
+
 h3 {
   margin-top: 40px;
   margin-bottom: 30px;
@@ -81,9 +87,13 @@ th {
   font-family: serif;
 }
 
-.case-information #caption {
-  width: 40%;
+.case-information #caption,#case-caption {
+  width: 49%;
   float: left;
+}
+
+.case-information .space {
+  margin-left: 25%;
 }
 
 .case-information #docket-number {
@@ -149,4 +159,16 @@ th {
 
 @page :first {
   margin-top: 0;
+}
+
+.margin-top-0 {
+  margin-top: 0;
+}
+
+.margin-bottom-0 {
+  margin-bottom: 0;
+}
+
+.text-bold {
+  font-weight:bold;
 }
