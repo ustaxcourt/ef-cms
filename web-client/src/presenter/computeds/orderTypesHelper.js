@@ -13,10 +13,12 @@ export const orderTypesHelper = (get, applicationContext) => {
 
   const showDocumentTitleInput = ['O', 'NOT'].includes(eventCode);
   let documentTitleInputLabel;
-  if (showDocumentTitleInput && eventCode === 'O') {
-    documentTitleInputLabel = 'Order title';
-  } else if (showDocumentTitleInput && eventCode === 'NOT') {
-    documentTitleInputLabel = 'Notice title';
+  if (showDocumentTitleInput) {
+    if (eventCode === 'O') {
+      documentTitleInputLabel = 'Order title';
+    } else if (eventCode === 'NOT') {
+      documentTitleInputLabel = 'Notice title';
+    }
   }
 
   return {
