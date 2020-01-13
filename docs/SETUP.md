@@ -18,6 +18,7 @@
 - Create the Lambda roles & policies needed for the Lambdas that run the backend:
      - `cd iam/environment-specific/terraform/main && ../bin/deploy-app dev`
      - `cd iam/environment-specific/terraform/main && ../bin/deploy-app stg`
+     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app test`
      - `cd iam/environment-specific/terraform/main && ../bin/deploy-app prod`
 - [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
 - [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
@@ -53,11 +54,13 @@
      - `USTC_ADMIN_PASS` (a unique password of your choice used by the Cognito admin user)
      - `DYNAMSOFT_PRODUCT_KEYS_DEV` (the product key provided after purchasing Dynamic Web TWAIN)
      - `DYNAMSOFT_PRODUCT_KEYS_STG`  (the product key provided after purchasing Dynamic Web TWAIN)
+     - `DYNAMSOFT_PRODUCT_KEYS_TEST`  (the product key provided after purchasing Dynamic Web TWAIN)
      - `DYNAMSOFT_PRODUCT_KEYS_PROD`  (the product key provided after purchasing Dynamic Web TWAIN)
      - `DYNAMSOFT_S3_ZIP_PATH` (the full S3 path to the Dynamic Web TWAIN ZIP, e.g. `s3://ef-cms.ustaxcourt.gov-software/Dynamsoft/dynamic-web-twain-sdk-14.3.1.tar.gz`)
      - `CLOUDWATCH_ROLE_ARN` (the ARN output after running Terraform in the `iam/terraform/account-specific/main` dir)
      - `POST_CONFIRMATION_ROLE_ARN_DEV` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
      - `POST_CONFIRMATION_ROLE_ARN_STG` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
+     - `POST_CONFIRMATION_ROLE_ARN_TEST` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
      - `POST_CONFIRMATION_ROLE_ARN_PROD` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
      - `SES_DMARC_EMAIL` (email address used with SES to which aggregate DMARC validations are sent)
 8. Run a build in CircleCI.
