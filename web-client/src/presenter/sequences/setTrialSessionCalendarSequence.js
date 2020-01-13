@@ -1,4 +1,5 @@
 import { canSetTrialSessionToCalendarAction } from '../actions/TrialSession/canSetTrialSessionToCalendarAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getSetTrialSessionCalendarAlertSuccessAction } from '../actions/TrialSession/getSetTrialSessionCalendarAlertSuccessAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
@@ -16,6 +17,7 @@ import { state } from 'cerebral';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const setTrialSessionCalendarSequence = [
+  clearAlertsAction,
   setWaitingForResponseAction,
   canSetTrialSessionToCalendarAction,
   {
