@@ -88,4 +88,26 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
       showJudge: false,
     });
   });
+
+  it('returns freeTextLabel for an order if the selected eventCode is O', () => {
+    let testState = { ...state, form: { eventCode: 'O' } };
+
+    const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
+      state: testState,
+    });
+    expect(result).toMatchObject({
+      freeTextLabel: 'What is this order for?',
+    });
+  });
+
+  it('returns freeTextLabel for a notice if the selected eventCode is NOT', () => {
+    let testState = { ...state, form: { eventCode: 'NOT' } };
+
+    const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
+      state: testState,
+    });
+    expect(result).toMatchObject({
+      freeTextLabel: 'What is this notice for?',
+    });
+  });
 });
