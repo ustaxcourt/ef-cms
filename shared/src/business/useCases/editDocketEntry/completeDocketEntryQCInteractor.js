@@ -1,4 +1,7 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   formatDocument,
   getFilingsAndProceedings,
 } = require('../../utilities/getFormattedCaseDetail');
@@ -183,6 +186,8 @@ exports.completeDocketEntryQCInteractor = async ({
       });
   }
 
+  let servedParties;
+
   if (needsNoticeOfDocketChange) {
     const noticeDocumentId = await generateNoticeOfDocketChangePdf({
       applicationContext,
@@ -204,6 +209,9 @@ exports.completeDocketEntryQCInteractor = async ({
     );
 
     caseEntity.addDocument(noticeUpdatedDocument);
+
+    //serve the notice
+    servedParties = aggregatePartiesForService(caseEntity);
   }
 
   await applicationContext.getPersistenceGateway().updateCase({
@@ -219,5 +227,8 @@ exports.completeDocketEntryQCInteractor = async ({
     });
   }
 
-  return caseEntity.toRawObject();
+  return {
+    caseDetail: caseEntity.toRawObject(),
+    paperServiceParties: servedParties && servedParties.paper,
+  };
 };
