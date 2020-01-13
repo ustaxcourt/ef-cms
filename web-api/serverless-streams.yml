@@ -132,3 +132,8 @@ functions:
           arn: ${opt:dynamo_stream_arn}
           batchSize: 100
           startingPosition: TRIM_HORIZON
+
+  reprocessFailedRecords:
+    handler: web-api/${self:provider.dir}/streamsHandlers.reprocessFailedRecordsLambda
+    events:
+      - schedule: cron(0 6 * * ? *)
