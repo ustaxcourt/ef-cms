@@ -165,7 +165,7 @@ describe('publicCaseDetailHelper', () => {
         hasDocument: true,
         index: 3,
         isPaper: undefined,
-        servedAtFormatted: '11/27/18 03:49 pm',
+        servedAtFormatted: '11/27/18',
         servedPartiesCode: '',
         showDocumentDescriptionWithoutLink: false,
         showLinkToDocument: true,

@@ -56,7 +56,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         additionalInfo2: 'Additional Info 2',
         documentId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
         isStatusServed: true,
-        servedAtFormatted: '03/27/19 05:54 pm',
+        servedAtFormatted: '03/27/19',
       },
     ],
     partyType: ContactFactory.PARTY_TYPES.petitioner,
