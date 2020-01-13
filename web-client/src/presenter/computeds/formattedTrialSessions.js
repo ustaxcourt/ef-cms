@@ -12,7 +12,7 @@ export const formatSession = (session, applicationContext) => {
     .formatDateString(session.startDate, 'MMDDYY');
   session.formattedNoticeIssuedDate = applicationContext
     .getUtilities()
-    .formatDateString(session.noticeIssuedDate, 'MMDDYY');
+    .formatDateString(session.noticeIssuedDate, 'MMDDYYYY');
   return session;
 };
 
