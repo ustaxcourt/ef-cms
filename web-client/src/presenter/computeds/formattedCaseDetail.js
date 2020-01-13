@@ -112,7 +112,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
         isPaper,
         isPending: document && document.pending,
         isServed: document && !!document.servedAt,
-        servedAtFormatted: document && document.servedAtFormatted,
+        servedAtFormatted:
+          document &&
+          applicationContext
+            .getUtilities()
+            .formatDateString(document.servedAt, 'MMDDYY'),
         servedPartiesCode: document && document.servedPartiesCode,
         showDocumentDescriptionWithoutLink:
           !userHasAccessToCase ||
