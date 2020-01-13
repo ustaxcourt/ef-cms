@@ -45,6 +45,9 @@ const applicationContext = {
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
   },
+  getDispatchers: () => ({
+    sendBulkTemplatedEmail: () => null,
+  }),
   getPersistenceGateway: () => {
     return persistenceGateway;
   },
@@ -88,14 +91,28 @@ const applicationContext = {
 
 describe('update primary contact on a case', () => {
   it('updates contactPrimary', async () => {
-    await updatePrimaryContactInteractor({
+    const caseDetail = await updatePrimaryContactInteractor({
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-      contactInfo: {},
+      contactInfo: {
+        address1: '453 Electric Ave',
+        city: 'Philadelphia',
+        countryType: 'domestic',
+        email: 'petitioner',
+        name: 'Bill Burr',
+        phone: '1234567890',
+        postalCode: '99999',
+        serviceIndicator: 'Electronic',
+        state: 'PA',
+      },
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
+    expect(caseDetail.documents[4].servedAt).toBeDefined();
+    expect(caseDetail.documents[4].servedParties).toEqual([
+      { email: 'petitioner', name: 'Bill Burr' },
+    ]);
   });
 
   it('throws an error if the case was not found', async () => {
