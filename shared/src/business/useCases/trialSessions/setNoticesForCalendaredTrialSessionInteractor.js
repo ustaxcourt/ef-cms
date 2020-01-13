@@ -118,7 +118,13 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     caseEntity.setNoticeOfTrialDate();
 
     // Serve notice
-    await serveNoticeForCase(caseEntity, noticeDocument, noticeOfTrialIssued);
+    const servedParties = await serveNoticeForCase(
+      caseEntity,
+      noticeDocument,
+      noticeOfTrialIssued,
+    );
+
+    noticeDocument.setAsServed(servedParties.all);
 
     const rawCase = caseEntity.validate().toRawObject();
     await applicationContext.getPersistenceGateway().updateCase({
@@ -136,7 +142,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
    * @param {object} caseEntity the case entity
    * @param {object} documentEntity the document entity
    * @param {Uint8Array} documentPdfData the pdf data of the document being served
-   * @returns {void} sends service emails and updates `newPdfDoc` with paper service pages for printing
+   * @returns {object} sends service emails and updates `newPdfDoc` with paper service pages for printing returning served servedParties
    */
   const serveNoticeForCase = async (
     caseEntity,
@@ -212,6 +218,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         });
       }
     }
+
+    return servedParties;
   };
 
   for (var calendaredCase of calendaredCases) {
