@@ -359,7 +359,7 @@ describe('TrialSession entity', () => {
     });
   });
 
-  describe('setNoticedIssued', () => {
+  describe('setNoticesIssued', () => {
     it('Should set the noticeIssuedDate on the trial session', async () => {
       const trialSession = new TrialSession(
         {
@@ -377,7 +377,7 @@ describe('TrialSession entity', () => {
 
       expect(trialSession.noticeIssuedDate).toBeFalsy();
 
-      trialSession.setNoticedIssued();
+      trialSession.setNoticesIssued();
 
       expect(trialSession.noticeIssuedDate).toBeTruthy();
     });

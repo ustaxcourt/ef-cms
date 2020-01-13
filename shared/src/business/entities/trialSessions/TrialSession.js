@@ -435,7 +435,7 @@ TrialSession.prototype.canSetAsCalendared = function() {
  *
  * @returns {TrialSession} the trial session entity
  */
-TrialSession.prototype.setNoticedIssued = function() {
+TrialSession.prototype.setNoticesIssued = function() {
   this.noticeIssuedDate = createISODateString();
   return this;
 };
