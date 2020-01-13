@@ -35,6 +35,14 @@ exports.processStreamRecordsInteractor = async ({
           }),
         );
       } catch (e) {
+        await applicationContext
+          .getPersistenceGateway()
+          .createElasticsearchReindexRecord({
+            applicationContext,
+            recordPk: record.dynamodb.Keys.pk.S,
+            recordSk: record.dynamodb.Keys.sk.S,
+          });
+
         applicationContext.logger.info('Error', e);
       }
     }

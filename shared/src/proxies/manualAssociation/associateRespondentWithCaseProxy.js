@@ -17,6 +17,6 @@ exports.associateRespondentWithCaseInteractor = ({
   return post({
     applicationContext,
     body: { caseId, userId },
-    endpoint: `/cases/${caseId}/associate-respondent`,
+    endpoint: `/case-parties/${caseId}/associate-respondent`,
   });
 };
