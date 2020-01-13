@@ -37,7 +37,9 @@ let generateNoticeOfTrialIssuedInteractorMock;
 let generatePaperServiceAddressPagePdfMock;
 let saveDocumentMock;
 let sendBulkTemplatedEmailMock;
+let updateTrialSessionMock;
 let testPdfDoc;
+let trialSession;
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   beforeEach(() => {
@@ -46,6 +48,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     generateNoticeOfTrialIssuedInteractorMock = jest.fn();
     saveDocumentMock = jest.fn();
     sendBulkTemplatedEmailMock = jest.fn();
+    updateTrialSessionMock = jest.fn();
 
     generatePaperServiceAddressPagePdfMock = jest
       .fn()
@@ -76,6 +79,8 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     calendaredCases = [case0, case1];
 
+    trialSession = { ...MOCK_TRIAL };
+
     applicationContext = {
       getCurrentUser: () => {
         return new User({
@@ -90,7 +95,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       getPersistenceGateway: () => ({
         deleteCaseTrialSortMappingRecords: () => {},
         getCalendaredCasesForTrialSession: () => calendaredCases,
-        getTrialSessionById: () => MOCK_TRIAL,
+        getTrialSessionById: () => trialSession,
         saveDocument: saveDocumentMock,
         updateCase: ({ caseToUpdate }) => {
           calendaredCases.some((caseRecord, index) => {
@@ -100,7 +105,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
             }
           });
         },
-        updateTrialSession: () => {},
+        updateTrialSession: ({ trialSessionToUpdate }) => {
+          updateTrialSessionMock();
+          trialSession = trialSessionToUpdate;
+        },
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       getUseCaseHelpers: () => ({
@@ -140,6 +148,21 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     }
 
     expect(error).toBeDefined();
+  });
+
+  it('Should return immediately if there are no calendared cases to be set', async () => {
+    applicationContext.getPersistenceGateway = () => ({
+      getCalendaredCasesForTrialSession: () => [], // returning no cases
+    });
+
+    const result = await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).not.toHaveBeenCalled();
+    expect(saveDocumentMock).not.toHaveBeenCalled();
+    expect(result).toBeUndefined();
   });
 
   it('Should generate a Notice of Trial for each case', async () => {
@@ -204,5 +227,78 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(result).toBeDefined();
+  });
+
+  it('Should set the noticeIssuedDate on the trial session and then call updateTrialSession', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(trialSession.noticeIssuedDate).toBeTruthy();
+    expect(updateTrialSessionMock).toHaveBeenCalled();
+  });
+
+  it('Should NOT overwrite the noticeIssuedDate on the trial session NOR call updateTrialSession if a caseId is set', async () => {
+    const oldDate = '2019-12-01T00:00:00.000Z';
+    trialSession.noticeIssuedDate = oldDate;
+
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(trialSession.noticeIssuedDate).toEqual(oldDate); // Should not be updated
+    expect(updateTrialSessionMock).not.toHaveBeenCalled();
+  });
+
+  it('Should only generate a Notice of Trial for a single case if a caseId is set', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentMock).toHaveBeenCalled();
+
+    const findNoticeOfTrial = caseRecord => {
+      return caseRecord.documents.find(
+        document =>
+          document.documentType === Document.NOTICE_OF_TRIAL.documentType,
+      );
+    };
+
+    expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy();
+    expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
+  });
+
+  it('Should only set the notice for a single case if a caseId is set', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '000aa3f7-e2e3-43e6-885d-4ce341588000',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(calendaredCases[0]).toHaveProperty('noticeOfTrialDate');
+    expect(calendaredCases[1]).not.toHaveProperty('noticeOfTrialDate');
+  });
+
+  it('Should only create a docket entry for a single case if a caseId is set', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    const findNoticeOfTrialDocketEntry = caseRecord => {
+      return caseRecord.docketRecord.find(
+        entry => entry.description === Document.NOTICE_OF_TRIAL.documentType,
+      );
+    };
+
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeFalsy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
   });
 });

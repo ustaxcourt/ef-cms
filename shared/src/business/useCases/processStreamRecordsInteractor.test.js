@@ -3,10 +3,14 @@ const {
 } = require('./processStreamRecordsInteractor');
 
 describe('processStreamRecordsInteractor', () => {
-  const indexSpy = jest.fn();
+  let indexSpy = jest.fn();
+  const createElasticsearchReindexRecordSpy = jest.fn();
 
   const applicationContext = {
     environment: { stage: 'local' },
+    getPersistenceGateway: () => ({
+      createElasticsearchReindexRecord: createElasticsearchReindexRecordSpy,
+    }),
     getSearchClient: () => ({
       index: indexSpy,
     }),
@@ -14,6 +18,10 @@ describe('processStreamRecordsInteractor', () => {
       info: () => {},
     },
   };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
   it('does not call index function if recordsToProcess is an empty array', async () => {
     await processStreamRecordsInteractor({
@@ -95,6 +103,32 @@ describe('processStreamRecordsInteractor', () => {
       },
       id: '4',
       index: 'efcms',
+    });
+  });
+
+  it('stores a reindex record if indexing fails', async () => {
+    indexSpy = jest.fn().mockImplementation(() => {
+      throw new Error('uh oh');
+    });
+
+    await processStreamRecordsInteractor({
+      applicationContext,
+      recordsToProcess: [
+        {
+          dynamodb: {
+            Keys: { pk: { S: '1' }, sk: { S: '2' } },
+            NewImage: { caseId: { S: '1' } },
+          },
+          eventName: 'INSERT',
+        },
+      ],
+    });
+
+    expect(indexSpy).toHaveBeenCalled();
+    expect(createElasticsearchReindexRecordSpy).toHaveBeenCalled();
+    expect(createElasticsearchReindexRecordSpy.mock.calls[0][0]).toMatchObject({
+      recordPk: '1',
+      recordSk: '2',
     });
   });
 });

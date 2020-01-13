@@ -16,5 +16,4 @@ module.exports = [
   ...require('./trial-sessions.json'),
   ...require('./trial-sessions-past.json'),
   ...require('./misc.json'),
-  ...require('./users.json'),
 ];

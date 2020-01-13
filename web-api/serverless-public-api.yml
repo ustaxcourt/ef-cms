@@ -3,7 +3,7 @@ service: ef-cms-public
 plugins:
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-aws-alerts
+  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -43,7 +43,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
+        topic: ${self:service}-${self:provider.stage}-cloudwatch-alerts
         notifications:
           - protocol: email
             endpoint: ustaxcourt@flexion.us
