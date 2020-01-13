@@ -20,7 +20,7 @@ describe('deleteCaseDeadline', () => {
     };
   });
 
-  it('attempts to persist the trial session', async () => {
+  it('deletes the case deadline', async () => {
     await deleteCaseDeadline({
       applicationContext,
       caseDeadlineId: '123',

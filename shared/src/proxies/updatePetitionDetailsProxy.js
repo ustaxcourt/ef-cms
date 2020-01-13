@@ -19,6 +19,6 @@ exports.updatePetitionDetailsInteractor = ({
     body: {
       petitionDetails,
     },
-    endpoint: `/cases/${caseId}/petition-details`,
+    endpoint: `/case-parties/${caseId}/petition-details`,
   });
 };
