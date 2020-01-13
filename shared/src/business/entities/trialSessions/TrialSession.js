@@ -186,11 +186,23 @@ TrialSession.VALIDATION_ERROR_MESSAGES = {
 
 TrialSession.validationRules = {
   COMMON: {
-    address1: joi.string().optional(),
-    address2: joi.string().optional(),
-    city: joi.string().optional(),
+    address1: joi
+      .string()
+      .allow('')
+      .optional(),
+    address2: joi
+      .string()
+      .allow('')
+      .optional(),
+    city: joi
+      .string()
+      .allow('')
+      .optional(),
     courtReporter: joi.string().optional(),
-    courthouseName: joi.string().optional(),
+    courthouseName: joi
+      .string()
+      .allow('')
+      .optional(),
     createdAt: joi
       .date()
       .iso()
@@ -221,7 +233,10 @@ TrialSession.validationRules = {
       .iso()
       .required(),
     startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
-    state: joi.string().optional(),
+    state: joi
+      .string()
+      .allow('')
+      .optional(),
     status: joi
       .string()
       .valid(
