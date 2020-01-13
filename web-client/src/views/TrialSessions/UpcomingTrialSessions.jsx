@@ -78,6 +78,7 @@ export const UpcomingTrialSessions = connect(
               <th>Type</th>
               <th>Judge</th>
               <th aria-label="Number of cases">No. of cases</th>
+              <th>Notice Issued</th>
             </tr>
           </thead>
           {formattedTrialSessions.map((trialDate, idxDate) => (
@@ -118,6 +119,7 @@ export const UpcomingTrialSessions = connect(
                     <td>{item.sessionType}</td>
                     <td>{item.judge && item.judge.name}</td>
                     <td>{item.maxCases}</td>
+                    <td>{item.formattedNoticeIssuedDate}</td>
                   </tr>
                 </tbody>
               ))}
