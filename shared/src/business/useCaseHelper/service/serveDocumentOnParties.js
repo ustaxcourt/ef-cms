@@ -9,9 +9,10 @@ const { PDFDocument } = require('pdf-lib');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.judge the optional judge filter
- * @param {string} providers.caseId the optional caseId filter
- * @returns {Array} the pending items found
+ * @param {object} providers.caseEntity the case entity containing the document to serve
+ * @param {object} providers.documentEntity the document entity for the document to serve
+ * @param {object} providers.servedParties the aggregated parties to serve
+ * @returns {string} the url of the paper service PDF in s3 if there are paper service parties
  */
 exports.serveDocumentOnParties = async ({
   applicationContext,
