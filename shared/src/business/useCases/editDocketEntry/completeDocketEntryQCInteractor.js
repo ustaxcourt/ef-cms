@@ -1,4 +1,7 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   formatDocument,
   getFilingsAndProceedings,
 } = require('../../utilities/getFormattedCaseDetail');
@@ -10,6 +13,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
@@ -48,7 +52,7 @@ exports.completeDocketEntryQCInteractor = async ({
       caseId,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
   const { index: docketRecordIndexUpdated } = caseEntity.docketRecord.find(
     record => record.documentId === documentId,
   );
@@ -183,13 +187,16 @@ exports.completeDocketEntryQCInteractor = async ({
       });
   }
 
+  let servedParties;
+  let paperServicePdfUrl;
+
   if (needsNoticeOfDocketChange) {
     const noticeDocumentId = await generateNoticeOfDocketChangePdf({
       applicationContext,
       docketChangeInfo,
     });
 
-    const noticeUpdatedDocument = new Document(
+    let noticeUpdatedDocument = new Document(
       {
         ...Document.NOTICE_OF_DOCKET_CHANGE,
         documentId: noticeDocumentId,
@@ -203,7 +210,33 @@ exports.completeDocketEntryQCInteractor = async ({
       docketChangeInfo.docketEntryIndex,
     );
 
+    servedParties = aggregatePartiesForService(caseEntity);
+
+    noticeUpdatedDocument.setAsServed(servedParties.all);
+
+    const docketEntry = caseEntity.docketRecord.find(
+      entry => entry.documentId === noticeUpdatedDocument.documentId,
+    );
+
+    const updatedDocketRecordEntity = new DocketRecord({
+      ...docketEntry,
+      filingDate: createISODateString(),
+    });
+    updatedDocketRecordEntity.validate();
+
+    caseEntity.updateDocketRecordEntry(updatedDocketRecordEntity);
+
     caseEntity.addDocument(noticeUpdatedDocument);
+
+    //serve the notice
+    paperServicePdfUrl = await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentOnParties({
+        applicationContext,
+        caseEntity,
+        documentEntity: noticeUpdatedDocument,
+        servedParties,
+      });
   }
 
   await applicationContext.getPersistenceGateway().updateCase({
@@ -219,5 +252,9 @@ exports.completeDocketEntryQCInteractor = async ({
     });
   }
 
-  return caseEntity.toRawObject();
+  return {
+    caseDetail: caseEntity.toRawObject(),
+    paperServiceParties: servedParties && servedParties.paper,
+    paperServicePdfUrl,
+  };
 };
