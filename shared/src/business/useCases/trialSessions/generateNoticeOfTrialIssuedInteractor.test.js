@@ -28,7 +28,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       judge: 'Test Judge',
       postalCode: '12345',
       startDate: '2/2/2020',
-      startTime: '10:00 AM',
+      startTime: '10:00',
       state: 'ST',
     }));
 
