@@ -13,6 +13,7 @@ exports.generatePdfFromHtmlInteractor = async ({
   contentHtml,
   displayHeaderFooter = true,
   docketNumber,
+  footerHtml,
   headerHtml,
 }) => {
   let browser = null;
@@ -44,9 +45,22 @@ exports.generatePdfFromHtmlInteractor = async ({
       </html>
     `;
 
-    const footerTemplate = `
-      <div style="font-size:8px !important; color:#000; text-align:center; width:100%; margin-bottom:5px;">Printed <span class="date"></span></div>
-    `;
+    const footerTemplate = footerHtml
+      ? `
+      <!doctype html>
+      <html>
+        <head>
+        </head>
+        <body style="margin: 0px;">
+          <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
+             <div>
+              ${footerHtml}
+            </div>
+          </div>
+        </body>
+      </html>
+    `
+      : '';
 
     result = await page.pdf({
       displayHeaderFooter,
