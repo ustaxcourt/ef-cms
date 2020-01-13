@@ -214,6 +214,13 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     await setNoticeForCase(calendaredCase);
   }
 
+  await trialSessionEntity.setNoticesIssued();
+
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  });
+
   if (newPdfDoc.getPages().length) {
     const paperServicePdfData = await newPdfDoc.save();
     const paperServicePdfBuffer = Buffer.from(paperServicePdfData);
