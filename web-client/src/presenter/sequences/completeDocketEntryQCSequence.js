@@ -11,6 +11,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
+import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -36,6 +37,7 @@ export const completeDocketEntryQCSequence = [
       setCurrentPageAction('Interstitial'),
       generateTitleAction,
       completeDocketEntryQCAction,
+      setPdfPreviewUrlAction,
       setCaseAction,
       setAlertSuccessAction,
       setPaperServicePartiesAction,
