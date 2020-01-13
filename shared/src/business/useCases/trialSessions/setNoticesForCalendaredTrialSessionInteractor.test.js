@@ -9,6 +9,12 @@ const { User } = require('../../entities/User');
 
 const { MOCK_CASE } = require('../../../test/mockCase');
 
+const findNoticeOfTrial = caseRecord => {
+  return caseRecord.documents.find(
+    document => document.documentType === Document.NOTICE_OF_TRIAL.documentType,
+  );
+};
+
 const fakeData =
   'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
 
@@ -174,13 +180,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
     expect(saveDocumentMock).toHaveBeenCalled();
 
-    const findNoticeOfTrial = caseRecord => {
-      return caseRecord.documents.find(
-        document =>
-          document.documentType === Document.NOTICE_OF_TRIAL.documentType,
-      );
-    };
-
     expect(findNoticeOfTrial(calendaredCases[0])).toBeTruthy();
     expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
   });
@@ -209,6 +208,49 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeTruthy();
     expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
+  });
+
+  it('Should set the status of the Notice of Trial as served for each case', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentMock).toHaveBeenCalled();
+
+    expect(findNoticeOfTrial(calendaredCases[0]).status).toEqual('served');
+    expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
+  });
+
+  it('Should set the servedAt field for the Notice of Trial for each case', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentMock).toHaveBeenCalled();
+
+    expect(findNoticeOfTrial(calendaredCases[0]).servedAt).toBeTruthy();
+    expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeTruthy();
+  });
+
+  it('Should set the servedParties field for the Notice of Trial for each case', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentMock).toHaveBeenCalled();
+
+    expect(
+      findNoticeOfTrial(calendaredCases[0]).servedParties.length,
+    ).toBeGreaterThan(0);
+    expect(
+      findNoticeOfTrial(calendaredCases[1]).servedParties.length,
+    ).toBeGreaterThan(0);
   });
 
   it('Should dispatch a service email for parties receiving electronic service', async () => {
@@ -263,13 +305,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
     expect(saveDocumentMock).toHaveBeenCalled();
 
-    const findNoticeOfTrial = caseRecord => {
-      return caseRecord.documents.find(
-        document =>
-          document.documentType === Document.NOTICE_OF_TRIAL.documentType,
-      );
-    };
-
     expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy();
     expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
   });
@@ -300,5 +335,19 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeFalsy();
     expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
+  });
+
+  it('Should set the status of the Notice of Trial as served for a single case if a caseId is set', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111',
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
+    expect(saveDocumentMock).toHaveBeenCalled();
+
+    expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy(); // Document should not exist on this case
+    expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
   });
 });
