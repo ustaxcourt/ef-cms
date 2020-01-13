@@ -129,26 +129,22 @@ exports.updatePrimaryContactInteractor = async ({
     },
   }));
 
-  const sendEmails = [];
   if (destinations.length > 0) {
-    sendEmails.push(
-      applicationContext.getDispatchers().sendBulkTemplatedEmail({
-        applicationContext,
-        defaultTemplateData: {
-          caseCaption: 'undefined',
-          docketNumber: 'undefined',
-          documentName: 'undefined',
-          loginUrl: 'undefined',
-          name: 'undefined',
-          serviceDate: 'undefined',
-          serviceTime: 'undefined',
-        },
-        destinations,
-        templateName: process.env.EMAIL_SERVED_TEMPLATE,
-      }),
-    );
+    await applicationContext.getDispatchers().sendBulkTemplatedEmail({
+      applicationContext,
+      defaultTemplateData: {
+        caseCaption: 'undefined',
+        docketNumber: 'undefined',
+        documentName: 'undefined',
+        loginUrl: 'undefined',
+        name: 'undefined',
+        serviceDate: 'undefined',
+        serviceTime: 'undefined',
+      },
+      destinations,
+      templateName: process.env.EMAIL_SERVED_TEMPLATE,
+    });
   }
-  await Promise.all(sendEmails);
 
   const workItem = new WorkItem(
     {
