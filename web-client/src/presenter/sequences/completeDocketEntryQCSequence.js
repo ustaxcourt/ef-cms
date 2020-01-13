@@ -10,6 +10,7 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -37,6 +38,7 @@ export const completeDocketEntryQCSequence = [
       completeDocketEntryQCAction,
       setCaseAction,
       setAlertSuccessAction,
+      setPaperServicePartiesAction,
       setSaveAlertsForNavigationAction,
       navigateToCaseDetailAction,
       clearErrorAlertsAction,

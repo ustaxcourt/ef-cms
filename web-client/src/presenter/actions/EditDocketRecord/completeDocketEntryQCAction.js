@@ -33,12 +33,13 @@ export const completeDocketEntryQCAction = async ({
     receivedAt: entryMetadata.dateReceived,
   };
 
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .completeDocketEntryQCInteractor({
-      applicationContext,
-      entryMetadata,
-    });
+  const {
+    caseDetail,
+    paperServiceParties,
+  } = await applicationContext.getUseCases().completeDocketEntryQCInteractor({
+    applicationContext,
+    entryMetadata,
+  });
 
   const updatedDocument = caseDetail.documents.filter(
     doc => doc.documentId === documentId,
@@ -51,6 +52,7 @@ export const completeDocketEntryQCAction = async ({
     },
     caseDetail,
     caseId: docketNumber,
+    paperServiceParties,
     updatedDocument,
   };
 };
