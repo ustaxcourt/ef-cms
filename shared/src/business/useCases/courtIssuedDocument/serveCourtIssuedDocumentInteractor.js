@@ -225,19 +225,19 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     const addressPages = [];
     let newPdfDoc = await PDFDocument.create();
 
-    for (let party of servedParties.paper) {
-      addressPages.push(
-        await applicationContext
-          .getUseCaseHelpers()
-          .generatePaperServiceAddressPagePdf({
-            applicationContext,
-            contactData: party,
-            docketNumberWithSuffix: `${
-              caseToUpdate.docketNumber
-            }${caseToUpdate.docketNumberSuffix || ''}`,
-          }),
-      );
-    }
+    const addressPagePromises = servedParties.paper.map(party => {
+      applicationContext
+        .getUseCaseHelpers()
+        .generatePaperServiceAddressPagePdf({
+          applicationContext,
+          contactData: party,
+          docketNumberWithSuffix: `${
+            caseToUpdate.docketNumber
+          }${caseToUpdate.docketNumberSuffix || ''}`,
+        });
+    });
+
+    await Promise.all(addressPagePromises);
 
     for (let addressPage of addressPages) {
       const addressPageDoc = await PDFDocument.load(addressPage);
@@ -245,17 +245,13 @@ exports.serveCourtIssuedDocumentInteractor = async ({
         addressPageDoc,
         addressPageDoc.getPageIndices(),
       );
-      copiedPages.forEach(page => {
-        newPdfDoc.addPage(page);
-      });
+      copiedPages.forEach(newPdfDoc.addPage);
 
       copiedPages = await newPdfDoc.copyPages(
         courtIssuedOrderDoc,
         courtIssuedOrderDoc.getPageIndices(),
       );
-      copiedPages.forEach(page => {
-        newPdfDoc.addPage(page);
-      });
+      copiedPages.forEach(newPdfDoc.addPage);
     }
 
     const paperServicePdfData = await newPdfDoc.save();

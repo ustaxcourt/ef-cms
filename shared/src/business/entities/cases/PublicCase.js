@@ -59,7 +59,10 @@ joiValidationDecorator(
       .iso()
       .optional(),
     docketNumber: joi.string().optional(),
-    docketNumberSuffix: joi.string().optional(),
+    docketNumberSuffix: joi
+      .string()
+      .allow(null)
+      .optional(),
     receivedAt: joi
       .date()
       .iso()

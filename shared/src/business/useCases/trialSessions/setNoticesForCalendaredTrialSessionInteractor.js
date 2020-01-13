@@ -25,6 +25,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
   caseId,
   trialSessionId,
 }) => {
+  let shouldSetNoticesIssued = true;
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -41,6 +42,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
   // opting to pull from the set of calendared cases rather than load the
   // case individually to add an additional layer of validation
   if (caseId) {
+    // Do not set when sending notices for a single case
+    shouldSetNoticesIssued = false;
+
     const singleCase = calendaredCases.find(
       caseRecord => caseRecord.caseId === caseId,
     );
@@ -114,7 +118,13 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     caseEntity.setNoticeOfTrialDate();
 
     // Serve notice
-    await serveNoticeForCase(caseEntity, noticeDocument, noticeOfTrialIssued);
+    const servedParties = await serveNoticeForCase(
+      caseEntity,
+      noticeDocument,
+      noticeOfTrialIssued,
+    );
+
+    noticeDocument.setAsServed(servedParties.all);
 
     const rawCase = caseEntity.validate().toRawObject();
     await applicationContext.getPersistenceGateway().updateCase({
@@ -132,7 +142,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
    * @param {object} caseEntity the case entity
    * @param {object} documentEntity the document entity
    * @param {Uint8Array} documentPdfData the pdf data of the document being served
-   * @returns {void} sends service emails and updates `newPdfDoc` with paper service pages for printing
+   * @returns {object} sends service emails and updates `newPdfDoc` with paper service pages for printing returning served servedParties
    */
   const serveNoticeForCase = async (
     caseEntity,
@@ -208,10 +218,23 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
         });
       }
     }
+
+    return servedParties;
   };
 
   for (var calendaredCase of calendaredCases) {
     await setNoticeForCase(calendaredCase);
+  }
+
+  // Prevent from being overwritten when generating notices for a manually-added
+  // case, after the session has been set (see above)
+  if (shouldSetNoticesIssued) {
+    await trialSessionEntity.setNoticesIssued();
+
+    await applicationContext.getPersistenceGateway().updateTrialSession({
+      applicationContext,
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
   }
 
   if (newPdfDoc.getPages().length) {

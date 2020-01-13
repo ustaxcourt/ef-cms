@@ -144,6 +144,7 @@ TrialSession.prototype.init = function(rawSession, { applicationContext }) {
   this.judge = rawSession.judge;
   this.maxCases = rawSession.maxCases;
   this.notes = rawSession.notes;
+  this.noticeIssuedDate = rawSession.noticeIssuedDate;
   this.postalCode = rawSession.postalCode;
   this.sessionType = rawSession.sessionType;
   this.startDate = rawSession.startDate;
@@ -205,6 +206,10 @@ TrialSession.validationRules = {
     notes: joi
       .string()
       .max(400)
+      .optional(),
+    noticeIssuedDate: joi
+      .date()
+      .iso()
       .optional(),
     postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
     sessionType: joi
@@ -423,6 +428,16 @@ TrialSession.prototype.canSetAsCalendared = function() {
     this.state,
     this.postalCode,
   ].some(property => isEmpty(property));
+};
+
+/**
+ * Sets the notice issued date on the trial session
+ *
+ * @returns {TrialSession} the trial session entity
+ */
+TrialSession.prototype.setNoticesIssued = function() {
+  this.noticeIssuedDate = createISODateString();
+  return this;
 };
 
 module.exports = { TrialSession };
