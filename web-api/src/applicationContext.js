@@ -566,6 +566,9 @@ const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
 const {
+  serveDocumentOnParties,
+} = require('../../shared/src/business/useCaseHelper/service/serveDocumentOnParties');
+const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
@@ -981,6 +984,7 @@ module.exports = (appContextUser = {}) => {
         generateCaseConfirmationPdf,
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
+        serveDocumentOnParties,
       };
     },
     getUseCases: () => {
