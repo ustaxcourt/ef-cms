@@ -5,18 +5,20 @@ import { state } from 'cerebral';
 import React from 'react';
 
 export const PaperServiceConfirmModal = connect(
-  { paperServiceParties: state.modal.paperServiceParties },
-  ({ onConfirmSequence, paperServiceParties }) => (
+  {
+    documentTitle: state.form.documentTitle,
+    paperServiceParties: state.modal.paperServiceParties,
+  },
+  ({ documentTitle, onConfirmSequence, paperServiceParties }) => (
     <ConfirmModal
-      noCloseBtn
-      cancelLabel="No, Cancel"
-      confirmLabel="Yes, Delete"
-      preventCancelOnBlur={true}
+      noCancel
+      confirmLabel="Print Now"
       title="Paper service is required for the following document:"
-      onCancelSequence="clearModalSequence"
       onConfirmSequence={onConfirmSequence}
     >
       <p>The following document will be served on all parties:</p>
+
+      <p>{documentTitle}</p>
 
       <Hint exclamation fullWidth className="block">
         <div className="margin-bottom-1">
