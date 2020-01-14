@@ -8,11 +8,15 @@
 export const getAddCaseToTrialSessionCalendarAlertWarningAction = ({
   props,
 }) => {
-  const { docketNumber } = props.caseDetail;
+  const { docketNumber, docketNumberSuffix } = props.caseDetail;
+
+  const displayDocketNumber = `${docketNumber}${
+    docketNumberSuffix ? docketNumberSuffix : ''
+  }`;
 
   return {
     alertWarning: {
-      message: `${docketNumber} has parties receiving paper service. Print and mail all paper service documents below.`,
+      message: `${displayDocketNumber} has parties receiving paper service. Print and mail all paper service documents below.`,
     },
   };
 };
