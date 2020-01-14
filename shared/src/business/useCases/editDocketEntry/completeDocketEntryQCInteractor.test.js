@@ -6,8 +6,16 @@ import {
   createISODateString,
   formatDateString,
 } from '../../../../../shared/src/business/utilities/DateHandler';
+const fs = require('fs');
+const path = require('path');
+const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
 describe('completeDocketEntryQCInteractor', () => {
+  const testPdfDocBytes = () => {
+    // sample.pdf is a 1 page document
+    return fs.readFileSync(testAssetsPath + 'sample.pdf');
+  };
+
   let applicationContext;
   let globalUser;
   const getCaseByCaseIdSpy = jest.fn(() => caseRecord);
@@ -15,6 +23,7 @@ describe('completeDocketEntryQCInteractor', () => {
   const saveWorkItemForDocketClerkFilingExternalDocumentSpy = jest.fn();
   const updateCaseSpy = jest.fn();
   let serveDocumentOnPartiesSpy = jest.fn();
+  const testPdfDoc = testPdfDocBytes();
 
   const PDF_MOCK_BUFFER = 'Hello World';
   const pageMock = {
@@ -99,16 +108,28 @@ describe('completeDocketEntryQCInteractor', () => {
       getPersistenceGateway: () => ({
         deleteWorkItemFromInbox: deleteWorkItemFromInboxSpy,
         getCaseByCaseId: getCaseByCaseIdSpy,
+        getDownloadPolicyUrl: () => ({
+          url: 'www.example.com',
+        }),
         getUserById: async () => globalUser,
+        saveDocument: jest.fn(),
         saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
         updateCase: updateCaseSpy,
       }),
       getPug: () => ({ compile: () => () => '' }),
       getStorageClient: () => ({
+        getObject: jest.fn().mockReturnValue({
+          promise: async () => ({
+            Body: testPdfDoc,
+          }),
+        }),
         upload: jest.fn().mockImplementation((params, resolve) => resolve()),
       }),
       getUniqueId: () => 'b6f835aa-bf95-4996-b858-c8e94566db47',
       getUseCaseHelpers: () => ({
+        generatePaperServiceAddressPagePdf: jest
+          .fn()
+          .mockResolvedValue(testPdfDoc),
         serveDocumentOnParties: serveDocumentOnPartiesSpy,
       }),
       getUseCases: () => ({
@@ -121,7 +142,9 @@ describe('completeDocketEntryQCInteractor', () => {
         };
       },
       logger: {
-        error: e => console.log(e),
+        error: () => {},
+        time: () => {},
+        timeEnd: () => {},
       },
     };
   });
@@ -238,6 +261,43 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(deleteWorkItemFromInboxSpy).toBeCalled();
     expect(updateCaseSpy).toBeCalled();
     expect(serveDocumentOnPartiesSpy).toBeCalled();
+    expect(result.paperServicePdfUrl).toEqual('www.example.com');
+    expect(result.paperServiceParties.length).toEqual(1);
+  });
+
+  it('generates a document for paper service if the document is a Notice of Change of Address and the case has paper service parties', async () => {
+    caseRecord.contactPrimary = {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      countryType: 'domestic',
+      name: 'Test Petitioner',
+      postalCode: '12345',
+      state: 'AK',
+    };
+    caseRecord.isPaper = true;
+    caseRecord.mailingDate = '2019-03-01T21:40:46.415Z';
+
+    let error;
+    let result;
+
+    try {
+      result = await completeDocketEntryQCInteractor({
+        applicationContext,
+        entryMetadata: {
+          caseId: caseRecord.caseId,
+          documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          documentTitle: 'Notice of Change of Address',
+          documentType: 'Notice of Change of Address',
+        },
+      });
+    } catch (err) {
+      error = err;
+    }
+    expect(error).toBeUndefined();
+    expect(getCaseByCaseIdSpy).toBeCalled();
+    expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
+    expect(deleteWorkItemFromInboxSpy).toBeCalled();
+    expect(updateCaseSpy).toBeCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
