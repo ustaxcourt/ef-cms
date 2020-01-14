@@ -223,47 +223,45 @@ exports.updatePetitionerInformationInteractor = async ({
       );
     }
 
-    if (primaryPdf) {
-      const primaryPdfDoc = await PDFDocument.load(primaryPdf);
-      for (let addressPage of addressPages) {
+    const addAddressPageAndNoticeToDocument = async ({
+      addressPagesToAdd,
+      combinedDocument,
+      documentToAdd,
+    }) => {
+      const documentToAddPdf = await PDFDocument.load(documentToAdd);
+      for (let addressPage of addressPagesToAdd) {
         const addressPageDoc = await PDFDocument.load(addressPage);
-        let copiedPages = await fullDocument.copyPages(
+        let copiedPages = await combinedDocument.copyPages(
           addressPageDoc,
           addressPageDoc.getPageIndices(),
         );
         copiedPages.forEach(page => {
-          fullDocument.addPage(page);
+          combinedDocument.addPage(page);
         });
 
-        copiedPages = await fullDocument.copyPages(
-          primaryPdfDoc,
-          primaryPdfDoc.getPageIndices(),
+        copiedPages = await combinedDocument.copyPages(
+          documentToAddPdf,
+          documentToAddPdf.getPageIndices(),
         );
         copiedPages.forEach(page => {
-          fullDocument.addPage(page);
+          combinedDocument.addPage(page);
         });
       }
+    };
+
+    if (primaryPdf) {
+      await addAddressPageAndNoticeToDocument({
+        addressPagesToAdd: addressPages,
+        combinedDocument: fullDocument,
+        documentToAdd: primaryPdf,
+      });
     }
     if (secondaryPdf) {
-      const secondaryPdfDoc = await PDFDocument.load(secondaryPdf);
-      for (let addressPage of addressPages) {
-        const addressPageDoc = await PDFDocument.load(addressPage);
-        let copiedPages = await fullDocument.copyPages(
-          addressPageDoc,
-          addressPageDoc.getPageIndices(),
-        );
-        copiedPages.forEach(page => {
-          fullDocument.addPage(page);
-        });
-
-        copiedPages = await fullDocument.copyPages(
-          secondaryPdfDoc,
-          secondaryPdfDoc.getPageIndices(),
-        );
-        copiedPages.forEach(page => {
-          fullDocument.addPage(page);
-        });
-      }
+      await addAddressPageAndNoticeToDocument({
+        addressPagesToAdd: addressPages,
+        combinedDocument: fullDocument,
+        documentToAdd: secondaryPdf,
+      });
     }
 
     const paperServicePdfData = await fullDocument.save();
