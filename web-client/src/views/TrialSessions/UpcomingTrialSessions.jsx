@@ -85,7 +85,7 @@ export const UpcomingTrialSessions = connect(
             <React.Fragment key={idxDate}>
               <tbody>
                 <tr className="trial-date">
-                  <td colSpan="6">
+                  <td colSpan="7">
                     <h4 className="margin-bottom-0">
                       {trialDate.dateFormatted}
                     </h4>
