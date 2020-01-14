@@ -1,10 +1,18 @@
 const {
+  addServedStampToDocument,
+} = require('./courtIssuedDocument/addServedStampToDocument');
+const {
+  aggregatePartiesForService,
+} = require('../utilities/aggregatePartiesForService');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
+const { formatDateString } = require('../utilities/DateHandler');
+const { PDFDocument } = require('pdf-lib');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -61,9 +69,11 @@ exports.updatePetitionerInformationInteractor = async ({
   );
 
   const caseDetail = {
-    ...caseEntity.toRawObject(),
+    ...caseEntity.validate().toRawObject(),
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
   };
+
+  const servedParties = aggregatePartiesForService(caseEntity);
 
   const createDocumentForChange = async ({
     contactName,
@@ -87,15 +97,7 @@ exports.updatePetitionerInformationInteractor = async ({
           oldData,
         },
       });
-    const docketRecordPdf = await applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor({
-        applicationContext,
-        contentHtml: pdfContentHtml,
-        displayHeaderFooter: false,
-        docketNumber: caseEntity.docketNumber,
-        headerHtml: null,
-      });
+
     const newDocumentId = applicationContext.getUniqueId();
 
     const changeOfAddressDocument = new Document(
@@ -112,23 +114,82 @@ exports.updatePetitionerInformationInteractor = async ({
       },
       { applicationContext },
     );
-    caseEntity.addDocument(changeOfAddressDocument);
-    const docketRecordPdfWithCover = await addCoverToPdf({
+    changeOfAddressDocument.setAsServed(servedParties.all);
+
+    const changeOfAddressPdf = await applicationContext
+      .getUseCases()
+      .generatePdfFromHtmlInteractor({
+        applicationContext,
+        contentHtml: pdfContentHtml,
+        displayHeaderFooter: false,
+        docketNumber: caseEntity.docketNumber,
+        headerHtml: null,
+      });
+    const serviceStampDate = formatDateString(
+      changeOfAddressDocument.servedAt,
+      'MMDDYY',
+    );
+    const servedChangeOfAddressPdf = await addServedStampToDocument({
+      pdfData: changeOfAddressPdf,
+      serviceStampText: `Served ${serviceStampDate}`,
+    });
+
+    const servedChangeOfAddressPdfWithCover = await addCoverToPdf({
       applicationContext,
       caseEntity,
       documentEntity: changeOfAddressDocument,
-      pdfData: docketRecordPdf,
+      pdfData: servedChangeOfAddressPdf,
     });
+
+    caseEntity.addDocument(changeOfAddressDocument);
 
     await applicationContext.getPersistenceGateway().saveDocument({
       applicationContext,
-      document: docketRecordPdfWithCover,
+      document: servedChangeOfAddressPdfWithCover,
       documentId: newDocumentId,
     });
+
+    const destinations = servedParties.electronic.map(party => ({
+      email: party.email,
+      templateData: {
+        caseCaption: caseEntity.caseCaption,
+        docketNumber: caseEntity.docketNumber,
+        documentName: changeOfAddressDocument.documentTitle,
+        loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
+        name: party.name,
+        serviceDate: formatDateString(
+          changeOfAddressDocument.servedAt,
+          'MMDDYYYY',
+        ),
+        serviceTime: formatDateString(changeOfAddressDocument.servedAt, 'TIME'),
+      },
+    }));
+
+    if (destinations.length > 0) {
+      await applicationContext.getDispatchers().sendBulkTemplatedEmail({
+        applicationContext,
+        defaultTemplateData: {
+          caseCaption: 'undefined',
+          docketNumber: 'undefined',
+          documentName: 'undefined',
+          loginUrl: 'undefined',
+          name: 'undefined',
+          serviceDate: 'undefined',
+          serviceTime: 'undefined',
+        },
+        destinations,
+        templateName: process.env.EMAIL_SERVED_TEMPLATE,
+      });
+    }
+
+    return servedChangeOfAddressPdfWithCover;
   };
 
+  let primaryPdf;
+  let secondaryPdf;
+  let paperServicePdfUrl;
   if (primaryChange) {
-    await createDocumentForChange({
+    primaryPdf = await createDocumentForChange({
       contactName: contactPrimary.name,
       documentType: primaryChange,
       newData: contactPrimary,
@@ -136,7 +197,7 @@ exports.updatePetitionerInformationInteractor = async ({
     });
   }
   if (secondaryChange) {
-    await createDocumentForChange({
+    secondaryPdf = await createDocumentForChange({
       contactName: contactSecondary.name,
       documentType: secondaryChange,
       newData: contactSecondary,
@@ -144,8 +205,99 @@ exports.updatePetitionerInformationInteractor = async ({
     });
   }
 
-  return await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  if (servedParties.paper.length > 0) {
+    const fullDocument = await PDFDocument.create();
+
+    const addressPages = [];
+    for (let party of servedParties.paper) {
+      addressPages.push(
+        await applicationContext
+          .getUseCaseHelpers()
+          .generatePaperServiceAddressPagePdf({
+            applicationContext,
+            contactData: party,
+            docketNumberWithSuffix: `${
+              caseEntity.docketNumber
+            }${caseEntity.docketNumberSuffix || ''}`,
+          }),
+      );
+    }
+
+    if (primaryPdf) {
+      const primaryPdfDoc = await PDFDocument.load(primaryPdf);
+      for (let addressPage of addressPages) {
+        const addressPageDoc = await PDFDocument.load(addressPage);
+        let copiedPages = await fullDocument.copyPages(
+          addressPageDoc,
+          addressPageDoc.getPageIndices(),
+        );
+        copiedPages.forEach(page => {
+          fullDocument.addPage(page);
+        });
+
+        copiedPages = await fullDocument.copyPages(
+          primaryPdfDoc,
+          primaryPdfDoc.getPageIndices(),
+        );
+        copiedPages.forEach(page => {
+          fullDocument.addPage(page);
+        });
+      }
+    }
+    if (secondaryPdf) {
+      const secondaryPdfDoc = await PDFDocument.load(secondaryPdf);
+      for (let addressPage of addressPages) {
+        const addressPageDoc = await PDFDocument.load(addressPage);
+        let copiedPages = await fullDocument.copyPages(
+          addressPageDoc,
+          addressPageDoc.getPageIndices(),
+        );
+        copiedPages.forEach(page => {
+          fullDocument.addPage(page);
+        });
+
+        copiedPages = await fullDocument.copyPages(
+          secondaryPdfDoc,
+          secondaryPdfDoc.getPageIndices(),
+        );
+        copiedPages.forEach(page => {
+          fullDocument.addPage(page);
+        });
+      }
+    }
+
+    const paperServicePdfData = await fullDocument.save();
+    const paperServicePdfId = applicationContext.getUniqueId();
+    applicationContext.logger.time('Saving S3 Document');
+    await applicationContext.getPersistenceGateway().saveDocument({
+      applicationContext,
+      document: paperServicePdfData,
+      documentId: paperServicePdfId,
+      useTempBucket: true,
+    });
+    applicationContext.logger.timeEnd('Saving S3 Document');
+
+    const {
+      url,
+    } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+      applicationContext,
+      documentId: paperServicePdfId,
+      useTempBucket: true,
+    });
+
+    paperServicePdfUrl = url;
+  }
+
+  const updatedCase = await applicationContext
+    .getPersistenceGateway()
+    .updateCase({
+      applicationContext,
+      caseToUpdate: caseEntity.validate().toRawObject(),
+    });
+
+  return {
+    paperServiceParties: servedParties && servedParties.paper,
+    paperServicePdfUrl,
+    updatedCase,
+  };
 };
