@@ -5,7 +5,9 @@
  * @param {object} providers.props the props object
  * @returns {object} the prop of the alert success message
  */
-export const addCaseToTrialSessionCalendarAlertWarningAction = ({ props }) => {
+export const getAddCaseToTrialSessionCalendarAlertWarningAction = ({
+  props,
+}) => {
   const { docketNumber } = props.caseDetail;
 
   return {
