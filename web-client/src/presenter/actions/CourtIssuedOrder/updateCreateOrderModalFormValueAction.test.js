@@ -40,6 +40,21 @@ describe('updateCreateOrderModalFormValueAction', () => {
     expect(result.state.form.documentType).toEqual('Order');
   });
 
+  it('sets state.form values correctly if a generic notice event code is passed in', async () => {
+    const result = await runAction(updateCreateOrderModalFormValueAction, {
+      modules: {
+        presenter,
+      },
+      props: { key: 'eventCode', value: 'NOT' },
+      state: {
+        form: {},
+      },
+    });
+    expect(result.state.form.eventCode).toEqual('NOT');
+    expect(result.state.form.documentTitle).toEqual('Notice');
+    expect(result.state.form.documentType).toEqual('Notice');
+  });
+
   it('unsets state.form values if event code is empty', async () => {
     const params = {
       modules: {
