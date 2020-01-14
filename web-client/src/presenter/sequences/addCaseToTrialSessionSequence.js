@@ -1,6 +1,7 @@
 import { addCaseToTrialSessionAction } from '../actions/CaseDetail/addCaseToTrialSessionAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { getAddCaseToTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/getAddCaseToTrialSessionCalendarAlertWarningAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
@@ -10,7 +11,6 @@ import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSession/setNoticesForCalendaredTrialSessionAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
-import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -47,7 +47,7 @@ export const addCaseToTrialSessionSequence = [
               clearModalStateAction,
               unsetWaitingForResponseAction,
               ...setPdfPreviewUrlSequence,
-              setTrialSessionCalendarAlertWarningAction,
+              getAddCaseToTrialSessionCalendarAlertWarningAction,
               setAlertWarningAction,
               set(state.currentPage, 'SimplePdfPreviewPage'),
             ],

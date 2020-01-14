@@ -1,10 +1,10 @@
-import { addCaseToTrialSessionCalendarAlertWarningAction } from './addCaseToTrialSessionCalendarAlertWarningAction';
+import { getAddCaseToTrialSessionCalendarAlertWarningAction } from './getAddCaseToTrialSessionCalendarAlertWarningAction';
 import { runAction } from 'cerebral/test';
 
-describe('addCaseToTrialSessionCalendarAlertWarningAction', () => {
+describe('getAddCaseToTrialSessionCalendarAlertWarningAction', () => {
   it('should set state.alertWarning with the print paper service for parties message', async () => {
     const result = await runAction(
-      addCaseToTrialSessionCalendarAlertWarningAction,
+      getAddCaseToTrialSessionCalendarAlertWarningAction,
       {
         props: {
           caseDetail: {
