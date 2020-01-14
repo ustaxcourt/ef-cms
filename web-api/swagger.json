@@ -3424,8 +3424,8 @@
       ],
       "post": {
         "tags": ["trialsessions"],
-        "summary": "gets the cases associated with a trial session and returns a PDF (if a paper case is in trial session)",
-        "description": "gets the cases associated with a trial session and returns a PDF (if a paper case is in trial session).\n",
+        "summary": "generates notices of trial for cases within a given trial session and returns a PDF if a paper case is in trial session",
+        "description": "generates notices of trial for cases within a given trial session and returns a PDF if a paper case is in trial session.\n",
         "produces": ["application/pdf"],
         "responses": {
           "200": {
