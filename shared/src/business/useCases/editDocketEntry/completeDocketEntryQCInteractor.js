@@ -105,12 +105,12 @@ exports.completeDocketEntryQCInteractor = async ({
   }
 
   const needsNewCoversheet =
-    updatedDocument.additionalInfo != currentDocument.additionalInfo ||
-    updatedDocumentTitle != currentDocumentTitle;
+    updatedDocument.additionalInfo !== currentDocument.additionalInfo ||
+    updatedDocumentTitle !== currentDocumentTitle;
 
   const needsNoticeOfDocketChange =
-    updatedDocument.filedBy != currentDocument.filedBy ||
-    updatedDocumentTitle != currentDocumentTitle;
+    updatedDocument.filedBy !== currentDocument.filedBy ||
+    updatedDocumentTitle !== currentDocumentTitle;
 
   const docketChangeInfo = {
     caseTitle: caseToUpdate.caseTitle,
@@ -329,7 +329,7 @@ exports.completeDocketEntryQCInteractor = async ({
 
   return {
     caseDetail: caseEntity.toRawObject(),
-    paperServiceParties: servedParties && servedParties.paper,
+    paperServiceParties: servedParties.paper,
     paperServicePdfUrl,
   };
 };
