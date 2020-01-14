@@ -530,7 +530,7 @@ describe('formatDocument', () => {
       servedAt: '2019-03-27T21:53:00.297Z',
     });
     expect(results).toMatchObject({
-      servedAtFormatted: '03/27/19 05:53 pm',
+      servedAtFormatted: '03/27/19',
     });
   });
 
