@@ -50,10 +50,18 @@ export default (test, overrides = {}) => {
 
     await test.runSequence('setTrialSessionCalendarSequence');
 
-    expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
-    expect(test.getState('alertSuccess')).toEqual({
-      message: 'You can view all cases set for this trial session below.',
-      title: 'Eligible cases have been set for this trial session.',
-    });
+    if (overrides.hasPaper) {
+      expect(test.getState('currentPage')).toEqual('SimplePdfPreviewPage');
+      expect(test.getState('alertWarning')).toEqual({
+        message:
+          'These cases have parties receiving paper service. Print and mail all paper service documents below.',
+      });
+    } else {
+      expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
+      expect(test.getState('alertSuccess')).toEqual({
+        message: 'You can view all cases set for this trial session below.',
+        title: 'Eligible cases have been set for this trial session.',
+      });
+    }
   });
 };
