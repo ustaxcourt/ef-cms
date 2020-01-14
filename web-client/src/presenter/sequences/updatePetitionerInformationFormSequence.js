@@ -1,6 +1,8 @@
 import { navigateToCaseDetailCaseInformationAction } from '../actions/navigateToCaseDetailCaseInformationAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
+import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -25,6 +27,8 @@ export const updatePetitionerInformationFormSequence = [
     success: [
       setWaitingForResponseAction,
       updatePetitionerInformationAction,
+      setPdfPreviewUrlAction,
+      setPaperServicePartiesAction,
       unsetWaitingForResponseAction,
       setSaveAlertsForNavigationAction,
       setAlertSuccessAction,

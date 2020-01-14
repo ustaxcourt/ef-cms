@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const {
   createISODateString,
   formatDateString,
@@ -8,6 +10,7 @@ const {
 const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
+const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
@@ -17,14 +20,32 @@ const fakeData =
 const fakeFile = Buffer.from(fakeData, 'base64');
 fakeFile.name = 'fakeFile.pdf';
 
+const testAssetsPath = path.join(__dirname, '../../../test-assets/');
+
+const testPdfDocBytes = () => {
+  // sample.pdf is a 1 page document
+  return fs.readFileSync(testAssetsPath + 'sample.pdf');
+};
+
+let testPdfDoc;
+
+testPdfDoc = testPdfDocBytes();
+
 const updateCaseStub = jest.fn();
 const generateChangeOfAddressTemplateStub = jest.fn();
 const generatePdfFromHtmlInteractorStub = jest.fn();
 const getAddressPhoneDiffStub = jest.fn();
 const saveDocumentStub = jest.fn();
+const sendBulkTemplatedEmailMock = jest.fn();
+const generatePaperServiceAddressPagePdfMock = jest
+  .fn()
+  .mockResolvedValue(testPdfDoc);
 
 let persistenceGateway = {
   getCaseByCaseId: () => MOCK_CASE,
+  getDownloadPolicyUrl: () => ({
+    url: 'https://www.example.com',
+  }),
   saveDocument: saveDocumentStub,
   saveWorkItemForNonPaper: () => null,
   updateCase: updateCaseStub,
@@ -49,6 +70,9 @@ const applicationContext = {
   getCurrentUser: () => {
     return new User(userObj);
   },
+  getDispatchers: () => ({
+    sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
+  }),
   getPersistenceGateway: () => {
     return persistenceGateway;
   },
@@ -61,6 +85,9 @@ const applicationContext = {
     };
   },
   getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+  getUseCaseHelpers: () => ({
+    generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
+  }),
   getUseCases: () => useCases,
   getUtilities: () => {
     return {
@@ -95,6 +122,7 @@ describe('update petitioner contact information on a case', () => {
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: MOCK_CASE.contactPrimary,
+      partyType: ContactFactory.PARTY_TYPES.petitioner,
     });
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
@@ -107,13 +135,14 @@ describe('update petitioner contact information on a case', () => {
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: MOCK_CASE.contactPrimary,
       contactSecondary: { countryType: 'domestic' },
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
     expect(generateChangeOfAddressTemplateStub).not.toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).not.toHaveBeenCalled();
     expect(updateCaseStub).toHaveBeenCalled();
   });
 
-  it('updates petitioner contact when primary contact info changes', async () => {
+  it('updates petitioner contact when primary contact info changes and serves the notice created', async () => {
     await updatePetitionerInformationInteractor({
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
@@ -121,19 +150,22 @@ describe('update petitioner contact information on a case', () => {
         address1: '456 Center St', // the address changes ONLY
         city: 'Somewhere',
         countryType: 'domestic',
+        email: 'test@example.com',
         name: 'Test Petitioner',
         postalCode: '12345',
         state: 'TN',
         title: 'Executor',
       },
+      partyType: ContactFactory.PARTY_TYPES.petitioner,
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
+    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
   });
 
-  it('updates petitioner contact when secondary contact info changes', async () => {
-    await updatePetitionerInformationInteractor({
+  it('updates petitioner contact when secondary contact info changes, serves the generated notice, and returns the download URL for the paper notice', async () => {
+    const result = await updatePetitionerInformationInteractor({
       applicationContext,
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: MOCK_CASE.contactPrimary,
@@ -146,10 +178,13 @@ describe('update petitioner contact information on a case', () => {
         state: 'TN',
         title: 'Executor',
       },
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     });
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
+    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(result.paperServicePdfUrl).toEqual('https://www.example.com');
   });
 
   it('throws an error if the user making the request does not have permission to edit petition details', async () => {
