@@ -1,9 +1,10 @@
 import { canSetTrialSessionToCalendarAction } from '../actions/TrialSession/canSetTrialSessionToCalendarAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearModalAction } from '../actions/clearModalAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getSetTrialSessionCalendarAlertSuccessAction } from '../actions/TrialSession/getSetTrialSessionCalendarAlertSuccessAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
-import { set } from 'cerebral/factories';
+import { parallel, set } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
@@ -19,29 +20,32 @@ import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForRespons
 export const setTrialSessionCalendarSequence = [
   clearAlertsAction,
   setWaitingForResponseAction,
-  canSetTrialSessionToCalendarAction,
-  {
-    no: [setAlertWarningAction],
-    yes: [
-      setTrialSessionCalendarAction,
-      getTrialSessionDetailsAction,
-      setTrialSessionDetailsAction,
-      getCalendaredCasesForTrialSessionAction,
-      setCalendaredCasesOnTrialSessionAction,
-      setNoticesForCalendaredTrialSessionAction,
-      {
-        electronic: [
-          getSetTrialSessionCalendarAlertSuccessAction,
-          setAlertSuccessAction,
-        ],
-        paper: [
-          ...setPdfPreviewUrlSequence,
-          setTrialSessionCalendarAlertWarningAction,
-          setAlertWarningAction,
-          set(state.currentPage, 'SimplePdfPreviewPage'),
-        ],
-      },
-    ],
-  },
+  parallel([
+    canSetTrialSessionToCalendarAction,
+    {
+      no: [setAlertWarningAction],
+      yes: [
+        setTrialSessionCalendarAction,
+        getTrialSessionDetailsAction,
+        setTrialSessionDetailsAction,
+        getCalendaredCasesForTrialSessionAction,
+        setCalendaredCasesOnTrialSessionAction,
+        setNoticesForCalendaredTrialSessionAction,
+        {
+          electronic: [
+            getSetTrialSessionCalendarAlertSuccessAction,
+            setAlertSuccessAction,
+          ],
+          paper: [
+            ...setPdfPreviewUrlSequence,
+            setTrialSessionCalendarAlertWarningAction,
+            setAlertWarningAction,
+            set(state.currentPage, 'SimplePdfPreviewPage'),
+          ],
+        },
+      ],
+    },
+    clearModalAction,
+  ]),
   unsetWaitingForResponseAction,
 ];
