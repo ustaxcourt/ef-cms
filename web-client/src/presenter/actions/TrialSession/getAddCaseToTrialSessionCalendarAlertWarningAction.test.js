@@ -9,6 +9,7 @@ describe('getAddCaseToTrialSessionCalendarAlertWarningAction', () => {
         props: {
           caseDetail: {
             docketNumber: '101-19',
+            docketNumberSuffix: 'P',
           },
         },
       },
@@ -17,7 +18,7 @@ describe('getAddCaseToTrialSessionCalendarAlertWarningAction', () => {
     expect(result.output).toEqual({
       alertWarning: {
         message:
-          '101-19 has parties receiving paper service. Print and mail all paper service documents below.',
+          '101-19P has parties receiving paper service. Print and mail all paper service documents below.',
       },
     });
   });
