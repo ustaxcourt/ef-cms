@@ -1,6 +1,7 @@
 import { addCaseToTrialSessionAction } from '../actions/CaseDetail/addCaseToTrialSessionAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
 import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialSessionCalendaredAction';
 import { set } from 'cerebral/factories';
@@ -17,6 +18,14 @@ import { state } from 'cerebral';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateAddToTrialSessionAction } from '../actions/CaseDetail/validateAddToTrialSessionAction';
 
+const showSuccessAlert = [
+  clearModalStateAction,
+  unsetWaitingForResponseAction,
+  setAlertSuccessAction,
+  getCaseAction,
+  setCaseAction,
+];
+
 export const addCaseToTrialSessionSequence = [
   startShowValidationAction,
   validateAddToTrialSessionAction,
@@ -29,22 +38,14 @@ export const addCaseToTrialSessionSequence = [
       getTrialSessionDetailsAction,
       isTrialSessionCalendaredAction,
       {
-        no: [
-          clearModalStateAction,
-          unsetWaitingForResponseAction,
-          setAlertSuccessAction,
-          setCaseAction,
-        ],
+        no: showSuccessAlert,
         yes: [
           setNoticesForCalendaredTrialSessionAction,
           {
-            electronic: [
+            electronic: showSuccessAlert,
+            paper: [
               clearModalStateAction,
               unsetWaitingForResponseAction,
-              setAlertSuccessAction,
-              setCaseAction,
-            ],
-            paper: [
               ...setPdfPreviewUrlSequence,
               setTrialSessionCalendarAlertWarningAction,
               setAlertWarningAction,
