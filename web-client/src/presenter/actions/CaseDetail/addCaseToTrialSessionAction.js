@@ -46,5 +46,7 @@ export const addCaseToTrialSessionAction = async ({
   return {
     alertSuccess,
     caseDetail,
+    caseId,
+    trialSessionId,
   };
 };
