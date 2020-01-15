@@ -447,7 +447,7 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
-      - bundle
+      - bundle:
           filters:
             branches:
               ignore:
