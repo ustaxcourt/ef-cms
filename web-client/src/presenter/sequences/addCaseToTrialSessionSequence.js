@@ -8,6 +8,7 @@ import { isTrialSessionCalendaredAction } from '../actions/TrialSession/isTrialS
 import { set } from 'cerebral/factories';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
+import { setAlternateBackLocationAction } from '../actions/setAlternateBackLocationAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setNoticesForCalendaredTrialSessionAction } from '../actions/TrialSession/setNoticesForCalendaredTrialSessionAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
@@ -47,6 +48,7 @@ export const addCaseToTrialSessionSequence = [
               clearModalStateAction,
               unsetWaitingForResponseAction,
               ...setPdfPreviewUrlSequence,
+              setAlternateBackLocationAction,
               getAddCaseToTrialSessionCalendarAlertWarningAction,
               setAlertWarningAction,
               set(state.currentPage, 'SimplePdfPreviewPage'),
