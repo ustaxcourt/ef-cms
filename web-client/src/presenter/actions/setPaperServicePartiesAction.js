@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setPaperServicePartiesAction = ({ props, store }) => {
-  if (props.paperServiceParties) {
+  if (props.paperServiceParties && props.paperServiceParties.length > 0) {
     store.set(state.showModal, 'PaperServiceConfirmModal');
   }
 };
