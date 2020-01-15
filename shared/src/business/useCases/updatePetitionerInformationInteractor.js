@@ -134,7 +134,7 @@ exports.updatePetitionerInformationInteractor = async ({
 
     caseEntity.addDocument(changeOfAddressDocument);
 
-    await applicationContext.getPersistenceGateway().saveDocument({
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: changeOfAddressPdfWithCover,
       documentId: newDocumentId,
@@ -232,7 +232,7 @@ exports.updatePetitionerInformationInteractor = async ({
     const paperServicePdfData = await fullDocument.save();
     const paperServicePdfId = applicationContext.getUniqueId();
     applicationContext.logger.time('Saving S3 Document');
-    await applicationContext.getPersistenceGateway().saveDocument({
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: paperServicePdfData,
       documentId: paperServicePdfId,

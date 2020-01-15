@@ -41,7 +41,7 @@ exports.serveDocumentOnParties = async ({
   });
 
   applicationContext.logger.time('Saving S3 Document');
-  await applicationContext.getPersistenceGateway().saveDocument({
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
     documentId: documentEntity.documentId,
@@ -98,7 +98,7 @@ exports.serveDocumentOnParties = async ({
     const paperServicePdfId = applicationContext.getUniqueId();
 
     applicationContext.logger.time('Saving S3 Document');
-    await applicationContext.getPersistenceGateway().saveDocument({
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: paperServicePdfData,
       documentId: paperServicePdfId,

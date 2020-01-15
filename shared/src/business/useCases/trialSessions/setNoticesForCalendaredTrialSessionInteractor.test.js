@@ -41,7 +41,7 @@ let applicationContext;
 let calendaredCases;
 let generateNoticeOfTrialIssuedInteractorMock;
 let generatePaperServiceAddressPagePdfMock;
-let saveDocumentMock;
+let saveDocumentFromLambdaMock;
 let sendBulkTemplatedEmailMock;
 let updateTrialSessionMock;
 let testPdfDoc;
@@ -52,7 +52,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     testPdfDoc = testPdfDocBytes();
 
     generateNoticeOfTrialIssuedInteractorMock = jest.fn();
-    saveDocumentMock = jest.fn();
+    saveDocumentFromLambdaMock = jest.fn();
     sendBulkTemplatedEmailMock = jest.fn();
     updateTrialSessionMock = jest.fn();
 
@@ -102,7 +102,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         deleteCaseTrialSortMappingRecords: () => {},
         getCalendaredCasesForTrialSession: () => calendaredCases,
         getTrialSessionById: () => trialSession,
-        saveDocument: saveDocumentMock,
+        saveDocumentFromLambda: saveDocumentFromLambdaMock,
         updateCase: ({ caseToUpdate }) => {
           calendaredCases.some((caseRecord, index) => {
             if (caseRecord.caseId === caseToUpdate.caseId) {
@@ -167,7 +167,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).not.toHaveBeenCalled();
-    expect(saveDocumentMock).not.toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).not.toHaveBeenCalled();
     expect(result).toBeUndefined();
   });
 
@@ -178,7 +178,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0])).toBeTruthy();
     expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
@@ -217,7 +217,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0]).status).toEqual('served');
     expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
@@ -230,7 +230,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0]).servedAt).toBeTruthy();
     expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeTruthy();
@@ -243,7 +243,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
 
     expect(
       findNoticeOfTrial(calendaredCases[0]).servedParties.length,
@@ -303,7 +303,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy();
     expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
@@ -345,7 +345,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy(); // Document should not exist on this case
     expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
