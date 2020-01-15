@@ -115,4 +115,76 @@ describe('migrateCaseInteractor', () => {
     expect(error).toBeUndefined();
     expect(result).toBeDefined();
   });
+
+  describe('validation', () => {
+    it('should failto migrate a case when the docket record is invalid', async () => {
+      const adminUser = new User({
+        name: 'Olivia Jade',
+        role: 'admin',
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+
+      applicationContext = {
+        environment: { stage: 'local' },
+        getCurrentUser: () => adminUser,
+        getPersistenceGateway: () => {
+          return {
+            createCase: async () => null,
+            getUserById: () => ({
+              ...adminUser,
+              section: 'admin',
+            }),
+          };
+        },
+        getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        getUseCases: () => ({
+          getUserInteractor: () => ({
+            name: 'john doe',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          }),
+        }),
+      };
+
+      let error;
+      let result;
+
+      try {
+        result = await migrateCaseInteractor({
+          applicationContext,
+          caseMetadata: {
+            caseType: 'other',
+            contactPrimary: {
+              address1: '99 South Oak Lane',
+              address2: 'Culpa numquam saepe ',
+              address3: 'Eaque voluptates com',
+              city: 'Dignissimos voluptat',
+              countryType: 'domestic',
+              email: 'petitioner1@example.com',
+              name: 'Diana Prince',
+              phone: '+1 (215) 128-6587',
+              postalCode: '69580',
+              state: 'AR',
+            },
+            contactSecondary: {},
+            docketNumber: '00101-00',
+            docketRecord: [{}],
+            filingType: 'Myself',
+            hasIrsNotice: true,
+            partyType: ContactFactory.PARTY_TYPES.petitioner,
+            petitionFile: new File([], 'test.pdf'),
+            petitionFileSize: 1,
+            preferredTrialCity: 'Chattanooga, TN',
+            procedureType: 'Small',
+            signature: true,
+            stinFile: new File([], 'test.pdf'),
+            stinFileSize: 1,
+          },
+        });
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error.message).toContain('Unauthorized');
+    });
+  });
 });
