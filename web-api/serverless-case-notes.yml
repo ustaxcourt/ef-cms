@@ -48,9 +48,6 @@ custom:
     topics:
       alarm:
         topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
-        notifications:
-          - protocol: email
-            endpoint: ustaxcourt@flexion.us
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
