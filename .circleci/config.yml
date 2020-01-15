@@ -396,23 +396,6 @@ workflows:
   version: 2
   hourly:
     jobs:
-      - deploy-ui
-      - deploy-api-west
-      - deploy-api-east
-      - post-deploy:
-          requires:
-            - deploy-ui
-            - deploy-api-west
-            - deploy-api-east
-    triggers:
-      - schedule:
-          cron: '0 12-23 * * 1-5'
-          filters:
-            branches:
-              only:
-                - develop
-  build-and-deploy:
-    jobs:
       - bundle
       - build-shared:
           requires:
@@ -429,6 +412,81 @@ workflows:
       - e2e-cypress:
           requires:
             - bundle
+      - deploy-ui:
+          requires:
+            - build-shared
+            - build-api
+            - build-client
+            - e2e-pa11y
+            - e2e-cypress
+      - deploy-api-west:
+          requires:
+            - build-shared
+            - build-api
+            - build-client
+            - e2e-pa11y
+            - e2e-cypress
+      - deploy-api-east:
+          requires:
+            - build-shared
+            - build-api
+            - build-client
+            - e2e-pa11y
+            - e2e-cypress
+      - post-deploy:
+          requires:
+            - deploy-ui
+            - deploy-api-west
+            - deploy-api-east
+    triggers:
+      - schedule:
+          cron: '0 12-23 * * 1-5'
+          filters:
+            branches:
+              only:
+                - develop
+  build-and-deploy:
+    jobs:
+      - bundle:
+          filters:
+            branches:
+              ignore:
+                - develop
+      - build-shared:
+          requires:
+            - bundle
+          filters:
+            branches:
+              ignore:
+                - develop
+      - build-api:
+          requires:
+            - bundle
+          filters:
+            branches:
+              ignore:
+                - develop
+      - build-client:
+          requires:
+            - bundle
+          filters:
+            branches:
+              ignore:
+                - develop
+      - e2e-pa11y:
+          requires:
+            - bundle
+          filters:
+            branches:
+              ignore:
+                - develop
+      - e2e-cypress:
+          requires:
+            - bundle
+          filters:
+            branches:
+              ignore:
+                - develop
       - deploy-ui:
           requires:
             - build-shared
@@ -479,7 +537,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - staging
                 - test
                 - master
