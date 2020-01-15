@@ -663,6 +663,14 @@ const router = {
     );
 
     route(
+      '/pdf-preview',
+      ifHasAccess(() => {
+        setPageTitle('PDF Preview');
+        app.getSequence('gotoPdfPreviewSequence')();
+      }),
+    );
+
+    route(
       '/reports/case-deadlines',
       ifHasAccess(() => {
         setPageTitle('Case deadlines');
