@@ -6,4 +6,4 @@ pushd ./web-api/terraform/main
   export ELASTICSEARCH_ENDPOINT
 popd
 
-./web-api/run-serverless.sh "${1}" "${2}" "migrateHandlers.js" "serverless-migrate.yml" "build:api"
+./web-api/run-serverless.sh "${1}" "${2}" "migrateHandlers.js" "serverless-migrate.yml" "build:api:migrate"
