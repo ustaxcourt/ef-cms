@@ -6,7 +6,7 @@ export default (test, overrides = {}) => {
 
     expect(test.getState('currentPage')).toEqual('EditTrialSession');
 
-    await test.runSequence('setTrialSessionCalendarSequence');
+    await test.runSequence('openSetCalendarModalSequence');
 
     expect(test.getState('alertWarning')).toEqual({
       message:
