@@ -82,7 +82,7 @@ exports.addCoverToPdf = async ({
   // create pdfDoc object from file data
   applicationContext.logger.time('Loading the PDF');
   const pdfDoc = await PDFDocument.load(pdfData);
-  applicationContext.logger.time('Loading the PDF');
+  applicationContext.logger.timeEnd('Loading the PDF');
 
   // Embed font to use for cover page generation
   applicationContext.logger.time('Embed Font');
