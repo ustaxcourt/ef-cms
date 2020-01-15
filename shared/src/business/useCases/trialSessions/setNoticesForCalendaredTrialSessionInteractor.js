@@ -6,6 +6,10 @@ const {
 } = require('../../utilities/sendServedPartiesEmails');
 
 const {
+  appendPaperServiceAddressPageToPdf,
+} = require('../../utilities/appendPaperServiceAddressPageToPdf');
+
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -164,40 +168,14 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     if (servedParties.paper.length > 0) {
       const noticeDoc = await PDFDocument.load(documentPdfData);
-      const addressPages = [];
 
-      for (let party of servedParties.paper) {
-        addressPages.push(
-          await applicationContext
-            .getUseCaseHelpers()
-            .generatePaperServiceAddressPagePdf({
-              applicationContext,
-              contactData: party,
-              docketNumberWithSuffix: `${
-                caseEntity.docketNumber
-              }${caseEntity.docketNumberSuffix || ''}`,
-            }),
-        );
-      }
-
-      for (let addressPage of addressPages) {
-        const addressPageDoc = await PDFDocument.load(addressPage);
-        let copiedPages = await newPdfDoc.copyPages(
-          addressPageDoc,
-          addressPageDoc.getPageIndices(),
-        );
-        copiedPages.forEach(page => {
-          newPdfDoc.addPage(page);
-        });
-
-        copiedPages = await newPdfDoc.copyPages(
-          noticeDoc,
-          noticeDoc.getPageIndices(),
-        );
-        copiedPages.forEach(page => {
-          newPdfDoc.addPage(page);
-        });
-      }
+      await appendPaperServiceAddressPageToPdf({
+        applicationContext,
+        caseEntity,
+        newPdfDoc,
+        noticeDoc,
+        servedParties,
+      });
     }
 
     return servedParties;
