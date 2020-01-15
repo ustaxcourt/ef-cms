@@ -8,6 +8,7 @@ describe('associatePractitionerToCase', () => {
   let applicationContext;
 
   let caseRecord = {
+    caseCaption: 'Case Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     docketNumber: '123-19',
   };
