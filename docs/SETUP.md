@@ -64,3 +64,20 @@
      - `POST_CONFIRMATION_ROLE_ARN_PROD` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
      - `SES_DMARC_EMAIL` (email address used with SES to which aggregate DMARC validations are sent)
 8. Run a build in CircleCI.
+
+## Setting up a new environment
+1. Choose a name for the branch which will be used for deployments (henceforth `$BRANCH`). Examples are 'master', 'develop', 'staging'.
+2. Choose a name for this environment (henceforth `$ENVIRONMENT`), name limited to 4 characters. Examples are 'prod', 'dev', 'stg'.
+3. Add CircleCI badge link to the README.md according to `$BRANCH`
+4. Edit `get-es-instance-count.sh`, adding a new `elif` statement for your `$BRANCH` which returns the appropriate number of ElasticSearch instances.
+5. Edit `get-keys.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the `$ENVIRONMENT`-specific Dynamsoft licensing keys; licensing requires that each environment use their own unique keys.
+6. Edit `get-post-confirmation-role-arn.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the correct Amazon resource name for your `$ENVIRONMENT` (see SETUP.md)
+7. Create the `config/$ENVIRONMENT.yml` (e.g. `config/stg.yml`)
+8. Create the `web-api/config/$ENVIRONMENT.yml` (e.g. `web-api/config/stg.yml`)
+9. Add mention of your environment, if appropriate, to SETUP.md
+    - to create Lambda roles & policies:
+      - e.g. `cd iam/environment-specific/terraform/main && ../bin/deploy-app $ENVIRONMENT`
+    - mention your `DYNAMSOFT_PRODUCT_KEYS_$ENVIRONMENT`
+    - mention your `POST_CONFIRMATION_ROLE_ARN_$ENVIRONMENT`
+10. Mention your `$ENVIRONMENT`, if necessary, in `web-api/deploy-sandbox.sh` within the `run_development` function
+11. For all files matching `web-api/serverless-*yml`, include your `$ENVIRONMENT` within the list of `custom.alerts.stages` if you want your `$ENVIRONMENT` to be included in those which are monitored & emails delivered upon alarm.
