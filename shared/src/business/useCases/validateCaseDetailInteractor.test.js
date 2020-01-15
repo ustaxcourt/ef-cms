@@ -54,9 +54,19 @@ describe('validate case detail', () => {
     const errors = validateCaseDetailInteractor({
       applicationContext,
       caseDetail: {
+        caseCaption: 'Caption',
         caseType: 'defined',
         contactPrimary,
         docketNumber: '101-18',
+        docketRecord: [
+          {
+            description: 'first record',
+            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+            eventCode: 'P',
+            filingDate: '2018-03-01T00:01:00.000Z',
+            index: 1,
+          },
+        ],
         documents: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -104,9 +114,19 @@ describe('validate case detail', () => {
     const errors = validateCaseDetailInteractor({
       applicationContext,
       caseDetail: {
+        caseCaption: 'Caption',
         caseType: 'defined',
         contactPrimary,
         docketNumber: '101-18',
+        docketRecord: [
+          {
+            description: 'first record',
+            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+            eventCode: 'P',
+            filingDate: '2018-03-01T00:01:00.000Z',
+            index: 1,
+          },
+        ],
         documents: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
@@ -142,9 +162,19 @@ describe('validate case detail', () => {
     const errors = validateCaseDetailInteractor({
       applicationContext,
       caseDetail: {
+        caseCaption: 'Caption',
         caseType: 'defined',
         contactPrimary,
         docketNumber: '101-18',
+        docketRecord: [
+          {
+            description: 'first record',
+            documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+            eventCode: 'P',
+            filingDate: '2018-03-01T00:01:00.000Z',
+            index: 1,
+          },
+        ],
         documents: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
