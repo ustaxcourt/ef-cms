@@ -378,7 +378,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         newPdfData,
       );
     });
-    //
     const result = await serveCourtIssuedDocumentInteractor({
       applicationContext,
       caseId: 'd857e73a-636e-4aa7-9de2-b5cee8770ff0',
