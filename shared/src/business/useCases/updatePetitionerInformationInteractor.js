@@ -5,10 +5,12 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const {
+  sendServedPartiesEmails,
+} = require('../utilities/sendServedPartiesEmails');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
-const { formatDateString } = require('../utilities/DateHandler');
 const { PDFDocument } = require('pdf-lib');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -138,38 +140,12 @@ exports.updatePetitionerInformationInteractor = async ({
       documentId: newDocumentId,
     });
 
-    const destinations = servedParties.electronic.map(party => ({
-      email: party.email,
-      templateData: {
-        caseCaption: caseEntity.caseCaption,
-        docketNumber: caseEntity.docketNumber,
-        documentName: changeOfAddressDocument.documentTitle,
-        loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-        name: party.name,
-        serviceDate: formatDateString(
-          changeOfAddressDocument.servedAt,
-          'MMDDYYYY',
-        ),
-        serviceTime: formatDateString(changeOfAddressDocument.servedAt, 'TIME'),
-      },
-    }));
-
-    if (destinations.length > 0) {
-      await applicationContext.getDispatchers().sendBulkTemplatedEmail({
-        applicationContext,
-        defaultTemplateData: {
-          caseCaption: 'undefined',
-          docketNumber: 'undefined',
-          documentName: 'undefined',
-          loginUrl: 'undefined',
-          name: 'undefined',
-          serviceDate: 'undefined',
-          serviceTime: 'undefined',
-        },
-        destinations,
-        templateName: process.env.EMAIL_SERVED_TEMPLATE,
-      });
-    }
+    await sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      documentEntity: changeOfAddressDocument,
+      servedParties,
+    });
 
     return changeOfAddressPdfWithCover;
   };

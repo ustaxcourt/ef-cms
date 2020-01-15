@@ -1,6 +1,9 @@
 const {
   addServedStampToDocument,
 } = require('../../useCases/courtIssuedDocument/addServedStampToDocument');
+const {
+  sendServedPartiesEmails,
+} = require('../../utilities/sendServedPartiesEmails');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { PDFDocument } = require('pdf-lib');
 
@@ -45,35 +48,12 @@ exports.serveDocumentOnParties = async ({
   });
   applicationContext.logger.timeEnd('Saving S3 Document');
 
-  const destinations = servedParties.electronic.map(party => ({
-    email: party.email,
-    templateData: {
-      caseCaption: caseEntity.caseCaption,
-      docketNumber: caseEntity.docketNumber,
-      documentName: documentEntity.documentTitle,
-      loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-      name: party.name,
-      serviceDate: formatDateString(documentEntity.servedAt, 'MMDDYYYY'),
-      serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
-    },
-  }));
-
-  if (destinations.length > 0) {
-    await applicationContext.getDispatchers().sendBulkTemplatedEmail({
-      applicationContext,
-      defaultTemplateData: {
-        caseCaption: 'undefined',
-        docketNumber: 'undefined',
-        documentName: 'undefined',
-        loginUrl: 'undefined',
-        name: 'undefined',
-        serviceDate: 'undefined',
-        serviceTime: 'undefined',
-      },
-      destinations,
-      templateName: process.env.EMAIL_SERVED_TEMPLATE,
-    });
-  }
+  await sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    documentEntity,
+    servedParties,
+  });
 
   if (servedParties.paper.length > 0) {
     const noticeDoc = await PDFDocument.load(newPdfData);
