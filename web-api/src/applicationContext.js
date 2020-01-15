@@ -518,6 +518,9 @@ const {
   removeCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor');
 const {
+  reprocessFailedRecordsInteractor,
+} = require('../../shared/src/business/useCases/reprocessFailedRecordsInteractor');
+const {
   runBatchProcessInteractor,
 } = require('../../shared/src/business/useCases/runBatchProcessInteractor');
 const {
@@ -565,6 +568,9 @@ const {
 const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
+const {
+  serveDocumentOnParties,
+} = require('../../shared/src/business/useCaseHelper/service/serveDocumentOnParties');
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
@@ -981,6 +987,7 @@ module.exports = (appContextUser = {}) => {
         generateCaseConfirmationPdf,
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
+        serveDocumentOnParties,
       };
     },
     getUseCases: () => {
@@ -1066,6 +1073,7 @@ module.exports = (appContextUser = {}) => {
         processStreamRecordsInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
         removeCaseFromTrialInteractor,
+        reprocessFailedRecordsInteractor,
         runBatchProcessInteractor,
         runTrialSessionPlanningReportInteractor,
         saveCaseDetailInternalEditInteractor,

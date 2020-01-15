@@ -337,8 +337,7 @@ describe('formattedCaseDetail', () => {
         description:
           'Unsworn Declaration of Test under Penalty of Perjury in Support of Amended Petition Additional Info',
         editLink: '',
-        filingsAndProceedingsWithAdditionalInfo:
-          ' Additional Info (Lodged) Additional Info2',
+        filingsAndProceedingsWithAdditionalInfo: ' (Lodged) Additional Info2',
         showDocumentDescriptionWithoutLink: false,
         showDocumentEditLink: true,
         showDocumentProcessing: false,

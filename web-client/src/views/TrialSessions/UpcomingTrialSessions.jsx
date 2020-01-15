@@ -78,13 +78,14 @@ export const UpcomingTrialSessions = connect(
               <th>Type</th>
               <th>Judge</th>
               <th aria-label="Number of cases">No. of cases</th>
+              <th>Notice Issued</th>
             </tr>
           </thead>
           {formattedTrialSessions.map((trialDate, idxDate) => (
             <React.Fragment key={idxDate}>
               <tbody>
                 <tr className="trial-date">
-                  <td colSpan="6">
+                  <td colSpan="7">
                     <h4 className="margin-bottom-0">
                       {trialDate.dateFormatted}
                     </h4>
@@ -118,6 +119,7 @@ export const UpcomingTrialSessions = connect(
                     <td>{item.sessionType}</td>
                     <td>{item.judge && item.judge.name}</td>
                     <td>{item.maxCases}</td>
+                    <td>{item.formattedNoticeIssuedDate}</td>
                   </tr>
                 </tbody>
               ))}

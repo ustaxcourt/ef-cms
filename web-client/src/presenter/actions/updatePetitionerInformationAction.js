@@ -15,7 +15,11 @@ export const updatePetitionerInformationAction = async ({
   const caseToUpdate = get(state.caseDetail);
   const { contactPrimary, contactSecondary, partyType } = get(state.form);
 
-  const updatedCase = await applicationContext
+  const {
+    paperServiceParties,
+    paperServicePdfUrl,
+    updatedCase,
+  } = await applicationContext
     .getUseCases()
     .updatePetitionerInformationInteractor({
       applicationContext,
@@ -31,6 +35,8 @@ export const updatePetitionerInformationAction = async ({
     },
     caseDetail: updatedCase,
     caseId: updatedCase.docketNumber,
+    paperServiceParties,
+    pdfUrl: paperServicePdfUrl,
     tab: 'caseInfo',
   };
 };

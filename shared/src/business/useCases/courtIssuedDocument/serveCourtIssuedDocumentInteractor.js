@@ -1,6 +1,11 @@
 const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
+
+const {
+  sendServedPartiesEmails,
+} = require('../../utilities/sendServedPartiesEmails');
+
 const {
   createISODateString,
   formatDateString,
@@ -189,35 +194,12 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  const destinations = servedParties.electronic.map(party => ({
-    email: party.email,
-    templateData: {
-      caseCaption: caseToUpdate.caseCaption,
-      docketNumber: caseToUpdate.docketNumber,
-      documentName: courtIssuedDocument.documentTitle,
-      loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-      name: party.name,
-      serviceDate: formatDateString(courtIssuedDocument.servedAt, 'MMDDYYYY'),
-      serviceTime: formatDateString(courtIssuedDocument.servedAt, 'TIME'),
-    },
-  }));
-
-  if (destinations.length > 0) {
-    await applicationContext.getDispatchers().sendBulkTemplatedEmail({
-      applicationContext,
-      defaultTemplateData: {
-        caseCaption: 'undefined',
-        docketNumber: 'undefined',
-        documentName: 'undefined',
-        loginUrl: 'undefined',
-        name: 'undefined',
-        serviceDate: 'undefined',
-        serviceTime: 'undefined',
-      },
-      destinations,
-      templateName: process.env.EMAIL_SERVED_TEMPLATE,
-    });
-  }
+  await sendServedPartiesEmails({
+    applicationContext,
+    caseEntity: caseToUpdate,
+    documentEntity: courtIssuedDocument,
+    servedParties,
+  });
 
   let paperServicePdfBuffer;
   if (servedParties.paper.length > 0) {
@@ -225,19 +207,19 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     const addressPages = [];
     let newPdfDoc = await PDFDocument.create();
 
-    for (let party of servedParties.paper) {
-      addressPages.push(
-        await applicationContext
-          .getUseCaseHelpers()
-          .generatePaperServiceAddressPagePdf({
-            applicationContext,
-            contactData: party,
-            docketNumberWithSuffix: `${
-              caseToUpdate.docketNumber
-            }${caseToUpdate.docketNumberSuffix || ''}`,
-          }),
-      );
-    }
+    const addressPagePromises = servedParties.paper.map(party => {
+      applicationContext
+        .getUseCaseHelpers()
+        .generatePaperServiceAddressPagePdf({
+          applicationContext,
+          contactData: party,
+          docketNumberWithSuffix: `${
+            caseToUpdate.docketNumber
+          }${caseToUpdate.docketNumberSuffix || ''}`,
+        });
+    });
+
+    await Promise.all(addressPagePromises);
 
     for (let addressPage of addressPages) {
       const addressPageDoc = await PDFDocument.load(addressPage);
@@ -245,17 +227,13 @@ exports.serveCourtIssuedDocumentInteractor = async ({
         addressPageDoc,
         addressPageDoc.getPageIndices(),
       );
-      copiedPages.forEach(page => {
-        newPdfDoc.addPage(page);
-      });
+      copiedPages.forEach(newPdfDoc.addPage);
 
       copiedPages = await newPdfDoc.copyPages(
         courtIssuedOrderDoc,
         courtIssuedOrderDoc.getPageIndices(),
       );
-      copiedPages.forEach(page => {
-        newPdfDoc.addPage(page);
-      });
+      copiedPages.forEach(newPdfDoc.addPage);
     }
 
     const paperServicePdfData = await newPdfDoc.save();

@@ -4,6 +4,7 @@ import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
 import { InactiveCases } from './InactiveCases';
 import { OpenCases } from './OpenCases';
+import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialSessionDetailHeader } from './TrialSessionDetailHeader';
@@ -16,9 +17,14 @@ import React from 'react';
 export const TrialSessionDetail = connect(
   {
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
-    setTrialSessionCalendarSequence: sequences.setTrialSessionCalendarSequence,
+    openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
+    showModal: state.showModal,
   },
-  ({ formattedTrialSessionDetails, setTrialSessionCalendarSequence }) => (
+  ({
+    formattedTrialSessionDetails,
+    openSetCalendarModalSequence,
+    showModal,
+  }) => (
     <>
       <TrialSessionDetailHeader />
 
@@ -35,7 +41,7 @@ export const TrialSessionDetail = connect(
             <Button
               className="tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
               icon="calendar-check"
-              onClick={() => setTrialSessionCalendarSequence()}
+              onClick={() => openSetCalendarModalSequence()}
             >
               Set Calendar
             </Button>
@@ -50,6 +56,7 @@ export const TrialSessionDetail = connect(
             </Tab>
           </Tabs>
         )}
+        {showModal == 'SetCalendarModalDialog' && <SetCalendarModalDialog />}
         {formattedTrialSessionDetails.isCalendared && (
           <Tabs
             bind="trialSessionDetailsTab.calendaredCaseList"
