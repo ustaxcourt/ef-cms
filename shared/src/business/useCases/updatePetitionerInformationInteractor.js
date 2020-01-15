@@ -2,6 +2,10 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
+  copyToNewPdf,
+  getAddressPages,
+} = require('../utilities/appendPaperServiceAddressPageToPdf');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
@@ -173,59 +177,24 @@ exports.updatePetitionerInformationInteractor = async ({
   if (servedParties.paper.length > 0) {
     const fullDocument = await PDFDocument.create();
 
-    const addressPages = [];
-    for (let party of servedParties.paper) {
-      addressPages.push(
-        await applicationContext
-          .getUseCaseHelpers()
-          .generatePaperServiceAddressPagePdf({
-            applicationContext,
-            contactData: party,
-            docketNumberWithSuffix: `${
-              caseEntity.docketNumber
-            }${caseEntity.docketNumberSuffix || ''}`,
-          }),
-      );
-    }
-
-    const addAddressPageAndNoticeToDocument = async ({
-      addressPagesToAdd,
-      combinedDocument,
-      documentToAdd,
-    }) => {
-      const documentToAddPdf = await PDFDocument.load(documentToAdd);
-      for (let addressPage of addressPagesToAdd) {
-        const addressPageDoc = await PDFDocument.load(addressPage);
-        let copiedPages = await combinedDocument.copyPages(
-          addressPageDoc,
-          addressPageDoc.getPageIndices(),
-        );
-        copiedPages.forEach(page => {
-          combinedDocument.addPage(page);
-        });
-
-        copiedPages = await combinedDocument.copyPages(
-          documentToAddPdf,
-          documentToAddPdf.getPageIndices(),
-        );
-        copiedPages.forEach(page => {
-          combinedDocument.addPage(page);
-        });
-      }
-    };
+    const addressPages = await getAddressPages({
+      applicationContext,
+      caseEntity,
+      servedParties,
+    });
 
     if (primaryPdf) {
-      await addAddressPageAndNoticeToDocument({
-        addressPagesToAdd: addressPages,
-        combinedDocument: fullDocument,
-        documentToAdd: primaryPdf,
+      await copyToNewPdf({
+        addressPages,
+        newPdfDoc: fullDocument,
+        noticeDoc: await PDFDocument.load(primaryPdf),
       });
     }
     if (secondaryPdf) {
-      await addAddressPageAndNoticeToDocument({
-        addressPagesToAdd: addressPages,
-        combinedDocument: fullDocument,
-        documentToAdd: secondaryPdf,
+      await copyToNewPdf({
+        addressPages,
+        newPdfDoc: fullDocument,
+        noticeDoc: await PDFDocument.load(secondaryPdf),
       });
     }
 
