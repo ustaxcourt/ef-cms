@@ -7,6 +7,10 @@ const {
 } = require('../../utilities/sendServedPartiesEmails');
 
 const {
+  appendPaperServiceAddressPageToPdf,
+} = require('../../utilities/appendPaperServiceAddressPageToPdf');
+
+const {
   createISODateString,
   formatDateString,
 } = require('../../utilities/DateHandler');
@@ -204,37 +208,16 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   let paperServicePdfBuffer;
   if (servedParties.paper.length > 0) {
     const courtIssuedOrderDoc = await PDFDocument.load(newPdfData);
-    const addressPages = [];
+
     let newPdfDoc = await PDFDocument.create();
 
-    const addressPagePromises = servedParties.paper.map(party => {
-      applicationContext
-        .getUseCaseHelpers()
-        .generatePaperServiceAddressPagePdf({
-          applicationContext,
-          contactData: party,
-          docketNumberWithSuffix: `${
-            caseToUpdate.docketNumber
-          }${caseToUpdate.docketNumberSuffix || ''}`,
-        });
+    await appendPaperServiceAddressPageToPdf({
+      applicationContext,
+      caseEntity,
+      newPdfDoc,
+      noticeDoc: courtIssuedOrderDoc,
+      servedParties,
     });
-
-    await Promise.all(addressPagePromises);
-
-    for (let addressPage of addressPages) {
-      const addressPageDoc = await PDFDocument.load(addressPage);
-      let copiedPages = await newPdfDoc.copyPages(
-        addressPageDoc,
-        addressPageDoc.getPageIndices(),
-      );
-      copiedPages.forEach(newPdfDoc.addPage);
-
-      copiedPages = await newPdfDoc.copyPages(
-        courtIssuedOrderDoc,
-        courtIssuedOrderDoc.getPageIndices(),
-      );
-      copiedPages.forEach(newPdfDoc.addPage);
-    }
 
     const paperServicePdfData = await newPdfDoc.save();
     paperServicePdfBuffer = Buffer.from(paperServicePdfData);
