@@ -54,7 +54,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:service}-${self:provider.stage}-cloudwatch-alerts
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
         notifications:
           - protocol: email
             endpoint: ustaxcourt@flexion.us

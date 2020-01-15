@@ -18,6 +18,7 @@ const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
 const { omit } = require('lodash');
+const { PDFDocument } = require('pdf-lib');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -104,12 +105,12 @@ exports.completeDocketEntryQCInteractor = async ({
   }
 
   const needsNewCoversheet =
-    updatedDocument.additionalInfo != currentDocument.additionalInfo ||
-    updatedDocumentTitle != currentDocumentTitle;
+    updatedDocument.additionalInfo !== currentDocument.additionalInfo ||
+    updatedDocumentTitle !== currentDocumentTitle;
 
   const needsNoticeOfDocketChange =
-    updatedDocument.filedBy != currentDocument.filedBy ||
-    updatedDocumentTitle != currentDocumentTitle;
+    updatedDocument.filedBy !== currentDocument.filedBy ||
+    updatedDocumentTitle !== currentDocumentTitle;
 
   const docketChangeInfo = {
     caseTitle: caseToUpdate.caseTitle,
@@ -187,10 +188,86 @@ exports.completeDocketEntryQCInteractor = async ({
       });
   }
 
-  let servedParties;
+  let servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;
 
-  if (needsNoticeOfDocketChange) {
+  if (
+    Document.CONTACT_CHANGE_DOCUMENT_TYPES.includes(
+      updatedDocument.documentType,
+    )
+  ) {
+    if (servedParties.paper.length > 0) {
+      const { Body: pdfData } = await applicationContext
+        .getStorageClient()
+        .getObject({
+          Bucket: applicationContext.environment.documentsBucketName,
+          Key: updatedDocument.documentId,
+        })
+        .promise();
+
+      const noticeDoc = await PDFDocument.load(pdfData);
+      const addressPages = [];
+      let newPdfDoc = await PDFDocument.create();
+
+      for (let party of servedParties.paper) {
+        addressPages.push(
+          await applicationContext
+            .getUseCaseHelpers()
+            .generatePaperServiceAddressPagePdf({
+              applicationContext,
+              contactData: party,
+              docketNumberWithSuffix: `${
+                caseEntity.docketNumber
+              }${caseEntity.docketNumberSuffix || ''}`,
+            }),
+        );
+      }
+
+      for (let addressPage of addressPages) {
+        const addressPageDoc = await PDFDocument.load(addressPage);
+        let copiedPages = await newPdfDoc.copyPages(
+          addressPageDoc,
+          addressPageDoc.getPageIndices(),
+        );
+        copiedPages.forEach(page => {
+          newPdfDoc.addPage(page);
+        });
+
+        copiedPages = await newPdfDoc.copyPages(
+          noticeDoc,
+          noticeDoc.getPageIndices(),
+        );
+        copiedPages.forEach(page => {
+          newPdfDoc.addPage(page);
+        });
+      }
+
+      const paperServicePdfData = await newPdfDoc.save();
+
+      const paperServicePdfId = applicationContext.getUniqueId();
+
+      applicationContext.logger.time('Saving S3 Document');
+      await applicationContext.getPersistenceGateway().saveDocument({
+        applicationContext,
+        document: paperServicePdfData,
+        documentId: paperServicePdfId,
+        useTempBucket: true,
+      });
+      applicationContext.logger.timeEnd('Saving S3 Document');
+
+      const {
+        url,
+      } = await applicationContext
+        .getPersistenceGateway()
+        .getDownloadPolicyUrl({
+          applicationContext,
+          documentId: paperServicePdfId,
+          useTempBucket: true,
+        });
+
+      paperServicePdfUrl = url;
+    }
+  } else if (needsNoticeOfDocketChange) {
     const noticeDocumentId = await generateNoticeOfDocketChangePdf({
       applicationContext,
       docketChangeInfo,
@@ -209,8 +286,6 @@ exports.completeDocketEntryQCInteractor = async ({
       Document.NOTICE_OF_DOCKET_CHANGE.documentTitle,
       docketChangeInfo.docketEntryIndex,
     );
-
-    servedParties = aggregatePartiesForService(caseEntity);
 
     noticeUpdatedDocument.setAsServed(servedParties.all);
 
@@ -254,7 +329,7 @@ exports.completeDocketEntryQCInteractor = async ({
 
   return {
     caseDetail: caseEntity.toRawObject(),
-    paperServiceParties: servedParties && servedParties.paper,
+    paperServiceParties: servedParties.paper,
     paperServicePdfUrl,
   };
 };
