@@ -371,14 +371,14 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     expect(result).toBeUndefined();
   });
 
-  it('should not call sendBulkTemplatedEmail if there are no electronically-served parties but should return paperServicePdfData', async () => {
+  it.only('should not call sendBulkTemplatedEmail if there are no electronically-served parties but should return paperServicePdfData', async () => {
     saveDocumentMock = jest.fn(({ document: newPdfData }) => {
       fs.writeFileSync(
         testOutputPath + 'serveCourtIssuedDocumentInteractor_2.pdf',
         newPdfData,
       );
     });
-
+    //
     const result = await serveCourtIssuedDocumentInteractor({
       applicationContext,
       caseId: 'd857e73a-636e-4aa7-9de2-b5cee8770ff0',

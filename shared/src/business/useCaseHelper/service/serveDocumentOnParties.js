@@ -2,11 +2,13 @@ const {
   addServedStampToDocument,
 } = require('../../useCases/courtIssuedDocument/addServedStampToDocument');
 const {
+  appendPaperServiceAddressPageToPdf,
+} = require('../../utilities/appendPaperServiceAddressPageToPdf');
+const {
   sendServedPartiesEmails,
 } = require('../../utilities/sendServedPartiesEmails');
 const { formatDateString } = require('../../utilities/DateHandler');
 const { PDFDocument } = require('pdf-lib');
-
 /**
  * serveDocumentOnParties
  *
@@ -57,44 +59,17 @@ exports.serveDocumentOnParties = async ({
 
   if (servedParties.paper.length > 0) {
     const noticeDoc = await PDFDocument.load(newPdfData);
-    const addressPages = [];
     let newPdfDoc = await PDFDocument.create();
 
-    for (let party of servedParties.paper) {
-      addressPages.push(
-        await applicationContext
-          .getUseCaseHelpers()
-          .generatePaperServiceAddressPagePdf({
-            applicationContext,
-            contactData: party,
-            docketNumberWithSuffix: `${
-              caseEntity.docketNumber
-            }${caseEntity.docketNumberSuffix || ''}`,
-          }),
-      );
-    }
-
-    for (let addressPage of addressPages) {
-      const addressPageDoc = await PDFDocument.load(addressPage);
-      let copiedPages = await newPdfDoc.copyPages(
-        addressPageDoc,
-        addressPageDoc.getPageIndices(),
-      );
-      copiedPages.forEach(page => {
-        newPdfDoc.addPage(page);
-      });
-
-      copiedPages = await newPdfDoc.copyPages(
-        noticeDoc,
-        noticeDoc.getPageIndices(),
-      );
-      copiedPages.forEach(page => {
-        newPdfDoc.addPage(page);
-      });
-    }
+    await appendPaperServiceAddressPageToPdf({
+      applicationContext,
+      caseEntity,
+      newPdfDoc,
+      noticeDoc,
+      servedParties,
+    });
 
     const paperServicePdfData = await newPdfDoc.save();
-
     const paperServicePdfId = applicationContext.getUniqueId();
 
     applicationContext.logger.time('Saving S3 Document');
