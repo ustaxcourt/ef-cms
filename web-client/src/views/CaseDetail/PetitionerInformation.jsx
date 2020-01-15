@@ -93,6 +93,16 @@ const PetitionerInformation = connect(
                     Edit
                   </Button>
                 )}
+                {caseDetailHelper.showEditPetitionerInformation && (
+                  <Button
+                    link
+                    className="margin-left-2"
+                    href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-petitioner-information`}
+                    icon="edit"
+                  >
+                    Edit
+                  </Button>
+                )}
               </h3>
               {formattedCaseDetail.contactPrimary && (
                 <div className="grid-row">

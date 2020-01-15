@@ -30,6 +30,7 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
@@ -47,7 +48,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
         notifications:
           - protocol: email
             endpoint: ustaxcourt@flexion.us
@@ -175,22 +176,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updatePrimaryContact:
-    handler: web-api/${self:provider.dir}/casesHandlers.updatePrimaryContactLambda
-    layers:
-      - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
-    memorySize: 3008
-    timeout: 900
-    events:
-      - http:
-          path: /{caseId}/contact-primary
-          method: put
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   createCase:
     handler: web-api/${self:provider.dir}/casesHandlers.createCaseLambda
     events:
@@ -267,54 +252,6 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  associatePractitionerWithCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.associatePractitionerWithCaseLambda
-    events:
-      - http:
-          path: /{caseId}/associate-practitioner
-          method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  associateRespondentWithCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.associateRespondentWithCaseLambda
-    events:
-      - http:
-          path: /{caseId}/associate-respondent
-          method: post
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updateCounselOnCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.updateCounselOnCaseLambda
-    events:
-      - http:
-          path: /{caseId}/counsel/{userId}
-          method: put
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  deleteCounselFromCase:
-    handler: web-api/${self:provider.dir}/casesHandlers.deleteCounselFromCaseLambda
-    events:
-      - http:
-          path: /{caseId}/counsel/{userId}
-          method: delete
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
   blockCaseFromTrial:
     handler: web-api/${self:provider.dir}/casesHandlers.blockCaseFromTrialLambda
     events:
@@ -380,18 +317,6 @@ functions:
     events:
       - http:
           path: /{caseId}/case-context
-          method: put
-          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
-
-  updatePetitionFeePayment:
-    handler: web-api/${self:provider.dir}/casesHandlers.updatePetitionFeePaymentLambda
-    events:
-      - http:
-          path: /{caseId}/petition-fee
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

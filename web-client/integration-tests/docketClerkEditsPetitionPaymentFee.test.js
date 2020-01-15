@@ -4,7 +4,7 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 
 const test = setupTest();
 
-describe('Create a work item', () => {
+describe('docket clerk edits a petition payment fee', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
   });
@@ -39,7 +39,7 @@ describe('Create a work item', () => {
       value: Case.PAYMENT_STATUS.PAID,
     });
 
-    await test.runSequence('updatePetitionFeePaymentSequence');
+    await test.runSequence('updatePetitionDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       petitionPaymentDate: Case.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
@@ -65,7 +65,7 @@ describe('Create a work item', () => {
       value: 'check',
     });
 
-    await test.runSequence('updatePetitionFeePaymentSequence');
+    await test.runSequence('updatePetitionDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

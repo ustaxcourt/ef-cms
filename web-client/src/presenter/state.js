@@ -27,6 +27,8 @@ import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
+import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
+import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
@@ -123,6 +125,8 @@ export const state = {
   documentSelectedForScan: null,
   documentSigningHelper,
   documentUploadMode: 'scan',
+  editDocketEntryHelper,
+  editPetitionerInformationHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fieldOrder: [],
