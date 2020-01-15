@@ -1,7 +1,4 @@
 const {
-  addServedStampToDocument,
-} = require('./courtIssuedDocument/addServedStampToDocument');
-const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
@@ -125,27 +122,19 @@ exports.updatePetitionerInformationInteractor = async ({
         docketNumber: caseEntity.docketNumber,
         headerHtml: null,
       });
-    const serviceStampDate = formatDateString(
-      changeOfAddressDocument.servedAt,
-      'MMDDYY',
-    );
-    const servedChangeOfAddressPdf = await addServedStampToDocument({
-      pdfData: changeOfAddressPdf,
-      serviceStampText: `Served ${serviceStampDate}`,
-    });
 
-    const servedChangeOfAddressPdfWithCover = await addCoverToPdf({
+    const changeOfAddressPdfWithCover = await addCoverToPdf({
       applicationContext,
       caseEntity,
       documentEntity: changeOfAddressDocument,
-      pdfData: servedChangeOfAddressPdf,
+      pdfData: changeOfAddressPdf,
     });
 
     caseEntity.addDocument(changeOfAddressDocument);
 
     await applicationContext.getPersistenceGateway().saveDocument({
       applicationContext,
-      document: servedChangeOfAddressPdfWithCover,
+      document: changeOfAddressPdfWithCover,
       documentId: newDocumentId,
     });
 
@@ -182,7 +171,7 @@ exports.updatePetitionerInformationInteractor = async ({
       });
     }
 
-    return servedChangeOfAddressPdfWithCover;
+    return changeOfAddressPdfWithCover;
   };
 
   let primaryPdf;
