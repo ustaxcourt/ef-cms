@@ -1,21 +1,16 @@
 const {
-  addServedStampToDocument,
-} = require('./courtIssuedDocument/addServedStampToDocument');
-const {
-  sendServedPartiesEmails,
-} = require('../utilities/sendServedPartiesEmails');
-
-const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const {
+  sendServedPartiesEmails,
+} = require('../utilities/sendServedPartiesEmails');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
-const { formatDateString } = require('../utilities/DateHandler');
 const { PDFDocument } = require('pdf-lib');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -129,27 +124,19 @@ exports.updatePetitionerInformationInteractor = async ({
         docketNumber: caseEntity.docketNumber,
         headerHtml: null,
       });
-    const serviceStampDate = formatDateString(
-      changeOfAddressDocument.servedAt,
-      'MMDDYY',
-    );
-    const servedChangeOfAddressPdf = await addServedStampToDocument({
-      pdfData: changeOfAddressPdf,
-      serviceStampText: `Served ${serviceStampDate}`,
-    });
 
-    const servedChangeOfAddressPdfWithCover = await addCoverToPdf({
+    const changeOfAddressPdfWithCover = await addCoverToPdf({
       applicationContext,
       caseEntity,
       documentEntity: changeOfAddressDocument,
-      pdfData: servedChangeOfAddressPdf,
+      pdfData: changeOfAddressPdf,
     });
 
     caseEntity.addDocument(changeOfAddressDocument);
 
     await applicationContext.getPersistenceGateway().saveDocument({
       applicationContext,
-      document: servedChangeOfAddressPdfWithCover,
+      document: changeOfAddressPdfWithCover,
       documentId: newDocumentId,
     });
 
@@ -160,7 +147,7 @@ exports.updatePetitionerInformationInteractor = async ({
       servedParties,
     });
 
-    return servedChangeOfAddressPdfWithCover;
+    return changeOfAddressPdfWithCover;
   };
 
   let primaryPdf;
