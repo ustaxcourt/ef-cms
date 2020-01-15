@@ -101,4 +101,15 @@ module.exports = [
   },
   'http://localhost:1234/mock-login?token=docketclerk&path=/print-preview/110-19/',
   'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-19/edit-petitioner-information',
+  {
+    actions: [
+      'wait for [name="contactPrimary.address1"] to be visible',
+      'set [name="contactPrimary.address1"] to 123 Main St',
+      'click element #submit-edit-petitioner-information',
+      'wait for .paper-service-confirm-modal to be visible',
+    ],
+    notes: 'checks a11y of paper-service-confirm-modal dialog',
+    url:
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19/edit-petitioner-information?info=paper-service-modal',
+  },
 ];
