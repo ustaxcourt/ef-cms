@@ -20,6 +20,7 @@ const ROLE_PERMISSIONS = {
   GET_CASE: 'GET_CASE',
   GET_READ_MESSAGES: 'GET_READ_MESSAGES',
   GET_USERS_IN_SECTION: 'GET_USERS_IN_SECTION',
+  MIGRATE_CASE: 'MIGRATE_CASE',
   PENDING_ITEMS: 'PENDING_ITEMS',
   PETITION: 'PETITION',
   PRIORITIZE_CASE: 'PRIORITIZE_CASE',
@@ -64,7 +65,11 @@ const allInternalUserPermissions = [
 
 const AUTHORIZATION_MAP = {
   adc: allInternalUserPermissions,
-  admin: [ROLE_PERMISSIONS.CREATE_USER, ROLE_PERMISSIONS.FILE_IN_CONSOLIDATED],
+  admin: [
+    ROLE_PERMISSIONS.CREATE_USER,
+    ROLE_PERMISSIONS.FILE_IN_CONSOLIDATED,
+    ROLE_PERMISSIONS.MIGRATE_CASE,
+  ],
   admissionsclerk: allInternalUserPermissions,
   calendarclerk: [
     ...allInternalUserPermissions,
