@@ -256,7 +256,7 @@ exports.uploadProposedStipulatedDecision = async test => {
     certificateOfServiceDate: null,
     documentTitle: 'Proposed Stipulated Decision',
     documentType: 'Proposed Stipulated Decision',
-    eventCode: 'PSDEC',
+    eventCode: 'PSDE',
     hasSecondarySupportingDocuments: false,
     hasSupportingDocuments: false,
     partyRespondent: true,
@@ -401,6 +401,11 @@ exports.setupTest = ({ useCases = {} } = {}) => {
         case `/print-preview/${test.caseId}`:
           await test.runSequence('gotoPrintPreviewSequence', {
             docketNumber: test.caseId,
+          });
+          break;
+        case `/case-detail/${test.docketNumber}/case-information`:
+          await test.runSequence('gotoCaseDetailSequence', {
+            docketNumber: test.docketNumber,
           });
           break;
         case '/':

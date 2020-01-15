@@ -403,7 +403,7 @@
         }
       }
     },
-    "/cases/{caseId}/counsel/{userId}": {
+    "/case-parties/{caseId}/counsel/{userId}": {
       "parameters": [
         {
           "name": "caseId",
@@ -480,7 +480,7 @@
         }
       }
     },
-    "/cases/{caseId}/contact-primary": {
+    "/case-parties/{caseId}/contact-primary": {
       "parameters": [
         {
           "name": "caseId",
@@ -3413,6 +3413,55 @@
         }
       }
     },
+    "/trial-sessions/{trialSessionId}/generate-notices": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["trialsessions"],
+        "summary": "generates notices of trial for cases within a given trial session and returns a PDF if a paper case is in trial session",
+        "description": "generates notices of trial for cases within a given trial session and returns a PDF if a paper case is in trial session.\n",
+        "produces": ["application/pdf"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/trial-sessions/{trialSessionId}/getAssociatedCases": {
       "parameters": [
         {
@@ -4053,7 +4102,7 @@
         }
       }
     },
-    "/cases/{caseId}/petition-fee": {
+    "/case-parties/{caseId}/petition-details": {
       "parameters": [
         {
           "name": "caseId",
@@ -4064,8 +4113,60 @@
       ],
       "put": {
         "tags": ["cases"],
-        "summary": "updates the petition payment fee on the case",
-        "description": "updates the petition payment fee on the case.\n",
+        "summary": "updates the petition details on the case",
+        "description": "updates the petition details on the case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-parties/{caseId}/petitioner-info": {
+      "parameters": [
+        {
+          "name": "caseId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "updates the petitioner information on the case",
+        "description": "updates the petitioner information on the case.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -4173,7 +4274,7 @@
         }
       }
     },
-    "/cases/{caseId}/associate-practitioner": {
+    "/case-parties/{caseId}/associate-practitioner": {
       "parameters": [
         {
           "name": "caseId",
@@ -4225,7 +4326,7 @@
         }
       }
     },
-    "/cases/{caseId}/associate-respondent": {
+    "/case-parties/{caseId}/associate-respondent": {
       "parameters": [
         {
           "name": "caseId",

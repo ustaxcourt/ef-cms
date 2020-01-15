@@ -31,7 +31,7 @@ export const CreateOrderChooseTypeModal = connect(
         className=""
         confirmLabel="Continue"
         confirmSequence={confirmSequence}
-        title="Create Order"
+        title="Create Order or Notice"
       >
         <div className="ustc-create-order-modal">
           <FormGroup errorText={validationErrors.eventCode}>
@@ -62,16 +62,17 @@ export const CreateOrderChooseTypeModal = connect(
               )}
             </select>
           </FormGroup>
-          {form.eventCode == 'O' && (
+          {orderTypesHelper.showDocumentTitleInput && (
             <FormGroup errorText={validationErrors.documentTitle}>
               <label className="usa-label" htmlFor="documentTitle">
-                Order title
+                {orderTypesHelper.documentTitleInputLabel}
               </label>
               <input
                 className="usa-input"
                 id="documentTitle"
                 name="documentTitle"
                 type="text"
+                value={form.documentTitle || ''}
                 onChange={e => {
                   updateFormValue({
                     key: e.target.name,

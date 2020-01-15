@@ -13,10 +13,13 @@ exports.handler = event =>
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
     try {
+      const { caseId } = JSON.parse(event.body);
+
       const results = await applicationContext
         .getUseCases()
         .setNoticesForCalendaredTrialSessionInteractor({
           applicationContext,
+          caseId: caseId,
           trialSessionId: event.pathParameters.trialSessionId,
         });
       applicationContext.logger.info('User', user);

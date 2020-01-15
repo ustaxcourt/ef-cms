@@ -16,7 +16,7 @@ const formatDocument = (applicationContext, document) => {
 
   result.servedAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.servedAt, 'DATE_TIME');
+    .formatDateString(result.servedAt, 'MMDDYY');
 
   result.signedAtFormatted = applicationContext
     .getUtilities()

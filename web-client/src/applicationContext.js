@@ -1,4 +1,6 @@
 import {
+  chiefJudgeNameForSigning,
+  clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
@@ -187,7 +189,8 @@ import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
 import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updateJudgesCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateJudgesCaseNoteProxy';
-import { updatePetitionFeePaymentInteractor } from '../../shared/src/proxies/updatePetitionFeePaymentProxy';
+import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
+import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/updateQcCompleteForTrialProxy';
 import { updateTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionProxy';
@@ -216,6 +219,7 @@ import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/us
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
+import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
 import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
@@ -354,7 +358,8 @@ const allUseCases = {
   updateCourtIssuedOrderInteractor,
   updateDocketEntryInteractor,
   updateJudgesCaseNoteInteractor,
-  updatePetitionFeePaymentInteractor,
+  updatePetitionDetailsInteractor,
+  updatePetitionerInformationInteractor,
   updatePrimaryContactInteractor,
   updateQcCompleteForTrialInteractor,
   updateTrialSessionInteractor,
@@ -381,6 +386,7 @@ const allUseCases = {
   validatePdfInteractor,
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
+  validatePetitionerInformationFormInteractor,
   validatePrimaryContactInteractor,
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
@@ -399,7 +405,8 @@ const applicationContext = {
     return process.env.API_URL || 'http://localhost:3000';
   },
   getCaseCaptionNames: Case.getCaseCaptionNames,
-  getChiefJudgeNameForSigning: () => 'Maurice B. Foley',
+  getChiefJudgeNameForSigning: () => chiefJudgeNameForSigning,
+  getClerkOfCourtNameForSigning: () => clerkOfCourtNameForSigning,
   getCognitoClientId: () => {
     return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
   },
@@ -422,6 +429,7 @@ const applicationContext = {
       CATEGORY_MAP: Document.CATEGORY_MAP,
       CHAMBERS_SECTION,
       CHAMBERS_SECTIONS,
+      CONTACT_CHANGE_DOCUMENT_TYPES: Document.CONTACT_CHANGE_DOCUMENT_TYPES,
       COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
       COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
       ESTATE_TYPES: ContactFactory.ESTATE_TYPES,

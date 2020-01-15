@@ -1,3 +1,10 @@
+const {
+  aggregatePartiesForService,
+} = require('../utilities/aggregatePartiesForService');
+const {
+  sendServedPartiesEmails,
+} = require('../utilities/sendServedPartiesEmails');
+
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
@@ -45,18 +52,6 @@ exports.updatePrimaryContactInteractor = async ({
     throw new UnauthorizedError('Unauthorized for update case contact');
   }
 
-  let caseNameToUse;
-  const spousePartyTypes = [
-    ContactFactory.PARTY_TYPES.petitionerSpouse,
-    ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
-  ];
-
-  if (spousePartyTypes.includes(caseEntity.partyType)) {
-    caseNameToUse = caseEntity.contactPrimary.name;
-  } else {
-    caseNameToUse = Case.getCaseCaptionNames(caseEntity.caseCaption);
-  }
-
   const documentType = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({
@@ -80,12 +75,11 @@ exports.updatePrimaryContactInteractor = async ({
           caseDetail.docketNumber
         }${caseDetail.docketNumberSuffix || ''}`,
         documentTitle: documentType.title,
-        name: caseNameToUse,
+        name: contactInfo.name,
         newData: contactInfo,
         oldData: caseEntity.contactPrimary,
       },
     });
-
   caseEntity.contactPrimary = ContactFactory.createContacts({
     contactInfo: { primary: contactInfo },
     partyType: caseEntity.partyType,
@@ -106,17 +100,29 @@ exports.updatePrimaryContactInteractor = async ({
   const changeOfAddressDocument = new Document(
     {
       addToCoversheet: true,
-      additionalInfo: `for ${caseNameToUse}`,
+      additionalInfo: `for ${contactInfo.name}`,
       caseId,
       documentId: newDocumentId,
+      documentTitle: documentType.title,
       documentType: documentType.title,
       eventCode: documentType.eventCode,
-      filedBy: user.name,
+      partyPrimary: true,
       processingStatus: 'complete',
       userId: user.userId,
     },
     { applicationContext },
   );
+
+  const servedParties = aggregatePartiesForService(caseEntity);
+
+  changeOfAddressDocument.setAsServed(servedParties.all);
+
+  await sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    documentEntity: changeOfAddressDocument,
+    servedParties,
+  });
 
   const workItem = new WorkItem(
     {

@@ -1,3 +1,6 @@
+const { Case } = require('../../entities/cases/Case');
+const { formatNow } = require('../../utilities/DateHandler');
+
 /**
  * generateNoticeOfTrialIssuedInteractor
  *
@@ -38,15 +41,15 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
     state,
   } = trialSession;
 
-  const { caseCaption, caseCaptionPostfix, docketNumberSuffix } = caseDetail;
+  const { caseCaption, docketNumberSuffix } = caseDetail;
+  const footerDate = formatNow('MMDDYYYY');
 
   const contentHtml = await applicationContext
     .getTemplateGenerators()
     .generateNoticeOfTrialIssuedTemplate({
       applicationContext,
       content: {
-        caption: caseCaption,
-        captionPostfix: caseCaptionPostfix,
+        caption: Case.getCaseCaptionNames(caseCaption),
         docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
         trialInfo: {
           address1,
@@ -65,5 +68,6 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
   return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
     applicationContext,
     contentHtml,
+    footerHtml: `<h3 style="text-align:center; font-family: sans-serif; width: 100%;" class="text-bold served-date">Served ${footerDate}</h3>`,
   });
 };

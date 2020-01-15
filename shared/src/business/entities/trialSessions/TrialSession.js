@@ -144,6 +144,7 @@ TrialSession.prototype.init = function(rawSession, { applicationContext }) {
   this.judge = rawSession.judge;
   this.maxCases = rawSession.maxCases;
   this.notes = rawSession.notes;
+  this.noticeIssuedDate = rawSession.noticeIssuedDate;
   this.postalCode = rawSession.postalCode;
   this.sessionType = rawSession.sessionType;
   this.startDate = rawSession.startDate;
@@ -185,11 +186,23 @@ TrialSession.VALIDATION_ERROR_MESSAGES = {
 
 TrialSession.validationRules = {
   COMMON: {
-    address1: joi.string().optional(),
-    address2: joi.string().optional(),
-    city: joi.string().optional(),
+    address1: joi
+      .string()
+      .allow('')
+      .optional(),
+    address2: joi
+      .string()
+      .allow('')
+      .optional(),
+    city: joi
+      .string()
+      .allow('')
+      .optional(),
     courtReporter: joi.string().optional(),
-    courthouseName: joi.string().optional(),
+    courthouseName: joi
+      .string()
+      .allow('')
+      .optional(),
     createdAt: joi
       .date()
       .iso()
@@ -206,6 +219,10 @@ TrialSession.validationRules = {
       .string()
       .max(400)
       .optional(),
+    noticeIssuedDate: joi
+      .date()
+      .iso()
+      .optional(),
     postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
     sessionType: joi
       .string()
@@ -216,7 +233,10 @@ TrialSession.validationRules = {
       .iso()
       .required(),
     startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES,
-    state: joi.string().optional(),
+    state: joi
+      .string()
+      .allow('')
+      .optional(),
     status: joi
       .string()
       .valid(
@@ -423,6 +443,16 @@ TrialSession.prototype.canSetAsCalendared = function() {
     this.state,
     this.postalCode,
   ].some(property => isEmpty(property));
+};
+
+/**
+ * Sets the notice issued date on the trial session
+ *
+ * @returns {TrialSession} the trial session entity
+ */
+TrialSession.prototype.setNoticesIssued = function() {
+  this.noticeIssuedDate = createISODateString();
+  return this;
 };
 
 module.exports = { TrialSession };

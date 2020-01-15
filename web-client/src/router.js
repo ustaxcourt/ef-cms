@@ -95,6 +95,16 @@ const router = {
     );
 
     route(
+      '/case-detail/*/edit-petitioner-information',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        app.getSequence('gotoEditPetitionerInformationSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/edit-details',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);

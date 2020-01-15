@@ -61,7 +61,7 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
 
     expect(result.state.form).toEqual({
       attachments: false,
-      documentTitle: '[Anything]',
+      documentTitle: 'Order [Anything]',
       documentType: 'O - Order',
       eventCode: 'O',
       freeText: 'something',
