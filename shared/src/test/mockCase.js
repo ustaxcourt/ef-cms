@@ -8,6 +8,7 @@ exports.MOCK_CASE = {
     address1: '123 Main St',
     city: 'Somewhere',
     countryType: 'domestic',
+    email: 'petitioner@example.com',
     name: 'Test Petitioner',
     postalCode: '12345',
     state: 'TN',

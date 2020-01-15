@@ -1,3 +1,10 @@
+const {
+  aggregatePartiesForService,
+} = require('../utilities/aggregatePartiesForService');
+const {
+  sendServedPartiesEmails,
+} = require('../utilities/sendServedPartiesEmails');
+
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
@@ -73,7 +80,6 @@ exports.updatePrimaryContactInteractor = async ({
         oldData: caseEntity.contactPrimary,
       },
     });
-
   caseEntity.contactPrimary = ContactFactory.createContacts({
     contactInfo: { primary: contactInfo },
     partyType: caseEntity.partyType,
@@ -97,14 +103,26 @@ exports.updatePrimaryContactInteractor = async ({
       additionalInfo: `for ${contactInfo.name}`,
       caseId,
       documentId: newDocumentId,
+      documentTitle: documentType.title,
       documentType: documentType.title,
       eventCode: documentType.eventCode,
-      filedBy: user.name,
+      partyPrimary: true,
       processingStatus: 'complete',
       userId: user.userId,
     },
     { applicationContext },
   );
+
+  const servedParties = aggregatePartiesForService(caseEntity);
+
+  changeOfAddressDocument.setAsServed(servedParties.all);
+
+  await sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    documentEntity: changeOfAddressDocument,
+    servedParties,
+  });
 
   const workItem = new WorkItem(
     {

@@ -10,6 +10,7 @@ import { EditPetitionDetails } from './EditPetitionDetails';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './MessagesInProgress';
+import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
 import { SuccessNotification } from '../SuccessNotification';
@@ -25,6 +26,7 @@ export const CaseDetailInternal = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     primaryTab: state.caseDetailPage.primaryTab,
     showEditPetition: state.caseDetailPage.showEditPetition,
+    showModal: state.showModal,
     token: state.token,
   },
   ({
@@ -33,6 +35,7 @@ export const CaseDetailInternal = connect(
     formattedCaseDetail,
     primaryTab,
     showEditPetition,
+    showModal,
     token,
   }) => {
     return (
@@ -114,6 +117,10 @@ export const CaseDetailInternal = connect(
             </>
           )}
         </section>
+
+        {showModal === 'PaperServiceConfirmModal' && (
+          <PaperServiceConfirmModal />
+        )}
 
         {/* This section below will be removed in a future story */}
         <section className="usa-section grid-container">
