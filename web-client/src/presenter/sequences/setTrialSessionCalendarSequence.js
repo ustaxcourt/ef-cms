@@ -1,9 +1,10 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
+import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCalendaredCasesForTrialSessionAction } from '../actions/TrialSession/getCalendaredCasesForTrialSessionAction';
 import { getSetTrialSessionCalendarAlertSuccessAction } from '../actions/TrialSession/getSetTrialSessionCalendarAlertSuccessAction';
 import { getTrialSessionDetailsAction } from '../actions/TrialSession/getTrialSessionDetailsAction';
-import { set } from 'cerebral/factories';
+import { navigateToPdfPreviewAction } from '../actions/navigateToPdfPreviewAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setAlternateBackLocationAction } from '../actions/setAlternateBackLocationAction';
@@ -14,11 +15,11 @@ import { setTrialSessionCalendarAction } from '../actions/TrialSession/setTrialS
 import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { state } from 'cerebral';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const setTrialSessionCalendarSequence = [
   clearAlertsAction,
+  clearScreenMetadataAction,
   setWaitingForResponseAction,
   setTrialSessionCalendarAction,
   getTrialSessionDetailsAction,
@@ -36,7 +37,7 @@ export const setTrialSessionCalendarSequence = [
       setAlternateBackLocationAction,
       setTrialSessionCalendarAlertWarningAction,
       setAlertWarningAction,
-      set(state.currentPage, 'SimplePdfPreviewPage'),
+      navigateToPdfPreviewAction,
     ],
   },
   clearModalAction,
