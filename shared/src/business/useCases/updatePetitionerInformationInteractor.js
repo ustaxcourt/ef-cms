@@ -3,7 +3,7 @@ const {
 } = require('./courtIssuedDocument/addServedStampToDocument');
 const {
   sendServedPartiesEmails,
-} = require('../../utilities/sendServedPartiesEmails');
+} = require('../utilities/sendServedPartiesEmails');
 
 const {
   aggregatePartiesForService,

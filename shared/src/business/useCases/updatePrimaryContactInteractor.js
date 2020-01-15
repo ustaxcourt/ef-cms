@@ -3,7 +3,7 @@ const {
 } = require('../utilities/aggregatePartiesForService');
 const {
   sendServedPartiesEmails,
-} = require('../../utilities/sendServedPartiesEmails');
+} = require('../utilities/sendServedPartiesEmails');
 
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { capitalize } = require('lodash');
@@ -11,7 +11,6 @@ const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { DOCKET_SECTION } = require('../entities/WorkQueue');
 const { Document } = require('../entities/Document');
-const { formatDateString } = require('../utilities/DateHandler');
 const { Message } = require('../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
