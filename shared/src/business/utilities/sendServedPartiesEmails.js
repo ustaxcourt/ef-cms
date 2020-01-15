@@ -1,6 +1,6 @@
 const { formatDateString } = require('./DateHandler');
 
-export const sendServedPartiesEmails = async ({
+exports.sendServedPartiesEmails = async ({
   applicationContext,
   caseEntity,
   documentEntity,
