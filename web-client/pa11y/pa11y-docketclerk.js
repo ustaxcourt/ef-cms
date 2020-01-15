@@ -110,6 +110,6 @@ module.exports = [
     ],
     notes: 'checks a11y of paper-service-confirm-modal dialog',
     url:
-      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19/edit-petitioner-information?info=paper-service-modal',
+      'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19/edit-petitioner-information&info=paper-service-modal',
   },
 ];
