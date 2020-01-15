@@ -1,6 +1,11 @@
 const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
+
+const {
+  sendServedPartiesEmails,
+} = require('../../utilities/sendServedPartiesEmails');
+
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -10,7 +15,6 @@ const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
-const { formatDateString } = require('../../utilities/DateHandler');
 const { Message } = require('../../entities/Message');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
@@ -125,7 +129,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
   const saveWorkItems = [];
   const sendEmails = [];
 
-  documentsToAdd.forEach(([documentId, metadata, relationship]) => {
+  for (let [documentId, metadata, relationship] of documentsToAdd) {
     if (documentId && metadata) {
       // TODO: Double check what is auto-generated here,
       // as this may not be entirely necessary
@@ -141,7 +145,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
         { applicationContext },
       ).toRawObject();
 
-      consolidatedCaseEntities.forEach(caseEntity => {
+      for (let caseEntity of consolidatedCaseEntities) {
         const isFilingDocumentForCase = caseIdsForDocumentFiling.includes(
           caseEntity.caseId,
         );
@@ -235,40 +239,12 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           if (documentEntity.isAutoServed()) {
             documentEntity.setAsServed(servedParties.all);
 
-            const destinations = servedParties.electronic.map(party => ({
-              email: party.email,
-              templateData: {
-                caseCaption: caseEntity.caseCaption,
-                docketNumber: caseEntity.docketNumber,
-                documentName: documentEntity.documentTitle,
-                loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-                name: party.name,
-                serviceDate: formatDateString(
-                  documentEntity.servedAt,
-                  'MMDDYYYY',
-                ),
-                serviceTime: formatDateString(documentEntity.servedAt, 'TIME'),
-              },
-            }));
-
-            if (destinations.length > 0) {
-              sendEmails.push(
-                applicationContext.getDispatchers().sendBulkTemplatedEmail({
-                  applicationContext,
-                  defaultTemplateData: {
-                    caseCaption: 'undefined',
-                    docketNumber: 'undefined',
-                    documentName: 'undefined',
-                    loginUrl: 'undefined',
-                    name: 'undefined',
-                    serviceDate: 'undefined',
-                    serviceTime: 'undefined',
-                  },
-                  destinations,
-                  templateName: process.env.EMAIL_SERVED_TEMPLATE,
-                }),
-              );
-            }
+            await sendServedPartiesEmails({
+              applicationContext,
+              caseEntity,
+              documentEntity,
+              servedParties,
+            });
           }
         }
 
@@ -286,9 +262,9 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           applicationContext,
           caseToUpdate: caseEntity.validate().toRawObject(),
         });
-      }); // consolidatedCases
+      } // consolidatedCases
     }
-  }); // documentsToAdd
+  } // documentsToAdd
   const saveCases = Object.keys(saveCasesMap).map(
     caseId => saveCasesMap[caseId],
   );

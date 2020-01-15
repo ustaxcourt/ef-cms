@@ -161,6 +161,12 @@ Document.TRACKED_DOCUMENT_TYPES = {
   },
 };
 
+Document.CONTACT_CHANGE_DOCUMENT_TYPES = [
+  'Notice of Change of Address',
+  'Notice of Change of Telephone Number',
+  'Notice of Change of Address and Telephone Number',
+];
+
 Document.isPendingOnCreation = rawDocument => {
   const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
     trackedType => {

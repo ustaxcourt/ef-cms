@@ -1,13 +1,16 @@
 const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
+const {
+  sendServedPartiesEmails,
+} = require('../utilities/sendServedPartiesEmails');
+
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { DOCKET_SECTION } = require('../entities/WorkQueue');
 const { Document } = require('../entities/Document');
-const { formatDateString } = require('../utilities/DateHandler');
 const { Message } = require('../entities/Message');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { WorkItem } = require('../entities/WorkItem');
@@ -100,9 +103,10 @@ exports.updatePrimaryContactInteractor = async ({
       additionalInfo: `for ${contactInfo.name}`,
       caseId,
       documentId: newDocumentId,
+      documentTitle: documentType.title,
       documentType: documentType.title,
       eventCode: documentType.eventCode,
-      filedBy: user.name,
+      partyPrimary: true,
       processingStatus: 'complete',
       userId: user.userId,
     },
@@ -113,38 +117,12 @@ exports.updatePrimaryContactInteractor = async ({
 
   changeOfAddressDocument.setAsServed(servedParties.all);
 
-  const destinations = servedParties.electronic.map(party => ({
-    email: party.email,
-    templateData: {
-      caseCaption: caseEntity.caseCaption,
-      docketNumber: caseEntity.docketNumber,
-      documentName: changeOfAddressDocument.documentTitle,
-      loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-      name: party.name,
-      serviceDate: formatDateString(
-        changeOfAddressDocument.servedAt,
-        'MMDDYYYY',
-      ),
-      serviceTime: formatDateString(changeOfAddressDocument.servedAt, 'TIME'),
-    },
-  }));
-
-  if (destinations.length > 0) {
-    await applicationContext.getDispatchers().sendBulkTemplatedEmail({
-      applicationContext,
-      defaultTemplateData: {
-        caseCaption: 'undefined',
-        docketNumber: 'undefined',
-        documentName: 'undefined',
-        loginUrl: 'undefined',
-        name: 'undefined',
-        serviceDate: 'undefined',
-        serviceTime: 'undefined',
-      },
-      destinations,
-      templateName: process.env.EMAIL_SERVED_TEMPLATE,
-    });
-  }
+  await sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    documentEntity: changeOfAddressDocument,
+    servedParties,
+  });
 
   const workItem = new WorkItem(
     {
