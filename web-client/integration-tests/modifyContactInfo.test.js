@@ -1,4 +1,7 @@
 import { fakeFile, setupTest } from './helpers';
+import docketClerkLogIn from './journey/docketClerkLogIn';
+import docketClerkSignsOut from './journey/docketClerkSignsOut';
+import docketClerkViewsNoticeOfChangeOfAddress from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
@@ -43,4 +46,8 @@ describe('Modify Petitioner Contact Information', () => {
   });
   petitionerEditsCaseSecondaryContactInformation(test);
   petitionerSignsOut(test);
+
+  docketClerkLogIn(test);
+  docketClerkViewsNoticeOfChangeOfAddress(test);
+  docketClerkSignsOut(test);
 });
