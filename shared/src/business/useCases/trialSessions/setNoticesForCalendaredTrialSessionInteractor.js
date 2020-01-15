@@ -2,6 +2,10 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  sendServedPartiesEmails,
+} = require('../../utilities/sendServedPartiesEmails');
+
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -151,35 +155,12 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
   ) => {
     const servedParties = aggregatePartiesForService(caseEntity);
 
-    const destinations = servedParties.electronic.map(party => ({
-      email: party.email,
-      templateData: {
-        caseCaption: caseEntity.caseCaption,
-        docketNumber: caseEntity.docketNumber,
-        documentName: documentEntity.documentTitle,
-        loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-        name: party.name,
-        serviceDate: applicationContext.getUtilities().formatNow('MMDDYY'),
-        serviceTime: applicationContext.getUtilities().formatNow('TIME'),
-      },
-    }));
-
-    if (destinations.length > 0) {
-      await applicationContext.getDispatchers().sendBulkTemplatedEmail({
-        applicationContext,
-        defaultTemplateData: {
-          caseCaption: 'undefined',
-          docketNumber: 'undefined',
-          documentName: 'undefined',
-          loginUrl: 'undefined',
-          name: 'undefined',
-          serviceDate: 'undefined',
-          serviceTime: 'undefined',
-        },
-        destinations,
-        templateName: process.env.EMAIL_SERVED_TEMPLATE,
-      });
-    }
+    await sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      documentEntity,
+      servedParties,
+    });
 
     if (servedParties.paper.length > 0) {
       const noticeDoc = await PDFDocument.load(documentPdfData);

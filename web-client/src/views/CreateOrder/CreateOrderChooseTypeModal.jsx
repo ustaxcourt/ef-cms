@@ -9,6 +9,7 @@ export const CreateOrderChooseTypeModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.submitCreateOrderModalSequence,
+    form: state.form,
     orderTypesHelper: state.orderTypesHelper,
     updateFormValue: sequences.updateCreateOrderModalFormValueSequence,
     validateSequence: sequences.validateOrderWithoutBodySequence,
@@ -17,6 +18,7 @@ export const CreateOrderChooseTypeModal = connect(
   ({
     cancelSequence,
     confirmSequence,
+    form,
     orderTypesHelper,
     updateFormValue,
     validateSequence,
@@ -70,6 +72,7 @@ export const CreateOrderChooseTypeModal = connect(
                 id="documentTitle"
                 name="documentTitle"
                 type="text"
+                value={form.documentTitle || ''}
                 onChange={e => {
                   updateFormValue({
                     key: e.target.name,
