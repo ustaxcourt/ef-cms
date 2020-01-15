@@ -5,9 +5,8 @@ const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
 const { Document } = require('../../entities/Document');
-const { User } = require('../../entities/User');
-
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { User } = require('../../entities/User');
 
 const findNoticeOfTrial = caseRecord => {
   return caseRecord.documents.find(

@@ -60,7 +60,7 @@ joiValidationDecorator(
     status: joi
       .string()
       .allow(null)
-      .required(),
+      .optional(),
   }),
   () => true,
   {},
