@@ -14,7 +14,7 @@ export const PaperServiceConfirmModal = connect(
       noCancel
       confirmLabel="Print Now"
       title="Paper service is required for the following document:"
-      onConfirmSequence="gotoPrintPreviewSequence"
+      onConfirmSequence="navigateToPrintPreviewSequence"
     >
       <p>The following document will be served on all parties:</p>
 
