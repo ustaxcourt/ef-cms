@@ -10,17 +10,9 @@ import { state } from 'cerebral';
  */
 
 export const setAlternateBackLocationAction = ({ props, store }) => {
-  const { caseId, isTrialSessionCalendared, trialSession } = props;
+  const { caseId, isTrialSessionCalendared } = props;
 
-  console.log('caseId', caseId);
-  console.log('isTrialSessionCalendared', isTrialSessionCalendared);
-  console.log('trialSession', trialSession);
   if (caseId && isTrialSessionCalendared) {
     store.set(state.screenMetadata.backLocation, `/case-detail/${caseId}`);
-  } else {
-    store.set(
-      state.screenMetadata.backLocation,
-      `/trial-session-detail/${trialSession.trialSessionId}`,
-    );
   }
 };
