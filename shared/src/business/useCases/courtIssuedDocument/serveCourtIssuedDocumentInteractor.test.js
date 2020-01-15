@@ -371,7 +371,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     expect(result).toBeUndefined();
   });
 
-  it.only('should not call sendBulkTemplatedEmail if there are no electronically-served parties but should return paperServicePdfData', async () => {
+  it('should not call sendBulkTemplatedEmail if there are no electronically-served parties but should return paperServicePdfData', async () => {
     saveDocumentMock = jest.fn(({ document: newPdfData }) => {
       fs.writeFileSync(
         testOutputPath + 'serveCourtIssuedDocumentInteractor_2.pdf',
