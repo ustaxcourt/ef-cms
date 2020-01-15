@@ -146,10 +146,9 @@ describe('migrateCaseInteractor', () => {
       };
 
       let error;
-      let result;
 
       try {
-        result = await migrateCaseInteractor({
+        await migrateCaseInteractor({
           applicationContext,
           caseMetadata: {
             caseType: 'other',
