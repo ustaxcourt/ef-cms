@@ -13,30 +13,11 @@ exports.appendPaperServiceAddressPageToPdf = async ({
     servedParties,
   });
 
-  console.log('addressPages', addressPages);
-
   await exports.copyToNewPdf({
     addressPages,
     newPdfDoc,
     noticeDoc,
   });
-};
-
-exports.copyToNewPdf = async ({ addressPages, newPdfDoc, noticeDoc }) => {
-  for (let addressPage of addressPages) {
-    const addressPageDoc = await PDFDocument.load(addressPage);
-    let copiedPages = await newPdfDoc.copyPages(
-      addressPageDoc,
-      addressPageDoc.getPageIndices(),
-    );
-    copiedPages.forEach(newPdfDoc.addPage);
-
-    copiedPages = await newPdfDoc.copyPages(
-      noticeDoc,
-      noticeDoc.getPageIndices(),
-    );
-    copiedPages.forEach(newPdfDoc.addPage);
-  }
 };
 
 exports.getAddressPages = async ({
@@ -59,4 +40,25 @@ exports.getAddressPages = async ({
     );
   }
   return addressPages;
+};
+
+exports.copyToNewPdf = async ({ addressPages, newPdfDoc, noticeDoc }) => {
+  for (let addressPage of addressPages) {
+    const addressPageDoc = await PDFDocument.load(addressPage);
+    let copiedPages = await newPdfDoc.copyPages(
+      addressPageDoc,
+      addressPageDoc.getPageIndices(),
+    );
+    copiedPages.forEach(page => {
+      newPdfDoc.addPage(page);
+    });
+
+    copiedPages = await newPdfDoc.copyPages(
+      noticeDoc,
+      noticeDoc.getPageIndices(),
+    );
+    copiedPages.forEach(page => {
+      newPdfDoc.addPage(page);
+    });
+  }
 };
