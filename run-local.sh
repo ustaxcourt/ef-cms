@@ -80,6 +80,8 @@ echo "starting streams service"
 npx sls offline start "$@" --config web-api/serverless-streams.yml &
 echo "starting case parties service"
 npx sls offline start "$@" --config web-api/serverless-case-parties.yml &
+echo "starting migrate service"
+npx sls offline start "$@" --config web-api/serverless-migrate.yml &
 
 echo "starting proxy"
 node ./web-api/proxy.js
