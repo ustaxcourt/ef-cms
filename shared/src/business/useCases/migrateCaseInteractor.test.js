@@ -9,6 +9,8 @@ const DATE = '2018-11-21T20:49:28.192Z';
 let applicationContext;
 let adminUser;
 let caseMetadata;
+let getCurrentUserMock;
+let getUserByIdMock;
 
 describe('migrateCaseInteractor', () => {
   beforeEach(() => {
@@ -21,16 +23,19 @@ describe('migrateCaseInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
+    getCurrentUserMock = jest.fn(() => adminUser);
+    getUserByIdMock = jest.fn(() => ({
+      ...adminUser,
+      section: 'admin',
+    }));
+
     applicationContext = {
       environment: { stage: 'local' },
-      getCurrentUser: () => adminUser,
+      getCurrentUser: getCurrentUserMock,
       getPersistenceGateway: () => {
         return {
           createCase: async () => null,
-          getUserById: () => ({
-            ...adminUser,
-            section: 'admin',
-          }),
+          getUserById: getUserByIdMock,
         };
       },
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -71,6 +76,15 @@ describe('migrateCaseInteractor', () => {
     };
   });
 
+  it('should get the current user from applicationContext', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata,
+    });
+
+    expect(getCurrentUserMock).toHaveBeenCalled();
+  });
+
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext = {
       getCurrentUser: () => {
@@ -96,6 +110,15 @@ describe('migrateCaseInteractor', () => {
       error = err;
     }
     expect(error.message).toContain('Unauthorized');
+  });
+
+  it('should pull the current user record from persistence', async () => {
+    await migrateCaseInteractor({
+      applicationContext,
+      caseMetadata,
+    });
+
+    expect(getUserByIdMock).toHaveBeenCalled();
   });
 
   it('should create a case successfully as a admin', async () => {
