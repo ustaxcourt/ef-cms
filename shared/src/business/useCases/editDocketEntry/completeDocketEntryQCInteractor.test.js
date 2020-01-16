@@ -112,7 +112,7 @@ describe('completeDocketEntryQCInteractor', () => {
           url: 'www.example.com',
         }),
         getUserById: async () => globalUser,
-        saveDocument: jest.fn(),
+        saveDocumentFromLambda: jest.fn(),
         saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
         updateCase: updateCaseSpy,
       }),

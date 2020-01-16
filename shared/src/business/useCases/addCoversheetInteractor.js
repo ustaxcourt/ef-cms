@@ -564,9 +564,11 @@ exports.addCoversheetInteractor = async ({
   applicationContext.logger.timeEnd('Updating Document Status');
 
   applicationContext.logger.time('Saving S3 Document');
-  await applicationContext
-    .getPersistenceGateway()
-    .saveDocument({ applicationContext, document: newPdfData, documentId });
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: newPdfData,
+    documentId,
+  });
   applicationContext.logger.timeEnd('Saving S3 Document');
 
   return newPdfData;

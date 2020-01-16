@@ -35,7 +35,7 @@ const updateCaseStub = jest.fn();
 const generateChangeOfAddressTemplateStub = jest.fn();
 const generatePdfFromHtmlInteractorStub = jest.fn();
 const getAddressPhoneDiffStub = jest.fn();
-const saveDocumentStub = jest.fn();
+const saveDocumentFromLambdaStub = jest.fn();
 const sendBulkTemplatedEmailMock = jest.fn();
 const generatePaperServiceAddressPagePdfMock = jest
   .fn()
@@ -46,7 +46,7 @@ let persistenceGateway = {
   getDownloadPolicyUrl: () => ({
     url: 'https://www.example.com',
   }),
-  saveDocument: saveDocumentStub,
+  saveDocumentFromLambda: saveDocumentFromLambdaStub,
   saveWorkItemForNonPaper: () => null,
   updateCase: updateCaseStub,
 };
