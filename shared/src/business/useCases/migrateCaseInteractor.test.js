@@ -11,6 +11,8 @@ let adminUser;
 let caseMetadata;
 let getCurrentUserMock;
 let getUserByIdMock;
+let createCaseMock;
+let createdCases;
 
 describe('migrateCaseInteractor', () => {
   beforeEach(() => {
@@ -24,17 +26,23 @@ describe('migrateCaseInteractor', () => {
     });
 
     getCurrentUserMock = jest.fn(() => adminUser);
+
     getUserByIdMock = jest.fn(() => ({
       ...adminUser,
       section: 'admin',
     }));
+
+    createdCases = [];
+    createCaseMock = jest.fn(({ caseToCreate }) => {
+      createdCases.push(caseToCreate);
+    });
 
     applicationContext = {
       environment: { stage: 'local' },
       getCurrentUser: getCurrentUserMock,
       getPersistenceGateway: () => {
         return {
-          createCase: async () => null,
+          createCase: createCaseMock,
           getUserById: getUserByIdMock,
         };
       },
@@ -121,9 +129,11 @@ describe('migrateCaseInteractor', () => {
     expect(getUserByIdMock).toHaveBeenCalled();
   });
 
-  it('should create a case successfully as a admin', async () => {
+  it('should create a case successfully', async () => {
     let error;
     let result;
+
+    expect(createdCases.length).toEqual(0);
 
     try {
       result = await migrateCaseInteractor({
@@ -136,6 +146,8 @@ describe('migrateCaseInteractor', () => {
 
     expect(error).toBeUndefined();
     expect(result).toBeDefined();
+    expect(createCaseMock).toHaveBeenCalled();
+    expect(createdCases.length).toEqual(1);
   });
 
   describe('validation', () => {
