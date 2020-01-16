@@ -1,4 +1,4 @@
-exports.saveDocument = ({
+exports.saveDocumentFromLambda = ({
   applicationContext,
   document: body,
   documentId: key,

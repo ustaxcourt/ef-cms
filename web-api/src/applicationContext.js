@@ -29,6 +29,9 @@ const {
   addWorkItemToSectionInbox,
 } = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
+  appendPaperServiceAddressPageToPdf,
+} = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
+const {
   archiveDraftDocumentInteractor,
 } = require('../../shared/src/business/useCases/archiveDraftDocumentInteractor');
 const {
@@ -536,8 +539,8 @@ const {
   saveCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/saveCaseNoteInteractor');
 const {
-  saveDocument,
-} = require('../../shared/src/persistence/s3/saveDocument');
+  saveDocumentFromLambda,
+} = require('../../shared/src/persistence/s3/saveDocumentFromLambda');
 const {
   saveIntermediateDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/editDocketEntry/saveIntermediateDocketEntryInteractor');
@@ -569,11 +572,11 @@ const {
   sendPetitionToIRSHoldingQueueInteractor,
 } = require('../../shared/src/business/useCases/sendPetitionToIRSHoldingQueueInteractor');
 const {
+  sendServedPartiesEmails,
+} = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
+const {
   serveCourtIssuedDocumentInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/serveCourtIssuedDocumentInteractor');
-const {
-  serveDocumentOnParties,
-} = require('../../shared/src/business/useCaseHelper/service/serveDocumentOnParties');
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
@@ -682,9 +685,6 @@ const {
 const {
   updateWorkItemInCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
-const {
-  uploadDocument,
-} = require('../../shared/src/persistence/s3/uploadDocument');
 const {
   userIsAssociated,
 } = require('../../shared/src/business/useCases/caseAssociation/userIsAssociatedInteractor');
@@ -903,7 +903,7 @@ module.exports = (appContextUser = {}) => {
         isFileExists,
         putWorkItemInOutbox,
         putWorkItemInUsersOutbox,
-        saveDocument,
+        saveDocumentFromLambda,
         saveUserConnection,
         saveWorkItemForDocketClerkFilingExternalDocument,
         saveWorkItemForDocketEntryWithoutFile,
@@ -921,7 +921,6 @@ module.exports = (appContextUser = {}) => {
         updateUser,
         updateWorkItem,
         updateWorkItemInCase,
-        uploadDocument,
         verifyCaseForUser,
         verifyPendingCaseForUser,
         zipDocuments,
@@ -989,11 +988,12 @@ module.exports = (appContextUser = {}) => {
     getUniqueId,
     getUseCaseHelpers: () => {
       return {
+        appendPaperServiceAddressPageToPdf,
         fetchPendingItems,
         generateCaseConfirmationPdf,
         generatePaperServiceAddressPagePdf,
         generatePendingReportPdf,
-        serveDocumentOnParties,
+        sendServedPartiesEmails,
       };
     },
     getUseCases: () => {

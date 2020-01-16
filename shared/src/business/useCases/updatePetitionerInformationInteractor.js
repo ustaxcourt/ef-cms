@@ -4,14 +4,11 @@ const {
 const {
   copyToNewPdf,
   getAddressPages,
-} = require('../utilities/appendPaperServiceAddressPageToPdf');
+} = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const {
-  sendServedPartiesEmails,
-} = require('../utilities/sendServedPartiesEmails');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
@@ -138,13 +135,13 @@ exports.updatePetitionerInformationInteractor = async ({
 
     caseEntity.addDocument(changeOfAddressDocument);
 
-    await applicationContext.getPersistenceGateway().saveDocument({
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: changeOfAddressPdfWithCover,
       documentId: newDocumentId,
     });
 
-    await sendServedPartiesEmails({
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
       documentEntity: changeOfAddressDocument,
@@ -201,7 +198,7 @@ exports.updatePetitionerInformationInteractor = async ({
     const paperServicePdfData = await fullDocument.save();
     const paperServicePdfId = applicationContext.getUniqueId();
     applicationContext.logger.time('Saving S3 Document');
-    await applicationContext.getPersistenceGateway().saveDocument({
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: paperServicePdfData,
       documentId: paperServicePdfId,

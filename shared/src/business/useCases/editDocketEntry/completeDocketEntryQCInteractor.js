@@ -1,9 +1,13 @@
 const {
+  addServedStampToDocument,
+} = require('../../useCases/courtIssuedDocument/addServedStampToDocument');
+const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  appendPaperServiceAddressPageToPdf,
-} = require('../../utilities/appendPaperServiceAddressPageToPdf');
+  createISODateString,
+  formatDateString,
+} = require('../../utilities/DateHandler');
 const {
   formatDocument,
   getFilingsAndProceedings,
@@ -16,7 +20,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { Document } = require('../../entities/Document');
@@ -212,20 +215,22 @@ exports.completeDocketEntryQCInteractor = async ({
 
       let newPdfDoc = await PDFDocument.create();
 
-      await appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc,
-        servedParties,
-      });
+      await applicationContext
+        .getUseCaseHelpers()
+        .appendPaperServiceAddressPageToPdf({
+          applicationContext,
+          caseEntity,
+          newPdfDoc,
+          noticeDoc,
+          servedParties,
+        });
 
       const paperServicePdfData = await newPdfDoc.save();
 
       const paperServicePdfId = applicationContext.getUniqueId();
 
       applicationContext.logger.time('Saving S3 Document');
-      await applicationContext.getPersistenceGateway().saveDocument({
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: paperServicePdfData,
         documentId: paperServicePdfId,
@@ -281,15 +286,77 @@ exports.completeDocketEntryQCInteractor = async ({
 
     caseEntity.addDocument(noticeUpdatedDocument);
 
-    //serve the notice
-    paperServicePdfUrl = await applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentOnParties({
+    const { Body: pdfData } = await applicationContext
+      .getStorageClient()
+      .getObject({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: noticeUpdatedDocument.documentId,
+      })
+      .promise();
+
+    const serviceStampDate = formatDateString(
+      noticeUpdatedDocument.servedAt,
+      'MMDDYY',
+    );
+
+    const newPdfData = await addServedStampToDocument({
+      pdfData,
+      serviceStampText: `Served ${serviceStampDate}`,
+    });
+
+    applicationContext.logger.time('Saving S3 Document');
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: newPdfData,
+      documentId: noticeUpdatedDocument.documentId,
+    });
+    applicationContext.logger.timeEnd('Saving S3 Document');
+
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      documentEntity: noticeUpdatedDocument,
+      servedParties,
+    });
+
+    if (servedParties.paper.length > 0) {
+      const noticeDoc = await PDFDocument.load(newPdfData);
+      let newPdfDoc = await PDFDocument.create();
+
+      await applicationContext
+        .getUseCaseHelpers()
+        .appendPaperServiceAddressPageToPdf({
+          applicationContext,
+          caseEntity,
+          newPdfDoc,
+          noticeDoc,
+          servedParties,
+        });
+
+      const paperServicePdfData = await newPdfDoc.save();
+      const paperServicePdfId = applicationContext.getUniqueId();
+
+      applicationContext.logger.time('Saving S3 Document');
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
-        caseEntity,
-        documentEntity: noticeUpdatedDocument,
-        servedParties,
+        document: paperServicePdfData,
+        documentId: paperServicePdfId,
+        useTempBucket: true,
       });
+      applicationContext.logger.timeEnd('Saving S3 Document');
+
+      const {
+        url,
+      } = await applicationContext
+        .getPersistenceGateway()
+        .getDownloadPolicyUrl({
+          applicationContext,
+          documentId: paperServicePdfId,
+          useTempBucket: true,
+        });
+
+      paperServicePdfUrl = url;
+    }
   }
 
   await applicationContext.getPersistenceGateway().updateCase({
