@@ -2,6 +2,9 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  appendPaperServiceAddressPageToPdf,
+} = require('../../utilities/appendPaperServiceAddressPageToPdf');
+const {
   formatDocument,
   getFilingsAndProceedings,
 } = require('../../utilities/getFormattedCaseDetail');
@@ -206,41 +209,16 @@ exports.completeDocketEntryQCInteractor = async ({
         .promise();
 
       const noticeDoc = await PDFDocument.load(pdfData);
-      const addressPages = [];
+
       let newPdfDoc = await PDFDocument.create();
 
-      for (let party of servedParties.paper) {
-        addressPages.push(
-          await applicationContext
-            .getUseCaseHelpers()
-            .generatePaperServiceAddressPagePdf({
-              applicationContext,
-              contactData: party,
-              docketNumberWithSuffix: `${
-                caseEntity.docketNumber
-              }${caseEntity.docketNumberSuffix || ''}`,
-            }),
-        );
-      }
-
-      for (let addressPage of addressPages) {
-        const addressPageDoc = await PDFDocument.load(addressPage);
-        let copiedPages = await newPdfDoc.copyPages(
-          addressPageDoc,
-          addressPageDoc.getPageIndices(),
-        );
-        copiedPages.forEach(page => {
-          newPdfDoc.addPage(page);
-        });
-
-        copiedPages = await newPdfDoc.copyPages(
-          noticeDoc,
-          noticeDoc.getPageIndices(),
-        );
-        copiedPages.forEach(page => {
-          newPdfDoc.addPage(page);
-        });
-      }
+      await appendPaperServiceAddressPageToPdf({
+        applicationContext,
+        caseEntity,
+        newPdfDoc,
+        noticeDoc,
+        servedParties,
+      });
 
       const paperServicePdfData = await newPdfDoc.save();
 
