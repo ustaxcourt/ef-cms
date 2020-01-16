@@ -9,3 +9,12 @@ Serverless: [AWS acm undefined 0.476s 3 retries] listCertificates({
   CertificateStatuses: [ 'PENDING_VALIDATION', 'ISSUED', 'INACTIVE', [length]: 3 ]
 })
 ```
+
+### serverless-domain-manager
+
+This is pointing to our own fork which includes the functionality required to host web socket endpoints.  The current state of serverless-domain-manager does not support web sockets.
+
+
+### serverless-s3-local and s3rver
+
+These libraries were forked to support multipart file uploads to s3 local.
