@@ -9,3 +9,25 @@ We utilize a package called `pa11y-ci` which runs tests found in the `pa11y/` di
 * If you're standing up a new environment, it is critical that you run the scripts (mentioned above and found in SETUP.md) to create Lambda roles & policies.
 > ``` ROLLBACK_COMPLETE ```
 * If you see this error in the AWS Cloudformation Stacks for your `$ENVIRONMENT`, there was an error configuring this stack. This stack will need to be DELETED prior to attempting to deploy again.  We hope to identify the causes of these situations as well as avoid downtime by utilizing blue/green deploy strategies.
+
+
+### Serverless 1.61.1
+
+We needed to lock the serverless file down to 1.61.1 because it throws this error when trying to do deploys
+
+```
+Domain Manager: UnknownEndpoint: Inaccessible host: `acm.undefined.amazonaws.com'. This service may not be available in the `us-east-1' region.
+Serverless: [AWS apigatewayv2 undefined 0s 0 retries] getDomainName({ DomainName: 'efcms-dev.ustc-case-mgmt.flexion.us' })
+Serverless: [AWS acm undefined 0.476s 3 retries] listCertificates({
+  CertificateStatuses: [ 'PENDING_VALIDATION', 'ISSUED', 'INACTIVE', [length]: 3 ]
+})
+```
+
+### serverless-domain-manager
+
+This is pointing to our own fork which includes the functionality required to host web socket endpoints.  The current state of serverless-domain-manager does not support web sockets.
+
+
+### serverless-s3-local and s3rver
+
+These libraries were forked to support multipart file uploads to s3 local.
