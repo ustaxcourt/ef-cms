@@ -108,11 +108,13 @@
         "filingDate": "2019-03-01T21:40:46.415Z",
         "description": "Petition",
         "filedBy": "Test Petitioner",
+        "eventCode": "P",
         "index": 1
       },
       {
         "filingDate": "2019-03-01T21:40:46.415Z",
         "description": "Request for Place of Trial at Birmingham, Alabama",
+        "eventCode": "RQT",
         "index": 2
       }
     ],
