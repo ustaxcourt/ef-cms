@@ -6,8 +6,19 @@ describe('associateRespondentToCase', () => {
   let applicationContext;
 
   let caseRecord = {
+    caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     docketNumber: '123-19',
+    docketRecord: [
+      {
+        description: 'first record',
+        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+        eventCode: 'P',
+        filingDate: '2018-03-01T00:01:00.000Z',
+        index: 1,
+      },
+    ],
+    status: 'New',
   };
 
   it('should not add mapping if already there', async () => {

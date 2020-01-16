@@ -497,6 +497,9 @@ const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
 const {
+  migrateCaseInteractor,
+} = require('../../shared/src/business/useCases/migrateCaseInteractor');
+const {
   onConnectInteractor,
 } = require('../../shared/src/business/useCases/notifications/onConnectInteractor');
 const {
@@ -805,6 +808,9 @@ module.exports = (appContextUser = {}) => {
       CaseInternal: CaseInternal,
       CaseSearch,
       ExternalDocumentFactory,
+    }),
+    getMigrations: () => ({
+      migrateCaseInteractor,
     }),
     getNodeSass: () => {
       // Notice: this require is here to only have the lambdas that need it call it.
