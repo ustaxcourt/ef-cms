@@ -20,6 +20,7 @@ const generatePdfFromHtmlInteractorStub = jest.fn();
 const getAddressPhoneDiffStub = jest.fn();
 const getDocumentTypeForAddressChangeStub = jest.fn();
 const saveDocumentFromLambdaStub = jest.fn();
+const sendServedPartiesEmailsStub = jest.fn();
 
 let persistenceGateway = {
   getCaseByCaseId: () => MOCK_CASE,
@@ -60,6 +61,9 @@ const applicationContext = {
     };
   },
   getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+  getUseCaseHelpers: () => ({
+    sendServedPartiesEmails: sendServedPartiesEmailsStub,
+  }),
   getUseCases: () => useCases,
   getUtilities: () => {
     return {
@@ -69,7 +73,7 @@ const applicationContext = {
         getAddressPhoneDiffStub();
         return {
           address1: {
-            newData: 'tset',
+            newData: 'new test',
             oldData: 'test',
           },
         };
