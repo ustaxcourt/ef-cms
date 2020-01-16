@@ -39,7 +39,7 @@ describe('uploadOrderDocumentInteractor', () => {
         };
       },
       getPersistenceGateway: () => {
-        return { uploadDocument: uploadMock };
+        return { uploadDocumentFromClient: uploadMock };
       },
     };
 

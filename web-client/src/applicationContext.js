@@ -196,11 +196,11 @@ import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/upd
 import { updateTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionProxy';
 import { updateTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionWorkingCopyProxy';
 import { updateUserContactInformationInteractor } from '../../shared/src/proxies/users/updateUserContactInformationProxy';
-import { uploadDocument } from '../../shared/src/persistence/s3/uploadDocument';
+import { uploadDocumentFromClient } from '../../shared/src/persistence/s3/uploadDocumentFromClient';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
-import { uploadPdf } from '../../shared/src/persistence/s3/uploadPdf';
+import { uploadPdfFromClient } from '../../shared/src/persistence/s3/uploadPdfFromClient';
 import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPractitionerInteractor';
 import { validateAddRespondentInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddRespondentInteractor';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
@@ -512,8 +512,8 @@ const applicationContext = {
       getItem,
       removeItem,
       setItem,
-      uploadDocument,
-      uploadPdf,
+      uploadDocumentFromClient,
+      uploadPdfFromClient,
     };
   },
   getScanner: async () => {

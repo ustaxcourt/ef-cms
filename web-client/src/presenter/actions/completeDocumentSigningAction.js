@@ -65,7 +65,7 @@ export const completeDocumentSigningAction = async ({
 
     const signedDocumentId = await applicationContext
       .getPersistenceGateway()
-      .uploadDocument({
+      .uploadDocumentFromClient({
         applicationContext,
         document: documentFile,
         documentId: documentIdToOverwrite,

@@ -1,4 +1,4 @@
-const { uploadDocument } = require('./uploadDocument');
+const { uploadDocumentFromClient } = require('./uploadDocumentFromClient');
 const { User } = require('../../business/entities/User');
 
 describe('uploadDocument', () => {
@@ -18,11 +18,11 @@ describe('uploadDocument', () => {
         }),
       }),
       getPersistenceGateway: () => ({
-        uploadPdf: () => DOCUMENT_ID,
+        uploadPdfFromClient: () => DOCUMENT_ID,
       }),
       getUniqueId: () => DOCUMENT_ID,
     };
-    const documentId = await uploadDocument({
+    const documentId = await uploadDocumentFromClient({
       applicationContext,
     });
     expect(documentId).toEqual(DOCUMENT_ID);
