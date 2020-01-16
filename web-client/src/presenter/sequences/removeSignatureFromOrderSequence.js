@@ -16,7 +16,7 @@ export const removeSignatureFromOrderSequence = [
   ...convertHtml2PdfSequence,
   overwriteOrderFileAction,
   {
-    error: [unsetWaitingForResponseAction], // TODO: show an alert if this occurs?
+    error: [], // TODO: show an alert if this occurs?
     success: [
       submitCourtIssuedOrderAction,
       set(state.alertSuccess, {
@@ -24,7 +24,7 @@ export const removeSignatureFromOrderSequence = [
         title: '',
       }),
       setCaseAction,
-      unsetWaitingForResponseAction,
     ],
   },
+  unsetWaitingForResponseAction,
 ];
