@@ -1,1 +1,3 @@
-module.exports = {};
+module.exports = {
+  migrateCaseLambda: require('./migrate/migrateCaseLambda'),
+};
