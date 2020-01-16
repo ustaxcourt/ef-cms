@@ -151,6 +151,21 @@ describe('migrateCaseInteractor', () => {
   });
 
   describe('validation', () => {
+    it('should fail to migrate a case when the case is invalid', async () => {
+      let error;
+
+      try {
+        await migrateCaseInteractor({
+          applicationContext,
+          caseMetadata: {},
+        });
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error.message).toContain('The Case entity was invalid');
+    });
+
     it('should fail to migrate a case when the docket record is invalid', async () => {
       let error;
 
