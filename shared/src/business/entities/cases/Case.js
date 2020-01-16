@@ -350,18 +350,18 @@ joiValidationDecorator(
       otherwise: joi.optional().allow(null),
       then: joi.string().required(),
     }),
-    caseCaption: joi.string().required(),
+    caseCaption: joi.string().optional(),
     caseId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
-      .required(),
+      .optional(),
     caseNote: joi.string().optional(),
     caseType: joi.string().optional(),
     contactPrimary: joi
       .object()
-      .required()
+      .optional()
       .allow(null),
     contactSecondary: joi
       .object()
@@ -370,7 +370,7 @@ joiValidationDecorator(
     createdAt: joi
       .date()
       .iso()
-      .required(),
+      .optional(),
     docketNumber: joi
       .string()
       .regex(Case.docketNumberMatcher)
@@ -379,7 +379,7 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
-    docketRecord: joi.array().required(),
+    docketRecord: joi.array().optional(),
     documents: joi.array().optional(),
     filingType: joi.string().optional(),
     hasIrsNotice: joi.boolean().optional(),
@@ -489,13 +489,13 @@ joiValidationDecorator(
     receivedAt: joi
       .date()
       .iso()
-      .required()
+      .optional()
       .allow(null),
     respondents: joi.array().optional(),
     status: joi
       .string()
       .valid(Object.values(Case.STATUS_TYPES))
-      .required(),
+      .optional(),
     trialDate: joi
       .date()
       .iso()

@@ -28,7 +28,7 @@ joiValidationDecorator(
   joi.object().keys({
     description: joi
       .string()
-      .required()
+      .optional()
       .allow(null),
     documentId: joi
       .string()
@@ -41,7 +41,7 @@ joiValidationDecorator(
     eventCode: joi
       .string()
       .allow(null)
-      .required(),
+      .optional(),
     filedBy: joi
       .string()
       .optional()
@@ -54,7 +54,7 @@ joiValidationDecorator(
     index: joi
       .number()
       .integer()
-      .required(),
+      .optional(),
     signatory: joi
       .string()
       .optional()
