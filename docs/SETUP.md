@@ -81,3 +81,6 @@
     - mention your `POST_CONFIRMATION_ROLE_ARN_$ENVIRONMENT`
 10. Mention your `$ENVIRONMENT`, if necessary, in `web-api/deploy-sandbox.sh` within the `run_development` function
 11. For all files matching `web-api/serverless-*yml`, include your `$ENVIRONMENT` within the list of `custom.alerts.stages` if you want your `$ENVIRONMENT` to be included in those which are monitored & emails delivered upon alarm.
+12. Update circle CI to have all the new environment variables needed:
+     - DYNAMSOFT_PRODUCT_KEYS_`$ENVIRONMENT`
+     - POST_CONFIRMATION_ROLE_ARN_`$ENVIRONMENT`
