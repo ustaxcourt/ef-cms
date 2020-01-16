@@ -10,7 +10,6 @@ const {
  * @returns {object} the aggregated contact information for all parties,
  * electronically-served parties, and paper-served parties
  */
-
 const aggregatePartiesForService = caseEntity => {
   const formattedCase = setServiceIndicatorsForCase(caseEntity);
 
