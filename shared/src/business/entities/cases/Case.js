@@ -379,10 +379,7 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
-    docketRecord: joi
-      .array()
-      .min(1)
-      .required(),
+    docketRecord: joi.array().required(),
     documents: joi.array().optional(),
     filingType: joi.string().optional(),
     hasIrsNotice: joi.boolean().optional(),
@@ -515,7 +512,7 @@ joiValidationDecorator(
     userId: joi.string().optional(),
     workItems: joi.array().optional(),
   }),
-  function () {
+  function() {
     return (
       Case.isValidDocketNumber(this.docketNumber) &&
       Document.validateCollection(this.documents) &&
@@ -533,7 +530,7 @@ joiValidationDecorator(
  * @param {object} rawCase the raw case data
  * @returns {string} the generated case caption
  */
-Case.getCaseCaption = function (rawCase) {
+Case.getCaseCaption = function(rawCase) {
   let caseCaption;
   switch (rawCase.partyType) {
     case ContactFactory.PARTY_TYPES.corporation:
@@ -592,13 +589,13 @@ Case.getCaseCaption = function (rawCase) {
   return caseCaption;
 };
 
-Case.prototype.toRawObject = function () {
+Case.prototype.toRawObject = function() {
   const result = this.toRawObjectFromJoi();
   result.hasPendingItems = this.doesHavePendingItems();
   return result;
 };
 
-Case.prototype.doesHavePendingItems = function () {
+Case.prototype.doesHavePendingItems = function() {
   return this.documents.some(document => document.pending);
 };
 
@@ -608,11 +605,11 @@ Case.prototype.doesHavePendingItems = function () {
  * @param {string} caseCaption the original case caption
  * @returns {string} caseCaptionNames the case caption with the postfix removed
  */
-Case.getCaseCaptionNames = function (caseCaption) {
+Case.getCaseCaptionNames = function(caseCaption) {
   return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
 };
 
-Case.prototype.attachRespondent = function (respondent) {
+Case.prototype.attachRespondent = function(respondent) {
   this.respondents.push(respondent);
 };
 
@@ -622,7 +619,7 @@ Case.prototype.attachRespondent = function (respondent) {
  * @param {string} respondentToUpdate the respondent user object with updated info
  * @returns {void} modifies the respondents array on the case
  */
-Case.prototype.updateRespondent = function (respondentToUpdate) {
+Case.prototype.updateRespondent = function(respondentToUpdate) {
   const foundRespondent = this.respondents.find(
     respondent => respondent.userId === respondentToUpdate.userId,
   );
@@ -635,7 +632,7 @@ Case.prototype.updateRespondent = function (respondentToUpdate) {
  * @param {string} respondentToRemove the respondent user object to remove from the case
  * @returns {Case} the modified case entity
  */
-Case.prototype.removeRespondent = function (respondentToRemove) {
+Case.prototype.removeRespondent = function(respondentToRemove) {
   const index = this.respondents.findIndex(
     respondent => respondent.userId === respondentToRemove.userId,
   );
@@ -643,7 +640,7 @@ Case.prototype.removeRespondent = function (respondentToRemove) {
   return this;
 };
 
-Case.prototype.attachPractitioner = function (practitioner) {
+Case.prototype.attachPractitioner = function(practitioner) {
   this.practitioners.push(practitioner);
 };
 
@@ -652,7 +649,7 @@ Case.prototype.attachPractitioner = function (practitioner) {
  *
  * @param {string} practitionerToUpdate the practitioner user object with updated info
  */
-Case.prototype.updatePractitioner = function (practitionerToUpdate) {
+Case.prototype.updatePractitioner = function(practitionerToUpdate) {
   const foundPractitioner = this.practitioners.find(
     practitioner => practitioner.userId === practitionerToUpdate.userId,
   );
@@ -664,7 +661,7 @@ Case.prototype.updatePractitioner = function (practitionerToUpdate) {
  *
  * @param {string} practitionerToRemove the practitioner user object to remove from the case
  */
-Case.prototype.removePractitioner = function (practitionerToRemove) {
+Case.prototype.removePractitioner = function(practitionerToRemove) {
   const index = this.practitioners.findIndex(
     practitioner => practitioner.userId === practitionerToRemove.userId,
   );
@@ -675,7 +672,7 @@ Case.prototype.removePractitioner = function (practitionerToRemove) {
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocument = function (document) {
+Case.prototype.addDocument = function(document) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 
@@ -683,6 +680,7 @@ Case.prototype.addDocument = function (document) {
     new DocketRecord({
       description: document.documentType,
       documentId: document.documentId,
+      eventCode: document.eventCode,
       filedBy: document.filedBy,
       filingDate: document.receivedAt || document.createdAt,
       status: document.status,
@@ -694,12 +692,12 @@ Case.prototype.addDocument = function (document) {
  *
  * @param {object} document the document to add to the case
  */
-Case.prototype.addDocumentWithoutDocketRecord = function (document) {
+Case.prototype.addDocumentWithoutDocketRecord = function(document) {
   document.caseId = this.caseId;
   this.documents = [...this.documents, document];
 };
 
-Case.prototype.closeCase = function () {
+Case.prototype.closeCase = function() {
   this.status = Case.STATUS_TYPES.closed;
   this.unsetAsBlocked();
   this.unsetAsHighPriority();
@@ -711,7 +709,7 @@ Case.prototype.closeCase = function () {
  * @param {Date} sendDate the time stamp when the case was sent to the IRS
  * @returns {Case} the updated case entity
  */
-Case.prototype.markAsSentToIRS = function (sendDate) {
+Case.prototype.markAsSentToIRS = function(sendDate) {
   this.irsSendDate = sendDate;
   this.status = Case.STATUS_TYPES.generalDocket;
   this.documents.forEach(document => {
@@ -732,7 +730,7 @@ Case.prototype.markAsSentToIRS = function (sendDate) {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateCaseTitleDocketRecord = function () {
+Case.prototype.updateCaseTitleDocketRecord = function() {
   const caseTitleRegex = /^Caption of case is amended from '(.*)' to '(.*)'/;
   let lastTitle = this.initialTitle;
 
@@ -762,7 +760,7 @@ Case.prototype.updateCaseTitleDocketRecord = function () {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketNumberRecord = function () {
+Case.prototype.updateDocketNumberRecord = function() {
   const docketNumberRegex = /^Docket Number is amended from '(.*)' to '(.*)'/;
 
   let lastDocketNumber =
@@ -799,17 +797,17 @@ Case.prototype.updateDocketNumberRecord = function () {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.sendToIRSHoldingQueue = function () {
+Case.prototype.sendToIRSHoldingQueue = function() {
   this.status = Case.STATUS_TYPES.batchedForIRS;
   return this;
 };
 
-Case.prototype.recallFromIRSHoldingQueue = function () {
+Case.prototype.recallFromIRSHoldingQueue = function() {
   this.status = Case.STATUS_TYPES.recalled;
   return this;
 };
 
-Case.prototype.getDocumentById = function ({ documentId }) {
+Case.prototype.getDocumentById = function({ documentId }) {
   return this.documents.find(document => document.documentId === documentId);
 };
 
@@ -817,7 +815,7 @@ Case.prototype.getDocumentById = function ({ documentId }) {
  *
  * @returns {boolean} whether to show case name for primary
  */
-Case.prototype.getShowCaseNameForPrimary = function () {
+Case.prototype.getShowCaseNameForPrimary = function() {
   return !(this.contactSecondary && this.contactSecondary.name);
 };
 
@@ -826,7 +824,7 @@ Case.prototype.getShowCaseNameForPrimary = function () {
  * @param {string} preferredTrialCity the preferred trial city
  * @returns {Case} the updated case entity
  */
-Case.prototype.setRequestForTrialDocketRecord = function (preferredTrialCity) {
+Case.prototype.setRequestForTrialDocketRecord = function(preferredTrialCity) {
   this.preferredTrialCity = preferredTrialCity;
 
   const found = find(this.docketRecord, item =>
@@ -851,7 +849,7 @@ Case.prototype.setRequestForTrialDocketRecord = function (preferredTrialCity) {
  * @param {DocketRecord} docketRecordEntity the docket record entity to add to case's the docket record
  * @returns {Case} the updated case entity
  */
-Case.prototype.addDocketRecord = function (docketRecordEntity) {
+Case.prototype.addDocketRecord = function(docketRecordEntity) {
   const nextIndex =
     this.docketRecord.reduce(
       (maxIndex, docketRecord, currentIndex) =>
@@ -868,7 +866,7 @@ Case.prototype.addDocketRecord = function (docketRecordEntity) {
  * @param {DocketRecord} updatedDocketEntry the update docket entry data
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketRecordEntry = function (updatedDocketEntry) {
+Case.prototype.updateDocketRecordEntry = function(updatedDocketEntry) {
   const foundEntry = this.docketRecord.find(
     entry => entry.documentId === updatedDocketEntry.documentId,
   );
@@ -882,7 +880,7 @@ Case.prototype.updateDocketRecordEntry = function (updatedDocketEntry) {
  * @param {DocketRecord} docketRecordEntity the updated docket entry to update on the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocketRecord = function (
+Case.prototype.updateDocketRecord = function(
   docketRecordIndex,
   docketRecordEntity,
 ) {
@@ -895,7 +893,7 @@ Case.prototype.updateDocketRecord = function (
  * @param {Document} updatedDocument the document to update on the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.updateDocument = function (updatedDocument) {
+Case.prototype.updateDocument = function(updatedDocument) {
   const foundDocument = this.documents.find(
     document => document.documentId === updatedDocument.documentId,
   );
@@ -955,7 +953,7 @@ Case.getFilingTypes = userRole => {
  *
  * @returns {WorkItem[]} the work items on the case
  */
-Case.prototype.getWorkItems = function () {
+Case.prototype.getWorkItems = function() {
   let workItems = [];
   this.documents.forEach(
     document => (workItems = [...workItems, ...(document.workItems || [])]),
@@ -969,7 +967,7 @@ Case.prototype.getWorkItems = function () {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.checkForReadyForTrial = function () {
+Case.prototype.checkForReadyForTrial = function() {
   let docFiledCutoffDate = prepareDateFromString().subtract(
     Case.ANSWER_CUTOFF_AMOUNT,
     Case.ANSWER_CUTOFF_UNIT,
@@ -1003,7 +1001,7 @@ Case.prototype.checkForReadyForTrial = function () {
  *
  * @returns {object} the sort tags
  */
-Case.prototype.generateTrialSortTags = function () {
+Case.prototype.generateTrialSortTags = function() {
   const {
     caseId,
     caseType,
@@ -1057,7 +1055,7 @@ Case.prototype.generateTrialSortTags = function () {
  * @param {object} trialSessionEntity - the trial session that is associated with the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.setAsCalendared = function (trialSessionEntity) {
+Case.prototype.setAsCalendared = function(trialSessionEntity) {
   if (trialSessionEntity.judge && trialSessionEntity.judge.name) {
     this.associatedJudge = trialSessionEntity.judge.name;
   }
@@ -1076,7 +1074,7 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
  *
  * @returns {boolean} if the case is calendared
  */
-Case.prototype.isCalendared = function () {
+Case.prototype.isCalendared = function() {
   return this.status === Case.STATUS_TYPES.calendared;
 };
 
@@ -1085,7 +1083,7 @@ Case.prototype.isCalendared = function () {
  *
  * @returns {boolean} if the case is calendared
  */
-Case.prototype.isReadyForTrial = function () {
+Case.prototype.isReadyForTrial = function() {
   return this.status === Case.STATUS_TYPES.generalDocketReadyForTrial;
 };
 
@@ -1094,7 +1092,7 @@ Case.prototype.isReadyForTrial = function () {
  *
  * @returns {boolean} the value of if an order is needed for place of trial.
  */
-Case.getDefaultOrderDesignatingPlaceOfTrialValue = function ({
+Case.getDefaultOrderDesignatingPlaceOfTrialValue = function({
   isPaper,
   preferredTrialCity,
   rawValue,
@@ -1116,7 +1114,7 @@ Case.getDefaultOrderDesignatingPlaceOfTrialValue = function ({
  * @param {string} blockedReason - the reason the case was blocked
  * @returns {Case} the updated case entity
  */
-Case.prototype.setAsBlocked = function (blockedReason) {
+Case.prototype.setAsBlocked = function(blockedReason) {
   this.blocked = true;
   this.blockedReason = blockedReason;
   this.blockedDate = createISODateString();
@@ -1128,7 +1126,7 @@ Case.prototype.setAsBlocked = function (blockedReason) {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.unsetAsBlocked = function () {
+Case.prototype.unsetAsBlocked = function() {
   this.blocked = false;
   this.blockedReason = undefined;
   this.blockedDate = undefined;
@@ -1141,7 +1139,7 @@ Case.prototype.unsetAsBlocked = function () {
  * @param {string} highPriorityReason - the reason the case was set to high priority
  * @returns {Case} the updated case entity
  */
-Case.prototype.setAsHighPriority = function (highPriorityReason) {
+Case.prototype.setAsHighPriority = function(highPriorityReason) {
   this.highPriority = true;
   this.highPriorityReason = highPriorityReason;
   return this;
@@ -1152,7 +1150,7 @@ Case.prototype.setAsHighPriority = function (highPriorityReason) {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.unsetAsHighPriority = function () {
+Case.prototype.unsetAsHighPriority = function() {
   this.highPriority = false;
   this.highPriorityReason = undefined;
   return this;
@@ -1163,7 +1161,7 @@ Case.prototype.unsetAsHighPriority = function () {
  *
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrial = function () {
+Case.prototype.removeFromTrial = function() {
   this.status = Case.STATUS_TYPES.generalDocketReadyForTrial;
   this.associatedJudge = Case.CHIEF_JUDGE;
   this.trialDate = undefined;
@@ -1179,7 +1177,7 @@ Case.prototype.removeFromTrial = function () {
  * @param {string} associatedJudge (optional) the associated judge for the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrialWithAssociatedJudge = function (associatedJudge) {
+Case.prototype.removeFromTrialWithAssociatedJudge = function(associatedJudge) {
   if (associatedJudge) {
     this.associatedJudge = associatedJudge;
   }
@@ -1197,7 +1195,7 @@ Case.prototype.removeFromTrialWithAssociatedJudge = function (associatedJudge) {
  * @param {string} associatedJudge the judge to associate with the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.setAssociatedJudge = function (associatedJudge) {
+Case.prototype.setAssociatedJudge = function(associatedJudge) {
   this.associatedJudge = associatedJudge;
   return this;
 };
@@ -1208,7 +1206,7 @@ Case.prototype.setAssociatedJudge = function (associatedJudge) {
  * @param {string} caseStatus the case status to update
  * @returns {Case} the updated case entity
  */
-Case.prototype.setCaseStatus = function (caseStatus) {
+Case.prototype.setCaseStatus = function(caseStatus) {
   this.status = caseStatus;
   if (
     [
@@ -1227,7 +1225,7 @@ Case.prototype.setCaseStatus = function (caseStatus) {
  * @param {string} caseCaption the case caption to update
  * @returns {Case} the updated case entity
  */
-Case.prototype.setCaseCaption = function (caseCaption) {
+Case.prototype.setCaseCaption = function(caseCaption) {
   this.caseCaption = caseCaption;
   this.setCaseTitle(caseCaption);
   return this;
@@ -1239,7 +1237,7 @@ Case.prototype.setCaseCaption = function (caseCaption) {
  * @param {string} caseCaption the case caption to build the case title
  * @returns {Case} the updated case entity
  */
-Case.prototype.setCaseTitle = function (caseCaption) {
+Case.prototype.setCaseTitle = function(caseCaption) {
   this.caseTitle = `${caseCaption.trim()} ${Case.CASE_CAPTION_POSTFIX}`;
   return this;
 };
@@ -1250,7 +1248,7 @@ Case.prototype.setCaseTitle = function (caseCaption) {
  * @param {object} shape specific contact params to be returned
  * @returns {object} object containing case contacts
  */
-Case.prototype.getCaseContacts = function (shape) {
+Case.prototype.getCaseContacts = function(shape) {
   const caseContacts = {};
   [
     'contactPrimary',
@@ -1272,7 +1270,7 @@ Case.prototype.getCaseContacts = function (shape) {
  * @param {object} caseEntity the pending case entity to check
  * @returns {object} object with canConsolidate flag and reason string
  */
-Case.prototype.getConsolidationStatus = function ({ caseEntity }) {
+Case.prototype.getConsolidationStatus = function({ caseEntity }) {
   let canConsolidate = true;
   const reason = [];
 
@@ -1319,7 +1317,7 @@ Case.prototype.getConsolidationStatus = function ({ caseEntity }) {
  * @returns {boolean} true if eligible for consolidation, false otherwise
  * @param {object} caseToConsolidate (optional) case to check for consolidation eligibility
  */
-Case.prototype.canConsolidate = function (caseToConsolidate) {
+Case.prototype.canConsolidate = function(caseToConsolidate) {
   const ineligibleStatusTypes = [
     Case.STATUS_TYPES.batchedForIRS,
     Case.STATUS_TYPES.new,
@@ -1340,7 +1338,7 @@ Case.prototype.canConsolidate = function (caseToConsolidate) {
  * @param {string} leadCaseId the caseId of the lead case for consolidation
  * @returns {Case} the updated Case entity
  */
-Case.prototype.setLeadCase = function (leadCaseId) {
+Case.prototype.setLeadCase = function(leadCaseId) {
   this.leadCaseId = leadCaseId;
   return this;
 };
@@ -1351,7 +1349,7 @@ Case.prototype.setLeadCase = function (leadCaseId) {
  * @param {Array} cases the cases to check for lead case computation
  * @returns {Case} the lead Case entity
  */
-Case.sortByDocketNumber = function (cases) {
+Case.sortByDocketNumber = function(cases) {
   const casesOrdered = cases.sort((a, b) => {
     const aSplit = a.docketNumber.split('-');
     const bSplit = b.docketNumber.split('-');
@@ -1375,7 +1373,7 @@ Case.sortByDocketNumber = function (cases) {
  * @param {Array} cases the cases to check for lead case computation
  * @returns {Case} the lead Case entity
  */
-Case.findLeadCaseForCases = function (cases) {
+Case.findLeadCaseForCases = function(cases) {
   const casesOrdered = Case.sortByDocketNumber([...cases]);
   return casesOrdered.shift();
 };
@@ -1384,7 +1382,7 @@ Case.findLeadCaseForCases = function (cases) {
  * @param {string} documentId the id of the document to check
  * @returns {boolean} true if the document is draft, false otherwise
  */
-Case.prototype.isDocumentDraft = function (documentId) {
+Case.prototype.isDocumentDraft = function(documentId) {
   const document = this.getDocumentById({ documentId });
 
   const isNotArchived = !document.archived;
@@ -1411,7 +1409,7 @@ Case.prototype.isDocumentDraft = function (documentId) {
  *
  * @returns {Case} this case entity
  */
-Case.prototype.setNoticeOfTrialDate = function () {
+Case.prototype.setNoticeOfTrialDate = function() {
   this.noticeOfTrialDate = createISODateString();
   return this;
 };
@@ -1424,7 +1422,7 @@ Case.prototype.setNoticeOfTrialDate = function () {
  * @param {string} providers.trialSessionId the id of the trial session to set qcCompleteForTrial for
  * @returns {Case} this case entity
  */
-Case.prototype.setQcCompleteForTrial = function ({
+Case.prototype.setQcCompleteForTrial = function({
   qcCompleteForTrial,
   trialSessionId,
 }) {
