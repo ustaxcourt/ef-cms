@@ -683,6 +683,7 @@ Case.prototype.addDocument = function(document) {
     new DocketRecord({
       description: document.documentType,
       documentId: document.documentId,
+      eventCode: document.eventCode,
       filedBy: document.filedBy,
       filingDate: document.receivedAt || document.createdAt,
       status: document.status,
