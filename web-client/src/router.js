@@ -83,6 +83,17 @@ const router = {
     );
 
     route(
+      '/case-detail/*?openModal=*',
+      ifHasAccess((docketNumber, openModal) => {
+        setPageTitle(`Docket ${docketNumber}`);
+        app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          openModal,
+        });
+      }),
+    );
+
+    route(
       '/case-detail/*/case-information',
       ifHasAccess(docketNumber => {
         window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
@@ -659,6 +670,14 @@ const router = {
           app.getSequence('gotoMessagesSequence')(routeArgs);
         }
         setPageTitle('Messages');
+      }),
+    );
+
+    route(
+      '/pdf-preview',
+      ifHasAccess(() => {
+        setPageTitle('PDF Preview');
+        app.getSequence('gotoPdfPreviewSequence')();
       }),
     );
 

@@ -22,7 +22,6 @@ describe('completeDocketEntryQCInteractor', () => {
   const deleteWorkItemFromInboxSpy = jest.fn();
   const saveWorkItemForDocketClerkFilingExternalDocumentSpy = jest.fn();
   const updateCaseSpy = jest.fn();
-  let serveDocumentOnPartiesSpy = jest.fn();
   const testPdfDoc = testPdfDocBytes();
   const addCoversheetInteractorSpy = jest.fn();
 
@@ -112,7 +111,7 @@ describe('completeDocketEntryQCInteractor', () => {
           url: 'www.example.com',
         }),
         getUserById: async () => globalUser,
-        saveDocument: jest.fn(),
+        saveDocumentFromLambda: jest.fn(),
         saveWorkItemForDocketClerkFilingExternalDocument: saveWorkItemForDocketClerkFilingExternalDocumentSpy,
         updateCase: updateCaseSpy,
       }),
@@ -127,10 +126,11 @@ describe('completeDocketEntryQCInteractor', () => {
       }),
       getUniqueId: () => 'b6f835aa-bf95-4996-b858-c8e94566db47',
       getUseCaseHelpers: () => ({
+        appendPaperServiceAddressPageToPdf: jest.fn(),
         generatePaperServiceAddressPagePdf: jest
           .fn()
           .mockResolvedValue(testPdfDoc),
-        serveDocumentOnParties: serveDocumentOnPartiesSpy,
+        sendServedPartiesEmails: jest.fn(),
       }),
       getUseCases: () => ({
         addCoversheetInteractor: addCoversheetInteractorSpy,
@@ -220,7 +220,6 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
     expect(deleteWorkItemFromInboxSpy).toBeCalled();
     expect(updateCaseSpy).toBeCalled();
-    expect(serveDocumentOnPartiesSpy).toBeCalled();
     expect(result.paperServicePdfUrl).toBeUndefined();
     expect(result.paperServiceParties.length).toEqual(0);
   });
@@ -240,7 +239,6 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
     expect(deleteWorkItemFromInboxSpy).toBeCalled();
     expect(updateCaseSpy).toBeCalled();
-    expect(serveDocumentOnPartiesSpy).toBeCalled();
     expect(addCoversheetInteractorSpy).toBeCalled();
   });
 
@@ -256,7 +254,6 @@ describe('completeDocketEntryQCInteractor', () => {
     });
     expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
     expect(updateCaseSpy).toBeCalled();
-    expect(serveDocumentOnPartiesSpy).toBeCalled();
     expect(addCoversheetInteractorSpy).toBeCalled();
   });
 
@@ -286,8 +283,6 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.isPaper = true;
     caseRecord.mailingDate = '2019-03-01T21:40:46.415Z';
 
-    serveDocumentOnPartiesSpy = jest.fn().mockResolvedValue('www.example.com');
-
     let error;
     let result;
 
@@ -309,7 +304,6 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
     expect(deleteWorkItemFromInboxSpy).toBeCalled();
     expect(updateCaseSpy).toBeCalled();
-    expect(serveDocumentOnPartiesSpy).toBeCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });

@@ -38,7 +38,7 @@ describe('completeDocumentSigningAction', () => {
     presenter.providers.applicationContext = {
       getCurrentUser: () => ({ userId: '1' }),
       getPersistenceGateway: () => ({
-        uploadDocument: uploadDocumentStub,
+        uploadDocumentFromClient: uploadDocumentStub,
       }),
       getUseCases: () => ({
         completeWorkItemInteractor: completeWorkItemInteractorStub,

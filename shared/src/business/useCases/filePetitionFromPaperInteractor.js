@@ -34,7 +34,7 @@ exports.filePetitionFromPaperInteractor = async ({
   const uploadDocumentAndMakeSafe = async (document, onUploadProgress) => {
     const documentId = await applicationContext
       .getPersistenceGateway()
-      .uploadDocument({
+      .uploadDocumentFromClient({
         applicationContext,
         document,
         onUploadProgress,

@@ -1,13 +1,15 @@
 const fs = require('fs');
 const path = require('path');
-import { formatDateString, formatNow } from '../../utilities/DateHandler';
+const {
+  appendPaperServiceAddressPageToPdf,
+} = require('../../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
 const { Document } = require('../../entities/Document');
-const { User } = require('../../entities/User');
-
+const { formatDateString, formatNow } = require('../../utilities/DateHandler');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { User } = require('../../entities/User');
 
 const findNoticeOfTrial = caseRecord => {
   return caseRecord.documents.find(
@@ -37,28 +39,22 @@ const MOCK_TRIAL = {
   trialLocation: 'Birmingham, AL',
 };
 
+const testPdfDoc = testPdfDocBytes();
+
 let applicationContext;
 let calendaredCases;
-let generateNoticeOfTrialIssuedInteractorMock;
-let generatePaperServiceAddressPagePdfMock;
-let saveDocumentMock;
-let sendBulkTemplatedEmailMock;
-let updateTrialSessionMock;
-let testPdfDoc;
+let generateNoticeOfTrialIssuedInteractorMock = jest.fn();
+let generatePaperServiceAddressPagePdfMock = jest
+  .fn()
+  .mockResolvedValue(testPdfDoc);
+let saveDocumentFromLambdaMock = jest.fn();
+let updateTrialSessionMock = jest.fn();
+let sendServedPartiesEmailsMock = jest.fn();
 let trialSession;
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   beforeEach(() => {
-    testPdfDoc = testPdfDocBytes();
-
-    generateNoticeOfTrialIssuedInteractorMock = jest.fn();
-    saveDocumentMock = jest.fn();
-    sendBulkTemplatedEmailMock = jest.fn();
-    updateTrialSessionMock = jest.fn();
-
-    generatePaperServiceAddressPagePdfMock = jest
-      .fn()
-      .mockResolvedValue(testPdfDoc);
+    jest.clearAllMocks();
 
     const case0 = {
       // should get electronic service
@@ -95,14 +91,11 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         });
       },
-      getDispatchers: () => ({
-        sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
-      }),
       getPersistenceGateway: () => ({
         deleteCaseTrialSortMappingRecords: () => {},
         getCalendaredCasesForTrialSession: () => calendaredCases,
         getTrialSessionById: () => trialSession,
-        saveDocument: saveDocumentMock,
+        saveDocumentFromLambda: saveDocumentFromLambdaMock,
         updateCase: ({ caseToUpdate }) => {
           calendaredCases.some((caseRecord, index) => {
             if (caseRecord.caseId === caseToUpdate.caseId) {
@@ -118,7 +111,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       getUseCaseHelpers: () => ({
+        appendPaperServiceAddressPageToPdf,
         generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
+        sendServedPartiesEmails: sendServedPartiesEmailsMock,
       }),
       getUseCases: () => ({
         generateNoticeOfTrialIssuedInteractor: () => {
@@ -167,7 +162,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).not.toHaveBeenCalled();
-    expect(saveDocumentMock).not.toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).not.toHaveBeenCalled();
     expect(result).toBeUndefined();
   });
 
@@ -178,7 +173,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0])).toBeTruthy();
     expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
@@ -217,7 +212,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0]).status).toEqual('served');
     expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
@@ -230,7 +225,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0]).servedAt).toBeTruthy();
     expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeTruthy();
@@ -243,7 +238,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
 
     expect(
       findNoticeOfTrial(calendaredCases[0]).servedParties.length,
@@ -259,7 +254,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
   });
 
   it('Should return data with paper service documents to be printed if there are parties that receive paper service', async () => {
@@ -303,7 +298,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy();
     expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
@@ -345,7 +340,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     expect(generateNoticeOfTrialIssuedInteractorMock).toHaveBeenCalled();
-    expect(saveDocumentMock).toHaveBeenCalled();
+    expect(saveDocumentFromLambdaMock).toHaveBeenCalled();
 
     expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy(); // Document should not exist on this case
     expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
