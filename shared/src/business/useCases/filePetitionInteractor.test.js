@@ -24,7 +24,7 @@ describe('filePetitionInteractor', () => {
         userId: 'petitioner',
       }),
       getPersistenceGateway: () => ({
-        uploadDocument: uploadDocumentStub,
+        uploadDocumentFromClient: uploadDocumentStub,
       }),
       getUseCases: () => ({
         createCaseInteractor: createCaseStub,

@@ -12,7 +12,7 @@ const getUploadPolicy = async ({ applicationContext, documentId }) => {
   return response.data;
 };
 
-exports.uploadDocument = async ({
+exports.uploadDocumentFromClient = async ({
   applicationContext,
   document,
   documentId,
@@ -23,7 +23,7 @@ exports.uploadDocument = async ({
     applicationContext,
     documentId: docId,
   });
-  await applicationContext.getPersistenceGateway().uploadPdf({
+  await applicationContext.getPersistenceGateway().uploadPdfFromClient({
     applicationContext,
     documentId: docId,
     file: document,
