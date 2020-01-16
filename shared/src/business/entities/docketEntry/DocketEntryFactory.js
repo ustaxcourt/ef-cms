@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('joi');
 const {
   ExternalDocumentFactory,
 } = require('../externalDocument/ExternalDocumentFactory');

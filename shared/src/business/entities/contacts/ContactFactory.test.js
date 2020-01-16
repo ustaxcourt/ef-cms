@@ -554,6 +554,7 @@ describe('Petition', () => {
       stinFile: {},
       stinFileSize: 1,
     });
+
     expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
   });
 });
