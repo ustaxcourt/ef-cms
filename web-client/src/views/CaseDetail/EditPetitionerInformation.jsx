@@ -93,6 +93,7 @@ export const EditPetitionerInformation = connect(
           </div>
 
           <Button
+            id="submit-edit-petitioner-information"
             onClick={() => {
               updatePetitionerInformationFormSequence();
             }}

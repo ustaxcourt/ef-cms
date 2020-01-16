@@ -12,6 +12,7 @@ export const PaperServiceConfirmModal = connect(
   ({ confirmInitiateServiceModalHelper, documentTitle }) => (
     <ConfirmModal
       noCancel
+      className="paper-service-confirm-modal"
       confirmLabel="Print Now"
       title="Paper service is required for the following document:"
       onConfirmSequence="navigateToPrintPreviewSequence"
