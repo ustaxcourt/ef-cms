@@ -1,7 +1,7 @@
 const sinon = require('sinon');
-const { saveDocument } = require('./saveDocument');
+const { saveDocumentFromLambda } = require('./saveDocumentFromLambda');
 
-describe('saveDocument', () => {
+describe('saveDocumentFromLambda', () => {
   const putObjectStub = sinon.stub().returns({
     promise: async () => null,
   });
@@ -20,7 +20,7 @@ describe('saveDocument', () => {
     };
     const expectedDocumentId = 'abc';
     const expectedArray = new Uint8Array(['a']);
-    await saveDocument({
+    await saveDocumentFromLambda({
       applicationContext,
       document: new Uint8Array(['a']),
       documentId: expectedDocumentId,
@@ -47,7 +47,7 @@ describe('saveDocument', () => {
     };
     const expectedDocumentId = 'abc';
     const expectedArray = new Uint8Array(['a']);
-    await saveDocument({
+    await saveDocumentFromLambda({
       applicationContext,
       document: new Uint8Array(['a']),
       documentId: expectedDocumentId,

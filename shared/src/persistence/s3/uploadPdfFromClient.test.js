@@ -1,8 +1,8 @@
 const sinon = require('sinon');
-const { uploadPdf } = require('./uploadPdf');
+const { uploadPdfFromClient } = require('./uploadPdfFromClient');
 const { User } = require('../../business/entities/User');
 
-describe('uploadPdf', () => {
+describe('uploadPdfFromClient', () => {
   it('makes a post request to the expected endpoint with the expected data', async () => {
     let postStub = sinon.stub().resolves(null);
     const applicationContext = {
@@ -16,7 +16,7 @@ describe('uploadPdf', () => {
         post: postStub,
       }),
     };
-    await uploadPdf({
+    await uploadPdfFromClient({
       applicationContext,
       documentId: '123',
       file: new File([], 'abc'),
@@ -62,7 +62,7 @@ describe('uploadPdf', () => {
         post: postStub,
       }),
     };
-    await uploadPdf({
+    await uploadPdfFromClient({
       applicationContext,
       documentId: '123',
       file: new Blob([]),

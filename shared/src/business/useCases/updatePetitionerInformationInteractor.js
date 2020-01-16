@@ -2,12 +2,13 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
+  copyToNewPdf,
+  getAddressPages,
+} = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const {
-  sendServedPartiesEmails,
-} = require('../utilities/sendServedPartiesEmails');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
@@ -134,13 +135,13 @@ exports.updatePetitionerInformationInteractor = async ({
 
     caseEntity.addDocument(changeOfAddressDocument);
 
-    await applicationContext.getPersistenceGateway().saveDocument({
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: changeOfAddressPdfWithCover,
       documentId: newDocumentId,
     });
 
-    await sendServedPartiesEmails({
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
       documentEntity: changeOfAddressDocument,
@@ -173,66 +174,31 @@ exports.updatePetitionerInformationInteractor = async ({
   if (servedParties.paper.length > 0) {
     const fullDocument = await PDFDocument.create();
 
-    const addressPages = [];
-    for (let party of servedParties.paper) {
-      addressPages.push(
-        await applicationContext
-          .getUseCaseHelpers()
-          .generatePaperServiceAddressPagePdf({
-            applicationContext,
-            contactData: party,
-            docketNumberWithSuffix: `${
-              caseEntity.docketNumber
-            }${caseEntity.docketNumberSuffix || ''}`,
-          }),
-      );
-    }
-
-    const addAddressPageAndNoticeToDocument = async ({
-      addressPagesToAdd,
-      combinedDocument,
-      documentToAdd,
-    }) => {
-      const documentToAddPdf = await PDFDocument.load(documentToAdd);
-      for (let addressPage of addressPagesToAdd) {
-        const addressPageDoc = await PDFDocument.load(addressPage);
-        let copiedPages = await combinedDocument.copyPages(
-          addressPageDoc,
-          addressPageDoc.getPageIndices(),
-        );
-        copiedPages.forEach(page => {
-          combinedDocument.addPage(page);
-        });
-
-        copiedPages = await combinedDocument.copyPages(
-          documentToAddPdf,
-          documentToAddPdf.getPageIndices(),
-        );
-        copiedPages.forEach(page => {
-          combinedDocument.addPage(page);
-        });
-      }
-    };
+    const addressPages = await getAddressPages({
+      applicationContext,
+      caseEntity,
+      servedParties,
+    });
 
     if (primaryPdf) {
-      await addAddressPageAndNoticeToDocument({
-        addressPagesToAdd: addressPages,
-        combinedDocument: fullDocument,
-        documentToAdd: primaryPdf,
+      await copyToNewPdf({
+        addressPages,
+        newPdfDoc: fullDocument,
+        noticeDoc: await PDFDocument.load(primaryPdf),
       });
     }
     if (secondaryPdf) {
-      await addAddressPageAndNoticeToDocument({
-        addressPagesToAdd: addressPages,
-        combinedDocument: fullDocument,
-        documentToAdd: secondaryPdf,
+      await copyToNewPdf({
+        addressPages,
+        newPdfDoc: fullDocument,
+        noticeDoc: await PDFDocument.load(secondaryPdf),
       });
     }
 
     const paperServicePdfData = await fullDocument.save();
     const paperServicePdfId = applicationContext.getUniqueId();
     applicationContext.logger.time('Saving S3 Document');
-    await applicationContext.getPersistenceGateway().saveDocument({
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: paperServicePdfData,
       documentId: paperServicePdfId,
