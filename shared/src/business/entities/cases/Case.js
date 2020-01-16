@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   createISODateString,
   formatDateString,
@@ -362,11 +362,13 @@ joiValidationDecorator(
     contactPrimary: joi
       .object()
       .optional()
-      .allow(null),
+      .allow(null)
+      .meta({ filename: 'contactPrimary', name: 'ContactPrimary' }),
     contactSecondary: joi
       .object()
       .optional()
-      .allow(null),
+      .allow(null)
+      .meta({ filename: 'contactSecondary', name: 'ContactSecondary' }),
     createdAt: joi
       .date()
       .iso()
@@ -465,7 +467,7 @@ joiValidationDecorator(
     }),
     petitionPaymentStatus: joi
       .string()
-      .valid(Object.values(Case.PAYMENT_STATUS))
+      .valid(...Object.values(Case.PAYMENT_STATUS))
       .required(),
     petitionPaymentWaivedDate: joi.when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.WAIVED,
@@ -485,7 +487,10 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     procedureType: joi.string().optional(),
-    qcCompleteForTrial: joi.object().required(),
+    qcCompleteForTrial: joi
+      .object()
+      .required()
+      .meta({ filename: 'qcCompleteForTrial', name: 'QC Complete for Trial' }),
     receivedAt: joi
       .date()
       .iso()
@@ -494,7 +499,7 @@ joiValidationDecorator(
     respondents: joi.array().optional(),
     status: joi
       .string()
-      .valid(Object.values(Case.STATUS_TYPES))
+      .valid(...Object.values(Case.STATUS_TYPES))
       .optional(),
     trialDate: joi
       .date()
