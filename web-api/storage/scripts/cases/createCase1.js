@@ -4,33 +4,31 @@ module.exports.createCase1 = async () => {
   let caseDetail;
 
   await asUserFromEmail('petitioner', async applicationContext => {
-    caseDetail = await applicationContext
-      .getUseCases()
-      .createCaseInteractor({
-        applicationContext,
-        petitionFileId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-        petitionMetadata: {
-          "caseType": "Whistleblower",
-          "contactPrimary": {
-            "address3": "Architecto assumenda",
-            "address2": "Suscipit animi solu",
-            "city": "Aspernatur nostrum s",
-            "phone": "+1 (537) 235-6147",
-            "address1": "68 Fabien Freeway",
-            "postalCode": "89499",
-            "name": "Brett Osborne",
-            "state": "AS",
-            "countryType": "domestic",
-            "email": "petitioner"
-          },
-          filingType: 'Myself',
-          hasIrsNotice: false,
-          partyType: 'Petitioner',
-          preferredTrialCity: 'Birmingham, Alabama',
-          procedureType: 'Regular',
+    caseDetail = await applicationContext.getUseCases().createCaseInteractor({
+      applicationContext,
+      petitionFileId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+      petitionMetadata: {
+        caseType: 'Whistleblower',
+        contactPrimary: {
+          address1: '68 Fabien Freeway',
+          address2: 'Suscipit animi solu',
+          address3: 'Architecto assumenda',
+          city: 'Aspernatur nostrum s',
+          countryType: 'domestic',
+          email: 'petitioner',
+          name: 'Brett Osborne',
+          phone: '+1 (537) 235-6147',
+          postalCode: '89499',
+          state: 'AS',
         },
-        stinFileId: 'b1aa4aa2-c214-424c-8870-d0049c5744d8',
-      });
+        filingType: 'Myself',
+        hasIrsNotice: false,
+        partyType: 'Petitioner',
+        preferredTrialCity: 'Birmingham, Alabama',
+        procedureType: 'Regular',
+      },
+      stinFileId: 'b1aa4aa2-c214-424c-8870-d0049c5744d8',
+    });
 
     const addCoversheet = document => {
       return applicationContext.getUseCases().addCoversheetInteractor({
@@ -40,20 +38,21 @@ module.exports.createCase1 = async () => {
       });
     };
 
-    await Promise.all(caseDetail.documents.map(addCoversheet));
+    for (const document of caseDetail.documents) {
+      await addCoversheet(document);
+    }
   });
 
   await asUserFromEmail('docketclerk', async applicationContext => {
-
     const { caseId, docketNumber } = caseDetail;
 
     const documentMetadata = {
-      "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
-      "documentType": "Order of Dismissal for Lack of Jurisdiction",
-      "eventCode": "ODJ",
-      "richText": "<p>Testing</p>",
       caseId,
       docketNumber,
+      documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
+      documentType: 'Order of Dismissal for Lack of Jurisdiction',
+      eventCode: 'ODJ',
+      richText: '<p>Testing</p>',
     };
 
     documentMetadata.draftState = { ...documentMetadata };
