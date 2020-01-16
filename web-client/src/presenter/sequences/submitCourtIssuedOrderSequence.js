@@ -29,7 +29,6 @@ const onFileUploadedSuccess = [
     CaseDetail: navigateToCaseDetailAction,
     DocumentDetail: navigateToDocumentDetailAction,
   },
-  unsetWaitingForResponseAction,
 ];
 
 export const submitCourtIssuedOrderSequence = [
