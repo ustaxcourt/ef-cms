@@ -1,10 +1,6 @@
 const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
-const {
-  sendServedPartiesEmails,
-} = require('../utilities/sendServedPartiesEmails');
-
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
@@ -117,7 +113,7 @@ exports.updatePrimaryContactInteractor = async ({
 
   changeOfAddressDocument.setAsServed(servedParties.all);
 
-  await sendServedPartiesEmails({
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity,
     documentEntity: changeOfAddressDocument,

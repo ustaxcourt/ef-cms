@@ -1,15 +1,6 @@
 const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
-
-const {
-  sendServedPartiesEmails,
-} = require('../../utilities/sendServedPartiesEmails');
-
-const {
-  appendPaperServiceAddressPageToPdf,
-} = require('../../utilities/appendPaperServiceAddressPageToPdf');
-
 const {
   createISODateString,
   formatDateString,
@@ -200,7 +191,7 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  await sendServedPartiesEmails({
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity: caseToUpdate,
     documentEntity: courtIssuedDocument,
@@ -213,13 +204,15 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
     let newPdfDoc = await PDFDocument.create();
 
-    await appendPaperServiceAddressPageToPdf({
-      applicationContext,
-      caseEntity,
-      newPdfDoc,
-      noticeDoc: courtIssuedOrderDoc,
-      servedParties,
-    });
+    await applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf({
+        applicationContext,
+        caseEntity,
+        newPdfDoc,
+        noticeDoc: courtIssuedOrderDoc,
+        servedParties,
+      });
 
     const paperServicePdfData = await newPdfDoc.save();
     paperServicePdfBuffer = Buffer.from(paperServicePdfData);
