@@ -108,6 +108,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         applicationContext,
         documentIds: ['dddddddd-1111-dddd-1111-dddddddddddd'],
         documentMetadata: {
+          documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
         },
       });
@@ -127,6 +128,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0],
       documentMetadata: {
+        documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
       },
       leadCaseId: caseId0,
@@ -146,6 +148,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0],
       documentMetadata: {
+        documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
       },
       leadCaseId: caseId0,
@@ -162,6 +165,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       applicationContext,
       documentIds: [documentId0],
       documentMetadata: {
+        documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
       },
       filingPartyNames: ['Guy Fieri', 'Enzo Ferrari'],
@@ -175,6 +179,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0],
       documentMetadata: {
+        documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
       },
       leadCaseId: caseId0,
@@ -201,6 +206,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0, documentId1],
       documentMetadata: {
+        documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         secondaryDocument: {
           documentType: 'Redacted',
