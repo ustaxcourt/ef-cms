@@ -9,6 +9,7 @@ describe('fileExternalDocumentInteractor', () => {
   let globalUser;
 
   let caseRecord = {
+    caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     contactPrimary: {
       email: 'fieri@example.com',
@@ -16,20 +17,32 @@ describe('fileExternalDocumentInteractor', () => {
     },
     createdAt: '',
     docketNumber: '45678-18',
+    docketRecord: [
+      {
+        description: 'first record',
+        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+        eventCode: 'P',
+        filingDate: '2018-03-01T00:01:00.000Z',
+        index: 1,
+      },
+    ],
     documents: [
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
+        eventCode: 'A',
         userId: 'respondent',
       },
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
+        eventCode: 'A',
         userId: 'respondent',
       },
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
+        eventCode: 'A',
         userId: 'respondent',
       },
     ],
@@ -103,6 +116,7 @@ describe('fileExternalDocumentInteractor', () => {
           caseId: caseRecord.caseId,
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
+          eventCode: 'A',
         },
       });
     } catch (err) {
@@ -129,6 +143,7 @@ describe('fileExternalDocumentInteractor', () => {
           caseId: caseRecord.caseId,
           documentTitle: 'Amended Simultaneous Memoranda of Law',
           documentType: 'Amended Simultaneous Memoranda of Law',
+          eventCode: 'A',
         },
       });
     } catch (err) {
