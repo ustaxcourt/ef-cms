@@ -169,6 +169,7 @@ exports.fileExternalDocumentInteractor = async ({
       const docketRecordEntity = new DocketRecord({
         description: metadata.documentTitle,
         documentId: documentEntity.documentId,
+        eventCode: documentEntity.eventCode,
         filingDate: documentEntity.receivedAt,
       });
       caseEntity.addDocketRecord(docketRecordEntity);
