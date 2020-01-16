@@ -21,6 +21,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     caseRecords = [
       {
+        caseCaption: 'Guy Fieri, Petitioner',
         caseId: caseId0,
         contactPrimary: {
           email: 'fieri@example.com',
@@ -36,6 +37,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         userId: 'petitioner',
       },
       {
+        caseCaption: 'Enzo Ferrari, Petitioner',
         caseId: caseId1,
         contactPrimary: {
           email: 'ferrari@example.com',
@@ -51,10 +53,11 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         userId: 'petitioner',
       },
       {
+        caseCaption: 'George Foreman, Petitioner',
         caseId: caseId2,
         contactPrimary: {
           email: 'foreman@example.com',
-          name: 'Geroge Foreman',
+          name: 'George Foreman',
         },
         createdAt: '2019-04-19T17:29:13.120Z',
         docketNumber: '345-19',
