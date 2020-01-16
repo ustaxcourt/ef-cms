@@ -379,10 +379,7 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
-    docketRecord: joi
-      .array()
-      .min(1)
-      .required(),
+    docketRecord: joi.array().required(),
     documents: joi.array().optional(),
     filingType: joi.string().optional(),
     hasIrsNotice: joi.boolean().optional(),

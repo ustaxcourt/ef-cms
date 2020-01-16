@@ -117,7 +117,7 @@ describe('migrateCaseInteractor', () => {
   });
 
   describe('validation', () => {
-    it('should failto migrate a case when the docket record is invalid', async () => {
+    it('should fail to migrate a case when the docket record is invalid', async () => {
       const adminUser = new User({
         name: 'Olivia Jade',
         role: 'admin',
@@ -183,7 +183,7 @@ describe('migrateCaseInteractor', () => {
         error = e;
       }
 
-      expect(error.message).toContain('Unauthorized');
+      expect(error.message).toContain('The DocketRecord entity was invalid');
     });
   });
 });
