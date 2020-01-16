@@ -19,11 +19,11 @@ const generateChangeOfAddressTemplateStub = jest.fn();
 const generatePdfFromHtmlInteractorStub = jest.fn();
 const getAddressPhoneDiffStub = jest.fn();
 const getDocumentTypeForAddressChangeStub = jest.fn();
-const saveDocumentStub = jest.fn();
+const saveDocumentFromLambdaStub = jest.fn();
 
 let persistenceGateway = {
   getCaseByCaseId: () => MOCK_CASE,
-  saveDocument: saveDocumentStub,
+  saveDocumentFromLambda: saveDocumentFromLambdaStub,
   saveWorkItemForNonPaper: () => null,
   updateCase: updateCaseStub,
 };

@@ -96,7 +96,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const newDocumentId = applicationContext.getUniqueId();
 
-    await applicationContext.getPersistenceGateway().saveDocument({
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: noticeOfTrialIssued,
       documentId: newDocumentId,
