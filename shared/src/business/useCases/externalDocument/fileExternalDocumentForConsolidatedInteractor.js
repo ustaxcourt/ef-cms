@@ -1,11 +1,6 @@
 const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
-
-const {
-  sendServedPartiesEmails,
-} = require('../../utilities/sendServedPartiesEmails');
-
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -239,12 +234,14 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           if (documentEntity.isAutoServed()) {
             documentEntity.setAsServed(servedParties.all);
 
-            await sendServedPartiesEmails({
-              applicationContext,
-              caseEntity,
-              documentEntity,
-              servedParties,
-            });
+            await applicationContext
+              .getUseCaseHelpers()
+              .sendServedPartiesEmails({
+                applicationContext,
+                caseEntity,
+                documentEntity,
+                servedParties,
+              });
           }
         }
 
