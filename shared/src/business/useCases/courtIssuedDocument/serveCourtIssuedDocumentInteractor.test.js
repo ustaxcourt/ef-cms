@@ -25,15 +25,16 @@ const testPdfDocBytes = () => {
 describe('serveCourtIssuedDocumentInteractor', () => {
   let applicationContext;
   let updateCaseMock;
-  let sendBulkTemplatedEmailMock;
   let getObjectMock;
-  let saveDocumentMock;
+  let saveDocumentFromLambdaMock;
   let deleteWorkItemFromInboxMock;
   let putWorkItemInOutboxMock;
   let testPdfDoc;
   let deleteCaseTrialSortMappingRecordsMock;
   let extendCase;
   let generatePaperServiceAddressPagePdfMock;
+  let sendServedPartiesEmailsMock;
+  let appendPaperServiceAddressPageToPdfMock;
 
   let getTrialSessionByIdMock;
   let updateTrialSessionMock;
@@ -165,7 +166,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     updateCaseMock = jest.fn(({ caseToUpdate }) => caseToUpdate);
     deleteCaseTrialSortMappingRecordsMock = jest.fn();
-    sendBulkTemplatedEmailMock = jest.fn();
     getObjectMock = jest.fn().mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,
@@ -176,6 +176,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     generatePaperServiceAddressPagePdfMock = jest
       .fn()
       .mockResolvedValue(testPdfDoc);
+    sendServedPartiesEmailsMock = jest.fn();
+    appendPaperServiceAddressPageToPdfMock = jest.fn();
 
     getTrialSessionByIdMock = jest.fn().mockReturnValue({
       caseOrder: [
@@ -209,9 +211,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     applicationContext = {
       environment: { documentsBucketName: 'documents' },
       getCurrentUser: () => mockUser,
-      getDispatchers: () => ({
-        sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
-      }),
       getPersistenceGateway: () => ({
         deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
         deleteWorkItemFromInbox: deleteWorkItemFromInboxMock,
@@ -228,7 +227,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         getTrialSessionById: getTrialSessionByIdMock,
         putWorkItemInOutbox: putWorkItemInOutboxMock,
-        saveDocument: saveDocumentMock,
+        saveDocumentFromLambda: saveDocumentFromLambdaMock,
         updateCase: updateCaseMock,
         updateTrialSession: updateTrialSessionMock,
       }),
@@ -236,7 +235,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         getObject: getObjectMock,
       }),
       getUseCaseHelpers: () => ({
+        appendPaperServiceAddressPageToPdf: appendPaperServiceAddressPageToPdfMock,
         generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
+        sendServedPartiesEmails: sendServedPartiesEmailsMock,
       }),
       logger: {
         time: () => null,
@@ -300,7 +301,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
-    saveDocumentMock = jest.fn(({ document: newPdfData }) => {
+    saveDocumentFromLambdaMock = jest.fn(({ document: newPdfData }) => {
       fs.writeFileSync(
         testOutputPath + 'serveCourtIssuedDocumentInteractor_1.pdf',
         newPdfData,
@@ -327,7 +328,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the document as served and update the case and work items for a non-generic order document', async () => {
-    saveDocumentMock = jest.fn(({ document: newPdfData }) => {
+    saveDocumentFromLambdaMock = jest.fn(({ document: newPdfData }) => {
       fs.writeFileSync(
         testOutputPath + 'serveCourtIssuedDocumentInteractor_1.pdf',
         newPdfData,
@@ -354,7 +355,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should call sendBulkTemplatedEmail, sending an email to all electronically-served parties, and should not return paperServicePdfData', async () => {
-    saveDocumentMock = jest.fn(({ document: newPdfData }) => {
+    saveDocumentFromLambdaMock = jest.fn(({ document: newPdfData }) => {
       fs.writeFileSync(
         testOutputPath + 'serveCourtIssuedDocumentInteractor_2.pdf',
         newPdfData,
@@ -367,12 +368,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
-    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
     expect(result).toBeUndefined();
   });
 
-  it('should not call sendBulkTemplatedEmail if there are no electronically-served parties but should return paperServicePdfData', async () => {
-    saveDocumentMock = jest.fn(({ document: newPdfData }) => {
+  it('should return paperServicePdfData when there are paper service parties on the case', async () => {
+    saveDocumentFromLambdaMock = jest.fn(({ document: newPdfData }) => {
       fs.writeFileSync(
         testOutputPath + 'serveCourtIssuedDocumentInteractor_2.pdf',
         newPdfData,
@@ -384,13 +385,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
-    expect(sendBulkTemplatedEmailMock).not.toHaveBeenCalled();
     expect(result).toBeDefined();
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId', async () => {
     extendCase.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-    saveDocumentMock = jest.fn();
+    saveDocumentFromLambdaMock = jest.fn();
 
     await serveCourtIssuedDocumentInteractor({
       applicationContext,
@@ -398,7 +398,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: documentsWithCaseClosingEventCodes[0].documentId,
     });
 
-    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
     expect(updateTrialSessionMock).toHaveBeenCalled();
   });
 
@@ -432,7 +432,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     });
 
     extendCase.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
-    saveDocumentMock = jest.fn();
+    saveDocumentFromLambdaMock = jest.fn();
 
     await serveCourtIssuedDocumentInteractor({
       applicationContext,
@@ -440,13 +440,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: documentsWithCaseClosingEventCodes[0].documentId,
     });
 
-    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
     expect(updateTrialSessionMock).toHaveBeenCalled();
   });
 
   documentsWithCaseClosingEventCodes.forEach(document => {
     it(`should set the case status to closed for event code: ${document.eventCode}`, async () => {
-      saveDocumentMock = jest.fn(({ document: newPdfData }) => {
+      saveDocumentFromLambdaMock = jest.fn(({ document: newPdfData }) => {
         fs.writeFileSync(
           testOutputPath + 'serveCourtIssuedDocumentInteractor_3.pdf',
           newPdfData,

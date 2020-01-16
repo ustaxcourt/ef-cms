@@ -1,5 +1,5 @@
 /**
- * uploadPdf
+ * uploadPdfFromClient
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -8,7 +8,7 @@
  * @param {object} providers.policy the upload policy
  * @returns {string} the document id
  */
-exports.uploadPdf = async ({
+exports.uploadPdfFromClient = async ({
   applicationContext,
   documentId,
   file,

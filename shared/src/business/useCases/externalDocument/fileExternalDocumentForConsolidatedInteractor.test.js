@@ -7,7 +7,6 @@ const { User } = require('../../entities/User');
 describe('fileExternalDocumentForConsolidatedInteractor', () => {
   let applicationContext;
   let caseRecords;
-  let sendBulkTemplatedEmailMock;
   const caseId0 = '00000000-b37b-479d-9201-067ec6e335bb';
   const caseId1 = '11111111-b37b-479d-9201-067ec6e335bb';
   const caseId2 = '22222222-b37b-479d-9201-067ec6e335bb';
@@ -17,8 +16,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   const documentId3 = 'd3d3d3d3-b37b-479d-9201-067ec6e335bb';
 
   beforeEach(() => {
-    sendBulkTemplatedEmailMock = jest.fn();
-
     caseRecords = [
       {
         caseCaption: 'Guy Fieri, Petitioner',
@@ -79,9 +76,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
-      getDispatchers: () => ({
-        sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
-      }),
       getPersistenceGateway: () => ({
         getCasesByLeadCaseId: async () => caseRecords,
         getUserById: () => ({
@@ -93,6 +87,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         updateCase: async ({ caseToUpdate }) => await caseToUpdate,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        sendServedPartiesEmails: jest.fn(),
+      }),
     };
   });
 
@@ -249,6 +246,4 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[0].documents.length).toEqual(4);
     expect(result[1].documents.length).toEqual(4);
   });
-
-  // service on parties?
 });

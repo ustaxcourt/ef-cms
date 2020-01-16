@@ -24,7 +24,7 @@ describe('getDocument', () => {
         return fun;
       },
       getPersistenceGateway: () => ({
-        uploadPdf: () => BLOB_DATA,
+        uploadPdfFromClient: () => BLOB_DATA,
       }),
     };
     const result = await getDocument({
