@@ -92,7 +92,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         });
       },
       getPersistenceGateway: () => ({
-        deleteCaseTrialSortMappingRecords: () => { },
+        deleteCaseTrialSortMappingRecords: () => {},
         getCalendaredCasesForTrialSession: () => calendaredCases,
         getTrialSessionById: () => trialSession,
         saveDocumentFromLambda: saveDocumentFromLambdaMock,
