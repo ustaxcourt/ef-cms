@@ -67,7 +67,7 @@ describe('Get trial session details', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'The TrialSession entity was invalid ValidationError: child "maxCases" fails because ["maxCases" is required]',
+      'The TrialSession entity was invalid ValidationError: "maxCases" is required',
     );
   });
 
