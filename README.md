@@ -6,9 +6,17 @@ An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), crea
 
 [![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop)
 
+#### master
+
+[![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master)
+
 #### staging
 
 [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging)
+
+#### test
+
+[![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test)
 
 API | Front-End | Shared Code
 --- | --------- | -----------
