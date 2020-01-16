@@ -25,7 +25,6 @@ const testPdfDocBytes = () => {
 describe('serveCourtIssuedDocumentInteractor', () => {
   let applicationContext;
   let updateCaseMock;
-  let sendBulkTemplatedEmailMock;
   let getObjectMock;
   let saveDocumentFromLambdaMock;
   let deleteWorkItemFromInboxMock;
@@ -34,6 +33,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   let deleteCaseTrialSortMappingRecordsMock;
   let extendCase;
   let generatePaperServiceAddressPagePdfMock;
+  let sendServedPartiesEmailsMock;
+  let appendPaperServiceAddressPageToPdfMock;
 
   let getTrialSessionByIdMock;
   let updateTrialSessionMock;
@@ -165,7 +166,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     updateCaseMock = jest.fn(({ caseToUpdate }) => caseToUpdate);
     deleteCaseTrialSortMappingRecordsMock = jest.fn();
-    sendBulkTemplatedEmailMock = jest.fn();
     getObjectMock = jest.fn().mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,
@@ -176,6 +176,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     generatePaperServiceAddressPagePdfMock = jest
       .fn()
       .mockResolvedValue(testPdfDoc);
+    sendServedPartiesEmailsMock = jest.fn();
+    appendPaperServiceAddressPageToPdfMock = jest.fn();
 
     getTrialSessionByIdMock = jest.fn().mockReturnValue({
       caseOrder: [
@@ -209,9 +211,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     applicationContext = {
       environment: { documentsBucketName: 'documents' },
       getCurrentUser: () => mockUser,
-      getDispatchers: () => ({
-        sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
-      }),
       getPersistenceGateway: () => ({
         deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
         deleteWorkItemFromInbox: deleteWorkItemFromInboxMock,
@@ -236,7 +235,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         getObject: getObjectMock,
       }),
       getUseCaseHelpers: () => ({
+        appendPaperServiceAddressPageToPdf: appendPaperServiceAddressPageToPdfMock,
         generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
+        sendServedPartiesEmails: sendServedPartiesEmailsMock,
       }),
       logger: {
         time: () => null,
@@ -367,11 +368,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
-    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
     expect(result).toBeUndefined();
   });
 
-  it('should not call sendBulkTemplatedEmail if there are no electronically-served parties but should return paperServicePdfData', async () => {
+  it('should return paperServicePdfData when there are paper service parties on the case', async () => {
     saveDocumentFromLambdaMock = jest.fn(({ document: newPdfData }) => {
       fs.writeFileSync(
         testOutputPath + 'serveCourtIssuedDocumentInteractor_2.pdf',
@@ -384,7 +385,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
-    expect(sendBulkTemplatedEmailMock).not.toHaveBeenCalled();
     expect(result).toBeDefined();
   });
 
@@ -398,7 +398,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: documentsWithCaseClosingEventCodes[0].documentId,
     });
 
-    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
     expect(updateTrialSessionMock).toHaveBeenCalled();
   });
 
@@ -440,7 +440,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: documentsWithCaseClosingEventCodes[0].documentId,
     });
 
-    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
     expect(updateTrialSessionMock).toHaveBeenCalled();
   });
 
