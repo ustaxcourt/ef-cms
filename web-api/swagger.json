@@ -1117,6 +1117,34 @@
           }
         ]
       },
+      "delete": {
+        "parameters": [
+          {
+            "name": "caseIdsToRemove",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": ["cases"],
+        "summary": "Unconsolidates the cases passed in the query string.",
+        "description": "Unconsolidates the cases passed in the query string.\n",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
       "options": {
         "consumes": ["application/json"],
         "produces": ["application/json"],
