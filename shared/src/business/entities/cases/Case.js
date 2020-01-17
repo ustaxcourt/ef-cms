@@ -369,7 +369,7 @@ joiValidationDecorator(
     caseType: joi
       .string()
       .valid(Case.CASE_TYPES)
-      .optional(),
+      .required(),
     contactPrimary: joi
       .object()
       .required()
