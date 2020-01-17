@@ -19,7 +19,7 @@ exports.handler = event =>
         .getMigrations()
         .migrateCaseInteractor({
           applicationContext,
-          user: JSON.parse(event.body),
+          caseMetadata: JSON.parse(event.body),
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
