@@ -45,8 +45,6 @@ describe('ExternalDocumentStandard', () => {
             scenario: 'Standard',
             selectedCases: ['101-19', '102-19'],
           });
-          console.log('doc', extDoc);
-          console.log('case[0]', extDoc.selectedCases[0]);
           expect(extDoc.getFormattedValidationErrors()).toEqual({
             documentType:
               'Proposed Stipulated Decision must be filed separately in each case',
