@@ -3,6 +3,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
+import { UnconsolidateCasesModal } from './UnconsolidateCasesModal';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import { state } from 'cerebral';
@@ -359,27 +360,39 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Consolidated Cases
+                    {formattedCaseDetail.canUnconsolidate && (
+                      <Button
+                        link
+                        aria-label="unconsolidate cases"
+                        className="red-warning margin-right-0 margin-top-1 padding-0 float-right"
+                        icon="minus-circle"
+                        onClick={() => {
+                          openCleanModalSequence({
+                            showModal: 'UnconsolidateCasesModal',
+                          });
+                        }}
+                      >
+                        Remove cases
+                      </Button>
+                    )}
                     {formattedCaseDetail.canConsolidate && (
                       <Button
                         link
                         aria-label="add cases to consolidate with this case"
-                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        className="margin-right-4 margin-top-1 padding-0 float-right"
+                        icon="plus-circle"
                         onClick={() => {
                           openCleanModalSequence({
                             showModal: 'AddConsolidatedCaseModal',
                           });
                         }}
                       >
-                        <FontAwesomeIcon
-                          className="margin-right-05"
-                          icon="plus-circle"
-                          size="1x"
-                        />
                         Add Cases
                       </Button>
                     )}
                   </h3>
                   <AddConsolidatedCaseModal />
+                  <UnconsolidateCasesModal />
                   {formattedCaseDetail.canConsolidate &&
                     formattedCaseDetail.consolidatedCases.length > 0 && (
                       <ConsolidatedCases
