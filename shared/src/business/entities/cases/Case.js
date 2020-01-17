@@ -363,7 +363,7 @@ joiValidationDecorator(
       .uuid({
         version: ['uuidv4'],
       })
-      .optional()
+      .required()
       .description('Unique Case ID only used by the system'),
     caseNote: joi.string().optional(),
     caseType: joi
