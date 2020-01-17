@@ -8,7 +8,7 @@ describe('CaseInternal entity', () => {
     it('creates a valid petition with minimal information', () => {
       const caseInternal = new CaseInternal({
         caseCaption: 'Dr. Leo Marvin, Petitioner',
-        caseType: 'other',
+        caseType: 'Other',
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',

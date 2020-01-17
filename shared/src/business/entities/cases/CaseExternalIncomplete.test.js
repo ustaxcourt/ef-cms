@@ -5,7 +5,7 @@ describe('CaseExternalIncomplete entity', () => {
   describe('isValid', () => {
     it('assigns a new irsNoticeDate if one is not passed in', () => {
       const caseExternalIncomplete = new CaseExternalIncomplete({
-        caseType: 'other',
+        caseType: 'Other',
         contactPrimary: {
           address1: '99 South Oak Lane',
           address2: 'Culpa numquam saepe ',
