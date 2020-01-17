@@ -350,7 +350,7 @@ joiValidationDecorator(
       otherwise: joi.optional().allow(null),
       then: joi.string().required(),
     }),
-    caseCaption: joi.string().optional(),
+    caseCaption: joi.string().required(),
     caseId: joi
       .string()
       .uuid({
