@@ -12,7 +12,7 @@ const {
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('../externalDocument/ExternalDocumentInformationFactory');
-const { includes, omit } = require('lodash');
+const { includes } = require('lodash');
 
 DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
