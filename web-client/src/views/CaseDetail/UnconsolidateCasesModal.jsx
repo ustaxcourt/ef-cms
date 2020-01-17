@@ -9,14 +9,8 @@ export const UnconsolidateCasesModal = connect(
     formattedCaseDetail: state.formattedCaseDetail,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateSequence: sequences.validateAddRespondentSequence,
   },
-  ({
-    formattedCaseDetail,
-    modal,
-    updateModalValueSequence,
-    validateSequence,
-  }) => {
+  ({ formattedCaseDetail, modal, updateModalValueSequence }) => {
     return (
       <ConfirmModal
         cancelLabel="Cancel"
@@ -26,26 +20,30 @@ export const UnconsolidateCasesModal = connect(
         showModalWhen="UnconsolidateCasesModal"
         title="What Cases Would You Like to Unconsolidate?"
         onCancelSequence="clearModalSequence"
-        // onConfirmSequence="submitAddConsolidatedCaseSequence"
+        onConfirmSequence="submitRemoveConsolidatedCasesSequence"
       >
-        <FormGroup>
+        <FormGroup errorText={modal.error || ''}>
           <fieldset className="usa-fieldset margin-bottom-0">
             {formattedCaseDetail.consolidatedCases.map(
               (consolidatedCase, index) => (
                 <div className="usa-checkbox" key={index}>
                   <input
                     aria-describedby="representing-legend"
-                    checked={modal[consolidatedCase.caseId] === true}
+                    checked={
+                      (modal.casesToRemove &&
+                        modal.casesToRemove[consolidatedCase.caseId] ===
+                          true) ||
+                      false
+                    }
                     className="usa-checkbox__input"
                     id={`case-${consolidatedCase.caseId}`}
-                    name={consolidatedCase.caseId}
+                    name={`casesToRemove.${consolidatedCase.caseId}`}
                     type="checkbox"
                     onChange={e => {
                       updateModalValueSequence({
-                        key: consolidatedCase.caseId,
+                        key: e.target.name,
                         value: e.target.checked,
                       });
-                      validateSequence();
                     }}
                   />
                   <label
