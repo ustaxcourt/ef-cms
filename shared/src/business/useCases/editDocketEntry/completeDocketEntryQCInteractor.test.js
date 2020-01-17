@@ -61,14 +61,21 @@ describe('completeDocketEntryQCInteractor', () => {
       createdAt: '',
       docketNumber: '45678-18',
       docketRecord: [
-        { documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb', index: 42 },
+        {
+          description: 'Answer Docket Record Entry',
+          documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          eventCode: 'A',
+          index: 42,
+        },
       ],
       documents: [
         {
           additionalInfo: 'additional info',
           additionalInfo2: 'additional info 2',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          documentTitle: 'Answer',
           documentType: 'Answer',
+          eventCode: 'A',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           workItems: [workItem],
         },
@@ -174,8 +181,11 @@ describe('completeDocketEntryQCInteractor', () => {
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
+          description: 'Memorandum in Support',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          documentTitle: 'Document Title',
           documentType: 'Memorandum in Support',
+          eventCode: 'M',
         },
       });
     } catch (err) {
@@ -207,9 +217,11 @@ describe('completeDocketEntryQCInteractor', () => {
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
+          description: 'Memorandum in Support',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Something Else',
           documentType: 'Memorandum in Support',
+          eventCode: 'M',
         },
       });
     } catch (err) {
@@ -231,9 +243,11 @@ describe('completeDocketEntryQCInteractor', () => {
         additionalInfo: '123',
         additionalInfo2: 'abc',
         caseId: caseRecord.caseId,
+        description: 'Memorandum in Support',
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
+        eventCode: 'M',
       },
     });
     expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
@@ -247,9 +261,11 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext,
       entryMetadata: {
         caseId: caseRecord.caseId,
+        description: 'Memorandum in Support',
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
+        eventCode: 'M',
       },
     });
     expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
@@ -265,7 +281,9 @@ describe('completeDocketEntryQCInteractor', () => {
         additionalInfo2: 'additional info 2',
         caseId: caseRecord.caseId,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        documentTitle: 'Answer',
         documentType: 'Answer',
+        eventCode: 'A',
       },
     });
     expect(addCoversheetInteractorSpy).not.toBeCalled();
@@ -291,9 +309,11 @@ describe('completeDocketEntryQCInteractor', () => {
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
+          description: 'Memorandum in Support',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Something Else',
           documentType: 'Memorandum in Support',
+          eventCode: 'M',
         },
       });
     } catch (err) {
@@ -328,9 +348,11 @@ describe('completeDocketEntryQCInteractor', () => {
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
+          description: 'Memorandum in Support',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Notice of Change of Address',
           documentType: 'Notice of Change of Address',
+          eventCode: 'M',
         },
       });
     } catch (err) {
@@ -364,9 +386,11 @@ describe('completeDocketEntryQCInteractor', () => {
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
+          description: 'Memorandum in Support',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Notice of Change of Address',
           documentType: 'Notice of Change of Address',
+          eventCode: 'NCA',
         },
       });
     } catch (err) {
