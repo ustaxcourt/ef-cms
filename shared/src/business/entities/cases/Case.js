@@ -127,6 +127,8 @@ Case.ANSWER_DOCUMENT_CODES = [
 
 Case.CHIEF_JUDGE = 'Chief Judge';
 
+Case.DOCKET_NUMBER_SUFFIXES = ['W', 'P', 'X', 'R', 'SL', 'L', 'S'];
+
 Case.VALIDATION_ERROR_MESSAGES = {
   applicationForWaiverOfFilingFeeFile:
     'Upload an Application for Waiver of Filing Fee',
@@ -350,15 +352,24 @@ joiValidationDecorator(
       otherwise: joi.optional().allow(null),
       then: joi.string().required(),
     }),
-    caseCaption: joi.string().required(),
+    caseCaption: joi
+      .string()
+      .required()
+      .description(
+        'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
+      ),
     caseId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
-      .required(),
+      .required()
+      .description('Unique Case ID only used by the system'),
     caseNote: joi.string().optional(),
-    caseType: joi.string().optional(),
+    caseType: joi
+      .string()
+      .valid(...Case.CASE_TYPES)
+      .optional(),
     contactPrimary: joi
       .object()
       .required()
@@ -370,21 +381,30 @@ joiValidationDecorator(
     createdAt: joi
       .date()
       .iso()
-      .required(),
+      .required()
+      .description('When the case was added to the system.'),
     docketNumber: joi
       .string()
       .regex(Case.docketNumberMatcher)
-      .required(),
+      .required()
+      .description('Unique Case ID in XXXXX-YY format.'),
     docketNumberSuffix: joi
       .string()
       .allow(null)
+      .valid(...Object.values(Case.DOCKET_NUMBER_SUFFIXES))
       .optional(),
     docketRecord: joi.array().optional(),
     documents: joi
       .array()
       .items(joi.object().meta({ filename: 'Document', name: 'Document' }))
       .optional(),
-    filingType: joi.string().optional(),
+    filingType: joi
+      .string()
+      .valid(
+        ...Case.FILING_TYPES[User.ROLES.petitioner],
+        ...Case.FILING_TYPES[User.ROLES.practitioner],
+      )
+      .optional(),
     hasIrsNotice: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
       .boolean()
