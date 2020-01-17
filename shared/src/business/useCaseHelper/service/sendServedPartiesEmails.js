@@ -1,4 +1,4 @@
-const { formatDateString } = require('./DateHandler');
+const { formatDateString } = require('../../utilities/DateHandler');
 
 exports.sendServedPartiesEmails = async ({
   applicationContext,

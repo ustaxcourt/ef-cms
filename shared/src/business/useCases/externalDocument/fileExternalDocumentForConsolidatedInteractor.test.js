@@ -7,7 +7,6 @@ const { User } = require('../../entities/User');
 describe('fileExternalDocumentForConsolidatedInteractor', () => {
   let applicationContext;
   let caseRecords;
-  let sendBulkTemplatedEmailMock;
   const caseId0 = '00000000-b37b-479d-9201-067ec6e335bb';
   const caseId1 = '11111111-b37b-479d-9201-067ec6e335bb';
   const caseId2 = '22222222-b37b-479d-9201-067ec6e335bb';
@@ -17,10 +16,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   const documentId3 = 'd3d3d3d3-b37b-479d-9201-067ec6e335bb';
 
   beforeEach(() => {
-    sendBulkTemplatedEmailMock = jest.fn();
-
     caseRecords = [
       {
+        caseCaption: 'Guy Fieri, Petitioner',
         caseId: caseId0,
         contactPrimary: {
           email: 'fieri@example.com',
@@ -36,6 +34,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         userId: 'petitioner',
       },
       {
+        caseCaption: 'Enzo Ferrari, Petitioner',
         caseId: caseId1,
         contactPrimary: {
           email: 'ferrari@example.com',
@@ -51,10 +50,11 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         userId: 'petitioner',
       },
       {
+        caseCaption: 'George Foreman, Petitioner',
         caseId: caseId2,
         contactPrimary: {
           email: 'foreman@example.com',
-          name: 'Geroge Foreman',
+          name: 'George Foreman',
         },
         createdAt: '2019-04-19T17:29:13.120Z',
         docketNumber: '345-19',
@@ -76,9 +76,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
           userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
         };
       },
-      getDispatchers: () => ({
-        sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
-      }),
       getPersistenceGateway: () => ({
         getCasesByLeadCaseId: async () => caseRecords,
         getUserById: () => ({
@@ -90,6 +87,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         updateCase: async ({ caseToUpdate }) => await caseToUpdate,
       }),
       getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      getUseCaseHelpers: () => ({
+        sendServedPartiesEmails: jest.fn(),
+      }),
     };
   });
 
@@ -105,6 +105,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         applicationContext,
         documentIds: ['dddddddd-1111-dddd-1111-dddddddddddd'],
         documentMetadata: {
+          documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
         },
       });
@@ -124,6 +125,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0],
       documentMetadata: {
+        documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
       },
       leadCaseId: caseId0,
@@ -143,6 +145,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0],
       documentMetadata: {
+        documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
       },
       leadCaseId: caseId0,
@@ -159,6 +162,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       applicationContext,
       documentIds: [documentId0],
       documentMetadata: {
+        documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
       },
       filingPartyNames: ['Guy Fieri', 'Enzo Ferrari'],
@@ -172,6 +176,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0],
       documentMetadata: {
+        documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
       },
       leadCaseId: caseId0,
@@ -198,6 +203,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0, documentId1],
       documentMetadata: {
+        documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         secondaryDocument: {
           documentType: 'Redacted',
@@ -240,6 +246,4 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[0].documents.length).toEqual(4);
     expect(result[1].documents.length).toEqual(4);
   });
-
-  // service on parties?
 });

@@ -2,10 +2,6 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  sendServedPartiesEmails,
-} = require('../../utilities/sendServedPartiesEmails');
-
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -92,7 +88,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     const newDocumentId = applicationContext.getUniqueId();
 
-    await applicationContext.getPersistenceGateway().saveDocument({
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: noticeOfTrialIssued,
       documentId: newDocumentId,
@@ -155,7 +151,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
   ) => {
     const servedParties = aggregatePartiesForService(caseEntity);
 
-    await sendServedPartiesEmails({
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
       documentEntity,
@@ -164,40 +160,16 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
 
     if (servedParties.paper.length > 0) {
       const noticeDoc = await PDFDocument.load(documentPdfData);
-      const addressPages = [];
 
-      for (let party of servedParties.paper) {
-        addressPages.push(
-          await applicationContext
-            .getUseCaseHelpers()
-            .generatePaperServiceAddressPagePdf({
-              applicationContext,
-              contactData: party,
-              docketNumberWithSuffix: `${
-                caseEntity.docketNumber
-              }${caseEntity.docketNumberSuffix || ''}`,
-            }),
-        );
-      }
-
-      for (let addressPage of addressPages) {
-        const addressPageDoc = await PDFDocument.load(addressPage);
-        let copiedPages = await newPdfDoc.copyPages(
-          addressPageDoc,
-          addressPageDoc.getPageIndices(),
-        );
-        copiedPages.forEach(page => {
-          newPdfDoc.addPage(page);
-        });
-
-        copiedPages = await newPdfDoc.copyPages(
+      await applicationContext
+        .getUseCaseHelpers()
+        .appendPaperServiceAddressPageToPdf({
+          applicationContext,
+          caseEntity,
+          newPdfDoc,
           noticeDoc,
-          noticeDoc.getPageIndices(),
-        );
-        copiedPages.forEach(page => {
-          newPdfDoc.addPage(page);
+          servedParties,
         });
-      }
     }
 
     return servedParties;

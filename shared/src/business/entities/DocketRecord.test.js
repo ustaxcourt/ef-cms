@@ -9,6 +9,7 @@ describe('DocketRecord', () => {
         }).isValid(),
       ).toBeFalsy();
     });
+
     it('returns true if a filingDate is not in the future', () => {
       expect(
         new DocketRecord({
@@ -16,6 +17,7 @@ describe('DocketRecord', () => {
         }).isValid(),
       ).toBeTruthy();
     });
+
     it('returns false if nothing is passed in', () => {
       expect(new DocketRecord({}).isValid()).toBeFalsy();
     });

@@ -21,6 +21,8 @@ function DocketRecord(rawDocketRecord) {
   this.editState = rawDocketRecord.editState;
 }
 
+DocketRecord.validationName = 'DocketRecord';
+
 joiValidationDecorator(
   DocketRecord,
   joi.object().keys({

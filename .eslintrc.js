@@ -216,6 +216,7 @@ module.exports = {
           'minw',
           'morrisons',
           'mousedown',
+          'multipart',
           'namespace',
           'navbar',
           'nega',
