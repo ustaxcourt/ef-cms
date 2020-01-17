@@ -366,17 +366,13 @@ export const CaseInformationInternal = connect(
                           link
                           aria-label="unconsolidate cases"
                           className="red-warning margin-right-0 margin-top-1 padding-0 float-right"
+                          icon="minus-circle"
                           onClick={() => {
                             openCleanModalSequence({
                               showModal: 'UnconsolidateCasesModal',
                             });
                           }}
                         >
-                          <FontAwesomeIcon
-                            className="margin-right-05"
-                            icon="plus-circle"
-                            size="1x"
-                          />
                           Remove cases
                         </Button>
                         <Button
