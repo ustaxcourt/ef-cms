@@ -107,6 +107,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         documentMetadata: {
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
+          eventCode: 'M',
         },
       });
     } catch (err) {
@@ -127,6 +128,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
+        eventCode: 'M',
       },
       leadCaseId: caseId0,
     });
@@ -147,6 +149,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
+        eventCode: 'M',
       },
       leadCaseId: caseId0,
     });
@@ -164,6 +167,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
+        eventCode: 'M',
       },
       filingPartyNames: ['Guy Fieri', 'Enzo Ferrari'],
       leadCaseId: caseId0,
@@ -178,6 +182,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
+        eventCode: 'M',
       },
       leadCaseId: caseId0,
     });
@@ -205,8 +210,11 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
+        eventCode: 'M',
         secondaryDocument: {
+          documentTitle: 'Redacted',
           documentType: 'Redacted',
+          eventCode: 'R',
         },
       },
       leadCaseId: caseId0,
@@ -216,7 +224,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(result[1].documents.length).toEqual(2);
   });
 
-  it('Should file multiple documents for each case if a supporting documents are provided', async () => {
+  it('Should file multiple documents for each case if supporting documents are provided', async () => {
     expect(caseRecords[0].documents.length).toEqual(0);
     expect(caseRecords[1].documents.length).toEqual(0);
 
@@ -225,18 +233,26 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       docketNumbersForFiling: ['123-19', '234-19'],
       documentIds: [documentId0, documentId1, documentId2, documentId3],
       documentMetadata: {
+        documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
+        eventCode: 'M',
         secondaryDocument: {
+          documentTitle: 'Redacted',
           documentType: 'Redacted',
+          eventCode: 'R',
         },
         secondarySupportingDocuments: [
           {
+            documentTitle: 'Redacted',
             documentType: 'Redacted',
+            eventCode: 'R',
           },
         ],
         supportingDocuments: [
           {
+            documentTitle: 'Redacted',
             documentType: 'Redacted',
+            eventCode: 'R',
           },
         ],
       },

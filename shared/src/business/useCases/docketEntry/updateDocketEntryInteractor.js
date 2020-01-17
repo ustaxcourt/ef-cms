@@ -66,6 +66,7 @@ exports.updateDocketEntryInteractor = async ({
     description: documentMetadata.documentTitle,
     documentId: documentEntity.documentId,
     editState: JSON.stringify(documentMetadata),
+    eventCode: documentEntity.eventCode,
     filingDate: documentEntity.receivedAt,
   });
 

@@ -26,10 +26,7 @@ DocketRecord.validationName = 'DocketRecord';
 joiValidationDecorator(
   DocketRecord,
   joi.object().keys({
-    description: joi
-      .string()
-      .optional()
-      .allow(null),
+    description: joi.string().required(),
     documentId: joi
       .string()
       .allow(null)
@@ -38,10 +35,7 @@ joiValidationDecorator(
       .string()
       .allow(null)
       .optional(),
-    eventCode: joi
-      .string()
-      .allow(null)
-      .optional(),
+    eventCode: joi.string().required(),
     filedBy: joi
       .string()
       .optional()
@@ -54,7 +48,7 @@ joiValidationDecorator(
     index: joi
       .number()
       .integer()
-      .optional(),
+      .required(),
     signatory: joi
       .string()
       .optional()

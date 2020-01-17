@@ -58,9 +58,14 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     eventCode => {
       const documentId = uuidv4();
 
+      const index = dynamicallyGeneratedDocketEntries.length + 2; // 2 statically set docket records per case;
+
       dynamicallyGeneratedDocketEntries.push({
+        description: `Docket Record ${index}`,
         documentId,
+        eventCode: 'O',
         filingDate: createISODateString(),
+        index,
       });
 
       const eventCodeMap = Document.COURT_ISSUED_EVENT_CODES.find(
@@ -93,12 +98,18 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: '123-45',
       docketRecord: [
         {
+          description: 'Docket Record 0',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          eventCode: 'O',
           filingDate: createISODateString(),
+          index: 0,
         },
         {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+          description: 'Docket Record 1',
+          documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+          eventCode: 'OAJ',
           filingDate: createISODateString(),
+          index: 1,
         },
         ...dynamicallyGeneratedDocketEntries,
       ],
@@ -130,12 +141,18 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: '123-45',
       docketRecord: [
         {
+          description: 'Docket Record 0',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          eventCode: 'O',
           filingDate: createISODateString(),
+          index: 0,
         },
         {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+          description: 'Docket Record 0',
+          documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+          eventCode: 'OAJ',
           filingDate: createISODateString(),
+          index: 1,
         },
         ...dynamicallyGeneratedDocketEntries,
       ],
