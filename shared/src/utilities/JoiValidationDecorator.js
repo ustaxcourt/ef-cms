@@ -152,7 +152,6 @@ exports.joiValidationDecorator = function(
     const { error } = schema.validate(this, {
       abortEarly: false,
       allowUnknown: true,
-      debug: true,
     });
     if (!error) return null;
     const errors = {};
