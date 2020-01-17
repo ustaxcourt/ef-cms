@@ -370,7 +370,7 @@ joiValidationDecorator(
     createdAt: joi
       .date()
       .iso()
-      .optional(),
+      .required(),
     docketNumber: joi
       .string()
       .regex(Case.docketNumberMatcher)
@@ -489,13 +489,13 @@ joiValidationDecorator(
     receivedAt: joi
       .date()
       .iso()
-      .optional()
+      .required()
       .allow(null),
     respondents: joi.array().optional(),
     status: joi
       .string()
       .valid(Object.values(Case.STATUS_TYPES))
-      .optional(),
+      .required(),
     trialDate: joi
       .date()
       .iso()
