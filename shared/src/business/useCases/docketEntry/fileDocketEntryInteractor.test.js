@@ -16,17 +16,23 @@ describe('fileDocketEntryInteractor', () => {
     documents: [
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentTitle: 'Answer',
         documentType: 'Answer',
+        eventCode: 'A',
         userId: 'respondent',
       },
       {
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+        documentTitle: 'Answer',
         documentType: 'Answer',
+        eventCode: 'A',
         userId: 'respondent',
       },
       {
-        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+        documentTitle: 'Answer',
         documentType: 'Answer',
+        eventCode: 'A',
         userId: 'respondent',
       },
     ],
@@ -61,7 +67,9 @@ describe('fileDocketEntryInteractor', () => {
         applicationContext,
         documentMetadata: {
           caseId: caseRecord.caseId,
+          documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
+          eventCode: 'MISL',
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
@@ -109,7 +117,9 @@ describe('fileDocketEntryInteractor', () => {
         applicationContext,
         documentMetadata: {
           caseId: caseRecord.caseId,
+          documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
+          eventCode: 'MISL',
           isPaper: true,
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -155,6 +165,7 @@ describe('fileDocketEntryInteractor', () => {
         applicationContext,
         documentMetadata: {
           caseId: caseRecord.caseId,
+          documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
           lodged: true,
         },
@@ -199,13 +210,19 @@ describe('fileDocketEntryInteractor', () => {
         applicationContext,
         documentMetadata: {
           caseId: caseRecord.caseId,
+          documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
+          eventCode: 'MISL',
           lodged: true,
           secondaryDocument: {
+            documentTitle: 'Memorandum in Support',
             documentType: 'Memorandum in Support',
+            eventCode: 'MISL',
           },
           secondarySupportingDocumentMetadata: {
+            documentTitle: 'Memorandum in Support',
             documentType: 'Memorandum in Support',
+            eventCode: 'MISL',
           },
         },
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
