@@ -56,7 +56,7 @@ describe('migrateCaseInteractor', () => {
     };
 
     caseMetadata = {
-      caseType: 'other',
+      caseType: 'Other',
       contactPrimary: {
         address1: '99 South Oak Lane',
         address2: 'Address 2',
@@ -105,7 +105,7 @@ describe('migrateCaseInteractor', () => {
       await migrateCaseInteractor({
         applicationContext,
         caseMetadata: {
-          caseType: 'other',
+          caseType: 'Other',
           docketNumber: '00101-00',
           filingType: 'Myself',
           hasIrsNotice: true,
