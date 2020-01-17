@@ -179,6 +179,8 @@ module.exports = {
           'goekes',
           'goto',
           'gsi1',
+          'unconsolidated',
+          'unconsolidate',
           'gsi1pk',
           'gustafson',
           'gustafsons',
