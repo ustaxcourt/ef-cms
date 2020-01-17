@@ -369,7 +369,7 @@ joiValidationDecorator(
     caseType: joi
       .string()
       .valid(...Case.CASE_TYPES)
-      .optional(),
+      .required(),
     contactPrimary: joi
       .object()
       .required()
@@ -393,7 +393,7 @@ joiValidationDecorator(
       .allow(null)
       .valid(...Object.values(Case.DOCKET_NUMBER_SUFFIXES))
       .optional(),
-    docketRecord: joi.array().optional(),
+    docketRecord: joi.array().required(),
     documents: joi
       .array()
       .items(joi.object().meta({ filename: 'Document', name: 'Document' }))
@@ -808,6 +808,7 @@ Case.prototype.updateDocketNumberRecord = function() {
     this.addDocketRecord(
       new DocketRecord({
         description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
+        eventCode: '-',
         filingDate: createISODateString(),
       }),
     );
