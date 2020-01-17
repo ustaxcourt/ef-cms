@@ -333,6 +333,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  removeConsolidatedCases:
+    handler: web-api/${self:provider.dir}/casesHandlers.removeConsolidatedCasesLambda
+    events:
+      - http:
+          path: /{caseId}/consolidate-case
+          method: delete
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getConsolidatedCasesByCase:
     handler: web-api/${self:provider.dir}/casesHandlers.getConsolidatedCasesByCaseLambda
     events:

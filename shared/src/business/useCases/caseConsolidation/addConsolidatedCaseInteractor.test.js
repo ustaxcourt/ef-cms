@@ -1,8 +1,8 @@
 const {
   addConsolidatedCaseInteractor,
 } = require('./addConsolidatedCaseInteractor');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
+const { MOCK_CASE } = require('../../../test/mockCase');
+const { User } = require('../../entities/User');
 
 let getCaseByCaseIdMock;
 let updateCaseMock;

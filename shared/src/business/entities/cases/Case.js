@@ -1344,6 +1344,16 @@ Case.prototype.setLeadCase = function(leadCaseId) {
 };
 
 /**
+ * removes the consolidation from the case by setting leadCaseId to undefined
+ *
+ * @returns {Case} the updated Case entity
+ */
+Case.prototype.removeConsolidation = function() {
+  this.leadCaseId = undefined;
+  return this;
+};
+
+/**
  * sorts the given array of cases by docket number
  *
  * @param {Array} cases the cases to check for lead case computation
