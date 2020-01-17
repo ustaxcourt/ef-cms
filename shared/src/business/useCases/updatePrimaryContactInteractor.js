@@ -4,7 +4,6 @@ const {
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { DOCKET_SECTION } = require('../entities/WorkQueue');
 const { Document } = require('../entities/Document');
 const { Message } = require('../entities/Message');
@@ -38,7 +37,10 @@ exports.updatePrimaryContactInteractor = async ({
     throw new NotFoundError(`Case ${caseId} was not found.`);
   }
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(
+    { ...caseToUpdate, contactPrimary: contactInfo },
+    { applicationContext },
+  );
 
   const userIsAssociated = applicationContext
     .getUseCases()
@@ -52,34 +54,25 @@ exports.updatePrimaryContactInteractor = async ({
     .getUtilities()
     .getDocumentTypeForAddressChange({
       newData: contactInfo,
-      oldData: caseEntity.contactPrimary,
+      oldData: caseToUpdate.contactPrimary,
     });
-
-  const caseDetail = {
-    ...caseEntity.toRawObject(),
-    caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
-  };
 
   const pdfContentHtml = await applicationContext
     .getTemplateGenerators()
     .generateChangeOfAddressTemplate({
       applicationContext,
       content: {
-        caption: caseDetail.caseCaption,
-        captionPostfix: caseDetail.caseCaptionPostfix,
+        caption: caseEntity.caseCaption,
+        captionPostfix: caseEntity.caseCaptionPostfix,
         docketNumberWithSuffix: `${
-          caseDetail.docketNumber
-        }${caseDetail.docketNumberSuffix || ''}`,
+          caseEntity.docketNumber
+        }${caseEntity.docketNumberSuffix || ''}`,
         documentTitle: documentType.title,
         name: contactInfo.name,
         newData: contactInfo,
-        oldData: caseEntity.contactPrimary,
+        oldData: caseToUpdate.contactPrimary,
       },
     });
-  caseEntity.contactPrimary = ContactFactory.createContacts({
-    contactInfo: { primary: contactInfo },
-    partyType: caseEntity.partyType,
-  }).primary.toRawObject();
 
   const docketRecordPdf = await applicationContext
     .getUseCases()
@@ -105,6 +98,9 @@ exports.updatePrimaryContactInteractor = async ({
       partyPrimary: true,
       processingStatus: 'complete',
       userId: user.userId,
+      ...caseEntity.getCaseContacts({
+        contactPrimary: true,
+      }),
     },
     { applicationContext },
   );

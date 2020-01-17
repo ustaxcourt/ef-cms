@@ -8,7 +8,7 @@ describe('CaseExternal', () => {
   describe('for (international) Contacts', () => {
     it('should not validate without country', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
@@ -38,7 +38,7 @@ describe('CaseExternal', () => {
 
     it('can validate primary contact', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
