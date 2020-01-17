@@ -1,4 +1,4 @@
-const joi = require('joi');
+const joi = require('@hapi/joi');
 const {
   ExternalDocumentFactory,
 } = require('../externalDocument/ExternalDocumentFactory');
@@ -71,7 +71,7 @@ function DocketEntryFactory(rawProps) {
     }
   };
 
-  let schema = {
+  let schema = joi.object().keys({
     addToCoversheet: joi.boolean(),
     additionalInfo: joi.string(),
     additionalInfo2: joi.string(),
@@ -106,7 +106,7 @@ function DocketEntryFactory(rawProps) {
       .max('now')
       .optional(),
     trialLocation: joi.string().optional(),
-  };
+  });
 
   let schemaOptionalItems = {
     certificateOfServiceDate: joi
@@ -127,18 +127,19 @@ function DocketEntryFactory(rawProps) {
   let customValidate;
 
   const addToSchema = itemName => {
-    schema[itemName] = schemaOptionalItems[itemName];
+    schema = schema.keys({
+      [itemName]: schemaOptionalItems[itemName],
+    });
   };
 
   const exDoc = ExternalDocumentFactory.get(rawProps);
+  const docketEntryExternalDocumentSchema = exDoc.getSchema();
 
-  const externalDocumentOmit = ['category'];
-
-  const docketEntryExternalDocumentSchema = omit(
-    exDoc.getSchema(),
-    externalDocumentOmit,
+  schema = schema.concat(docketEntryExternalDocumentSchema).concat(
+    joi.object({
+      category: joi.string().optional(), // omitting category
+    }),
   );
-  schema = { ...schema, ...docketEntryExternalDocumentSchema };
 
   if (rawProps.certificateOfService === true) {
     addToSchema('certificateOfServiceDate');

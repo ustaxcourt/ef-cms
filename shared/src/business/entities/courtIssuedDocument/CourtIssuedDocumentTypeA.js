@@ -39,7 +39,7 @@ CourtIssuedDocumentTypeA.schema = {
     otherwise: joi.optional().allow(null),
     then: joi
       .string()
-      .valid(SERVICE_STAMP_OPTIONS)
+      .valid(...SERVICE_STAMP_OPTIONS)
       .required(),
   }),
 };

@@ -26,7 +26,7 @@ ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
 };
 
-ExternalDocumentStandard.schema = {
+ExternalDocumentStandard.schema = joi.object({
   category: joi.string().required(),
   documentTitle: joi.string().optional(),
   documentType: joi
@@ -46,7 +46,7 @@ ExternalDocumentStandard.schema = {
     .array()
     .items(joi.string())
     .optional(),
-};
+});
 
 joiValidationDecorator(
   ExternalDocumentStandard,
