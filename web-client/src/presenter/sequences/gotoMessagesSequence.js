@@ -26,6 +26,7 @@ const goToMessages = [
   {
     ...takePathForRoles(
       [
+        'admin',
         'adc',
         'admissionsclerk',
         'calendarclerk',
