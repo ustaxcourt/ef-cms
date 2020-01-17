@@ -138,6 +138,7 @@ exports.completeDocketEntryQCInteractor = async ({
     description: updatedDocumentTitle,
     documentId: updatedDocument.documentId,
     editState: '{}',
+    eventCode: updatedDocument.eventCode,
     filingDate: updatedDocument.receivedAt,
   });
 
@@ -273,7 +274,7 @@ exports.completeDocketEntryQCInteractor = async ({
     noticeUpdatedDocument.setAsServed(servedParties.all);
 
     const docketEntry = caseEntity.docketRecord.find(
-      entry => entry.documentId === noticeUpdatedDocument.documentId,
+      entry => entry.documentId === updatedDocument.documentId,
     );
 
     const updatedDocketRecordEntity = new DocketRecord({
