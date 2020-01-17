@@ -52,7 +52,7 @@
 
 > `string` | required
 
-## [draftState](./undefined.md)
+## draftState
 
 > `object` | optional
 
@@ -135,10 +135,6 @@ whitelist: ``
 
 > `date` | optional
 
-## [qcByUser](./undefined.md)
-
-> `object` | optional
-
 ## qcByUserId
 
 > `string` | optional
@@ -158,7 +154,7 @@ whitelist: `null`
 
 > `string` | optional
 
-## [secondaryDocument](./undefined.md)
+## [secondaryDocument](./Document.md)
 
 > `object` | optional
 
