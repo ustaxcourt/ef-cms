@@ -2176,6 +2176,24 @@ describe('Case entity', () => {
       });
     });
 
+    describe('removeConsolidation', () => {
+      it('Should unset the leadCaseId on the given case', async () => {
+        const caseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            leadCaseId: 'd64ba5a9-b37b-479d-9201-067ec6e335cc',
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+        const result = caseEntity.removeConsolidation();
+
+        expect(result.leadCaseId).toBeUndefined();
+      });
+    });
+
     describe('sortByDocketNumber', () => {
       it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {
         const result = Case.sortByDocketNumber([
