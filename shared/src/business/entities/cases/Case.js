@@ -356,7 +356,7 @@ joiValidationDecorator(
       .uuid({
         version: ['uuidv4'],
       })
-      .optional(),
+      .required(),
     caseNote: joi.string().optional(),
     caseType: joi.string().optional(),
     contactPrimary: joi
