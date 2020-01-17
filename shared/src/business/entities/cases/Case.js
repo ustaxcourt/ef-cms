@@ -361,7 +361,7 @@ joiValidationDecorator(
     caseType: joi.string().optional(),
     contactPrimary: joi
       .object()
-      .optional()
+      .required()
       .allow(null),
     contactSecondary: joi
       .object()
