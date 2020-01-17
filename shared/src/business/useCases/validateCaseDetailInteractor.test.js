@@ -55,7 +55,7 @@ describe('validate case detail', () => {
       applicationContext,
       caseDetail: {
         caseCaption: 'Caption',
-        caseType: 'defined',
+        caseType: 'Other',
         contactPrimary,
         docketNumber: '101-18',
         docketRecord: [
@@ -115,7 +115,7 @@ describe('validate case detail', () => {
       applicationContext,
       caseDetail: {
         caseCaption: 'Caption',
-        caseType: 'defined',
+        caseType: 'Other',
         contactPrimary,
         docketNumber: '101-18',
         docketRecord: [
@@ -145,7 +145,7 @@ describe('validate case detail', () => {
             workItems: [],
           },
         ],
-        filingType: 'defined',
+        filingType: 'Other',
         hasIrsNotice: true,
         irsNoticeDate: new Date().toISOString(),
         partyType: ContactFactory.PARTY_TYPES.petitioner,
@@ -163,7 +163,7 @@ describe('validate case detail', () => {
       applicationContext,
       caseDetail: {
         caseCaption: 'Caption',
-        caseType: 'defined',
+        caseType: 'Other',
         contactPrimary,
         docketNumber: '101-18',
         docketRecord: [
@@ -193,7 +193,7 @@ describe('validate case detail', () => {
             workItems: [],
           },
         ],
-        filingType: 'defined',
+        filingType: 'Other',
         hasIrsNotice: false,
         irsNoticeDate: null,
         partyType: ContactFactory.PARTY_TYPES.petitioner,

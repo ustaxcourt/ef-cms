@@ -5,7 +5,7 @@ describe('CaseExternal', () => {
   describe('for Estate without an Executor/Personal Representative/Fiduciary/etc. Contacts', () => {
     it('should not validate without contact', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
@@ -23,7 +23,7 @@ describe('CaseExternal', () => {
 
     it('should validate without inCareOf', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
@@ -52,7 +52,7 @@ describe('CaseExternal', () => {
 
     it('can validate primary contact', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
