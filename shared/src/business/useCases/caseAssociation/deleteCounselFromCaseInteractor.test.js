@@ -36,6 +36,7 @@ describe('deleteCounselFromCaseInteractor', () => {
         getCaseByCaseId: ({ caseId }) => ({
           caseCaption: 'Caption',
           caseId,
+          caseType: 'Deficiency',
           docketNumber: '123-19',
           practitioners: mockPractitioners,
           respondents: mockRespondents,
