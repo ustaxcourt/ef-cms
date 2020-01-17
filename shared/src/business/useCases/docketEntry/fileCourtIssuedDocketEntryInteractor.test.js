@@ -54,22 +54,30 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       documents: [
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          documentTitle: 'Answer',
           documentType: 'Answer',
+          eventCode: 'A',
           userId: 'respondent',
         },
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          documentTitle: 'Answer',
           documentType: 'Answer',
+          eventCode: 'A',
           userId: 'respondent',
         },
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          documentTitle: 'Answer',
           documentType: 'Answer',
+          eventCode: 'A',
           userId: 'respondent',
         },
         {
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+          documentTile: 'Order',
           documentType: 'Order',
+          eventCode: 'O',
           userId: 'respondent',
         },
       ],
@@ -133,7 +141,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       documentMeta: {
         caseId: caseRecord.caseId,
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+        documentTitle: 'Order',
         documentType: 'Order',
+        eventCode: 'O',
+        generatedDocumentTitle: 'Generated Order Document Title',
       },
     });
 
