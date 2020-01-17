@@ -84,7 +84,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
-          caseType: 'other',
+          caseType: 'Other',
           contactPrimary: {
             address1: '99 South Oak Lane',
             address2: 'Culpa numquam saepe ',
@@ -163,7 +163,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
-          caseType: 'other',
+          caseType: 'Other',
           contactPrimary: {
             address1: '99 South Oak Lane',
             address2: 'Culpa numquam saepe ',
@@ -242,7 +242,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
-          caseType: 'other',
+          caseType: 'Other',
           contactPrimary: {
             address1: '99 South Oak Lane',
             address2: 'Culpa numquam saepe ',
@@ -323,7 +323,7 @@ describe('createCaseFromPaperInteractor', () => {
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
           caseCaption: 'caseCaption',
-          caseType: 'other',
+          caseType: 'Other',
           contactPrimary: {
             address1: '99 South Oak Lane',
             address2: 'Culpa numquam saepe ',
