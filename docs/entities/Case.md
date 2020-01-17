@@ -32,11 +32,11 @@
 
 > `string` | optional
 
-## contactPrimary
+## [contactPrimary](./contactPrimary.md)
 
 > `object` | optional
 
-## contactSecondary
+## [contactSecondary](./contactSecondary.md)
 
 > `object` | optional
 
@@ -197,7 +197,7 @@ whitelist: `null`
 
 > `string` | optional
 
-## qcCompleteForTrial
+## [qcCompleteForTrial](./qcCompleteForTrial.md)
 
 > `object` | required
 
