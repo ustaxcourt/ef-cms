@@ -95,6 +95,10 @@ TrialSession.TRIAL_CITIES = {
   SMALL: SMALL_CITIES,
 };
 
+TrialSession.TRIAL_CITY_STRINGS = SMALL_CITIES.map(
+  location => `${location.city}, ${location.state}`,
+);
+
 TrialSession.SESSION_TERMS = ['Winter', 'Fall', 'Spring'];
 
 TrialSession.SESSION_TYPES = [

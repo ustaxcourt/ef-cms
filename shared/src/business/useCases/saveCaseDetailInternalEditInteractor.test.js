@@ -37,7 +37,7 @@ const MOCK_CASE = {
   hasIrsNotice: false,
   partyType: ContactFactory.PARTY_TYPES.petitioner,
   petitioners: [{ name: 'Test Petitioner' }],
-  preferredTrialCity: 'Washington, D.C.',
+  preferredTrialCity: 'Washington, District of Columbia',
   procedureType: 'Regular',
   status: Case.STATUS_TYPES.new,
   userId: 'userId',
