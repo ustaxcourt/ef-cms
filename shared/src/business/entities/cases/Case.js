@@ -362,13 +362,11 @@ joiValidationDecorator(
     contactPrimary: joi
       .object()
       .optional()
-      .allow(null)
-      .meta({ filename: 'contactPrimary', name: 'ContactPrimary' }),
+      .allow(null),
     contactSecondary: joi
       .object()
       .optional()
-      .allow(null)
-      .meta({ filename: 'contactSecondary', name: 'ContactSecondary' }),
+      .allow(null),
     createdAt: joi
       .date()
       .iso()
@@ -382,7 +380,10 @@ joiValidationDecorator(
       .allow(null)
       .optional(),
     docketRecord: joi.array().optional(),
-    documents: joi.array().optional(),
+    documents: joi
+      .array()
+      .items(joi.object().meta({ filename: 'Document', name: 'Document' }))
+      .optional(),
     filingType: joi.string().optional(),
     hasIrsNotice: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
@@ -487,10 +488,7 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     procedureType: joi.string().optional(),
-    qcCompleteForTrial: joi
-      .object()
-      .required()
-      .meta({ filename: 'qcCompleteForTrial', name: 'QC Complete for Trial' }),
+    qcCompleteForTrial: joi.object().required(),
     receivedAt: joi
       .date()
       .iso()

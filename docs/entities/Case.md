@@ -32,14 +32,6 @@
 
 > `string` | optional
 
-## [contactPrimary](./contactPrimary.md)
-
-> `object` | optional
-
-## [contactSecondary](./contactSecondary.md)
-
-> `object` | optional
-
 ## createdAt
 
 > `date` | optional
@@ -61,7 +53,7 @@ whitelist: `null`
 
 ## documents
 
-> `array` | optional
+> `array`: [Document](./Document.md) | optional
 
 ## filingType
 
@@ -196,10 +188,6 @@ whitelist: `null`
 ## procedureType
 
 > `string` | optional
-
-## [qcCompleteForTrial](./qcCompleteForTrial.md)
-
-> `object` | required
 
 ## receivedAt
 
