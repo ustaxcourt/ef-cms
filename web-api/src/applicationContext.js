@@ -21,7 +21,7 @@ const {
 } = require('../../shared/src/business/useCases/trialSessions/addCaseToTrialSessionInteractor');
 const {
   addConsolidatedCaseInteractor,
-} = require('../../shared/src/business/useCases/addConsolidatedCaseInteractor');
+} = require('../../shared/src/business/useCases/caseConsolidation/addConsolidatedCaseInteractor');
 const {
   addCoversheetInteractor,
 } = require('../../shared/src/business/useCases/addCoversheetInteractor');
@@ -523,6 +523,9 @@ const {
 const {
   removeCaseFromTrialInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/removeCaseFromTrialInteractor');
+const {
+  removeConsolidatedCasesInteractor,
+} = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
   reprocessFailedRecordsInteractor,
 } = require('../../shared/src/business/useCases/reprocessFailedRecordsInteractor');
@@ -1079,6 +1082,7 @@ module.exports = (appContextUser = {}) => {
         processStreamRecordsInteractor,
         recallPetitionFromIRSHoldingQueueInteractor,
         removeCaseFromTrialInteractor,
+        removeConsolidatedCasesInteractor,
         reprocessFailedRecordsInteractor,
         runBatchProcessInteractor,
         runTrialSessionPlanningReportInteractor,

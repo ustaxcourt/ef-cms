@@ -1,9 +1,9 @@
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
+} = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * addConsolidatedCaseInteractor

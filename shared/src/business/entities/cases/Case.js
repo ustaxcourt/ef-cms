@@ -350,18 +350,18 @@ joiValidationDecorator(
       otherwise: joi.optional().allow(null),
       then: joi.string().required(),
     }),
-    caseCaption: joi.string().optional(),
+    caseCaption: joi.string().required(),
     caseId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
-      .optional(),
+      .required(),
     caseNote: joi.string().optional(),
     caseType: joi.string().optional(),
     contactPrimary: joi
       .object()
-      .optional()
+      .required()
       .allow(null),
     contactSecondary: joi
       .object()
@@ -370,7 +370,7 @@ joiValidationDecorator(
     createdAt: joi
       .date()
       .iso()
-      .optional(),
+      .required(),
     docketNumber: joi
       .string()
       .regex(Case.docketNumberMatcher)
@@ -492,13 +492,13 @@ joiValidationDecorator(
     receivedAt: joi
       .date()
       .iso()
-      .optional()
+      .required()
       .allow(null),
     respondents: joi.array().optional(),
     status: joi
       .string()
       .valid(...Object.values(Case.STATUS_TYPES))
-      .optional(),
+      .required(),
     trialDate: joi
       .date()
       .iso()
@@ -1343,6 +1343,16 @@ Case.prototype.canConsolidate = function(caseToConsolidate) {
  */
 Case.prototype.setLeadCase = function(leadCaseId) {
   this.leadCaseId = leadCaseId;
+  return this;
+};
+
+/**
+ * removes the consolidation from the case by setting leadCaseId to undefined
+ *
+ * @returns {Case} the updated Case entity
+ */
+Case.prototype.removeConsolidation = function() {
+  this.leadCaseId = undefined;
   return this;
 };
 
