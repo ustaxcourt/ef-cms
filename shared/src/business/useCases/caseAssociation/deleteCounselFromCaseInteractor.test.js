@@ -34,6 +34,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       getPersistenceGateway: () => ({
         deleteUserFromCase: deleteUserFromCaseMock,
         getCaseByCaseId: ({ caseId }) => ({
+          caseCaption: 'Caption',
           caseId,
           docketNumber: '123-19',
           practitioners: mockPractitioners,
