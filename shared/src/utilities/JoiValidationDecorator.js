@@ -125,13 +125,13 @@ exports.joiValidationDecorator = function(
 
   entityConstructor.prototype.isValid = function isValid() {
     return (
-      !!schema.validate(this.toRawObject(), { allowUnknown: true }).error ===
-        false && (customValidate ? customValidate.call(this) : true)
+      !!schema.validate(this, { allowUnknown: true }).error === false &&
+      (customValidate ? customValidate.call(this) : true)
     );
   };
 
   entityConstructor.prototype.getValidationError = function getValidationError() {
-    return schema.validate(this.toRawObject(), { allowUnknown: true }).error;
+    return schema.validate(this, { allowUnknown: true }).error;
   };
 
   entityConstructor.prototype.validate = function validate() {
@@ -149,9 +149,10 @@ exports.joiValidationDecorator = function(
   };
 
   entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
-    const { error } = schema.validate(this.toRawObject(), {
+    const { error } = schema.validate(this, {
       abortEarly: false,
       allowUnknown: true,
+      debug: true,
     });
     if (!error) return null;
     const errors = {};
