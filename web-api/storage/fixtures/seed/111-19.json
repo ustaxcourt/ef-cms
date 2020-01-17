@@ -115,6 +115,7 @@
     "docketRecord": [
       {
         "description": "Petition",
+        "eventCode": "P",
         "index": 1,
         "documentId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
         "filingDate": "2019-12-11T15:25:09.285Z",

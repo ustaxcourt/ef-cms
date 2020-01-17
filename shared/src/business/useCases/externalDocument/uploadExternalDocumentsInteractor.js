@@ -40,7 +40,7 @@ exports.uploadExternalDocumentsInteractor = async ({
   const uploadDocumentAndMakeSafe = async documentLabel => {
     const documentId = await applicationContext
       .getPersistenceGateway()
-      .uploadDocument({
+      .uploadDocumentFromClient({
         applicationContext,
         document: documentFiles[documentLabel],
         onUploadProgress: progressFunctions[documentLabel],

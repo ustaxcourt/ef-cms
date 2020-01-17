@@ -5,9 +5,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const {
-  sendServedPartiesEmails,
-} = require('../../utilities/sendServedPartiesEmails');
 const { capitalize, pick } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/WorkQueue');
@@ -169,6 +166,7 @@ exports.fileExternalDocumentInteractor = async ({
       const docketRecordEntity = new DocketRecord({
         description: metadata.documentTitle,
         documentId: documentEntity.documentId,
+        eventCode: documentEntity.eventCode,
         filingDate: documentEntity.receivedAt,
       });
       caseEntity.addDocketRecord(docketRecordEntity);
@@ -176,7 +174,7 @@ exports.fileExternalDocumentInteractor = async ({
       if (documentEntity.isAutoServed()) {
         documentEntity.setAsServed(servedParties.all);
 
-        await sendServedPartiesEmails({
+        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
           applicationContext,
           caseEntity: caseToUpdate,
           documentEntity,

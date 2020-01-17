@@ -154,7 +154,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
 
   const documentId = applicationContext.getUniqueId();
 
-  await applicationContext.getPersistenceGateway().saveDocument({
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: pdf,
     documentId,

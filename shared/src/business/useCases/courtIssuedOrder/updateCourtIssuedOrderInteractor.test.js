@@ -8,9 +8,19 @@ describe('updateCourtIssuedOrderInteractor', () => {
   let applicationContext;
 
   let caseRecord = {
+    caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     createdAt: '',
     docketNumber: '45678-18',
+    docketRecord: [
+      {
+        description: 'first record',
+        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+        eventCode: 'P',
+        filingDate: '2018-03-01T00:01:00.000Z',
+        index: 1,
+      },
+    ],
     documents: [
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

@@ -147,6 +147,7 @@ createJudgeAccount() {
 
 createAdmin "ustcadmin@example.com" "admin" "admin"
 
+createAccount "migrator@example.com" "admin" "" "" "admin"
 createManyAccounts "adc" "adc"
 createManyAccounts "admissionsclerk" "admissions"
 createManyAccounts "calendarclerk" "calendar"

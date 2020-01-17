@@ -184,7 +184,7 @@ exports.updateUserContactInformationInteractor = async ({
         pdfData: docketRecordPdf,
       });
 
-      await applicationContext.getPersistenceGateway().saveDocument({
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
         document: docketRecordPdfWithCover,
         documentId: newDocumentId,

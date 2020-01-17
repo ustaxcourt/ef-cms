@@ -35,18 +35,18 @@ const updateCaseStub = jest.fn();
 const generateChangeOfAddressTemplateStub = jest.fn();
 const generatePdfFromHtmlInteractorStub = jest.fn();
 const getAddressPhoneDiffStub = jest.fn();
-const saveDocumentStub = jest.fn();
-const sendBulkTemplatedEmailMock = jest.fn();
+const saveDocumentFromLambdaStub = jest.fn();
 const generatePaperServiceAddressPagePdfMock = jest
   .fn()
   .mockResolvedValue(testPdfDoc);
+const sendServedPartiesEmailsMock = jest.fn();
 
 let persistenceGateway = {
   getCaseByCaseId: () => MOCK_CASE,
   getDownloadPolicyUrl: () => ({
     url: 'https://www.example.com',
   }),
-  saveDocument: saveDocumentStub,
+  saveDocumentFromLambda: saveDocumentFromLambdaStub,
   saveWorkItemForNonPaper: () => null,
   updateCase: updateCaseStub,
 };
@@ -70,9 +70,6 @@ const applicationContext = {
   getCurrentUser: () => {
     return new User(userObj);
   },
-  getDispatchers: () => ({
-    sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
-  }),
   getPersistenceGateway: () => {
     return persistenceGateway;
   },
@@ -87,6 +84,7 @@ const applicationContext = {
   getUniqueId: () => 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
   getUseCaseHelpers: () => ({
     generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
+    sendServedPartiesEmails: sendServedPartiesEmailsMock,
   }),
   getUseCases: () => useCases,
   getUtilities: () => {
@@ -161,7 +159,7 @@ describe('update petitioner contact information on a case', () => {
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
-    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
   });
 
   it('updates petitioner contact when secondary contact info changes, serves the generated notice, and returns the download URL for the paper notice', async () => {
@@ -183,7 +181,7 @@ describe('update petitioner contact information on a case', () => {
     expect(updateCaseStub).toHaveBeenCalled();
     expect(generateChangeOfAddressTemplateStub).toHaveBeenCalled();
     expect(generatePdfFromHtmlInteractorStub).toHaveBeenCalled();
-    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('https://www.example.com');
   });
 
