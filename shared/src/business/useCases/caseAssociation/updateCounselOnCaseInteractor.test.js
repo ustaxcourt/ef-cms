@@ -33,6 +33,7 @@ describe('updateCounselOnCaseInteractor', () => {
         getCaseByCaseId: ({ caseId }) => ({
           caseCaption: 'Caption',
           caseId,
+          caseType: 'Deficiency',
           docketNumber: '123-19',
           docketRecord: [
             {

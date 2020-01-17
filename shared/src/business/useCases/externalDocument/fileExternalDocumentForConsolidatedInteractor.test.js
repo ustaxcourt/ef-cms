@@ -20,6 +20,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         caseCaption: 'Guy Fieri, Petitioner',
         caseId: caseId0,
+        caseType: 'Deficiency',
         contactPrimary: {
           email: 'fieri@example.com',
           name: 'Guy Fieri',
@@ -36,6 +37,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         caseCaption: 'Enzo Ferrari, Petitioner',
         caseId: caseId1,
+        caseType: 'Deficiency',
         contactPrimary: {
           email: 'ferrari@example.com',
           name: 'Enzo Ferrari',
@@ -52,6 +54,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         caseCaption: 'George Foreman, Petitioner',
         caseId: caseId2,
+        caseType: 'Deficiency',
         contactPrimary: {
           email: 'foreman@example.com',
           name: 'George Foreman',
