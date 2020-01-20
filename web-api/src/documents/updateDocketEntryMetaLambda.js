@@ -18,6 +18,7 @@ exports.handler = event =>
         .updateDocketEntryMetaInteractor({
           ...JSON.parse(event.body),
           applicationContext,
+          caseId: event.pathParameters.caseId,
         });
       applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
