@@ -296,10 +296,7 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
-    servedParties: joi
-      .array()
-      .items(joi.string())
-      .optional(),
+    servedParties: joi.array().optional(),
     serviceDate: joi
       .date()
       .iso()
