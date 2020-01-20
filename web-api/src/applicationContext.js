@@ -566,6 +566,9 @@ const {
   saveWorkItemForPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
+  sealCaseInteractor,
+} = require('../../shared/src/business/useCases/sealCaseInteractor');
+const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
@@ -1090,6 +1093,7 @@ module.exports = (appContextUser = {}) => {
         saveCaseNoteInteractor,
         saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
+        sealCaseInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
         serveCourtIssuedDocumentInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
