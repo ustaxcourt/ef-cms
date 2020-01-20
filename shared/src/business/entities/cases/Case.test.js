@@ -952,6 +952,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketRecord[2].description).toEqual(
         "Docket Number is amended from '123-19P' to '123-19W'",
       );
+      expect(caseToVerify.docketRecord[2].eventCode).toEqual('MIND');
     });
   });
 
