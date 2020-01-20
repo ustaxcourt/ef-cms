@@ -18,7 +18,7 @@ const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { Order } = require('../orders/Order');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
-// const { TrialSession } = require('../trialSessions/TrialSession');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
 const orderDocumentTypes = Order.ORDER_TYPES.map(
@@ -512,12 +512,14 @@ joiValidationDecorator(
         .required(),
     }),
     practitioners: joi.array().optional(),
-    preferredTrialCity: joi
-      .string()
-      .optional()
-      .allow(null),
-    // TODO: Add location validation after getting the Joi update merged.
-    // .valid(...TrialSession.TRIAL_CITY_STRINGS, null),
+    preferredTrialCity: joi.alternatives().try(
+      joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
+      joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+      joi
+        .string()
+        .optional()
+        .allow(null),
+    ),
     procedureType: joi.string().optional(),
     qcCompleteForTrial: joi.object().required(),
     receivedAt: joi
