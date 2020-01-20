@@ -109,7 +109,7 @@ describe('case information helper', () => {
     expect(result.showSealCaseButton).toBeFalsy();
   });
 
-  it('should show Seal Case button if user has SEAL_CASE permission', () => {
+  it('should show Seal Case button if user has SEAL_CASE permission and case is not already sealed', () => {
     const user = {
       role: User.ROLES.docketClerk, // has SEAL_CASE permission
       userId: '789',
@@ -122,5 +122,20 @@ describe('case information helper', () => {
       },
     });
     expect(result.showSealCaseButton).toBeTruthy();
+  });
+
+  it('should not show Seal Case button if user has SEAL_CASE permission and case is already sealed', () => {
+    const user = {
+      role: User.ROLES.docketClerk, // has SEAL_CASE permission
+      userId: '789',
+    };
+    const result = runCompute(caseInformationHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { sealedDate: '2019-03-01T21:40:46.415Z' },
+        form: {},
+      },
+    });
+    expect(result.showSealCaseButton).toBeFalsy();
   });
 });
