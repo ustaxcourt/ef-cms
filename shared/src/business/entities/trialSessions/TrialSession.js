@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
@@ -94,6 +94,10 @@ TrialSession.TRIAL_CITIES = {
   REGULAR: COMMON_CITIES,
   SMALL: SMALL_CITIES,
 };
+
+TrialSession.TRIAL_CITY_STRINGS = SMALL_CITIES.map(
+  location => `${location.city}, ${location.state}`,
+);
 
 TrialSession.SESSION_TERMS = ['Winter', 'Fall', 'Spring'];
 
@@ -226,7 +230,7 @@ TrialSession.validationRules = {
     postalCode: JoiValidationConstants.US_POSTAL_CODE.optional(),
     sessionType: joi
       .string()
-      .valid(TrialSession.SESSION_TYPES)
+      .valid(...TrialSession.SESSION_TYPES)
       .required(),
     startDate: joi
       .date()
@@ -240,7 +244,7 @@ TrialSession.validationRules = {
     status: joi
       .string()
       .valid(
-        Object.keys(TrialSession.STATUS_TYPES).map(
+        ...Object.keys(TrialSession.STATUS_TYPES).map(
           key => TrialSession.STATUS_TYPES[key],
         ),
       ),
@@ -257,7 +261,7 @@ TrialSession.validationRules = {
     }),
     term: joi
       .string()
-      .valid(TrialSession.SESSION_TERMS)
+      .valid(...TrialSession.SESSION_TERMS)
       .required(),
     termYear: joi.string().required(),
     trialClerk: joi.object().optional(),
@@ -301,7 +305,7 @@ joiValidationDecorator(
     status: joi
       .string()
       .valid(
-        Object.keys(TrialSession.STATUS_TYPES).map(
+        ...Object.keys(TrialSession.STATUS_TYPES).map(
           key => TrialSession.STATUS_TYPES[key],
         ),
       ),
