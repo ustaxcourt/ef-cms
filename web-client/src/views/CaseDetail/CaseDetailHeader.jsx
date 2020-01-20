@@ -22,6 +22,18 @@ export const CaseDetailHeader = connect(
   }) => {
     return (
       <>
+        {caseDetailHeaderHelper.showSealedCaseBanner && (
+          <div className="red-warning-header">
+            <div className="grid-container text-bold">
+              <FontAwesomeIcon
+                className="margin-right-1 icon-sealed"
+                icon="lock"
+                size="1x"
+              />
+              This case is sealed
+            </div>
+          </div>
+        )}
         <div className={classNames(className, 'big-blue-header')}>
           <div className="grid-container">
             <div className="display-flex flex-row flex-justify">
