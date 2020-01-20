@@ -50,7 +50,9 @@ export const UnconsolidateCasesModal = connect(
                     className="usa-checkbox__label"
                     htmlFor={`case-${consolidatedCase.caseId}`}
                   >
-                    {consolidatedCase.docketNumberWithSuffix}{' '}
+                    <div className="display-inline margin-right-1">
+                      {consolidatedCase.docketNumberWithSuffix}
+                    </div>
                     {consolidatedCase.caseName}
                   </label>
                 </div>
