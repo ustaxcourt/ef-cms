@@ -2,7 +2,6 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { EditDocketRecordEntryModal } from '../EditDocketRecordEntry/EditDocketRecordEntryModal';
-import { EditPetitionerInformation } from '../CaseDetail/EditPetitionerInformation';
 import { FilingsAndProceedings } from './FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
@@ -12,6 +11,7 @@ import classNames from 'classnames';
 
 export const DocketRecord = connect(
   {
+    docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     openEditDocketRecordEntryModalSequence:
       sequences.openEditDocketRecordEntryModalSequence,
@@ -19,6 +19,7 @@ export const DocketRecord = connect(
     showModal: state.showModal,
   },
   ({
+    docketRecordHelper,
     formattedCaseDetail,
     openEditDocketRecordEntryModalSequence,
     refreshCaseSequence,
@@ -58,7 +59,7 @@ export const DocketRecord = connect(
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
-              <th>&nbsp;</th>
+              {docketRecordHelper.showEditDocketRecordEntry && <th>&nbsp;</th>}
             </tr>
           </thead>
           <tbody>
@@ -128,20 +129,22 @@ export const DocketRecord = connect(
                       <span className="responsive-label">Parties</span>
                       {entry.servedPartiesCode}
                     </td>
-                    <td>
-                      <Button
-                        link
-                        className="padding-0"
-                        icon="edit"
-                        onClick={() => {
-                          openEditDocketRecordEntryModalSequence({
-                            index: entry.index,
-                          });
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    </td>
+                    {docketRecordHelper.showEditDocketRecordEntry && (
+                      <td>
+                        <Button
+                          link
+                          className="padding-0"
+                          icon="edit"
+                          onClick={() => {
+                            openEditDocketRecordEntryModalSequence({
+                              index: entry.index,
+                            });
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      </td>
+                    )}
                   </tr>
                 );
               },
