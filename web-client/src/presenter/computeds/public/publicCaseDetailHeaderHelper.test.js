@@ -14,18 +14,19 @@ describe('publicCaseDetailHeaderHelper', () => {
     };
   });
 
-  it('Should return the case title', () => {
+  it('Should return case detail helper information', () => {
     const result = runCompute(publicCaseDetailHeaderHelper, { state });
-    expect(result.caseTitle).toEqual('Test Title');
+    expect(result).toMatchObject({
+      caseTitle: 'Test Title',
+      docketNumber: '123-45',
+      docketNumberWithSuffix: '123-45S',
+      isCaseSealed: false,
+    });
   });
 
-  it('Should return the docket number', () => {
+  it('Should indicate a case is sealed if sealedDate has a valid date', () => {
+    state.caseDetail.sealedDate = '2019-09-19T16:42:00.000Z';
     const result = runCompute(publicCaseDetailHeaderHelper, { state });
-    expect(result.docketNumber).toEqual('123-45');
-  });
-
-  it('Should return the docket number with suffix', () => {
-    const result = runCompute(publicCaseDetailHeaderHelper, { state });
-    expect(result.docketNumberWithSuffix).toEqual('123-45S');
+    expect(result.isCaseSealed).toBe(true);
   });
 });

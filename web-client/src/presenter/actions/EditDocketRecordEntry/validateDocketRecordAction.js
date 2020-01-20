@@ -1,5 +1,5 @@
 /**
- * validates the petition.
+ * validates the docket record.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case

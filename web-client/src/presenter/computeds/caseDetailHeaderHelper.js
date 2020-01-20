@@ -39,6 +39,8 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const showCaseDetailHeaderMenu = !isExternalUser;
 
+  const showSealedCaseBanner = !!caseDetail.sealedDate;
+
   const showFileDocumentButton =
     permissions.FILE_EXTERNAL_DOCUMENT && userAssociatedWithCase;
 
@@ -54,5 +56,6 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     showFileFirstDocumentButton,
     showPendingAccessToCaseButton,
     showRequestAccessToCaseButton,
+    showSealedCaseBanner,
   };
 };
