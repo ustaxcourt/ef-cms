@@ -807,7 +807,7 @@ Case.prototype.updateDocketNumberRecord = function() {
     this.addDocketRecord(
       new DocketRecord({
         description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
-        eventCode: '-',
+        eventCode: 'MIND',
         filingDate: createISODateString(),
       }),
     );
