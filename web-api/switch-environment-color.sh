@@ -10,7 +10,7 @@ elif [[ $CURRENT_COLOR == 'blue' ]] ; then
   NEW_COLOR='green'
 fi
 
-aws dynamodb put-item --table-name "efcms-${slsStage}" --item '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"},"current":{"S":"'$NEW_COLOR'"}}'
+aws dynamodb put-item --region us-east-1 --table-name "efcms-${slsStage}" --item '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"},"current":{"S":"'$NEW_COLOR'"}}'
 
 # switch base path mappings to new color
 node switch-environment-color.js ${slsStage} 'us-east-1'
