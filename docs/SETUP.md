@@ -67,7 +67,7 @@
 
 ## Setting up a new environment
 1. Choose a name for the branch which will be used for deployments (henceforth `$BRANCH`). Examples are 'master', 'develop', 'staging'.
-2. Choose a name for this environment (henceforth `$ENVIRONMENT`), name limited to 4 characters. Examples are 'prod', 'dev', 'stg'.
+2. Choose a name for this environment (henceforth `$ENVIRONMENT`). Examples are 'prod', 'dev', 'stg'.
 3. Add CircleCI badge link to the README.md according to `$BRANCH`
 4. Edit `get-es-instance-count.sh`, adding a new `elif` statement for your `$BRANCH` which returns the appropriate number of ElasticSearch instances.
 5. Edit `get-keys.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the `$ENVIRONMENT`-specific Dynamsoft licensing keys; licensing requires that each environment use their own unique keys.
