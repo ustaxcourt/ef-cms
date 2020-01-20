@@ -8,12 +8,20 @@ describe('primePropsFromEditDocketRecordEntryModalAction', () => {
       primePropsFromEditDocketRecordEntryModalAction,
       {
         modules: { presenter },
-        state: { modal: { form: { something: '123' } } },
+        state: {
+          modal: {
+            caseId: '456',
+            docketRecordIndex: 1,
+            form: { something: '123' },
+          },
+        },
       },
     );
 
     expect(result.output).toEqual({
+      caseId: '456',
       docketRecordEntry: { something: '123' },
+      docketRecordIndex: 1,
       fromModal: true,
     });
   });
