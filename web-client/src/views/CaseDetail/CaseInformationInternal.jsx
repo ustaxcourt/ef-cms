@@ -51,7 +51,9 @@ const PetitionDetails = ({
             className="red-warning"
             icon="lock"
             onClick={() => {
-              openCleanModalSequence();
+              openCleanModalSequence({
+                showModal: 'SealCaseModal',
+              });
             }}
           >
             Seal Case
