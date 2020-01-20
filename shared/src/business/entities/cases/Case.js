@@ -515,8 +515,9 @@ joiValidationDecorator(
     preferredTrialCity: joi
       .string()
       .optional()
-      // .allow(null)
-      .valid(...TrialSession.TRIAL_CITY_STRINGS, null),
+      .allow(null),
+    // TODO: Add location validation after getting the Joi update merged.
+    // .valid(...TrialSession.TRIAL_CITY_STRINGS, null),
     procedureType: joi.string().optional(),
     qcCompleteForTrial: joi.object().required(),
     receivedAt: joi
