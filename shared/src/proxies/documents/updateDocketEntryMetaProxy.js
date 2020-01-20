@@ -10,7 +10,7 @@ const { put } = require('../requests');
  * @param {object} providers.docketEntryMeta the docket entry metadata
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateDocketEntryInteractor = ({
+exports.updateDocketEntryMetaInteractor = ({
   applicationContext,
   caseId,
   docketEntryMeta,
