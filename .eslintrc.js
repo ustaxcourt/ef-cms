@@ -246,6 +246,7 @@ module.exports = {
           'reindex',
           'renderer',
           'rescan',
+          'restapi',
           'riker',
           'ruwe',
           'ruwes',
