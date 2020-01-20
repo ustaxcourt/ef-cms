@@ -5,7 +5,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 let applicationContext;
-let getCaseByDocketNumberMock;
+let getCaseCaseIdNumberMock;
 let updateCaseMock;
 let docketRecord;
 let documents;
@@ -47,16 +47,21 @@ describe('updateDocketEntryMetaInteractor', () => {
     },
   ];
 
-  const casesByDocketNumber = {
-    '101-20': { ...MOCK_CASE, docketRecord, documents },
+  const caseByCaseId = {
+    'cccba5a9-b37b-479d-9201-067ec6e33ccc': {
+      ...MOCK_CASE,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+      docketRecord,
+      documents,
+    },
   };
 
-  getCaseByDocketNumberMock = jest.fn(({ docketNumber }) => {
-    return casesByDocketNumber[docketNumber];
+  getCaseCaseIdNumberMock = jest.fn(({ caseId }) => {
+    return caseByCaseId[caseId];
   });
 
   updateCaseMock = jest.fn(({ caseToUpdate }) => {
-    casesByDocketNumber[caseToUpdate.docketNumber] = caseToUpdate;
+    caseByCaseId[caseToUpdate.caseId] = caseToUpdate;
   });
 
   beforeEach(() => {
@@ -66,7 +71,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
       }),
       getPersistenceGateway: () => ({
-        getCaseByDocketNumber: getCaseByDocketNumberMock,
+        getCaseByCaseId: getCaseCaseIdNumberMock,
         updateCase: updateCaseMock,
       }),
     };
@@ -81,7 +86,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     try {
       await updateDocketEntryMetaInteractor({
         applicationContext,
-        docketNumber: '101-20',
+        caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       });
     } catch (err) {
       error = err;
@@ -96,34 +101,36 @@ describe('updateDocketEntryMetaInteractor', () => {
     try {
       await updateDocketEntryMetaInteractor({
         applicationContext,
-        docketNumber: '101-21',
+        caseId: 'xxxba5a9-b37b-479d-9201-067ec6e33xxx',
       });
     } catch (err) {
       error = err;
     }
 
-    expect(error.message).toContain('Case 101-21 was not found.');
+    expect(error.message).toContain(
+      'Case xxxba5a9-b37b-479d-9201-067ec6e33xxx was not found.',
+    );
     expect(error).toBeInstanceOf(NotFoundError);
   });
 
   it('should call the persistence method to load the case by its docket number', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {},
-      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
-    expect(getCaseByDocketNumberMock).toHaveBeenCalled();
+    expect(getCaseCaseIdNumberMock).toHaveBeenCalled();
   });
 
   it('should update the docket record description', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         description: 'Updated Description',
       },
-      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -137,10 +144,10 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should update the docket record filedBy', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         filedBy: 'New Filer',
       },
-      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -154,10 +161,10 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should update the document servedAt', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         servedAt: '2020-01-01T00:01:00.000Z',
       },
-      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -175,10 +182,10 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should update the document servedParties', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         servedParties: ['Served Party One', 'Served Party Two'],
       },
-      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
@@ -199,10 +206,10 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should call the updateCase persistence method', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
       docketEntryMeta: {
         description: 'Updated Description',
       },
-      docketNumber: '101-20',
       docketRecordIndex: 0,
     });
 
