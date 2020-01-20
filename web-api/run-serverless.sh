@@ -28,11 +28,15 @@ export SLS_DEBUG="*"
 
 CURRENT_COLOR=$(aws dynamodb get-item --table-name "efcms-${slsStage}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")
 
+echo "current color: ${CURRENT_COLOR}"
+
 if [[ $CURRENT_COLOR == 'green' ]] ; then
   NEW_COLOR='blue'
 elif [[ $CURRENT_COLOR == 'blue' ]] ; then
   NEW_COLOR='green'
 fi
+
+echo "new color: ${NEW_COLOR}"
 
 set -- \
   --accountId "${ACCOUNT_ID}" \
