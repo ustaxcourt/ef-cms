@@ -9,6 +9,8 @@ import { state } from 'cerebral';
  */
 export const primePropsFromEditDocketRecordEntryModalAction = ({ get }) => {
   const docketRecordEntry = get(state.modal.form);
+  const caseId = get(state.modal.caseId);
+  const docketRecordIndex = get(state.modal.docketRecordIndex);
 
-  return { docketRecordEntry };
+  return { caseId, docketRecordEntry, docketRecordIndex, fromModal: true };
 };

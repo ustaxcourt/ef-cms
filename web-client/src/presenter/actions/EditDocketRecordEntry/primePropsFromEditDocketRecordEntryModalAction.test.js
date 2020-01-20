@@ -14,6 +14,7 @@ describe('primePropsFromEditDocketRecordEntryModalAction', () => {
 
     expect(result.output).toEqual({
       docketRecordEntry: { something: '123' },
+      fromModal: true,
     });
   });
 });
