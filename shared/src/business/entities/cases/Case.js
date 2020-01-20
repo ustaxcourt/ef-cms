@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   createISODateString,
   formatDateString,
@@ -18,6 +18,7 @@ const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { Order } = require('../orders/Order');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
 const orderDocumentTypes = Order.ORDER_TYPES.map(
@@ -247,6 +248,7 @@ function Case(rawCase, { applicationContext }) {
   this.procedureType = rawCase.procedureType;
   this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
+  this.sealedDate = rawCase.sealedDate;
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
@@ -368,7 +370,7 @@ joiValidationDecorator(
     caseNote: joi.string().optional(),
     caseType: joi
       .string()
-      .valid(Case.CASE_TYPES)
+      .valid(...Case.CASE_TYPES)
       .required(),
     contactPrimary: joi
       .object()
@@ -391,17 +393,22 @@ joiValidationDecorator(
     docketNumberSuffix: joi
       .string()
       .allow(null)
-      .valid(Object.values(Case.DOCKET_NUMBER_SUFFIXES))
+      .valid(...Object.values(Case.DOCKET_NUMBER_SUFFIXES))
       .optional(),
-    docketRecord: joi.array().required(),
-    documents: joi.array().optional(),
+    docketRecord: joi
+      .array()
+      .required()
+      .description('List of DocketRecord Entities for the Case.'),
+    documents: joi
+      .array()
+      .items(joi.object().meta({ filename: 'Document', name: 'Document' }))
+      .optional()
+      .description('List of Document Entities for the Case.'),
     filingType: joi
       .string()
       .valid(
-        [
-          Case.FILING_TYPES[User.ROLES.petitioner],
-          [Case.FILING_TYPES[User.ROLES.practitioner]],
-        ].flat(),
+        ...Case.FILING_TYPES[User.ROLES.petitioner],
+        ...Case.FILING_TYPES[User.ROLES.practitioner],
       )
       .optional(),
     hasIrsNotice: joi.boolean().optional(),
@@ -432,14 +439,18 @@ joiValidationDecorator(
     irsSendDate: joi
       .date()
       .iso()
-      .optional(),
+      .optional()
+      .description('When the Case was sent to the IRS.'),
     isPaper: joi.boolean().optional(),
     leadCaseId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
-      .optional(),
+      .optional()
+      .description(
+        'If this Case is consolidated, this is the ID of the lead Case.',
+      ),
     mailingDate: joi.when('isPaper', {
       is: true,
       otherwise: joi
@@ -487,7 +498,7 @@ joiValidationDecorator(
     }),
     petitionPaymentStatus: joi
       .string()
-      .valid(Object.values(Case.PAYMENT_STATUS))
+      .valid(...Object.values(Case.PAYMENT_STATUS))
       .required(),
     petitionPaymentWaivedDate: joi.when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.WAIVED,
@@ -502,21 +513,31 @@ joiValidationDecorator(
         .required(),
     }),
     practitioners: joi.array().optional(),
-    preferredTrialCity: joi
-      .string()
-      .optional()
-      .allow(null),
+    preferredTrialCity: joi.alternatives().try(
+      joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
+      joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+      joi
+        .string()
+        .optional()
+        .allow(null),
+    ),
     procedureType: joi.string().optional(),
     qcCompleteForTrial: joi.object().required(),
     receivedAt: joi
       .date()
       .iso()
       .required()
-      .allow(null),
+      .allow(null)
+      .description('When the case was received by the Court.'),
     respondents: joi.array().optional(),
+    sealedDate: joi
+      .date()
+      .iso()
+      .optional()
+      .allow(null),
     status: joi
       .string()
-      .valid(Object.values(Case.STATUS_TYPES))
+      .valid(...Object.values(Case.STATUS_TYPES))
       .required(),
     trialDate: joi
       .date()
@@ -531,7 +552,10 @@ joiValidationDecorator(
       })
       .optional(),
     trialTime: joi.string().optional(),
-    userId: joi.string().optional(),
+    userId: joi
+      .string()
+      .optional()
+      .description('The user who added the Case to the System.'),
     workItems: joi.array().optional(),
   }),
   function() {

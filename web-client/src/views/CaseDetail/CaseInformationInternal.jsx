@@ -9,7 +9,11 @@ import { sequences } from 'cerebral';
 import { state } from 'cerebral';
 import React from 'react';
 
-const PetitionDetails = ({ caseDetail }) => (
+const PetitionDetails = ({
+  caseDetail,
+  caseInformationHelper,
+  openCleanModalSequence,
+}) => (
   <React.Fragment>
     <div className="grid-row">
       <div className="grid-col-6">
@@ -40,6 +44,20 @@ const PetitionDetails = ({ caseDetail }) => (
           {caseDetail.formattedPreferredTrialCity}
         </p>
       </div>
+      {caseInformationHelper.showSealCaseButton && (
+        <div className="grid-col-6">
+          <Button
+            link
+            className="red-warning"
+            icon="lock"
+            onClick={() => {
+              openCleanModalSequence();
+            }}
+          >
+            Seal Case
+          </Button>
+        </div>
+      )}
     </div>
   </React.Fragment>
 );
@@ -256,6 +274,7 @@ const TrialInformation = ({
 export const CaseInformationInternal = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
+    caseInformationHelper: state.caseInformationHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence:
       sequences.navigateToPrintableCaseConfirmationSequence,
@@ -272,6 +291,7 @@ export const CaseInformationInternal = connect(
   },
   ({
     caseDetailHelper,
+    caseInformationHelper,
     formattedCaseDetail,
     navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence,
@@ -323,7 +343,8 @@ export const CaseInformationInternal = connect(
 
                   <PetitionDetails
                     caseDetail={formattedCaseDetail}
-                    caseDetailHelper={caseDetailHelper}
+                    caseInformationHelper={caseInformationHelper}
+                    openCleanModalSequence={openCleanModalSequence}
                   />
                 </div>
               </div>

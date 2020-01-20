@@ -1,4 +1,5 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
+const { makeMarkdownDoc } = require('joi-md-doc');
 
 /**
  *
@@ -110,6 +111,10 @@ exports.joiValidationDecorator = function(
   customValidate,
   errorToMessageMap = {},
 ) {
+  if (!schema.validate && typeof schema === 'object') {
+    schema = joi.object().keys({ ...schema });
+  }
+
   entityConstructor.prototype.getErrorToMessageMap = function() {
     return errorToMessageMap;
   };
@@ -118,15 +123,21 @@ exports.joiValidationDecorator = function(
     return schema;
   };
 
+  entityConstructor.generateSchemaMarkdown = function(outputPath) {
+    const name = entityConstructor.validationName;
+
+    makeMarkdownDoc(schema.meta({ filename: name, name }), { outputPath });
+  };
+
   entityConstructor.prototype.isValid = function isValid() {
     return (
-      joi.validate(this, schema, { allowUnknown: true }).error === null &&
+      !!schema.validate(this, { allowUnknown: true }).error === false &&
       (customValidate ? customValidate.call(this) : true)
     );
   };
 
   entityConstructor.prototype.getValidationError = function getValidationError() {
-    return joi.validate(this, schema, { allowUnknown: true }).error;
+    return schema.validate(this, { allowUnknown: true }).error;
   };
 
   entityConstructor.prototype.validate = function validate() {
@@ -144,7 +155,7 @@ exports.joiValidationDecorator = function(
   };
 
   entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
-    const { error } = joi.validate(this, schema, {
+    const { error } = schema.validate(this, {
       abortEarly: false,
       allowUnknown: true,
     });
