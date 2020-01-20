@@ -11,7 +11,13 @@ function toRawObject(entity) {
   for (let key of keys) {
     const value = entity[key];
     if (Array.isArray(value)) {
-      obj[key] = value.map(v => toRawObject(v));
+      obj[key] = value.map(v => {
+        if (typeof v === 'string' || v instanceof String) {
+          return v;
+        } else {
+          return toRawObject(v);
+        }
+      });
     } else if (typeof value === 'object' && value !== null) {
       obj[key] = toRawObject(value);
     } else {
