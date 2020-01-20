@@ -1,5 +1,8 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
+import { EditDocketRecordEntryModal } from '../EditDocketRecordEntry/EditDocketRecordEntryModal';
+import { EditPetitionerInformation } from '../CaseDetail/EditPetitionerInformation';
 import { FilingsAndProceedings } from './FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
@@ -10,10 +13,17 @@ import classNames from 'classnames';
 export const DocketRecord = connect(
   {
     formattedCaseDetail: state.formattedCaseDetail,
+    openEditDocketRecordEntryModalSequence:
+      sequences.openEditDocketRecordEntryModalSequence,
     refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.showModal,
   },
-  ({ formattedCaseDetail, refreshCaseSequence, showModal }) => {
+  ({
+    formattedCaseDetail,
+    openEditDocketRecordEntryModalSequence,
+    refreshCaseSequence,
+    showModal,
+  }) => {
     useEffect(() => {
       const interval = setInterval(() => {
         refreshCaseSequence();
@@ -48,6 +58,7 @@ export const DocketRecord = connect(
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
+              <th>&nbsp;</th>
             </tr>
           </thead>
           <tbody>
@@ -117,6 +128,20 @@ export const DocketRecord = connect(
                       <span className="responsive-label">Parties</span>
                       {entry.servedPartiesCode}
                     </td>
+                    <td>
+                      <Button
+                        link
+                        className="padding-0"
+                        icon="edit"
+                        onClick={() => {
+                          openEditDocketRecordEntryModalSequence({
+                            index: entry.index,
+                          });
+                        }}
+                      >
+                        EditPetitionerInformation
+                      </Button>
+                    </td>
                   </tr>
                 );
               },
@@ -124,6 +149,9 @@ export const DocketRecord = connect(
           </tbody>
         </table>
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
+        {showModal == 'EditDocketRecordEntryModal' && (
+          <EditDocketRecordEntryModal />
+        )}
       </>
     );
   },

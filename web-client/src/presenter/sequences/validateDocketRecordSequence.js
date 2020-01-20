@@ -1,6 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { primePropsFromEditDocketRecordEntryModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketRecordEntryModalAction';
-import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateDocketRecordAction } from '../actions/EditDocketRecordEntry/validateDocketRecordAction';
 
@@ -12,7 +12,7 @@ export const validateDocketRecordSequence = [
       primePropsFromEditDocketRecordEntryModalAction,
       validateDocketRecordAction,
       {
-        error: [setValidationErrorsAction],
+        error: [setValidationErrorsByFlagAction],
         success: [clearAlertsAction],
       },
     ],
