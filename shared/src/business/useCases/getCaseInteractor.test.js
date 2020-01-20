@@ -103,7 +103,7 @@ describe('Get case', () => {
             docketNumber: '00101-00',
             documents,
             petitioners: [{ name: 'Test Petitioner' }],
-            preferredTrialCity: 'Washington, D.C.',
+            preferredTrialCity: 'Washington, District of Columbia',
             procedureType: 'Regular',
           }),
       }),
@@ -139,7 +139,7 @@ describe('Get case', () => {
               docketNumber: '00101-00',
               documents,
               petitioners: [{ name: 'Test Petitioner' }],
-              preferredTrialCity: 'Washington, D.C.',
+              preferredTrialCity: 'Washington, District of Columbia',
               procedureType: 'Regular',
             },
           ]),
@@ -178,7 +178,7 @@ describe('Get case', () => {
               hasIrsNotice: false,
               partyType: ContactFactory.PARTY_TYPES.petitioner,
               petitioners: [{ name: 'Test Petitioner' }],
-              preferredTrialCity: 'Washington, D.C.',
+              preferredTrialCity: 'Washington, District of Columbia',
               procedureType: 'Regular',
             }),
         };
@@ -194,7 +194,7 @@ describe('Get case', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'The Case entity was invalid ValidationError: child "docketNumber" fails because ["docketNumber" is required]',
+      'The Case entity was invalid ValidationError: "docketNumber" is required',
     );
   });
 });

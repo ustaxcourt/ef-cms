@@ -288,6 +288,19 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
+    it('Creates a valid case with sealedDate set to a valid date', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          sealedDate: '2019-09-19T16:42:00.000Z',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
     describe('with different payment statuses', () => {
       it('requires payment date and method if petition fee status is paid', () => {
         const myCase = new Case(
@@ -1236,9 +1249,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
@@ -1255,9 +1268,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-S-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-S-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
@@ -1274,9 +1287,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-R-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-R-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
@@ -1293,9 +1306,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-R-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-R-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
@@ -1313,9 +1326,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-S-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-S-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
   });
@@ -2438,6 +2451,21 @@ describe('Case entity', () => {
       expect(caseEntity.qcCompleteForTrial).toEqual({
         '80950eee-7efd-4374-a642-65a8262135ab': true,
       });
+    });
+  });
+
+  it('required messages display for non-defaulted fields when an empty case is validated', () => {
+    const myCase = new Case(
+      {},
+      {
+        applicationContext,
+      },
+    );
+
+    expect(myCase.getFormattedValidationErrors()).toEqual({
+      caseCaption: 'Enter a case caption',
+      caseType: 'Select a case type',
+      docketNumber: 'Docket number is required',
     });
   });
 });

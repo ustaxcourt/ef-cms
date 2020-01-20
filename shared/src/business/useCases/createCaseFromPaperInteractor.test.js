@@ -263,7 +263,7 @@ describe('createCaseFromPaperInteractor', () => {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
           petitionFileSize: 1,
-          preferredTrialCity: 'Chattanooga, TN',
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
           receivedAt: new Date().toISOString(),
         },

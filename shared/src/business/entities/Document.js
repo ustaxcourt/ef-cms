@@ -1,7 +1,7 @@
 const courtIssuedEventCodes = require('../../tools/courtIssuedEventCodes.json');
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -252,7 +252,7 @@ joiValidationDecorator(
     documentTitle: joi.string().optional(),
     documentType: joi
       .string()
-      .valid(Document.getDocumentTypes())
+      .valid(...Document.getDocumentTypes())
       .required(),
     draftState: joi.object().optional(),
     eventCode: joi.string().optional(),

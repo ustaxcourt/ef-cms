@@ -67,5 +67,14 @@ describe('DocketRecord', () => {
     it('fails validation if nothing is passed in', () => {
       expect(new DocketRecord({}).isValid()).toBeFalsy();
     });
+
+    it('required messages display for required fields when an empty docket record is validated', () => {
+      expect(new DocketRecord({}).getFormattedValidationErrors()).toEqual({
+        description: 'Enter a description',
+        eventCode: 'Enter an event code',
+        filingDate: 'Enter a valid filing date',
+        index: 'Enter an index',
+      });
+    });
   });
 });

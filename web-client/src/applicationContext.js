@@ -22,6 +22,7 @@ import { CaseSearch } from '../../shared/src/business/entities/cases/CaseSearch'
 import { ContactFactory } from '../../shared/src/business/entities/contacts/ContactFactory';
 import { CourtIssuedDocumentFactory } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentFactory';
 import { DocketEntryFactory } from '../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { DocketRecord } from '../../shared/src/business/entities/DocketRecord';
 import { Document } from '../../shared/src/business/entities/Document';
 import { EditPractitionerFactory } from '../../shared/src/business/entities/caseAssociation/EditPractitionerFactory';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
@@ -36,6 +37,7 @@ import {
 } from '../../shared/src/business/utilities/sortFunctions';
 import { fetchPendingItemsInteractor } from '../../shared/src/proxies/pendingItems/fetchPendingItemsProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
+import { validateDocketRecordInteractor } from '../../shared/src/business/useCases/validateDocketRecordInteractor';
 const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
@@ -380,6 +382,7 @@ const allUseCases = {
   validateCaseDetailInteractor,
   validateCourtIssuedDocketEntryInteractor,
   validateDocketEntryInteractor,
+  validateDocketRecordInteractor,
   validateEditPractitionerInteractor,
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
@@ -484,6 +487,7 @@ const applicationContext = {
     ContactFactory,
     CourtIssuedDocumentFactory,
     DocketEntryFactory,
+    DocketRecord,
     Document,
     EditPractitionerFactory,
     ExternalDocumentFactory,

@@ -143,14 +143,14 @@ describe('updatePetitionDetailsAction', () => {
       },
       state: {
         caseDetail: { caseId: '123' },
-        form: { preferredTrialCity: 'Somewhere, USA' },
+        form: { preferredTrialCity: 'Fresno, California' },
       },
     });
 
     expect(updatePetitionDetailsInteractorStub).toHaveBeenCalled();
     expect(updatePetitionDetailsInteractorStub.mock.calls[0][0]).toMatchObject({
       petitionDetails: {
-        preferredTrialCity: 'Somewhere, USA',
+        preferredTrialCity: 'Fresno, California',
       },
     });
   });
