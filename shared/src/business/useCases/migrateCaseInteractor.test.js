@@ -76,7 +76,7 @@ describe('migrateCaseInteractor', () => {
       partyType: ContactFactory.PARTY_TYPES.petitioner,
       petitionFile: new File([], 'test.pdf'),
       petitionFileSize: 1,
-      preferredTrialCity: 'Chattanooga, TN',
+      preferredTrialCity: 'Fresno, California',
       procedureType: 'Small',
       signature: true,
       stinFile: new File([], 'test.pdf'),
@@ -110,7 +110,7 @@ describe('migrateCaseInteractor', () => {
           filingType: 'Myself',
           hasIrsNotice: true,
           partyType: ContactFactory.PARTY_TYPES.petitioner,
-          preferredTrialCity: 'Chattanooga, TN',
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
         },
       });
