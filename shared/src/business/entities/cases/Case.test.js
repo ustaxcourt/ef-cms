@@ -2439,4 +2439,19 @@ describe('Case entity', () => {
       });
     });
   });
+
+  it('required messages display for non-defaulted fields when an empty case is validated', () => {
+    const myCase = new Case(
+      {},
+      {
+        applicationContext,
+      },
+    );
+
+    expect(myCase.getFormattedValidationErrors()).toEqual({
+      caseCaption: 'Enter a case caption',
+      caseType: 'Select a case type',
+      docketNumber: 'Docket number is required',
+    });
+  });
 });
