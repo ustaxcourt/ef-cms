@@ -9,13 +9,13 @@ export const EditDocketRecordEntryModal = connect(
   {
     form: state.modal.form,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateDocketEntrySequence: sequences.validateDocketEntrySequence,
+    validateDocketRecordSequence: sequences.validateDocketRecordSequence,
     validationErrors: state.modal.validationErrors,
   },
   ({
     form,
     updateModalValueSequence,
-    validateDocketEntrySequence,
+    validateDocketRecordSequence,
     validationErrors,
   }) => {
     return (
@@ -43,7 +43,7 @@ export const EditDocketRecordEntryModal = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateDocketEntrySequence();
+              validateDocketRecordSequence();
             }}
           />
         </FormGroup>
@@ -62,7 +62,7 @@ export const EditDocketRecordEntryModal = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateDocketEntrySequence();
+              validateDocketRecordSequence();
             }}
           />
         </FormGroup>
@@ -81,7 +81,7 @@ export const EditDocketRecordEntryModal = connect(
                 key: e.target.name,
                 value: e.target.value,
               });
-              validateDocketEntrySequence();
+              validateDocketRecordSequence();
             }}
           />
         </FormGroup>
