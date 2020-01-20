@@ -187,6 +187,7 @@ import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequ
 import { saveIntermediateDocketEntrySequence } from './sequences/saveIntermediateDocketEntrySequence';
 import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
+import { sealCaseSequence } from './sequences/sealCaseSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
@@ -532,6 +533,7 @@ export const presenter = {
     saveIntermediateDocketEntrySequence,
     scannerShutdownSequence,
     scannerStartupSequence,
+    sealCaseSequence,
     selectAssigneeSequence,
     selectDateRangeFromCalendarSequence,
     selectDocumentForPreviewSequence,

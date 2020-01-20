@@ -1487,4 +1487,14 @@ Case.prototype.setQcCompleteForTrial = function({
   return this;
 };
 
+/**
+ * sets the sealedDate on a case to the current date and time
+ *
+ * @returns {Case} this case entity
+ */
+Case.prototype.setAsSealed = function() {
+  this.sealedDate = createISODateString();
+  return this;
+};
+
 module.exports = { Case };

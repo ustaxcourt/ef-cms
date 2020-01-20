@@ -17,6 +17,7 @@ module.exports = {
     .handler,
   saveCaseDetailInternalEditLambda: require('./cases/saveCaseDetailInternalEditLambda')
     .handler,
+  sealCaseLambda: require('./cases/sealCaseLambda').handler,
   sendPetitionToIRSHoldingQueueLambda: require('./cases/sendPetitionToIRSHoldingQueueLambda')
     .handler,
   unblockCaseFromTrialLambda: require('./cases/unblockCaseFromTrialLambda')
