@@ -139,7 +139,7 @@ export const DocketRecord = connect(
                           });
                         }}
                       >
-                        EditPetitionerInformation
+                        Edit
                       </Button>
                     </td>
                   </tr>
