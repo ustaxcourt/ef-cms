@@ -1,5 +1,5 @@
 import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
-const { MOCK_CASE } = require('../../test/mockCase');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -15,12 +15,16 @@ describe('updateDocketEntryMetaInteractor', () => {
     {
       documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
       documentType: 'Order',
+      servedDate: '2019-01-01T00:01:00.000Z',
       servedParties: ['Some Party'],
+      userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
     },
     {
       documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
       documentType: 'Order',
+      servedDate: '2019-01-02T00:01:00.000Z',
       servedParties: ['Some Other Party'],
+      userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
     },
   ];
 
@@ -51,7 +55,9 @@ describe('updateDocketEntryMetaInteractor', () => {
     return casesByDocketNumber[docketNumber];
   });
 
-  updateCaseMock = jest.fn();
+  updateCaseMock = jest.fn(({ caseToUpdate }) => {
+    casesByDocketNumber[caseToUpdate.docketNumber] = caseToUpdate;
+  });
 
   beforeEach(() => {
     applicationContext = {
@@ -80,16 +86,12 @@ describe('updateDocketEntryMetaInteractor', () => {
     } catch (err) {
       error = err;
     }
+
     expect(error.message).toContain('Unauthorized');
     expect(error).toBeInstanceOf(UnauthorizedError);
   });
 
   it('should throw a Not Found error if the case does not exist', async () => {
-    applicationContext = {
-      getCurrentUser: () => {
-        return {};
-      },
-    };
     let error;
     try {
       await updateDocketEntryMetaInteractor({
@@ -99,6 +101,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     } catch (err) {
       error = err;
     }
+
     expect(error.message).toContain('Case 101-21 was not found.');
     expect(error).toBeInstanceOf(NotFoundError);
   });
@@ -106,7 +109,9 @@ describe('updateDocketEntryMetaInteractor', () => {
   it('should call the persistence method to load the case by its docket number', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
+      docketEntryMeta: {},
       docketNumber: '101-20',
+      docketRecordIndex: 0,
     });
 
     expect(getCaseByDocketNumberMock).toHaveBeenCalled();
@@ -146,11 +151,11 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(updatedDocketEntry.filedBy).toEqual('New Filer');
   });
 
-  it('should update the docket record servedDate', async () => {
+  it('should update the document servedAt', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
       docketEntryMeta: {
-        servedDate: '2020-01-01T00:01:00.000Z',
+        servedAt: '2020-01-01T00:01:00.000Z',
       },
       docketNumber: '101-20',
       docketRecordIndex: 0,
@@ -160,7 +165,11 @@ describe('updateDocketEntryMetaInteractor', () => {
       record => record.index === 0,
     );
 
-    expect(updatedDocketEntry.servedDate).toEqual('2020-01-01T00:01:00.000Z');
+    const updatedDocument = result.documents.find(
+      document => document.documentId === updatedDocketEntry.documentId,
+    );
+
+    expect(updatedDocument.servedAt).toEqual('2020-01-01T00:01:00.000Z');
   });
 
   it('should update the document servedParties', async () => {
