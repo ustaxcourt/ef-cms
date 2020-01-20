@@ -253,6 +253,18 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showCreateOrderButton).toEqual(true);
   });
 
+  it('should show the Sealed Case banner if the sealedDate on the case has a non-empty value', () => {
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        caseDetail: { sealedDate: '2019-09-19T16:42:00.000Z' },
+        currentPage: 'CaseDetail',
+        form: {},
+        permissions: {},
+      },
+    });
+    expect(result.showSealedCaseBanner).toEqual(true);
+  });
+
   it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
