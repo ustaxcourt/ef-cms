@@ -34,7 +34,7 @@ describe('validateDocketRecordAction', () => {
     };
   });
 
-  it('should call the path success when no errors are found', async () => {
+  it('should call the success path when no errors are found', async () => {
     validateDocketRecordInteractorStub.returns(null);
     await runAction(validateDocketRecordAction, {
       modules: {
@@ -48,7 +48,7 @@ describe('validateDocketRecordAction', () => {
     expect(successStub.calledOnce).toEqual(true);
   });
 
-  it('should call the path error when any errors are found', async () => {
+  it('should call the error path when any errors are found', async () => {
     validateDocketRecordInteractorStub.returns('error');
     await runAction(validateDocketRecordAction, {
       modules: {
