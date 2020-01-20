@@ -18,7 +18,7 @@ const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
 const { Order } = require('../orders/Order');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
-const { TrialSession } = require('../trialSessions/TrialSession');
+// const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
 const orderDocumentTypes = Order.ORDER_TYPES.map(
