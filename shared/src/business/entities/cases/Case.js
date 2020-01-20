@@ -248,6 +248,7 @@ function Case(rawCase, { applicationContext }) {
   this.procedureType = rawCase.procedureType;
   this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
+  this.sealedDate = rawCase.sealedDate;
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
@@ -529,6 +530,11 @@ joiValidationDecorator(
       .allow(null)
       .description('When the case was received by the Court.'),
     respondents: joi.array().optional(),
+    sealedDate: joi
+      .date()
+      .iso()
+      .optional()
+      .allow(null),
     status: joi
       .string()
       .valid(...Object.values(Case.STATUS_TYPES))
