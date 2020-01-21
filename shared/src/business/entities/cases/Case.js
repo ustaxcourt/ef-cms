@@ -342,7 +342,7 @@ joiValidationDecorator(
     associatedJudge: joi
       .string()
       .required()
-      .description('Defaults to Chielf Judge.'),
+      .description('Defaults to Chief Judge.'),
     blocked: joi
       .boolean()
       .optional()
@@ -419,7 +419,8 @@ joiValidationDecorator(
         ...Case.FILING_TYPES[User.ROLES.petitioner],
         ...Case.FILING_TYPES[User.ROLES.practitioner],
       )
-      .required(),
+      // TODO: What is this when the case is created by a Petitions Clerk?
+      .optional(),
     hasIrsNotice: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
       .boolean()
@@ -459,7 +460,7 @@ joiValidationDecorator(
       })
       .optional()
       .description(
-        'If this Case is consolidated, this is the ID of the lead Case. It is the lowest number in the consolidated group.',
+        'If this Case is consolidated, this is the ID of the lead Case. It is the lowest Docket Number in the consolidated group.',
       ),
     mailingDate: joi.when('isPaper', {
       is: true,
@@ -486,8 +487,10 @@ joiValidationDecorator(
     orderForRatification: joi.boolean().optional(),
     orderToChangeDesignatedPlaceOfTrial: joi.boolean().optional(),
     orderToShowCause: joi.boolean().optional(),
-    // TODO: Add ContactFactory.PARTY_TYPES
-    partyType: joi.string().required(),
+    partyType: joi
+      .string()
+      .valid(...Object.values(ContactFactory.PARTY_TYPES))
+      .required(),
     petitionPaymentDate: joi.when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.PAID,
       otherwise: joi
