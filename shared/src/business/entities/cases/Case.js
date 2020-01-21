@@ -1117,6 +1117,18 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
 };
 
 /**
+ * returns true if the case status is associated with the userId
+ *
+ * @param {string} userId id of the user account
+ * @returns {boolean} if the case is associated
+ */
+const isAssociatedUser = function({ caseRaw, userId }) {
+  const isRespondent = caseRaw.respondents.contains(userId);
+  const isPractitioner = caseRaw.practitioners.contains(userId);
+  return isRespondent || isPractitioner;
+};
+
+/**
  * returns true if the case status is already calendared
  *
  * @returns {boolean} if the case is calendared
@@ -1487,4 +1499,4 @@ Case.prototype.setQcCompleteForTrial = function({
   return this;
 };
 
-module.exports = { Case };
+module.exports = { Case, isAssociatedUser };
