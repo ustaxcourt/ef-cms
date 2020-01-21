@@ -143,6 +143,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
   caseCaption: 'Enter a case caption',
   caseType: 'Select a case type',
   docketNumber: 'Docket number is required',
+  docketRecord: 'At least one valid Docket Record is required',
   documents: 'At least one valid document is required',
   filingType: 'Select on whose behalf you are filing',
   hasIrsNotice: 'Indicate whether you received an IRS notice',
@@ -405,13 +406,17 @@ joiValidationDecorator(
       .optional(),
     docketRecord: joi
       .array()
+      .min(1)
+      .items(
+        joi.object().meta({ filename: 'DocketRecord', name: 'DocketRecord' }),
+      )
       .required()
       .description('List of DocketRecord Entities for the Case.'),
-    // TODO: Revisit with Jessica: Does a Case require at least one Document?
     documents: joi
       .array()
+      .min(1)
       .items(joi.object().meta({ filename: 'Document', name: 'Document' }))
-      .optional()
+      .required()
       .description('List of Document Entities for the Case.'),
     filingType: joi
       .string()
@@ -473,7 +478,6 @@ joiValidationDecorator(
         .max(25)
         .required(),
     }),
-    // TODO: Create a Description
     noticeOfAttachments: joi.boolean().optional(),
     noticeOfTrialDate: joi
       .date()
