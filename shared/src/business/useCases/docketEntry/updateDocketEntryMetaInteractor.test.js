@@ -147,7 +147,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(updatedDocketEntry.description).toEqual('Updated Description');
   });
 
-  it('should update the docket record filedBy', async () => {
+  it('should update the docket record and document filedBy', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
@@ -161,7 +161,12 @@ describe('updateDocketEntryMetaInteractor', () => {
       record => record.index === 0,
     );
 
+    const updatedDocument = result.documents.find(
+      document => document.documentId === updatedDocketEntry.documentId,
+    );
+
     expect(updatedDocketEntry.filedBy).toEqual('New Filer');
+    expect(updatedDocument.filedBy).toEqual('New Filer');
   });
 
   it('should update the docket record filingDate', async () => {
