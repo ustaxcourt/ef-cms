@@ -1,5 +1,7 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
+import { EditDocketEntryMetaModal } from '../EditDocketRecordEntry/EditDocketEntryMetaModal';
 import { FilingsAndProceedings } from './FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
@@ -9,11 +11,20 @@ import classNames from 'classnames';
 
 export const DocketRecord = connect(
   {
+    docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
+    openEditDocketEntryMetaModalSequence:
+      sequences.openEditDocketEntryMetaModalSequence,
     refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.showModal,
   },
-  ({ formattedCaseDetail, refreshCaseSequence, showModal }) => {
+  ({
+    docketRecordHelper,
+    formattedCaseDetail,
+    openEditDocketEntryMetaModalSequence,
+    refreshCaseSequence,
+    showModal,
+  }) => {
     useEffect(() => {
       const interval = setInterval(() => {
         refreshCaseSequence();
@@ -48,6 +59,7 @@ export const DocketRecord = connect(
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
+              {docketRecordHelper.showEditDocketRecordEntry && <th>&nbsp;</th>}
             </tr>
           </thead>
           <tbody>
@@ -117,6 +129,22 @@ export const DocketRecord = connect(
                       <span className="responsive-label">Parties</span>
                       {entry.servedPartiesCode}
                     </td>
+                    {docketRecordHelper.showEditDocketRecordEntry && (
+                      <td>
+                        <Button
+                          link
+                          className="padding-0"
+                          icon="edit"
+                          onClick={() => {
+                            openEditDocketEntryMetaModalSequence({
+                              index: entry.index,
+                            });
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      </td>
+                    )}
                   </tr>
                 );
               },
@@ -124,6 +152,9 @@ export const DocketRecord = connect(
           </tbody>
         </table>
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
+        {showModal == 'EditDocketEntryMetaModal' && (
+          <EditDocketEntryMetaModal />
+        )}
       </>
     );
   },
