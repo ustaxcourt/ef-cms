@@ -73,7 +73,7 @@ describe('Get trial session working copy', () => {
       error = err;
     }
     expect(error.message).toContain(
-      'The TrialSessionWorkingCopy entity was invalid ValidationError: child "userId" fails because ["userId" is required]',
+      'The TrialSessionWorkingCopy entity was invalid ValidationError: "userId" is required',
     );
   });
 

@@ -258,6 +258,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  updateDocketEntryMeta:
+    handler: web-api/${self:provider.dir}/caseDocumentsHandlers.updateDocketEntryMetaLambda
+    events:
+      - http:
+          path: /{caseId}/docket-entry-meta
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   saveIntermediateDocketEntry:
     handler: web-api/${self:provider.dir}/caseDocumentsHandlers.saveIntermediateDocketEntryLambda
     events:

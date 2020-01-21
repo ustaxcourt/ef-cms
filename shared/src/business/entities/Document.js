@@ -1,7 +1,7 @@
 const courtIssuedEventCodes = require('../../tools/courtIssuedEventCodes.json');
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -235,13 +235,12 @@ joiValidationDecorator(
       then: joi
         .date()
         .iso()
-        .optional()
         .required(),
     }),
     createdAt: joi
       .date()
       .iso()
-      .optional(),
+      .required(),
     docketNumber: joi.string().optional(),
     documentId: joi
       .string()
@@ -252,7 +251,7 @@ joiValidationDecorator(
     documentTitle: joi.string().optional(),
     documentType: joi
       .string()
-      .valid(Document.getDocumentTypes())
+      .valid(...Document.getDocumentTypes())
       .required(),
     draftState: joi.object().optional(),
     eventCode: joi.string().optional(),
@@ -267,7 +266,9 @@ joiValidationDecorator(
     isFileAttached: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
     lodged: joi.boolean().optional(),
+    // TODO: Required, Yes, no or unknown
     objections: joi.string().optional(),
+    // TODO: ?????
     ordinalValue: joi.string().optional(),
     partyPrimary: joi.boolean().optional(),
     partyRespondent: joi.boolean().optional(),
@@ -292,6 +293,7 @@ joiValidationDecorator(
     relationship: joi.string().optional(),
     scenario: joi.string().optional(),
     secondaryDocument: joi.object().optional(),
+    // TODO: What's the difference between servedAt and serviceDate?
     servedAt: joi
       .date()
       .iso()
@@ -318,6 +320,7 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null),
+    // TODO: Add city list
     trialLocation: joi.string().optional(),
     userId: joi.string().required(),
     workItems: joi.array().optional(),

@@ -368,3 +368,15 @@ functions:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
+
+  sealCase:
+    handler: web-api/${self:provider.dir}/casesHandlers.sealCaseLambda
+    events:
+      - http:
+          path: /{caseId}/seal
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer

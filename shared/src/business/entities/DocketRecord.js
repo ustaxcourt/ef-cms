@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
@@ -22,6 +22,13 @@ function DocketRecord(rawDocketRecord) {
 }
 
 DocketRecord.validationName = 'DocketRecord';
+
+DocketRecord.VALIDATION_ERROR_MESSAGES = {
+  description: 'Enter a description',
+  eventCode: 'Enter an event code',
+  filingDate: 'Enter a valid filing date',
+  index: 'Enter an index',
+};
 
 joiValidationDecorator(
   DocketRecord,
@@ -58,8 +65,8 @@ joiValidationDecorator(
       .allow(null)
       .optional(),
   }),
-  () => true,
-  {},
+  undefined,
+  DocketRecord.VALIDATION_ERROR_MESSAGES,
 );
 
 module.exports = { DocketRecord };

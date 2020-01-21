@@ -17,6 +17,7 @@ describe('fileDocketEntryInteractor', () => {
     docketNumber: '45678-18',
     documents: [
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Answer',
         documentType: 'Answer',
@@ -24,6 +25,7 @@ describe('fileDocketEntryInteractor', () => {
         userId: 'respondent',
       },
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         documentTitle: 'Answer',
         documentType: 'Answer',
@@ -31,6 +33,7 @@ describe('fileDocketEntryInteractor', () => {
         userId: 'respondent',
       },
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
         documentTitle: 'Answer',
         documentType: 'Answer',
@@ -38,7 +41,9 @@ describe('fileDocketEntryInteractor', () => {
         userId: 'respondent',
       },
     ],
+    filingType: 'Myself',
     partyType: ContactFactory.PARTY_TYPES.petitioner,
+    procedureType: 'Regular',
     role: User.ROLES.petitioner,
     userId: 'petitioner',
   };
