@@ -4,9 +4,21 @@ export default (test, docketRecordIndex = 1) => {
       index: docketRecordIndex,
     });
 
+    expect(test.getState('showModal')).toEqual('EditDocketEntryMetaModal');
+
     await test.runSequence('updateModalValueSequence', {
       key: 'form.description',
       value: 'New Docket Entry Description',
+    });
+
+    await test.runSequence('updateModalValueSequence', {
+      key: 'form.filedBy',
+      value: 'New Filer',
+    });
+
+    await test.runSequence('updateModalValueSequence', {
+      key: 'form.servedParties',
+      value: 'Party One, Party Two',
     });
 
     await test.runSequence('submitEditDocketEntryMetaSequence');
