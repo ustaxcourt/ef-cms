@@ -66,6 +66,15 @@ exports.updateDocketEntryMetaInteractor = async ({
       { applicationContext },
     );
 
+    if (servedAt && servedAt !== documentDetail.servedAt) {
+      // servedAt has changed, generate a new coversheet
+      await applicationContext.getUseCases().addCoversheetInteractor({
+        applicationContext,
+        caseId,
+        documentId: documentDetail.documentId,
+      });
+    }
+
     caseEntity.updateDocument(documentEntity);
   }
 
