@@ -185,6 +185,7 @@ import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequ
 import { saveIntermediateDocketEntrySequence } from './sequences/saveIntermediateDocketEntrySequence';
 import { scannerShutdownSequence } from './sequences/scannerShutdownSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
+import { sealCaseSequence } from './sequences/sealCaseSequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
@@ -311,6 +312,7 @@ import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSe
 import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequence';
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
+import { validateDocketRecordSequence } from './sequences/validateDocketRecordSequence';
 import { validateEditPractitionersSequence } from './sequences/caseAssociation/validateEditPractitionersSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
@@ -527,6 +529,7 @@ export const presenter = {
     saveIntermediateDocketEntrySequence,
     scannerShutdownSequence,
     scannerStartupSequence,
+    sealCaseSequence,
     selectAssigneeSequence,
     selectDateRangeFromCalendarSequence,
     selectDocumentForPreviewSequence,
@@ -651,6 +654,7 @@ export const presenter = {
     validateCaseDetailSequence,
     validateCourtIssuedDocketEntrySequence,
     validateDocketEntrySequence,
+    validateDocketRecordSequence,
     validateEditPractitionersSequence,
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,

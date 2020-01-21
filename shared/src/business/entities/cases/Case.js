@@ -248,6 +248,7 @@ function Case(rawCase, { applicationContext }) {
   this.procedureType = rawCase.procedureType;
   this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
+  this.sealedDate = rawCase.sealedDate;
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
@@ -547,6 +548,11 @@ joiValidationDecorator(
       .allow(null)
       .description('When the case was received by the Court.'),
     respondents: joi.array().optional(),
+    sealedDate: joi
+      .date()
+      .iso()
+      .optional()
+      .allow(null),
     status: joi
       .string()
       .valid(...Object.values(Case.STATUS_TYPES))
@@ -845,7 +851,7 @@ Case.prototype.updateDocketNumberRecord = function() {
     this.addDocketRecord(
       new DocketRecord({
         description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
-        eventCode: '-',
+        eventCode: 'MIND',
         filingDate: createISODateString(),
       }),
     );
@@ -1498,6 +1504,16 @@ Case.prototype.setQcCompleteForTrial = function({
   trialSessionId,
 }) {
   this.qcCompleteForTrial[trialSessionId] = qcCompleteForTrial;
+  return this;
+};
+
+/**
+ * sets the sealedDate on a case to the current date and time
+ *
+ * @returns {Case} this case entity
+ */
+Case.prototype.setAsSealed = function() {
+  this.sealedDate = createISODateString();
   return this;
 };
 

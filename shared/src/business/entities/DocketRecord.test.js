@@ -70,10 +70,10 @@ describe('DocketRecord', () => {
 
     it('required messages display for required fields when an empty docket record is validated', () => {
       expect(new DocketRecord({}).getFormattedValidationErrors()).toEqual({
-        description: '"description" is required',
-        eventCode: '"eventCode" is required',
-        filingDate: '"filingDate" is required',
-        index: '"index" is required',
+        description: 'Enter a description',
+        eventCode: 'Enter an event code',
+        filingDate: 'Enter a valid filing date',
+        index: 'Enter an index',
       });
     });
   });
