@@ -10,6 +10,7 @@ export const UpdateCaseModalDialog = connect(
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.submitUpdateCaseModalSequence,
     modal: state.modal,
+    newStatus: state.constants.STATUS_TYPES.new,
     updateCaseModalHelper: state.updateCaseModalHelper,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateUpdateCaseModalSequence: sequences.validateUpdateCaseModalSequence,
@@ -19,6 +20,7 @@ export const UpdateCaseModalDialog = connect(
     cancelSequence,
     confirmSequence,
     modal,
+    newStatus,
     updateCaseModalHelper,
     updateModalValueSequence,
     validateUpdateCaseModalSequence,
@@ -63,7 +65,7 @@ export const UpdateCaseModalDialog = connect(
         <div className="margin-bottom-4">
           <FormGroup errorText={validationErrors.caseStatus}>
             <label className="usa-label" htmlFor="caseStatus">
-              Case Status
+              Case status
             </label>
             <select
               className="case-status usa-select"
@@ -78,7 +80,9 @@ export const UpdateCaseModalDialog = connect(
                 validateUpdateCaseModalSequence();
               }}
             >
-              <option value="">- Select -</option>
+              {updateCaseModalHelper.showNewStatusOption && (
+                <option value={newStatus}>{newStatus}</option>
+              )}
               {updateCaseModalHelper.caseStatusOptions.map(status => (
                 <option key={status} value={status}>
                   {status}

@@ -24,6 +24,7 @@ describe('addCaseToTrialSessionAction', () => {
       state: {
         caseDetail: {
           caseId: '123',
+          docketNumber: '123-45',
         },
         modal: {
           trialSessionId: '234',
@@ -38,5 +39,8 @@ describe('addCaseToTrialSessionAction', () => {
     });
     expect(result.output).toHaveProperty('alertSuccess');
     expect(result.output.caseDetail).toEqual(MOCK_CASE);
+    expect(result.output.caseId).toEqual('123');
+    expect(result.output.docketNumber).toEqual('123-45');
+    expect(result.output.trialSessionId).toEqual('234');
   });
 });

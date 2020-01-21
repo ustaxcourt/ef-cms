@@ -26,7 +26,5 @@ export default (test, expectedDocumentCount = 2) => {
     });
     expect(helper.showDocumentStatus).toEqual(true);
     expect(helper.showIrsServedDate).toEqual(false);
-    expect(helper.showPayGovIdInput).toEqual(false);
-    expect(helper.showPaymentOptions).toEqual(true);
   });
 };

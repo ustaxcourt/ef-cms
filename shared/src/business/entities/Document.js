@@ -131,6 +131,12 @@ Document.NOTICE_OF_DOCKET_CHANGE = {
   eventCode: 'NODC',
 };
 
+Document.NOTICE_OF_TRIAL = {
+  documentTitle: 'Notice of Trial on [Date] at [Time]',
+  documentType: 'Notice of Trial',
+  eventCode: 'NDT',
+};
+
 Document.SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
@@ -151,9 +157,15 @@ Document.TRACKED_DOCUMENT_TYPES = {
   },
   proposedStipulatedDecision: {
     documentType: 'Proposed Stipulated Decision',
-    eventCode: 'PSDEC',
+    eventCode: 'PSDE',
   },
 };
+
+Document.CONTACT_CHANGE_DOCUMENT_TYPES = [
+  'Notice of Change of Address',
+  'Notice of Change of Telephone Number',
+  'Notice of Change of Address and Telephone Number',
+];
 
 Document.isPendingOnCreation = rawDocument => {
   const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
@@ -193,6 +205,7 @@ Document.getDocumentTypes = () => {
     ...courtIssuedDocTypes,
     ...signedTypes,
     Document.NOTICE_OF_DOCKET_CHANGE.documentType,
+    Document.NOTICE_OF_TRIAL.documentType,
   ];
 
   return documentTypes;

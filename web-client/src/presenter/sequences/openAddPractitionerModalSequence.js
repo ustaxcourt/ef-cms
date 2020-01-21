@@ -5,10 +5,13 @@ import { isPractitionerInCaseAction } from '../actions/isPractitionerInCaseActio
 import { setPractitionersAction } from '../actions/ManualAssociation/setPractitionersAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const openAddPractitionerModalSequence = [
   clearAlertsAction,
   clearModalStateAction,
+  setWaitingForResponseAction,
   getPractitionersBySearchKeyAction,
   {
     error: [setValidationErrorsAction],
@@ -21,4 +24,5 @@ export const openAddPractitionerModalSequence = [
       },
     ],
   },
+  unsetWaitingForResponseAction,
 ];

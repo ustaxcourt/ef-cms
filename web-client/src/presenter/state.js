@@ -27,6 +27,8 @@ import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
+import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
+import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
@@ -55,6 +57,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
+import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
@@ -122,6 +125,8 @@ export const state = {
   documentSelectedForScan: null,
   documentSigningHelper,
   documentUploadMode: 'scan',
+  editDocketEntryHelper,
+  editPetitionerInformationHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fieldOrder: [],
@@ -194,6 +199,7 @@ export const state = {
   startCaseInternalHelper,
   timeRemaining: Number.POSITIVE_INFINITY,
   trialCitiesHelper,
+  trialSessionDetailsHelper,
   trialSessionHeaderHelper,
   trialSessionWorkingCopyHelper,
   trialSessionsTab: {

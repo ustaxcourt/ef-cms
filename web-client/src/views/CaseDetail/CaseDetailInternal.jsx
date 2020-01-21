@@ -6,9 +6,11 @@ import { CaseInformationInternal } from './CaseInformationInternal';
 import { CaseNotes } from './CaseNotes';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
+import { EditPetitionDetails } from './EditPetitionDetails';
 import { ErrorNotification } from '../ErrorNotification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MessagesInProgress } from './MessagesInProgress';
+import { PaperServiceConfirmModal } from './PaperServiceConfirmModal';
 import { PetitionerInformation } from './PetitionerInformation';
 import { RespondentInformation } from './RespondentInformation';
 import { SuccessNotification } from '../SuccessNotification';
@@ -23,9 +25,19 @@ export const CaseDetailInternal = connect(
     caseDetail: state.caseDetail,
     formattedCaseDetail: state.formattedCaseDetail,
     primaryTab: state.caseDetailPage.primaryTab,
+    showEditPetition: state.caseDetailPage.showEditPetition,
+    showModal: state.showModal,
     token: state.token,
   },
-  ({ baseUrl, caseDetail, formattedCaseDetail, primaryTab, token }) => {
+  ({
+    baseUrl,
+    caseDetail,
+    formattedCaseDetail,
+    primaryTab,
+    showEditPetition,
+    showModal,
+    token,
+  }) => {
     return (
       <>
         <CaseDetailHeader className="margin-bottom-0" />
@@ -77,7 +89,10 @@ export const CaseDetailInternal = connect(
               </Tab>
             </Tabs>
           )}
-          {primaryTab === 'caseInformation' && (
+          {primaryTab === 'caseInformation' && showEditPetition && (
+            <EditPetitionDetails />
+          )}
+          {primaryTab === 'caseInformation' && !showEditPetition && (
             <Tabs
               bind="caseDetailPage.caseInformationTab"
               className="classic-horizontal-header3 tab-border"
@@ -102,6 +117,10 @@ export const CaseDetailInternal = connect(
             </>
           )}
         </section>
+
+        {showModal === 'PaperServiceConfirmModal' && (
+          <PaperServiceConfirmModal />
+        )}
 
         {/* This section below will be removed in a future story */}
         <section className="usa-section grid-container">

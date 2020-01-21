@@ -52,7 +52,7 @@ export const FilingsAndProceedings = connect(
               className="padding-0 border-0"
               onClick={() => {
                 showDocketRecordDetailModalSequence({
-                  arrayIndex,
+                  docketRecordIndex: arrayIndex,
                   showModal: 'DocketRecordOverlay',
                 });
               }}

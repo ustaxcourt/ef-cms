@@ -51,25 +51,25 @@ Case.STATUS_TYPES = {
 };
 
 Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
-  Case.STATUS_TYPES.submitted,
-  Case.STATUS_TYPES.cav,
-  Case.STATUS_TYPES.rule155,
-  Case.STATUS_TYPES.jurisdictionRetained,
   Case.STATUS_TYPES.assignedCase,
   Case.STATUS_TYPES.assignedMotion,
+  Case.STATUS_TYPES.cav,
+  Case.STATUS_TYPES.jurisdictionRetained,
+  Case.STATUS_TYPES.rule155,
+  Case.STATUS_TYPES.submitted,
 ];
 
 Case.STATUS_TYPES_MANUAL_UPDATE = [
-  Case.STATUS_TYPES.generalDocket,
-  Case.STATUS_TYPES.generalDocketReadyForTrial,
-  Case.STATUS_TYPES.submitted,
-  Case.STATUS_TYPES.cav,
-  Case.STATUS_TYPES.rule155,
-  Case.STATUS_TYPES.jurisdictionRetained,
   Case.STATUS_TYPES.assignedCase,
   Case.STATUS_TYPES.assignedMotion,
+  Case.STATUS_TYPES.cav,
   Case.STATUS_TYPES.closed,
+  Case.STATUS_TYPES.generalDocket,
+  Case.STATUS_TYPES.generalDocketReadyForTrial,
+  Case.STATUS_TYPES.jurisdictionRetained,
   Case.STATUS_TYPES.onAppeal,
+  Case.STATUS_TYPES.rule155,
+  Case.STATUS_TYPES.submitted,
 ];
 
 Case.ANSWER_CUTOFF_AMOUNT = 45;
@@ -161,15 +161,6 @@ Case.VALIDATION_ERROR_MESSAGES = {
     'Your Ownership Disclosure Statement file size is empty',
   ],
   partyType: 'Select a party type',
-  payGovDate: [
-    {
-      contains: 'must be less than or equal to',
-      message:
-        'The Fee Payment date cannot be in the future. Enter a valid date.',
-    },
-    'Please enter a valid Fee Payment date',
-  ],
-  payGovId: 'Fee Payment Id must be in a valid format',
   petitionFile: 'Upload a Petition',
   petitionFileSize: [
     {
@@ -178,10 +169,10 @@ Case.VALIDATION_ERROR_MESSAGES = {
     },
     'Your Petition file size is empty',
   ],
-  petitionPaymentDate: 'Please enter a valid Petition Fee payment date',
-  petitionPaymentMethod: 'Enter a valid Petition Fee payment method',
-  petitionPaymentStatus: 'Enter a valid Petition Fee payment status',
-  petitionPaymentWaivedDate: 'Enter a valid date waived',
+  petitionPaymentDate: 'Enter a payment date',
+  petitionPaymentMethod: 'Enter payment method',
+  petitionPaymentStatus: 'Enter payment status',
+  petitionPaymentWaivedDate: 'Enter date of waiver',
   preferredTrialCity: 'Select a preferred trial location',
   procedureType: 'Select a case procedure',
   receivedAt: [
@@ -231,8 +222,6 @@ function Case(rawCase, { applicationContext }) {
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
   this.caseNote = rawCase.caseNote;
   this.caseType = rawCase.caseType;
-  this.contactPrimary = rawCase.contactPrimary;
-  this.contactSecondary = rawCase.contactSecondary;
   this.createdAt = rawCase.createdAt || createISODateString();
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
@@ -247,8 +236,6 @@ function Case(rawCase, { applicationContext }) {
   this.isPaper = rawCase.isPaper;
   this.leadCaseId = rawCase.leadCaseId;
   this.partyType = rawCase.partyType;
-  this.payGovDate = rawCase.payGovDate;
-  this.payGovId = rawCase.payGovId;
   this.petitionPaymentStatus =
     rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
   this.petitionPaymentDate = rawCase.petitionPaymentDate;
@@ -256,6 +243,7 @@ function Case(rawCase, { applicationContext }) {
   this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
+  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
@@ -312,6 +300,7 @@ function Case(rawCase, { applicationContext }) {
     this.docketRecord = [];
   }
 
+  this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
   this.orderForAmendedPetitionAndFilingFee =
@@ -330,6 +319,17 @@ function Case(rawCase, { applicationContext }) {
       rawValue: rawCase.orderDesignatingPlaceOfTrial,
     },
   );
+
+  const contacts = ContactFactory.createContacts({
+    contactInfo: {
+      primary: rawCase.contactPrimary,
+      secondary: rawCase.contactSecondary,
+    },
+    isPaper: rawCase.isPaper,
+    partyType: rawCase.partyType,
+  });
+  this.contactPrimary = contacts.primary;
+  this.contactSecondary = contacts.secondary;
 }
 
 joiValidationDecorator(
@@ -431,6 +431,10 @@ joiValidationDecorator(
         .required(),
     }),
     noticeOfAttachments: joi.boolean().optional(),
+    noticeOfTrialDate: joi
+      .date()
+      .iso()
+      .optional(),
     orderForAmendedPetition: joi.boolean().optional(),
     orderForAmendedPetitionAndFilingFee: joi.boolean().optional(),
     orderForFilingFee: joi.boolean().optional(),
@@ -439,16 +443,6 @@ joiValidationDecorator(
     orderToChangeDesignatedPlaceOfTrial: joi.boolean().optional(),
     orderToShowCause: joi.boolean().optional(),
     partyType: joi.string().optional(),
-    payGovDate: joi
-      .date()
-      .iso()
-      .max('now')
-      .allow(null)
-      .optional(),
-    payGovId: joi
-      .string()
-      .allow(null)
-      .optional(),
     petitionPaymentDate: joi.when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.PAID,
       otherwise: joi
@@ -471,7 +465,8 @@ joiValidationDecorator(
     }),
     petitionPaymentStatus: joi
       .string()
-      .valid(Object.values(Case.PAYMENT_STATUS)),
+      .valid(Object.values(Case.PAYMENT_STATUS))
+      .required(),
     petitionPaymentWaivedDate: joi.when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.WAIVED,
       otherwise: joi
@@ -490,6 +485,7 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     procedureType: joi.string().optional(),
+    qcCompleteForTrial: joi.object().required(),
     receivedAt: joi
       .date()
       .iso()
@@ -820,41 +816,6 @@ Case.prototype.getDocumentById = function({ documentId }) {
  */
 Case.prototype.getShowCaseNameForPrimary = function() {
   return !(this.contactSecondary && this.contactSecondary.name);
-};
-
-/**
- *
- * @param {string} payGovDate an ISO formatted date string
- * @returns {Case} the updated case entity
- */
-Case.prototype.markAsPaidByPayGov = function(payGovDate) {
-  this.payGovDate = payGovDate;
-
-  const newDocketItem = {
-    description: 'Filing fee paid',
-    filingDate: payGovDate,
-  };
-
-  let found;
-  let docketRecordIndex;
-  let datesMatch;
-
-  this.docketRecord.forEach((docketRecord, index) => {
-    if (docketRecord.description === newDocketItem.description) {
-      found = true;
-      docketRecordIndex = index;
-      if (docketRecord.filingDate === newDocketItem.filingDate) {
-        datesMatch = true;
-      }
-    }
-  });
-
-  if (payGovDate && !found) {
-    this.addDocketRecord(new DocketRecord(newDocketItem));
-  } else if (payGovDate && found && !datesMatch) {
-    this.updateDocketRecord(docketRecordIndex, new DocketRecord(newDocketItem));
-  }
-  return this;
 };
 
 /**
@@ -1440,6 +1401,32 @@ Case.prototype.isDocumentDraft = function(documentId) {
       (isDraftOrder && !isDocumentOnDocketRecord) ||
       (isCourtIssuedDocument && !isDocumentOnDocketRecord))
   );
+};
+
+/**
+ * sets the notice of trial date for a case
+ *
+ * @returns {Case} this case entity
+ */
+Case.prototype.setNoticeOfTrialDate = function() {
+  this.noticeOfTrialDate = createISODateString();
+  return this;
+};
+
+/**
+ * sets the qc complete for trial boolean for a case
+ *
+ * @param {object} providers the providers object
+ * @param {boolean} providers.qcCompleteForTrial the value to set for qcCompleteForTrial
+ * @param {string} providers.trialSessionId the id of the trial session to set qcCompleteForTrial for
+ * @returns {Case} this case entity
+ */
+Case.prototype.setQcCompleteForTrial = function({
+  qcCompleteForTrial,
+  trialSessionId,
+}) {
+  this.qcCompleteForTrial[trialSessionId] = qcCompleteForTrial;
+  return this;
 };
 
 module.exports = { Case };

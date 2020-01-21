@@ -38,6 +38,24 @@ describe('setValidationAlertErrors', () => {
     });
   });
 
+  it('does not create messages for null errors', async () => {
+    const { state } = await runAction(setValidationAlertErrorsAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        errors: {
+          blues: null,
+          green: 'green is incorrect',
+        },
+      },
+      state: {},
+    });
+    expect(state.alertError).toMatchObject({
+      messages: ['green is incorrect'],
+    });
+  });
+
   it('creates messages for errors with nested arrays', async () => {
     const { state } = await runAction(setValidationAlertErrorsAction, {
       modules: {
