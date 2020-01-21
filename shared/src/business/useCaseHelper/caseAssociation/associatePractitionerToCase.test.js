@@ -21,6 +21,10 @@ describe('associatePractitionerToCase', () => {
         index: 1,
       },
     ],
+    filingType: 'Myself',
+    partyType: 'Petitioner',
+    preferredTrialCity: 'Fresno, California',
+    procedureType: 'Regular',
   };
 
   it('should not add mapping if already there', async () => {

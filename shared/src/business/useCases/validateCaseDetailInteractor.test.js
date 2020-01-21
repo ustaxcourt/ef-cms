@@ -70,6 +70,7 @@ describe('validate case detail', () => {
         documents: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             role: User.ROLES.petitioner,
@@ -78,6 +79,7 @@ describe('validate case detail', () => {
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             role: User.ROLES.petitioner,
@@ -91,7 +93,7 @@ describe('validate case detail', () => {
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'Fresno, California',
-        procedureType: 'defined',
+        procedureType: 'Regular',
         signature: true,
       },
     });
@@ -130,6 +132,7 @@ describe('validate case detail', () => {
         documents: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             role: User.ROLES.petitioner,
@@ -138,6 +141,7 @@ describe('validate case detail', () => {
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             role: User.ROLES.petitioner,
@@ -151,7 +155,7 @@ describe('validate case detail', () => {
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'Fresno, California',
-        procedureType: 'defined',
+        procedureType: 'Regular',
         signature: true,
       },
     });
@@ -178,6 +182,7 @@ describe('validate case detail', () => {
         documents: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             role: User.ROLES.petitioner,
@@ -186,6 +191,7 @@ describe('validate case detail', () => {
           },
           {
             createdAt: '2018-11-21T20:49:28.192Z',
+            docketNumber: '101-18',
             documentId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
             documentType: 'Petition',
             role: User.ROLES.petitioner,
@@ -199,7 +205,7 @@ describe('validate case detail', () => {
         partyType: ContactFactory.PARTY_TYPES.petitioner,
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'Fresno, California',
-        procedureType: 'defined',
+        procedureType: 'Regular',
         signature: true,
       },
     });

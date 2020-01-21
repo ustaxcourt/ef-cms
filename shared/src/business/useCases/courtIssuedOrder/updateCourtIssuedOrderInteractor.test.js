@@ -24,21 +24,28 @@ describe('updateCourtIssuedOrderInteractor', () => {
     ],
     documents: [
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         userId: 'respondent',
       },
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         userId: 'respondent',
       },
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         userId: 'respondent',
       },
     ],
+    filingType: 'Myself',
+    partyType: 'Petitioner',
+    preferredTrialCity: 'Fresno, California',
+    procedureType: 'Regular',
     role: User.ROLES.petitioner,
     userId: 'petitioner',
   };

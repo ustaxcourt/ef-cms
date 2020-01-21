@@ -133,7 +133,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         ...documentsWithCaseClosingEventCodes,
       ],
+      filingType: 'Myself',
       partyType: ContactFactory.PARTY_TYPES.petitioner,
+      preferredTrialCity: 'Fresno, California',
+      procedureType: 'Regular',
     },
     {
       caseCaption: 'Caption',
@@ -193,9 +196,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         ...documentsWithCaseClosingEventCodes,
       ],
+      filingType: 'Myself',
       isPaper: true,
       mailingDate: 'testing',
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      preferredTrialCity: 'Fresno, California',
+      procedureType: 'Regular',
     },
   ];
 

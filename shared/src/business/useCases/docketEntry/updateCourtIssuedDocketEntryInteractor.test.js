@@ -55,21 +55,25 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       ],
       documents: [
         {
+          docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           userId: 'respondent',
         },
         {
+          docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           userId: 'respondent',
         },
         {
+          docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentType: 'Answer',
           userId: 'respondent',
         },
         {
+          docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           documentType: 'Order',
           userId: 'respondent',
@@ -91,7 +95,10 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           ],
         },
       ],
+      filingType: 'Myself',
       partyType: ContactFactory.PARTY_TYPES.petitioner,
+      preferredTrialCity: 'Fresno, California',
+      procedureType: 'Regular',
       role: User.ROLES.petitioner,
       userId: 'petitioner',
     };
