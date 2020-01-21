@@ -40,6 +40,7 @@ exports.caseAdvancedSearchInteractor = async providers => {
         'docketNumber',
         'docketNumberSuffix',
         'receivedAt',
+        'sealedDate',
       ],
       query: {
         bool: {
@@ -70,6 +71,7 @@ exports.caseAdvancedSearchInteractor = async providers => {
             'docketNumber',
             'docketNumberSuffix',
             'receivedAt',
+            'sealedDate',
           ],
           query: {
             bool: {

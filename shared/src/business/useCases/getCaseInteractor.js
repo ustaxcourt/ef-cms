@@ -49,9 +49,14 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
   }
 
   let caseDetail;
+
   if (
     caseRecord.sealedDate &&
-    !ROLE_PERMISSIONS.VIEW_SEALED_CASE &&
+    !isAuthorized(
+      applicationContext.getCurrentUser(),
+      ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+      caseRecord.userId,
+    ) &&
     !isAssociatedUser({
       caseRaw: caseRecord,
       userId: applicationContext.getCurrentUser().userId,
