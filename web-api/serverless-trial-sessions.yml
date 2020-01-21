@@ -1,4 +1,4 @@
-service: ef-cms-trial-sessions
+service: ef-cms-trial-sessions-${opt:stageColor}
 plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
@@ -195,7 +195,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  setNoticesForCalendaredTrialSession:
+  setNoticesForCalendaredSession:
     handler: web-api/${self:provider.dir}/trialSessionsHandlers.setNoticesForCalendaredTrialSessionLambda
     layers:
       - arn:aws:lambda:${opt:region}:${opt:accountId}:layer:${opt:stage}-puppeteer:latest
@@ -247,7 +247,7 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  getCalendaredCasesForTrialSession:
+  getCalendaredCasesForSession:
     handler: web-api/${self:provider.dir}/trialSessionsHandlers.getCalendaredCasesForTrialSessionLambda
     events:
       - http:
