@@ -15,6 +15,6 @@ exports.deleteCounselFromCaseInteractor = ({
 }) => {
   return remove({
     applicationContext,
-    endpoint: `/cases/${caseId}/counsel/${userIdToDelete}`,
+    endpoint: `/case-parties/${caseId}/counsel/${userIdToDelete}`,
   });
 };

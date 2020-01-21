@@ -3,7 +3,7 @@ let createdDocketNumber;
 
 describe('File a petition', function() {
   before(() => {
-    cy.seed();
+    cy.task('seed');
     cy.login('petitioner');
   });
 
@@ -190,11 +190,5 @@ describe('can view case detail', () => {
 
   it('shows docket record table and data', () => {
     cy.get('table.case-detail.docket-record tbody tr').should('exist');
-  });
-
-  it('accordion header expands/collapses', () => {
-    cy.get('#actions-button').should('exist');
-    cy.get('#actions-button').click();
-    cy.get('#paymentInfo').should('be.visible');
   });
 });

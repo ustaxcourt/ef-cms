@@ -9,6 +9,7 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
+const { DocketRecord } = require('../entities/DocketRecord');
 const { Document } = require('../entities/Document');
 const { IRS_BATCH_SYSTEM_USER_ID, WorkItem } = require('../entities/WorkItem');
 const { Message } = require('../entities/Message');
@@ -45,20 +46,44 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
         caseId: workItem.caseId,
       });
 
+    const caseEntity = new Case(caseToBatch, { applicationContext });
+
+    if (caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+      caseEntity.addDocketRecord(
+        new DocketRecord({
+          description: 'Filing Fee Paid',
+          eventCode: 'FEE',
+          filingDate: caseEntity.petitionPaymentDate,
+        }),
+      );
+    } else if (
+      caseEntity.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED
+    ) {
+      caseEntity.addDocketRecord(
+        new DocketRecord({
+          description: 'Filing Fee Waived',
+          eventCode: 'FEEW',
+          filingDate: caseEntity.petitionPaymentWaivedDate,
+        }),
+      );
+    }
+
     await applicationContext.getPersistenceGateway().deleteWorkItemFromSection({
       applicationContext,
       workItem,
     });
 
-    const s3Ids = caseToBatch.documents.map(document => document.documentId);
-    const fileNames = caseToBatch.documents.map(
+    const s3Ids = caseEntity.documents
+      .filter(document => !caseEntity.isDocumentDraft(document.documentId))
+      .map(document => document.documentId);
+    const fileNames = caseEntity.documents.map(
       document => `${document.documentType}.pdf`,
     );
-    let zipName = sanitize(`${caseToBatch.docketNumber}`);
+    let zipName = sanitize(`${caseEntity.docketNumber}`);
 
-    if (caseToBatch.contactPrimary && caseToBatch.contactPrimary.name) {
+    if (caseEntity.contactPrimary && caseEntity.contactPrimary.name) {
       zipName += sanitize(
-        `_${caseToBatch.contactPrimary.name.replace(/\s/g, '_')}`,
+        `_${caseEntity.contactPrimary.name.replace(/\s/g, '_')}`,
       );
     }
     zipName += '.zip';
@@ -70,7 +95,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
       zipName,
     });
 
-    const stinDocument = caseToBatch.documents.find(
+    const stinDocument = caseEntity.documents.find(
       document =>
         document.documentType ===
         Document.INITIAL_DOCUMENT_TYPES.stin.documentType,
@@ -83,9 +108,7 @@ exports.runBatchProcessInteractor = async ({ applicationContext }) => {
       });
     }
 
-    const caseEntity = new Case(caseToBatch, {
-      applicationContext,
-    }).markAsSentToIRS(createISODateString());
+    caseEntity.markAsSentToIRS(createISODateString());
 
     const petitionDocument = caseEntity.documents.find(
       document =>

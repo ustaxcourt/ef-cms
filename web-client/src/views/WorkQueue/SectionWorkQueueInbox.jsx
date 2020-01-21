@@ -7,7 +7,6 @@ import React from 'react';
 export const SectionWorkQueueInbox = connect(
   {
     assignSelectedWorkItemsSequence: sequences.assignSelectedWorkItemsSequence,
-    documentEditLinkHelper: state.documentEditLinkHelper,
     formattedWorkQueue: state.formattedWorkQueue,
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
@@ -18,7 +17,6 @@ export const SectionWorkQueueInbox = connect(
   },
   ({
     assignSelectedWorkItemsSequence,
-    documentEditLinkHelper,
     formattedWorkQueue,
     selectAssigneeSequence,
     selectedWorkItems,
@@ -71,7 +69,7 @@ export const SectionWorkQueueInbox = connect(
               {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
               <th aria-label="Docket Number">Docket</th>
               <th>{workQueueHelper.inboxFiledColumnLabel}</th>
-              <th>Case name</th>
+              <th>Case title</th>
               {!workQueueHelper.hideIconColumn && (
                 <th aria-label="Status Icon" className="padding-right-0" />
               )}
@@ -171,17 +169,7 @@ export const SectionWorkQueueInbox = connect(
                   <div className="message-document-title">
                     <a
                       className="case-link"
-                      href={documentEditLinkHelper({
-                        docketNumber: item.docketNumber,
-                        documentId: item.document.documentId,
-                        messageId: item.currentMessage.messageId,
-                        shouldLinkToComplete:
-                          item.document.isFileAttached === false,
-                        shouldLinkToEdit:
-                          workQueueHelper.showEditDocketEntry &&
-                          item.isQC &&
-                          item.document.eventCode !== 'P',
-                      })}
+                      href={`/case-detail/${item.docketNumber}/documents/${item.document.documentId}${item.editLink}`}
                       onClick={e => {
                         e.stopPropagation();
                       }}

@@ -1,4 +1,4 @@
-const { Note } = require('../../entities/Note');
+const { Note } = require('../../entities/notes/Note');
 const { validateNoteInteractor } = require('./validateNoteInteractor');
 
 describe('validateNoteInteractor', () => {

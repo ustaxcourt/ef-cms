@@ -14,13 +14,17 @@ const { remove } = require('lodash');
  * @constructor
  */
 function Scan({ applicationContext, rawScan }) {
-  this.applicationContext = applicationContext;
   this.batches = rawScan.batches || [];
   this.createdAt = rawScan.createdAt || createISODateString();
   this.scanId = rawScan.scanId || applicationContext.getUniqueId();
 }
 
 Scan.validationName = 'Scan';
+Scan.SCAN_MODES = {
+  DUPLEX: 'duplex',
+  FEEDER: 'feeder',
+  FLATBED: 'flatbed',
+};
 
 /**
  * adds a batch to the current scan

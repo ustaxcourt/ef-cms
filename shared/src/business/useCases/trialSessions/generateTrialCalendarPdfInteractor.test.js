@@ -7,7 +7,7 @@ const getCalendaredCasesForTrialSessionStub = jest
     .mockReturnValue(['case1', 'case2', 'case3']),
   getTrialSessionByIdStub = jest.fn(),
   generatePdfFromHtmlInteractorStub = jest.fn(),
-  generateTrialCalendarTemplateStub = jest.fn(),
+  generateTrialCalendarTemplateStub = jest.fn().mockResolvedValue(true),
   formattedTrialSessionDetailsStub = jest.fn(),
   getFormattedCaseDetailStub = jest.fn();
 
@@ -33,7 +33,9 @@ describe('generateTrialCalendarPdfInteractor', () => {
     await expect(
       generateTrialCalendarPdfInteractor({
         applicationContext,
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        content: {
+          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
       }),
     ).resolves.not.toThrow();
     expect(getTrialSessionByIdStub.mock.calls.length).toBe(1);

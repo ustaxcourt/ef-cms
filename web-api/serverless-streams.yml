@@ -3,7 +3,7 @@ plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   # - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-aws-alerts
+  - serverless-plugin-aws-alerts
   - serverless-offline-dynamodb-streams
   - serverless-offline
   - serverless-prune-plugin
@@ -36,13 +36,10 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -57,10 +54,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
-        notifications:
-          - protocol: email
-            endpoint: jsutton@flexion.us
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -83,7 +77,7 @@ provider:
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
@@ -136,3 +130,8 @@ functions:
           arn: ${opt:dynamo_stream_arn}
           batchSize: 100
           startingPosition: TRIM_HORIZON
+
+  reprocessFailedRecords:
+    handler: web-api/${self:provider.dir}/streamsHandlers.reprocessFailedRecordsLambda
+    events:
+      - schedule: cron(0 6 * * ? *)

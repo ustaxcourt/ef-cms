@@ -16,16 +16,19 @@ import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContacts
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
 import { caseDetailHelper } from './computeds/caseDetailHelper';
+import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
+import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentDetailHelper } from './computeds/documentDetailHelper';
-import { documentEditLinkHelper } from './computeds/documentEditLinkHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
+import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
+import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { extractedDocument } from './computeds/extractDocument';
 import { extractedPendingMessagesFromCaseDetail } from './computeds/extractPendingMessagesFromCaseDetail';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
@@ -40,6 +43,7 @@ import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
+import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { primaryContactEditHelper } from './computeds/primaryContactEditHelper';
@@ -53,6 +57,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
+import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
@@ -90,6 +95,8 @@ export const state = {
   caseDetailErrors: {},
   caseDetailHeaderHelper,
   caseDetailHelper,
+  caseDetailPage: {},
+  caseDetailSubnavHelper,
   caseInformationHelper,
   caseTypeDescriptionHelper,
   caseTypes: [],
@@ -97,6 +104,7 @@ export const state = {
   cognitoLoginUrl: null,
   completeDocumentTypeSectionHelper,
   completeForm: {},
+  confirmInitiateServiceModalHelper,
   contactsHelper,
   createOrderHelper,
   currentPage: 'Interstitial',
@@ -112,12 +120,13 @@ export const state = {
     tab: '',
   },
   documentDetailHelper,
-  documentEditLinkHelper,
   documentId: null,
   documentSelectedForPreview: null,
   documentSelectedForScan: null,
   documentSigningHelper,
   documentUploadMode: 'scan',
+  editDocketEntryHelper,
+  editPetitionerInformationHelper,
   extractedDocument,
   extractedPendingMessagesFromCaseDetail,
   fieldOrder: [],
@@ -144,6 +153,7 @@ export const state = {
   modal: {},
   navigation: {},
   notifications: {},
+  orderTypesHelper,
   path: '/',
   paymentInfo: {
     showDetails: false,
@@ -178,7 +188,9 @@ export const state = {
   selectDocumentTypeHelper,
   selectedBatchIndex: 0,
   selectedWorkItems: [],
-  sessionMetadata: {},
+  sessionMetadata: {
+    docketRecordSort: [],
+  },
   showAppTimeoutModalHelper,
   showModal: '',
   showValidation: false,
@@ -187,8 +199,12 @@ export const state = {
   startCaseInternalHelper,
   timeRemaining: Number.POSITIVE_INFINITY,
   trialCitiesHelper,
+  trialSessionDetailsHelper,
   trialSessionHeaderHelper,
   trialSessionWorkingCopyHelper,
+  trialSessionsTab: {
+    group: null,
+  },
   updateCaseModalHelper,
   usaBanner: {
     showDetails: false,

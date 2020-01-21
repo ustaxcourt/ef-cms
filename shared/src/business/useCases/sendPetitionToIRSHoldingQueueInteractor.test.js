@@ -61,7 +61,7 @@ const MOCK_WORK_ITEMS = [
         createdAt: '2018-12-27T18:06:02.968Z',
         from: 'Petitioner',
         fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        message: 'Test messsage',
+        message: 'Test message',
         messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
         role: User.ROLES.petitioner,
         to: null,

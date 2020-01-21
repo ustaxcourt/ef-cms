@@ -1,4 +1,6 @@
+import { AddConsolidatedCaseModal } from './AddConsolidatedCaseModal';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
 import { connect } from '@cerebral/react';
@@ -6,35 +8,53 @@ import { sequences } from 'cerebral';
 import { state } from 'cerebral';
 import React from 'react';
 
-const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
+const PetitionDetails = ({ caseDetail }) => (
   <React.Fragment>
     <div className="grid-row">
-      <div className="grid-col-4">
-        <p className="label">Notice/Case Type</p>
+      <div className="grid-col-6">
+        <p className="label">Notice/case type</p>
         <p>{caseDetail.caseType}</p>
       </div>
-      <div className="grid-col-4">
-        <p className="label">Case Procedure</p>
-        <p>{caseDetail.procedureType}</p>
-      </div>
-      <div className="grid-col-4">
-        <p className="label">Requested Place of Trial</p>
-        <p>{caseDetail.formattedPreferredTrialCity}</p>
+      <div className="grid-col-6">
+        <p className="label">Case procedure</p>
+        <p>{caseDetail.procedureType} Tax Case</p>
       </div>
     </div>
     <div className="grid-row">
-      <div className="grid-col-4">
-        <p className="label">IRS Notice Date</p>
+      <div className="grid-col-6">
+        <p className="label">IRS notice date</p>
         <p className="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
       </div>
-      <div className="grid-col-4">
-        {showPaymentRecord && (
-          <React.Fragment>
-            <p className="label">Petition Fee Paid</p>
-            <p className="pay-gov-id-display">{caseDetail.payGovId}</p>
-          </React.Fragment>
-        )}
+      <div className="grid-col-6">
+        <p className="label">Filing fee</p>
+        <p className="pay-gov-id-display margin-bottom-0">
+          {caseDetail.filingFee}
+        </p>
       </div>
+    </div>
+    <div className="grid-row">
+      <div className="grid-col-6">
+        <p className="label">Requested place of trial</p>
+        <p className="margin-bottom-0">
+          {caseDetail.formattedPreferredTrialCity}
+        </p>
+      </div>
+    </div>
+  </React.Fragment>
+);
+
+const ConsolidatedCases = ({ caseDetail, caseDetailHelper }) => (
+  <React.Fragment>
+    {!caseDetailHelper.hasConsolidatedCases && <p>Not consolidated</p>}
+    <div className="grid-container padding-left-0">
+      {caseDetail.consolidatedCases.map((consolidatedCase, index) => (
+        <div className="grid-row margin-top-3" key={index}>
+          <div className="grid-col-2">
+            <CaseLink formattedCase={consolidatedCase} />
+          </div>
+          <div className="grid-col-10">{consolidatedCase.caseName}</div>
+        </div>
+      ))}
     </div>
   </React.Fragment>
 );
@@ -161,7 +181,7 @@ const TrialInformation = ({
     {caseDetail.showNotScheduled && (
       <>
         <h3 className="underlined">Trial - Not Scheduled</h3>
-        <div className="display-flex flex-row flex-justify">
+        <div className="margin-bottom-1">
           <Button
             link
             icon="plus-circle"
@@ -172,6 +192,8 @@ const TrialInformation = ({
           >
             Add to Trial
           </Button>
+        </div>
+        <div className="margin-bottom-1">
           <Button
             link
             className="high-priority-btn"
@@ -182,6 +204,8 @@ const TrialInformation = ({
           >
             Mark High Priority
           </Button>
+        </div>
+        <div>
           <Button
             link
             className="block-from-trial-btn red-warning"
@@ -236,6 +260,7 @@ export const CaseInformationInternal = connect(
       sequences.navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
+    openCleanModalSequence: sequences.openCleanModalSequence,
     openPrioritizeCaseModalSequence: sequences.openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
@@ -250,6 +275,7 @@ export const CaseInformationInternal = connect(
     navigateToPrintableCaseConfirmationSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
+    openCleanModalSequence,
     openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
@@ -264,6 +290,16 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Petition Details
+                    {caseDetailHelper.showEditPetitionDetailsButton && (
+                      <Button
+                        link
+                        className="margin-left-2 padding-0"
+                        href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-details`}
+                        icon="edit"
+                      >
+                        Edit
+                      </Button>
+                    )}
                     <If bind="caseDetail.irsSendDate">
                       <Button
                         link
@@ -286,7 +322,7 @@ export const CaseInformationInternal = connect(
 
                   <PetitionDetails
                     caseDetail={formattedCaseDetail}
-                    showPaymentRecord={caseDetailHelper.showPaymentRecord}
+                    caseDetailHelper={caseDetailHelper}
                   />
                 </div>
               </div>
@@ -313,6 +349,51 @@ export const CaseInformationInternal = connect(
                       openUnprioritizeCaseModalSequence
                     }
                   />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="grid-row grid-gap margin-top-4">
+            <div className="tablet:grid-col-6">
+              <div className="card height-full">
+                <div className="content-wrapper">
+                  <h3 className="underlined">
+                    Consolidated Cases
+                    {formattedCaseDetail.canConsolidate && (
+                      <Button
+                        link
+                        aria-label="add cases to consolidate with this case"
+                        className="margin-right-0 margin-top-1 padding-0 float-right"
+                        onClick={() => {
+                          openCleanModalSequence({
+                            showModal: 'AddConsolidatedCaseModal',
+                          });
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          className="margin-right-05"
+                          icon="plus-circle"
+                          size="1x"
+                        />
+                        Add Cases
+                      </Button>
+                    )}
+                  </h3>
+                  <AddConsolidatedCaseModal />
+                  {formattedCaseDetail.canConsolidate &&
+                    formattedCaseDetail.consolidatedCases.length > 0 && (
+                      <ConsolidatedCases
+                        caseDetail={formattedCaseDetail}
+                        caseDetailHelper={caseDetailHelper}
+                      />
+                    )}
+                  {formattedCaseDetail.canConsolidate &&
+                    formattedCaseDetail.consolidatedCases.length === 0 && (
+                      <p>Not consolidated</p>
+                    )}
+                  {!formattedCaseDetail.canConsolidate && (
+                    <p>This case is not eligible for consolidation.</p>
+                  )}
                 </div>
               </div>
             </div>

@@ -15,9 +15,23 @@ const { DocketRecord } = require('../DocketRecord');
 const { Document } = require('../Document');
 const { find, includes } = require('lodash');
 const { MAX_FILE_SIZE_MB } = require('../../../persistence/s3/getUploadPolicy');
+const { Order } = require('../orders/Order');
 const { Practitioner } = require('../Practitioner');
 const { Respondent } = require('../Respondent');
 const { User } = require('../User');
+
+const orderDocumentTypes = Order.ORDER_TYPES.map(
+  orderType => orderType.documentType,
+);
+const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
+  courtIssuedDoc => courtIssuedDoc.documentType,
+);
+
+Case.PAYMENT_STATUS = {
+  PAID: 'Paid',
+  UNPAID: 'Not Paid',
+  WAIVED: 'Waived',
+};
 
 Case.STATUS_TYPES = {
   assignedCase: 'Assigned - Case',
@@ -37,25 +51,25 @@ Case.STATUS_TYPES = {
 };
 
 Case.STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
-  Case.STATUS_TYPES.submitted,
-  Case.STATUS_TYPES.cav,
-  Case.STATUS_TYPES.rule155,
-  Case.STATUS_TYPES.jurisdictionRetained,
   Case.STATUS_TYPES.assignedCase,
   Case.STATUS_TYPES.assignedMotion,
+  Case.STATUS_TYPES.cav,
+  Case.STATUS_TYPES.jurisdictionRetained,
+  Case.STATUS_TYPES.rule155,
+  Case.STATUS_TYPES.submitted,
 ];
 
 Case.STATUS_TYPES_MANUAL_UPDATE = [
-  Case.STATUS_TYPES.generalDocket,
-  Case.STATUS_TYPES.generalDocketReadyForTrial,
-  Case.STATUS_TYPES.submitted,
-  Case.STATUS_TYPES.cav,
-  Case.STATUS_TYPES.rule155,
-  Case.STATUS_TYPES.jurisdictionRetained,
   Case.STATUS_TYPES.assignedCase,
   Case.STATUS_TYPES.assignedMotion,
+  Case.STATUS_TYPES.cav,
   Case.STATUS_TYPES.closed,
+  Case.STATUS_TYPES.generalDocket,
+  Case.STATUS_TYPES.generalDocketReadyForTrial,
+  Case.STATUS_TYPES.jurisdictionRetained,
   Case.STATUS_TYPES.onAppeal,
+  Case.STATUS_TYPES.rule155,
+  Case.STATUS_TYPES.submitted,
 ];
 
 Case.ANSWER_CUTOFF_AMOUNT = 45;
@@ -137,6 +151,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
     },
     'Please enter a valid IRS notice date',
   ],
+  mailingDate: 'Enter a mailing date',
   ownershipDisclosureFile: 'Upload an Ownership Disclosure Statement',
   ownershipDisclosureFileSize: [
     {
@@ -146,15 +161,6 @@ Case.VALIDATION_ERROR_MESSAGES = {
     'Your Ownership Disclosure Statement file size is empty',
   ],
   partyType: 'Select a party type',
-  payGovDate: [
-    {
-      contains: 'must be less than or equal to',
-      message:
-        'The Fee Payment date cannot be in the future. Enter a valid date.',
-    },
-    'Please enter a valid Fee Payment date',
-  ],
-  payGovId: 'Fee Payment Id must be in a valid format',
   petitionFile: 'Upload a Petition',
   petitionFileSize: [
     {
@@ -163,6 +169,10 @@ Case.VALIDATION_ERROR_MESSAGES = {
     },
     'Your Petition file size is empty',
   ],
+  petitionPaymentDate: 'Enter a payment date',
+  petitionPaymentMethod: 'Enter payment method',
+  petitionPaymentStatus: 'Enter payment status',
+  petitionPaymentWaivedDate: 'Enter date of waiver',
   preferredTrialCity: 'Select a preferred trial location',
   procedureType: 'Select a case procedure',
   receivedAt: [
@@ -210,25 +220,30 @@ function Case(rawCase, { applicationContext }) {
   this.blockedReason = rawCase.blockedReason;
   this.caseCaption = rawCase.caseCaption;
   this.caseId = rawCase.caseId || applicationContext.getUniqueId();
+  this.caseNote = rawCase.caseNote;
   this.caseType = rawCase.caseType;
-  this.contactPrimary = rawCase.contactPrimary;
-  this.contactSecondary = rawCase.contactSecondary;
   this.createdAt = rawCase.createdAt || createISODateString();
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
   this.hasIrsNotice = rawCase.hasIrsNotice;
+  this.mailingDate = rawCase.mailingDate;
   this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
   this.highPriority = rawCase.highPriority;
   this.highPriorityReason = rawCase.highPriorityReason;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.irsSendDate = rawCase.irsSendDate;
   this.isPaper = rawCase.isPaper;
+  this.leadCaseId = rawCase.leadCaseId;
   this.partyType = rawCase.partyType;
-  this.payGovDate = rawCase.payGovDate;
-  this.payGovId = rawCase.payGovId;
+  this.petitionPaymentStatus =
+    rawCase.petitionPaymentStatus || Case.PAYMENT_STATUS.UNPAID;
+  this.petitionPaymentDate = rawCase.petitionPaymentDate;
+  this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
+  this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
   this.preferredTrialCity = rawCase.preferredTrialCity;
   this.procedureType = rawCase.procedureType;
+  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
@@ -285,6 +300,7 @@ function Case(rawCase, { applicationContext }) {
     this.docketRecord = [];
   }
 
+  this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
   this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
   this.orderForAmendedPetitionAndFilingFee =
@@ -303,6 +319,17 @@ function Case(rawCase, { applicationContext }) {
       rawValue: rawCase.orderDesignatingPlaceOfTrial,
     },
   );
+
+  const contacts = ContactFactory.createContacts({
+    contactInfo: {
+      primary: rawCase.contactPrimary,
+      secondary: rawCase.contactSecondary,
+    },
+    isPaper: rawCase.isPaper,
+    partyType: rawCase.partyType,
+  });
+  this.contactPrimary = contacts.primary;
+  this.contactSecondary = contacts.secondary;
 }
 
 joiValidationDecorator(
@@ -323,13 +350,23 @@ joiValidationDecorator(
       otherwise: joi.optional().allow(null),
       then: joi.string().required(),
     }),
+    caseCaption: joi.string().optional(),
     caseId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
       .optional(),
+    caseNote: joi.string().optional(),
     caseType: joi.string().optional(),
+    contactPrimary: joi
+      .object()
+      .optional()
+      .allow(null),
+    contactSecondary: joi
+      .object()
+      .optional()
+      .allow(null),
     createdAt: joi
       .date()
       .iso()
@@ -375,30 +412,80 @@ joiValidationDecorator(
       .iso()
       .optional(),
     isPaper: joi.boolean().optional(),
+    leadCaseId: joi
+      .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
+      .optional(),
+    mailingDate: joi.when('isPaper', {
+      is: true,
+      otherwise: joi
+        .string()
+        .max(25)
+        .allow(null)
+        .optional(),
+      then: joi
+        .string()
+        .max(25)
+        .required(),
+    }),
     noticeOfAttachments: joi.boolean().optional(),
+    noticeOfTrialDate: joi
+      .date()
+      .iso()
+      .optional(),
     orderForAmendedPetition: joi.boolean().optional(),
     orderForAmendedPetitionAndFilingFee: joi.boolean().optional(),
     orderForFilingFee: joi.boolean().optional(),
     orderForOds: joi.boolean().optional(),
     orderForRatification: joi.boolean().optional(),
+    orderToChangeDesignatedPlaceOfTrial: joi.boolean().optional(),
     orderToShowCause: joi.boolean().optional(),
     partyType: joi.string().optional(),
-    payGovDate: joi
-      .date()
-      .iso()
-      .max('now')
-      .allow(null)
-      .optional(),
-    payGovId: joi
+    petitionPaymentDate: joi.when('petitionPaymentStatus', {
+      is: Case.PAYMENT_STATUS.PAID,
+      otherwise: joi
+        .date()
+        .iso()
+        .optional()
+        .allow(null),
+      then: joi
+        .date()
+        .iso()
+        .required(),
+    }),
+    petitionPaymentMethod: joi.when('petitionPaymentStatus', {
+      is: Case.PAYMENT_STATUS.PAID,
+      otherwise: joi
+        .string()
+        .allow(null)
+        .optional(),
+      then: joi.string().required(),
+    }),
+    petitionPaymentStatus: joi
       .string()
-      .allow(null)
-      .optional(),
+      .valid(Object.values(Case.PAYMENT_STATUS))
+      .required(),
+    petitionPaymentWaivedDate: joi.when('petitionPaymentStatus', {
+      is: Case.PAYMENT_STATUS.WAIVED,
+      otherwise: joi
+        .date()
+        .iso()
+        .allow(null)
+        .optional(),
+      then: joi
+        .date()
+        .iso()
+        .required(),
+    }),
     practitioners: joi.array().optional(),
     preferredTrialCity: joi
       .string()
       .optional()
       .allow(null),
     procedureType: joi.string().optional(),
+    qcCompleteForTrial: joi.object().required(),
     receivedAt: joi
       .date()
       .iso()
@@ -407,7 +494,7 @@ joiValidationDecorator(
     respondents: joi.array().optional(),
     status: joi
       .string()
-      .valid(Object.keys(Case.STATUS_TYPES).map(key => Case.STATUS_TYPES[key]))
+      .valid(Object.values(Case.STATUS_TYPES))
       .optional(),
     trialDate: joi
       .date()
@@ -729,41 +816,6 @@ Case.prototype.getDocumentById = function({ documentId }) {
  */
 Case.prototype.getShowCaseNameForPrimary = function() {
   return !(this.contactSecondary && this.contactSecondary.name);
-};
-
-/**
- *
- * @param {string} payGovDate an ISO formatted date string
- * @returns {Case} the updated case entity
- */
-Case.prototype.markAsPaidByPayGov = function(payGovDate) {
-  this.payGovDate = payGovDate;
-
-  const newDocketItem = {
-    description: 'Filing fee paid',
-    filingDate: payGovDate,
-  };
-
-  let found;
-  let docketRecordIndex;
-  let datesMatch;
-
-  this.docketRecord.forEach((docketRecord, index) => {
-    if (docketRecord.description === newDocketItem.description) {
-      found = true;
-      docketRecordIndex = index;
-      if (docketRecord.filingDate === newDocketItem.filingDate) {
-        datesMatch = true;
-      }
-    }
-  });
-
-  if (payGovDate && !found) {
-    this.addDocketRecord(new DocketRecord(newDocketItem));
-  } else if (payGovDate && found && !datesMatch) {
-    this.updateDocketRecord(docketRecordIndex, new DocketRecord(newDocketItem));
-  }
-  return this;
 };
 
 /**
@@ -1192,8 +1244,8 @@ Case.prototype.setCaseTitle = function(caseCaption) {
 /**
  * get case contacts
  *
- * @returns {object} object containing case contacts
  * @param {object} shape specific contact params to be returned
+ * @returns {object} object containing case contacts
  */
 Case.prototype.getCaseContacts = function(shape) {
   const caseContacts = {};
@@ -1209,6 +1261,172 @@ Case.prototype.getCaseContacts = function(shape) {
   });
 
   return caseContacts;
+};
+
+/**
+ * get consolidation status between current case entity and another case entity
+ *
+ * @param {object} caseEntity the pending case entity to check
+ * @returns {object} object with canConsolidate flag and reason string
+ */
+Case.prototype.getConsolidationStatus = function({ caseEntity }) {
+  let canConsolidate = true;
+  const reason = [];
+
+  if (!this.canConsolidate(caseEntity)) {
+    return {
+      canConsolidate: false,
+      reason: [
+        `Case status is ${caseEntity.status} and cannot be consolidated`,
+      ],
+    };
+  }
+
+  if (this.docketNumber === caseEntity.docketNumber) {
+    canConsolidate = false;
+    reason.push('Cases are the same');
+  }
+
+  if (this.status !== caseEntity.status) {
+    canConsolidate = false;
+    reason.push('Case status is not the same');
+  }
+
+  if (this.procedureType !== caseEntity.procedureType) {
+    canConsolidate = false;
+    reason.push('Case procedure is not the same');
+  }
+
+  if (this.trialLocation !== caseEntity.trialLocation) {
+    canConsolidate = false;
+    reason.push('Place of trial is not the same');
+  }
+
+  if (this.associatedJudge !== caseEntity.associatedJudge) {
+    canConsolidate = false;
+    reason.push('Judge is not the same');
+  }
+
+  return { canConsolidate, reason };
+};
+
+/**
+ * checks case eligibility for consolidation by the current case's status
+ *
+ * @returns {boolean} true if eligible for consolidation, false otherwise
+ * @param {object} caseToConsolidate (optional) case to check for consolidation eligibility
+ */
+Case.prototype.canConsolidate = function(caseToConsolidate) {
+  const ineligibleStatusTypes = [
+    Case.STATUS_TYPES.batchedForIRS,
+    Case.STATUS_TYPES.new,
+    Case.STATUS_TYPES.recalled,
+    Case.STATUS_TYPES.generalDocket,
+    Case.STATUS_TYPES.closed,
+    Case.STATUS_TYPES.onAppeal,
+  ];
+
+  const caseToCheck = caseToConsolidate || this;
+
+  return !ineligibleStatusTypes.includes(caseToCheck.status);
+};
+
+/**
+ * sets lead case id on the current case
+ *
+ * @param {string} leadCaseId the caseId of the lead case for consolidation
+ * @returns {Case} the updated Case entity
+ */
+Case.prototype.setLeadCase = function(leadCaseId) {
+  this.leadCaseId = leadCaseId;
+  return this;
+};
+
+/**
+ * sorts the given array of cases by docket number
+ *
+ * @param {Array} cases the cases to check for lead case computation
+ * @returns {Case} the lead Case entity
+ */
+Case.sortByDocketNumber = function(cases) {
+  const casesOrdered = cases.sort((a, b) => {
+    const aSplit = a.docketNumber.split('-');
+    const bSplit = b.docketNumber.split('-');
+
+    if (aSplit[1] !== bSplit[1]) {
+      // compare years if they aren't the same
+      return aSplit[1].localeCompare(bSplit[1]);
+    } else {
+      // compare index if years are the same
+      return aSplit[0].localeCompare(bSplit[0]);
+    }
+  });
+
+  return casesOrdered;
+};
+
+/**
+ * return the lead case for the given set of cases based on createdAt
+ * (does NOT evaluate leadCaseId)
+ *
+ * @param {Array} cases the cases to check for lead case computation
+ * @returns {Case} the lead Case entity
+ */
+Case.findLeadCaseForCases = function(cases) {
+  const casesOrdered = Case.sortByDocketNumber([...cases]);
+  return casesOrdered.shift();
+};
+
+/**
+ * @param {string} documentId the id of the document to check
+ * @returns {boolean} true if the document is draft, false otherwise
+ */
+Case.prototype.isDocumentDraft = function(documentId) {
+  const document = this.getDocumentById({ documentId });
+
+  const isNotArchived = !document.archived;
+  const isNotServed = !document.servedAt;
+  const isDocumentOnDocketRecord = this.docketRecord.find(
+    docketEntry => docketEntry.documentId === document.documentId,
+  );
+  const isStipDecision = document.documentType === 'Stipulated Decision';
+  const isDraftOrder = orderDocumentTypes.includes(document.documentType);
+  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+    document.documentType,
+  );
+  return (
+    isNotArchived &&
+    isNotServed &&
+    (isStipDecision ||
+      (isDraftOrder && !isDocumentOnDocketRecord) ||
+      (isCourtIssuedDocument && !isDocumentOnDocketRecord))
+  );
+};
+
+/**
+ * sets the notice of trial date for a case
+ *
+ * @returns {Case} this case entity
+ */
+Case.prototype.setNoticeOfTrialDate = function() {
+  this.noticeOfTrialDate = createISODateString();
+  return this;
+};
+
+/**
+ * sets the qc complete for trial boolean for a case
+ *
+ * @param {object} providers the providers object
+ * @param {boolean} providers.qcCompleteForTrial the value to set for qcCompleteForTrial
+ * @param {string} providers.trialSessionId the id of the trial session to set qcCompleteForTrial for
+ * @returns {Case} this case entity
+ */
+Case.prototype.setQcCompleteForTrial = function({
+  qcCompleteForTrial,
+  trialSessionId,
+}) {
+  this.qcCompleteForTrial[trialSessionId] = qcCompleteForTrial;
+  return this;
 };
 
 module.exports = { Case };

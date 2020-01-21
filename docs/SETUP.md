@@ -10,7 +10,7 @@
           - Make the intended domain name available on your local system, e.g. `export EFCMS_DOMAIN="ef-cms.example.gov"`
           - Create the policies on your local system: `cd iam/terraform/account-specific/main && ../bin/deploy-app.sh`
                - Make a note of the `cloudwatch_role_arn` that is output, to use shortly for the CirleCI setup.
-          - cd `../../environment-specific/main` && ../bin/deploy-app stg`
+          - cd `../../environment-specific/main && ../bin/deploy-app.sh stg`
                - Make a note of the ARNs that are output, to use shortly for the CirleCI setup.
      - In IAM, attach the `circle_ci_policy` to your `CircleCI` user.
      - Note the AWS-generated access key and secret access key — it will needed shortly for the CircleCI setup.
@@ -18,6 +18,7 @@
 - Create the Lambda roles & policies needed for the Lambdas that run the backend:
      - `cd iam/environment-specific/terraform/main && ../bin/deploy-app dev`
      - `cd iam/environment-specific/terraform/main && ../bin/deploy-app stg`
+     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app test`
      - `cd iam/environment-specific/terraform/main && ../bin/deploy-app prod`
 - [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
 - [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
@@ -39,6 +40,7 @@
 5. Go to the settings of the project in CircleCI via clicking on the project / job, and clicking the gear icon
 6. Click "Environment Variables"
 7. Add the following:
+     - `AWS_ACCOUNT_ID` (the AWS account ID, without hyphens, e.g. `345678901234`)
      - `AWS_ACCESS_KEY_ID` (the access key for the AWS CircleCI user created in the Prerequisites)
      - `AWS_SECRET_ACCESS_KEY` (the secret access key for the AWS CircleCI user created in the Prerequisites)
      - `EFCMS_DOMAIN` (the domain indented for use by the court, e.g., `ef-cms.example.gov`)
@@ -53,11 +55,33 @@
      - `USTC_ADMIN_PASS` (a unique password of your choice used by the Cognito admin user)
      - `DYNAMSOFT_PRODUCT_KEYS_DEV` (the product key provided after purchasing Dynamic Web TWAIN)
      - `DYNAMSOFT_PRODUCT_KEYS_STG`  (the product key provided after purchasing Dynamic Web TWAIN)
+     - `DYNAMSOFT_PRODUCT_KEYS_TEST`  (the product key provided after purchasing Dynamic Web TWAIN)
      - `DYNAMSOFT_PRODUCT_KEYS_PROD`  (the product key provided after purchasing Dynamic Web TWAIN)
      - `DYNAMSOFT_S3_ZIP_PATH` (the full S3 path to the Dynamic Web TWAIN ZIP, e.g. `s3://ef-cms.ustaxcourt.gov-software/Dynamsoft/dynamic-web-twain-sdk-14.3.1.tar.gz`)
      - `CLOUDWATCH_ROLE_ARN` (the ARN output after running Terraform in the `iam/terraform/account-specific/main` dir)
      - `POST_CONFIRMATION_ROLE_ARN_DEV` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
      - `POST_CONFIRMATION_ROLE_ARN_STG` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
+     - `POST_CONFIRMATION_ROLE_ARN_TEST` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
      - `POST_CONFIRMATION_ROLE_ARN_PROD` (the ARN output after running Terraform in the `iam/terraform/environment-specific/main` dir)
      - `SES_DMARC_EMAIL` (email address used with SES to which aggregate DMARC validations are sent)
 8. Run a build in CircleCI.
+
+## Setting up a new environment
+1. Choose a name for the branch which will be used for deployments (henceforth `$BRANCH`). Examples are 'master', 'develop', 'staging'.
+2. Choose a name for this environment (henceforth `$ENVIRONMENT`). Examples are 'prod', 'dev', 'stg'.
+3. Add CircleCI badge link to the README.md according to `$BRANCH`
+4. Edit `get-es-instance-count.sh`, adding a new `elif` statement for your `$BRANCH` which returns the appropriate number of ElasticSearch instances.
+5. Edit `get-keys.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the `$ENVIRONMENT`-specific Dynamsoft licensing keys; licensing requires that each environment use their own unique keys.
+6. Edit `get-post-confirmation-role-arn.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the correct Amazon resource name for your `$ENVIRONMENT` (see SETUP.md)
+7. Create the `config/$ENVIRONMENT.yml` (e.g. `config/stg.yml`)
+8. Create the `web-api/config/$ENVIRONMENT.yml` (e.g. `web-api/config/stg.yml`)
+9. Add mention of your environment, if appropriate, to SETUP.md
+    - to create Lambda roles & policies:
+      - e.g. `cd iam/environment-specific/terraform/main && ../bin/deploy-app $ENVIRONMENT`
+    - mention your `DYNAMSOFT_PRODUCT_KEYS_$ENVIRONMENT`
+    - mention your `POST_CONFIRMATION_ROLE_ARN_$ENVIRONMENT`
+10. Mention your `$ENVIRONMENT`, if necessary, in `web-api/deploy-sandbox.sh` within the `run_development` function
+11. For all files matching `web-api/serverless-*yml`, include your `$ENVIRONMENT` within the list of `custom.alerts.stages` if you want your `$ENVIRONMENT` to be included in those which are monitored & emails delivered upon alarm.
+12. Update circle CI to have all the new environment variables needed:
+     - DYNAMSOFT_PRODUCT_KEYS_`$ENVIRONMENT`
+     - POST_CONFIRMATION_ROLE_ARN_`$ENVIRONMENT`

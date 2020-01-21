@@ -11,6 +11,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unset } from 'cerebral/factories';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { unstashCreateOrderModalDataAction } from '../actions/CourtIssuedOrder/unstashCreateOrderModalDataAction';
 
 const gotoCreateOrder = [
@@ -23,6 +24,7 @@ const gotoCreateOrder = [
   unstashCreateOrderModalDataAction,
   ...convertHtml2PdfSequence,
   setCurrentPageAction('CreateOrder'),
+  unsetWaitingForResponseAction,
 ];
 
 const gotoCaseDetailWithModal = [

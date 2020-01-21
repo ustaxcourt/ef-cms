@@ -1,4 +1,5 @@
 import { setupTest, uploadPetition } from './helpers';
+import calendarClerkLogIn from './journey/calendarClerkLogIn';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
@@ -10,6 +11,7 @@ import judgeLogIn from './journey/judgeLogIn';
 import judgeSignsOut from './journey/judgeSignsOut';
 import judgeViewsNotesFromCaseDetail from './journey/judgeViewsNotesFromCaseDetail';
 import judgeViewsTrialSessionWorkingCopy from './journey/judgeViewsTrialSessionWorkingCopy';
+import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
@@ -44,11 +46,11 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
 
   const caseOverrides = {
     ...overrides,
-    procedureType: 'Small',
-    receivedAtYear: '2019',
-    receivedAtMonth: '01',
-    receivedAtDay: '01',
     caseType: 'Deficiency',
+    procedureType: 'Small',
+    receivedAtDay: '01',
+    receivedAtMonth: '01',
+    receivedAtYear: '2019',
   };
   petitionerLogin(test);
   it('Create case', async () => {
@@ -65,6 +67,10 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
 
   docketClerkLogIn(test);
   docketClerkSetsCaseReadyForTrial(test);
+  userSignsOut(test);
+
+  calendarClerkLogIn(test);
+  markAllCasesAsQCed(test, () => createdCases);
   userSignsOut(test);
 
   petitionsClerkLogIn(test);

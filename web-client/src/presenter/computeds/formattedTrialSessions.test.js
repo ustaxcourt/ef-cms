@@ -37,6 +37,7 @@ describe('formattedTrialSessions', () => {
     },
     {
       judge: { name: '3', userId: '3' },
+      noticeIssuedDate: '2019-07-25T15:00:00.000Z',
       startDate: '2019-11-27T15:00:00.000Z',
       swingSession: true,
       trialLocation: 'Jacksonville, FL',
@@ -79,6 +80,7 @@ describe('formattedTrialSessions', () => {
   it('formats trial sessions correctly selecting startOfWeek and formatting start date', () => {
     const result = formatSession(TRIAL_SESSIONS_LIST[2], applicationContext);
     expect(result).toMatchObject({
+      formattedNoticeIssuedDate: '07/25/2019',
       formattedStartDate: '11/27/19',
       judge: { name: '3', userId: '3' },
       startDate: '2019-11-27T15:00:00.000Z',

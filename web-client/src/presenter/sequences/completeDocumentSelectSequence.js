@@ -1,3 +1,4 @@
+import { canFileInConsolidatedCasesAction } from '../actions/FileDocument/canFileInConsolidatedCasesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
 import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
@@ -8,7 +9,9 @@ import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { unset } from 'cerebral/factories';
 import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocumentTypeAction';
 
 export const completeDocumentSelectSequence = [
@@ -25,6 +28,11 @@ export const completeDocumentSelectSequence = [
       generateTitleAction,
       setDocketNumberPropAction,
       setDefaultFileDocumentFormValuesAction,
+      canFileInConsolidatedCasesAction,
+      {
+        no: [],
+        yes: [unset(state.form.partyPrimary)],
+      },
       navigateToFileADocumentAction,
     ],
   },

@@ -1,24 +1,22 @@
-const _ = require('lodash');
 const { Case } = require('../entities/cases/Case');
+const { cloneDeep, isEmpty } = require('lodash');
+const { dateStringsCompared } = require('./DateHandler');
 const { Document } = require('../entities/Document');
-const { Order } = require('../entities/orders/Order');
 
-const orderDocumentTypes = Order.ORDER_TYPES.map(
-  orderType => orderType.documentType,
-);
 const courtIssuedDocumentTypes = Document.COURT_ISSUED_EVENT_CODES.map(
   courtIssuedDoc => courtIssuedDoc.documentType,
 );
 
 const formatDocument = (applicationContext, document) => {
-  const result = _.cloneDeep(document);
+  const result = cloneDeep(document);
+
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
 
   result.servedAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(result.servedAt, 'DATE_TIME');
+    .formatDateString(result.servedAt, 'MMDDYY');
 
   result.signedAtFormatted = applicationContext
     .getUtilities()
@@ -78,7 +76,7 @@ const formatDocument = (applicationContext, document) => {
 };
 
 const formatDocketRecord = (applicationContext, docketRecord) => {
-  const result = _.cloneDeep(docketRecord);
+  const result = cloneDeep(docketRecord);
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.filingDate, 'MMDDYY');
@@ -87,7 +85,7 @@ const formatDocketRecord = (applicationContext, docketRecord) => {
 };
 
 const formatCaseDeadline = (applicationContext, caseDeadline) => {
-  const result = _.cloneDeep(caseDeadline);
+  const result = cloneDeep(caseDeadline);
   result.deadlineDateFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.deadlineDate, 'MMDDYY');
@@ -121,7 +119,7 @@ const formatDocketRecordWithDocument = (
 
     const { index } = record;
 
-    if (record.documentId) {
+    if (record.documentId && documentMap[record.documentId]) {
       formattedDocument = formatDocument(
         applicationContext,
         documentMap[record.documentId],
@@ -186,10 +184,12 @@ const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {
 };
 
 const formatCase = (applicationContext, caseDetail) => {
-  if (_.isEmpty(caseDetail)) {
+  if (isEmpty(caseDetail)) {
     return {};
   }
-  const result = _.cloneDeep(caseDetail);
+  const formatCaseEntity = new Case(caseDetail, { applicationContext });
+  const result = cloneDeep(caseDetail);
+
   result.docketRecordWithDocument = [];
 
   if (result.documents)
@@ -211,43 +211,25 @@ const formatCase = (applicationContext, caseDetail) => {
     entry => entry.document && entry.document.pending,
   );
 
-  result.draftDocuments = (result.documents || []).filter(document => {
-    const isNotArchived = !document.archived;
-    const isNotServed = !document.servedAt;
-    const isDocumentOnDocketRecord = result.docketRecord.find(
-      docketEntry => docketEntry.documentId === document.documentId,
-    );
-    const isStipDecision = document.documentType === 'Stipulated Decision';
-    const isDraftOrder = orderDocumentTypes.includes(document.documentType);
-    const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
-      document.documentType,
-    );
-    return (
-      isNotArchived &&
-      isNotServed &&
-      (isStipDecision ||
-        (isDraftOrder && !isDocumentOnDocketRecord) ||
-        (isCourtIssuedDocument && !isDocumentOnDocketRecord))
-    );
-  });
-
-  result.draftDocuments = result.draftDocuments.map(document => ({
-    ...document,
-    editUrl:
-      document.documentType === 'Stipulated Decision'
-        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
-    signUrl:
-      document.documentType === 'Stipulated Decision'
-        ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
-        : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
-    signedAtFormatted: applicationContext
-      .getUtilities()
-      .formatDateString(document.signedAt, 'MMDDYY'),
-    signedAtFormattedTZ: applicationContext
-      .getUtilities()
-      .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
-  }));
+  result.draftDocuments = (result.documents || [])
+    .filter(document => formatCaseEntity.isDocumentDraft(document.documentId))
+    .map(document => ({
+      ...document,
+      editUrl:
+        document.documentType === 'Stipulated Decision'
+          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+          : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}`,
+      signUrl:
+        document.documentType === 'Stipulated Decision'
+          ? `/case-detail/${caseDetail.docketNumber}/documents/${document.documentId}/sign`
+          : `/case-detail/${caseDetail.docketNumber}/edit-order/${document.documentId}/sign`,
+      signedAtFormatted: applicationContext
+        .getUtilities()
+        .formatDateString(document.signedAt, 'MMDDYY'),
+      signedAtFormattedTZ: applicationContext
+        .getUtilities()
+        .formatDateString(document.signedAt, 'DATE_TIME_TZ'),
+    }));
 
   // establish an initial sort by ascending index
   result.docketRecordWithDocument.sort((a, b) => {
@@ -280,9 +262,6 @@ const formatCase = (applicationContext, caseDetail) => {
   result.irsDateFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.irsSendDate, 'DATE_TIME');
-  result.payGovDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.payGovDate, 'MMDDYY');
 
   result.docketNumberWithSuffix = `${
     result.docketNumber
@@ -347,32 +326,40 @@ const formatCase = (applicationContext, caseDetail) => {
     result.showNotScheduled = true;
   }
 
+  result.isConsolidatedSubCase = !!(
+    result.leadCaseId && result.leadCaseId !== result.caseId
+  );
+
+  result.isLeadCase = !!(
+    result.leadCaseId && result.leadCaseId === result.caseId
+  );
+
+  let paymentDate = '';
+  let paymentMethod = '';
+  if (caseDetail.petitionPaymentStatus === Case.PAYMENT_STATUS.PAID) {
+    paymentDate = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.petitionPaymentDate, 'MM/DD/YY');
+    paymentMethod = caseDetail.petitionPaymentMethod;
+  } else if (caseDetail.petitionPaymentStatus === Case.PAYMENT_STATUS.WAIVED) {
+    paymentDate = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MM/DD/YY');
+  }
+  result.filingFee = `${caseDetail.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
+
+  const caseEntity = new Case(caseDetail, { applicationContext });
+  result.canConsolidate = caseEntity.canConsolidate();
+
+  if (result.consolidatedCases) {
+    result.consolidatedCases = result.consolidatedCases.map(
+      consolidatedCase => {
+        return formatCase(applicationContext, consolidatedCase);
+      },
+    );
+  }
+
   return result;
-};
-
-const dateStringsCompared = (a, b) => {
-  const simpleDatePattern = /^(\d{4}-\d{2}-\d{2})/;
-  const simpleDateLength = 10; // e.g. YYYY-MM-DD
-
-  if (a.length == simpleDateLength || b.length == simpleDateLength) {
-    // at least one date has a simple format, compare only year, month, and day
-    const [aSimple, bSimple] = [
-      a.match(simpleDatePattern)[0],
-      b.match(simpleDatePattern)[0],
-    ];
-    if (aSimple.localeCompare(bSimple) == 0) {
-      return 0;
-    }
-  }
-
-  const secondsDifference = 30 * 1000;
-  const aDate = new Date(a);
-  const bDate = new Date(b);
-  if (Math.abs(aDate - bDate) < secondsDifference) {
-    // treat as equal time stamps
-    return 0;
-  }
-  return aDate - bDate;
 };
 
 const getDocketRecordSortFunc = sortBy => {
@@ -426,6 +413,8 @@ const getFormattedCaseDetail = ({
 module.exports = {
   formatCase,
   formatCaseDeadlines,
+  formatDocketRecord,
+  formatDocketRecordWithDocument,
   formatDocument,
   getFilingsAndProceedings,
   getFormattedCaseDetail,

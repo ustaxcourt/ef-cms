@@ -22,10 +22,6 @@ describe('TrialSessionWorkingCopy entity', () => {
             trialStatus: 'recall',
           },
         },
-        filters: {
-          aBasisReached: true,
-          showAll: true,
-        },
         sessionNotes: 'These are notes about a session',
         sort: 'practitioner',
         sortOrder: 'desc',

@@ -139,16 +139,6 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
-    it('adds a paygov date to an already existing case json', () => {
-      const myCase = new Case(
-        { payGovId: '1234', ...MOCK_CASE },
-        {
-          applicationContext,
-        },
-      );
-      expect(myCase.isValid()).toBeTruthy();
-    });
-
     it('Creates an invalid case with a document', () => {
       const myCase = new Case(
         {
@@ -297,6 +287,39 @@ describe('Case entity', () => {
       );
       expect(myCase.isValid()).toBeTruthy();
     });
+
+    describe('with different payment statuses', () => {
+      it('requires payment date and method if petition fee status is paid', () => {
+        const myCase = new Case(
+          {
+            ...MOCK_CASE,
+            petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+          },
+          {
+            applicationContext,
+          },
+        );
+        expect(myCase.getFormattedValidationErrors()).toMatchObject({
+          petitionPaymentDate: expect.anything(),
+          petitionPaymentMethod: expect.anything(),
+        });
+      });
+
+      it('requires waived date to be specified if petition fee is waived', () => {
+        const myCase = new Case(
+          {
+            ...MOCK_CASE,
+            petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+          },
+          {
+            applicationContext,
+          },
+        );
+        expect(myCase.getFormattedValidationErrors()).toMatchObject({
+          petitionPaymentWaivedDate: expect.anything(),
+        });
+      });
+    });
   });
 
   describe('validate', () => {
@@ -326,6 +349,29 @@ describe('Case entity', () => {
       }
       expect(error).toBeDefined();
     });
+
+    it('should throw an error on a case that is missing contacts', () => {
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          contactPrimary: {},
+          partyType: 'Petitioner & spouse',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors = testCase.getFormattedValidationErrors();
+      expect(errors).toMatchObject({
+        contactPrimary: {
+          name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
+        },
+        contactSecondary: {
+          name: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.name,
+        },
+      });
+    });
   });
 
   describe('isValidCaseId', () => {
@@ -347,7 +393,7 @@ describe('Case entity', () => {
       expect(Case.isValidDocketNumber('00101-00')).toBeTruthy();
     });
 
-    it('returns false if a invalid docketnumber', () => {
+    it('returns false if an invalid docket number', () => {
       expect(Case.isValidDocketNumber('00')).toBeFalsy();
     });
   });
@@ -623,60 +669,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('markAsPaidByPayGov', () => {
-    it('sets pay gov fields', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      expect(caseRecord.payGovDate).toBeDefined();
-    });
-
-    it('should add item to docket record when paid', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      const payGovDate = new Date().toISOString();
-      const initialDocketLength =
-        (caseRecord.docketRecord && caseRecord.docketRecord.length) || 0;
-      caseRecord.markAsPaidByPayGov(payGovDate);
-      const docketLength = caseRecord.docketRecord.length;
-      expect(docketLength).toEqual(initialDocketLength + 1);
-    });
-
-    it('should only set docket record once per time paid', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      const docketLength = caseRecord.docketRecord.length;
-      caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      caseRecord.markAsPaidByPayGov(new Date('2019-01-01').toISOString());
-      caseRecord.markAsPaidByPayGov(new Date('2019-01-01').toISOString());
-      expect(docketLength).toEqual(caseRecord.docketRecord.length);
-    });
-
-    it('should overwrite existing docket record entry if one already exists', () => {
-      const caseRecord = new Case(MOCK_CASE, {
-        applicationContext,
-      });
-      caseRecord.addDocketRecord(
-        new DocketRecord({
-          description: 'Some Description',
-          filingDate: new Date().toISOString(),
-        }),
-      );
-      caseRecord.addDocketRecord(
-        new DocketRecord({
-          description: 'Filing fee paid',
-          filingDate: new Date().toISOString(),
-        }),
-      );
-      caseRecord.markAsPaidByPayGov(new Date().toISOString());
-      expect(caseRecord.docketRecord.length).toEqual(5);
-    });
-  });
-
   describe('setRequestForTrialDocketRecord', () => {
     it('sets request for trial docket record when it does not already exist', () => {
       const caseRecord = new Case(MOCK_CASE, {
@@ -698,13 +690,13 @@ describe('Case entity', () => {
       caseRecord.setRequestForTrialDocketRecord(preferredTrialCity);
       const docketLength = caseRecord.docketRecord.length;
       caseRecord.setRequestForTrialDocketRecord('Birmingham, Alabama');
-      caseRecord.setRequestForTrialDocketRecord('Somecity, USA');
+      caseRecord.setRequestForTrialDocketRecord('Some city, USA');
       expect(docketLength).toEqual(caseRecord.docketRecord.length);
     });
   });
 
   describe('addDocketRecord', () => {
-    it('adds a new docketrecord', () => {
+    it('adds a new docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -722,14 +714,14 @@ describe('Case entity', () => {
 
       caseRecord.addDocketRecord(
         new DocketRecord({
-          description: 'sdfs',
+          description: 'some description',
           filingDate: new Date().toISOString(),
         }),
       );
 
       expect(caseRecord.docketRecord[4].index).toEqual(6);
     });
-    it('validates the docketrecord', () => {
+    it('validates the docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -745,7 +737,7 @@ describe('Case entity', () => {
   });
 
   describe('updateDocketRecordEntry', () => {
-    it('updates an existing docketrecord', () => {
+    it('updates an existing docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -764,7 +756,7 @@ describe('Case entity', () => {
       expect(caseRecord.docketRecord[1].index).toEqual(7);
     });
 
-    it('validates the docketrecord', () => {
+    it('validates the docket record', () => {
       const caseRecord = new Case(MOCK_CASE, {
         applicationContext,
       });
@@ -788,12 +780,12 @@ describe('Case entity', () => {
         },
       );
       try {
-        caseRecord.validateWithError(new Error('Imarealerror'));
+        caseRecord.validateWithError(new Error("I'm a real error"));
       } catch (e) {
         error = e;
       }
       expect(error).toBeDefined();
-      expect(error.message).toContain('Imarealerror');
+      expect(error.message).toContain("I'm a real error");
     });
 
     it('does not pass back an error passed in if valid', () => {
@@ -802,7 +794,7 @@ describe('Case entity', () => {
         applicationContext,
       });
       try {
-        caseRecord.validateWithError(new Error('Imarealerror'));
+        caseRecord.validateWithError(new Error("I'm a real error"));
       } catch (e) {
         error = e;
       }
@@ -894,7 +886,7 @@ describe('Case entity', () => {
     });
 
     it('returns the filing types for user role petitioner for unknown role', () => {
-      const filingTypes = Case.getFilingTypes('whodat');
+      const filingTypes = Case.getFilingTypes('unknown');
       expect(filingTypes).not.toBeNull();
       expect(filingTypes.length).toEqual(4);
       expect(filingTypes[0]).toEqual('Myself');
@@ -1491,7 +1483,7 @@ describe('Case entity', () => {
   });
 
   describe('updatePractitioner', () => {
-    it('updates the given practioner on the case', () => {
+    it('updates the given practitioner on the case', () => {
       const caseToVerify = new Case(
         {
           practitioners: [
@@ -1551,7 +1543,7 @@ describe('Case entity', () => {
         {
           respondents: [
             new Practitioner({
-              email: 'rspndnt',
+              email: 'respondent@example.com',
               userId: 'respondent',
             }),
           ],
@@ -1562,7 +1554,9 @@ describe('Case entity', () => {
       );
 
       expect(caseToVerify.respondents).not.toBeNull();
-      expect(caseToVerify.respondents[0].email).toEqual('rspndnt');
+      expect(caseToVerify.respondents[0].email).toEqual(
+        'respondent@example.com',
+      );
 
       caseToVerify.updateRespondent({
         email: 'respondent@example.com',
@@ -1902,11 +1896,24 @@ describe('Case entity', () => {
 
   describe('getCaseContacts', () => {
     const contactPrimary = {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
       name: 'Test Petitioner',
+      postalCode: '12345',
+      state: 'TN',
       title: 'Executor',
     };
 
-    const contactSecondary = { name: 'Contact Secondary' };
+    const contactSecondary = {
+      address1: '123 Main St',
+      city: 'Somewhere',
+      countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+      name: 'Contact Secondary',
+      postalCode: '12345',
+      state: 'TN',
+      title: 'Executor',
+    };
 
     const practitioners = [
       {
@@ -1926,6 +1933,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           contactPrimary,
           contactSecondary,
+          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
           practitioners,
           respondents,
         },
@@ -1949,6 +1957,7 @@ describe('Case entity', () => {
           ...MOCK_CASE,
           contactPrimary,
           contactSecondary,
+          partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
           practitioners,
           respondents,
         },
@@ -1964,6 +1973,451 @@ describe('Case entity', () => {
       expect(caseContacts).toMatchObject({
         contactPrimary,
         contactSecondary,
+      });
+    });
+  });
+
+  describe('Case Consolidation Eligibility', () => {
+    describe('canConsolidate', () => {
+      let caseEntity;
+
+      beforeEach(() => {
+        caseEntity = new Case(
+          { ...MOCK_CASE, status: 'Submitted' },
+          {
+            applicationContext,
+          },
+        );
+      });
+
+      it('should fail when the pending case status is ineligible', () => {
+        caseEntity.status = 'New';
+        const result = caseEntity.canConsolidate();
+
+        expect(result).toEqual(false);
+      });
+
+      it('should pass when a case has an eligible case status', () => {
+        const result = caseEntity.canConsolidate();
+
+        expect(result).toEqual(true);
+      });
+
+      it('should accept a case for consolidation as a param to check its eligible case status', () => {
+        let result;
+
+        // verify a failure on the current (this) case
+        caseEntity.status = 'New';
+        result = caseEntity.canConsolidate();
+        expect(result).toEqual(false);
+
+        // should also fail because duplicate of (this) case
+        const otherCase = { ...caseEntity };
+        result = caseEntity.canConsolidate(otherCase);
+        expect(result).toEqual(false);
+
+        otherCase.status = 'Submitted';
+        result = caseEntity.canConsolidate(otherCase);
+        expect(result).toEqual(true);
+      });
+    });
+
+    describe('getConsolidationStatus', () => {
+      let leadCaseEntity;
+      let pendingCaseEntity;
+
+      beforeEach(() => {
+        leadCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+
+        pendingCaseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            docketNumber: '102-19',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+      });
+
+      it('should fail when case statuses are not the same', () => {
+        pendingCaseEntity.status = 'Calendared';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual(['Case status is not the same']);
+      });
+
+      it('should fail when cases are the same', () => {
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: leadCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual(['Cases are the same']);
+      });
+
+      it('should fail when case procedures are not the same', () => {
+        pendingCaseEntity.procedureType = 'small';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual(['Case procedure is not the same']);
+      });
+
+      it('should fail when case trial locations are not the same', () => {
+        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual(['Place of trial is not the same']);
+      });
+
+      it('should fail when case judges are not the same', () => {
+        pendingCaseEntity.associatedJudge = 'Some judge';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual(['Judge is not the same']);
+      });
+
+      it('should fail when case statuses are both ineligible', () => {
+        leadCaseEntity.status = 'Closed';
+        pendingCaseEntity.status = 'Closed';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual([
+          'Case status is Closed and cannot be consolidated',
+        ]);
+      });
+
+      it('should only return the ineligible failure if the pending case status is ineligible', () => {
+        leadCaseEntity.status = 'Submitted';
+        pendingCaseEntity.status = 'Closed';
+        pendingCaseEntity.procedureType = 'small';
+        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+        pendingCaseEntity.associatedJudge = 'Some judge';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual([
+          'Case status is Closed and cannot be consolidated',
+        ]);
+      });
+
+      it('should return all reasons for the failure if the case status is eligible', () => {
+        pendingCaseEntity.procedureType = 'small';
+        pendingCaseEntity.trialLocation = 'Flavortown, AR';
+        pendingCaseEntity.associatedJudge = 'Some judge';
+
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(false);
+        expect(result.reason).toEqual([
+          'Case procedure is not the same',
+          'Place of trial is not the same',
+          'Judge is not the same',
+        ]);
+      });
+
+      it('should pass when both cases are eligible for consolidation', () => {
+        const result = leadCaseEntity.getConsolidationStatus({
+          caseEntity: pendingCaseEntity,
+        });
+
+        expect(result.canConsolidate).toEqual(true);
+        expect(result.reason).toEqual([]);
+      });
+    });
+
+    describe('setLeadCase', () => {
+      it('Should set the leadCaseId on the given case', async () => {
+        const leadCaseId = 'd64ba5a9-b37b-479d-9201-067ec6e335cc';
+        const caseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            preferredTrialCity: 'Birmingham, AL',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+        const result = caseEntity.setLeadCase(leadCaseId);
+
+        expect(result.leadCaseId).toEqual(leadCaseId);
+      });
+    });
+
+    describe('sortByDocketNumber', () => {
+      it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {
+        const result = Case.sortByDocketNumber([
+          {
+            caseId: '123',
+            docketNumber: '110-19',
+          },
+          {
+            caseId: '234',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+
+        expect(result).toEqual([
+          {
+            caseId: '234',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '123',
+            docketNumber: '110-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+      });
+
+      it('Should return the cases as an array sorted by docket number for cases filed in different years', () => {
+        const result = Case.sortByDocketNumber([
+          {
+            caseId: '123',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '234',
+            docketNumber: '110-18',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+          {
+            caseId: '456',
+            docketNumber: '120-18',
+          },
+        ]);
+
+        expect(result).toEqual([
+          {
+            caseId: '234',
+            docketNumber: '110-18',
+          },
+          {
+            caseId: '456',
+            docketNumber: '120-18',
+          },
+          {
+            caseId: '123',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+      });
+    });
+
+    describe('findLeadCaseForCases', () => {
+      it('Should return the case with the lowest docket number for cases filed in the same year', () => {
+        const result = Case.findLeadCaseForCases([
+          {
+            caseId: '123',
+            docketNumber: '110-19',
+          },
+          {
+            caseId: '234',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+
+        expect(result.caseId).toEqual('234');
+      });
+
+      it('Should return the case with the lowest docket number for cases filed in different years', () => {
+        const result = Case.findLeadCaseForCases([
+          {
+            caseId: '123',
+            docketNumber: '100-19',
+          },
+          {
+            caseId: '234',
+            docketNumber: '110-18',
+          },
+          {
+            caseId: '345',
+            docketNumber: '120-19',
+          },
+        ]);
+
+        expect(result.caseId).toEqual('234');
+      });
+    });
+  });
+
+  describe('isDocumentDraft', () => {
+    it('should return false for non-draft documents', () => {
+      const myCase = new Case(
+        {
+          documents: [
+            {
+              documentId: '1',
+              documentType: 'Answer',
+            },
+            {
+              archived: false,
+              documentId: '2',
+              documentType: 'Order',
+            },
+            {
+              archived: false,
+              documentId: '3',
+              documentType: 'Stipulated Decision',
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isDocumentDraft('1')).toEqual(false);
+    });
+
+    it('should return true for draft documents', () => {
+      const myCase = new Case(
+        {
+          docketRecord: [
+            {
+              documentId: '1',
+            },
+          ],
+          documents: [
+            {
+              archived: false,
+              documentId: '2',
+              documentType: 'Order',
+            },
+            {
+              archived: false,
+              documentId: '3',
+              documentType: 'Stipulated Decision',
+            },
+          ],
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isDocumentDraft('2')).toEqual(true);
+      expect(myCase.isDocumentDraft('3')).toEqual(true);
+    });
+  });
+
+  describe('setNoticeOfTrialDate', () => {
+    it('should set noticeOfTrialDate on the given case', () => {
+      const caseEntity = new Case(MOCK_CASE, { applicationContext });
+      const result = caseEntity.setNoticeOfTrialDate();
+
+      expect(result.isValid()).toBeTruthy();
+    });
+
+    it('should set noticeOfTrialDate when passed through Case constructor', () => {
+      const isoDateString = new Date().toISOString();
+
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          noticeOfTrialDate: isoDateString,
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.isValid()).toBeTruthy();
+      expect(caseEntity.noticeOfTrialDate).toEqual(isoDateString);
+    });
+  });
+
+  describe('setQcCompleteForTrial', () => {
+    it('should set qcCompleteForTrial on the given case for the given trial session id', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          qcCompleteForTrial: { 'd6fdd6e7-8dfa-463a-8a17-ed4512d1a68d': false },
+        },
+        { applicationContext },
+      );
+      const result = caseEntity.setQcCompleteForTrial({
+        qcCompleteForTrial: true,
+        trialSessionId: 'da61b7b3-5854-4434-a116-9e4135af60e0',
+      });
+
+      expect(result.isValid()).toBeTruthy();
+      expect(result.qcCompleteForTrial).toEqual({
+        'd6fdd6e7-8dfa-463a-8a17-ed4512d1a68d': false,
+        'da61b7b3-5854-4434-a116-9e4135af60e0': true,
+      });
+    });
+
+    it('should default qcCompleteForTrial to an empty object if not provided when entity is constructed', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.isValid()).toBeTruthy();
+      expect(caseEntity.qcCompleteForTrial).toEqual({});
+    });
+
+    it('should set qcCompleteForTrial to value provided when passed through Case constructor', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          qcCompleteForTrial: { '80950eee-7efd-4374-a642-65a8262135ab': true },
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.isValid()).toBeTruthy();
+      expect(caseEntity.qcCompleteForTrial).toEqual({
+        '80950eee-7efd-4374-a642-65a8262135ab': true,
       });
     });
   });

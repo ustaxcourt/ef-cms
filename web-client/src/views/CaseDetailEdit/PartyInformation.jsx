@@ -1,8 +1,7 @@
-import { sequences, state } from 'cerebral';
-
 import { Contacts } from '../StartCase/Contacts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PartyInformation = connect(
@@ -86,7 +85,7 @@ export const PartyInformation = connect(
               {caseDetailEditHelper.ownershipDisclosureStatementDocumentId && (
                 <a
                   aria-label="View PDF: Ownership Disclosure Statement"
-                  href={`${baseUrl}/documents/${caseDetailEditHelper.ownershipDisclosureStatementDocumentId}/document-download-url?token=${token}`}
+                  href={`${baseUrl}/case-documents/${caseDetail.caseId}/${caseDetailEditHelper.ownershipDisclosureStatementDocumentId}/document-download-url?token=${token}`}
                   rel="noopener noreferrer"
                   target="_blank"
                 >

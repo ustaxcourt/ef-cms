@@ -15,7 +15,6 @@ const mockCaseDetailBase = {
   docketNumber: '123-45',
   docketNumberSuffix: 'S',
   irsSendDate: new Date(),
-  payGovDate: new Date(),
   receivedAt: new Date(),
 };
 
@@ -263,7 +262,6 @@ describe('formatCase', () => {
     expect(result).toHaveProperty('createdAtFormatted');
     expect(result).toHaveProperty('receivedAtFormatted');
     expect(result).toHaveProperty('irsDateFormatted');
-    expect(result).toHaveProperty('payGovDateFormatted');
     expect(result.docketNumberWithSuffix).toEqual('123-45');
     expect(result.irsNoticeDateFormatted).toEqual('No notice provided');
     expect(result.datePetitionSentToIrsMessage).toEqual(
@@ -452,6 +450,45 @@ describe('formatCase', () => {
       showPrioritized: true,
     });
   });
+
+  it('should set isLeadCase true on the case if it has a leadCaseId that matches its caseId', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      leadCaseId: mockCaseDetail.caseId,
+    });
+
+    expect(result).toMatchObject({
+      isLeadCase: true,
+    });
+  });
+
+  it('should set isLeadCase false on the case if it has a leadCaseId that matches its caseId', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      leadCaseId: 'notthecaseid',
+    });
+
+    expect(result).toMatchObject({
+      isLeadCase: false,
+    });
+  });
+
+  it('should set consolidated cases if there are any', () => {
+    const result = formatCase(applicationContext, {
+      ...mockCaseDetail,
+      consolidatedCases: [mockCaseDetail],
+    });
+
+    expect(result).toHaveProperty('consolidatedCases');
+    expect(result.consolidatedCases).toMatchObject([mockCaseDetail]);
+  });
+
+  it('should not set consolidated cases if none are passed', () => {
+    const result = formatCase(applicationContext, mockCaseDetail);
+
+    expect(result).toMatchObject(mockCaseDetail);
+    expect(result).not.toHaveProperty('consolidatedCases');
+  });
 });
 
 describe('formatCaseDeadlines', () => {
@@ -493,7 +530,7 @@ describe('formatDocument', () => {
       servedAt: '2019-03-27T21:53:00.297Z',
     });
     expect(results).toMatchObject({
-      servedAtFormatted: '03/27/19 05:53 pm',
+      servedAtFormatted: '03/27/19',
     });
   });
 
@@ -594,6 +631,45 @@ describe('getFormattedCaseDetail', () => {
       },
     ]);
   });
+});
+
+it('should format filing fee string for a paid petition fee', () => {
+  const result = getFormattedCaseDetail({
+    applicationContext,
+    caseDetail: {
+      ...mockCaseDetailBase,
+      petitionPaymentDate: '2019-03-01T21:40:46.415Z',
+      petitionPaymentMethod: 'check',
+      petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+    },
+  });
+
+  expect(result.filingFee).toEqual('Paid 03/01/19 check');
+});
+
+it('should format filing fee string for a waived petition fee', () => {
+  const result = getFormattedCaseDetail({
+    applicationContext,
+    caseDetail: {
+      ...mockCaseDetailBase,
+      petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+      petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
+    },
+  });
+
+  expect(result.filingFee).toEqual('Waived 03/01/19 ');
+});
+
+it('should format filing fee string for an unpaid petition fee', () => {
+  const result = getFormattedCaseDetail({
+    applicationContext,
+    caseDetail: {
+      ...mockCaseDetailBase,
+      petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+    },
+  });
+
+  expect(result.filingFee).toEqual('Not Paid  ');
 });
 
 describe('sortDocketRecords', () => {

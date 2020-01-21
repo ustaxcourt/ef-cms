@@ -9,8 +9,8 @@ export const CreateOrderChooseTypeModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.submitCreateOrderModalSequence,
-    constants: state.constants,
     form: state.form,
+    orderTypesHelper: state.orderTypesHelper,
     updateFormValue: sequences.updateCreateOrderModalFormValueSequence,
     validateSequence: sequences.validateOrderWithoutBodySequence,
     validationErrors: state.validationErrors,
@@ -18,8 +18,8 @@ export const CreateOrderChooseTypeModal = connect(
   ({
     cancelSequence,
     confirmSequence,
-    constants,
     form,
+    orderTypesHelper,
     updateFormValue,
     validateSequence,
     validationErrors,
@@ -31,7 +31,7 @@ export const CreateOrderChooseTypeModal = connect(
         className=""
         confirmLabel="Continue"
         confirmSequence={confirmSequence}
-        title="Create Order"
+        title="Create Order or Notice"
       >
         <div className="ustc-create-order-modal">
           <FormGroup errorText={validationErrors.eventCode}>
@@ -52,23 +52,27 @@ export const CreateOrderChooseTypeModal = connect(
               }}
             >
               <option value="">- Select -</option>
-              {map(constants.ORDER_TYPES_MAP, ({ documentType, eventCode }) => (
-                <option key={eventCode} value={eventCode}>
-                  {documentType}
-                </option>
-              ))}
+              {map(
+                orderTypesHelper.orderTypes,
+                ({ documentType, eventCode }) => (
+                  <option key={eventCode} value={eventCode}>
+                    {documentType}
+                  </option>
+                ),
+              )}
             </select>
           </FormGroup>
-          {form.eventCode == 'O' && (
+          {orderTypesHelper.showDocumentTitleInput && (
             <FormGroup errorText={validationErrors.documentTitle}>
               <label className="usa-label" htmlFor="documentTitle">
-                Order title
+                {orderTypesHelper.documentTitleInputLabel}
               </label>
               <input
                 className="usa-input"
                 id="documentTitle"
                 name="documentTitle"
                 type="text"
+                value={form.documentTitle || ''}
                 onChange={e => {
                   updateFormValue({
                     key: e.target.name,

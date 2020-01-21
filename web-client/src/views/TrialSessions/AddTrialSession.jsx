@@ -45,8 +45,8 @@ export const AddTrialSession = connect(
             )}
             <ErrorNotification />
 
-            <p className="margin-bottom-2 required-statement margin-top-05 ">
-              *All fields required unless otherwise noted
+            <p className="margin-bottom-2 required-statement margin-top-05">
+              All fields required unless otherwise noted
             </p>
 
             <SessionInformationForm />

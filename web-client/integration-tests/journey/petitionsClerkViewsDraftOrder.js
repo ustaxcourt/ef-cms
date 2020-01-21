@@ -31,6 +31,8 @@ export default (test, draftOrderIndex) => {
       },
     );
 
-    expect(documentDetailHelperOrder.showAddDocketEntryButton).toBeFalsy();
+    expect(
+      documentDetailHelperOrder.showAddCourtIssuedDocketEntryButton,
+    ).toBeTruthy();
   });
 };

@@ -3,8 +3,12 @@ const {
   updateWorkItemCaseStatus,
 } = require('../workitems/updateWorkItemCaseStatus');
 const {
+  updateWorkItemCaseTitle,
+} = require('../workitems/updateWorkItemCaseTitle');
+const {
   updateWorkItemDocketNumberSuffix,
 } = require('../workitems/updateWorkItemDocketNumberSuffix');
+
 /**
  * updateCase
  *
@@ -25,7 +29,8 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   const requests = [];
   if (
     oldCase.status !== caseToUpdate.status ||
-    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix
+    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
+    oldCase.caseCaption !== caseToUpdate.caseCaption
   ) {
     const workItemMappings = await client.query({
       ExpressionAttributeNames: {
@@ -37,11 +42,19 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
       KeyConditionExpression: '#pk = :pk',
       applicationContext,
     });
+
     for (let mapping of workItemMappings) {
       requests.push(
         updateWorkItemCaseStatus({
           applicationContext,
           caseStatus: caseToUpdate.status,
+          workItemId: mapping.sk,
+        }),
+      );
+      requests.push(
+        updateWorkItemCaseTitle({
+          applicationContext,
+          caseTitle: caseToUpdate.caseCaption,
           workItemId: mapping.sk,
         }),
       );
@@ -55,11 +68,16 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     }
   }
 
+  let setLeadCase = caseToUpdate.leadCaseId
+    ? { gsi1pk: caseToUpdate.leadCaseId }
+    : {};
+
   const [results] = await Promise.all([
     client.put({
       Item: {
         pk: caseToUpdate.caseId,
         sk: caseToUpdate.caseId,
+        ...setLeadCase,
         ...caseToUpdate,
       },
       applicationContext,

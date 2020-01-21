@@ -4,11 +4,10 @@
  * again, but we've kept it in the project just in case.
  */
 
-const _ = require('lodash');
 const fs = require('fs');
 const parse = require('csv-parse');
-
 const { gatherRecords, getCsvOptions, sortableTitle } = require('./helpers');
+const { remove } = require('lodash');
 
 const USAGE = `
 Usage: node generateCategories.js [internal/external] spreadsheet.csv > output.json
@@ -46,6 +45,7 @@ if (type === 'internal') {
     'petitioner-ignore',
     'eventCode',
     'scenario',
+    'variations-ignore',
     'labelPreviousDocument',
     'labelFreeText',
     'labelFreeText2',
@@ -110,7 +110,7 @@ const presortCategory = (sortedCategory, categoryName) => {
   let resortedEntries = [];
 
   resortedEntries = firstEntries.map(title => {
-    const [foundObj] = _.remove(sortedCategory, m => {
+    const [foundObj] = remove(sortedCategory, m => {
       return m.documentTitle.toLowerCase() === title.toLowerCase();
     });
     return foundObj;

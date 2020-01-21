@@ -12,7 +12,7 @@ import { state } from 'cerebral';
  * showOwnershipDisclosureStatement, and ownershipDisclosureStatementDocumentId
  */
 export const caseDetailEditHelper = (get, applicationContext) => {
-  const { PARTY_TYPES } = applicationContext.getConstants();
+  const { PARTY_TYPES, PAYMENT_STATUS } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const showContacts = showContactsHelper(caseDetail.partyType, PARTY_TYPES);
 
@@ -56,6 +56,8 @@ export const caseDetailEditHelper = (get, applicationContext) => {
     requestForPlaceOfTrialDocumentTitle,
     showNoTrialLocationSelected:
       caseDetail.isPaper && !requestForPlaceOfTrialDocumentId,
+    showOrderForFilingFee:
+      caseDetail.petitionPaymentStatus === PAYMENT_STATUS.UNPAID,
     showOwnershipDisclosureStatement,
     showPrimaryContact: showContacts.contactPrimary,
     showRQTDocumentLink: caseDetail.isPaper && requestForPlaceOfTrialDocumentId,

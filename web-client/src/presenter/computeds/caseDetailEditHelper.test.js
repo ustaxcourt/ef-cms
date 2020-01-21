@@ -1,3 +1,4 @@
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { ContactFactory } from '../../../../shared/src/business/entities/contacts/ContactFactory';
 import { applicationContext } from '../../applicationContext';
 import { caseDetailEditHelper as caseDetailEditHelperComputed } from './caseDetailEditHelper';
@@ -337,5 +338,38 @@ describe('case detail edit computed', () => {
     );
     expect(result.showNoTrialLocationSelected).toBeFalsy();
     expect(result.showReadOnlyTrialLocation).toBeFalsy();
+  });
+
+  it('sets showOrderForFilingFee true if petitionPaymentStatus is unpaid', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        caseDetail: {
+          petitionPaymentStatus: Case.PAYMENT_STATUS.UNPAID,
+        },
+      },
+    });
+    expect(result.showOrderForFilingFee).toBeTruthy();
+  });
+
+  it('sets showOrderForFilingFee false if petitionPaymentStatus is paid', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        caseDetail: {
+          petitionPaymentStatus: Case.PAYMENT_STATUS.PAID,
+        },
+      },
+    });
+    expect(result.showOrderForFilingFee).toBeFalsy();
+  });
+
+  it('sets showOrderForFilingFee false if petitionPaymentStatus is waived', () => {
+    const result = runCompute(caseDetailEditHelper, {
+      state: {
+        caseDetail: {
+          petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
+        },
+      },
+    });
+    expect(result.showOrderForFilingFee).toBeFalsy();
   });
 });

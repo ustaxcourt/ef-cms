@@ -1,6 +1,7 @@
 import { generatePrintablePendingReportAction } from '../actions/PendingItems/generatePrintablePendingReportAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isGlobalReportAction } from '../actions/PendingItems/isGlobalReportAction';
+import { navigateToPdfPreviewAction } from '../actions/navigateToPdfPreviewAction';
 import { set } from 'cerebral/factories';
 import { setBaseUrlAction } from '../actions/setBaseUrlAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -28,10 +29,7 @@ export const gotoPrintablePendingReportSequence = [
   isGlobalReportAction,
   {
     no: [set(state.currentPage, 'PrintableDocketRecord')],
-    yes: [
-      setTitleForGlobalReportAction,
-      set(state.currentPage, 'SimplePdfPreviewPage'),
-    ],
+    yes: [setTitleForGlobalReportAction, navigateToPdfPreviewAction],
   },
   unsetWaitingForResponseAction,
 ];

@@ -6,7 +6,7 @@ const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
-const { flatten } = require('lodash');
+const { flatten, map } = require('lodash');
 const { Order } = require('./orders/Order');
 const { WorkItem } = require('./WorkItem');
 
@@ -33,6 +33,7 @@ function Document(rawDocument, { applicationContext }) {
   this.additionalInfo2 = rawDocument.additionalInfo2;
   this.addToCoversheet = rawDocument.addToCoversheet;
   this.attachments = rawDocument.attachments;
+  this.archived = rawDocument.archived;
   this.caseId = rawDocument.caseId;
   this.category = rawDocument.category;
   this.certificateOfService = rawDocument.certificateOfService;
@@ -40,16 +41,17 @@ function Document(rawDocument, { applicationContext }) {
   this.createdAt = rawDocument.createdAt || createISODateString();
   this.docketNumber = rawDocument.docketNumber;
   this.documentId = rawDocument.documentId;
+  this.mailingDate = rawDocument.mailingDate;
   this.documentTitle = rawDocument.documentTitle;
   this.documentType = rawDocument.documentType;
   this.draftState = rawDocument.draftState;
-  this.isFileAttached = rawDocument.isFileAttached;
   this.eventCode = rawDocument.eventCode;
   this.exhibits = rawDocument.exhibits;
   this.filedBy = rawDocument.filedBy;
   this.freeText = rawDocument.freeText;
   this.freeText2 = rawDocument.freeText2;
   this.hasSupportingDocuments = rawDocument.hasSupportingDocuments;
+  this.isFileAttached = rawDocument.isFileAttached;
   this.isPaper = rawDocument.isPaper;
   this.lodged = rawDocument.lodged;
   this.objections = rawDocument.objections;
@@ -63,7 +65,10 @@ function Document(rawDocument, { applicationContext }) {
       : rawDocument.pending;
   this.practitioner = rawDocument.practitioner;
   this.previousDocument = rawDocument.previousDocument;
-  this.processingStatus = rawDocument.processingStatus;
+  this.processingStatus = rawDocument.processingStatus || 'pending';
+  this.qcAt = rawDocument.qcAt;
+  this.qcByUser = rawDocument.qcByUser;
+  this.qcByUserId = rawDocument.qcByUserId;
   this.receivedAt = rawDocument.receivedAt || createISODateString();
   this.relationship = rawDocument.relationship;
   this.scenario = rawDocument.scenario;
@@ -79,11 +84,6 @@ function Document(rawDocument, { applicationContext }) {
   this.trialLocation = rawDocument.trialLocation;
   this.userId = rawDocument.userId;
   this.workItems = rawDocument.workItems;
-  this.archived = rawDocument.archived;
-  this.qcAt = rawDocument.qcAt;
-  this.qcByUserId = rawDocument.qcByUserId;
-  this.qcByUser = rawDocument.qcByUser;
-  this.processingStatus = this.processingStatus || 'pending';
   this.workItems = (this.workItems || []).map(
     workItem => new WorkItem(workItem, { applicationContext }),
   );
@@ -108,7 +108,7 @@ Document.INITIAL_DOCUMENT_TYPES = {
   },
   ownershipDisclosure: {
     documentType: 'Ownership Disclosure Statement',
-    eventCode: 'ODS',
+    eventCode: 'DISC',
   },
   petition: {
     documentType: 'Petition',
@@ -131,6 +131,12 @@ Document.NOTICE_OF_DOCKET_CHANGE = {
   eventCode: 'NODC',
 };
 
+Document.NOTICE_OF_TRIAL = {
+  documentTitle: 'Notice of Trial on [Date] at [Time]',
+  documentType: 'Notice of Trial',
+  eventCode: 'NDT',
+};
+
 Document.SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
@@ -151,9 +157,15 @@ Document.TRACKED_DOCUMENT_TYPES = {
   },
   proposedStipulatedDecision: {
     documentType: 'Proposed Stipulated Decision',
-    eventCode: 'PSDEC',
+    eventCode: 'PSDE',
   },
 };
+
+Document.CONTACT_CHANGE_DOCUMENT_TYPES = [
+  'Notice of Change of Address',
+  'Notice of Change of Telephone Number',
+  'Notice of Change of Address and Telephone Number',
+];
 
 Document.isPendingOnCreation = rawDocument => {
   const isPending = Object.values(Document.TRACKED_DOCUMENT_TYPES).some(
@@ -193,6 +205,7 @@ Document.getDocumentTypes = () => {
     ...courtIssuedDocTypes,
     ...signedTypes,
     Document.NOTICE_OF_DOCKET_CHANGE.documentType,
+    Document.NOTICE_OF_TRIAL.documentType,
   ];
 
   return documentTypes;
@@ -209,37 +222,65 @@ Document.prototype.isPetitionDocument = function() {
 joiValidationDecorator(
   Document,
   joi.object().keys({
+    addToCoversheet: joi.boolean().optional(),
+    additionalInfo: joi.string().optional(),
+    additionalInfo2: joi.string().optional(),
     archived: joi.boolean().optional(),
+    caseId: joi.string().optional(),
+    category: joi.string().optional(),
+    certificateOfService: joi.boolean().optional(),
+    certificateOfServiceDate: joi.when('certificateOfService', {
+      is: true,
+      otherwise: joi.optional(),
+      then: joi
+        .date()
+        .iso()
+        .optional()
+        .required(),
+    }),
     createdAt: joi
       .date()
       .iso()
       .optional(),
+    docketNumber: joi.string().optional(),
     documentId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
       .required(),
+    documentTitle: joi.string().optional(),
     documentType: joi
       .string()
       .valid(Document.getDocumentTypes())
       .required(),
+    draftState: joi.object().optional(),
     eventCode: joi.string().optional(),
+    exhibits: joi.boolean().optional(),
     filedBy: joi
       .string()
       .allow('')
       .optional(),
     freeText: joi.string().optional(),
     freeText2: joi.string().optional(),
+    hasSupportingDocuments: joi.boolean().optional(),
+    isFileAttached: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
     lodged: joi.boolean().optional(),
+    objections: joi.string().optional(),
     ordinalValue: joi.string().optional(),
+    partyPrimary: joi.boolean().optional(),
+    partyRespondent: joi.boolean().optional(),
+    partySecondary: joi.boolean().optional(),
     pending: joi.boolean().optional(),
+    practitioner: joi.array().optional(),
+    previousDocument: joi.string().optional(),
     processingStatus: joi.string().optional(),
     qcAt: joi
       .date()
       .iso()
       .optional(),
+    qcByUser: joi.object().optional(),
     qcByUserId: joi
       .string()
       .optional()
@@ -248,6 +289,8 @@ joiValidationDecorator(
       .date()
       .iso()
       .optional(),
+    relationship: joi.string().optional(),
+    scenario: joi.string().optional(),
     secondaryDocument: joi.object().optional(),
     servedAt: joi
       .date()
@@ -271,8 +314,13 @@ joiValidationDecorator(
       .optional()
       .allow(null),
     status: joi.string().optional(),
+    supportingDocument: joi
+      .string()
+      .optional()
+      .allow(null),
     trialLocation: joi.string().optional(),
     userId: joi.string().required(),
+    workItems: joi.array().optional(),
   }),
   function() {
     return WorkItem.validateCollection(this.workItems);
@@ -381,6 +429,45 @@ Document.prototype.setAsProcessingStatusAsCompleted = function() {
 
 Document.prototype.getQCWorkItem = function() {
   return this.workItems.find(workItem => workItem.isQC === true);
+};
+
+Document.prototype.isPublicAccessible = function() {
+  const orderDocumentTypes = map(Order.ORDER_TYPES, 'documentType');
+  const courtIssuedDocumentTypes = map(
+    Document.COURT_ISSUED_EVENT_CODES,
+    'documentType',
+  );
+
+  const isServed = !!this.servedAt;
+  const isStipDecision = this.documentType === 'Stipulated Decision';
+  const isOrder = orderDocumentTypes.includes(this.documentType);
+  const isCourtIssuedDocument = courtIssuedDocumentTypes.includes(
+    this.documentType,
+  );
+
+  return (isStipDecision || isOrder || isCourtIssuedDocument) && isServed;
+};
+
+Document.prototype.isAutoServed = function() {
+  const externalDocumentTypes = flatten(Object.values(documentMapExternal)).map(
+    t => t.documentType,
+  );
+
+  const isExternalDocumentType = externalDocumentTypes.includes(
+    this.documentType,
+  );
+  const isPractitionerAssociationDocumentType = practitionerAssociationDocumentTypes.includes(
+    this.documentType,
+  );
+  //if fully concatenated document title includes the word Simultaneous, do not auto-serve
+  const isSimultaneous = (this.documentTitle || this.documentType).includes(
+    'Simultaneous',
+  );
+
+  return (
+    (isExternalDocumentType || isPractitionerAssociationDocumentType) &&
+    !isSimultaneous
+  );
 };
 
 exports.Document = Document;
