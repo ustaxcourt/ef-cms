@@ -1,11 +1,11 @@
 import { presenter } from '../../presenter';
-import { primePropsFromEditDocketRecordEntryModalAction } from './primePropsFromEditDocketRecordEntryModalAction';
+import { primePropsFromEditDocketEntryMetaModalAction } from './primePropsFromEditDocketEntryMetaModalAction';
 import { runAction } from 'cerebral/test';
 
-describe('primePropsFromEditDocketRecordEntryModalAction', () => {
+describe('primePropsFromEditDocketEntryMetaModalAction', () => {
   it('should update the props from state', async () => {
     const result = await runAction(
-      primePropsFromEditDocketRecordEntryModalAction,
+      primePropsFromEditDocketEntryMetaModalAction,
       {
         modules: { presenter },
         state: {
@@ -28,7 +28,7 @@ describe('primePropsFromEditDocketRecordEntryModalAction', () => {
 
   it('should filter empty strings from the given params in state.modal.form', async () => {
     const result = await runAction(
-      primePropsFromEditDocketRecordEntryModalAction,
+      primePropsFromEditDocketEntryMetaModalAction,
       {
         modules: { presenter },
         state: {

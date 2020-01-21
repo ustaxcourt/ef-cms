@@ -24,7 +24,7 @@ const filterEmptyStrings = params => {
  * @param {object} providers.get the cerebral get function
  * @returns {object} the new props
  */
-export const primePropsFromEditDocketRecordEntryModalAction = ({ get }) => {
+export const primePropsFromEditDocketEntryMetaModalAction = ({ get }) => {
   const docketRecordEntry = filterEmptyStrings(get(state.modal.form));
   const caseId = get(state.modal.caseId);
   const docketRecordIndex = get(state.modal.docketRecordIndex);
