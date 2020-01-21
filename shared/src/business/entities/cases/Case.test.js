@@ -2467,6 +2467,7 @@ describe('Case entity', () => {
       caseType: 'Select a case type',
       docketNumber: 'Docket number is required',
       partyType: 'Select a party type',
+      preferredTrialCity: 'Select a preferred trial location',
       procedureType: 'Select a case procedure',
     });
   });
