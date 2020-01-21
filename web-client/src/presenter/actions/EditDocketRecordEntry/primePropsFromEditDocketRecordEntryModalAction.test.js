@@ -1,8 +1,13 @@
+import { applicationContext } from '../../../applicationContext';
 import { presenter } from '../../presenter';
 import { primePropsFromEditDocketRecordEntryModalAction } from './primePropsFromEditDocketRecordEntryModalAction';
 import { runAction } from 'cerebral/test';
 
 describe('primePropsFromEditDocketRecordEntryModalAction', () => {
+  beforeEach(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('should update the props from state', async () => {
     const result = await runAction(
       primePropsFromEditDocketRecordEntryModalAction,
