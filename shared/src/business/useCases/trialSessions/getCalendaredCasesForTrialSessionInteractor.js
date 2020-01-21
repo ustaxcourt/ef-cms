@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -29,11 +30,33 @@ exports.getCalendaredCasesForTrialSessionInteractor = async ({
   // userId is required for case notes.
   const userId = judgeUser ? judgeUser.userId : user.userId;
 
-  return await applicationContext
+  const casesWithNotes = await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,
       trialSessionId,
       userId,
     });
+
+  return casesWithNotes.map(caseWithAdditionalProperties => {
+    // TODO: revisit this approach.  I think our persistence layer is returning more than it should?
+    const {
+      disposition,
+      isManuallyAdded,
+      notes,
+      removedFromTrial,
+      removedFromTrialDate,
+    } = caseWithAdditionalProperties;
+
+    return {
+      ...new Case(caseWithAdditionalProperties, { applicationContext })
+        .validate()
+        .toRawObject(),
+      disposition,
+      isManuallyAdded,
+      notes,
+      removedFromTrial,
+      removedFromTrialDate,
+    };
+  });
 };

@@ -6,9 +6,17 @@ An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), crea
 
 [![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop)
 
+#### master
+
+[![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master)
+
 #### staging
 
 [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging)
+
+#### test
+
+[![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test)
 
 API | Front-End | Shared Code
 --- | --------- | -----------
@@ -252,3 +260,9 @@ Follow these steps for creating the end of sprint PRs for the court.
 8. When PR comments come in, make changes to master to fix the comments
 9. After the court approves and merges PR, merge master into develop
 10. Create a release in GitHub as sprint_00x against master and put the same description planned to be in the PR description for the court
+
+## Accessibility HTML_CodeSniffer Bookmarklet
+
+The following bookmarklet is useful for running pa11y directly on the page you are viewing.  The following link should have instruction on how to setup and use:
+
+https://squizlabs.github.io/HTML_CodeSniffer/

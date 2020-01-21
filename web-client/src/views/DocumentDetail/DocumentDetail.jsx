@@ -120,24 +120,26 @@ export const DocumentDetail = connect(
                     Apply Signature
                   </Button>
                 )}
-                {documentDetailHelper.showRemoveSignature && (
+                {documentDetailHelper.showSignedAt && (
                   <>
                     Signed{' '}
                     {documentDetailHelper.formattedDocument.signedAtFormattedTZ}
-                    <Button
-                      link
-                      className="margin-left-2 no-wrap"
-                      icon="trash"
-                      onClick={() =>
-                        removeSignatureFromOrderSequence({
-                          caseDetail,
-                          documentIdToEdit:
-                            documentDetailHelper.formattedDocument.documentId,
-                        })
-                      }
-                    >
-                      Delete Signature
-                    </Button>
+                    {documentDetailHelper.showRemoveSignature && (
+                      <Button
+                        link
+                        className="margin-left-2 no-wrap"
+                        icon="trash"
+                        onClick={() =>
+                          removeSignatureFromOrderSequence({
+                            caseDetail,
+                            documentIdToEdit:
+                              documentDetailHelper.formattedDocument.documentId,
+                          })
+                        }
+                      >
+                        Delete Signature
+                      </Button>
+                    )}
                   </>
                 )}
               </div>

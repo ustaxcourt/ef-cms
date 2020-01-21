@@ -37,7 +37,7 @@ export const ViewAllDocumentsDesktop = connect(
               >
                 All Document Categories
               </h1>
-              <p className="margin-bottom-5 margin-top-05 ">
+              <p className="margin-bottom-5 margin-top-05">
                 Expand a document category and select the document type you wish
                 to file.
               </p>

@@ -1332,8 +1332,8 @@ describe('document detail helper', () => {
     });
   });
 
-  describe('showConfirmEditOrder and showRemoveSignature', () => {
-    it('should show confirm edit order and remove signature', () => {
+  describe('showConfirmEditOrder, showSignedAt, and showRemoveSignature', () => {
+    it('should show confirm edit order, signed at, and remove signature for a signed order', () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -1359,7 +1359,39 @@ describe('document detail helper', () => {
       });
 
       expect(result.showConfirmEditOrder).toEqual(true);
+      expect(result.showSignedAt).toEqual(true);
       expect(result.showRemoveSignature).toEqual(true);
+    });
+
+    it('should show confirm edit order, signed at, but NOT remove signature for a signed notice', () => {
+      const user = {
+        role: User.ROLES.petitionsClerk,
+        userId: '123',
+      };
+      const result = runCompute(documentDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketRecord: [],
+            documents: [
+              {
+                documentId: '123-abc',
+                documentType: 'Notice',
+                eventCode: 'NOT',
+                signedAt: getDateISO(),
+              },
+            ],
+          },
+          documentId: '123-abc',
+          user: {
+            role: User.ROLES.petitionsClerk,
+          },
+        },
+      });
+
+      expect(result.showConfirmEditOrder).toEqual(true);
+      expect(result.showSignedAt).toEqual(true);
+      expect(result.showRemoveSignature).toEqual(false);
     });
 
     it('should NOT show confirm edit order OR remove signature when the documentType is not an order', () => {
@@ -1388,6 +1420,7 @@ describe('document detail helper', () => {
       });
 
       expect(result.showConfirmEditOrder).toEqual(false);
+      expect(result.showSignedAt).toEqual(false);
       expect(result.showRemoveSignature).toEqual(false);
     });
 
@@ -1417,6 +1450,7 @@ describe('document detail helper', () => {
       });
 
       expect(result.showConfirmEditOrder).toEqual(false);
+      expect(result.showSignedAt).toEqual(false);
       expect(result.showRemoveSignature).toEqual(false);
     });
   });

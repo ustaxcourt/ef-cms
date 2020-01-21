@@ -1,9 +1,6 @@
-import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
-
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
 export default (test, overrides = {}) => {
   return it('petitioner views case detail', async () => {
@@ -35,10 +32,5 @@ export default (test, overrides = {}) => {
     expect(caseDetail.docketRecord[1].eventCode).toEqual('RQT');
 
     expect(caseDetail.preferredTrialCity).toEqual('Seattle, Washington');
-
-    const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
-    });
-    expect(helper.showActionRequired).toEqual(true);
   });
 };

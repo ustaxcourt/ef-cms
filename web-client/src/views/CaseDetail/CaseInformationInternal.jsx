@@ -8,44 +8,36 @@ import { sequences } from 'cerebral';
 import { state } from 'cerebral';
 import React from 'react';
 
-const PetitionDetails = ({ caseDetail, showPaymentRecord }) => (
+const PetitionDetails = ({ caseDetail }) => (
   <React.Fragment>
     <div className="grid-row">
       <div className="grid-col-6">
-        <p className="label">Notice/Case Type</p>
+        <p className="label">Notice/case type</p>
         <p>{caseDetail.caseType}</p>
       </div>
       <div className="grid-col-6">
-        <p className="label">Case Procedure</p>
+        <p className="label">Case procedure</p>
         <p>{caseDetail.procedureType} Tax Case</p>
       </div>
     </div>
     <div className="grid-row">
       <div className="grid-col-6">
-        <p className="label">IRS Notice Date</p>
+        <p className="label">IRS notice date</p>
         <p className="irs-notice-date">{caseDetail.irsNoticeDateFormatted}</p>
       </div>
       <div className="grid-col-6">
-        <p className="label">Party Type</p>
-        <p className="irs-notice-date">{caseDetail.partyType}</p>
+        <p className="label">Filing fee</p>
+        <p className="pay-gov-id-display margin-bottom-0">
+          {caseDetail.filingFee}
+        </p>
       </div>
     </div>
     <div className="grid-row">
       <div className="grid-col-6">
-        <p className="label">Requested Place of Trial</p>
+        <p className="label">Requested place of trial</p>
         <p className="margin-bottom-0">
           {caseDetail.formattedPreferredTrialCity}
         </p>
-      </div>
-      <div className="grid-col-6">
-        {showPaymentRecord && (
-          <React.Fragment>
-            <p className="label">Petition Fee Paid</p>
-            <p className="pay-gov-id-display margin-bottom-0">
-              {caseDetail.payGovId}
-            </p>
-          </React.Fragment>
-        )}
       </div>
     </div>
   </React.Fragment>
@@ -298,6 +290,16 @@ export const CaseInformationInternal = connect(
                 <div className="content-wrapper">
                   <h3 className="underlined">
                     Petition Details
+                    {caseDetailHelper.showEditPetitionDetailsButton && (
+                      <Button
+                        link
+                        className="margin-left-2 padding-0"
+                        href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-details`}
+                        icon="edit"
+                      >
+                        Edit
+                      </Button>
+                    )}
                     <If bind="caseDetail.irsSendDate">
                       <Button
                         link
@@ -320,7 +322,7 @@ export const CaseInformationInternal = connect(
 
                   <PetitionDetails
                     caseDetail={formattedCaseDetail}
-                    showPaymentRecord={caseDetailHelper.showPaymentRecord}
+                    caseDetailHelper={caseDetailHelper}
                   />
                 </div>
               </div>

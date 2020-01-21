@@ -256,7 +256,7 @@ exports.uploadProposedStipulatedDecision = async test => {
     certificateOfServiceDate: null,
     documentTitle: 'Proposed Stipulated Decision',
     documentType: 'Proposed Stipulated Decision',
-    eventCode: 'PSDEC',
+    eventCode: 'PSDE',
     hasSecondarySupportingDocuments: false,
     hasSupportingDocuments: false,
     partyRespondent: true,
@@ -403,6 +403,14 @@ exports.setupTest = ({ useCases = {} } = {}) => {
             docketNumber: test.caseId,
           });
           break;
+        case `/case-detail/${test.docketNumber}/case-information`:
+          await test.runSequence('gotoCaseDetailSequence', {
+            docketNumber: test.docketNumber,
+          });
+          break;
+        case '/pdf-preview':
+          await test.runSequence('gotoPdfPreviewSequence');
+          break;
         case '/':
           await test.runSequence('gotoDashboardSequence');
           break;
@@ -490,7 +498,7 @@ exports.viewDocumentDetailMessage = async ({
 
 /**
  * This is needed because some sequences run router.route which runs another test.runSequence which
- * adds an new entry on the node event loop and causes the tests to continue running even though the sequence is
+ * adds a new entry on the node event loop and causes the tests to continue running even though the sequence is
  * not yet done.
  *
  * @returns {Promise} resolves when the setImmediate is done

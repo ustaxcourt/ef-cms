@@ -4,7 +4,7 @@ const {
 
 describe('Filing an Answer', function() {
   before(() => {
-    cy.seed();
+    cy.task('seed');
     cy.login('respondent', '/case-detail/102-19');
   });
 
