@@ -50,10 +50,8 @@ describe('setEditDocketEntryMetaModalStateAction', () => {
     });
 
     expect(result.state.modal.form.servedAt).toEqual('2019-09-30');
-    expect(result.state.modal.form.servedParties).toEqual([
-      'Guy Fieri',
-      'Bill Burr',
-      'Joe Rogan',
-    ]);
+    expect(result.state.modal.form.servedParties).toEqual(
+      'Guy Fieri,Bill Burr,Joe Rogan',
+    );
   });
 });
