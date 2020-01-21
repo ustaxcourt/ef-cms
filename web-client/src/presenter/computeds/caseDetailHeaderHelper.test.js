@@ -74,6 +74,29 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showRequestAccessToCaseButton).toEqual(false);
   });
 
+  it('should set showFileFirstDocumentButton and showRequestAccessToCaseButton to false if user role is respondent and the respondent is not associated with the case but the case is sealed', () => {
+    const user = {
+      role: User.ROLES.respondent,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          respondents: [{ userId: '789' }],
+          sealedDate: '2019-03-01T21:40:46.415Z',
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+    expect(result.showFileFirstDocumentButton).toEqual(false);
+    expect(result.showRequestAccessToCaseButton).toEqual(false);
+  });
+
   it('should set showRequestAccessToCaseButton to true if user role is respondent and the respondent is not associated with the case', () => {
     const user = {
       role: User.ROLES.respondent,
@@ -151,6 +174,25 @@ describe('caseDetailHeaderHelper', () => {
       },
     });
     expect(result.showRequestAccessToCaseButton).toEqual(true);
+  });
+
+  it('should set showRequestAccessToCaseButton to false if user role is practitioner and case is not owned by user and the case is sealed', () => {
+    const user = {
+      role: User.ROLES.practitioner,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: { sealedDate: '2019-03-01T21:40:46.415Z' },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+    expect(result.showRequestAccessToCaseButton).toEqual(false);
   });
 
   it('should set showRequestAccessToCaseButton to false if user role is practitioner and case is owned by user', () => {
