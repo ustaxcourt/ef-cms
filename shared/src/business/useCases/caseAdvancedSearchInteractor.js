@@ -6,7 +6,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { get } = require('lodash');
+const { caseSearchFilter } = require('../utilities/caseFilter');
+const { get, isEmpty } = require('lodash');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -50,13 +51,13 @@ exports.caseAdvancedSearchInteractor = async providers => {
     index: 'efcms',
   });
 
-  const foundCases = [];
+  let foundCases = [];
   const exactMatchesHits = get(exactMatchesBody, 'hits.hits');
+  const unmarshallHit = hit =>
+    AWS.DynamoDB.Converter.unmarshall(hit['_source']);
 
-  if (exactMatchesHits && exactMatchesHits.length > 0) {
-    for (let hit of exactMatchesBody.hits.hits) {
-      foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
-    }
+  if (!isEmpty(exactMatchesHits)) {
+    foundCases = exactMatchesHits.map(unmarshallHit);
   } else {
     const nonExactMatchesBody = await applicationContext
       .getSearchClient()
@@ -81,12 +82,12 @@ exports.caseAdvancedSearchInteractor = async providers => {
 
     const nonExactMatchesHits = get(nonExactMatchesBody, 'hits.hits');
 
-    if (nonExactMatchesHits && nonExactMatchesHits.length > 0) {
-      for (let hit of nonExactMatchesBody.hits.hits) {
-        foundCases.push(AWS.DynamoDB.Converter.unmarshall(hit['_source']));
-      }
+    if (!isEmpty(nonExactMatchesHits)) {
+      foundCases = nonExactMatchesHits.map(unmarshallHit);
     }
   }
+
+  foundCases = caseSearchFilter(foundCases, authorizedUser.userId);
 
   return foundCases;
 };
