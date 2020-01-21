@@ -5,66 +5,69 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 let applicationContext;
+let addCoversheetInteractorMock;
 let getCaseCaseIdNumberMock;
 let updateCaseMock;
 let docketRecord;
 let documents;
 
 describe('updateDocketEntryMetaInteractor', () => {
-  documents = [
-    {
-      documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
-      documentType: 'Order',
-      servedDate: '2019-01-01T00:01:00.000Z',
-      servedParties: ['Some Party'],
-      userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
-    },
-    {
-      documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
-      documentType: 'Order',
-      servedDate: '2019-01-02T00:01:00.000Z',
-      servedParties: ['Some Other Party'],
-      userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
-    },
-  ];
-
-  docketRecord = [
-    {
-      description: 'Test Entry 0',
-      documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
-      eventCode: 'TEST',
-      filedBy: 'Test User',
-      filingDate: '2019-01-01T00:01:00.000Z',
-      index: 0,
-    },
-    {
-      description: 'Test Entry 1',
-      documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
-      eventCode: 'O',
-      filedBy: 'Test User',
-      filingDate: '2019-01-02T00:01:00.000Z',
-      index: 1,
-    },
-  ];
-
-  const caseByCaseId = {
-    'cccba5a9-b37b-479d-9201-067ec6e33ccc': {
-      ...MOCK_CASE,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
-      docketRecord,
-      documents,
-    },
-  };
-
-  getCaseCaseIdNumberMock = jest.fn(({ caseId }) => {
-    return caseByCaseId[caseId];
-  });
-
-  updateCaseMock = jest.fn(({ caseToUpdate }) => {
-    caseByCaseId[caseToUpdate.caseId] = caseToUpdate;
-  });
-
   beforeEach(() => {
+    documents = [
+      {
+        documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
+        documentType: 'Order',
+        servedAt: '2019-01-01T00:01:00.000Z',
+        servedParties: ['Some Party'],
+        userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
+      },
+      {
+        documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+        documentType: 'Order',
+        servedAt: '2019-01-02T00:01:00.000Z',
+        servedParties: ['Some Other Party'],
+        userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
+      },
+    ];
+
+    docketRecord = [
+      {
+        description: 'Test Entry 0',
+        documentId: '000ba5a9-b37b-479d-9201-067ec6e33000',
+        eventCode: 'TEST',
+        filedBy: 'Test User',
+        filingDate: '2019-01-01T00:01:00.000Z',
+        index: 0,
+      },
+      {
+        description: 'Test Entry 1',
+        documentId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+        eventCode: 'O',
+        filedBy: 'Test User',
+        filingDate: '2019-01-02T00:01:00.000Z',
+        index: 1,
+      },
+    ];
+
+    const caseByCaseId = {
+      'cccba5a9-b37b-479d-9201-067ec6e33ccc': {
+        ...MOCK_CASE,
+        caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+        docketRecord,
+        documents,
+      },
+    };
+
+    addCoversheetInteractorMock = jest.fn();
+
+    getCaseCaseIdNumberMock = jest.fn(({ caseId }) => {
+      return caseByCaseId[caseId];
+    });
+
+    updateCaseMock = jest.fn(({ caseToUpdate }) => {
+      caseByCaseId[caseToUpdate.caseId] = caseToUpdate;
+    });
+
     applicationContext = {
       getCurrentUser: () => ({
         role: User.ROLES.docketClerk,
@@ -73,6 +76,9 @@ describe('updateDocketEntryMetaInteractor', () => {
       getPersistenceGateway: () => ({
         getCaseByCaseId: getCaseCaseIdNumberMock,
         updateCase: updateCaseMock,
+      }),
+      getUseCases: () => ({
+        addCoversheetInteractor: addCoversheetInteractorMock,
       }),
     };
   });
@@ -177,6 +183,32 @@ describe('updateDocketEntryMetaInteractor', () => {
     );
 
     expect(updatedDocument.servedAt).toEqual('2020-01-01T00:01:00.000Z');
+  });
+
+  it('should generate a new coversheet for the document if the servedAt field is changed', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+      docketEntryMeta: {
+        servedAt: '2020-01-01T00:01:00.000Z',
+      },
+      docketRecordIndex: 0,
+    });
+
+    expect(addCoversheetInteractorMock).toHaveBeenCalled();
+  });
+
+  it('should NOT generate a new coversheet for the document if the servedAt field is NOT changed', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+      docketEntryMeta: {
+        servedAt: '2019-01-01T00:01:00.000Z', // unchanged from current servedAt
+      },
+      docketRecordIndex: 0,
+    });
+
+    expect(addCoversheetInteractorMock).not.toHaveBeenCalled();
   });
 
   it('should update the document servedParties', async () => {
