@@ -54,6 +54,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       ],
       documents: [
         {
+          docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Answer',
           documentType: 'Answer',
@@ -61,6 +62,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           userId: 'respondent',
         },
         {
+          docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Answer',
           documentType: 'Answer',
@@ -68,6 +70,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           userId: 'respondent',
         },
         {
+          docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Answer',
           documentType: 'Answer',
@@ -75,6 +78,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           userId: 'respondent',
         },
         {
+          docketNumber: '45678-18',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           documentTile: 'Order',
           documentType: 'Order',
@@ -82,7 +86,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           userId: 'respondent',
         },
       ],
+      filingType: 'Myself',
       partyType: ContactFactory.PARTY_TYPES.petitioner,
+      preferredTrialCity: 'Fresno, California',
+      procedureType: 'Regular',
       role: User.ROLES.petitioner,
       userId: 'petitioner',
     };

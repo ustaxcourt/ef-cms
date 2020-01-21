@@ -15,6 +15,10 @@ exports.handler = event =>
     const { documentId } = event.pathParameters || {};
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
+
+    applicationContext.logger.info('User', user);
+    applicationContext.logger.info('Event', event);
+
     try {
       const results = await applicationContext
         .getUseCases()
@@ -22,7 +26,6 @@ exports.handler = event =>
           applicationContext,
           documentId,
         });
-      applicationContext.logger.info('User', user);
       applicationContext.logger.info('Results', results);
     } catch (e) {
       applicationContext.logger.error(e);
