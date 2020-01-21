@@ -16,7 +16,7 @@ export const primePropsFromEditDocketEntryMetaModalAction = ({
     .getUtilities()
     .filterEmptyStrings(get(state.modal.form));
   const caseId = get(state.modal.caseId);
-  const docketRecordIndex = get(state.modal.docketRecordIndex) - 1;
+  const docketRecordIndex = get(state.modal.docketRecordIndex);
 
   return { caseId, docketRecordEntry, docketRecordIndex, fromModal: true };
 };
