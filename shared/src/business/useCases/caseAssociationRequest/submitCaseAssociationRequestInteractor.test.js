@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const {
   submitCaseAssociationRequestInteractor,
 } = require('./submitCaseAssociationRequestInteractor');
+const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
 describe('submitCaseAssociationRequest', () => {
@@ -21,6 +22,7 @@ describe('submitCaseAssociationRequest', () => {
         index: 1,
       },
     ],
+    documents: MOCK_CASE.documents,
     filingType: 'Myself',
     partyType: 'Petitioner',
     preferredTrialCity: 'Fresno, California',
