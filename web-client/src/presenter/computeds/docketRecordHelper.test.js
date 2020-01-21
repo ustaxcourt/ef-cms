@@ -1,100 +1,29 @@
-import { User } from '../../../../shared/src/business/entities/User';
 import { docketRecordHelper } from './docketRecordHelper';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 
-const getBaseState = user => {
-  return {
-    permissions: getUserPermissions(user),
-  };
-};
-
 describe('docket record helper', () => {
-  it('should show direct download link and not document detail link if the user is a petitioner', () => {
-    const user = {
-      role: User.ROLES.petitioner,
-      userId: '789',
-    };
-    const result = runCompute(docketRecordHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        form: {},
-      },
-    });
-    expect(result.showDirectDownloadLink).toEqual(true);
-    expect(result.showDocumentDetailLink).toEqual(false);
-  });
-
-  it('should show direct download link and not document detail link if the user is a practitioner', () => {
-    const user = {
-      role: User.ROLES.practitioner,
-      userId: '789',
-    };
-    const result = runCompute(docketRecordHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        form: {},
-      },
-    });
-    expect(result.showDirectDownloadLink).toEqual(true);
-    expect(result.showDocumentDetailLink).toEqual(false);
-  });
-
-  it('should show direct download link and not document detail link if the user is a respondent', () => {
-    const user = {
-      role: User.ROLES.respondent,
-      userId: '789',
-    };
-    const result = runCompute(docketRecordHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {},
-        form: {},
-      },
-    });
-    expect(result.showDirectDownloadLink).toEqual(true);
-    expect(result.showDocumentDetailLink).toEqual(false);
-  });
-
-  it('should show document detail link and not direct download link if the user has UPDATE_CASE permission', () => {
+  it('should not show links for editing docket entries if user does have EDIT_DOCKET_ENTRY permission', () => {
     const result = runCompute(docketRecordHelper, {
       state: {
         caseDetail: {},
         form: {},
         permissions: {
-          UPDATE_CASE: true,
+          EDIT_DOCKET_ENTRY: true,
         },
       },
     });
-    expect(result.showDocumentDetailLink).toEqual(true);
-    expect(result.showDirectDownloadLink).toEqual(false);
+    expect(result.showEditDocketRecordEntry).toBeTruthy();
   });
-
-  it('should show links for editing docket entries if user has DOCKET_ENTRY permission', () => {
+  it('should not show links for editing docket entries if user does not have EDIT_DOCKET_ENTRY permission', () => {
     const result = runCompute(docketRecordHelper, {
       state: {
         caseDetail: {},
         form: {},
         permissions: {
-          DOCKET_ENTRY: true,
+          EDIT_DOCKET_ENTRY: false,
         },
       },
     });
-    expect(result.showEditDocketEntry).toEqual(true);
-  });
-
-  it('should not show links for editing docket entries if user does not have DOCKET_ENTRY permission', () => {
-    const result = runCompute(docketRecordHelper, {
-      state: {
-        caseDetail: {},
-        form: {},
-        permissions: {
-          DOCKET_ENTRY: false,
-        },
-      },
-    });
-    expect(result.showEditDocketEntry).toBeFalsy();
+    expect(result.showEditDocketRecordEntry).toBeFalsy();
   });
 });
