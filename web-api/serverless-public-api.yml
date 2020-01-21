@@ -1,4 +1,4 @@
-service: ef-cms-public
+service: ef-cms-public-${opt:stageColor}
 
 plugins:
   - serverless-domain-manager

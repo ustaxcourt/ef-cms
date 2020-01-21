@@ -14,6 +14,7 @@ describe('associateRespondentWithCaseInteractor', () => {
     docketNumber: '123-19',
     filingType: 'Myself',
     partyType: 'Petitioner',
+    preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };
 
