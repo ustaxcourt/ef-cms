@@ -41,6 +41,7 @@ describe('deleteCounselFromCaseInteractor', () => {
           filingType: 'Myself',
           partyType: 'Petitioner',
           practitioners: mockPractitioners,
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Regular',
           respondents: mockRespondents,
         }),

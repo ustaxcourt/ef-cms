@@ -474,7 +474,7 @@ joiValidationDecorator(
         .max(25)
         .required(),
     }),
-    // TODO: Get more info on this
+    // TODO: Get more info
     noticeOfAttachments: joi.boolean().optional(),
     noticeOfTrialDate: joi
       .date()
@@ -528,14 +528,17 @@ joiValidationDecorator(
         .required(),
     }),
     practitioners: joi.array().optional(),
-    preferredTrialCity: joi.alternatives().try(
-      joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
-      joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
-      joi
-        .string()
-        .optional()
-        .allow(null),
-    ),
+    preferredTrialCity: joi
+      .alternatives()
+      .try(
+        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
+        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+        joi
+          .string()
+          .optional()
+          .allow(null),
+      )
+      .required(),
     procedureType: joi
       .string()
       .valid(...Case.PROCEDURE_TYPES)
