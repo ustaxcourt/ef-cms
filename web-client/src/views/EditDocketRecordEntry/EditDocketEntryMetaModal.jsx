@@ -108,6 +108,32 @@ export const EditDocketEntryMetaModal = connect(
             }}
           />
         </FormGroup>
+        <FormGroup
+          errorText={validationErrors && validationErrors.servedParties}
+        >
+          <label
+            className="usa-label"
+            htmlFor="servedParties"
+            id="document-served-parties-label"
+          >
+            Parties
+          </label>
+          <input
+            area-describedby="document-served-parties-label"
+            className="usa-input"
+            id="servedParties"
+            name="form.servedParties"
+            type="text"
+            value={form.servedParties.join(', ') || ''}
+            onChange={e => {
+              updateModalValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+              validateDocketRecordSequence();
+            }}
+          />
+        </FormGroup>
       </ConfirmModal>
     );
   },
