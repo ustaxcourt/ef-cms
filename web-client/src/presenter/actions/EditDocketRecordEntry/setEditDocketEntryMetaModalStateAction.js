@@ -8,6 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setEditDocketEntryMetaModalStateAction = ({
+  applicationContext,
   get,
   props,
   store,
@@ -25,4 +26,15 @@ export const setEditDocketEntryMetaModalStateAction = ({
   store.set(state.modal.form, docketRecordEntry);
   store.set(state.modal.caseId, caseDetail.caseId);
   store.set(state.modal.docketRecordIndex, docketRecordIndex);
+
+  if (docketRecordEntry.documentId) {
+    const { Case } = applicationContext.getEntityConstructors();
+    const caseEntity = new Case(caseDetail, { applicationContext });
+    const documentEntity = caseEntity.getDocumentById({
+      documentId: docketRecordEntry.documentId,
+    });
+
+    store.set(state.modal.form.servedAt, documentEntity.servedAt);
+    store.set(state.modal.form.servedParties, documentEntity.servedParties);
+  }
 };
