@@ -9,5 +9,9 @@ export default (test, docketRecordIndex = 1) => {
     expect(docketRecordEntry.description).toEqual(
       'New Docket Entry Description',
     );
+
+    expect(docketRecordEntry.filedBy).toEqual('New Filer');
+
+    expect(docketRecordEntry.servedParties).toEqual(['Party One', 'Party Two']);
   });
 };
