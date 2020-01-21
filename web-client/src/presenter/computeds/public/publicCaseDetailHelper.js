@@ -3,7 +3,10 @@ import { state } from 'cerebral';
 export const publicCaseDetailHelper = (get, applicationContext) => {
   const publicCase = get(state.caseDetail);
 
-  const formatCaseDetail = caseToFormat => caseToFormat;
+  const formatCaseDetail = caseToFormat => ({
+    ...caseToFormat,
+    isCaseSealed: !!caseToFormat.sealedDate,
+  });
 
   const formattedDocketRecord = publicCase.docketRecord.map(d =>
     applicationContext.getUtilities().formatDocketRecord(applicationContext, d),

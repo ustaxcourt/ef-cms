@@ -4,7 +4,7 @@ export const publicCaseDetailHeaderHelper = get => {
   const caseDetail = get(state.caseDetail);
 
   return {
-    caseTitle: caseDetail.caseTitle,
+    caseTitle: caseDetail.caseTitle || '',
     docketNumber: caseDetail.docketNumber,
     docketNumberWithSuffix: `${
       caseDetail.docketNumber

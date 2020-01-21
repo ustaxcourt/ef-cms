@@ -77,8 +77,8 @@ const sealedCaseSchemaRestricted = {
   createdAt: joi.any().forbidden(),
   docketNumber: joi.string().required(),
   docketNumberSuffix: joi.any().forbidden(),
-  docketRecord: joi.any().forbidden(),
-  documents: joi.any().forbidden(),
+  docketRecord: joi.array().max(0),
+  documents: joi.array().max(0),
   receivedAt: joi.any().forbidden(),
   sealedDate: joi
     .date()
