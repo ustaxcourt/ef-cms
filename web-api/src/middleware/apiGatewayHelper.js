@@ -29,7 +29,7 @@ exports.handle = async (event, fun) => {
     const response = await fun();
     return exports.sendOk(response);
   } catch (err) {
-    if (!process.env.CI) {
+    if (!process.env.CI && !err.skipLogging) {
       console.error('err', err);
     }
     if (err instanceof NotFoundError) {
