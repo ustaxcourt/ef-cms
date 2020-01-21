@@ -13,15 +13,15 @@ export const DocketRecord = connect(
   {
     docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    openEditDocketRecordEntryModalSequence:
-      sequences.openEditDocketRecordEntryModalSequence,
+    openEditDocketEntryMetaModalSequence:
+      sequences.openEditDocketEntryMetaModalSequence,
     refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.showModal,
   },
   ({
     docketRecordHelper,
     formattedCaseDetail,
-    openEditDocketRecordEntryModalSequence,
+    openEditDocketEntryMetaModalSequence,
     refreshCaseSequence,
     showModal,
   }) => {
@@ -136,7 +136,7 @@ export const DocketRecord = connect(
                           className="padding-0"
                           icon="edit"
                           onClick={() => {
-                            openEditDocketRecordEntryModalSequence({
+                            openEditDocketEntryMetaModalSequence({
                               index: entry.index,
                             });
                           }}
