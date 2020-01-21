@@ -42,14 +42,23 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const docketRecordEntry = caseEntity.docketRecord[docketRecordIndex];
+  const docketRecordEntry = caseEntity.docketRecord.find(
+    record => record.index === docketRecordIndex,
+  );
 
-  const { description, filedBy, servedAt, servedParties } = docketEntryMeta;
+  const {
+    description,
+    filedBy,
+    filingDate,
+    servedAt,
+    servedParties,
+  } = docketEntryMeta;
 
   const docketRecordEntity = new DocketRecord({
     ...docketRecordEntry,
     description: description || docketRecordEntry.description,
     filedBy: filedBy || docketRecordEntry.filedBy,
+    filingDate: filingDate || docketRecordEntry.filingDate,
   });
 
   if (servedAt || servedParties) {

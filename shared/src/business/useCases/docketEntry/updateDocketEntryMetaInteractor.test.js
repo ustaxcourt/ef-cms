@@ -164,6 +164,23 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(updatedDocketEntry.filedBy).toEqual('New Filer');
   });
 
+  it('should update the docket record filingDate', async () => {
+    const result = await updateDocketEntryMetaInteractor({
+      applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+      docketEntryMeta: {
+        filingDate: '2020-01-01T00:01:00.000Z',
+      },
+      docketRecordIndex: 0,
+    });
+
+    const updatedDocketEntry = result.docketRecord.find(
+      record => record.index === 0,
+    );
+
+    expect(updatedDocketEntry.filingDate).toEqual('2020-01-01T00:01:00.000Z');
+  });
+
   it('should update the document servedAt', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
