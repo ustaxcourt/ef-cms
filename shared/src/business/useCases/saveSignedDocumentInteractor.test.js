@@ -36,6 +36,7 @@ describe('saveSignedDocumentInteractor', () => {
     const caseEntity = await saveSignedDocumentInteractor({
       applicationContext,
       caseId: mockCase.caseId,
+      docketNumber: MOCK_CASE.docketNumber,
       originalDocumentId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       signedDocumentId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
     });

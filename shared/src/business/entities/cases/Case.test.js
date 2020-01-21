@@ -2452,6 +2452,9 @@ describe('Case entity', () => {
       caseCaption: 'Enter a case caption',
       caseType: 'Select a case type',
       docketNumber: 'Docket number is required',
+      filingType: 'Select on whose behalf you are filing',
+      partyType: 'Select a party type',
+      procedureType: 'Select a case procedure',
     });
   });
 });

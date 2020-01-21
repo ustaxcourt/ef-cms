@@ -94,6 +94,9 @@ describe('completeDocketEntryQCInteractor', () => {
           workItems: [workItem],
         },
       ],
+      filingType: 'Myself',
+      partyType: 'Petitioner',
+      procedureType: 'Regular',
       role: User.ROLES.petitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };

@@ -19,6 +19,9 @@ describe('associateRespondentToCase', () => {
         index: 1,
       },
     ],
+    filingType: 'Myself',
+    partyType: 'Petitioner',
+    procedureType: 'Regular',
     status: 'New',
   };
 
