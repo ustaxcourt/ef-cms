@@ -36,6 +36,11 @@ export const setEditDocketEntryMetaModalStateAction = ({
     });
 
     store.set(state.modal.form.servedAt, documentEntity.servedAt);
-    store.set(state.modal.form.servedParties, documentEntity.servedParties);
+
+    const servedPartiesString = Array.isArray(documentEntity.servedParties)
+      ? documentEntity.servedParties.join()
+      : '';
+
+    store.set(state.modal.form.servedParties, servedPartiesString);
   }
 };
