@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
-import { EditDocketRecordEntryModal } from '../EditDocketRecordEntry/EditDocketRecordEntryModal';
+import { EditDocketEntryMetaModal } from '../EditDocketRecordEntry/EditDocketEntryMetaModal';
 import { FilingsAndProceedings } from './FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
@@ -13,15 +13,15 @@ export const DocketRecord = connect(
   {
     docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    openEditDocketRecordEntryModalSequence:
-      sequences.openEditDocketRecordEntryModalSequence,
+    openEditDocketEntryMetaModalSequence:
+      sequences.openEditDocketEntryMetaModalSequence,
     refreshCaseSequence: sequences.refreshCaseSequence,
     showModal: state.showModal,
   },
   ({
     docketRecordHelper,
     formattedCaseDetail,
-    openEditDocketRecordEntryModalSequence,
+    openEditDocketEntryMetaModalSequence,
     refreshCaseSequence,
     showModal,
   }) => {
@@ -136,7 +136,7 @@ export const DocketRecord = connect(
                           className="padding-0"
                           icon="edit"
                           onClick={() => {
-                            openEditDocketRecordEntryModalSequence({
+                            openEditDocketEntryMetaModalSequence({
                               index: entry.index,
                             });
                           }}
@@ -152,8 +152,8 @@ export const DocketRecord = connect(
           </tbody>
         </table>
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
-        {showModal == 'EditDocketRecordEntryModal' && (
-          <EditDocketRecordEntryModal />
+        {showModal == 'EditDocketEntryMetaModal' && (
+          <EditDocketEntryMetaModal />
         )}
       </>
     );

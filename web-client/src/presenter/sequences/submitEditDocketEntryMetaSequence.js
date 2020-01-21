@@ -1,17 +1,17 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { getEditDocketRecordEntryAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketRecordEntryAlertSuccessAction';
-import { primePropsFromEditDocketRecordEntryModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketRecordEntryModalAction';
+import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
+import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateDocketRecordAction } from '../actions/EditDocketRecordEntry/validateDocketRecordAction';
 
-export const editDocketRecordEntrySequence = [
+export const submitEditDocketEntryMetaSequence = [
   startShowValidationAction,
-  primePropsFromEditDocketRecordEntryModalAction,
+  primePropsFromEditDocketEntryMetaModalAction,
   validateDocketRecordAction,
   {
     error: [setValidationErrorsByFlagAction],
@@ -20,7 +20,7 @@ export const editDocketRecordEntrySequence = [
       clearAlertsAction,
       clearModalAction,
       clearModalStateAction,
-      getEditDocketRecordEntryAlertSuccessAction,
+      getEditDocketEntryMetaAlertSuccessAction,
       setAlertSuccessAction,
     ],
   },

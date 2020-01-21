@@ -2,7 +2,7 @@ import { docketRecordHelper } from './docketRecordHelper';
 import { runCompute } from 'cerebral/test';
 
 describe('docket record helper', () => {
-  it('should not show links for editing docket entries if user does have DOCKET_ENTRY permission', () => {
+  it('should not show links for editing docket entries if user does have EDIT_DOCKET_ENTRY permission', () => {
     const result = runCompute(docketRecordHelper, {
       state: {
         caseDetail: {},
@@ -14,7 +14,7 @@ describe('docket record helper', () => {
     });
     expect(result.showEditDocketRecordEntry).toBeTruthy();
   });
-  it('should not show links for editing docket entries if user does not have DOCKET_ENTRY permission', () => {
+  it('should not show links for editing docket entries if user does not have EDIT_DOCKET_ENTRY permission', () => {
     const result = runCompute(docketRecordHelper, {
       state: {
         caseDetail: {},

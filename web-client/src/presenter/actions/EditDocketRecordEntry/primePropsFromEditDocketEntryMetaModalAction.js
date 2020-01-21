@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @returns {object} the new props
  */
-export const primePropsFromEditDocketRecordEntryModalAction = ({
+export const primePropsFromEditDocketEntryMetaModalAction = ({
   applicationContext,
   get,
 }) => {

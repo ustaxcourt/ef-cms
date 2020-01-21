@@ -1,10 +1,10 @@
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
-import { setEditDocketRecordEntryModalStateAction } from './setEditDocketRecordEntryModalStateAction';
+import { setEditDocketEntryMetaModalStateAction } from './setEditDocketEntryMetaModalStateAction';
 
-describe('setEditDocketRecordEntryModalStateAction', () => {
+describe('setEditDocketEntryMetaModalStateAction', () => {
   it('should update the state from state', async () => {
-    const result = await runAction(setEditDocketRecordEntryModalStateAction, {
+    const result = await runAction(setEditDocketEntryMetaModalStateAction, {
       modules: { presenter },
       props: { index: 1 },
       state: {
