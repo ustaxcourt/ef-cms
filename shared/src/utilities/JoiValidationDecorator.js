@@ -123,6 +123,10 @@ exports.joiValidationDecorator = function(
     return schema;
   };
 
+  entityConstructor.getSchema = function() {
+    return schema;
+  };
+
   entityConstructor.generateSchemaMarkdown = function(outputPath) {
     const name = entityConstructor.validationName;
 
