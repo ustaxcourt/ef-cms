@@ -7,6 +7,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { updateDocketEntryMetaAction } from '../actions/EditDocketRecordEntry/updateDocketEntryMetaAction';
 import { validateDocketRecordAction } from '../actions/EditDocketRecordEntry/validateDocketRecordAction';
 
 export const submitEditDocketEntryMetaSequence = [
@@ -18,6 +19,7 @@ export const submitEditDocketEntryMetaSequence = [
     success: [
       stopShowValidationAction,
       clearAlertsAction,
+      updateDocketEntryMetaAction,
       clearModalAction,
       clearModalStateAction,
       getEditDocketEntryMetaAlertSuccessAction,
