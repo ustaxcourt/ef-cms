@@ -566,6 +566,9 @@ const {
   saveWorkItemForPaper,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForPaper');
 const {
+  sealCaseInteractor,
+} = require('../../shared/src/business/useCases/sealCaseInteractor');
+const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
@@ -640,6 +643,9 @@ const {
 const {
   updateDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryInteractor');
+const {
+  updateDocketEntryMetaInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
   updateDocumentProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocumentProcessingStatus');
@@ -1090,6 +1096,7 @@ module.exports = (appContextUser = {}) => {
         saveCaseNoteInteractor,
         saveIntermediateDocketEntryInteractor,
         saveSignedDocumentInteractor,
+        sealCaseInteractor,
         sendPetitionToIRSHoldingQueueInteractor,
         serveCourtIssuedDocumentInteractor,
         setNoticesForCalendaredTrialSessionInteractor,
@@ -1107,6 +1114,7 @@ module.exports = (appContextUser = {}) => {
         updateCourtIssuedDocketEntryInteractor,
         updateCourtIssuedOrderInteractor,
         updateDocketEntryInteractor,
+        updateDocketEntryMetaInteractor,
         updateJudgesCaseNoteInteractor,
         updatePetitionDetailsInteractor,
         updatePetitionerInformationInteractor,

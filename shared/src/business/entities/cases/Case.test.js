@@ -288,6 +288,19 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
+    it('Creates a valid case with sealedDate set to a valid date', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          sealedDate: '2019-09-19T16:42:00.000Z',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
     describe('with different payment statuses', () => {
       it('requires payment date and method if petition fee status is paid', () => {
         const myCase = new Case(
@@ -952,6 +965,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketRecord[2].description).toEqual(
         "Docket Number is amended from '123-19P' to '123-19W'",
       );
+      expect(caseToVerify.docketRecord[2].eventCode).toEqual('MIND');
     });
   });
 

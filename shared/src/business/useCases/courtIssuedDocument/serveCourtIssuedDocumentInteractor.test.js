@@ -93,6 +93,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
         email: 'contact@example.com',
         name: 'Contact Primary',
+        phone: '123123134',
         postalCode: '12345',
         state: 'TN',
       },
@@ -140,8 +141,24 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       caseCaption: 'Caption',
       caseId: 'd857e73a-636e-4aa7-9de2-b5cee8770ff0',
       caseType: 'Deficiency',
-      contactPrimary: { name: 'Contact Primary' },
-      contactSecondary: { name: 'Contact Secondary' },
+      contactPrimary: {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        name: 'Contact Primary',
+        phone: '123123134',
+        postalCode: '12345',
+        state: 'TN',
+      },
+      contactSecondary: {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        name: 'Contact Secondary',
+        phone: '123123134',
+        postalCode: '12345',
+        state: 'TN',
+      },
       docketNumber: '123-45',
       docketRecord: [
         {
@@ -181,8 +198,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       filingType: 'Myself',
       isPaper: true,
       mailingDate: 'testing',
-      partyType: 'Petitioner',
-      procedureType: 'Regular',
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     },
   ];
 

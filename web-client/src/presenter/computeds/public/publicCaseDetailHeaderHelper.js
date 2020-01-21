@@ -9,5 +9,6 @@ export const publicCaseDetailHeaderHelper = get => {
     docketNumberWithSuffix: `${
       caseDetail.docketNumber
     }${caseDetail.docketNumberSuffix || ''}`,
+    isCaseSealed: !!caseDetail.sealedDate,
   };
 };
