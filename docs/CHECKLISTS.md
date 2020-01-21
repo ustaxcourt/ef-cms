@@ -1,7 +1,7 @@
-# Developerr Check Lists
+# Developer Check Lists
 This file contains various check lists that can help you out when developing on this project and doing things such as adding a new endpoint or creating a new stack.
 
-### Developer Endpoint Creation Check List
+### New Endpoint Creation Check List
 Due to our code architecture, adding a new endpoint is an involved process.  The following can be used a checklist to make sure all the necessary files are created and updated when atttempting to create a new endpoint:
 
 - [ ] creating a new `*Lambda.js` file in the `./web-api/src`
@@ -13,7 +13,7 @@ Due to our code architecture, adding a new endpoint is an involved process.  The
 - [ ] updating the `./web-api/src/applicationContext.js` file and import the new interactor
 
 
-### Developer New Stack Check List
+### New Stack Check List
 All of our endpoints are split into multiple AWS CloudFormation stacks and hosted behind a single domain with base path mapping records.  Sometimes the stacks will get too large and you will start running into AWS limits.  Often you need to split your existing stack into 2 smaller stacks.  This check list can be followed to ensure you don't forget any of the steps.
 
 - [ ] create a new `*Handlers.js` file, your functions for your new `serverless-*.yml` must point to this handlers
@@ -26,3 +26,4 @@ All of our endpoints are split into multiple AWS CloudFormation stacks and hoste
 - [ ] create a new `./web-api/run-serverless*.sh` script (chmod 755 or copy an existing script) and modify it to use the new `*Handlers.js` file
 - [ ] update `./web-api/run-local.sh` to include your new serverless service
 - [ ] update `package.json` to have a new build method `build:api:YOUR_NEW_STACK`
+- [ ] update `.circleci/config.json` to deploy the new stack to both `us-east-1` and `us-west-1`
