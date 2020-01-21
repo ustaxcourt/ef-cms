@@ -135,6 +135,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       ],
       filingType: 'Myself',
       partyType: ContactFactory.PARTY_TYPES.petitioner,
+      preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
     },
     {
@@ -199,6 +200,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       isPaper: true,
       mailingDate: 'testing',
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
     },
   ];

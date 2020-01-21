@@ -88,6 +88,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       ],
       filingType: 'Myself',
       partyType: ContactFactory.PARTY_TYPES.petitioner,
+      preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: User.ROLES.petitioner,
       userId: 'petitioner',

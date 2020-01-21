@@ -1006,7 +1006,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should add to the docket record when the caption changes from the initial title', () => {
+    it('should add to the docket record with event code MINC when the caption changes from the initial title', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A New Caption',
@@ -1018,6 +1018,7 @@ describe('Case entity', () => {
         },
       ).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(1);
+      expect(caseToVerify.docketRecord[0].eventCode).toEqual('MINC');
     });
 
     it('should not add to the docket record when the caption is equivalent to the last updated title', () => {
@@ -2467,6 +2468,7 @@ describe('Case entity', () => {
       caseType: 'Select a case type',
       docketNumber: 'Docket number is required',
       partyType: 'Select a party type',
+      preferredTrialCity: 'Select a preferred trial location',
       procedureType: 'Select a case procedure',
     });
   });

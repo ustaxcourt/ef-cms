@@ -407,7 +407,7 @@ joiValidationDecorator(
       .array()
       .required()
       .description('List of DocketRecord Entities for the Case.'),
-    // TODO: Revisit with Jessica
+    // TODO: Revisit with Jessica: Does a Case require at least one Document?
     documents: joi
       .array()
       .items(joi.object().meta({ filename: 'Document', name: 'Document' }))
@@ -419,7 +419,6 @@ joiValidationDecorator(
         ...Case.FILING_TYPES[User.ROLES.petitioner],
         ...Case.FILING_TYPES[User.ROLES.practitioner],
       )
-      // TODO: What is this when the case is created by a Petitions Clerk?
       .optional(),
     hasIrsNotice: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
@@ -474,7 +473,7 @@ joiValidationDecorator(
         .max(25)
         .required(),
     }),
-    // TODO: Get more info on this
+    // TODO: Create a Description
     noticeOfAttachments: joi.boolean().optional(),
     noticeOfTrialDate: joi
       .date()
@@ -528,14 +527,17 @@ joiValidationDecorator(
         .required(),
     }),
     practitioners: joi.array().optional(),
-    preferredTrialCity: joi.alternatives().try(
-      joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
-      joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
-      joi
-        .string()
-        .optional()
-        .allow(null),
-    ),
+    preferredTrialCity: joi
+      .alternatives()
+      .try(
+        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
+        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+        joi
+          .string()
+          .optional()
+          .allow(null),
+      )
+      .required(),
     procedureType: joi
       .string()
       .valid(...Case.PROCEDURE_TYPES)
@@ -565,16 +567,27 @@ joiValidationDecorator(
       .iso()
       .optional()
       .allow(null),
-    // TODO: Must be in the locations list
-    trialLocation: joi.string().optional(),
+    trialLocation: joi
+      .alternatives()
+      .try(
+        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
+        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+        joi
+          .string()
+          .optional()
+          .allow(null),
+      )
+      .optional(),
     trialSessionId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
       .optional(),
-    // TODO: Revisit at format
-    trialTime: joi.string().optional(),
+    trialTime: joi
+      .string()
+      .pattern(/^([1-9]|1[0-2]):([0-5][0-9])$/)
+      .optional(),
     userId: joi
       .string()
       .optional()
@@ -817,6 +830,7 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
     this.addDocketRecord(
       new DocketRecord({
         description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
+        eventCode: 'MINC',
         filingDate: createISODateString(),
       }),
     );
