@@ -1123,8 +1123,11 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
  * @returns {boolean} if the case is associated
  */
 const isAssociatedUser = function({ caseRaw, userId }) {
-  const isRespondent = caseRaw.respondents.contains(userId);
-  const isPractitioner = caseRaw.practitioners.contains(userId);
+  const isRespondent =
+    caseRaw.respondents && caseRaw.respondents.find(r => r.userId === userId);
+  const isPractitioner =
+    caseRaw.practitioners &&
+    caseRaw.practitioners.find(p => p.userId === userId);
   return isRespondent || isPractitioner;
 };
 
