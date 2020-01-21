@@ -4,7 +4,7 @@ plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
-  # - serverless-plugin-aws-alerts
+  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -31,13 +31,10 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -52,10 +49,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
-        notifications:
-          - protocol: email
-            endpoint: jsutton@flexion.us
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -78,7 +72,7 @@ provider:
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
@@ -163,7 +157,7 @@ functions:
       - http:
           path: run-batch-process
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -175,7 +169,7 @@ functions:
       - http:
           path: notifications
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -192,7 +186,7 @@ functions:
       - http:
           path: swagger
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
 
   swaggerJson:
     handler: web-api/${self:provider.dir}/apiHandlers.swaggerJsonLambda
@@ -200,7 +194,7 @@ functions:
       - http:
           path: swagger.json
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
 
   createCourtIssuedOrderPdfFromHtml:
     handler: web-api/${self:provider.dir}/apiHandlers.createCourtIssuedOrderPdfFromHtmlLambda
@@ -212,7 +206,7 @@ functions:
       - http:
           path: court-issued-order
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -228,7 +222,7 @@ functions:
       - http:
           path: docket-record-pdf
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -244,7 +238,7 @@ functions:
       - http:
           path: trial-calendar-pdf
           method: post
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -256,7 +250,7 @@ functions:
       - http:
           path: pending-items
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -272,7 +266,7 @@ functions:
       - http:
           path: pending-report
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:

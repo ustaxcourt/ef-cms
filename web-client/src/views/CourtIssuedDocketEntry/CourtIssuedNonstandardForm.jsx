@@ -135,7 +135,7 @@ export const CourtIssuedNonstandardForm = connect(
               htmlFor="free-text"
               id="free-text-label"
             >
-              What is this order for?
+              {addCourtIssuedDocketEntryNonstandardHelper.freeTextLabel}
             </label>
 
             <input

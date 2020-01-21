@@ -6,7 +6,7 @@ const { MOCK_USERS } = require('../../../test/mockUsers');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
-const saveDocumentStub = jest.fn();
+const saveDocumentFromLambdaStub = jest.fn();
 
 const fakeData =
   'JVBERi0xLjEKJcKlwrHDqwoKMSAwIG9iagogIDw8IC9UeXBlIC9DYXRhbG9nCiAgICAgL1BhZ2VzIDIgMCBSCiAgPj4KZW5kb2JqCgoyIDAgb2JqCiAgPDwgL1R5cGUgL1BhZ2VzCiAgICAgL0tpZHMgWzMgMCBSXQogICAgIC9Db3VudCAxCiAgICAgL01lZGlhQm94IFswIDAgMzAwIDE0NF0KICA+PgplbmRvYmoKCjMgMCBvYmoKICA8PCAgL1R5cGUgL1BhZ2UKICAgICAgL1BhcmVudCAyIDAgUgogICAgICAvUmVzb3VyY2VzCiAgICAgICA8PCAvRm9udAogICAgICAgICAgIDw8IC9GMQogICAgICAgICAgICAgICA8PCAvVHlwZSAvRm9udAogICAgICAgICAgICAgICAgICAvU3VidHlwZSAvVHlwZTEKICAgICAgICAgICAgICAgICAgL0Jhc2VGb250IC9UaW1lcy1Sb21hbgogICAgICAgICAgICAgICA+PgogICAgICAgICAgID4+CiAgICAgICA+PgogICAgICAvQ29udGVudHMgNCAwIFIKICA+PgplbmRvYmoKCjQgMCBvYmoKICA8PCAvTGVuZ3RoIDg0ID4+CnN0cmVhbQogIEJUCiAgICAvRjEgMTggVGYKICAgIDUgODAgVGQKICAgIChDb25ncmF0aW9ucywgeW91IGZvdW5kIHRoZSBFYXN0ZXIgRWdnLikgVGoKICBFVAplbmRzdHJlYW0KZW5kb2JqCgp4cmVmCjAgNQowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMTggMDAwMDAgbiAKMDAwMDAwMDA3NyAwMDAwMCBuIAowMDAwMDAwMTc4IDAwMDAwIG4gCjAwMDAwMDA0NTcgMDAwMDAgbiAKdHJhaWxlcgogIDw8ICAvUm9vdCAxIDAgUgogICAgICAvU2l6ZSA1CiAgPj4Kc3RhcnR4cmVmCjU2NQolJUVPRgo=';
@@ -51,7 +51,7 @@ describe('updateUserContactInformationInteractor', () => {
             ]),
           getUserById: () =>
             Promise.resolve(MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f']),
-          saveDocument: saveDocumentStub,
+          saveDocumentFromLambda: saveDocumentFromLambdaStub,
           saveWorkItemForNonPaper: () => null,
           updateCase: updateCaseSpy,
           updateUser: updateUserSpy,
@@ -59,9 +59,9 @@ describe('updateUserContactInformationInteractor', () => {
       },
       getTemplateGenerators: () => {
         return {
-          generateChangeOfAddressTemplate: () => '<div></div>',
+          generateChangeOfAddressTemplate: async () => '<div></div>',
           generateHTMLTemplateForPDF: () => '<div></div>',
-          generatePrintableDocketRecordTemplate: () => '<div></div>',
+          generatePrintableDocketRecordTemplate: async () => '<div></div>',
         };
       },
       getUniqueId: () => 'a7d90c05-f6cd-442c-a168-202db587f16f',
@@ -125,7 +125,7 @@ describe('updateUserContactInformationInteractor', () => {
             ]),
           getUserById: () =>
             Promise.resolve(MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f']),
-          saveDocument: saveDocumentStub,
+          saveDocumentFromLambda: saveDocumentFromLambdaStub,
           saveWorkItemForNonPaper: () => null,
           updateCase: updateCaseSpy,
           updateUser: updateUserSpy,
@@ -133,9 +133,9 @@ describe('updateUserContactInformationInteractor', () => {
       },
       getTemplateGenerators: () => {
         return {
-          generateChangeOfAddressTemplate: () => '<div></div>',
+          generateChangeOfAddressTemplate: async () => '<div></div>',
           generateHTMLTemplateForPDF: () => '<div></div>',
-          generatePrintableDocketRecordTemplate: () => '<div></div>',
+          generatePrintableDocketRecordTemplate: async () => '<div></div>',
         };
       },
       getUniqueId: () => 'a7d90c05-f6cd-442c-a168-202db587f16f',

@@ -38,6 +38,10 @@ Order.ORDER_TYPES = [
     documentType: 'Decision',
     eventCode: 'DEC',
   },
+  {
+    documentType: 'Notice',
+    eventCode: 'NOT',
+  },
 ];
 
 /**
@@ -62,6 +66,7 @@ joiValidationDecorator(
   joi.object().keys({
     documentTitle: joi.string().required(),
     documentType: joi.string().required(),
+    eventCode: joi.string().optional(),
     orderBody: joi.string().required(),
   }),
   function() {

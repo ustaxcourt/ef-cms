@@ -1,26 +1,16 @@
-const AWS = require('aws-sdk');
-const seedEntries = require('./storage/fixtures/seed');
+const { seedLocalDatabase } = require('./storage/scripts/seedLocalDatabase');
 
-const client = new AWS.DynamoDB.DocumentClient({
-  credentials: {
-    accessKeyId: 'noop',
-    secretAccessKey: 'noop',
-  },
-  endpoint: 'http://localhost:8000',
-  region: 'us-east-1',
-});
+const args = process.argv.slice(2);
 
 const main = async () => {
-  await Promise.all(
-    seedEntries.map(item =>
-      client
-        .put({
-          Item: item,
-          TableName: 'efcms-local',
-        })
-        .promise(),
-    ),
-  );
+  let entries;
+
+  if (args[0]) {
+    // eslint-disable-next-line security/detect-non-literal-require
+    entries = require(args[0]);
+  }
+
+  await seedLocalDatabase(entries);
 };
 
 main();

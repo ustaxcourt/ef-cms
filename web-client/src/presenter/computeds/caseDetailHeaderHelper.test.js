@@ -190,4 +190,111 @@ describe('caseDetailHeaderHelper', () => {
     });
     expect(result.showRequestAccessToCaseButton).toEqual(false);
   });
+
+  it('should show the consolidated case icon if the case is associated with a lead case', async () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          leadCaseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+
+    expect(result.showConsolidatedCaseIcon).toEqual(true);
+  });
+
+  it('should NOT show the consolidated case icon if the case is NOT associated with a lead case', async () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '123',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          leadCaseId: '',
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        screenMetadata: {
+          isAssociated: false,
+        },
+      },
+    });
+
+    expect(result.showConsolidatedCaseIcon).toEqual(false);
+  });
+
+  it('should show the case detail header menu and add docket entry and create order buttons if current page is CaseDetailInternal and user role is docketclerk', () => {
+    const user = {
+      role: User.ROLES.docketClerk,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {},
+        currentPage: 'CaseDetailInternal',
+        form: {},
+      },
+    });
+    expect(result.showCaseDetailHeaderMenu).toEqual(true);
+    expect(result.showAddDocketEntryButton).toEqual(true);
+    expect(result.showCreateOrderButton).toEqual(true);
+  });
+
+  it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case', () => {
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        permissions: {
+          FILE_EXTERNAL_DOCUMENT: true,
+        },
+        screenMetadata: { isAssociated: true },
+      },
+    });
+    expect(result.showFileDocumentButton).toEqual(true);
+  });
+
+  it('should not show file document button if user does not have FILE_EXTERNAL_DOCUMENT permission', () => {
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        permissions: {
+          FILE_EXTERNAL_DOCUMENT: false,
+        },
+        screenMetadata: { isAssociated: true },
+      },
+    });
+    expect(result.showFileDocumentButton).toEqual(false);
+  });
+
+  it('should not show file document button if user has FILE_EXTERNAL_DOCUMENT permission but the user is not associated with the case', () => {
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        caseDetail: {},
+        currentPage: 'CaseDetail',
+        form: {},
+        permissions: {
+          FILE_EXTERNAL_DOCUMENT: true,
+        },
+        screenMetadata: { isAssociated: false },
+      },
+    });
+    expect(result.showFileDocumentButton).toEqual(false);
+  });
 });

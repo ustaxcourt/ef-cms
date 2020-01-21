@@ -5,7 +5,13 @@ exports.MOCK_CASE = {
   caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   caseType: 'Other',
   contactPrimary: {
+    address1: '123 Main St',
+    city: 'Somewhere',
+    countryType: 'domestic',
+    email: 'petitioner@example.com',
     name: 'Test Petitioner',
+    postalCode: '12345',
+    state: 'TN',
     title: 'Executor',
   },
   docketNumber: '101-18',

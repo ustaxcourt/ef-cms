@@ -6,10 +6,11 @@ import React from 'react';
 export const SelectScannerSourceModal = connect(
   {
     modal: state.modal,
+    scanModeOptions: state.scanHelper.scanModeOptions,
     sources: state.scanHelper.sources,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
-  ({ modal, sources, updateModalValueSequence }) => (
+  ({ modal, scanModeOptions, sources, updateModalValueSequence }) => (
     <ConfirmModal
       cancelLabel="Cancel"
       confirmLabel="Select"
@@ -18,43 +19,64 @@ export const SelectScannerSourceModal = connect(
       onCancelSequence="clearModalSequence"
       onConfirmSequence="selectScannerSequence"
     >
-      <legend className="usa-legend" id="scanner-select-legend">
-        Scanner(s) Found
-      </legend>
-      {sources.map((source, index) => {
-        return (
-          <div className="usa-radio" key={index}>
-            <input
-              aria-describedby="scanner-select-legend"
-              aria-labelledby={`scanner-select-${index}`}
-              checked={source === modal.scanner && index === modal.index}
-              className="usa-radio__input"
-              data-type={source}
-              id={`scanner-id-${index}`}
-              name="source"
-              type="radio"
-              value={source}
-              onChange={() => {
-                updateModalValueSequence({
-                  key: 'scanner',
-                  value: source,
-                });
-                updateModalValueSequence({
-                  key: 'index',
-                  value: index,
-                });
-              }}
-            />
-            <label
-              className="usa-radio__label"
-              htmlFor={`scanner-id-${index}`}
-              id={`scanner-select-${index}`}
-            >
-              {source}
-            </label>
-          </div>
-        );
-      })}
+      <div className="usa-form-group margin-top-1">
+        <legend className="usa-legend" id="scanner-select">
+          What scanner are you using?
+        </legend>
+        <select
+          className="usa-select"
+          defaultValue={modal.scanner}
+          id="scanner-select"
+          onChange={e => {
+            updateModalValueSequence({
+              key: 'scanner',
+              value: e.target.value,
+            });
+            updateModalValueSequence({
+              key: 'index',
+              value: e.target.selectedIndex,
+            });
+          }}
+        >
+          {sources.map((source, index) => {
+            return (
+              <option
+                data-index={index}
+                id={`scanner-id-${index}`}
+                key={index}
+                value={source}
+              >
+                {source}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+      <div className="usa-form-group margin-top-4">
+        <label className="usa-label" htmlFor="scanner-duplex-select">
+          How would you like to scan your documents?
+        </label>
+
+        <select
+          className="usa-select"
+          defaultValue={modal.scanMode}
+          id="scanner-duplex-select"
+          onChange={e => {
+            updateModalValueSequence({
+              key: 'scanMode',
+              value: e.target.value,
+            });
+          }}
+        >
+          {scanModeOptions.map((scanMode, index) => {
+            return (
+              <option key={index} value={scanMode.value}>
+                - {scanMode.label} -
+              </option>
+            );
+          })}
+        </select>
+      </div>
       {sources.length === 0 && (
         <p>There are currently no scanner sources available.</p>
       )}

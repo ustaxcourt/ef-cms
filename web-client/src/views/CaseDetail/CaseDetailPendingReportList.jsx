@@ -22,11 +22,11 @@ export const CaseDetailPendingReportList = connect(
   }) => {
     return (
       <>
-        <div>
+        <div className="margin-top-neg-3">
           <Button
             link
             aria-describedby="tab-pending-report"
-            className="push-right margin-top-2"
+            className="margin-top-neg-1 margin-bottom-1"
             href={`/case-detail/${formattedCaseDetail.docketNumber}/pending-report`}
             icon="print"
           >
@@ -50,43 +50,40 @@ export const CaseDetailPendingReportList = connect(
               <th>Date filed</th>
               <th>Filings and proceedings</th>
               <th>Filed by</th>
-              <th>Remove</th>
+              <th></th>
             </tr>
           </thead>
-          {pendingItemsDocketEntries.map(
-            ({ document, index, record }, arrayIndex) => (
-              <tbody key={arrayIndex}>
-                <tr className="pending-item-row">
-                  <td>{index}</td>
-                  <td>
-                    <span className="no-wrap">{record.createdAtFormatted}</span>
-                  </td>
-                  <td>
-                    <FilingsAndProceedings
-                      arrayIndex={arrayIndex}
-                      document={document}
-                      record={record}
-                    />
-                  </td>
-                  <td>{document.filedBy}</td>
-                  <td>
-                    <Button
-                      link
-                      className="padding-0 no-wrap"
-                      icon="trash"
-                      onClick={() =>
-                        openConfirmRemoveCaseDetailPendingItemModalSequence({
-                          documentId: document.documentId,
-                        })
-                      }
-                    >
-                      Remove
-                    </Button>
-                  </td>
-                </tr>
-              </tbody>
-            ),
-          )}
+          {pendingItemsDocketEntries.map((entry, arrayIndex) => (
+            <tbody key={arrayIndex}>
+              <tr className="pending-item-row">
+                <td>{entry.index}</td>
+                <td>
+                  <span className="no-wrap">{entry.createdAtFormatted}</span>
+                </td>
+                <td>
+                  <FilingsAndProceedings
+                    arrayIndex={arrayIndex}
+                    entry={entry}
+                  />
+                </td>
+                <td>{entry.filedBy}</td>
+                <td>
+                  <Button
+                    link
+                    className="padding-0 no-wrap"
+                    icon="trash"
+                    onClick={() =>
+                      openConfirmRemoveCaseDetailPendingItemModalSequence({
+                        documentId: entry.documentId,
+                      })
+                    }
+                  >
+                    Remove
+                  </Button>
+                </td>
+              </tr>
+            </tbody>
+          ))}
         </table>
         {pendingItemsDocketEntries.length === 0 && (
           <p>There is nothing pending.</p>

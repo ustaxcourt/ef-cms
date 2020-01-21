@@ -155,6 +155,25 @@ export const StartCaseInternal = connect(
                     </fieldset>
                   </FormGroup>
 
+                  <FormGroup errorText={validationErrors.mailingDate}>
+                    <label className="usa-label" htmlFor="mailing-date">
+                      Mailing date
+                    </label>
+                    <input
+                      className="usa-input usa-input-inline"
+                      id="mailing-date"
+                      maxLength="25"
+                      name="mailingDate"
+                      onBlur={() => validatePetitionFromPaperSequence()}
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
+                    />
+                  </FormGroup>
+
                   <FormGroup errorText={validationErrors.caseCaption}>
                     <label className="usa-label" htmlFor="case-caption">
                       Case caption

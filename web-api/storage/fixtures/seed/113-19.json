@@ -1,0 +1,144 @@
+[
+  {
+    "associatedJudge": "Chief Judge",
+    "procedureType": "Regular",
+    "contactSecondary": {},
+    "isPaper": false,
+    "initialTitle": "Letti Toretto, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "documents": [
+      {
+        "documentType": "Petition",
+        "partyPrimary": true,
+        "workItems": [
+          {
+            "docketNumberSuffix": "L",
+            "caseStatus": "New",
+            "document": {
+              "eventCode": "P",
+              "createdAt": "2019-12-11T16:02:31.174Z",
+              "processingStatus": "pending",
+              "documentType": "Petition",
+              "filedBy": "Petr. Letti Toretto",
+              "partyPrimary": true,
+              "pending": false,
+              "partySecondary": false,
+              "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
+              "receivedAt": "2019-12-11T16:02:31.174Z",
+              "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+            },
+            "caseTitle": "Letti Toretto",
+            "section": "petitions",
+            "workItemId": "f1f8459d-771d-4d60-b97c-9f05c7f79b94",
+            "isInitializeCase": true,
+            "assigneeId": null,
+            "isQC": true,
+            "sentBy": "7805d1ab-18d0-43ec-bafb-654e83405416",
+            "createdAt": "2019-12-11T16:02:31.175Z",
+            "assigneeName": null,
+            "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+            "messages": [
+              {
+                "createdAt": "2019-12-11T16:02:31.176Z",
+                "messageId": "3a6fda20-0ec9-47b9-8856-7c7d6bb2b743",
+                "from": "Test Petitioner",
+                "message": "Petition filed by Letti Toretto is ready for review.",
+                "fromUserId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+              }
+            ],
+            "docketNumber": "113-19",
+            "updatedAt": "2019-12-11T16:02:31.175Z"
+          }
+        ],
+        "pending": false,
+        "receivedAt": "2019-12-11T16:02:31.174Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "P",
+        "createdAt": "2019-12-11T16:02:31.174Z",
+        "processingStatus": "complete",
+        "filedBy": "Petr. Letti Toretto",
+        "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+        "partySecondary": false,
+        "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d"
+      },
+      {
+        "documentType": "Statement of Taxpayer Identification",
+        "partyPrimary": true,
+        "workItems": [],
+        "pending": false,
+        "receivedAt": "2019-12-11T16:02:31.176Z",
+        "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "eventCode": "STIN",
+        "createdAt": "2019-12-11T16:02:31.176Z",
+        "processingStatus": "complete",
+        "filedBy": "Petr. Letti Toretto",
+        "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+        "partySecondary": false,
+        "documentId": "3cf1f474-1dcd-47aa-8455-8f9a93d80183"
+      }
+    ],
+    "gsi1pk": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "orderForFilingFee": false,
+    "partyType": "Petitioner",
+    "receivedAt": "2019-12-11T16:02:31.173Z",
+    "caseType": "CDP (Lien/Levy)",
+    "orderDesignatingPlaceOfTrial": false,
+    "contactPrimary": {
+      "city": "Los Angeles",
+      "phone": "3235556429",
+      "address1": "111 Fast Ln",
+      "postalCode": "12355",
+      "name": "Letti Toretto",
+      "state": "CA",
+      "countryType": "domestic",
+      "email": "petitioner"
+    },
+    "createdAt": "2019-12-11T16:02:31.173Z",
+    "noticeOfAttachments": false,
+    "caseCaption": "Letti Toretto, Petitioner",
+    "caseId": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "sk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "filingType": "Myself",
+    "orderForOds": false,
+    "orderForRatification": false,
+    "hasIrsNotice": false,
+    "initialDocketNumberSuffix": "L",
+    "docketNumberSuffix": "L",
+    "orderToChangeDesignatedPlaceOfTrial": false,
+    "caseTitle": "Letti Toretto, Petitioner v. Commissioner of Internal Revenue, Respondent",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Birmingham, Alabama",
+    "respondents": [],
+    "practitioners": [],
+    "hasPendingItems": false,
+    "docketRecord": [
+      {
+        "description": "Petition",
+        "index": 1,
+        "documentId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
+        "filingDate": "2019-12-11T16:02:31.174Z",
+        "filedBy": "Petr. Letti Toretto"
+      },
+      {
+        "eventCode": "RQT",
+        "description": "Request for Place of Trial at Birmingham, Alabama",
+        "index": 2,
+        "filingDate": "2019-12-11T16:02:31.173Z"
+      }
+    ],
+    "orderForAmendedPetitionAndFilingFee": false,
+    "leadCaseId": "fd8d1139-5e54-4117-9b94-7a69359423c2",
+    "pk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "docketNumber": "113-19",
+    "status": "Submitted"
+  },
+  {
+    "sk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "pk": "113-19|case"
+  },
+  {
+    "sk": "cbe6e7dc-a209-4d5f-90d1-9bf7025b705b",
+    "pk": "7805d1ab-18d0-43ec-bafb-654e83405416|case"
+  }
+]

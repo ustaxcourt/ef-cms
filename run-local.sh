@@ -16,11 +16,15 @@ S3RVER_PID=$!
 
 npm run build:assets
 
-echo "seeding s3"
-npm run seed:s3
+if [ ! -z "$RESUME" ]; then
+  echo "Resuming operation with previous s3 and dynamo data"
+else
+  echo "seeding s3"
+  npm run seed:s3
 
-echo "creating & seeding dynamo tables"
-npm run seed:db
+  echo "creating & seeding dynamo tables"
+  npm run seed:db
+fi
 
 echo "creating elasticsearch index"
 npm run seed:elasticsearch
@@ -74,6 +78,8 @@ echo "starting notifications service"
 npx sls offline start "$@" --config web-api/serverless-notifications.yml &
 echo "starting streams service"
 npx sls offline start "$@" --config web-api/serverless-streams.yml &
+echo "starting case parties service"
+npx sls offline start "$@" --config web-api/serverless-case-parties.yml &
 
 echo "starting proxy"
 node ./web-api/proxy.js
@@ -83,6 +89,6 @@ echo "proxy stopped"
 if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"
   pkill -P $DYNAMO_PID
-  pkill -p $ESEARCH_PID
+  pkill -P $ESEARCH_PID
 fi
 kill $S3RVER_PID

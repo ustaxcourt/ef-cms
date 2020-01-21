@@ -2,6 +2,7 @@ service: ef-cms-case-notes
 plugins:
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
+  - serverless-plugin-aws-alerts
   - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-tracing
@@ -28,13 +29,10 @@ custom:
     stages:
       - dev
       - stg
+      - test
       - prod
     dashboards: true
     alarms:
-      - functionThrottles
-      - functionErrors
-      - functionInvocations
-      - functionDuration
       - errorExceptions
     definitions:
       errorExceptions:
@@ -49,10 +47,7 @@ custom:
         pattern: 'ERROR'
     topics:
       alarm:
-        topic: ${self:provider.stage}-cloudwatch-alerts
-        notifications:
-          - protocol: email
-            endpoint: jsutton@flexion.us
+        topic: arn:aws:sns:${opt:region}:${opt:accountId}:serverless-alerts-topic-${self:provider.stage}
 
   customDomain:
     domainName: efcms-${self:provider.stage}.${opt:domain}
@@ -75,7 +70,7 @@ provider:
   tracing: true
   stage: ${self:custom.stage}
   region: ${self:custom.region}
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   memorySize: 768
   timeout: 30
   logRetentionInDays: 7
@@ -152,25 +147,37 @@ resources:
             MetricsEnabled: true
 
 functions:
-  getCaseNote:
-    handler: web-api/${self:provider.dir}/caseNotesHandlers.getCaseNoteLambda
+  getJudgesCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.getJudgesCaseNoteLambda
     events:
       - http:
-          path: /{caseId}
+          path: /judges/{caseId}
           method: get
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
-  updateCaseNote:
-    handler: web-api/${self:provider.dir}/caseNotesHandlers.updateCaseNoteLambda
+  updateJudgesCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.updateJudgesCaseNoteLambda
     events:
       - http:
-          path: /{caseId}
+          path: /judges/{caseId}
           method: put
-          cors: true
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  deleteJudgesCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.deleteJudgesCaseNoteLambda
+    events:
+      - http:
+          path: /judges/{caseId}
+          method: delete
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId:
@@ -182,6 +189,18 @@ functions:
       - http:
           path: /{caseId}
           method: delete
+          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  saveCaseNote:
+    handler: web-api/${self:provider.dir}/caseNotesHandlers.saveCaseNoteLambda
+    events:
+      - http:
+          path: /{caseId}
+          method: put
           cors: true
           authorizer:
             type: COGNITO_USER_POOLS

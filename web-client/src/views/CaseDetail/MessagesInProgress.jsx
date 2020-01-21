@@ -1,18 +1,13 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-
 import React from 'react';
 
 export const MessagesInProgress = connect(
   {
-    documentEditLinkHelper: state.documentEditLinkHelper,
     extractedPendingMessagesFromCaseDetail:
       state.extractedPendingMessagesFromCaseDetail,
   },
-  function MessagesInProgress({
-    documentEditLinkHelper,
-    extractedPendingMessagesFromCaseDetail,
-  }) {
+  function MessagesInProgress({ extractedPendingMessagesFromCaseDetail }) {
     return (
       <>
         {extractedPendingMessagesFromCaseDetail.length === 0 && (
@@ -45,13 +40,7 @@ export const MessagesInProgress = connect(
                     <p className="margin-y-0">
                       <a
                         className="case-link"
-                        href={documentEditLinkHelper({
-                          docketNumber: workItem.docketNumber,
-                          documentId: workItem.document.documentId,
-                          messageId: workItem.currentMessage.messageId,
-                          shouldLinkToComplete:
-                            workItem.document.isFileAttached === false,
-                        })}
+                        href={`/case-detail/${workItem.docketNumber}/documents/${workItem.document.documentId}${workItem.editLink}`}
                       >
                         {workItem.document.documentTitle ||
                           workItem.document.documentType}

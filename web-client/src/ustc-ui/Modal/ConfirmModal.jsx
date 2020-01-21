@@ -2,7 +2,7 @@ import { BaseModal } from './BaseModal';
 import { Button } from '../Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { props, sequences } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 
@@ -10,6 +10,7 @@ export const ConfirmModal = connect(
   {
     onCancel: sequences[props.onCancelSequence],
     onConfirm: sequences[props.onConfirmSequence],
+    showModal: state.showModal,
   },
   ({
     cancelLabel,
@@ -26,9 +27,11 @@ export const ConfirmModal = connect(
     onCancelSequence,
     onConfirm,
     preventCancelOnBlur,
+    showModal,
+    showModalWhen,
     title,
   }) => {
-    hasErrorState = hasErrorState || true;
+    hasErrorState = hasErrorState || false;
     headerIcon = headerIcon || null;
     headerIconClassName = headerIconClassName || '';
     confirmLabel = confirmLabel || 'Ok';
@@ -58,6 +61,10 @@ export const ConfirmModal = connect(
 
       focusModal();
     }, []);
+
+    if (showModalWhen && showModal !== showModalWhen) {
+      return null;
+    }
 
     return (
       <BaseModal
@@ -102,7 +109,7 @@ export const ConfirmModal = connect(
         </div>
         <div className="margin-bottom-2">{children}</div>
         {(!noConfirm || !noCancel) && (
-          <>
+          <div className="margin-top-5">
             {!noConfirm && (
               <Button onClick={runConfirmSequence}>{confirmLabel}</Button>
             )}
@@ -111,7 +118,7 @@ export const ConfirmModal = connect(
                 {cancelLabel}
               </Button>
             )}
-          </>
+          </div>
         )}
       </BaseModal>
     );

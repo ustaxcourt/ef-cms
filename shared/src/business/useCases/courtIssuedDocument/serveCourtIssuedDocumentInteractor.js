@@ -1,6 +1,6 @@
 const {
-  aggregateElectronicallyServedParties,
-} = require('../../utilities/aggregateElectronicallyServedParties');
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
 const {
   createISODateString,
   formatDateString,
@@ -17,6 +17,7 @@ const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DocketRecord } = require('../../entities/DocketRecord');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { PDFDocument } = require('pdf-lib');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 const completeWorkItem = async ({
@@ -91,9 +92,9 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   );
 
   // Serve on all parties
-  const servedParties = aggregateElectronicallyServedParties(caseEntity);
+  const servedParties = aggregatePartiesForService(caseEntity);
 
-  courtIssuedDocument.setAsServed(servedParties);
+  courtIssuedDocument.setAsServed(servedParties.all);
 
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
@@ -124,9 +125,11 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   });
 
   applicationContext.logger.time('Saving S3 Document');
-  await applicationContext
-    .getPersistenceGateway()
-    .saveDocument({ applicationContext, document: newPdfData, documentId });
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: newPdfData,
+    documentId,
+  });
   applicationContext.logger.timeEnd('Saving S3 Document');
 
   const workItemToUpdate = courtIssuedDocument.getQCWorkItem();
@@ -183,40 +186,37 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     }
   }
 
-  const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
-
-  const destinations = servedParties.map(party => ({
-    email: party.email,
-    templateData: {
-      caseCaption: caseToUpdate.caseCaption,
-      docketNumber: caseToUpdate.docketNumber,
-      documentName: courtIssuedDocument.documentTitle,
-      loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-      name: party.name,
-      serviceDate: formatDateString(courtIssuedDocument.servedAt, 'MMDDYYYY'),
-      serviceTime: formatDateString(courtIssuedDocument.servedAt, 'TIME'),
-    },
-  }));
-
-  await applicationContext.getDispatchers().sendBulkTemplatedEmail({
+  await applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
-    defaultTemplateData: {
-      caseCaption: 'undefined',
-      docketNumber: 'undefined',
-      documentName: 'undefined',
-      loginUrl: 'undefined',
-      name: 'undefined',
-      serviceDate: 'undefined',
-      serviceTime: 'undefined',
-    },
-    destinations,
-    templateName: process.env.EMAIL_SERVED_TEMPLATE,
+    caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  return updatedCase;
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+    applicationContext,
+    caseEntity: caseToUpdate,
+    documentEntity: courtIssuedDocument,
+    servedParties,
+  });
+
+  let paperServicePdfBuffer;
+  if (servedParties.paper.length > 0) {
+    const courtIssuedOrderDoc = await PDFDocument.load(newPdfData);
+
+    let newPdfDoc = await PDFDocument.create();
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf({
+        applicationContext,
+        caseEntity,
+        newPdfDoc,
+        noticeDoc: courtIssuedOrderDoc,
+        servedParties,
+      });
+
+    const paperServicePdfData = await newPdfDoc.save();
+    paperServicePdfBuffer = Buffer.from(paperServicePdfData);
+  }
+
+  return paperServicePdfBuffer;
 };

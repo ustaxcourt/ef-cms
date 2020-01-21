@@ -1,3 +1,6 @@
+const {
+  aggregatePartiesForService,
+} = require('../utilities/aggregatePartiesForService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { capitalize } = require('lodash');
 const { Case } = require('../entities/cases/Case');
@@ -45,18 +48,6 @@ exports.updatePrimaryContactInteractor = async ({
     throw new UnauthorizedError('Unauthorized for update case contact');
   }
 
-  let caseNameToUse;
-  const spousePartyTypes = [
-    ContactFactory.PARTY_TYPES.petitionerSpouse,
-    ContactFactory.PARTY_TYPES.petitionerDeceasedSpouse,
-  ];
-
-  if (spousePartyTypes.includes(caseEntity.partyType)) {
-    caseNameToUse = caseEntity.contactPrimary.name;
-  } else {
-    caseNameToUse = Case.getCaseCaptionNames(caseEntity.caseCaption);
-  }
-
   const documentType = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({
@@ -69,20 +60,22 @@ exports.updatePrimaryContactInteractor = async ({
     caseCaptionPostfix: Case.CASE_CAPTION_POSTFIX,
   };
 
-  const pdfContentHtml = applicationContext
+  const pdfContentHtml = await applicationContext
     .getTemplateGenerators()
     .generateChangeOfAddressTemplate({
-      caption: caseDetail.caseCaption,
-      captionPostfix: caseDetail.caseCaptionPostfix,
-      docketNumberWithSuffix: `${
-        caseDetail.docketNumber
-      }${caseDetail.docketNumberSuffix || ''}`,
-      documentTitle: documentType.title,
-      name: caseNameToUse,
-      newData: contactInfo,
-      oldData: caseEntity.contactPrimary,
+      applicationContext,
+      content: {
+        caption: caseDetail.caseCaption,
+        captionPostfix: caseDetail.caseCaptionPostfix,
+        docketNumberWithSuffix: `${
+          caseDetail.docketNumber
+        }${caseDetail.docketNumberSuffix || ''}`,
+        documentTitle: documentType.title,
+        name: contactInfo.name,
+        newData: contactInfo,
+        oldData: caseEntity.contactPrimary,
+      },
     });
-
   caseEntity.contactPrimary = ContactFactory.createContacts({
     contactInfo: { primary: contactInfo },
     partyType: caseEntity.partyType,
@@ -103,17 +96,29 @@ exports.updatePrimaryContactInteractor = async ({
   const changeOfAddressDocument = new Document(
     {
       addToCoversheet: true,
-      additionalInfo: `for ${caseNameToUse}`,
+      additionalInfo: `for ${contactInfo.name}`,
       caseId,
       documentId: newDocumentId,
+      documentTitle: documentType.title,
       documentType: documentType.title,
       eventCode: documentType.eventCode,
-      filedBy: user.name,
+      partyPrimary: true,
       processingStatus: 'complete',
       userId: user.userId,
     },
     { applicationContext },
   );
+
+  const servedParties = aggregatePartiesForService(caseEntity);
+
+  changeOfAddressDocument.setAsServed(servedParties.all);
+
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    documentEntity: changeOfAddressDocument,
+    servedParties,
+  });
 
   const workItem = new WorkItem(
     {
@@ -158,7 +163,7 @@ exports.updatePrimaryContactInteractor = async ({
     pdfData: docketRecordPdf,
   });
 
-  await applicationContext.getPersistenceGateway().saveDocument({
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: docketRecordPdfWithCover,
     documentId: newDocumentId,

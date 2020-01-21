@@ -19,7 +19,7 @@ export const FileUploadErrorModal = connect(
         <div>
           <div className="uh-oh">Uh-oh!</div>
           <div className="message">
-            An error occured while uploading your document and it wasn’t
+            An error occurred while uploading your document and it wasn’t
             completed.
           </div>
         </div>

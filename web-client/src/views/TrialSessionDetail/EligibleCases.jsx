@@ -1,17 +1,31 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const EligibleCases = connect(
   {
     formattedEligibleCases:
       state.formattedTrialSessionDetails.formattedEligibleCases,
+    trialSessionDetailsHelper: state.trialSessionDetailsHelper,
+    trialSessionId: state.trialSession.trialSessionId,
+    updateQcCompleteForTrialSequence:
+      sequences.updateQcCompleteForTrialSequence,
   },
-  ({ formattedEligibleCases }) => {
+  ({
+    formattedEligibleCases,
+    trialSessionDetailsHelper,
+    trialSessionId,
+    updateQcCompleteForTrialSequence,
+  }) => {
     return (
       <React.Fragment>
+        {trialSessionDetailsHelper.showQcComplete && (
+          <div className="float-right text-semibold margin-top-neg-3 margin-bottom-2">
+            Completed: {trialSessionDetailsHelper.eligibleCaseQcCompleteCount}
+          </div>
+        )}
         <table
           aria-describedby="eligible-cases-tab"
           className="usa-table ustc-table trial-sessions subsection"
@@ -21,10 +35,13 @@ export const EligibleCases = connect(
             <tr>
               <th>Docket</th>
               <th aria-label="manually added indicator"></th>
-              <th>Case name</th>
+              <th>Case title</th>
               <th>Petitioner counsel</th>
               <th>Respondent counsel</th>
               <th>Case type</th>
+              {trialSessionDetailsHelper.showQcComplete && (
+                <th>QC complete?</th>
+              )}
             </tr>
           </thead>
           {formattedEligibleCases.map((item, idx) => (
@@ -51,6 +68,34 @@ export const EligibleCases = connect(
                 </td>
                 <td>{item.respondent}</td>
                 <td>{item.caseType}</td>
+                {trialSessionDetailsHelper.showQcComplete && (
+                  <td>
+                    <div className="text-center">
+                      <input
+                        aria-label="qc complete"
+                        checked={
+                          item.qcCompleteForTrial[trialSessionId] === true
+                        }
+                        className="usa-checkbox__input"
+                        id={`${item.caseId}-complete`}
+                        name={`${item.caseId}Complete`}
+                        type="checkbox"
+                        onChange={() => {
+                          updateQcCompleteForTrialSequence({
+                            caseId: item.caseId,
+                            qcCompleteForTrial: !item.qcCompleteForTrial[
+                              trialSessionId
+                            ],
+                          });
+                        }}
+                      />
+                      <label
+                        className="usa-checkbox__label"
+                        htmlFor={`${item.caseId}-complete`}
+                      ></label>
+                    </div>
+                  </td>
+                )}
               </tr>
             </tbody>
           ))}

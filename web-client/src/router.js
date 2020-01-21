@@ -76,7 +76,52 @@ const router = {
       '/case-detail/*',
       ifHasAccess(docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
-        app.getSequence('gotoCaseDetailSequence')({ docketNumber });
+        app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    route(
+      '/case-detail/*?openModal=*',
+      ifHasAccess((docketNumber, openModal) => {
+        setPageTitle(`Docket ${docketNumber}`);
+        app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          openModal,
+        });
+      }),
+    );
+
+    route(
+      '/case-detail/*/case-information',
+      ifHasAccess(docketNumber => {
+        window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
+        setPageTitle(`Docket ${docketNumber}`);
+        app.getSequence('gotoCaseDetailSequence')({
+          docketNumber,
+          primaryTab: 'caseInformation',
+        });
+      }),
+    );
+
+    route(
+      '/case-detail/*/edit-petitioner-information',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        app.getSequence('gotoEditPetitionerInformationSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    route(
+      '/case-detail/*/edit-details',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        app.getSequence('gotoEditPetitionDetailsSequence')({
+          docketNumber,
+        });
       }),
     );
 
@@ -291,6 +336,7 @@ const router = {
         app.getSequence('gotoPrimaryContactEditSequence')({ docketNumber });
       }),
     );
+
     route(
       '/case-detail/*/create-order',
       ifHasAccess(docketNumber => {
@@ -465,6 +511,21 @@ const router = {
     );
 
     route(
+      '/print-preview/*',
+      ifHasAccess(docketNumber => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
+        app.getSequence('gotoPrintPreviewSequence')({
+          alertWarning: {
+            message:
+              'This case has parties receiving paper service. Print and mail all paper service documents below.',
+            title: 'This document has been electronically served',
+          },
+          docketNumber,
+        });
+      }),
+    );
+
+    route(
       '/trial-session-detail/*',
       ifHasAccess(trialSessionId => {
         setPageTitle('Trial session information');
@@ -560,6 +621,14 @@ const router = {
       }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
     );
 
+    route(
+      '/edit-trial-session/*',
+      ifHasAccess(trialSessionId => {
+        setPageTitle('Edit trial session');
+        app.getSequence('gotoEditTrialSessionSequence')({ trialSessionId });
+      }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
+    );
+
     route('/style-guide', () => {
       setPageTitle('Style guide');
       app.getSequence('gotoStyleGuideSequence')();
@@ -601,6 +670,14 @@ const router = {
           app.getSequence('gotoMessagesSequence')(routeArgs);
         }
         setPageTitle('Messages');
+      }),
+    );
+
+    route(
+      '/pdf-preview',
+      ifHasAccess(() => {
+        setPageTitle('PDF Preview');
+        app.getSequence('gotoPdfPreviewSequence')();
       }),
     );
 

@@ -26,6 +26,7 @@ export const completeDocumentSigningAction = async ({
   if (get(state.pdfForSigning.signatureData.x)) {
     const {
       nameForSigning,
+      nameForSigningLine2,
       pageNumber,
       signatureData: { scale, x, y },
     } = get(state.pdfForSigning);
@@ -44,7 +45,7 @@ export const completeDocumentSigningAction = async ({
         scale,
         sigTextData: {
           signatureName: `(Signed) ${nameForSigning}`,
-          signatureTitle: 'Chief Judge',
+          signatureTitle: nameForSigningLine2,
         },
       });
 
@@ -64,7 +65,7 @@ export const completeDocumentSigningAction = async ({
 
     const signedDocumentId = await applicationContext
       .getPersistenceGateway()
-      .uploadDocument({
+      .uploadDocumentFromClient({
         applicationContext,
         document: documentFile,
         documentId: documentIdToOverwrite,

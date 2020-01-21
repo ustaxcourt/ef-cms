@@ -5,7 +5,6 @@ import { setMetadataAsPristineAction } from '../actions/setMetadataAsPristineAct
 import { setPdfFileAction } from '../actions/CourtIssuedOrder/setPdfFileAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const convertHtml2PdfSequence = [
   setWaitingForResponseAction,
@@ -15,5 +14,4 @@ export const convertHtml2PdfSequence = [
   setPdfFileAction,
   setPdfPreviewUrlAction,
   setMetadataAsPristineAction,
-  unsetWaitingForResponseAction,
 ];

@@ -77,7 +77,16 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "acm:ListCertificates",
         "acm:AddTagsToCertificate",
         "acm:ListTagsForCertificate",
-        "acm:DescribeCertificate"
+        "acm:DescribeCertificate",
+        "acm:DeleteCertificate"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "Ecr",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:*"
       ],
       "Resource": "*"
     },

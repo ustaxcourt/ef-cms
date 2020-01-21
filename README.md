@@ -8,9 +8,17 @@ An as-yet-unnamed project by the [U.S. Tax Court](https://ustaxcourt.gov/), crea
 
 [![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop)
 
+#### master
+
+[![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/master)
+
 #### staging
 
 [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging)
+
+#### test
+
+[![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test)
 
 API | Front-End | Shared Code
 --- | --------- | -----------
@@ -59,9 +67,9 @@ To exercise the CI/CD pipeline locally, run the following:
 
 This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral tests, Pa11y, etc. over all the components.
 
-## Running / verifing the project via Docker
+## Running / verifying the project via Docker
 
-Assuming you have Docker installed, the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it:
+Once [you have Docker installed](https://docs.docker.com/install/), the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it:
 
 `./docker-run.sh`
 
@@ -73,14 +81,19 @@ Assuming you have Docker installed, the following command will spin up a Docker 
 - You can access S3 local at http://localhost:9000
 - You can access the style guide at http://localhost:1234/style-guide
 
+Within Docker, you should allocate 4 CPUs, 16 GB of RAM, and 4 GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.
+
+### ECR
+ECR is Amazon’s docker container registry that holds images for `ef-cms` builds on CircleCI. Currently, images can be managed in the AWS ECR console under the `ef-cms-us-east-1`. If you need to update the Docker image, you can do so (with appropriate permissions) by running `./docker-to-ecr.sh`. This command will build an image per the `Dockerfile-CI` config, tag it as `latest` and push it to the repo in ECR.
+
 ## Running this project locally without Docker
 
 The EF-CMS is comprised of two components: the API and the UI. Both must be run in order to function.
 
 ### Prerequisites
 
-- Node v10.15.3
-- npm v6.4.1
+- Node v12.13.1
+- npm v6.12.1
 - ClamAV v0.101.2 (see Setup below)
 
 ### Setup
@@ -113,16 +126,20 @@ There are two login mechanisms available — the legacy mock login system, and a
 
 ### Mock login
 
-You can log in using these usernames:
+You can log in using the following accounts.
+
+#### External Users
 
 ```
-External Users:
 petitioner
 practitioner
 practitioner1 - practitioner4
 respondent
 respondent1 - respondent4
-Internal Users:
+```
+
+#### Internal Users
+```
 adc
 admissionsclerk
 calendarclerk
@@ -148,14 +165,17 @@ No password is required.
 
 ### AWS Cognito
 
-To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with:
+To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with the following accounts.
 
+#### External Users
 ```
-External Users:
 petitioner1@example.com – petitioner5@example.com
 practitioner1@example.com – practitioner10@example.com
 respondent1@example.com – respondent10@example.com
-Internal Users:
+```
+
+#### Internal Users
+```
 adc1@example.com – adc5@example.com
 admissionsclerk1@example.com – admissionsclerk5@example.com
 calendarclerk1@example.com – calendarclerk5@example.com
@@ -168,7 +188,7 @@ ashfordsChambers1@example.com - ashfordsChambers5@example.com
 jbuch@example.com
 buchsChambers1@example.com - buchsChambers5@example.com
 jcohen@example.com
-cohensChambers1@example.com - cohensChambers5@example.com
+cohensChambers1@example.com – cohensChambers5@example.com
 ```
 
 For a full list of available users, see [court_users.csv](web-api/court_users.csv).
@@ -242,3 +262,9 @@ Follow these steps for creating the end of sprint PRs for the court.
 8. When PR comments come in, make changes to master to fix the comments
 9. After the court approves and merges PR, merge master into develop
 10. Create a release in GitHub as sprint_00x against master and put the same description planned to be in the PR description for the court
+
+## Accessibility HTML_CodeSniffer Bookmarklet
+
+The following bookmarklet is useful for running pa11y directly on the page you are viewing.  The following link should have instruction on how to setup and use:
+
+https://squizlabs.github.io/HTML_CodeSniffer/
