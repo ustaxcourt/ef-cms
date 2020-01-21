@@ -12,7 +12,6 @@ Due to our code architecture, adding a new endpoint is an involved process.  The
 - [ ] updating the `./web-client/src/applicationContext.js` file and import the new proxy interactor
 - [ ] updating the `./web-api/src/applicationContext.js` file and import the new interactor
 
-
 ### New Stack Check List
 All of our endpoints are split into multiple AWS CloudFormation stacks and hosted behind a single domain with base path mapping records.  Sometimes the stacks will get too large and you will start running into AWS limits.  Often you need to split your existing stack into 2 smaller stacks.  This check list can be followed to ensure you don't forget any of the steps.
 
