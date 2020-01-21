@@ -831,7 +831,7 @@ Case.prototype.updateDocketNumberRecord = function() {
     this.addDocketRecord(
       new DocketRecord({
         description: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
-        eventCode: '-',
+        eventCode: 'MIND',
         filingDate: createISODateString(),
       }),
     );
@@ -1496,6 +1496,16 @@ Case.prototype.setQcCompleteForTrial = function({
   trialSessionId,
 }) {
   this.qcCompleteForTrial[trialSessionId] = qcCompleteForTrial;
+  return this;
+};
+
+/**
+ * sets the sealedDate on a case to the current date and time
+ *
+ * @returns {Case} this case entity
+ */
+Case.prototype.setAsSealed = function() {
+  this.sealedDate = createISODateString();
   return this;
 };
 

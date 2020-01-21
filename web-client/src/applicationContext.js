@@ -104,6 +104,7 @@ import { fileExternalDocumentForConsolidatedInteractor } from '../../shared/src/
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
+import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEmptyStrings';
 import {
   formatCase,
   formatCaseDeadlines,
@@ -191,6 +192,7 @@ import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAsso
 import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/updateCourtIssuedDocketEntryProxy';
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
 import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
+import { updateDocketEntryMetaInteractor } from '../../shared/src/proxies/documents/updateDocketEntryMetaProxy';
 import { updateJudgesCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateJudgesCaseNoteProxy';
 import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
 import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
@@ -361,6 +363,7 @@ const allUseCases = {
   updateCourtIssuedDocketEntryInteractor,
   updateCourtIssuedOrderInteractor,
   updateDocketEntryInteractor,
+  updateDocketEntryMetaInteractor,
   updateJudgesCaseNoteInteractor,
   updatePetitionDetailsInteractor,
   updatePetitionerInformationInteractor,
@@ -550,6 +553,7 @@ const applicationContext = {
       compareStrings,
       createISODateString,
       createISODateStringFromObject,
+      filterEmptyStrings,
       formatCase,
       formatCaseDeadlines,
       formatCaseForTrialSession,
