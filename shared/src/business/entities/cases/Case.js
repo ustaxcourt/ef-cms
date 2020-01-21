@@ -407,15 +407,11 @@ joiValidationDecorator(
     docketRecord: joi
       .array()
       .min(1)
-      .items(
-        joi.object().meta({ filename: 'DocketRecord', name: 'DocketRecord' }),
-      )
       .required()
       .description('List of DocketRecord Entities for the Case.'),
     documents: joi
       .array()
       .min(1)
-      .items(joi.object().meta({ filename: 'Document', name: 'Document' }))
       .required()
       .description('List of Document Entities for the Case.'),
     filingType: joi
