@@ -62,6 +62,7 @@ describe('saveIntermediateDocketEntryInteractor', () => {
     ],
     filingType: 'Myself',
     partyType: 'Petitioner',
+    preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: User.ROLES.petitioner,
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

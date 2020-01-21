@@ -47,6 +47,7 @@ describe('updateCounselOnCaseInteractor', () => {
           filingType: 'Myself',
           partyType: 'Petitioner',
           practitioners: mockPractitioners,
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Regular',
           respondents: mockRespondents,
         }),
