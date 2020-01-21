@@ -38,7 +38,10 @@ describe('deleteCounselFromCaseInteractor', () => {
           caseId,
           caseType: 'Deficiency',
           docketNumber: '123-19',
+          filingType: 'Myself',
+          partyType: 'Petitioner',
           practitioners: mockPractitioners,
+          procedureType: 'Regular',
           respondents: mockRespondents,
         }),
         getUserById: ({ userId }) => {

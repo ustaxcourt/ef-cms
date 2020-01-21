@@ -115,8 +115,8 @@ describe('createCaseFromPaperInteractor', () => {
       error = e;
     }
 
-    expect(caseFromPaper).toBeDefined();
     expect(error).toBeUndefined();
+    expect(caseFromPaper).toBeDefined();
   });
 
   it('creates a case from paper with a secondary contact', async () => {
@@ -194,8 +194,8 @@ describe('createCaseFromPaperInteractor', () => {
       error = e;
     }
 
-    expect(caseFromPaper).toBeDefined();
     expect(error).toBeUndefined();
+    expect(caseFromPaper).toBeDefined();
   });
 
   it('creates a case from paper with a request for place of trial and preferred trial city', async () => {
@@ -263,7 +263,7 @@ describe('createCaseFromPaperInteractor', () => {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: new File([], 'petitionFile.pdf'),
           petitionFileSize: 1,
-          preferredTrialCity: 'Chattanooga, TN',
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
           receivedAt: new Date().toISOString(),
         },
@@ -274,8 +274,8 @@ describe('createCaseFromPaperInteractor', () => {
       error = e;
     }
 
-    expect(caseFromPaper).toBeDefined();
     expect(error).toBeUndefined();
+    expect(caseFromPaper).toBeDefined();
   });
 
   it('creates a case from paper with Application for Waiver of Filing Fee', async () => {
@@ -353,7 +353,7 @@ describe('createCaseFromPaperInteractor', () => {
       error = e;
     }
 
-    expect(caseFromPaper).toBeDefined();
     expect(error).toBeUndefined();
+    expect(caseFromPaper).toBeDefined();
   });
 });

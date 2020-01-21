@@ -39,24 +39,30 @@ describe('saveIntermediateDocketEntryInteractor', () => {
     ],
     documents: [
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335b1',
         documentType: 'Answer',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         workItems: [workItem],
       },
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335b2',
         documentType: 'Answer',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         workItems: [workItem],
       },
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         workItems: [workItem],
       },
     ],
+    filingType: 'Myself',
+    partyType: 'Petitioner',
+    procedureType: 'Regular',
     role: User.ROLES.petitioner,
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
