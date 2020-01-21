@@ -25,7 +25,7 @@ export const EditDocketRecordEntryModal = connect(
         preventCancelOnBlur={true}
         title="What would you like to change on the Docket Record?"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="editDocketRecordEntrySequence"
+        onConfirmSequence="submitEditDocketEntryMetaSequence"
       >
         <FormGroup errorText={validationErrors && validationErrors.filingDate}>
           <label className="usa-label" htmlFor="filingDate">

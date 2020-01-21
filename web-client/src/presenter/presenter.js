@@ -57,7 +57,7 @@ import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingC
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
-import { editDocketRecordEntrySequence } from './sequences/editDocketRecordEntrySequence';
+import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
 import { fetchPendingItemsSequence } from './sequences/pending/fetchPendingItemsSequence';
@@ -403,7 +403,7 @@ export const presenter = {
     dismissAlertSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,
-    editDocketRecordEntrySequence,
+    submitEditDocketEntryMetaSequence,
     editSelectedDocumentSequence,
     editSelectedSecondaryDocumentSequence,
     fetchPendingItemsSequence,

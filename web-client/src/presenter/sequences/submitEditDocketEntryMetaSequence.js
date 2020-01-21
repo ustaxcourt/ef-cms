@@ -9,7 +9,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateDocketRecordAction } from '../actions/EditDocketRecordEntry/validateDocketRecordAction';
 
-export const editDocketRecordEntrySequence = [
+export const submitEditDocketEntryMetaSequence = [
   startShowValidationAction,
   primePropsFromEditDocketEntryMetaModalAction,
   validateDocketRecordAction,
