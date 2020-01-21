@@ -4,7 +4,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const EditDocketRecordEntryModal = connect(
+export const EditDocketEntryMetaModal = connect(
   {
     form: state.modal.form,
     updateModalValueSequence: sequences.updateModalValueSequence,
@@ -25,7 +25,7 @@ export const EditDocketRecordEntryModal = connect(
         preventCancelOnBlur={true}
         title="What would you like to change on the Docket Record?"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="editDocketRecordEntrySequence"
+        onConfirmSequence="submitEditDocketEntryMetaSequence"
       >
         <FormGroup errorText={validationErrors && validationErrors.filingDate}>
           <label className="usa-label" htmlFor="filingDate">
