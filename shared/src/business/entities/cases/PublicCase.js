@@ -70,7 +70,7 @@ const publicCaseSchema = {
 };
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
-  caseId: joi.forbidden(),
+  caseId: joi.string(),
   caseTitle: joi.any().forbidden(),
   contactPrimary: joi.any().forbidden(),
   contactSecondary: joi.any().forbidden(),

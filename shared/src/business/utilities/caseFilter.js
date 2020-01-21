@@ -1,5 +1,5 @@
 const { isAssociatedUser } = require('../entities/cases/Case');
-const CASE_ATTRIBUTE_WHITELIST = ['docketNumber', 'sealedDate'];
+const CASE_ATTRIBUTE_WHITELIST = ['caseId', 'docketNumber', 'sealedDate'];
 
 const caseSealedFormatter = caseRaw => {
   const sealedObj = {};
