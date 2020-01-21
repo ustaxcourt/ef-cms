@@ -1,4 +1,4 @@
-const { isAssociatedUser } = require('../../entities/cases/Case');
+const { isAssociatedUser } = require('../entities/cases/Case');
 const { map } = require('lodash');
 const CASE_ATTRIBUTE_WHITELIST = ['docketNumber'];
 

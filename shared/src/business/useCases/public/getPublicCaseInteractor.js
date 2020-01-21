@@ -1,5 +1,5 @@
 const { Case } = require('../../entities/cases/Case');
-const { caseSealedFormatter } = require('../utilities/caseFilter');
+const { caseSealedFormatter } = require('../../utilities/caseFilter');
 const { NotFoundError } = require('../../../errors/errors');
 const { PublicCase } = require('../../entities/cases/PublicCase');
 
@@ -44,5 +44,5 @@ exports.getPublicCaseInteractor = async ({ applicationContext, caseId }) => {
     .validate()
     .toRawObject();
 
-  if (publicCaseDetail) return publicCaseDetail.toRawObject();
+  return publicCaseDetail;
 };
