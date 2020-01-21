@@ -61,7 +61,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     filingDate: filingDate || docketRecordEntry.filingDate,
   });
 
-  if (servedAt || servedParties) {
+  if (servedAt || servedParties || filedBy) {
     const documentDetail = caseEntity.getDocumentById({
       documentId: docketRecordEntity.documentId,
     });
@@ -69,6 +69,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     const documentEntity = new Document(
       {
         ...documentDetail,
+        filedBy: filedBy || documentDetail.filedBy,
         servedAt: servedAt || documentDetail.servedAt,
         servedParties: servedParties || documentDetail.servedParties,
       },
