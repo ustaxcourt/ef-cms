@@ -121,10 +121,10 @@ export const EditDocketEntryMetaModal = connect(
           <input
             area-describedby="document-served-parties-label"
             className="usa-input"
+            defaultValue={form.servedParties}
             id="servedParties"
             name="form.servedParties"
             type="text"
-            value={form.servedParties.join(', ') || ''}
             onChange={e => {
               updateModalValueSequence({
                 key: e.target.name,
