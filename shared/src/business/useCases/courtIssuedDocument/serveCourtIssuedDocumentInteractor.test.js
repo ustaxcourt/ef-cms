@@ -199,6 +199,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       isPaper: true,
       mailingDate: 'testing',
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      procedureType: 'Regular',
     },
   ];
 
