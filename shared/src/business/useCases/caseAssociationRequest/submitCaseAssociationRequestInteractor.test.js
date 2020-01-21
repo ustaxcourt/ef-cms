@@ -23,6 +23,7 @@ describe('submitCaseAssociationRequest', () => {
     ],
     filingType: 'Myself',
     partyType: 'Petitioner',
+    preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
   };
 

@@ -21,6 +21,7 @@ describe('associateRespondentToCase', () => {
     ],
     filingType: 'Myself',
     partyType: 'Petitioner',
+    preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     status: 'New',
   };
