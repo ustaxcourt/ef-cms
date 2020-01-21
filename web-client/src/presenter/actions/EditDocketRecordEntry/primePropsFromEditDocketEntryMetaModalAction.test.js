@@ -26,7 +26,7 @@ describe('primePropsFromEditDocketEntryMetaModalAction', () => {
     expect(result.output).toEqual({
       caseId: '456',
       docketRecordEntry: { something: '123' },
-      docketRecordIndex: 1,
+      docketRecordIndex: 0,
       fromModal: true,
     });
   });
@@ -56,7 +56,7 @@ describe('primePropsFromEditDocketEntryMetaModalAction', () => {
     expect(result.output).toEqual({
       caseId: '456',
       docketRecordEntry: { someObj: {}, something: '123' },
-      docketRecordIndex: 1,
+      docketRecordIndex: 0,
       fromModal: true,
     });
   });
