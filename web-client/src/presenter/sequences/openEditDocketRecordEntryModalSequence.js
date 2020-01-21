@@ -1,9 +1,9 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { setEditDocketRecordEntryModalStateAction } from '../actions/EditDocketRecordEntry/setEditDocketRecordEntryModalStateAction';
+import { setEditDocketEntryMetaModalStateAction } from '../actions/EditDocketRecordEntry/setEditDocketEntryMetaModalStateAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const openEditDocketRecordEntryModalSequence = [
   clearModalStateAction,
-  setEditDocketRecordEntryModalStateAction,
+  setEditDocketEntryMetaModalStateAction,
   setShowModalFactoryAction('EditDocketRecordEntryModal'),
 ];

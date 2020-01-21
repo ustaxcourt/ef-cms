@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props function
  * @param {object} providers.store the cerebral store
  */
-export const setEditDocketRecordEntryModalStateAction = ({
+export const setEditDocketEntryMetaModalStateAction = ({
   get,
   props,
   store,
