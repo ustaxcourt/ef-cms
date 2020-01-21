@@ -84,6 +84,30 @@ export const EditDocketEntryMetaModal = connect(
             }}
           />
         </FormGroup>
+        <FormGroup errorText={validationErrors && validationErrors.servedAt}>
+          <label
+            className="usa-label"
+            htmlFor="servedAt"
+            id="document-served-at-label"
+          >
+            Served
+          </label>
+          <input
+            area-describedby="document-served-at-label"
+            className="usa-input"
+            id="servedAt"
+            name="form.servedAt"
+            type="text"
+            value={form.servedAt || ''}
+            onChange={e => {
+              updateModalValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+              validateDocketRecordSequence();
+            }}
+          />
+        </FormGroup>
       </ConfirmModal>
     );
   },
