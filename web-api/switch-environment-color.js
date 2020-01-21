@@ -5,7 +5,7 @@ const REGION = process.argv[3];
 const CURRENT_COLOR = process.argv[4];
 const NEW_COLOR = process.argv[5];
 
-export const getNewStack = ({
+const getNewStack = ({
   basePathMapping,
   currentColor,
   newColor,
@@ -41,7 +41,7 @@ export const getNewStack = ({
   return newStack;
 };
 
-export const switchBasePathMappings = async ({
+const switchBasePathMappings = async ({
   apigateway,
   currentColor,
   fullDomain,
@@ -105,3 +105,5 @@ const main = async () => {
 if (STAGE && REGION && CURRENT_COLOR && NEW_COLOR) {
   main();
 }
+
+module.exports = { getNewStack, switchBasePathMappings };
