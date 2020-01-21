@@ -338,8 +338,14 @@ function Case(rawCase, { applicationContext }) {
 joiValidationDecorator(
   Case,
   joi.object().keys({
-    associatedJudge: joi.string().required(),
-    blocked: joi.boolean().optional(),
+    associatedJudge: joi
+      .string()
+      .required()
+      .description('Defaults to Chielf Judge.'),
+    blocked: joi
+      .boolean()
+      .optional()
+      .description('Temporarily blocked from trial.'),
     blockedDate: joi.when('blocked', {
       is: true,
       otherwise: joi.optional().allow(null),
@@ -351,7 +357,12 @@ joiValidationDecorator(
     blockedReason: joi.when('blocked', {
       is: true,
       otherwise: joi.optional().allow(null),
-      then: joi.string().required(),
+      then: joi
+        .string()
+        .required()
+        .description(
+          'Open text field for describing reason for blocking this Case from Trial.',
+        ),
     }),
     caseCaption: joi
       .string()
@@ -365,16 +376,13 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .required()
-      .description('Unique Case ID only used by the system'),
+      .description('Unique Case ID only used by the system.'),
     caseNote: joi.string().optional(),
     caseType: joi
       .string()
       .valid(...Case.CASE_TYPES)
       .required(),
-    contactPrimary: joi
-      .object()
-      .required()
-      .allow(null),
+    contactPrimary: joi.object().required(),
     contactSecondary: joi
       .object()
       .optional()
@@ -398,6 +406,7 @@ joiValidationDecorator(
       .array()
       .required()
       .description('List of DocketRecord Entities for the Case.'),
+    // TODO: Revisit with Jessica
     documents: joi
       .array()
       .items(joi.object().meta({ filename: 'Document', name: 'Document' }))
@@ -409,7 +418,7 @@ joiValidationDecorator(
         ...Case.FILING_TYPES[User.ROLES.petitioner],
         ...Case.FILING_TYPES[User.ROLES.practitioner],
       )
-      .optional(),
+      .required(),
     hasIrsNotice: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
       .boolean()
@@ -434,12 +443,13 @@ joiValidationDecorator(
       .iso()
       .max('now')
       .optional()
-      .allow(null),
+      .allow(null)
+      .description('Last date that the Petitioner is allowed to file before.'),
     irsSendDate: joi
       .date()
       .iso()
       .optional()
-      .description('When the Case was sent to the IRS.'),
+      .description('When the Case was sent to the IRS by the Court.'),
     isPaper: joi.boolean().optional(),
     leadCaseId: joi
       .string()
@@ -448,7 +458,7 @@ joiValidationDecorator(
       })
       .optional()
       .description(
-        'If this Case is consolidated, this is the ID of the lead Case.',
+        'If this Case is consolidated, this is the ID of the lead Case. It is the lowest number in the consolidated group.',
       ),
     mailingDate: joi.when('isPaper', {
       is: true,
@@ -462,6 +472,7 @@ joiValidationDecorator(
         .max(25)
         .required(),
     }),
+    // TODO: Get more info on this
     noticeOfAttachments: joi.boolean().optional(),
     noticeOfTrialDate: joi
       .date()
@@ -474,7 +485,8 @@ joiValidationDecorator(
     orderForRatification: joi.boolean().optional(),
     orderToChangeDesignatedPlaceOfTrial: joi.boolean().optional(),
     orderToShowCause: joi.boolean().optional(),
-    partyType: joi.string().optional(),
+    // TODO: Add ContactFactory.PARTY_TYPES
+    partyType: joi.string().required(),
     petitionPaymentDate: joi.when('petitionPaymentStatus', {
       is: Case.PAYMENT_STATUS.PAID,
       otherwise: joi
@@ -520,8 +532,14 @@ joiValidationDecorator(
         .optional()
         .allow(null),
     ),
-    procedureType: joi.string().optional(),
-    qcCompleteForTrial: joi.object().required(),
+    procedureType: joi
+      .string()
+      .valid(...Case.PROCEDURE_TYPES)
+      .required(),
+    qcCompleteForTrial: joi
+      .object()
+      .required()
+      .description('QC Checklist.'),
     receivedAt: joi
       .date()
       .iso()
@@ -538,6 +556,7 @@ joiValidationDecorator(
       .iso()
       .optional()
       .allow(null),
+    // TODO: Must be in the locations list
     trialLocation: joi.string().optional(),
     trialSessionId: joi
       .string()
@@ -545,6 +564,7 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
+    // TODO: Revisit at format
     trialTime: joi.string().optional(),
     userId: joi
       .string()
