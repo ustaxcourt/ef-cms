@@ -57,7 +57,6 @@ import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingC
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
-import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
 import { editSelectedDocumentSequence } from './sequences/editSelectedDocumentSequence';
 import { editSelectedSecondaryDocumentSequence } from './sequences/editSelectedSecondaryDocumentSequence';
 import { fetchPendingItemsSequence } from './sequences/pending/fetchPendingItemsSequence';
@@ -237,6 +236,7 @@ import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIss
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitDocketEntrySequence } from './sequences/submitDocketEntrySequence';
+import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
 import { submitEditPractitionersModalSequence } from './sequences/submitEditPractitionersModalSequence';
 import { submitEditPrimaryContactSequence } from './sequences/submitEditPrimaryContactSequence';
 import { submitEditRespondentsModalSequence } from './sequences/submitEditRespondentsModalSequence';
@@ -403,7 +403,6 @@ export const presenter = {
     dismissAlertSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,
-    submitEditDocketEntryMetaSequence,
     editSelectedDocumentSequence,
     editSelectedSecondaryDocumentSequence,
     fetchPendingItemsSequence,
@@ -581,6 +580,7 @@ export const presenter = {
     submitCourtIssuedOrderSequence,
     submitCreateOrderModalSequence,
     submitDocketEntrySequence,
+    submitEditDocketEntryMetaSequence,
     submitEditPractitionersModalSequence,
     submitEditPrimaryContactSequence,
     submitEditRespondentsModalSequence,
