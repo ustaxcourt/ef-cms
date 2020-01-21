@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 /**
  *
  * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context needed for getting the entity constructor
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props function
  * @param {object} providers.store the cerebral store
