@@ -104,6 +104,7 @@ import { fileExternalDocumentForConsolidatedInteractor } from '../../shared/src/
 import { fileExternalDocumentInteractor } from '../../shared/src/proxies/documents/fileExternalDocumentProxy';
 import { filePetitionFromPaperInteractor } from '../../shared/src/business/useCases/filePetitionFromPaperInteractor';
 import { filePetitionInteractor } from '../../shared/src/business/useCases/filePetitionInteractor';
+import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEmptyStrings';
 import {
   formatCase,
   formatCaseDeadlines,
@@ -552,6 +553,7 @@ const applicationContext = {
       compareStrings,
       createISODateString,
       createISODateStringFromObject,
+      filterEmptyStrings,
       formatCase,
       formatCaseDeadlines,
       formatCaseForTrialSession,
