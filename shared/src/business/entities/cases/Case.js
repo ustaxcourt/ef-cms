@@ -817,6 +817,7 @@ Case.prototype.updateCaseTitleDocketRecord = function() {
     this.addDocketRecord(
       new DocketRecord({
         description: `Caption of case is amended from '${lastTitle}' to '${this.caseTitle}'`,
+        eventCode: 'MINC',
         filingDate: createISODateString(),
       }),
     );
