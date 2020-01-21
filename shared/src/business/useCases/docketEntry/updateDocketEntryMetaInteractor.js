@@ -29,7 +29,7 @@ exports.updateDocketEntryMetaInteractor = async ({
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
 
-  const caseToUpdate = applicationContext
+  const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByCaseId({
       applicationContext,
