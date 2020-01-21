@@ -8,6 +8,7 @@ const {
 const { createISODateString } = require('../utilities/DateHandler');
 const { flatten, map } = require('lodash');
 const { Order } = require('./orders/Order');
+const { TrialSession } = require('./trialSessions/TrialSession');
 const { WorkItem } = require('./WorkItem');
 
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
@@ -320,8 +321,17 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null),
-    // TODO: Add city list
-    trialLocation: joi.string().optional(),
+    trialLocation: joi
+      .alternatives()
+      .try(
+        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
+        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+        joi
+          .string()
+          .optional()
+          .allow(null),
+      )
+      .optional(),
     userId: joi.string().required(),
     workItems: joi.array().optional(),
   }),
