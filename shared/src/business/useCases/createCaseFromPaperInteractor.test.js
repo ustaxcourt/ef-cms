@@ -115,8 +115,8 @@ describe('createCaseFromPaperInteractor', () => {
       error = e;
     }
 
-    expect(caseFromPaper).toBeDefined();
     expect(error).toBeUndefined();
+    expect(caseFromPaper).toBeDefined();
   });
 
   it('creates a case from paper with a secondary contact', async () => {
@@ -194,8 +194,8 @@ describe('createCaseFromPaperInteractor', () => {
       error = e;
     }
 
-    expect(caseFromPaper).toBeDefined();
     expect(error).toBeUndefined();
+    expect(caseFromPaper).toBeDefined();
   });
 
   it('creates a case from paper with a request for place of trial and preferred trial city', async () => {
@@ -274,8 +274,8 @@ describe('createCaseFromPaperInteractor', () => {
       error = e;
     }
 
-    expect(caseFromPaper).toBeDefined();
     expect(error).toBeUndefined();
+    expect(caseFromPaper).toBeDefined();
   });
 
   it('creates a case from paper with Application for Waiver of Filing Fee', async () => {
@@ -353,7 +353,7 @@ describe('createCaseFromPaperInteractor', () => {
       error = e;
     }
 
-    expect(caseFromPaper).toBeDefined();
     expect(error).toBeUndefined();
+    expect(caseFromPaper).toBeDefined();
   });
 });
