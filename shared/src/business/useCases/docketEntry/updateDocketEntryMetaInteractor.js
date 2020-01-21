@@ -66,26 +66,27 @@ exports.updateDocketEntryMetaInteractor = async ({
       documentId: docketRecordEntity.documentId,
     });
 
-    const documentEntity = new Document(
-      {
-        ...documentDetail,
-        filedBy: filedBy || documentDetail.filedBy,
-        servedAt: servedAt || documentDetail.servedAt,
-        servedParties: servedParties || documentDetail.servedParties,
-      },
-      { applicationContext },
-    );
+    if (documentDetail) {
+      const documentEntity = new Document(
+        {
+          ...documentDetail,
+          filedBy: filedBy || documentDetail.filedBy,
+          servedAt: servedAt || documentDetail.servedAt,
+          servedParties: servedParties || documentDetail.servedParties,
+        },
+        { applicationContext },
+      );
 
-    if (servedAt && servedAt !== documentDetail.servedAt) {
-      // servedAt has changed, generate a new coversheet
-      await applicationContext.getUseCases().addCoversheetInteractor({
-        applicationContext,
-        caseId,
-        documentId: documentDetail.documentId,
-      });
+      if (servedAt && servedAt !== documentDetail.servedAt) {
+        // servedAt has changed, generate a new coversheet
+        await applicationContext.getUseCases().addCoversheetInteractor({
+          applicationContext,
+          caseId,
+          documentId: documentDetail.documentId,
+        });
+      }
+      caseEntity.updateDocument(documentEntity);
     }
-
-    caseEntity.updateDocument(documentEntity);
   }
 
   caseEntity.updateDocketRecordEntry(docketRecordEntity);
