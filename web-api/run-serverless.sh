@@ -26,30 +26,35 @@ cp "./dist/${handler}" web-api/src
 export SLS_DEPLOYMENT_BUCKET="${EFCMS_DOMAIN}.efcms.${slsStage}.${region}.deploys"
 export SLS_DEBUG="*"
 
-./node_modules/.bin/sls create_domain \
+CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-${slsStage}" --key '{"pk":{"S":"deployed-stack"},"sk":{"S":"deployed-stack"}}' | jq -r ".Item.current.S")
+
+echo "current color: ${CURRENT_COLOR}"
+
+if [[ $CURRENT_COLOR == 'green' ]] ; then
+  NEW_COLOR='blue'
+else
+  NEW_COLOR='green'
+fi
+
+echo "new color: ${NEW_COLOR}"
+
+set -- \
   --accountId "${ACCOUNT_ID}" \
   --config "./web-api/${config}" \
   --domain "${EFCMS_DOMAIN}" \
   --efcmsTableName="efcms-${slsStage}" \
   --region "${region}" \
   --stage "${slsStage}" \
+  --stageColor "${NEW_COLOR}" \
   --userPoolId "${USER_POOL_ID}" \
   --dynamo_stream_arn="${DYNAMO_STREAM_ARN}" \
   --elasticsearch_endpoint="${ELASTICSEARCH_ENDPOINT}" \
   --verbose
+
+./node_modules/.bin/sls create_domain "$@" 
 echo "done running create_domain"
 
-ENVIRONMENT="${slsStage}" ./node_modules/.bin/sls deploy \
-  --accountId "${ACCOUNT_ID}" \
-  --config "./web-api/${config}" \
-  --domain "${EFCMS_DOMAIN}"  \
-  --efcmsTableName="efcms-${slsStage}" \
-  --region "${region}" \
-  --stage "${slsStage}" \
-  --userPoolId "${USER_POOL_ID}" \
-  --dynamo_stream_arn="${DYNAMO_STREAM_ARN}" \
-  --elasticsearch_endpoint="${ELASTICSEARCH_ENDPOINT}" \
-  --verbose
+ENVIRONMENT="${slsStage}" ./node_modules/.bin/sls deploy "$@" 
 echo "done running sls deploy"
 
 echo "slsStage: ${slsStage}"
