@@ -32,10 +32,8 @@ echo "current color: ${CURRENT_COLOR}"
 
 if [[ $CURRENT_COLOR == 'green' ]] ; then
   NEW_COLOR='blue'
-elif [[ $CURRENT_COLOR == 'blue' ]] ; then
+else
   NEW_COLOR='green'
-else 
-  exit 1;
 fi
 
 echo "new color: ${NEW_COLOR}"
