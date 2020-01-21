@@ -44,7 +44,10 @@ describe('updateCounselOnCaseInteractor', () => {
               index: 1,
             },
           ],
+          filingType: 'Myself',
+          partyType: 'Petitioner',
           practitioners: mockPractitioners,
+          procedureType: 'Regular',
           respondents: mockRespondents,
         }),
         getUserById: ({ userId }) => {

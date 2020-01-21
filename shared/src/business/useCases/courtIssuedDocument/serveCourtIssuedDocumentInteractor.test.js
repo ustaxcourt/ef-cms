@@ -133,7 +133,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         ...documentsWithCaseClosingEventCodes,
       ],
+      filingType: 'Myself',
       partyType: ContactFactory.PARTY_TYPES.petitioner,
+      procedureType: 'Regular',
     },
     {
       caseCaption: 'Caption',
@@ -193,9 +195,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         ...documentsWithCaseClosingEventCodes,
       ],
+      filingType: 'Myself',
       isPaper: true,
       mailingDate: 'testing',
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      procedureType: 'Regular',
     },
   ];
 

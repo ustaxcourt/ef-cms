@@ -21,6 +21,9 @@ describe('associateRespondentWithCaseInteractor', () => {
         index: 1,
       },
     ],
+    filingType: 'Myself',
+    partyType: 'Petitioner',
+    procedureType: 'Regular',
   };
 
   it('should throw an error when not authorized', async () => {
