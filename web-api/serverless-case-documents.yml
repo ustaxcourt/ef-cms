@@ -1,4 +1,4 @@
-service: ef-cms-case-documents
+service: ef-cms-case-docs-${opt:stageColor}
 plugins:
   - serverless-domain-manager
   - serverless-plugin-bind-deployment-id
