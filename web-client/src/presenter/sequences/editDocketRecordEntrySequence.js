@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { getEditDocketRecordEntryAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketRecordEntryAlertSuccessAction';
+import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
@@ -20,7 +20,7 @@ export const editDocketRecordEntrySequence = [
       clearAlertsAction,
       clearModalAction,
       clearModalStateAction,
-      getEditDocketRecordEntryAlertSuccessAction,
+      getEditDocketEntryMetaAlertSuccessAction,
       setAlertSuccessAction,
     ],
   },
