@@ -5,5 +5,5 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 export const openEditDocketEntryMetaModalSequence = [
   clearModalStateAction,
   setEditDocketEntryMetaModalStateAction,
-  setShowModalFactoryAction('EditDocketRecordEntryModal'),
+  setShowModalFactoryAction('EditDocketEntryMetaModal'),
 ];
