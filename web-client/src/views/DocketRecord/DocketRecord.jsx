@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
-import { EditDocketRecordEntryModal } from '../EditDocketRecordEntry/EditDocketRecordEntryModal';
+import { EditDocketEntryMetaModal } from '../EditDocketRecordEntry/EditDocketEntryMetaModal';
 import { FilingsAndProceedings } from './FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
@@ -152,8 +152,8 @@ export const DocketRecord = connect(
           </tbody>
         </table>
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
-        {showModal == 'EditDocketRecordEntryModal' && (
-          <EditDocketRecordEntryModal />
+        {showModal == 'EditDocketEntryMetaModal' && (
+          <EditDocketEntryMetaModal />
         )}
       </>
     );
