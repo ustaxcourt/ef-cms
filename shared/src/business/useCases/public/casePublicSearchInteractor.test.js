@@ -35,7 +35,7 @@ describe('casePublicSearchInteractor', () => {
             {
               _source: {
                 caseCaption: { S: 'Test Case Caption One' },
-                caseId: { S: '1' },
+                caseId: { S: '8675309b-28d0-43ec-bafb-654e83405412' },
                 docketNumber: { S: '123-19' },
                 docketNumberSuffix: { S: 'S' },
                 receivedAt: { S: '2019-03-01T21:40:46.415Z' },
@@ -44,10 +44,20 @@ describe('casePublicSearchInteractor', () => {
             {
               _source: {
                 caseCaption: { S: 'Test Case Caption Two' },
-                caseId: { S: '2' },
+                caseId: { S: '8675309b-28d0-43ec-bafb-654e83405413' },
                 docketNumber: { S: '456-19' },
                 docketNumberSuffix: { S: 'S' },
                 receivedAt: { S: '2019-03-01T21:40:46.415Z' },
+              },
+            },
+            {
+              _source: {
+                caseCaption: { S: 'Sealed Case Caption Three' },
+                caseId: { S: '8675309b-28d0-43ec-bafb-654e83405416' },
+                docketNumber: { S: '222-20' },
+                docketNumberSuffix: { S: 'S' },
+                receivedAt: { S: '2020-03-01T21:40:46.415Z' },
+                sealedDate: { S: '2020-03-01T21:40:46.415Z' },
               },
             },
           ],
@@ -99,7 +109,7 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
-        caseId: '1',
+        caseId: '8675309b-28d0-43ec-bafb-654e83405412',
         caseTitle: undefined,
         contactPrimary: undefined,
         contactSecondary: undefined,
@@ -112,7 +122,7 @@ describe('casePublicSearchInteractor', () => {
       },
       {
         caseCaption: 'Test Case Caption Two',
-        caseId: '2',
+        caseId: '8675309b-28d0-43ec-bafb-654e83405413',
         caseTitle: undefined,
         contactPrimary: undefined,
         contactSecondary: undefined,
@@ -168,7 +178,7 @@ describe('casePublicSearchInteractor', () => {
               {
                 _source: {
                   caseCaption: { S: 'Test Case Caption One' },
-                  caseId: { S: '1' },
+                  caseId: { S: '8675309b-28d0-43ec-bafb-654e83405412' },
                   contactPrimary: { O: {} },
                   contactSecondary: { O: {} },
                   docketNumber: { S: '123-19' },
@@ -179,7 +189,7 @@ describe('casePublicSearchInteractor', () => {
               {
                 _source: {
                   caseCaption: { S: 'Test Case Caption Two' },
-                  caseId: { S: '2' },
+                  caseId: { S: '8675309b-28d0-43ec-bafb-654e83405413' },
                   contactPrimary: { O: {} },
                   contactSecondary: { O: {} },
                   docketNumber: { S: '456-19' },
@@ -254,7 +264,7 @@ describe('casePublicSearchInteractor', () => {
     expect(results).toEqual([
       {
         caseCaption: 'Test Case Caption One',
-        caseId: '1',
+        caseId: '8675309b-28d0-43ec-bafb-654e83405412',
         caseTitle: undefined,
         contactPrimary: undefined,
         contactSecondary: undefined,
@@ -267,7 +277,7 @@ describe('casePublicSearchInteractor', () => {
       },
       {
         caseCaption: 'Test Case Caption Two',
-        caseId: '2',
+        caseId: '8675309b-28d0-43ec-bafb-654e83405413',
         caseTitle: undefined,
         contactPrimary: undefined,
         contactSecondary: undefined,

@@ -24,6 +24,12 @@ describe('publicCaseDetailHelper', () => {
     expect(Array.isArray(result.formattedDocketEntries)).toBeTruthy();
   });
 
+  it('should indicate when a case is sealed', () => {
+    state.caseDetail.sealedDate = '2020-01-02T03:04:05.007Z';
+    const result = runCompute(publicCaseDetailHelper, { state });
+    expect(result.formattedCaseDetail.isCaseSealed).toBeTruthy();
+  });
+
   it('should format docket entries with documents and sort chronologically', () => {
     state.caseDetail.docketRecord = [
       {

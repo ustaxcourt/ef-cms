@@ -1,8 +1,13 @@
 const { isAssociatedUser } = require('../entities/cases/Case');
-const { map } = require('lodash');
-const CASE_ATTRIBUTE_WHITELIST = ['docketNumber'];
+const CASE_ATTRIBUTE_WHITELIST = ['docketNumber', 'sealedDate'];
 
-const caseSealedFormatter = caseRaw => map(caseRaw, CASE_ATTRIBUTE_WHITELIST);
+const caseSealedFormatter = caseRaw => {
+  const sealedObj = {};
+  CASE_ATTRIBUTE_WHITELIST.forEach(attr => {
+    sealedObj[attr] = caseRaw[attr];
+  });
+  return sealedObj;
+};
 
 const caseSearchFilter = (cases, userId) => {
   const results = [];
