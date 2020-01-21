@@ -28,10 +28,15 @@ export const EditDocketEntryMetaModal = connect(
         onConfirmSequence="submitEditDocketEntryMetaSequence"
       >
         <FormGroup errorText={validationErrors && validationErrors.filingDate}>
-          <label className="usa-label" htmlFor="filingDate">
+          <label
+            className="usa-label"
+            htmlFor="filingDate"
+            id="filing-date-label"
+          >
             Date
           </label>
           <input
+            aria-describedby="filing-date-label"
             className="usa-input"
             id="filingDate"
             name="form.filingDate"
@@ -47,10 +52,15 @@ export const EditDocketEntryMetaModal = connect(
           />
         </FormGroup>
         <FormGroup errorText={validationErrors && validationErrors.description}>
-          <label className="usa-label" htmlFor="description">
+          <label
+            className="usa-label"
+            htmlFor="description"
+            id="description-label"
+          >
             Filings and proceedings
           </label>
           <input
+            aria-describedby="description-label"
             className="usa-input"
             id="description"
             name="form.description"
@@ -66,10 +76,11 @@ export const EditDocketEntryMetaModal = connect(
           />
         </FormGroup>
         <FormGroup errorText={validationErrors && validationErrors.filedBy}>
-          <label className="usa-label" htmlFor="filedBy">
+          <label className="usa-label" htmlFor="filedBy" id="filed-by-label">
             Filed by
           </label>
           <input
+            aria-describedby="filed-by-label"
             className="usa-input"
             id="filedBy"
             name="form.filedBy"
