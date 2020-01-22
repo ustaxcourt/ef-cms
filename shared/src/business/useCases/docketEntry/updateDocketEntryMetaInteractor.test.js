@@ -130,6 +130,23 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(getCaseCaseIdNumberMock).toHaveBeenCalled();
   });
 
+  it('should update the docket record action', async () => {
+    const result = await updateDocketEntryMetaInteractor({
+      applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+      docketEntryMeta: {
+        action: 'Updated Action',
+      },
+      docketRecordIndex: 0,
+    });
+
+    const updatedDocketEntry = result.docketRecord.find(
+      record => record.index === 0,
+    );
+
+    expect(updatedDocketEntry.action).toEqual('Updated Action');
+  });
+
   it('should update the docket record description', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
