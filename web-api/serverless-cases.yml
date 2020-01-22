@@ -1,4 +1,4 @@
-service: ef-cms-cases
+service: ef-cms-cases-${opt:stageColor}
 plugins:
   # - serverless-plugin-split-stacks
   - serverless-domain-manager
@@ -333,6 +333,18 @@ functions:
             authorizerId:
               Ref: ApiGatewayAuthorizer
 
+  removeConsolidatedCases:
+    handler: web-api/${self:provider.dir}/casesHandlers.removeConsolidatedCasesLambda
+    events:
+      - http:
+          path: /{caseId}/consolidate-case
+          method: delete
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
   getConsolidatedCasesByCase:
     handler: web-api/${self:provider.dir}/casesHandlers.getConsolidatedCasesByCaseLambda
     events:
@@ -350,6 +362,18 @@ functions:
     events:
       - http:
           path: /{caseId}/qc-complete
+          method: put
+          cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
+
+  sealCase:
+    handler: web-api/${self:provider.dir}/casesHandlers.sealCaseLambda
+    events:
+      - http:
+          path: /{caseId}/seal
           method: put
           cors: ui-${self:provider.stage}.ef-cms.${opt:domain}
           authorizer:

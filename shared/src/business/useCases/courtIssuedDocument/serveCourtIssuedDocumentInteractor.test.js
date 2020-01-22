@@ -25,7 +25,6 @@ const testPdfDocBytes = () => {
 describe('serveCourtIssuedDocumentInteractor', () => {
   let applicationContext;
   let updateCaseMock;
-  let sendBulkTemplatedEmailMock;
   let getObjectMock;
   let saveDocumentFromLambdaMock;
   let deleteWorkItemFromInboxMock;
@@ -34,6 +33,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   let deleteCaseTrialSortMappingRecordsMock;
   let extendCase;
   let generatePaperServiceAddressPagePdfMock;
+  let sendServedPartiesEmailsMock;
+  let appendPaperServiceAddressPageToPdfMock;
 
   let getTrialSessionByIdMock;
   let updateTrialSessionMock;
@@ -57,9 +58,14 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     eventCode => {
       const documentId = uuidv4();
 
+      const index = dynamicallyGeneratedDocketEntries.length + 2; // 2 statically set docket records per case;
+
       dynamicallyGeneratedDocketEntries.push({
+        description: `Docket Record ${index}`,
         documentId,
+        eventCode: 'O',
         filingDate: createISODateString(),
+        index,
       });
 
       const eventCodeMap = Document.COURT_ISSUED_EVENT_CODES.find(
@@ -78,25 +84,34 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   const mockCases = [
     {
+      caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      caseType: 'Deficiency',
       contactPrimary: {
         address1: '123 Main St',
         city: 'Somewhere',
         countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
         email: 'contact@example.com',
         name: 'Contact Primary',
+        phone: '123123134',
         postalCode: '12345',
         state: 'TN',
       },
       docketNumber: '123-45',
       docketRecord: [
         {
+          description: 'Docket Record 0',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          eventCode: 'O',
           filingDate: createISODateString(),
+          index: 0,
         },
         {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+          description: 'Docket Record 1',
+          documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+          eventCode: 'OAJ',
           filingDate: createISODateString(),
+          index: 1,
         },
         ...dynamicallyGeneratedDocketEntries,
       ],
@@ -118,21 +133,48 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         ...documentsWithCaseClosingEventCodes,
       ],
+      filingType: 'Myself',
       partyType: ContactFactory.PARTY_TYPES.petitioner,
+      preferredTrialCity: 'Fresno, California',
+      procedureType: 'Regular',
     },
     {
+      caseCaption: 'Caption',
       caseId: 'd857e73a-636e-4aa7-9de2-b5cee8770ff0',
-      contactPrimary: { name: 'Contact Primary' },
-      contactSecondary: { name: 'Contact Secondary' },
+      caseType: 'Deficiency',
+      contactPrimary: {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        name: 'Contact Primary',
+        phone: '123123134',
+        postalCode: '12345',
+        state: 'TN',
+      },
+      contactSecondary: {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+        name: 'Contact Secondary',
+        phone: '123123134',
+        postalCode: '12345',
+        state: 'TN',
+      },
       docketNumber: '123-45',
       docketRecord: [
         {
+          description: 'Docket Record 0',
           documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          eventCode: 'O',
           filingDate: createISODateString(),
+          index: 0,
         },
         {
-          documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+          description: 'Docket Record 0',
+          documentId: 'cf105788-5d34-4451-aa8d-dfd9a851b675',
+          eventCode: 'OAJ',
           filingDate: createISODateString(),
+          index: 1,
         },
         ...dynamicallyGeneratedDocketEntries,
       ],
@@ -154,8 +196,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         ...documentsWithCaseClosingEventCodes,
       ],
+      filingType: 'Myself',
       isPaper: true,
       mailingDate: 'testing',
+      partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
+      preferredTrialCity: 'Fresno, California',
+      procedureType: 'Regular',
     },
   ];
 
@@ -165,7 +211,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     updateCaseMock = jest.fn(({ caseToUpdate }) => caseToUpdate);
     deleteCaseTrialSortMappingRecordsMock = jest.fn();
-    sendBulkTemplatedEmailMock = jest.fn();
     getObjectMock = jest.fn().mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,
@@ -176,6 +221,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     generatePaperServiceAddressPagePdfMock = jest
       .fn()
       .mockResolvedValue(testPdfDoc);
+    sendServedPartiesEmailsMock = jest.fn();
+    appendPaperServiceAddressPageToPdfMock = jest.fn();
 
     getTrialSessionByIdMock = jest.fn().mockReturnValue({
       caseOrder: [
@@ -209,9 +256,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     applicationContext = {
       environment: { documentsBucketName: 'documents' },
       getCurrentUser: () => mockUser,
-      getDispatchers: () => ({
-        sendBulkTemplatedEmail: sendBulkTemplatedEmailMock,
-      }),
       getPersistenceGateway: () => ({
         deleteCaseTrialSortMappingRecords: deleteCaseTrialSortMappingRecordsMock,
         deleteWorkItemFromInbox: deleteWorkItemFromInboxMock,
@@ -236,7 +280,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         getObject: getObjectMock,
       }),
       getUseCaseHelpers: () => ({
+        appendPaperServiceAddressPageToPdf: appendPaperServiceAddressPageToPdfMock,
         generatePaperServiceAddressPagePdf: generatePaperServiceAddressPagePdfMock,
+        sendServedPartiesEmails: sendServedPartiesEmailsMock,
       }),
       logger: {
         time: () => null,
@@ -367,11 +413,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
-    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
     expect(result).toBeUndefined();
   });
 
-  it('should not call sendBulkTemplatedEmail if there are no electronically-served parties but should return paperServicePdfData', async () => {
+  it('should return paperServicePdfData when there are paper service parties on the case', async () => {
     saveDocumentFromLambdaMock = jest.fn(({ document: newPdfData }) => {
       fs.writeFileSync(
         testOutputPath + 'serveCourtIssuedDocumentInteractor_2.pdf',
@@ -384,7 +430,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
     });
 
-    expect(sendBulkTemplatedEmailMock).not.toHaveBeenCalled();
     expect(result).toBeDefined();
   });
 
@@ -398,7 +443,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: documentsWithCaseClosingEventCodes[0].documentId,
     });
 
-    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
     expect(updateTrialSessionMock).toHaveBeenCalled();
   });
 
@@ -440,7 +485,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       documentId: documentsWithCaseClosingEventCodes[0].documentId,
     });
 
-    expect(sendBulkTemplatedEmailMock).toHaveBeenCalled();
+    expect(sendServedPartiesEmailsMock).toHaveBeenCalled();
     expect(updateTrialSessionMock).toHaveBeenCalled();
   });
 

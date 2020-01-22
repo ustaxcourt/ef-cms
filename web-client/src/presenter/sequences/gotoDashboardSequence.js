@@ -30,6 +30,7 @@ const goToDashboard = [
   {
     ...takePathForRoles(
       [
+        'admin',
         'adc',
         'admissionsclerk',
         'calendarclerk',

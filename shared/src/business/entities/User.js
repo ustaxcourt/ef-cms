@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
@@ -98,7 +98,7 @@ const userValidation = {
   name: joi.string().optional(),
   role: joi
     .string()
-    .valid(Object.values(User.ROLES))
+    .valid(...Object.values(User.ROLES))
     .required(),
   section: joi.string().optional(),
   token: joi.string().optional(),

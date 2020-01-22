@@ -1,13 +1,14 @@
 const courtIssuedEventCodes = require('../../tools/courtIssuedEventCodes.json');
 const documentMapExternal = require('../../tools/externalFilingEvents.json');
 const documentMapInternal = require('../../tools/internalFilingEvents.json');
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
 const { createISODateString } = require('../utilities/DateHandler');
 const { flatten, map } = require('lodash');
 const { Order } = require('./orders/Order');
+const { TrialSession } = require('./trialSessions/TrialSession');
 const { WorkItem } = require('./WorkItem');
 
 Document.PETITION_DOCUMENT_TYPES = ['Petition'];
@@ -235,13 +236,12 @@ joiValidationDecorator(
       then: joi
         .date()
         .iso()
-        .optional()
         .required(),
     }),
     createdAt: joi
       .date()
       .iso()
-      .optional(),
+      .required(),
     docketNumber: joi.string().optional(),
     documentId: joi
       .string()
@@ -252,7 +252,7 @@ joiValidationDecorator(
     documentTitle: joi.string().optional(),
     documentType: joi
       .string()
-      .valid(Document.getDocumentTypes())
+      .valid(...Document.getDocumentTypes())
       .required(),
     draftState: joi.object().optional(),
     eventCode: joi.string().optional(),
@@ -292,6 +292,7 @@ joiValidationDecorator(
     relationship: joi.string().optional(),
     scenario: joi.string().optional(),
     secondaryDocument: joi.object().optional(),
+    // TODO: What's the difference between servedAt and serviceDate?
     servedAt: joi
       .date()
       .iso()
@@ -318,7 +319,17 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null),
-    trialLocation: joi.string().optional(),
+    trialLocation: joi
+      .alternatives()
+      .try(
+        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
+        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+        joi
+          .string()
+          .optional()
+          .allow(null),
+      )
+      .optional(),
     userId: joi.string().required(),
     workItems: joi.array().optional(),
   }),

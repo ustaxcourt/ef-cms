@@ -118,6 +118,7 @@
     "docketRecord": [
       {
         "description": "Petition",
+        "eventCode": "P",
         "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
         "filingDate": "2019-03-27T21:53:00.297Z",
         "filedBy": "Test Practitioner",
@@ -126,6 +127,7 @@
       {
         "description": "Request for Place of Trial at Jackson, Mississippi",
         "filingDate": "2019-03-27T21:53:00.297Z",
+        "eventCode": "RQT",
         "index": 2
       }
     ],

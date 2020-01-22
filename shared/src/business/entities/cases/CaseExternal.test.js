@@ -11,10 +11,10 @@ describe('CaseExternal entity', () => {
     it('requires ownership disclosure if filing type is a business', () => {
       const caseExternal = new CaseExternal({
         businessType: ContactFactory.PARTY_TYPES.corporation,
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'A business',
         hasIrsNotice: false,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -23,9 +23,9 @@ describe('CaseExternal entity', () => {
     });
     it('does not require ownership disclosure if filing type not set', () => {
       const petition = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         hasIrsNotice: false,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -34,10 +34,10 @@ describe('CaseExternal entity', () => {
     });
     it('does not require ownership disclosure if filing type not a business', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'not a biz',
         hasIrsNotice: false,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -47,10 +47,10 @@ describe('CaseExternal entity', () => {
     it('requires stinFile', () => {
       const caseExternal = new CaseExternal({
         businessType: ContactFactory.PARTY_TYPES.corporation,
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'A business',
         hasIrsNotice: false,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(caseExternal.getFormattedValidationErrors().stinFile).toEqual(
@@ -62,13 +62,13 @@ describe('CaseExternal entity', () => {
   describe('Petition file size', () => {
     it('should inform you if petition file size is greater than 500MB', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
         petitionFile: new File([], 'test.pdf'),
         petitionFileSize: MAX_FILE_SIZE_BYTES + 5,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -78,13 +78,13 @@ describe('CaseExternal entity', () => {
 
     it('should inform you if petition file size is zero', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
         petitionFile: {},
         petitionFileSize: 0,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -94,11 +94,11 @@ describe('CaseExternal entity', () => {
 
     it('should not error on petitionFileSize when petitionFile is undefined', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -108,12 +108,12 @@ describe('CaseExternal entity', () => {
 
     it('should error on petitionFileSize when petitionFile is defined', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
         petitionFile: new File([], 'testPetitionFile.pdf'),
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -125,11 +125,11 @@ describe('CaseExternal entity', () => {
   describe('STIN file size', () => {
     it('should inform you if stin file size is greater than 500MB', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
         stinFile: new File([], 'test.pdf'),
         stinFileSize: MAX_FILE_SIZE_BYTES + 5,
@@ -141,11 +141,11 @@ describe('CaseExternal entity', () => {
 
     it('should inform you if stin file size is zero', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
         stinFile: new File([], 'test.pdf'),
         stinFileSize: 0,
@@ -157,11 +157,11 @@ describe('CaseExternal entity', () => {
 
     it('should not error on stinFileSize when stinFile is undefined', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -171,11 +171,11 @@ describe('CaseExternal entity', () => {
 
     it('should error on stinFileSize when stinFile is defined', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
         stinFile: new File([], 'testStinFile.pdf'),
       });
@@ -188,13 +188,13 @@ describe('CaseExternal entity', () => {
   describe('ownership disclosure file size', () => {
     it('should inform you if ownership disclosure file size is greater than 500MB', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         ownershipDisclosureFile: new File([], 'odsFile.pdf'),
         ownershipDisclosureFileSize: MAX_FILE_SIZE_BYTES + 5,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -206,13 +206,13 @@ describe('CaseExternal entity', () => {
 
     it('should inform you if ownership disclosure file size is zero', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         ownershipDisclosureFile: new File([], 'test.pdf'),
         ownershipDisclosureFileSize: 0,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -222,11 +222,11 @@ describe('CaseExternal entity', () => {
 
     it('should not error on ownershipDisclosureFileSize when ownershipDisclosureFile is undefined', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(
@@ -236,12 +236,12 @@ describe('CaseExternal entity', () => {
 
     it('should error on ownershipDisclosureFileSize when ownershipDisclosureFile is defined', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         ownershipDisclosureFile: new File([], 'testStinFile.pdf'),
         partyType: ContactFactory.PARTY_TYPES.nextFriendForMinor,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
       });
       expect(
