@@ -10,7 +10,7 @@ const MOCK_TRIAL = {
   swingSession: true,
   swingSessionId: '456',
   term: 'Fall',
-  trialLocation: 'Birmingham, AL',
+  trialLocation: 'Birmingham, Alabama',
   trialSessionId: '123',
 };
 

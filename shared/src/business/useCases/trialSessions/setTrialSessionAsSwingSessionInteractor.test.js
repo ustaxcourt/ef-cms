@@ -10,7 +10,7 @@ const MOCK_TRIAL_SESSION = {
   startDate: '3000-03-01T00:00:00.000Z',
   term: 'Fall',
   termYear: '3000',
-  trialLocation: 'Birmingham, AL',
+  trialLocation: 'Birmingham, Alabama',
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
