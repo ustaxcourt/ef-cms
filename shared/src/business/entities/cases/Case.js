@@ -405,12 +405,13 @@ joiValidationDecorator(
       .optional(),
     docketRecord: joi
       .array()
-      .required()
+      .required(joi.object().meta({ entityName: 'DocketRecord' }))
+      .items()
       .description('List of DocketRecord Entities for the Case.'),
     // TODO: Revisit with Jessica
     documents: joi
       .array()
-      .items(joi.object().meta({ filename: 'Document', name: 'Document' }))
+      .items(joi.object().meta({ entityName: 'Document' }))
       .optional()
       .description('List of Document Entities for the Case.'),
     filingType: joi
