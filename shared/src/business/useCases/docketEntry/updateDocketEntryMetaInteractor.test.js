@@ -237,7 +237,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(addCoversheetInteractorMock).toHaveBeenCalled();
   });
 
-  it('should generate a new coversheet for the document if the servedAt field is changed', async () => {
+  it('should generate a new coversheet for the document if the filingDate field is changed', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',

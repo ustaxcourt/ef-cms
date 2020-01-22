@@ -44,6 +44,7 @@ exports.generateJsonFromSchema = (schema, entityName) => {
       case 'boolean':
       case 'number':
       case 'object':
+      // eslint-disable-next-line spellcheck/spell-checker
       // eslint-disable-next-line no-fallthrough
       case 'string':
         if (rules && rules.length) {
