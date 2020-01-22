@@ -23,7 +23,7 @@ export const CaseDetailHeader = connect(
     return (
       <>
         {caseDetailHeaderHelper.showSealedCaseBanner && (
-          <div className="red-warning-header">
+          <div className="red-warning-header sealed-banner">
             <div className="grid-container text-bold">
               <FontAwesomeIcon
                 className="margin-right-1 icon-sealed"
