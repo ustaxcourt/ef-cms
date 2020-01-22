@@ -406,11 +406,13 @@ joiValidationDecorator(
       .optional(),
     docketRecord: joi
       .array()
+      .items(joi.object().meta({ entityName: 'DocketRecord' }))
       .min(1)
       .required()
       .description('List of DocketRecord Entities for the Case.'),
     documents: joi
       .array()
+      .items(joi.object().meta({ entityName: 'Document' }))
       .min(1)
       .required()
       .description('List of Document Entities for the Case.'),
