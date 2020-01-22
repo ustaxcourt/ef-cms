@@ -822,7 +822,7 @@ describe('document detail helper', () => {
   });
 
   describe('showEditDocketEntry and showEditCourtIssuedDocketEntry', () => {
-    it('should set showEditDocketEntry false and showEditCourtIssuedDocketEntry true when the the document is a signed stipulated decision with a docket entry and the user has the DOCKET_ENTRY permission', async () => {
+    it('should set showEditDocketEntry false and showEditCourtIssuedDocketEntry true when the document is a signed stipulated decision with a docket entry and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -857,7 +857,7 @@ describe('document detail helper', () => {
       expect(result.showEditCourtIssuedDocketEntry).toEqual(true);
     });
 
-    it('should set showEditDocketEntry false when the the document is an unsigned stipulated decision and the user has the DOCKET_ENTRY permission', async () => {
+    it('should set showEditDocketEntry false when the document is an unsigned stipulated decision and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -886,7 +886,7 @@ describe('document detail helper', () => {
       expect(result.showEditDocketEntry).toEqual(false);
     });
 
-    it('should set showEditDocketEntry true when the the non QCed document is a served order and the user has the DOCKET_ENTRY permission', async () => {
+    it('should set showEditDocketEntry true when the non QCed document is a served order and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -985,7 +985,7 @@ describe('document detail helper', () => {
       expect(result.showEditDocketEntry).toEqual(false);
     });
 
-    it('should set showEditDocketEntry false when the the document is an unserved order and the user has the DOCKET_ENTRY permission', async () => {
+    it('should set showEditDocketEntry false when the document is an unserved order and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
@@ -1014,7 +1014,7 @@ describe('document detail helper', () => {
       expect(result.showEditDocketEntry).toEqual(false);
     });
 
-    it('should set showEditDocketEntry false when the the document is petition and the user has the DOCKET_ENTRY permission', async () => {
+    it('should set showEditDocketEntry false when the document is petition and the user has the DOCKET_ENTRY permission', async () => {
       const user = {
         role: User.ROLES.petitionsClerk,
         userId: '123',
