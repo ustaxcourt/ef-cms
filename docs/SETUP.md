@@ -16,10 +16,10 @@
      - Note the AWS-generated access key and secret access key — it will needed shortly for the CircleCI setup.
 - [Create a Route53 Hosted Zone](https://console.aws.amazon.com/route53/home) This will be used for setting up the domains for the UI and API.  Create the desired domain name (e.g. `ef-cms.example.gov.`) and make sure it is a `Public Hosted Zone`. This is the value you will set for `EFCMS_DOMAIN` in CircleCI.  Make sure the domain name ends with a period.
 - Create the Lambda roles & policies needed for the Lambdas that run the backend:
-     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app dev`
-     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app stg`
-     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app test`
-     - `cd iam/environment-specific/terraform/main && ../bin/deploy-app prod`
+     - `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh dev`
+     - `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh stg`
+     - `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh test`
+     - `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh prod`
 - [Create a SonarCloud account](https://sonarcloud.io/). SonarCloud will be used to tests each build.
 - [Create a new SonarCloud organization](https://sonarcloud.io/create-organization).
   - There are three sub-projects to the EF-CMS — the front-end (the UI), the back-end (the API), and shared code. Each is handled separately by CircleCI and SonarCloud.
