@@ -30,9 +30,9 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   petitionerSignsOut(test);
 
   docketClerkLogIn(test);
-  docketClerkChecksDocketEntryEditLink();
-  docketClerkQCsDocketEntry();
-  docketClerkChecksDocketEntryEditLink({ value: true });
+  docketClerkChecksDocketEntryEditLink(test);
+  docketClerkQCsDocketEntry(test);
+  docketClerkChecksDocketEntryEditLink(test, { value: true });
 
   docketClerkEditsDocketEntryMeta(test);
 
