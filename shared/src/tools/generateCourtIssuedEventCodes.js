@@ -22,6 +22,7 @@ csvColumns = [
   'judgeName',
   'date',
   'docketNumbers',
+  'trialLocation',
   'documentTitle',
 ];
 

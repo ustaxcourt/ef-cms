@@ -37,7 +37,15 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
       break;
   }
 
+  let freeTextLabel;
+  if (selectedEventCode === 'O') {
+    freeTextLabel = 'What is this order for?';
+  } else if (selectedEventCode === 'NOT') {
+    freeTextLabel = 'What is this notice for?';
+  }
+
   return {
+    freeTextLabel,
     showDate,
     showDocketNumbers,
     showFreeText,

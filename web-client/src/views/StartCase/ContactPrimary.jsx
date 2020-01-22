@@ -30,6 +30,7 @@ export const ContactPrimary = connect(
     onChangeSequence,
     parentView,
     validationErrors,
+    wrapperClassName,
   }) => {
     return (
       <>
@@ -40,7 +41,11 @@ export const ContactPrimary = connect(
         ) : (
           <h4>{contactsHelper.contactPrimary.header}</h4>
         )}
-        <div className="blue-container contact-group">
+        <div
+          className={
+            wrapperClassName ? wrapperClassName : 'blue-container contact-group'
+          }
+        >
           <FormGroup
             errorText={
               validationErrors.contactPrimary &&

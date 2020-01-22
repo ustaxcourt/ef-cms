@@ -41,7 +41,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         };
       },
       getPersistenceGateway: () => ({
-        uploadDocument: async () => caseRecord,
+        uploadDocumentFromClient: async () => caseRecord,
       }),
       getUseCases: () => ({
         fileExternalDocumentInteractor: () => {},
@@ -76,7 +76,7 @@ describe('uploadExternalDocumentsInteractor', () => {
           };
         },
         getPersistenceGateway: () => ({
-          uploadDocument: async () => caseRecord,
+          uploadDocumentFromClient: async () => caseRecord,
         }),
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
@@ -112,7 +112,7 @@ describe('uploadExternalDocumentsInteractor', () => {
           };
         },
         getPersistenceGateway: () => ({
-          uploadDocument: async () => caseRecord,
+          uploadDocumentFromClient: async () => caseRecord,
         }),
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
@@ -159,7 +159,7 @@ describe('uploadExternalDocumentsInteractor', () => {
           };
         },
         getPersistenceGateway: () => ({
-          uploadDocument: async () => caseRecord,
+          uploadDocumentFromClient: async () => caseRecord,
         }),
         getUseCases: () => ({
           fileExternalDocumentInteractor: () => {},
@@ -202,7 +202,7 @@ describe('uploadExternalDocumentsInteractor', () => {
         };
       },
       getPersistenceGateway: () => ({
-        uploadDocument: async () => caseRecord,
+        uploadDocumentFromClient: async () => caseRecord,
       }),
       getUseCases: () => ({
         fileExternalDocumentForConsolidatedInteractor: fileExternalDocumentForConsolidatedInteractorMock,

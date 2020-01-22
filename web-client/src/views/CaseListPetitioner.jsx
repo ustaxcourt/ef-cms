@@ -1,5 +1,6 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseListRowExternal } from './CaseListRowExternal';
+import { WarningNotification } from './WarningNotification';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -11,6 +12,9 @@ export const CaseListPetitioner = connect(
   ({ formattedCases }) => {
     return (
       <>
+        <WarningNotification
+          alertWarning={{ message: 'Hi', title: 'Hello there' }}
+        />
         <div className="grid-container padding-x-0">
           <div className="grid-row">
             <div className="tablet:grid-col-6 hide-on-mobile">

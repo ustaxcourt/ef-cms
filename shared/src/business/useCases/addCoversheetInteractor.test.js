@@ -83,7 +83,7 @@ describe('addCoversheetInteractor', () => {
   it('adds a cover page to a pdf document', async () => {
     const getCaseByCaseIdStub = sinon.stub().resolves(testingCaseData);
 
-    const saveDocumentStub = sinon
+    const saveDocumentFromLambdaStub = sinon
       .stub()
       .callsFake(({ document: newPdfData }) => {
         fs.writeFileSync(
@@ -97,7 +97,7 @@ describe('addCoversheetInteractor', () => {
         environment: { documentsBucketName: 'documents' },
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdStub,
-          saveDocument: saveDocumentStub,
+          saveDocumentFromLambda: saveDocumentFromLambdaStub,
           updateDocumentProcessingStatus: updateDocumentProcessingStatusStub,
         }),
         getStorageClient: () => ({
@@ -124,14 +124,14 @@ describe('addCoversheetInteractor', () => {
 
     const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
-    expect(saveDocumentStub.calledOnce).toBeTruthy();
+    expect(saveDocumentFromLambdaStub.calledOnce).toBeTruthy();
     expect(newPdfDocPages.length).toEqual(2);
   });
 
   it('adds a cover page to a pdf document with optional data', async () => {
     const getCaseByCaseIdStub = sinon.stub().resolves(optionalTestingCaseData);
 
-    const saveDocumentStub = sinon
+    const saveDocumentFromLambdaStub = sinon
       .stub()
       .callsFake(({ document: newPdfData }) => {
         fs.writeFileSync(
@@ -145,7 +145,7 @@ describe('addCoversheetInteractor', () => {
         environment: { documentsBucketName: 'documents' },
         getPersistenceGateway: () => ({
           getCaseByCaseId: getCaseByCaseIdStub,
-          saveDocument: saveDocumentStub,
+          saveDocumentFromLambda: saveDocumentFromLambdaStub,
           updateDocumentProcessingStatus: updateDocumentProcessingStatusStub,
         }),
         getStorageClient: () => ({
@@ -172,7 +172,7 @@ describe('addCoversheetInteractor', () => {
 
     const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
-    expect(saveDocumentStub.calledOnce).toBeTruthy();
+    expect(saveDocumentFromLambdaStub.calledOnce).toBeTruthy();
     expect(newPdfDocPages.length).toEqual(2);
   });
 });

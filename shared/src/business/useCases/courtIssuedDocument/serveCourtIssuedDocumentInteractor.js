@@ -125,9 +125,11 @@ exports.serveCourtIssuedDocumentInteractor = async ({
   });
 
   applicationContext.logger.time('Saving S3 Document');
-  await applicationContext
-    .getPersistenceGateway()
-    .saveDocument({ applicationContext, document: newPdfData, documentId });
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: newPdfData,
+    documentId,
+  });
   applicationContext.logger.timeEnd('Saving S3 Document');
 
   const workItemToUpdate = courtIssuedDocument.getQCWorkItem();
@@ -189,74 +191,28 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
 
-  const destinations = servedParties.electronic.map(party => ({
-    email: party.email,
-    templateData: {
-      caseCaption: caseToUpdate.caseCaption,
-      docketNumber: caseToUpdate.docketNumber,
-      documentName: courtIssuedDocument.documentTitle,
-      loginUrl: `https://ui-${process.env.STAGE}.${process.env.EFCMS_DOMAIN}`,
-      name: party.name,
-      serviceDate: formatDateString(courtIssuedDocument.servedAt, 'MMDDYYYY'),
-      serviceTime: formatDateString(courtIssuedDocument.servedAt, 'TIME'),
-    },
-  }));
-
-  if (destinations.length > 0) {
-    await applicationContext.getDispatchers().sendBulkTemplatedEmail({
-      applicationContext,
-      defaultTemplateData: {
-        caseCaption: 'undefined',
-        docketNumber: 'undefined',
-        documentName: 'undefined',
-        loginUrl: 'undefined',
-        name: 'undefined',
-        serviceDate: 'undefined',
-        serviceTime: 'undefined',
-      },
-      destinations,
-      templateName: process.env.EMAIL_SERVED_TEMPLATE,
-    });
-  }
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+    applicationContext,
+    caseEntity: caseToUpdate,
+    documentEntity: courtIssuedDocument,
+    servedParties,
+  });
 
   let paperServicePdfBuffer;
   if (servedParties.paper.length > 0) {
     const courtIssuedOrderDoc = await PDFDocument.load(newPdfData);
-    const addressPages = [];
+
     let newPdfDoc = await PDFDocument.create();
 
-    for (let party of servedParties.paper) {
-      addressPages.push(
-        await applicationContext
-          .getUseCaseHelpers()
-          .generatePaperServiceAddressPagePdf({
-            applicationContext,
-            contactData: party,
-            docketNumberWithSuffix: `${
-              caseToUpdate.docketNumber
-            }${caseToUpdate.docketNumberSuffix || ''}`,
-          }),
-      );
-    }
-
-    for (let addressPage of addressPages) {
-      const addressPageDoc = await PDFDocument.load(addressPage);
-      let copiedPages = await newPdfDoc.copyPages(
-        addressPageDoc,
-        addressPageDoc.getPageIndices(),
-      );
-      copiedPages.forEach(page => {
-        newPdfDoc.addPage(page);
+    await applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf({
+        applicationContext,
+        caseEntity,
+        newPdfDoc,
+        noticeDoc: courtIssuedOrderDoc,
+        servedParties,
       });
-
-      copiedPages = await newPdfDoc.copyPages(
-        courtIssuedOrderDoc,
-        courtIssuedOrderDoc.getPageIndices(),
-      );
-      copiedPages.forEach(page => {
-        newPdfDoc.addPage(page);
-      });
-    }
 
     const paperServicePdfData = await newPdfDoc.save();
     paperServicePdfBuffer = Buffer.from(paperServicePdfData);

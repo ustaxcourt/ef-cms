@@ -190,9 +190,10 @@ export const documentDetailHelper = (get, applicationContext) => {
       !formattedDocument.isCourtIssuedDocument,
     showPrintCaseConfirmationButton,
     showRecallButton,
-    showRemoveSignature: isOrder && isSigned,
+    showRemoveSignature: isOrder && document.eventCode !== 'NOT' && isSigned,
     showServeToIrsButton,
     showSignDocumentButton,
+    showSignedAt: isOrder && isSigned,
     showViewOrdersNeededButton,
   };
 };

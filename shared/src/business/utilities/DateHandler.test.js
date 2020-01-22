@@ -8,6 +8,26 @@ describe('DateHandler', () => {
     });
   });
 
+  describe('createISODateStringFromObject', () => {
+    it('should return expected date when using single digit month and day', () => {
+      const myDate = DateHandler.createISODateStringFromObject({
+        day: '1',
+        month: '1',
+        year: '1990',
+      });
+      expect(myDate).toEqual('1990-01-01T05:00:00.000Z');
+    });
+
+    it('should return expected date when using double digit month and day', () => {
+      const myDate = DateHandler.createISODateStringFromObject({
+        day: '01',
+        month: '01',
+        year: '1990',
+      });
+      expect(myDate).toEqual('1990-01-01T05:00:00.000Z');
+    });
+  });
+
   describe('createISODateString', () => {
     it('creates a date anew', () => {
       const myDate = DateHandler.createISODateString();
@@ -94,6 +114,20 @@ describe('DateHandler', () => {
 
       result = DateHandler.dateStringsCompared(date2, date1);
       expect(result).toEqual(86400000); // 1 day in milliseconds
+    });
+  });
+
+  describe('isValidDateString', () => {
+    it('should return true on valid date strings', () => {
+      ['01-01-2001', '1-1-2001', '01/01/2001', '1/1/2001'].forEach(date => {
+        expect(DateHandler.isValidDateString(date)).toBeTruthy();
+      });
+    });
+
+    it('should return false on invalid date string', () => {
+      ['01-01-01', '13-1-2001', '01/41/2001', '/1/2001'].forEach(date => {
+        expect(DateHandler.isValidDateString(date)).toBeFalsy();
+      });
     });
   });
 });

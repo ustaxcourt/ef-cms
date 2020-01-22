@@ -133,6 +133,16 @@
   ],
   "Appearance and Representation": [
     {
+      "documentTitle": "Designation of Counsel [Name] to Receive Service",
+      "documentType": "Designation of Counsel to Receive Service",
+      "category": "Appearance and Representation",
+      "eventCode": "DSC",
+      "scenario": "Nonstandard B",
+      "labelPreviousDocument": "",
+      "labelFreeText": "Name",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Motion to Withdraw as Counsel",
       "documentType": "Motion to Withdraw as Counsel",
       "category": "Appearance and Representation",
@@ -210,7 +220,7 @@
       "documentTitle": "Proposed Stipulated Decision",
       "documentType": "Proposed Stipulated Decision",
       "category": "Decision",
-      "eventCode": "PSDEC",
+      "eventCode": "PSDE",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -242,7 +252,7 @@
       "documentTitle": "[First, Second, etc.] Amended [Document Name]",
       "documentType": "Amended",
       "category": "Miscellaneous",
-      "eventCode": "ADED",
+      "eventCode": "AMAT",
       "scenario": "Nonstandard F",
       "labelPreviousDocument": "Which document are you amending?",
       "labelFreeText": "",
@@ -259,8 +269,18 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "[First, Second, etc.] Amendment to [anything]",
+      "documentType": "Amendment [anything]",
+      "category": "Miscellaneous",
+      "eventCode": "ADMT",
+      "scenario": "Nonstandard F",
+      "labelPreviousDocument": "What is this amendment for?",
+      "labelFreeText": "",
+      "ordinalField": "What iteration is this filing?"
+    },
+    {
       "documentTitle": "[First, Second, etc.] Amendment to [Document Name]",
-      "documentType": "Amendment",
+      "documentType": "Amendment to",
       "category": "Miscellaneous",
       "eventCode": "AMNT",
       "scenario": "Nonstandard F",
@@ -731,16 +751,6 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion for Preliminary Injunction",
-      "documentType": "Motion for Preliminary Injunction",
-      "category": "Motion",
-      "eventCode": "M025",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Motion for Pretrial Conference",
       "documentType": "Motion for Pretrial Conference",
       "category": "Motion",
@@ -871,7 +881,7 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Add Small Tax case Designation",
+      "documentTitle": "Motion to Add Small Tax Case Designation",
       "documentType": "Motion to Add Small Tax case Designation",
       "category": "Motion",
       "eventCode": "M042",
@@ -977,7 +987,7 @@
       "eventCode": "M052",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket numbers (separate with a comma)",
+      "labelFreeText": "Docket Numbers (separate with a comma)",
       "ordinalField": ""
     },
     {
@@ -1117,7 +1127,7 @@
       "eventCode": "M067",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket numbers to be consolidated (separate with a comma)",
+      "labelFreeText": "Docket Numbers to Be Consolidated (separate with a comma)",
       "ordinalField": ""
     },
     {
@@ -1301,8 +1311,8 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(f)(2)",
-      "documentType": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(f)(2)",
+      "documentTitle": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(g)(3)",
+      "documentType": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(g)(3)",
       "category": "Motion",
       "eventCode": "M084",
       "scenario": "Standard",
@@ -1451,8 +1461,8 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Motion to Seal Case",
-      "documentType": "Motion to Seal Case",
+      "documentTitle": "Motion to Seal",
+      "documentType": "Motion to Seal",
       "category": "Motion",
       "eventCode": "M114",
       "scenario": "Standard",
@@ -1667,6 +1677,16 @@
       "documentType": "Notice of Abatement of Jeopardy Assessment",
       "category": "Notice",
       "eventCode": "NAJA",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
+      "documentTitle": "Notice of Appeal",
+      "documentType": "Notice of Appeal",
+      "category": "Notice",
+      "eventCode": "NOA",
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
@@ -2395,16 +2415,6 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Amended Seriatim Reply Brief",
-      "documentType": "Amended Seriatim Reply Brief",
-      "category": "Seriatim Brief",
-      "eventCode": "ADSB",
-      "scenario": "Standard",
-      "labelPreviousDocument": "",
-      "labelFreeText": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Amended Seriatim Sur-Reply Brief",
       "documentType": "Amended Seriatim Sur-Reply Brief",
       "category": "Seriatim Brief",
@@ -3067,7 +3077,7 @@
       "eventCode": "STBB",
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "Docket number",
+      "labelFreeText": "Docket Number",
       "ordinalField": ""
     },
     {

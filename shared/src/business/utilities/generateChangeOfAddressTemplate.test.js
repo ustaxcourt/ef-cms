@@ -49,6 +49,14 @@ describe('getAddressPhoneDiff', () => {
 });
 
 describe('getDocumentTypeForAddressChange', () => {
+  it('Returns undefined when none of the fields differ', () => {
+    const result = getDocumentTypeForAddressChange({
+      newData: caseDetail.contactPrimary,
+      oldData: caseDetail.contactPrimary,
+    });
+
+    expect(result).toBeUndefined();
+  });
   it('Returns Notice of Change of Address when only address fields differ', () => {
     const result = getDocumentTypeForAddressChange({
       newData: {
