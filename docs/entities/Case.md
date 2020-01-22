@@ -454,7 +454,7 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 ### qcCompleteForTrial
 
 
-QC Checklist.
+QC Checklist object that must be completed before the Case can go to trial.
 
 > `object` | required
 
@@ -620,7 +620,7 @@ When the case was received by the Court.
 ### userId
 
 
-The user who added the Case to the System.
+The ID of the User who added the Case to the System.
 
 > `string` | optional
 
