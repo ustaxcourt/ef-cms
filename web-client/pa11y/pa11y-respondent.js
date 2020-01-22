@@ -14,7 +14,7 @@ module.exports = [
   {
     actions: [
       'wait for .sealed-banner to be visible',
-      'wait for .case-title to be visible',
+      'wait for #case-title to be visible',
     ],
     notes: 'an associated respondent can see details of sealed case',
     url:
