@@ -108,7 +108,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
         documentId: document && document.documentId,
         editLink,
         eventCode: record.eventCode || (document && document.eventCode),
-        filedBy: document && document.filedBy,
+        filedBy: (document && document.filedBy) || record.filedBy,
         filingsAndProceedingsWithAdditionalInfo,
         hasDocument: !!document,
         index,
