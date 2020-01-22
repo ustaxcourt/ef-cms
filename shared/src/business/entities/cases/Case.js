@@ -250,6 +250,7 @@ function Case(rawCase, { applicationContext }) {
   this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.sealedDate = rawCase.sealedDate;
+  this.isSealed = !!rawCase.sealedDate;
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
@@ -1148,6 +1149,23 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
 };
 
 /**
+ * returns true if the case is associated with the userId
+ *
+ * @param {object} arguments
+ * @param {object} arguments.caseRaw raw case details
+ * @param {string} arguments.userId id of the user account
+ * @returns {boolean} if the case is associated
+ */
+const isAssociatedUser = function({ caseRaw, userId }) {
+  const isRespondent =
+    caseRaw.respondents && caseRaw.respondents.find(r => r.userId === userId);
+  const isPractitioner =
+    caseRaw.practitioners &&
+    caseRaw.practitioners.find(p => p.userId === userId);
+  return isRespondent || isPractitioner;
+};
+
+/**
  * returns true if the case status is already calendared
  *
  * @returns {boolean} if the case is calendared
@@ -1525,7 +1543,8 @@ Case.prototype.setQcCompleteForTrial = function({
  */
 Case.prototype.setAsSealed = function() {
   this.sealedDate = createISODateString();
+  this.isSealed = true;
   return this;
 };
 
-module.exports = { Case };
+module.exports = { Case, isAssociatedUser };
