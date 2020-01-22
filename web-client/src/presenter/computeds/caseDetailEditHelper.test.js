@@ -291,7 +291,7 @@ describe('case detail edit computed', () => {
       state: {
         caseDetail: {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
-          preferredTrialCity: 'Somewhere, USA',
+          preferredTrialCity: 'Fresno, California',
         },
       },
     });

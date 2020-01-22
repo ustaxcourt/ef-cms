@@ -71,6 +71,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     description: documentMeta.generatedDocumentTitle,
     documentId: documentEntity.documentId,
     editState: JSON.stringify(documentMeta),
+    eventCode: documentEntity.eventCode,
     filingDate: documentEntity.receivedAt,
   });
 

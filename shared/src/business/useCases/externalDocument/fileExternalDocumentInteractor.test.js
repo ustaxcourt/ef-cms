@@ -9,31 +9,52 @@ describe('fileExternalDocumentInteractor', () => {
   let globalUser;
 
   let caseRecord = {
+    caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    caseType: 'Deficiency',
     contactPrimary: {
       email: 'fieri@example.com',
       name: 'Guy Fieri',
     },
     createdAt: '',
     docketNumber: '45678-18',
+    docketRecord: [
+      {
+        description: 'first record',
+        docketNumber: '45678-18',
+        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+        eventCode: 'P',
+        filingDate: '2018-03-01T00:01:00.000Z',
+        index: 1,
+      },
+    ],
     documents: [
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
+        eventCode: 'A',
         userId: 'respondent',
       },
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
+        eventCode: 'A',
         userId: 'respondent',
       },
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
+        eventCode: 'A',
         userId: 'respondent',
       },
     ],
+    filingType: 'Myself',
     partyType: ContactFactory.PARTY_TYPES.petitioner,
+    preferredTrialCity: 'Fresno, California',
+    procedureType: 'Regular',
     role: User.ROLES.petitioner,
     userId: 'petitioner',
   };
@@ -101,8 +122,10 @@ describe('fileExternalDocumentInteractor', () => {
         documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
           caseId: caseRecord.caseId,
+          docketNumber: '45678-18',
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
+          eventCode: 'A',
         },
       });
     } catch (err) {
@@ -127,8 +150,10 @@ describe('fileExternalDocumentInteractor', () => {
         documentIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
           caseId: caseRecord.caseId,
+          docketNumber: '45678-18',
           documentTitle: 'Amended Simultaneous Memoranda of Law',
           documentType: 'Amended Simultaneous Memoranda of Law',
+          eventCode: 'A',
         },
       });
     } catch (err) {

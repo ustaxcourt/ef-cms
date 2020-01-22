@@ -680,6 +680,7 @@
     "docketRecord": [
       {
         "description": "Petition",
+        "eventCode": "P",
         "index": 1,
         "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
         "filingDate": "2019-07-12T17:09:41.026Z",
@@ -688,10 +689,12 @@
       {
         "description": "Request for Place of Trial at Lubbock, Texas",
         "filingDate": "2019-07-12T17:09:41.026Z",
+        "eventCode": "RQT",
         "index": 2
       },
       {
         "description": "Proposed Stipulated Decision",
+        "eventCode": "PSDE",
         "index": 3,
         "documentId": "7a923abd-fc41-407a-b76b-7f724fa5d47f",
         "filingDate": "1990-10-10"
