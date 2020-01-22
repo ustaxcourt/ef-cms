@@ -10,7 +10,7 @@ exports.generateJsonFromSchema = (schema, entityName) => {
 
   const jsonResult = [{ h1: entityName }];
 
-  const handleField = (field, fieldName) => {
+  const handleField = (field, fieldName, isAlternative = false, index = 0) => {
     const { allow, description, flags, matches, rules, type } = field;
     let presence;
 
@@ -20,8 +20,12 @@ exports.generateJsonFromSchema = (schema, entityName) => {
 
     const result = [];
 
-    if (fieldName) {
-      result.push({ h3: fieldName });
+    if (!isAlternative) {
+      if (fieldName) {
+        result.push({ h3: fieldName });
+      }
+    } else {
+      result.push({ h4: `Condition #${index + 1} for \`${fieldName}\`: ` });
     }
 
     if (description) {
@@ -29,7 +33,9 @@ exports.generateJsonFromSchema = (schema, entityName) => {
     }
 
     result.push({
-      blockquote: `\`${type}\`${presence ? ` | ${presence}` : ''}`,
+      blockquote: `\`${type === 'alternatives' ? 'conditional' : type}\`${
+        presence ? ` | ${presence}` : ''
+      }`,
     });
 
     switch (type) {
@@ -44,7 +50,7 @@ exports.generateJsonFromSchema = (schema, entityName) => {
           rules.forEach(({ args, name }) => {
             switch (name) {
               case 'pattern':
-                result.push({ h6: 'Regex Pattern' });
+                result.push({ h5: 'Regex Pattern' });
                 result.push({ p: `\`${args.regex}\`` });
                 break;
             }
@@ -55,14 +61,17 @@ exports.generateJsonFromSchema = (schema, entityName) => {
           const allowedValues = allow.map(
             allowedValue => `\`${allowedValue}\``,
           );
-          result.push({ h4: 'Allowed Values' });
+          result.push({ h5: 'Allowed Values' });
           result.push({ ul: allowedValues });
+        } else if (allow && allow.length === 1) {
+          result.push({ h5: `Can be ${allow[0]}.` });
         }
         break;
 
       case 'alternatives':
-        matches.forEach(({ schema: matchSchema }) => {
-          result.push(...handleField(matchSchema));
+        result.push({ p: '*Must match 1 of the following conditions:*' });
+        matches.forEach(({ schema: matchSchema }, index) => {
+          result.push(...handleField(matchSchema, fieldName, true, index));
         });
         break;
 
