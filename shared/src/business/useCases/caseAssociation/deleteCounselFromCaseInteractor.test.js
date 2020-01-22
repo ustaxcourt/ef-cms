@@ -1,6 +1,7 @@
 const {
   deleteCounselFromCaseInteractor,
 } = require('./deleteCounselFromCaseInteractor');
+const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
 let applicationContext;
@@ -34,15 +35,9 @@ describe('deleteCounselFromCaseInteractor', () => {
       getPersistenceGateway: () => ({
         deleteUserFromCase: deleteUserFromCaseMock,
         getCaseByCaseId: ({ caseId }) => ({
-          caseCaption: 'Caption',
+          ...MOCK_CASE,
           caseId,
-          caseType: 'Deficiency',
-          docketNumber: '123-19',
-          filingType: 'Myself',
-          partyType: 'Petitioner',
           practitioners: mockPractitioners,
-          preferredTrialCity: 'Fresno, California',
-          procedureType: 'Regular',
           respondents: mockRespondents,
         }),
         getUserById: ({ userId }) => {
