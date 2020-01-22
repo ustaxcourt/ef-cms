@@ -2467,6 +2467,8 @@ describe('Case entity', () => {
       caseCaption: 'Enter a case caption',
       caseType: 'Select a case type',
       docketNumber: 'Docket number is required',
+      docketRecord: 'At least one valid Docket Record is required',
+      documents: 'At least one valid document is required',
       partyType: 'Select a party type',
       preferredTrialCity: 'Select a preferred trial location',
       procedureType: 'Select a case procedure',
