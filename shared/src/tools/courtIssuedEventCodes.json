@@ -363,7 +363,7 @@
     "eventCode": "TRAN",
     "documentType": "Transcript",
     "documentTitle": "Transcript of [anything]",
-    "scenario": "Type A - NEED LOGIC for MVP"
+    "scenario": "Type A"
   },
   {
     "eventCode": "SPTO",

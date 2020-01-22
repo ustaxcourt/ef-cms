@@ -8,25 +8,25 @@
  */
 export const updateDocketEntryMetaAction = async ({
   applicationContext,
+  path,
   props,
 }) => {
   const { caseId, docketRecordEntry, docketRecordIndex } = props;
 
-  const { servedParties } = docketRecordEntry;
-
-  if (servedParties && typeof servedParties === 'string') {
-    const servedPartiesArry = servedParties.split(',');
-    if (Array.isArray(servedPartiesArry)) {
-      docketRecordEntry.servedParties = servedPartiesArry.map(party =>
-        party.trim(),
-      );
-    }
+  try {
+    await applicationContext.getUseCases().updateDocketEntryMetaInteractor({
+      applicationContext,
+      caseId,
+      docketEntryMeta: docketRecordEntry,
+      docketRecordIndex,
+    });
+    return path.success();
+  } catch (err) {
+    return path.error({
+      alertError: {
+        message: err.message,
+        title: 'Error',
+      },
+    });
   }
-
-  await applicationContext.getUseCases().updateDocketEntryMetaInteractor({
-    applicationContext,
-    caseId,
-    docketEntryMeta: docketRecordEntry,
-    docketRecordIndex,
-  });
 };

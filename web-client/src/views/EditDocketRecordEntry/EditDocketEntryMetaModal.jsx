@@ -1,4 +1,5 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -27,6 +28,7 @@ export const EditDocketEntryMetaModal = connect(
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence="submitEditDocketEntryMetaSequence"
       >
+        <ErrorNotification />
         <FormGroup errorText={validationErrors && validationErrors.filingDate}>
           <label
             className="usa-label"
@@ -95,21 +97,17 @@ export const EditDocketEntryMetaModal = connect(
             }}
           />
         </FormGroup>
-        <FormGroup errorText={validationErrors && validationErrors.servedAt}>
-          <label
-            className="usa-label"
-            htmlFor="servedAt"
-            id="document-served-at-label"
-          >
-            Served
+        <FormGroup errorText={validationErrors && validationErrors.action}>
+          <label className="usa-label" htmlFor="filedBy" id="action-label">
+            Action
           </label>
           <input
-            area-describedby="document-served-at-label"
+            aria-describedby="action-label"
             className="usa-input"
-            id="servedAt"
-            name="form.servedAt"
+            id="action"
+            name="form.action"
             type="text"
-            value={form.servedAt || ''}
+            value={form.action || ''}
             onChange={e => {
               updateModalValueSequence({
                 key: e.target.name,
@@ -119,23 +117,21 @@ export const EditDocketEntryMetaModal = connect(
             }}
           />
         </FormGroup>
-        <FormGroup
-          errorText={validationErrors && validationErrors.servedParties}
-        >
+        <FormGroup errorText={validationErrors && validationErrors.servedAt}>
           <label
             className="usa-label"
-            htmlFor="servedParties"
-            id="document-served-parties-label"
+            htmlFor="servedAt"
+            id="document-served-at-label"
           >
-            Parties
+            Served
           </label>
           <input
-            area-describedby="document-served-parties-label"
+            aria-describedby="document-served-at-label"
             className="usa-input"
-            defaultValue={form.servedParties}
-            id="servedParties"
-            name="form.servedParties"
+            id="servedAt"
+            name="form.servedAt"
             type="text"
+            value={form.servedAt || ''}
             onChange={e => {
               updateModalValueSequence({
                 key: e.target.name,

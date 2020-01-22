@@ -130,6 +130,23 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(getCaseCaseIdNumberMock).toHaveBeenCalled();
   });
 
+  it('should update the docket record action', async () => {
+    const result = await updateDocketEntryMetaInteractor({
+      applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+      docketEntryMeta: {
+        action: 'Updated Action',
+      },
+      docketRecordIndex: 0,
+    });
+
+    const updatedDocketEntry = result.docketRecord.find(
+      record => record.index === 0,
+    );
+
+    expect(updatedDocketEntry.action).toEqual('Updated Action');
+  });
+
   it('should update the docket record description', async () => {
     const result = await updateDocketEntryMetaInteractor({
       applicationContext,
@@ -220,7 +237,20 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(addCoversheetInteractorMock).toHaveBeenCalled();
   });
 
-  it('should NOT generate a new coversheet for the document if the servedAt field is NOT changed', async () => {
+  it('should generate a new coversheet for the document if the filingDate field is changed', async () => {
+    await updateDocketEntryMetaInteractor({
+      applicationContext,
+      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
+      docketEntryMeta: {
+        filingDate: '2020-01-01T00:01:00.000Z',
+      },
+      docketRecordIndex: 0,
+    });
+
+    expect(addCoversheetInteractorMock).toHaveBeenCalled();
+  });
+
+  it('should NOT generate a new coversheet for the document if the servedAt and filingDate fields are NOT changed', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
       caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
@@ -231,30 +261,6 @@ describe('updateDocketEntryMetaInteractor', () => {
     });
 
     expect(addCoversheetInteractorMock).not.toHaveBeenCalled();
-  });
-
-  it('should update the document servedParties', async () => {
-    const result = await updateDocketEntryMetaInteractor({
-      applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
-      docketEntryMeta: {
-        servedParties: ['Served Party One', 'Served Party Two'],
-      },
-      docketRecordIndex: 0,
-    });
-
-    const updatedDocketEntry = result.docketRecord.find(
-      record => record.index === 0,
-    );
-
-    const updatedDocument = result.documents.find(
-      document => document.documentId === updatedDocketEntry.documentId,
-    );
-
-    expect(updatedDocument.servedParties).toEqual([
-      'Served Party One',
-      'Served Party Two',
-    ]);
   });
 
   it('should call the updateCase persistence method', async () => {
