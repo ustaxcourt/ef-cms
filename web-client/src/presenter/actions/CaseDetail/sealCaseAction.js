@@ -22,5 +22,11 @@ export const sealCaseAction = async ({ applicationContext, get, path }) => {
     return path.error();
   }
 
-  return path.success({ caseDetail: result });
+  return path.success({
+    alertSuccess: {
+      message: 'Access to this case will be limited to authorized parties',
+      title: 'This case is now sealed',
+    },
+    caseDetail: result,
+  });
 };
