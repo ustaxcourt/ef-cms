@@ -37,6 +37,8 @@ export default (test, data = {}) => {
       },
     );
 
+    console.log(caseDetailFormatted);
+
     const selectedDocument = caseDetailFormatted.documents.find(
       document => document.documentId === documentId,
     );
