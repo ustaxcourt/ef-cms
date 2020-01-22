@@ -1,5 +1,4 @@
 const joi = require('@hapi/joi');
-const { makeMarkdownDoc } = require('joi-md-doc');
 
 /**
  *
@@ -123,10 +122,8 @@ exports.joiValidationDecorator = function(
     return schema;
   };
 
-  entityConstructor.generateSchemaMarkdown = function(outputPath) {
-    const name = entityConstructor.validationName;
-
-    makeMarkdownDoc(schema.meta({ filename: name, name }), { outputPath });
+  entityConstructor.getSchema = function() {
+    return schema;
   };
 
   entityConstructor.prototype.isValid = function isValid() {
