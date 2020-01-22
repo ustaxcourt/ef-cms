@@ -1,4 +1,5 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -27,6 +28,7 @@ export const EditDocketEntryMetaModal = connect(
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence="submitEditDocketEntryMetaSequence"
       >
+        <ErrorNotification />
         <FormGroup errorText={validationErrors && validationErrors.filingDate}>
           <label
             className="usa-label"
