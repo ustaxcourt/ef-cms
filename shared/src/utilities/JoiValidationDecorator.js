@@ -1,5 +1,4 @@
 const joi = require('@hapi/joi');
-const { makeMarkdownDoc } = require('joi-md-doc');
 
 /**
  *
