@@ -1,215 +1,641 @@
 # Document
 
-## addToCoversheet
+### addToCoversheet
 
 > `boolean` | optional
 
-## additionalInfo
+### additionalInfo
 
 > `string` | optional
 
-## additionalInfo2
+### additionalInfo2
 
 > `string` | optional
 
-## archived
+### archived
 
 > `boolean` | optional
 
-## caseId
+### caseId
 
 > `string` | optional
 
-## category
+### category
 
 > `string` | optional
 
-## certificateOfService
+### certificateOfService
 
 > `boolean` | optional
 
-## certificateOfServiceDate
+### certificateOfServiceDate
 
-> `*` | optional
+> `any`
 
-## createdAt
 
-> `date` | optional
+If `certificateOfService` = `true`, then this field is `date` and is `required.` 
 
-## docketNumber
+
+Otherwise, this field is `any` and is `optional`.
+
+### createdAt
+
+> `date` | required
+
+### docketNumber
 
 > `string` | optional
 
-## documentId
+### documentId
 
 > `string` | required
 
-## documentTitle
+### documentTitle
 
 > `string` | optional
 
-## documentType
+### documentType
 
 > `string` | required
 
-## draftState
+###### Allowed Values
+
+
+ - `Application for Waiver of Filing Fee`
+ - `Ownership Disclosure Statement`
+ - `Petition`
+ - `Request for Place of Trial`
+ - `Statement of Taxpayer Identification`
+ - `Entry of Appearance`
+ - `Substitution of Counsel`
+ - `Amended Answer`
+ - `Amendment to Answer`
+ - `Answer`
+ - `Answer to Amended Petition`
+ - `Answer to Amended Petition, as Amended`
+ - `Answer to Amendment to Amended Petition`
+ - `Answer to Amendment to Petition`
+ - `Answer to Petition, as Amended`
+ - `Answer to Second Amended Petition`
+ - `Answer to Second Amendment to Petition`
+ - `Answer to Supplement to Petition`
+ - `Answer to Third Amended Petition`
+ - `Answer to Third Amendment to Petition`
+ - `Designation of Counsel to Receive Service`
+ - `Motion to Withdraw as Counsel`
+ - `Motion to Withdraw Counsel (filed by petitioner)`
+ - `Application for Waiver of Filing Fee and Affidavit`
+ - `Application to Take Deposition`
+ - `Agreed Computation for Entry of Decision`
+ - `Computation for Entry of Decision`
+ - `Proposed Stipulated Decision`
+ - `Revised Computation`
+ - `Administrative Record`
+ - `Amended`
+ - `Amended Certificate of Service`
+ - `Amendment [anything]`
+ - `Amendment to`
+ - `Certificate as to the Genuineness of the Administrative Record`
+ - `Certificate of Service`
+ - `Civil Penalty Approval Form`
+ - `Exhibit(s)`
+ - `Memorandum`
+ - `Partial Administrative Record`
+ - `Ratification`
+ - `Redacted`
+ - `Report`
+ - `Status Report`
+ - `Supplemental Brief`
+ - `Unredacted`
+ - `Motion for Continuance`
+ - `Motion for Extension of Time`
+ - `Motion to Dismiss for Lack of Jurisdiction`
+ - `Motion to Dismiss for Lack of Prosecution`
+ - `Motion for Summary Judgment`
+ - `Motion to Change or Correct Caption`
+ - `Motion for a New Trial`
+ - `Motion for an Order under Federal Rule of Evidence 502(d)`
+ - `Motion for an Order under Model Rule of Professional Conduct 4.2`
+ - `Motion for Appointment of Mediator`
+ - `Motion for Assignment of Judge`
+ - `Motion for Audio of Trial Proceeding(s)`
+ - `Motion for Certification of an Interlocutory Order to Permit Immediate Appeal`
+ - `Motion for Default and Dismissal`
+ - `Motion for Entry of Decision`
+ - `Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)`
+ - `Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156`
+ - `Motion for in Camera Review`
+ - `Motion for International Judicial Assistance`
+ - `Motion for Judgment on the Pleadings`
+ - `Motion for Leave to Conduct Discovery Pursuant to Rule 70(a)(2)`
+ - `Motion for Leave to File`
+ - `Motion for Leave to File Out of Time`
+ - `Motion for Leave to Serve Additional Interrogatories`
+ - `Motion for Leave to Use Electronic Equipment`
+ - `Motion for More Definite Statement Pursuant to Rule 51`
+ - `Motion for Non-Binding Mediation`
+ - `Motion for Oral Argument`
+ - `Motion for Order Fixing Amount of an Appeal Bond`
+ - `Motion for Order to Release the Amount of an Appeal Bond`
+ - `Motion for Order to Show Cause Why Case Should Not Be Sumitted on the Basis of the Administrative Record`
+ - `Motion for Order to Show Cause Why Judgment Should Not be Entered on the Basis of a Previously Decided Case`
+ - `Motion for Order to Show Cause Why Proposed Facts and Evidence Should Not be Accepted as Established Pursuant to Rule 91(f)`
+ - `Motion for Partial Summary Judgment`
+ - `Motion for Pretrial Conference`
+ - `Motion for Protective Order Pursuant to Rule 103`
+ - `Motion for Reasonable Litigation or Administrative Costs`
+ - `Motion for Reconsideration of Findings or Opinion Pursuant to Rule 161`
+ - `Motion for Reconsideration of Order`
+ - `Motion for Recusal of Judge`
+ - `Motion for Review of Jeopardy Assessment or Jeopardy Levy Pursuant to Rule 56`
+ - `Motion for the Court to Pay the Expenses of a Transcript`
+ - `Motion for the Court to Pay the Expenses of an Interpreter`
+ - `Motion for Voluntary Binding Arbitration`
+ - `Motion for Writ of Habeas Corpus Ad Testificandum`
+ - `Motion in Limine`
+ - `Motion to Add Lien or Levy Designation`
+ - `Motion to Add Small Tax case Designation`
+ - `Motion to Amend Order`
+ - `Motion to Appoint an Interpreter Pursuant to Rule 143(f)`
+ - `Motion to Appoint New Tax Matters Partner`
+ - `Motion to Appoint Tax Matters Partner`
+ - `Motion to Authorize Proposed Sale of Seized Property`
+ - `Motion to Be Excused from Appearing at the Trial Session`
+ - `Motion to Be Recognized as Next Friend`
+ - `Motion to Bifurcate`
+ - `Motion to Calendar`
+ - `Motion to Calendar and Consolidate`
+ - `Motion to Calendar in the Electronic (North) Courtroom`
+ - `Motion to Certify for Interlocutory Appeal`
+ - `Motion to Change or Correct Docket Entry`
+ - `Motion to Change Place of Submission of Declaratory Judgment Case`
+ - `Motion to Change Place of Trial`
+ - `Motion to Change Service Method`
+ - `Motion to Clarify Order`
+ - `Motion to Close on Ground of Duplication`
+ - `Motion to Compel Discovery`
+ - `Motion to Compel Production of Documents`
+ - `Motion to Compel Responses to Interrogatories`
+ - `Motion to Compel the Taking of Deposition`
+ - `Motion to Conform the Pleadings to the Proof`
+ - `Motion to Consolidate`
+ - `Motion to Correct and Certify Record on Appeal`
+ - `Motion to Correct Clerical Order`
+ - `Motion to Correct Transcript`
+ - `Motion to Depose Pursuant to Rule 74`
+ - `Motion to Determine the Tax Matters Partner`
+ - `Motion to Dismiss`
+ - `Motion to Dismiss for Failure to Properly Prosecute`
+ - `Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted`
+ - `Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]`
+ - `Motion to Dismiss on Grounds of Mootness`
+ - `Motion to Disqualify Counsel`
+ - `Motion to Enforce a Refund of Overpayment Pursuant to Rule 260`
+ - `Motion to Enforce Subpoena`
+ - `Motion to Extend Time to Move or File Answer`
+ - `Motion to Impose a Penalty`
+ - `Motion to Impose Sanctions`
+ - `Motion to Modify Decision in Estate Tax Case Pursuant to Rule 262`
+ - `Motion to Modify Order`
+ - `Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(g)(3)`
+ - `Motion to Permit Levy`
+ - `Motion to Preclude`
+ - `Motion to Quash or Modify Subpoena`
+ - `Motion to Redetermine Interest Pursuant to Rule 261`
+ - `Motion to Remand`
+ - `Motion to Remove Lien/Levy Designation`
+ - `Motion to Remove Small Tax Case Designation`
+ - `Motion to Remove Tax Matters Partner`
+ - `Motion to Reopen the Record`
+ - `Motion to Require Petitioner to File a Reply in a Small Tax Case Pursuant to Rule 173(c)`
+ - `Motion to Restore Case to the General Docket`
+ - `Motion to Restrain Assessment or Collection or to Order Refund of Amount Collected`
+ - `Motion to Retain File in Estate Tax Case Involving § 6166 Election Pursuant to Rule 157`
+ - `Motion to Review the Sufficiency of Answers or Objections to Request for Admissions`
+ - `Motion to Seal`
+ - `Motion to Seal Documents`
+ - `Motion to Set for a Time & Date Certain`
+ - `Motion to Set Pretrial Scheduling Order`
+ - `Motion to Sever`
+ - `Motion to Shift the Burden of Proof`
+ - `Motion to Shorten the Time`
+ - `Motion to Stay Proceedings`
+ - `Motion to Stay Proposed Sale of Seized Property`
+ - `Motion to Strike`
+ - `Motion to Submit Case Pursuant to Rule 122`
+ - `Motion to Substitute Parties and Change Caption`
+ - `Motion to Substitute Trial Exhibit(s)`
+ - `Motion to Supplement the Record`
+ - `Motion to Suppress Evidence`
+ - `Motion to Take Deposition Pursuant to Rule 74(c)(3)`
+ - `Motion to Take Judicial Notice`
+ - `Motion to Vacate`
+ - `Motion to Vacate or Revise Pursuant to Rule 162`
+ - `Motion to Withdraw`
+ - `Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f)`
+ - `Notice of Abatement of Jeopardy Assessment`
+ - `Notice of Appeal`
+ - `Notice of Change of Address`
+ - `Notice of Change of Address and Telephone Number`
+ - `Notice of Change of Telephone Number`
+ - `Notice of Clarification of Tax Matters Partner`
+ - `Notice of Concession`
+ - `Notice of Consistent Agreement Pursuant to Rule 248(c)(1)`
+ - `Notice of Death of Counsel`
+ - `Notice of Election to Intervene`
+ - `Notice of Election to Participate`
+ - `Notice of Filing of Petition and Right to Intervene`
+ - `Notice of Filing of the Administrative Record`
+ - `Notice of Identification of Tax Matters Partner`
+ - `Notice of Intent Not to File`
+ - `Notice of Intervention`
+ - `Notice of Issue Concerning Foreign Law`
+ - `Notice of Jeopardy Assessment`
+ - `Notice of Judicial Ruling`
+ - `Notice of No Objection`
+ - `Notice of Objection`
+ - `Notice of Partial Abatement of Jeopardy Assessment`
+ - `Notice of Proceeding in Bankruptcy`
+ - `Notice of Relevant Judicial Decisions`
+ - `Notice of Settlement Agreement Pursuant to Rule 248(c)(1)`
+ - `Notice of Small Tax Case Election`
+ - `Notice of Supplemental Authority`
+ - `Notice of Telephone Number`
+ - `Notice of Termination Assessment`
+ - `Notice of Unavailability`
+ - `Amended Petition`
+ - `Amendment to Amended Petition`
+ - `Amendment to Petition`
+ - `Amendment to Second Amended Petition`
+ - `Amendment to Third Amended Petition`
+ - `Redacted Petition Filed`
+ - `Second Amended Petition`
+ - `Second Amendment to Petition`
+ - `Supplement to Petition`
+ - `Third Amended Petition`
+ - `Third Amendment to Petition`
+ - `Amended Prehearing Memorandum`
+ - `Amended Pretrial Memorandum`
+ - `Amendment to Prehearing Memorandum`
+ - `Amendment to Pretrial Memorandum`
+ - `Prehearing Memorandum`
+ - `Pretrial Memorandum`
+ - `Second Supplement to Pretrial Memorandum`
+ - `Supplement to Prehearing Memorandum`
+ - `Supplement to Pretrial Memorandum`
+ - `Amended Reply to Answer`
+ - `Amendment to Reply to Answer`
+ - `Reply`
+ - `Reply to Amendment to Answer`
+ - `Reply to Answer`
+ - `Reply to Answer to Amended Petition`
+ - `Reply to Answer to Amendment to Petition`
+ - `Reply to Answer to Petition, as Amended`
+ - `Reply to Answer to Second Amended Petition`
+ - `Reply to Answer to Supplement to Petition`
+ - `Reply to Answer to Third Amended Petition`
+ - `Sur-Reply`
+ - `Request for Admissions`
+ - `Request for Judicial Notice`
+ - `Request for Place of Submission of Declaratory Judgment Case`
+ - `Request for Pretrial Conference`
+ - `No Objection`
+ - `Objection`
+ - `Opposition`
+ - `Response`
+ - `Amended Seriatim Answering Brief`
+ - `Amended Seriatim Opening Brief`
+ - `Amended Seriatim Sur-Reply Brief`
+ - `Amended Seriatim Sur-Reply Memorandum Brief`
+ - `Amendment to Seriatim Answering Brief`
+ - `Amendment to Seriatim Opening Brief`
+ - `Amendment to Seriatim Sur-Reply Brief`
+ - `Amendment to Seriatim Sur-Reply Memorandum Brief`
+ - `Seriatim Answering Brief`
+ - `Seriatim Answering Memorandum Brief`
+ - `Seriatim Opening Brief`
+ - `Seriatim Opening Memorandum Brief`
+ - `Seriatim Reply Brief`
+ - `Seriatim Reply Memorandum Brief`
+ - `Seriatim Sur-Reply Brief`
+ - `Seriatim Sur-Reply Memorandum Brief`
+ - `Supplement to Seriatim Answering Brief`
+ - `Supplement to Seriatim Opening Brief`
+ - `Supplement to Seriatim Sur-Reply Brief`
+ - `Supplement to Seriatim Sur-Reply Memorandum Brief`
+ - `Amended Simultaneous Answering Brief`
+ - `Amended Simultaneous Answering Memoranda of Law`
+ - `Amended Simultaneous Answering Memorandum Brief`
+ - `Amended Simultaneous Memoranda of Law`
+ - `Amended Simultaneous Opening Brief`
+ - `Amended Simultaneous Opening Memorandum Brief`
+ - `Amended Simultaneous Sur-Reply Brief`
+ - `Amended Simultaneous Sur-Reply Memorandum Brief`
+ - `Amendment to Simultaneous Answering Brief`
+ - `Amendment to Simultaneous Answering Memoranda of Law`
+ - `Amendment to Simultaneous Answering Memorandum Brief`
+ - `Amendment to Simultaneous Memoranda of Law`
+ - `Amendment to Simultaneous Opening Brief`
+ - `Amendment to Simultaneous Opening Memorandum Brief`
+ - `Amendment to Simultaneous Sur-Reply Brief`
+ - `Amendment to Simultaneous Sur-Reply Memorandum Brief`
+ - `Simultaneous Answering Brief`
+ - `Simultaneous Answering Memoranda of Law`
+ - `Simultaneous Answering Memorandum Brief`
+ - `Simultaneous Memoranda of Law`
+ - `Simultaneous Opening Brief`
+ - `Simultaneous Opening Memorandum Brief`
+ - `Simultaneous Reply Brief`
+ - `Simultaneous Supplemental Brief`
+ - `Simultaneous Sur-Reply Brief`
+ - `Simultaneous Sur-Reply Memorandum Brief`
+ - `Supplement to Simultaneous Answering Brief`
+ - `Supplement to Simultaneous Answering Memoranda of Law`
+ - `Supplement to Simultaneous Answering Memorandum Brief`
+ - `Supplement to Simultaneous Memoranda of Law`
+ - `Supplement to Simultaneous Opening Brief`
+ - `Supplement to Simultaneous Opening Memorandum Brief`
+ - `Supplement to Simultaneous Sur-Reply Brief`
+ - `Supplement to Simultaneous Sur-Reply Memorandum Brief`
+ - `Statement`
+ - `Statement of Redacted Information`
+ - `Statement under Rule 212`
+ - `Statement under Rule 50(c)`
+ - `Settlement Stipulation`
+ - `Stipulation`
+ - `Stipulation as to the Administrative Record`
+ - `Stipulation as to the Partial Administrative Record`
+ - `Stipulation of Facts`
+ - `Stipulation of Pretrial Deadlines`
+ - `Stipulation of Settled Issues`
+ - `Stipulation of Settlement`
+ - `Stipulation to Be Bound`
+ - `Stipulation to Take Deposition`
+ - `Supplemental Stipulation of Facts`
+ - `Supplement`
+ - `Supplemental`
+ - `Affidavit in Support`
+ - `Brief in Support`
+ - `Declaration in Support`
+ - `Memorandum in Support`
+ - `Unsworn Declaration under Penalty of Perjury in Support`
+ - `Application`
+ - `Application for Examination Pursuant to Rule 73`
+ - `Stipulated Decision Entered`
+ - `Amended [Document Name]`
+ - `Amendment`
+ - `Appellate Filing Fee Received`
+ - `Bond`
+ - `Bounced Electronic Service`
+ - `Evidence`
+ - `Further Trial before [Judge] at [Place]`
+ - `Hearing before [Judge] at [Place]`
+ - `Hearing Exhibits`
+ - `Letter`
+ - `Miscellaneous`
+ - `Miscellaneous (Lodged)`
+ - `Partial Trial before [Judge] at [Place]`
+ - `Reference List of Redacted Information`
+ - `Returned Mail`
+ - `Trial Exhibits`
+ - `U.S.C.A. [Anything]`
+ - `Motion`
+ - `Motion for Review By the Full Court`
+ - `Motion for Review En Banc`
+ - `Motion to Be Exempt from E-Filing`
+ - `Motion to Change Place of Hearing of Disclosure Case`
+ - `Motion to File Document Under Seal`
+ - `Motion to Intervene`
+ - `Motion to Proceed Anonymously`
+ - `Notice of Trial on [Date] at [Place]`
+ - `Notice`
+ - `Notice of Change of Counsel for Non-Party`
+ - `Ratification of Petition`
+ - `Request`
+ - `Request for Place of Hearing of Disclosure Case`
+ - `Objection [anything]`
+ - `Opposition [anything]`
+ - `Response [anything]`
+ - `Amended Seriatim Reply Brief`
+ - `Supplement To [anything]`
+ - `Supplemental [anything]`
+ - `Order`
+ - `Order of Dismissal for Lack of Jurisdiction`
+ - `Order of Dismissal`
+ - `Order of Dismissal and Decision`
+ - `Order to Show Cause`
+ - `Order and Decision`
+ - `Decision`
+ - `O - Order`
+ - `O5 - Order`
+ - `OAJ - Order that case is assigned`
+ - `OAL - Order that the letter "L" is added to Docket Number`
+ - `OAP - Order for Amended Petition`
+ - `OAPF - Order for Amended Petition and Filing Fee`
+ - `OAPW - Order for Amended Petition and Filing Fee`
+ - `OAR - Order that the letter "R" is added to the Docket Number`
+ - `OAS - Order that the letter "S" is added to the Docket Number`
+ - `OASL - Order that the letters "SL" are added to the Docket Number`
+ - `OAW - Order that the letter "W" is added to the Docket Number`
+ - `OAX - Order that the letter "X" is added to the Docket Number`
+ - `OCA - Order that caption of case is amended`
+ - `OCD - Order`
+ - `OD - Order of Dismissal Entered,`
+ - `ODD - Order of Dismissal and Decision Entered,`
+ - `ODL - Order that the letter "L" is deleted from the Docket Number`
+ - `ODP - Order that the letter "P" is deleted from the Docket Number`
+ - `ODR - Order that the letter "R" is deleted from the Docket Number`
+ - `ODS - Order that the letter "S" is deleted from the Docket Number`
+ - `ODSL - Order that the letters "SL" are deleted from the Docket Number`
+ - `ODW - Order that the letter "W" is deleted from the Docket Number`
+ - `ODX - Order that the letter "X" is deleted from the Docket Number`
+ - `OF - Order for Filing Fee`
+ - `OFAB - Order fixing amount of bond`
+ - `OFFX - Order time is extended for petr(s) to pay the filing fee`
+ - `OFW - Order for Filing Fee`
+ - `OFWD - Order for Filing Fee. Application waiver of Filing Fee is denied.`
+ - `OFX - Order time is extended for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee`
+ - `OIP - Order that the letter "P" is added to the Docket Number`
+ - `OJR - Order that jurisdiction is retained`
+ - `OODS - Order for Ownership Disclosure Statement`
+ - `OPFX - Order time is extended for petr(s) to file Amended Petition and pay the Filing Fee or submit an Application for Waiver of Filing Fee`
+ - `OPX - Order time is extended for petr(s) to file Amended Petition`
+ - `ORAP - Order for Amendment to Petition`
+ - `OROP - Order for Ratification of Petition`
+ - `OSC - Order`
+ - `OSCP - Order petr(s) to show cause why "S" should not be removed`
+ - `OST - Order of Service of Transcript (Bench Opinion)`
+ - `OST5 - Order of Service of Transcript (Bench Opinion)`
+ - `OSUB - Order that case is submitted`
+ - `OVBA - Order`
+ - `OVD - Order`
+ - `DEC - Decision Entered,`
+ - `OAD - Order and Decision Entered,`
+ - `ODJ - Order of Dismissal for Lack of Jurisdiction Entered,`
+ - `SDEC - Stipulated Decision Entered,`
+ - `MOP - Memorandum Opinion`
+ - `NOT - Notice`
+ - `Summary Opinion`
+ - `Writ of Habeas Corpus Ad Testificandum`
+ - `CTRA - Corrected Transcript`
+ - `FTRL - Further Trial before ...`
+ - `HEAR - Hearing before ...`
+ - `NTD - Notice of Trial`
+ - `PTRL - Partial Trial before ...`
+ - `TRL - Trial before ...`
+ - `ROA - Record on Appeal`
+ - `TCOP - T.C. Opinion`
+ - `RTRA - Revised Transcript`
+ - `Transcript`
+ - `SPTO - Standing Pre-Trial Order`
+ - `Stipulated Decision`
+ - `Notice of Docket Change`
+ - `Notice of Trial`
+
+### draftState
 
 > `object` | optional
 
-## eventCode
+### eventCode
 
 > `string` | optional
 
-## exhibits
+### exhibits
 
 > `boolean` | optional
 
-## filedBy
+### filedBy
 
 > `string` | optional
 
-
-whitelist: ``
-
-## freeText
+### freeText
 
 > `string` | optional
 
-## freeText2
+### freeText2
 
 > `string` | optional
 
-## hasSupportingDocuments
+### hasSupportingDocuments
 
 > `boolean` | optional
 
-## isFileAttached
+### isFileAttached
 
 > `boolean` | optional
 
-## isPaper
+### isPaper
 
 > `boolean` | optional
 
-## lodged
+### lodged
 
 > `boolean` | optional
 
-## objections
+### objections
 
 > `string` | optional
 
-## ordinalValue
+### ordinalValue
 
 > `string` | optional
 
-## partyPrimary
+### partyPrimary
 
 > `boolean` | optional
 
-## partyRespondent
+### partyRespondent
 
 > `boolean` | optional
 
-## partySecondary
+### partySecondary
 
 > `boolean` | optional
 
-## pending
+### pending
 
 > `boolean` | optional
 
-## practitioner
+### practitioner
 
 > `array` | optional
 
-## previousDocument
+### previousDocument
 
 > `string` | optional
 
-## processingStatus
+### processingStatus
 
 > `string` | optional
 
-## qcAt
+### qcAt
 
 > `date` | optional
 
-## qcByUserId
-
-> `string` | optional
-
-
-whitelist: `null`
-
-## receivedAt
-
-> `date` | optional
-
-## relationship
-
-> `string` | optional
-
-## scenario
-
-> `string` | optional
-
-## [secondaryDocument](./Document.md)
+### qcByUser
 
 > `object` | optional
 
-## servedAt
+### qcByUserId
+
+> `string` | optional
+
+### receivedAt
 
 > `date` | optional
 
-## servedParties
+### relationship
+
+> `string` | optional
+
+### scenario
+
+> `string` | optional
+
+### secondaryDocument
+
+> `object` | optional
+
+### servedAt
+
+> `date` | optional
+
+### servedParties
 
 > `array` | optional
 
-## serviceDate
+### serviceDate
 
 > `date` | optional
 
-
-whitelist: `null`
-
-## serviceStamp
+### serviceStamp
 
 > `string` | optional
 
-## signedAt
+### signedAt
 
 > `date` | optional
 
-
-whitelist: `null`
-
-## signedByUserId
+### signedByUserId
 
 > `string` | optional
 
-
-whitelist: `null`
-
-## status
+### status
 
 > `string` | optional
 
-## supportingDocument
+### supportingDocument
 
 > `string` | optional
 
-
-whitelist: `null`
-
-## trialLocation
+### trialLocation
 
 > `string` | optional
 
-## userId
+### userId
 
 > `string` | required
 
-## workItems
+### workItems
 
 > `array` | optional
