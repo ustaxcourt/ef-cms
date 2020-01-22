@@ -64,7 +64,7 @@ describe('createCaseInteractor', () => {
         applicationContext,
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
-          caseType: 'other',
+          caseType: 'Other',
           contactPrimary: {
             address1: '99 South Oak Lane',
             address2: 'Culpa numquam saepe ',
@@ -81,7 +81,7 @@ describe('createCaseInteractor', () => {
           filingType: 'Myself',
           hasIrsNotice: true,
           partyType: ContactFactory.PARTY_TYPES.petitioner,
-          preferredTrialCity: 'Chattanooga, TN',
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
         },
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
@@ -104,11 +104,11 @@ describe('createCaseInteractor', () => {
         applicationContext,
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
-          caseType: 'other',
+          caseType: 'Other',
           filingType: 'Myself',
           hasIrsNotice: true,
           partyType: ContactFactory.PARTY_TYPES.petitioner,
-          preferredTrialCity: 'Chattanooga, TN',
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
         },
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
@@ -165,7 +165,7 @@ describe('createCaseInteractor', () => {
         ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
-          caseType: 'other',
+          caseType: 'Other',
           contactPrimary: {
             address1: '99 South Oak Lane',
             address2: 'Culpa numquam saepe ',
@@ -184,7 +184,7 @@ describe('createCaseInteractor', () => {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: 1,
-          preferredTrialCity: 'Chattanooga, TN',
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
           signature: true,
           stinFile: new File([], 'test.pdf'),
@@ -246,7 +246,7 @@ describe('createCaseInteractor', () => {
         ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
-          caseType: 'other',
+          caseType: 'Other',
           contactPrimary: {
             address1: '99 South Oak Lane',
             address2: 'Culpa numquam saepe ',
@@ -265,7 +265,7 @@ describe('createCaseInteractor', () => {
           partyType: ContactFactory.PARTY_TYPES.petitioner,
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: 1,
-          preferredTrialCity: 'Chattanooga, TN',
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
           signature: true,
           stinFile: new File([], 'test.pdf'),
@@ -329,7 +329,7 @@ describe('createCaseInteractor', () => {
         ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
         petitionMetadata: {
-          caseType: 'other',
+          caseType: 'Other',
           contactPrimary: {
             address1: '99 South Oak Lane',
             address2: 'Culpa numquam saepe ',
@@ -359,7 +359,7 @@ describe('createCaseInteractor', () => {
           partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
           petitionFile: new File([], 'test.pdf'),
           petitionFileSize: 1,
-          preferredTrialCity: 'Chattanooga, TN',
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
           signature: true,
           stinFile: new File([], 'test.pdf'),

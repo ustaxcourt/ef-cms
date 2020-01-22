@@ -342,6 +342,7 @@
     "docketRecord": [
       {
         "description": "Petition",
+        "eventCode": "P",
         "index": 1,
         "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
         "filingDate": "2019-08-16T17:29:10.132Z",
@@ -356,6 +357,7 @@
       },
       {
         "description": "Ownership Disclosure Statement",
+        "eventCode": "DISC",
         "index": 3,
         "documentId": "35306555-83f2-4f61-9be6-438bd107e5eb",
         "filingDate": "2019-08-16T17:29:10.133Z",

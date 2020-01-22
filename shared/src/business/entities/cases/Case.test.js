@@ -288,6 +288,19 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeTruthy();
     });
 
+    it('Creates a valid case with sealedDate set to a valid date', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          sealedDate: '2019-09-19T16:42:00.000Z',
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(myCase.isValid()).toBeTruthy();
+    });
+
     describe('with different payment statuses', () => {
       it('requires payment date and method if petition fee status is paid', () => {
         const myCase = new Case(
@@ -952,6 +965,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketRecord[2].description).toEqual(
         "Docket Number is amended from '123-19P' to '123-19W'",
       );
+      expect(caseToVerify.docketRecord[2].eventCode).toEqual('MIND');
     });
   });
 
@@ -992,7 +1006,7 @@ describe('Case entity', () => {
       expect(caseToVerify.docketRecord.length).toEqual(0);
     });
 
-    it('should add to the docket record when the caption changes from the initial title', () => {
+    it('should add to the docket record with event code MINC when the caption changes from the initial title', () => {
       const caseToVerify = new Case(
         {
           caseCaption: 'A New Caption',
@@ -1004,6 +1018,7 @@ describe('Case entity', () => {
         },
       ).updateCaseTitleDocketRecord();
       expect(caseToVerify.docketRecord.length).toEqual(1);
+      expect(caseToVerify.docketRecord[0].eventCode).toEqual('MINC');
     });
 
     it('should not add to the docket record when the caption is equivalent to the last updated title', () => {
@@ -1235,9 +1250,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-R-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
@@ -1254,9 +1269,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-S-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-S-D-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
@@ -1273,9 +1288,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-R-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-R-C-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
@@ -1292,9 +1307,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-R-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-R-B-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
 
@@ -1312,9 +1327,9 @@ describe('Case entity', () => {
       );
       expect(myCase.generateTrialSortTags()).toEqual({
         hybrid:
-          'WashingtonDC-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-H-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
         nonHybrid:
-          'WashingtonDC-S-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          'WashingtonDistrictofColumbia-S-A-20181212000000-c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     });
   });
@@ -1353,7 +1368,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -1385,7 +1400,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -1701,7 +1716,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -1746,7 +1761,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -1786,7 +1801,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -2164,7 +2179,7 @@ describe('Case entity', () => {
         const caseEntity = new Case(
           {
             ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, AL',
+            preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'regular',
             status: 'Submitted',
           },
@@ -2173,6 +2188,24 @@ describe('Case entity', () => {
         const result = caseEntity.setLeadCase(leadCaseId);
 
         expect(result.leadCaseId).toEqual(leadCaseId);
+      });
+    });
+
+    describe('removeConsolidation', () => {
+      it('Should unset the leadCaseId on the given case', async () => {
+        const caseEntity = new Case(
+          {
+            ...MOCK_CASE,
+            leadCaseId: 'd64ba5a9-b37b-479d-9201-067ec6e335cc',
+            preferredTrialCity: 'Birmingham, Alabama',
+            procedureType: 'regular',
+            status: 'Submitted',
+          },
+          { applicationContext },
+        );
+        const result = caseEntity.removeConsolidation();
+
+        expect(result.leadCaseId).toBeUndefined();
       });
     });
 
@@ -2419,6 +2452,26 @@ describe('Case entity', () => {
       expect(caseEntity.qcCompleteForTrial).toEqual({
         '80950eee-7efd-4374-a642-65a8262135ab': true,
       });
+    });
+  });
+
+  it('required messages display for non-defaulted fields when an empty case is validated', () => {
+    const myCase = new Case(
+      {},
+      {
+        applicationContext,
+      },
+    );
+
+    expect(myCase.getFormattedValidationErrors()).toEqual({
+      caseCaption: 'Enter a case caption',
+      caseType: 'Select a case type',
+      docketNumber: 'Docket number is required',
+      docketRecord: 'At least one valid Docket Record is required',
+      documents: 'At least one valid document is required',
+      partyType: 'Select a party type',
+      preferredTrialCity: 'Select a preferred trial location',
+      procedureType: 'Select a case procedure',
     });
   });
 });

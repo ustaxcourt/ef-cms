@@ -1,4 +1,4 @@
-const joi = require('joi-browser');
+const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
@@ -40,7 +40,7 @@ ExternalDocumentNonStandardG.schema = {
 
 joiValidationDecorator(
   ExternalDocumentNonStandardG,
-  ExternalDocumentNonStandardG.schema,
+  joi.object(ExternalDocumentNonStandardG.schema),
   undefined,
   ExternalDocumentNonStandardG.VALIDATION_ERROR_MESSAGES,
 );

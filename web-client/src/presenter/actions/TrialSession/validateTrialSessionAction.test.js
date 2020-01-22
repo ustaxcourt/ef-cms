@@ -14,7 +14,7 @@ const MOCK_TRIAL = {
   sessionType: 'Regular',
   startDate: '2019-12-01T00:00:00.000Z',
   term: 'Fall',
-  trialLocation: 'Birmingham, AL',
+  trialLocation: 'Birmingham, Alabama',
 };
 
 describe('validateTrialSessionAction', () => {

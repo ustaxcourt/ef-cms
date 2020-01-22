@@ -211,7 +211,7 @@ describe('formattedTrialSessions', () => {
         judge: { name: '4', userId: '4' },
         startDate: '2019-11-25T15:00:00.000Z',
         term: 'Winter',
-        trialLocation: 'Birmingham, AL',
+        trialLocation: 'Birmingham, Alabama',
       },
       {
         judge: { name: '5', userId: '5' },
@@ -237,7 +237,7 @@ describe('formattedTrialSessions', () => {
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         term: 'Winter',
-        trialLocation: 'Birmingham, AL',
+        trialLocation: 'Birmingham, Alabama',
         userIsAssignedToSession: false,
       },
       {

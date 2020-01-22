@@ -871,6 +871,13 @@ header.usa-header {
   }
 }
 
+.red-warning-header {
+  padding: 5px 0;
+  margin-bottom: 0;
+  background-color: color($theme-color-secondary-dark);
+  color: white;
+}
+
 .big-blue-header {
   padding: 20px 0;
   margin-bottom: 20px;

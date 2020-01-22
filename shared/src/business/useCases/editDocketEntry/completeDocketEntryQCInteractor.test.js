@@ -22,7 +22,6 @@ describe('completeDocketEntryQCInteractor', () => {
   const deleteWorkItemFromInboxSpy = jest.fn();
   const saveWorkItemForDocketClerkFilingExternalDocumentSpy = jest.fn();
   const updateCaseSpy = jest.fn();
-  let serveDocumentOnPartiesSpy = jest.fn();
   const testPdfDoc = testPdfDocBytes();
   const addCoversheetInteractorSpy = jest.fn();
 
@@ -58,18 +57,27 @@ describe('completeDocketEntryQCInteractor', () => {
 
   beforeEach(() => {
     caseRecord = {
+      caseCaption: 'Caption',
       caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      caseType: 'Deficiency',
       createdAt: '',
       docketNumber: '45678-18',
       docketRecord: [
-        { documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb', index: 42 },
+        {
+          description: 'Answer Docket Record Entry',
+          documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          eventCode: 'A',
+          index: 42,
+        },
       ],
       documents: [
         {
           additionalInfo: 'additional info',
           additionalInfo2: 'additional info 2',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          documentTitle: 'Answer',
           documentType: 'Answer',
+          eventCode: 'A',
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           workItems: [workItem],
         },
@@ -86,6 +94,10 @@ describe('completeDocketEntryQCInteractor', () => {
           workItems: [workItem],
         },
       ],
+      filingType: 'Myself',
+      partyType: 'Petitioner',
+      preferredTrialCity: 'Fresno, California',
+      procedureType: 'Regular',
       role: User.ROLES.petitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
@@ -127,10 +139,11 @@ describe('completeDocketEntryQCInteractor', () => {
       }),
       getUniqueId: () => 'b6f835aa-bf95-4996-b858-c8e94566db47',
       getUseCaseHelpers: () => ({
+        appendPaperServiceAddressPageToPdf: jest.fn(),
         generatePaperServiceAddressPagePdf: jest
           .fn()
           .mockResolvedValue(testPdfDoc),
-        serveDocumentOnParties: serveDocumentOnPartiesSpy,
+        sendServedPartiesEmails: jest.fn(),
       }),
       getUseCases: () => ({
         addCoversheetInteractor: addCoversheetInteractorSpy,
@@ -174,8 +187,11 @@ describe('completeDocketEntryQCInteractor', () => {
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
+          description: 'Memorandum in Support',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          documentTitle: 'Document Title',
           documentType: 'Memorandum in Support',
+          eventCode: 'M',
         },
       });
     } catch (err) {
@@ -207,9 +223,11 @@ describe('completeDocketEntryQCInteractor', () => {
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
+          description: 'Memorandum in Support',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Something Else',
           documentType: 'Memorandum in Support',
+          eventCode: 'M',
         },
       });
     } catch (err) {
@@ -220,7 +238,6 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
     expect(deleteWorkItemFromInboxSpy).toBeCalled();
     expect(updateCaseSpy).toBeCalled();
-    expect(serveDocumentOnPartiesSpy).toBeCalled();
     expect(result.paperServicePdfUrl).toBeUndefined();
     expect(result.paperServiceParties.length).toEqual(0);
   });
@@ -232,15 +249,16 @@ describe('completeDocketEntryQCInteractor', () => {
         additionalInfo: '123',
         additionalInfo2: 'abc',
         caseId: caseRecord.caseId,
+        description: 'Memorandum in Support',
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
+        eventCode: 'M',
       },
     });
     expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
     expect(deleteWorkItemFromInboxSpy).toBeCalled();
     expect(updateCaseSpy).toBeCalled();
-    expect(serveDocumentOnPartiesSpy).toBeCalled();
     expect(addCoversheetInteractorSpy).toBeCalled();
   });
 
@@ -249,14 +267,15 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext,
       entryMetadata: {
         caseId: caseRecord.caseId,
+        description: 'Memorandum in Support',
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
+        eventCode: 'M',
       },
     });
     expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
     expect(updateCaseSpy).toBeCalled();
-    expect(serveDocumentOnPartiesSpy).toBeCalled();
     expect(addCoversheetInteractorSpy).toBeCalled();
   });
 
@@ -268,7 +287,9 @@ describe('completeDocketEntryQCInteractor', () => {
         additionalInfo2: 'additional info 2',
         caseId: caseRecord.caseId,
         documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        documentTitle: 'Answer',
         documentType: 'Answer',
+        eventCode: 'A',
       },
     });
     expect(addCoversheetInteractorSpy).not.toBeCalled();
@@ -286,8 +307,6 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord.isPaper = true;
     caseRecord.mailingDate = '2019-03-01T21:40:46.415Z';
 
-    serveDocumentOnPartiesSpy = jest.fn().mockResolvedValue('www.example.com');
-
     let error;
     let result;
 
@@ -296,9 +315,11 @@ describe('completeDocketEntryQCInteractor', () => {
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
+          description: 'Memorandum in Support',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Something Else',
           documentType: 'Memorandum in Support',
+          eventCode: 'M',
         },
       });
     } catch (err) {
@@ -309,7 +330,6 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(saveWorkItemForDocketClerkFilingExternalDocumentSpy).toBeCalled();
     expect(deleteWorkItemFromInboxSpy).toBeCalled();
     expect(updateCaseSpy).toBeCalled();
-    expect(serveDocumentOnPartiesSpy).toBeCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
@@ -334,9 +354,11 @@ describe('completeDocketEntryQCInteractor', () => {
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
+          description: 'Memorandum in Support',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Notice of Change of Address',
           documentType: 'Notice of Change of Address',
+          eventCode: 'M',
         },
       });
     } catch (err) {
@@ -370,9 +392,11 @@ describe('completeDocketEntryQCInteractor', () => {
         applicationContext,
         entryMetadata: {
           caseId: caseRecord.caseId,
+          description: 'Memorandum in Support',
           documentId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
           documentTitle: 'Notice of Change of Address',
           documentType: 'Notice of Change of Address',
+          eventCode: 'NCA',
         },
       });
     } catch (err) {

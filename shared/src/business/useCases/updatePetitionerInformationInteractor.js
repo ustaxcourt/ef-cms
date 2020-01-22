@@ -4,14 +4,11 @@ const {
 const {
   copyToNewPdf,
   getAddressPages,
-} = require('../utilities/appendPaperServiceAddressPageToPdf');
+} = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const {
-  sendServedPartiesEmails,
-} = require('../utilities/sendServedPartiesEmails');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
 const { Case } = require('../entities/cases/Case');
 const { Document } = require('../entities/Document');
@@ -109,9 +106,9 @@ exports.updatePetitionerInformationInteractor = async ({
         additionalInfo: `for ${contactName}`,
         caseId,
         documentId: newDocumentId,
+        documentTitle: documentType.title,
         documentType: documentType.title,
         eventCode: documentType.eventCode,
-        filedBy: user.name,
         processingStatus: 'complete',
         userId: user.userId,
       },
@@ -144,7 +141,7 @@ exports.updatePetitionerInformationInteractor = async ({
       documentId: newDocumentId,
     });
 
-    await sendServedPartiesEmails({
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
       documentEntity: changeOfAddressDocument,
