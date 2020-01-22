@@ -44,7 +44,7 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 > `string` | required
 
-#### Allowed Values
+##### Allowed Values
 
 
  - `Deficiency`
@@ -69,6 +69,8 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 > `object` | optional
 
+##### Can be null.
+
 ### createdAt
 
 > `date` | required
@@ -77,7 +79,7 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 > `string` | required
 
-###### Regex Pattern
+##### Regex Pattern
 
 
 `/^(\d{3,5}-\d{2})$/`
@@ -86,7 +88,7 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 > `string` | optional
 
-#### Allowed Values
+##### Allowed Values
 
 
  - `null`
@@ -107,6 +109,9 @@ An array of [`DocketRecord`](./DocketRecord.md)s
 
 #### Rules
 
+
+At least `1` item(s) must be selected.
+
 ### documents
 
 > `array` | required
@@ -116,11 +121,14 @@ An array of [`Document`](./Document.md)s
 
 #### Rules
 
+
+At least `1` item(s) must be selected.
+
 ### filingType
 
 > `string` | optional
 
-#### Allowed Values
+##### Allowed Values
 
 
  - `Myself`
@@ -137,6 +145,8 @@ An array of [`Document`](./Document.md)s
 ### hasVerifiedIrsNotice
 
 > `boolean` | optional
+
+##### Can be null.
 
 ### highPriority
 
@@ -156,13 +166,19 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 > `string` | optional
 
+##### Can be null.
+
 ### initialTitle
 
 > `string` | optional
 
+##### Can be null.
+
 ### irsNoticeDate
 
 > `date` | optional
+
+##### Can be null.
 
 ### irsSendDate
 
@@ -226,7 +242,7 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 
 > `string` | required
 
-#### Allowed Values
+##### Allowed Values
 
 
  - `Conservator`
@@ -252,7 +268,7 @@ Otherwise, this field is `string` and is `optional`. `null` is allowed.
 
 > `string` | required
 
-#### Allowed Values
+##### Allowed Values
 
 
  - `Paid`
@@ -295,11 +311,16 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 ### preferredTrialCity
 
-> `alternatives` | required
+> `conditional` | required
+
+
+*Must match 1 of the following conditions:*
+
+#### Condition #1 for `preferredTrialCity`: 
 
 > `string`
 
-#### Allowed Values
+##### Allowed Values
 
 
  - `Fresno, California`
@@ -377,20 +398,26 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
  - `Charleston, West Virginia`
  - `Milwaukee, Wisconsin`
 
+#### Condition #2 for `preferredTrialCity`: 
+
 > `string`
 
-###### Regex Pattern
+##### Regex Pattern
 
 
 `/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/`
 
+#### Condition #3 for `preferredTrialCity`: 
+
 > `string` | optional
+
+##### Can be null.
 
 ### procedureType
 
 > `string` | required
 
-#### Allowed Values
+##### Allowed Values
 
 
  - `Regular`
@@ -404,6 +431,8 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 > `date` | required
 
+##### Can be null.
+
 ### respondents
 
 > `array` | optional
@@ -412,11 +441,13 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 > `date` | optional
 
+##### Can be null.
+
 ### status
 
 > `string` | required
 
-#### Allowed Values
+##### Allowed Values
 
 
  - `Assigned - Case`
@@ -438,13 +469,20 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 > `date` | optional
 
+##### Can be null.
+
 ### trialLocation
 
-> `alternatives` | optional
+> `conditional` | optional
+
+
+*Must match 1 of the following conditions:*
+
+#### Condition #1 for `trialLocation`: 
 
 > `string`
 
-#### Allowed Values
+##### Allowed Values
 
 
  - `Fresno, California`
@@ -522,14 +560,20 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
  - `Charleston, West Virginia`
  - `Milwaukee, Wisconsin`
 
+#### Condition #2 for `trialLocation`: 
+
 > `string`
 
-###### Regex Pattern
+##### Regex Pattern
 
 
 `/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/`
 
+#### Condition #3 for `trialLocation`: 
+
 > `string` | optional
+
+##### Can be null.
 
 ### trialSessionId
 
@@ -539,7 +583,7 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 > `string` | optional
 
-###### Regex Pattern
+##### Regex Pattern
 
 
 `/^([1-9]|1[0-2]):([0-5][0-9])$/`

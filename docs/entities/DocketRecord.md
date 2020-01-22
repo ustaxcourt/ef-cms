@@ -8,9 +8,13 @@
 
 > `string` | optional
 
+##### Can be null.
+
 ### editState
 
 > `string` | optional
+
+##### Can be null.
 
 ### eventCode
 
@@ -19,6 +23,8 @@
 ### filedBy
 
 > `string` | optional
+
+##### Can be null.
 
 ### filingDate
 
@@ -32,6 +38,10 @@
 
 > `string` | optional
 
+##### Can be null.
+
 ### status
 
 > `string` | optional
+
+##### Can be null.
