@@ -34,7 +34,10 @@ DocketRecord.VALIDATION_ERROR_MESSAGES = {
 joiValidationDecorator(
   DocketRecord,
   joi.object().keys({
-    action: joi.string().optional(),
+    action: joi
+      .string()
+      .optional()
+      .allow(null),
     description: joi.string().required(),
     documentId: joi
       .string()
