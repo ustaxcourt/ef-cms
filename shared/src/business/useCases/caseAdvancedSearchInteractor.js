@@ -91,7 +91,7 @@ exports.caseAdvancedSearchInteractor = async providers => {
     }
   }
 
-  foundCases = caseSearchFilter(foundCases, authorizedUser.userId);
+  foundCases = caseSearchFilter(foundCases, authorizedUser);
 
   return foundCases;
 };
