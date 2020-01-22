@@ -16,11 +16,6 @@ export default (test, docketRecordIndex = 1) => {
       value: 'New Filer',
     });
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'form.servedParties',
-      value: 'Party One, Party Two',
-    });
-
     await test.runSequence('submitEditDocketEntryMetaSequence');
 
     expect(test.getState('showModal')).toEqual('');
