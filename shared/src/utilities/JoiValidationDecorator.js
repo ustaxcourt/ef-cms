@@ -127,12 +127,6 @@ exports.joiValidationDecorator = function(
     return schema;
   };
 
-  entityConstructor.generateSchemaMarkdown = function(outputPath) {
-    const name = entityConstructor.validationName;
-
-    makeMarkdownDoc(schema.meta({ filename: name, name }), { outputPath });
-  };
-
   entityConstructor.prototype.isValid = function isValid() {
     return (
       !!schema.validate(this, { allowUnknown: true }).error === false &&
