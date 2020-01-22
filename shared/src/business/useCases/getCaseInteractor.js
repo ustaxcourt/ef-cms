@@ -39,7 +39,6 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
     error.skipLogging = true;
     throw error;
   }
-
   if (
     !isAuthorized(
       applicationContext.getCurrentUser(),
@@ -52,22 +51,27 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
 
   let caseDetail;
 
-  if (
-    caseRecord.sealedDate &&
-    !isAuthorized(
-      applicationContext.getCurrentUser(),
-      ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-      caseRecord.userId,
-    ) &&
-    !isAssociatedUser({
-      caseRaw: caseRecord,
-      userId: applicationContext.getCurrentUser().userId,
-    })
-  ) {
-    caseRecord = caseSealedFormatter(caseRecord);
-    caseDetail = new PublicCase(caseRecord, {
-      applicationContext,
-    });
+  if (caseRecord.sealedDate) {
+    let isAuthorizedUser =
+      isAuthorized(
+        applicationContext.getCurrentUser(),
+        ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+        caseRecord.userId,
+      ) ||
+      isAssociatedUser({
+        caseRaw: caseRecord,
+        userId: applicationContext.getCurrentUser().userId,
+      });
+    if (isAuthorizedUser) {
+      caseDetail = new Case(caseRecord, {
+        applicationContext,
+      });
+    } else {
+      caseRecord = caseSealedFormatter(caseRecord);
+      caseDetail = new PublicCase(caseRecord, {
+        applicationContext,
+      });
+    }
   } else {
     caseDetail = new Case(caseRecord, {
       applicationContext,

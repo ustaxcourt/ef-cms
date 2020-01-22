@@ -1,5 +1,14 @@
+const {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../authorization/authorizationClientService');
 const { isAssociatedUser } = require('../entities/cases/Case');
-const CASE_ATTRIBUTE_WHITELIST = ['caseId', 'docketNumber', 'sealedDate'];
+const CASE_ATTRIBUTE_WHITELIST = [
+  'caseId',
+  'docketNumber',
+  'docketNumberSuffix',
+  'sealedDate',
+];
 
 const caseSealedFormatter = caseRaw => {
   const sealedObj = {};
@@ -9,10 +18,18 @@ const caseSealedFormatter = caseRaw => {
   return sealedObj;
 };
 
-const caseSearchFilter = (cases, userId) => {
+const caseSearchFilter = (cases, currentUser) => {
   const results = [];
   for (const caseRaw of cases) {
-    if (!caseRaw.sealedDate || isAssociatedUser({ caseRaw, userId })) {
+    if (
+      !caseRaw.sealedDate ||
+      isAssociatedUser({ caseRaw, userId: currentUser.userId }) ||
+      isAuthorized(
+        currentUser,
+        ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+        caseRaw.userId,
+      )
+    ) {
       results.push(caseRaw);
     }
   }

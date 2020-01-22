@@ -30,8 +30,8 @@ describe('PublicCase', () => {
           contactPrimary: {},
           contactSecondary: {},
           createdAt: '2020-01-02T03:30:45.007Z',
-          docketNumber: 'testing',
-          docketNumberSuffix: 'testing',
+          docketNumber: '111-12',
+          docketNumberSuffix: 'S',
           docketRecord: [{ any: 'thing' }],
           documents: [{ any: 'thing' }],
           receivedAt: '2020-01-05T03:30:45.007Z',
@@ -40,17 +40,18 @@ describe('PublicCase', () => {
         {},
       );
       expect(entity.getFormattedValidationErrors()).toMatchObject({
+        // caseId is permitted
+        // docketNumber is permitted
+        // docketNumberSuffix is permitted
+        // isSealed is permitted
         caseCaption: expect.anything(),
         caseTitle: expect.anything(),
         contactPrimary: expect.anything(),
         contactSecondary: expect.anything(),
         createdAt: expect.anything(),
-        // no complaint about docketNumber, which is permitted
-        docketNumberSuffix: expect.anything(),
         docketRecord: expect.anything(),
         documents: expect.anything(),
         receivedAt: expect.anything(),
-        // no explicit complaint for sealedDate itself
       });
     });
   });
@@ -84,6 +85,7 @@ describe('PublicCase', () => {
       docketNumberSuffix: 'testing',
       docketRecord: [{}],
       documents: [{}],
+      isSealed: false,
       receivedAt: 'testing',
     });
   });
@@ -117,6 +119,7 @@ describe('PublicCase', () => {
       docketNumberSuffix: 'testing',
       docketRecord: [],
       documents: [],
+      isSealed: false,
       receivedAt: 'testing',
     });
   });
@@ -163,6 +166,7 @@ describe('PublicCase', () => {
         },
         { documentId: '345', documentType: 'Petition' },
       ],
+      isSealed: false,
       receivedAt: 'testing',
     });
   });

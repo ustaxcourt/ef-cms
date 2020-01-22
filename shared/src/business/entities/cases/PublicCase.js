@@ -23,7 +23,7 @@ function PublicCase(rawCase, { applicationContext }) {
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
   this.receivedAt = rawCase.receivedAt;
-  this.sealedDate = rawCase.sealedDate;
+  this.isSealed = !!rawCase.sealedDate;
   this.caseTitle = rawCase.caseTitle;
 
   this.contactPrimary = rawCase.contactPrimary
@@ -62,11 +62,11 @@ const publicCaseSchema = {
     .string()
     .allow(null)
     .optional(),
+  isSealed: joi.boolean(),
   receivedAt: joi
     .date()
     .iso()
     .optional(),
-  sealedDate: joi.date().iso(),
 };
 const sealedCaseSchemaRestricted = {
   caseCaption: joi.any().forbidden(),
@@ -76,23 +76,18 @@ const sealedCaseSchemaRestricted = {
   contactSecondary: joi.any().forbidden(),
   createdAt: joi.any().forbidden(),
   docketNumber: joi.string().required(),
-  docketNumberSuffix: joi.any().forbidden(),
+  docketNumberSuffix: joi.string().optional(),
   docketRecord: joi.array().max(0),
   documents: joi.array().max(0),
+  isSealed: joi.boolean(),
   receivedAt: joi.any().forbidden(),
-  sealedDate: joi
-    .date()
-    .iso()
-    .optional(),
 };
 
 joiValidationDecorator(
   PublicCase,
-  joi
-    .object(publicCaseSchema)
-    .when(joi.object({ sealedDate: joi.exist() }).unknown(), {
-      then: joi.object(sealedCaseSchemaRestricted),
-    }),
+  joi.object(publicCaseSchema).when(joi.object({ isSealed: true }).unknown(), {
+    then: joi.object(sealedCaseSchemaRestricted),
+  }),
   undefined,
   {},
 );
