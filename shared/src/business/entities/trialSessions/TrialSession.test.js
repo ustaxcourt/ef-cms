@@ -6,7 +6,7 @@ const VALID_TRIAL_SESSION = {
   startDate: '2025-03-01T00:00:00.000Z',
   term: 'Fall',
   termYear: '2025',
-  trialLocation: 'Birmingham, AL',
+  trialLocation: 'Birmingham, Alabama',
 };
 
 describe('TrialSession entity', () => {
@@ -99,7 +99,9 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
-      expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-R');
+      expect(trialSession.generateSortKeyPrefix()).toEqual(
+        'BirminghamAlabama-R',
+      );
     });
 
     it('should generate correct sort key prefix for a small trial session', () => {
@@ -112,7 +114,9 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
-      expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-S');
+      expect(trialSession.generateSortKeyPrefix()).toEqual(
+        'BirminghamAlabama-S',
+      );
     });
 
     it('should generate correct sort key prefix for a hybrid trial session', () => {
@@ -125,7 +129,9 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
-      expect(trialSession.generateSortKeyPrefix()).toEqual('BirminghamAL-H');
+      expect(trialSession.generateSortKeyPrefix()).toEqual(
+        'BirminghamAlabama-H',
+      );
     });
   });
 
