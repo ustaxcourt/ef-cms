@@ -39,7 +39,7 @@ describe('validateTrialSessionInteractor', () => {
       startDate: `${nextYear}-12-01T00:00:00.000Z`,
       term: 'Fall',
       termYear: nextYear,
-      trialLocation: 'Birmingham, AL',
+      trialLocation: 'Birmingham, Alabama',
     };
 
     const errors = validateTrialSessionInteractor({

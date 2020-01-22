@@ -1368,7 +1368,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -1400,7 +1400,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -1716,7 +1716,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -1761,7 +1761,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -1801,7 +1801,7 @@ describe('Case entity', () => {
           startDate: '2025-03-01T00:00:00.000Z',
           term: 'Fall',
           termYear: '2025',
-          trialLocation: 'Birmingham, AL',
+          trialLocation: 'Birmingham, Alabama',
         },
         { applicationContext },
       );
@@ -2179,7 +2179,7 @@ describe('Case entity', () => {
         const caseEntity = new Case(
           {
             ...MOCK_CASE,
-            preferredTrialCity: 'Birmingham, AL',
+            preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'regular',
             status: 'Submitted',
           },
@@ -2197,7 +2197,7 @@ describe('Case entity', () => {
           {
             ...MOCK_CASE,
             leadCaseId: 'd64ba5a9-b37b-479d-9201-067ec6e335cc',
-            preferredTrialCity: 'Birmingham, AL',
+            preferredTrialCity: 'Birmingham, Alabama',
             procedureType: 'regular',
             status: 'Submitted',
           },
