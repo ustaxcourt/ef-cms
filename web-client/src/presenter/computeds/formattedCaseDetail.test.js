@@ -978,4 +978,86 @@ describe('formattedCaseDetail', () => {
       expect(result.consolidatedCases).toEqual([]);
     });
   });
+
+  describe('showEditDocketRecordEntry', () => {
+    let caseDetail;
+
+    beforeEach(() => {
+      caseDetail = {
+        caseCaption: 'Brett Osborne, Petitioner',
+        contactPrimary: {
+          name: 'Bob',
+        },
+        docketRecord: [
+          {
+            description: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
+        ],
+        documents: [
+          {
+            attachments: false,
+            certificateOfService: false,
+            createdAt: '2019-06-19T17:29:13.120Z',
+            documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
+            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
+            eventCode: 'M073',
+            workItems: [{ isQC: true }],
+          },
+        ],
+      };
+    });
+
+
+    it('should not show the edit button if the docket entry document has not been QCed', () => {
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showEditDocketRecordEntry).toEqual(false);
+    });
+
+    it('should not show the edit button if the user does not have permission', () => {
+      caseDetail.documents[0].workItems[0].completedAt = '2019-06-19T17:29:13.120Z';
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+          permissions: {
+            EDIT_DOCKET_ENTRY: false,
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showEditDocketRecordEntry).toEqual(false);
+    });
+
+    it('should show the edit button if the docket entry document is QCed and the user has permission', () => {
+      caseDetail.documents[0].workItems[0].completedAt = '2019-06-19T17:29:13.120Z';
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntries[0].showEditDocketRecordEntry).toEqual(true);
+    });
+  });
 });
