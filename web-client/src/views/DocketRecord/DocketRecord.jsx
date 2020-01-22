@@ -11,7 +11,6 @@ import classNames from 'classnames';
 
 export const DocketRecord = connect(
   {
-    docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     openEditDocketEntryMetaModalSequence:
       sequences.openEditDocketEntryMetaModalSequence,
@@ -19,7 +18,6 @@ export const DocketRecord = connect(
     showModal: state.showModal,
   },
   ({
-    docketRecordHelper,
     formattedCaseDetail,
     openEditDocketEntryMetaModalSequence,
     refreshCaseSequence,
@@ -59,7 +57,7 @@ export const DocketRecord = connect(
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
-              {docketRecordHelper.showEditDocketRecordEntry && <th>&nbsp;</th>}
+              {entry.showEditDocketRecordEntry && <th>&nbsp;</th>}
             </tr>
           </thead>
           <tbody>
@@ -129,7 +127,7 @@ export const DocketRecord = connect(
                       <span className="responsive-label">Parties</span>
                       {entry.servedPartiesCode}
                     </td>
-                    {docketRecordHelper.showEditDocketRecordEntry && (
+                    {entry.showEditDocketRecordEntry && (
                       <td>
                         <Button
                           link
