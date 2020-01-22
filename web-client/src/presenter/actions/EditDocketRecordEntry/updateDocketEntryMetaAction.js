@@ -12,17 +12,6 @@ export const updateDocketEntryMetaAction = async ({
 }) => {
   const { caseId, docketRecordEntry, docketRecordIndex } = props;
 
-  const { servedParties } = docketRecordEntry;
-
-  if (servedParties && typeof servedParties === 'string') {
-    const servedPartiesArry = servedParties.split(',');
-    if (Array.isArray(servedPartiesArry)) {
-      docketRecordEntry.servedParties = servedPartiesArry.map(party =>
-        party.trim(),
-      );
-    }
-  }
-
   await applicationContext.getUseCases().updateDocketEntryMetaInteractor({
     applicationContext,
     caseId,
