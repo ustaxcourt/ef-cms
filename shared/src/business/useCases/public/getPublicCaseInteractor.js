@@ -1,4 +1,5 @@
 const { Case } = require('../../entities/cases/Case');
+const { caseSealedFormatter } = require('../../utilities/caseFilter');
 const { NotFoundError } = require('../../../errors/errors');
 const { PublicCase } = require('../../entities/cases/PublicCase');
 
@@ -35,8 +36,15 @@ exports.getPublicCaseInteractor = async ({ applicationContext, caseId }) => {
     throw error;
   }
 
+  if (caseRecord.sealedDate) {
+    caseRecord = caseSealedFormatter(caseRecord);
+  }
+
   const publicCaseDetail = new PublicCase(caseRecord, {
     applicationContext,
-  }).validate();
-  return publicCaseDetail.toRawObject();
+  })
+    .validate()
+    .toRawObject();
+
+  return publicCaseDetail;
 };
