@@ -1,6 +1,7 @@
 const uuid = require('uuid');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { migrateCaseInteractor } = require('./migrateCaseInteractor');
+const { MOCK_CASE } = require('../../test/mockCase.js');
 const { User } = require('../entities/User');
 
 const MOCK_CASE_ID = '413f62ce-d7c8-446e-aeda-14a2a625a626';
@@ -71,6 +72,8 @@ describe('migrateCaseInteractor', () => {
       },
       contactSecondary: {},
       docketNumber: '00101-00',
+      docketRecord: MOCK_CASE.docketRecord,
+      documents: MOCK_CASE.documents,
       filingType: 'Myself',
       hasIrsNotice: true,
       partyType: ContactFactory.PARTY_TYPES.petitioner,

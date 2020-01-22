@@ -267,9 +267,7 @@ joiValidationDecorator(
     isFileAttached: joi.boolean().optional(),
     isPaper: joi.boolean().optional(),
     lodged: joi.boolean().optional(),
-    // TODO: Required, Yes, no or unknown
     objections: joi.string().optional(),
-    // TODO: ?????
     ordinalValue: joi.string().optional(),
     partyPrimary: joi.boolean().optional(),
     partyRespondent: joi.boolean().optional(),

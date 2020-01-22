@@ -31,7 +31,9 @@ exports.getPublicCaseInteractor = async ({ applicationContext, caseId }) => {
   }
 
   if (!caseRecord) {
-    throw new NotFoundError(`Case ${caseId} was not found.`);
+    const error = new NotFoundError(`Case ${caseId} was not found.`);
+    error.skipLogging = true;
+    throw error;
   }
 
   if (caseRecord.sealedDate) {
