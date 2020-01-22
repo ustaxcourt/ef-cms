@@ -10,6 +10,7 @@ const {
  * @constructor
  */
 function DocketRecord(rawDocketRecord) {
+  this.action = rawDocketRecord.action;
   this.description = rawDocketRecord.description;
   this.signatory = rawDocketRecord.signatory;
   this.documentId = rawDocketRecord.documentId;
@@ -33,6 +34,7 @@ DocketRecord.VALIDATION_ERROR_MESSAGES = {
 joiValidationDecorator(
   DocketRecord,
   joi.object().keys({
+    action: joi.string().optional(),
     description: joi.string().required(),
     documentId: joi
       .string()
