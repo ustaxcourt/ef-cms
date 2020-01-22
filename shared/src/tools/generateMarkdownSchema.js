@@ -11,11 +11,11 @@ exports.generateJsonFromSchema = (schema, entityName) => {
   const jsonResult = [{ h1: entityName }];
 
   const handleField = (field, fieldName, isAlternative = false, index = 0) => {
-    const { allow, description, flags, matches, rules, type } = field;
-    let presence;
+    const { allow, flags, matches, rules, type } = field;
+    let presence, description;
 
     if (flags) {
-      ({ presence } = flags);
+      ({ description, presence } = flags);
     }
 
     const result = [];
