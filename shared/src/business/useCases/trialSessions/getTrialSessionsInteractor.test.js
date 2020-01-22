@@ -7,7 +7,7 @@ const MOCK_TRIAL_SESSION = {
   sessionType: 'Regular',
   startDate: '3000-03-01T00:00:00.000Z',
   term: 'Fall',
-  trialLocation: 'Birmingham, AL',
+  trialLocation: 'Birmingham, Alabama',
 };
 
 describe('Get trial sessions', () => {

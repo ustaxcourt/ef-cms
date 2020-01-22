@@ -532,12 +532,8 @@ joiValidationDecorator(
     preferredTrialCity: joi
       .alternatives()
       .try(
-        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
+        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
         joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
-        joi
-          .string()
-          .optional()
-          .allow(null),
       )
       .required(),
     procedureType: joi
@@ -572,12 +568,8 @@ joiValidationDecorator(
     trialLocation: joi
       .alternatives()
       .try(
-        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
+        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS, null),
         joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
-        joi
-          .string()
-          .optional()
-          .allow(null),
       )
       .optional(),
     trialSessionId: joi
@@ -588,7 +580,7 @@ joiValidationDecorator(
       .optional(),
     trialTime: joi
       .string()
-      .pattern(/^([1-9]|1[0-2]):([0-5][0-9])$/)
+      .pattern(/^[0-9]+:([0-5][0-9])$/)
       .optional(),
     userId: joi
       .string()
