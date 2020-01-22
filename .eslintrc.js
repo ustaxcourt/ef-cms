@@ -274,6 +274,7 @@ module.exports = {
           'truthy',
           'tubman',
           'uint',
+          'unassociated',
           'unconsolidate',
           'unconsolidated',
           'uniq',
