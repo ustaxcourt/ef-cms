@@ -3,7 +3,7 @@ const {
   MOCK_CASE,
   MOCK_CASE_WITHOUT_PENDING,
 } = require('../../../test/mockCase');
-const { Case } = require('./Case');
+const { Case, isAssociatedUser } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { DocketRecord } = require('../DocketRecord');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
@@ -2470,6 +2470,48 @@ describe('Case entity', () => {
       partyType: 'Select a party type',
       preferredTrialCity: 'Select a preferred trial location',
       procedureType: 'Select a case procedure',
+    });
+  });
+
+  describe('isAssociatedUser', () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        practitioners: [{ userId: '271e5918-6461-4e67-bc38-274bc0aa0248' }],
+        respondents: [{ userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' }],
+      },
+      {
+        applicationContext: {
+          getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      },
+    );
+
+    it('returns true if the user is a respondent on the case', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72',
+      });
+
+      expect(isAssociated).toBeTruthy();
+    });
+
+    it('returns true if the user is a practitioner on the case', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        userId: '271e5918-6461-4e67-bc38-274bc0aa0248',
+      });
+
+      expect(isAssociated).toBeTruthy();
+    });
+
+    it('returns false if the user is a not a practitioner or respondent on the case', () => {
+      const isAssociated = isAssociatedUser({
+        caseRaw: caseEntity.toRawObject(),
+        userId: '4b32e14b-f583-4631-ba44-1439a093d6d0',
+      });
+
+      expect(isAssociated).toBeFalsy();
     });
   });
 });
