@@ -16,6 +16,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   let showDocketNumbers = false;
   let showFreeText = false;
   let showJudge = false;
+  let showTrialLocation = false;
 
   switch (selectedDocumentInformation.scenario) {
     case 'Type A':
@@ -35,6 +36,14 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
     case 'Type E':
       showDate = true;
       break;
+    case 'Type F':
+      showJudge = true;
+      showTrialLocation = true;
+      break;
+    case 'Type G':
+      showDate = true;
+      showTrialLocation = true;
+      break;
   }
 
   let freeTextLabel;
@@ -42,6 +51,8 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
     freeTextLabel = 'What is this order for?';
   } else if (selectedEventCode === 'NOT') {
     freeTextLabel = 'What is this notice for?';
+  } else {
+    freeTextLabel = 'Enter description';
   }
 
   return {
@@ -50,5 +61,6 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
     showDocketNumbers,
     showFreeText,
     showJudge,
+    showTrialLocation,
   };
 };

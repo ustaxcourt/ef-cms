@@ -14,126 +14,145 @@ import React from 'react';
 
 export const CaseDetail = connect(
   {
+    caseDetailHelper: state.caseDetailHelper,
     caseDetailSubnavHelper: state.caseDetailSubnavHelper,
     caseInformationTab: state.caseDetailPage.caseInformationTab,
     formattedCaseDetail: state.formattedCaseDetail,
     primaryTab: state.caseDetailPage.primaryTab,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
   },
-  function CaseDetail({
+  ({
+    caseDetailHelper,
     caseDetailSubnavHelper,
     caseInformationTab,
     primaryTab,
     setCaseDetailPageTabSequence,
-  }) {
+  }) => {
     return (
       <>
         <CaseDetailHeader className="margin-bottom-0" />
-        <CaseDetailSubnavTabs />
 
-        <section className="usa-section grid-container">
-          <SuccessNotification />
-          <ErrorNotification />
-          {caseDetailSubnavHelper.showCaseInformationTab && (
-            <div className="only-small-screens">
-              <div className="margin-bottom-3">
-                <select
-                  aria-label="additional case info"
-                  className="usa-select"
-                  id="mobile-document-detail-tab-selector"
-                  onChange={e => {
-                    setCaseDetailPageTabSequence({
-                      isSecondary: [
-                        'overview',
-                        'petitioner',
-                        'respondent',
-                      ].includes(e.target.value),
-                      tab: e.target.value,
-                    });
-                  }}
-                >
-                  <option value="docketRecord">Docket Record</option>
-                  <optgroup label="Case Information">
-                    <option value="overview">Overview</option>
-                    <option value="petitioner">Petitioner</option>
-                    <option value="respondent">Respondent</option>
-                  </optgroup>
-                </select>
-              </div>
-            </div>
-          )}
-          {primaryTab === 'docketRecord' && (
-            <>
-              <div className="title">
-                <h1>Docket Record</h1>
-              </div>
-              <DocketRecord />
-            </>
-          )}
-          {caseDetailSubnavHelper.showCaseInformationTab &&
-            primaryTab === 'caseInformation' && (
-              <>
-                <NonMobile>
-                  <Tabs
-                    bind="caseDetailPage.caseInformationTab"
-                    className="classic-horizontal-header3 tab-border"
-                  >
-                    <Tab id="tab-overview" tabName="overview" title="Overview">
-                      <CaseInformationExternal />
-                    </Tab>
-                    <Tab
-                      id="tab-petitioner"
-                      tabName="petitioner"
-                      title="Petitioner"
+        {caseDetailHelper.userCanViewCase && (
+          <>
+            <CaseDetailSubnavTabs />
+
+            <section className="usa-section grid-container">
+              <SuccessNotification />
+              <ErrorNotification />
+              {caseDetailSubnavHelper.showCaseInformationTab && (
+                <div className="only-small-screens">
+                  <div className="margin-bottom-3">
+                    <select
+                      aria-label="additional case info"
+                      className="usa-select"
+                      id="mobile-document-detail-tab-selector"
+                      onChange={e => {
+                        setCaseDetailPageTabSequence({
+                          isSecondary: [
+                            'overview',
+                            'petitioner',
+                            'respondent',
+                          ].includes(e.target.value),
+                          tab: e.target.value,
+                        });
+                      }}
                     >
-                      <PetitionerInformation />
-                    </Tab>
-                    <Tab
-                      id="tab-respondent"
-                      tabName="respondent"
-                      title="Respondent"
-                    >
-                      <RespondentInformation />
-                    </Tab>
-                  </Tabs>
-                </NonMobile>
-                <Mobile>
-                  <Tabs
-                    bind="caseDetailPage.caseInformationTab"
-                    className="classic-horizontal-header3 tab-border"
-                  >
-                    {caseInformationTab === 'overview' && (
-                      <Tab
-                        id="tab-overview"
-                        tabName="overview"
-                        title="Overview"
+                      <option value="docketRecord">Docket Record</option>
+                      <optgroup label="Case Information">
+                        <option value="overview">Overview</option>
+                        <option value="petitioner">Petitioner</option>
+                        <option value="respondent">Respondent</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                </div>
+              )}
+              {primaryTab === 'docketRecord' && (
+                <>
+                  <div className="title">
+                    <h1>Docket Record</h1>
+                  </div>
+                  <DocketRecord />
+                </>
+              )}
+              {caseDetailSubnavHelper.showCaseInformationTab &&
+                primaryTab === 'caseInformation' && (
+                  <>
+                    <NonMobile>
+                      <Tabs
+                        bind="caseDetailPage.caseInformationTab"
+                        className="classic-horizontal-header3 tab-border"
                       >
-                        <CaseInformationExternal />
-                      </Tab>
-                    )}
-                    {caseInformationTab === 'petitioner' && (
-                      <Tab
-                        id="tab-petitioner"
-                        tabName="petitioner"
-                        title="Petitioner"
+                        <Tab
+                          id="tab-overview"
+                          tabName="overview"
+                          title="Overview"
+                        >
+                          <CaseInformationExternal />
+                        </Tab>
+                        <Tab
+                          id="tab-petitioner"
+                          tabName="petitioner"
+                          title="Petitioner"
+                        >
+                          <PetitionerInformation />
+                        </Tab>
+                        <Tab
+                          id="tab-respondent"
+                          tabName="respondent"
+                          title="Respondent"
+                        >
+                          <RespondentInformation />
+                        </Tab>
+                      </Tabs>
+                    </NonMobile>
+                    <Mobile>
+                      <Tabs
+                        bind="caseDetailPage.caseInformationTab"
+                        className="classic-horizontal-header3 tab-border"
                       >
-                        <PetitionerInformation />
-                      </Tab>
-                    )}
-                    {caseInformationTab === 'respondent' && (
-                      <Tab
-                        id="tab-respondent"
-                        tabName="respondent"
-                        title="Respondent"
-                      >
-                        <RespondentInformation />
-                      </Tab>
-                    )}
-                  </Tabs>
-                </Mobile>
-              </>
-            )}
-        </section>
+                        {caseInformationTab === 'overview' && (
+                          <Tab
+                            id="tab-overview"
+                            tabName="overview"
+                            title="Overview"
+                          >
+                            <CaseInformationExternal />
+                          </Tab>
+                        )}
+                        {caseInformationTab === 'petitioner' && (
+                          <Tab
+                            id="tab-petitioner"
+                            tabName="petitioner"
+                            title="Petitioner"
+                          >
+                            <PetitionerInformation />
+                          </Tab>
+                        )}
+                        {caseInformationTab === 'respondent' && (
+                          <Tab
+                            id="tab-respondent"
+                            tabName="respondent"
+                            title="Respondent"
+                          >
+                            <RespondentInformation />
+                          </Tab>
+                        )}
+                      </Tabs>
+                    </Mobile>
+                  </>
+                )}
+            </section>
+          </>
+        )}
+        {!caseDetailHelper.userCanViewCase && (
+          <section className="usa-section grid-container">
+            <p>
+              If you are counsel representing a party in this case, you must
+              file an Entry of Appearance by paper.
+            </p>
+          </section>
+        )}
       </>
     );
   },

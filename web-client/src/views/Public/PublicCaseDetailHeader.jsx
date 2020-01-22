@@ -11,7 +11,7 @@ export const PublicCaseDetailHeader = connect(
     return (
       <>
         {publicCaseDetailHeaderHelper.isCaseSealed && (
-          <div className="red-warning-header">
+          <div className="red-warning-header sealed-banner">
             <div className="grid-container text-bold">
               <FontAwesomeIcon
                 className="margin-right-1 icon-sealed"
