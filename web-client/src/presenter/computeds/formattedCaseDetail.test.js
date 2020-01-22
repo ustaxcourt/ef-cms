@@ -1010,7 +1010,6 @@ describe('formattedCaseDetail', () => {
       };
     });
 
-
     it('should not show the edit button if the docket entry document has not been QCed', () => {
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -1023,11 +1022,14 @@ describe('formattedCaseDetail', () => {
         },
       });
 
-      expect(result.formattedDocketEntries[0].showEditDocketRecordEntry).toEqual(false);
+      expect(
+        result.formattedDocketEntries[0].showEditDocketRecordEntry,
+      ).toEqual(false);
     });
 
     it('should not show the edit button if the user does not have permission', () => {
-      caseDetail.documents[0].workItems[0].completedAt = '2019-06-19T17:29:13.120Z';
+      caseDetail.documents[0].workItems[0].completedAt =
+        '2019-06-19T17:29:13.120Z';
 
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -1040,11 +1042,14 @@ describe('formattedCaseDetail', () => {
         },
       });
 
-      expect(result.formattedDocketEntries[0].showEditDocketRecordEntry).toEqual(false);
+      expect(
+        result.formattedDocketEntries[0].showEditDocketRecordEntry,
+      ).toEqual(false);
     });
 
     it('should show the edit button if the docket entry document is QCed and the user has permission', () => {
-      caseDetail.documents[0].workItems[0].completedAt = '2019-06-19T17:29:13.120Z';
+      caseDetail.documents[0].workItems[0].completedAt =
+        '2019-06-19T17:29:13.120Z';
 
       const result = runCompute(formattedCaseDetail, {
         state: {
@@ -1057,7 +1062,9 @@ describe('formattedCaseDetail', () => {
         },
       });
 
-      expect(result.formattedDocketEntries[0].showEditDocketRecordEntry).toEqual(true);
+      expect(
+        result.formattedDocketEntries[0].showEditDocketRecordEntry,
+      ).toEqual(true);
     });
   });
 });

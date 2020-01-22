@@ -905,10 +905,10 @@ describe('document detail helper', () => {
                 workItems: [
                   {
                     caseStatus: Case.STATUS_TYPES.new,
-                    isQC: true,
                     document: {
                       receivedAt: '2018-11-21T20:49:28.192Z',
                     },
+                    isQC: true,
                     messages: [
                       {
                         createdAt: '2018-11-21T20:49:28.192Z',
@@ -955,10 +955,10 @@ describe('document detail helper', () => {
                   {
                     caseStatus: Case.STATUS_TYPES.new,
                     completedAt: '2018-11-21T20:49:28.192Z',
-                    isQC: true,
                     document: {
                       receivedAt: '2018-11-21T20:49:28.192Z',
                     },
+                    isQC: true,
                     messages: [
                       {
                         createdAt: '2018-11-21T20:49:28.192Z',
