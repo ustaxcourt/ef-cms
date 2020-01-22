@@ -1,4 +1,5 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -124,6 +125,34 @@ export const CourtIssuedNonstandardForm = connect(
                   {judgeUser.name}
                 </option>
               ))}
+            </select>
+          </FormGroup>
+        )}
+
+        {addCourtIssuedDocketEntryNonstandardHelper.showTrialLocation && (
+          <FormGroup errorText={validationErrors.trialLocation}>
+            <label
+              className="usa-label"
+              htmlFor="trial-lcation"
+              id="trial-location-label"
+            >
+              Trial Location
+            </label>
+            <select
+              className="usa-select"
+              id="trial-location"
+              name="trialLocation"
+              value={form.trialLocation || ''}
+              onChange={e => {
+                updateCourtIssuedDocketEntryFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+                validateCourtIssuedDocketEntrySequence();
+              }}
+            >
+              <option value="">- Select -</option>
+              <TrialCityOptions />
             </select>
           </FormGroup>
         )}
