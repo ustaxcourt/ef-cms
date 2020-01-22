@@ -1,13 +1,10 @@
 const fs = require('fs');
+const json2md = require('json2md');
 const { Case } = require('../business/entities/cases/Case');
 const { DocketRecord } = require('../business/entities/DocketRecord');
 const { Document } = require('../business/entities/Document');
 
-const entitiesDir = `${__dirname}/../../../docs/entities`;
-
-const schema = Case.getSchema();
-
-const generateMarkdownSchema = (schema, entityName) => {
+exports.generateJsonFromSchema = (schema, entityName) => {
   let described = schema.describe ? schema.describe().keys : schema;
   const fields = Object.keys(described);
 
@@ -40,6 +37,8 @@ const generateMarkdownSchema = (schema, entityName) => {
       case 'date':
       case 'boolean':
       case 'number':
+      case 'object':
+      // eslint-disable-next-line no-fallthrough
       case 'string':
         if (rules && rules.length) {
           rules.forEach(({ args, name }) => {
@@ -53,10 +52,12 @@ const generateMarkdownSchema = (schema, entityName) => {
         }
 
         if (allow && allow.length > 1) {
+          const allowedValues = allow.map(
+            allowedValue => `\`${allowedValue}\``,
+          );
           result.push({ h6: 'Allowed Values' });
-          result.push({ ul: allow });
+          result.push({ ul: allowedValues });
         }
-
         break;
 
       case 'alternatives':
@@ -65,8 +66,38 @@ const generateMarkdownSchema = (schema, entityName) => {
         });
         break;
 
+      case 'array':
+        const { items } = field;
+        if (items) {
+          items.forEach(({ metas, type }) => {
+            if (metas) {
+              const metaEntityName = metas[0].entityName;
+              result.push({
+                p: `An array of [\`${metaEntityName}\`](./${metaEntityName}.md)s`,
+              });
+            } else {
+              result.push({
+                p: `An array of ${type}s.`,
+              });
+            }
+          });
+        }
+        break;
+
       case 'any':
-        // TODO
+        const { whens } = field;
+        whens.forEach(({ is, otherwise, ref, then }) => {
+          result.push({
+            p: `If \`${ref.path[0]}\` = \`${is.allow[1]}\`, then this field is \`${then.type}\` and is \`${then.flags.presence}.\` `,
+          });
+          let otherwiseVerbiage = `Otherwise, this field is \`${otherwise.type}\` and is \`${otherwise.flags.presence}\`.`;
+          if (otherwise.allow && otherwise.allow[0] === null) {
+            otherwiseVerbiage += ' `null` is allowed.';
+          }
+          result.push({
+            p: otherwiseVerbiage,
+          });
+        });
         break;
     }
 
@@ -80,11 +111,12 @@ const generateMarkdownSchema = (schema, entityName) => {
   return jsonResult;
 };
 
-// fs.writeFileSync(
-//   'schema.json',
-//   JSON.stringify(
-generateMarkdownSchema(schema.describe().keys, 'Case');
-// null,
-// 2,
-// ),
-// );
+exports.generateMarkdownSchema = (entity, entityName) => {
+  const json = exports.generateJsonFromSchema(entity.getSchema(), entityName);
+
+  fs.writeFileSync(`./docs/entities/${entityName}.md`, json2md(json));
+};
+
+exports.generateMarkdownSchema(Case, 'Case');
+exports.generateMarkdownSchema(DocketRecord, 'DocketRecord');
+exports.generateMarkdownSchema(Document, 'Document');
