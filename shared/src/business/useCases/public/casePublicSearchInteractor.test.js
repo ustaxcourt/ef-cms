@@ -118,6 +118,7 @@ describe('casePublicSearchInteractor', () => {
         docketNumberSuffix: 'S',
         docketRecord: [],
         documents: [],
+        isSealed: false,
         receivedAt: '2019-03-01T21:40:46.415Z',
       },
       {
@@ -131,6 +132,7 @@ describe('casePublicSearchInteractor', () => {
         docketNumberSuffix: 'S',
         docketRecord: [],
         documents: [],
+        isSealed: false,
         receivedAt: '2019-03-01T21:40:46.415Z',
       },
     ]);
@@ -273,6 +275,7 @@ describe('casePublicSearchInteractor', () => {
         docketNumberSuffix: 'S',
         docketRecord: [],
         documents: [],
+        isSealed: false,
         receivedAt: '2019-03-01T21:40:46.415Z',
       },
       {
@@ -286,6 +289,7 @@ describe('casePublicSearchInteractor', () => {
         docketNumberSuffix: 'S',
         docketRecord: [],
         documents: [],
+        isSealed: false,
         receivedAt: '2019-03-01T21:40:46.415Z',
       },
     ]);
