@@ -250,6 +250,7 @@ function Case(rawCase, { applicationContext }) {
   this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.sealedDate = rawCase.sealedDate;
+  this.isSealed = !!rawCase.sealedDate;
   this.status = rawCase.status || Case.STATUS_TYPES.new;
   this.trialDate = rawCase.trialDate;
   this.trialLocation = rawCase.trialLocation;
@@ -1546,6 +1547,7 @@ Case.prototype.setQcCompleteForTrial = function({
  */
 Case.prototype.setAsSealed = function() {
   this.sealedDate = createISODateString();
+  this.isSealed = true;
   return this;
 };
 

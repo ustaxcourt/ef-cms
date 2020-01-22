@@ -25,7 +25,7 @@ describe('publicCaseDetailHelper', () => {
   });
 
   it('should indicate when a case is sealed', () => {
-    state.caseDetail.sealedDate = '2020-01-02T03:04:05.007Z';
+    state.caseDetail.isSealed = true;
     const result = runCompute(publicCaseDetailHelper, { state });
     expect(result.formattedCaseDetail.isCaseSealed).toBeTruthy();
   });

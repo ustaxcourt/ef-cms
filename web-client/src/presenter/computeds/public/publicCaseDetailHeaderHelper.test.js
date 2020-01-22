@@ -24,8 +24,8 @@ describe('publicCaseDetailHeaderHelper', () => {
     });
   });
 
-  it('Should indicate a case is sealed if sealedDate has a valid date', () => {
-    state.caseDetail.sealedDate = '2019-09-19T16:42:00.000Z';
+  it('Should indicate whether a case is sealed', () => {
+    state.caseDetail.isSealed = true;
     const result = runCompute(publicCaseDetailHeaderHelper, { state });
     expect(result.isCaseSealed).toBe(true);
   });

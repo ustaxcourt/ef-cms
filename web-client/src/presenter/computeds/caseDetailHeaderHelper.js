@@ -16,7 +16,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const currentPage = get(state.currentPage);
   const isRequestAccessForm = currentPage === 'RequestAccessWizard';
 
-  const isCaseSealed = !!caseDetail.sealedDate;
+  const isCaseSealed = !!caseDetail.isSealed;
 
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;

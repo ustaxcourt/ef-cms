@@ -132,7 +132,7 @@ describe('case information helper', () => {
     const result = runCompute(caseInformationHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { sealedDate: '2019-03-01T21:40:46.415Z' },
+        caseDetail: { isSealed: true },
         form: {},
       },
     });
