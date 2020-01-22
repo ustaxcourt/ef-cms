@@ -8,6 +8,7 @@
  */
 export const updateDocketEntryMetaAction = async ({
   applicationContext,
+  path,
   props,
 }) => {
   const { caseId, docketRecordEntry, docketRecordIndex } = props;
@@ -23,10 +24,20 @@ export const updateDocketEntryMetaAction = async ({
     }
   }
 
-  await applicationContext.getUseCases().updateDocketEntryMetaInteractor({
-    applicationContext,
-    caseId,
-    docketEntryMeta: docketRecordEntry,
-    docketRecordIndex,
-  });
+  try {
+    await applicationContext.getUseCases().updateDocketEntryMetaInteractor({
+      applicationContext,
+      caseId,
+      docketEntryMeta: docketRecordEntry,
+      docketRecordIndex,
+    });
+    return path.success();
+  } catch (err) {
+    return path.error({
+      alertError: {
+        message: err.message,
+        title: 'Error',
+      },
+    });
+  }
 };
