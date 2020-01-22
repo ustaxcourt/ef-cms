@@ -6,7 +6,7 @@ const VALID_TRIAL_SESSION = {
   startDate: '2025-03-01T00:00:00.000Z',
   term: 'Fall',
   termYear: '2025',
-  trialLocation: 'Birmingham, AL',
+  trialLocation: 'Birmingham, Alabama',
 };
 
 describe('NewTrialSession entity', () => {

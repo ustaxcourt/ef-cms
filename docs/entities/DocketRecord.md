@@ -1,58 +1,47 @@
 # DocketRecord
 
-## description
+### description
+
+> `string` | required
+
+### documentId
 
 > `string` | optional
 
+##### Can be null.
 
-whitelist: `null`
-
-## documentId
-
-> `string` | optional
-
-
-whitelist: `null`
-
-## editState
+### editState
 
 > `string` | optional
 
+##### Can be null.
 
-whitelist: `null`
+### eventCode
 
-## eventCode
+> `string` | required
 
-> `string` | optional
-
-
-whitelist: `null`
-
-## filedBy
+### filedBy
 
 > `string` | optional
 
+##### Can be null.
 
-whitelist: `null`
-
-## filingDate
+### filingDate
 
 > `date` | required
 
-## index
+### index
 
-> `number` | optional
+> `number` | required
 
-## signatory
-
-> `string` | optional
-
-
-whitelist: `null`
-
-## status
+### signatory
 
 > `string` | optional
 
+##### Can be null.
 
-whitelist: `null`
+### status
+
+> `string` | optional
+
+##### Can be null.
