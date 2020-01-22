@@ -52,7 +52,6 @@ exports.updateDocketEntryMetaInteractor = async ({
     filedBy,
     filingDate,
     servedAt,
-    servedParties,
   } = docketEntryMeta;
 
   const docketRecordEntity = new DocketRecord({
@@ -63,24 +62,29 @@ exports.updateDocketEntryMetaInteractor = async ({
     filingDate: filingDate || docketRecordEntry.filingDate,
   });
 
-  if (servedAt || servedParties || filedBy) {
+  if (servedAt || filedBy || filingDate) {
     const documentDetail = caseEntity.getDocumentById({
       documentId: docketRecordEntity.documentId,
     });
 
     if (documentDetail) {
+      const servedAtUpdated = servedAt && servedAt !== documentDetail.servedAt;
+      const filingDateUpdated =
+        filingDate && filingDate !== documentDetail.createdAt;
+      const shouldGenerateCoversheet = servedAtUpdated || filingDateUpdated;
+
       const documentEntity = new Document(
         {
           ...documentDetail,
+          createdAt: filingDateUpdated ? null : documentDetail.createdAt, // setting to null will regenerate it for the coversheet
           filedBy: filedBy || documentDetail.filedBy,
           servedAt: servedAt || documentDetail.servedAt,
-          servedParties: servedParties || documentDetail.servedParties,
         },
         { applicationContext },
       );
 
-      if (servedAt && servedAt !== documentDetail.servedAt) {
-        // servedAt has changed, generate a new coversheet
+      if (shouldGenerateCoversheet) {
+        // servedAt or filingDate has changed, generate a new coversheet
         await applicationContext.getUseCases().addCoversheetInteractor({
           applicationContext,
           caseId,
