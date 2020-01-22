@@ -3,6 +3,7 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
+import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -22,11 +23,16 @@ export const submitEditDocketEntryMetaSequence = [
       stopShowValidationAction,
       clearAlertsAction,
       updateDocketEntryMetaAction,
-      clearModalAction,
-      clearModalStateAction,
-      getEditDocketEntryMetaAlertSuccessAction,
-      setAlertSuccessAction,
-      ...gotoCaseDetailSequence, // Needs to refresh the formatted case detail / docket record
+      {
+        error: [setAlertErrorAction],
+        success: [
+          clearModalAction,
+          clearModalStateAction,
+          getEditDocketEntryMetaAlertSuccessAction,
+          setAlertSuccessAction,
+          ...gotoCaseDetailSequence, // Needs to refresh the formatted case detail / docket record,
+        ],
+      },
     ],
   },
 ];

@@ -1,5 +1,6 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { sealCaseAction } from '../actions/CaseDetail/sealCaseAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
@@ -7,7 +8,7 @@ import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForRespons
 export const sealCaseSequence = [
   setWaitingForResponseAction,
   sealCaseAction,
-  { error: [], success: [setCaseAction] },
+  { error: [], success: [setAlertSuccessAction, setCaseAction] },
   unsetWaitingForResponseAction,
   clearModalAction,
 ];
