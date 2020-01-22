@@ -143,7 +143,7 @@ export const DocketRecord = connect(
                             }}
                           >
                             Edit
-                        </Button>
+                          </Button>
                         )}
                       </td>
                     )}

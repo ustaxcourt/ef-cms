@@ -52,7 +52,8 @@ export const formattedCaseDetail = (get, applicationContext) => {
         document.qcWorkItemsUntouched &&
         !document.isCourtIssuedDocument;
 
-      const showEditDocketRecordEntry = permissions.EDIT_DOCKET_ENTRY &&
+      const showEditDocketRecordEntry =
+        permissions.EDIT_DOCKET_ENTRY &&
         document &&
         document.qcWorkItemsCompleted;
 
