@@ -1155,9 +1155,11 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
 };
 
 /**
- * returns true if the case status is associated with the userId
+ * returns true if the case is associated with the userId
  *
- * @param {string} userId id of the user account
+ * @param {object} arguments
+ * @param {object} arguments.caseRaw raw case details
+ * @param {string} arguments.userId id of the user account
  * @returns {boolean} if the case is associated
  */
 const isAssociatedUser = function({ caseRaw, userId }) {
