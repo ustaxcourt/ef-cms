@@ -168,8 +168,11 @@ exports.isAuthorized = (user, action, owner) => {
     return false;
   }
 
-  const actionInRoleAuthorization = AUTHORIZATION_MAP[userRole].includes(
-    action,
-  );
+  const roleActionIndex = AUTHORIZATION_MAP[userRole].indexOf(action);
+
+  const actionInRoleAuthorization = !!AUTHORIZATION_MAP[userRole][
+    roleActionIndex
+  ];
+
   return actionInRoleAuthorization;
 };
