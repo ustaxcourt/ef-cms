@@ -47,6 +47,7 @@ exports.updateDocketEntryMetaInteractor = async ({
   );
 
   const {
+    action,
     description,
     filedBy,
     filingDate,
@@ -56,6 +57,7 @@ exports.updateDocketEntryMetaInteractor = async ({
 
   const docketRecordEntity = new DocketRecord({
     ...docketRecordEntry,
+    action: action || docketRecordEntry.action,
     description: description || docketRecordEntry.description,
     filedBy: filedBy || docketRecordEntry.filedBy,
     filingDate: filingDate || docketRecordEntry.filingDate,
