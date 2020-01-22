@@ -263,30 +263,6 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(addCoversheetInteractorMock).not.toHaveBeenCalled();
   });
 
-  it('should update the document servedParties', async () => {
-    const result = await updateDocketEntryMetaInteractor({
-      applicationContext,
-      caseId: 'cccba5a9-b37b-479d-9201-067ec6e33ccc',
-      docketEntryMeta: {
-        servedParties: ['Served Party One', 'Served Party Two'],
-      },
-      docketRecordIndex: 0,
-    });
-
-    const updatedDocketEntry = result.docketRecord.find(
-      record => record.index === 0,
-    );
-
-    const updatedDocument = result.documents.find(
-      document => document.documentId === updatedDocketEntry.documentId,
-    );
-
-    expect(updatedDocument.servedParties).toEqual([
-      'Served Party One',
-      'Served Party Two',
-    ]);
-  });
-
   it('should call the updateCase persistence method', async () => {
     await updateDocketEntryMetaInteractor({
       applicationContext,
