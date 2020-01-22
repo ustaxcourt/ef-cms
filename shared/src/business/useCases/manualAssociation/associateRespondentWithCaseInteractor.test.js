@@ -2,6 +2,7 @@ const sinon = require('sinon');
 const {
   associateRespondentWithCaseInteractor,
 } = require('./associateRespondentWithCaseInteractor');
+const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
 describe('associateRespondentWithCaseInteractor', () => {
@@ -12,6 +13,8 @@ describe('associateRespondentWithCaseInteractor', () => {
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     caseType: 'Deficiency',
     docketNumber: '123-19',
+    docketRecord: MOCK_CASE.docketRecord,
+    documents: MOCK_CASE.documents,
     filingType: 'Myself',
     partyType: 'Petitioner',
     preferredTrialCity: 'Fresno, California',

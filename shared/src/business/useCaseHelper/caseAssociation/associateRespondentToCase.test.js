@@ -1,5 +1,6 @@
 const sinon = require('sinon');
 const { associateRespondentToCase } = require('./associateRespondentToCase');
+const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
 describe('associateRespondentToCase', () => {
@@ -19,6 +20,7 @@ describe('associateRespondentToCase', () => {
         index: 1,
       },
     ],
+    documents: MOCK_CASE.documents,
     filingType: 'Myself',
     partyType: 'Petitioner',
     preferredTrialCity: 'Fresno, California',
