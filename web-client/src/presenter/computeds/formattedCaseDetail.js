@@ -52,6 +52,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
         document.qcWorkItemsUntouched &&
         !document.isCourtIssuedDocument;
 
+      const showEditDocketRecordEntry =
+        permissions.EDIT_DOCKET_ENTRY &&
+        document &&
+        document.qcWorkItemsCompleted;
+
       const isPaper =
         !isInProgress && !qcWorkItemsUntouched && document && document.isPaper;
 
@@ -133,6 +138,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
           document &&
           !permissions.UPDATE_CASE &&
           document.processingStatus !== 'complete',
+        showEditDocketRecordEntry,
         showInProgress: document && document.isInProgress && !isExternalUser,
         showLinkToDocument:
           userHasAccessToCase &&
