@@ -37,6 +37,7 @@ const ROLE_PERMISSIONS = {
   UPDATE_CONTACT_INFO: 'UPDATE_CONTACT_INFO',
   UPLOAD_DOCUMENT: 'UPLOAD_DOCUMENT',
   VIEW_DOCUMENTS: 'VIEW_DOCUMENTS',
+  VIEW_SEALED_CASE: 'VIEW_SEALED_CASE',
   WORKITEM: 'WORKITEM',
 };
 
@@ -52,7 +53,6 @@ const allInternalUserPermissions = [
   ROLE_PERMISSIONS.CONSOLIDATE_CASES,
   ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT,
   ROLE_PERMISSIONS.GET_CASE,
-  ROLE_PERMISSIONS.GET_CASES_BY_DOCUMENT_ID,
   ROLE_PERMISSIONS.GET_READ_MESSAGES,
   ROLE_PERMISSIONS.GET_USERS_IN_SECTION,
   ROLE_PERMISSIONS.PENDING_ITEMS,
@@ -62,6 +62,7 @@ const allInternalUserPermissions = [
   ROLE_PERMISSIONS.UPDATE_CASE,
   ROLE_PERMISSIONS.UPLOAD_DOCUMENT,
   ROLE_PERMISSIONS.VIEW_DOCUMENTS,
+  ROLE_PERMISSIONS.VIEW_SEALED_CASE,
   ROLE_PERMISSIONS.WORKITEM,
 ];
 
@@ -147,6 +148,8 @@ const AUTHORIZATION_MAP = {
   trialclerk: allInternalUserPermissions,
 };
 
+exports.AUTHORIZATION_MAP = AUTHORIZATION_MAP;
+
 /**
  * Checks user permissions for an action
  *
@@ -165,8 +168,11 @@ exports.isAuthorized = (user, action, owner) => {
     return false;
   }
 
-  const actionInRoleAuthorization = AUTHORIZATION_MAP[userRole].includes(
-    action,
-  );
+  const roleActionIndex = AUTHORIZATION_MAP[userRole].indexOf(action);
+
+  const actionInRoleAuthorization = !!AUTHORIZATION_MAP[userRole][
+    roleActionIndex
+  ];
+
   return actionInRoleAuthorization;
 };

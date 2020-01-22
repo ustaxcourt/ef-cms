@@ -2,8 +2,10 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
+const { Case, isAssociatedUser } = require('../entities/cases/Case');
+const { caseSealedFormatter } = require('../utilities/caseFilter');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
+const { PublicCase } = require('../entities/cases/PublicCase');
 
 /**
  * getCaseInteractor
@@ -37,7 +39,6 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
     error.skipLogging = true;
     throw error;
   }
-
   if (
     !isAuthorized(
       applicationContext.getCurrentUser(),
@@ -48,8 +49,33 @@ exports.getCaseInteractor = async ({ applicationContext, caseId }) => {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseDetail = new Case(caseRecord, {
-    applicationContext,
-  }).validate();
-  return caseDetail.toRawObject();
+  let caseDetail;
+
+  if (caseRecord.sealedDate) {
+    let isAuthorizedUser =
+      isAuthorized(
+        applicationContext.getCurrentUser(),
+        ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+        caseRecord.userId,
+      ) ||
+      isAssociatedUser({
+        caseRaw: caseRecord,
+        userId: applicationContext.getCurrentUser().userId,
+      });
+    if (isAuthorizedUser) {
+      caseDetail = new Case(caseRecord, {
+        applicationContext,
+      });
+    } else {
+      caseRecord = caseSealedFormatter(caseRecord);
+      caseDetail = new PublicCase(caseRecord, {
+        applicationContext,
+      });
+    }
+  } else {
+    caseDetail = new Case(caseRecord, {
+      applicationContext,
+    });
+  }
+  return caseDetail.validate().toRawObject();
 };

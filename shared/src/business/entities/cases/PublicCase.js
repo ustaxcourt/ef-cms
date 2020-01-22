@@ -23,6 +23,7 @@ function PublicCase(rawCase, { applicationContext }) {
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
   this.receivedAt = rawCase.receivedAt;
+  this.isSealed = !!rawCase.sealedDate;
   this.caseTitle = rawCase.caseTitle;
 
   this.contactPrimary = rawCase.contactPrimary
@@ -43,30 +44,49 @@ function PublicCase(rawCase, { applicationContext }) {
     .filter(document => !isPrivateDocument(document, this.docketRecord));
 }
 
+const publicCaseSchema = {
+  caseCaption: joi.string().optional(),
+  caseId: joi
+    .string()
+    .uuid({
+      version: ['uuidv4'],
+    })
+    .optional(),
+  caseTitle: joi.string().optional(),
+  createdAt: joi
+    .date()
+    .iso()
+    .optional(),
+  docketNumber: joi.string().optional(),
+  docketNumberSuffix: joi
+    .string()
+    .allow(null)
+    .optional(),
+  isSealed: joi.boolean(),
+  receivedAt: joi
+    .date()
+    .iso()
+    .optional(),
+};
+const sealedCaseSchemaRestricted = {
+  caseCaption: joi.any().forbidden(),
+  caseId: joi.string(),
+  caseTitle: joi.any().forbidden(),
+  contactPrimary: joi.any().forbidden(),
+  contactSecondary: joi.any().forbidden(),
+  createdAt: joi.any().forbidden(),
+  docketNumber: joi.string().required(),
+  docketNumberSuffix: joi.string().optional(),
+  docketRecord: joi.array().max(0),
+  documents: joi.array().max(0),
+  isSealed: joi.boolean(),
+  receivedAt: joi.any().forbidden(),
+};
+
 joiValidationDecorator(
   PublicCase,
-  joi.object().keys({
-    caseCaption: joi.string().optional(),
-    caseId: joi
-      .string()
-      .uuid({
-        version: ['uuidv4'],
-      })
-      .optional(),
-    caseTitle: joi.string().optional(),
-    createdAt: joi
-      .date()
-      .iso()
-      .optional(),
-    docketNumber: joi.string().optional(),
-    docketNumberSuffix: joi
-      .string()
-      .allow(null)
-      .optional(),
-    receivedAt: joi
-      .date()
-      .iso()
-      .optional(),
+  joi.object(publicCaseSchema).when(joi.object({ isSealed: true }).unknown(), {
+    then: joi.object(sealedCaseSchemaRestricted),
   }),
   undefined,
   {},

@@ -4,12 +4,19 @@ import { updateDocketEntryMetaAction } from './updateDocketEntryMetaAction';
 
 describe('updateDocketEntryMetaAction', () => {
   let updateDocketEntryMetaInteractorStub;
-  let docketEntryMetaParam;
+  let errorMock;
+  let successMock;
 
   beforeEach(() => {
-    updateDocketEntryMetaInteractorStub = jest.fn(
-      ({ docketEntryMeta }) => (docketEntryMetaParam = docketEntryMeta),
-    );
+    updateDocketEntryMetaInteractorStub = jest.fn();
+
+    errorMock = jest.fn();
+    successMock = jest.fn();
+
+    presenter.providers.path = {
+      error: errorMock,
+      success: successMock,
+    };
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
@@ -31,50 +38,27 @@ describe('updateDocketEntryMetaAction', () => {
     });
 
     expect(updateDocketEntryMetaInteractorStub).toHaveBeenCalled();
+    expect(successMock).toHaveBeenCalled();
   });
 
-  it('converts the servedParties string into an array', async () => {
+  it('returns the error path calling the interactor generates an error', async () => {
+    presenter.providers.applicationContext.getUseCases = () => ({
+      updateDocketEntryMetaInteractor: () => {
+        throw new Error('Guy Fieri has connected to the server.');
+      },
+    });
+
     await runAction(updateDocketEntryMetaAction, {
       modules: { presenter },
       props: {
         caseId: '123-45',
         docketRecordEntry: {
-          servedParties: 'One,Two,Three',
+          description: 'Test Description',
         },
         docketRecordIndex: 1,
       },
     });
 
-    expect(docketEntryMetaParam.servedParties).toEqual(['One', 'Two', 'Three']);
-  });
-
-  it('converts the servedParties string into an array, stripping white space from array items', async () => {
-    await runAction(updateDocketEntryMetaAction, {
-      modules: { presenter },
-      props: {
-        caseId: '123-45',
-        docketRecordEntry: {
-          servedParties: 'One , Two , Three',
-        },
-        docketRecordIndex: 1,
-      },
-    });
-
-    expect(docketEntryMetaParam.servedParties).toEqual(['One', 'Two', 'Three']);
-  });
-
-  it('does no operation the servedParties value if it is not a string', async () => {
-    await runAction(updateDocketEntryMetaAction, {
-      modules: { presenter },
-      props: {
-        caseId: '123-45',
-        docketRecordEntry: {
-          servedParties: undefined,
-        },
-        docketRecordIndex: 1,
-      },
-    });
-
-    expect(docketEntryMetaParam.servedParties).toEqual(undefined);
+    expect(errorMock).toHaveBeenCalled();
   });
 });
