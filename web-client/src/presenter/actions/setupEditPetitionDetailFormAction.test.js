@@ -17,7 +17,7 @@ describe('setupEditPetitionDetailFormAction', () => {
           caseType: 'some case type',
           petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
           petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
-          preferredTrialCity: 'Somewhere, USA',
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Small',
         },
         form: {},
@@ -30,7 +30,7 @@ describe('setupEditPetitionDetailFormAction', () => {
       paymentDateWaivedMonth: '03',
       paymentDateWaivedYear: '2019',
       petitionPaymentStatus: Case.PAYMENT_STATUS.WAIVED,
-      preferredTrialCity: 'Somewhere, USA',
+      preferredTrialCity: 'Fresno, California',
       procedureType: 'Small',
     });
   });

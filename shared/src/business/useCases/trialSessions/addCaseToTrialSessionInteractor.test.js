@@ -9,7 +9,7 @@ const MOCK_TRIAL = {
   startDate: '2025-12-01T00:00:00.000Z',
   term: 'Fall',
   termYear: '2025',
-  trialLocation: 'Birmingham, AL',
+  trialLocation: 'Birmingham, Alabama',
 };
 
 describe('addCaseToTrialSessionInteractor', () => {
@@ -131,7 +131,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       associatedJudge: Case.CHIEF_JUDGE,
       status: 'Calendared',
       trialDate: '2025-12-01T00:00:00.000Z',
-      trialLocation: 'Birmingham, AL',
+      trialLocation: 'Birmingham, Alabama',
       trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       trialTime: '10:00',
     });

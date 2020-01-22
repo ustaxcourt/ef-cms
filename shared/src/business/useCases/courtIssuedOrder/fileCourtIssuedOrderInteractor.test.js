@@ -5,26 +5,44 @@ const { User } = require('../../entities/User');
 
 describe('fileCourtIssuedOrderInteractor', () => {
   let caseRecord = {
+    caseCaption: 'Caption',
     caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    caseType: 'Deficiency',
     createdAt: '',
     docketNumber: '45678-18',
+    docketRecord: [
+      {
+        description: 'first record',
+        documentId: '8675309b-18d0-43ec-bafb-654e83405411',
+        eventCode: 'P',
+        filingDate: '2018-03-01T00:01:00.000Z',
+        index: 1,
+      },
+    ],
     documents: [
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         userId: 'respondent',
       },
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         userId: 'respondent',
       },
       {
+        docketNumber: '45678-18',
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentType: 'Answer',
         userId: 'respondent',
       },
     ],
+    filingType: 'Myself',
+    partyType: 'Petitioner',
+    preferredTrialCity: 'Fresno, California',
+    procedureType: 'Regular',
     role: User.ROLES.petitioner,
     userId: 'petitioner',
   };
@@ -77,6 +95,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
       applicationContext,
       documentMetadata: {
         caseId: caseRecord.caseId,
+        docketNumber: '45678-18',
         documentType: 'Order to Show Cause',
       },
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -92,6 +111,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
       applicationContext,
       documentMetadata: {
         caseId: caseRecord.caseId,
+        docketNumber: '45678-18',
         documentTitle: 'Order to do anything',
         documentType: 'Order',
         eventCode: 'O',
@@ -112,6 +132,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
       applicationContext,
       documentMetadata: {
         caseId: caseRecord.caseId,
+        docketNumber: '45678-18',
         documentTitle: 'Notice to be nice',
         documentType: 'Notice',
         eventCode: 'NOT',

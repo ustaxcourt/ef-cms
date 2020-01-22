@@ -2,6 +2,7 @@
 echo "killing dynamo if already running"
 pkill -f DynamoDBLocal
 
+
 echo "starting dynamo"
 ./web-api/start-dynamo.sh &
 DYNAMO_PID=$!
@@ -53,6 +54,7 @@ set -- \
   --region us-east-1 \
   --run_dir "${RUN_DIR}" \
   --stage local \
+  --stageColor "blue" \
   --dynamo_stream_arn "arn:aws:dynamodb:ddblocal:000000000000:table/efcms-local/stream/*" \
   --elasticsearch_endpoint "http://localhost:9200"
 
@@ -84,6 +86,8 @@ echo "starting streams service"
 npx sls offline start "$@" --config web-api/serverless-streams.yml &
 echo "starting case parties service"
 npx sls offline start "$@" --config web-api/serverless-case-parties.yml &
+echo "starting migrate service"
+npx sls offline start "$@" --config web-api/serverless-migrate.yml &
 
 echo "starting proxy"
 node ./web-api/proxy.js

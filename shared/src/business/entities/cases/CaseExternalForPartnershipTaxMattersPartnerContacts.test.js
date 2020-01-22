@@ -5,14 +5,14 @@ describe('CaseExternal', () => {
   describe('for Partnership (as the Tax Matters Partner) Contacts', () => {
     it('should not validate without contacts', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         filingType: 'Myself',
         hasIrsNotice: true,
         irsNoticeDate: '2009-10-13',
         partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         petitionFile: {},
         petitionFileSize: 1,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
@@ -23,7 +23,7 @@ describe('CaseExternal', () => {
 
     it('can validate contacts', () => {
       const caseExternal = new CaseExternal({
-        caseType: 'other',
+        caseType: 'Other',
         contactPrimary: {
           address1: '876 12th Ave',
           city: 'Nashville',
@@ -42,7 +42,7 @@ describe('CaseExternal', () => {
         partyType: ContactFactory.PARTY_TYPES.partnershipAsTaxMattersPartner,
         petitionFile: {},
         petitionFileSize: 1,
-        preferredTrialCity: 'Chattanooga, TN',
+        preferredTrialCity: 'Chattanooga, Tennessee',
         procedureType: 'Small',
         signature: true,
         stinFile: {},
