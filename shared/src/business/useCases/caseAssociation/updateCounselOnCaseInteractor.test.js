@@ -1,6 +1,7 @@
 const {
   updateCounselOnCaseInteractor,
 } = require('./updateCounselOnCaseInteractor');
+const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
 let applicationContext;
@@ -44,9 +45,11 @@ describe('updateCounselOnCaseInteractor', () => {
               index: 1,
             },
           ],
+          documents: MOCK_CASE.documents,
           filingType: 'Myself',
           partyType: 'Petitioner',
           practitioners: mockPractitioners,
+          preferredTrialCity: 'Fresno, California',
           procedureType: 'Regular',
           respondents: mockRespondents,
         }),

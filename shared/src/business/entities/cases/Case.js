@@ -143,6 +143,7 @@ Case.VALIDATION_ERROR_MESSAGES = {
   caseCaption: 'Enter a case caption',
   caseType: 'Select a case type',
   docketNumber: 'Docket number is required',
+  docketRecord: 'At least one valid Docket Record is required',
   documents: 'At least one valid document is required',
   filingType: 'Select on whose behalf you are filing',
   hasIrsNotice: 'Indicate whether you received an IRS notice',
@@ -405,14 +406,15 @@ joiValidationDecorator(
       .optional(),
     docketRecord: joi
       .array()
-      .required(joi.object().meta({ entityName: 'DocketRecord' }))
-      .items()
+      .items(joi.object().meta({ entityName: 'DocketRecord' }))
+      .min(1)
+      .required()
       .description('List of DocketRecord Entities for the Case.'),
-    // TODO: Revisit with Jessica
     documents: joi
       .array()
       .items(joi.object().meta({ entityName: 'Document' }))
-      .optional()
+      .min(1)
+      .required()
       .description('List of Document Entities for the Case.'),
     filingType: joi
       .string()
@@ -420,7 +422,6 @@ joiValidationDecorator(
         ...Case.FILING_TYPES[User.ROLES.petitioner],
         ...Case.FILING_TYPES[User.ROLES.practitioner],
       )
-      // TODO: What is this when the case is created by a Petitions Clerk?
       .optional(),
     hasIrsNotice: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
@@ -475,7 +476,6 @@ joiValidationDecorator(
         .max(25)
         .required(),
     }),
-    // TODO: Get more info on this
     noticeOfAttachments: joi.boolean().optional(),
     noticeOfTrialDate: joi
       .date()
@@ -529,14 +529,17 @@ joiValidationDecorator(
         .required(),
     }),
     practitioners: joi.array().optional(),
-    preferredTrialCity: joi.alternatives().try(
-      joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
-      joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
-      joi
-        .string()
-        .optional()
-        .allow(null),
-    ),
+    preferredTrialCity: joi
+      .alternatives()
+      .try(
+        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
+        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+        joi
+          .string()
+          .optional()
+          .allow(null),
+      )
+      .required(),
     procedureType: joi
       .string()
       .valid(...Case.PROCEDURE_TYPES)
@@ -566,16 +569,27 @@ joiValidationDecorator(
       .iso()
       .optional()
       .allow(null),
-    // TODO: Must be in the locations list
-    trialLocation: joi.string().optional(),
+    trialLocation: joi
+      .alternatives()
+      .try(
+        joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
+        joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
+        joi
+          .string()
+          .optional()
+          .allow(null),
+      )
+      .optional(),
     trialSessionId: joi
       .string()
       .uuid({
         version: ['uuidv4'],
       })
       .optional(),
-    // TODO: Revisit at format
-    trialTime: joi.string().optional(),
+    trialTime: joi
+      .string()
+      .pattern(/^([1-9]|1[0-2]):([0-5][0-9])$/)
+      .optional(),
     userId: joi
       .string()
       .optional()

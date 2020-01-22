@@ -2,6 +2,7 @@ const {
   fileExternalDocumentForConsolidatedInteractor,
 } = require('./fileExternalDocumentForConsolidatedInteractor');
 const { ContactFactory } = require('../../entities/contacts/ContactFactory');
+const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
 describe('fileExternalDocumentForConsolidatedInteractor', () => {
@@ -27,11 +28,12 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         },
         createdAt: '2019-04-19T17:29:13.120Z',
         docketNumber: '123-19',
-        docketRecord: [],
-        documents: [],
+        docketRecord: MOCK_CASE.docketRecord,
+        documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadCaseId: caseId0,
         partyType: ContactFactory.PARTY_TYPES.petitioner,
+        preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: User.ROLES.petitioner,
         userId: 'petitioner',
@@ -46,11 +48,12 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         },
         createdAt: '2019-04-19T17:29:13.120Z',
         docketNumber: '234-19',
-        docketRecord: [],
-        documents: [],
+        docketRecord: MOCK_CASE.docketRecord,
+        documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadCaseId: caseId0,
         partyType: ContactFactory.PARTY_TYPES.petitioner,
+        preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: User.ROLES.petitioner,
         userId: 'petitioner',
@@ -65,11 +68,12 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         },
         createdAt: '2019-04-19T17:29:13.120Z',
         docketNumber: '345-19',
-        docketRecord: [],
-        documents: [],
+        docketRecord: MOCK_CASE.docketRecord,
+        documents: MOCK_CASE.documents,
         filingType: 'Myself',
         leadCaseId: caseId0,
         partyType: ContactFactory.PARTY_TYPES.petitioner,
+        preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: User.ROLES.petitioner,
         userId: 'petitioner',
@@ -126,9 +130,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   });
 
   it('Should associate the document with all selected cases from the consolidated set', async () => {
-    expect(caseRecords[0].documents.length).toEqual(0);
-    expect(caseRecords[1].documents.length).toEqual(0);
-    expect(caseRecords[2].documents.length).toEqual(0);
+    expect(caseRecords[0].documents.length).toEqual(4);
+    expect(caseRecords[1].documents.length).toEqual(4);
+    expect(caseRecords[2].documents.length).toEqual(4);
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
@@ -142,14 +146,14 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       leadCaseId: caseId0,
     });
 
-    expect(result[0].documents[0].documentId).toEqual(documentId0);
-    expect(result[1].documents[0].documentId).toEqual(documentId0);
-    expect(result[2].documents.length).toEqual(0);
+    expect(result[0].documents[4].documentId).toEqual(documentId0);
+    expect(result[1].documents[4].documentId).toEqual(documentId0);
+    expect(result[2].documents.length).toEqual(4);
   });
 
   it('Should generate a docket record entry on each case in the consolidated set', async () => {
-    expect(caseRecords[0].docketRecord.length).toEqual(0);
-    expect(caseRecords[1].docketRecord.length).toEqual(0);
+    expect(caseRecords[0].docketRecord.length).toEqual(3);
+    expect(caseRecords[1].docketRecord.length).toEqual(3);
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
@@ -163,9 +167,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       leadCaseId: caseId0,
     });
 
-    expect(result[0].docketRecord[0].documentId).toEqual(documentId0);
-    expect(result[1].docketRecord[0].documentId).toEqual(documentId0);
-    expect(result[2].docketRecord[0].documentId).toEqual(documentId0);
+    expect(result[0].docketRecord[3].documentId).toEqual(documentId0);
+    expect(result[1].docketRecord[3].documentId).toEqual(documentId0);
+    expect(result[2].docketRecord[3].documentId).toEqual(documentId0);
   });
 
   it.skip('Should aggregate the filing parties for the docket record entry', async () => {
@@ -204,13 +208,13 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       record => record.caseId === caseId1,
     );
 
-    expect(lowestDocketNumberCase.documents[0].workItems.length).toEqual(1);
-    expect(nonLowestDocketNumberCase.documents[0].workItems.length).toEqual(0);
+    expect(lowestDocketNumberCase.documents[4].workItems.length).toEqual(1);
+    expect(nonLowestDocketNumberCase.documents[4].workItems.length).toEqual(0);
   });
 
   it('Should file multiple documents for each case if a secondary document is provided', async () => {
-    expect(caseRecords[0].documents.length).toEqual(0);
-    expect(caseRecords[1].documents.length).toEqual(0);
+    expect(caseRecords[0].documents.length).toEqual(4);
+    expect(caseRecords[1].documents.length).toEqual(4);
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
@@ -229,13 +233,13 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       leadCaseId: caseId0,
     });
 
-    expect(result[0].documents.length).toEqual(2);
-    expect(result[1].documents.length).toEqual(2);
+    expect(result[0].documents.length).toEqual(6);
+    expect(result[1].documents.length).toEqual(6);
   });
 
   it('Should file multiple documents for each case if supporting documents are provided', async () => {
-    expect(caseRecords[0].documents.length).toEqual(0);
-    expect(caseRecords[1].documents.length).toEqual(0);
+    expect(caseRecords[0].documents.length).toEqual(4);
+    expect(caseRecords[1].documents.length).toEqual(4);
 
     const result = await fileExternalDocumentForConsolidatedInteractor({
       applicationContext,
@@ -268,7 +272,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       leadCaseId: caseId0,
     });
 
-    expect(result[0].documents.length).toEqual(4);
-    expect(result[1].documents.length).toEqual(4);
+    expect(result[0].documents.length).toEqual(8);
+    expect(result[1].documents.length).toEqual(8);
   });
 });
