@@ -133,7 +133,7 @@ export const CourtIssuedNonstandardForm = connect(
           <FormGroup errorText={validationErrors.trialLocation}>
             <label
               className="usa-label"
-              htmlFor="trial-lcation"
+              htmlFor="trial-location"
               id="trial-location-label"
             >
               Trial Location
