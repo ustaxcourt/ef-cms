@@ -124,7 +124,7 @@ export const EditDocketEntryMetaModal = connect(
             Served
           </label>
           <input
-            area-describedby="document-served-at-label"
+            aria-describedby="document-served-at-label"
             className="usa-input"
             id="servedAt"
             name="form.servedAt"
