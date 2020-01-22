@@ -397,6 +397,7 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
  - `Spokane, Washington`
  - `Charleston, West Virginia`
  - `Milwaukee, Wisconsin`
+ - `null`
 
 #### Condition #2 for `preferredTrialCity`: 
 
@@ -406,12 +407,6 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 
 `/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/`
-
-#### Condition #3 for `preferredTrialCity`: 
-
-> `string` | optional
-
-##### Can be null.
 
 ### procedureType
 
@@ -559,6 +554,7 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
  - `Spokane, Washington`
  - `Charleston, West Virginia`
  - `Milwaukee, Wisconsin`
+ - `null`
 
 #### Condition #2 for `trialLocation`: 
 
@@ -568,12 +564,6 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 
 `/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/`
-
-#### Condition #3 for `trialLocation`: 
-
-> `string` | optional
-
-##### Can be null.
 
 ### trialSessionId
 
@@ -586,7 +576,7 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 ##### Regex Pattern
 
 
-`/^([1-9]|1[0-2]):([0-5][0-9])$/`
+`/^[0-9]+:([0-5][0-9])$/`
 
 ### userId
 
