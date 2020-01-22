@@ -6,12 +6,16 @@ export default (test, docketRecordIndex = 1) => {
       entry => entry.index === docketRecordIndex,
     );
 
+    const document = caseDetail.documents.find(
+      doc => doc.documentId === docketRecordEntry.documentId,
+    );
+
     expect(docketRecordEntry.description).toEqual(
       'New Docket Entry Description',
     );
 
     expect(docketRecordEntry.filedBy).toEqual('New Filer');
 
-    expect(docketRecordEntry.servedParties).toEqual(['Party One', 'Party Two']);
+    expect(document.servedParties).toEqual(['Party One', 'Party Two']);
   });
 };
