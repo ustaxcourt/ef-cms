@@ -55,7 +55,7 @@ exports.generateJsonFromSchema = (schema, entityName) => {
           const allowedValues = allow.map(
             allowedValue => `\`${allowedValue}\``,
           );
-          result.push({ h6: 'Allowed Values' });
+          result.push({ h4: 'Allowed Values' });
           result.push({ ul: allowedValues });
         }
         break;
@@ -67,7 +67,10 @@ exports.generateJsonFromSchema = (schema, entityName) => {
         break;
 
       case 'array':
+        // eslint-disable-next-line no-case-declarations
         const { items } = field;
+
+        // array item types (e.g. `.items(joi.object())`)
         if (items) {
           items.forEach(({ metas, type }) => {
             if (metas) {
@@ -82,9 +85,24 @@ exports.generateJsonFromSchema = (schema, entityName) => {
             }
           });
         }
+
+        // array rules (min, max, etc.)
+        if (rules) {
+          result.push({ h4: 'Rules' });
+
+          rules.forEach(({ args, name }) => {
+            switch (name) {
+              case 'min':
+                result.push({
+                  p: `At least \`${args.limit}\` item(s) must be selected.`,
+                });
+            }
+          });
+        }
         break;
 
       case 'any':
+        // eslint-disable-next-line no-case-declarations
         const { whens } = field;
         whens.forEach(({ is, otherwise, ref, then }) => {
           result.push({
