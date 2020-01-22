@@ -95,6 +95,26 @@ export const EditDocketEntryMetaModal = connect(
             }}
           />
         </FormGroup>
+        <FormGroup errorText={validationErrors && validationErrors.action}>
+          <label className="usa-label" htmlFor="filedBy" id="action-label">
+            Action
+          </label>
+          <input
+            aria-describedby="action-label"
+            className="usa-input"
+            id="action"
+            name="form.action"
+            type="text"
+            value={form.action || ''}
+            onChange={e => {
+              updateModalValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+              validateDocketRecordSequence();
+            }}
+          />
+        </FormGroup>
         <FormGroup errorText={validationErrors && validationErrors.servedAt}>
           <label
             className="usa-label"
