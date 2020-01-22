@@ -58,7 +58,7 @@ Otherwise, this field is `any` and is `optional`.
 
 > `string` | required
 
-#### Allowed Values
+##### Allowed Values
 
 
  - `Application for Waiver of Filing Fee`
@@ -508,6 +508,8 @@ Otherwise, this field is `any` and is `optional`.
 
 > `string` | optional
 
+##### Can be .
+
 ### freeText
 
 > `string` | optional
@@ -580,6 +582,8 @@ Otherwise, this field is `any` and is `optional`.
 
 > `string` | optional
 
+##### Can be null.
+
 ### receivedAt
 
 > `date` | optional
@@ -608,6 +612,8 @@ Otherwise, this field is `any` and is `optional`.
 
 > `date` | optional
 
+##### Can be null.
+
 ### serviceStamp
 
 > `string` | optional
@@ -616,9 +622,13 @@ Otherwise, this field is `any` and is `optional`.
 
 > `date` | optional
 
+##### Can be null.
+
 ### signedByUserId
 
 > `string` | optional
+
+##### Can be null.
 
 ### status
 
@@ -628,13 +638,20 @@ Otherwise, this field is `any` and is `optional`.
 
 > `string` | optional
 
+##### Can be null.
+
 ### trialLocation
 
-> `alternatives` | optional
+> `conditional` | optional
+
+
+*Must match 1 of the following conditions:*
+
+#### Condition #1 for `trialLocation`: 
 
 > `string`
 
-#### Allowed Values
+##### Allowed Values
 
 
  - `Fresno, California`
@@ -712,14 +729,20 @@ Otherwise, this field is `any` and is `optional`.
  - `Charleston, West Virginia`
  - `Milwaukee, Wisconsin`
 
+#### Condition #2 for `trialLocation`: 
+
 > `string`
 
-###### Regex Pattern
+##### Regex Pattern
 
 
 `/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/`
 
+#### Condition #3 for `trialLocation`: 
+
 > `string` | optional
+
+##### Can be null.
 
 ### userId
 
