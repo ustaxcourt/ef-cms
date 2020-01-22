@@ -578,7 +578,7 @@ joiValidationDecorator(
       .optional(),
     trialTime: joi
       .string()
-      .pattern(/^[1-9]+:([0-5][0-9])$/)
+      .pattern(/^[0-9]+:([0-5][0-9])$/)
       .optional(),
     userId: joi
       .string()
