@@ -56,9 +56,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
         !isInProgress && !qcWorkItemsUntouched && document && document.isPaper;
 
       let filingsAndProceedingsWithAdditionalInfo = '';
-      if (document && document.documentTitle && document.additionalInfo) {
-        filingsAndProceedingsWithAdditionalInfo += ` ${document.additionalInfo}`;
-      }
       if (record.filingsAndProceedings) {
         filingsAndProceedingsWithAdditionalInfo += ` ${record.filingsAndProceedings}`;
       }
@@ -93,13 +90,21 @@ export const formattedCaseDetail = (get, applicationContext) => {
         }
       }
 
+      let descriptionDisplay = record.description;
+
+      if (document && document.documentTitle) {
+        descriptionDisplay = document.documentTitle;
+        if (document.additionalInfo) {
+          descriptionDisplay += ` ${document.additionalInfo}`;
+        }
+      }
+
       return {
         action: record.action,
         canEdit: document && document.canEdit,
         createdAtFormatted: record.createdAtFormatted,
         description: record.description,
-        descriptionDisplay:
-          (document && document.documentTitle) || record.description,
+        descriptionDisplay,
         documentId: document && document.documentId,
         editLink,
         eventCode: record.eventCode || (document && document.eventCode),

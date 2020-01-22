@@ -51,25 +51,26 @@ export const setValidationAlertErrorsAction = ({ get, props, store }) => {
 
   const alertError = {
     messages: flattenDeep(
-      errorKeys.map(key => {
-        const error = props.errors[key];
-        if (Array.isArray(error)) {
-          return error.map(subError => {
-            const subErrorKeys = Object.keys(subError).filter(
-              k => k !== 'index',
-            );
-            return subErrorKeys.map(subErrorKey => {
-              return `${key} #${subError.index + 1} - ${subErrorKey} field - ${
-                subError[subErrorKey]
-              }`;
+      errorKeys
+        .filter(key => props.errors[key] !== null)
+        .map(key => {
+          const error = props.errors[key];
+          if (Array.isArray(error)) {
+            return error.map(subError => {
+              const subErrorKeys = Object.keys(subError).filter(
+                k => k !== 'index',
+              );
+              return subErrorKeys.map(subErrorKey => {
+                return `${key} #${subError.index +
+                  1} - ${subErrorKey} field - ${subError[subErrorKey]}`;
+              });
             });
-          });
-        } else if (typeof error === 'object') {
-          return Object.keys(error).map(k => error[k]);
-        } else {
-          return error;
-        }
-      }),
+          } else if (typeof error === 'object') {
+            return Object.keys(error).map(k => error[k]);
+          } else {
+            return error;
+          }
+        }),
     ),
     title: 'Please correct the following errors on the page:',
   };

@@ -15,10 +15,14 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
+import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { state } from 'cerebral';
 import { takePathForRoles } from './takePathForRoles';
 
-const gotoCaseDetailInternal = [setCurrentPageAction('CaseDetailInternal')];
+const gotoCaseDetailInternal = [
+  showModalFromQueryAction,
+  setCurrentPageAction('CaseDetailInternal'),
+];
 const gotoCaseDetailExternal = [
   getCaseAssociationAction,
   setCaseAssociationAction,

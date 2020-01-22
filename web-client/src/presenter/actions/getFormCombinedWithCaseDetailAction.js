@@ -37,18 +37,14 @@ export const castToISO = (applicationContext, dateString) => {
 };
 
 /**
- * checks if the new date contains all expected parts; otherwise, it returns the originalDate
+ * checks if the new date contains all expected parts and returns date as an
+ * ISO string; otherwise, it returns null
  *
  * @param {object} applicationContext the application context*
  * @param {string} updatedDateString the new date string to verify
- * @param {string} originalDate the original date to return if the updatedDateString is bad
  * @returns {string} the updatedDateString if everything is correct.
  */
-export const checkDate = (
-  applicationContext,
-  updatedDateString,
-  originalDate,
-) => {
+export const checkDate = (applicationContext, updatedDateString) => {
   const hasAllDateParts = /.+-.+-.+/;
   if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
     updatedDateString = null;
@@ -60,11 +56,7 @@ export const checkDate = (
       updatedDateString = castToISO(applicationContext, updatedDateString);
     } else {
       //xx-xx-undefined
-      if (originalDate) {
-        updatedDateString = originalDate;
-      } else {
-        updatedDateString = null;
-      }
+      updatedDateString = null;
     }
   }
   return updatedDateString;
@@ -89,9 +81,12 @@ export const getFormCombinedWithCaseDetailAction = ({
     irsDay,
     irsMonth,
     irsYear,
-    payGovDay,
-    payGovMonth,
-    payGovYear,
+    paymentDateDay,
+    paymentDateMonth,
+    paymentDateWaivedDay,
+    paymentDateWaivedMonth,
+    paymentDateWaivedYear,
+    paymentDateYear,
     receivedAtDay,
     receivedAtMonth,
     receivedAtYear,
@@ -103,16 +98,20 @@ export const getFormCombinedWithCaseDetailAction = ({
     {
       ...get(state.form),
       irsNoticeDate: `${irsYear}-${irsMonth}-${irsDay}`,
-      payGovDate: `${payGovYear}-${payGovMonth}-${payGovDay}`,
+      petitionPaymentDate: `${paymentDateYear}-${paymentDateMonth}-${paymentDateDay}`,
+      petitionPaymentWaivedDate: `${paymentDateWaivedYear}-${paymentDateWaivedMonth}-${paymentDateWaivedDay}`,
       receivedAt: `${receivedAtYear}-${receivedAtMonth}-${receivedAtDay}`,
     },
     [
       'irsYear',
       'irsMonth',
       'irsDay',
-      'payGovYear',
-      'payGovMonth',
-      'payGovDay',
+      'paymentDateYear',
+      'paymentDateMonth',
+      'paymentDateDay',
+      'paymentDateWaivedYear',
+      'paymentDateWaivedMonth',
+      'paymentDateWaivedDay',
       'receivedAtYear',
       'receivedAtMonth',
       'receivedAtDay',
@@ -120,21 +119,16 @@ export const getFormCombinedWithCaseDetailAction = ({
     ],
   );
 
-  form.irsNoticeDate = checkDate(
+  form.irsNoticeDate = checkDate(applicationContext, form.irsNoticeDate);
+  form.petitionPaymentDate = checkDate(
     applicationContext,
-    form.irsNoticeDate,
-    caseDetail.irsNoticeDate,
+    form.petitionPaymentDate,
   );
-  form.payGovDate = checkDate(
+  form.petitionPaymentWaivedDate = checkDate(
     applicationContext,
-    form.payGovDate,
-    caseDetail.payGovDate,
+    form.petitionPaymentWaivedDate,
   );
-  form.receivedAt = checkDate(
-    applicationContext,
-    form.receivedAt,
-    caseDetail.receivedAt,
-  );
+  form.receivedAt = checkDate(applicationContext, form.receivedAt);
 
   if (caseCaption && (caseCaption = caseCaption.trim())) {
     caseDetail.caseCaption = caseCaption;
@@ -147,7 +141,6 @@ export const getFormCombinedWithCaseDetailAction = ({
         'contactSecondary.serviceIndicator',
       ]),
       ...form,
-      payGovId: caseDetail.payGovId === '' ? null : caseDetail.payGovId,
     },
   };
 };

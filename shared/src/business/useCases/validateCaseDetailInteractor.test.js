@@ -7,6 +7,16 @@ const { User } = require('../entities/User');
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
+const contactPrimary = {
+  address1: '123 Main St',
+  city: 'Somewhere',
+  countryType: ContactFactory.COUNTRY_TYPES.DOMESTIC,
+  name: 'Test Petitioner',
+  phone: '1234567890',
+  postalCode: '12345',
+  state: 'TN',
+};
+
 describe('validate case detail', () => {
   let applicationContext;
 
@@ -45,6 +55,7 @@ describe('validate case detail', () => {
       applicationContext,
       caseDetail: {
         caseType: 'defined',
+        contactPrimary,
         docketNumber: '101-18',
         documents: [
           {
@@ -83,12 +94,10 @@ describe('validate case detail', () => {
       caseDetail: {
         hasIrsNotice: true,
         irsNoticeDate: 'aa',
-        payGovDate: '12',
       },
     });
     expect(errors).toBeTruthy();
     expect(errors.irsNoticeDate).toBeTruthy();
-    expect(errors.payGovDate).toBeTruthy();
   });
 
   it('returns no errors on valid amounts and years', () => {
@@ -96,6 +105,7 @@ describe('validate case detail', () => {
       applicationContext,
       caseDetail: {
         caseType: 'defined',
+        contactPrimary,
         docketNumber: '101-18',
         documents: [
           {
@@ -133,6 +143,7 @@ describe('validate case detail', () => {
       applicationContext,
       caseDetail: {
         caseType: 'defined',
+        contactPrimary,
         docketNumber: '101-18',
         documents: [
           {
@@ -156,7 +167,6 @@ describe('validate case detail', () => {
         hasIrsNotice: false,
         irsNoticeDate: null,
         partyType: ContactFactory.PARTY_TYPES.petitioner,
-        payGovDate: '2018-12-24T00:00:00.000Z',
         petitioners: [{ name: 'user' }],
         preferredTrialCity: 'Chattanooga, TN',
         procedureType: 'defined',

@@ -56,7 +56,7 @@ export const OrdersNeededSummary = connect(
                 <li>Order for Ownership Disclosure Statement</li>
               )}
               {formattedCaseDetail.orderForRatification && (
-                <li>Order for Radification of Petition</li>
+                <li>Order for Ratification of Petition</li>
               )}
               {formattedCaseDetail.orderDesignatingPlaceOfTrial && (
                 <li>Order to Change Designated Place of Trial</li>
@@ -76,7 +76,7 @@ export const OrdersNeededSummary = connect(
               id="button-create-order"
               onClick={() => openCreateOrderChooseTypeModalSequence()}
             >
-              Create Order
+              Create Order or Notice
             </Button>
           </div>
         </section>

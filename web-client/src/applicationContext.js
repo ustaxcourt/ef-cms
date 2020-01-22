@@ -1,4 +1,6 @@
 import {
+  chiefJudgeNameForSigning,
+  clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
@@ -60,6 +62,7 @@ import { associateRespondentWithCaseInteractor } from '../../shared/src/proxies/
 import { authorizeCodeInteractor } from '../../shared/src/business/useCases/authorizeCodeInteractor';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
+import { canSetTrialSessionAsCalendaredInteractor } from '../../shared/src/business/useCases/trialSessions/canSetTrialSessionAsCalendaredInteractor';
 import { caseAdvancedSearchInteractor } from '../../shared/src/proxies/caseAdvancedSearchProxy';
 import {
   compareCasesByDocketNumber,
@@ -78,9 +81,11 @@ import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from '../../shared/src/proxies/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlProxy';
 import {
   createISODateString,
+  createISODateStringFromObject,
   formatDateString,
   formatNow,
   isStringISOFormatted,
+  isValidDateString,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
@@ -166,6 +171,7 @@ import { sendPetitionToIRSHoldingQueueInteractor } from '../../shared/src/proxie
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
+import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setTrialSessionAsSwingSessionInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionAsSwingSessionProxy';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
@@ -183,15 +189,18 @@ import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies
 import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/courtIssuedOrder/updateCourtIssuedOrderProxy';
 import { updateDocketEntryInteractor } from '../../shared/src/proxies/documents/updateDocketEntryProxy';
 import { updateJudgesCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateJudgesCaseNoteProxy';
+import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
+import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
 import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
+import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/updateQcCompleteForTrialProxy';
 import { updateTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionProxy';
 import { updateTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionWorkingCopyProxy';
 import { updateUserContactInformationInteractor } from '../../shared/src/proxies/users/updateUserContactInformationProxy';
-import { uploadDocument } from '../../shared/src/persistence/s3/uploadDocument';
+import { uploadDocumentFromClient } from '../../shared/src/persistence/s3/uploadDocumentFromClient';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
-import { uploadPdf } from '../../shared/src/persistence/s3/uploadPdf';
+import { uploadPdfFromClient } from '../../shared/src/persistence/s3/uploadPdfFromClient';
 import { validateAddPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddPractitionerInteractor';
 import { validateAddRespondentInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddRespondentInteractor';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
@@ -210,6 +219,7 @@ import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/us
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
+import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
 import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
@@ -249,6 +259,7 @@ const allUseCases = {
   authorizeCodeInteractor,
   batchDownloadTrialSessionInteractor,
   blockCaseFromTrialInteractor,
+  canSetTrialSessionAsCalendaredInteractor,
   caseAdvancedSearchInteractor,
   completeDocketEntryQCInteractor,
   completeWorkItemInteractor,
@@ -330,6 +341,7 @@ const allUseCases = {
   sendPetitionToIRSHoldingQueueInteractor,
   serveCourtIssuedDocumentInteractor,
   setItemInteractor,
+  setNoticesForCalendaredTrialSessionInteractor,
   setTrialSessionAsSwingSessionInteractor,
   setTrialSessionCalendarInteractor,
   setWorkItemAsReadInteractor,
@@ -346,7 +358,10 @@ const allUseCases = {
   updateCourtIssuedOrderInteractor,
   updateDocketEntryInteractor,
   updateJudgesCaseNoteInteractor,
+  updatePetitionDetailsInteractor,
+  updatePetitionerInformationInteractor,
   updatePrimaryContactInteractor,
+  updateQcCompleteForTrialInteractor,
   updateTrialSessionInteractor,
   updateTrialSessionWorkingCopyInteractor,
   updateUserContactInformationInteractor,
@@ -371,6 +386,7 @@ const allUseCases = {
   validatePdfInteractor,
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
+  validatePetitionerInformationFormInteractor,
   validatePrimaryContactInteractor,
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
@@ -389,7 +405,8 @@ const applicationContext = {
     return process.env.API_URL || 'http://localhost:3000';
   },
   getCaseCaptionNames: Case.getCaseCaptionNames,
-  getChiefJudgeNameForSigning: () => 'Maurice B. Foley',
+  getChiefJudgeNameForSigning: () => chiefJudgeNameForSigning,
+  getClerkOfCourtNameForSigning: () => clerkOfCourtNameForSigning,
   getCognitoClientId: () => {
     return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
   },
@@ -412,6 +429,7 @@ const applicationContext = {
       CATEGORY_MAP: Document.CATEGORY_MAP,
       CHAMBERS_SECTION,
       CHAMBERS_SECTIONS,
+      CONTACT_CHANGE_DOCUMENT_TYPES: Document.CONTACT_CHANGE_DOCUMENT_TYPES,
       COUNTRY_TYPES: ContactFactory.COUNTRY_TYPES,
       COURT_ISSUED_EVENT_CODES: Document.COURT_ISSUED_EVENT_CODES,
       ESTATE_TYPES: ContactFactory.ESTATE_TYPES,
@@ -421,6 +439,7 @@ const applicationContext = {
       ORDER_TYPES_MAP: Order.ORDER_TYPES,
       OTHER_TYPES: ContactFactory.OTHER_TYPES,
       PARTY_TYPES: ContactFactory.PARTY_TYPES,
+      PAYMENT_STATUS: Case.PAYMENT_STATUS,
       REFRESH_INTERVAL: 20 * MINUTES,
       ROLE_PERMISSIONS,
       SCAN_MODES: Scan.SCAN_MODES,
@@ -428,11 +447,11 @@ const applicationContext = {
       SERVICE_INDICATOR_TYPES: constants,
       SERVICE_STAMP_OPTIONS,
       SESSION_DEBOUNCE: 250,
-      SESSION_MODAL_TIMEOUT: 5 * MINUTES, // 5 minutes
+      SESSION_MODAL_TIMEOUT: 5 * MINUTES,
       SESSION_TIMEOUT:
         (process.env.SESSION_TIMEOUT &&
           parseInt(process.env.SESSION_TIMEOUT)) ||
-        55 * MINUTES, // 55 minutes
+        55 * MINUTES,
       STATUS_TYPES: Case.STATUS_TYPES,
       STATUS_TYPES_MANUAL_UPDATE: Case.STATUS_TYPES_MANUAL_UPDATE,
       STATUS_TYPES_WITH_ASSOCIATED_JUDGE:
@@ -470,6 +489,7 @@ const applicationContext = {
     NewTrialSession,
     Note,
     OrderWithoutBody,
+    TrialSession,
     User,
   }),
   getError: e => {
@@ -492,8 +512,8 @@ const applicationContext = {
       getItem,
       removeItem,
       setItem,
-      uploadDocument,
-      uploadPdf,
+      uploadDocumentFromClient,
+      uploadPdfFromClient,
     };
   },
   getScanner: async () => {
@@ -523,6 +543,7 @@ const applicationContext = {
       compareISODateStrings,
       compareStrings,
       createISODateString,
+      createISODateStringFromObject,
       formatCase,
       formatCaseDeadlines,
       formatCaseForTrialSession,
@@ -534,6 +555,7 @@ const applicationContext = {
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isStringISOFormatted,
+      isValidDateString,
       prepareDateFromString,
       setServiceIndicatorsForCase,
       sortDocketRecords,

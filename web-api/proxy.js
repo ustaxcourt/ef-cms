@@ -16,6 +16,7 @@ const PROXY_DESTINATIONS = {
   '/case-deadlines': `http://${PROXY_HOST}:3009`,
   '/case-documents': `http://${PROXY_HOST}:3008`,
   '/case-notes': `http://${PROXY_HOST}:3010`,
+  '/case-parties': `http://${PROXY_HOST}:3014`,
   '/cases': `http://${PROXY_HOST}:3002`,
   '/documents': `http://${PROXY_HOST}:3004`,
   '/notifications': `http://${PROXY_HOST}:3011`,

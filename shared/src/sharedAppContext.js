@@ -23,7 +23,12 @@ const getUniqueId = () => {
   return uuidv4();
 };
 
+const chiefJudgeNameForSigning = 'Maurice B. Foley';
+const clerkOfCourtNameForSigning = 'Stephanie A. Servoss';
+
 module.exports = {
+  chiefJudgeNameForSigning,
+  clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
   getPublicSiteUrl,
   getUniqueId,
