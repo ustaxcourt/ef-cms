@@ -12,7 +12,7 @@ import docketClerkVerifiesDocketEntryMetaUpdates from './journey/docketClerkVeri
 import petitionerChoosesCaseType from './journey/petitionerChoosesCaseType';
 import petitionerChoosesProcedureType from './journey/petitionerChoosesProcedureType';
 import petitionerCreatesNewCase from './journey/petitionerCreatesNewCase';
-import petitionerFilesDocumentForCase from './journey/petitionerFilesDocumentForCase';
+import petitionerFilesADocumentForCase from './journey/petitionerFilesADocumentForCase';
 import petitionerLogin from './journey/petitionerLogIn';
 import petitionerNavigatesToCreateCase from './journey/petitionerCancelsCreateCase';
 import petitionerSignsOut from './journey/petitionerSignsOut';
@@ -26,7 +26,7 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
   petitionerCreatesNewCase(test, fakeFile);
-  petitionerFilesDocumentForCase(test, fakeFile);
+  petitionerFilesADocumentForCase(test, fakeFile);
   petitionerSignsOut(test);
 
   docketClerkLogIn(test);
