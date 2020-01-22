@@ -5,7 +5,7 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
 
   const formatCaseDetail = caseToFormat => ({
     ...caseToFormat,
-    isCaseSealed: !!caseToFormat.sealedDate,
+    isCaseSealed: !!caseToFormat.isSealed,
   });
 
   const formattedDocketRecord = publicCase.docketRecord.map(d =>

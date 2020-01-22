@@ -29,6 +29,7 @@ describe('Case entity', () => {
   it('defaults the orders to false', () => {
     const myCase = new Case(MOCK_CASE, { applicationContext });
     expect(myCase).toMatchObject({
+      isSealed: false,
       noticeOfAttachments: false,
       orderForAmendedPetition: false,
       orderForAmendedPetitionAndFilingFee: false,

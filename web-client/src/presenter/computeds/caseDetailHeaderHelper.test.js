@@ -83,8 +83,8 @@ describe('caseDetailHeaderHelper', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
+          isSealed: true,
           respondents: [{ userId: '789' }],
-          sealedDate: '2019-03-01T21:40:46.415Z',
         },
         currentPage: 'CaseDetail',
         form: {},
@@ -184,7 +184,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(user),
-        caseDetail: { sealedDate: '2019-03-01T21:40:46.415Z' },
+        caseDetail: { isSealed: true },
         currentPage: 'CaseDetail',
         form: {},
         screenMetadata: {
@@ -295,10 +295,10 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showCreateOrderButton).toEqual(true);
   });
 
-  it('should show the Sealed Case banner if the sealedDate on the case has a non-empty value', () => {
+  it('should show the Sealed Case banner if the case is sealed', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { sealedDate: '2019-09-19T16:42:00.000Z' },
+        caseDetail: { isSealed: true },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {},

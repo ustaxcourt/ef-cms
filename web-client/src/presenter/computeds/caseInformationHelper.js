@@ -13,7 +13,7 @@ export const caseInformationHelper = get => {
     caseDetail.respondents &&
     !!caseDetail.respondents.length;
   const showAddCounsel = permissions.ASSOCIATE_USER_WITH_CASE;
-  const showSealCaseButton = permissions.SEAL_CASE && !caseDetail.sealedDate;
+  const showSealCaseButton = permissions.SEAL_CASE && !caseDetail.isSealed;
 
   return {
     showAddCounsel,

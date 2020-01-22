@@ -167,7 +167,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       !isExternalUser ||
       (caseDetail.respondents && !!caseDetail.respondents.length),
     userCanViewCase:
-      (isExternalUser && userAssociatedWithCase) || !caseDetail.sealedDate,
+      (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed,
     userHasAccessToCase,
   };
 };
