@@ -1,6 +1,7 @@
 const AWS = require('aws-sdk');
 const seedEntries = require('../fixtures/seed');
 const { createUsers } = require('./createUsers');
+const { createCase1 } = require('./cases/createCase1');
 
 AWS.config = new AWS.Config();
 AWS.config.accessKeyId = 'noop';
@@ -35,5 +36,6 @@ module.exports.seedLocalDatabase = async entries => {
   } else {
     await createUsers();
     await putEntries(seedEntries);
+    await createCase1();
   }
 };
