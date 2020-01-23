@@ -48,34 +48,42 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
     });
 
     for (let mapping of workItemMappings) {
-      requests.push(
-        updateWorkItemCaseStatus({
-          applicationContext,
-          caseStatus: caseToUpdate.status,
-          workItemId: mapping.sk,
-        }),
-      );
-      requests.push(
-        updateWorkItemCaseTitle({
-          applicationContext,
-          caseTitle: caseToUpdate.caseCaption,
-          workItemId: mapping.sk,
-        }),
-      );
-      requests.push(
-        updateWorkItemDocketNumberSuffix({
-          applicationContext,
-          docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-          workItemId: mapping.sk,
-        }),
-      );
-      requests.push(
-        updateWorkItemTrialDate({
-          applicationContext,
-          trialDate: caseToUpdate.trialDate,
-          workItemId: mapping.sk,
-        }),
-      );
+      if (oldCase.status !== caseToUpdate.status) {
+        requests.push(
+          updateWorkItemCaseStatus({
+            applicationContext,
+            caseStatus: caseToUpdate.status,
+            workItemId: mapping.sk,
+          }),
+        );
+      }
+      if (oldCase.caseCaption !== caseToUpdate.caseCaption) {
+        requests.push(
+          updateWorkItemCaseTitle({
+            applicationContext,
+            caseTitle: caseToUpdate.caseCaption,
+            workItemId: mapping.sk,
+          }),
+        );
+      }
+      if (oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix) {
+        requests.push(
+          updateWorkItemDocketNumberSuffix({
+            applicationContext,
+            docketNumberSuffix: caseToUpdate.docketNumberSuffix || null,
+            workItemId: mapping.sk,
+          }),
+        );
+      }
+      if (oldCase.trialDate !== caseToUpdate.trialDate) {
+        requests.push(
+          updateWorkItemTrialDate({
+            applicationContext,
+            trialDate: caseToUpdate.trialDate || null,
+            workItemId: mapping.sk,
+          }),
+        );
+      }
     }
   }
 
