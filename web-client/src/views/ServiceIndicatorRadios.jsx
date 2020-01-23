@@ -32,7 +32,7 @@ export const ServiceIndicatorRadios = connect(
             <label
               className="usa-radio__label"
               htmlFor="service-type-electronic"
-              id="service-type-electronic"
+              id="service-type-label-electronic"
             >
               Electronic
             </label>
@@ -56,7 +56,7 @@ export const ServiceIndicatorRadios = connect(
             <label
               className="usa-radio__label"
               htmlFor="service-type-paper"
-              id="service-type-paper"
+              id="service-type-label-paper"
             >
               Paper
             </label>
@@ -80,7 +80,7 @@ export const ServiceIndicatorRadios = connect(
             <label
               className="usa-radio__label"
               htmlFor="service-type-none"
-              id="service-type-none"
+              id="service-type-label-none"
             >
               None
             </label>
