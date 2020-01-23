@@ -15,6 +15,7 @@ export const PaperServiceConfirmModal = connect(
       className="paper-service-confirm-modal"
       confirmLabel="Print Now"
       title="Paper service is required for the following document:"
+      onCancelSequence="clearModalSequence"
       onConfirmSequence="navigateToPrintPreviewSequence"
     >
       <p>The following document will be served on all parties:</p>
