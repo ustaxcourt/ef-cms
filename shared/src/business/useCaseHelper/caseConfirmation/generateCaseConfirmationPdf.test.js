@@ -47,7 +47,7 @@ describe('generateCaseConfirmationPdf', () => {
     isAuthorized.mockReturnValue(true);
   });
   afterEach(() => {
-    jest.restoreAllMocks();
+    jest.clearAllMocks();
   });
 
   it('requires permissions', async () => {

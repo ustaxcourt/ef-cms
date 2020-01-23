@@ -8,6 +8,9 @@ const {
 const {
   updateWorkItemDocketNumberSuffix,
 } = require('../workitems/updateWorkItemDocketNumberSuffix');
+const {
+  updateWorkItemTrialDate,
+} = require('../workitems/updateWorkItemTrialDate');
 
 /**
  * updateCase
@@ -30,7 +33,8 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
   if (
     oldCase.status !== caseToUpdate.status ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
-    oldCase.caseCaption !== caseToUpdate.caseCaption
+    oldCase.caseCaption !== caseToUpdate.caseCaption ||
+    oldCase.trialDate !== caseToUpdate.trialDate
   ) {
     const workItemMappings = await client.query({
       ExpressionAttributeNames: {
@@ -62,6 +66,13 @@ exports.updateCase = async ({ applicationContext, caseToUpdate }) => {
         updateWorkItemDocketNumberSuffix({
           applicationContext,
           docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+          workItemId: mapping.sk,
+        }),
+      );
+      requests.push(
+        updateWorkItemTrialDate({
+          applicationContext,
+          trialDate: caseToUpdate.trialDate,
           workItemId: mapping.sk,
         }),
       );

@@ -146,6 +146,7 @@ exports.fileExternalDocumentInteractor = async ({
           isQC: true,
           section: DOCKET_SECTION,
           sentBy: user.userId,
+          trialDate: caseEntity.trialDate,
         },
         { applicationContext },
       );
