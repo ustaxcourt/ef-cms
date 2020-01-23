@@ -2,9 +2,15 @@
 
 ### associatedJudge
 
+
+Defaults to Chief Judge.
+
 > `string` | required
 
 ### blocked
+
+
+Temporarily blocked from trial.
 
 > `boolean` | optional
 
@@ -30,9 +36,15 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 ### caseCaption
 
+
+The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.
+
 > `string` | required
 
 ### caseId
+
+
+Unique Case ID only used by the system.
 
 > `string` | required
 
@@ -73,9 +85,15 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 ### createdAt
 
+
+When the case was added to the system.
+
 > `date` | required
 
 ### docketNumber
+
+
+Unique Case ID in XXXXX-YY format.
 
 > `string` | required
 
@@ -102,6 +120,9 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 ### docketRecord
 
+
+List of DocketRecord Entities for the Case.
+
 > `array` | required
 
 
@@ -113,6 +134,9 @@ An array of [`DocketRecord`](./DocketRecord.md)s
 At least `1` item(s) must be selected.
 
 ### documents
+
+
+List of Document Entities for the Case.
 
 > `array` | required
 
@@ -176,11 +200,17 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 
 ### irsNoticeDate
 
+
+Last date that the Petitioner is allowed to file before.
+
 > `date` | optional
 
 ##### Can be null.
 
 ### irsSendDate
+
+
+When the Case was sent to the IRS by the Court.
 
 > `date` | optional
 
@@ -189,6 +219,9 @@ Otherwise, this field is `any` and is `optional`. `null` is allowed.
 > `boolean` | optional
 
 ### leadCaseId
+
+
+If this Case is consolidated, this is the ID of the lead Case. It is the lowest Docket Number in the consolidated group.
 
 > `string` | optional
 
@@ -420,9 +453,15 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 
 ### qcCompleteForTrial
 
+
+QC Checklist object that must be completed before the Case can go to trial.
+
 > `object` | required
 
 ### receivedAt
+
+
+When the case was received by the Court.
 
 > `date` | required
 
@@ -579,6 +618,9 @@ Otherwise, this field is `date` and is `optional`. `null` is allowed.
 `/^[0-9]+:([0-5][0-9])$/`
 
 ### userId
+
+
+The ID of the User who added the Case to the System.
 
 > `string` | optional
 

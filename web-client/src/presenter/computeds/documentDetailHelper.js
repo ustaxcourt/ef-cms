@@ -186,6 +186,7 @@ export const documentDetailHelper = (get, applicationContext) => {
     showEditDocketEntry:
       !isDraftDocument &&
       permissions.DOCKET_ENTRY &&
+      !formattedDocument.qcWorkItemsCompleted &&
       formattedDocument.isPetition === false &&
       !formattedDocument.isCourtIssuedDocument,
     showPrintCaseConfirmationButton,
