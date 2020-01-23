@@ -563,6 +563,7 @@ describe('formatted work queue computed', () => {
             highPriority: true,
             id: 'b',
             receivedAt: '2019-02-17T15:27:55.801Z',
+            trialDate: '2019-01-17T00:00:00.000Z',
           },
           {
             ...qcWorkItem,
@@ -571,6 +572,7 @@ describe('formatted work queue computed', () => {
             highPriority: true,
             id: 'a',
             receivedAt: '2019-01-17T15:27:55.801Z',
+            trialDate: '2019-02-17T00:00:00.000Z',
           },
           {
             ...qcWorkItem,
@@ -605,8 +607,10 @@ describe('formatted work queue computed', () => {
             assigneeId: docketClerkUser.userId,
             completedByUserId: docketClerkUser.userId,
             docketNumber: '101-19',
+            highPriority: true,
             id: 'c',
             receivedAt: '2019-01-17T15:27:55.801Z',
+            trialDate: '2019-02-17T00:00:00.000Z',
           },
           {
             ...qcWorkItem,
@@ -615,6 +619,7 @@ describe('formatted work queue computed', () => {
             highPriority: true,
             id: 'b',
             receivedAt: '2019-02-17T15:27:55.801Z',
+            trialDate: '2019-02-17T00:00:00.000Z',
           },
           {
             ...qcWorkItem,
@@ -623,6 +628,7 @@ describe('formatted work queue computed', () => {
             highPriority: true,
             id: 'a',
             receivedAt: '2019-01-17T15:27:55.801Z',
+            trialDate: '2019-01-17T00:00:00.000Z',
           },
           {
             ...qcWorkItem,
@@ -640,9 +646,9 @@ describe('formatted work queue computed', () => {
       },
     });
 
-    expect(result[0].id).toEqual('b');
-    expect(result[1].id).toEqual('a');
-    expect(result[2].id).toEqual('c');
+    expect(result[0].id).toEqual('a');
+    expect(result[1].id).toEqual('c');
+    expect(result[2].id).toEqual('b');
     expect(result[3].id).toEqual('d');
   });
 
