@@ -1072,7 +1072,6 @@ describe('formattedCaseDetail', () => {
     });
 
     it('should show the edit button if the docket entry has no document and the user has permission', () => {
-
       const result = runCompute(formattedCaseDetail, {
         state: {
           ...getBaseState(petitionsClerkUser),
