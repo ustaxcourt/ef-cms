@@ -80,10 +80,18 @@ exports.setTrialSessionCalendarInteractor = async ({
 
     caseEntity.setAsCalendared(trialSessionEntity);
 
-    return applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
+    return Promise.all([
+      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
+        applicationContext,
+        caseId: caseEntity.caseId,
+        highPriority: true,
+        trialDate: caseEntity.trialDate,
+      }),
+      applicationContext.getPersistenceGateway().updateCase({
+        applicationContext,
+        caseToUpdate: caseEntity.validate().toRawObject(),
+      }),
+    ]);
   };
 
   /**
@@ -100,6 +108,12 @@ exports.setTrialSessionCalendarInteractor = async ({
     trialSessionEntity.addCaseToCalendar(caseEntity);
 
     return Promise.all([
+      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
+        applicationContext,
+        caseId: caseEntity.caseId,
+        highPriority: true,
+        trialDate: caseEntity.trialDate,
+      }),
       applicationContext.getPersistenceGateway().updateCase({
         applicationContext,
         caseToUpdate: caseEntity.validate().toRawObject(),
