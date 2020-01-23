@@ -40,6 +40,7 @@ function WorkItem(rawWorkItem, { applicationContext }) {
   this.sentBy = rawWorkItem.sentBy;
   this.sentBySection = rawWorkItem.sentBySection;
   this.sentByUserId = rawWorkItem.sentByUserId;
+  this.trialDate = rawWorkItem.trialDate;
   this.updatedAt = rawWorkItem.updatedAt || createISODateString();
   this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
   this.messages = (rawWorkItem.messages || []).map(
@@ -118,6 +119,11 @@ joiValidationDecorator(
         version: ['uuidv4'],
       })
       .optional(),
+    trialDate: joi
+      .date()
+      .iso()
+      .optional()
+      .allow(null),
     updatedAt: joi
       .date()
       .iso()
