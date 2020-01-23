@@ -84,6 +84,7 @@ describe('setTrialSessionCalendarInteractor', () => {
           },
         ],
         getTrialSessionById: () => MOCK_TRIAL,
+        setPriorityOnAllWorkItems: () => {},
         updateCase: updateCaseSpy,
         updateTrialSession,
       }),
@@ -140,5 +141,63 @@ describe('setTrialSessionCalendarInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
     expect(updateCaseSpy.called).toEqual(false);
+  });
+
+  it('should set work items as high priority for each case that is calendared', async () => {
+    const setPriorityOnAllWorkItemsSpy = jest.fn();
+
+    applicationContext = {
+      getCurrentUser: () => {
+        return new User({
+          name: 'Docket Clerk',
+          role: User.ROLES.docketClerk,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+      },
+      getPersistenceGateway: () => ({
+        deleteCaseTrialSortMappingRecords: () => {},
+        getCalendaredCasesForTrialSession: () => [
+          {
+            ...MOCK_CASE,
+            caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+            docketNumber: '102-19',
+            qcCompleteForTrial: {
+              '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+            },
+          },
+        ],
+        getEligibleCasesForTrialSession: () => [
+          {
+            ...MOCK_CASE,
+            qcCompleteForTrial: {
+              '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+            },
+          },
+        ],
+        getTrialSessionById: () => MOCK_TRIAL,
+        setPriorityOnAllWorkItems: setPriorityOnAllWorkItemsSpy,
+        updateCase: () => {},
+        updateTrialSession: () => {},
+      }),
+      getUniqueId: () => 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    };
+
+    await setTrialSessionCalendarInteractor({
+      applicationContext,
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(setPriorityOnAllWorkItemsSpy).toBeCalled();
+    expect(setPriorityOnAllWorkItemsSpy.mock.calls.length).toEqual(2);
+    expect(setPriorityOnAllWorkItemsSpy.mock.calls[0][0]).toMatchObject({
+      caseId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+      highPriority: true,
+      trialDate: '2025-12-01T00:00:00.000Z',
+    });
+    expect(setPriorityOnAllWorkItemsSpy.mock.calls[1][0]).toMatchObject({
+      caseId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      highPriority: true,
+      trialDate: '2025-12-01T00:00:00.000Z',
+    });
   });
 });

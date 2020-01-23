@@ -47,6 +47,7 @@ describe('remove case from trial session', () => {
           createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsStub,
           getCaseByCaseId: getCaseByCaseIdStub,
           getTrialSessionById: getTrialSessionByIdStub,
+          setPriorityOnAllWorkItems: () => null,
           updateCase: updateCaseStub,
           updateTrialSession: updateTrialSessionStub,
         };
@@ -80,6 +81,7 @@ describe('remove case from trial session', () => {
           createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsStub,
           getCaseByCaseId: getCaseByCaseIdStub,
           getTrialSessionById: getTrialSessionByIdStub,
+          setPriorityOnAllWorkItems: () => null,
           updateCase: updateCaseStub,
           updateTrialSession: updateTrialSessionStub,
         };
@@ -147,6 +149,7 @@ describe('remove case from trial session', () => {
           createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsStub,
           getCaseByCaseId: getCaseByCaseIdStub,
           getTrialSessionById: getTrialSessionByIdStub,
+          setPriorityOnAllWorkItems: () => null,
           updateCase: updateCaseStub,
           updateTrialSession: updateTrialSessionStub,
         };
@@ -186,6 +189,45 @@ describe('remove case from trial session', () => {
       status: Case.STATUS_TYPES.generalDocketReadyForTrial,
       trialLocation: undefined,
       trialSessionId: undefined,
+    });
+  });
+
+  it('updates work items to be not high priority', async () => {
+    const getTrialSessionByIdStub = sinon
+      .stub()
+      .returns({ ...MOCK_TRIAL_SESSION, isCalendared: true });
+    const setPriorityOnAllWorkItemsSpy = jest.fn();
+
+    applicationContext = {
+      environment: { stage: 'local' },
+      getCurrentUser: () => {
+        return {
+          role: User.ROLES.petitionsClerk,
+          userId: 'petitionsclerk',
+        };
+      },
+      getPersistenceGateway: () => {
+        return {
+          createCaseTrialSortMappingRecords: createCaseTrialSortMappingRecordsStub,
+          getCaseByCaseId: getCaseByCaseIdStub,
+          getTrialSessionById: getTrialSessionByIdStub,
+          setPriorityOnAllWorkItems: setPriorityOnAllWorkItemsSpy,
+          updateCase: updateCaseStub,
+          updateTrialSession: updateTrialSessionStub,
+        };
+      },
+    };
+
+    await removeCaseFromTrialInteractor({
+      applicationContext,
+      caseId: MOCK_CASE.caseId,
+      disposition: 'because',
+      trialSessionId: MOCK_TRIAL_SESSION.trialSessionId,
+    });
+
+    expect(setPriorityOnAllWorkItemsSpy).toBeCalled();
+    expect(setPriorityOnAllWorkItemsSpy.mock.calls[0][0]).toMatchObject({
+      highPriority: false,
     });
   });
 });

@@ -587,6 +587,9 @@ const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
+  setPriorityOnAllWorkItems,
+} = require('../../shared/src/persistence/dynamo/workitems/setPriorityOnAllWorkItems');
+const {
   setServiceIndicatorsForCase,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
 const {
@@ -918,6 +921,7 @@ module.exports = (appContextUser = {}) => {
         saveWorkItemForDocketEntryWithoutFile,
         saveWorkItemForNonPaper,
         saveWorkItemForPaper,
+        setPriorityOnAllWorkItems,
         setWorkItemAsRead,
         updateCase,
         updateCaseDeadline,
