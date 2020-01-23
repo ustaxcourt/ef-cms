@@ -994,6 +994,10 @@ describe('formattedCaseDetail', () => {
             documentId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
             filingDate: '2019-06-19T17:29:13.120Z',
           },
+          {
+            description: 'Filing Fee Paid',
+            filingDate: '2019-06-19T17:29:13.120Z',
+          },
         ],
         documents: [
           {
@@ -1064,6 +1068,24 @@ describe('formattedCaseDetail', () => {
 
       expect(
         result.formattedDocketEntries[0].showEditDocketRecordEntry,
+      ).toEqual(true);
+    });
+
+    it('should show the edit button if the docket entry has no document and the user has permission', () => {
+
+      const result = runCompute(formattedCaseDetail, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail,
+          caseDetailErrors: {},
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+          },
+        },
+      });
+
+      expect(
+        result.formattedDocketEntries[1].showEditDocketRecordEntry,
       ).toEqual(true);
     });
   });
