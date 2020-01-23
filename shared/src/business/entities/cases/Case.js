@@ -410,6 +410,7 @@ joiValidationDecorator(
       .items(joi.object().meta({ entityName: 'DocketRecord' }))
       .min(1)
       .required()
+      .unique((a, b) => a.index === b.index)
       .description('List of DocketRecord Entities for the Case.'),
     documents: joi
       .array()
@@ -544,7 +545,9 @@ joiValidationDecorator(
     qcCompleteForTrial: joi
       .object()
       .required()
-      .description('QC Checklist.'),
+      .description(
+        'QC Checklist object that must be completed before the Case can go to trial.',
+      ),
     receivedAt: joi
       .date()
       .iso()
@@ -586,7 +589,7 @@ joiValidationDecorator(
     userId: joi
       .string()
       .optional()
-      .description('The user who added the Case to the System.'),
+      .description('The ID of the User who added the Case to the System.'),
     workItems: joi.array().optional(),
   }),
   function() {
@@ -1151,7 +1154,7 @@ Case.prototype.setAsCalendared = function(trialSessionEntity) {
 /**
  * returns true if the case is associated with the userId
  *
- * @param {object} arguments
+ * @param {object} arguments arguments
  * @param {object} arguments.caseRaw raw case details
  * @param {string} arguments.userId id of the user account
  * @returns {boolean} if the case is associated

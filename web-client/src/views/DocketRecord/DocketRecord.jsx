@@ -131,18 +131,20 @@ export const DocketRecord = connect(
                     </td>
                     {docketRecordHelper.showEditDocketRecordEntry && (
                       <td>
-                        <Button
-                          link
-                          className="padding-0"
-                          icon="edit"
-                          onClick={() => {
-                            openEditDocketEntryMetaModalSequence({
-                              index: entry.index,
-                            });
-                          }}
-                        >
-                          Edit
-                        </Button>
+                        {entry.showEditDocketRecordEntry && (
+                          <Button
+                            link
+                            className="padding-0"
+                            icon="edit"
+                            onClick={() => {
+                              openEditDocketEntryMetaModalSequence({
+                                index: entry.index,
+                              });
+                            }}
+                          >
+                            Edit
+                          </Button>
+                        )}
                       </td>
                     )}
                   </tr>

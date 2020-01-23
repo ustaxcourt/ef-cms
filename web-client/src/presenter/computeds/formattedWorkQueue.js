@@ -89,7 +89,11 @@ export const formatWorkItem = ({
   result.showComplete = !result.isInitializeCase;
   result.showSendTo = !result.isInitializeCase;
 
-  if (result.assigneeName === 'Unassigned') {
+  if (result.highPriority) {
+    result.showHighPriorityIcon = true;
+  }
+
+  if (result.assigneeName === 'Unassigned' && !result.showHighPriorityIcon) {
     result.showUnassignedIcon = true;
   }
 

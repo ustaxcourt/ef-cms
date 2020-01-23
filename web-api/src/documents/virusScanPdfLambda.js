@@ -12,7 +12,7 @@ const {
  */
 exports.handler = event =>
   handle(event, async () => {
-    const { documentId } = event.pathParameters || {};
+    const { documentId } = event.pathParameters || event.path || {};
     const user = getUserFromAuthHeader(event);
     const applicationContext = createApplicationContext(user);
 

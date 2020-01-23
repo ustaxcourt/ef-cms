@@ -1,5 +1,11 @@
 # DocketRecord
 
+### action
+
+> `string` | optional
+
+##### Can be null.
+
 ### description
 
 > `string` | required
