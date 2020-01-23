@@ -8,10 +8,14 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * @param {Array} cases case entities
+ * generatePage from template
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.templateContent the data to be passed to the pug template
  * @returns {string} an html string resulting from rendering template with caseInfo
  */
-const generatePage = async ({ applicationContext, docketChangeInfo }) => {
+const generatePage = async ({ applicationContext, templateContent }) => {
   const pug = applicationContext.getPug();
   const sass = applicationContext.getNodeSass();
 
@@ -23,7 +27,7 @@ const generatePage = async ({ applicationContext, docketChangeInfo }) => {
   const compiledFunction = pug.compile(template);
   const html = compiledFunction({
     css,
-    ...docketChangeInfo,
+    ...templateContent,
     logo: ustcLogoBufferBase64,
   });
   return html;
@@ -58,7 +62,7 @@ exports.generateNoticeOfDocketChangePdf = async ({
 
     const contentResult = await generatePage({
       applicationContext,
-      docketChangeInfo,
+      templateContent: docketChangeInfo,
     });
 
     await page.setContent(contentResult);
