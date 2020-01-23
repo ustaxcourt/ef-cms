@@ -59,15 +59,11 @@ const docketChangeInfo = {
 
 describe('generatePage', () => {
   it('returns a correctly-generated HTML output based on information provided', async () => {
-    const result = await generatePage({
-      applicationContext,
-      templateContent: docketChangeInfo,
-    });
+    const result = await generatePage({ applicationContext, docketChangeInfo });
     expect(result.indexOf('Sausage')).not.toEqual(-1);
     expect(result.indexOf('Cody')).not.toEqual(-1);
     expect(result.indexOf('123-19X')).not.toEqual(-1);
   });
-
   it('returns a correctly-generated HTML output based on information provided', async () => {
     const docketChangeArg = {
       ...docketChangeInfo,
@@ -78,7 +74,7 @@ describe('generatePage', () => {
     };
     const result = await generatePage({
       applicationContext,
-      templateContent: docketChangeArg,
+      docketChangeInfo: docketChangeArg,
     });
     expect(result.indexOf('Unchanged string')).toEqual(-1);
   });
