@@ -163,6 +163,14 @@ export const SectionWorkQueueInbox = connect(
                         size="lg"
                       />
                     )}
+                    {item.showHighPriorityIcon && (
+                      <FontAwesomeIcon
+                        aria-hidden="true"
+                        className="iconHighPriority"
+                        icon={['fas', 'exclamation-circle']}
+                        size="lg"
+                      />
+                    )}
                   </td>
                 )}
                 <td className="message-queue-row message-queue-document">
