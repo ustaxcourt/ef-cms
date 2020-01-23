@@ -63,6 +63,7 @@ export const formatWorkItem = ({
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
 
+  result.highPriority = !!result.highPriority;
   result.messages = orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
     message.createdAtFormatted = formatDateIfToday(
