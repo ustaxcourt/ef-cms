@@ -542,6 +542,59 @@ describe('formatted work queue computed', () => {
     });
   });
 
+  it('sorts high priority work items to the start of the list - qc, my, inbox', () => {
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          {
+            ...qcWorkItem,
+            assigneeId: docketClerkUser.userId,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '101-19',
+            highPriority: false,
+            id: 'c',
+            receivedAt: '2019-01-17T15:27:55.801Z',
+          },
+          {
+            ...qcWorkItem,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '102-19',
+            highPriority: true,
+            id: 'b',
+            receivedAt: '2019-02-17T15:27:55.801Z',
+          },
+          {
+            ...qcWorkItem,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '103-19',
+            highPriority: true,
+            id: 'a',
+            receivedAt: '2019-01-17T15:27:55.801Z',
+          },
+          {
+            ...qcWorkItem,
+            completedByUserId: docketClerkUser.userId,
+            docketNumber: '104-19',
+            highPriority: false,
+            id: 'd',
+            receivedAt: '2019-04-17T15:27:55.801Z',
+          },
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+          workQueueIsInternal: false,
+        },
+      },
+    });
+
+    expect(result[0].id).toEqual('b');
+    expect(result[1].id).toEqual('a');
+    expect(result[2].id).toEqual('c');
+    expect(result[3].id).toEqual('d');
+  });
+
   describe('getWorkItemDocumentLink', () => {
     const baseWorkItem = {
       assigneeId: null,

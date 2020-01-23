@@ -472,7 +472,18 @@ export const formattedWorkQueue = (get, applicationContext) => {
       workQueueToDisplay.queue
     ][workQueueToDisplay.box];
 
-  workQueue = orderBy(workQueue, [sortField, 'docketNumber'], sortDirection);
+  let highPriorityField = [];
+  let highPriorityDirection = [];
+  if (!workQueueIsInternal && workQueueToDisplay.box == 'inbox') {
+    highPriorityField = ['highPriority'];
+    highPriorityDirection = ['desc'];
+  }
+
+  workQueue = orderBy(
+    workQueue,
+    [...highPriorityField, sortField, 'docketNumber'],
+    [...highPriorityDirection, sortDirection, 'asc'],
+  );
 
   return workQueue;
 };
