@@ -67,6 +67,7 @@ describe('fileExternalDocumentInteractor', () => {
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: User.ROLES.petitioner,
+      trialDate: '2019-03-01T21:40:46.415Z',
       userId: 'petitioner',
     };
 
@@ -190,7 +191,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     expect(saveWorkItemForNonPaperSpy).toBeCalled();
     expect(saveWorkItemForNonPaperSpy.mock.calls[0][0]).toMatchObject({
-      workItem: { highPriority: true },
+      workItem: { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
     });
   });
 

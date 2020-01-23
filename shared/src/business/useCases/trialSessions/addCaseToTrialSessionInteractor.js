@@ -67,6 +67,15 @@ exports.addCaseToTrialSessionInteractor = async ({
       caseId,
     });
 
+  if (trialSessionEntity.isCalendared) {
+    await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
+      applicationContext,
+      caseId,
+      highPriority: true,
+      trialDate: caseEntity.trialDate,
+    });
+  }
+
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
