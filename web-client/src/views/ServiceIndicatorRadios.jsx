@@ -1,6 +1,6 @@
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { props, state } from 'cerebral';
 import React from 'react';
 
 export const ServiceIndicatorRadios = connect(
