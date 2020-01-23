@@ -1,5 +1,7 @@
 export default test => {
   return it('Search for sealed case by name', async () => {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     const queryParams = {
       petitionerName: 'NOTAREALNAMEFORTESTINGPUBLIC',
     };
