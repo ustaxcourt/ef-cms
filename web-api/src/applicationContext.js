@@ -265,6 +265,12 @@ const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
 const {
+  generateStandingPretrialOrderInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor');
+const {
+  generateStandingPretrialOrderTemplate,
+} = require('../../shared/src/business/useCaseHelper/standingPretrialOrder/generateStandingPretrialOrderTemplate');
+const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
 const {
@@ -994,6 +1000,7 @@ module.exports = (appContextUser = {}) => {
         generateNoticeOfTrialIssuedTemplate,
         generatePrintableDocketRecordTemplate,
         generatePrintableFilingReceiptTemplate,
+        generateStandingPretrialOrderTemplate,
         generateTrialCalendarTemplate,
         generateTrialSessionPlanningReportTemplate,
       };
@@ -1050,6 +1057,7 @@ module.exports = (appContextUser = {}) => {
         generatePdfFromHtmlInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
+        generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
         getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,
@@ -1174,7 +1182,7 @@ module.exports = (appContextUser = {}) => {
     runVirusScan: async ({ filePath }) => {
       return execPromise(
         `clamscan ${
-          process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
+        process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
         } ${filePath}`,
       );
     },
