@@ -18,7 +18,7 @@ function Practitioner(rawUser) {
   userDecorator(this, rawUser);
   this.representingPrimary = rawUser.representingPrimary;
   this.representingSecondary = rawUser.representingSecondary;
-  this.serviceIndicator = rawUser.serviceIndicator;
+  this.serviceIndicator = rawUser.serviceIndicator || constants.SI_ELECTRONIC;
 }
 
 joiValidationDecorator(
