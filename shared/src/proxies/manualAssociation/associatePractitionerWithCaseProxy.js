@@ -11,6 +11,7 @@ const { post } = require('../requests');
  * @param {boolean} params.representingSecondary whether the practitioner is
  * representing the secondary contact
  * @param {string} params.userId the user id
+ * @param {string} params.serviceIndicator the service indicator for the petitioner counsel (electronic, paper, none)
  * @returns {Promise<*>} the promise of the api call
  */
 exports.associatePractitionerWithCaseInteractor = ({
@@ -18,11 +19,18 @@ exports.associatePractitionerWithCaseInteractor = ({
   caseId,
   representingPrimary,
   representingSecondary,
+  serviceIndicator,
   userId,
 }) => {
   return post({
     applicationContext,
-    body: { caseId, representingPrimary, representingSecondary, userId },
+    body: {
+      caseId,
+      representingPrimary,
+      representingSecondary,
+      serviceIndicator,
+      userId,
+    },
     endpoint: `/case-parties/${caseId}/associate-practitioner`,
   });
 };
