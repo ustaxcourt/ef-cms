@@ -63,6 +63,7 @@ export const formatWorkItem = ({
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
 
+  result.highPriority = !!result.highPriority;
   result.messages = orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
     message.createdAtFormatted = formatDateIfToday(
@@ -89,7 +90,11 @@ export const formatWorkItem = ({
   result.showComplete = !result.isInitializeCase;
   result.showSendTo = !result.isInitializeCase;
 
-  if (result.assigneeName === 'Unassigned') {
+  if (result.highPriority) {
+    result.showHighPriorityIcon = true;
+  }
+
+  if (result.assigneeName === 'Unassigned' && !result.showHighPriorityIcon) {
     result.showUnassignedIcon = true;
   }
 
@@ -472,7 +477,18 @@ export const formattedWorkQueue = (get, applicationContext) => {
       workQueueToDisplay.queue
     ][workQueueToDisplay.box];
 
-  workQueue = orderBy(workQueue, [sortField, 'docketNumber'], sortDirection);
+  let highPriorityField = [];
+  let highPriorityDirection = [];
+  if (!workQueueIsInternal && workQueueToDisplay.box == 'inbox') {
+    highPriorityField = ['highPriority', 'trialDate'];
+    highPriorityDirection = ['desc', 'asc'];
+  }
+
+  workQueue = orderBy(
+    workQueue,
+    [...highPriorityField, sortField, 'docketNumber'],
+    [...highPriorityDirection, sortDirection, 'asc'],
+  );
 
   return workQueue;
 };

@@ -410,6 +410,7 @@ joiValidationDecorator(
       .items(joi.object().meta({ entityName: 'DocketRecord' }))
       .min(1)
       .required()
+      .unique((a, b) => a.index === b.index)
       .description('List of DocketRecord Entities for the Case.'),
     documents: joi
       .array()

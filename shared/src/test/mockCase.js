@@ -10,6 +10,7 @@ exports.MOCK_CASE = {
     countryType: 'domestic',
     email: 'petitioner@example.com',
     name: 'Test Petitioner',
+    phone: '1234567',
     postalCode: '12345',
     state: 'TN',
     title: 'Executor',

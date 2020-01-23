@@ -54,8 +54,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
       const showEditDocketRecordEntry =
         permissions.EDIT_DOCKET_ENTRY &&
-        document &&
-        document.qcWorkItemsCompleted;
+        (!document || document.qcWorkItemsCompleted);
 
       const isPaper =
         !isInProgress && !qcWorkItemsUntouched && document && document.isPaper;

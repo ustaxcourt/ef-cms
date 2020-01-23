@@ -126,6 +126,9 @@ exports.fileExternalDocumentInteractor = async ({
         { applicationContext },
       );
 
+      const highPriorityWorkItem =
+        caseEntity.status === Case.STATUS_TYPES.calendared;
+
       const workItem = new WorkItem(
         {
           assigneeId: null,
@@ -139,9 +142,11 @@ exports.fileExternalDocumentInteractor = async ({
             ...documentEntity.toRawObject(),
             createdAt: documentEntity.createdAt,
           },
+          highPriority: highPriorityWorkItem,
           isQC: true,
           section: DOCKET_SECTION,
           sentBy: user.userId,
+          trialDate: caseEntity.trialDate,
         },
         { applicationContext },
       );
