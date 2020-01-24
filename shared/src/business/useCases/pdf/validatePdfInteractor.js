@@ -17,6 +17,7 @@ exports.validatePdfInteractor = async ({ applicationContext, documentId }) => {
       Key: documentId,
     })
     .promise();
+  applicationContext.logger.timeEnd('Fetching S3 File');
 
   const stringDecoder = new StringDecoder('utf8');
   const pdfHeaderBytes = pdfData.slice(0, 5);
