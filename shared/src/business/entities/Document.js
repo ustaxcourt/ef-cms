@@ -36,7 +36,6 @@ function Document(rawDocument, { applicationContext }) {
   this.attachments = rawDocument.attachments;
   this.archived = rawDocument.archived;
   this.caseId = rawDocument.caseId;
-  this.category = rawDocument.category;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
   this.createdAt = rawDocument.createdAt || createISODateString();
@@ -228,7 +227,6 @@ joiValidationDecorator(
     additionalInfo2: joi.string().optional(),
     archived: joi.boolean().optional(),
     caseId: joi.string().optional(),
-    category: joi.string().optional(),
     certificateOfService: joi.boolean().optional(),
     certificateOfServiceDate: joi.when('certificateOfService', {
       is: true,
