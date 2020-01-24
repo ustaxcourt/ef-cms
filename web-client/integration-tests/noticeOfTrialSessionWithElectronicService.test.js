@@ -5,7 +5,6 @@ import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 
 import calendarClerkLogIn from './journey/calendarClerkLogIn';
 
-import docketClerkCompletesAndSetsTrialSession from './journey/docketClerkCompletesAndSetsTrialSession';
 import docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
@@ -18,6 +17,7 @@ import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
 import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
 
+import calendarClerkCompletesAndSetsTrialSession from './journey/calendarClerkCompletesAndSetsTrialSession';
 import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
@@ -72,9 +72,6 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
   markAllCasesAsQCed(test, () => {
     return [createdCases[0], createdCases[1]];
   });
-  userSignsOut(test);
-
-  docketClerkLogIn(test);
-  docketClerkCompletesAndSetsTrialSession(test);
+  calendarClerkCompletesAndSetsTrialSession(test);
   userSignsOut(test);
 });
