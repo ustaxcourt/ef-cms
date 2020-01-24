@@ -29,17 +29,7 @@ exports.generateStandingPretrialOrderInteractor = async ({
       docketNumber,
     });
 
-  const {
-    address1,
-    address2,
-    city,
-    courthouseName,
-    judge,
-    postalCode,
-    startDate,
-    startTime,
-    state,
-  } = trialSession;
+  const { city, startDate, startTime, state } = trialSession;
 
   const { caseCaption, docketNumberSuffix } = caseDetail;
   const footerDate = formatNow('MMDDYYYY');
@@ -52,12 +42,7 @@ exports.generateStandingPretrialOrderInteractor = async ({
         caption: Case.getCaseCaptionNames(caseCaption),
         docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
         trialInfo: {
-          address1,
-          address2,
           city,
-          courthouseName,
-          judge,
-          postalCode,
           startDate,
           startTime,
           state,
