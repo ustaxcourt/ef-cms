@@ -78,6 +78,15 @@ export const IndividualWorkQueueInbox = connect(
                         size="lg"
                       />
                     )}
+                    {item.showHighPriorityIcon && (
+                      <FontAwesomeIcon
+                        aria-hidden="false"
+                        aria-label="high priority"
+                        className="iconHighPriority"
+                        icon={['fas', 'exclamation-circle']}
+                        size="lg"
+                      />
+                    )}
                   </td>
                   <td className="message-queue-row message-queue-document">
                     <div className="message-document-title">
