@@ -5,9 +5,6 @@
     | 400 Second Street, N.W.
     br
     | Washington, D.C. 20217
-    br
-    br 
-    | #{headerDate}
 
   .clear
 
@@ -92,7 +89,7 @@ div(style='margin-left: 20px')
     b.text-underline 9. Service of Documents.
     |  It is ORDERED that every pleading, motion, letter, or other document (with the exception of the petition and the post trial briefs, see Rule 151(c)) submitted to the Court shall contain a certificate of service as specified in Rule21(b), which shows that the party has given a copy of that pleading, motion, letter or other document to all other parties.
 
-.signature
+.signature.text-center
   p 
     | (Signed) Maurice B. Foley
     br
@@ -104,7 +101,7 @@ div(style='page-break-after:always')
 p(style='margin-left:393px') 
   | Trial Calendar: #{trialInfo.city}, #{trialInfo.state}
   br
-  | Date: #{trialInfo.fullStartDate}
+  span(style='margin-left: 50px') Date: #{trialInfo.fullStartDate}
 
 p.text-center(style='margin-top:74px')
   b PRETRIAL MEMORANDUM FOR
