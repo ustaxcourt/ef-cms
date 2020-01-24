@@ -213,6 +213,10 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
   }) => {
     const servedParties = aggregatePartiesForService(caseEntity);
 
+    // TODO: This logic can go away when the notice interactor gets merged
+    const shouldIncludeStandingPretrialDocument =
+      !!standingPretrialDocumentEntity && !!standingPretrialPdfData;
+
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
       caseEntity,
@@ -220,35 +224,44 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       servedParties,
     });
 
-    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-      applicationContext,
-      caseEntity,
-      documentEntity: standingPretrialDocumentEntity,
-      servedParties,
-    });
+    if (shouldIncludeStandingPretrialDocument) {
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        documentEntity: standingPretrialDocumentEntity,
+        servedParties,
+      });
+    }
 
     if (servedParties.paper.length > 0) {
-      const combinedDocumentsPdf = await PDFDocument.create();
+      let combinedDocumentsPdf;
       const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
-      const standingPretrialPdf = await PDFDocument.load(
-        standingPretrialPdfData,
-      );
 
-      let copiedPages = await combinedDocumentsPdf.copyPages(
-        noticeDocumentPdf,
-        noticeDocumentPdf.getPageIndices(),
-      );
+      // TODO: This logic can go away when the notice interactor gets merged
+      if (shouldIncludeStandingPretrialDocument) {
+        combinedDocumentsPdf = await PDFDocument.create();
+        const standingPretrialPdf = await PDFDocument.load(
+          standingPretrialPdfData,
+        );
 
-      copiedPages = copiedPages.concat(
-        await combinedDocumentsPdf.copyPages(
-          standingPretrialPdf,
-          standingPretrialPdf.getPageIndices(),
-        ),
-      );
+        let copiedPages = await combinedDocumentsPdf.copyPages(
+          noticeDocumentPdf,
+          noticeDocumentPdf.getPageIndices(),
+        );
 
-      copiedPages.forEach(page => {
-        combinedDocumentsPdf.addPage(page);
-      });
+        copiedPages = copiedPages.concat(
+          await combinedDocumentsPdf.copyPages(
+            standingPretrialPdf,
+            standingPretrialPdf.getPageIndices(),
+          ),
+        );
+
+        copiedPages.forEach(page => {
+          combinedDocumentsPdf.addPage(page);
+        });
+      } else {
+        combinedDocumentsPdf = noticeDocumentPdf;
+      }
 
       await applicationContext
         .getUseCaseHelpers()
