@@ -12,6 +12,7 @@ const { Practitioner } = require('../../entities/Practitioner');
  * @param {boolean} providers.representingSecondary true if the practitioner is
  * representing the secondary contact on the case, false otherwise
  * @param {object} providers.user the user object for the logged in user
+ * @param {object} providers.serviceIndicator the service indicator
  * @returns {Promise<*>} the updated case entity
  */
 exports.associatePractitionerToCase = async ({
@@ -19,6 +20,7 @@ exports.associatePractitionerToCase = async ({
   caseId,
   representingPrimary,
   representingSecondary,
+  serviceIndicator,
   user,
 }) => {
   const isAssociated = await applicationContext
@@ -50,6 +52,7 @@ exports.associatePractitionerToCase = async ({
         ...user,
         representingPrimary,
         representingSecondary,
+        serviceIndicator,
       }),
     );
 
