@@ -27,6 +27,10 @@ const generateStandingPretrialOrderTemplate = async ({
   const headerDate = formatNow('MMMM D, YYYY');
   const trialStartTimeIso = createISODateString(trialInfo.startTime, 'HH:mm');
   trialInfo.startTime = formatDateString(trialStartTimeIso, 'hh:mm A');
+  trialInfo.fullStartDate = formatDateString(
+    trialInfo.startDate,
+    'dddd, MMMM D, YYYY',
+  );
   trialInfo.startDate = formatDateString(trialInfo.startDate, 'MMDDYYYY');
 
   const compiledFunction = pug.compile(template);
