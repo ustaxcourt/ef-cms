@@ -1182,7 +1182,7 @@ module.exports = (appContextUser = {}) => {
     runVirusScan: async ({ filePath }) => {
       return execPromise(
         `clamscan ${
-        process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
+          process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
         } ${filePath}`,
       );
     },
