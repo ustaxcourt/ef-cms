@@ -1,29 +1,36 @@
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
-import { props, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const ServiceIndicatorRadios = connect(
   {
-    modal: state[props.bind],
+    bindKey: props.bind,
+    bindObject: state[props.bind],
+    updateStateSequence: sequences.updateStateSequence,
     validationErrors: state[props.validationErrors],
   },
-  ({ modal, updateModalValueSequence, validationErrors }) => {
+  ({ bindKey, bindObject, updateStateSequence, validationErrors }) => {
     return (
       <FormGroup errorText={validationErrors.serviceIndicator}>
-        <fieldset className="usa-fieldset" id="service-type-radios">
-          <legend htmlFor="service-type-radios">Service preference</legend>
+        <fieldset
+          className="usa-fieldset"
+          id={`service-type-radios-${bindKey}`}
+        >
+          <legend htmlFor={`service-type-radios-${bindKey}`}>
+            Service preference
+          </legend>
           <div className="usa-radio usa-radio__inline">
             <input
-              aria-describedby="service-type-radios"
-              checked={modal.serviceIndicator === 'Electronic'}
+              aria-describedby={`service-type-radios-${bindKey}`}
+              checked={bindObject.serviceIndicator === 'Electronic'}
               className="usa-radio__input"
-              id="service-type-electronic"
-              name="serviceIndicator"
+              id={`service-type-electronic-${bindKey}`}
+              name={`${bindKey}.serviceIndicator`}
               type="radio"
               value="Electronic"
               onChange={e => {
-                updateModalValueSequence({
+                updateStateSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -31,23 +38,23 @@ export const ServiceIndicatorRadios = connect(
             />
             <label
               className="usa-radio__label"
-              htmlFor="service-type-electronic"
-              id="service-type-label-electronic"
+              htmlFor={`service-type-electronic-${bindKey}`}
+              id={`service-type-electronic-label-${bindKey}`}
             >
               Electronic
             </label>
           </div>
           <div className="usa-radio usa-radio__inline">
             <input
-              aria-describedby="service-type-radios"
-              checked={modal.serviceIndicator === 'Paper'}
+              aria-describedby={`service-type-radios-${bindKey}`}
+              checked={bindObject.serviceIndicator === 'Paper'}
               className="usa-radio__input"
-              id="service-type-paper"
-              name="serviceIndicator"
+              id={`service-type-paper-${bindKey}`}
+              name={`${bindKey}.serviceIndicator`}
               type="radio"
               value="Paper"
               onChange={e => {
-                updateModalValueSequence({
+                updateStateSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -55,23 +62,23 @@ export const ServiceIndicatorRadios = connect(
             />
             <label
               className="usa-radio__label"
-              htmlFor="service-type-paper"
-              id="service-type-label-paper"
+              htmlFor={`service-type-paper-${bindKey}`}
+              id={`service-type-paper-label-${bindKey}`}
             >
               Paper
             </label>
           </div>
           <div className="usa-radio usa-radio__inline">
             <input
-              aria-describedby="service-type-radios"
-              checked={modal.serviceIndicator === 'None'}
+              aria-describedby={`service-type-radios-${bindKey}`}
+              checked={bindObject.serviceIndicator === 'None'}
               className="usa-radio__input"
-              id="service-type-none"
-              name="serviceIndicator"
+              id={`service-type-none-${bindKey}`}
+              name={`${bindKey}.serviceIndicator`}
               type="radio"
               value="None"
               onChange={e => {
-                updateModalValueSequence({
+                updateStateSequence({
                   key: e.target.name,
                   value: e.target.value,
                 });
@@ -79,8 +86,8 @@ export const ServiceIndicatorRadios = connect(
             />
             <label
               className="usa-radio__label"
-              htmlFor="service-type-none"
-              id="service-type-label-none"
+              htmlFor={`service-type-none-${bindKey}`}
+              id={`service-type-none-label-${bindKey}`}
             >
               None
             </label>
