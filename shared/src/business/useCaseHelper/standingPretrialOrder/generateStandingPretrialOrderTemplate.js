@@ -9,7 +9,7 @@ const {
 } = require('../../utilities/generateHTMLTemplateForPDF');
 
 /**
- * HTML template generator for a Notice of Trial Issued
+ * HTML template generator for a Standing Pretrial Order
  *
  * @param {object} deconstructed function arguments
  * @param {object} deconstructed.applicationContext object that contains all the context specific methods
