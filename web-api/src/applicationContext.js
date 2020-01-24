@@ -265,6 +265,9 @@ const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
 const {
+  generateStandingPretrialNoticeInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialNoticeInteractor');
+const {
   generateStandingPretrialOrderInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor');
 const {
@@ -1057,6 +1060,7 @@ module.exports = (appContextUser = {}) => {
         generatePdfFromHtmlInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
+        generateStandingPretrialNoticeInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
         getAllCaseDeadlinesInteractor,

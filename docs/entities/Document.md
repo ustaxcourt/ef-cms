@@ -20,10 +20,6 @@
 
 > `string` | optional
 
-### category
-
-> `string` | optional
-
 ### certificateOfService
 
 > `boolean` | optional
@@ -68,8 +64,6 @@ Otherwise, this field is `any` and is `optional`.
  - `Statement of Taxpayer Identification`
  - `Entry of Appearance`
  - `Substitution of Counsel`
- - `Amended Answer`
- - `Amendment to Answer`
  - `Answer`
  - `Answer to Amended Petition`
  - `Answer to Amended Petition, as Amended`
@@ -94,7 +88,6 @@ Otherwise, this field is `any` and is `optional`.
  - `Amended`
  - `Amended Certificate of Service`
  - `Amendment [anything]`
- - `Amendment to`
  - `Certificate as to the Genuineness of the Administrative Record`
  - `Certificate of Service`
  - `Civil Penalty Approval Form`
@@ -105,8 +98,6 @@ Otherwise, this field is `any` and is `optional`.
  - `Redacted`
  - `Report`
  - `Status Report`
- - `Supplemental Brief`
- - `Unredacted`
  - `Motion for Continuance`
  - `Motion for Extension of Time`
  - `Motion to Dismiss for Lack of Jurisdiction`
@@ -213,7 +204,6 @@ Otherwise, this field is `any` and is `optional`.
  - `Motion to Retain File in Estate Tax Case Involving § 6166 Election Pursuant to Rule 157`
  - `Motion to Review the Sufficiency of Answers or Objections to Request for Admissions`
  - `Motion to Seal`
- - `Motion to Seal Documents`
  - `Motion to Set for a Time & Date Certain`
  - `Motion to Set Pretrial Scheduling Order`
  - `Motion to Sever`
@@ -242,13 +232,10 @@ Otherwise, this field is `any` and is `optional`.
  - `Notice of Concession`
  - `Notice of Consistent Agreement Pursuant to Rule 248(c)(1)`
  - `Notice of Death of Counsel`
- - `Notice of Election to Intervene`
- - `Notice of Election to Participate`
  - `Notice of Filing of Petition and Right to Intervene`
  - `Notice of Filing of the Administrative Record`
  - `Notice of Identification of Tax Matters Partner`
  - `Notice of Intent Not to File`
- - `Notice of Intervention`
  - `Notice of Issue Concerning Foreign Law`
  - `Notice of Jeopardy Assessment`
  - `Notice of Judicial Ruling`
@@ -263,54 +250,18 @@ Otherwise, this field is `any` and is `optional`.
  - `Notice of Telephone Number`
  - `Notice of Termination Assessment`
  - `Notice of Unavailability`
- - `Amended Petition`
- - `Amendment to Amended Petition`
- - `Amendment to Petition`
- - `Amendment to Second Amended Petition`
- - `Amendment to Third Amended Petition`
  - `Redacted Petition Filed`
- - `Second Amended Petition`
- - `Second Amendment to Petition`
- - `Supplement to Petition`
- - `Third Amended Petition`
- - `Third Amendment to Petition`
- - `Amended Prehearing Memorandum`
- - `Amended Pretrial Memorandum`
- - `Amendment to Prehearing Memorandum`
- - `Amendment to Pretrial Memorandum`
  - `Prehearing Memorandum`
  - `Pretrial Memorandum`
- - `Second Supplement to Pretrial Memorandum`
- - `Supplement to Prehearing Memorandum`
- - `Supplement to Pretrial Memorandum`
- - `Amended Reply to Answer`
- - `Amendment to Reply to Answer`
  - `Reply`
- - `Reply to Amendment to Answer`
- - `Reply to Answer`
- - `Reply to Answer to Amended Petition`
- - `Reply to Answer to Amendment to Petition`
- - `Reply to Answer to Petition, as Amended`
- - `Reply to Answer to Second Amended Petition`
- - `Reply to Answer to Supplement to Petition`
- - `Reply to Answer to Third Amended Petition`
  - `Sur-Reply`
  - `Request for Admissions`
  - `Request for Judicial Notice`
- - `Request for Place of Submission of Declaratory Judgment Case`
  - `Request for Pretrial Conference`
  - `No Objection`
  - `Objection`
  - `Opposition`
  - `Response`
- - `Amended Seriatim Answering Brief`
- - `Amended Seriatim Opening Brief`
- - `Amended Seriatim Sur-Reply Brief`
- - `Amended Seriatim Sur-Reply Memorandum Brief`
- - `Amendment to Seriatim Answering Brief`
- - `Amendment to Seriatim Opening Brief`
- - `Amendment to Seriatim Sur-Reply Brief`
- - `Amendment to Seriatim Sur-Reply Memorandum Brief`
  - `Seriatim Answering Brief`
  - `Seriatim Answering Memorandum Brief`
  - `Seriatim Opening Brief`
@@ -319,26 +270,6 @@ Otherwise, this field is `any` and is `optional`.
  - `Seriatim Reply Memorandum Brief`
  - `Seriatim Sur-Reply Brief`
  - `Seriatim Sur-Reply Memorandum Brief`
- - `Supplement to Seriatim Answering Brief`
- - `Supplement to Seriatim Opening Brief`
- - `Supplement to Seriatim Sur-Reply Brief`
- - `Supplement to Seriatim Sur-Reply Memorandum Brief`
- - `Amended Simultaneous Answering Brief`
- - `Amended Simultaneous Answering Memoranda of Law`
- - `Amended Simultaneous Answering Memorandum Brief`
- - `Amended Simultaneous Memoranda of Law`
- - `Amended Simultaneous Opening Brief`
- - `Amended Simultaneous Opening Memorandum Brief`
- - `Amended Simultaneous Sur-Reply Brief`
- - `Amended Simultaneous Sur-Reply Memorandum Brief`
- - `Amendment to Simultaneous Answering Brief`
- - `Amendment to Simultaneous Answering Memoranda of Law`
- - `Amendment to Simultaneous Answering Memorandum Brief`
- - `Amendment to Simultaneous Memoranda of Law`
- - `Amendment to Simultaneous Opening Brief`
- - `Amendment to Simultaneous Opening Memorandum Brief`
- - `Amendment to Simultaneous Sur-Reply Brief`
- - `Amendment to Simultaneous Sur-Reply Memorandum Brief`
  - `Simultaneous Answering Brief`
  - `Simultaneous Answering Memoranda of Law`
  - `Simultaneous Answering Memorandum Brief`
@@ -349,14 +280,6 @@ Otherwise, this field is `any` and is `optional`.
  - `Simultaneous Supplemental Brief`
  - `Simultaneous Sur-Reply Brief`
  - `Simultaneous Sur-Reply Memorandum Brief`
- - `Supplement to Simultaneous Answering Brief`
- - `Supplement to Simultaneous Answering Memoranda of Law`
- - `Supplement to Simultaneous Answering Memorandum Brief`
- - `Supplement to Simultaneous Memoranda of Law`
- - `Supplement to Simultaneous Opening Brief`
- - `Supplement to Simultaneous Opening Memorandum Brief`
- - `Supplement to Simultaneous Sur-Reply Brief`
- - `Supplement to Simultaneous Sur-Reply Memorandum Brief`
  - `Statement`
  - `Statement of Redacted Information`
  - `Statement under Rule 212`
@@ -371,7 +294,6 @@ Otherwise, this field is `any` and is `optional`.
  - `Stipulation of Settlement`
  - `Stipulation to Be Bound`
  - `Stipulation to Take Deposition`
- - `Supplemental Stipulation of Facts`
  - `Supplement`
  - `Supplemental`
  - `Affidavit in Support`
@@ -381,20 +303,15 @@ Otherwise, this field is `any` and is `optional`.
  - `Unsworn Declaration under Penalty of Perjury in Support`
  - `Application`
  - `Application for Examination Pursuant to Rule 73`
- - `Stipulated Decision Entered`
  - `Amended [Document Name]`
- - `Amendment`
  - `Appellate Filing Fee Received`
  - `Bond`
  - `Bounced Electronic Service`
  - `Evidence`
- - `Further Trial before [Judge] at [Place]`
- - `Hearing before [Judge] at [Place]`
  - `Hearing Exhibits`
  - `Letter`
  - `Miscellaneous`
  - `Miscellaneous (Lodged)`
- - `Partial Trial before [Judge] at [Place]`
  - `Reference List of Redacted Information`
  - `Returned Mail`
  - `Trial Exhibits`
@@ -407,16 +324,16 @@ Otherwise, this field is `any` and is `optional`.
  - `Motion to File Document Under Seal`
  - `Motion to Intervene`
  - `Motion to Proceed Anonymously`
- - `Notice of Trial on [Date] at [Place]`
  - `Notice`
  - `Notice of Change of Counsel for Non-Party`
+ - `Notice of Election to Intervene`
+ - `Notice of Election to Participate`
+ - `Notice of Intervention`
  - `Ratification of Petition`
  - `Request`
- - `Request for Place of Hearing of Disclosure Case`
  - `Objection [anything]`
  - `Opposition [anything]`
  - `Response [anything]`
- - `Amended Seriatim Reply Brief`
  - `Supplement To [anything]`
  - `Supplemental [anything]`
  - `Order`
@@ -427,19 +344,16 @@ Otherwise, this field is `any` and is `optional`.
  - `Order and Decision`
  - `Decision`
  - `O - Order`
- - `O5 - Order`
  - `OAJ - Order that case is assigned`
  - `OAL - Order that the letter "L" is added to Docket Number`
  - `OAP - Order for Amended Petition`
  - `OAPF - Order for Amended Petition and Filing Fee`
- - `OAPW - Order for Amended Petition and Filing Fee`
  - `OAR - Order that the letter "R" is added to the Docket Number`
  - `OAS - Order that the letter "S" is added to the Docket Number`
  - `OASL - Order that the letters "SL" are added to the Docket Number`
  - `OAW - Order that the letter "W" is added to the Docket Number`
  - `OAX - Order that the letter "X" is added to the Docket Number`
  - `OCA - Order that caption of case is amended`
- - `OCD - Order`
  - `OD - Order of Dismissal Entered,`
  - `ODD - Order of Dismissal and Decision Entered,`
  - `ODL - Order that the letter "L" is deleted from the Docket Number`
@@ -452,7 +366,6 @@ Otherwise, this field is `any` and is `optional`.
  - `OF - Order for Filing Fee`
  - `OFAB - Order fixing amount of bond`
  - `OFFX - Order time is extended for petr(s) to pay the filing fee`
- - `OFW - Order for Filing Fee`
  - `OFWD - Order for Filing Fee. Application waiver of Filing Fee is denied.`
  - `OFX - Order time is extended for petr(s) to pay filing fee or submit an Application for Waiver of Filing fee`
  - `OIP - Order that the letter "P" is added to the Docket Number`
@@ -465,10 +378,7 @@ Otherwise, this field is `any` and is `optional`.
  - `OSC - Order`
  - `OSCP - Order petr(s) to show cause why "S" should not be removed`
  - `OST - Order of Service of Transcript (Bench Opinion)`
- - `OST5 - Order of Service of Transcript (Bench Opinion)`
  - `OSUB - Order that case is submitted`
- - `OVBA - Order`
- - `OVD - Order`
  - `DEC - Decision Entered,`
  - `OAD - Order and Decision Entered,`
  - `ODJ - Order of Dismissal for Lack of Jurisdiction Entered,`
@@ -486,7 +396,7 @@ Otherwise, this field is `any` and is `optional`.
  - `ROA - Record on Appeal`
  - `TCOP - T.C. Opinion`
  - `RTRA - Revised Transcript`
- - `Transcript`
+ - `TRAN - Transcript`
  - `SPTO - Standing Pre-Trial Order`
  - `Stipulated Decision`
  - `Notice of Docket Change`
@@ -740,7 +650,7 @@ Otherwise, this field is `any` and is `optional`.
 
 #### Condition #3 for `trialLocation`: 
 
-> `string` | optional
+> `string`
 
 ##### Can be null.
 
