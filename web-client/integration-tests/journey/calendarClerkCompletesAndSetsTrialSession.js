@@ -1,5 +1,5 @@
 export default (test, overrides = {}) => {
-  return it('Docket clerk completes a trial session before calendaring', async () => {
+  return it('Calendar clerk completes a trial session before calendaring', async () => {
     await test.runSequence('gotoEditTrialSessionSequence', {
       trialSessionId: test.trialSessionId,
     });
