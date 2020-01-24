@@ -7,7 +7,7 @@ import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 
 import calendarClerkLogIn from './journey/calendarClerkLogIn';
 
-import docketClerkCompletesAndSetsTrialSession from './journey/docketClerkCompletesAndSetsTrialSession';
+import calendarClerkCompletesAndSetsTrialSession from './journey/calendarClerkCompletesAndSetsTrialSession';
 import docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
@@ -85,9 +85,6 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
   markAllCasesAsQCed(test, () => {
     return [createdCases[0], createdCases[1]];
   });
-  userSignsOut(test);
-
-  docketClerkLogIn(test);
-  docketClerkCompletesAndSetsTrialSession(test, overrides);
+  calendarClerkCompletesAndSetsTrialSession(test);
   userSignsOut(test);
 });
