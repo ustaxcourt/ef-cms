@@ -85,6 +85,6 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
   markAllCasesAsQCed(test, () => {
     return [createdCases[0], createdCases[1]];
   });
-  calendarClerkCompletesAndSetsTrialSession(test);
+  calendarClerkCompletesAndSetsTrialSession(test, overrides);
   userSignsOut(test);
 });
