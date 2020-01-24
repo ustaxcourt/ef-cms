@@ -2,7 +2,7 @@ const joi = require('@hapi/joi');
 
 const {
   constants,
-} = require('../../business/utilities/setServiceIndicatorsForCase');
+} = require('../../../business/utilities/setServiceIndicatorsForCase');
 const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
