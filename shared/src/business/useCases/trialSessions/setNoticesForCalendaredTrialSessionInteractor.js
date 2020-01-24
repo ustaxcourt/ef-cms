@@ -127,7 +127,11 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
       // Generate Standing Pretrial Notice
       standingPretrialFile = await applicationContext
         .getUseCases()
-        .generateStandingPretrialNoticeInteractor();
+        .generateStandingPretrialNoticeInteractor({
+          applicationContext,
+          docketNumber: caseEntity.docketNumber,
+          trialSessionId: trialSessionEntity.trialSessionId,
+        });
 
       standingPretrialDocumentTitle =
         Document.STANDING_PRETRIAL_NOTICE.documentType;
