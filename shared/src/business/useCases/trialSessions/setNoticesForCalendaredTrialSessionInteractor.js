@@ -123,7 +123,8 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async ({
     let standingPretrialDocumentTitle;
     let standingPretrialDocumentEventCode;
 
-    if (procedureType === 'Small') {
+    const disableForSmall = true; // TODO: This logic can go away when the notice interactor gets merged
+    if (procedureType === 'Small' && !disableForSmall) {
       // Generate Standing Pretrial Notice
       standingPretrialFile = await applicationContext
         .getUseCases()
