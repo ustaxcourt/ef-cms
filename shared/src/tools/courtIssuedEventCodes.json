@@ -6,12 +6,6 @@
     "scenario": "Type A"
   },
   {
-    "eventCode": "O5",
-    "documentType": "O5 - Order",
-    "documentTitle": "Order [Anything]",
-    "scenario": "Type A"
-  },
-  {
     "eventCode": "OAJ",
     "documentType": "OAJ - Order that case is assigned",
     "documentTitle": "Order [Judge Name] [Anything]",
@@ -32,12 +26,6 @@
   {
     "eventCode": "OAPF",
     "documentType": "OAPF - Order for Amended Petition and Filing Fee",
-    "documentTitle": "Order for Amended Petition and Filing Fee on [Date] [Anything]",
-    "scenario": "Type D"
-  },
-  {
-    "eventCode": "OAPW",
-    "documentType": "OAPW - Order for Amended Petition and Filing Fee",
     "documentTitle": "Order for Amended Petition and Filing Fee on [Date] [Anything]",
     "scenario": "Type D"
   },
@@ -75,12 +63,6 @@
     "eventCode": "OCA",
     "documentType": "OCA - Order that caption of case is amended",
     "documentTitle": "Order that caption of case is amended [Anything]",
-    "scenario": "Type A"
-  },
-  {
-    "eventCode": "OCD",
-    "documentType": "OCD - Order",
-    "documentTitle": "Order [Anything]",
     "scenario": "Type A"
   },
   {
@@ -156,12 +138,6 @@
     "scenario": "Type E"
   },
   {
-    "eventCode": "OFW",
-    "documentType": "OFW - Order for Filing Fee",
-    "documentTitle": "Order for Filing Fee on [Date] [Anything]",
-    "scenario": "Type D"
-  },
-  {
     "eventCode": "OFWD",
     "documentType": "OFWD - Order for Filing Fee. Application waiver of Filing Fee is denied.",
     "documentTitle": "Order for Filing Fee on [Date]. Application waiver of Filing Fee is denied.",
@@ -234,28 +210,10 @@
     "scenario": "Type A"
   },
   {
-    "eventCode": "OST5",
-    "documentType": "OST5 - Order of Service of Transcript (Bench Opinion)",
-    "documentTitle": "Order of Service of Transcript (Bench Opinion) [Anything]",
-    "scenario": "Type A"
-  },
-  {
     "eventCode": "OSUB",
     "documentType": "OSUB - Order that case is submitted",
     "documentTitle": "Order that case is submitted to [Judge Name] [Anything]",
     "scenario": "Type B"
-  },
-  {
-    "eventCode": "OVBA",
-    "documentType": "OVBA - Order",
-    "documentTitle": "Order [Anything]",
-    "scenario": "Type A"
-  },
-  {
-    "eventCode": "OVD",
-    "documentType": "OVD - Order",
-    "documentTitle": "Order [Anything]",
-    "scenario": "Type A"
   },
   {
     "eventCode": "DEC",
@@ -361,7 +319,7 @@
   },
   {
     "eventCode": "TRAN",
-    "documentType": "Transcript",
+    "documentType": "TRAN - Transcript",
     "documentTitle": "Transcript of [anything]",
     "scenario": "Type A"
   },

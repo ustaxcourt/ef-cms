@@ -19,8 +19,8 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
     state.form = {};
   });
 
-  it('returns showFreeText = true when state.form.eventCode is O5 (scenario = Type A)', () => {
-    let testState = { ...state, form: { eventCode: 'O5' } };
+  it('returns showFreeText = true when state.form.eventCode is O (scenario = Type A)', () => {
+    let testState = { ...state, form: { eventCode: 'O' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,

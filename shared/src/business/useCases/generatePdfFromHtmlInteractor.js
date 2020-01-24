@@ -15,6 +15,7 @@ exports.generatePdfFromHtmlInteractor = async ({
   docketNumber,
   footerHtml,
   headerHtml,
+  overwriteHeader,
 }) => {
   let browser = null;
   let result = null;
@@ -26,6 +27,16 @@ exports.generatePdfFromHtmlInteractor = async ({
 
     await page.setContent(contentHtml);
 
+    const headerContent = overwriteHeader
+      ? `${headerHtml ? headerHtml : ''}`
+      : ` <div style="font-size: 8px; font-family: sans-serif; float: right;">
+              Page <span class="pageNumber"></span>
+              of <span class="totalPages"></span>
+            </div>
+            <div style="float: left">
+              ${headerHtml ? headerHtml : `Docket Number: ${docketNumber}`}
+            </div>`;
+
     const headerTemplate = `
       <!doctype html>
       <html>
@@ -33,13 +44,7 @@ exports.generatePdfFromHtmlInteractor = async ({
         </head>
         <body style="margin: 0px;">
           <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
-            <div style="font-size: 8px; font-family: sans-serif; float: right;">
-              Page <span class="pageNumber"></span>
-              of <span class="totalPages"></span>
-            </div>
-            <div style="float: left">
-              ${headerHtml ? headerHtml : `Docket Number: ${docketNumber}`}
-            </div>
+            ${headerContent}
           </div>
         </body>
       </html>
@@ -53,9 +58,7 @@ exports.generatePdfFromHtmlInteractor = async ({
         </head>
         <body style="margin: 0px;">
           <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
-             <div>
-              ${footerHtml}
-            </div>
+            ${footerHtml}
           </div>
         </body>
       </html>
