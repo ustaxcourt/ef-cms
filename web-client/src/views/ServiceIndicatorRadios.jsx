@@ -8,81 +8,85 @@ export const ServiceIndicatorRadios = connect(
     bindKey: props.bind,
     bindObject: state[props.bind],
     updateStateSequence: sequences.updateStateSequence,
-    validationErrors: state[props.validationErrors],
   },
-  ({ bindKey, bindObject, updateStateSequence, validationErrors }) => {
+  ({ bindKey, bindObject, updateStateSequence }) => {
     return (
-      <FormGroup errorText={validationErrors.serviceIndicator}>
-        <fieldset className="usa-fieldset" id="service-type-radios">
-          <legend htmlFor="service-type-radios">Service preference</legend>
+      <FormGroup key={bindKey}>
+        <fieldset
+          className="usa-fieldset"
+          id={`service-type-radios-${bindKey}`}
+        >
+          <legend htmlFor={`service-type-radios-${bindKey}`}>
+            Service preference
+          </legend>
           <div className="usa-radio usa-radio__inline">
             <input
-              aria-describedby="service-type-radios"
+              aria-describedby={`service-type-radios-${bindKey}`}
               checked={bindObject.serviceIndicator === 'Electronic'}
               className="usa-radio__input"
-              id="service-type-electronic"
-              name="serviceIndicator"
+              id={`service-type-electronic-${bindKey}`}
+              name={`${bindKey}.serviceIndicator`}
               type="radio"
               value="Electronic"
               onChange={e => {
                 updateStateSequence({
-                  key: `${bindKey}.${e.target.name}`,
+                  key: e.target.name,
                   value: e.target.value,
                 });
               }}
             />
             <label
               className="usa-radio__label"
-              htmlFor="service-type-electronic"
-              id="service-type-label-electronic"
+              htmlFor={`service-type-electronic-${bindKey}`}
+              id={`service-type-electronic-label-${bindKey}`}
             >
               Electronic
             </label>
           </div>
           <div className="usa-radio usa-radio__inline">
             <input
-              aria-describedby="service-type-radios"
+              aria-describedby={`service-type-radios-${bindKey}`}
               checked={bindObject.serviceIndicator === 'Paper'}
               className="usa-radio__input"
-              id="service-type-paper"
-              name="serviceIndicator"
+              id={`service-type-paper-${bindKey}`}
+              name={`${bindKey}.serviceIndicator`}
               type="radio"
               value="Paper"
               onChange={e => {
                 updateStateSequence({
-                  key: `${bindKey}.${e.target.name}`,
+                  key: e.target.name,
                   value: e.target.value,
                 });
               }}
             />
             <label
               className="usa-radio__label"
-              htmlFor="service-type-paper"
-              id="service-type-label-paper"
+              htmlFor={`service-type-paper-${bindKey}`}
+              id={`service-type-paper-label-${bindKey}`}
             >
               Paper
             </label>
           </div>
           <div className="usa-radio usa-radio__inline">
             <input
-              aria-describedby="service-type-radios"
+              aria-describedby={`service-type-radios-${bindKey}`}
               checked={bindObject.serviceIndicator === 'None'}
               className="usa-radio__input"
-              id="service-type-none"
-              name="serviceIndicator"
+              id={`service-type-none-${bindKey}`}
+              name={`${bindKey}.serviceIndicator`}
               type="radio"
               value="None"
               onChange={e => {
                 updateStateSequence({
-                  key: `${bindKey}.${e.target.name}`,
+                  key: e.target.name,
                   value: e.target.value,
                 });
               }}
             />
             <label
               className="usa-radio__label"
-              htmlFor="service-type-none"
-              id="service-type-label-none"
+              htmlFor={`service-type-none-${bindKey}`}
+              id={`service-type-none-label-${bindKey}`}
             >
               None
             </label>
