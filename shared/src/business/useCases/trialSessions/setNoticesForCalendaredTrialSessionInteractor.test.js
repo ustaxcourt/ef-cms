@@ -358,7 +358,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
   });
 
-  it.skip('Should generate a Standing Pretrial Order for REGULAR cases', async () => {
+  it('Should generate a Standing Pretrial Order for REGULAR cases', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       caseId: '000aa3f7-e2e3-43e6-885d-4ce341588000', // MOCK_CASE with procedureType: 'Regular'
@@ -368,7 +368,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(generateStandingPretrialOrderInteractorMock).toHaveBeenCalled();
   });
 
-  it.skip('Should generate a Standing Pretrial Notice for SMALL cases', async () => {
+  it('Should generate a Standing Pretrial Notice for SMALL cases', async () => {
     await setNoticesForCalendaredTrialSessionInteractor({
       applicationContext,
       caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111', // MOCK_CASE with procedureType: 'Small'
