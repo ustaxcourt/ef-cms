@@ -1,6 +1,8 @@
 import { setupTest } from './helpers';
 import { uploadPetition } from './helpers';
 import calendarClerkLogIn from './journey/calendarClerkLogIn';
+import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
+import calendarClerkViewsACalendaredTrialSession from './journey/calendarClerkViewsACalendaredTrialSession';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
@@ -15,8 +17,6 @@ import petitionsClerkManuallyAddsCaseToTrial from './journey/petitionsClerkManua
 import petitionsClerkManuallyRemovesCaseFromTrial from './journey/petitionsClerkManuallyRemovesCaseFromTrial';
 import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
 import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
-import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
-import petitionsClerkViewsACalendaredTrialSession from './journey/petitionsClerkViewsACalendaredTrialSession';
 import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 import petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase from './journey/petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase';
 import userSignsOut from './journey/petitionerSignsOut';
@@ -82,15 +82,19 @@ describe('Schedule A Trial Session', () => {
   );
   petitionsClerkManuallyRemovesCaseFromTrial(test);
   petitionsClerkViewsATrialSessionsEligibleCases(test, caseCount);
+  petitionsClerkManuallyAddsCaseToTrial(test);
+  userSignsOut(test);
 
   calendarClerkLogIn(test);
+  // only mark cases 0 and 1 as QCed
   markAllCasesAsQCed(test, () => {
     return [createdCases[0], createdCases[1]];
   });
   userSignsOut(test);
 
-  petitionsClerkLogIn(test);
-  petitionsClerkSetsATrialSessionsSchedule(test);
-  petitionsClerkViewsACalendaredTrialSession(test, caseCount);
+  calendarClerkLogIn(test);
+  calendarClerkSetsATrialSessionsSchedule(test);
+  // only 2 cases should have been calendared because only 2 were marked as QCed
+  calendarClerkViewsACalendaredTrialSession(test, caseCount);
   userSignsOut(test);
 });
