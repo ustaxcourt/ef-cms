@@ -1,4 +1,4 @@
-const template = require('./standingPretrialOrder.pug_');
+const template = require('./standingPretrialNotice.pug_');
 const {
   createISODateString,
   formatDateString,
@@ -9,14 +9,14 @@ const {
 } = require('../../utilities/generateHTMLTemplateForPDF');
 
 /**
- * HTML template generator for a Standing Pretrial Order
+ * HTML template generator for a Standing Pretrial Notice
  *
  * @param {object} deconstructed function arguments
  * @param {object} deconstructed.applicationContext object that contains all the context specific methods
  * @param {object} deconstructed.content content to be injected into the template
  * @returns {string} hydrated HTML content in string form
  */
-const generateStandingPretrialOrderTemplate = async ({
+const generateStandingPretrialNoticeTemplate = async ({
   applicationContext,
   content,
 }) => {
@@ -25,7 +25,6 @@ const generateStandingPretrialOrderTemplate = async ({
   const pug = applicationContext.getPug();
 
   const headerDate = formatNow('MMMM D, YYYY');
-  const footerDate = formatNow('MMDDYYYY');
   const trialStartTimeIso = createISODateString(trialInfo.startTime, 'HH:mm');
   trialInfo.startTime = formatDateString(trialStartTimeIso, 'hh:mm A');
   trialInfo.fullStartDate = formatDateString(
@@ -38,7 +37,6 @@ const generateStandingPretrialOrderTemplate = async ({
   const main = compiledFunction({
     caption,
     docketNumberWithSuffix,
-    footerDate,
     headerDate,
     trialInfo,
   });
@@ -57,5 +55,5 @@ const generateStandingPretrialOrderTemplate = async ({
 };
 
 module.exports = {
-  generateStandingPretrialOrderTemplate,
+  generateStandingPretrialNoticeTemplate,
 };

@@ -46,7 +46,7 @@ p
   | . 
 
 
-div(style='margin-left: 20px')
+div(style='margin-left: 20px; margin-bottom:90px')
   p To help the efficient disposition of all cases on the trial calendar:
 
   p 
@@ -57,8 +57,7 @@ div(style='margin-left: 20px')
     b.text-underline 2. Trial Exhibits.
     |  It is ORDERED that any documents or materials which a party expects to use (except solely for impeachment) if the case is tried, but which are not stipulated, shall be identified in writing and exchanged by the parties at least 14 days before the first day of the trial session. The Court may refuse to receive in evidence any document or material that is not so stipulated or exchanged, unless the parties have agreed otherwise or the Court so allows for good cause shown.
 
-br
-div(style='page-break-after:always')
+h3.text-center.text-bold(style='page-break-after:always') Served #{footerDate}
 
 div(style='margin-left: 20px')
   p 
@@ -98,12 +97,12 @@ div(style='margin-left: 20px')
 br
 div(style='page-break-after:always')
 
-p(style='margin-left:393px') 
+p(style='margin-left:393px; margin-bottom:74px;') 
   | Trial Calendar: #{trialInfo.city}, #{trialInfo.state}
   br
   span(style='margin-left: 50px') Date: #{trialInfo.fullStartDate}
 
-p.text-center(style='margin-top:74px')
+p.text-center(style='margin-bottom:56px')
   b PRETRIAL MEMORANDUM FOR
   |  (Petitioner/Respondent)
   br
@@ -111,62 +110,64 @@ p.text-center(style='margin-top:74px')
   br
   | (This form may be expanded as necessary)
 
-p
-  b.text-underline NAME OF CASE
-  | :
+div(style='margin-bottom:29px')
+  p(style='width: 60%; float: left;')
+    b.text-underline NAME OF CASE
+    | :
+  p(style='width: 39%; float: left;')
+    b.text-underline DOCKET NO(S).
+    | :
+  .clear
 
-p
-  b.text-underline DOCKET NO(S).
-  | :
-
-
-p
-  b.text-underline ATTORNEYS:
+p(style='margin-bottom:2px')
+  b.text-underline ATTORNEYS
   | :
   
-div
-  p 
-    | Petitioner: ___________________________________
+div(style='margin-bottom:33px')
+  p.margin-top-0(style='width: 49%; float: left; margin-right: 1%;')
+    | Petitioner: ____________________________________
     br
     | Tel No.: ______________________________________
-div
-  p 
-    | Respondent: ___________________________________
+  p.margin-top-0(style='width: 49%; float: left;') 
+    | Respondent: ____________________________________
     br
     | Tel No.: ________________________________________
+  .clear
 
-
-p
+p(style='margin-bottom:2px')
   b.text-underline AMOUNTS IN DISPUTE
   | :
-  br
+p.margin-top-0(style='margin-bottom:52px')
   b.text-underline Year(s)/Period(s)
   |  
-  b.text-underline Deficiencies/Liabilities
+  b.text-underline(style='margin-left: 95px;') Deficiencies/Liabilities
   |  
-  b.text-underline Additions/Penalties
+  b.text-underline(style='margin-left: 95px;') Additions/Penalties
   
 p
   b.text-underline STATUS OF STIPULATION OF FACTS
   | :
-p
-  | Probable Settlement________ Probable Trial________ Definite Trial________
+p(style='margin-bottom:40px')
+  span Probable Settlement________ 
+  span(style='margin-left: 30px;') Probable Trial________ 
+  span(style='margin-left: 30px;') Definite Trial________
 
-p
+p(style='margin-bottom:30px')
   b.text-underline CURRENT ESTIMATE OF TRIAL TIME
   | : __________________________________________
 
-p
+p(style='margin-bottom:63px')
   b.text-underline MOTIONS YOUR EXPECT TO MAKE
   | :
   br
   | (Title and brief description)
 
-p
+p(style='margin-bottom:2px')
   b.text-underline STATUS OF STIPULATION OF FACTS
   | :
-  br
-  | Completed________  In Process________
+p.margin-top-0(style='margin-bottom:45px')
+  span Completed________  
+  span(style='margin-left: 15px;') In Process________
 
 p
   b.text-underline ISSUES
@@ -175,42 +176,44 @@ p
 br
 div(style='page-break-after:always')
 
-p
+p(style='margin-bottom:88px')
   b.text-underline WITNESS(ES) YOU EXPECT TO CALL
   | :
   br
   | (Name and brief summary of expected testimony)
 
-p
+p(style='margin-bottom:97px')
   b.text-underline SUMMARY OF FACTS
   | :
   br
   | (Attach separate pages, if necessary, to inform the Court of facts in chronological narrative form)
 
-p
+p(style='margin-bottom:91px')
   b.text-underline BRIEF SYNOPSIS OF LEGAL AUTHORITIES
   | :
   br
   | (Attach separate pages, if necessary, to discuss fully your legal position)
 
-p
+p(style='margin-bottom:91px')
   b.text-underline EVIDENTIARY PROBLEMS
   | :
 
-div
-  p Date: _________________________
 
-div
-  p 
+div(style='margin-bottom:61px')
+  p(style='width: 40%; float: left;')
+    | Date: _________________________
+  p(style='width: 59%; float: left;')
     | ________________________________________
     br
     | Petitioner/ Respondent
+  .clear
+
 
 div
-  | Trial Judge:
+  p(style='width: 15%; float: left;')
+    | Trial Judge:
 
-div
-  p
+  p(style='width: 70%; float: left;')
     b
       | #{trialInfo.judge.name}
       br
@@ -221,3 +224,4 @@ div
       | Washington, D.C. 20217
       br
       | (202) 521-0700
+  .clear

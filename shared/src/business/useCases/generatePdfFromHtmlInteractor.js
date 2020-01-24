@@ -50,20 +50,17 @@ exports.generatePdfFromHtmlInteractor = async ({
       </html>
     `;
 
-    const footerTemplate = footerHtml
-      ? `
+    const footerTemplate = `
       <!doctype html>
       <html>
         <head>
         </head>
         <body style="margin: 0px;">
           <div style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
-            ${footerHtml}
+            ${footerHtml ? footerHtml : ''}
           </div>
         </body>
-      </html>
-    `
-      : '';
+      </html>`;
 
     result = await page.pdf({
       displayHeaderFooter,
