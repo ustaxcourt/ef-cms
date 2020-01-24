@@ -22,12 +22,7 @@ describe('generateStandingPretrialOrderTemplate', () => {
         docketNumberWithSuffix:
           caseDetail.docketNumber + (caseDetail.docketNumberSuffix || ''),
         trialInfo: {
-          address1: '123 Some Street',
-          address2: 'Courtroom 2',
           city: 'City',
-          courthouseName: 'Courthouse 1',
-          judge: { name: 'Test Judge' },
-          postalCode: '12345',
           startDate: '2020-02-02T05:00:00.000Z',
           startTime: '10:00',
           state: 'ST',
@@ -38,16 +33,11 @@ describe('generateStandingPretrialOrderTemplate', () => {
     expect(result.indexOf('<!DOCTYPE html>')).toBe(0);
     expect(result.indexOf('Test Case Caption')).toBeGreaterThan(-1);
     expect(result.indexOf('123-45S')).toBeGreaterThan(-1);
-    expect(result.indexOf('Courthouse 1')).toBeGreaterThan(-1);
-    expect(result.indexOf('123 Some Street')).toBeGreaterThan(-1);
-    expect(result.indexOf('Courtroom 2')).toBeGreaterThan(-1);
     expect(result.indexOf('City')).toBeGreaterThan(-1);
     expect(result.indexOf('ST')).toBeGreaterThan(-1);
-    expect(result.indexOf('12345')).toBeGreaterThan(-1);
-    expect(result.indexOf('Test Judge')).toBeGreaterThan(-1);
-    expect(result.indexOf('NOTICE SETTING CASE FOR TRIAL')).toBeGreaterThan(-1);
+    expect(result.indexOf('STANDING PRE TRIAL ORDER')).toBeGreaterThan(-1);
     expect(
-      result.indexOf('beginning at 10:00 AM on 02/02/2020'),
+      result.indexOf('beginning on Sunday, February 2, 2020'),
     ).toBeGreaterThan(-1);
   });
 });
