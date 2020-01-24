@@ -324,10 +324,7 @@ joiValidationDecorator(
       .try(
         joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
         joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
-        joi
-          .string()
-          .optional()
-          .allow(null),
+        joi.string().allow(null),
       )
       .optional(),
     userId: joi.string().required(),
