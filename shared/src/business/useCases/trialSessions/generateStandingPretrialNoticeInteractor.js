@@ -1,8 +1,8 @@
 const { Case } = require('../../entities/cases/Case');
-// const { formatNow } = require('../../utilities/DateHandler');
+const { formatNow } = require('../../utilities/DateHandler');
 
 /**
- * generateStandingPretrialOrderInteractor
+ * generateStandingPretrialNoticeInteractor
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
@@ -10,7 +10,7 @@ const { Case } = require('../../entities/cases/Case');
  * @param {string} providers.trialSessionId the id for the trial session
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateStandingPretrialOrderInteractor = async ({
+exports.generateStandingPretrialNoticeInteractor = async ({
   applicationContext,
   docketNumber,
   trialSessionId,
@@ -29,20 +29,35 @@ exports.generateStandingPretrialOrderInteractor = async ({
       docketNumber,
     });
 
-  const { city, judge, startDate, startTime, state } = trialSession;
+  const {
+    address1,
+    address2,
+    city,
+    courthouseName,
+    postalCode,
+    startDate,
+    startTime,
+    state,
+  } = trialSession;
+
+  // TODO - GET Respondent contact
 
   const { caseCaption, docketNumberSuffix } = caseDetail;
+  const footerDate = formatNow('MMDDYYYY');
 
   const contentHtml = await applicationContext
     .getTemplateGenerators()
-    .generateStandingPretrialOrderTemplate({
+    .generateStandingPretrialNoticeTemplate({
       applicationContext,
       content: {
         caption: Case.getCaseCaptionNames(caseCaption),
         docketNumberWithSuffix: docketNumber + (docketNumberSuffix || ''),
         trialInfo: {
+          address1,
+          address2,
           city,
-          judge,
+          courthouseName,
+          postalCode,
           startDate,
           startTime,
           state,
@@ -53,6 +68,7 @@ exports.generateStandingPretrialOrderInteractor = async ({
   return await applicationContext.getUseCases().generatePdfFromHtmlInteractor({
     applicationContext,
     contentHtml,
+    footerHtml: `<h3 style="text-align:center; font-family: sans-serif; width: 100%;" class="text-bold served-date">Served ${footerDate}</h3>`,
     headerHtml:
       '<div style="text-align:center;"><span class="pageNumber"></span></div>',
     overwriteHeader: true,

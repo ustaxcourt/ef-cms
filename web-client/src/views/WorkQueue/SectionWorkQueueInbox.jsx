@@ -165,7 +165,8 @@ export const SectionWorkQueueInbox = connect(
                     )}
                     {item.showHighPriorityIcon && (
                       <FontAwesomeIcon
-                        aria-hidden="true"
+                        aria-hidden="false"
+                        aria-label="high priority"
                         className="iconHighPriority"
                         icon={['fas', 'exclamation-circle']}
                         size="lg"
