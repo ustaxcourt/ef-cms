@@ -138,6 +138,18 @@ Document.NOTICE_OF_TRIAL = {
   eventCode: 'NDT',
 };
 
+Document.STANDING_PRETRIAL_NOTICE = {
+  documentTitle: 'Standing Pretrial Notice',
+  documentType: 'Standing Pretrial Notice',
+  eventCode: 'SPTN',
+};
+
+Document.STANDING_PRETRIAL_ORDER = {
+  documentTitle: 'Standing Pretrial Order',
+  documentType: 'Standing Pretrial Order',
+  eventCode: 'SPTO',
+};
+
 Document.SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
@@ -207,6 +219,8 @@ Document.getDocumentTypes = () => {
     ...signedTypes,
     Document.NOTICE_OF_DOCKET_CHANGE.documentType,
     Document.NOTICE_OF_TRIAL.documentType,
+    Document.STANDING_PRETRIAL_ORDER.documentType,
+    Document.STANDING_PRETRIAL_NOTICE.documentType,
   ];
 
   return documentTypes;
