@@ -20,10 +20,6 @@
 
 > `string` | optional
 
-### category
-
-> `string` | optional
-
 ### certificateOfService
 
 > `boolean` | optional

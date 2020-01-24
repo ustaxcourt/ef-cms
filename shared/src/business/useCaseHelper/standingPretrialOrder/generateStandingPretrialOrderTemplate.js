@@ -25,6 +25,7 @@ const generateStandingPretrialOrderTemplate = async ({
   const pug = applicationContext.getPug();
 
   const headerDate = formatNow('MMMM D, YYYY');
+  const footerDate = formatNow('MMDDYYYY');
   const trialStartTimeIso = createISODateString(trialInfo.startTime, 'HH:mm');
   trialInfo.startTime = formatDateString(trialStartTimeIso, 'hh:mm A');
   trialInfo.fullStartDate = formatDateString(
@@ -37,6 +38,7 @@ const generateStandingPretrialOrderTemplate = async ({
   const main = compiledFunction({
     caption,
     docketNumberWithSuffix,
+    footerDate,
     headerDate,
     trialInfo,
   });
