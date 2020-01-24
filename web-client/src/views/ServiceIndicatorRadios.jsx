@@ -7,14 +7,28 @@ export const ServiceIndicatorRadios = connect(
   {
     bindKey: props.bind,
     bindObject: state[props.bind],
+    getValidationError: props.getValidationError,
     updateStateSequence: sequences.updateStateSequence,
     validationErrors: state[props.validationErrors],
   },
-  ({ bindKey, bindObject, updateStateSequence, validationErrors }) => {
+  ({
+    bindKey,
+    bindObject,
+    getValidationError,
+    updateStateSequence,
+    validateSequence,
+    validationErrors,
+  }) => {
     return (
-      <FormGroup errorText={validationErrors.serviceIndicator}>
+      <FormGroup
+        errorText={
+          getValidationError
+            ? getValidationError()
+            : validationErrors && validationErrors.serviceIndicator
+        }
+      >
         <fieldset
-          className="usa-fieldset"
+          className="usa-fieldset margin-bottom-0"
           id={`service-type-radios-${bindKey}`}
         >
           <legend htmlFor={`service-type-radios-${bindKey}`}>
@@ -34,6 +48,7 @@ export const ServiceIndicatorRadios = connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
+                validateSequence && validateSequence();
               }}
             />
             <label
@@ -58,6 +73,7 @@ export const ServiceIndicatorRadios = connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
+                validateSequence && validateSequence();
               }}
             />
             <label
@@ -82,6 +98,7 @@ export const ServiceIndicatorRadios = connect(
                   key: e.target.name,
                   value: e.target.value,
                 });
+                validateSequence && validateSequence();
               }}
             />
             <label

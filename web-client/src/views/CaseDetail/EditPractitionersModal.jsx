@@ -119,7 +119,12 @@ export const EditPractitionersModal = connect(
                   <div className="margin-top-2">
                     <ServiceIndicatorRadios
                       bind={`modal.practitioners.${idx}`}
-                      validationErrors="validationErrors"
+                      getValidationError={() =>
+                        validationErrors.practitioners &&
+                        validationErrors.practitioners[idx] &&
+                        validationErrors.practitioners[idx].serviceIndicator
+                      }
+                      validateSequence={validateEditPractitionersSequence}
                     />
                   </div>
                 </FormGroup>

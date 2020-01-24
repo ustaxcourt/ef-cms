@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -20,9 +21,12 @@ export const setupPetitionerInformationFormAction = ({
       ...caseDetail,
     });
 
-  store.set(state.form, {
-    contactPrimary: formattedCaseDetail.contactPrimary,
-    contactSecondary: formattedCaseDetail.contactSecondary,
-    partyType: formattedCaseDetail.partyType,
-  });
+  store.set(
+    state.form,
+    cloneDeep({
+      contactPrimary: formattedCaseDetail.contactPrimary,
+      contactSecondary: formattedCaseDetail.contactSecondary,
+      partyType: formattedCaseDetail.partyType,
+    }),
+  );
 };
