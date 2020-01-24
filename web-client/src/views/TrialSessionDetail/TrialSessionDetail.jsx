@@ -19,11 +19,13 @@ export const TrialSessionDetail = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
     showModal: state.showModal,
+    trialSessionDetailsHelper: state.trialSessionDetailsHelper,
   },
   ({
     formattedTrialSessionDetails,
     openSetCalendarModalSequence,
     showModal,
+    trialSessionDetailsHelper,
   }) => (
     <>
       <TrialSessionDetailHeader />
@@ -38,13 +40,15 @@ export const TrialSessionDetail = connect(
             bind="trialSessionDetailsTab.caseList"
             defaultActiveTab="EligibleCases"
           >
-            <Button
-              className="tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
-              icon="calendar-check"
-              onClick={() => openSetCalendarModalSequence()}
-            >
-              Set Calendar
-            </Button>
+            {trialSessionDetailsHelper.showSetCalendarButton && (
+              <Button
+                className="tab-right-button ustc-ui-tabs ustc-ui-tabs--right-button-container"
+                icon="calendar-check"
+                onClick={() => openSetCalendarModalSequence()}
+              >
+                Set Calendar
+              </Button>
+            )}
             <Tab
               id="eligible-cases-tab"
               tabName="EligibleCases"
