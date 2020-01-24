@@ -45,9 +45,3 @@
 > `string` | optional
 
 ##### Can be null.
-
-### status
-
-> `string` | optional
-
-##### Can be null.
