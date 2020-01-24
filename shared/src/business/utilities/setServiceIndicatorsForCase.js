@@ -40,10 +40,6 @@ const setServiceIndicatorsForCase = caseDetail => {
       if (practitioner.representingSecondary) {
         hasSecondaryPractitioner = true;
       }
-
-      practitioner.serviceIndicator = practitioner.userId
-        ? constants.SI_ELECTRONIC
-        : constants.SI_PAPER;
     });
   }
 
