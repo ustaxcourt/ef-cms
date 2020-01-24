@@ -48,7 +48,9 @@ exports.setTrialSessionCalendarInteractor = async ({
         trialSessionId,
       })
   ).filter(
-    manualCase => manualCase.qcCompleteForTrial[trialSessionId] === true,
+    manualCase =>
+      manualCase.qcCompleteForTrial &&
+      manualCase.qcCompleteForTrial[trialSessionId] === true,
   );
 
   let eligibleCasesLimit = trialSessionEntity.maxCases;
@@ -66,7 +68,9 @@ exports.setTrialSessionCalendarInteractor = async ({
         skPrefix: trialSessionEntity.generateSortKeyPrefix(),
       })
   ).filter(
-    eligibleCase => eligibleCase.qcCompleteForTrial[trialSessionId] === true,
+    eligibleCase =>
+      eligibleCase.qcCompleteForTrial &&
+      eligibleCase.qcCompleteForTrial[trialSessionId] === true,
   );
 
   /**

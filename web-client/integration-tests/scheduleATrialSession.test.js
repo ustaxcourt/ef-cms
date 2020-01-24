@@ -18,6 +18,7 @@ import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSe
 import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkViewsACalendaredTrialSession from './journey/petitionsClerkViewsACalendaredTrialSession';
 import petitionsClerkViewsATrialSessionsEligibleCases from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
+import petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase from './journey/petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase';
 import userSignsOut from './journey/petitionerSignsOut';
 
 const test = setupTest();
@@ -75,7 +76,10 @@ describe('Schedule A Trial Session', () => {
   petitionsClerkViewsATrialSessionsEligibleCases(test, caseCount);
 
   petitionsClerkManuallyAddsCaseToTrial(test);
-  petitionsClerkViewsATrialSessionsEligibleCases(test, caseCount + 1);
+  petitionsClerkViewsATrialSessionsEligibleCasesWithManuallyAddedCase(
+    test,
+    caseCount + 1,
+  );
   petitionsClerkManuallyRemovesCaseFromTrial(test);
   petitionsClerkViewsATrialSessionsEligibleCases(test, caseCount);
 
