@@ -2,6 +2,7 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 import { setupTest } from './helpers';
 import { uploadPetition } from './helpers';
 import calendarClerkLogIn from './journey/calendarClerkLogIn';
+import calendarClerkSetsATrialSessionsSchedule from './journey/calendarClerkSetsATrialSessionsSchedule';
 import captureCreatedCase from './journey/captureCreatedCase';
 import docketClerkCreatesATrialSession from './journey/docketClerkCreatesATrialSession';
 import docketClerkLogIn from './journey/docketClerkLogIn';
@@ -14,7 +15,6 @@ import petitionerViewsDashboard from './journey/petitionerViewsDashboard';
 import petitionsClerkLogIn from './journey/petitionsClerkLogIn';
 import petitionsClerkRunsBatchProcess from './journey/petitionsClerkRunsBatchProcess';
 import petitionsClerkSendsCaseToIRSHoldingQueue from './journey/petitionsClerkSendsCaseToIRSHoldingQueue';
-import petitionsClerkSetsATrialSessionsSchedule from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import petitionsClerkUpdatesFiledBy from './journey/petitionsClerkUpdatesFiledBy';
 import userSignsOut from './journey/petitionerSignsOut';
 
@@ -298,8 +298,8 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   describe(`Set calendar for '${trialLocation}' session`, () => {
-    petitionsClerkLogIn(test);
-    petitionsClerkSetsATrialSessionsSchedule(test);
+    calendarClerkLogIn(test);
+    calendarClerkSetsATrialSessionsSchedule(test);
     userSignsOut(test);
   });
 
