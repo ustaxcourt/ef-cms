@@ -8,10 +8,11 @@ export const ServiceIndicatorRadios = connect(
     bindKey: props.bind,
     bindObject: state[props.bind],
     updateStateSequence: sequences.updateStateSequence,
+    validationErrors: state[props.validationErrors],
   },
-  ({ bindKey, bindObject, updateStateSequence }) => {
+  ({ bindKey, bindObject, updateStateSequence, validationErrors }) => {
     return (
-      <FormGroup key={bindKey}>
+      <FormGroup errorText={validationErrors.serviceIndicator}>
         <fieldset
           className="usa-fieldset"
           id={`service-type-radios-${bindKey}`}
