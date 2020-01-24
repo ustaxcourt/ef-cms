@@ -1,14 +1,16 @@
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
-import { props, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const ServiceIndicatorRadios = connect(
   {
-    modal: state[props.bind],
+    bindKey: props.bind,
+    bindObject: state[props.bind],
+    updateStateSequence: sequences.updateStateSequence,
     validationErrors: state[props.validationErrors],
   },
-  ({ modal, updateModalValueSequence, validationErrors }) => {
+  ({ bindKey, bindObject, updateStateSequence, validationErrors }) => {
     return (
       <FormGroup errorText={validationErrors.serviceIndicator}>
         <fieldset className="usa-fieldset" id="service-type-radios">
@@ -16,15 +18,15 @@ export const ServiceIndicatorRadios = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby="service-type-radios"
-              checked={modal.serviceIndicator === 'Electronic'}
+              checked={bindObject.serviceIndicator === 'Electronic'}
               className="usa-radio__input"
               id="service-type-electronic"
               name="serviceIndicator"
               type="radio"
               value="Electronic"
               onChange={e => {
-                updateModalValueSequence({
-                  key: e.target.name,
+                updateStateSequence({
+                  key: `${bindKey}.${e.target.name}`,
                   value: e.target.value,
                 });
               }}
@@ -40,15 +42,15 @@ export const ServiceIndicatorRadios = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby="service-type-radios"
-              checked={modal.serviceIndicator === 'Paper'}
+              checked={bindObject.serviceIndicator === 'Paper'}
               className="usa-radio__input"
               id="service-type-paper"
               name="serviceIndicator"
               type="radio"
               value="Paper"
               onChange={e => {
-                updateModalValueSequence({
-                  key: e.target.name,
+                updateStateSequence({
+                  key: `${bindKey}.${e.target.name}`,
                   value: e.target.value,
                 });
               }}
@@ -64,15 +66,15 @@ export const ServiceIndicatorRadios = connect(
           <div className="usa-radio usa-radio__inline">
             <input
               aria-describedby="service-type-radios"
-              checked={modal.serviceIndicator === 'None'}
+              checked={bindObject.serviceIndicator === 'None'}
               className="usa-radio__input"
               id="service-type-none"
               name="serviceIndicator"
               type="radio"
               value="None"
               onChange={e => {
-                updateModalValueSequence({
-                  key: e.target.name,
+                updateStateSequence({
+                  key: `${bindKey}.${e.target.name}`,
                   value: e.target.value,
                 });
               }}
