@@ -1,5 +1,5 @@
 export default (test, expectedCount) => {
-  return it('Petitions Clerk Views A Calendared Trial Session', async () => {
+  return it('Calendar Clerk Views A Calendared Trial Session', async () => {
     await test.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: test.trialSessionId,
     });
