@@ -318,6 +318,7 @@
     ],
     "practitioners": [
       {
+        "serviceIndicator": "Electronic",
         "role": "practitioner",
         "section": "practitioner",
         "representingPrimary": true,
