@@ -12,14 +12,13 @@ const {
 function DocketRecord(rawDocketRecord) {
   this.action = rawDocketRecord.action;
   this.description = rawDocketRecord.description;
-  this.signatory = rawDocketRecord.signatory;
   this.documentId = rawDocketRecord.documentId;
+  this.editState = rawDocketRecord.editState;
+  this.eventCode = rawDocketRecord.eventCode;
   this.filedBy = rawDocketRecord.filedBy;
   this.filingDate = rawDocketRecord.filingDate;
   this.index = rawDocketRecord.index;
-  this.status = rawDocketRecord.status;
-  this.eventCode = rawDocketRecord.eventCode;
-  this.editState = rawDocketRecord.editState;
+  this.signatory = rawDocketRecord.signatory;
 }
 
 DocketRecord.validationName = 'DocketRecord';
@@ -65,10 +64,6 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null),
-    status: joi
-      .string()
-      .allow(null)
-      .optional(),
   }),
   undefined,
   DocketRecord.VALIDATION_ERROR_MESSAGES,
