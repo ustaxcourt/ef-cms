@@ -1,5 +1,5 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -62,8 +62,8 @@ export const SectionWorkQueueOutbox = connect(
                 </td>
                 <td className="message-queue-row has-icon padding-right-0">
                   {item.showBatchedStatusIcon && (
-                    <FontAwesomeIcon
-                      aria-hidden="true"
+                    <Icon
+                      aria-label="batched for IRS"
                       className="iconStatusBatched"
                       icon={['far', 'clock']}
                       size="lg"
