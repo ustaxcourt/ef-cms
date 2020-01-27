@@ -56,7 +56,7 @@ export const CheckConsolidatedCasesModal = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor={`case-${formattedConsolidatedCase.docketNumber}`}
                 >
                   {formattedConsolidatedCase.docketNumber}{' '}
