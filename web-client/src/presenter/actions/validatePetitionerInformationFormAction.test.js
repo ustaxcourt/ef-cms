@@ -1,5 +1,5 @@
+import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/cases/CaseConstants';
 import { applicationContext } from '../../applicationContext';
-import { constants } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { presenter } from '../presenter';
 import { runAction } from 'cerebral/test';
 import { validatePetitionerInformationFormAction } from './validatePetitionerInformationFormAction';
@@ -129,7 +129,7 @@ describe('validatePetitionerInformationFormAction', () => {
             name: 'Guy Fieri',
             phone: '1234567890',
             postalCode: '12345',
-            serviceIndicator: constants.SI_PAPER,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
             state: 'TN',
           },
           contactSecondary: {
@@ -140,7 +140,7 @@ describe('validatePetitionerInformationFormAction', () => {
             name: 'Gal Fieri',
             phone: '1234567890',
             postalCode: '12345',
-            serviceIndicator: constants.SI_PAPER,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
             state: 'TN',
           },
         },
@@ -153,7 +153,7 @@ describe('validatePetitionerInformationFormAction', () => {
             name: 'Guy Fieri',
             phone: '1234567890',
             postalCode: '12345',
-            serviceIndicator: constants.SI_ELECTRONIC,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
             state: 'TN',
           },
           contactSecondary: {
@@ -164,7 +164,7 @@ describe('validatePetitionerInformationFormAction', () => {
             name: 'Gal Fieri',
             phone: '1234567890',
             postalCode: '12345',
-            serviceIndicator: constants.SI_ELECTRONIC,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
             state: 'TN',
           },
           partyType: 'Petitioner',

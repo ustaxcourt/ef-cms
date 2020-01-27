@@ -2,6 +2,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 
 import docketClerkAddsDocketEntryFromOrder from './journey/docketClerkAddsDocketEntryFromOrder';
 import docketClerkCreatesAnOrder from './journey/docketClerkCreatesAnOrder';
+import docketClerkEditsPetitionerInformation from './journey/docketClerkEditsPetitionerInformation';
 import docketClerkEditsServiceIndicatorForPetitioner from './journey/docketClerkEditsServiceIndicatorForPetitioner';
 import docketClerkEditsServiceIndicatorForPractitioner from './journey/docketClerkEditsServiceIndicatorForPractitioner';
 import docketClerkEditsServiceIndicatorForRespondent from './journey/docketClerkEditsServiceIndicatorForRespondent';
@@ -27,6 +28,10 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
     const caseDetail = await uploadPetition(test);
     test.docketNumber = caseDetail.docketNumber;
   });
+
+  docketClerkLogIn(test);
+  docketClerkEditsPetitionerInformation(test);
+  docketClerkSignsOut(test);
 
   petitionsClerkLogIn(test);
   petitionsClerkViewsCaseDetail(test);
