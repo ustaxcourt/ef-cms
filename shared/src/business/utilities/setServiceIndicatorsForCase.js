@@ -17,18 +17,10 @@ const setServiceIndicatorsForCase = caseDetail => {
     contactSecondary,
     isPaper,
     practitioners,
-    respondents,
   } = caseDetail;
 
   let hasPrimaryPractitioner = false;
   let hasSecondaryPractitioner = false;
-
-  // respondents
-  if (respondents && respondents.length) {
-    respondents.forEach(
-      respondent => (respondent.serviceIndicator = constants.SI_ELECTRONIC),
-    );
-  }
 
   // practitioners
   if (practitioners && practitioners.length) {
@@ -40,10 +32,6 @@ const setServiceIndicatorsForCase = caseDetail => {
       if (practitioner.representingSecondary) {
         hasSecondaryPractitioner = true;
       }
-
-      practitioner.serviceIndicator = practitioner.userId
-        ? constants.SI_ELECTRONIC
-        : constants.SI_PAPER;
     });
   }
 

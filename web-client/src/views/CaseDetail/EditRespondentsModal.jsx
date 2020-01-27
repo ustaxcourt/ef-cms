@@ -1,4 +1,5 @@
 import { ModalDialog } from '../ModalDialog';
+import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -33,6 +34,13 @@ export const EditRespondentsModal = connect(
                 >
                   {respondent.name} ({respondent.barNumber})
                 </label>
+
+                <div className="margin-top-2">
+                  <ServiceIndicatorRadios
+                    bind={`modal.respondents.${idx}`}
+                    validationErrors="validationErrors"
+                  />
+                </div>
               </div>
               <div className="grid-col-4 text-right text-secondary-dark">
                 <div className="usa-checkbox" id={`respondent-${idx}`}>
