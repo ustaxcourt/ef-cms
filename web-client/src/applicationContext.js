@@ -29,6 +29,7 @@ import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { ExternalDocumentFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { ForwardMessage } from '../../shared/src/business/entities/ForwardMessage';
+import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/cases/CaseConstants';
 import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { Scan } from '../../shared/src/business/entities/Scan';
 import {
@@ -451,7 +452,7 @@ const applicationContext = {
       ROLE_PERMISSIONS,
       SCAN_MODES: Scan.SCAN_MODES,
       SECTIONS,
-      SERVICE_INDICATOR_TYPES: Case.SERVICE_INDICATOR_TYPES,
+      SERVICE_INDICATOR_TYPES: SERVICE_INDICATOR_TYPES,
       SERVICE_STAMP_OPTIONS,
       SESSION_DEBOUNCE: 250,
       SESSION_MODAL_TIMEOUT: 5 * MINUTES,

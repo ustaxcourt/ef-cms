@@ -1,4 +1,4 @@
-import { constants } from '../../../shared/src/business/utilities/setServiceIndicatorsForCase';
+import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/cases/CaseConstants';
 
 export default test => {
   return it('docket clerk edits service indicator for a practitioner', async () => {
@@ -9,22 +9,22 @@ export default test => {
     await test.runSequence('openEditPractitionersModalSequence');
 
     expect(test.getState('modal.practitioners.0.serviceIndicator')).toEqual(
-      constants.SI_ELECTRONIC,
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
 
     await test.runSequence('updateModalValueSequence', {
       key: 'practitioners.0.serviceIndicator',
-      value: constants.SI_PAPER,
+      value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
     expect(
       test.getState('caseDetail.practitioners.0.serviceIndicator'),
-    ).toEqual(constants.SI_ELECTRONIC);
+    ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
 
     await test.runSequence('submitEditPractitionersModalSequence');
 
     expect(
       test.getState('caseDetail.practitioners.0.serviceIndicator'),
-    ).toEqual(constants.SI_PAPER);
+    ).toEqual(SERVICE_INDICATOR_TYPES.SI_PAPER);
   });
 };

@@ -10,9 +10,9 @@ const {
 const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
-const { constants } = require('../utilities/setServiceIndicatorsForCase');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { SERVICE_INDICATOR_TYPES } = require('../entities/cases/CaseConstants');
 const { User } = require('../entities/User');
 
 const fakeData =
@@ -192,7 +192,7 @@ describe('update petitioner contact information on a case', () => {
       caseId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
       contactPrimary: {
         ...MOCK_CASE.contactPrimary,
-        serviceIndicator: constants.SI_PAPER,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
       partyType: ContactFactory.PARTY_TYPES.petitioner,
     });

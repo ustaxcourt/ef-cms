@@ -1,5 +1,7 @@
+const {
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/cases/CaseConstants');
 const { associateRespondentToCase } = require('./associateRespondentToCase');
-const { constants } = require('../../utilities/setServiceIndicatorsForCase');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
@@ -51,7 +53,7 @@ describe('associateRespondentToCase', () => {
     await associateRespondentToCase({
       applicationContext,
       caseId: caseRecord.caseId,
-      serviceIndicator: constants.SI_ELECTRONIC,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       user,
     });
 
@@ -82,7 +84,7 @@ describe('associateRespondentToCase', () => {
     await associateRespondentToCase({
       applicationContext,
       caseId: caseRecord.caseId,
-      serviceIndicator: constants.SI_ELECTRONIC,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       user,
     });
 
@@ -91,7 +93,7 @@ describe('associateRespondentToCase', () => {
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
       respondents: [
         {
-          serviceIndicator: constants.SI_ELECTRONIC,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
       ],

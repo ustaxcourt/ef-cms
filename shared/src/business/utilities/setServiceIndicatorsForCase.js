@@ -1,5 +1,5 @@
 const { isEmpty } = require('lodash');
-const { SERVICE_INDICATOR_TYPES } = require('../entities/cases/Case');
+const { SERVICE_INDICATOR_TYPES } = require('../entities/cases/CaseConstants');
 
 /**
  * sets the service indicators for parties on the given case

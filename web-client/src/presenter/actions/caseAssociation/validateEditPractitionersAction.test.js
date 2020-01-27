@@ -1,4 +1,4 @@
-import { constants } from '../../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
+import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/cases/CaseConstants';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import { validateEditPractitionersAction } from './validateEditPractitionersAction';
@@ -36,20 +36,26 @@ describe('validateEditPractitionersAction', () => {
       state: {
         caseDetail: {
           practitioners: [
-            { serviceIndicator: constants.SI_ELECTRONIC, userId: '1' },
-            { serviceIndicator: constants.SI_ELECTRONIC, userId: '2' },
+            {
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              userId: '1',
+            },
+            {
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              userId: '2',
+            },
           ],
         },
         modal: {
           practitioners: [
             {
               representingPrimary: true,
-              serviceIndicator: constants.SI_ELECTRONIC,
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
               userId: '1',
             },
             {
               representingPrimary: true,
-              serviceIndicator: constants.SI_ELECTRONIC,
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
               userId: '2',
             },
           ],
@@ -69,8 +75,14 @@ describe('validateEditPractitionersAction', () => {
       state: {
         caseDetail: {
           practitioners: [
-            { serviceIndicator: constants.SI_ELECTRONIC, userId: '1' },
-            { serviceIndicator: constants.SI_ELECTRONIC, userId: '2' },
+            {
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              userId: '1',
+            },
+            {
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              userId: '2',
+            },
           ],
         },
         modal: {
@@ -78,7 +90,7 @@ describe('validateEditPractitionersAction', () => {
             { userId: '1' },
             {
               representingPrimary: true,
-              serviceIndicator: constants.SI_ELECTRONIC,
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
               userId: '2',
             },
           ],
@@ -103,8 +115,8 @@ describe('validateEditPractitionersAction', () => {
       state: {
         caseDetail: {
           practitioners: [
-            { serviceIndicator: constants.SI_PAPER, userId: '1' },
-            { serviceIndicator: constants.SI_PAPER, userId: '2' },
+            { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER, userId: '1' },
+            { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER, userId: '2' },
           ],
         },
         modal: {
@@ -112,7 +124,7 @@ describe('validateEditPractitionersAction', () => {
             { userId: '1' },
             {
               representingPrimary: true,
-              serviceIndicator: constants.SI_ELECTRONIC,
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
               userId: '2',
             },
           ],
