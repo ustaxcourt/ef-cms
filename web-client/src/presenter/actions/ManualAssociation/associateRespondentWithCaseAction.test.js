@@ -1,4 +1,5 @@
 import { associateRespondentWithCaseAction } from './associateRespondentWithCaseAction';
+import { constants } from '../../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';
 import sinon from 'sinon';
@@ -25,6 +26,7 @@ describe('associateRespondentWithCaseAction', () => {
       state: {
         caseDetail: { caseId: 'sdsdfsd' },
         modal: {
+          serviceIndicator: constants.SI_ELECTRONIC,
           user: {
             userId: 'sdfsd',
           },
