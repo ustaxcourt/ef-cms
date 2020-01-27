@@ -4,19 +4,13 @@ import {
   setServiceIndicatorsForCase,
 } from './setServiceIndicatorsForCase';
 
-const baseCaseDetail = {
-  contactPrimary: {
-    email: 'petitioner@example.com',
-    name: 'Test Petitioner',
-  },
-  isPaper: false,
-};
+let baseCaseDetail;
 
 const basePractitioner = {
   email: 'practitioner1@example.com',
   name: 'Test Practitioner',
   representingPrimary: true,
-  role: User.ROLES.petitioner,
+  role: User.ROLES.practitioner,
   serviceIndicator: 'Paper',
 };
 
@@ -30,6 +24,16 @@ const baseRespondent = {
 };
 
 describe('setServiceIndicatorsForCases', () => {
+  beforeEach(() => {
+    baseCaseDetail = {
+      contactPrimary: {
+        email: 'petitioner@example.com',
+        name: 'Test Petitioner',
+      },
+      isPaper: false,
+    };
+  });
+
   it(`should return ${constants.SI_PAPER} for a Petitioner (contactPrimary) with no representing counsel filing by paper`, async () => {
     const caseDetail = {
       ...baseCaseDetail,
@@ -49,6 +53,21 @@ describe('setServiceIndicatorsForCases', () => {
     expect(result.contactPrimary.serviceIndicator).toEqual(
       constants.SI_ELECTRONIC,
     );
+  });
+
+  it(`should return ${constants.SI_NONE} for a Petitioner (contactPrimary) with ${constants.SI_NONE} already set as an override`, async () => {
+    const caseDetail = {
+      ...baseCaseDetail,
+      contactPrimary: {
+        email: 'petitioner@example.com',
+        name: 'Test Petitioner',
+        serviceIndicator: constants.SI_NONE,
+      },
+    };
+
+    const result = setServiceIndicatorsForCase(caseDetail);
+
+    expect(result.contactPrimary.serviceIndicator).toEqual(constants.SI_NONE);
   });
 
   it(`should return ${constants.SI_NONE} for a Petitioner (contactPrimary) with representing counsel filing by paper`, async () => {
@@ -89,6 +108,21 @@ describe('setServiceIndicatorsForCases', () => {
     expect(result.contactSecondary.serviceIndicator).toEqual(
       constants.SI_PAPER,
     );
+  });
+
+  it(`should return ${constants.SI_NONE} for a Petitioner (contactSecondary) with a serviceIndicator already set as an override`, async () => {
+    const caseDetail = {
+      ...baseCaseDetail,
+      contactSecondary: {
+        name: 'Test Petitioner2',
+        serviceIndicator: constants.SI_NONE,
+      },
+      practitioners: [{ ...basePractitioner }],
+    };
+
+    const result = setServiceIndicatorsForCase(caseDetail);
+
+    expect(result.contactSecondary.serviceIndicator).toEqual(constants.SI_NONE);
   });
 
   it(`should return ${constants.SI_NONE} for a Petitioner (contactSecondary) with representing counsel`, async () => {
