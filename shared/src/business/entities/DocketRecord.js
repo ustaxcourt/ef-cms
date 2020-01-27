@@ -18,7 +18,6 @@ function DocketRecord(rawDocketRecord) {
   this.filedBy = rawDocketRecord.filedBy;
   this.filingDate = rawDocketRecord.filingDate;
   this.index = rawDocketRecord.index;
-  this.signatory = rawDocketRecord.signatory;
 }
 
 DocketRecord.validationName = 'DocketRecord';
@@ -40,6 +39,9 @@ joiValidationDecorator(
     description: joi.string().required(),
     documentId: joi
       .string()
+      .uuid({
+        version: ['uuidv4'],
+      })
       .allow(null)
       .optional(),
     editState: joi
@@ -60,10 +62,6 @@ joiValidationDecorator(
       .number()
       .integer()
       .required(),
-    signatory: joi
-      .string()
-      .optional()
-      .allow(null),
   }),
   undefined,
   DocketRecord.VALIDATION_ERROR_MESSAGES,
