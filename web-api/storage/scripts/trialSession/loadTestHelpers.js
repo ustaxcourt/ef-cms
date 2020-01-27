@@ -1,5 +1,16 @@
-const createTrialSession = async ({ applicationContext }) => {
-  return await applicationContext.getUseCases().createTrialSession({
+const createApplicationContext = require('../../../src/applicationContext');
+
+const createTrialSession = async () => {
+  const user = {
+    email: 'docketclerk',
+    name: 'Test Docketclerk',
+    role: 'docketclerk',
+    userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+  };
+
+  const applicationContext = createApplicationContext(user);
+
+  return await applicationContext.getUseCases().createTrialSessionInteractor({
     applicationContext,
     trialSession: {
       maxCases: 100,
@@ -12,7 +23,16 @@ const createTrialSession = async ({ applicationContext }) => {
   });
 };
 
-const createCase = async ({ applicationContext }) => {
+const createCase = async () => {
+  const user = {
+    email: 'petitioner',
+    name: 'Test Petitioner',
+    role: 'petitioner',
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+  };
+
+  const applicationContext = createApplicationContext(user);
+
   const caseDetail = await applicationContext
     .getUseCases()
     .createCaseInteractor({
