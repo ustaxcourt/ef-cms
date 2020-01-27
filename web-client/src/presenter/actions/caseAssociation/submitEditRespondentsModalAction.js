@@ -26,6 +26,13 @@ export const submitEditRespondentsModalAction = async ({
         caseId,
         userIdToDelete: respondent.userId,
       });
+    } else {
+      await applicationContext.getUseCases().updateCounselOnCaseInteractor({
+        applicationContext,
+        caseId,
+        userData: respondent,
+        userIdToUpdate: respondent.userId,
+      });
     }
   }
 

@@ -297,6 +297,7 @@
     "respondents": [
       {
         "role": "respondent",
+        "serviceIndicator": "Electronic",
         "barNumber": "RT6789",
         "contact": {
           "address1": "234 Main St",
@@ -318,6 +319,7 @@
     ],
     "practitioners": [
       {
+        "serviceIndicator": "Electronic",
         "role": "practitioner",
         "section": "practitioner",
         "representingPrimary": true,

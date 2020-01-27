@@ -29,25 +29,39 @@ exports.setPriorityOnAllWorkItems = async ({
 
   const requests = [];
   for (let mapping of workItemMappings) {
-    requests.push(
-      client.update({
-        ExpressionAttributeNames: {
-          '#highPriority': 'highPriority',
-          '#trialDate': 'trialDate',
-        },
-        ExpressionAttributeValues: {
-          ':highPriority': highPriority,
-          ':trialDate': trialDate || null,
-        },
-        Key: {
-          pk: mapping.pk,
-          sk: mapping.sk,
-        },
-        UpdateExpression:
-          'SET #highPriority = :highPriority, #trialDate = :trialDate',
-        applicationContext,
-      }),
-    );
+    const workItems = await client.query({
+      ExpressionAttributeNames: {
+        '#gsi1pk': 'gsi1pk',
+      },
+      ExpressionAttributeValues: {
+        ':gsi1pk': `workitem-${mapping.sk}`,
+      },
+      IndexName: 'gsi1',
+      KeyConditionExpression: '#gsi1pk = :gsi1pk',
+      applicationContext,
+    });
+
+    for (let workItem of workItems) {
+      requests.push(
+        client.update({
+          ExpressionAttributeNames: {
+            '#highPriority': 'highPriority',
+            '#trialDate': 'trialDate',
+          },
+          ExpressionAttributeValues: {
+            ':highPriority': highPriority,
+            ':trialDate': trialDate || null,
+          },
+          Key: {
+            pk: workItem.pk,
+            sk: workItem.sk,
+          },
+          UpdateExpression:
+            'SET #highPriority = :highPriority, #trialDate = :trialDate',
+          applicationContext,
+        }),
+      );
+    }
   }
 
   const [results] = await Promise.all(requests);

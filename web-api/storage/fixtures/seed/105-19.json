@@ -93,6 +93,7 @@
     "practitioners": [
       {
         "role": "practitioner",
+        "serviceIndicator": "Electronic",
         "contact": {
           "address1": "234 Main St",
           "address2": "Apartment 4",

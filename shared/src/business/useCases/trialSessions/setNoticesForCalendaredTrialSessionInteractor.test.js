@@ -44,6 +44,8 @@ const testPdfDoc = testPdfDocBytes();
 let applicationContext;
 let calendaredCases;
 let generateNoticeOfTrialIssuedInteractorMock = jest.fn();
+let generateStandingPretrialNoticeInteractorMock = jest.fn();
+let generateStandingPretrialOrderInteractorMock = jest.fn();
 let generatePaperServiceAddressPagePdfMock = jest
   .fn()
   .mockResolvedValue(testPdfDoc);
@@ -65,6 +67,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         email: 'petitioner@example.com',
       },
       docketNumber: '102-20',
+      procedureType: 'Regular',
     };
 
     const case1 = {
@@ -77,6 +80,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       docketNumber: '103-20',
       isPaper: true,
       mailingDate: 'testing',
+      procedureType: 'Small',
     };
 
     calendaredCases = [case0, case1];
@@ -118,6 +122,14 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       getUseCases: () => ({
         generateNoticeOfTrialIssuedInteractor: () => {
           generateNoticeOfTrialIssuedInteractorMock();
+          return fakeFile;
+        },
+        generateStandingPretrialNoticeInteractor: () => {
+          generateStandingPretrialNoticeInteractorMock();
+          return fakeFile;
+        },
+        generateStandingPretrialOrderInteractor: () => {
+          generateStandingPretrialOrderInteractorMock();
           return fakeFile;
         },
       }),
@@ -344,5 +356,25 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy(); // Document should not exist on this case
     expect(findNoticeOfTrial(calendaredCases[1]).status).toEqual('served');
+  });
+
+  it('Should generate a Standing Pretrial Order for REGULAR cases', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '000aa3f7-e2e3-43e6-885d-4ce341588000', // MOCK_CASE with procedureType: 'Regular'
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateStandingPretrialOrderInteractorMock).toHaveBeenCalled();
+  });
+
+  it('Should generate a Standing Pretrial Notice for SMALL cases', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor({
+      applicationContext,
+      caseId: '111aa3f7-e2e3-43e6-885d-4ce341588111', // MOCK_CASE with procedureType: 'Small'
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(generateStandingPretrialNoticeInteractorMock).toHaveBeenCalled();
   });
 });
