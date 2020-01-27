@@ -62,7 +62,7 @@ joiValidationDecorator(
       .string()
       .optional()
       .allow(null)
-      .description('ID of the uswer that filed this Docket Record item.'),
+      .description('ID of the user that filed this Docket Record item.'),
     filingDate: joi
       .date()
       .max('now')
