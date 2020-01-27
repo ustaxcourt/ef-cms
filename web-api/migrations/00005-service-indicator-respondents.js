@@ -4,7 +4,7 @@ const {
   constants,
 } = require('../../shared/src/business/utilities/setServiceIndicatorsForCase');
 
-const { forAllRecords } = require('./00003-event-code-docket-entry');
+const { forAllRecords } = require('./00004-service-indicator');
 
 const up = async (documentClient, tableName) => {
   await forAllRecords(documentClient, tableName, async item => {
