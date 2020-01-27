@@ -317,11 +317,11 @@ module.exports = [
       'wait for element #react-select-2-input to be visible',
       'click #react-select-2-input',
       'wait for element .select-react-element__menu to be visible',
-      'click #react-select-2-option-86', //Motion for Leave to File Out of Time
+      'click #react-select-2-option-48', //Motion for Leave to File Out of Time
       'wait for element #react-select-3-input to be visible',
       'click #react-select-3-input',
       'wait for element .select-react-element__menu to be visible',
-      'click #react-select-3-option-75', //Motion for Continuance
+      'click #react-select-3-option-37', //Motion for Continuance
       'wait for element #submit-document to be visible',
       'click #submit-document',
       'wait for element #primary-document to be visible',

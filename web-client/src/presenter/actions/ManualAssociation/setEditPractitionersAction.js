@@ -11,6 +11,5 @@ import { state } from 'cerebral';
  */
 export const setEditPractitionersAction = async ({ get, store }) => {
   const practitioners = get(state.caseDetail.practitioners);
-
   store.set(state.modal.practitioners, practitioners);
 };

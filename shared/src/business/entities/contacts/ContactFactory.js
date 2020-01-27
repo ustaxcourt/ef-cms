@@ -1,12 +1,14 @@
 const joi = require('@hapi/joi');
 
 const {
+  constants,
+} = require('../../../business/utilities/setServiceIndicatorsForCase');
+const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-
 const ContactFactory = {};
 
 ContactFactory.COUNTRY_TYPES = {
@@ -157,6 +159,10 @@ const commonValidationRequirements = {
   phone: joi.string().required(),
   secondaryName: joi.string().optional(),
   title: joi.string().optional(),
+  serviceIndicator: joi
+    .string()
+    .valid(...Object.values(constants))
+    .optional(),
 };
 const domesticValidationObject = {
   countryType: joi
@@ -423,6 +429,7 @@ ContactFactory.createContactFactory = ({
       this.phone = rawContact.phone;
       this.postalCode = rawContact.postalCode;
       this.secondaryName = rawContact.secondaryName;
+      this.serviceIndicator = rawContact.serviceIndicator;
       this.state = rawContact.state;
       this.title = rawContact.title;
     }

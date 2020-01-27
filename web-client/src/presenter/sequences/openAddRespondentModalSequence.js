@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getRespondentsBySearchKeyAction } from '../actions/ManualAssociation/getRespondentsBySearchKeyAction';
 import { isRespondentInCaseAction } from '../actions/isRespondentInCaseAction';
+import { setDefaultServiceIndicatorAction } from '../actions/setDefaultServiceIndicatorAction';
 import { setRespondentsAction } from '../actions/ManualAssociation/setRespondentsAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -12,6 +13,7 @@ export const openAddRespondentModalSequence = [
   clearAlertsAction,
   clearModalStateAction,
   setWaitingForResponseAction,
+  setDefaultServiceIndicatorAction('modal'),
   getRespondentsBySearchKeyAction,
   {
     error: [setValidationErrorsAction],
