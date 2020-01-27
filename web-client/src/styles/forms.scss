@@ -107,6 +107,9 @@ select {
   &:hover::before {
     box-shadow: 0 0 0 2px color($theme-color-primary);
   }
+  &.inline-block {
+    display: inline-block;
+  }
 }
 
 .usa-checkbox,
