@@ -63,6 +63,7 @@ export const formatWorkItem = ({
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
 
+  result.highPriority = !!result.highPriority;
   result.messages = orderBy(result.messages, 'createdAt', 'desc');
   result.messages.forEach(message => {
     message.createdAtFormatted = formatDateIfToday(
@@ -83,15 +84,15 @@ export const formatWorkItem = ({
     .formatDateString(result.completedAt, 'DATE_TIME_TZ');
   result.assigneeName = result.assigneeName || 'Unassigned';
 
-  result.showUnreadIndicators = !result.isRead;
-  result.showUnreadStatusIcon = !result.isRead;
-
-  result.showComplete = !result.isInitializeCase;
-  result.showSendTo = !result.isInitializeCase;
-
   if (result.highPriority) {
     result.showHighPriorityIcon = true;
   }
+
+  result.showUnreadIndicators = !result.isRead;
+  result.showUnreadStatusIcon = !result.isRead && !result.showHighPriorityIcon;
+
+  result.showComplete = !result.isInitializeCase;
+  result.showSendTo = !result.isInitializeCase;
 
   if (result.assigneeName === 'Unassigned' && !result.showHighPriorityIcon) {
     result.showUnassignedIcon = true;
@@ -476,7 +477,18 @@ export const formattedWorkQueue = (get, applicationContext) => {
       workQueueToDisplay.queue
     ][workQueueToDisplay.box];
 
-  workQueue = orderBy(workQueue, [sortField, 'docketNumber'], sortDirection);
+  let highPriorityField = [];
+  let highPriorityDirection = [];
+  if (!workQueueIsInternal && workQueueToDisplay.box == 'inbox') {
+    highPriorityField = ['highPriority', 'trialDate'];
+    highPriorityDirection = ['desc', 'asc'];
+  }
+
+  workQueue = orderBy(
+    workQueue,
+    [...highPriorityField, sortField, 'docketNumber'],
+    [...highPriorityDirection, sortDirection, 'asc'],
+  );
 
   return workQueue;
 };

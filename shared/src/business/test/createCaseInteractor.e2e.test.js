@@ -74,7 +74,6 @@ describe('createCase integration test', () => {
         {
           description: 'Petition',
           filedBy: 'Petr. Rick Petitioner',
-          status: undefined,
         },
         {
           description: 'Request for Place of Trial at Aberdeen, South Dakota',

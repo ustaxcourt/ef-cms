@@ -1,5 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
+import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -115,6 +116,12 @@ export const EditPractitionersModal = connect(
                         </div>
                       )}
                   </fieldset>
+                  <div className="margin-top-2">
+                    <ServiceIndicatorRadios
+                      bind={`modal.practitioners.${idx}`}
+                      validationErrors="validationErrors"
+                    />
+                  </div>
                 </FormGroup>
               </div>
               <div className="grid-col-4 text-right text-secondary-dark">

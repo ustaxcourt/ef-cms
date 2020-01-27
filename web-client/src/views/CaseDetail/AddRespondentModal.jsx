@@ -1,5 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
+import { ServiceIndicatorRadios } from '../ServiceIndicatorRadios';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -106,6 +107,11 @@ export const AddRespondentModal = connect(
               </div>
             </fieldset>
           </FormGroup>
+
+          <ServiceIndicatorRadios
+            bind="modal"
+            validationErrors="validationErrors"
+          />
         </div>
       </ModalDialog>
     );

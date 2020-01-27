@@ -2,44 +2,49 @@ const { aggregatePartiesForService } = require('./aggregatePartiesForService');
 
 describe('aggregatePartiesForService', () => {
   let mockCase;
-
-  const contactPrimary = {
-    email: 'contactprimary@example.com',
-    name: 'Contact Primary',
-  };
-
-  const contactSecondary = {
-    address1: 'Test Address',
-    city: 'Testville',
-    name: 'Contact Secondary',
-    state: 'CA',
-  };
-
-  const respondents = [
-    {
-      email: 'respondentone@example.com',
-      name: 'Respondent One',
-    },
-    {
-      email: 'respondenttwo@example.com',
-      name: 'Respondent Two',
-    },
-  ];
-
-  const practitioners = [
-    {
-      email: 'practitionerone@example.com',
-      name: 'Practitioner One',
-      userId: 'p1',
-    },
-    {
-      email: 'practitionertwo@example.com',
-      name: 'Practitioner Two',
-      userId: 'p2',
-    },
-  ];
+  let respondents;
 
   beforeEach(() => {
+    const contactPrimary = {
+      email: 'contactprimary@example.com',
+      name: 'Contact Primary',
+    };
+
+    const contactSecondary = {
+      address1: 'Test Address',
+      city: 'Testville',
+      name: 'Contact Secondary',
+      state: 'CA',
+    };
+
+    respondents = [
+      {
+        email: 'respondentone@example.com',
+        name: 'Respondent One',
+        serviceIndicator: 'Electronic',
+      },
+      {
+        email: 'respondenttwo@example.com',
+        name: 'Respondent Two',
+        serviceIndicator: 'Electronic',
+      },
+    ];
+
+    const practitioners = [
+      {
+        email: 'practitionerone@example.com',
+        name: 'Practitioner One',
+        serviceIndicator: 'Electronic',
+        userId: 'p1',
+      },
+      {
+        email: 'practitionertwo@example.com',
+        name: 'Practitioner Two',
+        serviceIndicator: 'Electronic',
+        userId: 'p2',
+      },
+    ];
+
     mockCase = {
       contactPrimary,
       contactSecondary,

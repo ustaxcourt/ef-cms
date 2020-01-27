@@ -36,7 +36,6 @@ function Document(rawDocument, { applicationContext }) {
   this.attachments = rawDocument.attachments;
   this.archived = rawDocument.archived;
   this.caseId = rawDocument.caseId;
-  this.category = rawDocument.category;
   this.certificateOfService = rawDocument.certificateOfService;
   this.certificateOfServiceDate = rawDocument.certificateOfServiceDate;
   this.createdAt = rawDocument.createdAt || createISODateString();
@@ -138,6 +137,18 @@ Document.NOTICE_OF_TRIAL = {
   eventCode: 'NDT',
 };
 
+Document.STANDING_PRETRIAL_NOTICE = {
+  documentTitle: 'Standing Pretrial Notice',
+  documentType: 'Standing Pretrial Notice',
+  eventCode: 'SPTN',
+};
+
+Document.STANDING_PRETRIAL_ORDER = {
+  documentTitle: 'Standing Pretrial Order',
+  documentType: 'Standing Pretrial Order',
+  eventCode: 'SPTO',
+};
+
 Document.SIGNED_DOCUMENT_TYPES = {
   signedStipulatedDecision: {
     documentType: 'Stipulated Decision',
@@ -207,6 +218,8 @@ Document.getDocumentTypes = () => {
     ...signedTypes,
     Document.NOTICE_OF_DOCKET_CHANGE.documentType,
     Document.NOTICE_OF_TRIAL.documentType,
+    Document.STANDING_PRETRIAL_ORDER.documentType,
+    Document.STANDING_PRETRIAL_NOTICE.documentType,
   ];
 
   return documentTypes;
@@ -228,7 +241,6 @@ joiValidationDecorator(
     additionalInfo2: joi.string().optional(),
     archived: joi.boolean().optional(),
     caseId: joi.string().optional(),
-    category: joi.string().optional(),
     certificateOfService: joi.boolean().optional(),
     certificateOfServiceDate: joi.when('certificateOfService', {
       is: true,
@@ -324,10 +336,7 @@ joiValidationDecorator(
       .try(
         joi.string().valid(...TrialSession.TRIAL_CITY_STRINGS),
         joi.string().pattern(/^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/), // Allow unique values for testing
-        joi
-          .string()
-          .optional()
-          .allow(null),
+        joi.string().allow(null),
       )
       .optional(),
     userId: joi.string().required(),

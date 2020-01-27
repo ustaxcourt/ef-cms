@@ -5,15 +5,18 @@ import sinon from 'sinon';
 
 describe('submitEditRespondentsModalAction', () => {
   let deleteCounselFromCaseInteractorStub;
+  let updateCounselOnCaseInteractorStub;
   let successStub;
 
   beforeEach(() => {
     deleteCounselFromCaseInteractorStub = sinon.stub();
+    updateCounselOnCaseInteractorStub = sinon.stub();
     successStub = sinon.stub();
 
     presenter.providers.applicationContext = {
       getUseCases: () => ({
         deleteCounselFromCaseInteractor: deleteCounselFromCaseInteractorStub,
+        updateCounselOnCaseInteractor: updateCounselOnCaseInteractorStub,
       }),
     };
 
@@ -21,7 +24,7 @@ describe('submitEditRespondentsModalAction', () => {
       success: successStub,
     };
   });
-
+  //
   it('should call the delete use case for each respondent on the form with removeFromCase set to true and call the path.success when finished', async () => {
     const form = {
       respondents: [
