@@ -22,6 +22,11 @@ export const validatePetitionerInformationFormAction = ({
     contactSecondary: oldContactSecondary,
   } = get(state.caseDetail);
 
+  const serviceIndicatorError = {
+    serviceIndicator:
+      'You cannot change from paper to electronic service. Select a valid service preference.',
+  };
+
   const errors = applicationContext
     .getUseCases()
     .validatePetitionerInformationFormInteractor({
@@ -35,10 +40,6 @@ export const validatePetitionerInformationFormAction = ({
     ['Paper', 'None'].includes(oldContactPrimary.serviceIndicator) &&
     contactPrimary.serviceIndicator === 'Electronic'
   ) {
-    const serviceIndicatorError = {
-      serviceIndicator:
-        'You cannot change from paper to electronic service. Select a valid service preference.',
-    };
     errors.contactPrimary = {
       ...errors.contactPrimary,
       ...serviceIndicatorError,
@@ -50,10 +51,6 @@ export const validatePetitionerInformationFormAction = ({
     ['Paper', 'None'].includes(oldContactSecondary.serviceIndicator) &&
     contactSecondary.serviceIndicator === 'Electronic'
   ) {
-    const serviceIndicatorError = {
-      serviceIndicator:
-        'You cannot change from paper to electronic service. Select a valid service preference.',
-    };
     errors.contactSecondary = {
       ...errors.contactSecondary,
       ...serviceIndicatorError,
