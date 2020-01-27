@@ -5,9 +5,10 @@ import { uploadPetition } from './helpers';
 import captureCreatedCase from './journey/captureCreatedCase';
 import markAllCasesAsQCed from './journey/markAllCasesAsQCed';
 
-import calendarClerkLogIn from './journey/calendarClerkLogIn';
-
 import calendarClerkCompletesAndSetsTrialSession from './journey/calendarClerkCompletesAndSetsTrialSession';
+import calendarClerkLogIn from './journey/calendarClerkLogIn';
+import calendarClerkViewsDocketRecordAfterSettingTrial from './journey/calendarClerkViewsDocketRecordAfterSettingTrial';
+
 import docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import docketClerkLogIn from './journey/docketClerkLogIn';
 import docketClerkSetsCaseReadyForTrial from './journey/docketClerkSetsCaseReadyForTrial';
@@ -44,6 +45,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
     hasPaper: true,
     partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
     preferredTrialCity: trialLocation,
+    procedureType: 'Small', // should generate a Standing Pretrial Notice
     trialLocation,
   };
 
@@ -86,5 +88,8 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
     return [createdCases[0], createdCases[1]];
   });
   calendarClerkCompletesAndSetsTrialSession(test, overrides);
+  calendarClerkViewsDocketRecordAfterSettingTrial(test, {
+    documentTitle: 'Standing Pretrial Notice',
+  });
   userSignsOut(test);
 });
