@@ -1,7 +1,9 @@
 const {
   associatePractitionerToCase,
 } = require('./associatePractitionerToCase');
-const { constants } = require('../../utilities/setServiceIndicatorsForCase');
+const {
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/cases/CaseConstants');
 const { User } = require('../../entities/User');
 
 describe('associatePractitionerToCase', () => {
@@ -33,7 +35,7 @@ describe('associatePractitionerToCase', () => {
         name: 'Test Petitioner',
         phone: '1234567',
         postalCode: '12345',
-        serviceIndicator: constants.SI_ELECTRONIC,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         state: 'TN',
       },
       contactSecondary: {
@@ -43,7 +45,7 @@ describe('associatePractitionerToCase', () => {
         name: 'Test Petitioner Secondary',
         phone: '1234567',
         postalCode: '12345',
-        serviceIndicator: constants.SI_PAPER,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         state: 'TN',
       },
       docketNumber: '123-19',
@@ -126,8 +128,8 @@ describe('associatePractitionerToCase', () => {
     expect(associateUserWithCaseSpy).toBeCalled();
     expect(updateCaseSpy).toBeCalled();
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
-      contactPrimary: { serviceIndicator: constants.SI_NONE },
-      contactSecondary: { serviceIndicator: constants.SI_NONE },
+      contactPrimary: { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE },
+      contactSecondary: { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE },
     });
   });
 
@@ -145,8 +147,10 @@ describe('associatePractitionerToCase', () => {
     expect(associateUserWithCaseSpy).toBeCalled();
     expect(updateCaseSpy).toBeCalled();
     expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
-      contactPrimary: { serviceIndicator: constants.SI_ELECTRONIC },
-      contactSecondary: { serviceIndicator: constants.SI_NONE },
+      contactPrimary: {
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      },
+      contactSecondary: { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE },
     });
   });
 });

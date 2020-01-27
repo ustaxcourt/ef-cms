@@ -1,5 +1,7 @@
+const {
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/cases/CaseConstants');
 const { Case } = require('../../entities/cases/Case');
-const { constants } = require('../../utilities/setServiceIndicatorsForCase');
 const { Practitioner } = require('../../entities/Practitioner');
 
 /**
@@ -58,10 +60,12 @@ exports.associatePractitionerToCase = async ({
     );
 
     if (representingPrimary) {
-      caseEntity.contactPrimary.serviceIndicator = constants.SI_NONE;
+      caseEntity.contactPrimary.serviceIndicator =
+        SERVICE_INDICATOR_TYPES.SI_NONE;
     }
     if (representingSecondary) {
-      caseEntity.contactSecondary.serviceIndicator = constants.SI_NONE;
+      caseEntity.contactSecondary.serviceIndicator =
+        SERVICE_INDICATOR_TYPES.SI_NONE;
     }
 
     await applicationContext.getPersistenceGateway().updateCase({
