@@ -20,6 +20,7 @@ describe('docket clerk edits the petitioner information', () => {
         name: 'Secondary Person',
         phone: '+1 (884) 358-9729',
         postalCode: '77546',
+        serviceIndicator: 'Paper',
         state: 'CT',
       },
       partyType: ContactFactory.PARTY_TYPES.petitionerSpouse,
@@ -55,6 +56,11 @@ describe('docket clerk edits the petitioner information', () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.address1',
       value: '123 Some Street',
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.serviceIndicator',
+      value: 'Paper',
     });
   });
 
