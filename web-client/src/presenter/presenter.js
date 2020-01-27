@@ -317,6 +317,7 @@ import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCour
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateDocketRecordSequence } from './sequences/validateDocketRecordSequence';
 import { validateEditPractitionersSequence } from './sequences/caseAssociation/validateEditPractitionersSequence';
+import { validateEditRespondentsSequence } from './sequences/caseAssociation/validateEditRespondentsSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateForwardMessageSequence } from './sequences/validateForwardMessageSequence';
 import { validateInitialWorkItemMessageInModalSequence } from './sequences/validateInitialWorkItemMessageInModalSequence';
@@ -662,6 +663,7 @@ export const presenter = {
     validateDocketEntrySequence,
     validateDocketRecordSequence,
     validateEditPractitionersSequence,
+    validateEditRespondentsSequence,
     validateExternalDocumentInformationSequence,
     validateForwardMessageSequence,
     validateInitialWorkItemMessageInModalSequence,

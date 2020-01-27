@@ -10,8 +10,17 @@ export const EditRespondentsModal = connect(
     confirmSequence: sequences.submitEditRespondentsModalSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
+    validateEditRespondentsSequence: sequences.validateEditRespondentsSequence,
+    validationErrors: state.validationErrors,
   },
-  ({ cancelSequence, confirmSequence, modal, updateModalValueSequence }) => {
+  ({
+    cancelSequence,
+    confirmSequence,
+    modal,
+    updateModalValueSequence,
+    validateEditRespondentsSequence,
+    validationErrors,
+  }) => {
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -38,7 +47,12 @@ export const EditRespondentsModal = connect(
                 <div className="margin-top-2">
                   <ServiceIndicatorRadios
                     bind={`modal.respondents.${idx}`}
-                    validationErrors="validationErrors"
+                    getValidationError={() =>
+                      validationErrors.respondents &&
+                      validationErrors.respondents[idx] &&
+                      validationErrors.respondents[idx].serviceIndicator
+                    }
+                    validateSequence={validateEditRespondentsSequence}
                   />
                 </div>
               </div>
