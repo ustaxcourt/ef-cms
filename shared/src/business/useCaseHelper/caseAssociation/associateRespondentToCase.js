@@ -13,6 +13,7 @@ const { Respondent } = require('../../entities/Respondent');
 exports.associateRespondentToCase = async ({
   applicationContext,
   caseId,
+  serviceIndicator,
   user,
 }) => {
   const isAssociated = await applicationContext
@@ -39,7 +40,7 @@ exports.associateRespondentToCase = async ({
 
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-    caseEntity.attachRespondent(new Respondent(user));
+    caseEntity.attachRespondent(new Respondent({ ...user, serviceIndicator }));
 
     await applicationContext.getPersistenceGateway().updateCase({
       applicationContext,
