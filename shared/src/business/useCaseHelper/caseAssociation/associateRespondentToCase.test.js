@@ -1,5 +1,5 @@
-const sinon = require('sinon');
 const { associateRespondentToCase } = require('./associateRespondentToCase');
+const { constants } = require('../../utilities/setServiceIndicatorsForCase');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 const { User } = require('../../entities/User');
 
@@ -29,9 +29,9 @@ describe('associateRespondentToCase', () => {
   };
 
   it('should not add mapping if already there', async () => {
-    let associateUserWithCaseSpy = sinon.spy();
-    let verifyCaseForUserSpy = sinon.stub().returns(true);
-    let updateCaseSpy = sinon.spy();
+    let associateUserWithCaseSpy = jest.fn();
+    let verifyCaseForUserSpy = jest.fn().mockReturnValue(true);
+    let updateCaseSpy = jest.fn();
 
     const user = {
       name: 'Olivia Jade',
@@ -51,17 +51,18 @@ describe('associateRespondentToCase', () => {
     await associateRespondentToCase({
       applicationContext,
       caseId: caseRecord.caseId,
+      serviceIndicator: constants.SI_ELECTRONIC,
       user,
     });
 
-    expect(associateUserWithCaseSpy.called).toEqual(false);
-    expect(updateCaseSpy.called).toEqual(false);
+    expect(associateUserWithCaseSpy).not.toBeCalled();
+    expect(updateCaseSpy).not.toBeCalled();
   });
 
   it('should add mapping for a respondent', async () => {
-    let associateUserWithCaseSpy = sinon.spy();
-    let verifyCaseForUserSpy = sinon.stub().returns(false);
-    let updateCaseSpy = sinon.spy();
+    let associateUserWithCaseSpy = jest.fn();
+    let verifyCaseForUserSpy = jest.fn().mockReturnValue(false);
+    let updateCaseSpy = jest.fn();
 
     const user = {
       name: 'Olivia Jade',
@@ -81,10 +82,19 @@ describe('associateRespondentToCase', () => {
     await associateRespondentToCase({
       applicationContext,
       caseId: caseRecord.caseId,
+      serviceIndicator: constants.SI_ELECTRONIC,
       user,
     });
 
-    expect(associateUserWithCaseSpy.called).toEqual(true);
-    expect(updateCaseSpy.called).toEqual(true);
+    expect(associateUserWithCaseSpy).toBeCalled();
+    expect(updateCaseSpy).toBeCalled();
+    expect(updateCaseSpy.mock.calls[0][0].caseToUpdate).toMatchObject({
+      respondents: [
+        {
+          serviceIndicator: constants.SI_ELECTRONIC,
+          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
+      ],
+    });
   });
 });

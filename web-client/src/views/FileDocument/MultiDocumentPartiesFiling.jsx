@@ -67,7 +67,7 @@ export const MultiDocumentPartiesFiling = connect(
                         }}
                       />
                       <label
-                        className="usa-checkbox__label"
+                        className="usa-checkbox__label inline-block"
                         htmlFor={`party-primary-${formattedConsolidatedCase.docketNumber}`}
                       >
                         {formattedConsolidatedCase.contactPrimary.name},
@@ -101,7 +101,7 @@ export const MultiDocumentPartiesFiling = connect(
                           }}
                         />
                         <label
-                          className="usa-checkbox__label"
+                          className="usa-checkbox__label inline-block"
                           htmlFor={`party-secondary-${formattedConsolidatedCase.docketNumber}`}
                         >
                           {formattedConsolidatedCase.contactSecondary.name},
@@ -130,7 +130,7 @@ export const MultiDocumentPartiesFiling = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label"
+                  className="usa-checkbox__label inline-block"
                   htmlFor="party-respondent"
                 >
                   Respondent
