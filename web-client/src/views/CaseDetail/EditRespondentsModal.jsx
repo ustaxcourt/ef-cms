@@ -58,7 +58,7 @@ export const EditRespondentsModal = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor={`remove-respondent-${idx}`}
                   >
                     Remove from Case

@@ -80,7 +80,7 @@ export const EditPractitionersModal = connect(
                         }}
                       />
                       <label
-                        className="usa-checkbox__label"
+                        className="usa-checkbox__label inline-block"
                         htmlFor={`representing-primary-${idx}`}
                       >
                         {caseDetail.contactPrimary.name}
@@ -108,7 +108,7 @@ export const EditPractitionersModal = connect(
                             }}
                           />
                           <label
-                            className="usa-checkbox__label"
+                            className="usa-checkbox__label inline-block"
                             htmlFor={`representing-secondary-${idx}`}
                           >
                             {caseDetail.contactSecondary.name}
@@ -140,7 +140,7 @@ export const EditPractitionersModal = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label"
+                    className="usa-checkbox__label inline-block"
                     htmlFor={`remove-practitioner-${idx}`}
                   >
                     Remove from Case
