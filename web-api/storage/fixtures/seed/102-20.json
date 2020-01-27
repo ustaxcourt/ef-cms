@@ -219,6 +219,7 @@
     "respondents": [
       {
         "role": "respondent",
+        "serviceIndicator": "Electronic",
         "barNumber": "RT6789",
         "contact": {
           "address3": "Under the stairs",
@@ -240,6 +241,7 @@
       {
         "role": "practitioner",
         "barNumber": "PT5432",
+        "serviceIndicator": "Electronic",
         "contact": {
           "address3": "Under the stairs",
           "address2": "Apartment 4",

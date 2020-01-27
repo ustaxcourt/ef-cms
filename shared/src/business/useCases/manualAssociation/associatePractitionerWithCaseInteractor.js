@@ -25,6 +25,7 @@ exports.associatePractitionerWithCaseInteractor = async ({
   caseId,
   representingPrimary,
   representingSecondary,
+  serviceIndicator,
   userId,
 }) => {
   const authenticatedUser = applicationContext.getCurrentUser();
@@ -44,6 +45,7 @@ exports.associatePractitionerWithCaseInteractor = async ({
     caseId,
     representingPrimary,
     representingSecondary,
+    serviceIndicator,
     user,
   });
 };

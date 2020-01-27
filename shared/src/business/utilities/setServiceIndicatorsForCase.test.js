@@ -17,6 +17,7 @@ const basePractitioner = {
   name: 'Test Practitioner',
   representingPrimary: true,
   role: User.ROLES.petitioner,
+  serviceIndicator: 'Paper',
 };
 
 const baseRespondent = {
@@ -24,6 +25,7 @@ const baseRespondent = {
   name: 'Test Respondent',
   respondentId: '123-abc-123-abc',
   role: User.ROLES.respondent,
+  serviceIndicator: 'Paper',
   userId: 'abc-123-abc-123',
 };
 
@@ -103,7 +105,7 @@ describe('setServiceIndicatorsForCases', () => {
     expect(result.contactSecondary.serviceIndicator).toEqual(constants.SI_NONE);
   });
 
-  it(`should return ${constants.SI_PAPER} for a Practitioner WITHOUT an account filing by paper`, async () => {
+  it('should not modify the serviceIndicator on the Practitioner', async () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: true,
@@ -117,29 +119,13 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${constants.SI_ELECTRONIC} for a Practitioner WITH an account filing by paper`, async () => {
-    const caseDetail = {
-      ...baseCaseDetail,
-      isPaper: true,
-      practitioners: [{ ...basePractitioner, userId: '321-cba-321-cba' }],
-    };
-
-    const result = setServiceIndicatorsForCase(caseDetail);
-
-    expect(result.practitioners[0].serviceIndicator).toEqual(
-      constants.SI_ELECTRONIC,
-    );
-  });
-
-  it(`should return ${constants.SI_ELECTRONIC} for a Respondent`, async () => {
+  it('should not modify the serviceIndicator on the Respondent', async () => {
     const caseDetail = {
       ...baseCaseDetail,
       respondents: [{ ...baseRespondent }],
     };
     const result = setServiceIndicatorsForCase(caseDetail);
 
-    expect(result.respondents[0].serviceIndicator).toEqual(
-      constants.SI_ELECTRONIC,
-    );
+    expect(result.respondents[0].serviceIndicator).toEqual(constants.SI_PAPER);
   });
 });

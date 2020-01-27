@@ -265,6 +265,18 @@ const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
 const {
+  generateStandingPretrialNoticeInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialNoticeInteractor');
+const {
+  generateStandingPretrialNoticeTemplate,
+} = require('../../shared/src/business/useCaseHelper/standingPretrialNotice/generateStandingPretrialNoticeTemplate');
+const {
+  generateStandingPretrialOrderInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderInteractor');
+const {
+  generateStandingPretrialOrderTemplate,
+} = require('../../shared/src/business/useCaseHelper/standingPretrialOrder/generateStandingPretrialOrderTemplate');
+const {
   generateTrialCalendarPdfInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateTrialCalendarPdfInteractor');
 const {
@@ -994,6 +1006,8 @@ module.exports = (appContextUser = {}) => {
         generateNoticeOfTrialIssuedTemplate,
         generatePrintableDocketRecordTemplate,
         generatePrintableFilingReceiptTemplate,
+        generateStandingPretrialNoticeTemplate,
+        generateStandingPretrialOrderTemplate,
         generateTrialCalendarTemplate,
         generateTrialSessionPlanningReportTemplate,
       };
@@ -1050,6 +1064,8 @@ module.exports = (appContextUser = {}) => {
         generatePdfFromHtmlInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
+        generateStandingPretrialNoticeInteractor,
+        generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
         getAllCaseDeadlinesInteractor,
         getBlockedCasesInteractor,

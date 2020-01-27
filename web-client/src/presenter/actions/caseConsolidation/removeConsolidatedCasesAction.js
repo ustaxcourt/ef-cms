@@ -16,7 +16,7 @@ export const removeConsolidatedCasesAction = async ({
   const casesToRemove = get(state.modal.casesToRemove);
   const caseIdsToRemove = Object.entries(casesToRemove)
     .filter(([, shouldRemove]) => shouldRemove)
-    .map(([caseId]) => caseId);
+    .map(([caseIdToRemove]) => caseIdToRemove);
 
   const result = await applicationContext
     .getUseCases()
