@@ -171,7 +171,7 @@ exports.updatePetitionerInformationInteractor = async ({
     });
   }
 
-  if (servedParties.paper.length > 0) {
+  if ((primaryChange || secondaryChange) && servedParties.paper.length > 0) {
     const fullDocument = await PDFDocument.create();
 
     const addressPages = await getAddressPages({
