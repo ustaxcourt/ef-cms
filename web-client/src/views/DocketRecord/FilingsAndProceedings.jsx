@@ -42,7 +42,7 @@ export const FilingsAndProceedings = connect(
                   <FontAwesomeIcon icon={['fas', 'file-alt']} />
                 </span>
               )}
-              {entry.description}
+              {entry.descriptionDisplay}
             </a>
           </NonMobile>
           <Mobile>
@@ -57,12 +57,14 @@ export const FilingsAndProceedings = connect(
                 });
               }}
             >
-              {entry.description}
+              {entry.descriptionDisplay}
             </Button>
           </Mobile>
         </>
       );
     };
+
+    console.log('entry', entry);
 
     return (
       <>
