@@ -1,3 +1,27 @@
+mixin case-info-box
+  .info-box
+    .info-box-header.text-normal
+      p.text-center
+        | This case is set for the trial session beginning at 
+        b #{trialInfo.startTime} 
+        |  on 
+        b #{trialInfo.fullStartDate}
+        | .
+
+    .info-box-content
+      p.text-center
+        | #{trialInfo.courthouseName}
+        br
+        | #{trialInfo.address1}
+        br
+        if trialInfo.address2
+          | #{trialInfo.address2}
+          br
+        if trialInfo.address3
+          | #{trialInfo.address3}
+          br
+        | #{trialInfo.city}, #{trialInfo.state}  #{trialInfo.postalCode}
+
 .court-header
   .us-tax-court-seal
   h1 United States Tax Court
@@ -20,28 +44,7 @@
   
 h1(style='margin-bottom:39px') STANDING PRETRIAL NOTICE
 
-.info-box
-  .info-box-header.text-normal
-    p.text-center
-      | This case is set for the trial session beginning at 
-      b #{trialInfo.startTime} 
-      |  on 
-      b #{trialInfo.fullStartDate}
-      | .
-
-  .info-box-content
-    p.text-center
-      | #{trialInfo.courthouseName}
-      br
-      | #{trialInfo.address1}
-      br
-      if trialInfo.address2
-        | #{trialInfo.address2}
-        br
-      if trialInfo.address3
-        | #{trialInfo.address3}
-        br
-      | #{trialInfo.city}, #{trialInfo.state}  #{trialInfo.postalCode}
++case-info-box
 
 ul
   li 
@@ -55,6 +58,8 @@ ul
   li Visit the Tax Court website at www.ustaxcourt.gov for more information about the process and Frequently Asked Questions.
 
 h3.text-center.text-bold(style='page-break-after:always') Served #{footerDate}
+
++case-info-box
 
 ul
   li 
