@@ -1,3 +1,11 @@
+const SERVICE_INDICATOR_TYPES = {
+  SI_ELECTRONIC: 'Electronic',
+  SI_NONE: 'None',
+  SI_PAPER: 'Paper',
+};
+// This has to be exported before we import Practitioner, Respondent, and ContactFactory
+exports.SERVICE_INDICATOR_TYPES = SERVICE_INDICATOR_TYPES;
+
 const joi = require('@hapi/joi');
 const {
   createISODateString,
@@ -1550,4 +1558,5 @@ Case.prototype.setAsSealed = function() {
   return this;
 };
 
-module.exports = { Case, isAssociatedUser };
+exports.Case = Case;
+exports.isAssociatedUser = isAssociatedUser;

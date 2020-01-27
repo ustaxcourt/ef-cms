@@ -1,14 +1,12 @@
 const joi = require('@hapi/joi');
 
 const {
-  constants,
-} = require('../../../business/utilities/setServiceIndicatorsForCase');
-const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { SERVICE_INDICATOR_TYPES } = require('../cases/Case');
 const ContactFactory = {};
 
 ContactFactory.COUNTRY_TYPES = {
@@ -161,7 +159,7 @@ const commonValidationRequirements = {
   title: joi.string().optional(),
   serviceIndicator: joi
     .string()
-    .valid(...Object.values(constants))
+    .valid(...Object.values(SERVICE_INDICATOR_TYPES))
     .optional(),
 };
 const domesticValidationObject = {

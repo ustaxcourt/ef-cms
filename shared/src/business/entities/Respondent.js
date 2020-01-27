@@ -2,15 +2,12 @@ const joi = require('@hapi/joi');
 const {
   joiValidationDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-
-const {
-  constants,
-} = require('../../business/utilities/setServiceIndicatorsForCase');
 const {
   userDecorator,
   userValidation,
   VALIDATION_ERROR_MESSAGES,
 } = require('./User');
+const { SERVICE_INDICATOR_TYPES } = require('./cases/Case');
 
 /**
  * constructor
@@ -20,7 +17,8 @@ const {
  */
 function Respondent(rawUser) {
   userDecorator(this, rawUser);
-  this.serviceIndicator = rawUser.serviceIndicator || constants.SI_ELECTRONIC;
+  this.serviceIndicator =
+    rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 }
 
 joiValidationDecorator(
@@ -29,7 +27,7 @@ joiValidationDecorator(
     ...userValidation,
     serviceIndicator: joi
       .string()
-      .valid(...Object.values(constants))
+      .valid(...Object.values(SERVICE_INDICATOR_TYPES))
       .required(),
   }),
   undefined,
