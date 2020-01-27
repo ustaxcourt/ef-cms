@@ -17,15 +17,17 @@ AWS.config.region = 'us-east-1';
   const NUM_CASES = 100;
 
   const trialSessionEntity = await createTrialSession();
+  const { trialSessionId } = trialSessionEntity;
 
   // for (let i = 0; i < NUM_CASES; i++) {
   try {
     console.log('Creating Case');
     const caseEntity = await createCase();
-    console.log('Adding Case to Trial Session');
+    const { caseId } = caseEntity;
+    console.log(`Adding Case ${caseId} to Trial Session ${trialSessionId}`);
     await addCaseToTrialSession({
-      caseId: caseEntity.caseId,
-      trialSessionId: trialSessionEntity.trialSessionId,
+      caseId,
+      trialSessionId,
     });
   } catch (e) {
     console.log('err', e);

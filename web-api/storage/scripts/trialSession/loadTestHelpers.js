@@ -76,4 +76,23 @@ const createCase = async () => {
   return caseDetail;
 };
 
-module.exports = { createCase, createTrialSession };
+const addCaseToTrialSession = async ({ caseId, trialSessionId }) => {
+  const user = {
+    email: 'docketclerk',
+    name: 'Test Docketclerk',
+    role: 'docketclerk',
+    userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+  };
+
+  const applicationContext = createApplicationContext(user);
+
+  return await applicationContext
+    .getUseCases()
+    .addCaseToTrialSessionInteractor({
+      applicationContext,
+      caseId,
+      trialSessionId,
+    });
+};
+
+module.exports = { addCaseToTrialSession, createCase, createTrialSession };
