@@ -48,6 +48,7 @@ export const EditPractitionersModal = connect(
                   {practitioner.name} ({practitioner.barNumber})
                 </label>
                 <FormGroup
+                  className="margin-bottom-0"
                   errorText={
                     validationErrors &&
                     validationErrors.practitioners &&
@@ -119,7 +120,12 @@ export const EditPractitionersModal = connect(
                   <div className="margin-top-2">
                     <ServiceIndicatorRadios
                       bind={`modal.practitioners.${idx}`}
-                      validationErrors="validationErrors"
+                      getValidationError={() =>
+                        validationErrors.practitioners &&
+                        validationErrors.practitioners[idx] &&
+                        validationErrors.practitioners[idx].serviceIndicator
+                      }
+                      validateSequence={validateEditPractitionersSequence}
                     />
                   </div>
                 </FormGroup>
