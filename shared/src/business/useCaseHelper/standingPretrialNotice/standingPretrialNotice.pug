@@ -21,8 +21,14 @@
 h1(style='margin-bottom:39px') STANDING PRETRIAL NOTICE
 
 .info-box
-  .info-box-header
-    p This case is set for the trial session beginning at  10:00AM on Monday, March 25, 2019.
+  .info-box-header.text-normal
+    p.text-center
+      | This case is set for the trial session beginning at 
+      b #{trialInfo.startTime} 
+      |  on 
+      b #{trialInfo.fullStartDate}
+      | .
+
   .info-box-content
     p.text-center
       | #{trialInfo.courthouseName}
@@ -47,6 +53,9 @@ ul
       li Send them copies of documents that you think help your case.
       li Find out whether you will need to go to trial or if you can settle your case.
   li Visit the Tax Court website at www.ustaxcourt.gov for more information about the process and Frequently Asked Questions.
+
+h3.text-center.text-bold(style='page-break-after:always') Served #{footerDate}
+
 ul
   li 
     b WHAT TO DO BEFORE TRIAL
