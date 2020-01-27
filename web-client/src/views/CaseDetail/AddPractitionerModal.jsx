@@ -167,7 +167,6 @@ export const AddPractitionerModal = connect(
 
           <ServiceIndicatorRadios
             bind="modal"
-            updateModalValueSequence={updateModalValueSequence}
             validationErrors="validationErrors"
           />
         </div>

@@ -301,6 +301,7 @@ import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
 import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateStartCaseInternalPartyTypeSequence } from './sequences/updateStartCaseInternalPartyTypeSequence';
+import { updateStateSequence } from './sequences/updateStateSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserContactValueSequence } from './sequences/updateUserContactValueSequence';
@@ -645,6 +646,7 @@ export const presenter = {
     updateSessionMetadataSequence,
     updateStartCaseFormValueSequence,
     updateStartCaseInternalPartyTypeSequence,
+    updateStateSequence,
     updateTrialSessionFormDataSequence,
     updateTrialSessionSequence,
     updateUserContactValueSequence,
