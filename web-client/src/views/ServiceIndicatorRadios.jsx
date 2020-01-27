@@ -21,6 +21,7 @@ export const ServiceIndicatorRadios = connect(
   }) => {
     return (
       <FormGroup
+        className="margin-bottom-0"
         errorText={
           getValidationError
             ? getValidationError()
@@ -28,7 +29,7 @@ export const ServiceIndicatorRadios = connect(
         }
       >
         <fieldset
-          className="usa-fieldset margin-bottom-0"
+          className="usa-fieldset margin-bottom-2"
           id={`service-type-radios-${bindKey}`}
         >
           <legend htmlFor={`service-type-radios-${bindKey}`}>
